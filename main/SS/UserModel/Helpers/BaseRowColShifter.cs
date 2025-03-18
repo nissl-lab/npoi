@@ -57,9 +57,8 @@ namespace NPOI.SS.UserModel.Helpers
                 return cra;
             }
             Ptg ptg0 = ptgs[0];
-            if (ptg0 is AreaPtg)
+            if (ptg0 is AreaPtg bptg)
             {
-                AreaPtg bptg = (AreaPtg)ptg0;
                 return new CellRangeAddress(bptg.FirstRow, bptg.LastRow, bptg.FirstColumn, bptg.LastColumn);
             }
             if (ptg0 is AreaErrPtg)

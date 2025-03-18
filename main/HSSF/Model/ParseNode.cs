@@ -151,9 +151,8 @@ namespace NPOI.HSSF.Model
 
         private static bool IsIf(Ptg token)
         {
-            if (token is FuncVarPtg)
+            if (token is FuncVarPtg func)
             {
-                FuncVarPtg func = (FuncVarPtg)token;
                 if (FunctionMetadataRegistry.FUNCTION_NAME_IF.Equals(func.Name))
                 {
                     return true;

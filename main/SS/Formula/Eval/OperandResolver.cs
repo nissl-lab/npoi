@@ -58,21 +58,21 @@ namespace NPOI.SS.Formula.Eval
         public static ValueEval GetSingleValue(ValueEval arg, int srcCellRow, int srcCellCol)
         {
             ValueEval result;
-            if (arg is RefEval)
+            if (arg is RefEval eval)
             {
-                result = ChooseSingleElementFromRef((RefEval)arg);
+                result = ChooseSingleElementFromRef(eval);
             }
-            else if (arg is AreaEval)
+            else if (arg is AreaEval areaEval)
             {
-                result = ChooseSingleElementFromArea((AreaEval)arg, srcCellRow, srcCellCol);
+                result = ChooseSingleElementFromArea(areaEval, srcCellRow, srcCellCol);
             }
             else
             {
                 result = arg;
             }
-            if (result is ErrorEval)
+            if (result is ErrorEval errorEval)
             {
-                throw new EvaluationException((ErrorEval)result);
+                throw new EvaluationException(errorEval);
             }
             return result;
         }
@@ -126,9 +126,9 @@ namespace NPOI.SS.Formula.Eval
         {
             ValueEval result = ChooseSingleElementFromAreaInternal(ae, srcCellRow, srcCellCol);
             
-            if (result is ErrorEval)
+            if (result is ErrorEval eval)
             {
-                throw new EvaluationException((ErrorEval)result);
+                throw new EvaluationException(eval);
 
             }
             return result;
@@ -236,14 +236,14 @@ namespace NPOI.SS.Formula.Eval
             {
                 return 0.0;
             }
-            if (ev is NumericValueEval)
+            if (ev is NumericValueEval eval)
             {
                 // this also handles bools
-                return ((NumericValueEval)ev).NumberValue;
+                return eval.NumberValue;
             }
-            if (ev is StringEval)
+            if (ev is StringEval stringEval)
             {
-                double dd = ParseDouble(((StringEval)ev).StringValue);
+                double dd = ParseDouble(stringEval.StringValue);
                 if (double.IsNaN(dd))
                 {
                     throw EvaluationException.InvalidValue();
@@ -324,9 +324,8 @@ namespace NPOI.SS.Formula.Eval
          */
         public static String CoerceValueToString(ValueEval ve)
         {
-            if (ve is StringValueEval)
+            if (ve is StringValueEval sve)
             {
-                StringValueEval sve = (StringValueEval)ve;
                 return sve.StringValue;
             }
 
@@ -348,18 +347,18 @@ namespace NPOI.SS.Formula.Eval
                 // TODO - remove 've == null' condition once AreaEval is fixed
                 return null;
             }
-            if (ve is BoolEval)
+            if (ve is BoolEval eval)
             {
-                return ((BoolEval)ve).BooleanValue;
+                return eval.BooleanValue;
             }
 
-            if (ve is StringEval)
+            if (ve is StringEval stringEval)
             {
                 if (stringsAreBlanks)
                 {
                     return null;
                 }
-                String str = ((StringEval)ve).StringValue;
+                String str = stringEval.StringValue;
                 if (str.Equals("true", StringComparison.OrdinalIgnoreCase))
                 {
                     return true;
@@ -372,9 +371,8 @@ namespace NPOI.SS.Formula.Eval
                 throw new EvaluationException(ErrorEval.VALUE_INVALID);
             }
 
-            if (ve is NumericValueEval)
+            if (ve is NumericValueEval ne)
             {
-                NumericValueEval ne = (NumericValueEval)ve;
                 double d = ne.NumberValue;
                 if (Double.IsNaN(d))
                 {
@@ -382,9 +380,9 @@ namespace NPOI.SS.Formula.Eval
                 }
                 return d != 0;
             }
-            if (ve is ErrorEval)
+            if (ve is ErrorEval errorEval)
             {
-                throw new EvaluationException((ErrorEval)ve);
+                throw new EvaluationException(errorEval);
             }
             throw new InvalidOperationException("Unexpected eval (" + ve.GetType().Name + ")");
         }

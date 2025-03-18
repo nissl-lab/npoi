@@ -203,7 +203,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal
 
         public override bool Equals(Object obj)
         {
-            return (!(obj is ContentType))
+            return (obj is not ContentType)
                     || (this.ToString().Equals(obj.ToString(), StringComparison.InvariantCultureIgnoreCase));
         }
 

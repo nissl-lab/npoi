@@ -175,13 +175,13 @@ namespace NPOI.XWPF.UserModel
 
             foreach(object o in ctRow.Items)
             {
-                if (o is CT_Tc)
+                if (o is CT_Tc tc)
                 {
-                    cells.Add(new XWPFTableCell((CT_Tc)o, this, table.Body));
+                    cells.Add(new XWPFTableCell(tc, this, table.Body));
                 }
-                else if (o is CT_SdtCell)
+                else if (o is CT_SdtCell cell)
                 {
-                    cells.Add(new XWPFSDTCell((CT_SdtCell)o, this, table.Body));
+                    cells.Add(new XWPFSDTCell(cell, this, table.Body));
                 }
             }
             return cells;

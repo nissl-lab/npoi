@@ -95,16 +95,16 @@ namespace NPOI.OpenXml4Net.OPC
 
         public override bool Equals(Object obj)
         {
-            if (!(obj is PackageRelationship))
+            if (obj is not PackageRelationship rel)
             {
                 return false;
             }
-            PackageRelationship rel = (PackageRelationship)obj;
+
             return (this.id == rel.id
                     && this.relationshipType == rel.relationshipType
                     && (rel.source != null ? rel.source.Equals(this.source) : true)
                     && this.targetMode == rel.targetMode && this.targetUri
-                    .Equals(rel.targetUri));
+                        .Equals(rel.targetUri));
         }
 
 

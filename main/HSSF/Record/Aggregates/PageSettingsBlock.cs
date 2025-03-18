@@ -661,9 +661,8 @@ namespace NPOI.HSSF.Record.Aggregates
             {
                 foreach (RecordBase rb in sheetRecords)
                 {
-                    if (rb is CustomViewSettingsRecordAggregate)
+                    if (rb is CustomViewSettingsRecordAggregate cv)
                     {
-                        CustomViewSettingsRecordAggregate cv = (CustomViewSettingsRecordAggregate)rb;
                         cv.VisitContainedRecords(new CustomRecordVisitor1(cv,hf,_sviewHeaderFooters,hfGuidMap));
                     }
                 }

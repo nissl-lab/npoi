@@ -30,23 +30,21 @@ namespace NPOI.HSSF.Model
         /// <returns></returns>
         public static EscherRecord CreateAnchor(HSSFAnchor userAnchor)
         {
-            if (userAnchor is HSSFClientAnchor)
+            if (userAnchor is HSSFClientAnchor clientAnchor)
             {
-                HSSFClientAnchor a = (HSSFClientAnchor)userAnchor;
-
                 EscherClientAnchorRecord anchor = new EscherClientAnchorRecord();
                 anchor.RecordId=EscherClientAnchorRecord.RECORD_ID;
                 anchor.Options=(short)0x0000;
-                anchor.Flag=(short)a.AnchorType;
-                anchor.Col1=(short)Math.Min(a.Col1, a.Col2);
-                anchor.Dx1=(short)a.Dx1;
-                anchor.Row1=(short)Math.Min(a.Row1, a.Row2);
-                anchor.Dy1=(short)a.Dy1;
+                anchor.Flag=(short)clientAnchor.AnchorType;
+                anchor.Col1=(short)Math.Min(clientAnchor.Col1, clientAnchor.Col2);
+                anchor.Dx1=(short)clientAnchor.Dx1;
+                anchor.Row1=(short)Math.Min(clientAnchor.Row1, clientAnchor.Row2);
+                anchor.Dy1=(short)clientAnchor.Dy1;
 
-                anchor.Col2=(short)Math.Max(a.Col1, a.Col2);
-                anchor.Dx2=(short)a.Dx2;
-                anchor.Row2=(short)Math.Max(a.Row1, a.Row2);
-                anchor.Dy2=(short)a.Dy2;
+                anchor.Col2=(short)Math.Max(clientAnchor.Col1, clientAnchor.Col2);
+                anchor.Dx2=(short)clientAnchor.Dx2;
+                anchor.Row2=(short)Math.Max(clientAnchor.Row1, clientAnchor.Row2);
+                anchor.Dy2=(short)clientAnchor.Dy2;
                 return anchor;
             }
             else

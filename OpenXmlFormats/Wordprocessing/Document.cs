@@ -338,66 +338,66 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             int i=0;
             foreach(object o in this.Items)
             {
-                if(o is CT_RunTrackChange && this.itemsElementNameField[i] == DocumentBodyItemChoiceType.moveTo)
-                    ((CT_RunTrackChange) o).Write(sw, "moveTo");
-                else if(o is CT_OMathPara)
-                    ((CT_OMathPara) o).Write(sw, "oMathPara");
-                else if(o is CT_CustomXmlBlock)
-                    ((CT_CustomXmlBlock) o).Write(sw, "customXml");
-                else if(o is CT_OMath)
-                    ((CT_OMath) o).Write(sw, "oMath");
-                else if(o is CT_AltChunk)
-                    ((CT_AltChunk) o).Write(sw, "altChunk");
-                else if((o is CT_MarkupRange)&&this.itemsElementNameField[i]== DocumentBodyItemChoiceType.bookmarkEnd)
-                    ((CT_MarkupRange) o).Write(sw, "bookmarkEnd");
-                else if(o is CT_Bookmark && this.itemsElementNameField[i] == DocumentBodyItemChoiceType.bookmarkStart)
-                    ((CT_Bookmark) o).Write(sw, "bookmarkStart");
-                else if(o is CT_MarkupRange && this.itemsElementNameField[i] == DocumentBodyItemChoiceType.commentRangeEnd)
-                    ((CT_MarkupRange) o).Write(sw, "commentRangeEnd");
-                else if(o is CT_MarkupRange && this.itemsElementNameField[i] == DocumentBodyItemChoiceType.commentRangeStart)
-                    ((CT_MarkupRange) o).Write(sw, "commentRangeStart");
-                else if(o is CT_Markup && this.itemsElementNameField[i] == DocumentBodyItemChoiceType.customXmlDelRangeEnd)
-                    ((CT_Markup) o).Write(sw, "customXmlDelRangeEnd");
-                else if(o is CT_TrackChange && this.itemsElementNameField[i] == DocumentBodyItemChoiceType.customXmlDelRangeStart)
-                    ((CT_TrackChange) o).Write(sw, "customXmlDelRangeStart");
-                else if(o is CT_Markup && this.itemsElementNameField[i] == DocumentBodyItemChoiceType.customXmlInsRangeEnd)
-                    ((CT_Markup) o).Write(sw, "customXmlInsRangeEnd");
-                else if(o is CT_TrackChange && this.itemsElementNameField[i] == DocumentBodyItemChoiceType.customXmlInsRangeStart)
-                    ((CT_TrackChange) o).Write(sw, "customXmlInsRangeStart");
-                else if(o is CT_Markup && this.itemsElementNameField[i] == DocumentBodyItemChoiceType.customXmlMoveFromRangeEnd)
-                    ((CT_Markup) o).Write(sw, "customXmlMoveFromRangeEnd");
-                else if(o is CT_TrackChange && this.itemsElementNameField[i] == DocumentBodyItemChoiceType.customXmlMoveFromRangeStart)
-                    ((CT_TrackChange) o).Write(sw, "customXmlMoveFromRangeStart");
-                else if(o is CT_Markup && this.itemsElementNameField[i] == DocumentBodyItemChoiceType.customXmlMoveToRangeEnd)
-                    ((CT_Markup) o).Write(sw, "customXmlMoveToRangeEnd");
-                else if(o is CT_TrackChange && this.itemsElementNameField[i] == DocumentBodyItemChoiceType.customXmlMoveToRangeStart)
-                    ((CT_TrackChange) o).Write(sw, "customXmlMoveToRangeStart");
-                else if(o is CT_RunTrackChange && this.itemsElementNameField[i] == DocumentBodyItemChoiceType.del)
-                    ((CT_RunTrackChange) o).Write(sw, "del");
-                else if(o is CT_RunTrackChange && this.itemsElementNameField[i] == DocumentBodyItemChoiceType.ins)
-                    ((CT_RunTrackChange) o).Write(sw, "ins");
-                else if(o is CT_RunTrackChange && this.itemsElementNameField[i] == DocumentBodyItemChoiceType.moveFrom)
-                    ((CT_RunTrackChange) o).Write(sw, "moveFrom");
-                else if(o is CT_MarkupRange && this.itemsElementNameField[i] == DocumentBodyItemChoiceType.moveFromRangeEnd)
-                    ((CT_MarkupRange) o).Write(sw, "moveFromRangeEnd");
-                else if(o is CT_MoveBookmark && this.itemsElementNameField[i] == DocumentBodyItemChoiceType.moveFromRangeStart)
-                    ((CT_MoveBookmark) o).Write(sw, "moveFromRangeStart");
-                else if(o is CT_MarkupRange && this.itemsElementNameField[i] == DocumentBodyItemChoiceType.moveToRangeEnd)
-                    ((CT_MarkupRange) o).Write(sw, "moveToRangeEnd");
-                else if(o is CT_MoveBookmark && this.itemsElementNameField[i] == DocumentBodyItemChoiceType.moveToRangeStart)
-                    ((CT_MoveBookmark) o).Write(sw, "moveToRangeStart");
-                else if(o is CT_P)
-                    ((CT_P) o).Write(sw, "p");
-                else if(o is CT_Perm)
-                    ((CT_Perm) o).Write(sw, "permEnd");
-                else if(o is CT_PermStart)
-                    ((CT_PermStart) o).Write(sw, "permStart");
-                else if(o is CT_ProofErr)
-                    ((CT_ProofErr) o).Write(sw, "proofErr");
-                else if(o is CT_SdtBlock)
-                    ((CT_SdtBlock) o).Write(sw, "sdt");
-                else if(o is CT_Tbl)
-                    ((CT_Tbl) o).Write(sw, "tbl");
+                if(o is CT_RunTrackChange change && this.itemsElementNameField[i] == DocumentBodyItemChoiceType.moveTo)
+                    change.Write(sw, "moveTo");
+                else if(o is CT_OMathPara para)
+                    para.Write(sw, "oMathPara");
+                else if(o is CT_CustomXmlBlock block)
+                    block.Write(sw, "customXml");
+                else if(o is CT_OMath math)
+                    math.Write(sw, "oMath");
+                else if(o is CT_AltChunk chunk)
+                    chunk.Write(sw, "altChunk");
+                else if((o is CT_MarkupRange range)&&this.itemsElementNameField[i]== DocumentBodyItemChoiceType.bookmarkEnd)
+                    range.Write(sw, "bookmarkEnd");
+                else if(o is CT_Bookmark bookmark && this.itemsElementNameField[i] == DocumentBodyItemChoiceType.bookmarkStart)
+                    bookmark.Write(sw, "bookmarkStart");
+                else if(o is CT_MarkupRange markupRange && this.itemsElementNameField[i] == DocumentBodyItemChoiceType.commentRangeEnd)
+                    markupRange.Write(sw, "commentRangeEnd");
+                else if(o is CT_MarkupRange ctMarkupRange && this.itemsElementNameField[i] == DocumentBodyItemChoiceType.commentRangeStart)
+                    ctMarkupRange.Write(sw, "commentRangeStart");
+                else if(o is CT_Markup markup && this.itemsElementNameField[i] == DocumentBodyItemChoiceType.customXmlDelRangeEnd)
+                    markup.Write(sw, "customXmlDelRangeEnd");
+                else if(o is CT_TrackChange trackChange && this.itemsElementNameField[i] == DocumentBodyItemChoiceType.customXmlDelRangeStart)
+                    trackChange.Write(sw, "customXmlDelRangeStart");
+                else if(o is CT_Markup ctMarkup && this.itemsElementNameField[i] == DocumentBodyItemChoiceType.customXmlInsRangeEnd)
+                    ctMarkup.Write(sw, "customXmlInsRangeEnd");
+                else if(o is CT_TrackChange ctTrackChange && this.itemsElementNameField[i] == DocumentBodyItemChoiceType.customXmlInsRangeStart)
+                    ctTrackChange.Write(sw, "customXmlInsRangeStart");
+                else if(o is CT_Markup markup1 && this.itemsElementNameField[i] == DocumentBodyItemChoiceType.customXmlMoveFromRangeEnd)
+                    markup1.Write(sw, "customXmlMoveFromRangeEnd");
+                else if(o is CT_TrackChange change1 && this.itemsElementNameField[i] == DocumentBodyItemChoiceType.customXmlMoveFromRangeStart)
+                    change1.Write(sw, "customXmlMoveFromRangeStart");
+                else if(o is CT_Markup ctMarkup1 && this.itemsElementNameField[i] == DocumentBodyItemChoiceType.customXmlMoveToRangeEnd)
+                    ctMarkup1.Write(sw, "customXmlMoveToRangeEnd");
+                else if(o is CT_TrackChange trackChange1 && this.itemsElementNameField[i] == DocumentBodyItemChoiceType.customXmlMoveToRangeStart)
+                    trackChange1.Write(sw, "customXmlMoveToRangeStart");
+                else if(o is CT_RunTrackChange runTrackChange && this.itemsElementNameField[i] == DocumentBodyItemChoiceType.del)
+                    runTrackChange.Write(sw, "del");
+                else if(o is CT_RunTrackChange ctRunTrackChange && this.itemsElementNameField[i] == DocumentBodyItemChoiceType.ins)
+                    ctRunTrackChange.Write(sw, "ins");
+                else if(o is CT_RunTrackChange runTrackChange1 && this.itemsElementNameField[i] == DocumentBodyItemChoiceType.moveFrom)
+                    runTrackChange1.Write(sw, "moveFrom");
+                else if(o is CT_MarkupRange range1 && this.itemsElementNameField[i] == DocumentBodyItemChoiceType.moveFromRangeEnd)
+                    range1.Write(sw, "moveFromRangeEnd");
+                else if(o is CT_MoveBookmark moveBookmark && this.itemsElementNameField[i] == DocumentBodyItemChoiceType.moveFromRangeStart)
+                    moveBookmark.Write(sw, "moveFromRangeStart");
+                else if(o is CT_MarkupRange markupRange1 && this.itemsElementNameField[i] == DocumentBodyItemChoiceType.moveToRangeEnd)
+                    markupRange1.Write(sw, "moveToRangeEnd");
+                else if(o is CT_MoveBookmark ctMoveBookmark && this.itemsElementNameField[i] == DocumentBodyItemChoiceType.moveToRangeStart)
+                    ctMoveBookmark.Write(sw, "moveToRangeStart");
+                else if(o is CT_P p)
+                    p.Write(sw, "p");
+                else if(o is CT_Perm perm)
+                    perm.Write(sw, "permEnd");
+                else if(o is CT_PermStart start)
+                    start.Write(sw, "permStart");
+                else if(o is CT_ProofErr err)
+                    err.Write(sw, "proofErr");
+                else if(o is CT_SdtBlock sdtBlock)
+                    sdtBlock.Write(sw, "sdt");
+                else if(o is CT_Tbl tbl)
+                    tbl.Write(sw, "tbl");
                 i++;
             }
             if(this.sectPr != null)

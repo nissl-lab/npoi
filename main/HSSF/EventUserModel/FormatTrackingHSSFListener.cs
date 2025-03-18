@@ -77,14 +77,12 @@ namespace NPOI.HSSF.EventUserModel
          */
         public void ProcessRecordInternally(Record record)
         {
-            if (record is FormatRecord)
+            if (record is FormatRecord fr)
             {
-                FormatRecord fr = (FormatRecord)record;
                 customFormatRecords[fr.IndexCode] = fr;
             }
-            else if (record is ExtendedFormatRecord)
+            else if (record is ExtendedFormatRecord xr)
             {
-                ExtendedFormatRecord xr = (ExtendedFormatRecord)record;
                 xfRecords.Add(xr);
             }
         }
@@ -100,13 +98,13 @@ namespace NPOI.HSSF.EventUserModel
         public String FormatNumberDateCell(CellValueRecordInterface cell)
         {
             double value;
-            if (cell is NumberRecord)
+            if (cell is NumberRecord record)
             {
-                value = ((NumberRecord)cell).Value;
+                value = record.Value;
             }
-            else if (cell is FormulaRecord)
+            else if (cell is FormulaRecord formulaRecord)
             {
-                value = ((FormulaRecord)cell).Value;
+                value = formulaRecord.Value;
             }
             else
             {

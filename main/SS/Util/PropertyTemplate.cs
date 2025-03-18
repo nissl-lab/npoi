@@ -989,9 +989,9 @@ namespace NPOI.SS.Util
             if(cellProperties != null)
             {
                 object obj = cellProperties.TryGetValue(property, out object cellProperty) ? cellProperty : null;
-                if(obj is BorderStyle)
+                if(obj is BorderStyle style)
                 {
-                    value = (BorderStyle) obj;
+                    value = style;
                 }
             }
             return value;
@@ -1047,9 +1047,9 @@ namespace NPOI.SS.Util
         /// <return>short value, or 0 if not a short</return>
         private static short Getshort(object value)
         {
-            if(value is short)
+            if(value is short s)
             {
-                return (short) value;
+                return s;
             }
             return 0;
         }

@@ -99,9 +99,8 @@ namespace NPOI.HSSF.UserModel
 
         public HSSFHyperlink(IHyperlink other)
         {
-            if (other is HSSFHyperlink)
+            if (other is HSSFHyperlink hlink)
             {
-                HSSFHyperlink hlink = (HSSFHyperlink)other;
                 record = hlink.record.Clone() as HyperlinkRecord;
                 link_type = getType(record);
             }
@@ -221,8 +220,7 @@ namespace NPOI.HSSF.UserModel
         public override bool Equals(Object other)
         {
             if (this == other) return true;
-            if (!(other is HSSFHyperlink)) return false;
-            HSSFHyperlink otherLink = (HSSFHyperlink)other;
+            if (other is not HSSFHyperlink otherLink) return false;
             return record == otherLink.record;
         }
 

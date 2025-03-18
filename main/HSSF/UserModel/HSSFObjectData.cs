@@ -72,9 +72,9 @@ namespace NPOI.HSSF.UserModel
             String streamName = "MBD" + HexDump.ToHex((int)streamId);
 
             Entry entry = _root.GetEntry(streamName);
-            if (entry is DirectoryEntry)
+            if (entry is DirectoryEntry directoryEntry)
             {
-                return (DirectoryEntry)entry;
+                return directoryEntry;
             }
             else
             {
@@ -117,9 +117,9 @@ namespace NPOI.HSSF.UserModel
             while (subRecordIter.MoveNext())
             {
                 Object subRecord = subRecordIter.Current;
-                if (subRecord is EmbeddedObjectRefSubRecord)
+                if (subRecord is EmbeddedObjectRefSubRecord record)
                 {
-                    return (EmbeddedObjectRefSubRecord)subRecord;
+                    return record;
                 }
             }
 

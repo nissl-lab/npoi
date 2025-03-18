@@ -166,10 +166,10 @@ namespace NPOI.HSSF.Record.Aggregates
                         // ignore DBCELL records because POI generates them upon re-serialization
                         continue;
                 }
-                if (rec is UnknownRecord)
+                if (rec is UnknownRecord record)
                 {
                     // might need to keep track of where exactly these belong
-                    AddUnknownRecord((UnknownRecord)rec);
+                    AddUnknownRecord(record);
 
                     while (rs.PeekNextSid() == ContinueRecord.sid)
                     {
@@ -177,12 +177,12 @@ namespace NPOI.HSSF.Record.Aggregates
                     }
                     continue;
                 }
-       			if (rec is MulBlankRecord) {
-    			    _valuesAgg.AddMultipleBlanks((MulBlankRecord) rec);
+       			if (rec is MulBlankRecord blankRecord) {
+    			    _valuesAgg.AddMultipleBlanks(blankRecord);
 				    continue;
 			    }
 
-                if (!(rec is CellValueRecordInterface))
+                if (rec is not CellValueRecordInterface @interface)
                 {
                     //TODO: correct it, SeriesIndexRecord will appear in a separate chart sheet that contains a single chart
                     // rule SERIESDATA = Dimensions 3(SIIndex *(Number / BoolErr / Blank / Label))
@@ -194,7 +194,7 @@ namespace NPOI.HSSF.Record.Aggregates
                     throw new InvalidOperationException("Unexpected record type (" + rec.GetType().Name + ")");
 
                 }
-                _valuesAgg.Construct((CellValueRecordInterface)rec, rs, svm);
+                _valuesAgg.Construct(@interface, rs, svm);
             }
         }
         /**
@@ -253,9 +253,9 @@ namespace NPOI.HSSF.Record.Aggregates
         }
         public void RemoveCell(CellValueRecordInterface cvRec)
         {
-            if (cvRec is FormulaRecordAggregate)
+            if (cvRec is FormulaRecordAggregate aggregate)
             {
-                ((FormulaRecordAggregate)cvRec).NotifyFormulaChanging();
+                aggregate.NotifyFormulaChanging();
             }
             _valuesAgg.RemoveCell(cvRec);
         }

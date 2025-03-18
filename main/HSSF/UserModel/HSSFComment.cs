@@ -252,9 +252,9 @@ namespace NPOI.HSSF.UserModel
             get
             {
                 HSSFAnchor ha = base.Anchor as HSSFAnchor;
-                if (ha is IClientAnchor)
+                if (ha is IClientAnchor clientAnchor)
                 {
-                    return (IClientAnchor)ha;
+                    return clientAnchor;
                 }
 
                 throw new InvalidCastException("Anchor can not be changed in "
@@ -330,11 +330,11 @@ namespace NPOI.HSSF.UserModel
         }
         public override bool Equals(Object obj)
         {
-            if (!(obj is HSSFComment))
+            if (obj is not HSSFComment other)
             {
                 return false;
             }
-            HSSFComment other = (HSSFComment)obj;
+
             return NoteRecord.Equals(other.NoteRecord);
         }
         public override int GetHashCode()

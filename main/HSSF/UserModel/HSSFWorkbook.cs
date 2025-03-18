@@ -2027,9 +2027,9 @@ namespace NPOI.HSSF.UserModel
             List<HSSFPictureData> pictures = new List<HSSFPictureData>();
             foreach (Record r in workbook.Records)
             {
-                if (r is AbstractEscherHolderRecord) {
-                    ((AbstractEscherHolderRecord)r).Decode();
-                    IList escherRecords = ((AbstractEscherHolderRecord)r).EscherRecords;
+                if (r is AbstractEscherHolderRecord record) {
+                    record.Decode();
+                    IList escherRecords = record.EscherRecords;
                     SearchForPictures(escherRecords, pictures);
                 }
             }
@@ -2056,13 +2056,11 @@ namespace NPOI.HSSF.UserModel
             while (recordIter.MoveNext())
             {
                 Object obj = recordIter.Current;
-                if (obj is EscherRecord)
+                if (obj is EscherRecord escherRecord)
                 {
-                    EscherRecord escherRecord = (EscherRecord)obj;
-
-                    if (escherRecord is EscherBSERecord)
+                    if (escherRecord is EscherBSERecord record)
                     {
-                        EscherBlipRecord blip = ((EscherBSERecord)escherRecord).BlipRecord;
+                        EscherBlipRecord blip = record.BlipRecord;
                         if (blip != null)
                         {
                             // TODO: Some kind of structure.
@@ -2225,10 +2223,10 @@ namespace NPOI.HSSF.UserModel
         private void GetAllEmbeddedObjects(HSSFShapeContainer parent, List<HSSFObjectData> objects)
         {
             foreach (HSSFShape shape in parent.Children) {
-                if (shape is HSSFObjectData) {
-                    objects.Add((HSSFObjectData) shape);
-                } else if (shape is HSSFShapeContainer) {
-                    GetAllEmbeddedObjects((HSSFShapeContainer) shape, objects);
+                if (shape is HSSFObjectData data) {
+                    objects.Add(data);
+                } else if (shape is HSSFShapeContainer container) {
+                    GetAllEmbeddedObjects(container, objects);
                 }
             }
         }

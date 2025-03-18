@@ -17,8 +17,8 @@ namespace NPOI.SS.Formula.Eval
         private void Add(ValueEval v)
         {
             // flatten multiple nested RefListEval
-            if (v is RefListEval) {
-                list.AddRange(((RefListEval)v).list);
+            if (v is RefListEval eval) {
+                list.AddRange(eval.list);
             } else
             {
                 list.Add(v);

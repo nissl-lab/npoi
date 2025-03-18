@@ -498,9 +498,9 @@ namespace NPOI.HSSF.Model
             for (IEnumerator iterator = _workbookRecordList.GetEnumerator(); iterator.MoveNext(); supLinkIndex++)
             {
                 Record record = (Record)iterator.Current;
-                if (record is SupBookRecord)
+                if (record is SupBookRecord bookRecord)
                 {
-                    if (((SupBookRecord)record).IsAddInFunctions) break;
+                    if (bookRecord.IsAddInFunctions) break;
                 }
             }
             int numberOfNames = extBlock.NumberOfNames;

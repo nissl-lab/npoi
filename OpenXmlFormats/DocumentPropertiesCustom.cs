@@ -388,16 +388,15 @@ namespace NPOI.OpenXmlFormats
         }
         public override bool Equals(object obj)
         {
-            if (!(obj is CT_Property))
+            if (obj is not CT_Property property)
                 return false;
 
-            CT_Property a = (CT_Property)obj;
-            if (a.fmtidField != this.fmtidField
-                ||a.itemElementNameField!=this.itemElementNameField
-                ||a.itemField!=this.itemField
-                ||a.linkTargetField!=this.linkTargetField
-                ||a.nameField!=this.nameField
-                ||a.pidField!=this.pidField)
+            if (property.fmtidField != this.fmtidField
+                ||property.itemElementNameField!=this.itemElementNameField
+                ||property.itemField!=this.itemField
+                ||property.linkTargetField!=this.linkTargetField
+                ||property.nameField!=this.nameField
+                ||property.pidField!=this.pidField)
                 return false;
 
             return true;

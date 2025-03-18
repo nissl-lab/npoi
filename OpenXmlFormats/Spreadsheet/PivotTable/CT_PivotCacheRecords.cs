@@ -200,20 +200,20 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
                 foreach (object o in this.fields)
                 {
-                    if (o is CT_Number)
-                        ((CT_Number)o).Write(sw, "n");
-                    else if (o is CT_Boolean)
-                        ((CT_Boolean)o).Write(sw, "b");
-                    else if (o is CT_DateTime)
-                        ((CT_DateTime)o).Write(sw, "d");
-                    else if (o is CT_Error)
-                        ((CT_Error)o).Write(sw, "e");
-                    else if (o is CT_Missing)
-                        ((CT_Missing)o).Write(sw, "m");
-                    else if (o is CT_String)
-                        ((CT_String)o).Write(sw, "s");
-                    else if (o is CT_Index)
-                        ((CT_Index)o).Write(sw, "x");
+                    if (o is CT_Number number)
+                        number.Write(sw, "n");
+                    else if (o is CT_Boolean b)
+                        b.Write(sw, "b");
+                    else if (o is CT_DateTime time)
+                        time.Write(sw, "d");
+                    else if (o is CT_Error error)
+                        error.Write(sw, "e");
+                    else if (o is CT_Missing missing)
+                        missing.Write(sw, "m");
+                    else if (o is CT_String ctString)
+                        ctString.Write(sw, "s");
+                    else if (o is CT_Index index)
+                        index.Write(sw, "x");
                 }
 
                 sw.Write("</r>");

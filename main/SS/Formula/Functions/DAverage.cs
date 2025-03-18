@@ -31,10 +31,10 @@ namespace NPOI.SS.Formula.Functions
         private double total;
         public bool ProcessMatch(ValueEval eval)
         {
-            if(eval is NumericValueEval)
+            if(eval is NumericValueEval valueEval)
             {
                 count++;
-                total += ((NumericValueEval) eval).NumberValue;
+                total += valueEval.NumberValue;
             }
             return true;
         }

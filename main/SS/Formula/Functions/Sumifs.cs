@@ -59,7 +59,7 @@ namespace NPOI.SS.Formula.Functions
 
             public void AddValue(ValueEval value)
             {
-                accumulator += (value is NumberEval) ? ((NumberEval) value).NumberValue : 0.0;
+                accumulator += (value is NumberEval eval) ? eval.NumberValue : 0.0;
             }
 
             public ValueEval GetResult()

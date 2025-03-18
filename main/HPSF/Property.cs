@@ -359,14 +359,14 @@ namespace NPOI.HPSF
         /// @see Object#equals(java.lang.Object)
         public override bool Equals(Object o)
         {
-            if(!(o is Property))
+            if(o is not Property property)
             {
                 return false;
             }
-            Property p = (Property)o;
-            Object pValue = p.Value;
-            long pId = p.ID;
-            if(id != pId || (id != 0 && !typesAreEqual(type, p.Type)))
+
+            Object pValue = property.Value;
+            long pId = property.ID;
+            if(id != pId || (id != 0 && !typesAreEqual(type, property.Type)))
             {
                 return false;
             }
@@ -388,9 +388,9 @@ namespace NPOI.HPSF
                 return false;
             }
 
-            if(_value is byte[])
+            if(_value is byte[] bytes)
             {
-                return Arrays.Equals((byte[]) _value, (byte[]) pValue);
+                return Arrays.Equals(bytes, (byte[]) pValue);
             }
 
             return _value.Equals(pValue);
@@ -439,10 +439,9 @@ namespace NPOI.HPSF
             b.Append(Type);
             Object value = Value;
             b.Append(", value: ");
-            if(value is String)
+            if(value is String s)
             {
-                b.Append(value.ToString());
-                String s = (String)value;
+                b.Append(s.ToString());
                 int l = s.Length;
                 byte[] bytes = new byte[l * 2];
                 for(int i = 0; i < l; i++)
@@ -461,9 +460,8 @@ namespace NPOI.HPSF
                 }
                 b.Append("]");
             }
-            else if(value is byte[])
+            else if(value is byte[] bytes)
             {
-                byte[] bytes = (byte[])value;
                 if(bytes.Length > 0)
                 {
                     String hex = HexDump.Dump(bytes, 0L, 0);

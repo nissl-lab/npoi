@@ -156,7 +156,7 @@ namespace NPOI.SS.Formula
         public static Area3DPxg ParseStructuredReference(String tableText, IFormulaParsingWorkbook workbook, int rowIndex)
         {
             Ptg[] arr = FormulaParser.Parse(tableText, workbook, 0, 0, rowIndex);
-            if (arr.Length != 1 || !(arr[0] is Area3DPxg) ) {
+            if (arr.Length != 1 || arr[0] is not Area3DPxg ) {
                 throw new InvalidOperationException("Illegal structured reference");
             }
             return (Area3DPxg)arr[0];
@@ -445,9 +445,8 @@ namespace NPOI.SS.Formula
             }
 
             // next 2 are special cases of OperationPtg
-            if (tkn is AbstractFunctionPtg)
+            if (tkn is AbstractFunctionPtg afp)
             {
-                AbstractFunctionPtg afp = (AbstractFunctionPtg)tkn;
                 byte returnClass = afp.DefaultOperandClass;
                 return Ptg.CLASS_REF == returnClass;
             }
@@ -1283,23 +1282,20 @@ namespace NPOI.SS.Formula
          */
         private static Ptg ReduceRangeExpression(Ptg ptgA, Ptg ptgB)
         {
-            if (!(ptgB is RefPtg))
+            if (ptgB is not RefPtg refB)
             {
                 // only when second ref is simple 2-D ref can the range 
                 // expression be converted To an area ref
                 return null;
             }
-            RefPtg refB = (RefPtg)ptgB;
 
-            if (ptgA is RefPtg)
+            if (ptgA is RefPtg a)
             {
-                RefPtg refA = (RefPtg)ptgA;
-                return new AreaPtg(refA.Row, refB.Row, refA.Column, refB.Column,
-                        refA.IsRowRelative, refB.IsRowRelative, refA.IsColRelative, refB.IsColRelative);
+                return new AreaPtg(a.Row, refB.Row, a.Column, refB.Column,
+                        a.IsRowRelative, refB.IsRowRelative, a.IsColRelative, refB.IsColRelative);
             }
-            if (ptgA is Ref3DPtg)
+            if (ptgA is Ref3DPtg refA)
             {
-                Ref3DPtg refA = (Ref3DPtg)ptgA;
                 return new Area3DPtg(refA.Row, refB.Row, refA.Column, refB.Column,
                         refA.IsRowRelative, refB.IsRowRelative, refA.IsColRelative, refB.IsColRelative,
                         refA.ExternSheetIndex);
@@ -1921,22 +1917,22 @@ namespace NPOI.SS.Formula
                 // + or - directly next to a number is parsed with the number
 
                 Ptg token = factor.GetToken();
-                if (token is NumberPtg)
+                if (token is NumberPtg ptg)
                 {
                     if (isPlus)
                     {
                         return factor;
                     }
-                    token = new NumberPtg(-((NumberPtg)token).Value);
+                    token = new NumberPtg(-ptg.Value);
                     return new ParseNode(token);
                 }
-                if (token is IntPtg)
+                if (token is IntPtg intPtg)
                 {
                     if (isPlus)
                     {
                         return factor;
                     }
-                    int intVal = ((IntPtg)token).Value;
+                    int intVal = intPtg.Value;
                     // note - cannot use IntPtg for negatives
                     token = new NumberPtg(-intVal);
                     return new ParseNode(token);
@@ -2048,13 +2044,13 @@ namespace NPOI.SS.Formula
         private static Double ConvertArrayNumber(Ptg ptg, bool isPositive)
         {
             double value;
-            if (ptg is IntPtg)
+            if (ptg is IntPtg intPtg)
             {
-                value = ((IntPtg)ptg).Value;
+                value = intPtg.Value;
             }
-            else if (ptg is NumberPtg)
+            else if (ptg is NumberPtg numberPtg)
             {
-                value = ((NumberPtg)ptg).Value;
+                value = numberPtg.Value;
             }
             else
             {

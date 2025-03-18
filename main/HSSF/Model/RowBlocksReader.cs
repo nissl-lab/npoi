@@ -72,11 +72,11 @@ namespace NPOI.HSSF.Model
                         break;
                     case SharedFormulaRecord.sid:
                         dest = shFrmRecords;
-                        if (!(prevRec is FormulaRecord))
+                        if (prevRec is not FormulaRecord fr)
                         {
                             throw new Exception("Shared formula record should follow a FormulaRecord");
                         }
-                        FormulaRecord fr = (FormulaRecord)prevRec;
+
                         firstCellRefs.Add(new CellReference(fr.Row, fr.Column));
 
                         break;

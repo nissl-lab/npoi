@@ -25,13 +25,12 @@ namespace NPOI.SS.Formula.PTG
                     sb = new StringBuilder(sheetName.Length + cellRefText.Length + 4);
                     SheetNameFormatter.AppendFormat(sb, sheetName);
                 }
-                if (externalSheet is ExternalSheetRange)
+                if (externalSheet is ExternalSheetRange range)
                 {
-                    ExternalSheetRange r = (ExternalSheetRange)externalSheet;
-                    if (!r.FirstSheetName.Equals(r.LastSheetName))
+                    if (!range.FirstSheetName.Equals(range.LastSheetName))
                     {
                         sb.Append(':');
-                        SheetNameFormatter.AppendFormat(sb, r.LastSheetName);
+                        SheetNameFormatter.AppendFormat(sb, range.LastSheetName);
                     }
                 }
             }

@@ -141,31 +141,27 @@ namespace NPOI.SS.Formula.Constant
                 out1.WriteLong(0L);
                 return;
             }
-            if (value is bool)
+            if (value is bool bVal)
             {
-                bool bVal = ((bool)value);
                 out1.WriteByte(TYPE_BOOLEAN);
                 long longVal = bVal ? 1L : 0L;
                 out1.WriteLong(longVal);
                 return;
             }
-            if (value is double)
+            if (value is double dVal)
             {
-                double dVal = (double)value;
                 out1.WriteByte(TYPE_NUMBER);
                 out1.WriteDouble(dVal);
                 return;
             }
-            if (value is String)
+            if (value is String val)
             {
-                String val = (String)value;
                 out1.WriteByte(TYPE_STRING);
                 StringUtil.WriteUnicodeString(out1, val);
                 return;
             }
-            if (value is ErrorConstant)
+            if (value is ErrorConstant ecVal)
             {
-                ErrorConstant ecVal = (ErrorConstant)value;
                 out1.WriteByte(TYPE_ERROR_CODE);
                 long longVal = ecVal.ErrorCode;
                 out1.WriteLong(longVal);

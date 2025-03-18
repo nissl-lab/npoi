@@ -116,9 +116,8 @@ namespace NPOI.XSSF.UserModel
         //FIXME: change to protected if/when SXSSFHyperlink class is created
         public XSSFHyperlink(IHyperlink other)
         {
-            if (other is XSSFHyperlink)
+            if (other is XSSFHyperlink xlink)
             {
-                XSSFHyperlink xlink = (XSSFHyperlink)other;
                 _type = xlink.Type;
                 _location = xlink._location;
                 _externalRel = xlink._externalRel;

@@ -44,9 +44,9 @@ namespace NPOI.SS.Formula.Functions
         private double totalValue = 0;
         public bool ProcessMatch(ValueEval eval)
         {
-            if(eval is NumericValueEval)
+            if(eval is NumericValueEval valueEval)
             {
-                double currentValue = ((NumericValueEval)eval).NumberValue;
+                double currentValue = valueEval.NumberValue;
                 totalValue += currentValue;
             }
 

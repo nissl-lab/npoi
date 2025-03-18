@@ -766,11 +766,10 @@ namespace NPOI.HSSF.UserModel
         /// </exception>
         public override bool Equals(Object obj)
         {
-            if (!(obj is HSSFRow))
+            if (obj is not HSSFRow other)
             {
                 return false;
             }
-            HSSFRow other = (HSSFRow)obj;
 
             return (this.RowNum == other.RowNum) &&
                    (this.Sheet == other.Sheet);

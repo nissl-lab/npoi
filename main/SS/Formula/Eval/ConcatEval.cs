@@ -54,9 +54,8 @@ namespace NPOI.SS.Formula.Eval
 
         private Object GetText(ValueEval ve)
         {
-            if (ve is StringValueEval)
+            if (ve is StringValueEval sve)
             {
-                StringValueEval sve = (StringValueEval)ve;
                 return sve.StringValue;
             }
             if (ve == BlankEval.instance)

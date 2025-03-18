@@ -36,9 +36,9 @@ namespace NPOI.SS.Formula.Functions
         private  List<NumericValueEval> values = new List<NumericValueEval>();
         public bool ProcessMatch(ValueEval eval)
         {
-            if(eval is NumericValueEval)
+            if(eval is NumericValueEval valueEval)
             {
-                values.Add((NumericValueEval) eval);
+                values.Add(valueEval);
             }
             return true;
         }
