@@ -208,35 +208,41 @@ namespace TestCases.XSSF.UserModel
         [Test]
         public void ZeroWidthTest()
         {
-            XSSFWorkbook wb = new XSSFWorkbook();
-            XSSFSheet sheet = (XSSFSheet)wb.CreateSheet("sheet1");
-            int columnIndex = 10;
-            IColumn column1 = sheet.CreateColumn(columnIndex);
-            IColumn column2 = sheet.CreateColumn(columnIndex + 1);
-            short width = 20;
-
-            column2.Width = width;
-            column2.ZeroWidth = true;
-
-            ClassicAssert.IsFalse(column1.ZeroWidth);
-            ClassicAssert.AreEqual(sheet.DefaultColumnWidth, column1.Width);
-            ClassicAssert.IsTrue(column2.ZeroWidth);
-            ClassicAssert.AreEqual(width, column2.Width);
-
             FileInfo file = TempFile.CreateTempFile("poi-", ".xlsx");
-            Stream output = File.OpenWrite(file.FullName);
-            wb.Write(output);
-            output.Close();
+            short width = 20;
+            int columnIndex = 10;
 
-            XSSFWorkbook wbLoaded = new XSSFWorkbook(file.ToString());
-            XSSFSheet sheetLoaded = (XSSFSheet)wbLoaded.GetSheet("sheet1");
-            IColumn column1Loaded = sheetLoaded.GetColumn(columnIndex);
-            IColumn column2Loaded = sheetLoaded.GetColumn(columnIndex + 1);
+            using(XSSFWorkbook wb = new XSSFWorkbook())
+            {
+                XSSFSheet sheet = (XSSFSheet)wb.CreateSheet("sheet1");
+                IColumn column1 = sheet.CreateColumn(columnIndex);
+                IColumn column2 = sheet.CreateColumn(columnIndex + 1);
 
-            ClassicAssert.IsFalse(column1Loaded.ZeroWidth);
-            ClassicAssert.AreEqual(sheetLoaded.DefaultColumnWidth, column1Loaded.Width);
-            ClassicAssert.IsTrue(column2Loaded.ZeroWidth);
-            ClassicAssert.AreEqual(width, column2Loaded.Width);
+                column2.Width = width;
+                column2.ZeroWidth = true;
+
+                ClassicAssert.IsFalse(column1.ZeroWidth);
+                ClassicAssert.AreEqual(sheet.DefaultColumnWidth, column1.Width);
+                ClassicAssert.IsTrue(column2.ZeroWidth);
+                ClassicAssert.AreEqual(width, column2.Width);
+
+                using(Stream output = File.OpenWrite(file.FullName))
+                {
+                    wb.Write(output);
+                }
+            }
+
+            using(XSSFWorkbook wbLoaded = new XSSFWorkbook(file.ToString()))
+            { 
+                XSSFSheet sheetLoaded = (XSSFSheet)wbLoaded.GetSheet("sheet1");
+                IColumn column1Loaded = sheetLoaded.GetColumn(columnIndex);
+                IColumn column2Loaded = sheetLoaded.GetColumn(columnIndex + 1);
+
+                ClassicAssert.IsFalse(column1Loaded.ZeroWidth);
+                ClassicAssert.AreEqual(sheetLoaded.DefaultColumnWidth, column1Loaded.Width);
+                ClassicAssert.IsTrue(column2Loaded.ZeroWidth);
+                ClassicAssert.AreEqual(width, column2Loaded.Width);
+            }
         }
 
         [Test]
