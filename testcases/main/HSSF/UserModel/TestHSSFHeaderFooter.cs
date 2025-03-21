@@ -19,7 +19,7 @@ namespace TestCases.HSSF.UserModel
 {
     using System;
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.UserModel;
     using TestCases.HSSF;
     using NPOI.SS.UserModel;
@@ -48,19 +48,19 @@ namespace TestCases.HSSF.UserModel
             NPOI.SS.UserModel.ISheet s = wb.GetSheetAt(0);
             IHeader head = s.Header;
 
-            Assert.AreEqual("Top Left", head.Left);
-            Assert.AreEqual("Top Center", head.Center);
-            Assert.AreEqual("Top Right", head.Right);
+            ClassicAssert.AreEqual("Top Left", head.Left);
+            ClassicAssert.AreEqual("Top Center", head.Center);
+            ClassicAssert.AreEqual("Top Right", head.Right);
         }
         [Test]
         public void TestSpecialChars()
         {
-            Assert.AreEqual("&U", HSSFHeader.StartUnderline);
-            Assert.AreEqual("&U", HSSFHeader.EndUnderline);
-            Assert.AreEqual("&P", HSSFHeader.Page);
+            ClassicAssert.AreEqual("&U", HSSFHeader.StartUnderline);
+            ClassicAssert.AreEqual("&U", HSSFHeader.EndUnderline);
+            ClassicAssert.AreEqual("&P", HSSFHeader.Page);
 
-            Assert.AreEqual("&22", HSSFFooter.FontSize((short)22));
-            Assert.AreEqual("&\"Arial,bold\"", HSSFFooter.Font("Arial", "bold"));
+            ClassicAssert.AreEqual("&22", HSSFFooter.FontSize((short)22));
+            ClassicAssert.AreEqual("&\"Arial,bold\"", HSSFFooter.Font("Arial", "bold"));
         }
         [Test]
         public void TestStripFields()
@@ -72,34 +72,34 @@ namespace TestCases.HSSF.UserModel
             String withOtherAnds = "I am a&P Test header&&";
             String withOtherAnds2 = "I am a&P Test header&a&b";
 
-            Assert.IsTrue(0 < HeaderFooter.Fields.AllFields.Count,
+            ClassicAssert.IsTrue(0 < HeaderFooter.Fields.AllFields.Count,
                 string.Format(CultureInfo.InvariantCulture, "Fields.AllFields must be initialized before the following tests are working. Fields.AllFields.Count: {0}. ",
                 HeaderFooter.Fields.AllFields.Count));
 
-            Assert.AreEqual(simple, HSSFHeader.StripFields(simple));
-            Assert.AreEqual(simple, HeaderFooter.StripFields(withPage));
-            Assert.AreEqual(simple, HSSFHeader.StripFields(withPage));
-            Assert.AreEqual(simple, HSSFHeader.StripFields(withLots));
-            Assert.AreEqual(simple, HSSFHeader.StripFields(withFont));
-            Assert.AreEqual(simple + "&&", HSSFHeader.StripFields(withOtherAnds));
-            Assert.AreEqual(simple + "&a&b", HSSFHeader.StripFields(withOtherAnds2));
+            ClassicAssert.AreEqual(simple, HSSFHeader.StripFields(simple));
+            ClassicAssert.AreEqual(simple, HeaderFooter.StripFields(withPage));
+            ClassicAssert.AreEqual(simple, HSSFHeader.StripFields(withPage));
+            ClassicAssert.AreEqual(simple, HSSFHeader.StripFields(withLots));
+            ClassicAssert.AreEqual(simple, HSSFHeader.StripFields(withFont));
+            ClassicAssert.AreEqual(simple + "&&", HSSFHeader.StripFields(withOtherAnds));
+            ClassicAssert.AreEqual(simple + "&a&b", HSSFHeader.StripFields(withOtherAnds2));
 
             // Now Test the default Strip flag
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("EmbeddedChartHeaderTest.xls");
             NPOI.SS.UserModel.ISheet s = wb.GetSheetAt(0);
             IHeader head = s.Header;
 
-            Assert.AreEqual("Top Left", head.Left);
-            Assert.AreEqual("Top Center", head.Center);
-            Assert.AreEqual("Top Right", head.Right);
+            ClassicAssert.AreEqual("Top Left", head.Left);
+            ClassicAssert.AreEqual("Top Center", head.Center);
+            ClassicAssert.AreEqual("Top Right", head.Right);
 
             head.Left = ("Top &P&F&D Left");
-            Assert.AreEqual("Top &P&F&D Left", head.Left);
+            ClassicAssert.AreEqual("Top &P&F&D Left", head.Left);
 
-            Assert.AreEqual("Top  Left", NPOI.HSSF.UserModel.HeaderFooter.StripFields(head.Left));
+            ClassicAssert.AreEqual("Top  Left", NPOI.HSSF.UserModel.HeaderFooter.StripFields(head.Left));
             // Now even more complex
             head.Center = ("HEADER TEXT &P&N&D&T&Z&F&F&A&G&X END");
-            Assert.AreEqual("HEADER TEXT  END", NPOI.HSSF.UserModel.HeaderFooter.StripFields(head.Center));
+            ClassicAssert.AreEqual("HEADER TEXT  END", NPOI.HSSF.UserModel.HeaderFooter.StripFields(head.Center));
         }
 
         /**
@@ -115,9 +115,9 @@ namespace TestCases.HSSF.UserModel
             NPOI.SS.UserModel.ISheet s = wb.GetSheetAt(0);
             IFooter foot = s.Footer;
 
-            Assert.AreEqual("Bottom Left", foot.Left);
-            Assert.AreEqual("Bottom Center", foot.Center);
-            Assert.AreEqual("Bottom Right", foot.Right);
+            ClassicAssert.AreEqual("Bottom Left", foot.Left);
+            ClassicAssert.AreEqual("Bottom Center", foot.Center);
+            ClassicAssert.AreEqual("Bottom Right", foot.Right);
         }
 
         /**
@@ -136,9 +136,9 @@ namespace TestCases.HSSF.UserModel
             HSSFWorkbook b2 = HSSFTestDataSamples.WriteOutAndReadBack(b);
             IHeader h2 = b2.GetSheet("Test").Header;
 
-            Assert.AreEqual(h2.Left, "\u0391");
-            Assert.AreEqual(h2.Center, "\u0392");
-            Assert.AreEqual(h2.Right, "\u0393");
+            ClassicAssert.AreEqual(h2.Left, "\u0391");
+            ClassicAssert.AreEqual(h2.Center, "\u0392");
+            ClassicAssert.AreEqual(h2.Right, "\u0393");
         }
 
         /**
@@ -157,9 +157,9 @@ namespace TestCases.HSSF.UserModel
             HSSFWorkbook b2 = HSSFTestDataSamples.WriteOutAndReadBack(b);
             IFooter f2 = b2.GetSheet("Test").Footer;
 
-            Assert.AreEqual(f2.Left, "\u0391");
-            Assert.AreEqual(f2.Center, "\u0392");
-            Assert.AreEqual(f2.Right, "\u0393");
+            ClassicAssert.AreEqual(f2.Left, "\u0391");
+            ClassicAssert.AreEqual(f2.Center, "\u0392");
+            ClassicAssert.AreEqual(f2.Right, "\u0393");
         }
         [Test]
         public void TestReadDBCSHeaderFooter()
@@ -167,14 +167,14 @@ namespace TestCases.HSSF.UserModel
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("DBCSHeader.xls");
             NPOI.SS.UserModel.ISheet s = wb.GetSheetAt(0);
             IHeader h = s.Header;
-            Assert.AreEqual(h.Left, "\u090f\u0915", "Header Left ");
-            Assert.AreEqual(h.Center, "\u0939\u094b\u0917\u093e", "Header Center ");
-            Assert.AreEqual(h.Right, "\u091c\u093e", "Header Right ");
+            ClassicAssert.AreEqual(h.Left, "\u090f\u0915", "Header Left ");
+            ClassicAssert.AreEqual(h.Center, "\u0939\u094b\u0917\u093e", "Header Center ");
+            ClassicAssert.AreEqual(h.Right, "\u091c\u093e", "Header Right ");
 
             IFooter f = s.Footer;
-            Assert.AreEqual(f.Left, "\u091c\u093e", "Footer Left ");
-            Assert.AreEqual(f.Center, "\u091c\u093e", "Footer Center ");
-            Assert.AreEqual(f.Right, "\u091c\u093e", "Footer Right ");
+            ClassicAssert.AreEqual(f.Left, "\u091c\u093e", "Footer Left ");
+            ClassicAssert.AreEqual(f.Center, "\u091c\u093e", "Footer Center ");
+            ClassicAssert.AreEqual(f.Right, "\u091c\u093e", "Footer Right ");
         }
         /**
 	 * Excel tolerates files with missing HEADER/FOOTER records.  POI should do the same.
@@ -196,18 +196,18 @@ namespace TestCases.HSSF.UserModel
             {
                 throw new AssertionException("Identified bug 47244a");
             }
-            Assert.AreEqual("", footer.RawText);
+            ClassicAssert.AreEqual("", footer.RawText);
             HSSFHeader header = (HSSFHeader)sheet.Header;
-            Assert.AreEqual("", header.RawText);
+            ClassicAssert.AreEqual("", header.RawText);
 
             // make sure header / footer is properly linked to underlying data 
             HSSFHeader header2 = (HSSFHeader)sheet.Header;
             header.Center = (/*setter*/"foo");
-            Assert.AreEqual("foo", header2.Center);
+            ClassicAssert.AreEqual("foo", header2.Center);
 
             HSSFFooter footer2 = (HSSFFooter)sheet.Footer;
             footer.Center = (/*setter*/"bar");
-            Assert.AreEqual("bar", footer2.Center);
+            ClassicAssert.AreEqual("bar", footer2.Center);
         }
     }
 

@@ -22,7 +22,7 @@ using NPOI.SS.Formula;
 using NPOI.SS.Formula.Atp;
 using NPOI.SS.Formula.Eval;
 using NPOI.SS.Util;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 
 namespace TestCases.SS.Formula.Atp
 {
@@ -56,47 +56,47 @@ namespace TestCases.SS.Formula.Atp
         [Test]
         public void TestFailWhenNoArguments()
         {
-            Assert.AreEqual(ErrorEval.VALUE_INVALID, NetworkdaysFunction.instance.Evaluate(new ValueEval[0], null));
+            ClassicAssert.AreEqual(ErrorEval.VALUE_INVALID, NetworkdaysFunction.instance.Evaluate(new ValueEval[0], null));
         }
         [Test]
         public void TestFailWhenLessThan2Arguments()
         {
-            Assert.AreEqual(ErrorEval.VALUE_INVALID, NetworkdaysFunction.instance.Evaluate(new ValueEval[1], null));
+            ClassicAssert.AreEqual(ErrorEval.VALUE_INVALID, NetworkdaysFunction.instance.Evaluate(new ValueEval[1], null));
         }
         [Test]
         public void TestFailWhenMoreThan3Arguments()
         {
-            Assert.AreEqual(ErrorEval.VALUE_INVALID, NetworkdaysFunction.instance.Evaluate(new ValueEval[4], null));
+            ClassicAssert.AreEqual(ErrorEval.VALUE_INVALID, NetworkdaysFunction.instance.Evaluate(new ValueEval[4], null));
         }
         [Test]
         public void TestFailWhenArgumentsAreNotDates()
         {
-            Assert.AreEqual(ErrorEval.VALUE_INVALID, NetworkdaysFunction.instance.Evaluate(new ValueEval[]{ new StringEval("Potato"),
+            ClassicAssert.AreEqual(ErrorEval.VALUE_INVALID, NetworkdaysFunction.instance.Evaluate(new ValueEval[]{ new StringEval("Potato"),
                 new StringEval("Cucumber") }, EC));
         }
         [Test]
         public void TestFailWhenStartDateAfterEndDate()
         {
-            Assert.AreEqual(ErrorEval.NAME_INVALID, NetworkdaysFunction.instance.Evaluate(new ValueEval[]{ new StringEval(END_DATE),
+            ClassicAssert.AreEqual(ErrorEval.NAME_INVALID, NetworkdaysFunction.instance.Evaluate(new ValueEval[]{ new StringEval(END_DATE),
                 new StringEval(STARTING_DATE) }, EC));
         }
         [Test]
         public void TestReturnNetworkdays()
         {
-            Assert.AreEqual(108, (int)((NumericValueEval)NetworkdaysFunction.instance.Evaluate(new ValueEval[]{
+            ClassicAssert.AreEqual(108, (int)((NumericValueEval)NetworkdaysFunction.instance.Evaluate(new ValueEval[]{
                 new StringEval(STARTING_DATE), new StringEval(END_DATE) }, EC)).NumberValue);
         }
         [Test]
         public void TestReturnNetworkdaysWithAHoliday()
         {
-            Assert.AreEqual(107, (int)((NumericValueEval)NetworkdaysFunction.instance.Evaluate(new ValueEval[]{
+            ClassicAssert.AreEqual(107, (int)((NumericValueEval)NetworkdaysFunction.instance.Evaluate(new ValueEval[]{
                 new StringEval(STARTING_DATE), new StringEval(END_DATE), new StringEval(FIRST_HOLIDAY) },
                     EC)).NumberValue);
         }
         [Test]
         public void TestReturnNetworkdaysWithManyHolidays()
         {
-            Assert.AreEqual(105, (int)((NumericValueEval)NetworkdaysFunction.instance.Evaluate(new ValueEval[]{
+            ClassicAssert.AreEqual(105, (int)((NumericValueEval)NetworkdaysFunction.instance.Evaluate(new ValueEval[]{
                 new StringEval(STARTING_DATE), new StringEval(END_DATE),
                 new MockAreaEval(new string[]{FIRST_HOLIDAY, SECOND_HOLIDAY, THIRD_HOLIDAY}) }, EC)).NumberValue);
         }

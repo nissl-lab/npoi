@@ -1,7 +1,8 @@
 ﻿using System;
 using NPOI;
 using NPOI.SS.Util;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
+using NUnit.Framework.Legacy;
 
 namespace TestCases;
 
@@ -19,11 +20,11 @@ public class CellReferenceParserTest
     [TestCase("$123", char.MinValue, "", '$', "123")]
     public void TryParseCellReferenceShouldSucceedForValidInput(string input, char expectedColumnPrefix, string expectedColumn, char expectedRowPrefix, string expectedRow)
     {
-        Assert.True(CellReferenceParser.TryParseCellReference(input.AsSpan(), out var columnPrefix, out var column, out var rowPrefix, out var row));
-        Assert.AreEqual(expectedColumnPrefix, columnPrefix, "Column prefix mismatch");
-        Assert.AreEqual(expectedColumn, column.ToString(), "Column mismatch");
-        Assert.AreEqual(expectedRowPrefix, rowPrefix, "Row prefix mismatch");
-        Assert.AreEqual(expectedRow, row.ToString(), "Row mismatch");
+        ClassicAssert.True(CellReferenceParser.TryParseCellReference(input.AsSpan(), out var columnPrefix, out var column, out var rowPrefix, out var row));
+        ClassicAssert.AreEqual(expectedColumnPrefix, columnPrefix, "Column prefix mismatch");
+        ClassicAssert.AreEqual(expectedColumn, column.ToString(), "Column mismatch");
+        ClassicAssert.AreEqual(expectedRowPrefix, rowPrefix, "Row prefix mismatch");
+        ClassicAssert.AreEqual(expectedRow, row.ToString(), "Row mismatch");
     }
 
     [TestCase("$1$1")]
@@ -31,7 +32,7 @@ public class CellReferenceParserTest
     [TestCase("1$")]
     public void TryParseCellReferenceShouldFailForInvalidInput(string input)
     {
-        Assert.False(CellReferenceParser.TryParseCellReference(input.AsSpan(), out _, out _, out _, out _));
+        ClassicAssert.False(CellReferenceParser.TryParseCellReference(input.AsSpan(), out _, out _, out _, out _));
     }
 
     [TestCase("$A$1", "A", "1")]
@@ -43,9 +44,9 @@ public class CellReferenceParserTest
     [TestCase("$A123", "A", "123")]
     public void TryParseStrictCellReferenceShouldSucceedForValidInput(string input, string expectedColumn, string expectedRow)
     {
-        Assert.True(CellReferenceParser.TryParseStrictCellReference(input.AsSpan(), out var column, out var row));
-        Assert.AreEqual(expectedColumn, column.ToString(), "Column mismatch");
-        Assert.AreEqual(expectedRow, row.ToString(), "Row mismatch");
+        ClassicAssert.True(CellReferenceParser.TryParseStrictCellReference(input.AsSpan(), out var column, out var row));
+        ClassicAssert.AreEqual(expectedColumn, column.ToString(), "Column mismatch");
+        ClassicAssert.AreEqual(expectedRow, row.ToString(), "Row mismatch");
     }
 
     [TestCase("$1$1")]
@@ -55,7 +56,7 @@ public class CellReferenceParserTest
     [TestCase("1")]
     public void TryParseStrictCellReferenceShouldFailForInvalidInput(string input)
     {
-        Assert.False(CellReferenceParser.TryParseStrictCellReference(input.AsSpan(), out _, out _));
+        ClassicAssert.False(CellReferenceParser.TryParseStrictCellReference(input.AsSpan(), out _, out _));
     }
 
     [TestCase("A", "A")]
@@ -63,8 +64,8 @@ public class CellReferenceParserTest
     [TestCase("$ABC", "ABC")]
     public void TryParseColumnReferenceShouldSucceedForValidInput(string input, string expectedColumn)
     {
-        Assert.True(CellReferenceParser.TryParseColumnReference(input.AsSpan(), out var column));
-        Assert.AreEqual(expectedColumn, column.ToString(), "Column mismatch");
+        ClassicAssert.True(CellReferenceParser.TryParseColumnReference(input.AsSpan(), out var column));
+        ClassicAssert.AreEqual(expectedColumn, column.ToString(), "Column mismatch");
     }
 
     [TestCase("1")]
@@ -78,7 +79,7 @@ public class CellReferenceParserTest
     [TestCase("$A123")]
     public void TryParseColumnReferenceShouldFailForInvalidInput(string input)
     {
-        Assert.False(CellReferenceParser.TryParseColumnReference(input.AsSpan(), out _));
+        ClassicAssert.False(CellReferenceParser.TryParseColumnReference(input.AsSpan(), out _));
     }
 
 
@@ -87,8 +88,8 @@ public class CellReferenceParserTest
     [TestCase("$123", "123")]
     public void TryParseRowReferenceShouldSucceedForValidInput(string input, string expectedRow)
     {
-        Assert.True(CellReferenceParser.TryParseRowReference(input.AsSpan(), out var row));
-        Assert.AreEqual(expectedRow, row.ToString(), "Row mismatch");
+        ClassicAssert.True(CellReferenceParser.TryParseRowReference(input.AsSpan(), out var row));
+        ClassicAssert.AreEqual(expectedRow, row.ToString(), "Row mismatch");
     }
 
     [TestCase("$")]
@@ -97,6 +98,6 @@ public class CellReferenceParserTest
     [TestCase("A")]
     public void TryParseRowReferenceShouldFailForInvalidInput(string input)
     {
-        Assert.False(CellReferenceParser.TryParseRowReference(input.AsSpan(), out _));
+        ClassicAssert.False(CellReferenceParser.TryParseRowReference(input.AsSpan(), out _));
     }
 }

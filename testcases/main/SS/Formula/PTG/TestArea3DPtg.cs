@@ -18,7 +18,7 @@
 namespace TestCases.SS.Formula.PTG
 {
     using System;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Formula.PTG;
 
@@ -43,13 +43,13 @@ namespace TestCases.SS.Formula.PTG
             String sheetName = "my sheet";
             HSSFWorkbook wb = CreateWorkbookWithSheet(sheetName);
             HSSFEvaluationWorkbook book = HSSFEvaluationWorkbook.Create(wb);
-            Assert.AreEqual("'my sheet'!A1:B1", target.ToFormulaString(book));
+            ClassicAssert.AreEqual("'my sheet'!A1:B1", target.ToFormulaString(book));
 
             wb.SetSheetName(0, "Sheet1");
-            Assert.AreEqual("Sheet1!A1:B1", target.ToFormulaString(book));
+            ClassicAssert.AreEqual("Sheet1!A1:B1", target.ToFormulaString(book));
 
             wb.SetSheetName(0, "C64");
-            Assert.AreEqual("'C64'!A1:B1", target.ToFormulaString(book));
+            ClassicAssert.AreEqual("'C64'!A1:B1", target.ToFormulaString(book));
         }
     }
 

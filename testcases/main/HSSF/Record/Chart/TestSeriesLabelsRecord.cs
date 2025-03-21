@@ -24,7 +24,7 @@ namespace TestCases.HSSF.Record.Chart
     using System;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.Chart;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     /**
      * Tests the serialization and deserialization of the SeriesLabelsRecord
@@ -49,16 +49,16 @@ namespace TestCases.HSSF.Record.Chart
         public void TestLoad()
         {
             SeriesLabelsRecord record = new SeriesLabelsRecord(TestcaseRecordInputStream.Create(0x100c, data));
-            Assert.AreEqual(3, record.FormatFlags);
-            Assert.AreEqual(true, record.IsShowActual);
-            Assert.AreEqual(true, record.IsShowPercent);
-            Assert.AreEqual(false, record.IsLabelAsPercentage);
-            Assert.AreEqual(false, record.IsSmoothedLine);
-            Assert.AreEqual(false, record.IsShowLabel);
-            Assert.AreEqual(false, record.IsShowBubbleSizes);
+            ClassicAssert.AreEqual(3, record.FormatFlags);
+            ClassicAssert.AreEqual(true, record.IsShowActual);
+            ClassicAssert.AreEqual(true, record.IsShowPercent);
+            ClassicAssert.AreEqual(false, record.IsLabelAsPercentage);
+            ClassicAssert.AreEqual(false, record.IsSmoothedLine);
+            ClassicAssert.AreEqual(false, record.IsShowLabel);
+            ClassicAssert.AreEqual(false, record.IsShowBubbleSizes);
 
 
-            Assert.AreEqual(2 + 4, record.RecordSize);
+            ClassicAssert.AreEqual(2 + 4, record.RecordSize);
 
         }
         [Test]
@@ -74,9 +74,9 @@ namespace TestCases.HSSF.Record.Chart
 
 
             byte[] recordBytes = record.Serialize();
-            Assert.AreEqual(recordBytes.Length - 4, data.Length);
+            ClassicAssert.AreEqual(recordBytes.Length - 4, data.Length);
             for (int i = 0; i < data.Length; i++)
-                Assert.AreEqual(data[i], recordBytes[i + 4], "At offset " + i);
+                ClassicAssert.AreEqual(data[i], recordBytes[i + 4], "At offset " + i);
         }
     }
 }

@@ -15,24 +15,46 @@
    limitations under the License.
 ==================================================================== */
 
-namespace TestCases.HPSF.Basic
+/* ================================================================
+ * About NPOI
+ * Author: Tony Qu 
+ * Author's email: tonyqus (at) gmail.com 
+ * Author's Blog: tonyqus.wordpress.com.cn (wp.tonyqus.cn)
+ * HomePage: http://www.codeplex.com/npoi
+ * Contributors:
+ * 
+ * ==============================================================*/
+
+
+namespace TestCases.Util
 {
+
     using System;
 
-    using NUnit.Framework;using NUnit.Framework.Legacy;
-    using NPOI.HPSF;
+    using NUnit.Framework;
+    using System.IO;
+    using NPOI.Util;
 
     /**
-     * <p>Tests ClassID structure.</p>
+     * Tests ClassID structure.
      *
      * @author Michael Zalewski (zalewski@optonline.net)
      */
     [TestFixture]
     public class TestClassID
     {
+        /**
+         * Constructor
+         * 
+         * @param name the Test case's name
+         */
+        public TestClassID()
+        {
+
+        }
 
         /**
-         * Various tests of overridden .Equals()
+         * Various Tests of overridden .Equals()
          */
         [Test]
         public void TestEquals()
@@ -54,11 +76,11 @@ namespace TestCases.HPSF.Basic
             );
             ClassicAssert.AreEqual(clsidTest1, clsidTest1);
             ClassicAssert.AreEqual(clsidTest1, clsidTest2);
-            ClassicAssert.IsFalse(clsidTest1.Equals(clsidTest3));
-            ClassicAssert.IsFalse(clsidTest1.Equals(null));
+            Assert.IsFalse(clsidTest1.Equals(clsidTest3));
+            Assert.IsFalse(clsidTest1.Equals(null));
         }
         /**
-         * Try to write to a buffer that is too small. This should
+         * Try to Write to a buffer that is too small. This should
          *   throw an Exception
          */
         [Test]
@@ -78,7 +100,7 @@ namespace TestCases.HPSF.Basic
             {
                 bExceptionOccurred = true;
             }
-            ClassicAssert.IsTrue(bExceptionOccurred);
+            Assert.IsTrue(bExceptionOccurred);
 
             bExceptionOccurred = false;
             try
@@ -89,7 +111,7 @@ namespace TestCases.HPSF.Basic
             {
                 bExceptionOccurred = true;
             }
-            ClassicAssert.IsTrue(bExceptionOccurred);
+            Assert.IsTrue(bExceptionOccurred);
 
             // These should work without throwing an Exception
             bExceptionOccurred = false;
@@ -102,12 +124,12 @@ namespace TestCases.HPSF.Basic
             {
                 bExceptionOccurred = true;
             }
-            ClassicAssert.IsFalse(bExceptionOccurred);
+            Assert.IsFalse(bExceptionOccurred);
         }
         /**
-         * <p>Tests the {@link PropertySet} methods. The test file has two
+         * Tests the {@link PropertySet} methods. The Test file has two
          * property Set: the first one is a {@link SummaryInformation},
-         * the second one is a {@link DocumentSummaryInformation}.</p>
+         * the second one is a {@link DocumentSummaryInformation}.
          */
         [Test]
         public void TestClassID1()
@@ -121,6 +143,6 @@ namespace TestCases.HPSF.Basic
                                 "{04030201-0605-0807-090A-0B0C0D0E0F10}"
             );
         }
-    }
 
+    }
 }

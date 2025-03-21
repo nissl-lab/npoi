@@ -21,7 +21,7 @@ namespace TestCases.SS.Formula.Functions
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.Formula.Functions;
     using NPOI.SS.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     /**
      * Test cases for SUMPRODUCT()
@@ -48,7 +48,7 @@ namespace TestCases.SS.Formula.Functions
                 throw new AssertionException("Expected numeric result");
             }
             NumericValueEval nve = (NumericValueEval)actualEval;
-            Assert.AreEqual(expected, nve.NumberValue, 0);
+            ClassicAssert.AreEqual(expected, nve.NumberValue, 0);
         }
 
         [Test]
@@ -121,10 +121,10 @@ namespace TestCases.SS.Formula.Functions
         [Test]
         public void TestEvaluateException()
         {
-            Assert.AreEqual(ErrorEval.VALUE_INVALID, invokeSumif(-1, -1, BlankEval.instance, new NumberEval(30.0)));
-            Assert.AreEqual(ErrorEval.VALUE_INVALID, invokeSumif(-1, -1, BlankEval.instance, new NumberEval(30.0), new NumberEval(30.0)));
-            Assert.AreEqual(ErrorEval.VALUE_INVALID, invokeSumif(-1, -1, new NumberEval(30.0), BlankEval.instance, new NumberEval(30.0)));
-            Assert.AreEqual(ErrorEval.VALUE_INVALID, invokeSumif(-1, -1, new NumberEval(30.0), new NumberEval(30.0), BlankEval.instance));
+            ClassicAssert.AreEqual(ErrorEval.VALUE_INVALID, invokeSumif(-1, -1, BlankEval.instance, new NumberEval(30.0)));
+            ClassicAssert.AreEqual(ErrorEval.VALUE_INVALID, invokeSumif(-1, -1, BlankEval.instance, new NumberEval(30.0), new NumberEval(30.0)));
+            ClassicAssert.AreEqual(ErrorEval.VALUE_INVALID, invokeSumif(-1, -1, new NumberEval(30.0), BlankEval.instance, new NumberEval(30.0)));
+            ClassicAssert.AreEqual(ErrorEval.VALUE_INVALID, invokeSumif(-1, -1, new NumberEval(30.0), new NumberEval(30.0), BlankEval.instance));
         }
 
         [Test]

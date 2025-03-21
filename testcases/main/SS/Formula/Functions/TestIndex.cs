@@ -19,7 +19,7 @@ namespace TestCases.SS.Formula.Functions
 {
 
     using System;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.Util;
@@ -96,14 +96,14 @@ namespace TestCases.SS.Formula.Functions
             }
 
             double actual = invokeAndDereference(args);
-            Assert.AreEqual(expectedResult, actual, 0D);
+            ClassicAssert.AreEqual(expectedResult, actual, 0D);
         }
 
         private static double invokeAndDereference(ValueEval[] args)
         {
             ValueEval ve = FUNC_INST.Evaluate(args, -1, -1);
             ve = WorkbookEvaluator.DereferenceResult(ve, -1, -1);
-            Assert.AreEqual(typeof(NumberEval), ve.GetType());
+            ClassicAssert.AreEqual(typeof(NumberEval), ve.GetType());
             return ((NumberEval)ve).NumberValue;
         }
 
@@ -137,8 +137,8 @@ namespace TestCases.SS.Formula.Functions
             // result should be an area eval "B10:B10"
             AreaEval ae = ConfirmAreaEval("B10:B10", actualResult);
             actualResult = ae.GetValue(0, 0);
-            Assert.AreEqual(typeof(NumberEval), actualResult.GetType());
-            Assert.AreEqual(26.0, ((NumberEval)actualResult).NumberValue, 0.0);
+            ClassicAssert.AreEqual(typeof(NumberEval), actualResult.GetType());
+            ClassicAssert.AreEqual(26.0, ((NumberEval)actualResult).NumberValue, 0.0);
         }
 
         /**
@@ -164,12 +164,12 @@ namespace TestCases.SS.Formula.Functions
         private static AreaEval ConfirmAreaEval(String refText, ValueEval ve)
         {
             CellRangeAddress cra = CellRangeAddress.ValueOf(refText);
-            Assert.IsTrue(ve is AreaEval);
+            ClassicAssert.IsTrue(ve is AreaEval);
             AreaEval ae = (AreaEval)ve;
-            Assert.AreEqual(cra.FirstRow, ae.FirstRow);
-            Assert.AreEqual(cra.FirstColumn, ae.FirstColumn);
-            Assert.AreEqual(cra.LastRow, ae.LastRow);
-            Assert.AreEqual(cra.LastColumn, ae.LastColumn);
+            ClassicAssert.AreEqual(cra.FirstRow, ae.FirstRow);
+            ClassicAssert.AreEqual(cra.FirstColumn, ae.FirstColumn);
+            ClassicAssert.AreEqual(cra.LastRow, ae.LastRow);
+            ClassicAssert.AreEqual(cra.LastColumn, ae.LastColumn);
             return ae;
         }
     }

@@ -19,7 +19,7 @@ using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.SS.Util;
 using NPOI.XSSF;
 using NPOI.XSSF.UserModel;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 
 namespace TestCases.XSSF.UserModel
 {
@@ -30,15 +30,15 @@ namespace TestCases.XSSF.UserModel
         public void TestXSSFFactory()
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("chart_sheet.xlsx");
-            Assert.AreEqual(4, wb.NumberOfSheets);
+            ClassicAssert.AreEqual(4, wb.NumberOfSheets);
 
             //the third sheet is of type 'chartsheet'
-            Assert.AreEqual("Chart1", wb.GetSheetName(2));
-            Assert.IsTrue(wb.GetSheetAt(2) is XSSFChartSheet);
-            Assert.AreEqual("Chart1", wb.GetSheetAt(2).SheetName);
+            ClassicAssert.AreEqual("Chart1", wb.GetSheetName(2));
+            ClassicAssert.IsTrue(wb.GetSheetAt(2) is XSSFChartSheet);
+            ClassicAssert.AreEqual("Chart1", wb.GetSheetAt(2).SheetName);
 
             CT_Chartsheet ctChartsheet = ((XSSFChartSheet)wb.GetSheetAt(2)).GetCTChartsheet();
-            Assert.IsNotNull(ctChartsheet);
+            ClassicAssert.IsNotNull(ctChartsheet);
         }
         [Test]
         public void TestGetAccessors()
@@ -46,26 +46,26 @@ namespace TestCases.XSSF.UserModel
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("chart_sheet.xlsx");
             XSSFChartSheet sheet = (XSSFChartSheet)wb.GetSheetAt(2);
 
-            Assert.IsFalse(sheet.GetEnumerator().MoveNext(),
+            ClassicAssert.IsFalse(sheet.GetEnumerator().MoveNext(),
                 "Row iterator for charts sheets should return zero rows");
 
             //access to a arbitrary row
-            Assert.IsNull(sheet.GetRow(1));
+            ClassicAssert.IsNull(sheet.GetRow(1));
 
             //some basic get* accessors
-            Assert.AreEqual(0, sheet.NumberOfComments);
-            Assert.AreEqual(0, sheet.NumHyperlinks);
-            Assert.AreEqual(0, sheet.NumMergedRegions);
-            Assert.IsNull(sheet.ActiveCell);
-            Assert.IsTrue(sheet.Autobreaks);
-            Assert.IsNull(sheet.GetCellComment(new CellAddress(0, 0)));
-            Assert.IsNull(sheet.GetCellComment(new CellAddress(0, 0)));
-            Assert.AreEqual(0, sheet.ColumnBreaks.Length);
-            Assert.IsTrue(sheet.RowSumsBelow);
+            ClassicAssert.AreEqual(0, sheet.NumberOfComments);
+            ClassicAssert.AreEqual(0, sheet.NumHyperlinks);
+            ClassicAssert.AreEqual(0, sheet.NumMergedRegions);
+            ClassicAssert.IsNull(sheet.ActiveCell);
+            ClassicAssert.IsTrue(sheet.Autobreaks);
+            ClassicAssert.IsNull(sheet.GetCellComment(new CellAddress(0, 0)));
+            ClassicAssert.IsNull(sheet.GetCellComment(new CellAddress(0, 0)));
+            ClassicAssert.AreEqual(0, sheet.ColumnBreaks.Length);
+            ClassicAssert.IsTrue(sheet.RowSumsBelow);
 
-            Assert.IsNotNull(sheet.CreateDrawingPatriarch());
-            Assert.IsNotNull(sheet.GetDrawingPatriarch());
-            Assert.IsNotNull(sheet.GetCTChartsheet());
+            ClassicAssert.IsNotNull(sheet.CreateDrawingPatriarch());
+            ClassicAssert.IsNotNull(sheet.GetDrawingPatriarch());
+            ClassicAssert.IsNotNull(sheet.GetCTChartsheet());
         }
 
         [Test]
@@ -76,11 +76,11 @@ namespace TestCases.XSSF.UserModel
             XSSFSheet ns = (XSSFSheet)wb.GetSheetAt(0);
             XSSFChartSheet cs = (XSSFChartSheet)wb.GetSheetAt(2);
 
-            Assert.AreEqual(0, (ns.CreateDrawingPatriarch() as XSSFDrawing).GetCharts().Count);
-            Assert.AreEqual(1, (cs.CreateDrawingPatriarch() as XSSFDrawing).GetCharts().Count);
+            ClassicAssert.AreEqual(0, (ns.CreateDrawingPatriarch() as XSSFDrawing).GetCharts().Count);
+            ClassicAssert.AreEqual(1, (cs.CreateDrawingPatriarch() as XSSFDrawing).GetCharts().Count);
 
             XSSFChart chart = (cs.CreateDrawingPatriarch() as XSSFDrawing).GetCharts()[0];
-            Assert.IsNull(chart.Title);
+            ClassicAssert.IsNull(chart.Title);
         }
     }
 }

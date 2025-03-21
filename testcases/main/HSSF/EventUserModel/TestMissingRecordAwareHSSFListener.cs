@@ -27,7 +27,8 @@ namespace TestCases.HSSF.EventUserModel
     using NPOI.POIFS.FileSystem;
     using NPOI.HSSF.EventUserModel.DummyRecord;
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
+    using NUnit.Framework.Legacy;
 
     [TestFixture]
     public class TestMissingRecordAwareHSSFListener
@@ -55,7 +56,7 @@ namespace TestCases.HSSF.EventUserModel
             }
 
             r = mockListen.GetRecords();
-            Assert.IsTrue(r.Length > 100);
+            ClassicAssert.IsTrue(r.Length > 100);
         }
         public void OpenNormal()
         {
@@ -76,43 +77,43 @@ namespace TestCases.HSSF.EventUserModel
                     if (rr.RowNumber == 0) { row0 = i; }
                 }
             }
-            Assert.IsTrue(row0 > -1);
+            ClassicAssert.IsTrue(row0 > -1);
 
             // Following row 0, we should have 1, 2, then dummy, then 20+21+22
-            Assert.IsTrue(r[row0] is RowRecord);
-            Assert.IsTrue(r[row0 + 1] is RowRecord);
-            Assert.IsTrue(r[row0 + 2] is RowRecord);
-            Assert.IsTrue(r[row0 + 3] is MissingRowDummyRecord);
-            Assert.IsTrue(r[row0 + 4] is MissingRowDummyRecord);
-            Assert.IsTrue(r[row0 + 5] is MissingRowDummyRecord);
-            Assert.IsTrue(r[row0 + 6] is MissingRowDummyRecord);
+            ClassicAssert.IsTrue(r[row0] is RowRecord);
+            ClassicAssert.IsTrue(r[row0 + 1] is RowRecord);
+            ClassicAssert.IsTrue(r[row0 + 2] is RowRecord);
+            ClassicAssert.IsTrue(r[row0 + 3] is MissingRowDummyRecord);
+            ClassicAssert.IsTrue(r[row0 + 4] is MissingRowDummyRecord);
+            ClassicAssert.IsTrue(r[row0 + 5] is MissingRowDummyRecord);
+            ClassicAssert.IsTrue(r[row0 + 6] is MissingRowDummyRecord);
             // ...
-            Assert.IsTrue(r[row0 + 18] is MissingRowDummyRecord);
-            Assert.IsTrue(r[row0 + 19] is MissingRowDummyRecord);
-            Assert.IsTrue(r[row0 + 20] is RowRecord);
-            Assert.IsTrue(r[row0 + 21] is RowRecord);
-            Assert.IsTrue(r[row0 + 22] is RowRecord);
+            ClassicAssert.IsTrue(r[row0 + 18] is MissingRowDummyRecord);
+            ClassicAssert.IsTrue(r[row0 + 19] is MissingRowDummyRecord);
+            ClassicAssert.IsTrue(r[row0 + 20] is RowRecord);
+            ClassicAssert.IsTrue(r[row0 + 21] is RowRecord);
+            ClassicAssert.IsTrue(r[row0 + 22] is RowRecord);
 
             // Check things had the right row numbers
             RowRecord rr2;
             rr2 = (RowRecord)r[row0 + 2];
-            Assert.AreEqual(2, rr2.RowNumber);
+            ClassicAssert.AreEqual(2, rr2.RowNumber);
             rr2 = (RowRecord)r[row0 + 20];
-            Assert.AreEqual(20, rr2.RowNumber);
+            ClassicAssert.AreEqual(20, rr2.RowNumber);
             rr2 = (RowRecord)r[row0 + 21];
-            Assert.AreEqual(21, rr2.RowNumber);
+            ClassicAssert.AreEqual(21, rr2.RowNumber);
 
             MissingRowDummyRecord mr;
             mr = (MissingRowDummyRecord)r[row0 + 3];
-            Assert.AreEqual(3, mr.RowNumber);
+            ClassicAssert.AreEqual(3, mr.RowNumber);
             mr = (MissingRowDummyRecord)r[row0 + 4];
-            Assert.AreEqual(4, mr.RowNumber);
+            ClassicAssert.AreEqual(4, mr.RowNumber);
             mr = (MissingRowDummyRecord)r[row0 + 5];
-            Assert.AreEqual(5, mr.RowNumber);
+            ClassicAssert.AreEqual(5, mr.RowNumber);
             mr = (MissingRowDummyRecord)r[row0 + 18];
-            Assert.AreEqual(18, mr.RowNumber);
+            ClassicAssert.AreEqual(18, mr.RowNumber);
             mr = (MissingRowDummyRecord)r[row0 + 19];
-            Assert.AreEqual(19, mr.RowNumber);
+            ClassicAssert.AreEqual(19, mr.RowNumber);
         }
         [Test]
         public void TestEndOfRowRecords()
@@ -129,7 +130,7 @@ namespace TestCases.HSSF.EventUserModel
                     if (lr.Row == 0 && lr.Column == 0) { cell00 = i; }
                 }
             }
-            Assert.IsTrue(cell00 > -1);
+            ClassicAssert.IsTrue(cell00 > -1);
 
             // We have rows 0, 1, 2, 20 and 21
             // Row 0 has 1 entry
@@ -140,70 +141,70 @@ namespace TestCases.HSSF.EventUserModel
             // Row 22 has 12 entries
 
             // Row 0
-            Assert.IsFalse(r[cell00 + 0] is LastCellOfRowDummyRecord);
-            Assert.IsTrue(r[cell00 + 1] is LastCellOfRowDummyRecord);
+            ClassicAssert.IsFalse(r[cell00 + 0] is LastCellOfRowDummyRecord);
+            ClassicAssert.IsTrue(r[cell00 + 1] is LastCellOfRowDummyRecord);
             // Row 1
-            Assert.IsFalse(r[cell00 + 2] is LastCellOfRowDummyRecord);
-            Assert.IsFalse(r[cell00 + 3] is LastCellOfRowDummyRecord);
-            Assert.IsFalse(r[cell00 + 4] is LastCellOfRowDummyRecord);
-            Assert.IsFalse(r[cell00 + 5] is LastCellOfRowDummyRecord);
-            Assert.IsTrue(r[cell00 + 6] is LastCellOfRowDummyRecord);
+            ClassicAssert.IsFalse(r[cell00 + 2] is LastCellOfRowDummyRecord);
+            ClassicAssert.IsFalse(r[cell00 + 3] is LastCellOfRowDummyRecord);
+            ClassicAssert.IsFalse(r[cell00 + 4] is LastCellOfRowDummyRecord);
+            ClassicAssert.IsFalse(r[cell00 + 5] is LastCellOfRowDummyRecord);
+            ClassicAssert.IsTrue(r[cell00 + 6] is LastCellOfRowDummyRecord);
             // Row 2
-            Assert.IsFalse(r[cell00 + 7] is LastCellOfRowDummyRecord);
-            Assert.IsFalse(r[cell00 + 8] is LastCellOfRowDummyRecord);
-            Assert.IsFalse(r[cell00 + 9] is LastCellOfRowDummyRecord);
-            Assert.IsFalse(r[cell00 + 10] is LastCellOfRowDummyRecord);
-            Assert.IsFalse(r[cell00 + 11] is LastCellOfRowDummyRecord);
-            Assert.IsFalse(r[cell00 + 12] is LastCellOfRowDummyRecord);
-            Assert.IsTrue(r[cell00 + 13] is LastCellOfRowDummyRecord);
+            ClassicAssert.IsFalse(r[cell00 + 7] is LastCellOfRowDummyRecord);
+            ClassicAssert.IsFalse(r[cell00 + 8] is LastCellOfRowDummyRecord);
+            ClassicAssert.IsFalse(r[cell00 + 9] is LastCellOfRowDummyRecord);
+            ClassicAssert.IsFalse(r[cell00 + 10] is LastCellOfRowDummyRecord);
+            ClassicAssert.IsFalse(r[cell00 + 11] is LastCellOfRowDummyRecord);
+            ClassicAssert.IsFalse(r[cell00 + 12] is LastCellOfRowDummyRecord);
+            ClassicAssert.IsTrue(r[cell00 + 13] is LastCellOfRowDummyRecord);
             // Row 3 -> 19
-            Assert.IsTrue(r[cell00 + 14] is LastCellOfRowDummyRecord);
-            Assert.IsTrue(r[cell00 + 15] is LastCellOfRowDummyRecord);
-            Assert.IsTrue(r[cell00 + 16] is LastCellOfRowDummyRecord);
-            Assert.IsTrue(r[cell00 + 17] is LastCellOfRowDummyRecord);
-            Assert.IsTrue(r[cell00 + 18] is LastCellOfRowDummyRecord);
-            Assert.IsTrue(r[cell00 + 19] is LastCellOfRowDummyRecord);
-            Assert.IsTrue(r[cell00 + 20] is LastCellOfRowDummyRecord);
-            Assert.IsTrue(r[cell00 + 21] is LastCellOfRowDummyRecord);
-            Assert.IsTrue(r[cell00 + 22] is LastCellOfRowDummyRecord);
-            Assert.IsTrue(r[cell00 + 23] is LastCellOfRowDummyRecord);
-            Assert.IsTrue(r[cell00 + 24] is LastCellOfRowDummyRecord);
-            Assert.IsTrue(r[cell00 + 25] is LastCellOfRowDummyRecord);
-            Assert.IsTrue(r[cell00 + 26] is LastCellOfRowDummyRecord);
-            Assert.IsTrue(r[cell00 + 27] is LastCellOfRowDummyRecord);
-            Assert.IsTrue(r[cell00 + 28] is LastCellOfRowDummyRecord);
-            Assert.IsTrue(r[cell00 + 29] is LastCellOfRowDummyRecord);
-            Assert.IsTrue(r[cell00 + 30] is LastCellOfRowDummyRecord);
+            ClassicAssert.IsTrue(r[cell00 + 14] is LastCellOfRowDummyRecord);
+            ClassicAssert.IsTrue(r[cell00 + 15] is LastCellOfRowDummyRecord);
+            ClassicAssert.IsTrue(r[cell00 + 16] is LastCellOfRowDummyRecord);
+            ClassicAssert.IsTrue(r[cell00 + 17] is LastCellOfRowDummyRecord);
+            ClassicAssert.IsTrue(r[cell00 + 18] is LastCellOfRowDummyRecord);
+            ClassicAssert.IsTrue(r[cell00 + 19] is LastCellOfRowDummyRecord);
+            ClassicAssert.IsTrue(r[cell00 + 20] is LastCellOfRowDummyRecord);
+            ClassicAssert.IsTrue(r[cell00 + 21] is LastCellOfRowDummyRecord);
+            ClassicAssert.IsTrue(r[cell00 + 22] is LastCellOfRowDummyRecord);
+            ClassicAssert.IsTrue(r[cell00 + 23] is LastCellOfRowDummyRecord);
+            ClassicAssert.IsTrue(r[cell00 + 24] is LastCellOfRowDummyRecord);
+            ClassicAssert.IsTrue(r[cell00 + 25] is LastCellOfRowDummyRecord);
+            ClassicAssert.IsTrue(r[cell00 + 26] is LastCellOfRowDummyRecord);
+            ClassicAssert.IsTrue(r[cell00 + 27] is LastCellOfRowDummyRecord);
+            ClassicAssert.IsTrue(r[cell00 + 28] is LastCellOfRowDummyRecord);
+            ClassicAssert.IsTrue(r[cell00 + 29] is LastCellOfRowDummyRecord);
+            ClassicAssert.IsTrue(r[cell00 + 30] is LastCellOfRowDummyRecord);
             // Row 20
-            Assert.IsFalse(r[cell00 + 31] is LastCellOfRowDummyRecord);
-            Assert.IsFalse(r[cell00 + 32] is LastCellOfRowDummyRecord);
-            Assert.IsFalse(r[cell00 + 33] is LastCellOfRowDummyRecord);
-            Assert.IsFalse(r[cell00 + 34] is LastCellOfRowDummyRecord);
-            Assert.IsFalse(r[cell00 + 35] is LastCellOfRowDummyRecord);
-            Assert.IsTrue(r[cell00 + 36] is LastCellOfRowDummyRecord);
+            ClassicAssert.IsFalse(r[cell00 + 31] is LastCellOfRowDummyRecord);
+            ClassicAssert.IsFalse(r[cell00 + 32] is LastCellOfRowDummyRecord);
+            ClassicAssert.IsFalse(r[cell00 + 33] is LastCellOfRowDummyRecord);
+            ClassicAssert.IsFalse(r[cell00 + 34] is LastCellOfRowDummyRecord);
+            ClassicAssert.IsFalse(r[cell00 + 35] is LastCellOfRowDummyRecord);
+            ClassicAssert.IsTrue(r[cell00 + 36] is LastCellOfRowDummyRecord);
             // Row 21
-            Assert.IsFalse(r[cell00 + 37] is LastCellOfRowDummyRecord);
-            Assert.IsFalse(r[cell00 + 38] is LastCellOfRowDummyRecord);
-            Assert.IsFalse(r[cell00 + 39] is LastCellOfRowDummyRecord);
-            Assert.IsFalse(r[cell00 + 40] is LastCellOfRowDummyRecord);
-            Assert.IsFalse(r[cell00 + 41] is LastCellOfRowDummyRecord);
-            Assert.IsFalse(r[cell00 + 42] is LastCellOfRowDummyRecord);
-            Assert.IsFalse(r[cell00 + 43] is LastCellOfRowDummyRecord);
-            Assert.IsTrue(r[cell00 + 44] is LastCellOfRowDummyRecord);
+            ClassicAssert.IsFalse(r[cell00 + 37] is LastCellOfRowDummyRecord);
+            ClassicAssert.IsFalse(r[cell00 + 38] is LastCellOfRowDummyRecord);
+            ClassicAssert.IsFalse(r[cell00 + 39] is LastCellOfRowDummyRecord);
+            ClassicAssert.IsFalse(r[cell00 + 40] is LastCellOfRowDummyRecord);
+            ClassicAssert.IsFalse(r[cell00 + 41] is LastCellOfRowDummyRecord);
+            ClassicAssert.IsFalse(r[cell00 + 42] is LastCellOfRowDummyRecord);
+            ClassicAssert.IsFalse(r[cell00 + 43] is LastCellOfRowDummyRecord);
+            ClassicAssert.IsTrue(r[cell00 + 44] is LastCellOfRowDummyRecord);
             // Row 22
-            Assert.IsFalse(r[cell00 + 45] is LastCellOfRowDummyRecord);
-            Assert.IsFalse(r[cell00 + 46] is LastCellOfRowDummyRecord);
-            Assert.IsFalse(r[cell00 + 47] is LastCellOfRowDummyRecord);
-            Assert.IsFalse(r[cell00 + 48] is LastCellOfRowDummyRecord);
-            Assert.IsFalse(r[cell00 + 49] is LastCellOfRowDummyRecord);
-            Assert.IsFalse(r[cell00 + 50] is LastCellOfRowDummyRecord);
-            Assert.IsFalse(r[cell00 + 51] is LastCellOfRowDummyRecord);
-            Assert.IsFalse(r[cell00 + 52] is LastCellOfRowDummyRecord);
-            Assert.IsFalse(r[cell00 + 53] is LastCellOfRowDummyRecord);
-            Assert.IsFalse(r[cell00 + 54] is LastCellOfRowDummyRecord);
-            Assert.IsFalse(r[cell00 + 55] is LastCellOfRowDummyRecord);
-            Assert.IsFalse(r[cell00 + 56] is LastCellOfRowDummyRecord);
-            Assert.IsTrue(r[cell00 + 57] is LastCellOfRowDummyRecord);
+            ClassicAssert.IsFalse(r[cell00 + 45] is LastCellOfRowDummyRecord);
+            ClassicAssert.IsFalse(r[cell00 + 46] is LastCellOfRowDummyRecord);
+            ClassicAssert.IsFalse(r[cell00 + 47] is LastCellOfRowDummyRecord);
+            ClassicAssert.IsFalse(r[cell00 + 48] is LastCellOfRowDummyRecord);
+            ClassicAssert.IsFalse(r[cell00 + 49] is LastCellOfRowDummyRecord);
+            ClassicAssert.IsFalse(r[cell00 + 50] is LastCellOfRowDummyRecord);
+            ClassicAssert.IsFalse(r[cell00 + 51] is LastCellOfRowDummyRecord);
+            ClassicAssert.IsFalse(r[cell00 + 52] is LastCellOfRowDummyRecord);
+            ClassicAssert.IsFalse(r[cell00 + 53] is LastCellOfRowDummyRecord);
+            ClassicAssert.IsFalse(r[cell00 + 54] is LastCellOfRowDummyRecord);
+            ClassicAssert.IsFalse(r[cell00 + 55] is LastCellOfRowDummyRecord);
+            ClassicAssert.IsFalse(r[cell00 + 56] is LastCellOfRowDummyRecord);
+            ClassicAssert.IsTrue(r[cell00 + 57] is LastCellOfRowDummyRecord);
 
             // Check the numbers of the last seen columns
             LastCellOfRowDummyRecord[] lrs = new LastCellOfRowDummyRecord[24];
@@ -217,29 +218,29 @@ namespace TestCases.HSSF.EventUserModel
                 }
             }
 
-            Assert.AreEqual(0, lrs[0].LastColumnNumber);
-            Assert.AreEqual(0, lrs[0].Row);
+            ClassicAssert.AreEqual(0, lrs[0].LastColumnNumber);
+            ClassicAssert.AreEqual(0, lrs[0].Row);
 
-            Assert.AreEqual(3, lrs[1].LastColumnNumber);
-            Assert.AreEqual(1, lrs[1].Row);
+            ClassicAssert.AreEqual(3, lrs[1].LastColumnNumber);
+            ClassicAssert.AreEqual(1, lrs[1].Row);
 
-            Assert.AreEqual(5, lrs[2].LastColumnNumber);
-            Assert.AreEqual(2, lrs[2].Row);
+            ClassicAssert.AreEqual(5, lrs[2].LastColumnNumber);
+            ClassicAssert.AreEqual(2, lrs[2].Row);
 
             for (int i = 3; i <= 19; i++)
             {
-                Assert.AreEqual(-1, lrs[i].LastColumnNumber);
-                Assert.AreEqual(i, lrs[i].Row);
+                ClassicAssert.AreEqual(-1, lrs[i].LastColumnNumber);
+                ClassicAssert.AreEqual(i, lrs[i].Row);
             }
 
-            Assert.AreEqual(4, lrs[20].LastColumnNumber);
-            Assert.AreEqual(20, lrs[20].Row);
+            ClassicAssert.AreEqual(4, lrs[20].LastColumnNumber);
+            ClassicAssert.AreEqual(20, lrs[20].Row);
 
-            Assert.AreEqual(6, lrs[21].LastColumnNumber);
-            Assert.AreEqual(21, lrs[21].Row);
+            ClassicAssert.AreEqual(6, lrs[21].LastColumnNumber);
+            ClassicAssert.AreEqual(21, lrs[21].Row);
 
-            Assert.AreEqual(11, lrs[22].LastColumnNumber);
-            Assert.AreEqual(22, lrs[22].Row);
+            ClassicAssert.AreEqual(11, lrs[22].LastColumnNumber);
+            ClassicAssert.AreEqual(22, lrs[22].Row);
         }
 
         [Test]
@@ -257,7 +258,7 @@ namespace TestCases.HSSF.EventUserModel
                     if (lr.Row == 0 && lr.Column == 0) { cell00 = i; }
                 }
             }
-            Assert.IsTrue(cell00 > -1);
+            ClassicAssert.IsTrue(cell00 > -1);
 
             // We have rows 0, 1, 2, 20 and 21
             // Row 0 has 1 entry, 0
@@ -268,82 +269,82 @@ namespace TestCases.HSSF.EventUserModel
             // Row 22 has 12 entries, 0+3+4+11
 
             // Row 0
-            Assert.IsFalse(r[cell00 + 0] is MissingCellDummyRecord);
-            Assert.IsFalse(r[cell00 + 1] is MissingCellDummyRecord);
+            ClassicAssert.IsFalse(r[cell00 + 0] is MissingCellDummyRecord);
+            ClassicAssert.IsFalse(r[cell00 + 1] is MissingCellDummyRecord);
 
             // Row 1
-            Assert.IsFalse(r[cell00 + 2] is MissingCellDummyRecord);
-            Assert.IsTrue(r[cell00 + 3] is MissingCellDummyRecord);
-            Assert.IsTrue(r[cell00 + 4] is MissingCellDummyRecord);
-            Assert.IsFalse(r[cell00 + 5] is MissingCellDummyRecord);
-            Assert.IsFalse(r[cell00 + 6] is MissingCellDummyRecord);
+            ClassicAssert.IsFalse(r[cell00 + 2] is MissingCellDummyRecord);
+            ClassicAssert.IsTrue(r[cell00 + 3] is MissingCellDummyRecord);
+            ClassicAssert.IsTrue(r[cell00 + 4] is MissingCellDummyRecord);
+            ClassicAssert.IsFalse(r[cell00 + 5] is MissingCellDummyRecord);
+            ClassicAssert.IsFalse(r[cell00 + 6] is MissingCellDummyRecord);
 
             // Row 2
-            Assert.IsFalse(r[cell00 + 7] is MissingCellDummyRecord);
-            Assert.IsTrue(r[cell00 + 8] is MissingCellDummyRecord);
-            Assert.IsTrue(r[cell00 + 9] is MissingCellDummyRecord);
-            Assert.IsTrue(r[cell00 + 10] is MissingCellDummyRecord);
-            Assert.IsTrue(r[cell00 + 11] is MissingCellDummyRecord);
-            Assert.IsFalse(r[cell00 + 12] is MissingCellDummyRecord);
-            Assert.IsFalse(r[cell00 + 13] is MissingCellDummyRecord);
+            ClassicAssert.IsFalse(r[cell00 + 7] is MissingCellDummyRecord);
+            ClassicAssert.IsTrue(r[cell00 + 8] is MissingCellDummyRecord);
+            ClassicAssert.IsTrue(r[cell00 + 9] is MissingCellDummyRecord);
+            ClassicAssert.IsTrue(r[cell00 + 10] is MissingCellDummyRecord);
+            ClassicAssert.IsTrue(r[cell00 + 11] is MissingCellDummyRecord);
+            ClassicAssert.IsFalse(r[cell00 + 12] is MissingCellDummyRecord);
+            ClassicAssert.IsFalse(r[cell00 + 13] is MissingCellDummyRecord);
 
             // Row 3-19
-            Assert.IsFalse(r[cell00 + 14] is MissingCellDummyRecord);
-            Assert.IsFalse(r[cell00 + 15] is MissingCellDummyRecord);
+            ClassicAssert.IsFalse(r[cell00 + 14] is MissingCellDummyRecord);
+            ClassicAssert.IsFalse(r[cell00 + 15] is MissingCellDummyRecord);
 
             // Row 20
-            Assert.IsFalse(r[cell00 + 31] is MissingCellDummyRecord);
-            Assert.IsFalse(r[cell00 + 32] is MissingCellDummyRecord);
-            Assert.IsFalse(r[cell00 + 33] is MissingCellDummyRecord);
-            Assert.IsFalse(r[cell00 + 34] is MissingCellDummyRecord);
-            Assert.IsFalse(r[cell00 + 35] is MissingCellDummyRecord);
-            Assert.IsFalse(r[cell00 + 36] is MissingCellDummyRecord);
+            ClassicAssert.IsFalse(r[cell00 + 31] is MissingCellDummyRecord);
+            ClassicAssert.IsFalse(r[cell00 + 32] is MissingCellDummyRecord);
+            ClassicAssert.IsFalse(r[cell00 + 33] is MissingCellDummyRecord);
+            ClassicAssert.IsFalse(r[cell00 + 34] is MissingCellDummyRecord);
+            ClassicAssert.IsFalse(r[cell00 + 35] is MissingCellDummyRecord);
+            ClassicAssert.IsFalse(r[cell00 + 36] is MissingCellDummyRecord);
 
             // Row 21
-            Assert.IsFalse(r[cell00 + 37] is MissingCellDummyRecord);
-            Assert.IsFalse(r[cell00 + 38] is MissingCellDummyRecord);
-            Assert.IsTrue(r[cell00 + 39] is MissingCellDummyRecord);
-            Assert.IsFalse(r[cell00 + 40] is MissingCellDummyRecord);
-            Assert.IsTrue(r[cell00 + 41] is MissingCellDummyRecord);
-            Assert.IsFalse(r[cell00 + 42] is MissingCellDummyRecord);
-            Assert.IsFalse(r[cell00 + 43] is MissingCellDummyRecord);
-            Assert.IsFalse(r[cell00 + 44] is MissingCellDummyRecord);
+            ClassicAssert.IsFalse(r[cell00 + 37] is MissingCellDummyRecord);
+            ClassicAssert.IsFalse(r[cell00 + 38] is MissingCellDummyRecord);
+            ClassicAssert.IsTrue(r[cell00 + 39] is MissingCellDummyRecord);
+            ClassicAssert.IsFalse(r[cell00 + 40] is MissingCellDummyRecord);
+            ClassicAssert.IsTrue(r[cell00 + 41] is MissingCellDummyRecord);
+            ClassicAssert.IsFalse(r[cell00 + 42] is MissingCellDummyRecord);
+            ClassicAssert.IsFalse(r[cell00 + 43] is MissingCellDummyRecord);
+            ClassicAssert.IsFalse(r[cell00 + 44] is MissingCellDummyRecord);
 
             // Row 22
-            Assert.IsFalse(r[cell00 + 45] is MissingCellDummyRecord);
-            Assert.IsTrue(r[cell00 + 46] is MissingCellDummyRecord);
-            Assert.IsTrue(r[cell00 + 47] is MissingCellDummyRecord);
-            Assert.IsFalse(r[cell00 + 48] is MissingCellDummyRecord);
-            Assert.IsFalse(r[cell00 + 49] is MissingCellDummyRecord);
-            Assert.IsTrue(r[cell00 + 50] is MissingCellDummyRecord);
-            Assert.IsTrue(r[cell00 + 51] is MissingCellDummyRecord);
-            Assert.IsTrue(r[cell00 + 52] is MissingCellDummyRecord);
-            Assert.IsTrue(r[cell00 + 53] is MissingCellDummyRecord);
-            Assert.IsTrue(r[cell00 + 54] is MissingCellDummyRecord);
-            Assert.IsTrue(r[cell00 + 55] is MissingCellDummyRecord);
-            Assert.IsFalse(r[cell00 + 56] is MissingCellDummyRecord);
-            Assert.IsFalse(r[cell00 + 57] is MissingCellDummyRecord);
+            ClassicAssert.IsFalse(r[cell00 + 45] is MissingCellDummyRecord);
+            ClassicAssert.IsTrue(r[cell00 + 46] is MissingCellDummyRecord);
+            ClassicAssert.IsTrue(r[cell00 + 47] is MissingCellDummyRecord);
+            ClassicAssert.IsFalse(r[cell00 + 48] is MissingCellDummyRecord);
+            ClassicAssert.IsFalse(r[cell00 + 49] is MissingCellDummyRecord);
+            ClassicAssert.IsTrue(r[cell00 + 50] is MissingCellDummyRecord);
+            ClassicAssert.IsTrue(r[cell00 + 51] is MissingCellDummyRecord);
+            ClassicAssert.IsTrue(r[cell00 + 52] is MissingCellDummyRecord);
+            ClassicAssert.IsTrue(r[cell00 + 53] is MissingCellDummyRecord);
+            ClassicAssert.IsTrue(r[cell00 + 54] is MissingCellDummyRecord);
+            ClassicAssert.IsTrue(r[cell00 + 55] is MissingCellDummyRecord);
+            ClassicAssert.IsFalse(r[cell00 + 56] is MissingCellDummyRecord);
+            ClassicAssert.IsFalse(r[cell00 + 57] is MissingCellDummyRecord);
 
             // Check some numbers
             MissingCellDummyRecord mc;
 
             mc = (MissingCellDummyRecord)r[cell00 + 3];
-            Assert.AreEqual(1, mc.Row);
-            Assert.AreEqual(1, mc.Column);
+            ClassicAssert.AreEqual(1, mc.Row);
+            ClassicAssert.AreEqual(1, mc.Column);
             mc = (MissingCellDummyRecord)r[cell00 + 4];
-            Assert.AreEqual(1, mc.Row);
-            Assert.AreEqual(2, mc.Column);
+            ClassicAssert.AreEqual(1, mc.Row);
+            ClassicAssert.AreEqual(2, mc.Column);
 
             mc = (MissingCellDummyRecord)r[cell00 + 8];
-            Assert.AreEqual(2, mc.Row);
-            Assert.AreEqual(1, mc.Column);
+            ClassicAssert.AreEqual(2, mc.Row);
+            ClassicAssert.AreEqual(1, mc.Column);
             mc = (MissingCellDummyRecord)r[cell00 + 9];
-            Assert.AreEqual(2, mc.Row);
-            Assert.AreEqual(2, mc.Column);
+            ClassicAssert.AreEqual(2, mc.Row);
+            ClassicAssert.AreEqual(2, mc.Column);
 
             mc = (MissingCellDummyRecord)r[cell00 + 55];
-            Assert.AreEqual(22, mc.Row);
-            Assert.AreEqual(10, mc.Column);
+            ClassicAssert.AreEqual(22, mc.Row);
+            ClassicAssert.AreEqual(10, mc.Column);
         }
 
         // Make sure we don't put in any extra new lines
@@ -361,12 +362,12 @@ namespace TestCases.HSSF.EventUserModel
                 if (r[i] is LastCellOfRowDummyRecord)
                 {
                     LastCellOfRowDummyRecord eor = (LastCellOfRowDummyRecord)r[i];
-                    Assert.AreEqual(rowCount, eor.Row);
+                    ClassicAssert.AreEqual(rowCount, eor.Row);
                     rowCount++;
                 }
             }
             // Check we got the 33 rows
-            Assert.AreEqual(33, rowCount);
+            ClassicAssert.AreEqual(33, rowCount);
         }
 
         private class MockHSSFListener : IHSSFListener
@@ -450,8 +451,8 @@ namespace TestCases.HSSF.EventUserModel
             {
                 throw new AssertionException("Identified bug 45672");
             }
-            Assert.AreEqual(1, eorCount);
-            Assert.AreEqual(1, sfrCount);
+            ClassicAssert.AreEqual(1, eorCount);
+            ClassicAssert.AreEqual(1, sfrCount);
         }
 
         /**
@@ -497,7 +498,7 @@ namespace TestCases.HSSF.EventUserModel
             {
                 throw new AssertionException("Identified bug 45672");
             }
-            Assert.AreEqual(2, eorCount);
+            ClassicAssert.AreEqual(2, eorCount);
         }
         [Test]
         public void TestStringRecordHandling()
@@ -518,8 +519,8 @@ namespace TestCases.HSSF.EventUserModel
                     lastCount++;
                 }
             }
-            Assert.AreEqual(1, missingCount);
-            Assert.AreEqual(1, lastCount);
+            ClassicAssert.AreEqual(1, missingCount);
+            ClassicAssert.AreEqual(1, lastCount);
         }
     }
 }

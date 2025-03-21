@@ -18,7 +18,7 @@
 namespace TestCases.SS.UserModel
 {
     using System;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
     using System.Collections.Generic;
@@ -61,7 +61,7 @@ namespace TestCases.SS.UserModel
             }
             catch (ArgumentException e)
             {
-                Assert.AreEqual("The workbook already contains this name: testOne", e.Message);
+                ClassicAssert.AreEqual("The workbook already contains this name: testOne", e.Message);
             }
             //the check for duplicates is case-insensitive
             try
@@ -71,24 +71,24 @@ namespace TestCases.SS.UserModel
             }
             catch (ArgumentException e)
             {
-                Assert.AreEqual("The workbook already contains this name: TESTone", e.Message);
+                ClassicAssert.AreEqual("The workbook already contains this name: TESTone", e.Message);
             }
 
             name2.NameName = ("testTwo");
 
             String ref1 = "Test1!$A$1:$B$1";
             name1.RefersToFormula = (ref1);
-            Assert.AreEqual(ref1, name1.RefersToFormula);
-            Assert.AreEqual("Test1", name1.SheetName);
+            ClassicAssert.AreEqual(ref1, name1.RefersToFormula);
+            ClassicAssert.AreEqual("Test1", name1.SheetName);
 
             String ref2 = "'Testing Named Ranges'!$A$1:$B$1";
             name1.RefersToFormula = (ref2);
-            Assert.AreEqual("'Testing Named Ranges'!$A$1:$B$1", name1.RefersToFormula);
-            Assert.AreEqual("Testing Named Ranges", name1.SheetName);
+            ClassicAssert.AreEqual("'Testing Named Ranges'!$A$1:$B$1", name1.RefersToFormula);
+            ClassicAssert.AreEqual("Testing Named Ranges", name1.SheetName);
 
-            Assert.AreEqual(-1, name1.SheetIndex);
+            ClassicAssert.AreEqual(-1, name1.SheetIndex);
             name1.SheetIndex = (-1);
-            Assert.AreEqual(-1, name1.SheetIndex);
+            ClassicAssert.AreEqual(-1, name1.SheetIndex);
             try
             {
                 name1.SheetIndex = (2);
@@ -96,15 +96,15 @@ namespace TestCases.SS.UserModel
             }
             catch (ArgumentException e)
             {
-                Assert.AreEqual("Sheet index (2) is out of range (0..1)", e.Message);
+                ClassicAssert.AreEqual("Sheet index (2) is out of range (0..1)", e.Message);
             }
 
             name1.SheetIndex = (1);
-            Assert.AreEqual(1, name1.SheetIndex);
+            ClassicAssert.AreEqual(1, name1.SheetIndex);
 
             //-1 means the name applies to the entire workbook
             name1.SheetIndex = (-1);
-            Assert.AreEqual(-1, name1.SheetIndex);
+            ClassicAssert.AreEqual(-1, name1.SheetIndex);
 
             //names cannot be blank and must begin with a letter or underscore and not contain spaces
             String[] invalidNames = { "", "123", "1Name", "Named Range" };
@@ -134,31 +134,31 @@ namespace TestCases.SS.UserModel
             IWorkbook workBook2 = _testDataProvider.WriteOutAndReadBack(workBook);
             IName name2 = workBook2.GetNameAt(0);
 
-            Assert.AreEqual("\u03B1", name2.NameName);
-            Assert.AreEqual("Test!$D$3:$E$8", name2.RefersToFormula);
+            ClassicAssert.AreEqual("\u03B1", name2.NameName);
+            ClassicAssert.AreEqual("Test!$D$3:$E$8", name2.RefersToFormula);
         }
         [Test]
         public void TestAddRemove()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
-            Assert.AreEqual(0, wb.NumberOfNames);
+            ClassicAssert.AreEqual(0, wb.NumberOfNames);
             IName name1 = wb.CreateName();
             name1.NameName = ("name1");
-            Assert.AreEqual(1, wb.NumberOfNames);
+            ClassicAssert.AreEqual(1, wb.NumberOfNames);
 
             IName name2 = wb.CreateName();
             name2.NameName = ("name2");
-            Assert.AreEqual(2, wb.NumberOfNames);
+            ClassicAssert.AreEqual(2, wb.NumberOfNames);
 
             IName name3 = wb.CreateName();
             name3.NameName = ("name3");
-            Assert.AreEqual(3, wb.NumberOfNames);
+            ClassicAssert.AreEqual(3, wb.NumberOfNames);
 
             wb.RemoveName("name2");
-            Assert.AreEqual(2, wb.NumberOfNames);
+            ClassicAssert.AreEqual(2, wb.NumberOfNames);
 
             wb.RemoveName(0);
-            Assert.AreEqual(1, wb.NumberOfNames);
+            ClassicAssert.AreEqual(1, wb.NumberOfNames);
         }
         [Test]
         public void TestScope()
@@ -179,7 +179,7 @@ namespace TestCases.SS.UserModel
             }
             catch (Exception e)
             {
-                Assert.AreEqual("The workbook already contains this name: aaa", e.Message);
+                ClassicAssert.AreEqual("The workbook already contains this name: aaa", e.Message);
             }
 
             name = wb.CreateName();
@@ -194,7 +194,7 @@ namespace TestCases.SS.UserModel
             }
             catch (Exception e)
             {
-                Assert.AreEqual("The sheet already contains this name: aaa", e.Message);
+                ClassicAssert.AreEqual("The sheet already contains this name: aaa", e.Message);
             }
 
             name = wb.CreateName();
@@ -209,10 +209,10 @@ namespace TestCases.SS.UserModel
             }
             catch (Exception e)
             {
-                Assert.AreEqual("The sheet already contains this name: aaa", e.Message);
+                ClassicAssert.AreEqual("The sheet already contains this name: aaa", e.Message);
             }
 
-            Assert.AreEqual(3, wb.GetNames("aaa").Count);
+            ClassicAssert.AreEqual(3, wb.GetNames("aaa").Count);
         }
 
         /**
@@ -257,12 +257,12 @@ namespace TestCases.SS.UserModel
             // Read the Excel file and verify its content
             wb = _testDataProvider.WriteOutAndReadBack(wb);
             IName nm1 = wb.GetName("RangeTest1");
-            Assert.IsTrue("RangeTest1".Equals(nm1.NameName), "Name is " + nm1.NameName);
-            Assert.IsTrue((wb.GetSheetName(0) + "!$A$1:$L$41").Equals(nm1.RefersToFormula), "Reference is " + nm1.RefersToFormula);
+            ClassicAssert.IsTrue("RangeTest1".Equals(nm1.NameName), "Name is " + nm1.NameName);
+            ClassicAssert.IsTrue((wb.GetSheetName(0) + "!$A$1:$L$41").Equals(nm1.RefersToFormula), "Reference is " + nm1.RefersToFormula);
 
             IName nm2 = wb.GetName("RangeTest2");
-            Assert.IsTrue("RangeTest2".Equals(nm2.NameName), "Name is " + nm2.NameName);
-            Assert.IsTrue((wb.GetSheetName(1) + "!$A$1:$O$21").Equals(nm2.RefersToFormula), "Reference is " + nm2.RefersToFormula);
+            ClassicAssert.IsTrue("RangeTest2".Equals(nm2.NameName), "Name is " + nm2.NameName);
+            ClassicAssert.IsTrue((wb.GetSheetName(1) + "!$A$1:$O$21").Equals(nm2.RefersToFormula), "Reference is " + nm2.RefersToFormula);
         }
 
         /**
@@ -280,8 +280,8 @@ namespace TestCases.SS.UserModel
 
             String retrievedPrintArea = workbook.GetPrintArea(0);
 
-            Assert.IsNotNull(retrievedPrintArea, "Print Area not defined for first sheet");
-            Assert.AreEqual("'" + sheetName + "'!$A$1:$B$1", retrievedPrintArea);
+            ClassicAssert.IsNotNull(retrievedPrintArea, "Print Area not defined for first sheet");
+            ClassicAssert.AreEqual("'" + sheetName + "'!$A$1:$B$1", retrievedPrintArea);
         }
 
         /**
@@ -299,8 +299,8 @@ namespace TestCases.SS.UserModel
 
             String retrievedPrintArea = workbook.GetPrintArea(0);
 
-            Assert.IsNotNull(retrievedPrintArea, "Print Area not defined for first sheet");
-            Assert.AreEqual("'" + sheetName + "'!" + reference, retrievedPrintArea);
+            ClassicAssert.IsNotNull(retrievedPrintArea, "Print Area not defined for first sheet");
+            ClassicAssert.AreEqual("'" + sheetName + "'!" + reference, retrievedPrintArea);
         }
 
         /**
@@ -320,8 +320,8 @@ namespace TestCases.SS.UserModel
             workbook = _testDataProvider.WriteOutAndReadBack(workbook);
 
             String retrievedPrintArea = workbook.GetPrintArea(0);
-            Assert.IsNotNull(retrievedPrintArea, "Print Area not defined for first sheet");
-            Assert.AreEqual("'" + sheetName + "'!$A$1:$B$1", retrievedPrintArea, "References Match");
+            ClassicAssert.IsNotNull(retrievedPrintArea, "Print Area not defined for first sheet");
+            ClassicAssert.AreEqual("'" + sheetName + "'!$A$1:$B$1", retrievedPrintArea, "References Match");
         }
 
         /**
@@ -347,31 +347,31 @@ namespace TestCases.SS.UserModel
             String retrievedPrintArea;
 
             retrievedPrintArea = workbook.GetPrintArea(0);
-            Assert.IsNotNull(retrievedPrintArea, "Print Area Not Found (Sheet 1)");
-            Assert.AreEqual("Sheet1!" + reference1, retrievedPrintArea);
+            ClassicAssert.IsNotNull(retrievedPrintArea, "Print Area Not Found (Sheet 1)");
+            ClassicAssert.AreEqual("Sheet1!" + reference1, retrievedPrintArea);
 
             retrievedPrintArea = workbook.GetPrintArea(1);
-            Assert.IsNotNull(retrievedPrintArea, "Print Area Not Found (Sheet 2)");
-            Assert.AreEqual("Sheet2!" + reference2, retrievedPrintArea);
+            ClassicAssert.IsNotNull(retrievedPrintArea, "Print Area Not Found (Sheet 2)");
+            ClassicAssert.AreEqual("Sheet2!" + reference2, retrievedPrintArea);
 
             retrievedPrintArea = workbook.GetPrintArea(2);
-            Assert.IsNotNull(retrievedPrintArea, "Print Area Not Found (Sheet 3)");
-            Assert.AreEqual("Sheet3!" + reference3, retrievedPrintArea);
+            ClassicAssert.IsNotNull(retrievedPrintArea, "Print Area Not Found (Sheet 3)");
+            ClassicAssert.AreEqual("Sheet3!" + reference3, retrievedPrintArea);
 
             // Check print areas After re-reading workbook
             workbook = _testDataProvider.WriteOutAndReadBack(workbook);
 
             retrievedPrintArea = workbook.GetPrintArea(0);
-            Assert.IsNotNull(retrievedPrintArea, "Print Area Not Found (Sheet 1)");
-            Assert.AreEqual("Sheet1!" + reference1, retrievedPrintArea);
+            ClassicAssert.IsNotNull(retrievedPrintArea, "Print Area Not Found (Sheet 1)");
+            ClassicAssert.AreEqual("Sheet1!" + reference1, retrievedPrintArea);
 
             retrievedPrintArea = workbook.GetPrintArea(1);
-            Assert.IsNotNull(retrievedPrintArea, "Print Area Not Found (Sheet 2)");
-            Assert.AreEqual("Sheet2!" + reference2, retrievedPrintArea);
+            ClassicAssert.IsNotNull(retrievedPrintArea, "Print Area Not Found (Sheet 2)");
+            ClassicAssert.AreEqual("Sheet2!" + reference2, retrievedPrintArea);
 
             retrievedPrintArea = workbook.GetPrintArea(2);
-            Assert.IsNotNull(retrievedPrintArea, "Print Area Not Found (Sheet 3)");
-            Assert.AreEqual("Sheet3!" + reference3, retrievedPrintArea);
+            ClassicAssert.IsNotNull(retrievedPrintArea, "Print Area Not Found (Sheet 3)");
+            ClassicAssert.AreEqual("Sheet3!" + reference3, retrievedPrintArea);
         }
 
         /**
@@ -389,8 +389,8 @@ namespace TestCases.SS.UserModel
 
             String retrievedPrintArea = workbook.GetPrintArea(0);
 
-            Assert.IsNotNull(retrievedPrintArea, "Print Area not defined for first sheet");
-            Assert.AreEqual("'" + sheetName + "'!$A$1:$B$1", retrievedPrintArea);
+            ClassicAssert.IsNotNull(retrievedPrintArea, "Print Area not defined for first sheet");
+            ClassicAssert.AreEqual("'" + sheetName + "'!$A$1:$B$1", retrievedPrintArea);
         }
 
 
@@ -407,8 +407,8 @@ namespace TestCases.SS.UserModel
             String reference = "$A$1:$B$1,$D$1:$F$2";
             workbook.SetPrintArea(0, reference);
             String retrievedPrintArea = workbook.GetPrintArea(0);
-            Assert.IsNotNull(retrievedPrintArea, "Print Area not defined for first sheet");
-            Assert.AreEqual("'Test Print Area'!$A$1:$B$1,'Test Print Area'!$D$1:$F$2", retrievedPrintArea);
+            ClassicAssert.IsNotNull(retrievedPrintArea, "Print Area not defined for first sheet");
+            ClassicAssert.AreEqual("'Test Print Area'!$A$1:$B$1,'Test Print Area'!$D$1:$F$2", retrievedPrintArea);
         }
 
         /**
@@ -426,10 +426,10 @@ namespace TestCases.SS.UserModel
 
             String retrievedPrintArea = workbook.GetPrintArea(0);
 
-            Assert.IsNotNull(retrievedPrintArea, "Print Area not defined for first sheet");
+            ClassicAssert.IsNotNull(retrievedPrintArea, "Print Area not defined for first sheet");
 
             workbook.RemovePrintArea(0);
-            Assert.IsNull(workbook.GetPrintArea(0), "PrintArea was not Removed");
+            ClassicAssert.IsNull(workbook.GetPrintArea(0), "PrintArea was not Removed");
         }
 
         /**
@@ -444,7 +444,7 @@ namespace TestCases.SS.UserModel
             wb.CreateSheet("testSheet1");
             String sheetName = wb.GetSheetName(0);
 
-            Assert.AreEqual("testSheet1", sheetName);
+            ClassicAssert.AreEqual("testSheet1", sheetName);
 
             //Creating new Named Range
             IName newNamedRange = wb.CreateName();
@@ -462,12 +462,12 @@ namespace TestCases.SS.UserModel
 
             wb = _testDataProvider.WriteOutAndReadBack(wb);
             IName nm = wb.GetName("RangeTest");
-            Assert.IsTrue("RangeTest".Equals(nm.NameName), "Name is " + nm.NameName);
-            Assert.IsTrue((wb.GetSheetName(0) + "!$D$4:$E$8").Equals(nm.RefersToFormula), "Reference is " + nm.RefersToFormula);
+            ClassicAssert.IsTrue("RangeTest".Equals(nm.NameName), "Name is " + nm.NameName);
+            ClassicAssert.IsTrue((wb.GetSheetName(0) + "!$D$4:$E$8").Equals(nm.RefersToFormula), "Reference is " + nm.RefersToFormula);
 
             nm = wb.GetName("AnotherTest");
-            Assert.IsTrue("AnotherTest".Equals(nm.NameName), "Name is " + nm.NameName);
-            Assert.IsTrue(newNamedRange2.RefersToFormula.Equals(nm.RefersToFormula), "Reference is " + nm.RefersToFormula);
+            ClassicAssert.IsTrue("AnotherTest".Equals(nm.NameName), "Name is " + nm.NameName);
+            ClassicAssert.IsTrue(newNamedRange2.RefersToFormula.Equals(nm.RefersToFormula), "Reference is " + nm.RefersToFormula);
         }
         /**
          * Verifies correct functioning for "single cell named range" (aka "named cell")
@@ -493,20 +493,20 @@ namespace TestCases.SS.UserModel
 
             // retrieve the newly Created named range
             IName aNamedCell = wb.GetName(cellName);
-            Assert.IsNotNull(aNamedCell);
+            ClassicAssert.IsNotNull(aNamedCell);
 
             // retrieve the cell at the named range and Test its contents
             RangeAddress aref = new RangeAddress(aNamedCell.RefersToFormula);
-            Assert.IsTrue(aref.Height == 1 && aref.Width == 1, "Should be exactly 1 cell in the named cell :'" + cellName + "'");
+            ClassicAssert.IsTrue(aref.Height == 1 && aref.Width == 1, "Should be exactly 1 cell in the named cell :'" + cellName + "'");
 
             CellReference cref = new CellReference($"\'{aref.SheetName}\'!{aref.ToCell}");
-            Assert.IsNotNull(cref);
+            ClassicAssert.IsNotNull(cref);
             ISheet s = wb.GetSheet(cref.SheetName);
-            Assert.IsNotNull(s);
+            ClassicAssert.IsNotNull(s);
             IRow r = sheet.GetRow(cref.Row);
             ICell c = r.GetCell(cref.Col);
             String contents = c.RichStringCellValue.String;
-            Assert.AreEqual(contents, cellValue, "Contents of cell retrieved by its named reference");
+            ClassicAssert.AreEqual(contents, cellValue, "Contents of cell retrieved by its named reference");
         }
 
         /**
@@ -531,16 +531,16 @@ namespace TestCases.SS.UserModel
 
             // retrieve the newly Created named range
             IName aNamedCell = wb.GetName(cname);
-            Assert.IsNotNull(aNamedCell);
+            ClassicAssert.IsNotNull(aNamedCell);
 
             // retrieve the cell at the named range and Test its contents
             CellReference cref = new CellReference(aNamedCell.RefersToFormula);
-            Assert.IsNotNull(cref);
+            ClassicAssert.IsNotNull(cref);
             ISheet s = wb.GetSheet(cref.SheetName);
             IRow r = sheet.GetRow(cref.Row);
             ICell c = r.GetCell(cref.Col);
             String contents = c.RichStringCellValue.String;
-            Assert.AreEqual(contents, cvalue, "Contents of cell retrieved by its named reference");
+            ClassicAssert.AreEqual(contents, cvalue, "Contents of cell retrieved by its named reference");
         }
 
 
@@ -579,8 +579,8 @@ namespace TestCases.SS.UserModel
                 }
                 throw e;
             }
-            Assert.IsNull(formula);
-            Assert.IsFalse(n.IsDeleted); // according to exact defInition of isDeleted()
+            ClassicAssert.IsNull(formula);
+            ClassicAssert.IsFalse(n.IsDeleted); // according to exact defInition of isDeleted()
         }
         [Test]
         public void TestDeletedCell()
@@ -602,28 +602,28 @@ namespace TestCases.SS.UserModel
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
             IName n = wb.CreateName();
-            Assert.IsFalse(n.IsFunctionName);
+            ClassicAssert.IsFalse(n.IsFunctionName);
 
             n.SetFunction(false);
-            Assert.IsFalse(n.IsFunctionName);
+            ClassicAssert.IsFalse(n.IsFunctionName);
 
             n.SetFunction(true);
-            Assert.IsTrue(n.IsFunctionName);
+            ClassicAssert.IsTrue(n.IsFunctionName);
 
             n.SetFunction(false);
-            Assert.IsFalse(n.IsFunctionName);
+            ClassicAssert.IsFalse(n.IsFunctionName);
         }
         [Test]
         public void TestDefferedSetting()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
             IName n1 = wb.CreateName();
-            Assert.IsNull(n1.RefersToFormula);
-            Assert.AreEqual("", n1.NameName);
+            ClassicAssert.IsNull(n1.RefersToFormula);
+            ClassicAssert.AreEqual("", n1.NameName);
 
             IName n2 = wb.CreateName();
-            Assert.IsNull(n2.RefersToFormula);
-            Assert.AreEqual("", n2.NameName);
+            ClassicAssert.IsNull(n2.RefersToFormula);
+            ClassicAssert.AreEqual("", n2.NameName);
 
             n1.NameName = ("sale_1");
             n1.RefersToFormula = ("10");
@@ -638,7 +638,7 @@ namespace TestCases.SS.UserModel
             }
             catch (Exception e)
             {
-                Assert.AreEqual("The workbook already contains this name: sale_1", e.Message);
+                ClassicAssert.AreEqual("The workbook already contains this name: sale_1", e.Message);
             }
 
         }
@@ -660,12 +660,12 @@ namespace TestCases.SS.UserModel
             x2.RefersToFormula = "2";
             x2.SheetIndex = wb.GetSheetIndex("sheet2");
             IList<IName> names = wb.GetNames("x");
-            Assert.AreEqual(2, names.Count, "Had: " + names);
-            Assert.AreEqual("1", names[0].RefersToFormula);
-            Assert.AreEqual("2", names[1].RefersToFormula);
-            Assert.AreEqual("1", wb.GetName("x").RefersToFormula);
+            ClassicAssert.AreEqual(2, names.Count, "Had: " + names);
+            ClassicAssert.AreEqual("1", names[0].RefersToFormula);
+            ClassicAssert.AreEqual("2", names[1].RefersToFormula);
+            ClassicAssert.AreEqual("1", wb.GetName("x").RefersToFormula);
             wb.RemoveName("x");
-            Assert.AreEqual("2", wb.GetName("x").RefersToFormula);
+            ClassicAssert.AreEqual("2", wb.GetName("x").RefersToFormula);
 
             wb.Close();
         }
@@ -704,7 +704,7 @@ namespace TestCases.SS.UserModel
             }
             catch (ArgumentException e)
             {
-                Assert.AreEqual("Name cannot be blank", e.Message);
+                ClassicAssert.AreEqual("Name cannot be blank", e.Message);
             }
 
             foreach (string invalid in Arrays.AsList(
@@ -735,7 +735,7 @@ namespace TestCases.SS.UserModel
                 }
                 catch (ArgumentException e)
                 {
-                    Assert.IsTrue(e.Message.StartsWith("Invalid name: '" + invalid + "'"), invalid);
+                    ClassicAssert.IsTrue(e.Message.StartsWith("Invalid name: '" + invalid + "'"), invalid);
                 }
             }
             wb.Close();

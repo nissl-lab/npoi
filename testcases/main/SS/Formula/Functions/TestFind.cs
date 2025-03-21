@@ -19,7 +19,7 @@ namespace TestCases.SS.Formula.Functions
 {
 
     using System;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
 
@@ -63,8 +63,8 @@ namespace TestCases.SS.Formula.Functions
             cell.CellFormula=(formulaText);
             fe.NotifyUpdateCell(cell);
             CellValue result = fe.Evaluate(cell);
-            Assert.AreEqual(result.CellType, CellType.Numeric);
-            Assert.AreEqual(expectedResult, result.NumberValue, 0.0);
+            ClassicAssert.AreEqual(result.CellType, CellType.Numeric);
+            ClassicAssert.AreEqual(expectedResult, result.NumberValue, 0.0);
         }
 
         private static void ConfirmError(HSSFFormulaEvaluator fe, ICell cell, String formulaText,
@@ -73,8 +73,8 @@ namespace TestCases.SS.Formula.Functions
             cell.CellFormula=(formulaText);
             fe.NotifyUpdateCell(cell);
             CellValue result = fe.Evaluate(cell);
-            Assert.AreEqual(result.CellType, CellType.Error);
-            Assert.AreEqual(expectedErrorCode.Code, result.ErrorValue);
+            ClassicAssert.AreEqual(result.CellType, CellType.Error);
+            ClassicAssert.AreEqual(expectedErrorCode.Code, result.ErrorValue);
         }
     }
 

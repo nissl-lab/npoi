@@ -32,7 +32,7 @@ namespace TestCases.POIFS.FileSystem
     using System.IO;
     using TestCases.HSSF;
     using NPOI.POIFS.FileSystem;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.Util;
 
 
@@ -62,8 +62,8 @@ namespace TestCases.POIFS.FileSystem
             catch (OfficeXmlFileException e)
             {
                 // expected during successful Test
-                Assert.IsTrue(e.Message.IndexOf("The supplied data appears to be in the Office 2007+ XML") > -1);
-                Assert.IsTrue(e.Message.IndexOf("You are calling the part of POI that deals with OLE2 Office Documents") > -1);
+                ClassicAssert.IsTrue(e.Message.IndexOf("The supplied data appears to be in the Office 2007+ XML") > -1);
+                ClassicAssert.IsTrue(e.Message.IndexOf("You are calling the part of POI that deals with OLE2 Office Documents") > -1);
             }
         }
 
@@ -79,8 +79,8 @@ namespace TestCases.POIFS.FileSystem
             catch (NotOLE2FileException e)
             {
                 // expected during successful test
-                Assert.IsTrue(e.Message.IndexOf("The supplied data appears to be a raw XML file") > -1);
-                Assert.IsTrue(e.Message.IndexOf("Formats such as Office 2003 XML") > -1);
+                ClassicAssert.IsTrue(e.Message.IndexOf("The supplied data appears to be a raw XML file") > -1);
+                ClassicAssert.IsTrue(e.Message.IndexOf("Formats such as Office 2003 XML") > -1);
             }
         }
 
@@ -114,7 +114,7 @@ namespace TestCases.POIFS.FileSystem
                 {
                     throw new RuntimeException(ex);
                 }
-                Assert.AreEqual(expectedResult, actualResult);
+                ClassicAssert.AreEqual(expectedResult, actualResult);
             }
             finally
             {
@@ -132,13 +132,13 @@ namespace TestCases.POIFS.FileSystem
 
             // detect header
             InputStream in1 = new PushbackInputStream(testInput, 10);
-            Assert.IsFalse(POIFSFileSystem.HasPOIFSHeader(in1));
+            ClassicAssert.IsFalse(POIFSFileSystem.HasPOIFSHeader(in1));
 
             // check if InputStream is still intact
             byte[] test = new byte[3];
             in1.Read(test);
-            Assert.IsTrue(Arrays.Equals(testData, test));
-            Assert.AreEqual(-1, in1.Read());
+            ClassicAssert.IsTrue(Arrays.Equals(testData, test));
+            ClassicAssert.AreEqual(-1, in1.Read());
         }
         [Test]
         public void testFileCorruptionOPOIFS()
@@ -150,12 +150,12 @@ namespace TestCases.POIFS.FileSystem
 
             // detect header
             InputStream in1 = new PushbackInputStream(testInput, 10);
-            Assert.IsFalse(OPOIFSFileSystem.HasPOIFSHeader(in1));
+            ClassicAssert.IsFalse(OPOIFSFileSystem.HasPOIFSHeader(in1));
             // check if InputStream is still intact
             byte[] test = new byte[3];
             in1.Read(test);
-            Assert.IsTrue(Arrays.Equals(testData, test));
-            Assert.AreEqual(-1, in1.Read());
+            ClassicAssert.IsTrue(Arrays.Equals(testData, test));
+            ClassicAssert.AreEqual(-1, in1.Read());
         }
 
     }

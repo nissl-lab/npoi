@@ -15,7 +15,7 @@
    limitations under the License.
 ==================================================================== */
 
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.XSSF.UserModel;
 using System.Collections.Generic;
@@ -47,44 +47,44 @@ namespace TestCases.XSSF.Model
             int idx;
 
             // Check defaults
-            Assert.IsNotNull(sst.Items);
-            Assert.AreEqual(0, sst.Items.Count);
-            Assert.AreEqual(0, sst.Count);
-            Assert.AreEqual(0, sst.UniqueCount);
+            ClassicAssert.IsNotNull(sst.Items);
+            ClassicAssert.AreEqual(0, sst.Items.Count);
+            ClassicAssert.AreEqual(0, sst.Count);
+            ClassicAssert.AreEqual(0, sst.UniqueCount);
 
             st = new CT_Rst();
             st.t = ("Hello, World!");
 
             idx = sst.AddEntry(st);
-            Assert.AreEqual(0, idx);
-            Assert.AreEqual(1, sst.Count);
-            Assert.AreEqual(1, sst.UniqueCount);
+            ClassicAssert.AreEqual(0, idx);
+            ClassicAssert.AreEqual(1, sst.Count);
+            ClassicAssert.AreEqual(1, sst.UniqueCount);
 
             //add the same entry again
             idx = sst.AddEntry(st);
-            Assert.AreEqual(0, idx);
-            Assert.AreEqual(2, sst.Count);
-            Assert.AreEqual(1, sst.UniqueCount);
+            ClassicAssert.AreEqual(0, idx);
+            ClassicAssert.AreEqual(2, sst.Count);
+            ClassicAssert.AreEqual(1, sst.UniqueCount);
 
             //and again
             idx = sst.AddEntry(st);
-            Assert.AreEqual(0, idx);
-            Assert.AreEqual(3, sst.Count);
-            Assert.AreEqual(1, sst.UniqueCount);
+            ClassicAssert.AreEqual(0, idx);
+            ClassicAssert.AreEqual(3, sst.Count);
+            ClassicAssert.AreEqual(1, sst.UniqueCount);
 
             st = new CT_Rst();
             st.t = ("Second string");
 
             idx = sst.AddEntry(st);
-            Assert.AreEqual(1, idx);
-            Assert.AreEqual(4, sst.Count);
-            Assert.AreEqual(2, sst.UniqueCount);
+            ClassicAssert.AreEqual(1, idx);
+            ClassicAssert.AreEqual(4, sst.Count);
+            ClassicAssert.AreEqual(2, sst.UniqueCount);
 
             //add the same entry again
             idx = sst.AddEntry(st);
-            Assert.AreEqual(1, idx);
-            Assert.AreEqual(5, sst.Count);
-            Assert.AreEqual(2, sst.UniqueCount);
+            ClassicAssert.AreEqual(1, idx);
+            ClassicAssert.AreEqual(5, sst.Count);
+            ClassicAssert.AreEqual(2, sst.UniqueCount);
 
             st = new CT_Rst();
             CT_RElt r = st.AddNewR();
@@ -95,20 +95,20 @@ namespace TestCases.XSSF.Model
             r.t = ("Second string");
 
             idx = sst.AddEntry(st);
-            Assert.AreEqual(2, idx);
-            Assert.AreEqual(6, sst.Count);
-            Assert.AreEqual(3, sst.UniqueCount);
+            ClassicAssert.AreEqual(2, idx);
+            ClassicAssert.AreEqual(6, sst.Count);
+            ClassicAssert.AreEqual(3, sst.UniqueCount);
 
             idx = sst.AddEntry(st);
-            Assert.AreEqual(2, idx);
-            Assert.AreEqual(7, sst.Count);
-            Assert.AreEqual(3, sst.UniqueCount);
+            ClassicAssert.AreEqual(2, idx);
+            ClassicAssert.AreEqual(7, sst.Count);
+            ClassicAssert.AreEqual(3, sst.UniqueCount);
 
             //OK. the sst table is Filled, check the contents
-            Assert.AreEqual(3, sst.Items.Count);
-            Assert.AreEqual("Hello, World!", new XSSFRichTextString(sst.GetEntryAt(0)).ToString());
-            Assert.AreEqual("Second string", new XSSFRichTextString(sst.GetEntryAt(1)).ToString());
-            Assert.AreEqual("Second string", new XSSFRichTextString(sst.GetEntryAt(2)).ToString());
+            ClassicAssert.AreEqual(3, sst.Items.Count);
+            ClassicAssert.AreEqual("Hello, World!", new XSSFRichTextString(sst.GetEntryAt(0)).ToString());
+            ClassicAssert.AreEqual("Second string", new XSSFRichTextString(sst.GetEntryAt(1)).ToString());
+            ClassicAssert.AreEqual("Second string", new XSSFRichTextString(sst.GetEntryAt(2)).ToString());
         }
         [Test]
         public void TestReadWrite()
@@ -119,20 +119,20 @@ namespace TestCases.XSSF.Model
             //Serialize, read back and compare with the original
             SharedStringsTable sst2 = XSSFTestDataSamples.WriteOutAndReadBack(wb).GetSharedStringSource();
 
-            Assert.AreEqual(sst1.Count, sst2.Count);
-            Assert.AreEqual(sst1.UniqueCount, sst2.UniqueCount);
+            ClassicAssert.AreEqual(sst1.Count, sst2.Count);
+            ClassicAssert.AreEqual(sst1.UniqueCount, sst2.UniqueCount);
 
             IList<CT_Rst> items1 = sst1.Items;
             IList<CT_Rst> items2 = sst2.Items;
-            Assert.AreEqual(items1.Count, items2.Count);
+            ClassicAssert.AreEqual(items1.Count, items2.Count);
             for (int i = 0; i < items1.Count; i++)
             {
                 CT_Rst st1 = items1[i];
                 CT_Rst st2 = items2[i];
-                Assert.AreEqual(st1.ToString(), st2.ToString());
+                ClassicAssert.AreEqual(st1.ToString(), st2.ToString());
             }
 
-            Assert.IsNotNull(XSSFTestDataSamples.WriteOutAndReadBack(wb));
+            ClassicAssert.IsNotNull(XSSFTestDataSamples.WriteOutAndReadBack(wb));
         }
 
         /**
@@ -167,10 +167,10 @@ namespace TestCases.XSSF.Model
             foreach (String str in lst)
             {
                 String val = s.GetRow(i++).GetCell(0).StringCellValue;
-                Assert.AreEqual(str, val);
+                ClassicAssert.AreEqual(str, val);
             }
 
-            Assert.IsNotNull(XSSFTestDataSamples.WriteOutAndReadBack(w));
+            ClassicAssert.IsNotNull(XSSFTestDataSamples.WriteOutAndReadBack(w));
         }
 
         private List<String> ReadStrings(String filename)

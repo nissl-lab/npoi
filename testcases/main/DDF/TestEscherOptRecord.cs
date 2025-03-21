@@ -24,9 +24,11 @@ namespace TestCases.DDF
     using System.Collections.Generic;
     using System.IO;
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.DDF;
     using NPOI.Util;
+    using NUnit.Framework.Legacy;
+
     [TestFixture]
     public class TestEscherOptRecord
     {
@@ -49,15 +51,15 @@ namespace TestCases.DDF
 
             EscherOptRecord r = new EscherOptRecord();
             r.FillFields(HexRead.ReadFromString(dataStr), new DefaultEscherRecordFactory());
-            Assert.AreEqual((short)0x0033, r.Options);
-            Assert.AreEqual(unchecked((short)0xF00B), r.RecordId);
-            Assert.AreEqual(3, r.EscherProperties.Count);
+            ClassicAssert.AreEqual((short)0x0033, r.Options);
+            ClassicAssert.AreEqual(unchecked((short)0xF00B), r.RecordId);
+            ClassicAssert.AreEqual(3, r.EscherProperties.Count);
             EscherBoolProperty prop1 = new EscherBoolProperty(EscherProperties.TEXT__SIZE_TEXT_TO_FIT_SHAPE, 1);
             EscherComplexProperty prop2 = new EscherComplexProperty((short)1, false, new byte[] { 0x01, 0x02 });
             EscherBoolProperty prop3 = new EscherBoolProperty(EscherProperties.TEXT__SIZE_TEXT_TO_FIT_SHAPE, 1);
-            Assert.AreEqual(prop1, r.GetEscherProperty(0));
-            Assert.AreEqual(prop2, r.GetEscherProperty(1));
-            Assert.AreEqual(prop3, r.GetEscherProperty(2));
+            ClassicAssert.AreEqual(prop1, r.GetEscherProperty(0));
+            ClassicAssert.AreEqual(prop2, r.GetEscherProperty(1));
+            ClassicAssert.AreEqual(prop3, r.GetEscherProperty(2));
 
         }
 
@@ -72,15 +74,15 @@ namespace TestCases.DDF
 
             EscherOptRecord r = new EscherOptRecord();
             r.FillFields(HexRead.ReadFromString(dataStr), new DefaultEscherRecordFactory());
-            Assert.AreEqual((short)0x0033, r.Options);
-            Assert.AreEqual(unchecked((short)0xF00B), r.RecordId);
-            Assert.AreEqual(3, r.EscherProperties.Count);
+            ClassicAssert.AreEqual((short)0x0033, r.Options);
+            ClassicAssert.AreEqual(unchecked((short)0xF00B), r.RecordId);
+            ClassicAssert.AreEqual(3, r.EscherProperties.Count);
             EscherBoolProperty prop1 = new EscherBoolProperty(EscherProperties.TEXT__SIZE_TEXT_TO_FIT_SHAPE, 524296);
             EscherRGBProperty prop2 = new EscherRGBProperty(EscherProperties.FILL__FILLCOLOR, 0x08000009);
             EscherRGBProperty prop3 = new EscherRGBProperty(EscherProperties.LINESTYLE__COLOR, 0x08000040);
-            Assert.AreEqual(prop1, r.GetEscherProperty(0));
-            Assert.AreEqual(prop2, r.GetEscherProperty(1));
-            Assert.AreEqual(prop3, r.GetEscherProperty(2));
+            ClassicAssert.AreEqual(prop1, r.GetEscherProperty(0));
+            ClassicAssert.AreEqual(prop2, r.GetEscherProperty(1));
+            ClassicAssert.AreEqual(prop3, r.GetEscherProperty(2));
         }
         [Test]
         public void TestSerialize()
@@ -104,7 +106,7 @@ namespace TestCases.DDF
 
             byte[] data = new byte[28];
             int bytesWritten = r.Serialize(0, data);
-            Assert.AreEqual(28, bytesWritten);
+            ClassicAssert.AreEqual(28, bytesWritten);
             String dataStr = "[33, 00, " +
                     "0B, F0, " +
                     "14, 00, 00, 00, " +
@@ -112,7 +114,7 @@ namespace TestCases.DDF
                     "01, 80, 02, 00, 00, 00, " +
                     "BF, 00, 01, 00, 00, 00, " +
                     "01, 02]";
-            Assert.AreEqual(dataStr, HexDump.ToHex(data));
+            ClassicAssert.AreEqual(dataStr, HexDump.ToHex(data));
 
         }
 
@@ -136,8 +138,8 @@ namespace TestCases.DDF
                     "BF, 00, 01, 00, 00, 00, " +
                     "81, 01, 09, 00, 00, 08, " +
                     "C0, 01, 40, 00, 00, 08]";
-            Assert.AreEqual(dataStr, HexDump.ToHex(data));
-            Assert.AreEqual(26, bytesWritten);
+            ClassicAssert.AreEqual(dataStr, HexDump.ToHex(data));
+            ClassicAssert.AreEqual(26, bytesWritten);
         }
         [Test]
         public void TestToString()
@@ -157,7 +159,7 @@ namespace TestCases.DDF
                     "  numchildren: 0" + nl +
                     "  properties:" + nl +
                     "    propNum: 1, RAW: 0x0001, propName: unknown, complex: False, blipId: False, value: 1 (0x00000001)" + nl;
-            Assert.AreEqual(expected, r.ToString());
+            ClassicAssert.AreEqual(expected, r.ToString());
         }
 
         /**
@@ -243,18 +245,18 @@ namespace TestCases.DDF
             int Filled = r.FillFields(data, new DefaultEscherRecordFactory());
 
             // Check it's the right Length
-            Assert.AreEqual(data.Length, Filled);
-            Assert.AreEqual(data.Length, r.RecordSize);
+            ClassicAssert.AreEqual(data.Length, Filled);
+            ClassicAssert.AreEqual(data.Length, r.RecordSize);
 
             // Serialise it
             byte[] dest = new byte[data.Length];
             int written = r.Serialize(0, dest);
 
             // Check it serialised it back to the same data
-            Assert.AreEqual(data.Length, written);
+            ClassicAssert.AreEqual(data.Length, written);
             for (int i = 0; i < data.Length; i++)
             {
-                Assert.AreEqual(data[i], dest[i]);
+                ClassicAssert.AreEqual(data[i], dest[i]);
             }
         }
 
@@ -308,14 +310,14 @@ namespace TestCases.DDF
             EscherOptRecord r = new EscherOptRecord();
             byte[] data = HexRead.ReadFromString(dataStr1);
             r.FillFields(data, 0, new DefaultEscherRecordFactory());
-            Assert.AreEqual(unchecked((short)0xF00B), r.RecordId);
+            ClassicAssert.AreEqual(unchecked((short)0xF00B), r.RecordId);
 
             byte[] data1 = r.Serialize();
             EscherOptRecord opt2 = new EscherOptRecord();
             opt2.FillFields(data1, new DefaultEscherRecordFactory());
 
             byte[] data2 = opt2.Serialize();
-            Assert.IsTrue(Arrays.Equals(data1, data2));
+            ClassicAssert.IsTrue(Arrays.Equals(data1, data2));
         }
 
         /**
@@ -327,17 +329,17 @@ namespace TestCases.DDF
         {
             EscherOptRecord r = new EscherOptRecord();
             EscherArrayProperty p = new EscherArrayProperty(unchecked((short)(EscherProperties.FILL__SHADECOLORS + 0x8000)), new byte[0]);
-            Assert.AreEqual(0, p.NumberOfElementsInArray);
+            ClassicAssert.AreEqual(0, p.NumberOfElementsInArray);
             r.AddEscherProperty(p);
 
             byte[] data1 = r.Serialize();
             EscherOptRecord opt2 = new EscherOptRecord();
             opt2.FillFields(data1, new DefaultEscherRecordFactory());
             p = (EscherArrayProperty)opt2.EscherProperties[0];
-            Assert.AreEqual(0, p.NumberOfElementsInArray);
+            ClassicAssert.AreEqual(0, p.NumberOfElementsInArray);
 
             byte[] data2 = opt2.Serialize();
-            Assert.IsTrue(Arrays.Equals(data1, data2));
+            ClassicAssert.IsTrue(Arrays.Equals(data1, data2));
         }
     }
 }

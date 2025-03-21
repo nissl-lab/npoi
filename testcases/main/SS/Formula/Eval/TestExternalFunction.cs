@@ -19,7 +19,7 @@ namespace TestCases.SS.Formula.Eval
 {
 
     using System;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.Eval;
@@ -98,8 +98,8 @@ namespace TestCases.SS.Formula.Eval
             ICell myFunc2Cell = row.GetCell(2); // =myFunc2("_")
 
             HSSFFormulaEvaluator fe = HSSFFormulaEvaluator.Create(wb, null, udff);
-            Assert.AreEqual("_abc", fe.Evaluate(myFuncCell).StringValue);
-            Assert.AreEqual("_abc2", fe.Evaluate(myFunc2Cell).StringValue);
+            ClassicAssert.AreEqual("_abc", fe.Evaluate(myFuncCell).StringValue);
+            ClassicAssert.AreEqual("_abc2", fe.Evaluate(myFunc2Cell).StringValue);
         }
     }
 

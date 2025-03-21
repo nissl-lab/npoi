@@ -18,7 +18,7 @@ namespace TestCases.SS.Formula.Atp
 {
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.Model;
     using System;
     using TestCases.HSSF;
@@ -69,11 +69,11 @@ namespace TestCases.SS.Formula.Atp
             Evaluator.ClearAllCachedResultValues();
             formulaCell.CellFormula = ("RANDBETWEEN(1,1)");
             Evaluator.EvaluateFormulaCell(formulaCell);
-            Assert.AreEqual(1, formulaCell.NumericCellValue, 0);
+            ClassicAssert.AreEqual(1, formulaCell.NumericCellValue, 0);
             Evaluator.ClearAllCachedResultValues();
             formulaCell.CellFormula = ("RANDBETWEEN(-1,-1)");
             Evaluator.EvaluateFormulaCell(formulaCell);
-            Assert.AreEqual(-1, formulaCell.NumericCellValue, 0);
+            ClassicAssert.AreEqual(-1, formulaCell.NumericCellValue, 0);
 
         }
 
@@ -91,25 +91,25 @@ namespace TestCases.SS.Formula.Atp
             formulaCell.CellFormula = ("RANDBETWEEN($A$1,$B$1)");
             Evaluator.ClearAllCachedResultValues();
             Evaluator.EvaluateFormulaCell(formulaCell);
-            Assert.AreEqual(1, formulaCell.NumericCellValue, 0);
+            ClassicAssert.AreEqual(1, formulaCell.NumericCellValue, 0);
             bottomValueCell.SetCellValue(-0.1);
             topValueCell.SetCellValue(-0.05);
             formulaCell.CellFormula = ("RANDBETWEEN($A$1,$B$1)");
             Evaluator.ClearAllCachedResultValues();
             Evaluator.EvaluateFormulaCell(formulaCell);
-            Assert.AreEqual(0, formulaCell.NumericCellValue, 0);
+            ClassicAssert.AreEqual(0, formulaCell.NumericCellValue, 0);
             bottomValueCell.SetCellValue(-1.1);
             topValueCell.SetCellValue(-1.05);
             formulaCell.CellFormula = ("RANDBETWEEN($A$1,$B$1)");
             Evaluator.ClearAllCachedResultValues();
             Evaluator.EvaluateFormulaCell(formulaCell);
-            Assert.AreEqual(-1, formulaCell.NumericCellValue, 0);
+            ClassicAssert.AreEqual(-1, formulaCell.NumericCellValue, 0);
             bottomValueCell.SetCellValue(-1.1);
             topValueCell.SetCellValue(-1.1);
             formulaCell.CellFormula = ("RANDBETWEEN($A$1,$B$1)");
             Evaluator.ClearAllCachedResultValues();
             Evaluator.EvaluateFormulaCell(formulaCell);
-            Assert.AreEqual(-1, formulaCell.NumericCellValue, 0);
+            ClassicAssert.AreEqual(-1, formulaCell.NumericCellValue, 0);
         }
 
         /**
@@ -124,7 +124,7 @@ namespace TestCases.SS.Formula.Atp
             formulaCell.CellFormula = ("RANDBETWEEN($A$1,$B$1)");
             Evaluator.ClearAllCachedResultValues();
             Evaluator.EvaluateFormulaCell(formulaCell);
-            Assert.IsTrue(formulaCell.NumericCellValue == 0 || formulaCell.NumericCellValue == -1);
+            ClassicAssert.IsTrue(formulaCell.NumericCellValue == 0 || formulaCell.NumericCellValue == -1);
 
         }
         /**
@@ -139,8 +139,8 @@ namespace TestCases.SS.Formula.Atp
             formulaCell.CellFormula = ("RANDBETWEEN($A$1,$B$1)");
             Evaluator.ClearAllCachedResultValues();
             Evaluator.EvaluateFormulaCell(formulaCell);
-            Assert.AreEqual(CellType.Error, formulaCell.CachedFormulaResultType);
-            Assert.AreEqual(ErrorEval.VALUE_INVALID.ErrorCode, formulaCell.ErrorCellValue);
+            ClassicAssert.AreEqual(CellType.Error, formulaCell.CachedFormulaResultType);
+            ClassicAssert.AreEqual(ErrorEval.VALUE_INVALID.ErrorCode, formulaCell.ErrorCellValue);
 
 
             // Check case where top input is of the wrong type
@@ -149,8 +149,8 @@ namespace TestCases.SS.Formula.Atp
             formulaCell.CellFormula = ("RANDBETWEEN($A$1,$B$1)");
             Evaluator.ClearAllCachedResultValues();
             Evaluator.EvaluateFormulaCell(formulaCell);
-            Assert.AreEqual(CellType.Error, formulaCell.CachedFormulaResultType);
-            Assert.AreEqual(ErrorEval.VALUE_INVALID.ErrorCode, formulaCell.ErrorCellValue);
+            ClassicAssert.AreEqual(CellType.Error, formulaCell.CachedFormulaResultType);
+            ClassicAssert.AreEqual(ErrorEval.VALUE_INVALID.ErrorCode, formulaCell.ErrorCellValue);
 
             // Check case where both inputs are of wrong type
             bottomValueCell.SetCellValue("STRING");
@@ -158,8 +158,8 @@ namespace TestCases.SS.Formula.Atp
             formulaCell.CellFormula = ("RANDBETWEEN($A$1,$B$1)");
             Evaluator.ClearAllCachedResultValues();
             Evaluator.EvaluateFormulaCell(formulaCell);
-            Assert.AreEqual(CellType.Error, formulaCell.CachedFormulaResultType);
-            Assert.AreEqual(ErrorEval.VALUE_INVALID.ErrorCode, formulaCell.ErrorCellValue);
+            ClassicAssert.AreEqual(CellType.Error, formulaCell.CachedFormulaResultType);
+            ClassicAssert.AreEqual(ErrorEval.VALUE_INVALID.ErrorCode, formulaCell.ErrorCellValue);
 
         }
 
@@ -176,15 +176,15 @@ namespace TestCases.SS.Formula.Atp
             formulaCell.CellFormula = ("RANDBETWEEN($A$1,$B$1)");
             Evaluator.ClearAllCachedResultValues();
             Evaluator.EvaluateFormulaCell(formulaCell);
-            Assert.AreEqual(CellType.Error, formulaCell.CachedFormulaResultType);
-            Assert.AreEqual(ErrorEval.NUM_ERROR.ErrorCode, formulaCell.ErrorCellValue);
+            ClassicAssert.AreEqual(CellType.Error, formulaCell.CachedFormulaResultType);
+            ClassicAssert.AreEqual(ErrorEval.NUM_ERROR.ErrorCode, formulaCell.ErrorCellValue);
             bottomValueCell.SetCellValue(1);
             topValueCell.SetCellType(CellType.Blank);
             formulaCell.CellFormula = ("RANDBETWEEN($A$1,$B$1)");
             Evaluator.ClearAllCachedResultValues();
             Evaluator.EvaluateFormulaCell(formulaCell);
-            Assert.AreEqual(CellType.Error, formulaCell.CachedFormulaResultType);
-            Assert.AreEqual(ErrorEval.NUM_ERROR.ErrorCode, formulaCell.ErrorCellValue);
+            ClassicAssert.AreEqual(CellType.Error, formulaCell.CachedFormulaResultType);
+            ClassicAssert.AreEqual(ErrorEval.NUM_ERROR.ErrorCode, formulaCell.ErrorCellValue);
         }
 
         /**
@@ -199,7 +199,7 @@ namespace TestCases.SS.Formula.Atp
             formulaCell.CellFormula = ("RANDBETWEEN($A$1,$B$1)");
             Evaluator.ClearAllCachedResultValues();
             Evaluator.EvaluateFormulaCell(formulaCell);
-            Assert.IsTrue(formulaCell.NumericCellValue >= Double.MinValue && formulaCell.NumericCellValue <= Double.MaxValue);
+            ClassicAssert.IsTrue(formulaCell.NumericCellValue >= Double.MinValue && formulaCell.NumericCellValue <= Double.MaxValue);
 
         }
 

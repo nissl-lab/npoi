@@ -19,7 +19,7 @@ namespace TestCases.HSSF.Record.Crypto
 {
     using System;
     using System.IO;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.Util;
     using TestCases.Exceptions;
     using NPOI.HSSF.Record.Crypto;
@@ -74,7 +74,7 @@ namespace TestCases.HSSF.Record.Crypto
                 _ms = ms;
                 byte[] keyDigest = HexRead.ReadFromString(keyDigestHex);
                 _bds = new Biff8DecryptingStream(_ms, 0, new Biff8EncryptionKey(keyDigest));
-                Assert.AreEqual(expectedFirstInt, _bds.ReadInt());
+                ClassicAssert.AreEqual(expectedFirstInt, _bds.ReadInt());
                 _errorsOccurred = false;
             }
 
@@ -89,12 +89,12 @@ namespace TestCases.HSSF.Record.Crypto
              */
             public void RollForward(int fromPosition, int toPosition)
             {
-                Assert.AreEqual(fromPosition, _ms.GetPosition());
+                ClassicAssert.AreEqual(fromPosition, _ms.GetPosition());
                 for (int i = fromPosition; i < toPosition; i++)
                 {
                     _bds.ReadByte();
                 }
-                Assert.AreEqual(toPosition, _ms.GetPosition());
+                ClassicAssert.AreEqual(toPosition, _ms.GetPosition());
             }
 
             public void ConfirmByte(int expVal)
@@ -176,7 +176,7 @@ namespace TestCases.HSSF.Record.Crypto
 
             public void AssertNoErrors()
             {
-                Assert.IsFalse(_errorsOccurred, "Some values decrypted incorrectly");
+                ClassicAssert.IsFalse(_errorsOccurred, "Some values decrypted incorrectly");
             }
         }
 
@@ -207,9 +207,9 @@ namespace TestCases.HSSF.Record.Crypto
             st.RollForward(0x7215, 0x1B9AD);
             st.ConfirmShort(-1);
             st.RollForward(0x1B9AF, 0x37D99);
-            Assert.AreEqual(0xFFFF, st.ReadUShort());
+            ClassicAssert.AreEqual(0xFFFF, st.ReadUShort());
             st.RollForward(0x37D9B, 0x4A6F2);
-            Assert.AreEqual(-1, st.ReadShort());
+            ClassicAssert.AreEqual(-1, st.ReadShort());
 
             st.AssertNoErrors();
         }
@@ -250,12 +250,12 @@ namespace TestCases.HSSF.Record.Crypto
                 throw new AssertionException(
                         "Indentified bug in key alignment After call to ReadHeaderUshort()");
             }
-            Assert.AreEqual(0x16885243, nextInt);
+            ClassicAssert.AreEqual(0x16885243, nextInt);
             if (hval == 0x283E)
             {
                 throw new AssertionException("readHeaderUshort() incorrectly decrypted result");
             }
-            Assert.AreEqual(0x504F, hval);
+            ClassicAssert.AreEqual(0x504F, hval);
 
             // confirm next key change
             st.RollForward(0x0405, 0x07FC);

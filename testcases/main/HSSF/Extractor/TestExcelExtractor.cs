@@ -26,9 +26,9 @@ namespace TestCases.HSSF.Extractor
     using TestCases.HSSF;
 
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 using NPOI.HSSF.Record.Crypto;
-
+    using NUnit.Framework.Legacy;
 
     [TestFixture]
     public class TestExcelExtractor
@@ -55,11 +55,11 @@ using NPOI.HSSF.Record.Crypto;
 
             ExcelExtractor extractor = CreateExtractor("Simple.xls");
 
-            Assert.AreEqual("Sheet1\nreplaceMe\nSheet2\nSheet3\n", extractor.Text);
+            ClassicAssert.AreEqual("Sheet1\nreplaceMe\nSheet2\nSheet3\n", extractor.Text);
 
             // Now turn off sheet names
             extractor.IncludeSheetNames=false;
-            Assert.AreEqual("replaceMe\n", extractor.Text);
+            ClassicAssert.AreEqual("replaceMe\n", extractor.Text);
         }
         [Test]
         public void TestNumericFormula()
@@ -74,14 +74,14 @@ using NPOI.HSSF.Record.Crypto;
                     "4000\t4\n" +
                     "5000\t5\n" +
                     "Sheet2\nSheet3\n";
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                     expected,
                     extractor.Text
             );
 
             extractor.FormulasNotResults=(true);
 
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                 "Sheet1\n" +
                 "1000\t1\tSUMIF(A1:A5,\">4000\",B1:B5)\n" +
                 "2000\t2\n" +
@@ -103,7 +103,7 @@ using NPOI.HSSF.Record.Crypto;
             // Has masses of text
             // Until we fixed bug #41064, this would've
             //   failed by now
-            Assert.IsTrue(extractor.Text.Length > 40960);
+            ClassicAssert.IsTrue(extractor.Text.Length > 40960);
         }
         [Test]
         public void TestStringConcat()
@@ -113,11 +113,11 @@ using NPOI.HSSF.Record.Crypto;
 
             // Comes out as NaN if treated as a number
             // And as XYZ if treated as a string
-            Assert.AreEqual("Sheet1\nreplaceme\nreplaceme\nreplacemereplaceme\nSheet2\nSheet3\n", extractor.Text);
+            ClassicAssert.AreEqual("Sheet1\nreplaceme\nreplaceme\nreplacemereplaceme\nSheet2\nSheet3\n", extractor.Text);
 
             extractor.FormulasNotResults = (true);
 
-            Assert.AreEqual("Sheet1\nreplaceme\nreplaceme\nCONCATENATE(A1,A2)\nSheet2\nSheet3\n", extractor.Text);
+            ClassicAssert.AreEqual("Sheet1\nreplaceme\nreplaceme\nCONCATENATE(A1,A2)\nSheet2\nSheet3\n", extractor.Text);
         }
         [Test]
         public void TestStringFormula()
@@ -127,11 +127,11 @@ using NPOI.HSSF.Record.Crypto;
 
             // Comes out as NaN if treated as a number
             // And as XYZ if treated as a string
-            Assert.AreEqual("Sheet1\nXYZ\nSheet2\nSheet3\n", extractor.Text);
+            ClassicAssert.AreEqual("Sheet1\nXYZ\nSheet2\nSheet3\n", extractor.Text);
 
             extractor.FormulasNotResults = (true);
 
-            Assert.AreEqual("Sheet1\nUPPER(\"xyz\")\nSheet2\nSheet3\n", extractor.Text);
+            ClassicAssert.AreEqual("Sheet1\nUPPER(\"xyz\")\nSheet2\nSheet3\n", extractor.Text);
         }
 
         [Test]
@@ -149,13 +149,13 @@ using NPOI.HSSF.Record.Crypto;
             extractor.IncludeSheetNames = (true);
 
             String text = extractor.Text;
-            Assert.AreEqual("Sheet1\nreplaceme\nreplaceme\nreplacemereplaceme\nSheet2\nSheet3\n", text);
+            ClassicAssert.AreEqual("Sheet1\nreplaceme\nreplaceme\nreplacemereplaceme\nSheet2\nSheet3\n", text);
 
             extractor.IncludeSheetNames = (false);
             extractor.FormulasNotResults = (true);
 
             text = extractor.Text;
-            Assert.AreEqual("replaceme\nreplaceme\nCONCATENATE(A1,A2)\n", text);
+            ClassicAssert.AreEqual("replaceme\nreplaceme\nCONCATENATE(A1,A2)\n", text);
 
 
             // Now, a slightly longer file with numeric formulas
@@ -168,7 +168,7 @@ using NPOI.HSSF.Record.Crypto;
             extractor.FormulasNotResults = (true);
 
             text = extractor.Text;
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                     "1000\t1\tSUMIF(A1:A5,\">4000\",B1:B5)\n" +
                     "2000\t2\n" +
                     "3000\t3\n" +
@@ -184,7 +184,7 @@ using NPOI.HSSF.Record.Crypto;
             extractor.IncludeSheetNames = (false);
 
             // Check without comments
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                     "1\tone\n" +
                     "2\ttwo\n" +
                     "3\tthree\n",
@@ -193,7 +193,7 @@ using NPOI.HSSF.Record.Crypto;
 
             // Now with
             extractor.IncludeCellComments = (true);
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                     "1\tone Comment by Yegor Kozlov: Yegor Kozlov: first cell\n" +
                     "2\ttwo Comment by Yegor Kozlov: Yegor Kozlov: second cell\n" +
                     "3\tthree Comment by Yegor Kozlov: Yegor Kozlov: third cell\n",
@@ -208,14 +208,14 @@ using NPOI.HSSF.Record.Crypto;
             extractor.IncludeBlankCells = (true);
             String padded = extractor.Text;
 
-            Assert.IsTrue(def.StartsWith(
+            ClassicAssert.IsTrue(def.StartsWith(
                 "Sheet1\n" +
                 "&[TAB]\t\n" +
                 "Hello\n" +
                 "11\t23\n"
             ));
 
-            Assert.IsTrue(padded.StartsWith(
+            ClassicAssert.IsTrue(padded.StartsWith(
                 "Sheet1\n" +
                 "&[TAB]\t\n" +
                 "Hello\n" +
@@ -235,36 +235,36 @@ using NPOI.HSSF.Record.Crypto;
             //  actually quite match what they claim to
             //  be, as some are auto-local builtins...
 
-            Assert.IsTrue(text.StartsWith(
+            ClassicAssert.IsTrue(text.StartsWith(
                   "Dates, all 24th November 2006\n"
             ));
-            Assert.IsTrue(
+            ClassicAssert.IsTrue(
                   text.IndexOf(
                      "yyyy/mm/dd\t2006/11/24\n"
                   ) > -1
             );
-            Assert.IsTrue(
+            ClassicAssert.IsTrue(
                   text.IndexOf(
                      "yyyy-mm-dd\t2006-11-24\n"
                   ) > -1
             );
-            Assert.IsTrue(
+            ClassicAssert.IsTrue(
                   text.IndexOf(
                      "dd-mm-yy\t24-11-06\n"
                   ) > -1
             );
 
-            Assert.IsTrue(
+            ClassicAssert.IsTrue(
                   text.IndexOf(
                      "nn.nn\t10.52\n"
                   ) > -1
             );
-            Assert.IsTrue(
+            ClassicAssert.IsTrue(
                   text.IndexOf(
                      "nn.nnn\t10.520\n"
                   ) > -1
             );
-            Assert.IsTrue(
+            ClassicAssert.IsTrue(
                   text.IndexOf(
                      "\u00a3nn.nn\t\u00a310.52\n"
                   ) > -1
@@ -291,13 +291,13 @@ using NPOI.HSSF.Record.Crypto;
             ExcelExtractor exA = new ExcelExtractor(wbA);
             ExcelExtractor exB = new ExcelExtractor(wbB);
 
-            Assert.AreEqual("Sheet1\nTest excel file\nThis is the first file\nSheet2\nSheet3\n",
+            ClassicAssert.AreEqual("Sheet1\nTest excel file\nThis is the first file\nSheet2\nSheet3\n",
                     exA.Text);
-            Assert.AreEqual("Sample Excel", exA.SummaryInformation.Title);
+            ClassicAssert.AreEqual("Sample Excel", exA.SummaryInformation.Title);
 
-            Assert.AreEqual("Sheet1\nAnother excel file\nThis is the second file\nSheet2\nSheet3\n",
+            ClassicAssert.AreEqual("Sheet1\nAnother excel file\nThis is the second file\nSheet2\nSheet3\n",
                     exB.Text);
-            Assert.AreEqual("Sample Excel 2", exB.SummaryInformation.Title);
+            ClassicAssert.AreEqual("Sample Excel 2", exB.SummaryInformation.Title);
         }
 
         /**
@@ -319,19 +319,19 @@ using NPOI.HSSF.Record.Crypto;
             ExcelExtractor exA = new ExcelExtractor(wbA);
             ExcelExtractor exB = new ExcelExtractor(wbB);
 
-            Assert.AreEqual("Sheet1\nTest excel file\nThis is the first file\nSheet2\nSheet3\n",
+            ClassicAssert.AreEqual("Sheet1\nTest excel file\nThis is the first file\nSheet2\nSheet3\n",
                     exA.Text);
-            Assert.AreEqual("Sample Excel", exA.SummaryInformation.Title);
+            ClassicAssert.AreEqual("Sample Excel", exA.SummaryInformation.Title);
 
-            Assert.AreEqual("Sheet1\nAnother excel file\nThis is the second file\nSheet2\nSheet3\n",
+            ClassicAssert.AreEqual("Sheet1\nAnother excel file\nThis is the second file\nSheet2\nSheet3\n",
                     exB.Text);
-            Assert.AreEqual("Sample Excel 2", exB.SummaryInformation.Title);
+            ClassicAssert.AreEqual("Sample Excel 2", exB.SummaryInformation.Title);
 
             // And the base file too
             ExcelExtractor ex = new ExcelExtractor(fs);
-            Assert.AreEqual("Sheet1\nI have lots of embeded files in me\nSheet2\nSheet3\n",
+            ClassicAssert.AreEqual("Sheet1\nI have lots of embeded files in me\nSheet2\nSheet3\n",
                     ex.Text);
-            Assert.AreEqual("Excel With Embeded", ex.SummaryInformation.Title);
+            ClassicAssert.AreEqual("Excel With Embeded", ex.SummaryInformation.Title);
         }
 
         /**
@@ -348,8 +348,8 @@ using NPOI.HSSF.Record.Crypto;
             {
                 ExcelExtractor extractor = CreateExtractor(files[i]);
                 String text = extractor.Text;
-                Assert.IsTrue(text.IndexOf("testdoc") >= 0, "Unable to find expected word in text\n" + text);
-                Assert.IsTrue(text.IndexOf("test phrase") >= 0, "Unable to find expected word in text\n" + text);
+                ClassicAssert.IsTrue(text.IndexOf("testdoc") >= 0, "Unable to find expected word in text\n" + text);
+                ClassicAssert.IsTrue(text.IndexOf("test phrase") >= 0, "Unable to find expected word in text\n" + text);
             }
         }
         [Test]
@@ -361,14 +361,14 @@ using NPOI.HSSF.Record.Crypto;
             String text = extractor.Text;
             Biff8EncryptionKey.CurrentUserPassword = (null);
 
-            Assert.IsTrue(text.Contains("ZIP"));
+            ClassicAssert.IsTrue(text.Contains("ZIP"));
         }
         [Test]
         public void TestNullPointerException()
         {
             ExcelExtractor extractor = CreateExtractor("ar.org.apsme.www_Form%20Inscripcion%20Curso%20NO%20Socios.xls");
-            Assert.IsNotNull(extractor);
-            Assert.IsNotNull(extractor.Text);
+            ClassicAssert.IsNotNull(extractor);
+            ClassicAssert.IsNotNull(extractor.Text);
         }
     }
 }

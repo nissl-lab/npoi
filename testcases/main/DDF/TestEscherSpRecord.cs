@@ -24,7 +24,7 @@ namespace TestCases.DDF
     using System.Collections.Generic;
     using System.IO;
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.DDF;
     using NPOI.Util;
     [TestFixture]
@@ -37,8 +37,8 @@ namespace TestCases.DDF
 
             byte[] data = new byte[16];
             int bytesWritten = r.Serialize(0, data);
-            Assert.AreEqual(16, bytesWritten);
-            Assert.AreEqual("[02, 00, " +
+            ClassicAssert.AreEqual(16, bytesWritten);
+            ClassicAssert.AreEqual("[02, 00, " +
                     "0A, F0, " +
                     "08, 00, 00, 00, " +
                     "00, 04, 00, 00, " +
@@ -57,9 +57,9 @@ namespace TestCases.DDF
             EscherSpRecord r = new EscherSpRecord();
             int bytesWritten = r.FillFields(data, new DefaultEscherRecordFactory());
 
-            Assert.AreEqual(16, bytesWritten);
-            Assert.AreEqual(0x0400, r.ShapeId);
-            Assert.AreEqual(0x05, r.Flags);
+            ClassicAssert.AreEqual(16, bytesWritten);
+            ClassicAssert.AreEqual(0x0400, r.ShapeId);
+            ClassicAssert.AreEqual(0x05, r.Flags);
         }
         [Test]
         public void TestToString()
@@ -72,7 +72,7 @@ namespace TestCases.DDF
                     "  ShapeType: 0x0000" + nl +
                     "  ShapeId: 1024" + nl +
                     "  Flags: GROUP|PATRIARCH (0x00000005)" + nl;
-            Assert.AreEqual(expected, CreateRecord().ToString());
+            ClassicAssert.AreEqual(expected, CreateRecord().ToString());
         }
 
         private EscherSpRecord CreateRecord()

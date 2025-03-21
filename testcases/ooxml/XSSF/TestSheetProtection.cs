@@ -18,7 +18,7 @@ namespace TestCases
 {
     using NPOI.XSSF;
     using NPOI.XSSF.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     [TestFixture]
     public class TestSheetProtection
@@ -35,221 +35,221 @@ namespace TestCases
         [Test]
         public void TestShouldReadWorkbookProtection()
         {
-            Assert.IsFalse(sheet.IsAutoFilterLocked);
-            Assert.IsFalse(sheet.IsDeleteColumnsLocked);
-            Assert.IsFalse(sheet.IsDeleteRowsLocked);
-            Assert.IsFalse(sheet.IsFormatCellsLocked);
-            Assert.IsFalse(sheet.IsFormatColumnsLocked);
-            Assert.IsFalse(sheet.IsFormatRowsLocked);
-            Assert.IsFalse(sheet.IsInsertColumnsLocked);
-            Assert.IsFalse(sheet.IsInsertHyperlinksLocked);
-            Assert.IsFalse(sheet.IsInsertRowsLocked);
-            Assert.IsFalse(sheet.IsPivotTablesLocked);
-            Assert.IsFalse(sheet.IsSortLocked);
-            Assert.IsFalse(sheet.IsObjectsLocked);
-            Assert.IsFalse(sheet.IsScenariosLocked);
-            Assert.IsFalse(sheet.IsSelectLockedCellsLocked);
-            Assert.IsFalse(sheet.IsSelectUnlockedCellsLocked);
-            Assert.IsFalse(sheet.IsSheetLocked);
+            ClassicAssert.IsFalse(sheet.IsAutoFilterLocked);
+            ClassicAssert.IsFalse(sheet.IsDeleteColumnsLocked);
+            ClassicAssert.IsFalse(sheet.IsDeleteRowsLocked);
+            ClassicAssert.IsFalse(sheet.IsFormatCellsLocked);
+            ClassicAssert.IsFalse(sheet.IsFormatColumnsLocked);
+            ClassicAssert.IsFalse(sheet.IsFormatRowsLocked);
+            ClassicAssert.IsFalse(sheet.IsInsertColumnsLocked);
+            ClassicAssert.IsFalse(sheet.IsInsertHyperlinksLocked);
+            ClassicAssert.IsFalse(sheet.IsInsertRowsLocked);
+            ClassicAssert.IsFalse(sheet.IsPivotTablesLocked);
+            ClassicAssert.IsFalse(sheet.IsSortLocked);
+            ClassicAssert.IsFalse(sheet.IsObjectsLocked);
+            ClassicAssert.IsFalse(sheet.IsScenariosLocked);
+            ClassicAssert.IsFalse(sheet.IsSelectLockedCellsLocked);
+            ClassicAssert.IsFalse(sheet.IsSelectUnlockedCellsLocked);
+            ClassicAssert.IsFalse(sheet.IsSheetLocked);
 
             sheet = (XSSFSheet)XSSFTestDataSamples.OpenSampleWorkbook("sheetProtection_allLocked.xlsx").GetSheetAt(0);
 
-            Assert.IsTrue(sheet.IsAutoFilterLocked);
-            Assert.IsTrue(sheet.IsDeleteColumnsLocked);
-            Assert.IsTrue(sheet.IsDeleteRowsLocked);
-            Assert.IsTrue(sheet.IsFormatCellsLocked);
-            Assert.IsTrue(sheet.IsFormatColumnsLocked);
-            Assert.IsTrue(sheet.IsFormatRowsLocked);
-            Assert.IsTrue(sheet.IsInsertColumnsLocked);
-            Assert.IsTrue(sheet.IsInsertHyperlinksLocked);
-            Assert.IsTrue(sheet.IsInsertRowsLocked);
-            Assert.IsTrue(sheet.IsPivotTablesLocked);
-            Assert.IsTrue(sheet.IsSortLocked);
-            Assert.IsTrue(sheet.IsObjectsLocked);
-            Assert.IsTrue(sheet.IsScenariosLocked);
-            Assert.IsTrue(sheet.IsSelectLockedCellsLocked);
-            Assert.IsTrue(sheet.IsSelectUnlockedCellsLocked);
-            Assert.IsTrue(sheet.IsSheetLocked);
+            ClassicAssert.IsTrue(sheet.IsAutoFilterLocked);
+            ClassicAssert.IsTrue(sheet.IsDeleteColumnsLocked);
+            ClassicAssert.IsTrue(sheet.IsDeleteRowsLocked);
+            ClassicAssert.IsTrue(sheet.IsFormatCellsLocked);
+            ClassicAssert.IsTrue(sheet.IsFormatColumnsLocked);
+            ClassicAssert.IsTrue(sheet.IsFormatRowsLocked);
+            ClassicAssert.IsTrue(sheet.IsInsertColumnsLocked);
+            ClassicAssert.IsTrue(sheet.IsInsertHyperlinksLocked);
+            ClassicAssert.IsTrue(sheet.IsInsertRowsLocked);
+            ClassicAssert.IsTrue(sheet.IsPivotTablesLocked);
+            ClassicAssert.IsTrue(sheet.IsSortLocked);
+            ClassicAssert.IsTrue(sheet.IsObjectsLocked);
+            ClassicAssert.IsTrue(sheet.IsScenariosLocked);
+            ClassicAssert.IsTrue(sheet.IsSelectLockedCellsLocked);
+            ClassicAssert.IsTrue(sheet.IsSelectUnlockedCellsLocked);
+            ClassicAssert.IsTrue(sheet.IsSheetLocked);
         }
 
         [Test]
         public void TestWriteAutoFilter()
         {
-            Assert.IsFalse(sheet.IsAutoFilterLocked);
+            ClassicAssert.IsFalse(sheet.IsAutoFilterLocked);
             sheet.LockAutoFilter(true);
-            Assert.IsFalse(sheet.IsAutoFilterLocked);
+            ClassicAssert.IsFalse(sheet.IsAutoFilterLocked);
             sheet.EnableLocking();
-            Assert.IsTrue(sheet.IsAutoFilterLocked);
+            ClassicAssert.IsTrue(sheet.IsAutoFilterLocked);
             sheet.LockAutoFilter(false);
-            Assert.IsFalse(sheet.IsAutoFilterLocked);
+            ClassicAssert.IsFalse(sheet.IsAutoFilterLocked);
         }
 
         [Test]
         public void TestWriteDeleteColumns()
         {
-            Assert.IsFalse(sheet.IsDeleteColumnsLocked);
+            ClassicAssert.IsFalse(sheet.IsDeleteColumnsLocked);
             sheet.LockDeleteColumns(true);
-            Assert.IsFalse(sheet.IsDeleteColumnsLocked);
+            ClassicAssert.IsFalse(sheet.IsDeleteColumnsLocked);
             sheet.EnableLocking();
-            Assert.IsTrue(sheet.IsDeleteColumnsLocked);
+            ClassicAssert.IsTrue(sheet.IsDeleteColumnsLocked);
             sheet.LockDeleteColumns(false);
-            Assert.IsFalse(sheet.IsDeleteColumnsLocked);
+            ClassicAssert.IsFalse(sheet.IsDeleteColumnsLocked);
         }
 
         [Test]
         public void TestWriteDeleteRows()
         {
-            Assert.IsFalse(sheet.IsDeleteRowsLocked);
+            ClassicAssert.IsFalse(sheet.IsDeleteRowsLocked);
             sheet.LockDeleteRows(true);
-            Assert.IsFalse(sheet.IsDeleteRowsLocked);
+            ClassicAssert.IsFalse(sheet.IsDeleteRowsLocked);
             sheet.EnableLocking();
-            Assert.IsTrue(sheet.IsDeleteRowsLocked);
+            ClassicAssert.IsTrue(sheet.IsDeleteRowsLocked);
             sheet.LockDeleteRows(false);
-            Assert.IsFalse(sheet.IsDeleteRowsLocked);
+            ClassicAssert.IsFalse(sheet.IsDeleteRowsLocked);
         }
 
         [Test]
         public void TestWriteFormatCells()
         {
-            Assert.IsFalse(sheet.IsFormatCellsLocked);
+            ClassicAssert.IsFalse(sheet.IsFormatCellsLocked);
             sheet.LockFormatCells(true);
-            Assert.IsFalse(sheet.IsFormatCellsLocked);
+            ClassicAssert.IsFalse(sheet.IsFormatCellsLocked);
             sheet.EnableLocking();
-            Assert.IsTrue(sheet.IsFormatCellsLocked);
+            ClassicAssert.IsTrue(sheet.IsFormatCellsLocked);
             sheet.LockFormatCells(false);
-            Assert.IsFalse(sheet.IsFormatCellsLocked);
+            ClassicAssert.IsFalse(sheet.IsFormatCellsLocked);
         }
 
         [Test]
         public void TestWriteFormatColumns()
         {
-            Assert.IsFalse(sheet.IsFormatColumnsLocked);
+            ClassicAssert.IsFalse(sheet.IsFormatColumnsLocked);
             sheet.LockFormatColumns(true);
-            Assert.IsFalse(sheet.IsFormatColumnsLocked);
+            ClassicAssert.IsFalse(sheet.IsFormatColumnsLocked);
             sheet.EnableLocking();
-            Assert.IsTrue(sheet.IsFormatColumnsLocked);
+            ClassicAssert.IsTrue(sheet.IsFormatColumnsLocked);
             sheet.LockFormatColumns(false);
-            Assert.IsFalse(sheet.IsFormatColumnsLocked);
+            ClassicAssert.IsFalse(sheet.IsFormatColumnsLocked);
         }
 
         [Test]
         public void TestWriteFormatRows()
         {
-            Assert.IsFalse(sheet.IsFormatRowsLocked);
+            ClassicAssert.IsFalse(sheet.IsFormatRowsLocked);
             sheet.LockFormatRows(true);
-            Assert.IsFalse(sheet.IsFormatRowsLocked);
+            ClassicAssert.IsFalse(sheet.IsFormatRowsLocked);
             sheet.EnableLocking();
-            Assert.IsTrue(sheet.IsFormatRowsLocked);
+            ClassicAssert.IsTrue(sheet.IsFormatRowsLocked);
             sheet.LockFormatRows(false);
-            Assert.IsFalse(sheet.IsFormatRowsLocked);
+            ClassicAssert.IsFalse(sheet.IsFormatRowsLocked);
         }
 
         [Test]
         public void TestWriteInsertColumns()
         {
-            Assert.IsFalse(sheet.IsInsertColumnsLocked);
+            ClassicAssert.IsFalse(sheet.IsInsertColumnsLocked);
             sheet.LockInsertColumns(true);
-            Assert.IsFalse(sheet.IsInsertColumnsLocked);
+            ClassicAssert.IsFalse(sheet.IsInsertColumnsLocked);
             sheet.EnableLocking();
-            Assert.IsTrue(sheet.IsInsertColumnsLocked);
+            ClassicAssert.IsTrue(sheet.IsInsertColumnsLocked);
             sheet.LockInsertColumns(false);
-            Assert.IsFalse(sheet.IsInsertColumnsLocked);
+            ClassicAssert.IsFalse(sheet.IsInsertColumnsLocked);
         }
 
         [Test]
         public void TestWriteInsertHyperlinks()
         {
-            Assert.IsFalse(sheet.IsInsertHyperlinksLocked);
+            ClassicAssert.IsFalse(sheet.IsInsertHyperlinksLocked);
             sheet.LockInsertHyperlinks(true);
-            Assert.IsFalse(sheet.IsInsertHyperlinksLocked);
+            ClassicAssert.IsFalse(sheet.IsInsertHyperlinksLocked);
             sheet.EnableLocking();
-            Assert.IsTrue(sheet.IsInsertHyperlinksLocked);
+            ClassicAssert.IsTrue(sheet.IsInsertHyperlinksLocked);
             sheet.LockInsertHyperlinks(false);
-            Assert.IsFalse(sheet.IsInsertHyperlinksLocked);
+            ClassicAssert.IsFalse(sheet.IsInsertHyperlinksLocked);
         }
 
         [Test]
         public void TestWriteInsertRows()
         {
-            Assert.IsFalse(sheet.IsInsertRowsLocked);
+            ClassicAssert.IsFalse(sheet.IsInsertRowsLocked);
             sheet.LockInsertRows(true);
-            Assert.IsFalse(sheet.IsInsertRowsLocked);
+            ClassicAssert.IsFalse(sheet.IsInsertRowsLocked);
             sheet.EnableLocking();
-            Assert.IsTrue(sheet.IsInsertRowsLocked);
+            ClassicAssert.IsTrue(sheet.IsInsertRowsLocked);
             sheet.LockInsertRows(false);
-            Assert.IsFalse(sheet.IsInsertRowsLocked);
+            ClassicAssert.IsFalse(sheet.IsInsertRowsLocked);
         }
 
         [Test]
         public void TestWritePivotTables()
         {
-            Assert.IsFalse(sheet.IsPivotTablesLocked);
+            ClassicAssert.IsFalse(sheet.IsPivotTablesLocked);
             sheet.LockPivotTables(true);
-            Assert.IsFalse(sheet.IsPivotTablesLocked);
+            ClassicAssert.IsFalse(sheet.IsPivotTablesLocked);
             sheet.EnableLocking();
-            Assert.IsTrue(sheet.IsPivotTablesLocked);
+            ClassicAssert.IsTrue(sheet.IsPivotTablesLocked);
             sheet.LockPivotTables(false);
-            Assert.IsFalse(sheet.IsPivotTablesLocked);
+            ClassicAssert.IsFalse(sheet.IsPivotTablesLocked);
         }
 
         [Test]
         public void TestWriteSort()
         {
-            Assert.IsFalse(sheet.IsSortLocked);
+            ClassicAssert.IsFalse(sheet.IsSortLocked);
             sheet.LockSort(true);
-            Assert.IsFalse(sheet.IsSortLocked);
+            ClassicAssert.IsFalse(sheet.IsSortLocked);
             sheet.EnableLocking();
-            Assert.IsTrue(sheet.IsSortLocked);
+            ClassicAssert.IsTrue(sheet.IsSortLocked);
             sheet.LockSort(false);
-            Assert.IsFalse(sheet.IsSortLocked);
+            ClassicAssert.IsFalse(sheet.IsSortLocked);
         }
 
         [Test]
         public void TestWriteObjects()
         {
-            Assert.IsFalse(sheet.IsObjectsLocked);
+            ClassicAssert.IsFalse(sheet.IsObjectsLocked);
             sheet.LockObjects(true);
-            Assert.IsFalse(sheet.IsObjectsLocked);
+            ClassicAssert.IsFalse(sheet.IsObjectsLocked);
             sheet.EnableLocking();
-            Assert.IsTrue(sheet.IsObjectsLocked);
+            ClassicAssert.IsTrue(sheet.IsObjectsLocked);
             sheet.LockObjects(false);
-            Assert.IsFalse(sheet.IsObjectsLocked);
+            ClassicAssert.IsFalse(sheet.IsObjectsLocked);
         }
 
         [Test]
         public void TestWriteScenarios()
         {
-            Assert.IsFalse(sheet.IsScenariosLocked);
+            ClassicAssert.IsFalse(sheet.IsScenariosLocked);
             sheet.LockScenarios(true);
-            Assert.IsFalse(sheet.IsScenariosLocked);
+            ClassicAssert.IsFalse(sheet.IsScenariosLocked);
             sheet.EnableLocking();
-            Assert.IsTrue(sheet.IsScenariosLocked);
+            ClassicAssert.IsTrue(sheet.IsScenariosLocked);
             sheet.LockScenarios(false);
-            Assert.IsFalse(sheet.IsScenariosLocked);
+            ClassicAssert.IsFalse(sheet.IsScenariosLocked);
         }
 
         [Test]
         public void TestWriteSelectLockedCells()
         {
-            Assert.IsFalse(sheet.IsSelectLockedCellsLocked);
+            ClassicAssert.IsFalse(sheet.IsSelectLockedCellsLocked);
             sheet.LockSelectLockedCells(true);
-            Assert.IsFalse(sheet.IsSelectLockedCellsLocked);
+            ClassicAssert.IsFalse(sheet.IsSelectLockedCellsLocked);
             sheet.EnableLocking();
-            Assert.IsTrue(sheet.IsSelectLockedCellsLocked);
+            ClassicAssert.IsTrue(sheet.IsSelectLockedCellsLocked);
             sheet.LockSelectLockedCells(false);
-            Assert.IsFalse(sheet.IsSelectLockedCellsLocked);
+            ClassicAssert.IsFalse(sheet.IsSelectLockedCellsLocked);
         }
 
         [Test]
         public void TestWriteSelectUnlockedCells()
         {
-            Assert.IsFalse(sheet.IsSelectUnlockedCellsLocked);
+            ClassicAssert.IsFalse(sheet.IsSelectUnlockedCellsLocked);
             sheet.LockSelectUnlockedCells(true);
-            Assert.IsFalse(sheet.IsSelectUnlockedCellsLocked);
+            ClassicAssert.IsFalse(sheet.IsSelectUnlockedCellsLocked);
             sheet.EnableLocking();
-            Assert.IsTrue(sheet.IsSelectUnlockedCellsLocked);
+            ClassicAssert.IsTrue(sheet.IsSelectUnlockedCellsLocked);
             sheet.LockSelectUnlockedCells(false);
-            Assert.IsFalse(sheet.IsSelectUnlockedCellsLocked);
+            ClassicAssert.IsFalse(sheet.IsSelectUnlockedCellsLocked);
         }
 
         [Test]
@@ -257,41 +257,41 @@ namespace TestCases
         {
             sheet = (XSSFSheet) XSSFTestDataSamples.OpenSampleWorkbook("sheetProtection_allLocked.xlsx").GetSheetAt(0);
 
-            Assert.IsTrue(sheet.IsAutoFilterLocked);
-            Assert.IsTrue(sheet.IsDeleteColumnsLocked);
-            Assert.IsTrue(sheet.IsDeleteRowsLocked);
-            Assert.IsTrue(sheet.IsFormatCellsLocked);
-            Assert.IsTrue(sheet.IsFormatColumnsLocked);
-            Assert.IsTrue(sheet.IsFormatRowsLocked);
-            Assert.IsTrue(sheet.IsInsertColumnsLocked);
-            Assert.IsTrue(sheet.IsInsertHyperlinksLocked);
-            Assert.IsTrue(sheet.IsInsertRowsLocked);
-            Assert.IsTrue(sheet.IsPivotTablesLocked);
-            Assert.IsTrue(sheet.IsSortLocked);
-            Assert.IsTrue(sheet.IsObjectsLocked);
-            Assert.IsTrue(sheet.IsScenariosLocked);
-            Assert.IsTrue(sheet.IsSelectLockedCellsLocked);
-            Assert.IsTrue(sheet.IsSelectUnlockedCellsLocked);
-            Assert.IsTrue(sheet.IsSheetLocked);
+            ClassicAssert.IsTrue(sheet.IsAutoFilterLocked);
+            ClassicAssert.IsTrue(sheet.IsDeleteColumnsLocked);
+            ClassicAssert.IsTrue(sheet.IsDeleteRowsLocked);
+            ClassicAssert.IsTrue(sheet.IsFormatCellsLocked);
+            ClassicAssert.IsTrue(sheet.IsFormatColumnsLocked);
+            ClassicAssert.IsTrue(sheet.IsFormatRowsLocked);
+            ClassicAssert.IsTrue(sheet.IsInsertColumnsLocked);
+            ClassicAssert.IsTrue(sheet.IsInsertHyperlinksLocked);
+            ClassicAssert.IsTrue(sheet.IsInsertRowsLocked);
+            ClassicAssert.IsTrue(sheet.IsPivotTablesLocked);
+            ClassicAssert.IsTrue(sheet.IsSortLocked);
+            ClassicAssert.IsTrue(sheet.IsObjectsLocked);
+            ClassicAssert.IsTrue(sheet.IsScenariosLocked);
+            ClassicAssert.IsTrue(sheet.IsSelectLockedCellsLocked);
+            ClassicAssert.IsTrue(sheet.IsSelectUnlockedCellsLocked);
+            ClassicAssert.IsTrue(sheet.IsSheetLocked);
 
             sheet.DisableLocking();
 
-            Assert.IsFalse(sheet.IsAutoFilterLocked);
-            Assert.IsFalse(sheet.IsDeleteColumnsLocked);
-            Assert.IsFalse(sheet.IsDeleteRowsLocked);
-            Assert.IsFalse(sheet.IsFormatCellsLocked);
-            Assert.IsFalse(sheet.IsFormatColumnsLocked);
-            Assert.IsFalse(sheet.IsFormatRowsLocked);
-            Assert.IsFalse(sheet.IsInsertColumnsLocked);
-            Assert.IsFalse(sheet.IsInsertHyperlinksLocked);
-            Assert.IsFalse(sheet.IsInsertRowsLocked);
-            Assert.IsFalse(sheet.IsPivotTablesLocked);
-            Assert.IsFalse(sheet.IsSortLocked);
-            Assert.IsFalse(sheet.IsObjectsLocked);
-            Assert.IsFalse(sheet.IsScenariosLocked);
-            Assert.IsFalse(sheet.IsSelectLockedCellsLocked);
-            Assert.IsFalse(sheet.IsSelectUnlockedCellsLocked);
-            Assert.IsFalse(sheet.IsSheetLocked);
+            ClassicAssert.IsFalse(sheet.IsAutoFilterLocked);
+            ClassicAssert.IsFalse(sheet.IsDeleteColumnsLocked);
+            ClassicAssert.IsFalse(sheet.IsDeleteRowsLocked);
+            ClassicAssert.IsFalse(sheet.IsFormatCellsLocked);
+            ClassicAssert.IsFalse(sheet.IsFormatColumnsLocked);
+            ClassicAssert.IsFalse(sheet.IsFormatRowsLocked);
+            ClassicAssert.IsFalse(sheet.IsInsertColumnsLocked);
+            ClassicAssert.IsFalse(sheet.IsInsertHyperlinksLocked);
+            ClassicAssert.IsFalse(sheet.IsInsertRowsLocked);
+            ClassicAssert.IsFalse(sheet.IsPivotTablesLocked);
+            ClassicAssert.IsFalse(sheet.IsSortLocked);
+            ClassicAssert.IsFalse(sheet.IsObjectsLocked);
+            ClassicAssert.IsFalse(sheet.IsScenariosLocked);
+            ClassicAssert.IsFalse(sheet.IsSelectLockedCellsLocked);
+            ClassicAssert.IsFalse(sheet.IsSelectUnlockedCellsLocked);
+            ClassicAssert.IsFalse(sheet.IsSheetLocked);
         }
     }
 

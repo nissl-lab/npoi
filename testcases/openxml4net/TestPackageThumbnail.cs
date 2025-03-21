@@ -19,7 +19,7 @@ using NPOI.OpenXml4Net.OPC;
 using TestCases.OpenXml4Net;
 using System;
 using System.IO;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 namespace TestCases.OpenXml4Net.OPC
 {
 

@@ -33,7 +33,7 @@ namespace TestCases.SS.Formula
     using NPOI.Util;
     using NPOI.XSSF;
     using NPOI.XSSF.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     /// <summary>
     /// Test <see cref="FormulaParser"/>'s handling of row numbers at the edge of the
@@ -120,21 +120,21 @@ namespace TestCases.SS.Formula
 
                 //Expected ptg stack: [NamePtg(myFunc), StringPtg(arg), (additional operands would go here...), FunctionPtg(myFunc)]
                 Ptg[] ptg = FormulaParser.Parse("myFunc(\"arg\")", workbook, FormulaType.Cell, -1);
-                Assert.AreEqual(3, ptg.Length);
+                ClassicAssert.AreEqual(3, ptg.Length);
 
                 // the name Gets encoded as the first operand on the stack
                 NameXPxg tname = (NameXPxg) ptg[0];
-                Assert.AreEqual("myFunc", tname.ToFormulaString());
+                ClassicAssert.AreEqual("myFunc", tname.ToFormulaString());
 
                 // the function's arguments are pushed onto the stack from left-to-right as OperandPtgs
                 StringPtg arg = (StringPtg) ptg[1];
-                Assert.AreEqual("arg", arg.Value);
+                ClassicAssert.AreEqual("arg", arg.Value);
 
                 // The external FunctionPtg is the last Ptg added to the stack
                 // During formula evaluation, this Ptg pops off the the appropriate number of
                 // arguments (getNumberOfOperands()) and pushes the result on the stack 
                 AbstractFunctionPtg tfunc = (AbstractFunctionPtg) ptg[2];
-                Assert.IsTrue(tfunc.IsExternalFunction);
+                ClassicAssert.IsTrue(tfunc.IsExternalFunction);
 
                 // confirm formula parsing is case-insensitive
                 FormulaParser.Parse("mYfUnC(\"arg\")", workbook, FormulaType.Cell, -1);
@@ -209,7 +209,7 @@ namespace TestCases.SS.Formula
             catch(FormulaParseException e)
             {
                 // expected during successful test
-                Assert.IsNotNull(e.Message);
+                ClassicAssert.IsNotNull(e.Message);
             }
         }
 
@@ -222,13 +222,13 @@ namespace TestCases.SS.Formula
             XSSFEvaluationWorkbook fpwb = XSSFEvaluationWorkbook.Create(wb);
             Ptg[] ptgs = FormulaParser.Parse("[1]Sheet1!A1", fpwb, FormulaType.Cell, -1);
             // NPOI.SS.Formula.PTG.Ref3DPxg [ [workbook=1] sheet=Sheet 1 ! A1]
-            Assert.AreEqual(1, ptgs.Length, "Ptgs length");
-            Assert.IsTrue(ptgs[0] is Ref3DPxg, "Ptg class");
+            ClassicAssert.AreEqual(1, ptgs.Length, "Ptgs length");
+            ClassicAssert.IsTrue(ptgs[0] is Ref3DPxg, "Ptg class");
             Ref3DPxg pxg = (Ref3DPxg) ptgs[0];
-            Assert.AreEqual(1, pxg.ExternalWorkbookNumber, "External workbook number");
-            Assert.AreEqual("Sheet1", pxg.SheetName, "Sheet name");
-            Assert.AreEqual(0, pxg.Row, "Row");
-            Assert.AreEqual(0, pxg.Column, "Column");
+            ClassicAssert.AreEqual(1, pxg.ExternalWorkbookNumber, "External workbook number");
+            ClassicAssert.AreEqual("Sheet1", pxg.SheetName, "Sheet name");
+            ClassicAssert.AreEqual(0, pxg.Row, "Row");
+            ClassicAssert.AreEqual(0, pxg.Column, "Column");
             wb.Close();
         }
 
@@ -241,13 +241,13 @@ namespace TestCases.SS.Formula
             XSSFEvaluationWorkbook fpwb = XSSFEvaluationWorkbook.Create(wb);
             Ptg[] ptgs = FormulaParser.Parse("'[1]Sheet 1'!A1", fpwb, FormulaType.Cell, -1);
             // NPOI.SS.Formula.PTG.Ref3DPxg [ [workbook=1] sheet=Sheet 1 ! A1]
-            Assert.AreEqual(1, ptgs.Length, "Ptgs length");
-            Assert.IsTrue(ptgs[0] is Ref3DPxg, "Ptg class");
+            ClassicAssert.AreEqual(1, ptgs.Length, "Ptgs length");
+            ClassicAssert.IsTrue(ptgs[0] is Ref3DPxg, "Ptg class");
             Ref3DPxg pxg = (Ref3DPxg) ptgs[0];
-            Assert.AreEqual(1, pxg.ExternalWorkbookNumber, "External workbook number");
-            Assert.AreEqual("Sheet 1", pxg.SheetName, "Sheet name");
-            Assert.AreEqual(0, pxg.Row, "Row");
-            Assert.AreEqual(0, pxg.Column, "Column");
+            ClassicAssert.AreEqual(1, pxg.ExternalWorkbookNumber, "External workbook number");
+            ClassicAssert.AreEqual("Sheet 1", pxg.SheetName, "Sheet name");
+            ClassicAssert.AreEqual(0, pxg.Row, "Row");
+            ClassicAssert.AreEqual(0, pxg.Column, "Column");
             wb.Close();
         }
 

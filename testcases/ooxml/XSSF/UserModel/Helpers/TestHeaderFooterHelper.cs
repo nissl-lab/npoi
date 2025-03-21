@@ -17,7 +17,7 @@
 
 using System;
 using NPOI.XSSF.UserModel.Helpers;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 namespace TestCases.XSSF.UserModel.Helpers
 {
 
@@ -35,12 +35,12 @@ namespace TestCases.XSSF.UserModel.Helpers
             HeaderFooterHelper helper = new HeaderFooterHelper();
 
             String headerFooter = "&CTest the center section";
-            Assert.AreEqual("Test the center section", helper.GetCenterSection(headerFooter));
+            ClassicAssert.AreEqual("Test the center section", helper.GetCenterSection(headerFooter));
 
             headerFooter = "&CTest the center section&LThe left one&RAnd the right one";
-            Assert.AreEqual("Test the center section", helper.GetCenterSection(headerFooter));
-            Assert.AreEqual("The left one", helper.GetLeftSection(headerFooter));
-            Assert.AreEqual("And the right one", helper.GetRightSection(headerFooter));
+            ClassicAssert.AreEqual("Test the center section", helper.GetCenterSection(headerFooter));
+            ClassicAssert.AreEqual("The left one", helper.GetLeftSection(headerFooter));
+            ClassicAssert.AreEqual("And the right one", helper.GetRightSection(headerFooter));
         }
         [Test]
         public void TestSetCenterLeftRightSection()
@@ -48,21 +48,21 @@ namespace TestCases.XSSF.UserModel.Helpers
             HeaderFooterHelper helper = new HeaderFooterHelper();
             String headerFooter = "";
             headerFooter = helper.SetCenterSection(headerFooter, "First Added center section");
-            Assert.AreEqual("First Added center section", helper.GetCenterSection(headerFooter));
+            ClassicAssert.AreEqual("First Added center section", helper.GetCenterSection(headerFooter));
             headerFooter = helper.SetLeftSection(headerFooter, "First left");
-            Assert.AreEqual("First left", helper.GetLeftSection(headerFooter));
+            ClassicAssert.AreEqual("First left", helper.GetLeftSection(headerFooter));
 
             headerFooter = helper.SetRightSection(headerFooter, "First right");
-            Assert.AreEqual("First right", helper.GetRightSection(headerFooter));
-            Assert.AreEqual("&CFirst Added center section&LFirst left&RFirst right", headerFooter);
+            ClassicAssert.AreEqual("First right", helper.GetRightSection(headerFooter));
+            ClassicAssert.AreEqual("&CFirst Added center section&LFirst left&RFirst right", headerFooter);
 
             headerFooter = helper.SetRightSection(headerFooter, "First right&F");
-            Assert.AreEqual("First right&F", helper.GetRightSection(headerFooter));
-            Assert.AreEqual("&CFirst Added center section&LFirst left&RFirst right&F", headerFooter);
+            ClassicAssert.AreEqual("First right&F", helper.GetRightSection(headerFooter));
+            ClassicAssert.AreEqual("&CFirst Added center section&LFirst left&RFirst right&F", headerFooter);
 
             headerFooter = helper.SetRightSection(headerFooter, "First right&");
-            Assert.AreEqual("First right&", helper.GetRightSection(headerFooter));
-            Assert.AreEqual("&CFirst Added center section&LFirst left&RFirst right&", headerFooter);
+            ClassicAssert.AreEqual("First right&", helper.GetRightSection(headerFooter));
+            ClassicAssert.AreEqual("&CFirst Added center section&LFirst left&RFirst right&", headerFooter);
         }
 
     }

@@ -24,9 +24,11 @@ namespace TestCases.DDF
     using System.Collections.Generic;
     using System.IO;
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.DDF;
     using NPOI.Util;
+    using NUnit.Framework.Legacy;
+
     [TestFixture]
     public class TestEscherBSERecord
     {
@@ -38,19 +40,19 @@ namespace TestCases.DDF
                     " 00 00 02 00 00 00 03 00 00 00 04 05 06 07";
             EscherBSERecord r = new EscherBSERecord();
             int bytesWritten = r.FillFields(HexRead.ReadFromString(data), 0, new DefaultEscherRecordFactory());
-            Assert.AreEqual(44, bytesWritten);
-            Assert.AreEqual((short)0x0001, r.Options);
-            Assert.AreEqual(EscherBSERecord.BT_JPEG, r.BlipTypeWin32);
-            Assert.AreEqual(EscherBSERecord.BT_JPEG, r.BlipTypeMacOS);
-            Assert.AreEqual("[01, 02, 03, 04, 05, 06, 07, 08, 09, 0A, 0B, 0C, 0D, 0E, 0F, 00]", HexDump.ToHex(r.UID));
-            Assert.AreEqual((short)1, r.Tag);
-            Assert.AreEqual(2, r.Ref);
-            Assert.AreEqual(3, r.Offset);
-            Assert.AreEqual((byte)4, r.Usage);
-            Assert.AreEqual((byte)5, r.Name);
-            Assert.AreEqual((byte)6, r.Unused2);
-            Assert.AreEqual((byte)7, r.Unused3);
-            Assert.AreEqual(0, r.RemainingData.Length);
+            ClassicAssert.AreEqual(44, bytesWritten);
+            ClassicAssert.AreEqual((short)0x0001, r.Options);
+            ClassicAssert.AreEqual(EscherBSERecord.BT_JPEG, r.BlipTypeWin32);
+            ClassicAssert.AreEqual(EscherBSERecord.BT_JPEG, r.BlipTypeMacOS);
+            ClassicAssert.AreEqual("[01, 02, 03, 04, 05, 06, 07, 08, 09, 0A, 0B, 0C, 0D, 0E, 0F, 00]", HexDump.ToHex(r.UID));
+            ClassicAssert.AreEqual((short)1, r.Tag);
+            ClassicAssert.AreEqual(2, r.Ref);
+            ClassicAssert.AreEqual(3, r.Offset);
+            ClassicAssert.AreEqual((byte)4, r.Usage);
+            ClassicAssert.AreEqual((byte)5, r.Name);
+            ClassicAssert.AreEqual((byte)6, r.Unused2);
+            ClassicAssert.AreEqual((byte)7, r.Unused3);
+            ClassicAssert.AreEqual(0, r.RemainingData.Length);
         }
         [Test]
         public void TestSerialize()
@@ -59,8 +61,8 @@ namespace TestCases.DDF
 
             byte[] data = new byte[8 + 36];
             int bytesWritten = r.Serialize(0, data);
-            Assert.AreEqual(44, bytesWritten);
-            Assert.AreEqual("[01, 00, 00, 00, 24, 00, 00, 00, 05, 05, 01, 02, 03, 04, " +
+            ClassicAssert.AreEqual(44, bytesWritten);
+            ClassicAssert.AreEqual("[01, 00, 00, 00, 24, 00, 00, 00, 05, 05, 01, 02, 03, 04, " +
                     "05, 06, 07, 08, 09, 0A, 0B, 0C, 0D, 0E, 0F, 00, 01, 00, 00, 00, " +
                     "00, 00, 02, 00, 00, 00, 03, 00, 00, 00, 04, 05, 06, 07]",
                     HexDump.ToHex(data));
@@ -90,7 +92,7 @@ namespace TestCases.DDF
         {
             EscherBSERecord record = CreateRecord();
             String nl = Environment.NewLine;
-            Assert.AreEqual("EscherBSERecord:" + nl +
+            ClassicAssert.AreEqual("EscherBSERecord:" + nl +
                     "  RecordId: 0xF007" + nl +
                     "  Version: 0x0001" + '\n' +
                     "  Instance: 0x0000" + '\n' +

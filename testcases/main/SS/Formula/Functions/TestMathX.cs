@@ -22,7 +22,7 @@ namespace TestCases.SS.Formula.Functions
 {
 
     using System;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.SS.Formula.Functions;
 
 
@@ -39,13 +39,13 @@ namespace TestCases.SS.Formula.Functions
             double d = 0;
 
             d = MathX.Acosh(0);
-            Assert.IsTrue(Double.IsNaN(d), "Acosh 0 is NaN");
+            ClassicAssert.IsTrue(Double.IsNaN(d), "Acosh 0 is NaN");
 
             d = MathX.Acosh(1);
             AssertEquals("Acosh 1 ",0, d);
 
             d = MathX.Acosh(-1);
-            Assert.IsTrue(Double.IsNaN(d), "Acosh -1 is NaN");
+            ClassicAssert.IsTrue(Double.IsNaN(d), "Acosh -1 is NaN");
 
             d = MathX.Acosh(100);
             AssertEquals("Acosh 100 ", 5.298292366d, d);
@@ -262,15 +262,15 @@ namespace TestCases.SS.Formula.Functions
         [Test]
         public void TestProduct()
         {
-            Assert.AreEqual(0, MathX.Product(null), "Product ");
-            Assert.AreEqual(0, MathX.Product(new double[] { }), "Product ");
-            Assert.AreEqual(0, MathX.Product(new double[] { 1, 0 }), "Product ");
+            ClassicAssert.AreEqual(0, MathX.Product(null), "Product ");
+            ClassicAssert.AreEqual(0, MathX.Product(new double[] { }), "Product ");
+            ClassicAssert.AreEqual(0, MathX.Product(new double[] { 1, 0 }), "Product ");
 
-            Assert.AreEqual(1, MathX.Product(new double[] { 1 }), "Product ");
-            Assert.AreEqual(1, MathX.Product(new double[] { 1, 1 }), "Product ");
-            Assert.AreEqual(10, MathX.Product(new double[] { 10, 1 }), "Product ");
-            Assert.AreEqual(-2, MathX.Product(new double[] { 2, -1 }), "Product ");
-            Assert.AreEqual(99988000209999d, MathX.Product(new double[] { 99999, 99999, 9999 }), "Product ");
+            ClassicAssert.AreEqual(1, MathX.Product(new double[] { 1 }), "Product ");
+            ClassicAssert.AreEqual(1, MathX.Product(new double[] { 1, 1 }), "Product ");
+            ClassicAssert.AreEqual(10, MathX.Product(new double[] { 10, 1 }), "Product ");
+            ClassicAssert.AreEqual(-2, MathX.Product(new double[] { 2, -1 }), "Product ");
+            ClassicAssert.AreEqual(99988000209999d, MathX.Product(new double[] { 99999, 99999, 9999 }), "Product ");
         
 
             double[] d = new double[100];
@@ -311,24 +311,24 @@ namespace TestCases.SS.Formula.Functions
         {
 
             //example from Excel help
-            Assert.AreEqual(1.0, MathX.Mod(3, 2));
-            Assert.AreEqual(1.0, MathX.Mod(-3, 2));
-            Assert.AreEqual(-1.0, MathX.Mod(3, -2));
-            Assert.AreEqual(-1.0, MathX.Mod(-3, -2));
+            ClassicAssert.AreEqual(1.0, MathX.Mod(3, 2));
+            ClassicAssert.AreEqual(1.0, MathX.Mod(-3, 2));
+            ClassicAssert.AreEqual(-1.0, MathX.Mod(3, -2));
+            ClassicAssert.AreEqual(-1.0, MathX.Mod(-3, -2));
 
-            Assert.AreEqual(0.0, MathX.Mod(0, 2));
-            Assert.AreEqual(Double.NaN, MathX.Mod(3, 0));
+            ClassicAssert.AreEqual(0.0, MathX.Mod(0, 2));
+            ClassicAssert.AreEqual(Double.NaN, MathX.Mod(3, 0));
 
-            Assert.AreEqual((double)1.4, MathX.Mod(3.4, 2));
-            Assert.AreEqual((double)-1.4, MathX.Mod(-3.4, -2));
-            Assert.AreEqual((double)0.6000000000000001, MathX.Mod(-3.4, 2.0));// should actually be 0.6
-            Assert.AreEqual((double)-0.6000000000000001, MathX.Mod(3.4, -2.0));// should actually be -0.6
+            ClassicAssert.AreEqual((double)1.4, MathX.Mod(3.4, 2));
+            ClassicAssert.AreEqual((double)-1.4, MathX.Mod(-3.4, -2));
+            ClassicAssert.AreEqual((double)0.6000000000000001, MathX.Mod(-3.4, 2.0));// should actually be 0.6
+            ClassicAssert.AreEqual((double)-0.6000000000000001, MathX.Mod(3.4, -2.0));// should actually be -0.6
 
-            Assert.AreEqual(3.0, MathX.Mod(3, Double.MaxValue));
-            Assert.AreEqual(2.0, MathX.Mod(Double.MaxValue, 3));
+            ClassicAssert.AreEqual(3.0, MathX.Mod(3, Double.MaxValue));
+            ClassicAssert.AreEqual(2.0, MathX.Mod(Double.MaxValue, 3));
 
             // Bugzilla 50033
-            Assert.AreEqual(1.0, MathX.Mod(13, 12));
+            ClassicAssert.AreEqual(1.0, MathX.Mod(13, 12));
         }
         [Test]
         public void TestNChooseK()
@@ -661,7 +661,7 @@ namespace TestCases.SS.Formula.Functions
             {
                 result += acc.Accumulate(xarr[i], yarr[i]);
             }
-            Assert.AreEqual(expectedResult, result, 0.0);
+            ClassicAssert.AreEqual(expectedResult, result, 0.0);
         }
         [Test]
         public void TestRound()

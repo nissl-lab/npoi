@@ -21,7 +21,7 @@ using NPOI.SS.Util;
 using NPOI.Util;
 using NPOI.XSSF;
 using NPOI.XSSF.UserModel;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using System;
 using System.Collections.Generic;
 using TestCases.SS.UserModel;
@@ -56,11 +56,11 @@ namespace TestCases.XSSF.UserModel
             sheet.ShiftRows(3, 5, -1);
 
             ICell cell = CellUtil.GetCell(sheet.GetRow(1), 0);
-            Assert.AreEqual(1.0, cell.NumericCellValue, 0);
+            ClassicAssert.AreEqual(1.0, cell.NumericCellValue, 0);
             cell = CellUtil.GetCell(sheet.GetRow(2), 0);
-            Assert.AreEqual("SUM(A2:A2)", cell.CellFormula);
+            ClassicAssert.AreEqual("SUM(A2:A2)", cell.CellFormula);
             cell = CellUtil.GetCell(sheet.GetRow(3), 0);
-            Assert.AreEqual("X", cell.StringCellValue);
+            ClassicAssert.AreEqual("X", cell.StringCellValue);
 
             workbook.Close();
         }
@@ -94,7 +94,7 @@ namespace TestCases.XSSF.UserModel
 
             IWorkbook read = XSSFTestDataSamples.WriteOutAndReadBack(wb);
             wb.Close();
-            Assert.IsNotNull(read);
+            ClassicAssert.IsNotNull(read);
 
             ISheet readSheet = read.GetSheetAt(0);
             verifyCellContent(readSheet, 0, "0.0");
@@ -137,17 +137,17 @@ namespace TestCases.XSSF.UserModel
             // 5                b
 
             List<CT_Row> xrow = sheetData.row;
-            Assert.AreEqual(3, xrow.Count);
+            ClassicAssert.AreEqual(3, xrow.Count);
 
             // Rows are sorted: [3, 4, 5]
-            Assert.AreEqual(3u, xrow[0].r);
-            Assert.IsTrue(xrow[0].Equals(row3.GetCTRow()));
+            ClassicAssert.AreEqual(3u, xrow[0].r);
+            ClassicAssert.IsTrue(xrow[0].Equals(row3.GetCTRow()));
 
-            Assert.AreEqual(4u, xrow[1].r);
-            Assert.IsTrue(xrow[1].Equals(row1.GetCTRow()));
+            ClassicAssert.AreEqual(4u, xrow[1].r);
+            ClassicAssert.IsTrue(xrow[1].Equals(row1.GetCTRow()));
 
-            Assert.AreEqual(5u, xrow[2].r);
-            Assert.IsTrue(xrow[2].Equals(row2.GetCTRow()));
+            ClassicAssert.AreEqual(5u, xrow[2].r);
+            ClassicAssert.IsTrue(xrow[2].Equals(row2.GetCTRow()));
         }
 
         private void verifyCellContent(ISheet readSheet, int row, String expect)
@@ -155,17 +155,17 @@ namespace TestCases.XSSF.UserModel
             IRow readRow = readSheet.GetRow(row);
             if (expect == null)
             {
-                Assert.IsNull(readRow);
+                ClassicAssert.IsNull(readRow);
                 return;
             }
             ICell readCell = readRow.GetCell(0);
             if (readCell.CellType == CellType.Numeric)
             {
-                Assert.AreEqual(expect, readCell.NumericCellValue.ToString("0.0"));
+                ClassicAssert.AreEqual(expect, readCell.NumericCellValue.ToString("0.0"));
             }
             else
             {
-                Assert.AreEqual(expect, readCell.StringCellValue);
+                ClassicAssert.AreEqual(expect, readCell.StringCellValue);
             }
         }
         [Test]
@@ -183,7 +183,7 @@ namespace TestCases.XSSF.UserModel
 
             IWorkbook read = XSSFTestDataSamples.WriteOutAndReadBack(wb);
             wb.Close();
-            Assert.IsNotNull(read);
+            ClassicAssert.IsNotNull(read);
 
             ISheet readSheet = read.GetSheetAt(0);
             verifyCellContent(readSheet, 0, "0.0");
@@ -206,37 +206,37 @@ namespace TestCases.XSSF.UserModel
             ISheet sheet = wb.GetSheetAt(0);
 
             IComment comment = sheet.GetCellComment(new CellAddress(0, 0));
-            Assert.IsNotNull(comment);
-            Assert.AreEqual("Amdocs", comment.Author);
-            Assert.AreEqual("Amdocs:\ntest\n", comment.String.String);
+            ClassicAssert.IsNotNull(comment);
+            ClassicAssert.AreEqual("Amdocs", comment.Author);
+            ClassicAssert.AreEqual("Amdocs:\ntest\n", comment.String.String);
 
             sheet.ShiftRows(0, 1, 1);
 
             // comment in row 0 is gone
             comment = sheet.GetCellComment(new CellAddress(0, 0));
-            Assert.IsNull(comment);
+            ClassicAssert.IsNull(comment);
 
             // comment is now in row 1
             comment = sheet.GetCellComment(new CellAddress(1, 0));
-            Assert.IsNotNull(comment);
-            Assert.AreEqual("Amdocs", comment.Author);
-            Assert.AreEqual("Amdocs:\ntest\n", comment.String.String);
+            ClassicAssert.IsNotNull(comment);
+            ClassicAssert.AreEqual("Amdocs", comment.Author);
+            ClassicAssert.AreEqual("Amdocs:\ntest\n", comment.String.String);
 
             IWorkbook wbBack = XSSFTestDataSamples.WriteOutAndReadBack(wb);
             wb.Close();
-            Assert.IsNotNull(wbBack);
+            ClassicAssert.IsNotNull(wbBack);
 
             ISheet sheetBack = wbBack.GetSheetAt(0);
 
             // comment in row 0 is gone
             comment = sheetBack.GetCellComment(new CellAddress(0, 0));
-            Assert.IsNull(comment);
+            ClassicAssert.IsNull(comment);
 
             // comment is now in row 1
             comment = sheetBack.GetCellComment(new CellAddress(1, 0));
-            Assert.IsNotNull(comment);
-            Assert.AreEqual("Amdocs", comment.Author);
-            Assert.AreEqual("Amdocs:\ntest\n", comment.String.String);
+            ClassicAssert.IsNotNull(comment);
+            ClassicAssert.AreEqual("Amdocs", comment.Author);
+            ClassicAssert.AreEqual("Amdocs:\ntest\n", comment.String.String);
             wbBack.Close();
         }
 
@@ -244,16 +244,16 @@ namespace TestCases.XSSF.UserModel
         public void Test57171()
         {
             IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("57171_57163_57165.xlsx");
-            Assert.AreEqual(5, wb.ActiveSheetIndex);
+            ClassicAssert.AreEqual(5, wb.ActiveSheetIndex);
             RemoveAllSheetsBut(5, wb); // 5 is the active / selected sheet
-            Assert.AreEqual(0, wb.ActiveSheetIndex);
+            ClassicAssert.AreEqual(0, wb.ActiveSheetIndex);
 
             IWorkbook wbRead = XSSFTestDataSamples.WriteOutAndReadBack(wb);
             wb.Close();
-            Assert.AreEqual(0, wbRead.ActiveSheetIndex);
+            ClassicAssert.AreEqual(0, wbRead.ActiveSheetIndex);
 
             wbRead.RemoveSheetAt(0);
-            Assert.AreEqual(0, wbRead.ActiveSheetIndex);
+            ClassicAssert.AreEqual(0, wbRead.ActiveSheetIndex);
 
             wbRead.Close();
         }
@@ -262,9 +262,9 @@ namespace TestCases.XSSF.UserModel
         public void Test57163()
         {
             IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("57171_57163_57165.xlsx");
-            Assert.AreEqual(5, wb.ActiveSheetIndex);
+            ClassicAssert.AreEqual(5, wb.ActiveSheetIndex);
             wb.RemoveSheetAt(0);
-            Assert.AreEqual(4, wb.ActiveSheetIndex);
+            ClassicAssert.AreEqual(4, wb.ActiveSheetIndex);
 
             wb.Close();
         }
@@ -274,48 +274,48 @@ namespace TestCases.XSSF.UserModel
         {
             IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("57171_57163_57165.xlsx");
 
-            Assert.AreEqual(5, wb.ActiveSheetIndex);
+            ClassicAssert.AreEqual(5, wb.ActiveSheetIndex);
 
             // Move the sheets around in all possible combinations to check that the active sheet
             // is Set correctly in all cases
             wb.SetSheetOrder(wb.GetSheetName(5), 4);
-            Assert.AreEqual(4, wb.ActiveSheetIndex);
+            ClassicAssert.AreEqual(4, wb.ActiveSheetIndex);
 
             wb.SetSheetOrder(wb.GetSheetName(5), 5);
-            Assert.AreEqual(4, wb.ActiveSheetIndex);
+            ClassicAssert.AreEqual(4, wb.ActiveSheetIndex);
 
             wb.SetSheetOrder(wb.GetSheetName(3), 5);
-            Assert.AreEqual(3, wb.ActiveSheetIndex);
+            ClassicAssert.AreEqual(3, wb.ActiveSheetIndex);
 
             wb.SetSheetOrder(wb.GetSheetName(4), 5);
-            Assert.AreEqual(3, wb.ActiveSheetIndex);
+            ClassicAssert.AreEqual(3, wb.ActiveSheetIndex);
 
             wb.SetSheetOrder(wb.GetSheetName(2), 2);
-            Assert.AreEqual(3, wb.ActiveSheetIndex);
+            ClassicAssert.AreEqual(3, wb.ActiveSheetIndex);
 
             wb.SetSheetOrder(wb.GetSheetName(2), 1);
-            Assert.AreEqual(3, wb.ActiveSheetIndex);
+            ClassicAssert.AreEqual(3, wb.ActiveSheetIndex);
 
             wb.SetSheetOrder(wb.GetSheetName(3), 5);
-            Assert.AreEqual(5, wb.ActiveSheetIndex);
+            ClassicAssert.AreEqual(5, wb.ActiveSheetIndex);
 
             wb.SetSheetOrder(wb.GetSheetName(0), 5);
-            Assert.AreEqual(4, wb.ActiveSheetIndex);
+            ClassicAssert.AreEqual(4, wb.ActiveSheetIndex);
 
             wb.SetSheetOrder(wb.GetSheetName(0), 5);
-            Assert.AreEqual(3, wb.ActiveSheetIndex);
+            ClassicAssert.AreEqual(3, wb.ActiveSheetIndex);
 
             wb.SetSheetOrder(wb.GetSheetName(0), 5);
-            Assert.AreEqual(2, wb.ActiveSheetIndex);
+            ClassicAssert.AreEqual(2, wb.ActiveSheetIndex);
 
             wb.SetSheetOrder(wb.GetSheetName(0), 5);
-            Assert.AreEqual(1, wb.ActiveSheetIndex);
+            ClassicAssert.AreEqual(1, wb.ActiveSheetIndex);
 
             wb.SetSheetOrder(wb.GetSheetName(0), 5);
-            Assert.AreEqual(0, wb.ActiveSheetIndex);
+            ClassicAssert.AreEqual(0, wb.ActiveSheetIndex);
 
             wb.SetSheetOrder(wb.GetSheetName(0), 5);
-            Assert.AreEqual(5, wb.ActiveSheetIndex);
+            ClassicAssert.AreEqual(5, wb.ActiveSheetIndex);
 
             wb.Close();
         }
@@ -325,28 +325,28 @@ namespace TestCases.XSSF.UserModel
         {
             IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("57171_57163_57165.xlsx");
 
-            Assert.AreEqual(5, wb.ActiveSheetIndex);
+            ClassicAssert.AreEqual(5, wb.ActiveSheetIndex);
 
             wb.RemoveSheetAt(0);
-            Assert.AreEqual(4, wb.ActiveSheetIndex);
+            ClassicAssert.AreEqual(4, wb.ActiveSheetIndex);
 
             wb.SetActiveSheet(3);
-            Assert.AreEqual(3, wb.ActiveSheetIndex);
+            ClassicAssert.AreEqual(3, wb.ActiveSheetIndex);
 
             wb.RemoveSheetAt(4);
-            Assert.AreEqual(3, wb.ActiveSheetIndex);
+            ClassicAssert.AreEqual(3, wb.ActiveSheetIndex);
 
             wb.RemoveSheetAt(3);
-            Assert.AreEqual(2, wb.ActiveSheetIndex);
+            ClassicAssert.AreEqual(2, wb.ActiveSheetIndex);
 
             wb.RemoveSheetAt(0);
-            Assert.AreEqual(1, wb.ActiveSheetIndex);
+            ClassicAssert.AreEqual(1, wb.ActiveSheetIndex);
 
             wb.RemoveSheetAt(1);
-            Assert.AreEqual(0, wb.ActiveSheetIndex);
+            ClassicAssert.AreEqual(0, wb.ActiveSheetIndex);
 
             wb.RemoveSheetAt(0);
-            Assert.AreEqual(0, wb.ActiveSheetIndex);
+            ClassicAssert.AreEqual(0, wb.ActiveSheetIndex);
 
             try
             {
@@ -357,13 +357,13 @@ namespace TestCases.XSSF.UserModel
             {
                 // expected
             }
-            Assert.AreEqual(0, wb.ActiveSheetIndex);
+            ClassicAssert.AreEqual(0, wb.ActiveSheetIndex);
 
             wb.CreateSheet();
-            Assert.AreEqual(0, wb.ActiveSheetIndex);
+            ClassicAssert.AreEqual(0, wb.ActiveSheetIndex);
 
             wb.RemoveSheetAt(0);
-            Assert.AreEqual(0, wb.ActiveSheetIndex);
+            ClassicAssert.AreEqual(0, wb.ActiveSheetIndex);
 
             wb.Close();
         }
@@ -372,14 +372,14 @@ namespace TestCases.XSSF.UserModel
         public void Test57165()
         {
             IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("57171_57163_57165.xlsx");
-            Assert.AreEqual(5, wb.ActiveSheetIndex);
+            ClassicAssert.AreEqual(5, wb.ActiveSheetIndex);
             RemoveAllSheetsBut(3, wb);
-            Assert.AreEqual(0, wb.ActiveSheetIndex);
+            ClassicAssert.AreEqual(0, wb.ActiveSheetIndex);
             wb.CreateSheet("New Sheet1");
-            Assert.AreEqual(0, wb.ActiveSheetIndex);
+            ClassicAssert.AreEqual(0, wb.ActiveSheetIndex);
             wb.CloneSheet(0); // Throws exception here
             wb.SetSheetName(1, "New Sheet");
-            Assert.AreEqual(0, wb.ActiveSheetIndex);
+            ClassicAssert.AreEqual(0, wb.ActiveSheetIndex);
 
             wb.Close();
         }
@@ -405,24 +405,24 @@ namespace TestCases.XSSF.UserModel
             XSSFSheet sheet = wb.GetSheetAt(0) as XSSFSheet;
 
             IComment comment1 = sheet.GetCellComment(new CellAddress(2, 1));
-            Assert.IsNotNull(comment1);
+            ClassicAssert.IsNotNull(comment1);
 
             IComment comment2 = sheet.GetCellComment(new CellAddress(2, 2));
-            Assert.IsNotNull(comment2);
+            ClassicAssert.IsNotNull(comment2);
 
             IComment comment3 = sheet.GetCellComment(new CellAddress(1, 1));
-            Assert.IsNull(comment3, "NO comment in (1,1) and it should be null");
+            ClassicAssert.IsNull(comment3, "NO comment in (1,1) and it should be null");
 
             sheet.ShiftRows(2, 2, -1);
 
             comment3 = sheet.GetCellComment(new CellAddress(1, 1));
-            Assert.IsNotNull(comment3, "Comment in (2,1) Moved to (1,1) so its not null now.");
+            ClassicAssert.IsNotNull(comment3, "Comment in (2,1) Moved to (1,1) so its not null now.");
 
             comment1 = sheet.GetCellComment(new CellAddress(2, 1));
-            Assert.IsNull(comment1, "No comment currently in (2,1) and hence it is null");
+            ClassicAssert.IsNull(comment1, "No comment currently in (2,1) and hence it is null");
 
             comment2 = sheet.GetCellComment(new CellAddress(1, 2));
-            Assert.IsNotNull(comment2, "Comment in (2,2) should have Moved as well because of shift rows. But its not");
+            ClassicAssert.IsNotNull(comment2, "Comment in (2,2) should have Moved as well because of shift rows. But its not");
 
             wb.Close();
         }
@@ -431,10 +431,10 @@ namespace TestCases.XSSF.UserModel
         {
             CellAddress cellAddress = new CellAddress(address);
             IRow row = sheet.GetRow(cellAddress.Row);
-            Assert.IsNotNull(row);
+            ClassicAssert.IsNotNull(row);
             ICell cell = row.GetCell(cellAddress.Column);
-            Assert.IsNotNull(cell);
-            Assert.AreEqual(CellType.Formula, cell.CellType);
+            ClassicAssert.IsNotNull(cell);
+            ClassicAssert.AreEqual(CellType.Formula, cell.CellType);
             return cell.CellFormula;
         }
         // This test is written as expected-to-Assert.Fail and should be rewritten
@@ -444,15 +444,15 @@ namespace TestCases.XSSF.UserModel
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("TestShiftRowSharedFormula.xlsx");
             XSSFSheet sheet = wb.GetSheetAt(0) as XSSFSheet;
-            Assert.AreEqual("SUM(C2:C4)", getCellFormula(sheet, "C5"));
-            Assert.AreEqual("SUM(D2:D4)", getCellFormula(sheet, "D5"));
-            Assert.AreEqual("SUM(E2:E4)", getCellFormula(sheet, "E5"));
+            ClassicAssert.AreEqual("SUM(C2:C4)", getCellFormula(sheet, "C5"));
+            ClassicAssert.AreEqual("SUM(D2:D4)", getCellFormula(sheet, "D5"));
+            ClassicAssert.AreEqual("SUM(E2:E4)", getCellFormula(sheet, "E5"));
             sheet.ShiftRows(3, sheet.LastRowNum, 1);
             try
             {
-                Assert.AreEqual("SUM(C2:C5)", getCellFormula(sheet, "C6"));
-                Assert.AreEqual("SUM(D2:D5)", getCellFormula(sheet, "D6"));
-                Assert.AreEqual("SUM(E2:E5)", getCellFormula(sheet, "E6"));
+                ClassicAssert.AreEqual("SUM(C2:C5)", getCellFormula(sheet, "C6"));
+                ClassicAssert.AreEqual("SUM(D2:D5)", getCellFormula(sheet, "D6"));
+                ClassicAssert.AreEqual("SUM(E2:E5)", getCellFormula(sheet, "E6"));
                 POITestCase.TestPassesNow(59983);
             }
             catch (AssertionException e)

@@ -1,6 +1,6 @@
 ﻿using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -20,8 +20,8 @@ namespace TestCases.XSSF
             ICell valueCell = cell.Row.CreateCell(1);
             valueCell.SetCellValue(value);
             workbook.GetCreationHelper().CreateFormulaEvaluator().EvaluateAll();
-            Assert.AreEqual(CellType.String, cell.CachedFormulaResultType);
-            Assert.AreEqual(value, cell.StringCellValue);
+            ClassicAssert.AreEqual(CellType.String, cell.CachedFormulaResultType);
+            ClassicAssert.AreEqual(value, cell.StringCellValue);
         }
     }
 }

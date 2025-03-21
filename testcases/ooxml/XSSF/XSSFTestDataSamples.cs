@@ -25,7 +25,7 @@ using NPOI.Util;
 using NPOI.HSSF;
 using TestCases.HSSF;
 using System.Diagnostics;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 
 namespace NPOI.XSSF
 {

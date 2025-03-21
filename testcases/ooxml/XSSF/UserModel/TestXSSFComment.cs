@@ -26,7 +26,7 @@ using NPOI.XSSF;
 using NPOI.XSSF.Model;
 using NPOI.XSSF.Streaming;
 using NPOI.XSSF.UserModel;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using TestCases.SS.UserModel;
 
 namespace TestCases.XSSF.UserModel
@@ -50,20 +50,20 @@ namespace TestCases.XSSF.UserModel
         public void Constructor()
         {
             CommentsTable sheetComments = new CommentsTable();
-            Assert.IsNotNull(sheetComments.GetCTComments().commentList);
-            Assert.IsNotNull(sheetComments.GetCTComments().authors);
-            Assert.AreEqual(1, sheetComments.GetCTComments().authors.SizeOfAuthorArray());
-            Assert.AreEqual(1, sheetComments.GetNumberOfAuthors());
+            ClassicAssert.IsNotNull(sheetComments.GetCTComments().commentList);
+            ClassicAssert.IsNotNull(sheetComments.GetCTComments().authors);
+            ClassicAssert.AreEqual(1, sheetComments.GetCTComments().authors.SizeOfAuthorArray());
+            ClassicAssert.AreEqual(1, sheetComments.GetNumberOfAuthors());
 
             CT_Comment ctComment = sheetComments.NewComment(CellAddress.A1);
             CT_Shape vmlShape = new CT_Shape();
 
             XSSFComment comment = new XSSFComment(sheetComments, ctComment, vmlShape);
-            Assert.AreEqual(null, comment.String.String);
-            Assert.AreEqual(0, comment.Row);
-            Assert.AreEqual(0, comment.Column);
-            Assert.AreEqual("", comment.Author);
-            Assert.AreEqual(false, comment.Visible);
+            ClassicAssert.AreEqual(null, comment.String.String);
+            ClassicAssert.AreEqual(0, comment.Row);
+            ClassicAssert.AreEqual(0, comment.Column);
+            ClassicAssert.AreEqual("", comment.Author);
+            ClassicAssert.AreEqual(false, comment.Visible);
         }
         [Test]
         public void GetSetCol()
@@ -75,14 +75,14 @@ namespace TestCases.XSSF.UserModel
 
             XSSFComment comment = new XSSFComment(sheetComments, ctComment, vmlShape);
             comment.Column = (1);
-            Assert.AreEqual(1, comment.Column);
-            Assert.AreEqual(1, new CellReference(ctComment.@ref).Col);
-            Assert.AreEqual(1, vmlShape.GetClientDataArray(0).GetColumnArray(0));
+            ClassicAssert.AreEqual(1, comment.Column);
+            ClassicAssert.AreEqual(1, new CellReference(ctComment.@ref).Col);
+            ClassicAssert.AreEqual(1, vmlShape.GetClientDataArray(0).GetColumnArray(0));
 
             comment.Column = (5);
-            Assert.AreEqual(5, comment.Column);
-            Assert.AreEqual(5, new CellReference(ctComment.@ref).Col);
-            Assert.AreEqual(5, vmlShape.GetClientDataArray(0).GetColumnArray(0));
+            ClassicAssert.AreEqual(5, comment.Column);
+            ClassicAssert.AreEqual(5, new CellReference(ctComment.@ref).Col);
+            ClassicAssert.AreEqual(5, vmlShape.GetClientDataArray(0).GetColumnArray(0));
         }
         [Test]
         public void GetSetRow()
@@ -94,14 +94,14 @@ namespace TestCases.XSSF.UserModel
 
             XSSFComment comment = new XSSFComment(sheetComments, ctComment, vmlShape);
             comment.Row = (1);
-            Assert.AreEqual(1, comment.Row);
-            Assert.AreEqual(1, new CellReference(ctComment.@ref).Row);
-            Assert.AreEqual(1, vmlShape.GetClientDataArray(0).GetRowArray(0));
+            ClassicAssert.AreEqual(1, comment.Row);
+            ClassicAssert.AreEqual(1, new CellReference(ctComment.@ref).Row);
+            ClassicAssert.AreEqual(1, vmlShape.GetClientDataArray(0).GetRowArray(0));
 
             comment.Row = (5);
-            Assert.AreEqual(5, comment.Row);
-            Assert.AreEqual(5, new CellReference(ctComment.@ref).Row);
-            Assert.AreEqual(5, vmlShape.GetClientDataArray(0).GetRowArray(0));
+            ClassicAssert.AreEqual(5, comment.Row);
+            ClassicAssert.AreEqual(5, new CellReference(ctComment.@ref).Row);
+            ClassicAssert.AreEqual(5, vmlShape.GetClientDataArray(0).GetRowArray(0));
         }
         [Test]
         public void SetString()
@@ -118,12 +118,12 @@ namespace TestCases.XSSF.UserModel
             }
             catch (ArgumentException e)
             {
-                Assert.AreEqual("Only XSSFRichTextString argument is supported", e.Message);
+                ClassicAssert.AreEqual("Only XSSFRichTextString argument is supported", e.Message);
             }
 
             //simple string argument
             comment.SetString(TEST_RICHTEXTSTRING);
-            Assert.AreEqual(TEST_RICHTEXTSTRING, comment.String.String);
+            ClassicAssert.AreEqual(TEST_RICHTEXTSTRING, comment.String.String);
 
             //if the text is already Set, it should be overridden, not Added twice!
             comment.SetString(TEST_RICHTEXTSTRING);
@@ -132,11 +132,11 @@ namespace TestCases.XSSF.UserModel
             //  Assert.Fail("TODO test case incomplete!?");
             //XmlObject[] obj = ctComment.selectPath(
             //        "declare namespace w='"+XSSFRelation.NS_SPREADSHEETML+"' .//w:text");
-            //Assert.AreEqual(1, obj.Length);
-            Assert.AreEqual(TEST_RICHTEXTSTRING, comment.String.String);
+            //ClassicAssert.AreEqual(1, obj.Length);
+            ClassicAssert.AreEqual(TEST_RICHTEXTSTRING, comment.String.String);
 
             //sequential call of comment.String should return the same XSSFRichTextString object
-            Assert.AreSame(comment.String, comment.String);
+            ClassicAssert.AreSame(comment.String, comment.String);
 
             XSSFRichTextString richText = new XSSFRichTextString(TEST_RICHTEXTSTRING);
             XSSFFont font1 = (XSSFFont)wb.CreateFont();
@@ -150,16 +150,16 @@ namespace TestCases.XSSF.UserModel
             comment.String = richText;
             //obj = ctComment.selectPath(
             //        "declare namespace w='"+XSSFRelation.NS_SPREADSHEETML+"' .//w:text");
-            //Assert.AreEqual(1, obj.Length);
-            Assert.AreSame(comment.String, richText);
+            //ClassicAssert.AreEqual(1, obj.Length);
+            ClassicAssert.AreSame(comment.String, richText);
             //check that the rich text is Set in the comment
             CT_RPrElt rPr = richText.GetCTRst().GetRArray(0).rPr;
-            Assert.AreEqual(true, rPr.GetIArray(0).val);
-            Assert.AreEqual(8.5, rPr.GetSzArray(0).val);
-            Assert.AreEqual(IndexedColors.BlueGrey.Index, (short)rPr.GetColorArray(0).indexed);
-            Assert.AreEqual("Tahoma", rPr.GetRFontArray(0).val);
+            ClassicAssert.AreEqual(true, rPr.GetIArray(0).val);
+            ClassicAssert.AreEqual(8.5, rPr.GetSzArray(0).val);
+            ClassicAssert.AreEqual(IndexedColors.BlueGrey.Index, (short)rPr.GetColorArray(0).indexed);
+            ClassicAssert.AreEqual("Tahoma", rPr.GetRFontArray(0).val);
 
-            Assert.IsNotNull(XSSFTestDataSamples.WriteOutAndReadBack(wb));
+            ClassicAssert.IsNotNull(XSSFTestDataSamples.WriteOutAndReadBack(wb));
         }
         [Test]
         public void Author()
@@ -167,17 +167,17 @@ namespace TestCases.XSSF.UserModel
             CommentsTable sheetComments = new CommentsTable();
             CT_Comment ctComment = sheetComments.NewComment(CellAddress.A1);
 
-            Assert.AreEqual(1, sheetComments.GetNumberOfAuthors());
+            ClassicAssert.AreEqual(1, sheetComments.GetNumberOfAuthors());
             XSSFComment comment = new XSSFComment(sheetComments, ctComment, null);
-            Assert.AreEqual("", comment.Author);
+            ClassicAssert.AreEqual("", comment.Author);
             comment.Author = ("Apache POI");
-            Assert.AreEqual("Apache POI", comment.Author);
-            Assert.AreEqual(2, sheetComments.GetNumberOfAuthors());
+            ClassicAssert.AreEqual("Apache POI", comment.Author);
+            ClassicAssert.AreEqual(2, sheetComments.GetNumberOfAuthors());
             comment.Author = ("Apache POI");
-            Assert.AreEqual(2, sheetComments.GetNumberOfAuthors());
+            ClassicAssert.AreEqual(2, sheetComments.GetNumberOfAuthors());
             comment.Author = ("");
-            Assert.AreEqual("", comment.Author);
-            Assert.AreEqual(2, sheetComments.GetNumberOfAuthors());
+            ClassicAssert.AreEqual("", comment.Author);
+            ClassicAssert.AreEqual(2, sheetComments.GetNumberOfAuthors());
         }
 
         [Test]
@@ -228,20 +228,20 @@ namespace TestCases.XSSF.UserModel
                 CellAddress ref1 = new CellAddress(ca.Row1, ca.Col1);
                 XSSFComment shape2 = new XSSFComment(comments, comments.NewComment(ref1), vmlShape2);
 
-                Assert.AreEqual(shape1.Author, shape2.Author);
-                Assert.AreEqual(shape1.ClientAnchor, shape2.ClientAnchor);
-                Assert.AreEqual(shape1.Column, shape2.Column);
-                Assert.AreEqual(shape1.Row, shape2.Row);
-                Assert.AreEqual(shape1.GetCTComment().ToString(), shape2.GetCTComment().ToString());
-                Assert.AreEqual(shape1.GetCTComment().@ref, shape2.GetCTComment().@ref);
+                ClassicAssert.AreEqual(shape1.Author, shape2.Author);
+                ClassicAssert.AreEqual(shape1.ClientAnchor, shape2.ClientAnchor);
+                ClassicAssert.AreEqual(shape1.Column, shape2.Column);
+                ClassicAssert.AreEqual(shape1.Row, shape2.Row);
+                ClassicAssert.AreEqual(shape1.GetCTComment().ToString(), shape2.GetCTComment().ToString());
+                ClassicAssert.AreEqual(shape1.GetCTComment().@ref, shape2.GetCTComment().@ref);
 
                 /*CommentsTable table1 = shape1.CommentsTable;
                 CommentsTable table2 = shape2.CommentsTable;
-                Assert.AreEqual(table1.CTComments.toString(), table2.CTComments.toString());
-                Assert.AreEqual(table1.NumberOfComments, table2.NumberOfComments);
-                Assert.AreEqual(table1.Relations, table2.Relations);*/
+                ClassicAssert.AreEqual(table1.CTComments.toString(), table2.CTComments.toString());
+                ClassicAssert.AreEqual(table1.NumberOfComments, table2.NumberOfComments);
+                ClassicAssert.AreEqual(table1.Relations, table2.Relations);*/
 
-                Assert.AreEqual(vmlShape1.ToString().Replace("_x0000_s\\d+", "_x0000_s0000"), 
+                ClassicAssert.AreEqual(vmlShape1.ToString().Replace("_x0000_s\\d+", "_x0000_s0000"), 
                     vmlShape2.ToString().Replace("_x0000_s\\d+", "_x0000_s0000"),
                     "The vmlShapes should have equal content afterwards");
             }
@@ -301,18 +301,18 @@ namespace TestCases.XSSF.UserModel
             IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("57838.xlsx");
             ISheet sheet = wb.GetSheetAt(0);
             IComment comment1 = sheet.GetCellComment(new CellAddress(2, 1));
-            Assert.IsNotNull(comment1);
+            ClassicAssert.IsNotNull(comment1);
             IComment comment2 = sheet.GetCellComment(new CellAddress(2, 2));
-            Assert.IsNotNull(comment2);
+            ClassicAssert.IsNotNull(comment2);
             IRow row = sheet.GetRow(2);
-            Assert.IsNotNull(row);
+            ClassicAssert.IsNotNull(row);
             sheet.RemoveRow(row); // Remove row from index 2
             row = sheet.GetRow(2);
-            Assert.IsNull(row); // Row is null since we deleted it.
+            ClassicAssert.IsNull(row); // Row is null since we deleted it.
             comment1 = sheet.GetCellComment(new CellAddress(2, 1));
-            Assert.IsNull(comment1); // comment should be null but will Assert.Fail due to bug
+            ClassicAssert.IsNull(comment1); // comment should be null but will Assert.Fail due to bug
             comment2 = sheet.GetCellComment(new CellAddress(2, 2));
-            Assert.IsNull(comment2); // comment should be null but will Assert.Fail due to bug
+            ClassicAssert.IsNull(comment2); // comment should be null but will Assert.Fail due to bug
             wb.Close();
         }
 
@@ -344,13 +344,13 @@ namespace TestCases.XSSF.UserModel
                 cell.CellComment = comment;
 
                 var exCellComment = sheet.GetCellComment(new CellAddress(1, 0));
-                Assert.IsNotNull(exCellComment);
-                Assert.IsTrue(exCellComment.String.String.Equals("Hello, World!"));
-                Assert.IsTrue(exCellComment.Author.Equals("Apache POI"));
+                ClassicAssert.IsNotNull(exCellComment);
+                ClassicAssert.IsTrue(exCellComment.String.String.Equals("Hello, World!"));
+                ClassicAssert.IsTrue(exCellComment.Author.Equals("Apache POI"));
 
                 cell.RemoveCellComment();
                 exCellComment = sheet.GetCellComment(new CellAddress(1, 0));
-                Assert.IsNull(exCellComment);
+                ClassicAssert.IsNull(exCellComment);
 
                 IComment newComment = drawing.CreateCellComment(anchor);
                 newComment.String = str;
@@ -358,9 +358,9 @@ namespace TestCases.XSSF.UserModel
                 cell.CellComment = newComment;
 
                 exCellComment = sheet.GetCellComment(new CellAddress(1, 0));
-                Assert.NotNull(exCellComment);
-                Assert.IsTrue(exCellComment.String.String.Equals("Hello, World!"));
-                Assert.IsTrue(exCellComment.Author.Equals("Apache POI"));
+                ClassicAssert.NotNull(exCellComment);
+                ClassicAssert.IsTrue(exCellComment.String.String.Equals("Hello, World!"));
+                ClassicAssert.IsTrue(exCellComment.Author.Equals("Apache POI"));
             }
             finally
             {
@@ -396,13 +396,13 @@ namespace TestCases.XSSF.UserModel
                 cell.CellComment = comment;
 
                 var exCellComment = sheet.GetCellComment(new CellAddress(1, 0));
-                Assert.IsNotNull(exCellComment);
-                Assert.IsTrue(exCellComment.String.String.Equals("Hello, World!"));
-                Assert.IsTrue(exCellComment.Author.Equals("Apache POI"));
+                ClassicAssert.IsNotNull(exCellComment);
+                ClassicAssert.IsTrue(exCellComment.String.String.Equals("Hello, World!"));
+                ClassicAssert.IsTrue(exCellComment.Author.Equals("Apache POI"));
 
                 cell.RemoveCellComment();
                 exCellComment = sheet.GetCellComment(new CellAddress(1, 0));
-                Assert.IsNull(exCellComment);
+                ClassicAssert.IsNull(exCellComment);
 
                 IComment newComment = drawing.CreateCellComment(anchor);
                 newComment.String = str;
@@ -410,9 +410,9 @@ namespace TestCases.XSSF.UserModel
                 cell.CellComment = newComment;
 
                 exCellComment = sheet.GetCellComment(new CellAddress(1, 0));
-                Assert.NotNull(exCellComment);
-                Assert.IsTrue(exCellComment.String.String.Equals("Hello, World!"));
-                Assert.IsTrue(exCellComment.Author.Equals("Apache POI"));
+                ClassicAssert.NotNull(exCellComment);
+                ClassicAssert.IsTrue(exCellComment.String.String.Equals("Hello, World!"));
+                ClassicAssert.IsTrue(exCellComment.Author.Equals("Apache POI"));
             }
             finally
             {

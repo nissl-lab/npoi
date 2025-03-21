@@ -17,7 +17,7 @@
 
 using System;
 using NPOI.SS.UserModel;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using TestCases.SS.Formula.Functions;
 using NPOI.OpenXml4Net.OPC;
 using System.IO;
@@ -123,32 +123,32 @@ namespace TestCases.XSSF.UserModel
             switch (expected.CellType)
             {
                 case CellType.Blank:
-                    Assert.AreEqual(CellType.Blank, actual.CellType, msg);
+                    ClassicAssert.AreEqual(CellType.Blank, actual.CellType, msg);
                     break;
                 case CellType.Boolean:
-                    Assert.AreEqual(CellType.Boolean, actual.CellType, msg);
-                    Assert.AreEqual(expected.BooleanCellValue, actual.BooleanValue, msg);
+                    ClassicAssert.AreEqual(CellType.Boolean, actual.CellType, msg);
+                    ClassicAssert.AreEqual(expected.BooleanCellValue, actual.BooleanValue, msg);
                     break;
                 case CellType.Error:
-                    Assert.AreEqual(CellType.Error, actual.CellType, msg);
+                    ClassicAssert.AreEqual(CellType.Error, actual.CellType, msg);
                     //if (false)
                     //{ // TODO: fix ~45 functions which are currently returning incorrect error values
-                    //	Assert.AreEqual(expected.ErrorCellValue, actual.ErrorValue, msg);
+                    //	ClassicAssert.AreEqual(expected.ErrorCellValue, actual.ErrorValue, msg);
                     //}
                     break;
                 case CellType.Formula: // will never be used, since we will call method After formula Evaluation
                     throw new AssertionException("Cannot expect formula as result of formula Evaluation: " + msg);
                 case CellType.Numeric:
-                    Assert.AreEqual(CellType.Numeric, actual.CellType, msg);
+                    ClassicAssert.AreEqual(CellType.Numeric, actual.CellType, msg);
                     AbstractNumericTestCase.AssertEquals(msg, expected.NumericCellValue, actual.NumberValue, TestMathX.POS_ZERO, TestMathX.DIFF_TOLERANCE_FACTOR);
 
                     //				double delta = Math.abs(expected.NumericCellValue-actual.NumberValue);
                     //				double pctExpected = Math.abs(0.00001*expected.NumericCellValue);
-                    //				Assert.IsTrue(msg, delta <= pctExpected);
+                    //				ClassicAssert.IsTrue(msg, delta <= pctExpected);
                     break;
                 case CellType.String:
-                    Assert.AreEqual(CellType.String, actual.CellType, msg);
-                    Assert.AreEqual(expected.RichStringCellValue.String, actual.StringValue, msg);
+                    ClassicAssert.AreEqual(CellType.String, actual.CellType, msg);
+                    ClassicAssert.AreEqual(expected.RichStringCellValue.String, actual.StringValue, msg);
                     break;
             }
         }
@@ -175,7 +175,7 @@ namespace TestCases.XSSF.UserModel
         [Test]
         public void TestOpen()
         {
-            Assert.IsNotNull(workbook);
+            ClassicAssert.IsNotNull(workbook);
         }
 
         /**

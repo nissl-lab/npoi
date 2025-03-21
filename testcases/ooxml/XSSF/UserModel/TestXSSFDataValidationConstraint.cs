@@ -19,7 +19,7 @@ namespace TestCases.XSSF.UserModel
     using System;
     using NPOI.SS.UserModel;
     using NPOI.XSSF.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     [TestFixture]
     public class TestXSSFDataValidationConstraint
@@ -39,7 +39,7 @@ namespace TestCases.XSSF.UserModel
             CollectionAssert.AreEqual(expected, constraint.ExplicitListValues);
             // Excel and DataValidationConstraint Parser ignore (strip) whitespace; quotes should still be intact
             // FIXME: whitespace wasn't stripped
-            Assert.AreEqual(literal, constraint.Formula1);
+            ClassicAssert.AreEqual(literal, constraint.Formula1);
         }
 
         [Test]
@@ -51,7 +51,7 @@ namespace TestCases.XSSF.UserModel
             IDataValidationConstraint constraint = new XSSFDataValidationConstraint(expected);
             CollectionAssert.AreEqual(expected, constraint.ExplicitListValues);
             // Excel and DataValidationConstraint Parser ignore (strip) whitespace; quotes should still be intact
-            Assert.AreEqual(literal.Replace(" ", ""), constraint.Formula1);
+            ClassicAssert.AreEqual(literal.Replace(" ", ""), constraint.Formula1);
         }
 
         [Test]
@@ -60,8 +60,8 @@ namespace TestCases.XSSF.UserModel
             // (unnamed range) reference list        
             String reference = "A1:A5";
             IDataValidationConstraint constraint = new XSSFDataValidationConstraint(listType, ignoredType, reference, null);
-            Assert.IsNull(constraint.ExplicitListValues);
-            Assert.AreEqual("A1:A5", constraint.Formula1);
+            ClassicAssert.IsNull(constraint.ExplicitListValues);
+            ClassicAssert.AreEqual("A1:A5", constraint.Formula1);
         }
 
         [Test]
@@ -70,8 +70,8 @@ namespace TestCases.XSSF.UserModel
             // named range list
             String namedRange = "MyNamedRange";
             IDataValidationConstraint constraint = new XSSFDataValidationConstraint(listType, ignoredType, namedRange, null);
-            Assert.IsNull(constraint.ExplicitListValues);
-            Assert.AreEqual("MyNamedRange", constraint.Formula1);
+            ClassicAssert.IsNull(constraint.ExplicitListValues);
+            ClassicAssert.AreEqual("MyNamedRange", constraint.Formula1);
         }
 
     }

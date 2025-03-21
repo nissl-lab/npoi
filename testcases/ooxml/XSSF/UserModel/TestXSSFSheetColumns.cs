@@ -19,7 +19,7 @@ using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using NPOI.Util;
 using NPOI.XSSF.UserModel;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using System;
 using System.IO;
 
@@ -41,7 +41,7 @@ namespace TestCases.XSSF.UserModel
 
             _ = sheet.CreateColumn(10);
 
-            Assert.AreEqual(10, sheet.FirstColumnNum);
+            ClassicAssert.AreEqual(10, sheet.FirstColumnNum);
 
             FileInfo file = TempFile.CreateTempFile("poi-", ".xlsx");
             Stream output = File.OpenWrite(file.FullName);
@@ -51,7 +51,7 @@ namespace TestCases.XSSF.UserModel
             XSSFWorkbook wbLoaded = new XSSFWorkbook(file.ToString());
             XSSFSheet sheetLoaded = (XSSFSheet)wbLoaded.GetSheet("sheet1");
 
-            Assert.AreEqual(10, sheetLoaded.FirstColumnNum);
+            ClassicAssert.AreEqual(10, sheetLoaded.FirstColumnNum);
         }
 
         [Test]
@@ -62,7 +62,7 @@ namespace TestCases.XSSF.UserModel
 
             _ = sheet.CreateColumn(10);
 
-            Assert.AreEqual(10, sheet.LastColumnNum);
+            ClassicAssert.AreEqual(10, sheet.LastColumnNum);
 
             FileInfo file = TempFile.CreateTempFile("poi-", ".xlsx");
             Stream output = File.OpenWrite(file.FullName);
@@ -72,7 +72,7 @@ namespace TestCases.XSSF.UserModel
             XSSFWorkbook wbLoaded = new XSSFWorkbook(file.ToString());
             XSSFSheet sheetLoaded = (XSSFSheet)wbLoaded.GetSheet("sheet1");
 
-            Assert.AreEqual(10, sheetLoaded.LastColumnNum);
+            ClassicAssert.AreEqual(10, sheetLoaded.LastColumnNum);
         }
 
         [Test]
@@ -87,9 +87,9 @@ namespace TestCases.XSSF.UserModel
                 _ = sheet.CreateColumn(i);
             }
 
-            Assert.AreEqual(0, sheet.FirstColumnNum);
-            Assert.AreEqual(colNumber - 1, sheet.LastColumnNum);
-            Assert.AreEqual(colNumber, sheet.PhysicalNumberOfColumns);
+            ClassicAssert.AreEqual(0, sheet.FirstColumnNum);
+            ClassicAssert.AreEqual(colNumber - 1, sheet.LastColumnNum);
+            ClassicAssert.AreEqual(colNumber, sheet.PhysicalNumberOfColumns);
 
             FileInfo file = TempFile.CreateTempFile("poi-", ".xlsx");
             Stream output = File.OpenWrite(file.FullName);
@@ -99,9 +99,9 @@ namespace TestCases.XSSF.UserModel
             XSSFWorkbook wbLoaded = new XSSFWorkbook(file.ToString());
             XSSFSheet sheetLoaded = (XSSFSheet)wbLoaded.GetSheet("sheet1");
 
-            Assert.AreEqual(0, sheetLoaded.FirstColumnNum);
-            Assert.AreEqual(colNumber - 1, sheetLoaded.LastColumnNum);
-            Assert.AreEqual(colNumber, sheetLoaded.PhysicalNumberOfColumns);
+            ClassicAssert.AreEqual(0, sheetLoaded.FirstColumnNum);
+            ClassicAssert.AreEqual(colNumber - 1, sheetLoaded.LastColumnNum);
+            ClassicAssert.AreEqual(colNumber, sheetLoaded.PhysicalNumberOfColumns);
         }
 
         [Test]
@@ -115,8 +115,8 @@ namespace TestCases.XSSF.UserModel
 
             IColumn column = sheet.GetColumn(colIndex);
 
-            Assert.NotNull(column);
-            Assert.AreEqual(colIndex, column.ColumnNum);
+            ClassicAssert.NotNull(column);
+            ClassicAssert.AreEqual(colIndex, column.ColumnNum);
 
             FileInfo file = TempFile.CreateTempFile("poi-", ".xlsx");
             Stream output = File.OpenWrite(file.FullName);
@@ -127,8 +127,8 @@ namespace TestCases.XSSF.UserModel
             XSSFSheet sheetLoaded = (XSSFSheet)wbLoaded.GetSheet("sheet1");
             IColumn columnLoaded = sheetLoaded.GetColumn(colIndex);
 
-            Assert.NotNull(columnLoaded);
-            Assert.AreEqual(colIndex, columnLoaded.ColumnNum);
+            ClassicAssert.NotNull(columnLoaded);
+            ClassicAssert.AreEqual(colIndex, columnLoaded.ColumnNum);
         }
 
         [Test]
@@ -141,15 +141,15 @@ namespace TestCases.XSSF.UserModel
             sheet.CreateColumn(colIndex).CreateCell(0).SetCellValue(1);
             IColumn column = sheet.GetColumn(colIndex);
 
-            Assert.NotNull(column);
-            Assert.AreEqual(colIndex, column.ColumnNum);
-            Assert.AreEqual(1, column.GetCell(0).NumericCellValue);
+            ClassicAssert.NotNull(column);
+            ClassicAssert.AreEqual(colIndex, column.ColumnNum);
+            ClassicAssert.AreEqual(1, column.GetCell(0).NumericCellValue);
 
             IColumn columnOverwrite = sheet.CreateColumn(colIndex);
 
-            Assert.NotNull(columnOverwrite);
-            Assert.AreEqual(colIndex, columnOverwrite.ColumnNum);
-            Assert.IsNull(columnOverwrite.GetCell(0));
+            ClassicAssert.NotNull(columnOverwrite);
+            ClassicAssert.AreEqual(colIndex, columnOverwrite.ColumnNum);
+            ClassicAssert.IsNull(columnOverwrite.GetCell(0));
 
             FileInfo file = TempFile.CreateTempFile("poi-", ".xlsx");
             Stream output = File.OpenWrite(file.FullName);
@@ -160,9 +160,9 @@ namespace TestCases.XSSF.UserModel
             XSSFSheet sheetLoaded = (XSSFSheet)wbLoaded.GetSheet("sheet1");
             IColumn columnLoaded = sheetLoaded.GetColumn(colIndex);
 
-            Assert.NotNull(columnLoaded);
-            Assert.AreEqual(colIndex, columnLoaded.ColumnNum);
-            Assert.IsNull(columnLoaded.GetCell(0));
+            ClassicAssert.NotNull(columnLoaded);
+            ClassicAssert.AreEqual(colIndex, columnLoaded.ColumnNum);
+            ClassicAssert.IsNull(columnLoaded.GetCell(0));
         }
 
         [Test]
@@ -174,8 +174,8 @@ namespace TestCases.XSSF.UserModel
             _ = sheet.CreateColumn(10);
             IColumn column = sheet.GetColumn(10);
 
-            Assert.NotNull(column);
-            Assert.AreEqual(10, column.ColumnNum);
+            ClassicAssert.NotNull(column);
+            ClassicAssert.AreEqual(10, column.ColumnNum);
 
             FileInfo file = TempFile.CreateTempFile("poi-", ".xlsx");
             Stream output = File.OpenWrite(file.FullName);
@@ -186,8 +186,8 @@ namespace TestCases.XSSF.UserModel
             XSSFSheet sheetLoaded = (XSSFSheet)wbLoaded.GetSheet("sheet1");
             IColumn columnLoaded = sheetLoaded.GetColumn(10);
 
-            Assert.NotNull(columnLoaded);
-            Assert.AreEqual(10, columnLoaded.ColumnNum);
+            ClassicAssert.NotNull(columnLoaded);
+            ClassicAssert.AreEqual(10, columnLoaded.ColumnNum);
         }
 
         [Test]
@@ -198,7 +198,7 @@ namespace TestCases.XSSF.UserModel
 
             IColumn column = sheet.GetColumn(10);
 
-            Assert.IsNull(column);
+            ClassicAssert.IsNull(column);
 
             FileInfo file = TempFile.CreateTempFile("poi-", ".xlsx");
             Stream output = File.OpenWrite(file.FullName);
@@ -209,7 +209,7 @@ namespace TestCases.XSSF.UserModel
             XSSFSheet sheetLoaded = (XSSFSheet)wbLoaded.GetSheet("sheet1");
             IColumn columnLoaded = sheetLoaded.GetColumn(10);
 
-            Assert.IsNull(columnLoaded);
+            ClassicAssert.IsNull(columnLoaded);
         }
 
         [Test]
@@ -222,36 +222,36 @@ namespace TestCases.XSSF.UserModel
             _ = sheet.CreateColumn(2);
             _ = sheet.CreateColumn(3);
 
-            Assert.NotNull(sheet.GetColumn(1));
-            Assert.NotNull(sheet.GetColumn(2));
-            Assert.NotNull(sheet.GetColumn(3));
-            Assert.AreEqual(1, sheet.FirstColumnNum);
-            Assert.AreEqual(3, sheet.LastColumnNum);
+            ClassicAssert.NotNull(sheet.GetColumn(1));
+            ClassicAssert.NotNull(sheet.GetColumn(2));
+            ClassicAssert.NotNull(sheet.GetColumn(3));
+            ClassicAssert.AreEqual(1, sheet.FirstColumnNum);
+            ClassicAssert.AreEqual(3, sheet.LastColumnNum);
 
             sheet.RemoveColumn(sheet.GetColumn(3));
 
-            Assert.IsNull(sheet.GetColumn(3));
-            Assert.AreEqual(1, sheet.FirstColumnNum);
-            Assert.AreEqual(2, sheet.LastColumnNum);
+            ClassicAssert.IsNull(sheet.GetColumn(3));
+            ClassicAssert.AreEqual(1, sheet.FirstColumnNum);
+            ClassicAssert.AreEqual(2, sheet.LastColumnNum);
 
             _ = sheet.CreateColumn(3);
 
             sheet.RemoveColumn(sheet.GetColumn(1));
 
-            Assert.IsNull(sheet.GetColumn(1));
-            Assert.AreEqual(2, sheet.FirstColumnNum);
-            Assert.AreEqual(3, sheet.LastColumnNum);
+            ClassicAssert.IsNull(sheet.GetColumn(1));
+            ClassicAssert.AreEqual(2, sheet.FirstColumnNum);
+            ClassicAssert.AreEqual(3, sheet.LastColumnNum);
 
             _ = sheet.CreateColumn(1);
 
-            Assert.NotNull(sheet.GetColumn(3));
-            Assert.AreEqual(3, sheet.LastColumnNum);
+            ClassicAssert.NotNull(sheet.GetColumn(3));
+            ClassicAssert.AreEqual(3, sheet.LastColumnNum);
 
             sheet.RemoveColumn(sheet.GetColumn(2));
 
-            Assert.IsNull(sheet.GetColumn(2));
-            Assert.AreEqual(1, sheet.FirstColumnNum);
-            Assert.AreEqual(3, sheet.LastColumnNum);
+            ClassicAssert.IsNull(sheet.GetColumn(2));
+            ClassicAssert.AreEqual(1, sheet.FirstColumnNum);
+            ClassicAssert.AreEqual(3, sheet.LastColumnNum);
 
             FileInfo file = TempFile.CreateTempFile("poi-", ".xlsx");
             Stream output = File.OpenWrite(file.FullName);
@@ -261,9 +261,9 @@ namespace TestCases.XSSF.UserModel
             XSSFWorkbook wbLoaded = new XSSFWorkbook(file.ToString());
             XSSFSheet sheetLoaded = (XSSFSheet)wbLoaded.GetSheet("sheet1");
 
-            Assert.IsNull(sheetLoaded.GetColumn(2));
-            Assert.AreEqual(1, sheetLoaded.FirstColumnNum);
-            Assert.AreEqual(3, sheetLoaded.LastColumnNum);
+            ClassicAssert.IsNull(sheetLoaded.GetColumn(2));
+            ClassicAssert.AreEqual(1, sheetLoaded.FirstColumnNum);
+            ClassicAssert.AreEqual(3, sheetLoaded.LastColumnNum);
         }
 
         [Test]
@@ -276,11 +276,11 @@ namespace TestCases.XSSF.UserModel
             _ = sheet.CreateColumn(2);
             _ = sheet.CreateColumn(3);
 
-            Assert.NotNull(sheet.GetColumn(1));
-            Assert.NotNull(sheet.GetColumn(2));
-            Assert.NotNull(sheet.GetColumn(3));
-            Assert.AreEqual(1, sheet.FirstColumnNum);
-            Assert.AreEqual(3, sheet.LastColumnNum);
+            ClassicAssert.NotNull(sheet.GetColumn(1));
+            ClassicAssert.NotNull(sheet.GetColumn(2));
+            ClassicAssert.NotNull(sheet.GetColumn(3));
+            ClassicAssert.AreEqual(1, sheet.FirstColumnNum);
+            ClassicAssert.AreEqual(3, sheet.LastColumnNum);
 
             _ = Assert.Throws<ArgumentException>(() => sheet.RemoveColumn(sheet.GetColumn(4)));
         }
@@ -325,11 +325,11 @@ namespace TestCases.XSSF.UserModel
 
             fe.EvaluateAll();
 
-            Assert.AreEqual("POI", sheet.GetRow(mergedRegionFirstRow).GetCell(originalColIndex).StringCellValue);
-            Assert.AreEqual("POI", formulaCell1.CellComment.Author);
-            Assert.AreEqual(30, formulaCell1.NumericCellValue);
-            Assert.AreEqual(1, sheet.NumMergedRegions);
-            Assert.NotNull(originaMergedRegion);
+            ClassicAssert.AreEqual("POI", sheet.GetRow(mergedRegionFirstRow).GetCell(originalColIndex).StringCellValue);
+            ClassicAssert.AreEqual("POI", formulaCell1.CellComment.Author);
+            ClassicAssert.AreEqual(30, formulaCell1.NumericCellValue);
+            ClassicAssert.AreEqual(1, sheet.NumMergedRegions);
+            ClassicAssert.NotNull(originaMergedRegion);
 
             XSSFColumn copyColumn = (XSSFColumn)sheet.CopyColumn(originalColIndex, copyColIndex);
             CellRangeAddress copyMergedRegion = sheet.GetMergedRegion(1);
@@ -337,20 +337,20 @@ namespace TestCases.XSSF.UserModel
 
             XSSFCell formulaCell2 = (XSSFCell)sheet.GetColumn(copyColIndex).GetCell(0);
 
-            Assert.AreEqual(1, sheet.FirstColumnNum);
-            Assert.AreEqual(4, sheet.LastColumnNum);
-            Assert.AreEqual(width, copyColumn.Width);
-            //Assert.AreEqual("POI", sheet.GetRow(mergedRegionFirstRow).GetCell(copyColIndex).StringCellValue);
-            Assert.AreEqual("POI", formulaCell2.CellComment.Author);
-            Assert.AreEqual("C1 + D1", formulaCell2.CellFormula);
-            Assert.AreEqual(30, formulaCell2.NumericCellValue);
-            Assert.AreEqual(2, sheet.NumMergedRegions);
-            Assert.NotNull(originaMergedRegion);
-            Assert.NotNull(copyMergedRegion);
-            Assert.AreEqual(mergedRegionFirstRow, copyMergedRegion.FirstRow);
-            Assert.AreEqual(mergedRegionLastRow, copyMergedRegion.LastRow);
-            Assert.AreEqual(copyColumn.ColumnNum, copyMergedRegion.FirstColumn);
-            Assert.AreEqual(copyColumn.ColumnNum + 1, copyMergedRegion.LastColumn);
+            ClassicAssert.AreEqual(1, sheet.FirstColumnNum);
+            ClassicAssert.AreEqual(4, sheet.LastColumnNum);
+            ClassicAssert.AreEqual(width, copyColumn.Width);
+            //ClassicAssert.AreEqual("POI", sheet.GetRow(mergedRegionFirstRow).GetCell(copyColIndex).StringCellValue);
+            ClassicAssert.AreEqual("POI", formulaCell2.CellComment.Author);
+            ClassicAssert.AreEqual("C1 + D1", formulaCell2.CellFormula);
+            ClassicAssert.AreEqual(30, formulaCell2.NumericCellValue);
+            ClassicAssert.AreEqual(2, sheet.NumMergedRegions);
+            ClassicAssert.NotNull(originaMergedRegion);
+            ClassicAssert.NotNull(copyMergedRegion);
+            ClassicAssert.AreEqual(mergedRegionFirstRow, copyMergedRegion.FirstRow);
+            ClassicAssert.AreEqual(mergedRegionLastRow, copyMergedRegion.LastRow);
+            ClassicAssert.AreEqual(copyColumn.ColumnNum, copyMergedRegion.FirstColumn);
+            ClassicAssert.AreEqual(copyColumn.ColumnNum + 1, copyMergedRegion.LastColumn);
 
             FileInfo file = TempFile.CreateTempFile("ShiftCols-", ".xlsx");
             Stream output = File.OpenWrite(file.FullName);
@@ -368,25 +368,25 @@ namespace TestCases.XSSF.UserModel
 
             feLoaded.EvaluateAll();
 
-            Assert.AreEqual(1, sheetLoaded.FirstColumnNum);
-            Assert.AreEqual(4, sheetLoaded.LastColumnNum);
-            Assert.AreEqual(width, copyColumnLoaded.Width);
-            Assert.AreEqual(10, sheetLoaded.GetColumn(originalColIndex + 1).GetCell(0).NumericCellValue);
-            Assert.AreEqual(20, sheetLoaded.GetColumn(originalColIndex + 2).GetCell(0).NumericCellValue);
-            Assert.AreEqual("POI", sheetLoaded.GetRow(mergedRegionFirstRow).GetCell(copyColIndex).StringCellValue);
-            Assert.AreEqual("POI", formulaCellLoaded.CellComment.Author);
-            Assert.AreEqual("C1 + D1", formulaCellLoaded.CellFormula);
-            Assert.AreEqual(30, formulaCellLoaded.NumericCellValue);
-            Assert.NotNull(originalMergedRegionLoaded);
-            Assert.AreEqual(mergedRegionFirstRow, originalMergedRegionLoaded.FirstRow);
-            Assert.AreEqual(mergedRegionLastRow, originalMergedRegionLoaded.LastRow);
-            Assert.AreEqual(originalColumnLoaded.ColumnNum, originalMergedRegionLoaded.FirstColumn);
-            Assert.AreEqual(originalColumnLoaded.ColumnNum + 1, originalMergedRegionLoaded.LastColumn);
-            Assert.NotNull(copyMergedRegionLoaded);
-            Assert.AreEqual(mergedRegionFirstRow, copyMergedRegionLoaded.FirstRow);
-            Assert.AreEqual(mergedRegionLastRow, copyMergedRegionLoaded.LastRow);
-            Assert.AreEqual(copyColumnLoaded.ColumnNum, copyMergedRegionLoaded.FirstColumn);
-            Assert.AreEqual(copyColumnLoaded.ColumnNum + 1, copyMergedRegionLoaded.LastColumn);
+            ClassicAssert.AreEqual(1, sheetLoaded.FirstColumnNum);
+            ClassicAssert.AreEqual(4, sheetLoaded.LastColumnNum);
+            ClassicAssert.AreEqual(width, copyColumnLoaded.Width);
+            ClassicAssert.AreEqual(10, sheetLoaded.GetColumn(originalColIndex + 1).GetCell(0).NumericCellValue);
+            ClassicAssert.AreEqual(20, sheetLoaded.GetColumn(originalColIndex + 2).GetCell(0).NumericCellValue);
+            ClassicAssert.AreEqual("POI", sheetLoaded.GetRow(mergedRegionFirstRow).GetCell(copyColIndex).StringCellValue);
+            ClassicAssert.AreEqual("POI", formulaCellLoaded.CellComment.Author);
+            ClassicAssert.AreEqual("C1 + D1", formulaCellLoaded.CellFormula);
+            ClassicAssert.AreEqual(30, formulaCellLoaded.NumericCellValue);
+            ClassicAssert.NotNull(originalMergedRegionLoaded);
+            ClassicAssert.AreEqual(mergedRegionFirstRow, originalMergedRegionLoaded.FirstRow);
+            ClassicAssert.AreEqual(mergedRegionLastRow, originalMergedRegionLoaded.LastRow);
+            ClassicAssert.AreEqual(originalColumnLoaded.ColumnNum, originalMergedRegionLoaded.FirstColumn);
+            ClassicAssert.AreEqual(originalColumnLoaded.ColumnNum + 1, originalMergedRegionLoaded.LastColumn);
+            ClassicAssert.NotNull(copyMergedRegionLoaded);
+            ClassicAssert.AreEqual(mergedRegionFirstRow, copyMergedRegionLoaded.FirstRow);
+            ClassicAssert.AreEqual(mergedRegionLastRow, copyMergedRegionLoaded.LastRow);
+            ClassicAssert.AreEqual(copyColumnLoaded.ColumnNum, copyMergedRegionLoaded.FirstColumn);
+            ClassicAssert.AreEqual(copyColumnLoaded.ColumnNum + 1, copyMergedRegionLoaded.LastColumn);
         }
 
         /// <summary>
@@ -432,11 +432,11 @@ namespace TestCases.XSSF.UserModel
 
             fe.EvaluateAll();
 
-            Assert.AreEqual("POI", sheet.GetRow(mergedRegionFirstRow).GetCell(originalColIndex).StringCellValue);
-            Assert.AreEqual("POI", formulaCell1.CellComment.Author);
-            Assert.AreEqual(30, formulaCell1.NumericCellValue);
-            Assert.AreEqual(1, sheet.NumMergedRegions);
-            Assert.NotNull(originaMergedRegion);
+            ClassicAssert.AreEqual("POI", sheet.GetRow(mergedRegionFirstRow).GetCell(originalColIndex).StringCellValue);
+            ClassicAssert.AreEqual("POI", formulaCell1.CellComment.Author);
+            ClassicAssert.AreEqual(30, formulaCell1.NumericCellValue);
+            ClassicAssert.AreEqual(1, sheet.NumMergedRegions);
+            ClassicAssert.NotNull(originaMergedRegion);
 
             XSSFColumn copyColumn = (XSSFColumn)sheet.CopyColumn(originalColIndex, copyColIndex);
             CellRangeAddress copyMergedRegion = sheet.GetMergedRegion(1);
@@ -444,22 +444,22 @@ namespace TestCases.XSSF.UserModel
 
             XSSFCell formulaCell2 = (XSSFCell)sheet.GetColumn(copyColIndex).GetCell(0);
 
-            Assert.AreEqual(copyColIndex + 1, anotherColumn.ColumnNum);
-            Assert.AreEqual("POI", sheet.GetRow(0).GetCell(copyColIndex + 1).StringCellValue);
-            Assert.AreEqual(1, sheet.FirstColumnNum);
-            Assert.AreEqual(5, sheet.LastColumnNum);
-            Assert.AreEqual(width, copyColumn.Width);
-            Assert.AreEqual("POI", sheet.GetRow(mergedRegionFirstRow).GetCell(copyColIndex).StringCellValue);
-            Assert.AreEqual("POI", formulaCell2.CellComment.Author);
-            Assert.AreEqual("C1 + D1", formulaCell2.CellFormula);
-            Assert.AreEqual(30, formulaCell2.NumericCellValue);
-            Assert.AreEqual(2, sheet.NumMergedRegions);
-            Assert.NotNull(originaMergedRegion);
-            Assert.NotNull(copyMergedRegion);
-            Assert.AreEqual(mergedRegionFirstRow, copyMergedRegion.FirstRow);
-            Assert.AreEqual(mergedRegionLastRow, copyMergedRegion.LastRow);
-            Assert.AreEqual(copyColumn.ColumnNum, copyMergedRegion.FirstColumn);
-            Assert.AreEqual(copyColumn.ColumnNum + 1, copyMergedRegion.LastColumn);
+            ClassicAssert.AreEqual(copyColIndex + 1, anotherColumn.ColumnNum);
+            ClassicAssert.AreEqual("POI", sheet.GetRow(0).GetCell(copyColIndex + 1).StringCellValue);
+            ClassicAssert.AreEqual(1, sheet.FirstColumnNum);
+            ClassicAssert.AreEqual(5, sheet.LastColumnNum);
+            ClassicAssert.AreEqual(width, copyColumn.Width);
+            ClassicAssert.AreEqual("POI", sheet.GetRow(mergedRegionFirstRow).GetCell(copyColIndex).StringCellValue);
+            ClassicAssert.AreEqual("POI", formulaCell2.CellComment.Author);
+            ClassicAssert.AreEqual("C1 + D1", formulaCell2.CellFormula);
+            ClassicAssert.AreEqual(30, formulaCell2.NumericCellValue);
+            ClassicAssert.AreEqual(2, sheet.NumMergedRegions);
+            ClassicAssert.NotNull(originaMergedRegion);
+            ClassicAssert.NotNull(copyMergedRegion);
+            ClassicAssert.AreEqual(mergedRegionFirstRow, copyMergedRegion.FirstRow);
+            ClassicAssert.AreEqual(mergedRegionLastRow, copyMergedRegion.LastRow);
+            ClassicAssert.AreEqual(copyColumn.ColumnNum, copyMergedRegion.FirstColumn);
+            ClassicAssert.AreEqual(copyColumn.ColumnNum + 1, copyMergedRegion.LastColumn);
 
             FileInfo file = TempFile.CreateTempFile("ShiftCols-", ".xlsx");
             Stream output = File.OpenWrite(file.FullName);
@@ -477,25 +477,25 @@ namespace TestCases.XSSF.UserModel
 
             feLoaded.EvaluateAll();
 
-            Assert.AreEqual(1, sheetLoaded.FirstColumnNum);
-            Assert.AreEqual(5, sheetLoaded.LastColumnNum);
-            Assert.AreEqual(width, copyColumnLoaded.Width);
-            Assert.AreEqual(10, sheetLoaded.GetColumn(originalColIndex + 1).GetCell(0).NumericCellValue);
-            Assert.AreEqual(20, sheetLoaded.GetColumn(originalColIndex + 2).GetCell(0).NumericCellValue);
-            Assert.AreEqual("POI", sheetLoaded.GetRow(mergedRegionFirstRow).GetCell(copyColIndex).StringCellValue);
-            Assert.AreEqual("POI", formulaCellLoaded.CellComment.Author);
-            Assert.AreEqual("C1 + D1", formulaCellLoaded.CellFormula);
-            Assert.AreEqual(30, formulaCellLoaded.NumericCellValue);
-            Assert.NotNull(originalMergedRegionLoaded);
-            Assert.AreEqual(mergedRegionFirstRow, originalMergedRegionLoaded.FirstRow);
-            Assert.AreEqual(mergedRegionLastRow, originalMergedRegionLoaded.LastRow);
-            Assert.AreEqual(originalColumnLoaded.ColumnNum, originalMergedRegionLoaded.FirstColumn);
-            Assert.AreEqual(originalColumnLoaded.ColumnNum + 1, originalMergedRegionLoaded.LastColumn);
-            Assert.NotNull(copyMergedRegionLoaded);
-            Assert.AreEqual(mergedRegionFirstRow, copyMergedRegionLoaded.FirstRow);
-            Assert.AreEqual(mergedRegionLastRow, copyMergedRegionLoaded.LastRow);
-            Assert.AreEqual(copyColumnLoaded.ColumnNum, copyMergedRegionLoaded.FirstColumn);
-            Assert.AreEqual(copyColumnLoaded.ColumnNum + 1, copyMergedRegionLoaded.LastColumn);
+            ClassicAssert.AreEqual(1, sheetLoaded.FirstColumnNum);
+            ClassicAssert.AreEqual(5, sheetLoaded.LastColumnNum);
+            ClassicAssert.AreEqual(width, copyColumnLoaded.Width);
+            ClassicAssert.AreEqual(10, sheetLoaded.GetColumn(originalColIndex + 1).GetCell(0).NumericCellValue);
+            ClassicAssert.AreEqual(20, sheetLoaded.GetColumn(originalColIndex + 2).GetCell(0).NumericCellValue);
+            ClassicAssert.AreEqual("POI", sheetLoaded.GetRow(mergedRegionFirstRow).GetCell(copyColIndex).StringCellValue);
+            ClassicAssert.AreEqual("POI", formulaCellLoaded.CellComment.Author);
+            ClassicAssert.AreEqual("C1 + D1", formulaCellLoaded.CellFormula);
+            ClassicAssert.AreEqual(30, formulaCellLoaded.NumericCellValue);
+            ClassicAssert.NotNull(originalMergedRegionLoaded);
+            ClassicAssert.AreEqual(mergedRegionFirstRow, originalMergedRegionLoaded.FirstRow);
+            ClassicAssert.AreEqual(mergedRegionLastRow, originalMergedRegionLoaded.LastRow);
+            ClassicAssert.AreEqual(originalColumnLoaded.ColumnNum, originalMergedRegionLoaded.FirstColumn);
+            ClassicAssert.AreEqual(originalColumnLoaded.ColumnNum + 1, originalMergedRegionLoaded.LastColumn);
+            ClassicAssert.NotNull(copyMergedRegionLoaded);
+            ClassicAssert.AreEqual(mergedRegionFirstRow, copyMergedRegionLoaded.FirstRow);
+            ClassicAssert.AreEqual(mergedRegionLastRow, copyMergedRegionLoaded.LastRow);
+            ClassicAssert.AreEqual(copyColumnLoaded.ColumnNum, copyMergedRegionLoaded.FirstColumn);
+            ClassicAssert.AreEqual(copyColumnLoaded.ColumnNum + 1, copyMergedRegionLoaded.LastColumn);
         }
 
         [Test]
@@ -523,26 +523,26 @@ namespace TestCases.XSSF.UserModel
 
             fe.EvaluateAll();
 
-            Assert.AreEqual("POI", sheet.GetColumn(2).GetCell(0).CellComment.Author);
-            Assert.AreEqual(30, formulaCell.NumericCellValue);
-            Assert.AreEqual("MERGED", sheet.GetRow(10).GetCell(0).StringCellValue);
-            Assert.AreEqual(1, sheet.NumMergedRegions);
-            Assert.NotNull(mergedRegion);
-            Assert.AreEqual("A11:K12", mergedRegion.FormatAsString());
+            ClassicAssert.AreEqual("POI", sheet.GetColumn(2).GetCell(0).CellComment.Author);
+            ClassicAssert.AreEqual(30, formulaCell.NumericCellValue);
+            ClassicAssert.AreEqual("MERGED", sheet.GetRow(10).GetCell(0).StringCellValue);
+            ClassicAssert.AreEqual(1, sheet.NumMergedRegions);
+            ClassicAssert.NotNull(mergedRegion);
+            ClassicAssert.AreEqual("A11:K12", mergedRegion.FormatAsString());
 
             sheet.ShiftColumns(2, 3, 4);
             fe.EvaluateAll();
 
-            Assert.AreEqual(1, sheet.FirstColumnNum);
-            Assert.AreEqual(7, sheet.LastColumnNum);
-            Assert.AreEqual(10, sheet.GetColumn(6).GetCell(0).NumericCellValue);
-            Assert.AreEqual(20, sheet.GetColumn(7).GetCell(0).NumericCellValue);
+            ClassicAssert.AreEqual(1, sheet.FirstColumnNum);
+            ClassicAssert.AreEqual(7, sheet.LastColumnNum);
+            ClassicAssert.AreEqual(10, sheet.GetColumn(6).GetCell(0).NumericCellValue);
+            ClassicAssert.AreEqual(20, sheet.GetColumn(7).GetCell(0).NumericCellValue);
             cell1 = (XSSFCell)sheet.GetColumn(6).GetCell(0);
-            Assert.AreEqual("POI", cell1.CellComment.Author);
-            Assert.AreEqual("G1+H1", formulaCell.CellFormula);
-            Assert.AreEqual(30, formulaCell.NumericCellValue);
-            Assert.AreEqual("MERGED", sheet.GetRow(10).GetCell(0).StringCellValue);
-            Assert.AreEqual(0, sheet.NumMergedRegions);
+            ClassicAssert.AreEqual("POI", cell1.CellComment.Author);
+            ClassicAssert.AreEqual("G1+H1", formulaCell.CellFormula);
+            ClassicAssert.AreEqual(30, formulaCell.NumericCellValue);
+            ClassicAssert.AreEqual("MERGED", sheet.GetRow(10).GetCell(0).StringCellValue);
+            ClassicAssert.AreEqual(0, sheet.NumMergedRegions);
 
             FileInfo file = TempFile.CreateTempFile("ShiftCols-", ".xlsx");
             Stream output = File.OpenWrite(file.FullName);
@@ -556,16 +556,16 @@ namespace TestCases.XSSF.UserModel
 
             feLoaded.EvaluateAll();
 
-            Assert.IsNull(sheetLoaded.GetColumn(2));
-            Assert.AreEqual(1, sheetLoaded.FirstColumnNum);
-            Assert.AreEqual(7, sheetLoaded.LastColumnNum);
-            Assert.AreEqual(10, sheetLoaded.GetColumn(6).GetCell(0).NumericCellValue);
-            Assert.AreEqual(20, sheetLoaded.GetColumn(7).GetCell(0).NumericCellValue);
-            Assert.AreEqual("POI", sheetLoaded.GetColumn(6).GetCell(0).CellComment.Author);
-            Assert.AreEqual("G1+H1", formulaCellLoaded.CellFormula);
-            Assert.AreEqual(30, formulaCellLoaded.NumericCellValue);
-            Assert.AreEqual("MERGED", sheetLoaded.GetRow(10).GetCell(0).StringCellValue);
-            Assert.AreEqual(0, sheetLoaded.NumMergedRegions);
+            ClassicAssert.IsNull(sheetLoaded.GetColumn(2));
+            ClassicAssert.AreEqual(1, sheetLoaded.FirstColumnNum);
+            ClassicAssert.AreEqual(7, sheetLoaded.LastColumnNum);
+            ClassicAssert.AreEqual(10, sheetLoaded.GetColumn(6).GetCell(0).NumericCellValue);
+            ClassicAssert.AreEqual(20, sheetLoaded.GetColumn(7).GetCell(0).NumericCellValue);
+            ClassicAssert.AreEqual("POI", sheetLoaded.GetColumn(6).GetCell(0).CellComment.Author);
+            ClassicAssert.AreEqual("G1+H1", formulaCellLoaded.CellFormula);
+            ClassicAssert.AreEqual(30, formulaCellLoaded.NumericCellValue);
+            ClassicAssert.AreEqual("MERGED", sheetLoaded.GetRow(10).GetCell(0).StringCellValue);
+            ClassicAssert.AreEqual(0, sheetLoaded.NumMergedRegions);
         }
 
         [Test]
@@ -588,20 +588,20 @@ namespace TestCases.XSSF.UserModel
 
             fe.EvaluateAll();
 
-            Assert.AreEqual("POI", sheet.GetColumn(2).GetCell(0).CellComment.Author);
-            Assert.AreEqual(30, formulaCell.NumericCellValue);
+            ClassicAssert.AreEqual("POI", sheet.GetColumn(2).GetCell(0).CellComment.Author);
+            ClassicAssert.AreEqual(30, formulaCell.NumericCellValue);
 
             sheet.ShiftColumns(2, 2, 4);
             fe.EvaluateAll();
 
-            Assert.AreEqual(1, sheet.FirstColumnNum);
-            Assert.AreEqual(6, sheet.LastColumnNum);
-            Assert.AreEqual(10, sheet.GetColumn(6).GetCell(0).NumericCellValue);
-            Assert.AreEqual(20, sheet.GetColumn(3).GetCell(0).NumericCellValue);
+            ClassicAssert.AreEqual(1, sheet.FirstColumnNum);
+            ClassicAssert.AreEqual(6, sheet.LastColumnNum);
+            ClassicAssert.AreEqual(10, sheet.GetColumn(6).GetCell(0).NumericCellValue);
+            ClassicAssert.AreEqual(20, sheet.GetColumn(3).GetCell(0).NumericCellValue);
             cell1 = (XSSFCell)sheet.GetColumn(6).GetCell(0);
-            Assert.AreEqual("POI", cell1.CellComment.Author);
-            Assert.AreEqual("G1+D1", formulaCell.CellFormula);
-            Assert.AreEqual(30, formulaCell.NumericCellValue);
+            ClassicAssert.AreEqual("POI", cell1.CellComment.Author);
+            ClassicAssert.AreEqual("G1+D1", formulaCell.CellFormula);
+            ClassicAssert.AreEqual(30, formulaCell.NumericCellValue);
 
             FileInfo file = TempFile.CreateTempFile("ShiftCols-", ".xlsx");
             Stream output = File.OpenWrite(file.FullName);
@@ -615,14 +615,14 @@ namespace TestCases.XSSF.UserModel
 
             feLoaded.EvaluateAll();
 
-            Assert.IsNull(sheetLoaded.GetColumn(2));
-            Assert.AreEqual(1, sheetLoaded.FirstColumnNum);
-            Assert.AreEqual(6, sheetLoaded.LastColumnNum);
-            Assert.AreEqual(10, sheetLoaded.GetColumn(6).GetCell(0).NumericCellValue);
-            Assert.AreEqual(20, sheetLoaded.GetColumn(3).GetCell(0).NumericCellValue);
-            Assert.AreEqual("POI", sheetLoaded.GetColumn(6).GetCell(0).CellComment.Author);
-            Assert.AreEqual("G1+D1", formulaCellLoaded.CellFormula);
-            Assert.AreEqual(30, formulaCellLoaded.NumericCellValue);
+            ClassicAssert.IsNull(sheetLoaded.GetColumn(2));
+            ClassicAssert.AreEqual(1, sheetLoaded.FirstColumnNum);
+            ClassicAssert.AreEqual(6, sheetLoaded.LastColumnNum);
+            ClassicAssert.AreEqual(10, sheetLoaded.GetColumn(6).GetCell(0).NumericCellValue);
+            ClassicAssert.AreEqual(20, sheetLoaded.GetColumn(3).GetCell(0).NumericCellValue);
+            ClassicAssert.AreEqual("POI", sheetLoaded.GetColumn(6).GetCell(0).CellComment.Author);
+            ClassicAssert.AreEqual("G1+D1", formulaCellLoaded.CellFormula);
+            ClassicAssert.AreEqual(30, formulaCellLoaded.NumericCellValue);
         }
 
         /// <summary>
@@ -653,19 +653,19 @@ namespace TestCases.XSSF.UserModel
 
             fe.EvaluateAll();
 
-            Assert.AreEqual("POI", row.GetCell(3).CellComment.Author);
-            Assert.AreEqual(30, formulaCell.NumericCellValue);
-            Assert.AreEqual(1, sheet.FirstColumnNum);
-            Assert.AreEqual(2, sheet.LastColumnNum);
+            ClassicAssert.AreEqual("POI", row.GetCell(3).CellComment.Author);
+            ClassicAssert.AreEqual(30, formulaCell.NumericCellValue);
+            ClassicAssert.AreEqual(1, sheet.FirstColumnNum);
+            ClassicAssert.AreEqual(2, sheet.LastColumnNum);
 
             sheet.ShiftColumns(3, 3, 4);
             fe.EvaluateAll();
 
-            Assert.AreEqual("POI", row.GetCell(7).CellComment.Author);
-            Assert.AreEqual("C1+H2", formulaCell.CellFormula);
-            Assert.AreEqual(30, formulaCell.NumericCellValue);
-            Assert.AreEqual(1, sheet.FirstColumnNum);
-            Assert.AreEqual(2, sheet.LastColumnNum);
+            ClassicAssert.AreEqual("POI", row.GetCell(7).CellComment.Author);
+            ClassicAssert.AreEqual("C1+H2", formulaCell.CellFormula);
+            ClassicAssert.AreEqual(30, formulaCell.NumericCellValue);
+            ClassicAssert.AreEqual(1, sheet.FirstColumnNum);
+            ClassicAssert.AreEqual(2, sheet.LastColumnNum);
 
             FileInfo file = TempFile.CreateTempFile("ShiftCols-", ".xlsx");
             Stream output = File.OpenWrite(file.FullName);
@@ -680,11 +680,11 @@ namespace TestCases.XSSF.UserModel
 
             feLoaded.EvaluateAll();
 
-            Assert.AreEqual("POI", rowLoaded.GetCell(7).CellComment.Author);
-            Assert.AreEqual("C1+H2", formulaCellLoaded.CellFormula);
-            Assert.AreEqual(30, formulaCellLoaded.NumericCellValue);
-            Assert.AreEqual(1, sheetLoaded.FirstColumnNum);
-            Assert.AreEqual(2, sheetLoaded.LastColumnNum);
+            ClassicAssert.AreEqual("POI", rowLoaded.GetCell(7).CellComment.Author);
+            ClassicAssert.AreEqual("C1+H2", formulaCellLoaded.CellFormula);
+            ClassicAssert.AreEqual(30, formulaCellLoaded.NumericCellValue);
+            ClassicAssert.AreEqual(1, sheetLoaded.FirstColumnNum);
+            ClassicAssert.AreEqual(2, sheetLoaded.LastColumnNum);
         }//*/
     }
 }

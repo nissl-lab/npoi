@@ -20,7 +20,7 @@ namespace TestCases.HSSF.Model
     using System;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using TestCases.HSSF;
     using NPOI.SS.UserModel;
     using NPOI.Util;
@@ -63,7 +63,7 @@ namespace TestCases.HSSF.Model
                 throw;
             }
             // some other sanity Checks
-            Assert.AreEqual(3, wb.NumberOfSheets);
+            ClassicAssert.AreEqual(3, wb.NumberOfSheets);
             String formula = wb.GetSheetAt(0).GetRow(4).GetCell(13).CellFormula;
 
             if ("ipcSummenproduktIntern($P5,N$6,$A$9,N$5)".Equals(formula))
@@ -73,7 +73,7 @@ namespace TestCases.HSSF.Model
                 // This is observable in version 3.0
             }
 
-            Assert.AreEqual("ipcSummenproduktIntern($C5,N$2,$A$9,N$1)", formula);
+            ClassicAssert.AreEqual("ipcSummenproduktIntern($C5,N$2,$A$9,N$1)", formula);
         }
         [Test]
         public void TestMultipleExternSheetRecords_bug45698()
@@ -93,7 +93,7 @@ namespace TestCases.HSSF.Model
                 throw;
             }
             // some other sanity Checks
-            Assert.AreEqual(7, wb.NumberOfSheets);
+            ClassicAssert.AreEqual(7, wb.NumberOfSheets);
         }
         [Test]
         public void TestExtraSheetRefs_bug45978()
@@ -139,7 +139,7 @@ namespace TestCases.HSSF.Model
                 }
                 throw e;
             }
-            Assert.AreEqual("Data!$A2", cellFormula);
+            ClassicAssert.AreEqual("Data!$A2", cellFormula);
         }
 
         /**
@@ -171,7 +171,7 @@ namespace TestCases.HSSF.Model
 
                 throw;
             }
-            Assert.IsNotNull(lt);
+            ClassicAssert.IsNotNull(lt);
         }
         [Test]
         public void TestNameCommentRecordBetweenNameRecords()
@@ -189,13 +189,13 @@ namespace TestCases.HSSF.Model
             Dictionary<String, NameCommentRecord> commentRecords = new Dictionary<String, NameCommentRecord>();
 
             LinkTable lt = new LinkTable(recList, 0, wrl, commentRecords);
-            Assert.IsNotNull(lt);
+            ClassicAssert.IsNotNull(lt);
 
-            Assert.AreEqual(2, commentRecords.Count);
-            Assert.IsTrue(recs[1] == commentRecords["name1"]); //== is intentionally not .Equals()!
-            Assert.IsTrue(recs[3] == commentRecords["name2"]); //== is intentionally not .Equals()!
+            ClassicAssert.AreEqual(2, commentRecords.Count);
+            ClassicAssert.IsTrue(recs[1] == commentRecords["name1"]); //== is intentionally not .Equals()!
+            ClassicAssert.IsTrue(recs[3] == commentRecords["name2"]); //== is intentionally not .Equals()!
 
-            Assert.AreEqual(2, lt.NumNames);
+            ClassicAssert.AreEqual(2, lt.NumNames);
         }
         [Test]
         public void TestAddNameX()
@@ -215,26 +215,26 @@ namespace TestCases.HSSF.Model
             //    [EXTERNSHEET]
             //    [EOFRecord]
 
-            Assert.AreEqual(5, wrl.Records.Count);
-            Assert.IsTrue(wrl[(2)] is SupBookRecord);
+            ClassicAssert.AreEqual(5, wrl.Records.Count);
+            ClassicAssert.IsTrue(wrl[(2)] is SupBookRecord);
             SupBookRecord sup1 = (SupBookRecord)wrl[(2)];
-            Assert.AreEqual(numberOfSheets, sup1.NumberOfSheets);
-            Assert.IsTrue(wrl[(3)] is ExternSheetRecord);
+            ClassicAssert.AreEqual(numberOfSheets, sup1.NumberOfSheets);
+            ClassicAssert.IsTrue(wrl[(3)] is ExternSheetRecord);
             ExternSheetRecord extSheet = (ExternSheetRecord)wrl[(3)];
-            Assert.AreEqual(0, extSheet.NumOfRefs);
+            ClassicAssert.AreEqual(0, extSheet.NumOfRefs);
 
-            Assert.IsNull(tbl.GetNameXPtg("ISODD", -1));
-            Assert.AreEqual(5, wrl.Records.Count); //still have five records
+            ClassicAssert.IsNull(tbl.GetNameXPtg("ISODD", -1));
+            ClassicAssert.AreEqual(5, wrl.Records.Count); //still have five records
 
             NameXPtg namex1 = tbl.AddNameXPtg("ISODD");  // Adds two new rercords
-            Assert.AreEqual(0, namex1.SheetRefIndex);
-            Assert.AreEqual(0, namex1.NameIndex);
-            Assert.AreEqual(namex1.ToString(), tbl.GetNameXPtg("ISODD", -1).ToString());
+            ClassicAssert.AreEqual(0, namex1.SheetRefIndex);
+            ClassicAssert.AreEqual(0, namex1.NameIndex);
+            ClassicAssert.AreEqual(namex1.ToString(), tbl.GetNameXPtg("ISODD", -1).ToString());
 
             // Can only find on the right sheet ref, if restricting
-            Assert.AreEqual(namex1.ToString(), tbl.GetNameXPtg("ISODD", 0).ToString());
-            Assert.IsNull(tbl.GetNameXPtg("ISODD", 1));
-            Assert.IsNull(tbl.GetNameXPtg("ISODD", 2));
+            ClassicAssert.AreEqual(namex1.ToString(), tbl.GetNameXPtg("ISODD", 0).ToString());
+            ClassicAssert.IsNull(tbl.GetNameXPtg("ISODD", 1));
+            ClassicAssert.IsNull(tbl.GetNameXPtg("ISODD", 2));
             // assure they are in place:
             //    [BOFRecord]
             //    [CountryRecord]
@@ -244,26 +244,26 @@ namespace TestCases.HSSF.Model
             //    [EXTERNSHEET]
             //    [EOFRecord]
 
-            Assert.AreEqual(7, wrl.Records.Count);
-            Assert.IsTrue(wrl[(3)] is SupBookRecord);
+            ClassicAssert.AreEqual(7, wrl.Records.Count);
+            ClassicAssert.IsTrue(wrl[(3)] is SupBookRecord);
             SupBookRecord sup2 = (SupBookRecord)wrl[(3)];
-            Assert.IsTrue(sup2.IsAddInFunctions);
-            Assert.IsTrue(wrl[(4)] is ExternalNameRecord);
+            ClassicAssert.IsTrue(sup2.IsAddInFunctions);
+            ClassicAssert.IsTrue(wrl[(4)] is ExternalNameRecord);
             ExternalNameRecord ext1 = (ExternalNameRecord)wrl[(4)];
-            Assert.AreEqual("ISODD", ext1.Text);
-            Assert.IsTrue(wrl[(5)] is ExternSheetRecord);
-            Assert.AreEqual(1, extSheet.NumOfRefs);
+            ClassicAssert.AreEqual("ISODD", ext1.Text);
+            ClassicAssert.IsTrue(wrl[(5)] is ExternSheetRecord);
+            ClassicAssert.AreEqual(1, extSheet.NumOfRefs);
 
             //check that
-            Assert.AreEqual(0, tbl.ResolveNameXIx(namex1.SheetRefIndex, namex1.NameIndex));
-            Assert.AreEqual("ISODD", tbl.ResolveNameXText(namex1.SheetRefIndex, namex1.NameIndex, null));
+            ClassicAssert.AreEqual(0, tbl.ResolveNameXIx(namex1.SheetRefIndex, namex1.NameIndex));
+            ClassicAssert.AreEqual("ISODD", tbl.ResolveNameXText(namex1.SheetRefIndex, namex1.NameIndex, null));
 
-            Assert.IsNull(tbl.GetNameXPtg("ISEVEN", -1));
+            ClassicAssert.IsNull(tbl.GetNameXPtg("ISEVEN", -1));
             NameXPtg namex2 = tbl.AddNameXPtg("ISEVEN");  // Adds two new rercords
-            Assert.AreEqual(0, namex2.SheetRefIndex);
-            Assert.AreEqual(1, namex2.NameIndex);  // name index increased by one
-            Assert.AreEqual(namex2.ToString(), tbl.GetNameXPtg("ISEVEN", -1).ToString());
-            Assert.AreEqual(8, wrl.Records.Count);
+            ClassicAssert.AreEqual(0, namex2.SheetRefIndex);
+            ClassicAssert.AreEqual(1, namex2.NameIndex);  // name index increased by one
+            ClassicAssert.AreEqual(namex2.ToString(), tbl.GetNameXPtg("ISEVEN", -1).ToString());
+            ClassicAssert.AreEqual(8, wrl.Records.Count);
             // assure they are in place:
             //    [BOFRecord]
             //    [CountryRecord]
@@ -273,16 +273,16 @@ namespace TestCases.HSSF.Model
             //    [EXTERNALNAME .name    = ISEVEN]
             //    [EXTERNSHEET]
             //    [EOFRecord]
-            Assert.IsTrue(wrl[(3)] is SupBookRecord);
-            Assert.IsTrue(wrl[(4)] is ExternalNameRecord);
-            Assert.IsTrue(wrl[(5)] is ExternalNameRecord);
-            Assert.AreEqual("ISODD", ((ExternalNameRecord)wrl[(4)]).Text);
-            Assert.AreEqual("ISEVEN", ((ExternalNameRecord)wrl[(5)]).Text);
-            Assert.IsTrue(wrl[(6)] is ExternSheetRecord);
-            Assert.IsTrue(wrl[(7)] is EOFRecord);
+            ClassicAssert.IsTrue(wrl[(3)] is SupBookRecord);
+            ClassicAssert.IsTrue(wrl[(4)] is ExternalNameRecord);
+            ClassicAssert.IsTrue(wrl[(5)] is ExternalNameRecord);
+            ClassicAssert.AreEqual("ISODD", ((ExternalNameRecord)wrl[(4)]).Text);
+            ClassicAssert.AreEqual("ISEVEN", ((ExternalNameRecord)wrl[(5)]).Text);
+            ClassicAssert.IsTrue(wrl[(6)] is ExternSheetRecord);
+            ClassicAssert.IsTrue(wrl[(7)] is EOFRecord);
 
-            Assert.AreEqual(0, tbl.ResolveNameXIx(namex2.SheetRefIndex, namex2.NameIndex));
-            Assert.AreEqual("ISEVEN", tbl.ResolveNameXText(namex2.SheetRefIndex, namex2.NameIndex, null));
+            ClassicAssert.AreEqual(0, tbl.ResolveNameXIx(namex2.SheetRefIndex, namex2.NameIndex));
+            ClassicAssert.AreEqual("ISEVEN", tbl.ResolveNameXText(namex2.SheetRefIndex, namex2.NameIndex, null));
 
         }
     }

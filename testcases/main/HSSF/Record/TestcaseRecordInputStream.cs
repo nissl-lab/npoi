@@ -19,7 +19,7 @@ namespace TestCases.HSSF.Record
 {
     using System;
     using System.IO;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.Record;
     using NPOI.Util;
     using System.Text;
@@ -82,9 +82,9 @@ namespace TestCases.HSSF.Record
         public static void ConfirmRecordEncoding(String msgPrefix, int expectedSid, byte[] expectedData, byte[] actualRecordBytes)
         {
             int expectedDataSize = expectedData.Length;
-            Assert.AreEqual(actualRecordBytes.Length - 4, expectedDataSize,"Size of encode data mismatch");
-            Assert.AreEqual(expectedSid, LittleEndian.GetShort(actualRecordBytes, 0));
-            Assert.AreEqual(expectedDataSize, LittleEndian.GetShort(actualRecordBytes, 2));
+            ClassicAssert.AreEqual(actualRecordBytes.Length - 4, expectedDataSize,"Size of encode data mismatch");
+            ClassicAssert.AreEqual(expectedSid, LittleEndian.GetShort(actualRecordBytes, 0));
+            ClassicAssert.AreEqual(expectedDataSize, LittleEndian.GetShort(actualRecordBytes, 2));
             for (int i = 0; i < expectedDataSize; i++)
                 if (expectedData[i] != actualRecordBytes[i + 4])
                 {

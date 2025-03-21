@@ -21,7 +21,7 @@ namespace TestCases.HSSF.Record
 {
     using System;
     using NPOI.HSSF.Record;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using System.Collections.Generic;
     using NPOI.Util;
 
@@ -40,7 +40,7 @@ namespace TestCases.HSSF.Record
         public void TestRecordLength()
         {
             BoundSheetRecord record = new BoundSheetRecord("Sheet1");
-            Assert.AreEqual(18, record.RecordSize, " 2  +  2  +  4  +   2   +    1     +    1    + len(str)");
+            ClassicAssert.AreEqual(18, record.RecordSize, " 2  +  2  +  4  +   2   +    1     +    1    + len(str)");
         }
         [Test]
         public void TestWideRecordLength()
@@ -48,7 +48,7 @@ namespace TestCases.HSSF.Record
             BoundSheetRecord record = new BoundSheetRecord("Sheet\u20ac");
             record.Sheetname = ("Sheet\u20ac");
 
-            Assert.AreEqual(24, record.RecordSize, " 2  +  2  +  4  +   2   +    1     +    1    + len(str) * 2");
+            ClassicAssert.AreEqual(24, record.RecordSize, " 2  +  2  +  4  +   2   +    1     +    1    + len(str) * 2");
         }
         [Test]
         public void TestName()
@@ -58,7 +58,7 @@ namespace TestCases.HSSF.Record
             try
             {
                 record.Sheetname = ("s//*s");
-                Assert.IsTrue(false, "Should have thrown ArgumentException, but didnt");
+                ClassicAssert.IsTrue(false, "Should have thrown ArgumentException, but didnt");
             }
             catch (ArgumentException)
             {
@@ -83,10 +83,10 @@ namespace TestCases.HSSF.Record
 		RecordInputStream in1 = TestcaseRecordInputStream.Create(data);
 		BoundSheetRecord bsr = new BoundSheetRecord(in1);
 		// sheet name is unicode Russian for 'minor page'
-		Assert.AreEqual("\u0421\u0442\u0440\u0430\u043D\u0438\u0447\u043A\u0430", bsr.Sheetname);
+		ClassicAssert.AreEqual("\u0421\u0442\u0440\u0430\u043D\u0438\u0447\u043A\u0430", bsr.Sheetname);
 
 		byte[] data2 = bsr.Serialize();
-		Assert.IsTrue(Arrays.Equals(data, data2));
+		ClassicAssert.IsTrue(Arrays.Equals(data, data2));
 	}
         [Test]
         public void TestOrdering()
@@ -104,10 +104,10 @@ namespace TestCases.HSSF.Record
             l.Add(bs3);
 
             BoundSheetRecord[] r = BoundSheetRecord.OrderByBofPosition(l);
-            Assert.AreEqual(3, r.Length);
-            Assert.AreEqual(bs1, r[0]);
-            Assert.AreEqual(bs3, r[1]);
-            Assert.AreEqual(bs2, r[2]);
+            ClassicAssert.AreEqual(3, r.Length);
+            ClassicAssert.AreEqual(bs1, r[0]);
+            ClassicAssert.AreEqual(bs3, r[1]);
+            ClassicAssert.AreEqual(bs2, r[2]);
         }
         [Test]
         public void TestValidNames()

@@ -19,7 +19,7 @@ namespace TestCases.SS.Formula.Eval
     using System;
     using NPOI.SS.UserModel;
     using NPOI.Util;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using TestCases.SS;
     using NPOI.SS.Formula.Eval;
 
@@ -61,8 +61,8 @@ namespace TestCases.SS.Formula.Eval
          */
         private static void ConfirmCycleErrorCode(CellValue cellValue)
         {
-            Assert.IsTrue(cellValue.CellType == CellType.Error);
-            Assert.AreEqual(ErrorEval.CIRCULAR_REF_ERROR.ErrorCode, cellValue.ErrorValue);
+            ClassicAssert.IsTrue(cellValue.CellType == CellType.Error);
+            ClassicAssert.AreEqual(ErrorEval.CIRCULAR_REF_ERROR.ErrorCode, cellValue.ErrorValue);
         }
 
 
@@ -93,8 +93,8 @@ namespace TestCases.SS.Formula.Eval
 
             CellValue cellValue = EvaluateWithCycles(wb, testCell);
 
-            Assert.IsTrue(cellValue.CellType == CellType.Numeric);
-            Assert.AreEqual(2, cellValue.NumberValue, 0);
+            ClassicAssert.IsTrue(cellValue.CellType == CellType.Numeric);
+            ClassicAssert.AreEqual(2, cellValue.NumberValue, 0);
 
             wb.Close();
         }
@@ -169,26 +169,26 @@ namespace TestCases.SS.Formula.Eval
 
             // Happy day flow - Evaluate A1 first
             cv = fe.Evaluate(cellA1);
-            Assert.AreEqual(CellType.Numeric, cv.CellType);
-            Assert.AreEqual(42.0, cv.NumberValue, 0.0);
+            ClassicAssert.AreEqual(CellType.Numeric, cv.CellType);
+            ClassicAssert.AreEqual(42.0, cv.NumberValue, 0.0);
             cv = fe.Evaluate(cellB1); // no circ-ref-error because A1 result is cached
-            Assert.AreEqual(CellType.Numeric, cv.CellType);
-            Assert.AreEqual(46.0, cv.NumberValue, 0.0);
+            ClassicAssert.AreEqual(CellType.Numeric, cv.CellType);
+            ClassicAssert.AreEqual(46.0, cv.NumberValue, 0.0);
 
             // Show the bug - Evaluate another cell from the loop first
             fe.ClearAllCachedResultValues();
             cv = fe.Evaluate(cellB1);
             // Identified bug 46898
-            Assert.AreNotEqual(cv.CellType, ErrorEval.CIRCULAR_REF_ERROR.ErrorCode);
+            ClassicAssert.AreNotEqual(cv.CellType, ErrorEval.CIRCULAR_REF_ERROR.ErrorCode);
 
-            Assert.AreEqual(CellType.Numeric, cv.CellType);
-            Assert.AreEqual(46.0, cv.NumberValue, 0.0);
+            ClassicAssert.AreEqual(CellType.Numeric, cv.CellType);
+            ClassicAssert.AreEqual(46.0, cv.NumberValue, 0.0);
 
             // start Evaluation on another cell
             fe.ClearAllCachedResultValues();
             cv = fe.Evaluate(cellE1);
-            Assert.AreEqual(CellType.Numeric, cv.CellType);
-            Assert.AreEqual(43.0, cv.NumberValue, 0.0);
+            ClassicAssert.AreEqual(CellType.Numeric, cv.CellType);
+            ClassicAssert.AreEqual(43.0, cv.NumberValue, 0.0);
 
             wb.Close();
         }

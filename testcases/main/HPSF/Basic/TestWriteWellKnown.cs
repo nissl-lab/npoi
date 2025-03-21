@@ -27,7 +27,8 @@ namespace TestCases.HPSF.Basic
     using NPOI.HPSF.Wellknown;
     using NPOI.POIFS.FileSystem;
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
+    using NUnit.Framework.Legacy;
 
     /**
      * Tests HPSF's high-level writing functionality for the well-known property
@@ -322,62 +323,62 @@ namespace TestCases.HPSF.Basic
                     ps = new PropertySet(dis);
                     dsi = new DocumentSummaryInformation(ps);
 
-                    Assert.AreEqual(P_APPLICATION_NAME, si.ApplicationName);
-                    Assert.AreEqual(P_AUTHOR, si.Author);
-                    Assert.AreEqual(P_CHAR_COUNT, si.CharCount);
-                    Assert.AreEqual(P_COMMENTS, si.Comments);
-                    Assert.AreEqual(P_CREATE_DATE_TIME, si.CreateDateTime);
-                    Assert.AreEqual(P_EDIT_TIME, si.EditTime);
-                    Assert.AreEqual(P_KEYWORDS, si.Keywords);
-                    Assert.AreEqual(P_LAST_AUTHOR, si.LastAuthor);
-                    Assert.AreEqual(P_LAST_PRINTED, si.LastPrinted);
-                    Assert.AreEqual(P_LAST_SAVE_DATE_TIME, si.LastSaveDateTime);
-                    Assert.AreEqual(P_PAGE_COUNT, si.PageCount);
-                    Assert.AreEqual(P_REV_NUMBER, si.RevNumber);
-                    Assert.AreEqual(P_SECURITY, si.Security);
-                    Assert.AreEqual(P_SUBJECT, si.Subject);
-                    Assert.AreEqual(P_TEMPLATE, si.Template);
-                    // FIXME (byte array properties not yet implemented): Assert.AreEqual(P_THUMBNAIL, si.Thumbnail);
-                    Assert.AreEqual(P_TITLE, si.Title);
-                    Assert.AreEqual(P_WORD_COUNT, si.WordCount);
+                    ClassicAssert.AreEqual(P_APPLICATION_NAME, si.ApplicationName);
+                    ClassicAssert.AreEqual(P_AUTHOR, si.Author);
+                    ClassicAssert.AreEqual(P_CHAR_COUNT, si.CharCount);
+                    ClassicAssert.AreEqual(P_COMMENTS, si.Comments);
+                    ClassicAssert.AreEqual(P_CREATE_DATE_TIME, si.CreateDateTime);
+                    ClassicAssert.AreEqual(P_EDIT_TIME, si.EditTime);
+                    ClassicAssert.AreEqual(P_KEYWORDS, si.Keywords);
+                    ClassicAssert.AreEqual(P_LAST_AUTHOR, si.LastAuthor);
+                    ClassicAssert.AreEqual(P_LAST_PRINTED, si.LastPrinted);
+                    ClassicAssert.AreEqual(P_LAST_SAVE_DATE_TIME, si.LastSaveDateTime);
+                    ClassicAssert.AreEqual(P_PAGE_COUNT, si.PageCount);
+                    ClassicAssert.AreEqual(P_REV_NUMBER, si.RevNumber);
+                    ClassicAssert.AreEqual(P_SECURITY, si.Security);
+                    ClassicAssert.AreEqual(P_SUBJECT, si.Subject);
+                    ClassicAssert.AreEqual(P_TEMPLATE, si.Template);
+                    // FIXME (byte array properties not yet implemented): ClassicAssert.AreEqual(P_THUMBNAIL, si.Thumbnail);
+                    ClassicAssert.AreEqual(P_TITLE, si.Title);
+                    ClassicAssert.AreEqual(P_WORD_COUNT, si.WordCount);
 
-                    Assert.AreEqual(P_BYTE_COUNT, dsi.ByteCount);
-                    Assert.AreEqual(P_CATEGORY, dsi.Category);
-                    Assert.AreEqual(P_COMPANY, dsi.Company);
-                    // FIXME (byte array properties not yet implemented): Assert.AreEqual(P_, dsi.Docparts);
-                    // FIXME (byte array properties not yet implemented): Assert.AreEqual(P_, dsi.HeadingPair);
-                    Assert.AreEqual(P_HIDDEN_COUNT, dsi.HiddenCount);
-                    Assert.AreEqual(P_LINE_COUNT, dsi.LineCount);
-                    Assert.AreEqual(P_LINKS_DIRTY, dsi.LinksDirty);
-                    Assert.AreEqual(P_MANAGER, dsi.Manager);
-                    Assert.AreEqual(P_MM_CLIP_COUNT, dsi.MMClipCount);
-                    Assert.AreEqual(P_NOTE_COUNT, dsi.NoteCount);
-                    Assert.AreEqual(P_PAR_COUNT, dsi.ParCount);
-                    Assert.AreEqual(P_PRESENTATION_FORMAT, dsi.PresentationFormat);
-                    Assert.AreEqual(P_SCALE, dsi.Scale);
-                    Assert.AreEqual(P_SLIDE_COUNT, dsi.SlideCount);
+                    ClassicAssert.AreEqual(P_BYTE_COUNT, dsi.ByteCount);
+                    ClassicAssert.AreEqual(P_CATEGORY, dsi.Category);
+                    ClassicAssert.AreEqual(P_COMPANY, dsi.Company);
+                    // FIXME (byte array properties not yet implemented): ClassicAssert.AreEqual(P_, dsi.Docparts);
+                    // FIXME (byte array properties not yet implemented): ClassicAssert.AreEqual(P_, dsi.HeadingPair);
+                    ClassicAssert.AreEqual(P_HIDDEN_COUNT, dsi.HiddenCount);
+                    ClassicAssert.AreEqual(P_LINE_COUNT, dsi.LineCount);
+                    ClassicAssert.AreEqual(P_LINKS_DIRTY, dsi.LinksDirty);
+                    ClassicAssert.AreEqual(P_MANAGER, dsi.Manager);
+                    ClassicAssert.AreEqual(P_MM_CLIP_COUNT, dsi.MMClipCount);
+                    ClassicAssert.AreEqual(P_NOTE_COUNT, dsi.NoteCount);
+                    ClassicAssert.AreEqual(P_PAR_COUNT, dsi.ParCount);
+                    ClassicAssert.AreEqual(P_PRESENTATION_FORMAT, dsi.PresentationFormat);
+                    ClassicAssert.AreEqual(P_SCALE, dsi.Scale);
+                    ClassicAssert.AreEqual(P_SLIDE_COUNT, dsi.SlideCount);
 
                     CustomProperties cps = dsi.CustomProperties;
-                    //Assert.AreEqual(customProperties, cps);
-                    Assert.IsNull(cps["No value available"]);
-                    Assert.AreEqual("Wert 1", cps["Schlüssel 1"]);
-                    Assert.AreEqual("Wert 2", cps["Schlüssel 2"]);
-                    Assert.AreEqual("Wert 3", cps["Schlüssel 3"]);
-                    Assert.AreEqual("Wert 4", cps["Schlüssel 4"]);
-                    Assert.AreEqual(POSITIVE_INTEGER, cps["positive_int"]);
-                    Assert.AreEqual(POSITIVE_LONG, cps["positive_long"]);
-                    Assert.AreEqual(POSITIVE_DOUBLE, cps["positive_Double"]);
-                    Assert.AreEqual(NEGATIVE_INTEGER, cps["negative_int"]);
-                    Assert.AreEqual(NEGATIVE_LONG, cps["negative_long"]);
-                    Assert.AreEqual(NEGATIVE_DOUBLE, cps["negative_Double"]);
-                    Assert.AreEqual(true, cps["Boolean"]);
-                    Assert.AreEqual(now, cps["Date"]);
-                    Assert.AreEqual(MAX_INTEGER, cps["max_int"]);
-                    Assert.AreEqual(MIN_INTEGER, cps["min_int"]);
-                    Assert.AreEqual(MAX_LONG, cps["max_long"]);
-                    Assert.AreEqual(MIN_LONG, cps["min_long"]);
-                    Assert.AreEqual(MAX_DOUBLE, cps["max_Double"]);
-                    Assert.AreEqual(MIN_DOUBLE, cps["min_Double"]);
+                    //ClassicAssert.AreEqual(customProperties, cps);
+                    ClassicAssert.IsNull(cps["No value available"]);
+                    ClassicAssert.AreEqual("Wert 1", cps["Schlüssel 1"]);
+                    ClassicAssert.AreEqual("Wert 2", cps["Schlüssel 2"]);
+                    ClassicAssert.AreEqual("Wert 3", cps["Schlüssel 3"]);
+                    ClassicAssert.AreEqual("Wert 4", cps["Schlüssel 4"]);
+                    ClassicAssert.AreEqual(POSITIVE_INTEGER, cps["positive_int"]);
+                    ClassicAssert.AreEqual(POSITIVE_LONG, cps["positive_long"]);
+                    ClassicAssert.AreEqual(POSITIVE_DOUBLE, cps["positive_Double"]);
+                    ClassicAssert.AreEqual(NEGATIVE_INTEGER, cps["negative_int"]);
+                    ClassicAssert.AreEqual(NEGATIVE_LONG, cps["negative_long"]);
+                    ClassicAssert.AreEqual(NEGATIVE_DOUBLE, cps["negative_Double"]);
+                    ClassicAssert.AreEqual(true, cps["Boolean"]);
+                    ClassicAssert.AreEqual(now, cps["Date"]);
+                    ClassicAssert.AreEqual(MAX_INTEGER, cps["max_int"]);
+                    ClassicAssert.AreEqual(MIN_INTEGER, cps["min_int"]);
+                    ClassicAssert.AreEqual(MAX_LONG, cps["max_long"]);
+                    ClassicAssert.AreEqual(MIN_LONG, cps["min_long"]);
+                    ClassicAssert.AreEqual(MAX_DOUBLE, cps["max_Double"]);
+                    ClassicAssert.AreEqual(MIN_DOUBLE, cps["min_Double"]);
 
                     /* Remove all properties supported by HPSF from the summary
                      * information (e.g. author, edit date, application name) and from the
@@ -450,54 +451,54 @@ namespace TestCases.HPSF.Basic
                         ps = new PropertySet(dis);
                         dsi = new DocumentSummaryInformation(ps);
 
-                        Assert.AreEqual(null, si.ApplicationName);
-                        Assert.AreEqual(null, si.Author);
-                        Assert.AreEqual(0, si.CharCount);
-                        Assert.IsTrue(si.WasNull);
-                        Assert.AreEqual(null, si.Comments);
-                        Assert.AreEqual(null, si.CreateDateTime);
-                        Assert.AreEqual(0, si.EditTime);
-                        Assert.IsTrue(si.WasNull);
-                        Assert.AreEqual(null, si.Keywords);
-                        Assert.AreEqual(null, si.LastAuthor);
-                        Assert.AreEqual(null, si.LastPrinted);
-                        Assert.AreEqual(null, si.LastSaveDateTime);
-                        Assert.AreEqual(0, si.PageCount);
-                        Assert.IsTrue(si.WasNull);
-                        Assert.AreEqual(null, si.RevNumber);
-                        Assert.AreEqual(0, si.Security);
-                        Assert.IsTrue(si.WasNull);
-                        Assert.AreEqual(null, si.Subject);
-                        Assert.AreEqual(null, si.Template);
-                        Assert.AreEqual(null, si.Thumbnail);
-                        Assert.AreEqual(null, si.Title);
-                        Assert.AreEqual(0, si.WordCount);
-                        Assert.IsTrue(si.WasNull);
+                        ClassicAssert.AreEqual(null, si.ApplicationName);
+                        ClassicAssert.AreEqual(null, si.Author);
+                        ClassicAssert.AreEqual(0, si.CharCount);
+                        ClassicAssert.IsTrue(si.WasNull);
+                        ClassicAssert.AreEqual(null, si.Comments);
+                        ClassicAssert.AreEqual(null, si.CreateDateTime);
+                        ClassicAssert.AreEqual(0, si.EditTime);
+                        ClassicAssert.IsTrue(si.WasNull);
+                        ClassicAssert.AreEqual(null, si.Keywords);
+                        ClassicAssert.AreEqual(null, si.LastAuthor);
+                        ClassicAssert.AreEqual(null, si.LastPrinted);
+                        ClassicAssert.AreEqual(null, si.LastSaveDateTime);
+                        ClassicAssert.AreEqual(0, si.PageCount);
+                        ClassicAssert.IsTrue(si.WasNull);
+                        ClassicAssert.AreEqual(null, si.RevNumber);
+                        ClassicAssert.AreEqual(0, si.Security);
+                        ClassicAssert.IsTrue(si.WasNull);
+                        ClassicAssert.AreEqual(null, si.Subject);
+                        ClassicAssert.AreEqual(null, si.Template);
+                        ClassicAssert.AreEqual(null, si.Thumbnail);
+                        ClassicAssert.AreEqual(null, si.Title);
+                        ClassicAssert.AreEqual(0, si.WordCount);
+                        ClassicAssert.IsTrue(si.WasNull);
 
-                        Assert.AreEqual(0, dsi.ByteCount);
-                        Assert.IsTrue(dsi.WasNull);
-                        Assert.AreEqual(null, dsi.Category);
-                        Assert.AreEqual(null, dsi.CustomProperties);
-                        // FIXME (byte array properties not yet implemented): Assert.AreEqual(null, dsi.Docparts);
-                        // FIXME (byte array properties not yet implemented): Assert.AreEqual(null, dsi.HeadingPair);
-                        Assert.AreEqual(0, dsi.HiddenCount);
-                        Assert.IsTrue(dsi.WasNull);
-                        Assert.AreEqual(0, dsi.LineCount);
-                        Assert.IsTrue(dsi.WasNull);
-                        Assert.AreEqual(false, dsi.LinksDirty);
-                        Assert.IsTrue(dsi.WasNull);
-                        Assert.AreEqual(null, dsi.Manager);
-                        Assert.AreEqual(0, dsi.MMClipCount);
-                        Assert.IsTrue(dsi.WasNull);
-                        Assert.AreEqual(0, dsi.NoteCount);
-                        Assert.IsTrue(dsi.WasNull);
-                        Assert.AreEqual(0, dsi.ParCount);
-                        Assert.IsTrue(dsi.WasNull);
-                        Assert.AreEqual(null, dsi.PresentationFormat);
-                        Assert.AreEqual(false, dsi.Scale);
-                        Assert.IsTrue(dsi.WasNull);
-                        Assert.AreEqual(0, dsi.SlideCount);
-                        Assert.IsTrue(dsi.WasNull);
+                        ClassicAssert.AreEqual(0, dsi.ByteCount);
+                        ClassicAssert.IsTrue(dsi.WasNull);
+                        ClassicAssert.AreEqual(null, dsi.Category);
+                        ClassicAssert.AreEqual(null, dsi.CustomProperties);
+                        // FIXME (byte array properties not yet implemented): ClassicAssert.AreEqual(null, dsi.Docparts);
+                        // FIXME (byte array properties not yet implemented): ClassicAssert.AreEqual(null, dsi.HeadingPair);
+                        ClassicAssert.AreEqual(0, dsi.HiddenCount);
+                        ClassicAssert.IsTrue(dsi.WasNull);
+                        ClassicAssert.AreEqual(0, dsi.LineCount);
+                        ClassicAssert.IsTrue(dsi.WasNull);
+                        ClassicAssert.AreEqual(false, dsi.LinksDirty);
+                        ClassicAssert.IsTrue(dsi.WasNull);
+                        ClassicAssert.AreEqual(null, dsi.Manager);
+                        ClassicAssert.AreEqual(0, dsi.MMClipCount);
+                        ClassicAssert.IsTrue(dsi.WasNull);
+                        ClassicAssert.AreEqual(0, dsi.NoteCount);
+                        ClassicAssert.IsTrue(dsi.WasNull);
+                        ClassicAssert.AreEqual(0, dsi.ParCount);
+                        ClassicAssert.IsTrue(dsi.WasNull);
+                        ClassicAssert.AreEqual(null, dsi.PresentationFormat);
+                        ClassicAssert.AreEqual(false, dsi.Scale);
+                        ClassicAssert.IsTrue(dsi.WasNull);
+                        ClassicAssert.AreEqual(0, dsi.SlideCount);
+                        ClassicAssert.IsTrue(dsi.WasNull);
                     }
                 }
             }
@@ -553,8 +554,8 @@ namespace TestCases.HPSF.Basic
             foreach (var de in cps)
             {
                 CustomProperty cp = (CustomProperty)de.Value;
-                Assert.IsNotNull(cp.Name);
-                Assert.IsNotNull(cp.Value);
+                ClassicAssert.IsNotNull(cp.Name);
+                ClassicAssert.IsNotNull(cp.Value);
             }
         }
 
@@ -600,28 +601,28 @@ namespace TestCases.HPSF.Basic
 
             CustomProperty cp;
             CustomProperties cps = new CustomProperties();
-            Assert.AreEqual(0, cps.Count);
+            ClassicAssert.AreEqual(0, cps.Count);
 
             /* After Adding a custom property the size must be 1 and it must be
              * possible to extract the custom property from the map. */
             cps.Put(KEY, VALUE_1);
-            Assert.AreEqual(1, cps.Count);
+            ClassicAssert.AreEqual(1, cps.Count);
             Object v1 = cps[KEY];
-            Assert.AreEqual(VALUE_1, v1);
+            ClassicAssert.AreEqual(VALUE_1, v1);
 
             /* After Adding a custom property with the same name the size must still
              * be one. */
             cps.Put(KEY, VALUE_2);
-            Assert.AreEqual(1, cps.Count);
+            ClassicAssert.AreEqual(1, cps.Count);
             Object v2 = cps[KEY];
-            Assert.AreEqual(VALUE_2, v2);
+            ClassicAssert.AreEqual(VALUE_2, v2);
 
             /* Removing the custom property must return the Remove property and
              * reduce the size to 0. */
             cp = (CustomProperty)cps.Remove(KEY);
-            Assert.AreEqual(KEY, cp.Name);
-            Assert.AreEqual(VALUE_2, cp.Value);
-            Assert.AreEqual(0, cps.Count);
+            ClassicAssert.AreEqual(KEY, cp.Name);
+            ClassicAssert.AreEqual(VALUE_2, cp.Value);
+            ClassicAssert.AreEqual(0, cps.Count);
         }
 
         /**
@@ -643,7 +644,7 @@ namespace TestCases.HPSF.Basic
 
             /* A document summary information Set stream by default does have custom properties. */
             cps = dsi.CustomProperties;
-            Assert.AreEqual(null, cps);
+            ClassicAssert.AreEqual(null, cps);
 
             /* Test an empty custom properties Set. */
             s = new MutableSection();
@@ -651,7 +652,7 @@ namespace TestCases.HPSF.Basic
             // s.SetCodepage(CodePageUtil.CP_UNICODE);
             dsi.AddSection(s);
             cps = dsi.CustomProperties;
-            Assert.AreEqual(0, cps.Count);
+            ClassicAssert.AreEqual(0, cps.Count);
 
             /* Add a custom property. */
             MutableProperty p = new MutableProperty();
@@ -662,16 +663,16 @@ namespace TestCases.HPSF.Basic
             dictionary[ID_1] = NAME_1;
             s.SetDictionary(dictionary);
             cps = dsi.CustomProperties;
-            Assert.AreEqual(1, cps.Count);
-            Assert.IsTrue(cps.IsPure);
+            ClassicAssert.AreEqual(1, cps.Count);
+            ClassicAssert.IsTrue(cps.IsPure);
 
             /* Add another custom property. */
             s.SetProperty((int)ID_2, Variant.VT_LPWSTR, VALUE_1);
             dictionary[ID_2] = NAME_1;
             s.SetDictionary(dictionary);
             cps = dsi.CustomProperties;
-            Assert.AreEqual(1, cps.Count);
-            Assert.IsFalse(cps.IsPure);
+            ClassicAssert.AreEqual(1, cps.Count);
+            ClassicAssert.IsFalse(cps.IsPure);
         }
     }
 }

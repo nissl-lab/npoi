@@ -29,8 +29,9 @@ namespace TestCases.HSSF.EventUserModel
     using NPOI.POIFS.FileSystem;
     using NPOI.SS.Formula;
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.SS.Formula.PTG;
+    using NUnit.Framework.Legacy;
 
 
     [TestFixture]
@@ -62,29 +63,29 @@ namespace TestCases.HSSF.EventUserModel
         [Test]
         public void TestBasics()
         {
-            Assert.IsNotNull(listener.GetSSTRecord());
-            Assert.IsNotNull(listener.GetBoundSheetRecords());
-            Assert.IsNotNull(listener.GetExternSheetRecords());
+            ClassicAssert.IsNotNull(listener.GetSSTRecord());
+            ClassicAssert.IsNotNull(listener.GetBoundSheetRecords());
+            ClassicAssert.IsNotNull(listener.GetExternSheetRecords());
         }
         [Test]
         public void TestGetStubWorkbooks()
         {
-            Assert.IsNotNull(listener.GetStubWorkbook());
-            Assert.IsNotNull(listener.GetStubHSSFWorkbook());
+            ClassicAssert.IsNotNull(listener.GetStubWorkbook());
+            ClassicAssert.IsNotNull(listener.GetStubHSSFWorkbook());
         }
         [Test]
         public void TestContents()
         {
-            Assert.AreEqual(2, listener.GetSSTRecord().NumStrings);
-            Assert.AreEqual(3, listener.GetBoundSheetRecords().Length);
-            Assert.AreEqual(1, listener.GetExternSheetRecords().Length);
+            ClassicAssert.AreEqual(2, listener.GetSSTRecord().NumStrings);
+            ClassicAssert.AreEqual(3, listener.GetBoundSheetRecords().Length);
+            ClassicAssert.AreEqual(1, listener.GetExternSheetRecords().Length);
 
-            Assert.AreEqual(3, listener.GetStubWorkbook().NumSheets);
+            ClassicAssert.AreEqual(3, listener.GetStubWorkbook().NumSheets);
 
             InternalWorkbook ref1 = listener.GetStubWorkbook();
-            Assert.AreEqual("Sh3", ref1.FindSheetFirstNameFromExternSheet(0));
-            Assert.AreEqual("Sheet1", ref1.FindSheetFirstNameFromExternSheet(1));
-            Assert.AreEqual("S2", ref1.FindSheetFirstNameFromExternSheet(2));
+            ClassicAssert.AreEqual("Sh3", ref1.FindSheetFirstNameFromExternSheet(0));
+            ClassicAssert.AreEqual("Sheet1", ref1.FindSheetFirstNameFromExternSheet(1));
+            ClassicAssert.AreEqual("S2", ref1.FindSheetFirstNameFromExternSheet(2));
         }
         [Test]
         public void TestFormulas()
@@ -93,17 +94,17 @@ namespace TestCases.HSSF.EventUserModel
             FormulaRecord[] fRecs = mockListen.GetFormulaRecords();
 
             // Check our formula records
-            Assert.AreEqual(6, fRecs.Length);
+            ClassicAssert.AreEqual(6, fRecs.Length);
 
             InternalWorkbook stubWB = listener.GetStubWorkbook();
-            Assert.IsNotNull(stubWB);
+            ClassicAssert.IsNotNull(stubWB);
             HSSFWorkbook stubHSSF = listener.GetStubHSSFWorkbook();
-            Assert.IsNotNull(stubHSSF);
+            ClassicAssert.IsNotNull(stubHSSF);
 
             // Check these stubs have the right stuff on them
-            Assert.AreEqual("Sheet1", stubWB.GetSheetName(0));
-            Assert.AreEqual("S2", stubWB.GetSheetName(1));
-            Assert.AreEqual("Sh3", stubWB.GetSheetName(2));
+            ClassicAssert.AreEqual("Sheet1", stubWB.GetSheetName(0));
+            ClassicAssert.AreEqual("S2", stubWB.GetSheetName(1));
+            ClassicAssert.AreEqual("Sh3", stubWB.GetSheetName(2));
 
             // Check we can Get the formula without breaking
             for (int i = 0; i < fRecs.Length; i++)
@@ -114,12 +115,12 @@ namespace TestCases.HSSF.EventUserModel
             // Peer into just one formula, and check that
             //  all the ptgs give back the right things
             Ptg[] ptgs = fRecs[0].ParsedExpression;
-            Assert.AreEqual(1, ptgs.Length);
-            Assert.IsTrue(ptgs[0] is Ref3DPtg);
+            ClassicAssert.AreEqual(1, ptgs.Length);
+            ClassicAssert.IsTrue(ptgs[0] is Ref3DPtg);
 
             Ref3DPtg ptg = (Ref3DPtg)ptgs[0];
             HSSFEvaluationWorkbook book = HSSFEvaluationWorkbook.Create(stubHSSF);
-            Assert.AreEqual("Sheet1!A1", ptg.ToFormulaString(book));
+            ClassicAssert.AreEqual("Sheet1!A1", ptg.ToFormulaString(book));
 
 
             // Now check we Get the right formula back for
@@ -128,27 +129,27 @@ namespace TestCases.HSSF.EventUserModel
 
             // Sheet 1 A2 is on same sheet
             fr = fRecs[0];
-            Assert.AreEqual(1, fr.Row);
-            Assert.AreEqual(0, fr.Column);
-            Assert.AreEqual("Sheet1!A1", HSSFFormulaParser.ToFormulaString(stubHSSF, fr.ParsedExpression));
+            ClassicAssert.AreEqual(1, fr.Row);
+            ClassicAssert.AreEqual(0, fr.Column);
+            ClassicAssert.AreEqual("Sheet1!A1", HSSFFormulaParser.ToFormulaString(stubHSSF, fr.ParsedExpression));
 
             // Sheet 1 A5 is to another sheet
             fr = fRecs[3];
-            Assert.AreEqual(4, fr.Row);
-            Assert.AreEqual(0, fr.Column);
-            Assert.AreEqual("'S2'!A1", HSSFFormulaParser.ToFormulaString(stubHSSF, fr.ParsedExpression));
+            ClassicAssert.AreEqual(4, fr.Row);
+            ClassicAssert.AreEqual(0, fr.Column);
+            ClassicAssert.AreEqual("'S2'!A1", HSSFFormulaParser.ToFormulaString(stubHSSF, fr.ParsedExpression));
 
             // Sheet 1 A7 is to another sheet, range
             fr = fRecs[5];
-            Assert.AreEqual(6, fr.Row);
-            Assert.AreEqual(0, fr.Column);
-            Assert.AreEqual("SUM(Sh3!A1:A4)", HSSFFormulaParser.ToFormulaString(stubHSSF, fr.ParsedExpression));
+            ClassicAssert.AreEqual(6, fr.Row);
+            ClassicAssert.AreEqual(0, fr.Column);
+            ClassicAssert.AreEqual("SUM(Sh3!A1:A4)", HSSFFormulaParser.ToFormulaString(stubHSSF, fr.ParsedExpression));
 
 
             // Now, load via Usermodel and re-check
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("3dFormulas.xls");
-            Assert.AreEqual("Sheet1!A1", wb.GetSheetAt(0).GetRow(1).GetCell(0).CellFormula);
-            Assert.AreEqual("SUM(Sh3!A1:A4)", wb.GetSheetAt(0).GetRow(6).GetCell(0).CellFormula);
+            ClassicAssert.AreEqual("Sheet1!A1", wb.GetSheetAt(0).GetRow(1).GetCell(0).CellFormula);
+            ClassicAssert.AreEqual("SUM(Sh3!A1:A4)", wb.GetSheetAt(0).GetRow(6).GetCell(0).CellFormula);
         }
 
         private class MockHSSFListener : IHSSFListener

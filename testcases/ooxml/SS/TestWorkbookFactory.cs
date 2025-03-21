@@ -25,7 +25,7 @@ namespace TestCases.SS
     using NPOI.SS.UserModel;
     using NPOI.Util;
     using NPOI.XSSF.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using System;
     using System.IO;
     using TestCases;
@@ -103,8 +103,8 @@ namespace TestCases.SS
             wb = WorkbookFactory.Create(
                     new POIFSFileSystem(HSSFTestDataSamples.OpenSampleFileStream(xls))
             );
-            Assert.IsNotNull(wb);
-            Assert.IsTrue(wb is HSSFWorkbook);
+            ClassicAssert.IsNotNull(wb);
+            ClassicAssert.IsTrue(wb is HSSFWorkbook);
             AssertCloseDoesNotModifyFile(xls, wb);
 
             // Package -> xssf
@@ -112,8 +112,8 @@ namespace TestCases.SS
                     OPCPackage.Open(
                             HSSFTestDataSamples.OpenSampleFileStream(xlsx))
             );
-            Assert.IsNotNull(wb);
-            Assert.IsTrue(wb is XSSFWorkbook);
+            ClassicAssert.IsNotNull(wb);
+            ClassicAssert.IsTrue(wb is XSSFWorkbook);
             AssertCloseDoesNotModifyFile(xlsx, wb);
         }
         [Test]
@@ -123,14 +123,14 @@ namespace TestCases.SS
 
             // POIFS -> hssf
             wb = WorkbookFactory.Create(HSSFTestDataSamples.GetSampleFile(xls).FullName, null, true);
-            Assert.IsNotNull(wb);
-            Assert.IsTrue(wb is HSSFWorkbook);
+            ClassicAssert.IsNotNull(wb);
+            ClassicAssert.IsTrue(wb is HSSFWorkbook);
             AssertCloseDoesNotModifyFile(xls, wb);
 
             // Package -> xssf
             wb = WorkbookFactory.Create(HSSFTestDataSamples.GetSampleFile(xlsx).FullName, null, true);
-            Assert.IsNotNull(wb);
-            Assert.IsTrue(wb is XSSFWorkbook);
+            ClassicAssert.IsNotNull(wb);
+            ClassicAssert.IsTrue(wb is XSSFWorkbook);
             AssertCloseDoesNotModifyFile(xlsx, wb);
         }
         /**
@@ -147,30 +147,30 @@ namespace TestCases.SS
             wb = WorkbookFactory.Create(
                     HSSFTestDataSamples.OpenSampleFileStream(xls)
             );
-            Assert.IsNotNull(wb);
-            Assert.IsTrue(wb is HSSFWorkbook);
+            ClassicAssert.IsNotNull(wb);
+            ClassicAssert.IsTrue(wb is HSSFWorkbook);
             AssertCloseDoesNotModifyFile(xls, wb);
 
             wb = WorkbookFactory.Create(
                     HSSFTestDataSamples.OpenSampleFileStream(xlsx)
             );
-            Assert.IsNotNull(wb);
-            Assert.IsTrue(wb is XSSFWorkbook);
+            ClassicAssert.IsNotNull(wb);
+            ClassicAssert.IsTrue(wb is XSSFWorkbook);
             AssertCloseDoesNotModifyFile(xlsx, wb);
 
             // File -> either
             wb = WorkbookFactory.Create(
                   Path.GetFullPath(Path.Combine(testdataPath, xls))
             );
-            Assert.IsNotNull(wb);
-            Assert.IsTrue(wb is HSSFWorkbook);
+            ClassicAssert.IsNotNull(wb);
+            ClassicAssert.IsTrue(wb is HSSFWorkbook);
             AssertCloseDoesNotModifyFile(xls, wb);
 
             wb = WorkbookFactory.Create(
                   Path.Combine(testdataPath, xlsx)
             );
-            Assert.IsNotNull(wb);
-            Assert.IsTrue(wb is XSSFWorkbook);
+            ClassicAssert.IsNotNull(wb);
+            ClassicAssert.IsTrue(wb is XSSFWorkbook);
             AssertCloseDoesNotModifyFile(xlsx, wb);
 
             // Invalid type -> exception
@@ -207,46 +207,46 @@ namespace TestCases.SS
         //    wb = WorkbookFactory.Create(
         //            HSSFTestDataSamples.OpenSampleFileStream(xls), null
         //    );
-        //    Assert.IsNotNull(wb);
-        //    Assert.IsTrue(wb is HSSFWorkbook);
+        //    ClassicAssert.IsNotNull(wb);
+        //    ClassicAssert.IsTrue(wb is HSSFWorkbook);
         //    AssertCloseDoesNotModifyFile(xls, wb);
 
         //    wb = WorkbookFactory.Create(
         //            HSSFTestDataSamples.OpenSampleFileStream(xlsx), null
         //    );
-        //    Assert.IsNotNull(wb);
-        //    Assert.IsTrue(wb is XSSFWorkbook);
+        //    ClassicAssert.IsNotNull(wb);
+        //    ClassicAssert.IsTrue(wb is XSSFWorkbook);
         //    AssertCloseDoesNotModifyFile(xlsx, wb);
 
         //    // Unprotected, wrong password, opens normally
         //    wb = WorkbookFactory.Create(
         //            HSSFTestDataSamples.OpenSampleFileStream(xls), "wrong"
         //    );
-        //    Assert.IsNotNull(wb);
-        //    Assert.IsTrue(wb is HSSFWorkbook);
+        //    ClassicAssert.IsNotNull(wb);
+        //    ClassicAssert.IsTrue(wb is HSSFWorkbook);
         //    AssertCloseDoesNotModifyFile(xls, wb);
 
 
         //    wb = WorkbookFactory.Create(
         //            HSSFTestDataSamples.OpenSampleFileStream(xlsx), "wrong"
         //    );
-        //    Assert.IsNotNull(wb);
-        //    Assert.IsTrue(wb is XSSFWorkbook);
+        //    ClassicAssert.IsNotNull(wb);
+        //    ClassicAssert.IsTrue(wb is XSSFWorkbook);
         //    AssertCloseDoesNotModifyFile(xlsx, wb);
 
         //    // Protected, correct password, opens fine
         //    wb = WorkbookFactory.Create(
         //            HSSFTestDataSamples.OpenSampleFileStream(xls_prot[0]), xls_prot[1]
         //    );
-        //    Assert.IsNotNull(wb);
-        //    Assert.IsTrue(wb is HSSFWorkbook);
+        //    ClassicAssert.IsNotNull(wb);
+        //    ClassicAssert.IsTrue(wb is HSSFWorkbook);
         //    AssertCloseDoesNotModifyFile(xls_prot[0], wb);
 
         //    wb = WorkbookFactory.Create(
         //            HSSFTestDataSamples.OpenSampleFileStream(xlsx_prot[0]), xlsx_prot[1]
         //    );
-        //    Assert.IsNotNull(wb);
-        //    Assert.IsTrue(wb is XSSFWorkbook);
+        //    ClassicAssert.IsNotNull(wb);
+        //    ClassicAssert.IsTrue(wb is XSSFWorkbook);
         //    AssertCloseDoesNotModifyFile(xlsx_prot[0], wb);
 
         //    // Protected, wrong password, throws Exception
@@ -281,48 +281,48 @@ namespace TestCases.SS
             wb = WorkbookFactory.Create(
                     HSSFTestDataSamples.GetSampleFile(xls).FullName, null
             );
-            Assert.IsNotNull(wb);
-            Assert.IsTrue(wb is HSSFWorkbook);
+            ClassicAssert.IsNotNull(wb);
+            ClassicAssert.IsTrue(wb is HSSFWorkbook);
             AssertCloseDoesNotModifyFile(xls, wb);
 
             wb = WorkbookFactory.Create(
                     HSSFTestDataSamples.GetSampleFile(xlsx).FullName, null
             );
-            Assert.IsNotNull(wb);
-            Assert.IsTrue(wb is XSSFWorkbook);
+            ClassicAssert.IsNotNull(wb);
+            ClassicAssert.IsTrue(wb is XSSFWorkbook);
             AssertCloseDoesNotModifyFile(xlsx, wb);
 
             // Unprotected, wrong password, opens normally
             wb = WorkbookFactory.Create(
                     HSSFTestDataSamples.GetSampleFile(xls).FullName, "wrong"
             );
-            Assert.IsNotNull(wb);
-            Assert.IsTrue(wb is HSSFWorkbook);
+            ClassicAssert.IsNotNull(wb);
+            ClassicAssert.IsTrue(wb is HSSFWorkbook);
             AssertCloseDoesNotModifyFile(xls, wb);
 
             wb = WorkbookFactory.Create(
                     HSSFTestDataSamples.GetSampleFile(xlsx).FullName, "wrong"
             );
-            Assert.IsNotNull(wb);
-            Assert.IsTrue(wb is XSSFWorkbook);
+            ClassicAssert.IsNotNull(wb);
+            ClassicAssert.IsTrue(wb is XSSFWorkbook);
             AssertCloseDoesNotModifyFile(xlsx, wb);
 
             // Protected, correct password, opens fine
             wb = WorkbookFactory.Create(
                     HSSFTestDataSamples.GetSampleFile(xls_prot[0]).FullName, xls_prot[1]
             );
-            Assert.IsNotNull(wb);
-            Assert.IsTrue(wb is HSSFWorkbook);
+            ClassicAssert.IsNotNull(wb);
+            ClassicAssert.IsTrue(wb is HSSFWorkbook);
             AssertCloseDoesNotModifyFile(xls, wb);
 
             wb = WorkbookFactory.Create(
                     HSSFTestDataSamples.GetSampleFile(xlsx_prot[0]).FullName, xlsx_prot[1]
             );
-            Assert.IsNotNull(wb);
-            Assert.IsTrue(wb is XSSFWorkbook);
-            Assert.IsTrue(wb.NumberOfSheets > 0);
-            Assert.IsNotNull(wb.GetSheetAt(0));
-            Assert.IsNotNull(wb.GetSheetAt(0).GetRow(0));
+            ClassicAssert.IsNotNull(wb);
+            ClassicAssert.IsTrue(wb is XSSFWorkbook);
+            ClassicAssert.IsTrue(wb.NumberOfSheets > 0);
+            ClassicAssert.IsNotNull(wb.GetSheetAt(0));
+            ClassicAssert.IsNotNull(wb.GetSheetAt(0).GetRow(0));
             AssertCloseDoesNotModifyFile(xlsx, wb);
 
             // Protected, wrong password, throws Exception
@@ -389,7 +389,7 @@ namespace TestCases.SS
         public void TestNonExistantFile()
         {
             FileInfo nonExistantFile = new FileInfo("notExistantFile");
-            Assert.IsFalse(nonExistantFile.Exists);
+            ClassicAssert.IsFalse(nonExistantFile.Exists);
             try
             {
                 WorkbookFactory.Create(nonExistantFile.FullName, "password", true);

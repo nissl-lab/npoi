@@ -20,7 +20,7 @@ namespace TestCases.SS.Formula.Eval
     using NPOI.SS.Formula.PTG;
     using NPOI.SS.Formula.Functions;
     using TestCases.SS.Formula.Functions;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.SS.Formula.Eval;
 
     /**
@@ -62,7 +62,7 @@ namespace TestCases.SS.Formula.Eval
         private static void Confirm(int expectedValue, AreaEval ae, int row, int col)
         {
             NumberEval v = (NumberEval)ae.GetAbsoluteValue(row, col);
-            Assert.AreEqual(expectedValue, v.NumberValue, 0.0);
+            ClassicAssert.AreEqual(expectedValue, v.NumberValue, 0.0);
         }
     }
 

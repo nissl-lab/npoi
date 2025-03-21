@@ -19,7 +19,7 @@ namespace TestCases.HSSF.Record
 {
     using System;
     using NPOI.HSSF.Record;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.DDF;
     using NPOI.Util;
 
@@ -33,7 +33,7 @@ namespace TestCases.HSSF.Record
         public void TestRecordSize()
         {
             DrawingGroupRecord r = new DrawingGroupRecord();
-            Assert.AreEqual(4, r.RecordSize);
+            ClassicAssert.AreEqual(4, r.RecordSize);
 
             EscherSpRecord sp = new EscherSpRecord();
             sp.RecordId = (EscherSpRecord.RECORD_ID);
@@ -46,25 +46,25 @@ namespace TestCases.HSSF.Record
             dggContainer.AddChildRecord(sp);
 
             r.AddEscherRecord(dggContainer);
-            Assert.AreEqual(28, r.RecordSize);
+            ClassicAssert.AreEqual(28, r.RecordSize);
 
             byte[] data = new byte[28];
             int size = r.Serialize(0, data);
-            Assert.AreEqual("[EB, 00, 18, 00, 0F, 00, 00, F0, 10, 00, 00, 00, 11, 11, 0A, F0, 08, 00, 00, 00, FF, FF, FF, FF, FF, FF, FF, FF]", HexDump.ToHex(data));
-            Assert.AreEqual(28, size);
+            ClassicAssert.AreEqual("[EB, 00, 18, 00, 0F, 00, 00, F0, 10, 00, 00, 00, 11, 11, 0A, F0, 08, 00, 00, 00, FF, FF, FF, FF, FF, FF, FF, FF]", HexDump.ToHex(data));
+            ClassicAssert.AreEqual(28, size);
 
-            Assert.AreEqual(24, dggContainer.RecordSize);
+            ClassicAssert.AreEqual(24, dggContainer.RecordSize);
 
 
             r = new DrawingGroupRecord();
             r.RawData = (new byte[MAX_DATA_SIZE]);
-            Assert.AreEqual(MAX_RECORD_SIZE, r.RecordSize);
+            ClassicAssert.AreEqual(MAX_RECORD_SIZE, r.RecordSize);
             r.RawData = (new byte[MAX_DATA_SIZE + 1]);
-            Assert.AreEqual(MAX_RECORD_SIZE + 5, r.RecordSize);
+            ClassicAssert.AreEqual(MAX_RECORD_SIZE + 5, r.RecordSize);
             r.RawData = (new byte[MAX_DATA_SIZE * 2]);
-            Assert.AreEqual(MAX_RECORD_SIZE * 2, r.RecordSize);
+            ClassicAssert.AreEqual(MAX_RECORD_SIZE * 2, r.RecordSize);
             r.RawData = (new byte[MAX_DATA_SIZE * 2 + 1]);
-            Assert.AreEqual(MAX_RECORD_SIZE * 2 + 5, r.RecordSize);
+            ClassicAssert.AreEqual(MAX_RECORD_SIZE * 2 + 5, r.RecordSize);
         }
         [Test]
         public void TestSerialize()
@@ -77,15 +77,15 @@ namespace TestCases.HSSF.Record
             r.RawData = (rawData);
             byte[] buffer = new byte[r.RecordSize];
             int size = r.Serialize(0, buffer);
-            Assert.AreEqual(104, size);
-            Assert.AreEqual("[EB, 00, 64, 00, 64, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, C8]", HexDump.ToHex(buffer));
+            ClassicAssert.AreEqual(104, size);
+            ClassicAssert.AreEqual("[EB, 00, 64, 00, 64, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, C8]", HexDump.ToHex(buffer));
 
             // check at max record size
             rawData = new byte[MAX_DATA_SIZE];
             r.RawData = (rawData);
             buffer = new byte[r.RecordSize];
             size = r.Serialize(0, buffer);
-            Assert.AreEqual(MAX_RECORD_SIZE, size);
+            ClassicAssert.AreEqual(MAX_RECORD_SIZE, size);
 
             // check over max record size
             rawData = new byte[MAX_DATA_SIZE + 1];
@@ -93,9 +93,9 @@ namespace TestCases.HSSF.Record
             r.RawData = (rawData);
             buffer = new byte[r.RecordSize];
             size = r.Serialize(0, buffer);
-            Assert.AreEqual(MAX_RECORD_SIZE + 5, size);
-            Assert.AreEqual("[EB, 00, 20, 20]", HexDump.ToHex(cut(buffer, 0, 4)));
-            Assert.AreEqual("[00, EB, 00, 01, 00, FF]", HexDump.ToHex(cut(buffer, MAX_RECORD_SIZE - 1, MAX_RECORD_SIZE + 5)));
+            ClassicAssert.AreEqual(MAX_RECORD_SIZE + 5, size);
+            ClassicAssert.AreEqual("[EB, 00, 20, 20]", HexDump.ToHex(cut(buffer, 0, 4)));
+            ClassicAssert.AreEqual("[00, EB, 00, 01, 00, FF]", HexDump.ToHex(cut(buffer, MAX_RECORD_SIZE - 1, MAX_RECORD_SIZE + 5)));
 
             // check continue record
             rawData = new byte[MAX_DATA_SIZE * 2 + 1];
@@ -103,19 +103,19 @@ namespace TestCases.HSSF.Record
             r.RawData = (rawData);
             buffer = new byte[r.RecordSize];
             size = r.Serialize(0, buffer);
-            Assert.AreEqual(MAX_RECORD_SIZE * 2 + 5, size);
-            Assert.AreEqual(MAX_RECORD_SIZE * 2 + 5, r.RecordSize);
-            Assert.AreEqual("[EB, 00, 20, 20]", HexDump.ToHex(cut(buffer, 0, 4)));
-            Assert.AreEqual("[EB, 00, 20, 20]", HexDump.ToHex(cut(buffer, MAX_RECORD_SIZE, MAX_RECORD_SIZE + 4)));
-            Assert.AreEqual("[3C, 00, 01, 00, FF]", HexDump.ToHex(cut(buffer, MAX_RECORD_SIZE * 2, MAX_RECORD_SIZE * 2 + 5)));
+            ClassicAssert.AreEqual(MAX_RECORD_SIZE * 2 + 5, size);
+            ClassicAssert.AreEqual(MAX_RECORD_SIZE * 2 + 5, r.RecordSize);
+            ClassicAssert.AreEqual("[EB, 00, 20, 20]", HexDump.ToHex(cut(buffer, 0, 4)));
+            ClassicAssert.AreEqual("[EB, 00, 20, 20]", HexDump.ToHex(cut(buffer, MAX_RECORD_SIZE, MAX_RECORD_SIZE + 4)));
+            ClassicAssert.AreEqual("[3C, 00, 01, 00, FF]", HexDump.ToHex(cut(buffer, MAX_RECORD_SIZE * 2, MAX_RECORD_SIZE * 2 + 5)));
 
             // check continue record
             rawData = new byte[664532];
             r.RawData = (rawData);
             buffer = new byte[r.RecordSize];
             size = r.Serialize(0, buffer);
-            Assert.AreEqual(664856, size);
-            Assert.AreEqual(664856, r.RecordSize);
+            ClassicAssert.AreEqual(664856, size);
+            ClassicAssert.AreEqual(664856, r.RecordSize);
         }
 
         private byte[] cut(byte[] data, int fromInclusive, int toExclusive)
@@ -134,12 +134,12 @@ namespace TestCases.HSSF.Record
                 //System.out.println( "  Diff: " + (DrawingGroupRecord.GrossSizeFromDataSize( i ) - i) );
             }
 
-            Assert.AreEqual(4, DrawingGroupRecord.GrossSizeFromDataSize(0));
-            Assert.AreEqual(5, DrawingGroupRecord.GrossSizeFromDataSize(1));
-            Assert.AreEqual(MAX_RECORD_SIZE, DrawingGroupRecord.GrossSizeFromDataSize(MAX_DATA_SIZE));
-            Assert.AreEqual(MAX_RECORD_SIZE + 5, DrawingGroupRecord.GrossSizeFromDataSize(MAX_DATA_SIZE + 1));
-            Assert.AreEqual(MAX_RECORD_SIZE * 2, DrawingGroupRecord.GrossSizeFromDataSize(MAX_DATA_SIZE * 2));
-            Assert.AreEqual(MAX_RECORD_SIZE * 2 + 5, DrawingGroupRecord.GrossSizeFromDataSize(MAX_DATA_SIZE * 2 + 1));
+            ClassicAssert.AreEqual(4, DrawingGroupRecord.GrossSizeFromDataSize(0));
+            ClassicAssert.AreEqual(5, DrawingGroupRecord.GrossSizeFromDataSize(1));
+            ClassicAssert.AreEqual(MAX_RECORD_SIZE, DrawingGroupRecord.GrossSizeFromDataSize(MAX_DATA_SIZE));
+            ClassicAssert.AreEqual(MAX_RECORD_SIZE + 5, DrawingGroupRecord.GrossSizeFromDataSize(MAX_DATA_SIZE + 1));
+            ClassicAssert.AreEqual(MAX_RECORD_SIZE * 2, DrawingGroupRecord.GrossSizeFromDataSize(MAX_DATA_SIZE * 2));
+            ClassicAssert.AreEqual(MAX_RECORD_SIZE * 2 + 5, DrawingGroupRecord.GrossSizeFromDataSize(MAX_DATA_SIZE * 2 + 1));
         }
 
     }

@@ -18,7 +18,7 @@
 namespace TestCases.SS.Formula.PTG
 {
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
 
@@ -39,9 +39,9 @@ namespace TestCases.SS.Formula.PTG
             HSSFWorkbook workbook = LoadWorkbook("PercentPtg.xls");
             ISheet sheet = workbook.GetSheetAt(0);
 
-            Assert.AreEqual(53000.0, sheet.GetRow(0).GetCell(0).NumericCellValue, 0.0, "Wrong numeric value for original number");
-            Assert.AreEqual(5300.0, sheet.GetRow(1).GetCell(0).NumericCellValue, 0.0, "Wrong numeric value for percent formula result");
-            Assert.AreEqual("A1*10%", sheet.GetRow(1).GetCell(0).CellFormula, "Wrong formula string for percent formula");
+            ClassicAssert.AreEqual(53000.0, sheet.GetRow(0).GetCell(0).NumericCellValue, 0.0, "Wrong numeric value for original number");
+            ClassicAssert.AreEqual(5300.0, sheet.GetRow(1).GetCell(0).NumericCellValue, 0.0, "Wrong numeric value for percent formula result");
+            ClassicAssert.AreEqual("A1*10%", sheet.GetRow(1).GetCell(0).CellFormula, "Wrong formula string for percent formula");
         }
     }
 

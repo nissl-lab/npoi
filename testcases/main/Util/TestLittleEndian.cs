@@ -29,7 +29,7 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Diagnostics;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using NPOI.Util;
 
 namespace TestCases.Util
@@ -53,8 +53,8 @@ namespace TestCases.Util
 
             expected[ 0 ] = unchecked(( short ) 0xFF01);
             expected[ 1 ] = 0x02FF;
-            Assert.AreEqual(expected[ 0 ], LittleEndian.GetShort(testdata));
-            Assert.AreEqual(expected[ 1 ], LittleEndian.GetShort(testdata, 1));
+            ClassicAssert.AreEqual(expected[ 0 ], LittleEndian.GetShort(testdata));
+            ClassicAssert.AreEqual(expected[ 1 ], LittleEndian.GetShort(testdata, 1));
         }
         [Test]
         public void TestGetUShort()
@@ -77,19 +77,19 @@ namespace TestCases.Util
             expected[ 1 ] = 0x02FF;
             expected[ 2 ] = 0x930D;
             expected[ 3 ] = 0xFF93;
-            Assert.AreEqual(expected[ 0 ], LittleEndian.GetUShort(testdata));
-            Assert.AreEqual(expected[ 1 ], LittleEndian.GetUShort(testdata, 1));
-            Assert.AreEqual(expected[ 2 ], LittleEndian.GetUShort(testdata2));
-            Assert.AreEqual(expected[ 3 ], LittleEndian.GetUShort(testdata2, 1));
+            ClassicAssert.AreEqual(expected[ 0 ], LittleEndian.GetUShort(testdata));
+            ClassicAssert.AreEqual(expected[ 1 ], LittleEndian.GetUShort(testdata, 1));
+            ClassicAssert.AreEqual(expected[ 2 ], LittleEndian.GetUShort(testdata2));
+            ClassicAssert.AreEqual(expected[ 3 ], LittleEndian.GetUShort(testdata2, 1));
 
             byte[] testdata3 = new byte[ LittleEndianConsts.SHORT_SIZE + 1 ];
             LittleEndian.PutShort(testdata3, 0, ( short ) expected[2] );
             LittleEndian.PutShort(testdata3, 1, ( short ) expected[3] );
-            Assert.AreEqual(testdata3[ 0 ], 0x0D);
-            Assert.AreEqual(testdata3[ 1 ], unchecked((byte)0x93));
-            Assert.AreEqual(testdata3[ 2 ], unchecked((byte)0xFF));
-            Assert.AreEqual(expected[ 2 ], LittleEndian.GetUShort(testdata3));
-            Assert.AreEqual(expected[ 3 ], LittleEndian.GetUShort(testdata3, 1));
+            ClassicAssert.AreEqual(testdata3[ 0 ], 0x0D);
+            ClassicAssert.AreEqual(testdata3[ 1 ], unchecked((byte)0x93));
+            ClassicAssert.AreEqual(testdata3[ 2 ], unchecked((byte)0xFF));
+            ClassicAssert.AreEqual(expected[ 2 ], LittleEndian.GetUShort(testdata3));
+            ClassicAssert.AreEqual(expected[ 3 ], LittleEndian.GetUShort(testdata3, 1));
         }
 
         private static byte[]   _DOUBLE_array =
@@ -108,9 +108,9 @@ namespace TestCases.Util
         [Test]
         public void TestGetDouble()
         {
-            Assert.AreEqual(_DOUBLEs[ 0 ], LittleEndian.GetDouble(_DOUBLE_array, 0), 0.000001 );
-            Assert.AreEqual(_DOUBLEs[ 1 ], LittleEndian.GetDouble( _DOUBLE_array, LittleEndianConsts.DOUBLE_SIZE), 0.000001);
-            Assert.IsTrue(Double.IsNaN(LittleEndian.GetDouble(_nan_DOUBLE_array, 0)));
+            ClassicAssert.AreEqual(_DOUBLEs[ 0 ], LittleEndian.GetDouble(_DOUBLE_array, 0), 0.000001 );
+            ClassicAssert.AreEqual(_DOUBLEs[ 1 ], LittleEndian.GetDouble( _DOUBLE_array, LittleEndianConsts.DOUBLE_SIZE), 0.000001);
+            ClassicAssert.IsTrue(Double.IsNaN(LittleEndian.GetDouble(_nan_DOUBLE_array, 0)));
 
             double nan = LittleEndian.GetDouble(_nan_DOUBLE_array, 0);
             byte[] data = new byte[8];
@@ -118,7 +118,7 @@ namespace TestCases.Util
             for ( int i = 0; i < data.Length; i++ )
             {
                 byte b = data[i];
-                Assert.AreEqual(data[i], _nan_DOUBLE_array[i]);
+                ClassicAssert.AreEqual(data[i], _nan_DOUBLE_array[i]);
             }
         }
 
@@ -136,8 +136,8 @@ namespace TestCases.Util
 
             expected[ 0 ] = unchecked((int)0xFFFFFF01);
             expected[ 1 ] = 0x02FFFFFF;
-            Assert.AreEqual(expected[ 0 ], LittleEndian.GetInt(testdata));
-            Assert.AreEqual(expected[ 1 ], LittleEndian.GetInt(testdata, 1));
+            ClassicAssert.AreEqual(expected[ 0 ], LittleEndian.GetInt(testdata));
+            ClassicAssert.AreEqual(expected[ 1 ], LittleEndian.GetInt(testdata, 1));
         }
 
         [Test]
@@ -158,8 +158,8 @@ namespace TestCases.Util
 
             expected[ 0 ] = unchecked((long)0xFFFFFFFFFFFFFF01L);
             expected[ 1 ] = 0x02FFFFFFFFFFFFFFL;
-            Assert.AreEqual(expected[ 0 ], LittleEndian.GetLong(testdata, 0));
-            Assert.AreEqual(expected[ 1 ], LittleEndian.GetLong(testdata, 1));
+            ClassicAssert.AreEqual(expected[ 0 ], LittleEndian.GetLong(testdata, 0));
+            ClassicAssert.AreEqual(expected[ 1 ], LittleEndian.GetLong(testdata, 1));
         }
 
         [Test]
@@ -176,10 +176,10 @@ namespace TestCases.Util
             testdata[ 0 ] = unchecked(( short ) 0xFF01);
             testdata[ 1 ] = 0x02FF;
             LittleEndian.PutShort(received, 0,  testdata[ 0 ]);
-            Assert.IsTrue(ba_equivalent(received, expected, 0,
+            ClassicAssert.IsTrue(ba_equivalent(received, expected, 0,
                                      LittleEndianConsts.SHORT_SIZE));
             LittleEndian.PutShort(received, 1, testdata[ 1 ]);
-            Assert.IsTrue(ba_equivalent(received, expected, 1,
+            ClassicAssert.IsTrue(ba_equivalent(received, expected, 1,
                                      LittleEndianConsts.SHORT_SIZE));
         }
 
@@ -199,10 +199,10 @@ namespace TestCases.Util
             testdata[ 0 ] = unchecked((int)0xFFFFFF01);
             testdata[ 1 ] = 0x02FFFFFF;
             LittleEndian.PutInt(received, 0, testdata[ 0 ]);
-            Assert.IsTrue(ba_equivalent(received, expected, 0,
+            ClassicAssert.IsTrue(ba_equivalent(received, expected, 0,
                                      LittleEndianConsts.INT_SIZE));
             LittleEndian.PutInt(received, 1, testdata[ 1 ]);
-            Assert.IsTrue(ba_equivalent(received, expected, 1,
+            ClassicAssert.IsTrue(ba_equivalent(received, expected, 1,
                                      LittleEndianConsts.INT_SIZE));
         }
 
@@ -212,14 +212,14 @@ namespace TestCases.Util
             byte[] received = new byte[ LittleEndianConsts.DOUBLE_SIZE + 1 ];
 
             LittleEndian.PutDouble(received, 0,  _DOUBLEs[ 0 ]);
-            Assert.IsTrue(ba_equivalent(received, _DOUBLE_array, 0,
+            ClassicAssert.IsTrue(ba_equivalent(received, _DOUBLE_array, 0,
                                      LittleEndianConsts.DOUBLE_SIZE));
             LittleEndian.PutDouble(received, 1, _DOUBLEs[ 1 ]);
             byte[] expected = new byte[ LittleEndianConsts.DOUBLE_SIZE + 1 ];
 
             System.Array.Copy(_DOUBLE_array, LittleEndianConsts.DOUBLE_SIZE, expected,
                              1, LittleEndianConsts.DOUBLE_SIZE);
-            Assert.IsTrue(ba_equivalent(received, expected, 1,
+            ClassicAssert.IsTrue(ba_equivalent(received, expected, 1,
                                      LittleEndianConsts.DOUBLE_SIZE));
         }
 
@@ -243,10 +243,10 @@ namespace TestCases.Util
             testdata[ 0 ] = unchecked((long)0xFFFFFFFFFFFFFF01L);
             testdata[ 1 ] = 0x02FFFFFFFFFFFFFFL;
             LittleEndian.PutLong(received, 0, testdata[ 0 ]);
-            Assert.IsTrue(ba_equivalent(received, expected, 0,
+            ClassicAssert.IsTrue(ba_equivalent(received, expected, 0,
                                      LittleEndianConsts.LONG_SIZE));
             LittleEndian.PutLong(received, 1, testdata[ 1 ]);
-            Assert.IsTrue(ba_equivalent(received, expected, 1,
+            ClassicAssert.IsTrue(ba_equivalent(received, expected, 1,
                                      LittleEndianConsts.LONG_SIZE));
         }
 
@@ -270,10 +270,10 @@ namespace TestCases.Util
             while ((stream.Length - stream.Position) > 0)
             {
                 short value = LittleEndian.ReadShort(stream);
-                Assert.AreEqual(value, expected_value);
+                ClassicAssert.AreEqual(value, expected_value);
                 count++;
             }
-            Assert.AreEqual(count,
+            ClassicAssert.AreEqual(count,
                          _good_array.Length / LittleEndianConsts.SHORT_SIZE);
             stream = new MemoryStream(_bad_array);
             try
@@ -298,10 +298,10 @@ namespace TestCases.Util
             while ((stream.Length - stream.Position) > 0)
             {
                 int value = LittleEndian.ReadInt(stream);
-                Assert.AreEqual(value, expected_value);
+                ClassicAssert.AreEqual(value, expected_value);
                 count++;
             }
-            Assert.AreEqual(count, _good_array.Length / LittleEndianConsts.INT_SIZE);
+            ClassicAssert.AreEqual(count, _good_array.Length / LittleEndianConsts.INT_SIZE);
             stream = new MemoryStream(_bad_array);
             try
             {
@@ -325,10 +325,10 @@ namespace TestCases.Util
             while ((stream.Length - stream.Position) > 0)
             {
                 long value = LittleEndian.ReadLong(stream);
-                Assert.AreEqual(value, expected_value);
+                ClassicAssert.AreEqual(value, expected_value);
                 count++;
             }
-            Assert.AreEqual(count,
+            ClassicAssert.AreEqual(count,
                          _good_array.Length / LittleEndianConsts.LONG_SIZE);
             stream = new MemoryStream(_bad_array);
             try
@@ -350,7 +350,7 @@ namespace TestCases.Util
         //    byte[]      value  = LittleEndian.ReadFromStream(stream,
         //                             _good_array.Length);
 
-        //    Assert.IsTrue(ba_equivalent(value, _good_array, 0, _good_array.Length));
+        //    ClassicAssert.IsTrue(ba_equivalent(value, _good_array, 0, _good_array.Length));
         //    stream = new MemoryStream(_good_array);
         //    try
         //    {
@@ -367,7 +367,7 @@ namespace TestCases.Util
         [Test]
         public void TestUnsignedByteToInt()
         {
-            Assert.AreEqual(255, LittleEndian.UByteToInt(unchecked((byte)255)));
+            ClassicAssert.AreEqual(255, LittleEndian.UByteToInt(unchecked((byte)255)));
         }
 
         private bool ba_equivalent(byte [] received, byte [] expected,
@@ -389,7 +389,7 @@ namespace TestCases.Util
         [Test]
         public void TestUnsignedShort()
         {
-            Assert.AreEqual(0xffff, LittleEndian.GetUShort(new byte[] { unchecked((byte)0xff), unchecked((byte)0xff) }, 0));
+            ClassicAssert.AreEqual(0xffff, LittleEndian.GetUShort(new byte[] { unchecked((byte)0xff), unchecked((byte)0xff) }, 0));
         }
         
     }

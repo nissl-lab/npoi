@@ -17,7 +17,7 @@
 
 namespace TestCases.HSSF.Record.Chart
 {
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.Record;
     using NPOI.Util;
     using TestCases.HSSF.Record;
@@ -53,11 +53,11 @@ namespace TestCases.HSSF.Record.Chart
             {
                 throw new AssertionException("Identified bug 44693d");
             }
-            Assert.AreEqual(0, in1.Remaining);
-            Assert.AreEqual(24, record.RecordSize);
+            ClassicAssert.AreEqual(0, in1.Remaining);
+            ClassicAssert.AreEqual(24, record.RecordSize);
 
             byte[] data2 = record.Serialize();
-            Assert.IsTrue(Arrays.Equals(data, data2));
+            ClassicAssert.IsTrue(Arrays.Equals(data, data2));
         }
     }
 

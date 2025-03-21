@@ -23,7 +23,7 @@ namespace TestCases.XSSF.Streaming
     using NPOI.SS.UserModel;
     using NPOI.XSSF;
     using NPOI.XSSF.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using System;
     using TestCases.SS.UserModel;
 
@@ -59,7 +59,7 @@ namespace TestCases.XSSF.Streaming
                 IWorkbook swb = _testDataProvider.CreateWorkbook();
                 ICell sCell = swb.CreateSheet().CreateRow(0).CreateCell(0);
                 sCell.SetCellValue(str);
-                Assert.AreEqual(sCell.StringCellValue, str);
+                ClassicAssert.AreEqual(sCell.StringCellValue, str);
 
                 // read back as XSSF and check that xml:spaces="preserve" is Set
                 XSSFWorkbook xwb = (XSSFWorkbook)_testDataProvider.WriteOutAndReadBack(swb);
@@ -73,7 +73,7 @@ namespace TestCases.XSSF.Streaming
 
 
                 //write is1 to xml stream writer ,get the xml text and parse it and get space attr.
-                //Assert.AreEqual("preserve", t, "expected xml:spaces=\"preserve\" \"" + str + "\"");
+                //ClassicAssert.AreEqual("preserve", t, "expected xml:spaces=\"preserve\" \"" + str + "\"");
                 xwb.Close();
                 swb.Close();
             }

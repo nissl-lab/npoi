@@ -17,7 +17,7 @@
 
 using System;
 using System.Text;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using System.Collections.Generic;
 using NPOI.Util;
 using System.Reflection;
@@ -34,42 +34,42 @@ namespace TestCases
     {
         public static void AssertStartsWith(String actual, String prefix)
         {
-            Assert.IsNotNull(actual);
-            Assert.IsNotNull(prefix);
+            ClassicAssert.IsNotNull(actual);
+            ClassicAssert.IsNotNull(prefix);
             StringAssert.StartsWith(prefix, actual);
         }
 
         public static void AssertStartsWith(String message, String actual, String prefix)
         {
-            Assert.IsNotNull(message, actual);
-            Assert.IsNotNull(message, prefix);
+            ClassicAssert.IsNotNull(message, actual);
+            ClassicAssert.IsNotNull(message, prefix);
             StringAssert.StartsWith(prefix, actual, message);
         }
 
         public static void AssertEndsWith(String actual, String suffix)
         {
-            Assert.IsNotNull(actual);
-            Assert.IsNotNull(suffix);
+            ClassicAssert.IsNotNull(actual);
+            ClassicAssert.IsNotNull(suffix);
             StringAssert.EndsWith(suffix, actual);
         }
 
         public static void AssertContains(String actual, String expected)
         {
-            Assert.IsNotNull(actual);
-            Assert.IsNotNull(expected);
+            ClassicAssert.IsNotNull(actual);
+            ClassicAssert.IsNotNull(expected);
             StringAssert.Contains(expected, actual);
         }
         public static void AssertContains(String message, String actual, String expected)
         {
-            Assert.IsNotNull(actual, message);
-            Assert.IsNotNull(expected, message);
+            ClassicAssert.IsNotNull(actual, message);
+            ClassicAssert.IsNotNull(expected, message);
             StringAssert.Contains(expected, actual, message);
         }
 
         public static void AssertContainsIgnoreCase(String actual, String expected, CultureInfo locale)
         {
-            Assert.IsNotNull(actual);
-            Assert.IsNotNull(expected);
+            ClassicAssert.IsNotNull(actual);
+            ClassicAssert.IsNotNull(expected);
             string hay = actual.ToLower(locale);
             string n = expected.ToLower(locale);
             StringAssert.Contains(n, hay, "Unable to find expected text '" + expected + "' in1 text:\n" + actual);
@@ -81,8 +81,8 @@ namespace TestCases
 
         public static void AssertNotContained(String actual, String expected)
         {
-            Assert.IsNotNull(actual);
-            Assert.IsNotNull(expected);
+            ClassicAssert.IsNotNull(actual);
+            ClassicAssert.IsNotNull(expected);
             StringAssert.DoesNotContain(expected, actual, "Unexpectedly found text '" + expected + "' in text:\n" + actual);
         }
 
@@ -100,18 +100,18 @@ namespace TestCases
         }
         public static void AssertEquals<T>(T[] expected, T[] actual)
         {
-            Assert.AreEqual(expected.Length, actual.Length, "Non-matching lengths");
+            ClassicAssert.AreEqual(expected.Length, actual.Length, "Non-matching lengths");
             for(int i = 0; i < expected.Length; i++)
             {
-                Assert.AreEqual(expected[i], actual[i], "Mis-match at offset " + i);
+                ClassicAssert.AreEqual(expected[i], actual[i], "Mis-match at offset " + i);
             }
         }
         public static void AssertEquals(byte[] expected, byte[] actual)
         {
-            Assert.AreEqual(expected.Length, actual.Length, "Non-matching lengths");
+            ClassicAssert.AreEqual(expected.Length, actual.Length, "Non-matching lengths");
             for(int i = 0; i < expected.Length; i++)
             {
-                Assert.AreEqual(expected[i], actual[i], "Mis-match at offset " + i);
+                ClassicAssert.AreEqual(expected[i], actual[i], "Mis-match at offset " + i);
             }
         }
         public static void AssertContains<T>(T needle, T[] haystack)
@@ -148,7 +148,7 @@ namespace TestCases
 
         public static R GetFieldValue<R, T>(Type clazz, T instance, Type fieldType, String fieldName)
         {
-            Assert.IsTrue(clazz.FullName.StartsWith("NPOI"), "Reflection of private fields is only allowed for POI classes.");
+            ClassicAssert.IsTrue(clazz.FullName.StartsWith("NPOI"), "Reflection of private fields is only allowed for POI classes.");
             try
             {
                 FieldInfo fieldInfo = clazz.GetField(fieldName, BindingFlags.NonPublic | BindingFlags.GetField | BindingFlags.Instance);
@@ -173,14 +173,14 @@ namespace TestCases
 
         public static void AssertBetween(String message, int value, int min, int max)
         {
-            Assert.IsTrue(min <= value, message + ": " + value + " is less than the minimum value of " + min);
-            Assert.IsTrue(value <= max, message + ": " + value + " is greater than the maximum value of " + max);
+            ClassicAssert.IsTrue(min <= value, message + ": " + value + " is less than the minimum value of " + min);
+            ClassicAssert.IsTrue(value <= max, message + ": " + value + " is greater than the maximum value of " + max);
         }
 
         public static void AssertStrictlyBetween(String message, int value, int min, int max)
         {
-            Assert.IsTrue(min < value, message + ": " + value + " is less than or equal to the minimum value of " + min);
-            Assert.IsTrue(value < max, message + ": " + value + " is greater than or equal to the maximum value of " + max);
+            ClassicAssert.IsTrue(min < value, message + ": " + value + " is less than or equal to the minimum value of " + min);
+            ClassicAssert.IsTrue(value < max, message + ": " + value + " is greater than or equal to the maximum value of " + max);
         }
     }
 }

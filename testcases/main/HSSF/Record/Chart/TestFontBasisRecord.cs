@@ -21,7 +21,7 @@ namespace TestCases.HSSF.Record.Chart
     using System;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.Chart;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     /**
      * Tests the serialization and deserialization of the FontBasisRecord
@@ -51,14 +51,14 @@ namespace TestCases.HSSF.Record.Chart
         {
 
             FontBasisRecord record = new FontBasisRecord(TestcaseRecordInputStream.Create((short)0x1060, data));
-            Assert.AreEqual(0x1a28, record.XBasis);
-            Assert.AreEqual(0x0f9c, record.YBasis);
-            Assert.AreEqual(0xc8, record.HeightBasis);
-            Assert.AreEqual(0x00, record.Scale);
-            Assert.AreEqual(0x05, record.IndexToFontTable);
+            ClassicAssert.AreEqual(0x1a28, record.XBasis);
+            ClassicAssert.AreEqual(0x0f9c, record.YBasis);
+            ClassicAssert.AreEqual(0xc8, record.HeightBasis);
+            ClassicAssert.AreEqual(0x00, record.Scale);
+            ClassicAssert.AreEqual(0x05, record.IndexToFontTable);
 
 
-            Assert.AreEqual(14, record.RecordSize);
+            ClassicAssert.AreEqual(14, record.RecordSize);
         }
         [Test]
         public void TestStore()
@@ -71,9 +71,9 @@ namespace TestCases.HSSF.Record.Chart
             record.IndexToFontTable = ((short)0x05);
 
             byte[] recordBytes = record.Serialize();
-            Assert.AreEqual(recordBytes.Length - 4, data.Length);
+            ClassicAssert.AreEqual(recordBytes.Length - 4, data.Length);
             for (int i = 0; i < data.Length; i++)
-                Assert.AreEqual(data[i], recordBytes[i + 4], "At offset " + i);
+                ClassicAssert.AreEqual(data[i], recordBytes[i + 4], "At offset " + i);
         }
     }
 }

@@ -19,7 +19,7 @@ namespace TestCases.HSSF.Record.Crypto
 {
     using System;
     using System.Text;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.Util;
     using TestCases.Exceptions;
     using NPOI.HSSF.Record.Crypto;

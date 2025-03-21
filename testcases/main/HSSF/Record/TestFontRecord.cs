@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using NPOI.HSSF.Record;
 using NPOI.Util;
 using NPOI.SS.UserModel;
@@ -29,21 +29,21 @@ namespace TestCases.HSSF.Record
         {
 
             FontRecord record = new FontRecord(TestcaseRecordInputStream.Create(0x31, data));
-            Assert.AreEqual(0xc8, record.FontHeight);
-            Assert.AreEqual(0x00, record.Attributes);
-            Assert.IsFalse(record.IsItalic);
-            Assert.IsFalse(record.IsStrikeout);
-            Assert.IsFalse(record.IsMacoutlined);
-            Assert.IsFalse(record.IsMacshadowed);
-            Assert.AreEqual(0x7fff, record.ColorPaletteIndex);
-            Assert.AreEqual(0x190, record.BoldWeight);
-            Assert.AreEqual(FontSuperScript.None, record.SuperSubScript);
-            Assert.AreEqual(FontUnderlineType.None, record.Underline);
-            Assert.AreEqual(0x00, record.Family);
-            Assert.AreEqual(0x00, record.Charset);
-            Assert.AreEqual("Arial", record.FontName);
+            ClassicAssert.AreEqual(0xc8, record.FontHeight);
+            ClassicAssert.AreEqual(0x00, record.Attributes);
+            ClassicAssert.IsFalse(record.IsItalic);
+            ClassicAssert.IsFalse(record.IsStrikeout);
+            ClassicAssert.IsFalse(record.IsMacoutlined);
+            ClassicAssert.IsFalse(record.IsMacshadowed);
+            ClassicAssert.AreEqual(0x7fff, record.ColorPaletteIndex);
+            ClassicAssert.AreEqual(0x190, record.BoldWeight);
+            ClassicAssert.AreEqual(FontSuperScript.None, record.SuperSubScript);
+            ClassicAssert.AreEqual(FontUnderlineType.None, record.Underline);
+            ClassicAssert.AreEqual(0x00, record.Family);
+            ClassicAssert.AreEqual(0x00, record.Charset);
+            ClassicAssert.AreEqual("Arial", record.FontName);
 
-            Assert.AreEqual(21 + 4, record.RecordSize);
+            ClassicAssert.AreEqual(21 + 4, record.RecordSize);
         }
         [Test]
         public void TestStore()
@@ -86,9 +86,9 @@ namespace TestCases.HSSF.Record
             other.CloneStyleFrom(base1);
 
             byte[] recordBytes = other.Serialize();
-            Assert.AreEqual(recordBytes.Length - 4, data.Length);
+            ClassicAssert.AreEqual(recordBytes.Length - 4, data.Length);
             for (int i = 0; i < data.Length; i++)
-                Assert.AreEqual(data[i], recordBytes[i + 4], "At offset " + i);
+                ClassicAssert.AreEqual(data[i], recordBytes[i + 4], "At offset " + i);
         }
         [Test]
         public void TestSameProperties()
@@ -96,17 +96,17 @@ namespace TestCases.HSSF.Record
             FontRecord f1 = new FontRecord(TestcaseRecordInputStream.Create(0x31, data));
             FontRecord f2 = new FontRecord(TestcaseRecordInputStream.Create(0x31, data));
 
-            Assert.IsTrue(f1.SameProperties(f2));
+            ClassicAssert.IsTrue(f1.SameProperties(f2));
 
             f2.FontName = ("Arial2");
-            Assert.IsFalse(f1.SameProperties(f2));
+            ClassicAssert.IsFalse(f1.SameProperties(f2));
             f2.FontName = ("Arial");
-            Assert.IsTrue(f1.SameProperties(f2));
+            ClassicAssert.IsTrue(f1.SameProperties(f2));
 
             f2.FontHeight = ((short)11);
-            Assert.IsFalse(f1.SameProperties(f2));
+            ClassicAssert.IsFalse(f1.SameProperties(f2));
             f2.FontHeight = ((short)0xc8);
-            Assert.IsTrue(f1.SameProperties(f2));
+            ClassicAssert.IsTrue(f1.SameProperties(f2));
         }
 
         /**
@@ -129,9 +129,9 @@ namespace TestCases.HSSF.Record
             {
                 throw new AssertionException("Identified bug 47250");
             }
-            Assert.AreEqual(0, in1.Available());
+            ClassicAssert.AreEqual(0, in1.Available());
 
-            Assert.AreEqual(0, fr.FontName.Length);
+            ClassicAssert.AreEqual(0, fr.FontName.Length);
             byte[] recordBytes = fr.Serialize();
             TestcaseRecordInputStream.ConfirmRecordEncoding(SID, emptyNameData, recordBytes);
         }

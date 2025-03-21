@@ -18,7 +18,7 @@ namespace TestCases.HSSF.UserModel
 {
     using System;
     using NPOI.HSSF.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using System.IO;
     using TestCases.HSSF;
     using NPOI.SS.UserModel;
@@ -49,8 +49,8 @@ namespace TestCases.HSSF.UserModel
             textbox.HorizontalAlignment = HorizontalTextAlignment.Center;
             textbox.VerticalAlignment = VerticalTextAlignment.Center;
 
-            Assert.AreEqual(HorizontalTextAlignment.Center, textbox.HorizontalAlignment);
-            Assert.AreEqual(VerticalTextAlignment.Center, textbox.VerticalAlignment);
+            ClassicAssert.AreEqual(HorizontalTextAlignment.Center, textbox.HorizontalAlignment);
+            ClassicAssert.AreEqual(VerticalTextAlignment.Center, textbox.VerticalAlignment);
         }
 
         /**
@@ -66,12 +66,12 @@ namespace TestCases.HSSF.UserModel
 
             HSSFTextbox textbox1 = patriarch.CreateTextbox(new HSSFClientAnchor(0, 0, 0, 0, 1, 1, 3, 3)) as HSSFTextbox;
             HSSFRichTextString rt1 = new HSSFRichTextString("Hello, World!");
-            Assert.AreEqual(0, rt1.NumFormattingRuns);
+            ClassicAssert.AreEqual(0, rt1.NumFormattingRuns);
             textbox1.String=(rt1);
 
             HSSFRichTextString rt2 = (HSSFRichTextString)textbox1.String;
-            Assert.AreEqual(1, rt2.NumFormattingRuns);
-            Assert.AreEqual(HSSFRichTextString.NO_FONT, rt2.GetFontOfFormattingRun(0));
+            ClassicAssert.AreEqual(1, rt2.NumFormattingRuns);
+            ClassicAssert.AreEqual(HSSFRichTextString.NO_FONT, rt2.GetFontOfFormattingRun(0));
         }
 
     }

@@ -22,7 +22,7 @@ namespace TestCases.HSSF.UserModel
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using System;
     using TestCases.HSSF;
     using TestCases.SS.Formula;
@@ -59,8 +59,8 @@ namespace TestCases.HSSF.UserModel
             ICell cell = sheet.GetRow(8).GetCell(0);
             HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
             CellValue cv = fe.Evaluate(cell);
-            Assert.AreEqual(CellType.Numeric, cv.CellType);
-            Assert.AreEqual(3.72, cv.NumberValue, 0.0);
+            ClassicAssert.AreEqual(CellType.Numeric, cv.CellType);
+            ClassicAssert.AreEqual(3.72, cv.NumberValue, 0.0);
 
             wb.Close();
         }
@@ -93,7 +93,7 @@ namespace TestCases.HSSF.UserModel
                     Assert.Fail("Identified bug 46479a");
                 }
             }
-            Assert.AreEqual(3.5, cellB1.NumericCellValue, 0.0);
+            ClassicAssert.AreEqual(3.5, cellB1.NumericCellValue, 0.0);
 
             wb.Close();
         }
@@ -137,8 +137,8 @@ namespace TestCases.HSSF.UserModel
             try
             {
                 value = hsf.Evaluate(cellA1);
-                Assert.AreEqual(CellType.Numeric, value.CellType);
-                Assert.AreEqual(5.33, value.NumberValue, 0.0);
+                ClassicAssert.AreEqual(CellType.Numeric, value.CellType);
+                ClassicAssert.AreEqual(5.33, value.NumberValue, 0.0);
             }
             catch (Exception e)
             {
@@ -203,8 +203,8 @@ namespace TestCases.HSSF.UserModel
                 // Without short-circuit-if evaluation, evaluating cell 'A1' takes 3 extra evaluations (for D1,E1,F1)
                 Assert.Fail("Identifed bug 48195 - Formula evaluator should short-circuit IF() calculations.");
             }
-            Assert.AreEqual(3, evalCount);
-            Assert.AreEqual(2.0, ((NumberEval)ve).NumberValue, 0D);
+            ClassicAssert.AreEqual(3, evalCount);
+            ClassicAssert.AreEqual(2.0, ((NumberEval)ve).NumberValue, 0D);
 
             wb.Close();
         }
@@ -221,24 +221,24 @@ namespace TestCases.HSSF.UserModel
 
             // VLookup on a name in another file
             cell = wb1.GetSheetAt(0).GetRow(1).GetCell(2);
-            Assert.AreEqual(CellType.Formula, cell.CellType);
-            Assert.AreEqual(CellType.Numeric, cell.CachedFormulaResultType);
-            Assert.AreEqual(12.30, cell.NumericCellValue, 0.0001);
+            ClassicAssert.AreEqual(CellType.Formula, cell.CellType);
+            ClassicAssert.AreEqual(CellType.Numeric, cell.CachedFormulaResultType);
+            ClassicAssert.AreEqual(12.30, cell.NumericCellValue, 0.0001);
             // WARNING - this is wrong!
             // The file name should be Showing, but bug #45970 is fixed
             //  we seem to loose it
-            Assert.AreEqual("VLOOKUP(PART,COSTS,2,FALSE)", cell.CellFormula);
+            ClassicAssert.AreEqual("VLOOKUP(PART,COSTS,2,FALSE)", cell.CellFormula);
 
 
             // Simple reference to a name in another file
             cell = wb1.GetSheetAt(0).GetRow(1).GetCell(4);
-            Assert.AreEqual(CellType.Formula, cell.CellType);
-            Assert.AreEqual(CellType.Numeric, cell.CachedFormulaResultType);
-            Assert.AreEqual(36.90, cell.NumericCellValue, 0.0001);
+            ClassicAssert.AreEqual(CellType.Formula, cell.CellType);
+            ClassicAssert.AreEqual(CellType.Numeric, cell.CachedFormulaResultType);
+            ClassicAssert.AreEqual(36.90, cell.NumericCellValue, 0.0001);
             // WARNING - this is wrong!
             // The file name should be Showing, but bug #45970 is fixed
             //  we seem to loose it
-            Assert.AreEqual("Cost*Markup_Cost", cell.CellFormula);
+            ClassicAssert.AreEqual("Cost*Markup_Cost", cell.CellFormula);
 
 
             // Evaluate the cells
@@ -260,26 +260,26 @@ namespace TestCases.HSSF.UserModel
 
             // Re-check VLOOKUP one
             cell = wb1.GetSheetAt(0).GetRow(1).GetCell(2);
-            Assert.AreEqual(CellType.Formula, cell.CellType);
-            Assert.AreEqual(CellType.Numeric, cell.CachedFormulaResultType);
-            Assert.AreEqual(12.30, cell.NumericCellValue, 0.0001);
+            ClassicAssert.AreEqual(CellType.Formula, cell.CellType);
+            ClassicAssert.AreEqual(CellType.Numeric, cell.CachedFormulaResultType);
+            ClassicAssert.AreEqual(12.30, cell.NumericCellValue, 0.0001);
 
             // Re-check ref one
             cell = wb1.GetSheetAt(0).GetRow(1).GetCell(4);
-            Assert.AreEqual(CellType.Formula, cell.CellType);
-            Assert.AreEqual(CellType.Numeric, cell.CachedFormulaResultType);
-            Assert.AreEqual(36.90, cell.NumericCellValue, 0.0001);
+            ClassicAssert.AreEqual(CellType.Formula, cell.CellType);
+            ClassicAssert.AreEqual(CellType.Numeric, cell.CachedFormulaResultType);
+            ClassicAssert.AreEqual(36.90, cell.NumericCellValue, 0.0001);
 
             // Add a formula that refers to one of the existing external workbooks
             cell = wb1.GetSheetAt(0).GetRow(1).CreateCell(40);
             cell.CellFormula = (/*setter*/"Cost*[XRefCalcData.xls]MarkupSheet!$B$1");
 
             // Check is was stored correctly
-            Assert.AreEqual("Cost*[XRefCalcData.xls]MarkupSheet!$B$1", cell.CellFormula);
+            ClassicAssert.AreEqual("Cost*[XRefCalcData.xls]MarkupSheet!$B$1", cell.CellFormula);
 
             // Check it Evaluates correctly
             eval.EvaluateFormulaCell(cell);
-            Assert.AreEqual(24.60 * 1.8, cell.NumericCellValue, 0);
+            ClassicAssert.AreEqual(24.60 * 1.8, cell.NumericCellValue, 0);
 
 
             // Try to add a formula for a new external workbook, won't be allowed to start
@@ -298,7 +298,7 @@ namespace TestCases.HSSF.UserModel
 
             // Now add a formula that refers to our new workbook
             cell.CellFormula = (/*setter*/"[alt.xls]Sheet0!$A$1");
-            Assert.AreEqual("[alt.xls]Sheet0!$A$1", cell.CellFormula);
+            ClassicAssert.AreEqual("[alt.xls]Sheet0!$A$1", cell.CellFormula);
 
             // Evaluate it, without a link to that workbook
             try
@@ -318,7 +318,7 @@ namespace TestCases.HSSF.UserModel
               }
             );
             eval.EvaluateFormulaCell(cell);
-            Assert.AreEqual("In another workbook", cell.StringCellValue);
+            ClassicAssert.AreEqual("In another workbook", cell.StringCellValue);
 
 
             // Save and re-load
@@ -335,15 +335,15 @@ namespace TestCases.HSSF.UserModel
 
             // Check the one referring to the previously existing workbook behaves
             cell = wb4.GetSheetAt(0).GetRow(1).GetCell(40);
-            Assert.AreEqual("Cost*[XRefCalcData.xls]MarkupSheet!$B$1", cell.CellFormula);
+            ClassicAssert.AreEqual("Cost*[XRefCalcData.xls]MarkupSheet!$B$1", cell.CellFormula);
             eval.EvaluateFormulaCell(cell);
-            Assert.AreEqual(24.60 * 1.8, cell.NumericCellValue);
+            ClassicAssert.AreEqual(24.60 * 1.8, cell.NumericCellValue);
 
             // Now check the newly Added reference
             cell = wb4.GetSheetAt(0).GetRow(1).GetCell(42);
-            Assert.AreEqual("[alt.xls]Sheet0!$A$1", cell.CellFormula);
+            ClassicAssert.AreEqual("[alt.xls]Sheet0!$A$1", cell.CellFormula);
             eval.EvaluateFormulaCell(cell);
-            Assert.AreEqual("In another workbook", cell.StringCellValue);
+            ClassicAssert.AreEqual("In another workbook", cell.StringCellValue);
 
             wb4.Close();
             wb3.Close();

@@ -1,7 +1,7 @@
 ﻿using System;
 using NPOI;
 using NPOI.POIFS.Crypt;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 
 namespace TestCases.POIFS.Crypt
 {
@@ -11,15 +11,15 @@ namespace TestCases.POIFS.Crypt
         [Test]
         public void Test()
         {
-            Assert.AreEqual(128, CipherAlgorithm.aes128.defaultKeySize);
+            ClassicAssert.AreEqual(128, CipherAlgorithm.aes128.defaultKeySize);
 
             foreach (CipherAlgorithm alg in CipherAlgorithm.Values)
             {
-                Assert.AreEqual(alg, CipherAlgorithm.ValueOf(alg.ToString()));
+                ClassicAssert.AreEqual(alg, CipherAlgorithm.ValueOf(alg.ToString()));
             }
 
-            Assert.AreEqual(CipherAlgorithm.aes128, CipherAlgorithm.FromEcmaId(0x660E));
-            Assert.AreEqual(CipherAlgorithm.aes192, CipherAlgorithm.FromXmlId("AES", 192));
+            ClassicAssert.AreEqual(CipherAlgorithm.aes128, CipherAlgorithm.FromEcmaId(0x660E));
+            ClassicAssert.AreEqual(CipherAlgorithm.aes192, CipherAlgorithm.FromXmlId("AES", 192));
 
             try
             {

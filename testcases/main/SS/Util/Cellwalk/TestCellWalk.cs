@@ -21,7 +21,7 @@ namespace TestCases.SS.Util.CellWalk
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Util;
     using System;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.SS.Util.CellWalk;
     [TestFixture]
     public class TestCellWalk
@@ -45,9 +45,9 @@ namespace TestCases.SS.Util.CellWalk
             countCellHandler.reset();
             cellWalk.Traverse(countCellHandler);
 
-            Assert.AreEqual(4, countCellHandler.GetVisitedCellsNumber());
+            ClassicAssert.AreEqual(4, countCellHandler.GetVisitedCellsNumber());
             /* 1 + 2 + 5 + 9 */
-            Assert.AreEqual(17L, countCellHandler.GetOrdinalNumberSum());
+            ClassicAssert.AreEqual(17L, countCellHandler.GetOrdinalNumberSum());
         }
 
 

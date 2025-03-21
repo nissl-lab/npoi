@@ -17,7 +17,7 @@
 
 using NPOI.SS.UserModel;
 using NPOI.OpenXmlFormats.Spreadsheet;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using NPOI.XSSF.UserModel.Extensions;
 
 namespace TestCases.XSSF.UserModel.Extensions
@@ -41,14 +41,14 @@ namespace TestCases.XSSF.UserModel.Extensions
             bottom.style = (ST_BorderStyle.thin);
 
             XSSFCellBorder cellBorderStyle = new XSSFCellBorder(border);
-            Assert.AreEqual("DashDot", cellBorderStyle.GetBorderStyle(BorderSide.TOP).ToString());
+            ClassicAssert.AreEqual("DashDot", cellBorderStyle.GetBorderStyle(BorderSide.TOP).ToString());
 
-            Assert.AreEqual("None", cellBorderStyle.GetBorderStyle(BorderSide.RIGHT).ToString());
-            Assert.AreEqual(BorderStyle.None, cellBorderStyle.GetBorderStyle(BorderSide.RIGHT));
+            ClassicAssert.AreEqual("None", cellBorderStyle.GetBorderStyle(BorderSide.RIGHT).ToString());
+            ClassicAssert.AreEqual(BorderStyle.None, cellBorderStyle.GetBorderStyle(BorderSide.RIGHT));
 
-            Assert.AreEqual("Thin", cellBorderStyle.GetBorderStyle(BorderSide.BOTTOM).ToString());
+            ClassicAssert.AreEqual("Thin", cellBorderStyle.GetBorderStyle(BorderSide.BOTTOM).ToString());
 
-            Assert.AreEqual(BorderStyle.Thin, cellBorderStyle.GetBorderStyle(BorderSide.BOTTOM));
+            ClassicAssert.AreEqual(BorderStyle.Thin, cellBorderStyle.GetBorderStyle(BorderSide.BOTTOM));
         }
 
     }

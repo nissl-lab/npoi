@@ -17,7 +17,7 @@
 
 using NPOI.SS.UserModel;
 using NPOI.XSSF.Streaming;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 
 namespace TestCases.XSSF.Streaming
 {
@@ -36,42 +36,42 @@ namespace TestCases.XSSF.Streaming
         public void IfCreatingCellShouldReturnBlankCell()
         {
             var result = _objectToTest.CreateCell(0);
-            Assert.AreEqual(CellType.Blank, result.CellType);
+            ClassicAssert.AreEqual(CellType.Blank, result.CellType);
         }
 
         [Test]
         public void IfCreatingCellWithTypeBooleanShouldReturnCellofTypeBoolean()
         {
             var result = _objectToTest.CreateCell(0, CellType.Boolean);
-            Assert.AreEqual(CellType.Boolean, result.CellType);
+            ClassicAssert.AreEqual(CellType.Boolean, result.CellType);
         }
 
         [Test]
         public void IfCreatingCellWithTypeFormulaShouldReturnCellofTypeFormula()
         {
             var result = _objectToTest.CreateCell(0, CellType.Formula);
-            Assert.AreEqual(CellType.Formula, result.CellType);
+            ClassicAssert.AreEqual(CellType.Formula, result.CellType);
         }
 
         [Test]
         public void IfCreatingCellWithTypeErrorShouldReturnCellofTypeError()
         {
             var result = _objectToTest.CreateCell(0, CellType.Error);
-            Assert.AreEqual(CellType.Error, result.CellType);
+            ClassicAssert.AreEqual(CellType.Error, result.CellType);
         }
 
         [Test]
         public void IfCreatingCellWithTypeNumericShouldReturnCellofTypeNumeric()
         {
             var result = _objectToTest.CreateCell(0, CellType.Numeric);
-            Assert.AreEqual(CellType.Numeric, result.CellType);
+            ClassicAssert.AreEqual(CellType.Numeric, result.CellType);
         }
 
         [Test]
         public void IfCreatingCellWithTypeStringShouldReturnCellofTypeString()
         {
             var result = _objectToTest.CreateCell(0, CellType.String);
-            Assert.AreEqual(CellType.String, result.CellType);
+            ClassicAssert.AreEqual(CellType.String, result.CellType);
         }
 
         //TODO add test for cell out of bounds.

@@ -21,7 +21,7 @@ namespace TestCases.HSSF.UserModel
     using NPOI.HSSF.UserModel;
     using NPOI.Util;
     using NPOI.SS.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     [TestFixture]
     public class TestUnicodeWorkbook
@@ -52,16 +52,16 @@ namespace TestCases.HSSF.UserModel
             c.SetCellValue(new HSSFRichTextString("\u00e4"));
 
             //Confirm that the sring will be compressed
-            Assert.AreEqual(((HSSFRichTextString)c.RichStringCellValue).UnicodeString.OptionFlags, 0);
+            ClassicAssert.AreEqual(((HSSFRichTextString)c.RichStringCellValue).UnicodeString.OptionFlags, 0);
 
             wb = HSSFTestDataSamples.WriteOutAndReadBack(wb);
 
             //Test the sheetname
             s = wb.GetSheet("Test");
-            Assert.IsNotNull(s);
+            ClassicAssert.IsNotNull(s);
 
             c = r.GetCell(1);
-            Assert.AreEqual(c.RichStringCellValue.String, "\u00e4");
+            ClassicAssert.AreEqual(c.RichStringCellValue.String, "\u00e4");
         }
 
     }

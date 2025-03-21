@@ -22,7 +22,7 @@ namespace TestCases.XSSF.Model
     using NPOI.XSSF;
     using NPOI.XSSF.Model;
     using NPOI.XSSF.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
 
     [TestFixture]
@@ -32,41 +32,41 @@ namespace TestCases.XSSF.Model
         public void None()
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("SampleSS.xlsx");
-            Assert.IsNotNull(wb.ExternalLinksTable);
-            Assert.AreEqual(0, wb.ExternalLinksTable.Count);
+            ClassicAssert.IsNotNull(wb.ExternalLinksTable);
+            ClassicAssert.AreEqual(0, wb.ExternalLinksTable.Count);
         }
 
         [Test]
         public void BasicRead()
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("ref-56737.xlsx");
-            Assert.IsNotNull(wb.ExternalLinksTable);
+            ClassicAssert.IsNotNull(wb.ExternalLinksTable);
             IName name = null;
 
-            Assert.AreEqual(1, wb.ExternalLinksTable.Count);
+            ClassicAssert.AreEqual(1, wb.ExternalLinksTable.Count);
 
             ExternalLinksTable links = wb.ExternalLinksTable[0];
 
-            Assert.AreEqual(3, links.SheetNames.Count);
-            Assert.AreEqual(2, links.DefinedNames.Count);
+            ClassicAssert.AreEqual(3, links.SheetNames.Count);
+            ClassicAssert.AreEqual(2, links.DefinedNames.Count);
 
-            Assert.AreEqual("Uses", links.SheetNames[(0)]);
-            Assert.AreEqual("Defines", links.SheetNames[(1)]);
-            Assert.AreEqual("56737", links.SheetNames[(2)]);
+            ClassicAssert.AreEqual("Uses", links.SheetNames[(0)]);
+            ClassicAssert.AreEqual("Defines", links.SheetNames[(1)]);
+            ClassicAssert.AreEqual("56737", links.SheetNames[(2)]);
 
             name = links.DefinedNames[(0)];
-            Assert.AreEqual("NR_Global_B2", name.NameName);
-            Assert.AreEqual(-1, name.SheetIndex);
-            Assert.AreEqual(null, name.SheetName);
-            Assert.AreEqual("'Defines'!$B$2", name.RefersToFormula);
+            ClassicAssert.AreEqual("NR_Global_B2", name.NameName);
+            ClassicAssert.AreEqual(-1, name.SheetIndex);
+            ClassicAssert.AreEqual(null, name.SheetName);
+            ClassicAssert.AreEqual("'Defines'!$B$2", name.RefersToFormula);
 
             name = links.DefinedNames[(1)];
-            Assert.AreEqual("NR_To_A1", name.NameName);
-            Assert.AreEqual(1, name.SheetIndex);
-            Assert.AreEqual("Defines", name.SheetName);
-            Assert.AreEqual("'Defines'!$A$1", name.RefersToFormula);
+            ClassicAssert.AreEqual("NR_To_A1", name.NameName);
+            ClassicAssert.AreEqual(1, name.SheetIndex);
+            ClassicAssert.AreEqual("Defines", name.SheetName);
+            ClassicAssert.AreEqual("'Defines'!$A$1", name.RefersToFormula);
 
-            Assert.AreEqual("56737.xlsx", links.LinkedFileName);
+            ClassicAssert.AreEqual("56737.xlsx", links.LinkedFileName);
         }
 
         [Test]
@@ -78,74 +78,74 @@ namespace TestCases.XSSF.Model
             name.RefersToFormula = (/*setter*/"$A$1");
 
             wb = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
-            Assert.AreEqual(1, wb.ExternalLinksTable.Count);
+            ClassicAssert.AreEqual(1, wb.ExternalLinksTable.Count);
             ExternalLinksTable links = wb.ExternalLinksTable[(0)];
 
             name = links.DefinedNames[(0)];
-            Assert.AreEqual("NR_Global_B2", name.NameName);
-            Assert.AreEqual(-1, name.SheetIndex);
-            Assert.AreEqual(null, name.SheetName);
-            Assert.AreEqual("'Defines'!$B$2", name.RefersToFormula);
+            ClassicAssert.AreEqual("NR_Global_B2", name.NameName);
+            ClassicAssert.AreEqual(-1, name.SheetIndex);
+            ClassicAssert.AreEqual(null, name.SheetName);
+            ClassicAssert.AreEqual("'Defines'!$B$2", name.RefersToFormula);
 
             name = links.DefinedNames[(1)];
-            Assert.AreEqual("Testing", name.NameName);
-            Assert.AreEqual(1, name.SheetIndex);
-            Assert.AreEqual("Defines", name.SheetName);
-            Assert.AreEqual("$A$1", name.RefersToFormula);
+            ClassicAssert.AreEqual("Testing", name.NameName);
+            ClassicAssert.AreEqual(1, name.SheetIndex);
+            ClassicAssert.AreEqual("Defines", name.SheetName);
+            ClassicAssert.AreEqual("$A$1", name.RefersToFormula);
         }
 
         [Test]
         public void readWithReferencesToTwoExternalBooks() {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("ref2-56737.xlsx");
 
-            Assert.IsNotNull(wb.ExternalLinksTable);
+            ClassicAssert.IsNotNull(wb.ExternalLinksTable);
             IName name = null;
 
-            Assert.AreEqual(2, wb.ExternalLinksTable.Count);
+            ClassicAssert.AreEqual(2, wb.ExternalLinksTable.Count);
 
             // Check the first one, links to 56737.xlsx
             ExternalLinksTable links = wb.ExternalLinksTable[0];
-            Assert.AreEqual("56737.xlsx", links.LinkedFileName);
-            Assert.AreEqual(3, links.SheetNames.Count);
-            Assert.AreEqual(2, links.DefinedNames.Count);
+            ClassicAssert.AreEqual("56737.xlsx", links.LinkedFileName);
+            ClassicAssert.AreEqual(3, links.SheetNames.Count);
+            ClassicAssert.AreEqual(2, links.DefinedNames.Count);
 
-            Assert.AreEqual("Uses", links.SheetNames[0]);
-            Assert.AreEqual("Defines", links.SheetNames[1]);
-            Assert.AreEqual("56737", links.SheetNames[2]);
+            ClassicAssert.AreEqual("Uses", links.SheetNames[0]);
+            ClassicAssert.AreEqual("Defines", links.SheetNames[1]);
+            ClassicAssert.AreEqual("56737", links.SheetNames[2]);
 
             name = links.DefinedNames[0];
-            Assert.AreEqual("NR_Global_B2", name.NameName);
-            Assert.AreEqual(-1, name.SheetIndex);
-            Assert.AreEqual(null, name.SheetName);
-            Assert.AreEqual("'Defines'!$B$2", name.RefersToFormula);
+            ClassicAssert.AreEqual("NR_Global_B2", name.NameName);
+            ClassicAssert.AreEqual(-1, name.SheetIndex);
+            ClassicAssert.AreEqual(null, name.SheetName);
+            ClassicAssert.AreEqual("'Defines'!$B$2", name.RefersToFormula);
 
             name = links.DefinedNames[1];
-            Assert.AreEqual("NR_To_A1", name.NameName);
-            Assert.AreEqual(1, name.SheetIndex);
-            Assert.AreEqual("Defines", name.SheetName);
-            Assert.AreEqual("'Defines'!$A$1", name.RefersToFormula);
+            ClassicAssert.AreEqual("NR_To_A1", name.NameName);
+            ClassicAssert.AreEqual(1, name.SheetIndex);
+            ClassicAssert.AreEqual("Defines", name.SheetName);
+            ClassicAssert.AreEqual("'Defines'!$A$1", name.RefersToFormula);
 
 
             // Check the second one, links to 56737.xls, slightly differently
             links = wb.ExternalLinksTable[1];
-            Assert.AreEqual("56737.xls", links.LinkedFileName);
-            Assert.AreEqual(2, links.SheetNames.Count);
-            Assert.AreEqual(2, links.DefinedNames.Count);
+            ClassicAssert.AreEqual("56737.xls", links.LinkedFileName);
+            ClassicAssert.AreEqual(2, links.SheetNames.Count);
+            ClassicAssert.AreEqual(2, links.DefinedNames.Count);
 
-            Assert.AreEqual("Uses", links.SheetNames[0]);
-            Assert.AreEqual("Defines", links.SheetNames[1]);
+            ClassicAssert.AreEqual("Uses", links.SheetNames[0]);
+            ClassicAssert.AreEqual("Defines", links.SheetNames[1]);
 
             name = links.DefinedNames[0];
-            Assert.AreEqual("NR_Global_B2", name.NameName);
-            Assert.AreEqual(-1, name.SheetIndex);
-            Assert.AreEqual(null, name.SheetName);
-            Assert.AreEqual("'Defines'!$B$2", name.RefersToFormula);
+            ClassicAssert.AreEqual("NR_Global_B2", name.NameName);
+            ClassicAssert.AreEqual(-1, name.SheetIndex);
+            ClassicAssert.AreEqual(null, name.SheetName);
+            ClassicAssert.AreEqual("'Defines'!$B$2", name.RefersToFormula);
 
             name = links.DefinedNames[1];
-            Assert.AreEqual("NR_To_A1", name.NameName);
-            Assert.AreEqual(1, name.SheetIndex);
-            Assert.AreEqual("Defines", name.SheetName);
-            Assert.AreEqual("'Defines'!$A$1", name.RefersToFormula);
+            ClassicAssert.AreEqual("NR_To_A1", name.NameName);
+            ClassicAssert.AreEqual(1, name.SheetIndex);
+            ClassicAssert.AreEqual("Defines", name.SheetName);
+            ClassicAssert.AreEqual("'Defines'!$A$1", name.RefersToFormula);
         }
     }
 

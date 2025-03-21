@@ -20,7 +20,7 @@ namespace TestCases.SS.Formula.Atp
     using System;
     using NPOI.SS.Formula.Atp;
     using NPOI.SS.Formula.Eval;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     /**
      * @author jfaenomoto@gmail.com
@@ -38,7 +38,7 @@ namespace TestCases.SS.Formula.Atp
             }
             catch (EvaluationException e)
             {
-                Assert.AreEqual(ErrorEval.VALUE_INVALID, e.GetErrorEval());
+                ClassicAssert.AreEqual(ErrorEval.VALUE_INVALID, e.GetErrorEval());
             }
         }
 
@@ -52,7 +52,7 @@ namespace TestCases.SS.Formula.Atp
             }
             catch (EvaluationException e)
             {
-                Assert.AreEqual(ErrorEval.VALUE_INVALID, e.GetErrorEval());
+                ClassicAssert.AreEqual(ErrorEval.VALUE_INVALID, e.GetErrorEval());
             }
         }
 
@@ -66,7 +66,7 @@ namespace TestCases.SS.Formula.Atp
             }
             catch (EvaluationException e)
             {
-                Assert.AreEqual(ErrorEval.VALUE_INVALID, e.GetErrorEval());
+                ClassicAssert.AreEqual(ErrorEval.VALUE_INVALID, e.GetErrorEval());
             }
         }
 
@@ -75,14 +75,14 @@ namespace TestCases.SS.Formula.Atp
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
 
-            Assert.AreEqual(new DateTime(1984, 10, 20), DateParser.ParseDate("1984/10/20"));
+            ClassicAssert.AreEqual(new DateTime(1984, 10, 20), DateParser.ParseDate("1984/10/20"));
         }
 
         [Test]
         public void TestShouldIgnoreTimestamp()
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
-            Assert.AreEqual(new DateTime(1984, 10, 20), DateParser.ParseDate("1984/10/20 12:34:56"));
+            ClassicAssert.AreEqual(new DateTime(1984, 10, 20), DateParser.ParseDate("1984/10/20 12:34:56"));
         }
     }
 }

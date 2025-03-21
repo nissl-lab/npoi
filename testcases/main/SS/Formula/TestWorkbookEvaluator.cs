@@ -25,7 +25,7 @@ namespace TestCases.SS.Formula
     using NPOI.SS.Formula.PTG;
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     using TestCases.HSSF;
 
@@ -58,7 +58,7 @@ namespace TestCases.SS.Formula
             Ptg[] ptgs = { new IntPtg(42), AttrPtg.SUM, };
 
             ValueEval result = EvaluateFormula(ptgs);
-            Assert.AreEqual(42, ((NumberEval)result).NumberValue, 0.0);
+            ClassicAssert.AreEqual(42, ((NumberEval)result).NumberValue, 0.0);
         }
 
         /**
@@ -80,7 +80,7 @@ namespace TestCases.SS.Formula
             Ptg[] ptgs = { ptg };
 
             ValueEval result = EvaluateFormula(ptgs);
-            Assert.AreEqual(ErrorEval.REF_INVALID, result);
+            ClassicAssert.AreEqual(ErrorEval.REF_INVALID, result);
         }
 
         /**
@@ -93,7 +93,7 @@ namespace TestCases.SS.Formula
             Ptg[] ptgs = { new IntPtg(42), AttrPtg.SUM, };
 
             ValueEval result = EvaluateFormula(ptgs);
-            Assert.AreEqual(42, ((NumberEval)result).NumberValue, 0.0);
+            ClassicAssert.AreEqual(42, ((NumberEval)result).NumberValue, 0.0);
         }
 
         [Test]
@@ -149,14 +149,14 @@ namespace TestCases.SS.Formula
 
         private static void ConfirmEvaluation(double expectedValue, HSSFFormulaEvaluator fe, ICell cell)
         {
-            Assert.AreEqual(expectedValue, fe.Evaluate(cell).NumberValue, 0.0);
+            ClassicAssert.AreEqual(expectedValue, fe.Evaluate(cell).NumberValue, 0.0);
         }
 
         private static void ConfirmFormula(HSSFWorkbook wb, int sheetIndex, int rowIndex, int columnIndex,
                 String expectedFormula)
         {
             ICell cell = wb.GetSheetAt(sheetIndex).GetRow(rowIndex).GetCell(columnIndex);
-            Assert.AreEqual(expectedFormula, cell.CellFormula);
+            ClassicAssert.AreEqual(expectedFormula, cell.CellFormula);
         }
 
         /**
@@ -182,28 +182,28 @@ namespace TestCases.SS.Formula
                 Assert.Fail("Missing arg result not being handled correctly.");
             }
 
-            Assert.AreEqual(CellType.Numeric, cv.CellType);
+            ClassicAssert.AreEqual(CellType.Numeric, cv.CellType);
 
             // Adding blank to 1.0 gives 1.0
-            Assert.AreEqual(1.0, cv.NumberValue, 0.0);
+            ClassicAssert.AreEqual(1.0, cv.NumberValue, 0.0);
 
             // check with string operand
             cell.CellFormula = "\"abc\"&IF(1,,)";
             fe.NotifySetFormula(cell);
             cv = fe.Evaluate(cell);
-            Assert.AreEqual(CellType.String, cv.CellType);
+            ClassicAssert.AreEqual(CellType.String, cv.CellType);
 
             // Adding blank to "abc" gives "abc"
-            Assert.AreEqual("abc", cv.StringValue);
+            ClassicAssert.AreEqual("abc", cv.StringValue);
 
             // check CHOOSE()
             cell.CellFormula = "\"abc\"&CHOOSE(2,5,,9)";
             fe.NotifySetFormula(cell);
             cv = fe.Evaluate(cell);
-            Assert.AreEqual(CellType.String, cv.CellType);
+            ClassicAssert.AreEqual(CellType.String, cv.CellType);
 
             // Adding blank to "abc" gives "abc"
-            Assert.AreEqual("abc", cv.StringValue);
+            ClassicAssert.AreEqual("abc", cv.StringValue);
         }
 
         /**
@@ -233,15 +233,15 @@ namespace TestCases.SS.Formula
                 throw;
             }
 
-            Assert.AreEqual(CellType.Error, cv.CellType);
-            Assert.AreEqual(ErrorEval.VALUE_INVALID.ErrorCode, cv.ErrorValue);
+            ClassicAssert.AreEqual(CellType.Error, cv.CellType);
+            ClassicAssert.AreEqual(ErrorEval.VALUE_INVALID.ErrorCode, cv.ErrorValue);
 
             // verify circular refs are still detected properly
             fe.ClearAllCachedResultValues();
             cell.CellFormula = "OFFSET(A1,0,0)";
             cv = fe.Evaluate(cell);
-            Assert.AreEqual(CellType.Error, cv.CellType);
-            Assert.AreEqual(ErrorEval.CIRCULAR_REF_ERROR.ErrorCode, cv.ErrorValue);
+            ClassicAssert.AreEqual(CellType.Error, cv.CellType);
+            ClassicAssert.AreEqual(ErrorEval.CIRCULAR_REF_ERROR.ErrorCode, cv.ErrorValue);
         }
 
         /**
@@ -282,10 +282,10 @@ namespace TestCases.SS.Formula
             row3.CreateCell(2).SetCellFormula("aConstant+aFormula+SUM(aSet)");
 
             IFormulaEvaluator fe = wb.GetCreationHelper().CreateFormulaEvaluator();
-            Assert.AreEqual(3.14, fe.Evaluate(row0.GetCell(2)).NumberValue);
-            Assert.AreEqual(10.0, fe.Evaluate(row1.GetCell(2)).NumberValue);
-            Assert.AreEqual(15.0, fe.Evaluate(row2.GetCell(2)).NumberValue);
-            Assert.AreEqual(28.14, fe.Evaluate(row3.GetCell(2)).NumberValue);
+            ClassicAssert.AreEqual(3.14, fe.Evaluate(row0.GetCell(2)).NumberValue);
+            ClassicAssert.AreEqual(10.0, fe.Evaluate(row1.GetCell(2)).NumberValue);
+            ClassicAssert.AreEqual(15.0, fe.Evaluate(row2.GetCell(2)).NumberValue);
+            ClassicAssert.AreEqual(28.14, fe.Evaluate(row3.GetCell(2)).NumberValue);
         }
 
 
@@ -355,11 +355,11 @@ namespace TestCases.SS.Formula
             CellValue result = eval.Evaluate(D1);
 
             // Call should not modify the contents
-            Assert.AreEqual(CellType.Formula, D1.CellType);
-            Assert.AreEqual(expectedFormula, D1.CellFormula);
+            ClassicAssert.AreEqual(CellType.Formula, D1.CellType);
+            ClassicAssert.AreEqual(expectedFormula, D1.CellFormula);
 
-            Assert.AreEqual(CellType.Numeric, result.CellType);
-            Assert.AreEqual(expectedResult, result.NumberValue, EPSILON);
+            ClassicAssert.AreEqual(CellType.Numeric, result.CellType);
+            ClassicAssert.AreEqual(expectedResult, result.NumberValue, EPSILON);
 
             TestIFEqualsFormulaEvaluation_teardown(wb);
         }
@@ -519,11 +519,11 @@ namespace TestCases.SS.Formula
             CellType resultCellType = eval.EvaluateFormulaCell(D1);
 
             // Call should modify the contents, but leave the formula intact
-            Assert.AreEqual(CellType.Formula, D1.CellType);
-            Assert.AreEqual(expectedFormula, D1.CellFormula);
-            Assert.AreEqual(CellType.Numeric, resultCellType);
-            Assert.AreEqual(CellType.Numeric, D1.CachedFormulaResultType);
-            Assert.AreEqual(expectedResult, D1.NumericCellValue, EPSILON);
+            ClassicAssert.AreEqual(CellType.Formula, D1.CellType);
+            ClassicAssert.AreEqual(expectedFormula, D1.CellFormula);
+            ClassicAssert.AreEqual(CellType.Numeric, resultCellType);
+            ClassicAssert.AreEqual(CellType.Numeric, D1.CachedFormulaResultType);
+            ClassicAssert.AreEqual(expectedResult, D1.NumericCellValue, EPSILON);
 
             TestIFEqualsFormulaEvaluation_teardown(wb);
         }
@@ -538,7 +538,7 @@ namespace TestCases.SS.Formula
             ICell result = eval.EvaluateInCell(D1);
 
             // Call should modify the contents and replace the formula with the result
-            Assert.AreSame(D1, result); // returns the same cell that was provided as an argument so that calls can be chained.
+            ClassicAssert.AreSame(D1, result); // returns the same cell that was provided as an argument so that calls can be chained.
             try
             {
                 string tmp = D1.CellFormula;
@@ -547,8 +547,8 @@ namespace TestCases.SS.Formula
             catch (InvalidOperationException)
             {
             }
-            Assert.AreEqual(CellType.Numeric, D1.CellType);
-            Assert.AreEqual(expectedResult, D1.NumericCellValue, EPSILON);
+            ClassicAssert.AreEqual(CellType.Numeric, D1.CellType);
+            ClassicAssert.AreEqual(expectedResult, D1.NumericCellValue, EPSILON);
 
             TestIFEqualsFormulaEvaluation_teardown(wb);
         }
@@ -563,11 +563,11 @@ namespace TestCases.SS.Formula
             eval.EvaluateAll();
 
             // Call should modify the contents
-            Assert.AreEqual(CellType.Formula, D1.CellType);
-            Assert.AreEqual(expectedFormula, D1.CellFormula);
+            ClassicAssert.AreEqual(CellType.Formula, D1.CellType);
+            ClassicAssert.AreEqual(expectedFormula, D1.CellFormula);
 
-            Assert.AreEqual(CellType.Numeric, D1.CachedFormulaResultType);
-            Assert.AreEqual(expectedResult, D1.NumericCellValue, EPSILON);
+            ClassicAssert.AreEqual(CellType.Numeric, D1.CachedFormulaResultType);
+            ClassicAssert.AreEqual(expectedResult, D1.NumericCellValue, EPSILON);
 
             TestIFEqualsFormulaEvaluation_teardown(wb);
         }
@@ -581,12 +581,12 @@ namespace TestCases.SS.Formula
             HSSFFormulaEvaluator.EvaluateAllFormulaCells(wb);
 
             // Call should modify the contents
-            Assert.AreEqual(CellType.Formula, D1.CellType);
+            ClassicAssert.AreEqual(CellType.Formula, D1.CellType);
             // whitespace gets deleted because formula is parsed and re-rendered
-            Assert.AreEqual(expectedFormula, D1.CellFormula);
+            ClassicAssert.AreEqual(expectedFormula, D1.CellFormula);
 
-            Assert.AreEqual(CellType.Numeric, D1.CachedFormulaResultType);
-            Assert.AreEqual(expectedResult, D1.NumericCellValue, EPSILON);
+            ClassicAssert.AreEqual(CellType.Numeric, D1.CachedFormulaResultType);
+            ClassicAssert.AreEqual(expectedResult, D1.NumericCellValue, EPSILON);
 
             TestIFEqualsFormulaEvaluation_teardown(wb);
         }
@@ -621,13 +621,13 @@ namespace TestCases.SS.Formula
 
             wb.GetCreationHelper().CreateFormulaEvaluator().EvaluateAll();
 
-            Assert.AreEqual(cellA2.StringCellValue, "1");
-            Assert.AreEqual(cellB2.NumericCellValue, 0, 0.00001);
-            Assert.AreEqual(cellC2.StringCellValue, "3");
+            ClassicAssert.AreEqual(cellA2.StringCellValue, "1");
+            ClassicAssert.AreEqual(cellB2.NumericCellValue, 0, 0.00001);
+            ClassicAssert.AreEqual(cellC2.StringCellValue, "3");
 
-            Assert.AreEqual(cellA3.StringCellValue, "1");
-            Assert.AreEqual(cellB3.NumericCellValue, 0, 0.00001);
-            Assert.AreEqual(cellC3.StringCellValue, "3");
+            ClassicAssert.AreEqual(cellA3.StringCellValue, "1");
+            ClassicAssert.AreEqual(cellB3.NumericCellValue, 0, 0.00001);
+            ClassicAssert.AreEqual(cellC3.StringCellValue, "3");
         }
     }
 }

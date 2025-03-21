@@ -6,7 +6,7 @@ using NPOI.SS.Formula;
 using NPOI.SS.Formula.Eval;
 using NPOI.SS.Formula.Functions;
 using NPOI.SS.UserModel;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 
 namespace TestCases.SS.Formula.Functions
 {
@@ -65,22 +65,22 @@ namespace TestCases.SS.Formula.Functions
         private static void confirmValue(String number1, String number2, String number3, double expected)
         {
             ValueEval result = invokeValue(number1, number2, number3);
-            Assert.IsTrue(result is NumberEval);
-            Assert.AreEqual(expected, ((NumberEval)result).NumberValue, 0.0000001);
+            ClassicAssert.IsTrue(result is NumberEval);
+            ClassicAssert.AreEqual(expected, ((NumberEval)result).NumberValue, 0.0000001);
         }
 
         private static void confirmInvalidError(String number1, String number2, String number3)
         {
             ValueEval result = invokeValue(number1, number2, number3);
-            Assert.IsTrue(result is ErrorEval);
-            Assert.AreEqual(ErrorEval.VALUE_INVALID, result);
+            ClassicAssert.IsTrue(result is ErrorEval);
+            ClassicAssert.AreEqual(ErrorEval.VALUE_INVALID, result);
         }
 
         private static void confirmNumError(String number1, String number2, String number3)
         {
             ValueEval result = invokeValue(number1, number2, number3);
-            Assert.IsTrue(result is ErrorEval);
-            Assert.AreEqual(ErrorEval.NUM_ERROR, result);
+            ClassicAssert.IsTrue(result is ErrorEval);
+            ClassicAssert.AreEqual(ErrorEval.NUM_ERROR, result);
         }
     }
 }

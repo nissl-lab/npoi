@@ -23,7 +23,7 @@ namespace TestCases.HSSF.Record.Chart
     using System;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.Chart;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     /**
      * Tests the serialization and deserialization of the SheetPropertiesRecord
@@ -50,16 +50,16 @@ namespace TestCases.HSSF.Record.Chart
         public void TestLoad()
         {
             ShtPropsRecord record = new ShtPropsRecord(TestcaseRecordInputStream.Create(0x1044, data));
-            Assert.AreEqual(10, record.Flags);
-            Assert.AreEqual(false, record.IsManSerAlloc);
-            Assert.AreEqual(true, record.IsPlotVisibleOnly);
-            Assert.AreEqual(false, record.IsNotSizeWithWindow);
-            Assert.AreEqual(true, record.IsManPlotArea);
-            Assert.AreEqual(false, record.IsAlwaysAutoPlotArea);
-            Assert.AreEqual(0, record.Blank);
+            ClassicAssert.AreEqual(10, record.Flags);
+            ClassicAssert.AreEqual(false, record.IsManSerAlloc);
+            ClassicAssert.AreEqual(true, record.IsPlotVisibleOnly);
+            ClassicAssert.AreEqual(false, record.IsNotSizeWithWindow);
+            ClassicAssert.AreEqual(true, record.IsManPlotArea);
+            ClassicAssert.AreEqual(false, record.IsAlwaysAutoPlotArea);
+            ClassicAssert.AreEqual(0, record.Blank);
 
 
-            Assert.AreEqual(8, record.RecordSize);
+            ClassicAssert.AreEqual(8, record.RecordSize);
         }
         [Test]
         public void TestStore()
@@ -74,9 +74,9 @@ namespace TestCases.HSSF.Record.Chart
 
 
             byte[] recordBytes = record.Serialize();
-            Assert.AreEqual(recordBytes.Length - 4, data.Length);
+            ClassicAssert.AreEqual(recordBytes.Length - 4, data.Length);
             for (int i = 0; i < data.Length; i++)
-                Assert.AreEqual(data[i], recordBytes[i + 4], "At offset " + i);
+                ClassicAssert.AreEqual(data[i], recordBytes[i + 4], "At offset " + i);
         }
     }
 }

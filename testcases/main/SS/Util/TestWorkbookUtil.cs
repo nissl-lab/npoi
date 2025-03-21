@@ -19,7 +19,7 @@ namespace TestCases.SS.Util
 {
 
     using NPOI.SS.Util;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using System;
     using System.Text;
     using NPOI.Util;
@@ -42,56 +42,56 @@ namespace TestCases.SS.Util
 
             String p = "Sheet1";
             String actual = WorkbookUtil.CreateSafeSheetName(p);
-            Assert.AreEqual(p, actual);
+            ClassicAssert.AreEqual(p, actual);
 
             p = "O'Brien's sales";
             actual = WorkbookUtil.CreateSafeSheetName(p);
-            Assert.AreEqual(p, actual);
+            ClassicAssert.AreEqual(p, actual);
 
             p = " data # ";
             actual = WorkbookUtil.CreateSafeSheetName(p);
-            Assert.AreEqual(p, actual);
+            ClassicAssert.AreEqual(p, actual);
 
             p = "data $1.00";
             actual = WorkbookUtil.CreateSafeSheetName(p);
-            Assert.AreEqual(p, actual);
+            ClassicAssert.AreEqual(p, actual);
 
             // now the replaced versions ...
             actual = WorkbookUtil.CreateSafeSheetName("data?");
-            Assert.AreEqual("data ", actual);
+            ClassicAssert.AreEqual("data ", actual);
 
             actual = WorkbookUtil.CreateSafeSheetName("abc/def");
-            Assert.AreEqual("abc def", actual);
+            ClassicAssert.AreEqual("abc def", actual);
 
             actual = WorkbookUtil.CreateSafeSheetName("data[0]");
-            Assert.AreEqual("data 0 ", actual);
+            ClassicAssert.AreEqual("data 0 ", actual);
 
             actual = WorkbookUtil.CreateSafeSheetName("data*");
-            Assert.AreEqual("data ", actual);
+            ClassicAssert.AreEqual("data ", actual);
 
             actual = WorkbookUtil.CreateSafeSheetName("abc\\def");
-            Assert.AreEqual("abc def", actual);
+            ClassicAssert.AreEqual("abc def", actual);
 
             actual = WorkbookUtil.CreateSafeSheetName("'data");
-            Assert.AreEqual(" data", actual);
+            ClassicAssert.AreEqual(" data", actual);
 
             actual = WorkbookUtil.CreateSafeSheetName("data'");
-            Assert.AreEqual("data ", actual);
+            ClassicAssert.AreEqual("data ", actual);
 
             actual = WorkbookUtil.CreateSafeSheetName("d'at'a");
-            Assert.AreEqual("d'at'a", actual);
+            ClassicAssert.AreEqual("d'at'a", actual);
 
             actual = WorkbookUtil.CreateSafeSheetName(null);
-            Assert.AreEqual("null", actual);
+            ClassicAssert.AreEqual("null", actual);
 
             actual = WorkbookUtil.CreateSafeSheetName("");
-            Assert.AreEqual("empty", actual);
+            ClassicAssert.AreEqual("empty", actual);
 
             actual = WorkbookUtil.CreateSafeSheetName("1234567890123456789012345678901TOOLONG");
-            Assert.AreEqual("1234567890123456789012345678901", actual);
+            ClassicAssert.AreEqual("1234567890123456789012345678901", actual);
 
             actual = WorkbookUtil.CreateSafeSheetName("sheet:a4");
-            Assert.AreEqual("sheet a4", actual);
+            ClassicAssert.AreEqual("sheet a4", actual);
         }
     }
 }

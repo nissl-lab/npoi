@@ -18,7 +18,7 @@ using NPOI.OpenXmlFormats.Vml;
 using NPOI.OpenXmlFormats.Vml.Office;
 using NPOI.OpenXmlFormats.Vml.Spreadsheet;
 using NPOI.XSSF.UserModel;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using System;
 using System.Collections;
 using System.IO;
@@ -38,50 +38,50 @@ namespace TestCases.XSSF.UserModel
         {
             XSSFVMLDrawing vml = new XSSFVMLDrawing();
             ArrayList items = vml.GetItems();
-            Assert.AreEqual(2, items.Count);
-            Assert.IsTrue(items[0] is CT_ShapeLayout);
+            ClassicAssert.AreEqual(2, items.Count);
+            ClassicAssert.IsTrue(items[0] is CT_ShapeLayout);
             CT_ShapeLayout layout = (CT_ShapeLayout)items[0];
-            Assert.AreEqual(ST_Ext.edit, layout.ext);
-            Assert.AreEqual(ST_Ext.edit, layout.idmap.ext);
-            Assert.AreEqual("1", layout.idmap.data);
+            ClassicAssert.AreEqual(ST_Ext.edit, layout.ext);
+            ClassicAssert.AreEqual(ST_Ext.edit, layout.idmap.ext);
+            ClassicAssert.AreEqual("1", layout.idmap.data);
 
-            Assert.IsTrue(items[1] is CT_Shapetype);
+            ClassicAssert.IsTrue(items[1] is CT_Shapetype);
             CT_Shapetype type = (CT_Shapetype)items[1];
-            Assert.AreEqual("21600,21600", type.coordsize);
-            Assert.AreEqual(202.0f, type.spt, 0);
-            Assert.AreEqual("m,l,21600r21600,l21600,xe", type.path2);
-            Assert.AreEqual("_x0000_t202", type.id);
-            Assert.AreEqual(NPOI.OpenXmlFormats.Vml.ST_TrueFalse.t, type.path.gradientshapeok);
-            Assert.AreEqual(ST_ConnectType.rect, type.path.connecttype);
+            ClassicAssert.AreEqual("21600,21600", type.coordsize);
+            ClassicAssert.AreEqual(202.0f, type.spt, 0);
+            ClassicAssert.AreEqual("m,l,21600r21600,l21600,xe", type.path2);
+            ClassicAssert.AreEqual("_x0000_t202", type.id);
+            ClassicAssert.AreEqual(NPOI.OpenXmlFormats.Vml.ST_TrueFalse.t, type.path.gradientshapeok);
+            ClassicAssert.AreEqual(ST_ConnectType.rect, type.path.connecttype);
 
             CT_Shape shape = vml.newCommentShape();
-            Assert.AreEqual(3, items.Count);
-            Assert.AreSame(items[2], shape);
-            Assert.AreEqual("#_x0000_t202", shape.type);
-            Assert.AreEqual("position:absolute; visibility:hidden", shape.style);
-            Assert.AreEqual("#ffffe1", shape.fillcolor);
-            Assert.AreEqual(ST_InsetMode.auto, shape.insetmode);
-            Assert.AreEqual("#ffffe1", shape.fill.color);
+            ClassicAssert.AreEqual(3, items.Count);
+            ClassicAssert.AreSame(items[2], shape);
+            ClassicAssert.AreEqual("#_x0000_t202", shape.type);
+            ClassicAssert.AreEqual("position:absolute; visibility:hidden", shape.style);
+            ClassicAssert.AreEqual("#ffffe1", shape.fillcolor);
+            ClassicAssert.AreEqual(ST_InsetMode.auto, shape.insetmode);
+            ClassicAssert.AreEqual("#ffffe1", shape.fill.color);
             CT_Shadow shadow = shape.shadow;
-            Assert.AreEqual(NPOI.OpenXmlFormats.Vml.ST_TrueFalse.t, shadow.on);
-            Assert.AreEqual("black", shadow.color);
-            Assert.AreEqual(NPOI.OpenXmlFormats.Vml.ST_TrueFalse.t, shadow.obscured);
-            Assert.AreEqual(ST_ConnectType.none, shape.path.connecttype);
-            Assert.AreEqual("mso-direction-alt:auto", shape.textbox.style);
+            ClassicAssert.AreEqual(NPOI.OpenXmlFormats.Vml.ST_TrueFalse.t, shadow.on);
+            ClassicAssert.AreEqual("black", shadow.color);
+            ClassicAssert.AreEqual(NPOI.OpenXmlFormats.Vml.ST_TrueFalse.t, shadow.obscured);
+            ClassicAssert.AreEqual(ST_ConnectType.none, shape.path.connecttype);
+            ClassicAssert.AreEqual("mso-direction-alt:auto", shape.textbox.style);
             CT_ClientData cldata = shape.GetClientDataArray(0);
-            Assert.AreEqual(ST_ObjectType.Note, cldata.ObjectType);
-            Assert.AreEqual(1, cldata.SizeOfMoveWithCellsArray());
-            Assert.AreEqual(1, cldata.SizeOfSizeWithCellsArray());
-            Assert.AreEqual("1, 15, 0, 2, 3, 15, 3, 16", cldata.anchor);
-            Assert.AreEqual(ST_TrueFalseBlank.@false, cldata.autoFill);
-            Assert.AreEqual(0, cldata.GetRowArray(0));
-            Assert.AreEqual(0, cldata.GetColumnArray(0));
+            ClassicAssert.AreEqual(ST_ObjectType.Note, cldata.ObjectType);
+            ClassicAssert.AreEqual(1, cldata.SizeOfMoveWithCellsArray());
+            ClassicAssert.AreEqual(1, cldata.SizeOfSizeWithCellsArray());
+            ClassicAssert.AreEqual("1, 15, 0, 2, 3, 15, 3, 16", cldata.anchor);
+            ClassicAssert.AreEqual(ST_TrueFalseBlank.@false, cldata.autoFill);
+            ClassicAssert.AreEqual(0, cldata.GetRowArray(0));
+            ClassicAssert.AreEqual(0, cldata.GetColumnArray(0));
 
             //each of the properties of CT_ClientData should occurs 0 or 1 times, and CT_ClientData has multiple properties.
-            //Assert.AreEqual("[]", cldata.GetVisibleList().ToString());
-            Assert.AreEqual(ST_TrueFalseBlank.NONE, cldata.visible);
+            //ClassicAssert.AreEqual("[]", cldata.GetVisibleList().ToString());
+            ClassicAssert.AreEqual(ST_TrueFalseBlank.NONE, cldata.visible);
             cldata.visible = (ST_TrueFalseBlank) Enum.Parse(typeof(ST_TrueFalseBlank), "true");
-            Assert.AreEqual(ST_TrueFalseBlank.@true, cldata.visible);
+            ClassicAssert.AreEqual(ST_TrueFalseBlank.@true, cldata.visible);
             //serialize and read again
             MemoryStream out1 = new MemoryStream();
             vml.Write(out1);
@@ -89,10 +89,10 @@ namespace TestCases.XSSF.UserModel
             XSSFVMLDrawing vml2 = new XSSFVMLDrawing();
             vml2.Read(new MemoryStream(out1.ToArray()));
             ArrayList items2 = vml2.GetItems();
-            Assert.AreEqual(3, items2.Count);
-            Assert.IsTrue(items2[0] is CT_ShapeLayout);
-            Assert.IsTrue(items2[1] is CT_Shapetype);
-            Assert.IsTrue(items2[2] is CT_Shape);
+            ClassicAssert.AreEqual(3, items2.Count);
+            ClassicAssert.IsTrue(items2[0] is CT_ShapeLayout);
+            ClassicAssert.IsTrue(items2[1] is CT_Shapetype);
+            ClassicAssert.IsTrue(items2[2] is CT_Shape);
         }
         [Test]
         public void TestFindCommentShape()
@@ -102,31 +102,31 @@ namespace TestCases.XSSF.UserModel
             vml.Read(POIDataSamples.GetSpreadSheetInstance().OpenResourceAsStream("vmlDrawing1.vml"));
 
             CT_Shape sh_a1 = vml.FindCommentShape(0, 0);
-            Assert.IsNotNull(sh_a1);
-            Assert.AreEqual("_x0000_s1025", sh_a1.id);
+            ClassicAssert.IsNotNull(sh_a1);
+            ClassicAssert.AreEqual("_x0000_s1025", sh_a1.id);
 
             CT_Shape sh_b1 = vml.FindCommentShape(0, 1);
-            Assert.IsNotNull(sh_b1);
-            Assert.AreEqual("_x0000_s1026", sh_b1.id);
+            ClassicAssert.IsNotNull(sh_b1);
+            ClassicAssert.AreEqual("_x0000_s1026", sh_b1.id);
 
             CT_Shape sh_c1 = vml.FindCommentShape(0, 2);
-            Assert.IsNull(sh_c1);
+            ClassicAssert.IsNull(sh_c1);
 
             CT_Shape sh_d1 = vml.newCommentShape();
-            Assert.AreEqual("_x0000_s1027", sh_d1.id);
+            ClassicAssert.AreEqual("_x0000_s1027", sh_d1.id);
             sh_d1.GetClientDataArray(0).SetRowArray(0, 0);
             sh_d1.GetClientDataArray(0).SetColumnArray(0, 3);
-            Assert.AreSame(sh_d1, vml.FindCommentShape(0, 3));
+            ClassicAssert.AreSame(sh_d1, vml.FindCommentShape(0, 3));
 
             //newly created drawing
             XSSFVMLDrawing newVml = new XSSFVMLDrawing();
-            Assert.IsNull(newVml.FindCommentShape(0, 0));
+            ClassicAssert.IsNull(newVml.FindCommentShape(0, 0));
 
             sh_a1 = newVml.newCommentShape();
-            Assert.AreEqual("_x0000_s1025", sh_a1.id);
+            ClassicAssert.AreEqual("_x0000_s1025", sh_a1.id);
             sh_a1.GetClientDataArray(0).SetRowArray(0, 0);
             sh_a1.GetClientDataArray(0).SetColumnArray(0, 1);
-            Assert.AreSame(sh_a1, newVml.FindCommentShape(0, 1));
+            ClassicAssert.AreSame(sh_a1, newVml.FindCommentShape(0, 1));
         }
         [Test]
         public void TestRead()
@@ -146,10 +146,10 @@ namespace TestCases.XSSF.UserModel
             vml.Read(POIDataSamples.GetSpreadSheetInstance().OpenResourceAsStream("vmlDrawing1.vml"));
 
             CT_Shape sh_a1 = vml.FindCommentShape(0, 0);
-            Assert.IsNotNull(sh_a1);
+            ClassicAssert.IsNotNull(sh_a1);
 
-            Assert.IsTrue(vml.RemoveCommentShape(0, 0));
-            Assert.IsNull(vml.FindCommentShape(0, 0));
+            ClassicAssert.IsTrue(vml.RemoveCommentShape(0, 0));
+            ClassicAssert.IsNull(vml.FindCommentShape(0, 0));
 
         }
         [Test]
@@ -177,8 +177,8 @@ namespace TestCases.XSSF.UserModel
             foreach(object o in items)
                 if(o is CT_Shapetype)
                     shapetype = (CT_Shapetype) o;
-            Assert.AreEqual(NPOI.OpenXmlFormats.Vml.ST_TrueFalse.t, shapetype.stroked);
-            Assert.AreEqual(NPOI.OpenXmlFormats.Vml.ST_TrueFalse.t, shapetype.filled);
+            ClassicAssert.AreEqual(NPOI.OpenXmlFormats.Vml.ST_TrueFalse.t, shapetype.stroked);
+            ClassicAssert.AreEqual(NPOI.OpenXmlFormats.Vml.ST_TrueFalse.t, shapetype.filled);
 
             using(MemoryStream ws = new MemoryStream())
             {
@@ -203,8 +203,8 @@ namespace TestCases.XSSF.UserModel
                     //    throw new System.Exception(System.Text.Encoding.UTF8.GetString(ws2.GetBuffer()));
                     //}
 
-                    Assert.AreEqual(NPOI.OpenXmlFormats.Vml.ST_TrueFalse.t, shapetype.stroked);
-                    Assert.AreEqual(NPOI.OpenXmlFormats.Vml.ST_TrueFalse.t, shapetype.filled);
+                    ClassicAssert.AreEqual(NPOI.OpenXmlFormats.Vml.ST_TrueFalse.t, shapetype.stroked);
+                    ClassicAssert.AreEqual(NPOI.OpenXmlFormats.Vml.ST_TrueFalse.t, shapetype.filled);
                 }
             }
         }
@@ -227,7 +227,7 @@ namespace TestCases.XSSF.UserModel
                 count += split.Length-1;
             }
 
-            Assert.AreEqual(16, count);
+            ClassicAssert.AreEqual(16, count);
         }
     }
 }

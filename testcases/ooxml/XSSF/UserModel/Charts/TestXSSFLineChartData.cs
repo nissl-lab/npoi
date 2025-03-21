@@ -2,7 +2,7 @@
 {
     using System;
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.SS.UserModel;
     using NPOI.SS.UserModel.Charts;
     using NPOI.SS.Util;
@@ -39,9 +39,9 @@
             IChartDataSource<double> ys = DataSources.FromNumericCellRange(sheet, CellRangeAddress.ValueOf("A2:J2"));
             ILineChartSeries<string, double> series = lineChartData.AddSeries(xs, ys);
 
-            Assert.IsNotNull(series);
-            Assert.AreEqual(1, lineChartData.GetSeries().Count);
-            Assert.IsTrue(lineChartData.GetSeries().Contains(series));
+            ClassicAssert.IsNotNull(series);
+            ClassicAssert.AreEqual(1, lineChartData.GetSeries().Count);
+            ClassicAssert.IsTrue(lineChartData.GetSeries().Contains(series));
 
             chart.Plot(lineChartData, bottomAxis, leftAxis);
             wb.Close();

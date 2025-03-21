@@ -3,7 +3,7 @@ using NPOI.SS.Util;
 using NPOI.Util;
 using NPOI.XSSF;
 using NPOI.XSSF.Streaming;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using System.IO;
 using TestCases.SS.UserModel;
 
@@ -38,8 +38,8 @@ namespace TestCases.XSSF.Streaming
             s1.RepeatingRows = (cra);
 
             IPrintSetup ps1 = s1.PrintSetup;
-            Assert.AreEqual(false, ps1.ValidSettings);
-            Assert.AreEqual(false, ps1.Landscape);
+            ClassicAssert.AreEqual(false, ps1.ValidSettings);
+            ClassicAssert.AreEqual(false, ps1.Landscape);
 
 
             // Had valid print settings before repeating
@@ -47,14 +47,14 @@ namespace TestCases.XSSF.Streaming
             IPrintSetup ps2 = s2.PrintSetup;
 
             ps2.Landscape = (false);
-            Assert.AreEqual(true, ps2.ValidSettings);
-            Assert.AreEqual(false, ps2.Landscape);
+            ClassicAssert.AreEqual(true, ps2.ValidSettings);
+            ClassicAssert.AreEqual(false, ps2.Landscape);
             s2.RepeatingColumns = (cra);
             s2.RepeatingRows = (cra);
 
             ps2 = s2.PrintSetup;
-            Assert.AreEqual(true, ps2.ValidSettings);
-            Assert.AreEqual(false, ps2.Landscape);
+            ClassicAssert.AreEqual(true, ps2.ValidSettings);
+            ClassicAssert.AreEqual(false, ps2.Landscape);
 
             wb1.Close();
             wb2.Close();

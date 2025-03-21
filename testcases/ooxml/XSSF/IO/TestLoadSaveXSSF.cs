@@ -17,7 +17,7 @@
 
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using System.Collections;
 namespace TestCases.XSSF.IO
 {
@@ -31,15 +31,15 @@ namespace TestCases.XSSF.IO
         public void TestLoadSample()
         {
             XSSFWorkbook workbook = new XSSFWorkbook(_ssSampels.OpenResourceAsStream("sample.xlsx"));
-            Assert.AreEqual(3, workbook.NumberOfSheets);
-            Assert.AreEqual("Sheet1", workbook.GetSheetName(0));
+            ClassicAssert.AreEqual(3, workbook.NumberOfSheets);
+            ClassicAssert.AreEqual("Sheet1", workbook.GetSheetName(0));
             ISheet sheet = workbook.GetSheetAt(0);
             IRow row = sheet.GetRow(0);
             ICell cell = row.GetCell((short)1);
-            Assert.IsNotNull(cell);
-            Assert.AreEqual(111.0, cell.NumericCellValue, 0.0);
+            ClassicAssert.IsNotNull(cell);
+            ClassicAssert.AreEqual(111.0, cell.NumericCellValue, 0.0);
             cell = row.GetCell((short)0);
-            Assert.AreEqual("Lorem", cell.RichStringCellValue.String);
+            ClassicAssert.AreEqual("Lorem", cell.RichStringCellValue.String);
         }
 
         // TODO filename string hard coded in XSSFWorkbook constructor in order to make ant Test-ooxml target be successful.
@@ -60,7 +60,7 @@ namespace TestCases.XSSF.IO
         {
             XSSFWorkbook workbook = new XSSFWorkbook(_ssSampels.OpenResourceAsStream("picture.xlsx"));
             IList pictures = workbook.GetAllPictures();
-            Assert.AreEqual(1, pictures.Count);
+            ClassicAssert.AreEqual(1, pictures.Count);
         }
     }
 }

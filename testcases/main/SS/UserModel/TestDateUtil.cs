@@ -25,7 +25,7 @@ namespace TestCases.SS.UserModel
 {
     using NPOI.SS.UserModel;
     using NPOI.Util;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using System.Globalization;
 
     public class TestDateUtil
@@ -74,11 +74,11 @@ namespace TestCases.SS.UserModel
                 Assert.Fail("invalid datetime double value -1");
             }
             catch (ArgumentException) { }
-            //Assert.AreEqual(null, DateUtil.GetJavaDate(dateValue));
-            //Assert.AreEqual(null, DateUtil.GetJavaDate(dateValue, tz));
-            //Assert.AreEqual(null, DateUtil.GetJavaDate(dateValue, use1904windowing));
-            //Assert.AreEqual(null, DateUtil.GetJavaDate(dateValue, use1904windowing, tz));
-            //Assert.AreEqual(null, DateUtil.GetJavaDate(dateValue, use1904windowing, tz, roundSeconds));
+            //ClassicAssert.AreEqual(null, DateUtil.GetJavaDate(dateValue));
+            //ClassicAssert.AreEqual(null, DateUtil.GetJavaDate(dateValue, tz));
+            //ClassicAssert.AreEqual(null, DateUtil.GetJavaDate(dateValue, use1904windowing));
+            //ClassicAssert.AreEqual(null, DateUtil.GetJavaDate(dateValue, use1904windowing, tz));
+            //ClassicAssert.AreEqual(null, DateUtil.GetJavaDate(dateValue, use1904windowing, tz, roundSeconds));
         }
 
         [Test]
@@ -93,11 +93,11 @@ namespace TestCases.SS.UserModel
             //Date date = calendar.GetTime();
             DateTime date = calendar;
 
-            Assert.AreEqual(date, DateUtil.GetJavaDate(dateValue));
-            Assert.AreEqual(date, DateUtil.GetJavaDate(dateValue, tz));
-            Assert.AreEqual(date, DateUtil.GetJavaDate(dateValue, use1904windowing));
-            Assert.AreEqual(date, DateUtil.GetJavaDate(dateValue, use1904windowing, tz));
-            Assert.AreEqual(date, DateUtil.GetJavaDate(dateValue, use1904windowing, tz, roundSeconds));
+            ClassicAssert.AreEqual(date, DateUtil.GetJavaDate(dateValue));
+            ClassicAssert.AreEqual(date, DateUtil.GetJavaDate(dateValue, tz));
+            ClassicAssert.AreEqual(date, DateUtil.GetJavaDate(dateValue, use1904windowing));
+            ClassicAssert.AreEqual(date, DateUtil.GetJavaDate(dateValue, use1904windowing, tz));
+            ClassicAssert.AreEqual(date, DateUtil.GetJavaDate(dateValue, use1904windowing, tz, roundSeconds));
         }
 
         [Test]
@@ -132,10 +132,10 @@ namespace TestCases.SS.UserModel
                 Assert.Fail("invalid datetime double value -1");
             }
             catch (ArgumentException) { }
-            //Assert.AreEqual(null, DateUtil.GetJavaCalendar(dateValue));
-            //Assert.AreEqual(null, DateUtil.GetJavaCalendar(dateValue, use1904windowing));
-            //Assert.AreEqual(null, DateUtil.GetJavaCalendar(dateValue, use1904windowing, tz));
-            //Assert.AreEqual(null, DateUtil.GetJavaCalendar(dateValue, use1904windowing, tz, roundSeconds));
+            //ClassicAssert.AreEqual(null, DateUtil.GetJavaCalendar(dateValue));
+            //ClassicAssert.AreEqual(null, DateUtil.GetJavaCalendar(dateValue, use1904windowing));
+            //ClassicAssert.AreEqual(null, DateUtil.GetJavaCalendar(dateValue, use1904windowing, tz));
+            //ClassicAssert.AreEqual(null, DateUtil.GetJavaCalendar(dateValue, use1904windowing, tz, roundSeconds));
         }
 
         [Test]
@@ -154,10 +154,10 @@ namespace TestCases.SS.UserModel
             DateUtil.GetJavaCalendar(dateValue, use1904windowing, tz),
             DateUtil.GetJavaCalendar(dateValue, use1904windowing, tz, roundSeconds)
         };
-            Assert.AreEqual(expCal, actCal[0]);
-            Assert.AreEqual(expCal, actCal[1]);
-            Assert.AreEqual(expCal, actCal[2]);
-            Assert.AreEqual(expCal, actCal[3]);
+            ClassicAssert.AreEqual(expCal, actCal[0]);
+            ClassicAssert.AreEqual(expCal, actCal[1]);
+            ClassicAssert.AreEqual(expCal, actCal[2]);
+            ClassicAssert.AreEqual(expCal, actCal[3]);
         }
 
         [Test]
@@ -165,30 +165,30 @@ namespace TestCases.SS.UserModel
         {
             // Cell content 2016-12-8 as an example
             // Cell show "12/8/2016"
-            Assert.IsTrue(DateUtil.IsADateFormat(14, "m/d/yy"));
+            ClassicAssert.IsTrue(DateUtil.IsADateFormat(14, "m/d/yy"));
             // Cell show "Thursday, December 8, 2016"
-            Assert.IsTrue(DateUtil.IsADateFormat(182, "[$-F800]dddd\\,\\ mmmm\\ dd\\,\\ yyyy"));
+            ClassicAssert.IsTrue(DateUtil.IsADateFormat(182, "[$-F800]dddd\\,\\ mmmm\\ dd\\,\\ yyyy"));
             // Cell show "12/8"
-            Assert.IsTrue(DateUtil.IsADateFormat(183, "m/d;@"));
+            ClassicAssert.IsTrue(DateUtil.IsADateFormat(183, "m/d;@"));
             // Cell show "12/08/16"
-            Assert.IsTrue(DateUtil.IsADateFormat(184, "mm/dd/yy;@"));
+            ClassicAssert.IsTrue(DateUtil.IsADateFormat(184, "mm/dd/yy;@"));
             // Cell show "8-Dec-16"
-            Assert.IsTrue(DateUtil.IsADateFormat(185, "[$-409]d\\-mmm\\-yy;@"));
+            ClassicAssert.IsTrue(DateUtil.IsADateFormat(185, "[$-409]d\\-mmm\\-yy;@"));
             // Cell show "D-16"
-            Assert.IsTrue(DateUtil.IsADateFormat(186, "[$-409]mmmmm\\-yy;@"));
+            ClassicAssert.IsTrue(DateUtil.IsADateFormat(186, "[$-409]mmmmm\\-yy;@"));
 
             // Cell show "2016年12月8日"
-            Assert.IsTrue(DateUtil.IsADateFormat(165, "yyyy\"年\"m\"月\"d\"日\";@"));
+            ClassicAssert.IsTrue(DateUtil.IsADateFormat(165, "yyyy\"年\"m\"月\"d\"日\";@"));
             // Cell show "2016年12月"
-            Assert.IsTrue(DateUtil.IsADateFormat(164, "yyyy\"年\"m\"月\";@"));
+            ClassicAssert.IsTrue(DateUtil.IsADateFormat(164, "yyyy\"年\"m\"月\";@"));
             // Cell show "12月8日"
-            Assert.IsTrue(DateUtil.IsADateFormat(168, "m\"月\"d\"日\";@"));
+            ClassicAssert.IsTrue(DateUtil.IsADateFormat(168, "m\"月\"d\"日\";@"));
             // Cell show "十二月八日"
-            Assert.IsTrue(DateUtil.IsADateFormat(181, "[DBNum1][$-404]m\"月\"d\"日\";@"));
+            ClassicAssert.IsTrue(DateUtil.IsADateFormat(181, "[DBNum1][$-404]m\"月\"d\"日\";@"));
             // Cell show "贰零壹陆年壹拾贰月捌日"
-            Assert.IsTrue(DateUtil.IsADateFormat(177, "[DBNum2][$-804]yyyy\"年\"m\"月\"d\"日\";@"));
+            ClassicAssert.IsTrue(DateUtil.IsADateFormat(177, "[DBNum2][$-804]yyyy\"年\"m\"月\"d\"日\";@"));
             // Cell show "２０１６年１２月８日"
-            Assert.IsTrue(DateUtil.IsADateFormat(178, "[DBNum3][$-804]yyyy\"年\"m\"月\"d\"日\";@"));
+            ClassicAssert.IsTrue(DateUtil.IsADateFormat(178, "[DBNum3][$-804]yyyy\"年\"m\"月\"d\"日\";@"));
         }
     }
 }

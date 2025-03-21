@@ -22,7 +22,7 @@ namespace TestCases.SS.Formula.Function
     using NPOI.SS.Formula.PTG;
     using NPOI.HSSF.UserModel;
     using System;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     /**
      * Tests parsing of some built-in functions that were not properly
      * registered in POI as of bug #44675, #44733 (March/April 2008).
@@ -54,15 +54,15 @@ namespace TestCases.SS.Formula.Function
                 throw new AssertionException("Failed to recognise built-in function in formula '"
                         + formula + "'");
             }
-            Assert.AreEqual(expPtgArraySize, ptgs.Length);
-            Assert.AreEqual(funcIx, func.FunctionIndex);
+            ClassicAssert.AreEqual(expPtgArraySize, ptgs.Length);
+            ClassicAssert.AreEqual(funcIx, func.FunctionIndex);
             Type expCls = isVarArgFunc ? typeof(FuncVarPtg) : typeof(FuncPtg);
-            Assert.AreEqual(expCls, ptgF.GetType());
+            ClassicAssert.AreEqual(expCls, ptgF.GetType());
 
             // check that Parsed Ptg array Converts back to formula text OK
             HSSFWorkbook book = new HSSFWorkbook();
             String reRenderedFormula = HSSFFormulaParser.ToFormulaString(book, ptgs);
-            Assert.AreEqual(formula, reRenderedFormula);
+            ClassicAssert.AreEqual(formula, reRenderedFormula);
         }
         [Test]
         public void TestDatedif()

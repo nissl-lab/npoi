@@ -15,7 +15,7 @@
    limitations under the License.
 ==================================================================== */
 
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.XSSF.UserModel.Extensions;
 using NPOI.XSSF.UserModel;
@@ -34,10 +34,10 @@ namespace TestCases.XSSF.UserModel.Extensions
             XSSFCellFill cellFill = new XSSFCellFill(ctFill);
             CT_PatternFill ctPatternFill = ctFill.AddNewPatternFill();
             CT_Color bgColor = ctPatternFill.AddNewBgColor();
-            Assert.IsNotNull(cellFill.GetFillBackgroundColor());
+            ClassicAssert.IsNotNull(cellFill.GetFillBackgroundColor());
             bgColor.indexed = 2;
             bgColor.indexedSpecified = true;
-            Assert.AreEqual(2, cellFill.GetFillBackgroundColor().Indexed);
+            ClassicAssert.AreEqual(2, cellFill.GetFillBackgroundColor().Indexed);
         }
         [Test]
         public void TestGetFillForegroundColor()
@@ -46,10 +46,10 @@ namespace TestCases.XSSF.UserModel.Extensions
             XSSFCellFill cellFill = new XSSFCellFill(ctFill);
             CT_PatternFill ctPatternFill = ctFill.AddNewPatternFill();
             CT_Color fgColor = ctPatternFill.AddNewFgColor();
-            Assert.IsNotNull(cellFill.GetFillForegroundColor());
+            ClassicAssert.IsNotNull(cellFill.GetFillForegroundColor());
             fgColor.indexed = 8;
             fgColor.indexedSpecified = true;
-            Assert.AreEqual(8, cellFill.GetFillForegroundColor().Indexed);
+            ClassicAssert.AreEqual(8, cellFill.GetFillForegroundColor().Indexed);
         }
         [Test]
         public void TestGetSetPatternType()
@@ -58,7 +58,7 @@ namespace TestCases.XSSF.UserModel.Extensions
             XSSFCellFill cellFill = new XSSFCellFill(ctFill);
             CT_PatternFill ctPatternFill = ctFill.AddNewPatternFill();
             ctPatternFill.patternType = (ST_PatternType.solid);
-            Assert.AreEqual(ST_PatternType.solid, cellFill.GetPatternType());
+            ClassicAssert.AreEqual(ST_PatternType.solid, cellFill.GetPatternType());
         }
         [Test]
         public void TestGetNotModifies()
@@ -67,7 +67,7 @@ namespace TestCases.XSSF.UserModel.Extensions
             XSSFCellFill cellFill = new XSSFCellFill(ctFill);
             CT_PatternFill ctPatternFill = ctFill.AddNewPatternFill();
             ctPatternFill.patternType = (ST_PatternType.darkDown);
-            Assert.AreEqual(ST_PatternType.darkDown, cellFill.GetPatternType());
+            ClassicAssert.AreEqual(ST_PatternType.darkDown, cellFill.GetPatternType());
         }
         [Test]
         public void TestColorFromTheme()
@@ -79,16 +79,16 @@ namespace TestCases.XSSF.UserModel.Extensions
             byte[] rgb = foregroundColor.RGB;
             byte[] rgbWithTint = foregroundColor.GetRgbWithTint();
             // Dk2
-            Assert.AreEqual(rgb[0], 31);
-            Assert.AreEqual(rgb[1], 73);
-            Assert.AreEqual(rgb[2], 125);
+            ClassicAssert.AreEqual(rgb[0], 31);
+            ClassicAssert.AreEqual(rgb[1], 73);
+            ClassicAssert.AreEqual(rgb[2], 125);
             // Dk2, lighter 40% (tint is about 0.39998)
             // 31 * (1.0 - 0.39998) + (255 - 255 * (1.0 - 0.39998)) = 120.59552 => 120 (byte)
             // 73 * (1.0 - 0.39998) + (255 - 255 * (1.0 - 0.39998)) = 145.79636 => -111 (byte)
             // 125 * (1.0 - 0.39998) + (255 - 255 * (1.0 - 0.39998)) = 176.99740 => -80 (byte)
-            Assert.AreEqual(rgbWithTint[0], 120);
-            Assert.AreEqual((sbyte)rgbWithTint[1], -111);
-            Assert.AreEqual((sbyte)rgbWithTint[2], -80);
+            ClassicAssert.AreEqual(rgbWithTint[0], 120);
+            ClassicAssert.AreEqual((sbyte)rgbWithTint[1], -111);
+            ClassicAssert.AreEqual((sbyte)rgbWithTint[2], -80);
 
         }
     }

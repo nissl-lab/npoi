@@ -15,7 +15,7 @@
    limitations under the License.
 ==================================================================== */
 
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using TestCases.SS.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.OpenXmlFormats.Spreadsheet;
@@ -86,19 +86,19 @@ namespace TestCases.XSSF.UserModel
             XSSFRow row = (XSSFRow)sheet.GetRow(1);
 
             XSSFCell cell_0 = (XSSFCell)row.GetCell(0);
-            Assert.AreEqual(ST_CellType.inlineStr, cell_0.GetCTCell().t);
-            Assert.IsTrue(cell_0.GetCTCell().IsSetIs());
-            Assert.AreEqual(cell_0.StringCellValue, "A Very large string in column 1 AAAAAAAAAAAAAAAAAAAAA");
+            ClassicAssert.AreEqual(ST_CellType.inlineStr, cell_0.GetCTCell().t);
+            ClassicAssert.IsTrue(cell_0.GetCTCell().IsSetIs());
+            ClassicAssert.AreEqual(cell_0.StringCellValue, "A Very large string in column 1 AAAAAAAAAAAAAAAAAAAAA");
 
             XSSFCell cell_1 = (XSSFCell)row.GetCell(1);
-            Assert.AreEqual(ST_CellType.inlineStr, cell_1.GetCTCell().t);
-            Assert.IsTrue(cell_1.GetCTCell().IsSetIs());
-            Assert.AreEqual(cell_1.StringCellValue, "foo");
+            ClassicAssert.AreEqual(ST_CellType.inlineStr, cell_1.GetCTCell().t);
+            ClassicAssert.IsTrue(cell_1.GetCTCell().IsSetIs());
+            ClassicAssert.AreEqual(cell_1.StringCellValue, "foo");
 
             XSSFCell cell_2 = (XSSFCell)row.GetCell(2);
-            Assert.AreEqual(ST_CellType.inlineStr, cell_2.GetCTCell().t);
-            Assert.IsTrue(cell_2.GetCTCell().IsSetIs());
-            Assert.AreEqual(row.GetCell(2).StringCellValue, "bar");
+            ClassicAssert.AreEqual(ST_CellType.inlineStr, cell_2.GetCTCell().t);
+            ClassicAssert.IsTrue(cell_2.GetCTCell().IsSetIs());
+            ClassicAssert.AreEqual(row.GetCell(2).StringCellValue, "bar");
         }
 
         /**
@@ -111,21 +111,21 @@ namespace TestCases.XSSF.UserModel
             XSSFSheet sheet = (XSSFSheet)wb.CreateSheet();
             IRow row = sheet.CreateRow(0);
             SharedStringsTable sst = wb.GetSharedStringSource();
-            Assert.AreEqual(0, sst.Count);
+            ClassicAssert.AreEqual(0, sst.Count);
 
             //case 1. cell.SetCellValue(new XSSFRichTextString((String)null));
             ICell cell_0 = row.CreateCell(0);
             XSSFRichTextString str = new XSSFRichTextString((String)null);
-            Assert.IsNull(str.String);
+            ClassicAssert.IsNull(str.String);
             cell_0.SetCellValue(str);
-            Assert.AreEqual(0, sst.Count);
-            Assert.AreEqual(CellType.Blank, cell_0.CellType);
+            ClassicAssert.AreEqual(0, sst.Count);
+            ClassicAssert.AreEqual(CellType.Blank, cell_0.CellType);
 
             //case 2. cell.SetCellValue((String)null);
             ICell cell_1 = row.CreateCell(1);
             cell_1.SetCellValue((String)null);
-            Assert.AreEqual(0, sst.Count);
-            Assert.AreEqual(CellType.Blank, cell_1.CellType);
+            ClassicAssert.AreEqual(0, sst.Count);
+            ClassicAssert.AreEqual(CellType.Blank, cell_1.CellType);
         }
         [Test]
         public void TestFormulaString()
@@ -135,38 +135,38 @@ namespace TestCases.XSSF.UserModel
             CT_Cell ctCell = cell.GetCTCell(); //low-level bean holding cell's xml
 
             cell.SetCellFormula("A2");
-            Assert.AreEqual(CellType.Formula, cell.CellType);
-            Assert.AreEqual(cell.CellFormula, "A2");
+            ClassicAssert.AreEqual(CellType.Formula, cell.CellType);
+            ClassicAssert.AreEqual(cell.CellFormula, "A2");
             //the value is not Set and cell's type='N' which means blank
-            Assert.AreEqual(ST_CellType.n, ctCell.t);
+            ClassicAssert.AreEqual(ST_CellType.n, ctCell.t);
 
             //set cached formula value
             cell.SetCellValue("t='str'");
             //we are still of 'formula' type
-            Assert.AreEqual(CellType.Formula, cell.CellType);
-            Assert.AreEqual(cell.CellFormula, "A2");
+            ClassicAssert.AreEqual(CellType.Formula, cell.CellType);
+            ClassicAssert.AreEqual(cell.CellFormula, "A2");
             //cached formula value is Set and cell's type='STR'
-            Assert.AreEqual(ST_CellType.str, ctCell.t);
-            Assert.AreEqual(cell.StringCellValue, "t='str'");
+            ClassicAssert.AreEqual(ST_CellType.str, ctCell.t);
+            ClassicAssert.AreEqual(cell.StringCellValue, "t='str'");
 
             //now remove the formula, the cached formula result remains
             cell.SetCellFormula(null);
-            Assert.AreEqual(CellType.String, cell.CellType);
-            Assert.AreEqual(ST_CellType.str, ctCell.t);
+            ClassicAssert.AreEqual(CellType.String, cell.CellType);
+            ClassicAssert.AreEqual(ST_CellType.str, ctCell.t);
             //the line below failed prior to fix of Bug #47889
-            Assert.AreEqual(cell.StringCellValue, "t='str'");
+            ClassicAssert.AreEqual(cell.StringCellValue, "t='str'");
 
             //revert to a blank cell
             cell.SetCellValue((String)null);
-            Assert.AreEqual(CellType.Blank, cell.CellType);
-            Assert.AreEqual(ST_CellType.n, ctCell.t);
-            Assert.AreEqual(cell.StringCellValue, "");
+            ClassicAssert.AreEqual(CellType.Blank, cell.CellType);
+            ClassicAssert.AreEqual(ST_CellType.n, ctCell.t);
+            ClassicAssert.AreEqual(cell.StringCellValue, "");
 
             // check behavior with setCellFormulaValidation
             String invalidFormula = "A", validFormula = "A2";
             FormulaParseException fpe = null;
             // check that default is true
-            Assert.IsTrue(wb.CellFormulaValidation);
+            ClassicAssert.IsTrue(wb.CellFormulaValidation);
 
             // check that valid formula does not throw exception
             try
@@ -177,7 +177,7 @@ namespace TestCases.XSSF.UserModel
             {
                 fpe = e;
             }
-            Assert.IsNull(fpe);
+            ClassicAssert.IsNull(fpe);
 
             // check that invalid formula does throw exception
             try
@@ -188,12 +188,12 @@ namespace TestCases.XSSF.UserModel
             {
                 fpe = e;
             }
-            Assert.IsNotNull(fpe);
+            ClassicAssert.IsNotNull(fpe);
             fpe = null;
 
             // set cell formula validation to false
             wb.CellFormulaValidation = false;
-            Assert.IsFalse(wb.CellFormulaValidation);
+            ClassicAssert.IsFalse(wb.CellFormulaValidation);
 
             // check that neither valid nor invalid formula throw an exception
             try
@@ -205,7 +205,7 @@ namespace TestCases.XSSF.UserModel
             {
                 fpe = e;
             }
-            Assert.IsNull(fpe);
+            ClassicAssert.IsNull(fpe);
         }
 
         /**
@@ -221,21 +221,21 @@ namespace TestCases.XSSF.UserModel
 
             //try a string cell
             cell = sh.GetRow(0).GetCell(0);
-            Assert.AreEqual(CellType.String, cell.CellType);
-            Assert.AreEqual(cell.StringCellValue, "a");
-            Assert.AreEqual(cell.ToString(), "a");
+            ClassicAssert.AreEqual(CellType.String, cell.CellType);
+            ClassicAssert.AreEqual(cell.StringCellValue, "a");
+            ClassicAssert.AreEqual(cell.ToString(), "a");
             //Gnumeric produces spreadsheets without styles
             //make sure we return null for that instead of throwing OutOfBounds
-            Assert.AreEqual(null, cell.CellStyle);
+            ClassicAssert.AreEqual(null, cell.CellStyle);
 
             //try a numeric cell
             cell = sh.GetRow(1).GetCell(0);
-            Assert.AreEqual(CellType.Numeric, cell.CellType);
-            Assert.AreEqual(1.0, cell.NumericCellValue);
-            Assert.AreEqual(cell.ToString(), "1");
+            ClassicAssert.AreEqual(CellType.Numeric, cell.CellType);
+            ClassicAssert.AreEqual(1.0, cell.NumericCellValue);
+            ClassicAssert.AreEqual(cell.ToString(), "1");
             //Gnumeric produces spreadsheets without styles
             //make sure we return null for that instead of throwing OutOfBounds
-            Assert.AreEqual(null, cell.CellStyle);
+            ClassicAssert.AreEqual(null, cell.CellStyle);
         }
 
         [Test]
@@ -248,15 +248,15 @@ namespace TestCases.XSSF.UserModel
             ICell cell6 = row.CreateCell(6);
             ICell cell8 = row.CreateCell(8);
 
-            Assert.IsFalse(cell5.IsMergedCell);
-            Assert.IsFalse(cell6.IsMergedCell);
-            Assert.IsFalse(cell8.IsMergedCell);
+            ClassicAssert.IsFalse(cell5.IsMergedCell);
+            ClassicAssert.IsFalse(cell6.IsMergedCell);
+            ClassicAssert.IsFalse(cell8.IsMergedCell);
 
             sheet.AddMergedRegion(new CellRangeAddress(5, 6, 5, 6));   //region with 4 cells
 
-            Assert.IsTrue(cell5.IsMergedCell);
-            Assert.IsTrue(cell6.IsMergedCell);
-            Assert.IsFalse(cell8.IsMergedCell);
+            ClassicAssert.IsTrue(cell5.IsMergedCell);
+            ClassicAssert.IsTrue(cell6.IsMergedCell);
+            ClassicAssert.IsFalse(cell8.IsMergedCell);
 
         }
         [Test]
@@ -289,28 +289,28 @@ namespace TestCases.XSSF.UserModel
         private void assertCellsWithMissingR(XSSFRow row)
         {
             XSSFCell a1 = (XSSFCell)row.GetCell(0);
-            Assert.IsNotNull(a1);
+            ClassicAssert.IsNotNull(a1);
             XSSFCell a2 = (XSSFCell)row.GetCell(1);
-            Assert.IsNotNull(a2);
+            ClassicAssert.IsNotNull(a2);
             XSSFCell a5 = (XSSFCell)row.GetCell(4);
-            Assert.IsNotNull(a5);
+            ClassicAssert.IsNotNull(a5);
             XSSFCell a6 = (XSSFCell)row.GetCell(5);
-            Assert.IsNotNull(a6);
+            ClassicAssert.IsNotNull(a6);
 
-            Assert.AreEqual(6, row.LastCellNum);
-            Assert.AreEqual(4, row.PhysicalNumberOfCells);
+            ClassicAssert.AreEqual(6, row.LastCellNum);
+            ClassicAssert.AreEqual(4, row.PhysicalNumberOfCells);
 
-            Assert.AreEqual(a1.StringCellValue, "A1");
-            Assert.AreEqual(a2.StringCellValue, "B1");
-            Assert.AreEqual(a5.StringCellValue, "E1");
-            Assert.AreEqual(a6.StringCellValue, "F1");
+            ClassicAssert.AreEqual(a1.StringCellValue, "A1");
+            ClassicAssert.AreEqual(a2.StringCellValue, "B1");
+            ClassicAssert.AreEqual(a5.StringCellValue, "E1");
+            ClassicAssert.AreEqual(a6.StringCellValue, "F1");
 
             // even if R attribute is not set,
             // POI is able to re-construct it from column and row indexes
-            Assert.AreEqual(a1.GetReference(), "A1");
-            Assert.AreEqual(a2.GetReference(), "B1");
-            Assert.AreEqual(a5.GetReference(), "E1");
-            Assert.AreEqual(a6.GetReference(), "F1");
+            ClassicAssert.AreEqual(a1.GetReference(), "A1");
+            ClassicAssert.AreEqual(a2.GetReference(), "B1");
+            ClassicAssert.AreEqual(a5.GetReference(), "E1");
+            ClassicAssert.AreEqual(a6.GetReference(), "F1");
         }
         [Test]
         public void TestMissingRAttributeBug54288()
@@ -322,7 +322,7 @@ namespace TestCases.XSSF.UserModel
 
             XSSFSheet sheet = (XSSFSheet)wb.GetSheetAt(0);
             XSSFSheet sheetRef = (XSSFSheet)wbRef.GetSheetAt(0);
-            Assert.AreEqual(sheetRef.PhysicalNumberOfRows, sheet.PhysicalNumberOfRows);
+            ClassicAssert.AreEqual(sheetRef.PhysicalNumberOfRows, sheet.PhysicalNumberOfRows);
 
             // Test idea: iterate over cells in the reference worksheet, they all have the R attribute set.
             // For each cell from the reference sheet find the corresponding cell in the problematic file (with missing R)
@@ -333,23 +333,23 @@ namespace TestCases.XSSF.UserModel
                 XSSFRow rowRef = (XSSFRow)r;
                 XSSFRow row = (XSSFRow)sheet.GetRow(rowRef.RowNum);
 
-                Assert.AreEqual(rowRef.PhysicalNumberOfCells, row.PhysicalNumberOfCells, "number of cells in row[" + row.RowNum + "]");
+                ClassicAssert.AreEqual(rowRef.PhysicalNumberOfCells, row.PhysicalNumberOfCells, "number of cells in row[" + row.RowNum + "]");
 
                 foreach (ICell c in rowRef.Cells)
                 {
                     XSSFCell cellRef = (XSSFCell)c;
                     XSSFCell cell = (XSSFCell)row.GetCell(cellRef.ColumnIndex);
 
-                    Assert.AreEqual(cellRef.ColumnIndex, cell.ColumnIndex);
-                    Assert.AreEqual(cellRef.GetReference(), cell.GetReference());
+                    ClassicAssert.AreEqual(cellRef.ColumnIndex, cell.ColumnIndex);
+                    ClassicAssert.AreEqual(cellRef.GetReference(), cell.GetReference());
 
                     if (!cell.GetCTCell().IsSetR())
                     {
-                        Assert.IsTrue(cellRef.GetCTCell().IsSetR(), "R must e set in cellRef");
+                        ClassicAssert.IsTrue(cellRef.GetCTCell().IsSetR(), "R must e set in cellRef");
 
                         String valRef = formater.FormatCellValue(cellRef);
                         String val = formater.FormatCellValue(cell);
-                        Assert.AreEqual(valRef, val);
+                        ClassicAssert.AreEqual(valRef, val);
                     }
 
                 }
@@ -399,7 +399,7 @@ namespace TestCases.XSSF.UserModel
             table.GetCTTable().@ref = (new CellRangeAddress(startRef.Row, 1, startRef.Col, endRef.Col).FormatAsString());
 
             wbRead = XSSFTestDataSamples.WriteOutAndReadBack(wb);
-            Assert.IsNotNull(wbRead);
+            ClassicAssert.IsNotNull(wbRead);
 
             /*FileOutputStream stream = new FileOutputStream("c:\\temp\\output.xlsx");
             workbook.Write(stream);
@@ -446,7 +446,7 @@ namespace TestCases.XSSF.UserModel
 
             foreach (ICell cell in row)
             {
-                Assert.IsNotNull(cell.ToString());
+                ClassicAssert.IsNotNull(cell.ToString());
             }
         }
 
@@ -528,11 +528,11 @@ namespace TestCases.XSSF.UserModel
                 ICell sCell = swb.CreateSheet().CreateRow(0).CreateCell(0);
 
                 cell.SetCellValue(str);
-                Assert.AreEqual(str, cell.StringCellValue);
+                ClassicAssert.AreEqual(str, cell.StringCellValue);
                 xCell.SetCellValue(str);
-                Assert.AreEqual(str, xCell.StringCellValue);
+                ClassicAssert.AreEqual(str, xCell.StringCellValue);
                 sCell.SetCellValue(str);
-                Assert.AreEqual(str, sCell.StringCellValue);
+                ClassicAssert.AreEqual(str, sCell.StringCellValue);
 
                 IWorkbook wbBack = HSSFITestDataProvider.Instance.WriteOutAndReadBack(wb);
                 IWorkbook xwbBack = XSSFITestDataProvider.instance.WriteOutAndReadBack(xwb);
@@ -541,8 +541,8 @@ namespace TestCases.XSSF.UserModel
                 xCell = xwbBack.GetSheetAt(0).CreateRow(0).CreateCell(0);
                 sCell = swbBack.GetSheetAt(0).CreateRow(0).CreateCell(0);
 
-                Assert.AreEqual(cell.StringCellValue, xCell.StringCellValue);
-                Assert.AreEqual(cell.StringCellValue, sCell.StringCellValue);
+                ClassicAssert.AreEqual(cell.StringCellValue, xCell.StringCellValue);
+                ClassicAssert.AreEqual(cell.StringCellValue, sCell.StringCellValue);
 
                 pos += SpreadsheetVersion.EXCEL97.MaxTextLength;
 
@@ -566,9 +566,9 @@ namespace TestCases.XSSF.UserModel
             CellCopyPolicy policy = new CellCopyPolicy();
             destCell.CopyCellFrom(srcCell, policy);
 
-            Assert.AreEqual(CellType.Formula, destCell.CellType);
-            Assert.AreEqual("2+3", destCell.CellFormula);
-            Assert.AreEqual(srcCell.CellStyle, destCell.CellStyle);
+            ClassicAssert.AreEqual(CellType.Formula, destCell.CellType);
+            ClassicAssert.AreEqual("2+3", destCell.CellFormula);
+            ClassicAssert.AreEqual(srcCell.CellStyle, destCell.CellStyle);
         }
 
         [Test]
@@ -579,7 +579,7 @@ namespace TestCases.XSSF.UserModel
             // Paste values only
             CellCopyPolicy policy = new CellCopyPolicy.Builder().CellFormula(false).Build();
             destCell.CopyCellFrom(srcCell, policy);
-            Assert.AreEqual(CellType.Numeric, destCell.CellType);
+            ClassicAssert.AreEqual(CellType.Numeric, destCell.CellType);
         }
         [Test]
         public void TestCopyCellFrom_CellCopyPolicy_formulaWithUnregisteredUDF()
@@ -592,7 +592,7 @@ namespace TestCases.XSSF.UserModel
             // Users should use higher-level copying functions to row- or column-shift formulas.
             CellCopyPolicy policy = new CellCopyPolicy.Builder().CellFormula(true).Build();
             destCell.CopyCellFrom(srcCell, policy);
-            Assert.AreEqual("MYFUNC2(123, $A5, Sheet1!$B7)", destCell.CellFormula);
+            ClassicAssert.AreEqual("MYFUNC2(123, $A5, Sheet1!$B7)", destCell.CellFormula);
         }
 
         [Test]
@@ -604,12 +604,12 @@ namespace TestCases.XSSF.UserModel
             // Paste styles only
             CellCopyPolicy policy = new CellCopyPolicy.Builder().CellValue(false).Build();
             destCell.CopyCellFrom(srcCell, policy);
-            Assert.AreEqual(srcCell.CellStyle, destCell.CellStyle);
+            ClassicAssert.AreEqual(srcCell.CellStyle, destCell.CellStyle);
 
             // Old cell value should not have been overwritten
-            Assert.AreNotEqual(CellType.Blank, destCell.CellType);
-            Assert.AreEqual(CellType.Boolean, destCell.CellType);
-            Assert.AreEqual(true, destCell.BooleanCellValue);
+            ClassicAssert.AreNotEqual(CellType.Blank, destCell.CellType);
+            ClassicAssert.AreEqual(CellType.Boolean, destCell.CellType);
+            ClassicAssert.AreEqual(true, destCell.BooleanCellValue);
         }
 
 
@@ -633,14 +633,14 @@ namespace TestCases.XSSF.UserModel
             // Copy hyperlink
             CellCopyPolicy policy = new CellCopyPolicy.Builder().CopyHyperlink(true).MergeHyperlink(false).Build();
             destCell.CopyCellFrom(srcCell, policy);
-            Assert.IsNotNull(destCell.Hyperlink);
-            Assert.AreSame(srcCell.Sheet, destCell.Sheet,
+            ClassicAssert.IsNotNull(destCell.Hyperlink);
+            ClassicAssert.AreSame(srcCell.Sheet, destCell.Sheet,
                 "unit test assumes srcCell and destCell are on the same sheet");
             List<IHyperlink> links = srcCell.Sheet.GetHyperlinkList();
-            Assert.AreEqual(2, links.Count, "number of hyperlinks on sheet");
-            Assert.AreEqual(new CellReference(srcCell).FormatAsString(), (links[(0)] as XSSFHyperlink).CellRef,
+            ClassicAssert.AreEqual(2, links.Count, "number of hyperlinks on sheet");
+            ClassicAssert.AreEqual(new CellReference(srcCell).FormatAsString(), (links[(0)] as XSSFHyperlink).CellRef,
                 "source hyperlink");
-            Assert.AreEqual(new CellReference(destCell).FormatAsString(), (links[(1)] as XSSFHyperlink).CellRef,
+            ClassicAssert.AreEqual(new CellReference(destCell).FormatAsString(), (links[(1)] as XSSFHyperlink).CellRef,
                 "destination hyperlink");
 
             wb.Close();
@@ -665,31 +665,31 @@ namespace TestCases.XSSF.UserModel
             destCell.CellStyle = (hlinkStyle);
 
             // Pre-condition assumptions. This test is broken if either of these Assert.Fail.
-            Assert.AreSame(srcCell.Sheet, destCell.Sheet,
+            ClassicAssert.AreSame(srcCell.Sheet, destCell.Sheet,
                 "unit test assumes srcCell and destCell are on the same sheet");
-            Assert.IsNull(srcCell.Hyperlink);
+            ClassicAssert.IsNull(srcCell.Hyperlink);
             // Merge hyperlink - since srcCell doesn't have a hyperlink, destCell's hyperlink is not overwritten (cleared).
             CellCopyPolicy policy = new CellCopyPolicy.Builder().MergeHyperlink(true).CopyHyperlink(false).Build();
             destCell.CopyCellFrom(srcCell, policy);
-            Assert.IsNull(srcCell.Hyperlink);
-            Assert.IsNotNull(destCell.Hyperlink);
-            Assert.AreSame(link, destCell.Hyperlink);
+            ClassicAssert.IsNull(srcCell.Hyperlink);
+            ClassicAssert.IsNotNull(destCell.Hyperlink);
+            ClassicAssert.AreSame(link, destCell.Hyperlink);
             List<IHyperlink> links;
             links = srcCell.Sheet.GetHyperlinkList();
-            Assert.AreEqual(1, links.Count, "number of hyperlinks on sheet");
-            Assert.AreEqual(new CellReference(destCell).FormatAsString(), (links[(0)] as XSSFHyperlink).CellRef,
+            ClassicAssert.AreEqual(1, links.Count, "number of hyperlinks on sheet");
+            ClassicAssert.AreEqual(new CellReference(destCell).FormatAsString(), (links[(0)] as XSSFHyperlink).CellRef,
                 "source hyperlink");
 
             // Merge destCell's hyperlink to srcCell. Since destCell does have a hyperlink, this should copy destCell's hyperlink to srcCell.
             srcCell.CopyCellFrom(destCell, policy);
-            Assert.IsNotNull(srcCell.Hyperlink);
-            Assert.IsNotNull(destCell.Hyperlink);
+            ClassicAssert.IsNotNull(srcCell.Hyperlink);
+            ClassicAssert.IsNotNull(destCell.Hyperlink);
 
             links = srcCell.Sheet.GetHyperlinkList();
-            Assert.AreEqual(2, links.Count, "number of hyperlinks on sheet");
-            Assert.AreEqual(new CellReference(destCell).FormatAsString(), (links[(0)] as XSSFHyperlink).CellRef,
+            ClassicAssert.AreEqual(2, links.Count, "number of hyperlinks on sheet");
+            ClassicAssert.AreEqual(new CellReference(destCell).FormatAsString(), (links[(0)] as XSSFHyperlink).CellRef,
                 "dest hyperlink");
-            Assert.AreEqual(new CellReference(srcCell).FormatAsString(), (links[(1)] as XSSFHyperlink).CellRef,
+            ClassicAssert.AreEqual(new CellReference(srcCell).FormatAsString(), (links[(1)] as XSSFHyperlink).CellRef,
                 "source hyperlink");
 
             wb.Close();

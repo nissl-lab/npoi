@@ -20,7 +20,7 @@ namespace TestCases.SS.Formula.Functions
     using NPOI.SS.Formula.Eval;
     using System;
     using NPOI.SS.Formula.Functions;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     /**
      * Tests for {@link Value}
@@ -40,15 +40,15 @@ namespace TestCases.SS.Formula.Functions
         private static void ConfirmValue(String strText, double expected)
         {
             ValueEval result = invokeValue(strText);
-            Assert.AreEqual(typeof(NumberEval), result.GetType());
-            Assert.AreEqual(expected, ((NumberEval)result).NumberValue, 0.0);
+            ClassicAssert.AreEqual(typeof(NumberEval), result.GetType());
+            ClassicAssert.AreEqual(expected, ((NumberEval)result).NumberValue, 0.0);
         }
 
         private static void ConfirmValueError(String strText)
         {
             ValueEval result = invokeValue(strText);
-            Assert.AreEqual(typeof(ErrorEval), result.GetType());
-            Assert.AreEqual(ErrorEval.VALUE_INVALID, result);
+            ClassicAssert.AreEqual(typeof(ErrorEval), result.GetType());
+            ClassicAssert.AreEqual(ErrorEval.VALUE_INVALID, result);
         }
         [Test]
         public void TestBasic()

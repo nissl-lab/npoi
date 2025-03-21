@@ -19,7 +19,7 @@ namespace TestCases.SS.Formula.Functions
 {
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     /**
      * Tests for Excel function ISBLANK()
      * 
@@ -44,14 +44,14 @@ namespace TestCases.SS.Formula.Functions
 
             HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
             CellValue result = fe.Evaluate(cell);
-            Assert.AreEqual(CellType.Boolean, result.CellType);
-            Assert.AreEqual(true, result.BooleanValue);
+            ClassicAssert.AreEqual(CellType.Boolean, result.CellType);
+            ClassicAssert.AreEqual(true, result.BooleanValue);
 
             cell.CellFormula=("isblank(D7:D7)");
 
             result = fe.Evaluate(cell);
-            Assert.AreEqual(CellType.Boolean, result.CellType);
-            Assert.AreEqual(true, result.BooleanValue);
+            ClassicAssert.AreEqual(CellType.Boolean, result.CellType);
+            ClassicAssert.AreEqual(true, result.BooleanValue);
         }
     }
 

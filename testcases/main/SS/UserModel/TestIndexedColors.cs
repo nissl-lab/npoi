@@ -18,7 +18,7 @@
 namespace TestCases.SS.UserModel
 {
     using NPOI.SS.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using System;
 
     /**
@@ -43,22 +43,22 @@ namespace TestCases.SS.UserModel
                     // expected
                 }
             }
-            Assert.AreEqual(IndexedColors.Black, IndexedColors.FromInt(8));
-            Assert.AreEqual(IndexedColors.Gold, IndexedColors.FromInt(51));
-            Assert.AreEqual(IndexedColors.Automatic, IndexedColors.FromInt(64));
+            ClassicAssert.AreEqual(IndexedColors.Black, IndexedColors.FromInt(8));
+            ClassicAssert.AreEqual(IndexedColors.Gold, IndexedColors.FromInt(51));
+            ClassicAssert.AreEqual(IndexedColors.Automatic, IndexedColors.FromInt(64));
         }
 
 
         [Test]
         public void GetIndex()
         {
-            Assert.AreEqual(51, IndexedColors.Gold.Index);
+            ClassicAssert.AreEqual(51, IndexedColors.Gold.Index);
         }
 
         [Test]
         public void Index()
         {
-            Assert.AreEqual(51, IndexedColors.Gold.Index);
+            ClassicAssert.AreEqual(51, IndexedColors.Gold.Index);
         }
     }
 }

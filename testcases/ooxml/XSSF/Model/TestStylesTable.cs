@@ -16,7 +16,7 @@
 ==================================================================== */
 
 using System;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using NPOI.XSSF.UserModel;
 using System.Collections.Generic;
 using NPOI.SS.UserModel;
@@ -34,7 +34,7 @@ namespace TestCases.XSSF.Model
         [SetUp]
         public static void assumeCustomDataFormatIsNotBuiltIn()
         {
-            Assert.AreEqual(-1, BuiltinFormats.GetBuiltinFormat(customDataFormat));
+            ClassicAssert.AreEqual(-1, BuiltinFormats.GetBuiltinFormat(customDataFormat));
         }
 
         [Test]
@@ -43,10 +43,10 @@ namespace TestCases.XSSF.Model
             StylesTable st = new StylesTable();
 
             // Check defaults
-            Assert.IsNotNull(st.GetCTStylesheet());
-            Assert.AreEqual(1, st.XfsSize);
-            Assert.AreEqual(1, st.StyleXfsSize);
-            Assert.AreEqual(0, st.NumDataFormats);
+            ClassicAssert.IsNotNull(st.GetCTStylesheet());
+            ClassicAssert.AreEqual(1, st.XfsSize);
+            ClassicAssert.AreEqual(1, st.StyleXfsSize);
+            ClassicAssert.AreEqual(0, st.NumDataFormats);
         }
         [Test]
         public void TestCreateSaveLoad()
@@ -54,37 +54,37 @@ namespace TestCases.XSSF.Model
             XSSFWorkbook wb = new XSSFWorkbook();
             StylesTable st = wb.GetStylesSource();
 
-            Assert.IsNotNull(st.GetCTStylesheet());
-            Assert.AreEqual(1, st.XfsSize);
-            Assert.AreEqual(1, st.StyleXfsSize);
-            Assert.AreEqual(0, st.NumDataFormats);
+            ClassicAssert.IsNotNull(st.GetCTStylesheet());
+            ClassicAssert.AreEqual(1, st.XfsSize);
+            ClassicAssert.AreEqual(1, st.StyleXfsSize);
+            ClassicAssert.AreEqual(0, st.NumDataFormats);
 
             st = ((XSSFWorkbook)XSSFTestDataSamples.WriteOutAndReadBack(wb)).GetStylesSource();
 
-            Assert.IsNotNull(st.GetCTStylesheet());
-            Assert.AreEqual(1, st.XfsSize);
-            Assert.AreEqual(1, st.StyleXfsSize);
-            Assert.AreEqual(0, st.NumDataFormats);
+            ClassicAssert.IsNotNull(st.GetCTStylesheet());
+            ClassicAssert.AreEqual(1, st.XfsSize);
+            ClassicAssert.AreEqual(1, st.StyleXfsSize);
+            ClassicAssert.AreEqual(0, st.NumDataFormats);
 
-            Assert.IsNotNull(XSSFTestDataSamples.WriteOutAndReadBack(wb));
+            ClassicAssert.IsNotNull(XSSFTestDataSamples.WriteOutAndReadBack(wb));
         }
         [Test]
         public void TestLoadExisting()
         {
             XSSFWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook(testFile);
-            Assert.IsNotNull(workbook.GetStylesSource());
+            ClassicAssert.IsNotNull(workbook.GetStylesSource());
 
             StylesTable st = workbook.GetStylesSource();
 
             doTestExisting(st);
 
-            Assert.IsNotNull(XSSFTestDataSamples.WriteOutAndReadBack(workbook));
+            ClassicAssert.IsNotNull(XSSFTestDataSamples.WriteOutAndReadBack(workbook));
         }
         [Test]
         public void TestLoadSaveLoad()
         {
             XSSFWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook(testFile);
-            Assert.IsNotNull(workbook.GetStylesSource());
+            ClassicAssert.IsNotNull(workbook.GetStylesSource());
 
             StylesTable st = workbook.GetStylesSource();
             doTestExisting(st);
@@ -95,28 +95,28 @@ namespace TestCases.XSSF.Model
         public void doTestExisting(StylesTable st)
         {
             // Check contents
-            Assert.IsNotNull(st.GetCTStylesheet());
-            Assert.AreEqual(11, st.XfsSize);
-            Assert.AreEqual(1, st.StyleXfsSize);
-            Assert.AreEqual(8, st.NumDataFormats);
+            ClassicAssert.IsNotNull(st.GetCTStylesheet());
+            ClassicAssert.AreEqual(11, st.XfsSize);
+            ClassicAssert.AreEqual(1, st.StyleXfsSize);
+            ClassicAssert.AreEqual(8, st.NumDataFormats);
 
-            Assert.AreEqual(2, st.GetFonts().Count);
-            Assert.AreEqual(2, st.GetFills().Count);
-            Assert.AreEqual(1, st.GetBorders().Count);
+            ClassicAssert.AreEqual(2, st.GetFonts().Count);
+            ClassicAssert.AreEqual(2, st.GetFills().Count);
+            ClassicAssert.AreEqual(1, st.GetBorders().Count);
 
-            Assert.AreEqual("yyyy/mm/dd", st.GetNumberFormatAt((short)165));
-            Assert.AreEqual("yy/mm/dd", st.GetNumberFormatAt((short)167));
+            ClassicAssert.AreEqual("yyyy/mm/dd", st.GetNumberFormatAt((short)165));
+            ClassicAssert.AreEqual("yy/mm/dd", st.GetNumberFormatAt((short)167));
 
-            Assert.IsNotNull(st.GetStyleAt(0));
-            Assert.IsNotNull(st.GetStyleAt(1));
-            Assert.IsNotNull(st.GetStyleAt(2));
+            ClassicAssert.IsNotNull(st.GetStyleAt(0));
+            ClassicAssert.IsNotNull(st.GetStyleAt(1));
+            ClassicAssert.IsNotNull(st.GetStyleAt(2));
 
-            Assert.AreEqual(0, st.GetStyleAt(0).DataFormat);
-            Assert.AreEqual(14, st.GetStyleAt(1).DataFormat);
-            Assert.AreEqual(0, st.GetStyleAt(2).DataFormat);
-            Assert.AreEqual(165, st.GetStyleAt(3).DataFormat);
+            ClassicAssert.AreEqual(0, st.GetStyleAt(0).DataFormat);
+            ClassicAssert.AreEqual(14, st.GetStyleAt(1).DataFormat);
+            ClassicAssert.AreEqual(0, st.GetStyleAt(2).DataFormat);
+            ClassicAssert.AreEqual(165, st.GetStyleAt(3).DataFormat);
 
-            Assert.AreEqual("yyyy/mm/dd", st.GetStyleAt(3).GetDataFormatString());
+            ClassicAssert.AreEqual("yyyy/mm/dd", st.GetStyleAt(3).GetDataFormatString());
         }
         [Test]
         public void TestPopulateNew()
@@ -124,57 +124,57 @@ namespace TestCases.XSSF.Model
             XSSFWorkbook wb = new XSSFWorkbook();
             StylesTable st = wb.GetStylesSource();
 
-            Assert.IsNotNull(st.GetCTStylesheet());
-            Assert.AreEqual(1, st.XfsSize);
-            Assert.AreEqual(1, st.StyleXfsSize);
-            Assert.AreEqual(0, st.NumDataFormats);
+            ClassicAssert.IsNotNull(st.GetCTStylesheet());
+            ClassicAssert.AreEqual(1, st.XfsSize);
+            ClassicAssert.AreEqual(1, st.StyleXfsSize);
+            ClassicAssert.AreEqual(0, st.NumDataFormats);
 
             int nf1 = st.PutNumberFormat("yyyy-mm-dd");
             int nf2 = st.PutNumberFormat("yyyy-mm-DD");
-            Assert.AreEqual(nf1, st.PutNumberFormat("yyyy-mm-dd"));
+            ClassicAssert.AreEqual(nf1, st.PutNumberFormat("yyyy-mm-dd"));
 
             st.PutStyle(new XSSFCellStyle(st));
 
             // Save and re-load
             st = ((XSSFWorkbook)XSSFTestDataSamples.WriteOutAndReadBack(wb)).GetStylesSource();
 
-            Assert.IsNotNull(st.GetCTStylesheet());
-            Assert.AreEqual(2, st.XfsSize);
-            Assert.AreEqual(1, st.StyleXfsSize);
-            Assert.AreEqual(2, st.NumDataFormats);
+            ClassicAssert.IsNotNull(st.GetCTStylesheet());
+            ClassicAssert.AreEqual(2, st.XfsSize);
+            ClassicAssert.AreEqual(1, st.StyleXfsSize);
+            ClassicAssert.AreEqual(2, st.NumDataFormats);
 
-            Assert.AreEqual("yyyy-mm-dd", st.GetNumberFormatAt((short)nf1));
-            Assert.AreEqual(nf1, st.PutNumberFormat("yyyy-mm-dd"));
-            Assert.AreEqual(nf2, st.PutNumberFormat("yyyy-mm-DD"));
+            ClassicAssert.AreEqual("yyyy-mm-dd", st.GetNumberFormatAt((short)nf1));
+            ClassicAssert.AreEqual(nf1, st.PutNumberFormat("yyyy-mm-dd"));
+            ClassicAssert.AreEqual(nf2, st.PutNumberFormat("yyyy-mm-DD"));
 
-            Assert.IsNotNull(XSSFTestDataSamples.WriteOutAndReadBack(wb));
+            ClassicAssert.IsNotNull(XSSFTestDataSamples.WriteOutAndReadBack(wb));
         }
         [Test]
         public void TestPopulateExisting()
         {
             XSSFWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook(testFile);
-            Assert.IsNotNull(workbook.GetStylesSource());
+            ClassicAssert.IsNotNull(workbook.GetStylesSource());
 
             StylesTable st = workbook.GetStylesSource();
-            Assert.AreEqual(11, st.XfsSize);
-            Assert.AreEqual(1, st.StyleXfsSize);
-            Assert.AreEqual(8, st.NumDataFormats);
+            ClassicAssert.AreEqual(11, st.XfsSize);
+            ClassicAssert.AreEqual(1, st.StyleXfsSize);
+            ClassicAssert.AreEqual(8, st.NumDataFormats);
 
             int nf1 = st.PutNumberFormat("YYYY-mm-dd");
             int nf2 = st.PutNumberFormat("YYYY-mm-DD");
-            Assert.AreEqual(nf1, st.PutNumberFormat("YYYY-mm-dd"));
+            ClassicAssert.AreEqual(nf1, st.PutNumberFormat("YYYY-mm-dd"));
 
             st = ((XSSFWorkbook)XSSFTestDataSamples.WriteOutAndReadBack(workbook)).GetStylesSource();
 
-            Assert.AreEqual(11, st.XfsSize);
-            Assert.AreEqual(1, st.StyleXfsSize);
-            Assert.AreEqual(10, st.NumDataFormats);
+            ClassicAssert.AreEqual(11, st.XfsSize);
+            ClassicAssert.AreEqual(1, st.StyleXfsSize);
+            ClassicAssert.AreEqual(10, st.NumDataFormats);
 
-            Assert.AreEqual("YYYY-mm-dd", st.GetNumberFormatAt((short)nf1));
-            Assert.AreEqual(nf1, st.PutNumberFormat("YYYY-mm-dd"));
-            Assert.AreEqual(nf2, st.PutNumberFormat("YYYY-mm-DD"));
+            ClassicAssert.AreEqual("YYYY-mm-dd", st.GetNumberFormatAt((short)nf1));
+            ClassicAssert.AreEqual(nf1, st.PutNumberFormat("YYYY-mm-dd"));
+            ClassicAssert.AreEqual(nf2, st.PutNumberFormat("YYYY-mm-DD"));
 
-            Assert.IsNotNull(XSSFTestDataSamples.WriteOutAndReadBack(workbook));
+            ClassicAssert.IsNotNull(XSSFTestDataSamples.WriteOutAndReadBack(workbook));
         }
 
         [Test]
@@ -212,11 +212,11 @@ namespace TestCases.XSSF.Model
 
         private static void AssertNotContainsKey<K, V>(SortedDictionary<K, V> map, K key)
         {
-            Assert.IsFalse(map.ContainsKey(key));
+            ClassicAssert.IsFalse(map.ContainsKey(key));
         }
         private static void AssertNotContainsValue<K, V>(SortedDictionary<K, V> map, V value)
         {
-            Assert.IsFalse(map.ContainsValue(value));
+            ClassicAssert.IsFalse(map.ContainsValue(value));
         }
 
         [Test]
@@ -234,8 +234,8 @@ namespace TestCases.XSSF.Model
                 style.DataFormat = fmtIdx;
                 cell.CellStyle = style;
 
-                Assert.AreEqual(fmt, cell.CellStyle.GetDataFormatString());
-                Assert.AreEqual(fmt, wb1.GetStylesSource().GetNumberFormatAt(fmtIdx));
+                ClassicAssert.AreEqual(fmt, cell.CellStyle.GetDataFormatString());
+                ClassicAssert.AreEqual(fmt, wb1.GetStylesSource().GetNumberFormatAt(fmtIdx));
 
                 // remove the number format from the workbook
                 wb1.GetStylesSource().RemoveNumberFormat(fmt);
@@ -243,8 +243,8 @@ namespace TestCases.XSSF.Model
                 // number format in CellStyles should be restored to default number format
                 short defaultFmtIdx = 0;
                 String defaultFmt = BuiltinFormats.GetBuiltinFormat(0);
-                Assert.AreEqual(defaultFmtIdx, style.DataFormat);
-                Assert.AreEqual(defaultFmt, style.GetDataFormatString());
+                ClassicAssert.AreEqual(defaultFmtIdx, style.DataFormat);
+                ClassicAssert.AreEqual(defaultFmt, style.GetDataFormatString());
 
                 // The custom number format should be entirely removed from the workbook
                 SortedDictionary<short, String> numberFormats = wb1.GetStylesSource().GetNumberFormats() as SortedDictionary<short, String>;
@@ -252,7 +252,7 @@ namespace TestCases.XSSF.Model
                 AssertNotContainsValue(numberFormats, fmt);
 
                 // The default style shouldn't be added back to the styles source because it's built-in
-                Assert.AreEqual(0, wb1.GetStylesSource().NumDataFormats);
+                ClassicAssert.AreEqual(0, wb1.GetStylesSource().NumDataFormats);
 
                 cell = null;
                 style = null;
@@ -263,8 +263,8 @@ namespace TestCases.XSSF.Model
                 style = cell.CellStyle;
 
                 // number format in CellStyles should be restored to default number format
-                Assert.AreEqual(defaultFmtIdx, style.DataFormat);
-                Assert.AreEqual(defaultFmt, style.GetDataFormatString());
+                ClassicAssert.AreEqual(defaultFmtIdx, style.DataFormat);
+                ClassicAssert.AreEqual(defaultFmt, style.GetDataFormatString());
 
                 // The custom number format should be entirely removed from the workbook
                 numberFormats = wb2.GetStylesSource().GetNumberFormats() as SortedDictionary<short, String>;
@@ -272,7 +272,7 @@ namespace TestCases.XSSF.Model
                 AssertNotContainsValue(numberFormats, fmt);
 
                 // The default style shouldn't be added back to the styles source because it's built-in
-                Assert.AreEqual(0, wb2.GetStylesSource().NumDataFormats);
+                ClassicAssert.AreEqual(0, wb2.GetStylesSource().NumDataFormats);
 
                 wb2.Close();
             }
@@ -293,13 +293,13 @@ namespace TestCases.XSSF.Model
                 // Check default limit
                 int n = styles.MaxNumberOfDataFormats;
                 // https://support.office.com/en-us/article/excel-specifications-and-limits-1672b34d-7043-467e-8e27-269d656771c3
-                Assert.IsTrue(200 <= n);
-                Assert.IsTrue(n <= 250);
+                ClassicAssert.IsTrue(200 <= n);
+                ClassicAssert.IsTrue(n <= 250);
 
                 // Check upper limit
                 n = int.MaxValue;
                 styles.MaxNumberOfDataFormats = (n);
-                Assert.AreEqual(n, styles.MaxNumberOfDataFormats);
+                ClassicAssert.AreEqual(n, styles.MaxNumberOfDataFormats);
 
                 // Check negative (illegal) limits
                 try

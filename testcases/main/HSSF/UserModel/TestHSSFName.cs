@@ -19,7 +19,7 @@ namespace TestCases.HSSF.UserModel
 {
     using System;
     using System.Reflection;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.Model;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.UserModel;
@@ -77,22 +77,22 @@ namespace TestCases.HSSF.UserModel
                 sheet.RepeatingRows = (cra);
                 sheet.CreateFreezePane(0, 3);
             }
-            Assert.AreEqual(1, wb.NumberOfNames);
+            ClassicAssert.AreEqual(1, wb.NumberOfNames);
             IName nr1 = wb.GetNameAt(0);
 
-            Assert.AreEqual("Print_Titles", nr1.NameName);
+            ClassicAssert.AreEqual("Print_Titles", nr1.NameName);
             // TODO - full column references not rendering properly, absolute markers not present either
             // assertEquals("FirstSheet!$A:$A,FirstSheet!$1:$3", nr1.getRefersToFormula());
-            Assert.AreEqual("FirstSheet!A:A,FirstSheet!$A$1:$IV$3", nr1.RefersToFormula);
+            ClassicAssert.AreEqual("FirstSheet!A:A,FirstSheet!$A$1:$IV$3", nr1.RefersToFormula);
 
             // Save and re-open
             HSSFWorkbook nwb = HSSFTestDataSamples.WriteOutAndReadBack(wb);
 
-            Assert.AreEqual(1, nwb.NumberOfNames);
+            ClassicAssert.AreEqual(1, nwb.NumberOfNames);
             nr1 = nwb.GetNameAt(0);
 
-            Assert.AreEqual("Print_Titles", nr1.NameName);
-            Assert.AreEqual("FirstSheet!A:A,FirstSheet!$A$1:$IV$3", nr1.RefersToFormula);
+            ClassicAssert.AreEqual("Print_Titles", nr1.NameName);
+            ClassicAssert.AreEqual("FirstSheet!A:A,FirstSheet!$A$1:$IV$3", nr1.RefersToFormula);
 
             // check that Setting RR&C on a second sheet causes a new Print_Titles built-in
             // name to be Created
@@ -101,11 +101,11 @@ namespace TestCases.HSSF.UserModel
             sheet.RepeatingColumns = (cra);
             sheet.RepeatingRows = (cra);
 
-            Assert.AreEqual(2, nwb.NumberOfNames);
+            ClassicAssert.AreEqual(2, nwb.NumberOfNames);
             IName nr2 = nwb.GetNameAt(1);
 
-            Assert.AreEqual("Print_Titles", nr2.NameName);
-            Assert.AreEqual("SecondSheet!B:C,SecondSheet!$A$1:$IV$1", nr2.RefersToFormula);
+            ClassicAssert.AreEqual("Print_Titles", nr2.NameName);
+            ClassicAssert.AreEqual("SecondSheet!B:C,SecondSheet!$A$1:$IV$1", nr2.RefersToFormula);
         }
         [Test]
         public void TestNamedRange()
@@ -127,7 +127,7 @@ namespace TestCases.HSSF.UserModel
             IName namedRange1 = wb.GetNameAt(0);
             //Getting it sheet name
             sheetName = namedRange1.SheetName;
-            Assert.IsNotNull(sheetName);
+            ClassicAssert.IsNotNull(sheetName);
 
             // sanity check
             SanityChecker c = new SanityChecker();
@@ -135,8 +135,8 @@ namespace TestCases.HSSF.UserModel
 
             wb = HSSFTestDataSamples.WriteOutAndReadBack(wb);
             IName nm = wb.GetNameAt(wb.GetNameIndex("RangeTest"));
-            Assert.IsTrue("RangeTest".Equals(nm.NameName), "Name is " + nm.NameName);
-            Assert.AreEqual(wb.GetSheetName(0) + "!$D$4:$E$8", nm.RefersToFormula);
+            ClassicAssert.IsTrue("RangeTest".Equals(nm.NameName), "Name is " + nm.NameName);
+            ClassicAssert.AreEqual(wb.GetSheetName(0) + "!$D$4:$E$8", nm.RefersToFormula);
         }
 
         /**
@@ -159,12 +159,12 @@ namespace TestCases.HSSF.UserModel
             //Getting its reference
             String reference = namedRange1.RefersToFormula;
 
-            Assert.AreEqual(sheetName + "!$A$1:$D$10", reference);
+            ClassicAssert.AreEqual(sheetName + "!$A$1:$D$10", reference);
 
             IName namedRange2 = wb.GetNameAt(1);
 
-            Assert.AreEqual(sheetName + "!$D$17:$G$27", namedRange2.RefersToFormula);
-            Assert.AreEqual("SecondNamedRange", namedRange2.NameName);
+            ClassicAssert.AreEqual(sheetName + "!$D$17:$G$27", namedRange2.RefersToFormula);
+            ClassicAssert.AreEqual("SecondNamedRange", namedRange2.NameName);
         }
 
         /**
@@ -180,13 +180,13 @@ namespace TestCases.HSSF.UserModel
             IName name = wb.GetNameAt(0);
             String sheetName = wb.GetSheetName(0);
 
-            Assert.AreEqual(sheetName + "!$A$1:$D$10", name.RefersToFormula);
+            ClassicAssert.AreEqual(sheetName + "!$A$1:$D$10", name.RefersToFormula);
 
             name = wb.GetNameAt(1);
             String newReference = sheetName + "!$A$1:$C$36";
 
             name.RefersToFormula = newReference;
-            Assert.AreEqual(newReference, name.RefersToFormula);
+            ClassicAssert.AreEqual(newReference, name.RefersToFormula);
         }
 
         /**
@@ -200,7 +200,7 @@ namespace TestCases.HSSF.UserModel
             String sheetName = workbook.GetSheetName(0);
             String reference = sheetName + "!$A$1:$C$5";
 
-            Assert.AreEqual(reference, workbook.GetPrintArea(0));
+            ClassicAssert.AreEqual(reference, workbook.GetPrintArea(0));
         }
 
         [Test]
@@ -208,18 +208,18 @@ namespace TestCases.HSSF.UserModel
         public void TestDeletedReference()
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("24207.xls");
-            Assert.AreEqual(2, wb.NumberOfNames);
+            ClassicAssert.AreEqual(2, wb.NumberOfNames);
 
             IName name1 = wb.GetNameAt(0);
-            Assert.AreEqual("a", name1.NameName);
-            Assert.AreEqual("Sheet1!$A$1", name1.RefersToFormula);
+            ClassicAssert.AreEqual("a", name1.NameName);
+            ClassicAssert.AreEqual("Sheet1!$A$1", name1.RefersToFormula);
             new AreaReference(name1.RefersToFormula);
-            Assert.IsTrue(true, "Successfully constructed first reference");
+            ClassicAssert.IsTrue(true, "Successfully constructed first reference");
 
             IName name2 = wb.GetNameAt(1);
-            Assert.AreEqual("b", name2.NameName);
-            Assert.AreEqual("Sheet1!#REF!", name2.RefersToFormula);
-            Assert.IsTrue(name2.IsDeleted);
+            ClassicAssert.AreEqual("b", name2.NameName);
+            ClassicAssert.AreEqual("Sheet1!#REF!", name2.RefersToFormula);
+            ClassicAssert.IsTrue(name2.IsDeleted);
             try
             {
                 new AreaReference(name2.RefersToFormula);
@@ -245,7 +245,7 @@ namespace TestCases.HSSF.UserModel
             Ptg[] ptgs = HSSFFormulaParser.Parse("CSCO!$E$71", wb, FormulaType.NamedRange, 0);
             foreach (Ptg ptg in ptgs)
             {
-                Assert.AreEqual('R', ptg.RVAType);
+                ClassicAssert.AreEqual('R', ptg.RVAType);
             }
         }
     }
