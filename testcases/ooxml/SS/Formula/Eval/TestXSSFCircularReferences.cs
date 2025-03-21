@@ -19,7 +19,7 @@ namespace TestCases.SS.Formula.Eval
 {
 
     using NPOI.XSSF;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     /**
      * Tests XSSFFormulaEvaluator for its handling of cell formula circular references.

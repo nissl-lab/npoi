@@ -20,7 +20,7 @@ namespace TestCases.HSSF.UserModel
     using System;
     using NPOI.Util.Collections;
     using NPOI.HSSF.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     /**
      * Tests the implementation of the FontDetails class.
      *
@@ -45,20 +45,20 @@ namespace TestCases.HSSF.UserModel
         [Test]
         public void TestCreate()
         {
-            Assert.AreEqual(13, fontDetails.GetHeight());
-            Assert.AreEqual(6, fontDetails.GetCharWidth('a'));
-            Assert.AreEqual(3, fontDetails.GetCharWidth('f'));
+            ClassicAssert.AreEqual(13, fontDetails.GetHeight());
+            ClassicAssert.AreEqual(6, fontDetails.GetCharWidth('a'));
+            ClassicAssert.AreEqual(3, fontDetails.GetCharWidth('f'));
         }
         [Test]
         public void TestGetStringWidth()
         {
-            Assert.AreEqual(9, fontDetails.GetStringWidth("af"));
+            ClassicAssert.AreEqual(9, fontDetails.GetStringWidth("af"));
         }
         [Test]
         public void TestGetCharWidth()
         {
-            Assert.AreEqual(6, fontDetails.GetCharWidth('a'));
-            Assert.AreEqual(9, fontDetails.GetCharWidth('='));
+            ClassicAssert.AreEqual(6, fontDetails.GetCharWidth('a'));
+            ClassicAssert.AreEqual(9, fontDetails.GetCharWidth('='));
         }
 
     }

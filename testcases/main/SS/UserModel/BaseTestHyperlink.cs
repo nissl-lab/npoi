@@ -15,7 +15,7 @@
    limitations under the License.
 ==================================================================== */
 
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using NPOI.SS.UserModel;
 using System.Collections.Generic;
 using System;
@@ -89,13 +89,13 @@ namespace TestCases.SS.UserModel
             sheet = wb2.GetSheetAt(0);
             link = sheet.GetRow(0).GetCell(0).Hyperlink;
 
-            Assert.AreEqual("http://poi.apache.org/", link.Address);
+            ClassicAssert.AreEqual("http://poi.apache.org/", link.Address);
             link = sheet.GetRow(1).GetCell(0).Hyperlink;
-            Assert.AreEqual("hyperinks-beta4-dump.txt", link.Address);
+            ClassicAssert.AreEqual("hyperinks-beta4-dump.txt", link.Address);
             link = sheet.GetRow(2).GetCell(0).Hyperlink;
-            Assert.AreEqual("mailto:poi@apache.org?subject=Hyperlinks", link.Address);
+            ClassicAssert.AreEqual("mailto:poi@apache.org?subject=Hyperlinks", link.Address);
             link = sheet.GetRow(3).GetCell(0).Hyperlink;
-            Assert.AreEqual("'Target Sheet'!A1", link.Address);
+            ClassicAssert.AreEqual("'Target Sheet'!A1", link.Address);
 
             wb2.Close();
         }
@@ -125,18 +125,18 @@ namespace TestCases.SS.UserModel
             cell2.Hyperlink = (link2);
 
             // Make sure hyperlinks were deep-copied, and modifying one does not modify the other. 
-            Assert.AreNotSame(link1, link2);
-            Assert.AreNotEqual(link1, link2);
-            Assert.AreEqual("http://poi.apache.org/", link1.Address);
-            Assert.AreEqual("http://apache.org/", link2.Address);
-            Assert.AreEqual(link1, cell1.Hyperlink);
-            Assert.AreEqual(link2, cell2.Hyperlink);
+            ClassicAssert.AreNotSame(link1, link2);
+            ClassicAssert.AreNotEqual(link1, link2);
+            ClassicAssert.AreEqual("http://poi.apache.org/", link1.Address);
+            ClassicAssert.AreEqual("http://apache.org/", link2.Address);
+            ClassicAssert.AreEqual(link1, cell1.Hyperlink);
+            ClassicAssert.AreEqual(link2, cell2.Hyperlink);
 
             // Make sure both hyperlinks were added to the sheet
             List<IHyperlink> actualHyperlinks = sheet.GetHyperlinkList();
-            Assert.AreEqual(2, actualHyperlinks.Count);
-            Assert.AreEqual(link1, actualHyperlinks[0]);
-            Assert.AreEqual(link2, actualHyperlinks[1]);
+            ClassicAssert.AreEqual(2, actualHyperlinks.Count);
+            ClassicAssert.AreEqual(link1, actualHyperlinks[0]);
+            ClassicAssert.AreEqual(link2, actualHyperlinks[1]);
 
             wb.Close();
         }

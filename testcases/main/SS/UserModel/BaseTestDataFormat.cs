@@ -18,7 +18,7 @@
 using NPOI.SS.UserModel;
 using System.Collections.Generic;
 using System;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using NPOI.HSSF.UserModel;
 namespace TestCases.SS.UserModel
 {
@@ -45,7 +45,7 @@ namespace TestCases.SS.UserModel
         public void AssertNotBuiltInFormat(String customFmt)
         {
             //check it is not in built-in formats
-            Assert.AreEqual(-1, BuiltinFormats.GetBuiltinFormat(customFmt));
+            ClassicAssert.AreEqual(-1, BuiltinFormats.GetBuiltinFormat(customFmt));
         }
 
         [Test]
@@ -59,14 +59,14 @@ namespace TestCases.SS.UserModel
             for (int idx = 0; idx < formats.Count; idx++)
             {
                 String fmt = formats[idx];
-                Assert.AreEqual(idx, df.GetFormat(fmt));
+                ClassicAssert.AreEqual(idx, df.GetFormat(fmt));
             }
 
             //default format for new cells is General
             ISheet sheet = wb.CreateSheet();
             ICell cell = sheet.CreateRow(0).CreateCell(0);
-            Assert.AreEqual(0, cell.CellStyle.DataFormat);
-            Assert.AreEqual("General", cell.CellStyle.GetDataFormatString());
+            ClassicAssert.AreEqual(0, cell.CellStyle.DataFormat);
+            ClassicAssert.AreEqual("General", cell.CellStyle.GetDataFormatString());
 
             //create a custom data format
             String customFmt = "#0.00 AM/PM";
@@ -74,9 +74,9 @@ namespace TestCases.SS.UserModel
             AssertNotBuiltInFormat(customFmt);
             int customIdx = df.GetFormat(customFmt);
             //The first user-defined format starts at 164.
-            Assert.IsTrue(customIdx >= HSSFDataFormat.FIRST_USER_DEFINED_FORMAT_INDEX);
+            ClassicAssert.IsTrue(customIdx >= HSSFDataFormat.FIRST_USER_DEFINED_FORMAT_INDEX);
             //read and verify the string representation
-            Assert.AreEqual(customFmt, df.GetFormat((short)customIdx));
+            ClassicAssert.AreEqual(customFmt, df.GetFormat((short)customIdx));
 
             wb.Close();
         }
@@ -102,14 +102,14 @@ namespace TestCases.SS.UserModel
             // than BuiltinFormats.FIRST_USER_DEFINED_FORMAT_INDEX
             short poundFmtIdx = 6;
 
-            Assert.AreEqual(poundFmt, style.GetDataFormatString());
-            Assert.AreEqual(poundFmtIdx, style.DataFormat);
-            Assert.AreEqual("\u00a31", df.FormatCellValue(cell));
+            ClassicAssert.AreEqual(poundFmt, style.GetDataFormatString());
+            ClassicAssert.AreEqual(poundFmtIdx, style.DataFormat);
+            ClassicAssert.AreEqual("\u00a31", df.FormatCellValue(cell));
 
 
             IDataFormat dataFormat = wb.CreateDataFormat();
-            Assert.AreEqual(poundFmtIdx, dataFormat.GetFormat(poundFmt));
-            Assert.AreEqual(poundFmt, dataFormat.GetFormat(poundFmtIdx));
+            ClassicAssert.AreEqual(poundFmtIdx, dataFormat.GetFormat(poundFmt));
+            ClassicAssert.AreEqual(poundFmt, dataFormat.GetFormat(poundFmtIdx));
         }
 
         [Test]
@@ -131,7 +131,7 @@ namespace TestCases.SS.UserModel
                 IDataFormat dataFormat = wb.CreateDataFormat();
                 short fmtIdx = dataFormat.GetFormat(fmt);
                 String readbackFmt = dataFormat.GetFormat(fmtIdx);
-                Assert.AreEqual(fmt, readbackFmt, msg);
+                ClassicAssert.AreEqual(fmt, readbackFmt, msg);
             }
             finally
             {
@@ -156,14 +156,14 @@ namespace TestCases.SS.UserModel
 
             // Check the formats are as expected
             IRow headers = s.GetRow(0);
-            Assert.IsNotNull(headers);
-            Assert.AreEqual(formatKMWhole, headers.GetCell(1).StringCellValue);
-            Assert.AreEqual(formatKM3dp, headers.GetCell(3).StringCellValue);
+            ClassicAssert.IsNotNull(headers);
+            ClassicAssert.AreEqual(formatKMWhole, headers.GetCell(1).StringCellValue);
+            ClassicAssert.AreEqual(formatKM3dp, headers.GetCell(3).StringCellValue);
 
             IRow r2 = s.GetRow(1);
-            Assert.IsNotNull(r2);
-            Assert.AreEqual(formatKMWhole, r2.GetCell(1).CellStyle.GetDataFormatString());
-            Assert.AreEqual(formatKM3dp, r2.GetCell(3).CellStyle.GetDataFormatString());
+            ClassicAssert.IsNotNull(r2);
+            ClassicAssert.AreEqual(formatKMWhole, r2.GetCell(1).CellStyle.GetDataFormatString());
+            ClassicAssert.AreEqual(formatKM3dp, r2.GetCell(3).CellStyle.GetDataFormatString());
 
             // For all of the contents rows, check that DataFormatter is able
             //  to format the cells to the same value as the one next to it
@@ -177,8 +177,8 @@ namespace TestCases.SS.UserModel
                 String expWhole = r.GetCell(2).StringCellValue;
                 String exp3dp = r.GetCell(4).StringCellValue;
 
-                Assert.AreEqual(expWhole, fmt.FormatCellValue(r.GetCell(1), eval), "Wrong formatting of " + value + " for row " + rn);
-                Assert.AreEqual(exp3dp, fmt.FormatCellValue(r.GetCell(3), eval), "Wrong formatting of " + value + " for row " + rn);
+                ClassicAssert.AreEqual(expWhole, fmt.FormatCellValue(r.GetCell(1), eval), "Wrong formatting of " + value + " for row " + rn);
+                ClassicAssert.AreEqual(exp3dp, fmt.FormatCellValue(r.GetCell(3), eval), "Wrong formatting of " + value + " for row " + rn);
             }
         }
 
@@ -212,8 +212,8 @@ namespace TestCases.SS.UserModel
             zero.SetCellValue(0);
             zero.CellStyle = (cs);
 
-            Assert.AreEqual(pound + "   12,345", formatter.FormatCellValue(pve));
-            Assert.AreEqual("-" + pound + "   12,345", formatter.FormatCellValue(nve));
+            ClassicAssert.AreEqual(pound + "   12,345", formatter.FormatCellValue(pve));
+            ClassicAssert.AreEqual("-" + pound + "   12,345", formatter.FormatCellValue(nve));
             // TODO Fix this to not have an extra 0 at the end
             //assertEquals(pound+"   -  ", formatter.formatCellValue(zero)); 
 
@@ -256,10 +256,10 @@ namespace TestCases.SS.UserModel
                 lge.SetCellValue(12345678);
                 lge.CellStyle = (cs);
 
-                Assert.AreEqual("0", formatter.FormatCellValue(zero));
-                Assert.AreEqual("12", formatter.FormatCellValue(sml));
-                Assert.AreEqual("1'234", formatter.FormatCellValue(med));
-                Assert.AreEqual("12'345'678", formatter.FormatCellValue(lge));
+                ClassicAssert.AreEqual("0", formatter.FormatCellValue(zero));
+                ClassicAssert.AreEqual("12", formatter.FormatCellValue(sml));
+                ClassicAssert.AreEqual("1'234", formatter.FormatCellValue(med));
+                ClassicAssert.AreEqual("12'345'678", formatter.FormatCellValue(lge));
             }
             finally { 
                 wb.Close();

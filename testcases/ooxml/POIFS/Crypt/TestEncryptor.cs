@@ -25,7 +25,7 @@ namespace TestCases.POIFS.Crypt
     using NPOI.POIFS.FileSystem;
     using NPOI.Util;
     using NPOI.XWPF.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using TestCases;
 
     [TestFixture]
@@ -60,14 +60,14 @@ namespace TestCases.POIFS.Crypt
             ei = new EncryptionInfo(fs);
             Decryptor dec = ei.Decryptor;
             bool b = dec.VerifyPassword(password);
-            Assert.IsTrue(b);
+            ClassicAssert.IsTrue(b);
 
             MemoryStream payloadActual = new MemoryStream();
             is1 = dec.GetDataStream(fs.Root);
             IOUtils.Copy(is1, payloadActual);
             is1.Close();
 
-            Assert.IsTrue(Arrays.Equals(payloadExpected.ToArray(), payloadActual.ToArray()));
+            ClassicAssert.IsTrue(Arrays.Equals(payloadExpected.ToArray(), payloadActual.ToArray()));
             //assertArrayEquals(payloadExpected.ToArray(), payloadActual.ToArray());
         }
 
@@ -85,7 +85,7 @@ namespace TestCases.POIFS.Crypt
             EncryptionInfo infoExpected = new EncryptionInfo(nfs);
             Decryptor decExpected = Decryptor.GetInstance(infoExpected);
             bool passed = decExpected.VerifyPassword(pass);
-            Assert.IsTrue(passed, "Unable to Process: document is encrypted");
+            ClassicAssert.IsTrue(passed, "Unable to Process: document is encrypted");
 
             // extract the payload
             Stream is1 = decExpected.GetDataStream(nfs);
@@ -93,7 +93,7 @@ namespace TestCases.POIFS.Crypt
             is1.Close();
 
             long decPackLenExpected = decExpected.GetLength();
-            Assert.AreEqual(decPackLenExpected, payloadExpected.Length);
+            ClassicAssert.AreEqual(decPackLenExpected, payloadExpected.Length);
 
             is1 = nfs.Root.CreateDocumentInputStream(Decryptor.DEFAULT_POIFS_ENTRY);
             ///is1 = new BoundedInputStream(is1, is1.Available() - 16); // ignore pAdding block
@@ -139,7 +139,7 @@ namespace TestCases.POIFS.Crypt
             infoActual = new EncryptionInfo(nfs.Root);
             Decryptor decActual = Decryptor.GetInstance(infoActual);
             passed = decActual.VerifyPassword(pass);
-            Assert.IsTrue(passed, "Unable to Process: document is encrypted");
+            ClassicAssert.IsTrue(passed, "Unable to Process: document is encrypted");
 
             // extract the payload
             is1 = decActual.GetDataStream(nfs);
@@ -161,7 +161,7 @@ namespace TestCases.POIFS.Crypt
             AgileEncryptionHeader aehExpected = (AgileEncryptionHeader)infoExpected.Header;
             AgileEncryptionHeader aehActual = (AgileEncryptionHeader)infoActual.Header;
             CollectionAssert.AreEqual(aehExpected.GetEncryptedHmacKey(), aehActual.GetEncryptedHmacKey());
-            Assert.AreEqual(decPackLenExpected, decPackLenActual);
+            ClassicAssert.AreEqual(decPackLenExpected, decPackLenActual);
             CollectionAssert.AreEqual(payloadExpected, payloadActual);
             CollectionAssert.AreEqual(encPackExpected, encPackActual);
         }
@@ -179,7 +179,7 @@ namespace TestCases.POIFS.Crypt
             EncryptionInfo infoExpected = new EncryptionInfo(nfs);
             Decryptor d = Decryptor.GetInstance(infoExpected);
             bool passed = d.VerifyPassword(pass);
-            Assert.IsTrue(passed, "Unable to Process: document is encrypted");
+            ClassicAssert.IsTrue(passed, "Unable to Process: document is encrypted");
 
             // extract the payload
             MemoryStream bos = new MemoryStream();
@@ -245,7 +245,7 @@ namespace TestCases.POIFS.Crypt
             infoExpected = new EncryptionInfo(nfs);
             d = Decryptor.GetInstance(infoExpected);
             passed = d.VerifyPassword(pass);
-            Assert.IsTrue(passed, "Unable to Process: document is encrypted");
+            ClassicAssert.IsTrue(passed, "Unable to Process: document is encrypted");
 
             bos.Seek(0, SeekOrigin.Begin); //bos.Reset();
             is1 = d.GetDataStream(nfs);
@@ -273,10 +273,10 @@ namespace TestCases.POIFS.Crypt
             OPCPackage pkg = OPCPackage.Open(inp.Name);
 
             // It doesn't have any core properties yet
-            Assert.AreEqual(0, pkg.GetPartsByContentType(ContentTypes.CORE_PROPERTIES_PART).Count);
-            Assert.IsNotNull(pkg.GetPackageProperties());
-            Assert.IsNotNull(pkg.GetPackageProperties().GetLanguageProperty());
-            //Assert.IsNull(pkg.GetPackageProperties().GetLanguageProperty().GetValue());
+            ClassicAssert.AreEqual(0, pkg.GetPartsByContentType(ContentTypes.CORE_PROPERTIES_PART).Count);
+            ClassicAssert.IsNotNull(pkg.GetPackageProperties());
+            ClassicAssert.IsNotNull(pkg.GetPackageProperties().GetLanguageProperty());
+            //ClassicAssert.IsNull(pkg.GetPackageProperties().GetLanguageProperty().GetValue());
 
             // Encrypt it
             EncryptionInfo info = new EncryptionInfo(EncryptionMode.Agile);
@@ -298,15 +298,15 @@ namespace TestCases.POIFS.Crypt
             // Check we can decrypt it
             info = new EncryptionInfo(inpFS);
             Decryptor d = Decryptor.GetInstance(info);
-            Assert.AreEqual(true, d.VerifyPassword("password"));
+            ClassicAssert.AreEqual(true, d.VerifyPassword("password"));
 
             OPCPackage inpPkg = OPCPackage.Open(d.GetDataStream(inpFS));
 
             // Check it now has empty core properties
-            Assert.AreEqual(1, inpPkg.GetPartsByContentType(ContentTypes.CORE_PROPERTIES_PART).Count);
-            Assert.IsNotNull(inpPkg.GetPackageProperties());
-            Assert.IsNotNull(inpPkg.GetPackageProperties().GetLanguageProperty());
-            //Assert.IsNull(inpPkg.PackageProperties.LanguageProperty.Value);
+            ClassicAssert.AreEqual(1, inpPkg.GetPartsByContentType(ContentTypes.CORE_PROPERTIES_PART).Count);
+            ClassicAssert.IsNotNull(inpPkg.GetPackageProperties());
+            ClassicAssert.IsNotNull(inpPkg.GetPackageProperties().GetLanguageProperty());
+            //ClassicAssert.IsNull(inpPkg.PackageProperties.LanguageProperty.Value);
         }
 
         [Test]
@@ -327,7 +327,7 @@ namespace TestCases.POIFS.Crypt
             EncryptionInfo encInfo = new EncryptionInfo(fs);
             Decryptor d = encInfo.Decryptor;
             bool b = d.VerifyPassword(Decryptor.DEFAULT_PASSWORD);
-            Assert.IsTrue(b);
+            ClassicAssert.IsTrue(b);
 
             // do some strange things with it ;)
             XWPFDocument docx = new XWPFDocument(d.GetDataStream(fs));

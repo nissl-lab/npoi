@@ -20,7 +20,7 @@ namespace TestCases.POIFS.Macros
     using NPOI.POIFS.FileSystem;
     using NPOI.POIFS.Macros;
     using NPOI.Util;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using System;
     using System.Collections.Generic;
     using System.IO;
@@ -274,18 +274,18 @@ namespace TestCases.POIFS.Macros
 
         protected void AssertMacroContents(POIDataSamples samples, VBAMacroReader r)
         {
-            Assert.IsNotNull(r);
+            ClassicAssert.IsNotNull(r);
             Dictionary<String, String> contents = r.ReadMacros();
-            Assert.IsNotNull(contents);
-            Assert.IsFalse(contents.Count == 0, "Found 0 macros");
+            ClassicAssert.IsNotNull(contents);
+            ClassicAssert.IsFalse(contents.Count == 0, "Found 0 macros");
             /*
-            Assert.AreEqual(5, contents.Size());
+            ClassicAssert.AreEqual(5, contents.Size());
 
             // Check the ones without scripts
             String[] noScripts = new String[] { "ThisWorkbook",
                     "Sheet1", "Sheet2", "Sheet3" };
             foreach (String entry in noScripts) {
-                Assert.IsTrue(entry, contents.ContainsKey(entry));
+                ClassicAssert.IsTrue(entry, contents.ContainsKey(entry));
 
                 String content = contents.Get(entry);
                 assertContains(content, "Attribute VB_Exposed = True");
@@ -299,7 +299,7 @@ namespace TestCases.POIFS.Macros
             // Check the script one
             POITestCase.AssertContains(contents, "Module1");
             String content = contents["Module1"];
-            Assert.IsNotNull(content);
+            ClassicAssert.IsNotNull(content);
             POITestCase.AssertContains(content, "Attribute VB_Name = \"Module1\"");
             //assertContains(content, "Attribute TestMacro.VB_Description = \"This is a test macro\"");
 
@@ -315,7 +315,7 @@ namespace TestCases.POIFS.Macros
             FileInfo f = POIDataSamples.GetSpreadSheetInstance().GetFileInfo("59830.xls");
             VBAMacroReader r = new VBAMacroReader(f);
             Dictionary<string, string> macros = r.ReadMacros();
-            Assert.IsNotNull(macros["Module20"]);
+            ClassicAssert.IsNotNull(macros["Module20"]);
             StringAssert.Contains("here start of superscripting", macros["Module20"]);
             r.Close();
         }
@@ -328,7 +328,7 @@ namespace TestCases.POIFS.Macros
             FileInfo f = POIDataSamples.GetSpreadSheetInstance().GetFileInfo("59858.xls");
             VBAMacroReader r = new VBAMacroReader(f);
             Dictionary<string, string> macros = r.ReadMacros();
-            Assert.IsNotNull(macros["Sheet4"]);
+            ClassicAssert.IsNotNull(macros["Sheet4"]);
             StringAssert.Contains("intentional constituent", macros["Sheet4"]);
             r.Close();
         }
@@ -341,7 +341,7 @@ namespace TestCases.POIFS.Macros
             FileInfo f = POIDataSamples.GetDocumentInstance().GetFileInfo("60158.docm");
             VBAMacroReader r = new VBAMacroReader(f);
             Dictionary<string, string> macros = r.ReadMacros();
-            Assert.IsNotNull(macros["NewMacros"]);
+            ClassicAssert.IsNotNull(macros["NewMacros"]);
             StringAssert.Contains("' dirty", macros["NewMacros"]);
             r.Close();
         }
@@ -353,7 +353,7 @@ namespace TestCases.POIFS.Macros
             FileInfo f = POIDataSamples.GetSpreadSheetInstance().GetFileInfo("60273.xls");
             VBAMacroReader r = new VBAMacroReader(f);
             Dictionary<string, string> macros = r.ReadMacros();
-            Assert.IsNotNull(macros["Module1"]);
+            ClassicAssert.IsNotNull(macros["Module1"]);
             StringAssert.Contains("9/8/2004", macros["Module1"]);
             r.Close();
         }

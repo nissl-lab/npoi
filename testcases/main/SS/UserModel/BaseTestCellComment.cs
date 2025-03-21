@@ -22,7 +22,7 @@ namespace TestCases.SS.UserModel
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
     using NPOI.Util;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     /**
      * Common superclass for testing implementatiosn of
@@ -44,12 +44,12 @@ namespace TestCases.SS.UserModel
         {
             IWorkbook book = _testDataProvider.CreateWorkbook();
             ISheet sheet = book.CreateSheet();
-            Assert.IsNull(sheet.GetCellComment(new CellAddress(0, 0)));
+            ClassicAssert.IsNull(sheet.GetCellComment(new CellAddress(0, 0)));
 
             IRow row = sheet.CreateRow(0);
             ICell cell = row.CreateCell(0);
-            Assert.IsNull(sheet.GetCellComment(new CellAddress(0, 0)));
-            Assert.IsNull(cell.CellComment);
+            ClassicAssert.IsNull(sheet.GetCellComment(new CellAddress(0, 0)));
+            ClassicAssert.IsNull(cell.CellComment);
 
             book.Close();
         }
@@ -66,12 +66,12 @@ namespace TestCases.SS.UserModel
             ICreationHelper factory = wb1.GetCreationHelper();
 
             ISheet sheet = wb1.CreateSheet();
-            Assert.IsNull(sheet.GetCellComment(new CellAddress(cellRow, cellColumn)));
+            ClassicAssert.IsNull(sheet.GetCellComment(new CellAddress(cellRow, cellColumn)));
 
             ICell cell = sheet.CreateRow(cellRow).CreateCell(cellColumn);
             cell.SetCellValue(factory.CreateRichTextString(cellText));
-            Assert.IsNull(cell.CellComment);
-            Assert.IsNull(sheet.GetCellComment(new CellAddress(cellRow, cellColumn)));
+            ClassicAssert.IsNull(cell.CellComment);
+            ClassicAssert.IsNull(sheet.GetCellComment(new CellAddress(cellRow, cellColumn)));
 
             IDrawing patr = sheet.CreateDrawingPatriarch();
             IClientAnchor anchor = factory.CreateClientAnchor();
@@ -80,21 +80,21 @@ namespace TestCases.SS.UserModel
             anchor.Row1=(1);
             anchor.Row2=(2);
             IComment comment = patr.CreateCellComment(anchor);
-            Assert.IsFalse(comment.Visible);
+            ClassicAssert.IsFalse(comment.Visible);
             comment.Visible = (true);
-            Assert.IsTrue(comment.Visible);
+            ClassicAssert.IsTrue(comment.Visible);
             IRichTextString string1 = factory.CreateRichTextString(commentText);
             comment.String=(string1);
             comment.Author=(commentAuthor);
             cell.CellComment=(comment);
-            Assert.IsNotNull(cell.CellComment);
-            Assert.IsNotNull(sheet.GetCellComment(new CellAddress(cellRow, cellColumn)));
+            ClassicAssert.IsNotNull(cell.CellComment);
+            ClassicAssert.IsNotNull(sheet.GetCellComment(new CellAddress(cellRow, cellColumn)));
 
             //verify our Settings
-            Assert.AreEqual(commentAuthor, comment.Author);
-            Assert.AreEqual(commentText, comment.String.String);
-            Assert.AreEqual(cellRow, comment.Row);
-            Assert.AreEqual(cellColumn, comment.Column);
+            ClassicAssert.AreEqual(commentAuthor, comment.Author);
+            ClassicAssert.AreEqual(commentText, comment.String.String);
+            ClassicAssert.AreEqual(cellRow, comment.Row);
+            ClassicAssert.AreEqual(cellColumn, comment.Column);
 
             IWorkbook wb2 = _testDataProvider.WriteOutAndReadBack(wb1);
             wb1.Close();
@@ -103,12 +103,12 @@ namespace TestCases.SS.UserModel
             cell = sheet.GetRow(cellRow).GetCell(cellColumn);
             comment = cell.CellComment;
 
-            Assert.IsNotNull(comment);
-            Assert.AreEqual(commentAuthor, comment.Author);
-            Assert.AreEqual(commentText, comment.String.String);
-            Assert.AreEqual(cellRow, comment.Row);
-            Assert.AreEqual(cellColumn, comment.Column);
-            Assert.IsTrue(comment.Visible);
+            ClassicAssert.IsNotNull(comment);
+            ClassicAssert.AreEqual(commentAuthor, comment.Author);
+            ClassicAssert.AreEqual(commentText, comment.String.String);
+            ClassicAssert.AreEqual(cellRow, comment.Row);
+            ClassicAssert.AreEqual(cellColumn, comment.Column);
+            ClassicAssert.IsTrue(comment.Visible);
 
             // Change slightly, and re-test
             comment.String = (factory.CreateRichTextString("New Comment Text"));
@@ -121,16 +121,16 @@ namespace TestCases.SS.UserModel
             cell = sheet.GetRow(cellRow).GetCell(cellColumn);
             comment = cell.CellComment;
 
-            Assert.IsNotNull(comment);
-            Assert.AreEqual(commentAuthor, comment.Author);
-            Assert.AreEqual("New Comment Text", comment.String.String);
-            Assert.AreEqual(cellRow, comment.Row);
-            Assert.AreEqual(cellColumn, comment.Column);
-            Assert.IsFalse(comment.Visible);
+            ClassicAssert.IsNotNull(comment);
+            ClassicAssert.AreEqual(commentAuthor, comment.Author);
+            ClassicAssert.AreEqual("New Comment Text", comment.String.String);
+            ClassicAssert.AreEqual(cellRow, comment.Row);
+            ClassicAssert.AreEqual(cellColumn, comment.Column);
+            ClassicAssert.IsFalse(comment.Visible);
 
             // Test Comment.equals and Comment.hashCode
-            Assert.AreEqual(comment, cell.CellComment);
-            Assert.AreEqual(comment.GetHashCode(), cell.CellComment.GetHashCode());
+            ClassicAssert.AreEqual(comment, cell.CellComment);
+            ClassicAssert.AreEqual(comment.GetHashCode(), cell.CellComment.GetHashCode());
 
             wb3.Close();
         }
@@ -154,8 +154,8 @@ namespace TestCases.SS.UserModel
                 row = sheet.GetRow(rownum);
                 cell = row.GetCell(0);
                 comment = cell.CellComment;
-                Assert.IsNull(comment, "Cells in the first column are not commented");
-                Assert.IsNull(sheet.GetCellComment(new CellAddress(rownum, 0)));
+                ClassicAssert.IsNull(comment, "Cells in the first column are not commented");
+                ClassicAssert.IsNull(sheet.GetCellComment(new CellAddress(rownum, 0)));
             }
 
             for (int rownum = 0; rownum < 3; rownum++)
@@ -163,13 +163,13 @@ namespace TestCases.SS.UserModel
                 row = sheet.GetRow(rownum);
                 cell = row.GetCell(1);
                 comment = cell.CellComment;
-                Assert.IsNotNull(comment, "Cells in the second column have comments");
-                Assert.IsNotNull(sheet.GetCellComment(new CellAddress(rownum, 1)), "Cells in the second column have comments");
+                ClassicAssert.IsNotNull(comment, "Cells in the second column have comments");
+                ClassicAssert.IsNotNull(sheet.GetCellComment(new CellAddress(rownum, 1)), "Cells in the second column have comments");
 
-                Assert.AreEqual("Yegor Kozlov", comment.Author);
-                Assert.IsFalse(comment.String.String == string.Empty, "cells in the second column have not empyy notes");
-                Assert.AreEqual(rownum, comment.Row);
-                Assert.AreEqual(cell.ColumnIndex, comment.Column);
+                ClassicAssert.AreEqual("Yegor Kozlov", comment.Author);
+                ClassicAssert.IsFalse(comment.String.String == string.Empty, "cells in the second column have not empyy notes");
+                ClassicAssert.AreEqual(rownum, comment.Row);
+                ClassicAssert.AreEqual(cell.ColumnIndex, comment.Column);
             }
 
             wb.Close();
@@ -211,8 +211,8 @@ namespace TestCases.SS.UserModel
                 cell = row.GetCell(1);
                 comment = cell.CellComment;
 
-                Assert.AreEqual("Mofified[" + rownum + "] by Yegor", comment.Author);
-                Assert.AreEqual("Modified comment at row " + rownum, comment.String.String);
+                ClassicAssert.AreEqual("Mofified[" + rownum + "] by Yegor", comment.Author);
+                ClassicAssert.AreEqual("Modified comment at row " + rownum, comment.String.String);
             }
 
             wb2.Close();
@@ -224,17 +224,17 @@ namespace TestCases.SS.UserModel
             ISheet sheet = wb1.GetSheetAt(0);
 
             // Zap from rows 1 and 3
-            Assert.IsNotNull(sheet.GetRow(0).GetCell(1).CellComment);
-            Assert.IsNotNull(sheet.GetRow(1).GetCell(1).CellComment);
-            Assert.IsNotNull(sheet.GetRow(2).GetCell(1).CellComment);
+            ClassicAssert.IsNotNull(sheet.GetRow(0).GetCell(1).CellComment);
+            ClassicAssert.IsNotNull(sheet.GetRow(1).GetCell(1).CellComment);
+            ClassicAssert.IsNotNull(sheet.GetRow(2).GetCell(1).CellComment);
 
             sheet.GetRow(0).GetCell(1).RemoveCellComment();
             sheet.GetRow(2).GetCell(1).CellComment = (null);
 
             // Check gone so far
-            Assert.IsNull(sheet.GetRow(0).GetCell(1).CellComment);
-            Assert.IsNotNull(sheet.GetRow(1).GetCell(1).CellComment);
-            Assert.IsNull(sheet.GetRow(2).GetCell(1).CellComment);
+            ClassicAssert.IsNull(sheet.GetRow(0).GetCell(1).CellComment);
+            ClassicAssert.IsNotNull(sheet.GetRow(1).GetCell(1).CellComment);
+            ClassicAssert.IsNull(sheet.GetRow(2).GetCell(1).CellComment);
 
             // Save and re-load
             IWorkbook wb2 = _testDataProvider.WriteOutAndReadBack(wb1);
@@ -242,9 +242,9 @@ namespace TestCases.SS.UserModel
 
             sheet = wb2.GetSheetAt(0);
             // Check
-            Assert.IsNull(sheet.GetRow(0).GetCell(1).CellComment);
-            Assert.IsNotNull(sheet.GetRow(1).GetCell(1).CellComment);
-            Assert.IsNull(sheet.GetRow(2).GetCell(1).CellComment);
+            ClassicAssert.IsNull(sheet.GetRow(0).GetCell(1).CellComment);
+            ClassicAssert.IsNotNull(sheet.GetRow(1).GetCell(1).CellComment);
+            ClassicAssert.IsNull(sheet.GetRow(2).GetCell(1).CellComment);
 
             wb2.Close();
         }
@@ -280,11 +280,11 @@ namespace TestCases.SS.UserModel
             sheet = wb2.GetSheetAt(0);
             cell = sheet.GetRow(3).GetCell(5);
             comment = cell.CellComment;
-            Assert.IsNotNull(comment);
-            Assert.AreEqual("Hello, World!", comment.String.String);
-            Assert.AreEqual("Apache POI", comment.Author);
-            Assert.AreEqual(3, comment.Row);
-            Assert.AreEqual(5, comment.Column);
+            ClassicAssert.IsNotNull(comment);
+            ClassicAssert.AreEqual("Hello, World!", comment.String.String);
+            ClassicAssert.AreEqual("Apache POI", comment.Author);
+            ClassicAssert.AreEqual(3, comment.Row);
+            ClassicAssert.AreEqual(5, comment.Column);
 
             wb2.Close();
         }
@@ -329,14 +329,14 @@ namespace TestCases.SS.UserModel
             cell.CellComment = (/*setter*/comment);
 
             anchor = comment.ClientAnchor;
-            Assert.AreEqual(dx1, anchor.Dx1);
-            Assert.AreEqual(dy1, anchor.Dy1);
-            Assert.AreEqual(dx2, anchor.Dx2);
-            Assert.AreEqual(dy2, anchor.Dy2);
-            Assert.AreEqual(col1, anchor.Col1);
-            Assert.AreEqual(row1, anchor.Row1);
-            Assert.AreEqual(col2, anchor.Col2);
-            Assert.AreEqual(row2, anchor.Row2);
+            ClassicAssert.AreEqual(dx1, anchor.Dx1);
+            ClassicAssert.AreEqual(dy1, anchor.Dy1);
+            ClassicAssert.AreEqual(dx2, anchor.Dx2);
+            ClassicAssert.AreEqual(dy2, anchor.Dy2);
+            ClassicAssert.AreEqual(col1, anchor.Col1);
+            ClassicAssert.AreEqual(row1, anchor.Row1);
+            ClassicAssert.AreEqual(col2, anchor.Col2);
+            ClassicAssert.AreEqual(row2, anchor.Row2);
 
             anchor = factory.CreateClientAnchor();
             comment = Drawing.CreateCellComment(anchor);
@@ -345,27 +345,27 @@ namespace TestCases.SS.UserModel
 
             if (sheet is HSSFSheet)
             {
-                Assert.AreEqual(0, anchor.Col1);
-                Assert.AreEqual(0, anchor.Dx1);
-                Assert.AreEqual(0, anchor.Row1);
-                Assert.AreEqual(0, anchor.Dy1);
-                Assert.AreEqual(0, anchor.Col2);
-                Assert.AreEqual(0, anchor.Dx2);
-                Assert.AreEqual(0, anchor.Row2);
-                Assert.AreEqual(0, anchor.Dy2);
+                ClassicAssert.AreEqual(0, anchor.Col1);
+                ClassicAssert.AreEqual(0, anchor.Dx1);
+                ClassicAssert.AreEqual(0, anchor.Row1);
+                ClassicAssert.AreEqual(0, anchor.Dy1);
+                ClassicAssert.AreEqual(0, anchor.Col2);
+                ClassicAssert.AreEqual(0, anchor.Dx2);
+                ClassicAssert.AreEqual(0, anchor.Row2);
+                ClassicAssert.AreEqual(0, anchor.Dy2);
             }
             else
             {
                 // when anchor is Initialized without parameters, the comment anchor attributes default to
                 // "1, 15, 0, 2, 3, 15, 3, 16" ... see XSSFVMLDrawing.NewCommentShape()
-                Assert.AreEqual(1, anchor.Col1);
-                Assert.AreEqual(15 * Units.EMU_PER_PIXEL, anchor.Dx1);
-                Assert.AreEqual(0, anchor.Row1);
-                Assert.AreEqual(2 * Units.EMU_PER_PIXEL, anchor.Dy1);
-                Assert.AreEqual(3, anchor.Col2);
-                Assert.AreEqual(15 * Units.EMU_PER_PIXEL, anchor.Dx2);
-                Assert.AreEqual(3, anchor.Row2);
-                Assert.AreEqual(16 * Units.EMU_PER_PIXEL, anchor.Dy2);
+                ClassicAssert.AreEqual(1, anchor.Col1);
+                ClassicAssert.AreEqual(15 * Units.EMU_PER_PIXEL, anchor.Dx1);
+                ClassicAssert.AreEqual(0, anchor.Row1);
+                ClassicAssert.AreEqual(2 * Units.EMU_PER_PIXEL, anchor.Dy1);
+                ClassicAssert.AreEqual(3, anchor.Col2);
+                ClassicAssert.AreEqual(15 * Units.EMU_PER_PIXEL, anchor.Dx2);
+                ClassicAssert.AreEqual(3, anchor.Row2);
+                ClassicAssert.AreEqual(16 * Units.EMU_PER_PIXEL, anchor.Dy2);
             }
 
             wb.Close();
@@ -388,12 +388,12 @@ namespace TestCases.SS.UserModel
             catch (InvalidOperationException e)
             {
                 // HSSFWorkbooks fail when writing out workbook
-                Assert.AreEqual(e.Message, "found multiple cell comments for cell A1");
+                ClassicAssert.AreEqual(e.Message, "found multiple cell comments for cell A1");
             }
             catch (ArgumentException e)
             {
                 // XSSFWorkbooks fail when creating and setting the cell address of the comment
-                Assert.AreEqual(e.Message, "Multiple cell comments in one cell are not allowed, cell: A1");
+                ClassicAssert.AreEqual(e.Message, "Multiple cell comments in one cell are not allowed, cell: A1");
             }
             finally
             {
@@ -410,10 +410,10 @@ namespace TestCases.SS.UserModel
             IDrawing patriarch = sh.CreateDrawingPatriarch();
             IComment comment = patriarch.CreateCellComment(factory.CreateClientAnchor());
 
-            Assert.AreEqual(CellAddress.A1, comment.Address);
+            ClassicAssert.AreEqual(CellAddress.A1, comment.Address);
             ICell C2 = sh.CreateRow(1).CreateCell(2);
             C2.CellComment = comment;
-            Assert.AreEqual(new CellAddress("C2"), comment.Address);
+            ClassicAssert.AreEqual(new CellAddress("C2"), comment.Address);
         }
 
         [Test]
@@ -425,16 +425,16 @@ namespace TestCases.SS.UserModel
             IDrawing patriarch = sh.CreateDrawingPatriarch();
             IComment comment = patriarch.CreateCellComment(factory.CreateClientAnchor());
 
-            Assert.AreEqual(CellAddress.A1, comment.Address);
+            ClassicAssert.AreEqual(CellAddress.A1, comment.Address);
             CellAddress C2 = new CellAddress("C2");
-            Assert.AreEqual("C2", C2.FormatAsString());
+            ClassicAssert.AreEqual("C2", C2.FormatAsString());
             comment.Address = C2;
-            Assert.AreEqual(C2, comment.Address);
+            ClassicAssert.AreEqual(C2, comment.Address);
 
             CellAddress E10 = new CellAddress(9, 4);
-            Assert.AreEqual("E10", E10.FormatAsString());
+            ClassicAssert.AreEqual("E10", E10.FormatAsString());
             comment.SetAddress(9, 4);
-            Assert.AreEqual(E10, comment.Address);
+            ClassicAssert.AreEqual(E10, comment.Address);
         }
 
     }

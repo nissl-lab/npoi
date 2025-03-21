@@ -23,7 +23,7 @@ namespace TestCases.XSSF.Streaming
     using NPOI.XSSF;
     using NPOI.XSSF.Streaming;
     using NPOI.XSSF.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     /**
      * Formula Evaluation with SXSSF.
@@ -99,15 +99,15 @@ namespace TestCases.XSSF.Streaming
             SXSSFSheet s = wb.CreateSheet() as SXSSFSheet;
 
             s.CreateRow(0).CreateCell(0).CellFormula = (/*setter*/"1+2");
-            Assert.AreEqual(false, s.AllRowsFlushed);
-            Assert.AreEqual(-1, s.LastFlushedRowNumber);
+            ClassicAssert.AreEqual(false, s.AllRowsFlushed);
+            ClassicAssert.AreEqual(-1, s.LastFlushedRowNumber);
 
             for (int i = 1; i <= 19; i++) { s.CreateRow(i); }
             ICell c = s.CreateRow(20).CreateCell(0);
             c.CellFormula = (/*setter*/"A1+100");
 
-            Assert.AreEqual(false, s.AllRowsFlushed);
-            Assert.AreEqual(15, s.LastFlushedRowNumber);
+            ClassicAssert.AreEqual(false, s.AllRowsFlushed);
+            ClassicAssert.AreEqual(15, s.LastFlushedRowNumber);
 
             IFormulaEvaluator eval = wb.GetCreationHelper().CreateFormulaEvaluator();
             try
@@ -139,9 +139,9 @@ namespace TestCases.XSSF.Streaming
             IFormulaEvaluator eval = wb.GetCreationHelper().CreateFormulaEvaluator();
             eval.EvaluateAll();
 
-            Assert.AreEqual(3, (int)s.GetRow(0).GetCell(0).NumericCellValue);
-            Assert.AreEqual(13, (int)s.GetRow(1).GetCell(1).NumericCellValue);
-            Assert.AreEqual(113, (int)s.GetRow(2).GetCell(2).NumericCellValue);
+            ClassicAssert.AreEqual(3, (int)s.GetRow(0).GetCell(0).NumericCellValue);
+            ClassicAssert.AreEqual(13, (int)s.GetRow(1).GetCell(1).NumericCellValue);
+            ClassicAssert.AreEqual(113, (int)s.GetRow(2).GetCell(2).NumericCellValue);
 
             wb.Close();
         }
@@ -160,9 +160,9 @@ namespace TestCases.XSSF.Streaming
             c = s.CreateRow(1).CreateCell(0) as SXSSFCell;
             c.CellFormula = (/*setter*/"A1*2");
 
-            Assert.AreEqual(0, (int)c.NumericCellValue);
+            ClassicAssert.AreEqual(0, (int)c.NumericCellValue);
             eval.EvaluateFormulaCell(c);
-            Assert.AreEqual(3, (int)c.NumericCellValue);
+            ClassicAssert.AreEqual(3, (int)c.NumericCellValue);
 
             wb.Close();
         }
@@ -177,14 +177,14 @@ namespace TestCases.XSSF.Streaming
 
             SXSSFCell c = s.CreateRow(0).CreateCell(0) as SXSSFCell;
             c.CellFormula = (/*setter*/"1+2");
-            Assert.AreEqual(0, (int)c.NumericCellValue);
+            ClassicAssert.AreEqual(0, (int)c.NumericCellValue);
             eval.EvaluateFormulaCell(c);
-            Assert.AreEqual(3, (int)c.NumericCellValue);
+            ClassicAssert.AreEqual(3, (int)c.NumericCellValue);
 
             c = s.CreateRow(1).CreateCell(0) as SXSSFCell;
             c.CellFormula = (/*setter*/"CONCATENATE(\"hello\",\" \",\"world\")");
             eval.EvaluateFormulaCell(c);
-            Assert.AreEqual("hello world", c.StringCellValue);
+            ClassicAssert.AreEqual("hello world", c.StringCellValue);
 
 
         }

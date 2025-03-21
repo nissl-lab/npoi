@@ -18,7 +18,7 @@ namespace TestCases.SS.Formula.Functions
 {
 
     using System;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
     [TestFixture]
@@ -74,8 +74,8 @@ namespace TestCases.SS.Formula.Functions
             cell.CellFormula=(formulaText);
             fe.NotifyUpdateCell(cell);
             CellValue result = fe.Evaluate(cell);
-            Assert.AreEqual(result.CellType, CellType.String);
-            Assert.AreEqual(expectedResult, result.StringValue);
+            ClassicAssert.AreEqual(result.CellType, CellType.String);
+            ClassicAssert.AreEqual(expectedResult, result.StringValue);
         }
     }
 

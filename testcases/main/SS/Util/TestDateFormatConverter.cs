@@ -24,7 +24,7 @@ using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using NPOI.Util;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 
 namespace TestCases.SS.Util
 {

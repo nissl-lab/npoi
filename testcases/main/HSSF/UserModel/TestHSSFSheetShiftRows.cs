@@ -17,7 +17,7 @@
 
 namespace TestCases.HSSF.UserModel
 {
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     using TestCases.HSSF;
     using TestCases.SS.UserModel;

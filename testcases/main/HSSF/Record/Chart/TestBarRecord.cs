@@ -24,7 +24,7 @@ namespace TestCases.HSSF.Record.Chart
     using System;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.Chart;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     /**
      * Tests the serialization and deserialization of the BarRecord
@@ -52,16 +52,16 @@ namespace TestCases.HSSF.Record.Chart
         {
 
             BarRecord record = new BarRecord(TestcaseRecordInputStream.Create((short)0x1017, data));
-            Assert.AreEqual(0, record.BarSpace);
-            Assert.AreEqual(0x96, record.CategorySpace);
-            Assert.AreEqual(0, record.FormatFlags);
-            Assert.AreEqual(false, record.IsHorizontal);
-            Assert.AreEqual(false, record.IsStacked);
-            Assert.AreEqual(false, record.IsDisplayAsPercentage);
-            Assert.AreEqual(false, record.IsShadow);
+            ClassicAssert.AreEqual(0, record.BarSpace);
+            ClassicAssert.AreEqual(0x96, record.CategorySpace);
+            ClassicAssert.AreEqual(0, record.FormatFlags);
+            ClassicAssert.AreEqual(false, record.IsHorizontal);
+            ClassicAssert.AreEqual(false, record.IsStacked);
+            ClassicAssert.AreEqual(false, record.IsDisplayAsPercentage);
+            ClassicAssert.AreEqual(false, record.IsShadow);
 
 
-            Assert.AreEqual(10, record.RecordSize);
+            ClassicAssert.AreEqual(10, record.RecordSize);
         }
         [Test]
         public void TestStore()
@@ -76,9 +76,9 @@ namespace TestCases.HSSF.Record.Chart
 
 
             byte[] recordBytes = record.Serialize();
-            Assert.AreEqual(recordBytes.Length - 4, data.Length);
+            ClassicAssert.AreEqual(recordBytes.Length - 4, data.Length);
             for (int i = 0; i < data.Length; i++)
-                Assert.AreEqual(data[i], recordBytes[i + 4], "At offset " + i);
+                ClassicAssert.AreEqual(data[i], recordBytes[i + 4], "At offset " + i);
         }
     }
 }

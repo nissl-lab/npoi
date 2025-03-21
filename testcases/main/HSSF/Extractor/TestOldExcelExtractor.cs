@@ -21,7 +21,7 @@ namespace TestCases.HSSF.Extractor
     using NPOI.HSSF.Extractor;
     using NPOI.POIFS.FileSystem;
     using NPOI.Util;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using System;
     using System.IO;
     using System.Text;
@@ -68,8 +68,8 @@ namespace TestCases.HSSF.Extractor
             AssertContains(text, "1981/82");
 
             // Check the type
-            Assert.AreEqual(3, extractor.BiffVersion);
-            Assert.AreEqual(0x10, extractor.FileType);
+            ClassicAssert.AreEqual(3, extractor.BiffVersion);
+            ClassicAssert.AreEqual(0x10, extractor.FileType);
 
             extractor.Close();
         }
@@ -77,7 +77,7 @@ namespace TestCases.HSSF.Extractor
         public void TestSimpleExcel3NoReading()
         {
             OldExcelExtractor extractor = CreateExtractor("testEXCEL_3.xls");
-            Assert.IsNotNull(extractor);
+            ClassicAssert.IsNotNull(extractor);
 
             extractor.Close();
         }
@@ -99,8 +99,8 @@ namespace TestCases.HSSF.Extractor
             AssertContains(text, "784");
 
             // Check the type
-            Assert.AreEqual(4, extractor.BiffVersion);
-            Assert.AreEqual(0x10, extractor.FileType);
+            ClassicAssert.AreEqual(4, extractor.BiffVersion);
+            ClassicAssert.AreEqual(0x10, extractor.FileType);
 
             extractor.Close();
         }
@@ -126,8 +126,8 @@ namespace TestCases.HSSF.Extractor
                 AssertContains(text, "Sheet: Feuil3");
 
                 // Check the type
-                Assert.AreEqual(5, extractor.BiffVersion);
-                Assert.AreEqual(0x05, extractor.FileType);
+                ClassicAssert.AreEqual(5, extractor.BiffVersion);
+                ClassicAssert.AreEqual(0x05, extractor.FileType);
 
                 extractor.Close();
             }
@@ -215,8 +215,8 @@ namespace TestCases.HSSF.Extractor
 
                 OldExcelExtractor extractor = new OldExcelExtractor(f);
                 String text = extractor.Text;
-                Assert.IsNotNull(text);
-                Assert.IsTrue(text.Length > 100);
+                ClassicAssert.IsNotNull(text);
+                ClassicAssert.IsTrue(text.Length > 100);
 
                 extractor.Close();
             }
@@ -268,7 +268,7 @@ namespace TestCases.HSSF.Extractor
             {
                 OldExcelExtractor extractor = new OldExcelExtractor(stream);
                 String text = extractor.Text;
-                Assert.IsNotNull(text);
+                ClassicAssert.IsNotNull(text);
                 extractor.Close();
             }
             finally
@@ -385,7 +385,7 @@ namespace TestCases.HSSF.Extractor
                 out1.Close();
                 }
                 String string1 = Encoding.UTF8.GetString(out1.ToByteArray());
-                Assert.IsTrue(string1.Contains("Table C-13--Lemons"), "Had: " + string1);
+                ClassicAssert.IsTrue(string1.Contains("Table C-13--Lemons"), "Had: " + string1);
             }
             finally
             {
@@ -398,8 +398,8 @@ namespace TestCases.HSSF.Extractor
             //test file derives from Common Crawl
             FileInfo file = HSSFTestDataSamples.GetSampleFile("60284.xls");
             OldExcelExtractor ex = new OldExcelExtractor(file);
-            Assert.AreEqual(5, ex.BiffVersion);
-            Assert.AreEqual(5, ex.FileType);
+            ClassicAssert.AreEqual(5, ex.BiffVersion);
+            ClassicAssert.AreEqual(5, ex.FileType);
             try
             {
                 var x = ex.Text;
@@ -407,7 +407,7 @@ namespace TestCases.HSSF.Extractor
             }
             catch (EncryptedDocumentException)
             {
-                Assert.IsTrue(true, "correct exception thrown");
+                ClassicAssert.IsTrue(true, "correct exception thrown");
             }
             ex.Close();
         }

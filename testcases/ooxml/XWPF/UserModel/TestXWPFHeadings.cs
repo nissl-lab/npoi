@@ -19,7 +19,7 @@ namespace TestCases.XWPF.UserModel
     using NPOI.OpenXmlFormats.Wordprocessing;
     using NPOI.XWPF;
     using NPOI.XWPF.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using System;
 
 
@@ -43,9 +43,9 @@ namespace TestCases.XWPF.UserModel
 
             CT_SdtBlock block = doc.Document.body.AddNewSdt();
 
-            Assert.IsNull(p.Style);
+            ClassicAssert.IsNull(p.Style);
             p.Style = HEADING1;
-            Assert.AreEqual(HEADING1, p.GetCTP().pPr.pStyle.val);
+            ClassicAssert.AreEqual(HEADING1, p.GetCTP().pPr.pStyle.val);
 
             doc.CreateTOC();
             /*

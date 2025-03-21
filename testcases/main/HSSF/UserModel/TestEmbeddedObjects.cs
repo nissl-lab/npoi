@@ -19,7 +19,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NPOI.HSSF.UserModel;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 
 namespace TestCases.HSSF.UserModel
 {
@@ -34,11 +34,11 @@ namespace TestCases.HSSF.UserModel
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("drawings.xls");
             IList<HSSFObjectData> list = wb.GetAllEmbeddedObjects();
-            Assert.AreEqual(list.Count, 1);
+            ClassicAssert.AreEqual(list.Count, 1);
             HSSFObjectData obj = list[0];
-            Assert.IsNotNull(obj.GetObjectData());
-            Assert.IsNotNull(obj.GetDirectory());
-            Assert.IsNotNull(obj.OLE2ClassName);
+            ClassicAssert.IsNotNull(obj.GetObjectData());
+            ClassicAssert.IsNotNull(obj.GetDirectory());
+            ClassicAssert.IsNotNull(obj.OLE2ClassName);
         }
 
         /**
@@ -50,10 +50,10 @@ namespace TestCases.HSSF.UserModel
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("WithCheckBoxes.xls");
             IList<HSSFObjectData> list = wb.GetAllEmbeddedObjects();
-            Assert.AreEqual(list.Count, 1);
+            ClassicAssert.AreEqual(list.Count, 1);
             HSSFObjectData obj = list[0];
-            Assert.IsNotNull(obj.GetObjectData());
-            Assert.IsNotNull(obj.OLE2ClassName);
+            ClassicAssert.IsNotNull(obj.GetObjectData());
+            ClassicAssert.IsNotNull(obj.OLE2ClassName);
         }
 
         /**
@@ -65,7 +65,7 @@ namespace TestCases.HSSF.UserModel
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("45538_form_Header.xls");
             IList<HSSFObjectData> list = wb.GetAllEmbeddedObjects();
-            Assert.AreEqual(list.Count, 40);
+            ClassicAssert.AreEqual(list.Count, 40);
         }
     }
 }

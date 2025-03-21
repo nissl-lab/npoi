@@ -31,7 +31,7 @@ using System;
 using System.Collections;
 using System.IO;
 
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 
 using NPOI.POIFS.FileSystem;
 using NPOI.POIFS.Properties;
@@ -77,9 +77,9 @@ namespace TestCases.POIFS.FileSystem
             DirectoryNode parent = new DirectoryNode(property1, fs, null);
             DirectoryNode node = new DirectoryNode(property2, fs, parent);
 
-            Assert.AreEqual(0, parent.Path.Length);
-            Assert.AreEqual(1, node.Path.Length);
-            Assert.AreEqual("child", node.Path.GetComponent(0));
+            ClassicAssert.AreEqual(0, parent.Path.Length);
+            ClassicAssert.AreEqual(1, node.Path.Length);
+            ClassicAssert.AreEqual("child", node.Path.GetComponent(0));
 
             // Verify that GetEntries behaves correctly
             int count = 0;
@@ -89,13 +89,13 @@ namespace TestCases.POIFS.FileSystem
             {
                 count++;
             }
-            Assert.AreEqual(0, count);
+            ClassicAssert.AreEqual(0, count);
 
             // Verify behavior of IsEmpty
-            Assert.IsTrue(node.IsEmpty);
+            ClassicAssert.IsTrue(node.IsEmpty);
 
             // Verify behavior of EntryCount
-            Assert.AreEqual(0, node.EntryCount);
+            ClassicAssert.AreEqual(0, node.EntryCount);
 
             // Verify behavior of Entry
             try
@@ -110,16 +110,16 @@ namespace TestCases.POIFS.FileSystem
             }
 
             // Verify behavior of isDirectoryEntry
-            Assert.IsTrue(node.IsDirectoryEntry);
+            ClassicAssert.IsTrue(node.IsDirectoryEntry);
 
             // Verify behavior of GetName
-            Assert.AreEqual(property2.Name, node.Name);
+            ClassicAssert.AreEqual(property2.Name, node.Name);
 
             // Verify behavior of isDocumentEntry
-            Assert.IsTrue(!node.IsDocumentEntry);
+            ClassicAssert.IsTrue(!node.IsDocumentEntry);
 
             // Verify behavior of GetParent
-            Assert.AreEqual(parent, node.Parent);
+            ClassicAssert.AreEqual(parent, node.Parent);
         }
 
         /**
@@ -147,13 +147,13 @@ namespace TestCases.POIFS.FileSystem
                 count++;
                 //iter.Current;
             }
-            Assert.AreEqual(2, count);
+            ClassicAssert.AreEqual(2, count);
 
             // Verify behavior of IsEmpty
-            Assert.IsTrue(!node.IsEmpty);
+            ClassicAssert.IsTrue(!node.IsEmpty);
 
             // Verify behavior of EntryCount
-            Assert.AreEqual(2, node.EntryCount);
+            ClassicAssert.AreEqual(2, node.EntryCount);
 
             // Verify behavior of Entry
             DirectoryNode child1 = (DirectoryNode)node.GetEntry("child1");
@@ -172,16 +172,16 @@ namespace TestCases.POIFS.FileSystem
             }
 
             // Verify behavior of isDirectoryEntry
-            Assert.IsTrue(node.IsDirectoryEntry);
+            ClassicAssert.IsTrue(node.IsDirectoryEntry);
 
             // Verify behavior of GetName
-            Assert.AreEqual(property1.Name, node.Name);
+            ClassicAssert.AreEqual(property1.Name, node.Name);
 
             // Verify behavior of isDocumentEntry
-            Assert.IsTrue(!node.IsDocumentEntry);
+            ClassicAssert.IsTrue(!node.IsDocumentEntry);
 
             // Verify behavior of GetParent
-            Assert.IsNull(node.Parent);
+            ClassicAssert.IsNull(node.Parent);
         }
 
         /**
@@ -195,32 +195,32 @@ namespace TestCases.POIFS.FileSystem
             POIFSFileSystem fs = new POIFSFileSystem();
             DirectoryEntry root = fs.Root;
 
-            Assert.IsFalse(root.Delete());
-            Assert.IsTrue(root.IsEmpty);
+            ClassicAssert.IsFalse(root.Delete());
+            ClassicAssert.IsTrue(root.IsEmpty);
 
             DirectoryEntry dir = fs.CreateDirectory("myDir");
 
-            Assert.IsFalse(root.IsEmpty);
-            Assert.IsTrue(dir.IsEmpty);
+            ClassicAssert.IsFalse(root.IsEmpty);
+            ClassicAssert.IsTrue(dir.IsEmpty);
 
-            Assert.IsFalse(root.Delete());
+            ClassicAssert.IsFalse(root.Delete());
             // Verify can Delete empty directory
-            Assert.IsTrue(dir.Delete());
+            ClassicAssert.IsTrue(dir.Delete());
             dir = fs.CreateDirectory("NextDir");
             DocumentEntry doc = dir.CreateDocument("foo", new MemoryStream(new byte[1]));
 
-            Assert.IsFalse(root.IsEmpty);
-            Assert.IsFalse(dir.IsEmpty);
+            ClassicAssert.IsFalse(root.IsEmpty);
+            ClassicAssert.IsFalse(dir.IsEmpty);
 
-            Assert.IsFalse(dir.Delete());
+            ClassicAssert.IsFalse(dir.Delete());
 
             // Verify cannot Delete empty directory
-            Assert.IsTrue(!dir.Delete());
-            Assert.IsTrue(doc.Delete());
-            Assert.IsTrue(dir.IsEmpty);
+            ClassicAssert.IsTrue(!dir.Delete());
+            ClassicAssert.IsTrue(doc.Delete());
+            ClassicAssert.IsTrue(dir.IsEmpty);
             // Verify now we can Delete it
-            Assert.IsTrue(dir.Delete());
-            Assert.IsTrue(root.IsEmpty);
+            ClassicAssert.IsTrue(dir.Delete());
+            ClassicAssert.IsTrue(root.IsEmpty);
 
             fs.Close();
         }
@@ -237,18 +237,18 @@ namespace TestCases.POIFS.FileSystem
             DirectoryEntry root = fs.Root;
 
             // Verify cannot Rename the root directory
-            Assert.IsTrue(!root.RenameTo("foo"));
+            ClassicAssert.IsTrue(!root.RenameTo("foo"));
             DirectoryEntry dir = fs.CreateDirectory("myDir");
 
-            Assert.IsTrue(dir.RenameTo("foo"));
-            Assert.AreEqual("foo", dir.Name);
+            ClassicAssert.IsTrue(dir.RenameTo("foo"));
+            ClassicAssert.AreEqual("foo", dir.Name);
             DirectoryEntry dir2 = fs.CreateDirectory("myDir");
 
-            Assert.IsTrue(!dir2.RenameTo("foo"));
-            Assert.AreEqual("myDir", dir2.Name);
-            Assert.IsTrue(dir.RenameTo("FirstDir"));
-            Assert.IsTrue(dir2.RenameTo("foo"));
-            Assert.AreEqual("foo", dir2.Name);
+            ClassicAssert.IsTrue(!dir2.RenameTo("foo"));
+            ClassicAssert.AreEqual("myDir", dir2.Name);
+            ClassicAssert.IsTrue(dir.RenameTo("FirstDir"));
+            ClassicAssert.IsTrue(dir2.RenameTo("foo"));
+            ClassicAssert.AreEqual("foo", dir2.Name);
 
             fs.Close();
         }

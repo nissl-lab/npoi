@@ -24,7 +24,7 @@ namespace TestCases.DDF
     using System.Collections.Generic;
     using System.IO;
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.DDF;
     using NPOI.Util;
     [TestFixture]
@@ -42,12 +42,12 @@ namespace TestCases.DDF
             IEscherRecordFactory factory = new DefaultEscherRecordFactory();
             r.FillFields(HexRead.ReadFromString(TestData), factory);
 
-            Assert.AreEqual(0x020F, r.Options);
-            Assert.AreEqual(unchecked((short)0xF111), r.RecordId);
-            Assert.IsTrue(r.IsContainerRecord);
-            Assert.AreEqual(8, r.RecordSize);
-            Assert.AreEqual(0, r.ChildRecords.Count);
-            Assert.AreEqual(0, r.Data.Length);
+            ClassicAssert.AreEqual(0x020F, r.Options);
+            ClassicAssert.AreEqual(unchecked((short)0xF111), r.RecordId);
+            ClassicAssert.IsTrue(r.IsContainerRecord);
+            ClassicAssert.AreEqual(8, r.RecordSize);
+            ClassicAssert.AreEqual(0, r.ChildRecords.Count);
+            ClassicAssert.AreEqual(0, r.Data.Length);
 
             TestData =
                     "00 02 " + // options
@@ -58,16 +58,16 @@ namespace TestCases.DDF
             r = new UnknownEscherRecord();
             r.FillFields(HexRead.ReadFromString(TestData), factory);
 
-            Assert.AreEqual(0x0200, r.Options);
-            Assert.AreEqual(unchecked((short)0xF111), r.RecordId);
-            Assert.AreEqual(12, r.RecordSize);
-            Assert.IsFalse(r.IsContainerRecord);
-            Assert.AreEqual(0, r.ChildRecords.Count);
-            Assert.AreEqual(4, r.Data.Length);
-            Assert.AreEqual(1, r.Data[0]);
-            Assert.AreEqual(2, r.Data[1]);
-            Assert.AreEqual(3, r.Data[2]);
-            Assert.AreEqual(4, r.Data[3]);
+            ClassicAssert.AreEqual(0x0200, r.Options);
+            ClassicAssert.AreEqual(unchecked((short)0xF111), r.RecordId);
+            ClassicAssert.AreEqual(12, r.RecordSize);
+            ClassicAssert.IsFalse(r.IsContainerRecord);
+            ClassicAssert.AreEqual(0, r.ChildRecords.Count);
+            ClassicAssert.AreEqual(4, r.Data.Length);
+            ClassicAssert.AreEqual(1, r.Data[0]);
+            ClassicAssert.AreEqual(2, r.Data[1]);
+            ClassicAssert.AreEqual(3, r.Data[2]);
+            ClassicAssert.AreEqual(4, r.Data[3]);
 
             TestData =
                     "0F 02 " + // options
@@ -80,12 +80,12 @@ namespace TestCases.DDF
             r = new UnknownEscherRecord();
             r.FillFields(HexRead.ReadFromString(TestData), factory);
 
-            Assert.AreEqual(0x020F, r.Options);
-            Assert.AreEqual(unchecked((short)0xF111), r.RecordId);
-            Assert.AreEqual(8, r.RecordSize);
-            Assert.IsTrue(r.IsContainerRecord);
-            Assert.AreEqual(1, r.ChildRecords.Count);
-            Assert.AreEqual(unchecked((short)0xFFFF), r.GetChild(0).RecordId);
+            ClassicAssert.AreEqual(0x020F, r.Options);
+            ClassicAssert.AreEqual(unchecked((short)0xF111), r.RecordId);
+            ClassicAssert.AreEqual(8, r.RecordSize);
+            ClassicAssert.IsTrue(r.IsContainerRecord);
+            ClassicAssert.AreEqual(1, r.ChildRecords.Count);
+            ClassicAssert.AreEqual(unchecked((short)0xFFFF), r.GetChild(0).RecordId);
 
         }
         [Test]
@@ -97,7 +97,7 @@ namespace TestCases.DDF
             byte[] data = new byte[8];
             r.Serialize(0, data);
 
-            Assert.AreEqual("[34, 12, 12, F1, 00, 00, 00, 00]", HexDump.ToHex(data));
+            ClassicAssert.AreEqual("[34, 12, 12, F1, 00, 00, 00, 00]", HexDump.ToHex(data));
 
             EscherRecord childRecord = new UnknownEscherRecord();
             childRecord.Options=unchecked((short)0x9999);
@@ -107,7 +107,7 @@ namespace TestCases.DDF
             data = new byte[16];
             r.Serialize(0, data);
 
-            Assert.AreEqual("[3F, 12, 12, F1, 08, 00, 00, 00, 99, 99, 01, FF, 00, 00, 00, 00]", HexDump.ToHex(data));
+            ClassicAssert.AreEqual("[3F, 12, 12, F1, 08, 00, 00, 00, 99, 99, 01, FF, 00, 00, 00, 00]", HexDump.ToHex(data));
         }
         [Test]
         public void TestToString()
@@ -119,7 +119,7 @@ namespace TestCases.DDF
             r.Serialize(0, data);
 
             String nl = Environment.NewLine;
-            Assert.AreEqual("UnknownEscherRecord:" + nl +
+            ClassicAssert.AreEqual("UnknownEscherRecord:" + nl +
                     "  isContainer: False" + nl +
                     "  version: 0x0004" + nl +
                     "  instance: 0x0123" + nl +

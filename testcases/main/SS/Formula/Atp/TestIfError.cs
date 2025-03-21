@@ -18,7 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using NPOI.SS.UserModel;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.Util;
@@ -73,15 +73,15 @@ namespace TestCases.SS.Formula.Atp
 
             IFormulaEvaluator evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
 
-            Assert.AreEqual(CellType.Numeric, evaluator.Evaluate(cell1).CellType, "Checks that the cell is numeric");
-            Assert.AreEqual(6.0, evaluator.Evaluate(cell1).NumberValue, accuracy, "Divides 210 by 35 and returns 6.0");
+            ClassicAssert.AreEqual(CellType.Numeric, evaluator.Evaluate(cell1).CellType, "Checks that the cell is numeric");
+            ClassicAssert.AreEqual(6.0, evaluator.Evaluate(cell1).NumberValue, accuracy, "Divides 210 by 35 and returns 6.0");
 
 
-            Assert.AreEqual(CellType.String, evaluator.Evaluate(cell2).CellType, "Checks that the cell is numeric");
-            Assert.AreEqual("Error in calculation", evaluator.Evaluate(cell2).StringValue, "Rounds -10 to a nearest multiple of -3 (-9)");
+            ClassicAssert.AreEqual(CellType.String, evaluator.Evaluate(cell2).CellType, "Checks that the cell is numeric");
+            ClassicAssert.AreEqual("Error in calculation", evaluator.Evaluate(cell2).StringValue, "Rounds -10 to a nearest multiple of -3 (-9)");
 
-            Assert.AreEqual(CellType.String, evaluator.Evaluate(cell3).CellType, "Check that C1 returns string");
-            Assert.AreEqual("error", evaluator.Evaluate(cell3).StringValue, "Check that C1 returns string \"error\"");
+            ClassicAssert.AreEqual(CellType.String, evaluator.Evaluate(cell3).CellType, "Check that C1 returns string");
+            ClassicAssert.AreEqual("error", evaluator.Evaluate(cell3).StringValue, "Check that C1 returns string \"error\"");
         }
     }
 }

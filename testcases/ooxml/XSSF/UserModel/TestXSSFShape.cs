@@ -4,7 +4,7 @@ using NPOI.SS.UserModel;
 using NPOI.Util;
 using NPOI.XSSF;
 using NPOI.XSSF.UserModel;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -38,11 +38,11 @@ namespace TestCases.XSSF.UserModel
             {
                 if(sp.Name == "sp1")
                 {
-                    Assert.AreEqual(NPOI.SS.UserModel.LineEndingCapType.Round, sp.LineEndingCapType);
+                    ClassicAssert.AreEqual(NPOI.SS.UserModel.LineEndingCapType.Round, sp.LineEndingCapType);
                     return;
                 }
             }
-            Assert.True(false);
+            ClassicAssert.True(false);
         }
         [Test]
         public void TestShapeCompoundLineType()
@@ -67,11 +67,11 @@ namespace TestCases.XSSF.UserModel
             {
                 if(sp.Name == "sp2")
                 {
-                    Assert.AreEqual(NPOI.SS.UserModel.CompoundLineType.DoubleLines, sp.CompoundLineType);
+                    ClassicAssert.AreEqual(NPOI.SS.UserModel.CompoundLineType.DoubleLines, sp.CompoundLineType);
                     return;
                 }
             }
-            Assert.True(false);
+            ClassicAssert.True(false);
         }
 
         [Test]
@@ -114,11 +114,11 @@ namespace TestCases.XSSF.UserModel
             {
                 if(sp.Name == "shape1")
                 {
-                    Assert.AreEqual(true, ((XSSFSimpleShape)sp).WordWrap);
+                    ClassicAssert.AreEqual(true, ((XSSFSimpleShape)sp).WordWrap);
                     XSSFTestDataSamples.WriteOut(wb, "TestShapeTextWrap-1-");
                     ((XSSFSimpleShape)sp).WordWrap = false;
                     XSSFWorkbook rbwb = (XSSFWorkbook)XSSFITestDataProvider.instance.WriteOutAndReadBack(wb);
-                    Assert.AreEqual(false, ((XSSFSimpleShape)sp).WordWrap);
+                    ClassicAssert.AreEqual(false, ((XSSFSimpleShape)sp).WordWrap);
                     XSSFTestDataSamples.WriteOut(wb, "TestShapeTextWrap-2-");
                 }
             }
@@ -136,14 +136,14 @@ namespace TestCases.XSSF.UserModel
             var sp0 = drawing.CreateSimpleShape(ca0);
             sp0.LineStyle = LineStyle.Solid;
             sp0.LineStyleColor = 0xff00000;
-            Assert.AreEqual(7.2, sp0.LeftInset);
-            Assert.AreEqual(false, sp0.GetCTShape().txBody.bodyPr.IsSetLIns());
-            Assert.AreEqual(3.6, sp0.TopInset);
-            Assert.AreEqual(false, sp0.GetCTShape().txBody.bodyPr.IsSetTIns());
-            Assert.AreEqual(7.2, sp0.RightInset);
-            Assert.AreEqual(false, sp0.GetCTShape().txBody.bodyPr.IsSetRIns());
-            Assert.AreEqual(3.6, sp0.BottomInset);
-            Assert.AreEqual(false, sp0.GetCTShape().txBody.bodyPr.IsSetBIns());
+            ClassicAssert.AreEqual(7.2, sp0.LeftInset);
+            ClassicAssert.AreEqual(false, sp0.GetCTShape().txBody.bodyPr.IsSetLIns());
+            ClassicAssert.AreEqual(3.6, sp0.TopInset);
+            ClassicAssert.AreEqual(false, sp0.GetCTShape().txBody.bodyPr.IsSetTIns());
+            ClassicAssert.AreEqual(7.2, sp0.RightInset);
+            ClassicAssert.AreEqual(false, sp0.GetCTShape().txBody.bodyPr.IsSetRIns());
+            ClassicAssert.AreEqual(3.6, sp0.BottomInset);
+            ClassicAssert.AreEqual(false, sp0.GetCTShape().txBody.bodyPr.IsSetBIns());
             XSSFTestDataSamples.WriteOut(wb, "TestShapeTextWrap-1-");
 
             //----- zero
@@ -155,14 +155,14 @@ namespace TestCases.XSSF.UserModel
             var sht1 = rbwb1.GetSheet("sheet0");
             var dw1 = ((XSSFSheet)sht1).GetDrawingPatriarch();
             XSSFSimpleShape sp1 = (XSSFSimpleShape)dw1.GetShapes()[0];
-            Assert.AreEqual(0, sp1.LeftInset);
-            Assert.AreEqual(true, sp1.GetCTShape().txBody.bodyPr.IsSetLIns());
-            Assert.AreEqual(0, sp1.TopInset);
-            Assert.AreEqual(true, sp1.GetCTShape().txBody.bodyPr.IsSetTIns());
-            Assert.AreEqual(0, sp1.RightInset);
-            Assert.AreEqual(true, sp1.GetCTShape().txBody.bodyPr.IsSetRIns());
-            Assert.AreEqual(0, sp1.BottomInset);
-            Assert.AreEqual(true, sp1.GetCTShape().txBody.bodyPr.IsSetBIns());
+            ClassicAssert.AreEqual(0, sp1.LeftInset);
+            ClassicAssert.AreEqual(true, sp1.GetCTShape().txBody.bodyPr.IsSetLIns());
+            ClassicAssert.AreEqual(0, sp1.TopInset);
+            ClassicAssert.AreEqual(true, sp1.GetCTShape().txBody.bodyPr.IsSetTIns());
+            ClassicAssert.AreEqual(0, sp1.RightInset);
+            ClassicAssert.AreEqual(true, sp1.GetCTShape().txBody.bodyPr.IsSetRIns());
+            ClassicAssert.AreEqual(0, sp1.BottomInset);
+            ClassicAssert.AreEqual(true, sp1.GetCTShape().txBody.bodyPr.IsSetBIns());
             XSSFTestDataSamples.WriteOut(rbwb1, "TestShapeTextWrap-2-");
 
             //----- others
@@ -174,14 +174,14 @@ namespace TestCases.XSSF.UserModel
             var sht2 = rbwb2.GetSheet("sheet0");
             var dw2 = ((XSSFSheet)sht2).GetDrawingPatriarch();
             XSSFSimpleShape sp2 = (XSSFSimpleShape)dw2.GetShapes()[0];
-            Assert.AreEqual(3.6, sp2.LeftInset);
-            Assert.AreEqual(true, sp2.GetCTShape().txBody.bodyPr.IsSetLIns());
-            Assert.AreEqual(1.8, sp2.TopInset);
-            Assert.AreEqual(true, sp2.GetCTShape().txBody.bodyPr.IsSetTIns());
-            Assert.AreEqual(3.6, sp2.RightInset);
-            Assert.AreEqual(true, sp2.GetCTShape().txBody.bodyPr.IsSetRIns());
-            Assert.AreEqual(1.8, sp2.BottomInset);
-            Assert.AreEqual(true, sp2.GetCTShape().txBody.bodyPr.IsSetBIns());
+            ClassicAssert.AreEqual(3.6, sp2.LeftInset);
+            ClassicAssert.AreEqual(true, sp2.GetCTShape().txBody.bodyPr.IsSetLIns());
+            ClassicAssert.AreEqual(1.8, sp2.TopInset);
+            ClassicAssert.AreEqual(true, sp2.GetCTShape().txBody.bodyPr.IsSetTIns());
+            ClassicAssert.AreEqual(3.6, sp2.RightInset);
+            ClassicAssert.AreEqual(true, sp2.GetCTShape().txBody.bodyPr.IsSetRIns());
+            ClassicAssert.AreEqual(1.8, sp2.BottomInset);
+            ClassicAssert.AreEqual(true, sp2.GetCTShape().txBody.bodyPr.IsSetBIns());
             XSSFTestDataSamples.WriteOut(rbwb2, "TestShapeTextWrap-3-");
         }
 
@@ -219,7 +219,7 @@ namespace TestCases.XSSF.UserModel
                 {
                     case "S00":
                     case "L00":
-                        Assert.AreEqual(sp.cellanchor.clientData.fLocksWithSheet, true, "shape name:[{0}]", new object[] { sp.Name });
+                        ClassicAssert.AreEqual(sp.cellanchor.clientData.fLocksWithSheet, true, "shape name:[{0}]", new object[] { sp.Name });
                         break;
                     default:
                         break;
@@ -242,7 +242,7 @@ namespace TestCases.XSSF.UserModel
                 {
                     case "S00":
                     case "L00":
-                        Assert.AreEqual(sp.cellanchor.clientData.fLocksWithSheet, false, "shape name:[{0}]", new object[] { sp.Name });
+                        ClassicAssert.AreEqual(sp.cellanchor.clientData.fLocksWithSheet, false, "shape name:[{0}]", new object[] { sp.Name });
                         break;
                     default:
                         break;
@@ -297,7 +297,7 @@ namespace TestCases.XSSF.UserModel
             shp3.Name = "L03";
             shp3.cellanchor.clientData.fLocksWithSheet = false;
 
-            Assert.AreEqual(shp1.cellanchor.clientData.fLocksWithSheet, false);
+            ClassicAssert.AreEqual(shp1.cellanchor.clientData.fLocksWithSheet, false);
 
             XSSFTestDataSamples.WriteOut(wb, "TestGroupLockWithSheet");
         }
@@ -463,12 +463,12 @@ namespace TestCases.XSSF.UserModel
                             var rbspPr = ((XSSFSimpleShape)rbsp).GetCTShape().spPr;
                             var rbcg = rbspPr.custGeom; //read back custom geometry
 
-                            Assert.IsFalse(!Compeare(spPr0.xfrm.off.x, rbspPr.xfrm.off.x), $"{sp0.Name}-xfrm.off.x:{spPr0.xfrm.off.x}!={rbspPr.xfrm.off.x}");
-                            Assert.IsFalse(!Compeare(spPr0.xfrm.off.y, rbspPr.xfrm.off.y), $"{sp0.Name}-xfrm.off.y:{spPr0.xfrm.off.y}!={rbspPr.xfrm.off.y}");
-                            Assert.IsFalse(!Compeare(spPr0.xfrm.ext.cx, rbspPr.xfrm.ext.cx), $"{sp0.Name}-xfrm.off.x:{spPr0.xfrm.ext.cx}!={rbspPr.xfrm.ext.cx}");
-                            Assert.IsFalse(!Compeare(spPr0.xfrm.ext.cy, rbspPr.xfrm.ext.cy), $"{sp0.Name}-xfrm.off.y:{spPr0.xfrm.ext.cy}!={rbspPr.xfrm.ext.cy}");
+                            ClassicAssert.IsFalse(!Compeare(spPr0.xfrm.off.x, rbspPr.xfrm.off.x), $"{sp0.Name}-xfrm.off.x:{spPr0.xfrm.off.x}!={rbspPr.xfrm.off.x}");
+                            ClassicAssert.IsFalse(!Compeare(spPr0.xfrm.off.y, rbspPr.xfrm.off.y), $"{sp0.Name}-xfrm.off.y:{spPr0.xfrm.off.y}!={rbspPr.xfrm.off.y}");
+                            ClassicAssert.IsFalse(!Compeare(spPr0.xfrm.ext.cx, rbspPr.xfrm.ext.cx), $"{sp0.Name}-xfrm.off.x:{spPr0.xfrm.ext.cx}!={rbspPr.xfrm.ext.cx}");
+                            ClassicAssert.IsFalse(!Compeare(spPr0.xfrm.ext.cy, rbspPr.xfrm.ext.cy), $"{sp0.Name}-xfrm.off.y:{spPr0.xfrm.ext.cy}!={rbspPr.xfrm.ext.cy}");
 
-                            Assert.AreEqual(cg0.cxnLst.cxn.Count, rbcg.cxnLst.cxn.Count, $"Count:{cg0.cxnLst.cxn.Count}!={rbcg.cxnLst.cxn.Count}");
+                            ClassicAssert.AreEqual(cg0.cxnLst.cxn.Count, rbcg.cxnLst.cxn.Count, $"Count:{cg0.cxnLst.cxn.Count}!={rbcg.cxnLst.cxn.Count}");
 
                             for(int ct = 0; ct< cg0.cxnLst.cxn.Count; ct++)
                             {
@@ -478,8 +478,8 @@ namespace TestCases.XSSF.UserModel
                                     var rbcd = GetGeomGuide(rbcg.gdLst.gd, ct);
                                     if(rbcd != null)
                                     {
-                                        Assert.IsFalse(!Compeare(cd0.x, rbcd.x), $"{sp0.Name}-gdLst.x{ct}:{cd0.x}!={rbcd.x}");
-                                        Assert.IsFalse(!Compeare(cd0.y, rbcd.y), $"{sp0.Name}-gdLst.y{ct}:{cd0.y}!={rbcd.y}");
+                                        ClassicAssert.IsFalse(!Compeare(cd0.x, rbcd.x), $"{sp0.Name}-gdLst.x{ct}:{cd0.x}!={rbcd.x}");
+                                        ClassicAssert.IsFalse(!Compeare(cd0.y, rbcd.y), $"{sp0.Name}-gdLst.y{ct}:{cd0.y}!={rbcd.y}");
                                     }
                                     else
                                     {
@@ -493,22 +493,22 @@ namespace TestCases.XSSF.UserModel
                             }
                             var ogph = cg0.pathLst.path[0];
                             var rbph = rbcg.pathLst.path[0];
-                            Assert.IsFalse(!Compeare(ogph.w, rbph.w), $"{sp0.Name}-path.w:{ogph.w}!={rbph.w}");
-                            Assert.IsFalse(!Compeare(ogph.h, rbph.h), $"{sp0.Name}-path.h:{ogph.h}!={rbph.h}");
+                            ClassicAssert.IsFalse(!Compeare(ogph.w, rbph.w), $"{sp0.Name}-path.w:{ogph.w}!={rbph.w}");
+                            ClassicAssert.IsFalse(!Compeare(ogph.h, rbph.h), $"{sp0.Name}-path.h:{ogph.h}!={rbph.h}");
 
-                            Assert.IsFalse(!Compeare(ogph.moveto.pt.x, rbph.moveto.pt.x), $"{sp0.Name}-moveto.x:{ogph.moveto.pt.x}!={rbph.moveto.pt.x}");
-                            Assert.IsFalse(!Compeare(ogph.moveto.pt.y, rbph.moveto.pt.y), $"{sp0.Name}-moveto.y:{ogph.moveto.pt.y}!={rbph.moveto.pt.y}");
+                            ClassicAssert.IsFalse(!Compeare(ogph.moveto.pt.x, rbph.moveto.pt.x), $"{sp0.Name}-moveto.x:{ogph.moveto.pt.x}!={rbph.moveto.pt.x}");
+                            ClassicAssert.IsFalse(!Compeare(ogph.moveto.pt.y, rbph.moveto.pt.y), $"{sp0.Name}-moveto.y:{ogph.moveto.pt.y}!={rbph.moveto.pt.y}");
 
-                            Assert.AreEqual(ogph.cubicBezTo.Count, rbph.cubicBezTo.Count, $"cubicBezTo.Count:{ogph.cubicBezTo.Count}!={rbph.cubicBezTo.Count}");
+                            ClassicAssert.AreEqual(ogph.cubicBezTo.Count, rbph.cubicBezTo.Count, $"cubicBezTo.Count:{ogph.cubicBezTo.Count}!={rbph.cubicBezTo.Count}");
 
                             for(int i = 0; i<ogph.cubicBezTo.Count; i++)
                             {
-                                Assert.IsFalse(!Compeare(ogph.cubicBezTo[i].pt[0].x, rbph.cubicBezTo[i].pt[0].x), $"{ogph.cubicBezTo[i].pt[0].x},{rbph.cubicBezTo[i].pt[0].x}");
-                                Assert.IsFalse(!Compeare(ogph.cubicBezTo[i].pt[0].y, rbph.cubicBezTo[i].pt[0].y), $"{ogph.cubicBezTo[i].pt[0].y},{rbph.cubicBezTo[i].pt[0].y}");
-                                Assert.IsFalse(!Compeare(ogph.cubicBezTo[i].pt[1].x, rbph.cubicBezTo[i].pt[1].x), $"{ogph.cubicBezTo[i].pt[1].x},{rbph.cubicBezTo[i].pt[1].x}");
-                                Assert.IsFalse(!Compeare(ogph.cubicBezTo[i].pt[1].y, rbph.cubicBezTo[i].pt[1].y), $"{ogph.cubicBezTo[i].pt[1].y},{rbph.cubicBezTo[i].pt[1].y}");
-                                Assert.IsFalse(!Compeare(ogph.cubicBezTo[i].pt[2].x, rbph.cubicBezTo[i].pt[2].x), $"{sp0.Name}-cubicBezTo[{i}].pt[2].x:{ogph.cubicBezTo[i].pt[2].x},{rbph.cubicBezTo[i].pt[2].x}");
-                                Assert.IsFalse(!Compeare(ogph.cubicBezTo[i].pt[2].y, rbph.cubicBezTo[i].pt[2].y), $"{sp0.Name}-cubicBezTo[{i}].pt[2].y:{ogph.cubicBezTo[i].pt[2].y},{rbph.cubicBezTo[i].pt[2].y}");
+                                ClassicAssert.IsFalse(!Compeare(ogph.cubicBezTo[i].pt[0].x, rbph.cubicBezTo[i].pt[0].x), $"{ogph.cubicBezTo[i].pt[0].x},{rbph.cubicBezTo[i].pt[0].x}");
+                                ClassicAssert.IsFalse(!Compeare(ogph.cubicBezTo[i].pt[0].y, rbph.cubicBezTo[i].pt[0].y), $"{ogph.cubicBezTo[i].pt[0].y},{rbph.cubicBezTo[i].pt[0].y}");
+                                ClassicAssert.IsFalse(!Compeare(ogph.cubicBezTo[i].pt[1].x, rbph.cubicBezTo[i].pt[1].x), $"{ogph.cubicBezTo[i].pt[1].x},{rbph.cubicBezTo[i].pt[1].x}");
+                                ClassicAssert.IsFalse(!Compeare(ogph.cubicBezTo[i].pt[1].y, rbph.cubicBezTo[i].pt[1].y), $"{ogph.cubicBezTo[i].pt[1].y},{rbph.cubicBezTo[i].pt[1].y}");
+                                ClassicAssert.IsFalse(!Compeare(ogph.cubicBezTo[i].pt[2].x, rbph.cubicBezTo[i].pt[2].x), $"{sp0.Name}-cubicBezTo[{i}].pt[2].x:{ogph.cubicBezTo[i].pt[2].x},{rbph.cubicBezTo[i].pt[2].x}");
+                                ClassicAssert.IsFalse(!Compeare(ogph.cubicBezTo[i].pt[2].y, rbph.cubicBezTo[i].pt[2].y), $"{sp0.Name}-cubicBezTo[{i}].pt[2].y:{ogph.cubicBezTo[i].pt[2].y},{rbph.cubicBezTo[i].pt[2].y}");
                             }
                         }
                     }

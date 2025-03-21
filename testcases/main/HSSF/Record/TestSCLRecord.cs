@@ -23,7 +23,7 @@ namespace TestCases.HSSF.Record
     using System;
     using NPOI.HSSF.Record;
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     /**
      * Tests the serialization and deserialization of the SCLRecord
@@ -44,11 +44,11 @@ namespace TestCases.HSSF.Record
         public void TestLoad()
         {
             SCLRecord record = new SCLRecord(TestcaseRecordInputStream.Create((short)0xa0, data));
-            Assert.AreEqual(3, record.Numerator);
-            Assert.AreEqual(4, record.Denominator);
+            ClassicAssert.AreEqual(3, record.Numerator);
+            ClassicAssert.AreEqual(4, record.Denominator);
 
 
-            Assert.AreEqual(8, record.RecordSize);
+            ClassicAssert.AreEqual(8, record.RecordSize);
         }
         [Test]
         public void TestStore()
@@ -59,9 +59,9 @@ namespace TestCases.HSSF.Record
 
 
             byte[] recordBytes = record.Serialize();
-            Assert.AreEqual(recordBytes.Length - 4, data.Length);
+            ClassicAssert.AreEqual(recordBytes.Length - 4, data.Length);
             for (int i = 0; i < data.Length; i++)
-                Assert.AreEqual(data[i], recordBytes[i + 4], "At offset " + i);
+                ClassicAssert.AreEqual(data[i], recordBytes[i + 4], "At offset " + i);
         }
     }
 }

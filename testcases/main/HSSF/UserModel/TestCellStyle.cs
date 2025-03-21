@@ -30,7 +30,7 @@ namespace TestCases.HSSF.UserModel
     using NPOI.HSSF.UserModel;
 
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using TestCases.HSSF;
     using NPOI.SS.UserModel;
     using NPOI.HSSF.Util;
@@ -103,8 +103,8 @@ namespace TestCases.HSSF.UserModel
             out1.Close();
             SanityChecker sanityChecker = new SanityChecker();
             sanityChecker.CheckHSSFWorkbook(wb);
-            Assert.AreEqual(99, s.LastRowNum, "LAST ROW == 99");
-            Assert.AreEqual(0, s.FirstRowNum, "FIRST ROW == 0");
+            ClassicAssert.AreEqual(99, s.LastRowNum, "LAST ROW == 99");
+            ClassicAssert.AreEqual(0, s.FirstRowNum, "FIRST ROW == 0");
 
             // assert((s.LastRowNum == 99));
         }
@@ -141,8 +141,8 @@ namespace TestCases.HSSF.UserModel
             SanityChecker sanityChecker = new SanityChecker();
             sanityChecker.CheckHSSFWorkbook(wb);
 
-            Assert.AreEqual(0, s.LastRowNum, "LAST ROW ");
-            Assert.AreEqual(0, s.FirstRowNum, "FIRST ROW ");
+            ClassicAssert.AreEqual(0, s.LastRowNum, "LAST ROW ");
+            ClassicAssert.AreEqual(0, s.FirstRowNum, "FIRST ROW ");
 
         }
         [Test]
@@ -165,15 +165,15 @@ namespace TestCases.HSSF.UserModel
             cell2.CellStyle = (cs2);
             cell2.SetCellValue(DateTime.Now);
 
-            Assert.AreEqual(cs1.GetHashCode(), cs1.GetHashCode());
-            Assert.AreEqual(cs2.GetHashCode(), cs2.GetHashCode());
-            Assert.IsTrue(cs1.Equals(cs1));
-            Assert.IsTrue(cs2.Equals(cs2));
+            ClassicAssert.AreEqual(cs1.GetHashCode(), cs1.GetHashCode());
+            ClassicAssert.AreEqual(cs2.GetHashCode(), cs2.GetHashCode());
+            ClassicAssert.IsTrue(cs1.Equals(cs1));
+            ClassicAssert.IsTrue(cs2.Equals(cs2));
 
             // Change cs1, hash will alter
             int hash1 = cs1.GetHashCode();
             cs1.DataFormat = (HSSFDataFormat.GetBuiltinFormat("m/dd/yy"));
-            Assert.IsFalse(hash1 == cs1.GetHashCode());
+            ClassicAssert.IsFalse(hash1 == cs1.GetHashCode());
 
             wb.Close();
         }
@@ -234,8 +234,8 @@ namespace TestCases.HSSF.UserModel
             out1.Close();
             SanityChecker sanityChecker = new SanityChecker();
             sanityChecker.CheckHSSFWorkbook(wb);
-            Assert.AreEqual(99, s.LastRowNum, "LAST ROW == 99");
-            Assert.AreEqual(0, s.FirstRowNum, "FIRST ROW == 0");
+            ClassicAssert.AreEqual(99, s.LastRowNum, "LAST ROW == 99");
+            ClassicAssert.AreEqual(0, s.FirstRowNum, "FIRST ROW == 0");
 
             // assert((s.LastRowNum == 99));
         }
@@ -250,30 +250,30 @@ namespace TestCases.HSSF.UserModel
             HSSFWorkbook wb = new HSSFWorkbook();
             IFont fnt = wb.CreateFont();
             fnt.FontName = ("TestingFont");
-            Assert.AreEqual(5, wb.NumberOfFonts);
+            ClassicAssert.AreEqual(5, wb.NumberOfFonts);
 
             NPOI.SS.UserModel.ICellStyle orig = wb.CreateCellStyle();
             orig.Alignment = (HorizontalAlignment.Right);
             orig.SetFont(fnt);
             orig.DataFormat = ((short)18);
 
-            Assert.AreEqual(HorizontalAlignment.Right, orig.Alignment);
-            Assert.AreEqual(fnt, orig.GetFont(wb));
-            Assert.AreEqual(18, orig.DataFormat);
+            ClassicAssert.AreEqual(HorizontalAlignment.Right, orig.Alignment);
+            ClassicAssert.AreEqual(fnt, orig.GetFont(wb));
+            ClassicAssert.AreEqual(18, orig.DataFormat);
 
             NPOI.SS.UserModel.ICellStyle clone = wb.CreateCellStyle();
-            Assert.AreNotEqual(HorizontalAlignment.Right, clone.Alignment);
-            Assert.AreNotEqual(fnt, clone.GetFont(wb));
-            Assert.AreNotEqual(18, clone.DataFormat);
+            ClassicAssert.AreNotEqual(HorizontalAlignment.Right, clone.Alignment);
+            ClassicAssert.AreNotEqual(fnt, clone.GetFont(wb));
+            ClassicAssert.AreNotEqual(18, clone.DataFormat);
 
             clone.CloneStyleFrom(orig);
-            Assert.AreEqual(HorizontalAlignment.Right, orig.Alignment);
-            Assert.AreEqual(fnt, clone.GetFont(wb));
-            Assert.AreEqual(18, clone.DataFormat);
-            Assert.AreEqual(5, wb.NumberOfFonts);
+            ClassicAssert.AreEqual(HorizontalAlignment.Right, orig.Alignment);
+            ClassicAssert.AreEqual(fnt, clone.GetFont(wb));
+            ClassicAssert.AreEqual(18, clone.DataFormat);
+            ClassicAssert.AreEqual(5, wb.NumberOfFonts);
 
             orig.Alignment = HorizontalAlignment.Left;
-            Assert.AreEqual(HorizontalAlignment.Right, clone.Alignment);
+            ClassicAssert.AreEqual(HorizontalAlignment.Right, clone.Alignment);
         }
 
         /**
@@ -287,7 +287,7 @@ namespace TestCases.HSSF.UserModel
 
             IFont fnt = wbOrig.CreateFont();
             fnt.FontName = ("TestingFont");
-            Assert.AreEqual(5, wbOrig.NumberOfFonts);
+            ClassicAssert.AreEqual(5, wbOrig.NumberOfFonts);
 
             IDataFormat fmt = wbOrig.CreateDataFormat();
             fmt.GetFormat("MadeUpOne");
@@ -298,27 +298,27 @@ namespace TestCases.HSSF.UserModel
             orig.SetFont(fnt);
             orig.DataFormat = (fmt.GetFormat("Test##"));
 
-            Assert.AreEqual(HorizontalAlignment.Right, orig.Alignment);
-            Assert.AreEqual(fnt, orig.GetFont(wbOrig));
-            Assert.AreEqual(fmt.GetFormat("Test##"), orig.DataFormat);
+            ClassicAssert.AreEqual(HorizontalAlignment.Right, orig.Alignment);
+            ClassicAssert.AreEqual(fnt, orig.GetFont(wbOrig));
+            ClassicAssert.AreEqual(fmt.GetFormat("Test##"), orig.DataFormat);
 
             // Now a style on another workbook
             HSSFWorkbook wbClone = new HSSFWorkbook();
-            Assert.AreEqual(4, wbClone.NumberOfFonts);
+            ClassicAssert.AreEqual(4, wbClone.NumberOfFonts);
             IDataFormat fmtClone = wbClone.CreateDataFormat();
 
             NPOI.SS.UserModel.ICellStyle clone = wbClone.CreateCellStyle();
-            Assert.AreEqual(4, wbClone.NumberOfFonts);
+            ClassicAssert.AreEqual(4, wbClone.NumberOfFonts);
 
-            Assert.AreNotEqual(HorizontalAlignment.Right, clone.Alignment);
-            Assert.AreNotEqual("TestingFont", clone.GetFont(wbClone).FontName);
+            ClassicAssert.AreNotEqual(HorizontalAlignment.Right, clone.Alignment);
+            ClassicAssert.AreNotEqual("TestingFont", clone.GetFont(wbClone).FontName);
 
             clone.CloneStyleFrom(orig);
-            Assert.AreEqual(HorizontalAlignment.Right, clone.Alignment);
-            Assert.AreEqual("TestingFont", clone.GetFont(wbClone).FontName);
-            Assert.AreEqual(fmtClone.GetFormat("Test##"), clone.DataFormat);
-            Assert.AreNotEqual(fmtClone.GetFormat("Test##"), fmt.GetFormat("Test##"));
-            Assert.AreEqual(5, wbClone.NumberOfFonts);
+            ClassicAssert.AreEqual(HorizontalAlignment.Right, clone.Alignment);
+            ClassicAssert.AreEqual("TestingFont", clone.GetFont(wbClone).FontName);
+            ClassicAssert.AreEqual(fmtClone.GetFormat("Test##"), clone.DataFormat);
+            ClassicAssert.AreNotEqual(fmtClone.GetFormat("Test##"), fmt.GetFormat("Test##"));
+            ClassicAssert.AreEqual(5, wbClone.NumberOfFonts);
         }
         [Test]
         public void TestStyleNames()
@@ -333,46 +333,46 @@ namespace TestCases.HSSF.UserModel
             HSSFCellStyle cs2 = (HSSFCellStyle)c2.CellStyle;
             HSSFCellStyle cs3 = (HSSFCellStyle)c3.CellStyle;
 
-            Assert.IsNotNull(cs1);
-            Assert.IsNotNull(cs2);
-            Assert.IsNotNull(cs3);
+            ClassicAssert.IsNotNull(cs1);
+            ClassicAssert.IsNotNull(cs2);
+            ClassicAssert.IsNotNull(cs3);
 
             // Check we got the styles we'd expect
-            Assert.AreEqual(10, cs1.GetFont(wb).FontHeightInPoints);
-            Assert.AreEqual(9, cs2.GetFont(wb).FontHeightInPoints);
-            Assert.AreEqual(12, cs3.GetFont(wb).FontHeightInPoints);
+            ClassicAssert.AreEqual(10, cs1.GetFont(wb).FontHeightInPoints);
+            ClassicAssert.AreEqual(9, cs2.GetFont(wb).FontHeightInPoints);
+            ClassicAssert.AreEqual(12, cs3.GetFont(wb).FontHeightInPoints);
 
-            Assert.AreEqual(15, cs1.Index);
-            Assert.AreEqual(23, cs2.Index);
-            Assert.AreEqual(24, cs3.Index);
+            ClassicAssert.AreEqual(15, cs1.Index);
+            ClassicAssert.AreEqual(23, cs2.Index);
+            ClassicAssert.AreEqual(24, cs3.Index);
 
-            Assert.IsNull(cs1.ParentStyle);
-            Assert.IsNotNull(cs2.ParentStyle);
-            Assert.IsNotNull(cs3.ParentStyle);
+            ClassicAssert.IsNull(cs1.ParentStyle);
+            ClassicAssert.IsNotNull(cs2.ParentStyle);
+            ClassicAssert.IsNotNull(cs3.ParentStyle);
 
-            Assert.AreEqual(21, cs2.ParentStyle.Index);
-            Assert.AreEqual(22, cs3.ParentStyle.Index);
+            ClassicAssert.AreEqual(21, cs2.ParentStyle.Index);
+            ClassicAssert.AreEqual(22, cs3.ParentStyle.Index);
 
             // Now Check we can get style records for 
             //  the parent ones
-            Assert.IsNull(wb.Workbook.GetStyleRecord(15));
-            Assert.IsNull(wb.Workbook.GetStyleRecord(23));
-            Assert.IsNull(wb.Workbook.GetStyleRecord(24));
+            ClassicAssert.IsNull(wb.Workbook.GetStyleRecord(15));
+            ClassicAssert.IsNull(wb.Workbook.GetStyleRecord(23));
+            ClassicAssert.IsNull(wb.Workbook.GetStyleRecord(24));
 
-            Assert.IsNotNull(wb.Workbook.GetStyleRecord(21));
-            Assert.IsNotNull(wb.Workbook.GetStyleRecord(22));
+            ClassicAssert.IsNotNull(wb.Workbook.GetStyleRecord(21));
+            ClassicAssert.IsNotNull(wb.Workbook.GetStyleRecord(22));
 
             // Now Check the style names
-            Assert.AreEqual(null, cs1.UserStyleName);
-            Assert.AreEqual(null, cs2.UserStyleName);
-            Assert.AreEqual(null, cs3.UserStyleName);
-            Assert.AreEqual("style1", cs2.ParentStyle.UserStyleName);
-            Assert.AreEqual("style2", cs3.ParentStyle.UserStyleName);
+            ClassicAssert.AreEqual(null, cs1.UserStyleName);
+            ClassicAssert.AreEqual(null, cs2.UserStyleName);
+            ClassicAssert.AreEqual(null, cs3.UserStyleName);
+            ClassicAssert.AreEqual("style1", cs2.ParentStyle.UserStyleName);
+            ClassicAssert.AreEqual("style2", cs3.ParentStyle.UserStyleName);
 
             // now apply a named style to a new cell
             ICell c4 = s.GetRow(0).CreateCell(1);
             c4.CellStyle = (cs2);
-            Assert.AreEqual("style1", ((HSSFCellStyle)c4.CellStyle).ParentStyle.UserStyleName);
+            ClassicAssert.AreEqual("style1", ((HSSFCellStyle)c4.CellStyle).ParentStyle.UserStyleName);
         }
 
         [Test]
@@ -383,40 +383,40 @@ namespace TestCases.HSSF.UserModel
             ICellStyle cs;
 
             cs = s.GetRow(0).GetCell(0).CellStyle;
-            Assert.AreEqual(BorderStyle.Hair, cs.BorderRight);
+            ClassicAssert.AreEqual(BorderStyle.Hair, cs.BorderRight);
 
             cs = s.GetRow(1).GetCell(1).CellStyle;
-            Assert.AreEqual(BorderStyle.Dotted, cs.BorderRight);
+            ClassicAssert.AreEqual(BorderStyle.Dotted, cs.BorderRight);
 
             cs = s.GetRow(2).GetCell(2).CellStyle;
-            Assert.AreEqual(BorderStyle.DashDotDot, cs.BorderRight);
+            ClassicAssert.AreEqual(BorderStyle.DashDotDot, cs.BorderRight);
 
             cs = s.GetRow(3).GetCell(3).CellStyle;
-            Assert.AreEqual(BorderStyle.Dashed, cs.BorderRight);
+            ClassicAssert.AreEqual(BorderStyle.Dashed, cs.BorderRight);
 
             cs = s.GetRow(4).GetCell(4).CellStyle;
-            Assert.AreEqual(BorderStyle.Thin, cs.BorderRight);
+            ClassicAssert.AreEqual(BorderStyle.Thin, cs.BorderRight);
 
             cs = s.GetRow(5).GetCell(5).CellStyle;
-            Assert.AreEqual(BorderStyle.MediumDashDotDot, cs.BorderRight);
+            ClassicAssert.AreEqual(BorderStyle.MediumDashDotDot, cs.BorderRight);
 
             cs = s.GetRow(6).GetCell(6).CellStyle;
-            Assert.AreEqual(BorderStyle.SlantedDashDot, cs.BorderRight);
+            ClassicAssert.AreEqual(BorderStyle.SlantedDashDot, cs.BorderRight);
 
             cs = s.GetRow(7).GetCell(7).CellStyle;
-            Assert.AreEqual(BorderStyle.MediumDashDot, cs.BorderRight);
+            ClassicAssert.AreEqual(BorderStyle.MediumDashDot, cs.BorderRight);
 
             cs = s.GetRow(8).GetCell(8).CellStyle;
-            Assert.AreEqual(BorderStyle.MediumDashed, cs.BorderRight);
+            ClassicAssert.AreEqual(BorderStyle.MediumDashed, cs.BorderRight);
 
             cs = s.GetRow(9).GetCell(9).CellStyle;
-            Assert.AreEqual(BorderStyle.Medium, cs.BorderRight);
+            ClassicAssert.AreEqual(BorderStyle.Medium, cs.BorderRight);
 
             cs = s.GetRow(10).GetCell(10).CellStyle;
-            Assert.AreEqual(BorderStyle.Thick, cs.BorderRight);
+            ClassicAssert.AreEqual(BorderStyle.Thick, cs.BorderRight);
 
             cs = s.GetRow(11).GetCell(11).CellStyle;
-            Assert.AreEqual(BorderStyle.Double, cs.BorderRight);
+            ClassicAssert.AreEqual(BorderStyle.Double, cs.BorderRight);
         }
 
         [Test]
@@ -428,7 +428,7 @@ namespace TestCases.HSSF.UserModel
             IRow r = s.GetRow(0);
             ICellStyle cs = r.GetCell(0).CellStyle;
 
-            Assert.AreEqual(true, cs.ShrinkToFit);
+            ClassicAssert.AreEqual(true, cs.ShrinkToFit);
 
             // New file
             IWorkbook wbOrig = new HSSFWorkbook();
@@ -447,8 +447,8 @@ namespace TestCases.HSSF.UserModel
             wb = HSSFTestDataSamples.WriteOutAndReadBack(wbOrig as HSSFWorkbook);
             s = wb.GetSheetAt(0);
             r = s.GetRow(0);
-            Assert.AreEqual(false, r.GetCell(0).CellStyle.ShrinkToFit);
-            Assert.AreEqual(true, r.GetCell(1).CellStyle.ShrinkToFit);
+            ClassicAssert.AreEqual(false, r.GetCell(0).CellStyle.ShrinkToFit);
+            ClassicAssert.AreEqual(true, r.GetCell(1).CellStyle.ShrinkToFit);
         }
 
         [Test]
@@ -480,8 +480,8 @@ namespace TestCases.HSSF.UserModel
             newCell.CellStyle = (style);
             newCell.SetCellValue("2testtext2");
             ICellStyle newStyle = newCell.CellStyle;
-            Assert.AreEqual(BorderStyle.Dotted, newStyle.BorderBottom);
-            Assert.AreEqual(HSSFColor.Red.Index, ((HSSFCellStyle)newStyle).GetFont(wb).Color);
+            ClassicAssert.AreEqual(BorderStyle.Dotted, newStyle.BorderBottom);
+            ClassicAssert.AreEqual(HSSFColor.Red.Index, ((HSSFCellStyle)newStyle).GetFont(wb).Color);
 
             //        OutputStream out = new FileOutputStream("/tmp/56959.xls");
             //        try {
@@ -496,30 +496,30 @@ namespace TestCases.HSSF.UserModel
         {
             HSSFWorkbook wb = new HSSFWorkbook();
             HSSFCellStyle cellStyle = wb.CreateCellStyle() as HSSFCellStyle;
-            Assert.AreEqual(0, cellStyle.Rotation);
+            ClassicAssert.AreEqual(0, cellStyle.Rotation);
             cellStyle.Rotation = ((short)89);
-            Assert.AreEqual(89, cellStyle.Rotation);
+            ClassicAssert.AreEqual(89, cellStyle.Rotation);
 
             cellStyle.Rotation = ((short)90);
-            Assert.AreEqual(90, cellStyle.Rotation);
+            ClassicAssert.AreEqual(90, cellStyle.Rotation);
 
             cellStyle.Rotation = ((short)-1);
-            Assert.AreEqual(-1, cellStyle.Rotation);
+            ClassicAssert.AreEqual(-1, cellStyle.Rotation);
 
             cellStyle.Rotation = ((short)-89);
-            Assert.AreEqual(-89, cellStyle.Rotation);
+            ClassicAssert.AreEqual(-89, cellStyle.Rotation);
 
             cellStyle.Rotation = ((short)-90);
-            Assert.AreEqual(-90, cellStyle.Rotation);
+            ClassicAssert.AreEqual(-90, cellStyle.Rotation);
 
             cellStyle.Rotation = ((short)-89);
-            Assert.AreEqual(-89, cellStyle.Rotation);
+            ClassicAssert.AreEqual(-89, cellStyle.Rotation);
             // values above 90 are mapped to the correct values for compatibility between HSSF and XSSF
             cellStyle.Rotation = ((short)179);
-            Assert.AreEqual(-89, cellStyle.Rotation);
+            ClassicAssert.AreEqual(-89, cellStyle.Rotation);
 
             cellStyle.Rotation = ((short)180);
-            Assert.AreEqual(-90, cellStyle.Rotation);
+            ClassicAssert.AreEqual(-90, cellStyle.Rotation);
 
             wb.Close();
         }

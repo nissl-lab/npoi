@@ -18,7 +18,7 @@
 namespace TestCases.SS.Formula.Eval
 {
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.SS.Formula.Eval;
     using TestCases.SS.Formula.Functions;
 
@@ -39,7 +39,7 @@ namespace TestCases.SS.Formula.Eval
 
             double result = NumericFunctionInvoker.Invoke(EvalInstances.Multiply, args, 0, 0);
 
-            Assert.AreEqual(expectedResult, result, 0);
+            ClassicAssert.AreEqual(expectedResult, result, 0);
         }
         [Test]
         public void TestBasic()

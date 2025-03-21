@@ -30,7 +30,7 @@ using System.Text;
 using System.Collections.Generic;
 using System.IO;
 
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 
 using NPOI.POIFS.Storage;
 using NPOI.Util;
@@ -1147,14 +1147,14 @@ namespace TestCases.POIFS.Storage
             {
                 if (IsUsed[j])
                 {
-                    Assert.IsTrue(sbat.IsUsed(j), "checking usage of block " + j);
-                    Assert.AreEqual(nextIndex[j],
+                    ClassicAssert.IsTrue(sbat.IsUsed(j), "checking usage of block " + j);
+                    ClassicAssert.AreEqual(nextIndex[j],
                                  sbat.GetNextBlockIndex(j), "checking usage of block " + j);
                     small_blocks.Remove(j);
                 }
                 else
                 {
-                    Assert.IsTrue(!sbat.IsUsed(j), "checking usage of block " + j);
+                    ClassicAssert.IsTrue(!sbat.IsUsed(j), "checking usage of block " + j);
                     try
                     {
                         small_blocks.Remove(j);
@@ -1214,18 +1214,18 @@ namespace TestCases.POIFS.Storage
             {
                 if (i % 256 == 0)
                 {
-                    Assert.IsTrue(
+                    ClassicAssert.IsTrue(
                                !table.IsUsed(i), "verifying block " + i + " Is unused");
                 }
                 else if (i % 256 == 255)
                 {
-                    Assert.AreEqual(
+                    ClassicAssert.AreEqual(
                                  POIFSConstants.END_OF_CHAIN,
                                  table.GetNextBlockIndex(i), "Verify end of chain for block " + i);
                 }
                 else
                 {
-                    Assert.AreEqual(i + 1,
+                    ClassicAssert.AreEqual(i + 1,
                                  table.GetNextBlockIndex(i), "Verify next index for block " + i);
                 }
             }
@@ -1326,7 +1326,7 @@ namespace TestCases.POIFS.Storage
                     }
                     else
                     {
-                        Assert.AreEqual(expected_Length[j], dataBlocks.Length);
+                        ClassicAssert.AreEqual(expected_Length[j], dataBlocks.Length);
                     }
                 }
                 catch (IOException)
@@ -1353,7 +1353,7 @@ namespace TestCases.POIFS.Storage
         {
             int BLOCK_SIZE = 512;
             POIFSBigBlockSize bigBlockSize = POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS;
-            Assert.AreEqual(BLOCK_SIZE, bigBlockSize.GetBigBlockSize());
+            ClassicAssert.AreEqual(BLOCK_SIZE, bigBlockSize.GetBigBlockSize());
 
             // 512 bytes take from the start of bugzilla attachment 24444
             byte[] initData = HexRead.ReadFromString(
@@ -1389,7 +1389,7 @@ namespace TestCases.POIFS.Storage
             catch (IOException e)
             {
                 // expected during successful test
-                Assert.AreEqual("Block count 538976257 is too high. POI maximum is 65535.", e.Message);
+                ClassicAssert.AreEqual("Block count 538976257 is too high. POI maximum is 65535.", e.Message);
             }
             catch (OutOfMemoryException e)
             {

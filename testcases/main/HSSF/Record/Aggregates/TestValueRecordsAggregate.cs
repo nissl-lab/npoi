@@ -21,7 +21,7 @@ namespace TestCases.HSSF.Record.Aggregates
     using System.IO;
     using System.Collections;
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.Aggregates;
@@ -64,11 +64,11 @@ namespace TestCases.HSSF.Record.Aggregates
             ConstructValueRecord(records);
             IList<CellValueRecordInterface> cvrs = GetValueRecords();
             //Ensure that the SharedFormulaRecord has been converted
-            Assert.AreEqual(1, cvrs.Count);
+            ClassicAssert.AreEqual(1, cvrs.Count);
 
             CellValueRecordInterface record = cvrs[0];
-            Assert.IsNotNull(record, "Row contains a value");
-            Assert.IsTrue((record is FormulaRecordAggregate), "First record is1 a FormulaRecordsAggregate");
+            ClassicAssert.IsNotNull(record, "Row contains a value");
+            ClassicAssert.IsTrue((record is FormulaRecordAggregate), "First record is1 a FormulaRecordsAggregate");
         }
 
         private IList TestData()
@@ -90,11 +90,11 @@ namespace TestCases.HSSF.Record.Aggregates
         [Test]
         public void TestInsertCell()
         {
-            Assert.AreEqual(0, GetValueRecords().Count);
+            ClassicAssert.AreEqual(0, GetValueRecords().Count);
 
             BlankRecord blankRecord = NewBlankRecord();
             valueRecord.InsertCell(blankRecord);
-            Assert.AreEqual(1, GetValueRecords().Count);
+            ClassicAssert.AreEqual(1, GetValueRecords().Count);
         }
         [Test]
         public void TestRemoveCell()
@@ -103,7 +103,7 @@ namespace TestCases.HSSF.Record.Aggregates
             valueRecord.InsertCell(blankRecord1);
             BlankRecord blankRecord2 = NewBlankRecord();
             valueRecord.RemoveCell(blankRecord2);
-            Assert.AreEqual(0, GetValueRecords().Count);
+            ClassicAssert.AreEqual(0, GetValueRecords().Count);
 
             // removing an already empty cell just falls through
             valueRecord.RemoveCell(blankRecord2);
@@ -112,38 +112,38 @@ namespace TestCases.HSSF.Record.Aggregates
         [Test]
         public void TestPhysicalNumberOfCells()
         {
-            Assert.AreEqual(0, valueRecord.PhysicalNumberOfCells);
+            ClassicAssert.AreEqual(0, valueRecord.PhysicalNumberOfCells);
             BlankRecord blankRecord1 = NewBlankRecord();
             valueRecord.InsertCell(blankRecord1);
-            Assert.AreEqual(1, valueRecord.PhysicalNumberOfCells);
+            ClassicAssert.AreEqual(1, valueRecord.PhysicalNumberOfCells);
             valueRecord.RemoveCell(blankRecord1);
-            Assert.AreEqual(0, valueRecord.PhysicalNumberOfCells);
+            ClassicAssert.AreEqual(0, valueRecord.PhysicalNumberOfCells);
         }
         [Test]
         public void TestFirstCellNum()
         {
-            Assert.AreEqual(-1, valueRecord.FirstCellNum);
+            ClassicAssert.AreEqual(-1, valueRecord.FirstCellNum);
             valueRecord.InsertCell(NewBlankRecord(2, 2));
-            Assert.AreEqual(2, valueRecord.FirstCellNum);
+            ClassicAssert.AreEqual(2, valueRecord.FirstCellNum);
             valueRecord.InsertCell(NewBlankRecord(3, 3));
-            Assert.AreEqual(2, valueRecord.FirstCellNum);
+            ClassicAssert.AreEqual(2, valueRecord.FirstCellNum);
 
             // Note: Removal doesn't currently reSet the first column.  It probably should but it doesn't.
             valueRecord.RemoveCell(NewBlankRecord(2, 2));
-            Assert.AreEqual(2, valueRecord.FirstCellNum);
+            ClassicAssert.AreEqual(2, valueRecord.FirstCellNum);
         }
         [Test]
         public void TestLastCellNum()
         {
-            Assert.AreEqual(-1, valueRecord.LastCellNum);
+            ClassicAssert.AreEqual(-1, valueRecord.LastCellNum);
             valueRecord.InsertCell(NewBlankRecord(2, 2));
-            Assert.AreEqual(2, valueRecord.LastCellNum);
+            ClassicAssert.AreEqual(2, valueRecord.LastCellNum);
             valueRecord.InsertCell(NewBlankRecord(3, 3));
-            Assert.AreEqual(3, valueRecord.LastCellNum);
+            ClassicAssert.AreEqual(3, valueRecord.LastCellNum);
 
             // Note: Removal doesn't currently reSet the last column.  It probably should but it doesn't.
             valueRecord.RemoveCell(NewBlankRecord(3, 3));
-            Assert.AreEqual(3, valueRecord.LastCellNum);
+            ClassicAssert.AreEqual(3, valueRecord.LastCellNum);
 
         }
         [Test]
@@ -166,9 +166,9 @@ namespace TestCases.HSSF.Record.Aggregates
             ConstructValueRecord(records);
             int bytesWritten = valueRecord.SerializeCellRow(1, 0, actualArray);
             bytesWritten += valueRecord.SerializeCellRow(2, bytesWritten, actualArray);
-            Assert.AreEqual(36, bytesWritten);
+            ClassicAssert.AreEqual(36, bytesWritten);
             for (int i = 0; i < 36; i++)
-                Assert.AreEqual(expectedArray[i], actualArray[i]);
+                ClassicAssert.AreEqual(expectedArray[i], actualArray[i]);
         }
 
         private BlankRecord NewBlankRecord()
@@ -415,9 +415,9 @@ namespace TestCases.HSSF.Record.Aggregates
                     valueRecord.VisitCellsForRow(rowIx, rv);
                 }
             }
-            Assert.AreEqual(expectedTotalBlankCells, bs.countBlankCells);
-            Assert.AreEqual(expectedNumberOfMulBlankRecords, bs.countMulBlankRecords);
-            Assert.AreEqual(expectedNumberOfSingleBlankRecords, bs.countSingleBlankRecords);
+            ClassicAssert.AreEqual(expectedTotalBlankCells, bs.countBlankCells);
+            ClassicAssert.AreEqual(expectedNumberOfMulBlankRecords, bs.countMulBlankRecords);
+            ClassicAssert.AreEqual(expectedNumberOfSingleBlankRecords, bs.countSingleBlankRecords);
         }
     }
 }

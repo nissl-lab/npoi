@@ -31,7 +31,7 @@ namespace TestCases.POIFS.Storage
     using System.IO;
     using System.Collections;
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.POIFS.Storage;
     using NPOI.Util;
     using NPOI.POIFS.FileSystem;
@@ -49,9 +49,9 @@ namespace TestCases.POIFS.Storage
         {
             byte[] expected = RawDataUtil.Decode(expectedDataHexDumpLines);
 
-            Assert.AreEqual(expected.Length, actual.Length);
+            ClassicAssert.AreEqual(expected.Length, actual.Length);
             for (int i = 0; i < expected.Length; i++)
-                Assert.AreEqual(expected[i], actual[i], "Test byte " + i);
+                ClassicAssert.AreEqual(expected[i], actual[i], "Test byte " + i);
         }
 
         /**
@@ -93,7 +93,7 @@ namespace TestCases.POIFS.Storage
             block.PropertyStart = unchecked((int)0x87654321);
             output = new MemoryStream(512);
             block.WriteBlocks(output);
-            Assert.AreEqual(unchecked((int)0x87654321),  new HeaderBlockReader(new MemoryStream(output.ToArray())).PropertyStart);
+            ClassicAssert.AreEqual(unchecked((int)0x87654321),  new HeaderBlockReader(new MemoryStream(output.ToArray())).PropertyStart);
 
         }
 
@@ -185,8 +185,8 @@ namespace TestCases.POIFS.Storage
             HeaderBlockWriter block = new HeaderBlockWriter(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS);
             BATBlock[] xbats = block.SetBATBlocks(5, 0x01234567);
 
-            Assert.AreEqual(0, xbats.Length);
-            Assert.AreEqual(0, HeaderBlockWriter.CalculateXBATStorageRequirements(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS, 5));
+            ClassicAssert.AreEqual(0, xbats.Length);
+            ClassicAssert.AreEqual(0, HeaderBlockWriter.CalculateXBATStorageRequirements(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS, 5));
             MemoryStream output = new MemoryStream(512);
 
             block.WriteBlocks(output);
@@ -217,8 +217,8 @@ namespace TestCases.POIFS.Storage
 
             block = new HeaderBlockWriter(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS);
             xbats = block.SetBATBlocks(109, 0x01234567);
-            Assert.AreEqual(0, xbats.Length);
-            Assert.AreEqual(0, HeaderBlockWriter.CalculateXBATStorageRequirements(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS, 109));
+            ClassicAssert.AreEqual(0, xbats.Length);
+            ClassicAssert.AreEqual(0, HeaderBlockWriter.CalculateXBATStorageRequirements(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS, 109));
             output = new MemoryStream(512);
             block.WriteBlocks(output);
             copy = output.ToArray();
@@ -245,8 +245,8 @@ namespace TestCases.POIFS.Storage
 
             block = new HeaderBlockWriter(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS);
             xbats = block.SetBATBlocks(256, 0x01234567);
-            Assert.AreEqual(2, xbats.Length);
-            Assert.AreEqual(2, HeaderBlockWriter.CalculateXBATStorageRequirements(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS, 256));
+            ClassicAssert.AreEqual(2, xbats.Length);
+            ClassicAssert.AreEqual(2, HeaderBlockWriter.CalculateXBATStorageRequirements(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS, 256));
             output = new MemoryStream(512);
             block.WriteBlocks(output);
             copy = output.ToArray();
@@ -281,29 +281,29 @@ namespace TestCases.POIFS.Storage
 
             for (; k < 127; k++)
             {
-                Assert.AreEqual(correct,
+                ClassicAssert.AreEqual(correct,
                              LittleEndian.GetInt(copy, offset), "XBAT entry " + k);
                 correct++;
                 offset += LittleEndianConsts.INT_SIZE;
             }
-            Assert.AreEqual(0x01234567 + 257,
+            ClassicAssert.AreEqual(0x01234567 + 257,
                          LittleEndian.GetInt(copy, offset), "XBAT Chain");
             offset += LittleEndianConsts.INT_SIZE;
             k++;
             for (; k < 148; k++)
             {
-                Assert.AreEqual(correct,
+                ClassicAssert.AreEqual(correct,
                              LittleEndian.GetInt(copy, offset), "XBAT entry " + k);
                 correct++;
                 offset += LittleEndianConsts.INT_SIZE;
             }
             for (; k < 255; k++)
             {
-                Assert.AreEqual(-1,
+                ClassicAssert.AreEqual(-1,
                              LittleEndian.GetInt(copy, offset), "XBAT entry " + k);
                 offset += LittleEndianConsts.INT_SIZE;
             }
-            Assert.AreEqual(-2,
+            ClassicAssert.AreEqual(-2,
                          LittleEndian.GetInt(copy, offset), "XBAT End of chain");
         }
     }

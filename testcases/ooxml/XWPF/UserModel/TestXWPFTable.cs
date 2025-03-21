@@ -17,7 +17,7 @@
 namespace TestCases.XWPF.UserModel
 {
     using System;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.OpenXmlFormats.Wordprocessing;
     using System.Collections.Generic;
     using NPOI.XWPF.UserModel;
@@ -46,17 +46,17 @@ namespace TestCases.XWPF.UserModel
             XWPFDocument doc = new XWPFDocument();
             CT_Tbl ctTable = new CT_Tbl();
             XWPFTable xtab = new XWPFTable(ctTable, doc);
-            Assert.IsNotNull(xtab);
-            Assert.AreEqual(1, ctTable.SizeOfTrArray());
-            Assert.AreEqual(1, ctTable.GetTrArray(0).SizeOfTcArray());
-            Assert.IsNotNull(ctTable.GetTrArray(0).GetTcArray(0).GetPArray(0));
+            ClassicAssert.IsNotNull(xtab);
+            ClassicAssert.AreEqual(1, ctTable.SizeOfTrArray());
+            ClassicAssert.AreEqual(1, ctTable.GetTrArray(0).SizeOfTcArray());
+            ClassicAssert.IsNotNull(ctTable.GetTrArray(0).GetTcArray(0).GetPArray(0));
 
             ctTable = new CT_Tbl();
             xtab = new XWPFTable(ctTable, doc, 3, 2);
-            Assert.IsNotNull(xtab);
-            Assert.AreEqual(3, ctTable.SizeOfTrArray());
-            Assert.AreEqual(2, ctTable.GetTrArray(0).SizeOfTcArray());
-            Assert.IsNotNull(ctTable.GetTrArray(0).GetTcArray(0).GetPArray(0));
+            ClassicAssert.IsNotNull(xtab);
+            ClassicAssert.AreEqual(3, ctTable.SizeOfTrArray());
+            ClassicAssert.AreEqual(2, ctTable.GetTrArray(0).SizeOfTcArray());
+            ClassicAssert.IsNotNull(ctTable.GetTrArray(0).GetTcArray(0).GetPArray(0));
         }
 
         [Test]
@@ -69,8 +69,8 @@ namespace TestCases.XWPF.UserModel
             cttblgrid.AddNewGridCol().w = 321;
 
             XWPFTable xtab = new XWPFTable(ctTable, doc);
-            Assert.AreEqual(123, xtab.GetCTTbl().tblGrid.gridCol[0].w);
-            Assert.AreEqual(321, xtab.GetCTTbl().tblGrid.gridCol[1].w);
+            ClassicAssert.AreEqual(123, xtab.GetCTTbl().tblGrid.gridCol[0].w);
+            ClassicAssert.AreEqual(321, xtab.GetCTTbl().tblGrid.gridCol[1].w);
         }
 
         [Test]
@@ -86,7 +86,7 @@ namespace TestCases.XWPF.UserModel
             text.Value = ("finally I can Write!");
 
             XWPFTable xtab = new XWPFTable(table, doc);
-            Assert.AreEqual("finally I can Write!\n", xtab.Text);
+            ClassicAssert.AreEqual("finally I can Write!\n", xtab.Text);
         }
 
 
@@ -107,19 +107,19 @@ namespace TestCases.XWPF.UserModel
             r3.AddNewTc().AddNewP();
 
             XWPFTable xtab = new XWPFTable(table, doc);
-            Assert.AreEqual(3, xtab.NumberOfRows);
-            Assert.IsNotNull(xtab.GetRow(2));
+            ClassicAssert.AreEqual(3, xtab.NumberOfRows);
+            ClassicAssert.IsNotNull(xtab.GetRow(2));
 
             //add a new row
             xtab.CreateRow();
-            Assert.AreEqual(4, xtab.NumberOfRows);
+            ClassicAssert.AreEqual(4, xtab.NumberOfRows);
 
             //check number of cols
-            Assert.AreEqual(2, table.GetTrArray(0).SizeOfTcArray());
+            ClassicAssert.AreEqual(2, table.GetTrArray(0).SizeOfTcArray());
 
             //check creation of first row
             xtab = new XWPFTable(new CT_Tbl(), doc);
-            Assert.AreEqual(1, xtab.GetCTTbl().GetTrArray(0).SizeOfTcArray());
+            ClassicAssert.AreEqual(1, xtab.GetCTTbl().GetTrArray(0).SizeOfTcArray());
         }
         [Test]
         public void TestInsertRow()
@@ -138,17 +138,17 @@ namespace TestCases.XWPF.UserModel
             r3.AddNewTc().AddNewP();
 
             XWPFTable xtab = new XWPFTable(table, doc);
-            Assert.AreEqual(3, xtab.NumberOfRows);
-            Assert.IsNotNull(xtab.GetRow(2));
+            ClassicAssert.AreEqual(3, xtab.NumberOfRows);
+            ClassicAssert.IsNotNull(xtab.GetRow(2));
 
             //add a new row
             xtab.CreateRow();
-            Assert.AreEqual(4, xtab.NumberOfRows);
+            ClassicAssert.AreEqual(4, xtab.NumberOfRows);
 
             xtab.InsertNewTableRow(0);
-            Assert.AreEqual(5, xtab.NumberOfRows);
+            ClassicAssert.AreEqual(5, xtab.NumberOfRows);
             xtab.InsertNewTableRow(xtab.NumberOfRows);
-            Assert.AreEqual(6, xtab.NumberOfRows);
+            ClassicAssert.AreEqual(6, xtab.NumberOfRows);
 
 
         }
@@ -163,10 +163,10 @@ namespace TestCases.XWPF.UserModel
 
             XWPFTable xtab = new XWPFTable(table, doc);
 
-            Assert.AreEqual(1000, xtab.Width);
+            ClassicAssert.AreEqual(1000, xtab.Width);
 
             xtab.Width = 100;
-            Assert.AreEqual(100, int.Parse(table.tblPr.tblW.w));
+            ClassicAssert.AreEqual(100, int.Parse(table.tblPr.tblW.w));
         }
         [Test]
         public void TestSetGetHeight()
@@ -178,7 +178,7 @@ namespace TestCases.XWPF.UserModel
             XWPFTable xtab = new XWPFTable(table, doc);
             XWPFTableRow row = xtab.CreateRow();
             row.Height = (20);
-            Assert.AreEqual(20, row.Height);
+            ClassicAssert.AreEqual(20, row.Height);
         }
         [Test]
         public void TestSetGetMargins()
@@ -187,7 +187,7 @@ namespace TestCases.XWPF.UserModel
             // the XmlBean process and Added to the jar file. it's required
             // for the following XWPFTable methods.
             CT_TblCellMar ctm = new CT_TblCellMar();
-            Assert.IsNotNull(ctm);
+            ClassicAssert.IsNotNull(ctm);
             // create a table
             XWPFDocument doc = new XWPFDocument();
             CT_Tbl ctTable = new CT_Tbl();
@@ -196,13 +196,13 @@ namespace TestCases.XWPF.UserModel
             table.SetCellMargins(50, 50, 250, 450);
             // Get margin components
             int t = table.CellMarginTop;
-            Assert.AreEqual(50, t);
+            ClassicAssert.AreEqual(50, t);
             int l = table.CellMarginLeft;
-            Assert.AreEqual(50, l);
+            ClassicAssert.AreEqual(50, l);
             int b = table.CellMarginBottom;
-            Assert.AreEqual(250, b);
+            ClassicAssert.AreEqual(250, b);
             int r = table.CellMarginRight;
-            Assert.AreEqual(450, r);
+            ClassicAssert.AreEqual(450, r);
         }
 
         [Test]
@@ -212,9 +212,9 @@ namespace TestCases.XWPF.UserModel
             // the XmlBean process and Added to the jar file. they are required
             // for the following XWPFTable methods.
             CT_TblBorders cttb = new CT_TblBorders();
-            Assert.IsNotNull(cttb);
+            ClassicAssert.IsNotNull(cttb);
             ST_Border stb = new ST_Border();
-            Assert.IsNotNull(stb);
+            ClassicAssert.IsNotNull(stb);
             // create a table
             XWPFDocument doc = new XWPFDocument();
             CT_Tbl ctTable = new CT_Tbl();
@@ -223,13 +223,13 @@ namespace TestCases.XWPF.UserModel
             table.SetInsideHBorder(NPOI.XWPF.UserModel.XWPFTable.XWPFBorderType.SINGLE, 4, 0, "FF0000");
             // Get inside horizontal border components
             int s = table.InsideHBorderSize;
-            Assert.AreEqual(4, s);
+            ClassicAssert.AreEqual(4, s);
             int sp = table.InsideHBorderSpace;
-            Assert.AreEqual(0, sp);
+            ClassicAssert.AreEqual(0, sp);
             String clr = table.InsideHBorderColor;
-            Assert.AreEqual("FF0000", clr);
+            ClassicAssert.AreEqual("FF0000", clr);
             NPOI.XWPF.UserModel.XWPFTable.XWPFBorderType bt = table.InsideHBorderType;
-            Assert.AreEqual(NPOI.XWPF.UserModel.XWPFTable.XWPFBorderType.SINGLE, bt);
+            ClassicAssert.AreEqual(NPOI.XWPF.UserModel.XWPFTable.XWPFBorderType.SINGLE, bt);
         }
         [Test]
         public void TestSetGetVBorders()
@@ -242,13 +242,13 @@ namespace TestCases.XWPF.UserModel
             table.SetInsideVBorder(NPOI.XWPF.UserModel.XWPFTable.XWPFBorderType.DOUBLE, 4, 0, "00FF00");
             // Get inside vertical border components
             NPOI.XWPF.UserModel.XWPFTable.XWPFBorderType bt = table.InsideVBorderType;
-            Assert.AreEqual(NPOI.XWPF.UserModel.XWPFTable.XWPFBorderType.DOUBLE, bt);
+            ClassicAssert.AreEqual(NPOI.XWPF.UserModel.XWPFTable.XWPFBorderType.DOUBLE, bt);
             int sz = table.InsideVBorderSize;
-            Assert.AreEqual(4, sz);
+            ClassicAssert.AreEqual(4, sz);
             int sp = table.InsideVBorderSpace;
-            Assert.AreEqual(0, sp);
+            ClassicAssert.AreEqual(0, sp);
             String clr = table.InsideVBorderColor;
-            Assert.AreEqual("00FF00", clr);
+            ClassicAssert.AreEqual("00FF00", clr);
         }
         [Test]
         public void TestSetGetRowBandSize()
@@ -258,7 +258,7 @@ namespace TestCases.XWPF.UserModel
             XWPFTable table = new XWPFTable(ctTable, doc);
             table.RowBandSize = 12;
             int sz = table.RowBandSize;
-            Assert.AreEqual(12, sz);
+            ClassicAssert.AreEqual(12, sz);
         }
         [Test]
         public void TestSetGetColBandSize()
@@ -268,7 +268,7 @@ namespace TestCases.XWPF.UserModel
             XWPFTable table = new XWPFTable(ctTable, doc);
             table.ColBandSize = 16;
             int sz = table.ColBandSize;
-            Assert.AreEqual(16, sz);
+            ClassicAssert.AreEqual(16, sz);
         }
         [Test]
         public void TestCreateTable()
@@ -283,17 +283,17 @@ namespace TestCases.XWPF.UserModel
 
             // assert the table is empty
             List<XWPFTableRow> rows = table.Rows;
-            Assert.AreEqual(noRows, rows.Count, "Table has less rows than requested.");
+            ClassicAssert.AreEqual(noRows, rows.Count, "Table has less rows than requested.");
             foreach (XWPFTableRow xwpfRow in rows)
             {
-                Assert.IsNotNull(xwpfRow);
+                ClassicAssert.IsNotNull(xwpfRow);
                 for (int i = 0; i < 7; i++)
                 {
                     XWPFTableCell xwpfCell = xwpfRow.GetCell(i);
-                    Assert.IsNotNull(xwpfCell);
-                    Assert.AreEqual(1, xwpfCell.Paragraphs.Count, "Empty cells should not have one paragraph.");
+                    ClassicAssert.IsNotNull(xwpfCell);
+                    ClassicAssert.AreEqual(1, xwpfCell.Paragraphs.Count, "Empty cells should not have one paragraph.");
                     xwpfCell = xwpfRow.GetCell(i);
-                    Assert.AreEqual(1, xwpfCell.Paragraphs.Count, "Calling 'getCell' must not modify cells content.");
+                    ClassicAssert.AreEqual(1, xwpfCell.Paragraphs.Count, "Calling 'getCell' must not modify cells content.");
                 }
             }
             doc.Package.Revert();
@@ -312,8 +312,8 @@ namespace TestCases.XWPF.UserModel
 
             //Check
             CT_String tblCaption = table.GetCTTbl().tblPr.tblCaption;
-            Assert.IsNotNull(tblCaption);
-            Assert.AreEqual("%TABLECAPTION%", tblCaption.val);
+            ClassicAssert.IsNotNull(tblCaption);
+            ClassicAssert.AreEqual("%TABLECAPTION%", tblCaption.val);
         }
 
         [Test]
@@ -329,8 +329,8 @@ namespace TestCases.XWPF.UserModel
 
             //Check
             CT_String tblDesc = table.GetCTTbl().tblPr.tblDescription;
-            Assert.IsNotNull(tblDesc);
-            Assert.AreEqual("%TABLEDESCRIPTION%", tblDesc.val);
+            ClassicAssert.IsNotNull(tblDesc);
+            ClassicAssert.AreEqual("%TABLEDESCRIPTION%", tblDesc.val);
         }
 
         [Test]
@@ -343,8 +343,8 @@ namespace TestCases.XWPF.UserModel
             var table = doc.Tables[0];
 
             //Assert Table Caption & Description
-            Assert.AreEqual("Table Title", table.TableCaption);
-            Assert.AreEqual("Table Description", table.TableDescription);
+            ClassicAssert.AreEqual("Table Title", table.TableCaption);
+            ClassicAssert.AreEqual("Table Description", table.TableDescription);
         }
     }
 }

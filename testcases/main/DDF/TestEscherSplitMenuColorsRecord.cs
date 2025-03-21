@@ -23,7 +23,7 @@ namespace TestCases.DDF
     using System.Text;
     using System.IO;
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.DDF;
     using NPOI.Util;
     [TestFixture]
@@ -36,8 +36,8 @@ namespace TestCases.DDF
 
             byte[] data = new byte[24];
             int bytesWritten = r.Serialize(0, data);
-            Assert.AreEqual(24, bytesWritten);
-            Assert.AreEqual("[40, 00, " +
+            ClassicAssert.AreEqual(24, bytesWritten);
+            ClassicAssert.AreEqual("[40, 00, " +
                     "1E, F1, " +
                     "10, 00, 00, 00, " +
                     "02, 04, 00, 00, " +
@@ -60,11 +60,11 @@ namespace TestCases.DDF
             EscherSplitMenuColorsRecord r = new EscherSplitMenuColorsRecord();
             int bytesWritten = r.FillFields(data, new DefaultEscherRecordFactory());
 
-            Assert.AreEqual(24, bytesWritten);
-            Assert.AreEqual(0x0402, r.Color1);
-            Assert.AreEqual(0x02, r.Color2);
-            Assert.AreEqual(0x02, r.Color3);
-            Assert.AreEqual(0x01, r.Color4);
+            ClassicAssert.AreEqual(24, bytesWritten);
+            ClassicAssert.AreEqual(0x0402, r.Color1);
+            ClassicAssert.AreEqual(0x02, r.Color2);
+            ClassicAssert.AreEqual(0x02, r.Color3);
+            ClassicAssert.AreEqual(0x01, r.Color4);
         }
         [Test]
         public void TestToString()
@@ -80,7 +80,7 @@ namespace TestCases.DDF
                     "  Color3: 0x00000002" + nl +
                     "  Color4: 0x00000001" + nl +
                     "";
-            Assert.AreEqual(expected, CreateRecord().ToString());
+            ClassicAssert.AreEqual(expected, CreateRecord().ToString());
         }
 
         private EscherSplitMenuColorsRecord CreateRecord()

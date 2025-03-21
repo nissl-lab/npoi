@@ -20,7 +20,7 @@ namespace TestCases.SS.Format
     using System.Collections.Generic;
     using System.Text.RegularExpressions;
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Format;
     using NPOI.SS.UserModel;
@@ -77,7 +77,7 @@ namespace TestCases.SS.Format
 
             public virtual void Equivalent(String expected, String actual, CellFormatPart format)
             {
-                Assert.AreEqual('"' + expected + '"',
+                ClassicAssert.AreEqual('"' + expected + '"',
                         '"' + actual + '"', "format \"" + format.ToString() + "\"");
             }
         }
@@ -251,7 +251,7 @@ namespace TestCases.SS.Format
             String actualText = result.Text;
             Color actualColor = labelForeColor;
             getter.Equivalent(expectedText, actualText, format);
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                     expectedColor, actualColor, cname == null ? "no color" : "color " + cname);
             return actualText;
         }

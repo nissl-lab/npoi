@@ -23,7 +23,7 @@ namespace TestCases.HSSF.UserModel
     using NPOI.SS.Formula;
     using TestCases.SS.Formula;
     using TestCases.HSSF;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.SS.UserModel;
 
     /**
@@ -52,18 +52,18 @@ namespace TestCases.HSSF.UserModel
 
             ISheet sh = wb.GetSheetAt(0);
             // these two are not imlemented in r
-            Assert.AreEqual("DELTA(1.3,1.5)", sh.GetRow(0).GetCell(1).CellFormula);
-            Assert.AreEqual("COMPLEX(2,4)", sh.GetRow(1).GetCell(1).CellFormula);
+            ClassicAssert.AreEqual("DELTA(1.3,1.5)", sh.GetRow(0).GetCell(1).CellFormula);
+            ClassicAssert.AreEqual("COMPLEX(2,4)", sh.GetRow(1).GetCell(1).CellFormula);
 
             ICell cell2 = sh.GetRow(2).GetCell(1);
-            Assert.AreEqual("ISODD(2)", cell2.CellFormula);
-            Assert.AreEqual(false, Evaluator.Evaluate(cell2).BooleanValue);
-            Assert.AreEqual(CellType.Boolean, Evaluator.EvaluateFormulaCell(cell2));
+            ClassicAssert.AreEqual("ISODD(2)", cell2.CellFormula);
+            ClassicAssert.AreEqual(false, Evaluator.Evaluate(cell2).BooleanValue);
+            ClassicAssert.AreEqual(CellType.Boolean, Evaluator.EvaluateFormulaCell(cell2));
 
             ICell cell3 = sh.GetRow(3).GetCell(1);
-            Assert.AreEqual("ISEVEN(2)", cell3.CellFormula);
-            Assert.AreEqual(true, Evaluator.Evaluate(cell3).BooleanValue);
-            Assert.AreEqual(CellType.Boolean, Evaluator.EvaluateFormulaCell(cell3));
+            ClassicAssert.AreEqual("ISEVEN(2)", cell3.CellFormula);
+            ClassicAssert.AreEqual(true, Evaluator.Evaluate(cell3).BooleanValue);
+            ClassicAssert.AreEqual(CellType.Boolean, Evaluator.EvaluateFormulaCell(cell3));
         }
 
     }

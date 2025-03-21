@@ -22,7 +22,7 @@ namespace TestCases.XSSF.UserModel
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
     using NPOI.XSSF.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
 
     /**

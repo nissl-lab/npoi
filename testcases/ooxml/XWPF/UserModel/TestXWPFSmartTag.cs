@@ -17,7 +17,7 @@
 namespace TestCases.XWPF.UserModel
 {
     using NPOI.XWPF.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     /**
      * Tests for Reading SmartTags from Word docx.
@@ -34,9 +34,9 @@ namespace TestCases.XWPF.UserModel
             XWPFParagraph p = doc.GetParagraphArray(0);
             //About NPOI: because the serializer bug(the CT_Run contains whitespace will discard the whitespace),
             //Text is "CarnegieMellonUniversitySchool of Computer Science"
-            Assert.IsTrue(p.Text.Contains("Carnegie Mellon University School of Computer Science"));
+            ClassicAssert.IsTrue(p.Text.Contains("Carnegie Mellon University School of Computer Science"));
             p = doc.GetParagraphArray(2);
-            Assert.IsTrue(p.Text.Contains("Alice's Adventures"));
+            ClassicAssert.IsTrue(p.Text.Contains("Alice's Adventures"));
         }
     }
 

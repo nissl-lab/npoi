@@ -18,7 +18,7 @@
 namespace TestCases.SS.Formula.Functions
 {
     using System;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.Formula.Functions;
@@ -65,8 +65,8 @@ namespace TestCases.SS.Formula.Functions
 
             ValueEval result = new Subtotal().Evaluate(args, 0, 0);
 
-            Assert.AreEqual(typeof(NumberEval), result.GetType());
-            Assert.AreEqual(expected, ((NumberEval) result).NumberValue, 0.0);
+            ClassicAssert.AreEqual(typeof(NumberEval), result.GetType());
+            ClassicAssert.AreEqual(expected, ((NumberEval) result).NumberValue, 0.0);
         }
         [Test]
         public void TestBasics()
@@ -106,10 +106,10 @@ namespace TestCases.SS.Formula.Functions
 
             fe.EvaluateAll();
 
-            Assert.AreEqual(2.0, a3.NumericCellValue);
-            Assert.AreEqual(8.0, a6.NumericCellValue);
-            Assert.AreEqual(3.0, a7.NumericCellValue);
-            Assert.AreEqual(3.0, a8.NumericCellValue);
+            ClassicAssert.AreEqual(2.0, a3.NumericCellValue);
+            ClassicAssert.AreEqual(8.0, a6.NumericCellValue);
+            ClassicAssert.AreEqual(3.0, a7.NumericCellValue);
+            ClassicAssert.AreEqual(3.0, a8.NumericCellValue);
         }
         [Test]
         public void TestSum()
@@ -139,10 +139,10 @@ namespace TestCases.SS.Formula.Functions
 
             fe.EvaluateAll();
 
-            Assert.AreEqual(4.0, a3.NumericCellValue);
-            Assert.AreEqual(26.0, a6.NumericCellValue);
-            Assert.AreEqual(12.0, a7.NumericCellValue);
-            Assert.AreEqual(12.0, a8.NumericCellValue);
+            ClassicAssert.AreEqual(4.0, a3.NumericCellValue);
+            ClassicAssert.AreEqual(26.0, a6.NumericCellValue);
+            ClassicAssert.AreEqual(12.0, a7.NumericCellValue);
+            ClassicAssert.AreEqual(12.0, a8.NumericCellValue);
         }
         [Test]
         public void TestCount()
@@ -172,10 +172,10 @@ namespace TestCases.SS.Formula.Functions
 
             fe.EvaluateAll();
 
-            Assert.AreEqual(2.0, a3.NumericCellValue);
-            Assert.AreEqual(6.0, a6.NumericCellValue);
-            Assert.AreEqual(2.0, a7.NumericCellValue);
-            Assert.AreEqual(2.0, a8.NumericCellValue);
+            ClassicAssert.AreEqual(2.0, a3.NumericCellValue);
+            ClassicAssert.AreEqual(6.0, a6.NumericCellValue);
+            ClassicAssert.AreEqual(2.0, a7.NumericCellValue);
+            ClassicAssert.AreEqual(2.0, a8.NumericCellValue);
         }
         [Test]
         public void TestCounta()
@@ -205,10 +205,10 @@ namespace TestCases.SS.Formula.Functions
 
             fe.EvaluateAll();
 
-            Assert.AreEqual(2.0, a3.NumericCellValue);
-            Assert.AreEqual(8.0, a6.NumericCellValue);
-            Assert.AreEqual(3.0, a7.NumericCellValue);
-            Assert.AreEqual(3.0, a8.NumericCellValue);
+            ClassicAssert.AreEqual(2.0, a3.NumericCellValue);
+            ClassicAssert.AreEqual(8.0, a6.NumericCellValue);
+            ClassicAssert.AreEqual(3.0, a7.NumericCellValue);
+            ClassicAssert.AreEqual(3.0, a8.NumericCellValue);
         }
         [Test]
         public void TestMax()
@@ -238,10 +238,10 @@ namespace TestCases.SS.Formula.Functions
 
             fe.EvaluateAll();
 
-            Assert.AreEqual(3.0, a3.NumericCellValue);
-            Assert.AreEqual(16.0, a6.NumericCellValue);
-            Assert.AreEqual(7.0, a7.NumericCellValue);
-            Assert.AreEqual(7.0, a8.NumericCellValue);
+            ClassicAssert.AreEqual(3.0, a3.NumericCellValue);
+            ClassicAssert.AreEqual(16.0, a6.NumericCellValue);
+            ClassicAssert.AreEqual(7.0, a7.NumericCellValue);
+            ClassicAssert.AreEqual(7.0, a8.NumericCellValue);
         }
         [Test]
         public void TestMin()
@@ -271,10 +271,10 @@ namespace TestCases.SS.Formula.Functions
 
             fe.EvaluateAll();
 
-            Assert.AreEqual(1.0, a3.NumericCellValue);
-            Assert.AreEqual(4.0, a6.NumericCellValue);
-            Assert.AreEqual(1.0, a7.NumericCellValue);
-            Assert.AreEqual(1.0, a8.NumericCellValue);
+            ClassicAssert.AreEqual(1.0, a3.NumericCellValue);
+            ClassicAssert.AreEqual(4.0, a6.NumericCellValue);
+            ClassicAssert.AreEqual(1.0, a7.NumericCellValue);
+            ClassicAssert.AreEqual(1.0, a8.NumericCellValue);
         }
         [Test]
         public void TestStdev()
@@ -304,10 +304,10 @@ namespace TestCases.SS.Formula.Functions
 
             fe.EvaluateAll();
 
-            Assert.AreEqual(1.41421, a3.NumericCellValue, 0.00001);
-            Assert.AreEqual(7.65685, a6.NumericCellValue, 0.00001);
-            Assert.AreEqual(2.82842, a7.NumericCellValue, 0.00001);
-            Assert.AreEqual(2.82842, a8.NumericCellValue, 0.00001);
+            ClassicAssert.AreEqual(1.41421, a3.NumericCellValue, 0.00001);
+            ClassicAssert.AreEqual(7.65685, a6.NumericCellValue, 0.00001);
+            ClassicAssert.AreEqual(2.82842, a7.NumericCellValue, 0.00001);
+            ClassicAssert.AreEqual(2.82842, a8.NumericCellValue, 0.00001);
         }
 
         [Test]
@@ -337,10 +337,10 @@ namespace TestCases.SS.Formula.Functions
 
                 fe.EvaluateAll();
 
-                Assert.AreEqual(1.0, a3.NumericCellValue, 0.00001);
-                Assert.AreEqual(6.898979, a6.NumericCellValue, 0.00001);
-                Assert.AreEqual(2.44949, a7.NumericCellValue, 0.00001);
-                Assert.AreEqual(2.44949, a8.NumericCellValue, 0.00001);
+                ClassicAssert.AreEqual(1.0, a3.NumericCellValue, 0.00001);
+                ClassicAssert.AreEqual(6.898979, a6.NumericCellValue, 0.00001);
+                ClassicAssert.AreEqual(2.44949, a7.NumericCellValue, 0.00001);
+                ClassicAssert.AreEqual(2.44949, a8.NumericCellValue, 0.00001);
             }
         }
 
@@ -373,10 +373,10 @@ namespace TestCases.SS.Formula.Functions
 
                 fe.EvaluateAll();
 
-                Assert.AreEqual(2.0, a3.NumericCellValue);
-                Assert.AreEqual(18.0, a6.NumericCellValue);
-                Assert.AreEqual(8.0, a7.NumericCellValue);
-                Assert.AreEqual(8.0, a8.NumericCellValue);
+                ClassicAssert.AreEqual(2.0, a3.NumericCellValue);
+                ClassicAssert.AreEqual(18.0, a6.NumericCellValue);
+                ClassicAssert.AreEqual(8.0, a7.NumericCellValue);
+                ClassicAssert.AreEqual(8.0, a8.NumericCellValue);
             }
         }
 
@@ -409,10 +409,10 @@ namespace TestCases.SS.Formula.Functions
 
                 fe.EvaluateAll();
 
-                Assert.AreEqual(1.0, a3.NumericCellValue);
-                Assert.AreEqual(14.0, a6.NumericCellValue);
-                Assert.AreEqual(6.0, a7.NumericCellValue);
-                Assert.AreEqual(6.0, a8.NumericCellValue);
+                ClassicAssert.AreEqual(1.0, a3.NumericCellValue);
+                ClassicAssert.AreEqual(14.0, a6.NumericCellValue);
+                ClassicAssert.AreEqual(6.0, a7.NumericCellValue);
+                ClassicAssert.AreEqual(6.0, a8.NumericCellValue);
             }
         }
 
@@ -430,8 +430,8 @@ namespace TestCases.SS.Formula.Functions
 
             IFormulaEvaluator fe = wb.GetCreationHelper().CreateFormulaEvaluator();
             fe.EvaluateAll();
-            Assert.AreEqual(1.0, a2.NumericCellValue);
-            Assert.AreEqual(1.0, a3.NumericCellValue);
+            ClassicAssert.AreEqual(1.0, a2.NumericCellValue);
+            ClassicAssert.AreEqual(1.0, a3.NumericCellValue);
         }
 
         private static void ConfirmExpectedResult(IFormulaEvaluator Evaluator, String msg, ICell cell, double expected)
@@ -440,7 +440,7 @@ namespace TestCases.SS.Formula.Functions
             CellValue value = Evaluator.Evaluate(cell);
             if(value.ErrorValue != 0)
                 throw new Exception(msg + ": " + value.FormatAsString());
-            Assert.AreEqual(expected, value.NumberValue, msg);
+            ClassicAssert.AreEqual(expected, value.NumberValue, msg);
         }
         [Test]
         public void TestFunctionsFromTestSpreadsheet()
@@ -449,16 +449,16 @@ namespace TestCases.SS.Formula.Functions
             ISheet sheet = workbook.GetSheetAt(0);
             IFormulaEvaluator evaluator = workbook.GetCreationHelper().CreateFormulaEvaluator();
 
-            Assert.AreEqual(10.0, sheet.GetRow(1).GetCell(1).NumericCellValue, "B2");
-            Assert.AreEqual(20.0, sheet.GetRow(2).GetCell(1).NumericCellValue, "B3");
+            ClassicAssert.AreEqual(10.0, sheet.GetRow(1).GetCell(1).NumericCellValue, "B2");
+            ClassicAssert.AreEqual(20.0, sheet.GetRow(2).GetCell(1).NumericCellValue, "B3");
 
             //Test simple subtotal over one area
             ICell cellA3 = sheet.GetRow(3).GetCell(1);
             ConfirmExpectedResult(evaluator, "B4", cellA3, 30.0);
 
             //Test existence of the second area
-            Assert.IsNotNull(sheet.GetRow(1).GetCell(2), "C2 must not be null");
-            Assert.AreEqual(7.0, sheet.GetRow(1).GetCell(2).NumericCellValue, "C2");
+            ClassicAssert.IsNotNull(sheet.GetRow(1).GetCell(2), "C2 must not be null");
+            ClassicAssert.AreEqual(7.0, sheet.GetRow(1).GetCell(2).NumericCellValue, "C2");
 
             ICell cellC1 = sheet.GetRow(1).GetCell(3);
             ICell cellC2 = sheet.GetRow(2).GetCell(3);
@@ -482,7 +482,7 @@ namespace TestCases.SS.Formula.Functions
             
             a3.CellFormula = ("SUBTOTAL(0,B2:B3)");
             fe.EvaluateAll();
-            Assert.AreEqual(FormulaError.VALUE.Code, a3.ErrorCellValue);
+            ClassicAssert.AreEqual(FormulaError.VALUE.Code, a3.ErrorCellValue);
             try
             {
                 a3.CellFormula = ("SUBTOTAL(9)");
@@ -502,7 +502,7 @@ namespace TestCases.SS.Formula.Functions
                 // expected here
             }
             Subtotal subtotal = new Subtotal();
-            Assert.AreEqual(ErrorEval.VALUE_INVALID, subtotal.Evaluate(new ValueEval[] { }, 0, 0));
+            ClassicAssert.AreEqual(ErrorEval.VALUE_INVALID, subtotal.Evaluate(new ValueEval[] { }, 0, 0));
         }
 
     }

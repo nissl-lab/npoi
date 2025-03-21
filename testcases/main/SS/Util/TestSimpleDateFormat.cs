@@ -22,7 +22,7 @@ using System.Globalization;
 using System.IO;
 using NPOI.SS.Util;
 using NPOI.Util;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 
 namespace TestCases.SS.Util
 {
@@ -46,7 +46,7 @@ namespace TestCases.SS.Util
             Assert.DoesNotThrow(() => illForm = format.Parse("2020-07-03T 9:41:11-04:00"));
             Assert.Throws<FormatException>(() => format.Parse("2020-07-03T09: 1:11-04:00"));
 
-            Assert.AreEqual(standardForm, illForm);
+            ClassicAssert.AreEqual(standardForm, illForm);
         }
 
     }

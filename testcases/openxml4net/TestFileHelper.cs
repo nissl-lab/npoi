@@ -20,7 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using NPOI.OpenXml4Net.OPC.Internal;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 namespace TestCases.OpenXml4Net.OPC
 {
 
@@ -53,10 +53,10 @@ namespace TestCases.OpenXml4Net.OPC
                 if (false)
                 {
                     // YK: The original version asserted expected values against File#getAbsolutePath():
-                    Assert.IsTrue(expectedValue[filename].Equals(f2,StringComparison.InvariantCultureIgnoreCase));
+                    ClassicAssert.IsTrue(expectedValue[filename].Equals(f2,StringComparison.InvariantCultureIgnoreCase));
                     // This comparison is platform dependent. A better approach is below
                 }
-                Assert.IsTrue(f1.Equals(f2));
+                ClassicAssert.IsTrue(f1.Equals(f2));
             }
         }
     }

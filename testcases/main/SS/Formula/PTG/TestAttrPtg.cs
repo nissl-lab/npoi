@@ -18,7 +18,7 @@
 namespace TestCases.SS.Formula.PTG
 {
     using System;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.SS.Formula.PTG;
     using NPOI.Util;
 
@@ -51,7 +51,7 @@ namespace TestCases.SS.Formula.PTG
             {
                 throw new AssertionException("incorrect re-serialization of tAttrChoose");
             }
-            Assert.IsTrue(Arrays.Equals(data, data2));
+            ClassicAssert.IsTrue(Arrays.Equals(data, data2));
         }
     }
 

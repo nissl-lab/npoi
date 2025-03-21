@@ -18,7 +18,7 @@
 namespace TestCases.SS.Formula.PTG
 {
     using System;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
@@ -57,21 +57,21 @@ namespace TestCases.SS.Formula.PTG
             try
             {
                 HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("XRefCalc.xls");
-                Assert.AreEqual("Sheet1!$A$2", wb.GetName("QUANT").RefersToFormula);
-                Assert.AreEqual("Sheet1!$B$2", wb.GetName("PART").RefersToFormula);
-                Assert.AreEqual("x123", wb.GetSheet("Sheet1").GetRow(1).GetCell(1).StringCellValue);
-                Assert.AreEqual("Sheet1!$C$2", wb.GetName("UNITCOST").RefersToFormula);
+                ClassicAssert.AreEqual("Sheet1!$A$2", wb.GetName("QUANT").RefersToFormula);
+                ClassicAssert.AreEqual("Sheet1!$B$2", wb.GetName("PART").RefersToFormula);
+                ClassicAssert.AreEqual("x123", wb.GetSheet("Sheet1").GetRow(1).GetCell(1).StringCellValue);
+                ClassicAssert.AreEqual("Sheet1!$C$2", wb.GetName("UNITCOST").RefersToFormula);
                 CellReference cellRef = new CellReference(wb.GetName("UNITCOST").RefersToFormula);
                 ICell cell = wb.GetSheet(cellRef.SheetName).GetRow(cellRef.Row).GetCell((int)cellRef.Col);
-                Assert.AreEqual("VLOOKUP(PART,COSTS,2,FALSE)", cell.CellFormula);
-                Assert.AreEqual("Sheet1!$D$2", wb.GetName("COST").RefersToFormula);
+                ClassicAssert.AreEqual("VLOOKUP(PART,COSTS,2,FALSE)", cell.CellFormula);
+                ClassicAssert.AreEqual("Sheet1!$D$2", wb.GetName("COST").RefersToFormula);
                 cellRef = new CellReference(wb.GetName("COST").RefersToFormula);
                 cell = wb.GetSheet(cellRef.SheetName).GetRow(cellRef.Row).GetCell((int)cellRef.Col);
-                Assert.AreEqual("UNITCOST*Quant", cell.CellFormula);
-                Assert.AreEqual("Sheet1!$E$2", wb.GetName("TOTALCOST").RefersToFormula);
+                ClassicAssert.AreEqual("UNITCOST*Quant", cell.CellFormula);
+                ClassicAssert.AreEqual("Sheet1!$E$2", wb.GetName("TOTALCOST").RefersToFormula);
                 cellRef = new CellReference(wb.GetName("TOTALCOST").RefersToFormula);
                 cell = wb.GetSheet(cellRef.SheetName).GetRow(cellRef.Row).GetCell((int)cellRef.Col);
-                Assert.AreEqual("Cost*Markup_Cost", cell.CellFormula);
+                ClassicAssert.AreEqual("Cost*Markup_Cost", cell.CellFormula);
             }
             catch (Exception e)
             {
@@ -84,11 +84,11 @@ namespace TestCases.SS.Formula.PTG
             try
             {
                 HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("XRefCalcData.xls");
-                Assert.AreEqual("CostSheet!$A$2:$B$3", wb.GetName("COSTS").RefersToFormula);
-                Assert.AreEqual("x123", wb.GetSheet("CostSheet").GetRow(1).GetCell(0).StringCellValue);
-                Assert.AreEqual(PART_COST, wb.GetSheet("CostSheet").GetRow(1).GetCell(1).NumericCellValue);
-                Assert.AreEqual("MarkupSheet!$B$1", wb.GetName("Markup_Cost").RefersToFormula);
-                Assert.AreEqual(MARKUP_COST_1, wb.GetSheet("MarkupSheet").GetRow(0).GetCell(1).NumericCellValue);
+                ClassicAssert.AreEqual("CostSheet!$A$2:$B$3", wb.GetName("COSTS").RefersToFormula);
+                ClassicAssert.AreEqual("x123", wb.GetSheet("CostSheet").GetRow(1).GetCell(0).StringCellValue);
+                ClassicAssert.AreEqual(PART_COST, wb.GetSheet("CostSheet").GetRow(1).GetCell(1).NumericCellValue);
+                ClassicAssert.AreEqual("MarkupSheet!$B$1", wb.GetName("Markup_Cost").RefersToFormula);
+                ClassicAssert.AreEqual(MARKUP_COST_1, wb.GetSheet("MarkupSheet").GetRow(0).GetCell(1).NumericCellValue);
             }
             catch (Exception e)
             {
@@ -119,10 +119,10 @@ namespace TestCases.SS.Formula.PTG
             Evaluator.EvaluateFormulaCell(uccell);
             Evaluator.EvaluateFormulaCell(ccell);
             Evaluator.EvaluateFormulaCell(tccell);
-            Assert.AreEqual(NEW_PART_COST, uccell.NumericCellValue);
+            ClassicAssert.AreEqual(NEW_PART_COST, uccell.NumericCellValue);
             double ctotal = decimal.ToDouble((decimal)NEW_PART_COST * (decimal)NEW_QUANT);
-            Assert.AreEqual(ctotal, ccell.NumericCellValue);
-            Assert.AreEqual(NEW_PART_COST * NEW_QUANT * MARKUP_COST_2, tccell.NumericCellValue);
+            ClassicAssert.AreEqual(ctotal, ccell.NumericCellValue);
+            ClassicAssert.AreEqual(NEW_PART_COST * NEW_QUANT * MARKUP_COST_2, tccell.NumericCellValue);
         }
     }
 

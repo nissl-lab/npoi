@@ -17,7 +17,7 @@
 
 namespace TestCases.SS.UserModel
 {
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using TestCases.SS;
 
     /**

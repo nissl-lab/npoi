@@ -20,7 +20,7 @@ namespace TestCases.SS.Formula.Functions
 
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.Formula.Functions;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using System;
 
     /**
@@ -38,12 +38,12 @@ namespace TestCases.SS.Formula.Functions
             {
                 ValueEval[] args = { EvalFactory.CreateRefEval("C5"), };
                 double actual = NumericFunctionInvoker.Invoke(target, args);
-                Assert.AreEqual(3, actual, 0D);
+                ClassicAssert.AreEqual(3, actual, 0D);
             }
             {
                 ValueEval[] args = { EvalFactory.CreateAreaEval("E2:H12", new ValueEval[44]), };
                 double actual = NumericFunctionInvoker.Invoke(target, args);
-                Assert.AreEqual(5, actual, 0D);
+                ClassicAssert.AreEqual(5, actual, 0D);
             }
         }
         [Test]
@@ -53,12 +53,12 @@ namespace TestCases.SS.Formula.Functions
             {
                 ValueEval[] args = { new StringEval("col"), EvalFactory.CreateRefEval("B5"), };
                 double actual = NumericFunctionInvoker.Invoke(target, args);
-                Assert.AreEqual(2, actual);
+                ClassicAssert.AreEqual(2, actual);
             }
             {
                 ValueEval[] args = { new StringEval("row"), EvalFactory.CreateRefEval("B5"), };
                 double actual = NumericFunctionInvoker.Invoke(target, args);
-                Assert.AreEqual(5, actual);
+                ClassicAssert.AreEqual(5, actual);
             }
         }
         [Test]
@@ -69,12 +69,12 @@ namespace TestCases.SS.Formula.Functions
             {
                 ValueEval[] args = { EvalFactory.CreateRefEval("C5"), };
                 double actual = NumericFunctionInvoker.Invoke(target, args);
-                Assert.AreEqual(5, actual, 0D);
+                ClassicAssert.AreEqual(5, actual, 0D);
             }
             {
                 ValueEval[] args = { EvalFactory.CreateAreaEval("E2:H12", new ValueEval[44]), };
                 double actual = NumericFunctionInvoker.Invoke(target, args);
-                Assert.AreEqual(2, actual, 0D);
+                ClassicAssert.AreEqual(2, actual, 0D);
             }
         }
         [Test]
@@ -88,7 +88,7 @@ namespace TestCases.SS.Formula.Functions
 
             ValueEval[] args = { EvalFactory.CreateRefEval("C5"), };
             double actual = NumericFunctionInvoker.Invoke(new Columns(), args);
-            Assert.AreEqual(1, actual, 0D);
+            ClassicAssert.AreEqual(1, actual, 0D);
         }
         [Test]
         public void TestRows()
@@ -101,7 +101,7 @@ namespace TestCases.SS.Formula.Functions
 
             ValueEval[] args = { EvalFactory.CreateRefEval("C5"), };
             double actual = NumericFunctionInvoker.Invoke(new Rows(), args);
-            Assert.AreEqual(1, actual, 0D);
+            ClassicAssert.AreEqual(1, actual, 0D);
         }
 
         private static void ConfirmRowsFunc(String areaRefStr, int nCols, int nRows)
@@ -109,7 +109,7 @@ namespace TestCases.SS.Formula.Functions
             ValueEval[] args = { EvalFactory.CreateAreaEval(areaRefStr, new ValueEval[nCols * nRows]), };
 
             double actual = NumericFunctionInvoker.Invoke(new Rows(), args);
-            Assert.AreEqual(nRows, actual, 0D);
+            ClassicAssert.AreEqual(nRows, actual, 0D);
         }
 
 
@@ -118,7 +118,7 @@ namespace TestCases.SS.Formula.Functions
             ValueEval[] args = { EvalFactory.CreateAreaEval(areaRefStr, new ValueEval[nCols * nRows]), };
 
             double actual = NumericFunctionInvoker.Invoke(new Columns(), args);
-            Assert.AreEqual(nCols, actual, 0D);
+            ClassicAssert.AreEqual(nCols, actual, 0D);
         }
     }
 

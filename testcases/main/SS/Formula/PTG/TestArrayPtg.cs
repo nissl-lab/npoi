@@ -18,7 +18,7 @@
 namespace TestCases.SS.Formula.PTG
 {
     using System;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Formula.PTG;
     using NPOI.Util;
@@ -63,17 +63,17 @@ namespace TestCases.SS.Formula.PTG
         public void TestReadWriteTokenValueBytes()
         {
             ArrayPtg ptg = Create(ENCODED_PTG_DATA, ENCODED_CONSTANT_DATA);
-            Assert.AreEqual(3, ptg.ColumnCount);
-            Assert.AreEqual(2, ptg.RowCount);
+            ClassicAssert.AreEqual(3, ptg.ColumnCount);
+            ClassicAssert.AreEqual(2, ptg.RowCount);
             Object[,] values = ptg.GetTokenArrayValues();
-            Assert.AreEqual(2, values.Length);
+            ClassicAssert.AreEqual(2, values.Length);
 
 
-            Assert.AreEqual(true, values[0,0]);
-            Assert.AreEqual("ABCD", values[0,1]);
-            Assert.AreEqual(0d, values[1,0]);
-            Assert.AreEqual(false, values[1,1]);
-            Assert.AreEqual("FG", values[1,2]);
+            ClassicAssert.AreEqual(true, values[0,0]);
+            ClassicAssert.AreEqual("ABCD", values[0,1]);
+            ClassicAssert.AreEqual(0d, values[1,0]);
+            ClassicAssert.AreEqual(false, values[1,1]);
+            ClassicAssert.AreEqual("FG", values[1,2]);
 
             byte[] outBuf = new byte[ENCODED_CONSTANT_DATA.Length];
             ptg.WriteTokenValueBytes(new LittleEndianByteArrayOutputStream(outBuf, 0));
@@ -82,7 +82,7 @@ namespace TestCases.SS.Formula.PTG
             {
                 throw new AssertionException("Identified bug 42564b");
             }
-            Assert.IsTrue(Arrays.Equals(ENCODED_CONSTANT_DATA, outBuf));
+            ClassicAssert.IsTrue(Arrays.Equals(ENCODED_CONSTANT_DATA, outBuf));
         }
 
 
@@ -93,15 +93,15 @@ namespace TestCases.SS.Formula.PTG
         public void TestElementOrdering()
         {
             ArrayPtg ptg = Create(ENCODED_PTG_DATA, ENCODED_CONSTANT_DATA);
-            Assert.AreEqual(3, ptg.ColumnCount);
-            Assert.AreEqual(2, ptg.RowCount);
+            ClassicAssert.AreEqual(3, ptg.ColumnCount);
+            ClassicAssert.AreEqual(2, ptg.RowCount);
 
-            Assert.AreEqual(0, ptg.GetValueIndex(0, 0));
-            Assert.AreEqual(1, ptg.GetValueIndex(1, 0));
-            Assert.AreEqual(2, ptg.GetValueIndex(2, 0));
-            Assert.AreEqual(3, ptg.GetValueIndex(0, 1));
-            Assert.AreEqual(4, ptg.GetValueIndex(1, 1));
-            Assert.AreEqual(5, ptg.GetValueIndex(2, 1));
+            ClassicAssert.AreEqual(0, ptg.GetValueIndex(0, 0));
+            ClassicAssert.AreEqual(1, ptg.GetValueIndex(1, 0));
+            ClassicAssert.AreEqual(2, ptg.GetValueIndex(2, 0));
+            ClassicAssert.AreEqual(3, ptg.GetValueIndex(0, 1));
+            ClassicAssert.AreEqual(4, ptg.GetValueIndex(1, 1));
+            ClassicAssert.AreEqual(5, ptg.GetValueIndex(2, 1));
         }
 
         /**
@@ -120,7 +120,7 @@ namespace TestCases.SS.Formula.PTG
             {
                 throw new AssertionException("Identified bug 42564 b");
             }
-            Assert.AreEqual("SUM({1,2,3,4,5;6,7,8,9,10;11,12,13,14,15})", formula);
+            ClassicAssert.AreEqual("SUM({1,2,3,4,5;6,7,8,9,10;11,12,13,14,15})", formula);
         }
         [Test]
         public void TestToFormulaString()
@@ -139,7 +139,7 @@ namespace TestCases.SS.Formula.PTG
                 }
                 throw e;
             }
-            Assert.AreEqual("{TRUE,\"ABCD\",\"E\";0,FALSE,\"FG\"}", actualFormula);
+            ClassicAssert.AreEqual("{TRUE,\"ABCD\",\"E\";0,FALSE,\"FG\"}", actualFormula);
         }
 
         /**
@@ -163,9 +163,9 @@ namespace TestCases.SS.Formula.PTG
             ILittleEndianInput in1 = TestcaseRecordInputStream.CreateLittleEndian(fullData);
 
             Ptg[] ptgs = Ptg.ReadTokens(ENCODED_PTG_DATA.Length, in1);
-            Assert.AreEqual(1, ptgs.Length);
+            ClassicAssert.AreEqual(1, ptgs.Length);
             ArrayPtg aPtg = (ArrayPtg)ptgs[0];
-            Assert.AreEqual(operandClass, aPtg.PtgClass);
+            ClassicAssert.AreEqual(operandClass, aPtg.PtgClass);
         }
 
         private static byte[] concat(byte[] a, byte[] b)

@@ -21,7 +21,7 @@ namespace TestCases.XSSF.UserModel.Charts
     using NPOI.SS.UserModel.Charts;
     using NPOI.XSSF.UserModel;
     using NPOI.XSSF.UserModel.Charts;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     [TestFixture]
     public class TestXSSFCategoryAxis
@@ -38,9 +38,9 @@ namespace TestCases.XSSF.UserModel.Charts
             XSSFCategoryAxis axis = chart.ChartAxisFactory.CreateCategoryAxis(AxisPosition.Bottom) as XSSFCategoryAxis;
 
             axis.Crosses=(AxisCrosses.AutoZero);
-            Assert.AreEqual(axis.Crosses, AxisCrosses.AutoZero);
+            ClassicAssert.AreEqual(axis.Crosses, AxisCrosses.AutoZero);
 
-            Assert.AreEqual(chart.GetAxis().Count, 1);
+            ClassicAssert.AreEqual(chart.GetAxis().Count, 1);
         }
     }
 

@@ -18,7 +18,7 @@
 namespace TestCases.HSSF.EventModel
 {
     using System.IO;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.EventUserModel;
     using NPOI.HSSF.Record;
     using NPOI.POIFS.FileSystem;
@@ -56,16 +56,16 @@ namespace TestCases.HSSF.EventModel
 
             HSSFEventFactory f = new HSSFEventFactory();
 
-            Assert.AreEqual(0, l.countSeen);
-            Assert.AreEqual(null, l.lastRecordSeen);
+            ClassicAssert.AreEqual(0, l.countSeen);
+            ClassicAssert.AreEqual(null, l.lastRecordSeen);
 
             POIFSFileSystem fs = openSample();
             short res = f.AbortableProcessWorkbookEvents(req, fs);
 
-            Assert.AreEqual(0, res);
-            //Assert.AreEqual(175, l.countSeen);
-            Assert.AreEqual(176, l.countSeen); //Tony Qu add a sheetext record, so this value should be 176
-            Assert.AreEqual(EOFRecord.sid, l.lastRecordSeen.Sid);
+            ClassicAssert.AreEqual(0, res);
+            //ClassicAssert.AreEqual(175, l.countSeen);
+            ClassicAssert.AreEqual(176, l.countSeen); //Tony Qu add a sheetext record, so this value should be 176
+            ClassicAssert.AreEqual(EOFRecord.sid, l.lastRecordSeen.Sid);
         }
 
 
@@ -79,15 +79,15 @@ namespace TestCases.HSSF.EventModel
 
             HSSFEventFactory f = new HSSFEventFactory();
 
-            Assert.AreEqual(0, l.countSeen);
-            Assert.AreEqual(null, l.lastRecordSeen);
+            ClassicAssert.AreEqual(0, l.countSeen);
+            ClassicAssert.AreEqual(null, l.lastRecordSeen);
 
             POIFSFileSystem fs = openSample();
             short res = f.AbortableProcessWorkbookEvents(req, fs);
 
-            Assert.AreEqual(1234, res);
-            Assert.AreEqual(1, l.countSeen);
-            Assert.AreEqual(BOFRecord.sid, l.lastRecordSeen.Sid);
+            ClassicAssert.AreEqual(1234, res);
+            ClassicAssert.AreEqual(1, l.countSeen);
+            ClassicAssert.AreEqual(BOFRecord.sid, l.lastRecordSeen.Sid);
         }
 
         private class AbortableCountingListener : AbortableHSSFListener

@@ -19,7 +19,7 @@ using System;
 using NPOI.HPSF;
 using NPOI.HPSF.Wellknown;
 using NPOI.Util;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 
 namespace TestCases.HPSF
 {
@@ -65,21 +65,21 @@ namespace TestCases.HPSF
 
             Object hdrs = s.GetProperty(PropertyIDMap.PID_HEADINGPAIR);
 
-            Assert.IsNotNull(hdrs, "PID_HEADINGPAIR was not found");
+            ClassicAssert.IsNotNull(hdrs, "PID_HEADINGPAIR was not found");
 
-            Assert.IsTrue(hdrs is byte[], "PID_HEADINGPAIR: expected byte[] but was " + hdrs.GetType());
+            ClassicAssert.IsTrue(hdrs is byte[], "PID_HEADINGPAIR: expected byte[] but was " + hdrs.GetType());
             // parse the value
             Vector v = new Vector((short)Variant.VT_VARIANT);
             v.Read((byte[])hdrs, 0);
 
             TypedPropertyValue[] items = v.Values;
-            Assert.AreEqual(2, items.Length);
+            ClassicAssert.AreEqual(2, items.Length);
 
-            Assert.IsNotNull(items[0].Value);
-            Assert.IsTrue(items[0].Value is CodePageString, "first item must be CodePageString but was " + items[0].GetType());
-            Assert.IsNotNull(items[1].Value);
-            Assert.IsTrue(Number.IsInteger(items[1].Value), "second item must be Integer but was " + items[1].Value.GetType());
-            Assert.AreEqual(1, (int)items[1].Value);
+            ClassicAssert.IsNotNull(items[0].Value);
+            ClassicAssert.IsTrue(items[0].Value is CodePageString, "first item must be CodePageString but was " + items[0].GetType());
+            ClassicAssert.IsNotNull(items[1].Value);
+            ClassicAssert.IsTrue(Number.IsInteger(items[1].Value), "second item must be Integer but was " + items[1].Value.GetType());
+            ClassicAssert.AreEqual(1, (int)items[1].Value);
 
         }
     }

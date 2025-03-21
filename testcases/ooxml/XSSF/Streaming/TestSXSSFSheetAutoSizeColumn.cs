@@ -22,7 +22,7 @@ namespace TestCases.XSSF.Streaming
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
     using NPOI.XSSF.Streaming;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     //Add a new test fixture, set useMergedCells with true value.
     [TestFixture]
@@ -229,7 +229,7 @@ namespace TestCases.XSSF.Streaming
 
             SortedSet<int> expected = new SortedSet<int>();
             expected.Add(0);
-            Assert.AreEqual(expected, sheet.TrackedColumnsForAutoSizing);
+            ClassicAssert.AreEqual(expected, sheet.TrackedColumnsForAutoSizing);
 
             sheet.AutoSizeColumn(0, useMergedCells);
             try
@@ -252,7 +252,7 @@ namespace TestCases.XSSF.Streaming
 
             sheet.TrackColumnsForAutoSizing(columns);
             SortedSet<int> sorted = new SortedSet<int>(columns);
-            Assert.AreEqual(sorted, sheet.TrackedColumnsForAutoSizing);
+            ClassicAssert.AreEqual(sorted, sheet.TrackedColumnsForAutoSizing);
 
             sheet.AutoSizeColumn(sorted.First(), useMergedCells);
             try
@@ -325,10 +325,10 @@ namespace TestCases.XSSF.Streaming
             sheet.TrackColumnsForAutoSizing(columns);
             foreach (int column in columns)
             {
-                Assert.IsTrue(sheet.IsColumnTrackedForAutoSizing(column));
+                ClassicAssert.IsTrue(sheet.IsColumnTrackedForAutoSizing(column));
 
                 Assume.That(!columns.Contains(column + 10));
-                Assert.IsFalse(sheet.IsColumnTrackedForAutoSizing(column + 10));
+                ClassicAssert.IsFalse(sheet.IsColumnTrackedForAutoSizing(column + 10));
             }
         }
 
@@ -402,9 +402,9 @@ namespace TestCases.XSSF.Streaming
 
         private static void assertColumnWidthStrictlyWithinRange(double actualColumnWidth, int lowerBoundExclusive, int upperBoundExclusive)
         {
-            Assert.IsTrue(actualColumnWidth > lowerBoundExclusive,
+            ClassicAssert.IsTrue(actualColumnWidth > lowerBoundExclusive,
                 "Expected a column width greater than " + lowerBoundExclusive + " but found " + actualColumnWidth);
-            Assert.IsTrue(actualColumnWidth < upperBoundExclusive,
+            ClassicAssert.IsTrue(actualColumnWidth < upperBoundExclusive,
                 "Expected column width less than " + upperBoundExclusive + " but found " + actualColumnWidth);
 
         }

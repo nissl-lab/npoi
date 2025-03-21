@@ -24,7 +24,7 @@ namespace TestCases.XSSF.Streaming
     using NPOI.XSSF;
     using NPOI.XSSF.Streaming;
     using NPOI.XSSF.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using System;
     using TestCases.SS.UserModel;
 
@@ -111,8 +111,6 @@ namespace TestCases.XSSF.Streaming
             // properties on Cells...
         }
 
-
-        [Test]
         public override void DefaultColumnStyle() {
             //TODO column styles are not yet supported by XSSF
         }
@@ -150,13 +148,13 @@ namespace TestCases.XSSF.Streaming
                     sheet.CreateRow(1);
                     Assert.Fail("expected exception");
                 } catch (Exception e) {
-                    Assert.AreEqual("Attempting to write a row[1] in the range [0,1] that is already written to disk.", e.Message);
+                    ClassicAssert.AreEqual("Attempting to write a row[1] in the range [0,1] that is already written to disk.", e.Message);
                 }
                 try {
                     sheet.CreateRow(0);
                     Assert.Fail("expected exception");
                 } catch (Exception e) {
-                    Assert.AreEqual("Attempting to write a row[0] in the range [0,1] that is already written to disk.", e.Message);
+                    ClassicAssert.AreEqual("Attempting to write a row[0] in the range [0,1] that is already written to disk.", e.Message);
                 }
                 sheet.CreateRow(2);
             } finally {
@@ -174,13 +172,13 @@ namespace TestCases.XSSF.Streaming
             SXSSFRow row1 = sheet.CreateRow(1) as SXSSFRow;
             sheet.ChangeRowNum(row0, 2);
 
-            Assert.AreEqual(1, row1.RowNum, "Row 1 knows its row number");
-            Assert.AreEqual(2, row0.RowNum, "Row 2 knows its row number");
-            Assert.AreEqual(1, sheet.GetRowNum(row1), "Sheet knows Row 1's row number");
-            Assert.AreEqual(2, sheet.GetRowNum(row0), "Sheet knows Row 2's row number");
+            ClassicAssert.AreEqual(1, row1.RowNum, "Row 1 knows its row number");
+            ClassicAssert.AreEqual(2, row0.RowNum, "Row 2 knows its row number");
+            ClassicAssert.AreEqual(1, sheet.GetRowNum(row1), "Sheet knows Row 1's row number");
+            ClassicAssert.AreEqual(2, sheet.GetRowNum(row0), "Sheet knows Row 2's row number");
             var it = sheet.GetEnumerator();
             it.MoveNext();
-            Assert.AreEqual(row1, it.Current, "Sheet row iteratation order should be ascending");
+            ClassicAssert.AreEqual(row1, it.Current, "Sheet row iteratation order should be ascending");
 
             wb.Close();
         }

@@ -19,7 +19,7 @@ namespace TestCases.SS.Formula.Eval
 {
 
     using System;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
 
@@ -52,12 +52,12 @@ namespace TestCases.SS.Formula.Eval
                 throw new AssertionException("Missing args Evaluation not implemented (bug 43354");
             }
             // MissingArg -> BlankEval -> zero (as formula result)
-            Assert.AreEqual(0.0, cv.NumberValue, 0.0);
+            ClassicAssert.AreEqual(0.0, cv.NumberValue, 0.0);
 
             // MissingArg -> BlankEval -> empty string (in concatenation)
             cell.CellFormula=("\"abc\"&if(true,)");
             fe.ClearAllCachedResultValues();
-            Assert.AreEqual("abc", fe.Evaluate(cell).StringValue);
+            ClassicAssert.AreEqual("abc", fe.Evaluate(cell).StringValue);
         }
         [Test]
         public void TestCompareMissingArgs()
@@ -70,53 +70,53 @@ namespace TestCases.SS.Formula.Eval
             cell.SetCellFormula("iferror(0/0,)<0");
             fe.ClearAllCachedResultValues();
             CellValue cv = fe.Evaluate(cell);
-            Assert.IsFalse(cv.BooleanValue);
+            ClassicAssert.IsFalse(cv.BooleanValue);
 
             cell.SetCellFormula("iferror(0/0,)<=0");
             fe.ClearAllCachedResultValues();
             cv = fe.Evaluate(cell);
-            Assert.IsTrue(cv.BooleanValue);
+            ClassicAssert.IsTrue(cv.BooleanValue);
 
             cell.SetCellFormula("iferror(0/0,)=0");
             fe.ClearAllCachedResultValues();
             cv = fe.Evaluate(cell);
-            Assert.IsTrue(cv.BooleanValue);
+            ClassicAssert.IsTrue(cv.BooleanValue);
 
             cell.SetCellFormula("iferror(0/0,)>=0");
             fe.ClearAllCachedResultValues();
             cv = fe.Evaluate(cell);
-            Assert.IsTrue(cv.BooleanValue);
+            ClassicAssert.IsTrue(cv.BooleanValue);
 
             cell.SetCellFormula("iferror(0/0,)>0");
             fe.ClearAllCachedResultValues();
             cv = fe.Evaluate(cell);
-            Assert.IsFalse(cv.BooleanValue);
+            ClassicAssert.IsFalse(cv.BooleanValue);
 
             // invert above for code coverage
             cell.SetCellFormula("0<iferror(0/0,)");
             fe.ClearAllCachedResultValues();
             cv = fe.Evaluate(cell);
-            Assert.IsFalse(cv.BooleanValue);
+            ClassicAssert.IsFalse(cv.BooleanValue);
 
             cell.SetCellFormula("0<=iferror(0/0,)");
             fe.ClearAllCachedResultValues();
             cv = fe.Evaluate(cell);
-            Assert.IsTrue(cv.BooleanValue);
+            ClassicAssert.IsTrue(cv.BooleanValue);
 
             cell.SetCellFormula("0=iferror(0/0,)");
             fe.ClearAllCachedResultValues();
             cv = fe.Evaluate(cell);
-            Assert.IsTrue(cv.BooleanValue);
+            ClassicAssert.IsTrue(cv.BooleanValue);
 
             cell.SetCellFormula("0>=iferror(0/0,)");
             fe.ClearAllCachedResultValues();
             cv = fe.Evaluate(cell);
-            Assert.IsTrue(cv.BooleanValue);
+            ClassicAssert.IsTrue(cv.BooleanValue);
 
             cell.SetCellFormula("0>iferror(0/0,)");
             fe.ClearAllCachedResultValues();
             cv = fe.Evaluate(cell);
-            Assert.IsFalse(cv.BooleanValue);
+            ClassicAssert.IsFalse(cv.BooleanValue);
         }
         [Test]
         public void TestCountFuncs()
@@ -127,11 +127,11 @@ namespace TestCases.SS.Formula.Eval
             ICell cell = sheet.CreateRow(0).CreateCell(0);
 
             cell.CellFormula=("COUNT(C5,,,,)"); // 4 missing args, C5 is blank 
-            Assert.AreEqual(4.0, fe.Evaluate(cell).NumberValue, 0.0);
+            ClassicAssert.AreEqual(4.0, fe.Evaluate(cell).NumberValue, 0.0);
 
             cell.CellFormula=("COUNTA(C5,,)"); // 2 missing args, C5 is blank 
             fe.ClearAllCachedResultValues();
-            Assert.AreEqual(2.0, fe.Evaluate(cell).NumberValue, 0.0);
+            ClassicAssert.AreEqual(2.0, fe.Evaluate(cell).NumberValue, 0.0);
         }
     }
 }

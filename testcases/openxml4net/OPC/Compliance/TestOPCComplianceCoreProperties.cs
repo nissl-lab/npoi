@@ -21,7 +21,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
     using System;
     using NPOI.OpenXml4Net.OPC;
     using NPOI.OpenXml4Net.Exceptions;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using System.IO;
     using NPOI.Util;
 
@@ -110,11 +110,11 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
             OPCPackage pkg = OPCPackage.Open(is1);
 
             // We can see 2 by type
-            Assert.AreEqual(2, pkg.GetPartsByContentType(ContentTypes.CORE_PROPERTIES_PART).Count);
+            ClassicAssert.AreEqual(2, pkg.GetPartsByContentType(ContentTypes.CORE_PROPERTIES_PART).Count);
             // But only the first one by relationship
-            Assert.AreEqual(1, pkg.GetPartsByRelationshipType(PackageRelationshipTypes.CORE_PROPERTIES).Count);
+            ClassicAssert.AreEqual(1, pkg.GetPartsByRelationshipType(PackageRelationshipTypes.CORE_PROPERTIES).Count);
             // It should be core.xml not the older core1.xml
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                   "/docProps/core.xml",
                   pkg.GetPartsByRelationshipType(PackageRelationshipTypes.CORE_PROPERTIES)[0].PartName.ToString()
             );
@@ -151,7 +151,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
             catch (InvalidOperationException e)
             {
                 // expected during successful test
-                Assert.AreEqual("OPC Compliance error [M4.1]: can't add another core properties part ! Use the built-in package method instead.", e.Message);
+                ClassicAssert.AreEqual("OPC Compliance error [M4.1]: can't add another core properties part ! Use the built-in package method instead.", e.Message);
             }
             pkg.Revert();
         }
@@ -178,7 +178,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
             catch (InvalidOperationException e)
             {
                 // expected during successful test
-                Assert.AreEqual("OPC Compliance error [M4.1]: you try to add more than one core properties relationship in the package !", e.Message);
+                ClassicAssert.AreEqual("OPC Compliance error [M4.1]: you try to add more than one core properties relationship in the package !", e.Message);
             }
             pkg.Revert();
         }
@@ -190,7 +190,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
         public void TestDoNotUseCompatibilityMarkup()
         {
             String msg = ExtractInvalidFormatMessage("DoNotUseCompatibilityMarkupFAIL.docx");
-            Assert.AreEqual("OPC Compliance error [M4.2]: A format consumer shall consider the use of the Markup Compatibility namespace to be an error.", msg);
+            ClassicAssert.AreEqual("OPC Compliance error [M4.2]: A format consumer shall consider the use of the Markup Compatibility namespace to be an error.", msg);
         }
 
         /**
@@ -200,7 +200,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
         public void TestDCTermsNamespaceLimitedUse()
         {
             String msg = ExtractInvalidFormatMessage("DCTermsNamespaceLimitedUseFAIL.docx");
-            Assert.AreEqual("OPC Compliance error [M4.3]: Producers shall not create a document element that contains refinements to the Dublin Core elements, except for the two specified in the schema: <dcterms:created> and <dcterms:modified> Consumers shall consider a document element that violates this constraint to be an error.", msg);
+            ClassicAssert.AreEqual("OPC Compliance error [M4.3]: Producers shall not create a document element that contains refinements to the Dublin Core elements, except for the two specified in the schema: <dcterms:created> and <dcterms:modified> Consumers shall consider a document element that violates this constraint to be an error.", msg);
         }
 
         /**
@@ -210,7 +210,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
         public void TestUnauthorizedXMLLangAttribute()
         {
             String msg = ExtractInvalidFormatMessage("UnauthorizedXMLLangAttributeFAIL.docx");
-            Assert.AreEqual("OPC Compliance error [M4.4]: Producers shall not create a document element that contains the xml:lang attribute. Consumers shall consider a document element that violates this constraint to be an error.", msg);
+            ClassicAssert.AreEqual("OPC Compliance error [M4.4]: Producers shall not create a document element that contains the xml:lang attribute. Consumers shall consider a document element that violates this constraint to be an error.", msg);
         }
 
         /**
@@ -220,7 +220,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
         public void TestLimitedXSITypeAttribute_NotPresent()
         {
             String msg = ExtractInvalidFormatMessage("LimitedXSITypeAttribute_NotPresentFAIL.docx");
-            Assert.AreEqual("The element 'created' must have the 'xsi:type' attribute present !", msg);
+            ClassicAssert.AreEqual("The element 'created' must have the 'xsi:type' attribute present !", msg);
         }
 
         /**
@@ -230,7 +230,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
         public void TestLimitedXSITypeAttribute_PresentWithUnauthorizedValue()
         {
             String msg = ExtractInvalidFormatMessage("LimitedXSITypeAttribute_PresentWithUnauthorizedValueFAIL.docx");
-            Assert.AreEqual("The element 'modified' must have the 'xsi:type' attribute with the value 'dcterms:W3CDTF', but had 'W3CDTF' !", msg);
+            ClassicAssert.AreEqual("The element 'modified' must have the 'xsi:type' attribute with the value 'dcterms:W3CDTF', but had 'W3CDTF' !", msg);
         }
 
         /**
@@ -244,10 +244,10 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
             OPCPackage pkg = OPCPackage.Open(POIDataSamples.GetOpenXML4JInstance().GetFileInfo(sampleFileName).FullName);
 
             // Verify it has empty properties
-            Assert.AreEqual(0, pkg.GetPartsByContentType(ContentTypes.CORE_PROPERTIES_PART).Count);
-            Assert.IsNotNull(pkg.GetPackageProperties());
-            Assert.IsNull(pkg.GetPackageProperties().GetLanguageProperty());
-            //Assert.IsNull(pkg.GetPackageProperties().GetLanguageProperty().Value);
+            ClassicAssert.AreEqual(0, pkg.GetPartsByContentType(ContentTypes.CORE_PROPERTIES_PART).Count);
+            ClassicAssert.IsNotNull(pkg.GetPackageProperties());
+            ClassicAssert.IsNull(pkg.GetPackageProperties().GetLanguageProperty());
+            //ClassicAssert.IsNull(pkg.GetPackageProperties().GetLanguageProperty().Value);
 
             // Save and re-load
             MemoryStream baos = new MemoryStream();
@@ -258,10 +258,10 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
             pkg = OPCPackage.Open(bais);
 
             // An Empty Properties part has been Added in the save/load
-            Assert.AreEqual(1, pkg.GetPartsByContentType(ContentTypes.CORE_PROPERTIES_PART).Count);
-            Assert.IsNotNull(pkg.GetPackageProperties());
-            Assert.IsNull(pkg.GetPackageProperties().GetLanguageProperty());
-            //Assert.IsNull(pkg.GetPackageProperties().GetLanguageProperty().Value);
+            ClassicAssert.AreEqual(1, pkg.GetPartsByContentType(ContentTypes.CORE_PROPERTIES_PART).Count);
+            ClassicAssert.IsNotNull(pkg.GetPackageProperties());
+            ClassicAssert.IsNull(pkg.GetPackageProperties().GetLanguageProperty());
+            //ClassicAssert.IsNull(pkg.GetPackageProperties().GetLanguageProperty().Value);
             pkg.Close();
 
             // Open a new copy of it
@@ -276,10 +276,10 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
             pkg = OPCPackage.Open(bais);
 
             // Check that this too Added empty properties without error
-            Assert.AreEqual(1, pkg.GetPartsByContentType(ContentTypes.CORE_PROPERTIES_PART).Count);
-            Assert.IsNotNull(pkg.GetPackageProperties());
-            Assert.IsNull(pkg.GetPackageProperties().GetLanguageProperty());
-            //Assert.IsNull(pkg.GetPackageProperties().GetLanguageProperty().Value);
+            ClassicAssert.AreEqual(1, pkg.GetPartsByContentType(ContentTypes.CORE_PROPERTIES_PART).Count);
+            ClassicAssert.IsNotNull(pkg.GetPackageProperties());
+            ClassicAssert.IsNull(pkg.GetPackageProperties().GetLanguageProperty());
+            //ClassicAssert.IsNull(pkg.GetPackageProperties().GetLanguageProperty().Value);
 
         }
 
@@ -306,10 +306,10 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
             OPCPackage pkg = OPCPackage.Open(tmp);
 
             // Empty properties
-            Assert.AreEqual(0, pkg.GetPartsByContentType(ContentTypes.CORE_PROPERTIES_PART).Count);
-            Assert.IsNotNull(pkg.GetPackageProperties());
-            Assert.IsNull(pkg.GetPackageProperties().GetLanguageProperty());
-            //Assert.IsNull(pkg.GetPackageProperties().GetLanguageProperty().Value);
+            ClassicAssert.AreEqual(0, pkg.GetPartsByContentType(ContentTypes.CORE_PROPERTIES_PART).Count);
+            ClassicAssert.IsNotNull(pkg.GetPackageProperties());
+            ClassicAssert.IsNull(pkg.GetPackageProperties().GetLanguageProperty());
+            //ClassicAssert.IsNull(pkg.GetPackageProperties().GetLanguageProperty().Value);
 
             // Save and close
             pkg.Close();
@@ -319,16 +319,16 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
             pkg = OPCPackage.Open(tmp);
 
             // An Empty Properties part has been Added in the save/load
-            Assert.AreEqual(1, pkg.GetPartsByContentType(ContentTypes.CORE_PROPERTIES_PART).Count);
-            Assert.IsNotNull(pkg.GetPackageProperties());
-            Assert.IsNull(pkg.GetPackageProperties().GetLanguageProperty());
-            //Assert.IsNull(pkg.GetPackageProperties().GetLanguageProperty().Value);
+            ClassicAssert.AreEqual(1, pkg.GetPartsByContentType(ContentTypes.CORE_PROPERTIES_PART).Count);
+            ClassicAssert.IsNotNull(pkg.GetPackageProperties());
+            ClassicAssert.IsNull(pkg.GetPackageProperties().GetLanguageProperty());
+            //ClassicAssert.IsNull(pkg.GetPackageProperties().GetLanguageProperty().Value);
 
             // Finish and tidy
             pkg.Revert();
             tmp.Delete();
 
-            Assert.IsFalse(File.Exists(tmp.FullName), $"{tmp.FullName} file exists!");
+            ClassicAssert.IsFalse(File.Exists(tmp.FullName), $"{tmp.FullName} file exists!");
         }
     }
 }

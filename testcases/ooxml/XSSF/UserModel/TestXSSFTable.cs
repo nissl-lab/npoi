@@ -24,7 +24,7 @@ namespace TestCases.XSSF.UserModel
     using NPOI.SS.Util;
     using NPOI.XSSF;
     using NPOI.XSSF.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
 
     [TestFixture]
@@ -57,14 +57,14 @@ namespace TestCases.XSSF.UserModel
             CT_Table ctTable = (inputWorkbook.GetSheetAt(0) as XSSFSheet).GetTables()[0].GetCTTable();
             List<CT_TableColumn> ctTableColumnList = ctTable.tableColumns.tableColumn;
 
-            Assert.AreEqual(headers.Count, ctTableColumnList.Count,
+            ClassicAssert.AreEqual(headers.Count, ctTableColumnList.Count,
                     "number of headers in xml table should match number of header cells in worksheet");
             for (int i = 0; i < headers.Count; i++)
             {
-                Assert.AreEqual(headers[i], ctTableColumnList[i].name,
+                ClassicAssert.AreEqual(headers[i], ctTableColumnList[i].name,
                     "header name in xml table should match number of header cells in worksheet");
             }
-            //Assert.IsTrue(outputFile.Delete());
+            //ClassicAssert.IsTrue(outputFile.Delete());
             inputWorkbook.Close();
         }
         [Test]
@@ -86,15 +86,15 @@ namespace TestCases.XSSF.UserModel
 
             XSSFWorkbook inputWorkbook = XSSFTestDataSamples.WriteOutAndReadBack(outputWorkbook);
             List<XSSFTable> tables = (inputWorkbook.GetSheetAt(0) as XSSFSheet).GetTables();
-            Assert.AreEqual(1, tables.Count, "Tables number");
+            ClassicAssert.AreEqual(1, tables.Count, "Tables number");
 
             XSSFTable inputTable = tables[0];
-            Assert.AreEqual(outputTable.DisplayName, inputTable.DisplayName, "Table display name");
+            ClassicAssert.AreEqual(outputTable.DisplayName, inputTable.DisplayName, "Table display name");
 
             CT_TableStyleInfo inputStyleInfo = inputTable.GetCTTable().tableStyleInfo;
-            Assert.AreEqual(outputStyleInfo.name, inputStyleInfo.name, "Style name");
-            Assert.AreEqual(outputStyleInfo.showColumnStripes, inputStyleInfo.showColumnStripes, "Show column stripes");
-            Assert.AreEqual(outputStyleInfo.showRowStripes, inputStyleInfo.showRowStripes, "Show row stripes");
+            ClassicAssert.AreEqual(outputStyleInfo.name, inputStyleInfo.name, "Style name");
+            ClassicAssert.AreEqual(outputStyleInfo.showColumnStripes, inputStyleInfo.showColumnStripes, "Show column stripes");
+            ClassicAssert.AreEqual(outputStyleInfo.showRowStripes, inputStyleInfo.showRowStripes, "Show row stripes");
             outputWorkbook.Close();
 
         }
@@ -107,16 +107,16 @@ namespace TestCases.XSSF.UserModel
             // that XSSFTable.findColumnIndex returns the column index relative to the first
             // column in the table, not the column number in the sheet
             XSSFTable table = wb.GetTable("\\_Prime.1");
-            Assert.IsNotNull(table);
-            Assert.AreEqual(0, table.FindColumnIndex("calc='#*'#"),
+            ClassicAssert.IsNotNull(table);
+            ClassicAssert.AreEqual(0, table.FindColumnIndex("calc='#*'#"),
                 "column header has special escaped characters");
-            Assert.AreEqual(1, table.FindColumnIndex("Name"));
-            Assert.AreEqual(2, table.FindColumnIndex("Number"));
-            Assert.AreEqual(2, table.FindColumnIndex("NuMbEr"), "case insensitive");
+            ClassicAssert.AreEqual(1, table.FindColumnIndex("Name"));
+            ClassicAssert.AreEqual(2, table.FindColumnIndex("Number"));
+            ClassicAssert.AreEqual(2, table.FindColumnIndex("NuMbEr"), "case insensitive");
             // findColumnIndex should return -1 if no column header name matches
-            Assert.AreEqual(-1, table.FindColumnIndex(null));
-            Assert.AreEqual(-1, table.FindColumnIndex(""));
-            Assert.AreEqual(-1, table.FindColumnIndex("one"));
+            ClassicAssert.AreEqual(-1, table.FindColumnIndex(null));
+            ClassicAssert.AreEqual(-1, table.FindColumnIndex(""));
+            ClassicAssert.AreEqual(-1, table.FindColumnIndex("one"));
             wb.Close();
         }
 
@@ -127,10 +127,10 @@ namespace TestCases.XSSF.UserModel
             XSSFTable table = wb.GetTable("SmallCity");
             // Make sure that XSSFTable.findColumnIndex returns the column index relative to the first
             // column in the table, not the column number in the sheet
-            Assert.AreEqual(0, table.FindColumnIndex("City")); // column I in worksheet but 0th column in table
-            Assert.AreEqual(1, table.FindColumnIndex("Latitude"));
-            Assert.AreEqual(2, table.FindColumnIndex("Longitude"));
-            Assert.AreEqual(3, table.FindColumnIndex("Population"));
+            ClassicAssert.AreEqual(0, table.FindColumnIndex("City")); // column I in worksheet but 0th column in table
+            ClassicAssert.AreEqual(1, table.FindColumnIndex("Latitude"));
+            ClassicAssert.AreEqual(2, table.FindColumnIndex("Longitude"));
+            ClassicAssert.AreEqual(3, table.FindColumnIndex("Population"));
             wb.Close();
         }
 
@@ -139,7 +139,7 @@ namespace TestCases.XSSF.UserModel
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("StructuredReferences.xlsx");
             XSSFTable table = wb.GetTable("\\_Prime.1");
-            Assert.AreEqual("Table", table.SheetName);
+            ClassicAssert.AreEqual("Table", table.SheetName);
             wb.Close();
         }
         [Test]
@@ -147,7 +147,7 @@ namespace TestCases.XSSF.UserModel
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("StructuredReferences.xlsx");
             XSSFTable table = wb.GetTable("\\_Prime.1");
-            Assert.IsFalse(table.IsHasTotalsRow);
+            ClassicAssert.IsFalse(table.IsHasTotalsRow);
             wb.Close();
         }
         [Test]
@@ -155,7 +155,7 @@ namespace TestCases.XSSF.UserModel
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("StructuredReferences.xlsx");
             XSSFTable table = wb.GetTable("\\_Prime.1");
-            Assert.AreEqual(0, table.StartColIndex);
+            ClassicAssert.AreEqual(0, table.StartColIndex);
             wb.Close();
         }
         [Test]
@@ -163,7 +163,7 @@ namespace TestCases.XSSF.UserModel
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("StructuredReferences.xlsx");
             XSSFTable table = wb.GetTable("\\_Prime.1");
-            Assert.AreEqual(2, table.EndColIndex);
+            ClassicAssert.AreEqual(2, table.EndColIndex);
             wb.Close();
         }
         [Test]
@@ -171,7 +171,7 @@ namespace TestCases.XSSF.UserModel
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("StructuredReferences.xlsx");
             XSSFTable table = wb.GetTable("\\_Prime.1");
-            Assert.AreEqual(0, table.StartRowIndex);
+            ClassicAssert.AreEqual(0, table.StartRowIndex);
             wb.Close();
         }
         [Test]
@@ -179,7 +179,7 @@ namespace TestCases.XSSF.UserModel
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("StructuredReferences.xlsx");
             XSSFTable table = wb.GetTable("\\_Prime.1");
-            Assert.AreEqual(6, table.EndRowIndex);
+            ClassicAssert.AreEqual(6, table.EndRowIndex);
             wb.Close();
         }
         [Test]
@@ -187,7 +187,7 @@ namespace TestCases.XSSF.UserModel
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("StructuredReferences.xlsx");
             XSSFTable table = wb.GetTable("\\_Prime.1");
-            Assert.AreEqual(new CellReference("A1"), table.StartCellReference);
+            ClassicAssert.AreEqual(new CellReference("A1"), table.StartCellReference);
             wb.Close();
         }
         [Test]
@@ -195,7 +195,7 @@ namespace TestCases.XSSF.UserModel
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("StructuredReferences.xlsx");
             XSSFTable table = wb.GetTable("\\_Prime.1");
-            Assert.AreEqual(new CellReference("C7"), table.EndCellReference);
+            ClassicAssert.AreEqual(new CellReference("C7"), table.EndCellReference);
             wb.Close();
         }
         [Test]
@@ -204,7 +204,7 @@ namespace TestCases.XSSF.UserModel
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("StructuredReferences.xlsx");
             XSSFTable table = wb.GetTable("\\_Prime.1");
-            Assert.AreEqual(3, table.NumberOfMappedColumns);
+            ClassicAssert.AreEqual(3, table.NumberOfMappedColumns);
             wb.Close();
         }
         [Test]
@@ -212,13 +212,13 @@ namespace TestCases.XSSF.UserModel
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("StructuredReferences.xlsx");
             XSSFTable table = wb.GetTable("\\_Prime.1");
-            Assert.AreEqual("\\_Prime.1", table.DisplayName);
+            ClassicAssert.AreEqual("\\_Prime.1", table.DisplayName);
             table.DisplayName = null;
-            Assert.IsNull(table.DisplayName);
-            Assert.AreEqual("\\_Prime.1", table.Name); // name and display name are different
+            ClassicAssert.IsNull(table.DisplayName);
+            ClassicAssert.AreEqual("\\_Prime.1", table.Name); // name and display name are different
             table.DisplayName = "Display name";
-            Assert.AreEqual("Display name", table.DisplayName);
-            Assert.AreEqual("\\_Prime.1", table.Name); // name and display name are different
+            ClassicAssert.AreEqual("Display name", table.DisplayName);
+            ClassicAssert.AreEqual("\\_Prime.1", table.Name); // name and display name are different
             wb.Close();
         }
 
@@ -232,18 +232,18 @@ namespace TestCases.XSSF.UserModel
             XSSFTable table = sh.CreateTable();
             CT_Table ctTable = table.GetCTTable();
             ctTable.@ref = "B2:E8";
-            Assert.AreEqual(new CellReference("B2"), table.StartCellReference);
-            Assert.AreEqual(new CellReference("E8"), table.EndCellReference);
+            ClassicAssert.AreEqual(new CellReference("B2"), table.StartCellReference);
+            ClassicAssert.AreEqual(new CellReference("E8"), table.EndCellReference);
             // At this point start and end cell reference are cached
             // and may not follow changes to the underlying CTTable
             ctTable.@ref = "C1:M3";
-            Assert.AreEqual(new CellReference("B2"), table.StartCellReference);
-            Assert.AreEqual(new CellReference("E8"), table.EndCellReference);
+            ClassicAssert.AreEqual(new CellReference("B2"), table.StartCellReference);
+            ClassicAssert.AreEqual(new CellReference("E8"), table.EndCellReference);
             // Force a synchronization between CTTable and XSSFTable
             // start and end cell references
             table.UpdateReferences();
-            Assert.AreEqual(new CellReference("C1"), table.StartCellReference);
-            Assert.AreEqual(new CellReference("M3"), table.EndCellReference);
+            ClassicAssert.AreEqual(new CellReference("C1"), table.StartCellReference);
+            ClassicAssert.AreEqual(new CellReference("M3"), table.EndCellReference);
             wb.Close();
         }
 
@@ -254,15 +254,15 @@ namespace TestCases.XSSF.UserModel
             XSSFSheet sh = wb.CreateSheet() as XSSFSheet;
             XSSFTable table = sh.CreateTable();
             CT_Table ctTable = table.GetCTTable();
-            Assert.AreEqual(0, table.RowCount);
+            ClassicAssert.AreEqual(0, table.RowCount);
             ctTable.@ref = "B2:B2";
             // update cell references to clear the cache
             table.UpdateReferences();
-            Assert.AreEqual(1, table.RowCount);
+            ClassicAssert.AreEqual(1, table.RowCount);
             ctTable.@ref = "B2:B12";
             // update cell references to clear the cache
             table.UpdateReferences();
-            Assert.AreEqual(11, table.RowCount);
+            ClassicAssert.AreEqual(11, table.RowCount);
             wb.Close();
         }
 
@@ -292,7 +292,7 @@ namespace TestCases.XSSF.UserModel
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("SingleCellTable.xlsx");
             XSSFTable table = wb.GetTable("Table3");
-            Assert.AreEqual(new CellReference("A2"), table.EndCellReference);
+            ClassicAssert.AreEqual(new CellReference("A2"), table.EndCellReference);
             wb.Close();
         }
 

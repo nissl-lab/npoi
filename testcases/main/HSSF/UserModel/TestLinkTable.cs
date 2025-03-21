@@ -2,7 +2,7 @@ namespace TestCases.HSSF.UserModel
 {
     using System;
     using NPOI.HSSF.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     using TestCases.HSSF;
     /**
@@ -39,7 +39,7 @@ namespace TestCases.HSSF.UserModel
                 throw;
             }
             // some other sanity Checks
-            Assert.AreEqual(3, wb.NumberOfSheets);
+            ClassicAssert.AreEqual(3, wb.NumberOfSheets);
             String formula = wb.GetSheetAt(0).GetRow(4).GetCell(13).CellFormula;
 
             if ("ipcSummenproduktIntern($P5,N$6,$A$9,N$5)".Equals(formula))
@@ -49,7 +49,7 @@ namespace TestCases.HSSF.UserModel
                 // This is observable in version 3.0
             }
 
-            Assert.AreEqual("ipcSummenproduktIntern($C5,N$2,$A$9,N$1)", formula);
+            ClassicAssert.AreEqual("ipcSummenproduktIntern($C5,N$2,$A$9,N$1)", formula);
         }
         [Test]
         public void TestMultipleExternSheetRecords_bug45698()
@@ -69,7 +69,7 @@ namespace TestCases.HSSF.UserModel
                 throw;
             }
             // some other sanity Checks
-            Assert.AreEqual(7, wb.NumberOfSheets);
+            ClassicAssert.AreEqual(7, wb.NumberOfSheets);
         }
         [Test]
         public void TestExtraSheetRefs_bug45978()
@@ -115,7 +115,7 @@ namespace TestCases.HSSF.UserModel
                 }
                 throw e;
             }
-            Assert.AreEqual("Data!$A2", cellFormula);
+            ClassicAssert.AreEqual("Data!$A2", cellFormula);
         }
     }
 }

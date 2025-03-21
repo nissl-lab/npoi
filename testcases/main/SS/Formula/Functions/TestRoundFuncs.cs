@@ -19,7 +19,7 @@ namespace TestCases.SS.Formula.Functions
 {
 
     using NPOI.SS.Formula.Eval;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.SS.Formula.Functions;
 
     /**
@@ -38,7 +38,7 @@ namespace TestCases.SS.Formula.Functions
             ValueEval strArg = new StringEval("abc");
             ValueEval[] args = { strArg, new NumberEval(2), };
             ValueEval result = NumericFunction.ROUNDDOWN.Evaluate(args, -1, (short)-1);
-            Assert.AreEqual(ErrorEval.VALUE_INVALID, result);
+            ClassicAssert.AreEqual(ErrorEval.VALUE_INVALID, result);
         }
         [Test]
         public void TestRoundupWithStringArg()
@@ -47,7 +47,7 @@ namespace TestCases.SS.Formula.Functions
             ValueEval strArg = new StringEval("abc");
             ValueEval[] args = { strArg, new NumberEval(2), };
             ValueEval result = NumericFunction.ROUNDUP.Evaluate(args, -1, (short)-1);
-            Assert.AreEqual(ErrorEval.VALUE_INVALID, result);
+            ClassicAssert.AreEqual(ErrorEval.VALUE_INVALID, result);
         }
 
     }

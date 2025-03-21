@@ -20,7 +20,7 @@ namespace TestCases.SS.Formula.PTG
 
     using System;
     using System.IO;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.Model;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Formula.PTG;
@@ -47,7 +47,7 @@ namespace TestCases.SS.Formula.PTG
             String expectedFormula = "YEARFRAC(B1,C1)";
             ISheet sht = wb.GetSheetAt(0);
             String cellFormula = sht.GetRow(0).GetCell(0).CellFormula;
-            Assert.AreEqual(expectedFormula, cellFormula);
+            ClassicAssert.AreEqual(expectedFormula, cellFormula);
         }
         [Test]
         public void TestParse()
@@ -56,8 +56,8 @@ namespace TestCases.SS.Formula.PTG
 
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("externalFunctionExample.xls");
             Ptg[] ptgs = HSSFFormulaParser.Parse("YEARFRAC(B1,C1)", wb);
-            Assert.AreEqual(4, ptgs.Length);
-            Assert.AreEqual(typeof(NameXPtg), ptgs[0].GetType());
+            ClassicAssert.AreEqual(4, ptgs.Length);
+            ClassicAssert.AreEqual(typeof(NameXPtg), ptgs[0].GetType());
 
             wb.GetSheetAt(0).GetRow(0).CreateCell(6).CellFormula = ("YEARFRAC(C1,B1)");
 #if !HIDE_UNREACHABLE_CODE
@@ -98,9 +98,9 @@ namespace TestCases.SS.Formula.PTG
                 HSSFFormulaEvaluator fe, String expectedFormula, double expectedResult)
         {
             ICell cell = sheet.GetRow(rowIx).GetCell(colIx);
-            Assert.AreEqual(expectedFormula, cell.CellFormula);
+            ClassicAssert.AreEqual(expectedFormula, cell.CellFormula);
             CellValue cv = fe.Evaluate(cell);
-            Assert.AreEqual(expectedResult, cv.NumberValue, 0.0);
+            ClassicAssert.AreEqual(expectedResult, cv.NumberValue, 0.0);
         }
     }
 

@@ -22,7 +22,7 @@ namespace TestCases.Util
     using NPOI.Util;
 
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     /**
      * Class to test {@link LittleEndianInputStream} and {@link LittleEndianOutputStream}
      *
@@ -55,13 +55,13 @@ namespace TestCases.Util
 
             ILittleEndianInput lei = new LittleEndianInputStream(new MemoryStream(baos.ToArray()));
 
-            Assert.AreEqual(12345678, lei.ReadInt());
-            Assert.AreEqual(12345, lei.ReadShort());
-            Assert.AreEqual(123, lei.ReadByte());
-            Assert.AreEqual(40000, lei.ReadUShort());
-            Assert.AreEqual(200, lei.ReadUByte());
-            Assert.AreEqual(1234567890123456789L, lei.ReadLong());
-            Assert.AreEqual(123.456, lei.ReadDouble(), 0.0);
+            ClassicAssert.AreEqual(12345678, lei.ReadInt());
+            ClassicAssert.AreEqual(12345, lei.ReadShort());
+            ClassicAssert.AreEqual(123, lei.ReadByte());
+            ClassicAssert.AreEqual(40000, lei.ReadUShort());
+            ClassicAssert.AreEqual(200, lei.ReadUByte());
+            ClassicAssert.AreEqual(1234567890123456789L, lei.ReadLong());
+            ClassicAssert.AreEqual(123.456, lei.ReadDouble(), 0.0);
         }
 
         /**
@@ -76,7 +76,7 @@ namespace TestCases.Util
             ILittleEndianInput lei = new LittleEndianByteArrayInputStream(srcBuf);
 
             // do Initial read to increment the read index beyond zero
-            Assert.AreEqual(0x8899, lei.ReadUShort());
+            ClassicAssert.AreEqual(0x8899, lei.ReadUShort());
 
             byte[] actBuf = new byte[4];
             lei.ReadFully(actBuf);
@@ -87,9 +87,9 @@ namespace TestCases.Util
             }
 
             byte[] expBuf = HexRead.ReadFromString("77 66 55 44");
-            Assert.IsTrue(Arrays.Equals(actBuf, expBuf));
-            Assert.AreEqual(0x33, lei.ReadUByte());
-            Assert.AreEqual(0, lei.Available());
+            ClassicAssert.IsTrue(Arrays.Equals(actBuf, expBuf));
+            ClassicAssert.AreEqual(0x33, lei.ReadUByte());
+            ClassicAssert.AreEqual(0, lei.Available());
         }
     }
 }

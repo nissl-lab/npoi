@@ -30,7 +30,7 @@ using System.Text;
 using System.Collections;
 using System.IO;
 
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 
 using NPOI.POIFS.Common;
 using NPOI.POIFS.Storage;
@@ -65,9 +65,9 @@ namespace TestCases.POIFS.Properties
 
             byte[] output = stream.ToArray();
 
-            Assert.AreEqual(expectedData.Length, output.Length, "length check #1");
+            ClassicAssert.AreEqual(expectedData.Length, output.Length, "length check #1");
             for (int i = 0; i < expectedData.Length; i++)
-                Assert.AreEqual(expectedData[i], output[i], "content check #1: mismatch at offset " + i);
+                ClassicAssert.AreEqual(expectedData[i], output[i], "content check #1: mismatch at offset " + i);
         }
 
         [Test]
@@ -447,7 +447,7 @@ namespace TestCases.POIFS.Properties
             // Get property table from the document
             PropertyTable table = new PropertyTable(headerBock, dataBlocks);
 
-            Assert.AreEqual(30 * 64, table.Root.Size);
+            ClassicAssert.AreEqual(30 * 64, table.Root.Size);
             int count = 0;
             Property child = null;
             foreach (Property p in table.Root)
@@ -458,15 +458,15 @@ namespace TestCases.POIFS.Properties
             if (child == null)
                 throw new Exception("no children found");
 
-            Assert.AreEqual(1, count);
-            Assert.IsTrue(child.IsDirectory);
+            ClassicAssert.AreEqual(1, count);
+            ClassicAssert.IsTrue(child.IsDirectory);
             count = 0;
             foreach (Property p in (DirectoryProperty)child)
             {
                 child = p;
                 ++count;
             }
-            Assert.AreEqual(35, count);
+            ClassicAssert.AreEqual(35, count);
         }
     }
 }

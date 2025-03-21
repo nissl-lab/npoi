@@ -20,10 +20,7 @@ namespace TestCases.DDF
 {
 
     using System;
-    using System.Text;
-    using System.IO;
-
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.DDF;
     using NPOI.Util;
     [TestFixture]
@@ -36,8 +33,8 @@ namespace TestCases.DDF
 
             byte[] data = new byte[24];
             int bytesWritten = r.Serialize(0, data);
-            Assert.AreEqual(24, bytesWritten);
-            Assert.AreEqual("[10, 00, " +
+            ClassicAssert.AreEqual(24, bytesWritten);
+            ClassicAssert.AreEqual("[10, 00, " +
                     "09, F0, " +
                     "10, 00, 00, 00, " +
                     "01, 00, 00, 00, " +     // x
@@ -60,11 +57,11 @@ namespace TestCases.DDF
             EscherSpgrRecord r = new EscherSpgrRecord();
             int bytesWritten = r.FillFields(data, new DefaultEscherRecordFactory());
 
-            Assert.AreEqual(24, bytesWritten);
-            Assert.AreEqual(1, r.RectX1);
-            Assert.AreEqual(2, r.RectY1);
-            Assert.AreEqual(3, r.RectX2);
-            Assert.AreEqual(4, r.RectY2);
+            ClassicAssert.AreEqual(24, bytesWritten);
+            ClassicAssert.AreEqual(1, r.RectX1);
+            ClassicAssert.AreEqual(2, r.RectY1);
+            ClassicAssert.AreEqual(3, r.RectX2);
+            ClassicAssert.AreEqual(4, r.RectY2);
         }
         [Test]
         public void TestToString()
@@ -80,7 +77,7 @@ namespace TestCases.DDF
                     "  RectWidth: 3" + nl +
                     "  RectHeight: 4" + nl;
             ;
-            Assert.AreEqual(expected, CreateRecord().ToString());
+            ClassicAssert.AreEqual(expected, CreateRecord().ToString());
         }
 
         private EscherSpgrRecord CreateRecord()

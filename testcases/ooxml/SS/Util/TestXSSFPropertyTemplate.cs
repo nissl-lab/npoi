@@ -27,7 +27,7 @@ namespace TestCases.SS.Util
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
     using NPOI.XSSF.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     [TestFixture]
     public class TestXSSFPropertyTemplate
     {
@@ -50,14 +50,14 @@ namespace TestCases.SS.Util
                 foreach(ICell cell in row)
                 {
                     ICellStyle cs = cell.CellStyle;
-                    Assert.AreEqual(BorderStyle.Thin, cs.BorderTop);
-                    Assert.AreEqual(IndexedColors.Red.Index, cs.TopBorderColor);
-                    Assert.AreEqual(BorderStyle.Thin, cs.BorderBottom);
-                    Assert.AreEqual(IndexedColors.Red.Index, cs.BottomBorderColor);
-                    Assert.AreEqual(BorderStyle.Thin, cs.BorderLeft);
-                    Assert.AreEqual(IndexedColors.Red.Index, cs.LeftBorderColor);
-                    Assert.AreEqual(BorderStyle.Thin, cs.BorderRight);
-                    Assert.AreEqual(IndexedColors.Red.Index, cs.RightBorderColor);
+                    ClassicAssert.AreEqual(BorderStyle.Thin, cs.BorderTop);
+                    ClassicAssert.AreEqual(IndexedColors.Red.Index, cs.TopBorderColor);
+                    ClassicAssert.AreEqual(BorderStyle.Thin, cs.BorderBottom);
+                    ClassicAssert.AreEqual(IndexedColors.Red.Index, cs.BottomBorderColor);
+                    ClassicAssert.AreEqual(BorderStyle.Thin, cs.BorderLeft);
+                    ClassicAssert.AreEqual(IndexedColors.Red.Index, cs.LeftBorderColor);
+                    ClassicAssert.AreEqual(BorderStyle.Thin, cs.BorderRight);
+                    ClassicAssert.AreEqual(IndexedColors.Red.Index, cs.RightBorderColor);
                 }
             }
 
@@ -71,39 +71,39 @@ namespace TestCases.SS.Util
                     ICellStyle cs = cell.CellStyle;
                     if(cell.ColumnIndex != 1 || row.RowNum == 0)
                     {
-                        Assert.AreEqual(BorderStyle.Thin, cs.BorderTop);
-                        Assert.AreEqual(IndexedColors.Red.Index, cs.TopBorderColor);
+                        ClassicAssert.AreEqual(BorderStyle.Thin, cs.BorderTop);
+                        ClassicAssert.AreEqual(IndexedColors.Red.Index, cs.TopBorderColor);
                     }
                     else
                     {
-                        Assert.AreEqual(BorderStyle.None, cs.BorderTop);
+                        ClassicAssert.AreEqual(BorderStyle.None, cs.BorderTop);
                     }
                     if(cell.ColumnIndex != 1 || row.RowNum == 2)
                     {
-                        Assert.AreEqual(BorderStyle.Thin, cs.BorderBottom);
-                        Assert.AreEqual(IndexedColors.Red.Index, cs.BottomBorderColor);
+                        ClassicAssert.AreEqual(BorderStyle.Thin, cs.BorderBottom);
+                        ClassicAssert.AreEqual(IndexedColors.Red.Index, cs.BottomBorderColor);
                     }
                     else
                     {
-                        Assert.AreEqual(BorderStyle.None, cs.BorderBottom);
+                        ClassicAssert.AreEqual(BorderStyle.None, cs.BorderBottom);
                     }
                     if(cell.ColumnIndex == 0 || row.RowNum != 1)
                     {
-                        Assert.AreEqual(BorderStyle.Thin, cs.BorderLeft);
-                        Assert.AreEqual(IndexedColors.Red.Index, cs.LeftBorderColor);
+                        ClassicAssert.AreEqual(BorderStyle.Thin, cs.BorderLeft);
+                        ClassicAssert.AreEqual(IndexedColors.Red.Index, cs.LeftBorderColor);
                     }
                     else
                     {
-                        Assert.AreEqual(BorderStyle.None, cs.BorderLeft);
+                        ClassicAssert.AreEqual(BorderStyle.None, cs.BorderLeft);
                     }
                     if(cell.ColumnIndex == 2 || row.RowNum != 1)
                     {
-                        Assert.AreEqual(BorderStyle.Thin, cs.BorderRight);
-                        Assert.AreEqual(IndexedColors.Red.Index, cs.RightBorderColor);
+                        ClassicAssert.AreEqual(BorderStyle.Thin, cs.BorderRight);
+                        ClassicAssert.AreEqual(IndexedColors.Red.Index, cs.RightBorderColor);
                     }
                     else
                     {
-                        Assert.AreEqual(BorderStyle.None, cs.BorderRight);
+                        ClassicAssert.AreEqual(BorderStyle.None, cs.BorderRight);
                     }
                 }
             }
@@ -119,13 +119,13 @@ namespace TestCases.SS.Util
             PropertyTemplate pt = new PropertyTemplate();
             pt.DrawBorders(a1c3, BorderStyle.Medium, IndexedColors.Red.Index, BorderExtent.ALL);
             PropertyTemplate pt2 = new PropertyTemplate(pt);
-            Assert.AreNotSame(pt2, pt);
+            ClassicAssert.AreNotSame(pt2, pt);
             for(int i = 0; i <= 2; i++)
             {
                 for(int j = 0; j <= 2; j++)
                 {
-                    Assert.AreEqual(4, pt2.GetNumBorderColors(i, j));
-                    Assert.AreEqual(4, pt2.GetNumBorderColors(i, j));
+                    ClassicAssert.AreEqual(4, pt2.GetNumBorderColors(i, j));
+                    ClassicAssert.AreEqual(4, pt2.GetNumBorderColors(i, j));
                 }
             }
 
@@ -141,14 +141,14 @@ namespace TestCases.SS.Util
                 foreach(ICell cell in row)
                 {
                     ICellStyle cs = cell.CellStyle;
-                    Assert.AreEqual(BorderStyle.Medium, cs.BorderTop);
-                    Assert.AreEqual(BorderStyle.Medium, cs.BorderBottom);
-                    Assert.AreEqual(BorderStyle.Medium, cs.BorderLeft);
-                    Assert.AreEqual(BorderStyle.Medium, cs.BorderRight);
-                    Assert.AreEqual(IndexedColors.Red.Index, cs.TopBorderColor);
-                    Assert.AreEqual(IndexedColors.Red.Index, cs.BottomBorderColor);
-                    Assert.AreEqual(IndexedColors.Red.Index, cs.LeftBorderColor);
-                    Assert.AreEqual(IndexedColors.Red.Index, cs.RightBorderColor);
+                    ClassicAssert.AreEqual(BorderStyle.Medium, cs.BorderTop);
+                    ClassicAssert.AreEqual(BorderStyle.Medium, cs.BorderBottom);
+                    ClassicAssert.AreEqual(BorderStyle.Medium, cs.BorderLeft);
+                    ClassicAssert.AreEqual(BorderStyle.Medium, cs.BorderRight);
+                    ClassicAssert.AreEqual(IndexedColors.Red.Index, cs.TopBorderColor);
+                    ClassicAssert.AreEqual(IndexedColors.Red.Index, cs.BottomBorderColor);
+                    ClassicAssert.AreEqual(IndexedColors.Red.Index, cs.LeftBorderColor);
+                    ClassicAssert.AreEqual(IndexedColors.Red.Index, cs.RightBorderColor);
                 }
             }
 

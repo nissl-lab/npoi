@@ -18,7 +18,7 @@
 namespace TestCases.SS.Formula.PTG
 {
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.UserModel;
     /**
      * Tests for {@link AreaErrPtg}.
@@ -35,7 +35,7 @@ namespace TestCases.SS.Formula.PTG
         public void TestReading()
         {
             HSSFWorkbook workbook = LoadWorkbook("AreaErrPtg.xls");
-            Assert.AreEqual("SUM(#REF!)", workbook.GetSheetAt(0).GetRow(0).GetCell(2).CellFormula, "Wrong formula string for area error");
+            ClassicAssert.AreEqual("SUM(#REF!)", workbook.GetSheetAt(0).GetRow(0).GetCell(2).CellFormula, "Wrong formula string for area error");
         }
     }
 

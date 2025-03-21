@@ -30,7 +30,7 @@ namespace TestCases.HPSF.Basic
     using NPOI.POIFS.FileSystem;
     using NPOI.Util;
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NUnit.Framework.Constraints;
 
     /**
@@ -104,7 +104,7 @@ namespace TestCases.HPSF.Basic
                 }
                 catch (Exception ex)
                 {
-                    Assert.IsTrue(ex is NoFormatIDException);
+                    ClassicAssert.IsTrue(ex is NoFormatIDException);
                 }
                 finally
                 {
@@ -232,14 +232,14 @@ namespace TestCases.HPSF.Basic
             POIFSReaderListener1 psl = new POIFSReaderListener1();
             reader1.RegisterListener(psl);
             reader1.Read(file);
-            Assert.IsNotNull(psa[0]);
-            Assert.IsTrue(psa[0].IsSummaryInformation);
+            ClassicAssert.IsNotNull(psa[0]);
+            ClassicAssert.IsTrue(psa[0].IsSummaryInformation);
 
             Section s = (Section)(psa[0].Sections[0]);
             Object p1 = s.GetProperty(PropertyIDMap.PID_AUTHOR);
             Object p2 = s.GetProperty(PropertyIDMap.PID_TITLE);
-            Assert.AreEqual(AUTHOR, p1);
-            Assert.AreEqual(TITLE, p2);
+            ClassicAssert.AreEqual(AUTHOR, p1);
+            ClassicAssert.AreEqual(TITLE, p2);
             file.Close();
             try
             {
@@ -313,14 +313,14 @@ namespace TestCases.HPSF.Basic
             POIFSReaderListener2 prl = new POIFSReaderListener2();
             reader2.RegisterListener(prl);
             reader2.Read(file);
-            Assert.IsNotNull(psa[0]);
+            ClassicAssert.IsNotNull(psa[0]);
             Section s = (Section)(psa[0].Sections[0]);
-            Assert.AreEqual(s.FormatID, formatID);
+            ClassicAssert.AreEqual(s.FormatID, formatID);
             Object p = s.GetProperty(2);
-            Assert.AreEqual(SECTION1, p);
+            ClassicAssert.AreEqual(SECTION1, p);
             s = (Section)(psa[0].Sections[1]);
             p = s.GetProperty(2);
-            Assert.AreEqual(SECTION2, p);
+            ClassicAssert.AreEqual(SECTION2, p);
 
             file.Close();
             //File.Delete(dataDir + POI_FS);
@@ -535,10 +535,10 @@ namespace TestCases.HPSF.Basic
                 byte[] bytes = out1.ToArray();
 
                 PropertySet psr = new PropertySet(bytes);
-                Assert.IsTrue(psr.IsSummaryInformation);
+                ClassicAssert.IsTrue(psr.IsSummaryInformation);
                 Section sr = (Section)psr.Sections[0];
                 String title = (String)sr.GetProperty(PropertyIDMap.PID_TITLE);
-                Assert.AreEqual(TITLE, title);
+                ClassicAssert.AreEqual(TITLE, title);
             }
             catch (WritingNotSupportedException e)
             {
@@ -600,7 +600,7 @@ namespace TestCases.HPSF.Basic
                           " (" + Encoding.Default.EncodingName + ")." : "."));
                 }
                 else
-                    Assert.AreEqual(value, objRead);
+                    ClassicAssert.AreEqual(value, objRead);
         }
 
 
@@ -722,7 +722,7 @@ namespace TestCases.HPSF.Basic
                 /* Compare the property Set stream with the corresponding one
                  * from the origin file and check whether they are equal. */
                 
-                Assert.AreEqual(ps1, ps2, "Equality for file " + f.Name);
+                ClassicAssert.AreEqual(ps1, ps2, "Equality for file " + f.Name);
             }
             out1.Close();
         }
@@ -754,18 +754,18 @@ namespace TestCases.HPSF.Basic
             }
             /* Read back: */
             POIFile[] psf = Util.ReadPropertySets(copy);
-            Assert.AreEqual(1, psf.Length);
+            ClassicAssert.AreEqual(1, psf.Length);
             byte[] bytes = psf[0].GetBytes();
             InputStream in1 = new ByteArrayInputStream(bytes);
             PropertySet ps2 = PropertySetFactory.Create(in1);
 
             /* Check if the result is a DocumentSummaryInformation stream, as
                 * specified. */
-            Assert.IsTrue(ps2.IsDocumentSummaryInformation);
+            ClassicAssert.IsTrue(ps2.IsDocumentSummaryInformation);
 
             /* Compare the property Set stream with the corresponding one
                 * from the origin file and check whether they are equal. */
-            Assert.IsTrue(ps1.Equals(ps2));
+            ClassicAssert.IsTrue(ps1.Equals(ps2));
             
             copy.Delete();
         }
@@ -807,20 +807,20 @@ namespace TestCases.HPSF.Basic
             InputStream sinfStream = new NDocumentInputStream(sinfDoc);
             sinf = (SummaryInformation)PropertySetFactory.Create(sinfStream);
             sinfStream.Close();
-            Assert.AreEqual(131077, sinf.OSVersion);
+            ClassicAssert.AreEqual(131077, sinf.OSVersion);
 
             InputStream dinfStream = new NDocumentInputStream(dinfDoc);
             dinf = (DocumentSummaryInformation)PropertySetFactory.Create(dinfStream);
             dinfStream.Close();
-            Assert.AreEqual(131077, dinf.OSVersion);
+            ClassicAssert.AreEqual(131077, dinf.OSVersion);
 
             // Check they start as we expect
-            Assert.AreEqual("Reiichiro Hori", sinf.Author);
-            Assert.AreEqual("Microsoft Word 9.0", sinf.ApplicationName);
-            Assert.AreEqual("\u7b2c1\u7ae0", sinf.Title);
+            ClassicAssert.AreEqual("Reiichiro Hori", sinf.Author);
+            ClassicAssert.AreEqual("Microsoft Word 9.0", sinf.ApplicationName);
+            ClassicAssert.AreEqual("\u7b2c1\u7ae0", sinf.Title);
 
-            Assert.AreEqual("", dinf.Company);
-            Assert.AreEqual(null, dinf.Manager);
+            ClassicAssert.AreEqual("", dinf.Company);
+            ClassicAssert.AreEqual(null, dinf.Manager);
 
             // Do an in-place replace via an InputStream
             new NPOIFSDocument(sinfDoc).ReplaceContents(sinf.ToInputStream());
@@ -834,12 +834,12 @@ namespace TestCases.HPSF.Basic
             InputStream sinfStream2 = new NDocumentInputStream(sinfDoc);
             sinf = (SummaryInformation)PropertySetFactory.Create(sinfStream2);
             sinfStream2.Close();
-            Assert.AreEqual(131077, sinf.OSVersion);
+            ClassicAssert.AreEqual(131077, sinf.OSVersion);
 
             InputStream dinfStream2 = new NDocumentInputStream(dinfDoc);
             dinf = (DocumentSummaryInformation)PropertySetFactory.Create(dinfStream2);
             dinfStream2.Close();
-            Assert.AreEqual(131077, dinf.OSVersion);
+            ClassicAssert.AreEqual(131077, dinf.OSVersion);
 
 
             // Start again!
@@ -861,12 +861,12 @@ namespace TestCases.HPSF.Basic
             InputStream sinfStream3 = new NDocumentInputStream(sinfDoc);
             sinf = (SummaryInformation)PropertySetFactory.Create(sinfStream3);
             sinfStream3.Close();
-            Assert.AreEqual(131077, sinf.OSVersion);
+            ClassicAssert.AreEqual(131077, sinf.OSVersion);
 
             InputStream dinfStream3 = new NDocumentInputStream(dinfDoc);
             dinf = (DocumentSummaryInformation)PropertySetFactory.Create(dinfStream3);
             dinfStream3.Close();
-            Assert.AreEqual(131077, dinf.OSVersion);
+            ClassicAssert.AreEqual(131077, dinf.OSVersion);
 
 
             // Have them write themselves in-place with no Changes
@@ -902,19 +902,19 @@ namespace TestCases.HPSF.Basic
             InputStream sinfStream5 = new NDocumentInputStream(sinfDoc);
             sinf = (SummaryInformation)PropertySetFactory.Create(sinfStream5);
             sinfStream5.Close();
-            Assert.AreEqual(131077, sinf.OSVersion);
+            ClassicAssert.AreEqual(131077, sinf.OSVersion);
 
             InputStream dinfStream5 = new NDocumentInputStream(dinfDoc);
             dinf = (DocumentSummaryInformation)PropertySetFactory.Create(dinfStream5);
             dinfStream5.Close();
-            Assert.AreEqual(131077, dinf.OSVersion);
+            ClassicAssert.AreEqual(131077, dinf.OSVersion);
 
-            Assert.AreEqual("Reiichiro Hori", sinf.Author);
-            Assert.AreEqual("Microsoft Word 9.0", sinf.ApplicationName);
-            Assert.AreEqual("\u7b2c1\u7ae0", sinf.Title);
+            ClassicAssert.AreEqual("Reiichiro Hori", sinf.Author);
+            ClassicAssert.AreEqual("Microsoft Word 9.0", sinf.ApplicationName);
+            ClassicAssert.AreEqual("\u7b2c1\u7ae0", sinf.Title);
 
-            Assert.AreEqual("", dinf.Company);
-            Assert.AreEqual(null, dinf.Manager);
+            ClassicAssert.AreEqual("", dinf.Company);
+            ClassicAssert.AreEqual(null, dinf.Manager);
 
 
             // Now alter a few of them
@@ -937,20 +937,20 @@ namespace TestCases.HPSF.Basic
             InputStream sinfStream6 = new NDocumentInputStream(sinfDoc);
             sinf = (SummaryInformation)PropertySetFactory.Create(sinfStream6);
             sinfStream6.Close();
-            Assert.AreEqual(131077, sinf.OSVersion);
+            ClassicAssert.AreEqual(131077, sinf.OSVersion);
 
             dinfDoc = (DocumentNode)root.GetEntry(DocumentSummaryInformation.DEFAULT_STREAM_NAME);
             InputStream dinfStream6 = new NDocumentInputStream(dinfDoc);
             dinf = (DocumentSummaryInformation)PropertySetFactory.Create(dinfStream6);
             dinfStream6.Close();
-            Assert.AreEqual(131077, dinf.OSVersion);
+            ClassicAssert.AreEqual(131077, dinf.OSVersion);
 
-            Assert.AreEqual("Changed Author", sinf.Author);
-            Assert.AreEqual("Microsoft Word 9.0", sinf.ApplicationName);
-            Assert.AreEqual("Le titre \u00e9tait chang\u00e9", sinf.Title);
+            ClassicAssert.AreEqual("Changed Author", sinf.Author);
+            ClassicAssert.AreEqual("Microsoft Word 9.0", sinf.ApplicationName);
+            ClassicAssert.AreEqual("Le titre \u00e9tait chang\u00e9", sinf.Title);
 
-            Assert.AreEqual("", dinf.Company);
-            Assert.AreEqual("Changed Manager", dinf.Manager);
+            ClassicAssert.AreEqual("", dinf.Company);
+            ClassicAssert.AreEqual("Changed Manager", dinf.Manager);
 
 
             // Close the whole filesystem, and open it once more
@@ -965,20 +965,20 @@ namespace TestCases.HPSF.Basic
             InputStream sinfStream7 = new NDocumentInputStream(sinfDoc);
             sinf = (SummaryInformation)PropertySetFactory.Create(sinfStream7);
             sinfStream7.Close();
-            Assert.AreEqual(131077, sinf.OSVersion);
+            ClassicAssert.AreEqual(131077, sinf.OSVersion);
 
             dinfDoc = (DocumentNode)root.GetEntry(DocumentSummaryInformation.DEFAULT_STREAM_NAME);
             InputStream dinfStream7 = new NDocumentInputStream(dinfDoc);
             dinf = (DocumentSummaryInformation)PropertySetFactory.Create(dinfStream7);
             dinfStream7.Close();
-            Assert.AreEqual(131077, dinf.OSVersion);
+            ClassicAssert.AreEqual(131077, dinf.OSVersion);
 
-            Assert.AreEqual("Changed Author", sinf.Author);
-            Assert.AreEqual("Microsoft Word 9.0", sinf.ApplicationName);
-            Assert.AreEqual("Le titre \u00e9tait chang\u00e9", sinf.Title);
+            ClassicAssert.AreEqual("Changed Author", sinf.Author);
+            ClassicAssert.AreEqual("Microsoft Word 9.0", sinf.ApplicationName);
+            ClassicAssert.AreEqual("Le titre \u00e9tait chang\u00e9", sinf.Title);
 
-            Assert.AreEqual("", dinf.Company);
-            Assert.AreEqual("Changed Manager", dinf.Manager);
+            ClassicAssert.AreEqual("", dinf.Company);
+            ClassicAssert.AreEqual("Changed Manager", dinf.Manager);
 
 
             // Tidy up

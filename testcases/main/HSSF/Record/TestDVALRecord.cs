@@ -20,7 +20,7 @@ namespace TestCases.HSSF.Record
     using System.IO;
     using NPOI.Util;
     using NPOI.HSSF.Record;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     /**
      * 
@@ -46,15 +46,15 @@ namespace TestCases.HSSF.Record
             in1.NextRecord();
             DVALRecord dv = new DVALRecord(in1);
 
-            Assert.AreEqual(55, dv.Options);
-            Assert.AreEqual(56, dv.HorizontalPos);
-            Assert.AreEqual(57, dv.VerticalPos);
-            Assert.AreEqual(58, dv.ObjectID);
+            ClassicAssert.AreEqual(55, dv.Options);
+            ClassicAssert.AreEqual(56, dv.HorizontalPos);
+            ClassicAssert.AreEqual(57, dv.VerticalPos);
+            ClassicAssert.AreEqual(58, dv.ObjectID);
             if (dv.DVRecNo == 0)
             {
                 Assert.Fail("Identified bug 44510");
             }
-            Assert.AreEqual(59, dv.DVRecNo);
+            ClassicAssert.AreEqual(59, dv.DVRecNo);
         }
     }
 }

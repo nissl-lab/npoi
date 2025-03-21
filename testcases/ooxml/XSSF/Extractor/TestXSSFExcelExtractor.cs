@@ -15,7 +15,7 @@
    limitations under the License.
 ==================================================================== */
 
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using NPOI.HSSF.Extractor;
 using TestCases.HSSF;
 using System.Text.RegularExpressions;
@@ -48,11 +48,11 @@ namespace TestCases.XSSF.Extractor
             XSSFExcelExtractor extractor = GetExtractor("sample.xlsx");
 
             string text = extractor.Text;
-            Assert.IsTrue(text.Length > 0);
+            ClassicAssert.IsTrue(text.Length > 0);
 
             // Check sheet names
-            Assert.IsTrue(text.StartsWith("Sheet1"));
-            Assert.IsTrue(text.EndsWith("Sheet3\n"));
+            ClassicAssert.IsTrue(text.StartsWith("Sheet1"));
+            ClassicAssert.IsTrue(text.EndsWith("Sheet3\n"));
 
             // Now without, will have text
             extractor.SetIncludeSheetNames(false);
@@ -73,7 +73,7 @@ namespace TestCases.XSSF.Extractor
                 "hello, xssf		hello, xssf\n\t" +
                 "hello, xssf		hello, xssf\n\t" +
                 "hello, xssf		hello, xssf\n";
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                     CHUNK1 +
                     "at\t4995\n" +
                     CHUNK2
@@ -82,7 +82,7 @@ namespace TestCases.XSSF.Extractor
             // Now Get formulas not their values
             extractor.SetFormulasNotResults(true);
             text = extractor.Text;
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                     CHUNK1 +
                     "at\tSUM(B1:B9)\n" +
                     CHUNK2, text);
@@ -90,7 +90,7 @@ namespace TestCases.XSSF.Extractor
             // With sheet names too
             extractor.SetIncludeSheetNames(true);
             text = extractor.Text;
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                     "Sheet1\n" +
                     CHUNK1 +
                     "at\tSUM(B1:B9)\n" +
@@ -107,11 +107,11 @@ namespace TestCases.XSSF.Extractor
             XSSFExcelExtractor extractor = GetExtractor("AverageTaxRates.xlsx");
 
             string text = extractor.Text;
-            Assert.IsTrue(text.Length > 0);
+            ClassicAssert.IsTrue(text.Length > 0);
 
             // Might not have all formatting it should do!
             // TODO decide if we should really have the "null" in there
-            Assert.IsTrue(text.StartsWith(
+            ClassicAssert.IsTrue(text.StartsWith(
                             "Avgtxfull\n" +
                             "\t\t(iii) AVERAGE TAX RATES ON ANNUAL"
             ));
@@ -139,9 +139,9 @@ namespace TestCases.XSSF.Extractor
                 POITextExtractor extractor = extractors[i];
 
                 string text = Regex.Replace(extractor.Text,"[\r\t]", "");
-                Assert.IsTrue(text.StartsWith("First Sheet\nTest spreadsheet\n2nd row2nd row 2nd column\n"));
+                ClassicAssert.IsTrue(text.StartsWith("First Sheet\nTest spreadsheet\n2nd row2nd row 2nd column\n"));
                 Regex pattern = new Regex(".*13(\\.0+)?\\s+Sheet3.*",RegexOptions.Compiled);
-                Assert.IsTrue(pattern.IsMatch(text));
+                ClassicAssert.IsTrue(pattern.IsMatch(text));
                 
             }
             ole2Extractor.Close();
@@ -164,8 +164,8 @@ namespace TestCases.XSSF.Extractor
                    XSSFExcelExtractor extractor = GetExtractor(sampleName);
                    string text = extractor.Text;
 
-                   Assert.IsTrue(text.Contains("testdoc"), "Unable to find expected word in text from " + sampleName + "\n" + text);
-                   Assert.IsTrue(text.Contains("test phrase"), "Unable to find expected word in text\n" + text);
+                   ClassicAssert.IsTrue(text.Contains("testdoc"), "Unable to find expected word in text from " + sampleName + "\n" + text);
+                   ClassicAssert.IsTrue(text.Contains("test phrase"), "Unable to find expected word in text\n" + text);
                    extractor.Close();
                }
            }
@@ -181,14 +181,14 @@ namespace TestCases.XSSF.Extractor
             string text = extractor.Text;
 
             // No comments there yet
-            Assert.IsFalse(text.Contains("testdoc"), "Unable to find expected word in text\n" + text);
-            Assert.IsFalse(text.Contains("test phrase"), "Unable to find expected word in text\n" + text);
+            ClassicAssert.IsFalse(text.Contains("testdoc"), "Unable to find expected word in text\n" + text);
+            ClassicAssert.IsFalse(text.Contains("test phrase"), "Unable to find expected word in text\n" + text);
 
             // Turn on comment extraction, will then be
             extractor.SetIncludeCellComments(true);
             text = extractor.Text;
-            Assert.IsTrue(text.Contains("testdoc"), "Unable to find expected word in text\n" + text);
-            Assert.IsTrue(text.Contains("test phrase"), "Unable to find expected word in text\n" + text);
+            ClassicAssert.IsTrue(text.Contains("testdoc"), "Unable to find expected word in text\n" + text);
+            ClassicAssert.IsTrue(text.Contains("test phrase"), "Unable to find expected word in text\n" + text);
             extractor.Close();
         }
         [Test]
@@ -199,20 +199,20 @@ namespace TestCases.XSSF.Extractor
             string text = extractor.Text;
 
             // Numbers
-            Assert.IsTrue(text.Contains("43"), "Unable to find expected word in text\n" + text);
-            Assert.IsTrue(text.Contains("22"), "Unable to find expected word in text\n" + text);
+            ClassicAssert.IsTrue(text.Contains("43"), "Unable to find expected word in text\n" + text);
+            ClassicAssert.IsTrue(text.Contains("22"), "Unable to find expected word in text\n" + text);
 
             // Strings
-            Assert.IsTrue(text.Contains("ABCDE"), "Unable to find expected word in text\n" + text);
-            Assert.IsTrue(text.Contains("Long Text"), "Unable to find expected word in text\n" + text);
+            ClassicAssert.IsTrue(text.Contains("ABCDE"), "Unable to find expected word in text\n" + text);
+            ClassicAssert.IsTrue(text.Contains("Long Text"), "Unable to find expected word in text\n" + text);
 
             // Inline Strings
-            Assert.IsTrue(text.Contains("1st Inline String"), "Unable to find expected word in text\n" + text);
-            Assert.IsTrue(text.Contains("And More"), "Unable to find expected word in text\n" + text);
+            ClassicAssert.IsTrue(text.Contains("1st Inline String"), "Unable to find expected word in text\n" + text);
+            ClassicAssert.IsTrue(text.Contains("And More"), "Unable to find expected word in text\n" + text);
 
             // Formulas
-            Assert.IsTrue(text.Contains("A2"), "Unable to find expected word in text\n" + text);
-            Assert.IsTrue(text.Contains("A5-A$2"), "Unable to find expected word in text\n" + text);
+            ClassicAssert.IsTrue(text.Contains("A2"), "Unable to find expected word in text\n" + text);
+            ClassicAssert.IsTrue(text.Contains("A5-A$2"), "Unable to find expected word in text\n" + text);
             extractor.Close();
         }
 
@@ -222,11 +222,11 @@ namespace TestCases.XSSF.Extractor
             XSSFExcelExtractor extractor = GetExtractor("SimpleNormal.xlsx");
 
             string text = extractor.Text;
-            Assert.IsTrue(text.Length > 0);
+            ClassicAssert.IsTrue(text.Length > 0);
             
             // This sheet demonstrates the preservation of empty cells, as
             // signified by sequential \t characters.
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                 // Sheet 1
                 "Sheet1\n" + 
                 "test\t\t1\n" + 
@@ -259,9 +259,9 @@ namespace TestCases.XSSF.Extractor
             {
                 extractor.SetFormulasNotResults(true);
                 string text = extractor.Text;
-                Assert.IsTrue(text.IndexOf("Line 1") > -1);
-                Assert.IsTrue(text.IndexOf("Line 2") > -1);
-                Assert.IsTrue(text.IndexOf("Line 3") > -1);
+                ClassicAssert.IsTrue(text.IndexOf("Line 1") > -1);
+                ClassicAssert.IsTrue(text.IndexOf("Line 2") > -1);
+                ClassicAssert.IsTrue(text.IndexOf("Line 3") > -1);
             }
             finally
             {
@@ -275,9 +275,9 @@ namespace TestCases.XSSF.Extractor
             XSSFExcelExtractor extractor = GetExtractor("bug67784.xlsx");
  	        string text = extractor.Text.Replace("\r", "");
  	        string[] lines = text.Split('\n');
- 	        Assert.AreEqual("FALSE", lines[2]);
- 	        Assert.AreEqual("TRUE", lines[3]);
- 	        Assert.AreEqual("ERROR:#DIV/0!", lines[4]);
+ 	        ClassicAssert.AreEqual("FALSE", lines[2]);
+ 	        ClassicAssert.AreEqual("TRUE", lines[3]);
+ 	        ClassicAssert.AreEqual("ERROR:#DIV/0!", lines[4]);
             extractor.Close();
         }
 
@@ -288,9 +288,9 @@ namespace TestCases.XSSF.Extractor
             extractor.FormulasNotResults = true;
             string text = extractor.Text.Replace("\r", "");
             string[] lines = text.Split('\n');
-            Assert.AreEqual("(2 > 5)", lines[2]);
-            Assert.AreEqual("(2 < 4)", lines[3]);
-            Assert.AreEqual("10/0", lines[4]);
+            ClassicAssert.AreEqual("(2 > 5)", lines[2]);
+            ClassicAssert.AreEqual("(2 < 4)", lines[3]);
+            ClassicAssert.AreEqual("10/0", lines[4]);
             extractor.Close();
         }
 
@@ -301,10 +301,10 @@ namespace TestCases.XSSF.Extractor
             try
             {
                 String text = extractor.Text;
-                Assert.IsTrue(text.Contains("\u8C4A\u7530"));
+                ClassicAssert.IsTrue(text.Contains("\u8C4A\u7530"));
                 //this shows up only as a phonetic run and should not appear
                 //in the extracted text
-                Assert.IsFalse(text.Contains("\u30CB\u30DB\u30F3"));
+                ClassicAssert.IsFalse(text.Contains("\u30CB\u30DB\u30F3"));
             }
             finally
             {

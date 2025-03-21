@@ -21,7 +21,7 @@ namespace TestCases.HSSF.Record.Aggregates
     using System.IO;
     using System.Collections;
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.Aggregates;
@@ -73,41 +73,41 @@ namespace TestCases.HSSF.Record.Aggregates
             recs = RecordFactory.CreateRecords(in1);
 
             // Verify
-            Assert.IsNotNull(recs);
-            Assert.AreEqual(4, recs.Count);
+            ClassicAssert.IsNotNull(recs);
+            ClassicAssert.AreEqual(4, recs.Count);
 
             header = (CFHeaderRecord)recs[0];
             rule1 = (CFRuleRecord)recs[1];
-            Assert.IsNotNull(rule1);
+            ClassicAssert.IsNotNull(rule1);
             rule2 = (CFRuleRecord)recs[2];
-            Assert.IsNotNull(rule2);
+            ClassicAssert.IsNotNull(rule2);
             rule3 = (CFRuleRecord)recs[3];
-            Assert.IsNotNull(rule3);
+            ClassicAssert.IsNotNull(rule3);
             cellRanges = header.CellRanges;
 
-            Assert.AreEqual(2, cellRanges.Length);
-            Assert.AreEqual(3, header.NumberOfConditionalFormats);
-            Assert.IsFalse(header.NeedRecalculation);
+            ClassicAssert.AreEqual(2, cellRanges.Length);
+            ClassicAssert.AreEqual(3, header.NumberOfConditionalFormats);
+            ClassicAssert.IsFalse(header.NeedRecalculation);
 
             record = CFRecordsAggregate.CreateCFAggregate(new RecordStream(recs, 0));
 
             record = record.CloneCFAggregate();
 
-            Assert.IsNotNull(record.Header);
-            Assert.AreEqual(3, record.NumberOfRules);
+            ClassicAssert.IsNotNull(record.Header);
+            ClassicAssert.AreEqual(3, record.NumberOfRules);
 
             header = record.Header;
             rule1 = record.GetRule(0);
-            Assert.IsNotNull(rule1);
+            ClassicAssert.IsNotNull(rule1);
             rule2 = record.GetRule(1);
-            Assert.IsNotNull(rule2);
+            ClassicAssert.IsNotNull(rule2);
             rule3 = record.GetRule(2);
-            Assert.IsNotNull(rule3);
+            ClassicAssert.IsNotNull(rule3);
             cellRanges = header.CellRanges;
 
-            Assert.AreEqual(2, cellRanges.Length);
-            Assert.AreEqual(3, header.NumberOfConditionalFormats);
-            Assert.IsFalse(header.NeedRecalculation);
+            ClassicAssert.AreEqual(2, cellRanges.Length);
+            ClassicAssert.AreEqual(3, header.NumberOfConditionalFormats);
+            ClassicAssert.IsFalse(header.NeedRecalculation);
         }
         /**
          * Make sure that the CF Header record is properly updated with the number of rules
@@ -134,7 +134,7 @@ namespace TestCases.HSSF.Record.Aggregates
             {
                 throw new AssertionException("Identified bug 45682 b");
             }
-            Assert.AreEqual(rules.Length, nRules);
+            ClassicAssert.AreEqual(rules.Length, nRules);
         }
 
         [Test]
@@ -159,7 +159,7 @@ namespace TestCases.HSSF.Record.Aggregates
 
             rules = new CFRuleBase[] { CFRuleRecord.Create(sheet, "7") };
             CFRecordsAggregate agg = new CFRecordsAggregate(cellRanges, rules);
-            Assert.IsTrue(agg.Header.NeedRecalculation);
+            ClassicAssert.IsTrue(agg.Header.NeedRecalculation);
 
             try
             {

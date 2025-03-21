@@ -22,7 +22,7 @@ namespace TestCases.HSSF.Record
     using TestCases.HSSF.Record;
     using NPOI.Util;
     using NPOI.HSSF.Record;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     /**
      * Tests for {@link BoolErrRecord}
@@ -40,8 +40,8 @@ namespace TestCases.HSSF.Record
 
             RecordInputStream in1 = TestcaseRecordInputStream.Create(BoolErrRecord.sid, data);
             BoolErrRecord ber = new BoolErrRecord(in1);
-            Assert.IsTrue(ber.IsError);
-            Assert.AreEqual(7, ber.ErrorValue);
+            ClassicAssert.IsTrue(ber.IsError);
+            ClassicAssert.AreEqual(7, ber.ErrorValue);
 
             TestcaseRecordInputStream.ConfirmRecordEncoding(BoolErrRecord.sid, data, ber.Serialize());
         }
@@ -78,9 +78,9 @@ namespace TestCases.HSSF.Record
                 }
                 throw e;
             }
-            Assert.IsFalse(hasMore);
-            Assert.IsTrue(ber.IsBoolean);
-            Assert.AreEqual(true, ber.BooleanValue);
+            ClassicAssert.IsFalse(hasMore);
+            ClassicAssert.IsTrue(ber.IsBoolean);
+            ClassicAssert.AreEqual(true, ber.BooleanValue);
 
             // Check that the record re-Serializes correctly
             byte[] outData = ber.Serialize();
@@ -89,7 +89,7 @@ namespace TestCases.HSSF.Record
                     "00 00 00 00 0F 00 " +
                     "01 00 " // normal number of data bytes
                     );
-            Assert.IsTrue(Arrays.Equals(expData, outData));
+            ClassicAssert.IsTrue(Arrays.Equals(expData, outData));
         }
     }
 }

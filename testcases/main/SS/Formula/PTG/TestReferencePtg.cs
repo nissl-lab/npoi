@@ -18,7 +18,7 @@
 namespace TestCases.SS.Formula.PTG
 {
     using System;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Formula.PTG;
     using NPOI.SS.UserModel;
@@ -43,27 +43,27 @@ namespace TestCases.SS.Formula.PTG
             ISheet sheet = workbook.GetSheetAt(0);
 
             // First row
-            Assert.AreEqual(55.0, sheet.GetRow(0).GetCell(0).NumericCellValue, 0.0, "Wrong numeric value for original number");
-            Assert.AreEqual(55.0, sheet.GetRow(0).GetCell(1).NumericCellValue, 0.0, "Wrong numeric value for referemce");
-            Assert.AreEqual("A1", sheet.GetRow(0).GetCell(1).CellFormula, "Wrong formula string for reference");
+            ClassicAssert.AreEqual(55.0, sheet.GetRow(0).GetCell(0).NumericCellValue, 0.0, "Wrong numeric value for original number");
+            ClassicAssert.AreEqual(55.0, sheet.GetRow(0).GetCell(1).NumericCellValue, 0.0, "Wrong numeric value for referemce");
+            ClassicAssert.AreEqual("A1", sheet.GetRow(0).GetCell(1).CellFormula, "Wrong formula string for reference");
 
             // Now moving over the 2**15 boundary
             // (Remember that excel row (n) is poi row (n-1)
-            Assert.AreEqual(32767.0, sheet.GetRow(32766).GetCell(0).NumericCellValue, 0.0, "Wrong numeric value for original number");
-            Assert.AreEqual(32767.0, sheet.GetRow(32766).GetCell(1).NumericCellValue, 0.0, "Wrong numeric value for referemce");
-            Assert.AreEqual("A32767", sheet.GetRow(32766).GetCell(1).CellFormula, "Wrong formula string for reference");
+            ClassicAssert.AreEqual(32767.0, sheet.GetRow(32766).GetCell(0).NumericCellValue, 0.0, "Wrong numeric value for original number");
+            ClassicAssert.AreEqual(32767.0, sheet.GetRow(32766).GetCell(1).NumericCellValue, 0.0, "Wrong numeric value for referemce");
+            ClassicAssert.AreEqual("A32767", sheet.GetRow(32766).GetCell(1).CellFormula, "Wrong formula string for reference");
 
-            Assert.AreEqual(32768.0, sheet.GetRow(32767).GetCell(0).NumericCellValue, 0.0, "Wrong numeric value for original number");
-            Assert.AreEqual(32768.0, sheet.GetRow(32767).GetCell(1).NumericCellValue, 0.0, "Wrong numeric value for referemce");
-            Assert.AreEqual("A32768", sheet.GetRow(32767).GetCell(1).CellFormula, "Wrong formula string for reference");
+            ClassicAssert.AreEqual(32768.0, sheet.GetRow(32767).GetCell(0).NumericCellValue, 0.0, "Wrong numeric value for original number");
+            ClassicAssert.AreEqual(32768.0, sheet.GetRow(32767).GetCell(1).NumericCellValue, 0.0, "Wrong numeric value for referemce");
+            ClassicAssert.AreEqual("A32768", sheet.GetRow(32767).GetCell(1).CellFormula, "Wrong formula string for reference");
 
-            Assert.AreEqual(32769.0, sheet.GetRow(32768).GetCell(0).NumericCellValue, 0.0, "Wrong numeric value for original number");
-            Assert.AreEqual(32769.0, sheet.GetRow(32768).GetCell(1).NumericCellValue, 0.0, "Wrong numeric value for referemce");
-            Assert.AreEqual("A32769", sheet.GetRow(32768).GetCell(1).CellFormula, "Wrong formula string for reference");
+            ClassicAssert.AreEqual(32769.0, sheet.GetRow(32768).GetCell(0).NumericCellValue, 0.0, "Wrong numeric value for original number");
+            ClassicAssert.AreEqual(32769.0, sheet.GetRow(32768).GetCell(1).NumericCellValue, 0.0, "Wrong numeric value for referemce");
+            ClassicAssert.AreEqual("A32769", sheet.GetRow(32768).GetCell(1).CellFormula, "Wrong formula string for reference");
 
-            Assert.AreEqual(32770.0, sheet.GetRow(32769).GetCell(0).NumericCellValue, 0.0, "Wrong numeric value for original number");
-            Assert.AreEqual(32770.0, sheet.GetRow(32769).GetCell(1).NumericCellValue, 0.0, "Wrong numeric value for referemce");
-            Assert.AreEqual("A32770", sheet.GetRow(32769).GetCell(1).CellFormula, "Wrong formula string for reference");
+            ClassicAssert.AreEqual(32770.0, sheet.GetRow(32769).GetCell(0).NumericCellValue, 0.0, "Wrong numeric value for original number");
+            ClassicAssert.AreEqual(32770.0, sheet.GetRow(32769).GetCell(1).NumericCellValue, 0.0, "Wrong numeric value for referemce");
+            ClassicAssert.AreEqual("A32770", sheet.GetRow(32769).GetCell(1).CellFormula, "Wrong formula string for reference");
         }
         [Test]
         public void TestBug44921()
@@ -97,7 +97,7 @@ namespace TestCases.SS.Formula.PTG
             {
                 throw new AssertionException("Identified bug 45091");
             }
-            Assert.IsTrue(Arrays.Equals(tRefN_data, outData));
+            ClassicAssert.IsTrue(Arrays.Equals(tRefN_data, outData));
         }
 
         /**
@@ -109,12 +109,12 @@ namespace TestCases.SS.Formula.PTG
         {
             RefPtgBase ptg;
             ptg = new RefPtg("IW1");
-            Assert.AreEqual(256, ptg.Column);
-            Assert.AreEqual("IW1", ptg.FormatReferenceAsString());
+            ClassicAssert.AreEqual(256, ptg.Column);
+            ClassicAssert.AreEqual("IW1", ptg.FormatReferenceAsString());
 
             ptg = new RefPtg("JA1");
-            Assert.AreEqual(260, ptg.Column);
-            Assert.AreEqual("JA1", ptg.FormatReferenceAsString());
+            ClassicAssert.AreEqual(260, ptg.Column);
+            ClassicAssert.AreEqual("JA1", ptg.FormatReferenceAsString());
         }
     }
 

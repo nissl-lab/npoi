@@ -30,7 +30,7 @@ using System;
 using System.IO;
 using System.Collections;
 
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using NPOI.POIFS.Storage;
 using NPOI.Util;
 using NPOI.POIFS.FileSystem;
@@ -84,7 +84,7 @@ namespace TestCases.POIFS.Storage
                 }
                 index += 512;
             }
-            Assert.AreEqual(_testdata.Length, size);
+            ClassicAssert.AreEqual(_testdata.Length, size);
         }
 
         /**
@@ -112,7 +112,7 @@ namespace TestCases.POIFS.Storage
                     DocumentBlock.Read(blocks, buffer, offset);
                     for (int n = 0; n < buffer.Length; n++)
                     {
-                        Assert.AreEqual(_testdata[(k * j) + n], buffer[n]
+                        ClassicAssert.AreEqual(_testdata[(k * j) + n], buffer[n]
                             , "checking byte " + (k * j) + n);
                     }
                     offset += j;
@@ -136,14 +136,14 @@ namespace TestCases.POIFS.Storage
 
         private void verifyOutput(DocumentBlock block, byte[] input)
         {
-            Assert.AreEqual(input.Length, block.Size);
+            ClassicAssert.AreEqual(input.Length, block.Size);
             if (input.Length < 512)
             {
-                Assert.IsTrue(block.PartiallyRead);
+                ClassicAssert.IsTrue(block.PartiallyRead);
             }
             else
             {
-                Assert.IsTrue(!block.PartiallyRead);
+                ClassicAssert.IsTrue(!block.PartiallyRead);
             }
             MemoryStream output = new MemoryStream(512);
 
@@ -153,11 +153,11 @@ namespace TestCases.POIFS.Storage
 
             for (; j < input.Length; j++)
             {
-                Assert.AreEqual(input[j], copy[j]);
+                ClassicAssert.AreEqual(input[j], copy[j]);
             }
             for (; j < 512; j++)
             {
-                Assert.AreEqual((byte)0xFF, copy[j]);
+                ClassicAssert.AreEqual((byte)0xFF, copy[j]);
             }
         }
     }

@@ -21,7 +21,7 @@ namespace TestCases.HPSF.Extractor
 
 
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     using NPOI.HSSF;
     using NPOI.HSSF.UserModel;
@@ -48,17 +48,17 @@ namespace TestCases.HPSF.Extractor
             String sinfText = ext.SummaryInformationText;
             String dinfText = ext.DocumentSummaryInformationText;
 
-            Assert.IsTrue(sinfText.IndexOf("TEMPLATE = Normal") > -1);
-            Assert.IsTrue(sinfText.IndexOf("SUBJECT = sample subject") > -1);
-            Assert.IsTrue(dinfText.IndexOf("MANAGER = sample manager") > -1);
-            Assert.IsTrue(dinfText.IndexOf("COMPANY = sample company") > -1);
+            ClassicAssert.IsTrue(sinfText.IndexOf("TEMPLATE = Normal") > -1);
+            ClassicAssert.IsTrue(sinfText.IndexOf("SUBJECT = sample subject") > -1);
+            ClassicAssert.IsTrue(dinfText.IndexOf("MANAGER = sample manager") > -1);
+            ClassicAssert.IsTrue(dinfText.IndexOf("COMPANY = sample company") > -1);
 
             // Now overall
             text = ext.Text;
-            Assert.IsTrue(text.IndexOf("TEMPLATE = Normal") > -1);
-            Assert.IsTrue(text.IndexOf("SUBJECT = sample subject") > -1);
-            Assert.IsTrue(text.IndexOf("MANAGER = sample manager") > -1);
-            Assert.IsTrue(text.IndexOf("COMPANY = sample company") > -1);
+            ClassicAssert.IsTrue(text.IndexOf("TEMPLATE = Normal") > -1);
+            ClassicAssert.IsTrue(text.IndexOf("SUBJECT = sample subject") > -1);
+            ClassicAssert.IsTrue(text.IndexOf("MANAGER = sample manager") > -1);
+            ClassicAssert.IsTrue(text.IndexOf("COMPANY = sample company") > -1);
         }
 
         [Test]
@@ -72,17 +72,17 @@ namespace TestCases.HPSF.Extractor
             String sinfText = ext.SummaryInformationText;
             String dinfText = ext.DocumentSummaryInformationText;
 
-            Assert.IsTrue(sinfText.IndexOf("AUTHOR = marshall") > -1);
-            Assert.IsTrue(sinfText.IndexOf("TITLE = Titel: \u00c4h") > -1);
-            Assert.IsTrue(dinfText.IndexOf("COMPANY = Schreiner") > -1);
-            Assert.IsTrue(dinfText.IndexOf("SCALE = False") > -1);
+            ClassicAssert.IsTrue(sinfText.IndexOf("AUTHOR = marshall") > -1);
+            ClassicAssert.IsTrue(sinfText.IndexOf("TITLE = Titel: \u00c4h") > -1);
+            ClassicAssert.IsTrue(dinfText.IndexOf("COMPANY = Schreiner") > -1);
+            ClassicAssert.IsTrue(dinfText.IndexOf("SCALE = False") > -1);
 
             // Now overall
             text = ext.Text;
-            Assert.IsTrue(text.IndexOf("AUTHOR = marshall") > -1);
-            Assert.IsTrue(text.IndexOf("TITLE = Titel: \u00c4h") > -1);
-            Assert.IsTrue(text.IndexOf("COMPANY = Schreiner") > -1);
-            Assert.IsTrue(text.IndexOf("SCALE = False") > -1);
+            ClassicAssert.IsTrue(text.IndexOf("AUTHOR = marshall") > -1);
+            ClassicAssert.IsTrue(text.IndexOf("TITLE = Titel: \u00c4h") > -1);
+            ClassicAssert.IsTrue(text.IndexOf("COMPANY = Schreiner") > -1);
+            ClassicAssert.IsTrue(text.IndexOf("SCALE = False") > -1);
         }
 
         [Test]
@@ -95,12 +95,12 @@ namespace TestCases.HPSF.Extractor
 
             // Custom properties are part of the document info stream
             String dinfText = ext.DocumentSummaryInformationText;
-            Assert.IsTrue(dinfText.IndexOf("Client = sample client") > -1);
-            Assert.IsTrue(dinfText.IndexOf("Division = sample division") > -1);
+            ClassicAssert.IsTrue(dinfText.IndexOf("Client = sample client") > -1);
+            ClassicAssert.IsTrue(dinfText.IndexOf("Division = sample division") > -1);
 
             String text = ext.Text;
-            Assert.IsTrue(text.IndexOf("Client = sample client") > -1);
-            Assert.IsTrue(text.IndexOf("Division = sample division") > -1);
+            ClassicAssert.IsTrue(text.IndexOf("Client = sample client") > -1);
+            ClassicAssert.IsTrue(text.IndexOf("Division = sample division") > -1);
         }
 
         [Test]
@@ -155,11 +155,11 @@ namespace TestCases.HPSF.Extractor
                 eeExt.Close();
             }
 
-            Assert.AreEqual(fsText, hwText);
-            Assert.AreEqual(fsText, eeText);
+            ClassicAssert.AreEqual(fsText, hwText);
+            ClassicAssert.AreEqual(fsText, eeText);
 
-            Assert.IsTrue(fsText.IndexOf("AUTHOR = marshall") > -1);
-            Assert.IsTrue(fsText.IndexOf("TITLE = Titel: \u00c4h") > -1);
+            ClassicAssert.IsTrue(fsText.IndexOf("AUTHOR = marshall") > -1);
+            ClassicAssert.IsTrue(fsText.IndexOf("TITLE = Titel: \u00c4h") > -1);
 
             // Finally tidy
             wb.Close();
@@ -170,10 +170,10 @@ namespace TestCases.HPSF.Extractor
         {
             HPSFPropertiesExtractor ex = new HPSFPropertiesExtractor(HSSFTestDataSamples.OpenSampleWorkbook("42726.xls"));
             String txt = ex.Text;
-            Assert.IsTrue(txt.IndexOf("PID_AUTHOR") != -1);
-            Assert.IsTrue(txt.IndexOf("PID_EDITTIME") != -1);
-            Assert.IsTrue(txt.IndexOf("PID_REVNUMBER") != -1);
-            Assert.IsTrue(txt.IndexOf("PID_THUMBNAIL") != -1);
+            ClassicAssert.IsTrue(txt.IndexOf("PID_AUTHOR") != -1);
+            ClassicAssert.IsTrue(txt.IndexOf("PID_EDITTIME") != -1);
+            ClassicAssert.IsTrue(txt.IndexOf("PID_REVNUMBER") != -1);
+            ClassicAssert.IsTrue(txt.IndexOf("PID_THUMBNAIL") != -1);
         }
 
         [Test]
@@ -182,9 +182,9 @@ namespace TestCases.HPSF.Extractor
             POIFSFileSystem fs = new POIFSFileSystem(_samples.OpenResourceAsStream("TestThumbnail.xls"));
             HSSFWorkbook wb = new HSSFWorkbook(fs);
             Thumbnail thumbnail = new Thumbnail(wb.SummaryInformation.Thumbnail);
-            Assert.AreEqual(-1, thumbnail.ClipboardFormatTag);
-            Assert.AreEqual(3, thumbnail.GetClipboardFormat());
-            Assert.IsNotNull(thumbnail.GetThumbnailAsWMF());
+            ClassicAssert.AreEqual(-1, thumbnail.ClipboardFormatTag);
+            ClassicAssert.AreEqual(3, thumbnail.GetClipboardFormat());
+            ClassicAssert.IsNotNull(thumbnail.GetThumbnailAsWMF());
             //wb.Close();
         }
 
@@ -195,11 +195,11 @@ namespace TestCases.HPSF.Extractor
             HPSFPropertiesExtractor ext = new HPSFPropertiesExtractor(fs);
             try
             {
-                Assert.IsNotNull(ext.DocSummaryInformation);
-                Assert.IsNotNull(ext.DocumentSummaryInformationText);
-                Assert.IsNotNull(ext.SummaryInformation);
-                Assert.IsNotNull(ext.SummaryInformationText);
-                Assert.IsNotNull(ext.Text);
+                ClassicAssert.IsNotNull(ext.DocSummaryInformation);
+                ClassicAssert.IsNotNull(ext.DocumentSummaryInformationText);
+                ClassicAssert.IsNotNull(ext.SummaryInformation);
+                ClassicAssert.IsNotNull(ext.SummaryInformationText);
+                ClassicAssert.IsNotNull(ext.Text);
             }
             finally
             {

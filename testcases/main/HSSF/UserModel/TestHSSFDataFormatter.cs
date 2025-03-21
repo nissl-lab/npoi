@@ -22,7 +22,7 @@ namespace TestCases.HSSF.UserModel
     using NPOI.HSSF;
     using NPOI.SS.UserModel;
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using System.Collections;
     using TestCases.HSSF;
     using NPOI.SS.Util;
@@ -246,8 +246,8 @@ namespace TestCases.HSSF.UserModel
                 String fmtval = formatter.FormatCellValue(cell);
 
                 // should not be equal to "555.555"
-                Assert.IsTrue(DateUtil.IsCellDateFormatted(cell));
-                Assert.IsTrue(!"555.555".Equals(fmtval));
+                ClassicAssert.IsTrue(DateUtil.IsCellDateFormatted(cell));
+                ClassicAssert.IsTrue(!"555.555".Equals(fmtval));
 
                 String fmt = cell.CellStyle.GetDataFormatString();
 
@@ -262,7 +262,7 @@ namespace TestCases.HSSF.UserModel
                 }
                 log(fmt+"\t\t\t"+fmtval + "\t\t\t" + jul);
                 // check we found july properly
-                Assert.IsTrue(fmtval.IndexOf(jul) > -1, "Format came out incorrect - " + fmt);
+                ClassicAssert.IsTrue(fmtval.IndexOf(jul) > -1, "Format came out incorrect - " + fmt);
             }
 
             row = wb.GetSheetAt(0).GetRow(1);
@@ -276,11 +276,11 @@ namespace TestCases.HSSF.UserModel
                 log(fmtval);
 
                 // should not be equal to "555.47431"
-                Assert.IsTrue(DateUtil.IsCellDateFormatted(cell));
-                Assert.IsTrue(!"555.47431".Equals(fmtval));
+                ClassicAssert.IsTrue(DateUtil.IsCellDateFormatted(cell));
+                ClassicAssert.IsTrue(!"555.47431".Equals(fmtval));
 
                 // check we found the time properly
-                Assert.IsTrue(fmtval.IndexOf("11:23") > -1,
+                ClassicAssert.IsTrue(fmtval.IndexOf("11:23") > -1,
                     "Format came out incorrect - " + fmt + ": " + fmtval + ", but expected to find '11:23'");
             }
 
@@ -295,7 +295,7 @@ namespace TestCases.HSSF.UserModel
                 log(formatted);
 
                 // should not include "12345678" - note that the input value was negative
-                Assert.IsTrue(formatted != null && !formatted.Contains("12345678"));
+                ClassicAssert.IsTrue(formatted != null && !formatted.Contains("12345678"));
             }
 
             // Test bad number formats
@@ -308,7 +308,7 @@ namespace TestCases.HSSF.UserModel
                 log(formatter.FormatCellValue(cell));
                 // in some locales the the decimal delimiter is a comma, not a dot
                 string decimalSeparator = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
-                Assert.AreEqual("12345678" + decimalSeparator + "9", formatter.FormatCellValue(cell));
+                ClassicAssert.AreEqual("12345678" + decimalSeparator + "9", formatter.FormatCellValue(cell));
             }
 
             // Test Zip+4 format
@@ -316,27 +316,27 @@ namespace TestCases.HSSF.UserModel
             ICell cell1 = row.GetCell(0);
             log("\n==== ZIP FORMAT ====");
             log(formatter.FormatCellValue(cell1));
-            Assert.AreEqual("12345-6789", formatter.FormatCellValue(cell1));
+            ClassicAssert.AreEqual("12345-6789", formatter.FormatCellValue(cell1));
 
             // Test phone number format
             row = wb.GetSheetAt(0).GetRow(5);
             cell1 = row.GetCell(0);
             log("\n==== PHONE FORMAT ====");
             log(formatter.FormatCellValue(cell1));
-            Assert.AreEqual("(555) 123-4567", formatter.FormatCellValue(cell1));
+            ClassicAssert.AreEqual("(555) 123-4567", formatter.FormatCellValue(cell1));
 
             // Test SSN format
             row = wb.GetSheetAt(0).GetRow(6);
             cell1 = row.GetCell(0);
             log("\n==== SSN FORMAT ====");
             log(formatter.FormatCellValue(cell1));
-            Assert.AreEqual("444-55-1234", formatter.FormatCellValue(cell1));
+            ClassicAssert.AreEqual("444-55-1234", formatter.FormatCellValue(cell1));
 
             // null Test-- null cell should result in empty String
-            Assert.AreEqual(formatter.FormatCellValue(null), "");
+            ClassicAssert.AreEqual(formatter.FormatCellValue(null), "");
 
             // null Test-- null cell should result in empty String
-            Assert.AreEqual(formatter.FormatCellValue(null), "");
+            ClassicAssert.AreEqual(formatter.FormatCellValue(null), "");
         }
         [Test]
         public void TestGetFormattedCellValueHSSFCellHSSFFormulaEvaluator()
@@ -348,13 +348,13 @@ namespace TestCases.HSSF.UserModel
 
             // first without a formula Evaluator
             log(formatter.FormatCellValue(cell) + "\t (without Evaluator)");
-            Assert.AreEqual("SUM(12.25,12.25)/100", formatter.FormatCellValue(cell));
+            ClassicAssert.AreEqual("SUM(12.25,12.25)/100", formatter.FormatCellValue(cell));
 
             // now with a formula Evaluator
             HSSFFormulaEvaluator Evaluator = new HSSFFormulaEvaluator(wb);
             log(formatter.FormatCellValue(cell, Evaluator) + "\t\t\t (with Evaluator)");
             string decimalSeparator = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
-            Assert.AreEqual(formatter.FormatCellValue(cell, Evaluator), "24" + decimalSeparator + "50%");
+            ClassicAssert.AreEqual(formatter.FormatCellValue(cell, Evaluator), "24" + decimalSeparator + "50%");
 
         }
 
@@ -375,8 +375,8 @@ namespace TestCases.HSSF.UserModel
             {
                 cell.SetCellValue(cell.NumericCellValue * rand.Next() / 1000000 - 1000);
                 log(formatter.FormatCellValue(cell));
-                Assert.IsTrue(formatter.FormatCellValue(cell).StartsWith("Balance "));
-                Assert.IsTrue(formatter.FormatCellValue(cell).EndsWith(" USD"));
+                ClassicAssert.IsTrue(formatter.FormatCellValue(cell).StartsWith("Balance "));
+                ClassicAssert.IsTrue(formatter.FormatCellValue(cell).EndsWith(" USD"));
             }
         }
 
@@ -391,13 +391,13 @@ namespace TestCases.HSSF.UserModel
             IRow row = sheet.GetRow(0);
             ICell cellA1 = row.GetCell(0);
 
-            Assert.AreEqual(CellType.Numeric, cellA1.CellType);
-            Assert.AreEqual(2345.0, cellA1.NumericCellValue, 0.0001);
-            Assert.AreEqual("@", cellA1.CellStyle.GetDataFormatString());
+            ClassicAssert.AreEqual(CellType.Numeric, cellA1.CellType);
+            ClassicAssert.AreEqual(2345.0, cellA1.NumericCellValue, 0.0001);
+            ClassicAssert.AreEqual("@", cellA1.CellStyle.GetDataFormatString());
 
             HSSFDataFormatter f = new HSSFDataFormatter();
 
-            Assert.AreEqual("2345", f.FormatCellValue(cellA1));
+            ClassicAssert.AreEqual("2345", f.FormatCellValue(cellA1));
         }
 
         /**
@@ -412,51 +412,51 @@ namespace TestCases.HSSF.UserModel
             HSSFDataFormatter f = new HSSFDataFormatter();
 
             // This one is one of the nasty auto-locale changing ones...
-            Assert.AreEqual("dd/mm/yyyy", sheet.GetRow(1).GetCell(0).StringCellValue);
-            Assert.AreEqual("m/d/yy", sheet.GetRow(1).GetCell(1).CellStyle.GetDataFormatString());
-            Assert.AreEqual("11/24/06", f.FormatCellValue(sheet.GetRow(1).GetCell(1)));
+            ClassicAssert.AreEqual("dd/mm/yyyy", sheet.GetRow(1).GetCell(0).StringCellValue);
+            ClassicAssert.AreEqual("m/d/yy", sheet.GetRow(1).GetCell(1).CellStyle.GetDataFormatString());
+            ClassicAssert.AreEqual("11/24/06", f.FormatCellValue(sheet.GetRow(1).GetCell(1)));
 
-            Assert.AreEqual("yyyy/mm/dd", sheet.GetRow(2).GetCell(0).StringCellValue);
-            Assert.AreEqual("yyyy/mm/dd", sheet.GetRow(2).GetCell(1).CellStyle.GetDataFormatString());
-            Assert.AreEqual("2006/11/24", f.FormatCellValue(sheet.GetRow(2).GetCell(1)));
+            ClassicAssert.AreEqual("yyyy/mm/dd", sheet.GetRow(2).GetCell(0).StringCellValue);
+            ClassicAssert.AreEqual("yyyy/mm/dd", sheet.GetRow(2).GetCell(1).CellStyle.GetDataFormatString());
+            ClassicAssert.AreEqual("2006/11/24", f.FormatCellValue(sheet.GetRow(2).GetCell(1)));
 
-            Assert.AreEqual("yyyy-mm-dd", sheet.GetRow(3).GetCell(0).StringCellValue);
-            Assert.AreEqual("yyyy\\-mm\\-dd", sheet.GetRow(3).GetCell(1).CellStyle.GetDataFormatString());
-            Assert.AreEqual("2006-11-24", f.FormatCellValue(sheet.GetRow(3).GetCell(1)));
+            ClassicAssert.AreEqual("yyyy-mm-dd", sheet.GetRow(3).GetCell(0).StringCellValue);
+            ClassicAssert.AreEqual("yyyy\\-mm\\-dd", sheet.GetRow(3).GetCell(1).CellStyle.GetDataFormatString());
+            ClassicAssert.AreEqual("2006-11-24", f.FormatCellValue(sheet.GetRow(3).GetCell(1)));
 
-            Assert.AreEqual("yy/mm/dd", sheet.GetRow(4).GetCell(0).StringCellValue);
-            Assert.AreEqual("yy/mm/dd", sheet.GetRow(4).GetCell(1).CellStyle.GetDataFormatString());
-            Assert.AreEqual("06/11/24", f.FormatCellValue(sheet.GetRow(4).GetCell(1)));
-
-            // Another builtin fun one
-            Assert.AreEqual("dd/mm/yy", sheet.GetRow(5).GetCell(0).StringCellValue);
-            Assert.AreEqual("d/m/yy;@", sheet.GetRow(5).GetCell(1).CellStyle.GetDataFormatString());
-            Assert.AreEqual("24/11/06", f.FormatCellValue(sheet.GetRow(5).GetCell(1)));
-
-            Assert.AreEqual("dd-mm-yy", sheet.GetRow(6).GetCell(0).StringCellValue);
-            Assert.AreEqual("dd\\-mm\\-yy", sheet.GetRow(6).GetCell(1).CellStyle.GetDataFormatString());
-            Assert.AreEqual("24-11-06", f.FormatCellValue(sheet.GetRow(6).GetCell(1)));
-
+            ClassicAssert.AreEqual("yy/mm/dd", sheet.GetRow(4).GetCell(0).StringCellValue);
+            ClassicAssert.AreEqual("yy/mm/dd", sheet.GetRow(4).GetCell(1).CellStyle.GetDataFormatString());
+            ClassicAssert.AreEqual("06/11/24", f.FormatCellValue(sheet.GetRow(4).GetCell(1)));
 
             // Another builtin fun one
-            Assert.AreEqual("nn.nn", sheet.GetRow(9).GetCell(0).StringCellValue);
-            Assert.AreEqual("General", sheet.GetRow(9).GetCell(1).CellStyle.GetDataFormatString());
-            Assert.AreEqual("10.52", f.FormatCellValue(sheet.GetRow(9).GetCell(1)));
+            ClassicAssert.AreEqual("dd/mm/yy", sheet.GetRow(5).GetCell(0).StringCellValue);
+            ClassicAssert.AreEqual("d/m/yy;@", sheet.GetRow(5).GetCell(1).CellStyle.GetDataFormatString());
+            ClassicAssert.AreEqual("24/11/06", f.FormatCellValue(sheet.GetRow(5).GetCell(1)));
+
+            ClassicAssert.AreEqual("dd-mm-yy", sheet.GetRow(6).GetCell(0).StringCellValue);
+            ClassicAssert.AreEqual("dd\\-mm\\-yy", sheet.GetRow(6).GetCell(1).CellStyle.GetDataFormatString());
+            ClassicAssert.AreEqual("24-11-06", f.FormatCellValue(sheet.GetRow(6).GetCell(1)));
+
+
+            // Another builtin fun one
+            ClassicAssert.AreEqual("nn.nn", sheet.GetRow(9).GetCell(0).StringCellValue);
+            ClassicAssert.AreEqual("General", sheet.GetRow(9).GetCell(1).CellStyle.GetDataFormatString());
+            ClassicAssert.AreEqual("10.52", f.FormatCellValue(sheet.GetRow(9).GetCell(1)));
 
             // text isn't quite the format rule...
-            Assert.AreEqual("nn.nnn", sheet.GetRow(10).GetCell(0).StringCellValue);
-            Assert.AreEqual("0.000", sheet.GetRow(10).GetCell(1).CellStyle.GetDataFormatString());
-            Assert.AreEqual("10.520", f.FormatCellValue(sheet.GetRow(10).GetCell(1)));
+            ClassicAssert.AreEqual("nn.nnn", sheet.GetRow(10).GetCell(0).StringCellValue);
+            ClassicAssert.AreEqual("0.000", sheet.GetRow(10).GetCell(1).CellStyle.GetDataFormatString());
+            ClassicAssert.AreEqual("10.520", f.FormatCellValue(sheet.GetRow(10).GetCell(1)));
 
             // text isn't quite the format rule...
-            Assert.AreEqual("nn.n", sheet.GetRow(11).GetCell(0).StringCellValue);
-            Assert.AreEqual("0.0", sheet.GetRow(11).GetCell(1).CellStyle.GetDataFormatString());
-            Assert.AreEqual("10.5", f.FormatCellValue(sheet.GetRow(11).GetCell(1)));
+            ClassicAssert.AreEqual("nn.n", sheet.GetRow(11).GetCell(0).StringCellValue);
+            ClassicAssert.AreEqual("0.0", sheet.GetRow(11).GetCell(1).CellStyle.GetDataFormatString());
+            ClassicAssert.AreEqual("10.5", f.FormatCellValue(sheet.GetRow(11).GetCell(1)));
 
             // text isn't quite the format rule...
-            Assert.AreEqual("\u00a3nn.nn", sheet.GetRow(12).GetCell(0).StringCellValue);
-            Assert.AreEqual("\"\u00a3\"#,##0.00", sheet.GetRow(12).GetCell(1).CellStyle.GetDataFormatString());
-            Assert.AreEqual("\u00a310.52", f.FormatCellValue(sheet.GetRow(12).GetCell(1)));
+            ClassicAssert.AreEqual("\u00a3nn.nn", sheet.GetRow(12).GetCell(0).StringCellValue);
+            ClassicAssert.AreEqual("\"\u00a3\"#,##0.00", sheet.GetRow(12).GetCell(1).CellStyle.GetDataFormatString());
+            ClassicAssert.AreEqual("\u00a310.52", f.FormatCellValue(sheet.GetRow(12).GetCell(1)));
         }
 
         private static void log(String msg)

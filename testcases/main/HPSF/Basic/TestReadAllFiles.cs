@@ -23,7 +23,7 @@ namespace TestCases.HPSF.Basic
     using System.IO;
     using System.Text;
     using System.Collections;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HPSF;
     using NPOI.Util;
     using System.Collections.Generic;

@@ -18,7 +18,7 @@ namespace TestCases.POIFS.Crypt
 {
     using NPOI.POIFS.Crypt;
     using NPOI.POIFS.FileSystem;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using TestCases;
 
     [TestFixture]
@@ -32,15 +32,15 @@ namespace TestCases.POIFS.Crypt
 
             EncryptionInfo info = new EncryptionInfo(fs);
 
-            Assert.AreEqual(3, info.VersionMajor);
-            Assert.AreEqual(2, info.VersionMinor);
+            ClassicAssert.AreEqual(3, info.VersionMajor);
+            ClassicAssert.AreEqual(2, info.VersionMinor);
 
-            Assert.AreEqual(CipherAlgorithm.aes128, info.Header.CipherAlgorithm);
-            Assert.AreEqual(HashAlgorithm.sha1, info.Header.HashAlgorithm);
-            Assert.AreEqual(128, info.Header.KeySize);
-            Assert.AreEqual(32, info.Verifier.EncryptedVerifierHash.Length);
-            Assert.AreEqual(CipherProvider.aes, info.Header.CipherProvider);
-            Assert.AreEqual("Microsoft Enhanced RSA and AES Cryptographic Provider", info.Header.CspName);
+            ClassicAssert.AreEqual(CipherAlgorithm.aes128, info.Header.CipherAlgorithm);
+            ClassicAssert.AreEqual(HashAlgorithm.sha1, info.Header.HashAlgorithm);
+            ClassicAssert.AreEqual(128, info.Header.KeySize);
+            ClassicAssert.AreEqual(32, info.Verifier.EncryptedVerifierHash.Length);
+            ClassicAssert.AreEqual(CipherProvider.aes, info.Header.CipherProvider);
+            ClassicAssert.AreEqual("Microsoft Enhanced RSA and AES Cryptographic Provider", info.Header.CspName);
 
             fs.Close();
         }
@@ -52,15 +52,15 @@ namespace TestCases.POIFS.Crypt
 
             EncryptionInfo info = new EncryptionInfo(fs);
 
-            Assert.AreEqual(4, info.VersionMajor);
-            Assert.AreEqual(4, info.VersionMinor);
+            ClassicAssert.AreEqual(4, info.VersionMajor);
+            ClassicAssert.AreEqual(4, info.VersionMinor);
 
-            Assert.AreEqual(CipherAlgorithm.aes256, info.Header.CipherAlgorithm);
-            Assert.AreEqual(HashAlgorithm.sha512, info.Header.HashAlgorithm);
-            Assert.AreEqual(256, info.Header.KeySize);
-            Assert.AreEqual(64, info.Verifier.EncryptedVerifierHash.Length);
-            Assert.AreEqual(CipherProvider.aes, info.Header.CipherProvider);
-            //        Assert.AreEqual("Microsoft Enhanced RSA and AES Cryptographic Provider", info.Header.CspName);
+            ClassicAssert.AreEqual(CipherAlgorithm.aes256, info.Header.CipherAlgorithm);
+            ClassicAssert.AreEqual(HashAlgorithm.sha512, info.Header.HashAlgorithm);
+            ClassicAssert.AreEqual(256, info.Header.KeySize);
+            ClassicAssert.AreEqual(64, info.Verifier.EncryptedVerifierHash.Length);
+            ClassicAssert.AreEqual(CipherProvider.aes, info.Header.CipherProvider);
+            //        ClassicAssert.AreEqual("Microsoft Enhanced RSA and AES Cryptographic Provider", info.Header.CspName);
 
             fs.Close();
         }

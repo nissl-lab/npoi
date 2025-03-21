@@ -18,7 +18,7 @@
 namespace TestCases.SS.UserModel
 {
     using System;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
@@ -44,18 +44,18 @@ namespace TestCases.SS.UserModel
             // some pre-checks to hunt for a problem in the Maven build
             // these checks ensure that the correct locale is set, so a Assert.Failure here
             // usually indicates an invalid locale during test-execution
-            Assert.IsFalse(DateUtil.IsADateFormat(-1, "_-* #,##0.00_-;-* #,##0.00_-;_-* \"-\"??_-;_-@_-"));
+            ClassicAssert.IsFalse(DateUtil.IsADateFormat(-1, "_-* #,##0.00_-;-* #,##0.00_-;_-* \"-\"??_-;_-@_-"));
             //Locale ul = LocaleUtil.getUserLocale();
             //assertTrue(Locale.ROOT.equals(ul) || Locale.getDefault().equals(ul));
             String textValue = NumberToTextConverter.ToText(1234.56);
-            Assert.AreEqual(-1, textValue.IndexOf('E'));
+            ClassicAssert.AreEqual(-1, textValue.IndexOf('E'));
             Object cellValueO = 1234.56d;
             /*CellFormat cellFormat = new CellFormat("_-* #,##0.00_-;-* #,##0.00_-;_-* \"-\"??_-;_-@_-");
             CellFormatResult result = cellFormat.apply(cellValueO);
-            Assert.AreEqual("    1,234.56 ", result.text);*/
+            ClassicAssert.AreEqual("    1,234.56 ", result.text);*/
             CellFormat cfmt = CellFormat.GetInstance("_-* #,##0.00_-;-* #,##0.00_-;_-* \"-\"??_-;_-@_-");
             CellFormatResult result = cfmt.Apply(cellValueO);
-            Assert.AreEqual("    1,234.56 ", result.Text,
+            ClassicAssert.AreEqual("    1,234.56 ", result.Text,
                 "This Assert.Failure can indicate that the wrong locale is used during test-execution, ensure you run with english/US via -Duser.language=en -Duser.country=US");
         }
         /**
@@ -68,11 +68,11 @@ namespace TestCases.SS.UserModel
             DataFormatter dfUS = new DataFormatter(CultureInfo.GetCultureInfo("en-US"));
             DataFormatter dfFR = new DataFormatter(CultureInfo.GetCultureInfo("fr-FR"));
 
-            Assert.AreEqual("1234", dfUS.FormatRawCellContents(1234, -1, "@"));
-            Assert.AreEqual("1234", dfFR.FormatRawCellContents(1234, -1, "@"));
+            ClassicAssert.AreEqual("1234", dfUS.FormatRawCellContents(1234, -1, "@"));
+            ClassicAssert.AreEqual("1234", dfFR.FormatRawCellContents(1234, -1, "@"));
             
-            Assert.AreEqual("12.34", dfUS.FormatRawCellContents(12.34, -1, "@"));
-            Assert.AreEqual("12,34", dfFR.FormatRawCellContents(12.34, -1, "@"));
+            ClassicAssert.AreEqual("12.34", dfUS.FormatRawCellContents(12.34, -1, "@"));
+            ClassicAssert.AreEqual("12,34", dfFR.FormatRawCellContents(12.34, -1, "@"));
         }
         /**
          * At the moment, we don't decode the locale strings into
@@ -85,12 +85,12 @@ namespace TestCases.SS.UserModel
             DataFormatter dfUS = new DataFormatter(CultureInfo.GetCultureInfo("en-US"));
 
             // Standard formats
-            Assert.AreEqual("63", dfUS.FormatRawCellContents(63.0, -1, "[$-1010409]General"));
-            Assert.AreEqual("63", dfUS.FormatRawCellContents(63.0, -1, "[$-1010409]@"));
+            ClassicAssert.AreEqual("63", dfUS.FormatRawCellContents(63.0, -1, "[$-1010409]General"));
+            ClassicAssert.AreEqual("63", dfUS.FormatRawCellContents(63.0, -1, "[$-1010409]@"));
 
             // Regular numeric style formats
-            Assert.AreEqual("63", dfUS.FormatRawCellContents(63.0, -1, "[$-1010409]##"));
-            Assert.AreEqual("63", dfUS.FormatRawCellContents(63.0, -1, "[$-1010409]00"));
+            ClassicAssert.AreEqual("63", dfUS.FormatRawCellContents(63.0, -1, "[$-1010409]##"));
+            ClassicAssert.AreEqual("63", dfUS.FormatRawCellContents(63.0, -1, "[$-1010409]00"));
 
         }
         /**
@@ -103,13 +103,13 @@ namespace TestCases.SS.UserModel
             DataFormatter dfUS = new DataFormatter(CultureInfo.GetCultureInfo("en-US"));
             DataFormatter dfDE = new DataFormatter(CultureInfo.GetCultureInfo("de-DE"));
 
-            Assert.AreEqual("1,234.57", dfUS.FormatRawCellContents(1234.567, -1, "#,##0.00"));
-            Assert.AreEqual("1'234.57", dfUS.FormatRawCellContents(1234.567, -1, "#'##0.00"));
-            Assert.AreEqual("1 234.57", dfUS.FormatRawCellContents(1234.567, -1, "# ##0.00"));
+            ClassicAssert.AreEqual("1,234.57", dfUS.FormatRawCellContents(1234.567, -1, "#,##0.00"));
+            ClassicAssert.AreEqual("1'234.57", dfUS.FormatRawCellContents(1234.567, -1, "#'##0.00"));
+            ClassicAssert.AreEqual("1 234.57", dfUS.FormatRawCellContents(1234.567, -1, "# ##0.00"));
 
-            Assert.AreEqual("1.234,57", dfDE.FormatRawCellContents(1234.567, -1, "#,##0.00"));
-            Assert.AreEqual("1'234,57", dfDE.FormatRawCellContents(1234.567, -1, "#'##0.00"));
-            Assert.AreEqual("1 234,57", dfDE.FormatRawCellContents(1234.567, -1, "# ##0.00"));
+            ClassicAssert.AreEqual("1.234,57", dfDE.FormatRawCellContents(1234.567, -1, "#,##0.00"));
+            ClassicAssert.AreEqual("1'234,57", dfDE.FormatRawCellContents(1234.567, -1, "#'##0.00"));
+            ClassicAssert.AreEqual("1 234,57", dfDE.FormatRawCellContents(1234.567, -1, "# ##0.00"));
         }
 
         /**
@@ -130,12 +130,12 @@ namespace TestCases.SS.UserModel
        };
             foreach (String format in formats)
             {
-                Assert.AreEqual(
+                ClassicAssert.AreEqual(
                       "12.34",
                       dfUS.FormatRawCellContents(12.343, -1, format),
                       "Wrong format for: " + format
                 );
-                Assert.AreEqual(
+                ClassicAssert.AreEqual(
                       "-12.34",
                       dfUS.FormatRawCellContents(-12.343, -1, format),
                                             "Wrong format for: " + format
@@ -144,8 +144,8 @@ namespace TestCases.SS.UserModel
             }
 
             // Ensure that random square brackets remain
-            Assert.AreEqual("12.34[a]", dfUS.FormatRawCellContents(12.343, -1, "##.##[a]"));
-            Assert.AreEqual("[ab]12.34[x]", dfUS.FormatRawCellContents(12.343, -1, "[ab]##.##[x]"));
+            ClassicAssert.AreEqual("12.34[a]", dfUS.FormatRawCellContents(12.343, -1, "##.##[a]"));
+            ClassicAssert.AreEqual("[ab]12.34[x]", dfUS.FormatRawCellContents(12.343, -1, "[ab]##.##[x]"));
         }
         [Test]
         public void TestColoursAndBrackets()
@@ -159,13 +159,13 @@ namespace TestCases.SS.UserModel
        };
             foreach (String format in formats)
             {
-                Assert.AreEqual(
+                ClassicAssert.AreEqual(
                       
                       "12.34",
                       dfUS.FormatRawCellContents(12.343, -1, format),
                       "Wrong format for: " + format
                 );
-                Assert.AreEqual(
+                ClassicAssert.AreEqual(
                       
                       "(12.34)",
                       dfUS.FormatRawCellContents(-12.343, -1, format),
@@ -179,12 +179,12 @@ namespace TestCases.SS.UserModel
        };
             foreach (String format in formats)
             {
-                Assert.AreEqual(
+                ClassicAssert.AreEqual(
                       "$12.34",
                       dfUS.FormatRawCellContents(12.343, -1, format),
                       "Wrong format for: " + format
                 );
-                Assert.AreEqual(
+                ClassicAssert.AreEqual(
                       "($12.34)",
                       dfUS.FormatRawCellContents(-12.343, -1, format),
                       "Wrong format for: " + format
@@ -212,33 +212,33 @@ namespace TestCases.SS.UserModel
             String all2dpTSP = "00.00_x";
             String p2dp_n2dpTSP = "00.00_x;(00.00)_x";
 
-            Assert.AreEqual("12.34", dfUS.FormatRawCellContents(12.343, -1, all2dp));
-            Assert.AreEqual("12.34", dfUS.FormatRawCellContents(12.343, -1, p2dp_n1dp));
-            Assert.AreEqual("12.34", dfUS.FormatRawCellContents(12.343, -1, p2dp_n1dp_z0));
+            ClassicAssert.AreEqual("12.34", dfUS.FormatRawCellContents(12.343, -1, all2dp));
+            ClassicAssert.AreEqual("12.34", dfUS.FormatRawCellContents(12.343, -1, p2dp_n1dp));
+            ClassicAssert.AreEqual("12.34", dfUS.FormatRawCellContents(12.343, -1, p2dp_n1dp_z0));
 
-            Assert.AreEqual("(12.3)", dfUS.FormatRawCellContents(12.343, -1, alln1dp));
-            Assert.AreEqual("-(12.3)", dfUS.FormatRawCellContents(-12.343, -1, alln1dp));
-            Assert.AreEqual("12.3", dfUS.FormatRawCellContents(12.343, -1, p1dp_n1dp));
-            Assert.AreEqual("(12.3)", dfUS.FormatRawCellContents(-12.343, -1, p1dp_n1dp));
+            ClassicAssert.AreEqual("(12.3)", dfUS.FormatRawCellContents(12.343, -1, alln1dp));
+            ClassicAssert.AreEqual("-(12.3)", dfUS.FormatRawCellContents(-12.343, -1, alln1dp));
+            ClassicAssert.AreEqual("12.3", dfUS.FormatRawCellContents(12.343, -1, p1dp_n1dp));
+            ClassicAssert.AreEqual("(12.3)", dfUS.FormatRawCellContents(-12.343, -1, p1dp_n1dp));
 
-            Assert.AreEqual("-12.34", dfUS.FormatRawCellContents(-12.343, -1, all2dp));
+            ClassicAssert.AreEqual("-12.34", dfUS.FormatRawCellContents(-12.343, -1, all2dp));
             // TODO - fix case of negative subpattern differing from the
             //  positive one by more than just the prefix+suffix, which
             //  is all DecimalFormat supports...
-            //       Assert.AreEqual("(12.3)", dfUS.FormatRawCellContents(-12.343, -1, p2dp_n1dp));
-            //       Assert.AreEqual("(12.3)", dfUS.FormatRawCellContents(-12.343, -1, p2dp_n1dp_z0));
+            //       ClassicAssert.AreEqual("(12.3)", dfUS.FormatRawCellContents(-12.343, -1, p2dp_n1dp));
+            //       ClassicAssert.AreEqual("(12.3)", dfUS.FormatRawCellContents(-12.343, -1, p2dp_n1dp_z0));
 
-            Assert.AreEqual("00.00", dfUS.FormatRawCellContents(0, -1, all2dp));
-            Assert.AreEqual("00.00", dfUS.FormatRawCellContents(0, -1, p2dp_n1dp));
-            Assert.AreEqual("0", dfUS.FormatRawCellContents(0, -1, p2dp_n1dp_z0));
+            ClassicAssert.AreEqual("00.00", dfUS.FormatRawCellContents(0, -1, all2dp));
+            ClassicAssert.AreEqual("00.00", dfUS.FormatRawCellContents(0, -1, p2dp_n1dp));
+            ClassicAssert.AreEqual("0", dfUS.FormatRawCellContents(0, -1, p2dp_n1dp_z0));
 
             // Spaces are skipped
-            Assert.AreEqual("12.34", dfUS.FormatRawCellContents(12.343, -1, all2dpTSP));
-            Assert.AreEqual("12.34", dfUS.FormatRawCellContents(12.343, -1, p2dp_n2dpTSP));
-            Assert.AreEqual("(12.34)", dfUS.FormatRawCellContents(-12.343, -1, p2dp_n2dpTSP));
+            ClassicAssert.AreEqual("12.34", dfUS.FormatRawCellContents(12.343, -1, all2dpTSP));
+            ClassicAssert.AreEqual("12.34", dfUS.FormatRawCellContents(12.343, -1, p2dp_n2dpTSP));
+            ClassicAssert.AreEqual("(12.34)", dfUS.FormatRawCellContents(-12.343, -1, p2dp_n2dpTSP));
             //String p2dp_n1dpTSP = "00.00_x;(00.0)_x";
-            //       Assert.AreEqual("12.34", dfUS.FormatRawCellContents(12.343, -1, p2dp_n1dpTSP));
-            //       Assert.AreEqual("(12.3)", dfUS.FormatRawCellContents(-12.343, -1, p2dp_n1dpTSP));
+            //       ClassicAssert.AreEqual("12.34", dfUS.FormatRawCellContents(12.343, -1, p2dp_n1dpTSP));
+            //       ClassicAssert.AreEqual("(12.3)", dfUS.FormatRawCellContents(-12.343, -1, p2dp_n1dpTSP));
         }
 
         /**
@@ -251,64 +251,64 @@ namespace TestCases.SS.UserModel
             DataFormatter dfUS = new DataFormatter(CultureInfo.GetCultureInfo("en-US"));
 
             // Excel often prefers "# #/#"
-            Assert.AreEqual("321 1/3", dfUS.FormatRawCellContents(321.321, -1, "# #/#"));
-            Assert.AreEqual("321 26/81", dfUS.FormatRawCellContents(321.321, -1, "# #/##"));
-            Assert.AreEqual("26027/81", dfUS.FormatRawCellContents(321.321, -1, "#/##"));
+            ClassicAssert.AreEqual("321 1/3", dfUS.FormatRawCellContents(321.321, -1, "# #/#"));
+            ClassicAssert.AreEqual("321 26/81", dfUS.FormatRawCellContents(321.321, -1, "# #/##"));
+            ClassicAssert.AreEqual("26027/81", dfUS.FormatRawCellContents(321.321, -1, "#/##"));
 
             // OOo seems to like the "# ?/?" form
-            Assert.AreEqual("321 1/3", dfUS.FormatRawCellContents(321.321, -1, "# ?/?"));
-            Assert.AreEqual("321 26/81", dfUS.FormatRawCellContents(321.321, -1, "# ?/??"));
-            Assert.AreEqual("26027/81", dfUS.FormatRawCellContents(321.321, -1, "?/??"));
+            ClassicAssert.AreEqual("321 1/3", dfUS.FormatRawCellContents(321.321, -1, "# ?/?"));
+            ClassicAssert.AreEqual("321 26/81", dfUS.FormatRawCellContents(321.321, -1, "# ?/??"));
+            ClassicAssert.AreEqual("26027/81", dfUS.FormatRawCellContents(321.321, -1, "?/??"));
 
             // p;n;z;s parts
-            Assert.AreEqual("321 1/3", dfUS.FormatRawCellContents(321.321, -1, "# #/#;# ##/#;0;xxx"));
-            Assert.AreEqual("321 1/3", dfUS.FormatRawCellContents(-321.321, -1, "# #/#;# ##/#;0;xxx")); // Note the lack of - sign!
-            Assert.AreEqual("0", dfUS.FormatRawCellContents(0, -1, "# #/#;# ##/#;0;xxx"));
-            //     Assert.AreEqual(".",        dfUS.FormatRawCellContents(0,       -1, "# #/#;# ##/#;#.#;xxx")); // Currently shows as 0. not .
+            ClassicAssert.AreEqual("321 1/3", dfUS.FormatRawCellContents(321.321, -1, "# #/#;# ##/#;0;xxx"));
+            ClassicAssert.AreEqual("321 1/3", dfUS.FormatRawCellContents(-321.321, -1, "# #/#;# ##/#;0;xxx")); // Note the lack of - sign!
+            ClassicAssert.AreEqual("0", dfUS.FormatRawCellContents(0, -1, "# #/#;# ##/#;0;xxx"));
+            //     ClassicAssert.AreEqual(".",        dfUS.FormatRawCellContents(0,       -1, "# #/#;# ##/#;#.#;xxx")); // Currently shows as 0. not .
 
             // Custom formats with text are not currently supported
-            Assert.AreEqual("+ve", dfUS.FormatRawCellContents(1, -1, "+ve;-ve;zero;xxx"));
-            Assert.AreEqual("-ve", dfUS.FormatRawCellContents(-1, -1, "-ve;-ve;zero;xxx"));
-            Assert.AreEqual("zero", dfUS.FormatRawCellContents(0, -1, "zero;-ve;zero;xxx"));
+            ClassicAssert.AreEqual("+ve", dfUS.FormatRawCellContents(1, -1, "+ve;-ve;zero;xxx"));
+            ClassicAssert.AreEqual("-ve", dfUS.FormatRawCellContents(-1, -1, "-ve;-ve;zero;xxx"));
+            ClassicAssert.AreEqual("zero", dfUS.FormatRawCellContents(0, -1, "zero;-ve;zero;xxx"));
 
             // Custom formats - check text is stripped, including multiple spaces
-            Assert.AreEqual("321 1/3", dfUS.FormatRawCellContents(321.321, -1, "#   #/#"));
-            Assert.AreEqual("321 1/3", dfUS.FormatRawCellContents(321.321, -1, "#\"  \" #/#"));
-            Assert.AreEqual("321 1/3", dfUS.FormatRawCellContents(321.321, -1, "#\"FRED\" #/#"));
-            Assert.AreEqual("321 1/3", dfUS.FormatRawCellContents(321.321, -1, "#\\ #/#"));
-            Assert.AreEqual("321 1/3", dfUS.FormatRawCellContents(321.321, -1, "# \\q#/#"));
+            ClassicAssert.AreEqual("321 1/3", dfUS.FormatRawCellContents(321.321, -1, "#   #/#"));
+            ClassicAssert.AreEqual("321 1/3", dfUS.FormatRawCellContents(321.321, -1, "#\"  \" #/#"));
+            ClassicAssert.AreEqual("321 1/3", dfUS.FormatRawCellContents(321.321, -1, "#\"FRED\" #/#"));
+            ClassicAssert.AreEqual("321 1/3", dfUS.FormatRawCellContents(321.321, -1, "#\\ #/#"));
+            ClassicAssert.AreEqual("321 1/3", dfUS.FormatRawCellContents(321.321, -1, "# \\q#/#"));
 
             // Cases that were very slow
-            Assert.AreEqual("321 1/3", dfUS.FormatRawCellContents(321.321, -1, "0\" \"?/?;?/?")); // 0" "?/?;?/?     - length of -ve part was used
-            Assert.AreEqual("321 1/3", dfUS.FormatRawCellContents(321.321, -1, "0 \"#\"\\#\\#?/?")); // 0 "#"\#\#?/? - length of text was used
+            ClassicAssert.AreEqual("321 1/3", dfUS.FormatRawCellContents(321.321, -1, "0\" \"?/?;?/?")); // 0" "?/?;?/?     - length of -ve part was used
+            ClassicAssert.AreEqual("321 1/3", dfUS.FormatRawCellContents(321.321, -1, "0 \"#\"\\#\\#?/?")); // 0 "#"\#\#?/? - length of text was used
 
-            Assert.AreEqual("321 295/919", dfUS.FormatRawCellContents(321.321, -1, "# #/###"));
-            Assert.AreEqual("321 321/1000", dfUS.FormatRawCellContents(321.321, -1, "# #/####")); // Code limits to #### as that is as slow as we want to get
-            Assert.AreEqual("321 321/1000", dfUS.FormatRawCellContents(321.321, -1, "# #/##########"));
+            ClassicAssert.AreEqual("321 295/919", dfUS.FormatRawCellContents(321.321, -1, "# #/###"));
+            ClassicAssert.AreEqual("321 321/1000", dfUS.FormatRawCellContents(321.321, -1, "# #/####")); // Code limits to #### as that is as slow as we want to get
+            ClassicAssert.AreEqual("321 321/1000", dfUS.FormatRawCellContents(321.321, -1, "# #/##########"));
 
             // Not a valid fraction formats (too many #/# or ?/?) - hence the strange expected results
-            /*Assert.AreEqual("321 / ?/?", dfUS.FormatRawCellContents(321.321, -1, "# #/# ?/?"));
-            Assert.AreEqual("321 / /", dfUS.FormatRawCellContents(321.321, -1, "# #/# #/#"));
-            Assert.AreEqual("321 ?/? ?/?", dfUS.FormatRawCellContents(321.321, -1, "# ?/? ?/?"));
-            Assert.AreEqual("321 ?/? / /", dfUS.FormatRawCellContents(321.321, -1, "# ?/? #/# #/#"));
+            /*ClassicAssert.AreEqual("321 / ?/?", dfUS.FormatRawCellContents(321.321, -1, "# #/# ?/?"));
+            ClassicAssert.AreEqual("321 / /", dfUS.FormatRawCellContents(321.321, -1, "# #/# #/#"));
+            ClassicAssert.AreEqual("321 ?/? ?/?", dfUS.FormatRawCellContents(321.321, -1, "# ?/? ?/?"));
+            ClassicAssert.AreEqual("321 ?/? / /", dfUS.FormatRawCellContents(321.321, -1, "# ?/? #/# #/#"));
             */
 
             //Bug54686 patch sets default behavior of # #/## if there is a failure to parse
-            Assert.AreEqual("321 1/3", dfUS.FormatRawCellContents(321.321, -1, "# #/# ?/?"));
-            Assert.AreEqual("321 1/3", dfUS.FormatRawCellContents(321.321, -1, "# #/# #/#"));
-            Assert.AreEqual("321 1/3", dfUS.FormatRawCellContents(321.321, -1, "# ?/? ?/?"));
-            Assert.AreEqual("321 1/3", dfUS.FormatRawCellContents(321.321, -1, "# ?/? #/# #/#"));
+            ClassicAssert.AreEqual("321 1/3", dfUS.FormatRawCellContents(321.321, -1, "# #/# ?/?"));
+            ClassicAssert.AreEqual("321 1/3", dfUS.FormatRawCellContents(321.321, -1, "# #/# #/#"));
+            ClassicAssert.AreEqual("321 1/3", dfUS.FormatRawCellContents(321.321, -1, "# ?/? ?/?"));
+            ClassicAssert.AreEqual("321 1/3", dfUS.FormatRawCellContents(321.321, -1, "# ?/? #/# #/#"));
 
             // Where +ve has a fraction, but -ve doesnt, we currently show both
-            Assert.AreEqual("123 1/3", dfUS.FormatRawCellContents(123.321, -1, "0 ?/?;0"));
-            //Assert.AreEqual("123", dfUS.FormatRawCellContents(-123.321, -1, "0 ?/?;0"));
+            ClassicAssert.AreEqual("123 1/3", dfUS.FormatRawCellContents(123.321, -1, "0 ?/?;0"));
+            //ClassicAssert.AreEqual("123", dfUS.FormatRawCellContents(-123.321, -1, "0 ?/?;0"));
 
             //Bug54868 patch has a hit on the first string before the ";"
-            Assert.AreEqual("-123 1/3", dfUS.FormatRawCellContents(-123.321, -1, "0 ?/?;0"));
+            ClassicAssert.AreEqual("-123 1/3", dfUS.FormatRawCellContents(-123.321, -1, "0 ?/?;0"));
 
             //Bug53150 formatting a whole number with fractions should just give the number
-            Assert.AreEqual("1", dfUS.FormatRawCellContents(1.0, -1, "# #/#"));
-            Assert.AreEqual("11", dfUS.FormatRawCellContents(11.0, -1, "# #/#"));
+            ClassicAssert.AreEqual("1", dfUS.FormatRawCellContents(1.0, -1, "# #/#"));
+            ClassicAssert.AreEqual("11", dfUS.FormatRawCellContents(11.0, -1, "# #/#"));
         }
 
         /**
@@ -321,15 +321,15 @@ namespace TestCases.SS.UserModel
         {
             //DataFormatter dfUS = new DataFormatter(Locale.US);
             DataFormatter dfUS = new DataFormatter(CultureInfo.GetCultureInfo("en-US"));
-            Assert.AreEqual("12.34", dfUS.FormatRawCellContents(12.343, -1, "##.##_ "));
-            Assert.AreEqual("12.34", dfUS.FormatRawCellContents(12.343, -1, "##.##_1"));
-            Assert.AreEqual("12.34", dfUS.FormatRawCellContents(12.343, -1, "##.##_)"));
-            Assert.AreEqual("12.34", dfUS.FormatRawCellContents(12.343, -1, "_-##.##"));
+            ClassicAssert.AreEqual("12.34", dfUS.FormatRawCellContents(12.343, -1, "##.##_ "));
+            ClassicAssert.AreEqual("12.34", dfUS.FormatRawCellContents(12.343, -1, "##.##_1"));
+            ClassicAssert.AreEqual("12.34", dfUS.FormatRawCellContents(12.343, -1, "##.##_)"));
+            ClassicAssert.AreEqual("12.34", dfUS.FormatRawCellContents(12.343, -1, "_-##.##"));
 
-            Assert.AreEqual("12.34", dfUS.FormatRawCellContents(12.343, -1, "##.##* "));
-            Assert.AreEqual("12.34", dfUS.FormatRawCellContents(12.343, -1, "##.##*1"));
-            Assert.AreEqual("12.34", dfUS.FormatRawCellContents(12.343, -1, "##.##*)"));
-            Assert.AreEqual("12.34", dfUS.FormatRawCellContents(12.343, -1, "*-##.##"));
+            ClassicAssert.AreEqual("12.34", dfUS.FormatRawCellContents(12.343, -1, "##.##* "));
+            ClassicAssert.AreEqual("12.34", dfUS.FormatRawCellContents(12.343, -1, "##.##*1"));
+            ClassicAssert.AreEqual("12.34", dfUS.FormatRawCellContents(12.343, -1, "##.##*)"));
+            ClassicAssert.AreEqual("12.34", dfUS.FormatRawCellContents(12.343, -1, "*-##.##"));
         }
 
         /**
@@ -340,31 +340,31 @@ namespace TestCases.SS.UserModel
         {
             //DataFormatter dfUS = new DataFormatter(Locale.US);
             DataFormatter dfUS = new DataFormatter(CultureInfo.GetCultureInfo("en-US"), true);
-            Assert.AreEqual("12.34 ", dfUS.FormatRawCellContents(12.343, -1, "##.##_ "));
-            Assert.AreEqual("-12.34 ", dfUS.FormatRawCellContents(-12.343, -1, "##.##_ "));
-            Assert.AreEqual(". ", dfUS.FormatRawCellContents(0.0, -1, "##.##_ "));
-            Assert.AreEqual("12.34 ", dfUS.FormatRawCellContents(12.343, -1, "##.##_1"));
-            Assert.AreEqual("-12.34 ", dfUS.FormatRawCellContents(-12.343, -1, "##.##_1"));
-            Assert.AreEqual(". ", dfUS.FormatRawCellContents(0.0, -1, "##.##_1"));
-            Assert.AreEqual("12.34 ", dfUS.FormatRawCellContents(12.343, -1, "##.##_)"));
-            Assert.AreEqual("-12.34 ", dfUS.FormatRawCellContents(-12.343, -1, "##.##_)"));
-            Assert.AreEqual(". ", dfUS.FormatRawCellContents(0.0, -1, "##.##_)"));
-            Assert.AreEqual(" 12.34", dfUS.FormatRawCellContents(12.343, -1, "_-##.##"));
-            Assert.AreEqual("- 12.34", dfUS.FormatRawCellContents(-12.343, -1, "_-##.##"));
-            Assert.AreEqual(" .", dfUS.FormatRawCellContents(0.0, -1, "_-##.##"));
+            ClassicAssert.AreEqual("12.34 ", dfUS.FormatRawCellContents(12.343, -1, "##.##_ "));
+            ClassicAssert.AreEqual("-12.34 ", dfUS.FormatRawCellContents(-12.343, -1, "##.##_ "));
+            ClassicAssert.AreEqual(". ", dfUS.FormatRawCellContents(0.0, -1, "##.##_ "));
+            ClassicAssert.AreEqual("12.34 ", dfUS.FormatRawCellContents(12.343, -1, "##.##_1"));
+            ClassicAssert.AreEqual("-12.34 ", dfUS.FormatRawCellContents(-12.343, -1, "##.##_1"));
+            ClassicAssert.AreEqual(". ", dfUS.FormatRawCellContents(0.0, -1, "##.##_1"));
+            ClassicAssert.AreEqual("12.34 ", dfUS.FormatRawCellContents(12.343, -1, "##.##_)"));
+            ClassicAssert.AreEqual("-12.34 ", dfUS.FormatRawCellContents(-12.343, -1, "##.##_)"));
+            ClassicAssert.AreEqual(". ", dfUS.FormatRawCellContents(0.0, -1, "##.##_)"));
+            ClassicAssert.AreEqual(" 12.34", dfUS.FormatRawCellContents(12.343, -1, "_-##.##"));
+            ClassicAssert.AreEqual("- 12.34", dfUS.FormatRawCellContents(-12.343, -1, "_-##.##"));
+            ClassicAssert.AreEqual(" .", dfUS.FormatRawCellContents(0.0, -1, "_-##.##"));
 
-            Assert.AreEqual("12.34", dfUS.FormatRawCellContents(12.343, -1, "##.##* "));
-            Assert.AreEqual("-12.34", dfUS.FormatRawCellContents(-12.343, -1, "##.##* "));
-            Assert.AreEqual(".", dfUS.FormatRawCellContents(0.0, -1, "##.##* "));
-            Assert.AreEqual("12.34", dfUS.FormatRawCellContents(12.343, -1, "##.##*1"));
-            Assert.AreEqual("-12.34", dfUS.FormatRawCellContents(-12.343, -1, "##.##*1"));
-            Assert.AreEqual(".", dfUS.FormatRawCellContents(0.0, -1, "##.##*1"));
-            Assert.AreEqual("12.34", dfUS.FormatRawCellContents(12.343, -1, "##.##*)"));
-            Assert.AreEqual("-12.34", dfUS.FormatRawCellContents(-12.343, -1, "##.##*)"));
-            Assert.AreEqual(".", dfUS.FormatRawCellContents(0.0, -1, "##.##*)"));
-            Assert.AreEqual("12.34", dfUS.FormatRawCellContents(12.343, -1, "*-##.##"));
-            Assert.AreEqual("-12.34", dfUS.FormatRawCellContents(-12.343, -1, "*-##.##"));
-            Assert.AreEqual(".", dfUS.FormatRawCellContents(0.0, -1, "*-##.##"));
+            ClassicAssert.AreEqual("12.34", dfUS.FormatRawCellContents(12.343, -1, "##.##* "));
+            ClassicAssert.AreEqual("-12.34", dfUS.FormatRawCellContents(-12.343, -1, "##.##* "));
+            ClassicAssert.AreEqual(".", dfUS.FormatRawCellContents(0.0, -1, "##.##* "));
+            ClassicAssert.AreEqual("12.34", dfUS.FormatRawCellContents(12.343, -1, "##.##*1"));
+            ClassicAssert.AreEqual("-12.34", dfUS.FormatRawCellContents(-12.343, -1, "##.##*1"));
+            ClassicAssert.AreEqual(".", dfUS.FormatRawCellContents(0.0, -1, "##.##*1"));
+            ClassicAssert.AreEqual("12.34", dfUS.FormatRawCellContents(12.343, -1, "##.##*)"));
+            ClassicAssert.AreEqual("-12.34", dfUS.FormatRawCellContents(-12.343, -1, "##.##*)"));
+            ClassicAssert.AreEqual(".", dfUS.FormatRawCellContents(0.0, -1, "##.##*)"));
+            ClassicAssert.AreEqual("12.34", dfUS.FormatRawCellContents(12.343, -1, "*-##.##"));
+            ClassicAssert.AreEqual("-12.34", dfUS.FormatRawCellContents(-12.343, -1, "*-##.##"));
+            ClassicAssert.AreEqual(".", dfUS.FormatRawCellContents(0.0, -1, "*-##.##"));
         }
 
         /**
@@ -379,7 +379,7 @@ namespace TestCases.SS.UserModel
 
             DateTime c = new DateTime(2010, 6, 1, 2, 0, 0, 0);
             System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
-            Assert.AreEqual("2010-J-1 2:00:00", dfUS.FormatRawCellContents(
+            ClassicAssert.AreEqual("2010-J-1 2:00:00", dfUS.FormatRawCellContents(
                   DateUtil.GetExcelDate(c, false), -1, "YYYY-MMMMM-D h:mm:ss"
             ));
         }
@@ -391,14 +391,14 @@ namespace TestCases.SS.UserModel
         {
             DataFormatter dfUS = new DataFormatter(CultureInfo.GetCultureInfo("en-US"));
 
-            Assert.AreEqual("06:00", dfUS.FormatRawCellContents(0.25, -1, "hh:mm"));
-            Assert.AreEqual("18:00", dfUS.FormatRawCellContents(0.75, -1, "hh:mm"));
+            ClassicAssert.AreEqual("06:00", dfUS.FormatRawCellContents(0.25, -1, "hh:mm"));
+            ClassicAssert.AreEqual("18:00", dfUS.FormatRawCellContents(0.75, -1, "hh:mm"));
 
-            Assert.AreEqual("06:00 AM", dfUS.FormatRawCellContents(0.25, -1, "hh:mm AM/PM"));
-            Assert.AreEqual("06:00 PM", dfUS.FormatRawCellContents(0.75, -1, "hh:mm AM/PM"));
+            ClassicAssert.AreEqual("06:00 AM", dfUS.FormatRawCellContents(0.25, -1, "hh:mm AM/PM"));
+            ClassicAssert.AreEqual("06:00 PM", dfUS.FormatRawCellContents(0.75, -1, "hh:mm AM/PM"));
 
-            Assert.AreEqual("1904-01-01 06:00:00 AM", dfUS.FormatRawCellContents(0.25, -1, "yyyy-mm-dd hh:mm:ss AM/PM", true));
-            Assert.AreEqual("1904-01-01 06:00:00 PM", dfUS.FormatRawCellContents(0.75, -1, "yyyy-mm-dd hh:mm:ss AM/PM", true));
+            ClassicAssert.AreEqual("1904-01-01 06:00:00 AM", dfUS.FormatRawCellContents(0.25, -1, "yyyy-mm-dd hh:mm:ss AM/PM", true));
+            ClassicAssert.AreEqual("1904-01-01 06:00:00 PM", dfUS.FormatRawCellContents(0.75, -1, "yyyy-mm-dd hh:mm:ss AM/PM", true));
         }
         /**
          * Test that we can handle elapsed time,
@@ -411,80 +411,80 @@ namespace TestCases.SS.UserModel
             DataFormatter dfUS = new DataFormatter(CultureInfo.GetCultureInfo("en-US"));
             double hour = 1.0 / 24.0;
 
-            Assert.AreEqual("01:00", dfUS.FormatRawCellContents(1 * hour, -1, "hh:mm"));
-            Assert.AreEqual("05:00", dfUS.FormatRawCellContents(5 * hour, -1, "hh:mm"));
-            Assert.AreEqual("20:00", dfUS.FormatRawCellContents(20 * hour, -1, "hh:mm"));
-            Assert.AreEqual("23:00", dfUS.FormatRawCellContents(23 * hour, -1, "hh:mm"));
-            Assert.AreEqual("00:00", dfUS.FormatRawCellContents(24 * hour, -1, "hh:mm"));
-            Assert.AreEqual("02:00", dfUS.FormatRawCellContents(26 * hour, -1, "hh:mm"));
-            Assert.AreEqual("20:00", dfUS.FormatRawCellContents(44 * hour, -1, "hh:mm"));
-            Assert.AreEqual("02:00", dfUS.FormatRawCellContents(50 * hour, -1, "hh:mm"));
+            ClassicAssert.AreEqual("01:00", dfUS.FormatRawCellContents(1 * hour, -1, "hh:mm"));
+            ClassicAssert.AreEqual("05:00", dfUS.FormatRawCellContents(5 * hour, -1, "hh:mm"));
+            ClassicAssert.AreEqual("20:00", dfUS.FormatRawCellContents(20 * hour, -1, "hh:mm"));
+            ClassicAssert.AreEqual("23:00", dfUS.FormatRawCellContents(23 * hour, -1, "hh:mm"));
+            ClassicAssert.AreEqual("00:00", dfUS.FormatRawCellContents(24 * hour, -1, "hh:mm"));
+            ClassicAssert.AreEqual("02:00", dfUS.FormatRawCellContents(26 * hour, -1, "hh:mm"));
+            ClassicAssert.AreEqual("20:00", dfUS.FormatRawCellContents(44 * hour, -1, "hh:mm"));
+            ClassicAssert.AreEqual("02:00", dfUS.FormatRawCellContents(50 * hour, -1, "hh:mm"));
 
-            Assert.AreEqual("01:00", dfUS.FormatRawCellContents(1 * hour, -1, "[hh]:mm"));
-            Assert.AreEqual("05:00", dfUS.FormatRawCellContents(5 * hour, -1, "[hh]:mm"));
-            Assert.AreEqual("20:00", dfUS.FormatRawCellContents(20 * hour, -1, "[hh]:mm"));
-            Assert.AreEqual("23:00", dfUS.FormatRawCellContents(23 * hour, -1, "[hh]:mm"));
-            Assert.AreEqual("24:00", dfUS.FormatRawCellContents(24 * hour, -1, "[hh]:mm"));
-            Assert.AreEqual("26:00", dfUS.FormatRawCellContents(26 * hour, -1, "[hh]:mm"));
-            Assert.AreEqual("44:00", dfUS.FormatRawCellContents(44 * hour, -1, "[hh]:mm"));
-            Assert.AreEqual("50:00", dfUS.FormatRawCellContents(50 * hour, -1, "[hh]:mm"));
+            ClassicAssert.AreEqual("01:00", dfUS.FormatRawCellContents(1 * hour, -1, "[hh]:mm"));
+            ClassicAssert.AreEqual("05:00", dfUS.FormatRawCellContents(5 * hour, -1, "[hh]:mm"));
+            ClassicAssert.AreEqual("20:00", dfUS.FormatRawCellContents(20 * hour, -1, "[hh]:mm"));
+            ClassicAssert.AreEqual("23:00", dfUS.FormatRawCellContents(23 * hour, -1, "[hh]:mm"));
+            ClassicAssert.AreEqual("24:00", dfUS.FormatRawCellContents(24 * hour, -1, "[hh]:mm"));
+            ClassicAssert.AreEqual("26:00", dfUS.FormatRawCellContents(26 * hour, -1, "[hh]:mm"));
+            ClassicAssert.AreEqual("44:00", dfUS.FormatRawCellContents(44 * hour, -1, "[hh]:mm"));
+            ClassicAssert.AreEqual("50:00", dfUS.FormatRawCellContents(50 * hour, -1, "[hh]:mm"));
 
-            Assert.AreEqual("01", dfUS.FormatRawCellContents(1 * hour, -1, "[hh]"));
-            Assert.AreEqual("05", dfUS.FormatRawCellContents(5 * hour, -1, "[hh]"));
-            Assert.AreEqual("20", dfUS.FormatRawCellContents(20 * hour, -1, "[hh]"));
-            Assert.AreEqual("23", dfUS.FormatRawCellContents(23 * hour, -1, "[hh]"));
-            Assert.AreEqual("24", dfUS.FormatRawCellContents(24 * hour, -1, "[hh]"));
-            Assert.AreEqual("26", dfUS.FormatRawCellContents(26 * hour, -1, "[hh]"));
-            Assert.AreEqual("44", dfUS.FormatRawCellContents(44 * hour, -1, "[hh]"));
-            Assert.AreEqual("50", dfUS.FormatRawCellContents(50 * hour, -1, "[hh]"));
+            ClassicAssert.AreEqual("01", dfUS.FormatRawCellContents(1 * hour, -1, "[hh]"));
+            ClassicAssert.AreEqual("05", dfUS.FormatRawCellContents(5 * hour, -1, "[hh]"));
+            ClassicAssert.AreEqual("20", dfUS.FormatRawCellContents(20 * hour, -1, "[hh]"));
+            ClassicAssert.AreEqual("23", dfUS.FormatRawCellContents(23 * hour, -1, "[hh]"));
+            ClassicAssert.AreEqual("24", dfUS.FormatRawCellContents(24 * hour, -1, "[hh]"));
+            ClassicAssert.AreEqual("26", dfUS.FormatRawCellContents(26 * hour, -1, "[hh]"));
+            ClassicAssert.AreEqual("44", dfUS.FormatRawCellContents(44 * hour, -1, "[hh]"));
+            ClassicAssert.AreEqual("50", dfUS.FormatRawCellContents(50 * hour, -1, "[hh]"));
 
             double minute = 1.0 / 24.0 / 60.0;
-            Assert.AreEqual("01:00", dfUS.FormatRawCellContents(1 * minute, -1, "[mm]:ss"));
-            Assert.AreEqual("05:00", dfUS.FormatRawCellContents(5 * minute, -1, "[mm]:ss"));
-            Assert.AreEqual("20:00", dfUS.FormatRawCellContents(20 * minute, -1, "[mm]:ss"));
-            Assert.AreEqual("23:00", dfUS.FormatRawCellContents(23 * minute, -1, "[mm]:ss"));
-            Assert.AreEqual("24:00", dfUS.FormatRawCellContents(24 * minute, -1, "[mm]:ss"));
-            Assert.AreEqual("26:00", dfUS.FormatRawCellContents(26 * minute, -1, "[mm]:ss"));
-            Assert.AreEqual("44:00", dfUS.FormatRawCellContents(44 * minute, -1, "[mm]:ss"));
-            Assert.AreEqual("50:00", dfUS.FormatRawCellContents(50 * minute, -1, "[mm]:ss"));
-            Assert.AreEqual("59:00", dfUS.FormatRawCellContents(59 * minute, -1, "[mm]:ss"));
-            Assert.AreEqual("60:00", dfUS.FormatRawCellContents(60 * minute, -1, "[mm]:ss"));
-            Assert.AreEqual("61:00", dfUS.FormatRawCellContents(61 * minute, -1, "[mm]:ss"));
-            Assert.AreEqual("119:00", dfUS.FormatRawCellContents(119 * minute, -1, "[mm]:ss"));
-            Assert.AreEqual("120:00", dfUS.FormatRawCellContents(120 * minute, -1, "[mm]:ss"));
-            Assert.AreEqual("121:00", dfUS.FormatRawCellContents(121 * minute, -1, "[mm]:ss"));
+            ClassicAssert.AreEqual("01:00", dfUS.FormatRawCellContents(1 * minute, -1, "[mm]:ss"));
+            ClassicAssert.AreEqual("05:00", dfUS.FormatRawCellContents(5 * minute, -1, "[mm]:ss"));
+            ClassicAssert.AreEqual("20:00", dfUS.FormatRawCellContents(20 * minute, -1, "[mm]:ss"));
+            ClassicAssert.AreEqual("23:00", dfUS.FormatRawCellContents(23 * minute, -1, "[mm]:ss"));
+            ClassicAssert.AreEqual("24:00", dfUS.FormatRawCellContents(24 * minute, -1, "[mm]:ss"));
+            ClassicAssert.AreEqual("26:00", dfUS.FormatRawCellContents(26 * minute, -1, "[mm]:ss"));
+            ClassicAssert.AreEqual("44:00", dfUS.FormatRawCellContents(44 * minute, -1, "[mm]:ss"));
+            ClassicAssert.AreEqual("50:00", dfUS.FormatRawCellContents(50 * minute, -1, "[mm]:ss"));
+            ClassicAssert.AreEqual("59:00", dfUS.FormatRawCellContents(59 * minute, -1, "[mm]:ss"));
+            ClassicAssert.AreEqual("60:00", dfUS.FormatRawCellContents(60 * minute, -1, "[mm]:ss"));
+            ClassicAssert.AreEqual("61:00", dfUS.FormatRawCellContents(61 * minute, -1, "[mm]:ss"));
+            ClassicAssert.AreEqual("119:00", dfUS.FormatRawCellContents(119 * minute, -1, "[mm]:ss"));
+            ClassicAssert.AreEqual("120:00", dfUS.FormatRawCellContents(120 * minute, -1, "[mm]:ss"));
+            ClassicAssert.AreEqual("121:00", dfUS.FormatRawCellContents(121 * minute, -1, "[mm]:ss"));
 
-            Assert.AreEqual("01", dfUS.FormatRawCellContents(1 * minute, -1, "[mm]"));
-            Assert.AreEqual("05", dfUS.FormatRawCellContents(5 * minute, -1, "[mm]"));
-            Assert.AreEqual("20", dfUS.FormatRawCellContents(20 * minute, -1, "[mm]"));
-            Assert.AreEqual("23", dfUS.FormatRawCellContents(23 * minute, -1, "[mm]"));
-            Assert.AreEqual("24", dfUS.FormatRawCellContents(24 * minute, -1, "[mm]"));
-            Assert.AreEqual("26", dfUS.FormatRawCellContents(26 * minute, -1, "[mm]"));
-            Assert.AreEqual("44", dfUS.FormatRawCellContents(44 * minute, -1, "[mm]"));
-            Assert.AreEqual("50", dfUS.FormatRawCellContents(50 * minute, -1, "[mm]"));
-            Assert.AreEqual("59", dfUS.FormatRawCellContents(59 * minute, -1, "[mm]"));
-            Assert.AreEqual("60", dfUS.FormatRawCellContents(60 * minute, -1, "[mm]"));
-            Assert.AreEqual("61", dfUS.FormatRawCellContents(61 * minute, -1, "[mm]"));
-            Assert.AreEqual("119", dfUS.FormatRawCellContents(119 * minute, -1, "[mm]"));
-            Assert.AreEqual("120", dfUS.FormatRawCellContents(120 * minute, -1, "[mm]"));
-            Assert.AreEqual("121", dfUS.FormatRawCellContents(121 * minute, -1, "[mm]"));
+            ClassicAssert.AreEqual("01", dfUS.FormatRawCellContents(1 * minute, -1, "[mm]"));
+            ClassicAssert.AreEqual("05", dfUS.FormatRawCellContents(5 * minute, -1, "[mm]"));
+            ClassicAssert.AreEqual("20", dfUS.FormatRawCellContents(20 * minute, -1, "[mm]"));
+            ClassicAssert.AreEqual("23", dfUS.FormatRawCellContents(23 * minute, -1, "[mm]"));
+            ClassicAssert.AreEqual("24", dfUS.FormatRawCellContents(24 * minute, -1, "[mm]"));
+            ClassicAssert.AreEqual("26", dfUS.FormatRawCellContents(26 * minute, -1, "[mm]"));
+            ClassicAssert.AreEqual("44", dfUS.FormatRawCellContents(44 * minute, -1, "[mm]"));
+            ClassicAssert.AreEqual("50", dfUS.FormatRawCellContents(50 * minute, -1, "[mm]"));
+            ClassicAssert.AreEqual("59", dfUS.FormatRawCellContents(59 * minute, -1, "[mm]"));
+            ClassicAssert.AreEqual("60", dfUS.FormatRawCellContents(60 * minute, -1, "[mm]"));
+            ClassicAssert.AreEqual("61", dfUS.FormatRawCellContents(61 * minute, -1, "[mm]"));
+            ClassicAssert.AreEqual("119", dfUS.FormatRawCellContents(119 * minute, -1, "[mm]"));
+            ClassicAssert.AreEqual("120", dfUS.FormatRawCellContents(120 * minute, -1, "[mm]"));
+            ClassicAssert.AreEqual("121", dfUS.FormatRawCellContents(121 * minute, -1, "[mm]"));
 
             double second = 1.0 / 24.0 / 60.0 / 60.0;
-            Assert.AreEqual("86400", dfUS.FormatRawCellContents(86400 * second, -1, "[ss]"));
-            Assert.AreEqual("01", dfUS.FormatRawCellContents(1 * second, -1, "[ss]"));
-            Assert.AreEqual("05", dfUS.FormatRawCellContents(5 * second, -1, "[ss]"));
-            Assert.AreEqual("20", dfUS.FormatRawCellContents(20 * second, -1, "[ss]"));
-            Assert.AreEqual("23", dfUS.FormatRawCellContents(23 * second, -1, "[ss]"));
-            Assert.AreEqual("24", dfUS.FormatRawCellContents(24 * second, -1, "[ss]"));
-            Assert.AreEqual("26", dfUS.FormatRawCellContents(26 * second, -1, "[ss]"));
-            Assert.AreEqual("44", dfUS.FormatRawCellContents(44 * second, -1, "[ss]"));
-            Assert.AreEqual("50", dfUS.FormatRawCellContents(50 * second, -1, "[ss]"));
-            Assert.AreEqual("59", dfUS.FormatRawCellContents(59 * second, -1, "[ss]"));
-            Assert.AreEqual("60", dfUS.FormatRawCellContents(60 * second, -1, "[ss]"));
-            Assert.AreEqual("61", dfUS.FormatRawCellContents(61 * second, -1, "[ss]"));
-            Assert.AreEqual("119", dfUS.FormatRawCellContents(119 * second, -1, "[ss]"));
-            Assert.AreEqual("120", dfUS.FormatRawCellContents(120 * second, -1, "[ss]"));
-            Assert.AreEqual("121", dfUS.FormatRawCellContents(121 * second, -1, "[ss]"));
+            ClassicAssert.AreEqual("86400", dfUS.FormatRawCellContents(86400 * second, -1, "[ss]"));
+            ClassicAssert.AreEqual("01", dfUS.FormatRawCellContents(1 * second, -1, "[ss]"));
+            ClassicAssert.AreEqual("05", dfUS.FormatRawCellContents(5 * second, -1, "[ss]"));
+            ClassicAssert.AreEqual("20", dfUS.FormatRawCellContents(20 * second, -1, "[ss]"));
+            ClassicAssert.AreEqual("23", dfUS.FormatRawCellContents(23 * second, -1, "[ss]"));
+            ClassicAssert.AreEqual("24", dfUS.FormatRawCellContents(24 * second, -1, "[ss]"));
+            ClassicAssert.AreEqual("26", dfUS.FormatRawCellContents(26 * second, -1, "[ss]"));
+            ClassicAssert.AreEqual("44", dfUS.FormatRawCellContents(44 * second, -1, "[ss]"));
+            ClassicAssert.AreEqual("50", dfUS.FormatRawCellContents(50 * second, -1, "[ss]"));
+            ClassicAssert.AreEqual("59", dfUS.FormatRawCellContents(59 * second, -1, "[ss]"));
+            ClassicAssert.AreEqual("60", dfUS.FormatRawCellContents(60 * second, -1, "[ss]"));
+            ClassicAssert.AreEqual("61", dfUS.FormatRawCellContents(61 * second, -1, "[ss]"));
+            ClassicAssert.AreEqual("119", dfUS.FormatRawCellContents(119 * second, -1, "[ss]"));
+            ClassicAssert.AreEqual("120", dfUS.FormatRawCellContents(120 * second, -1, "[ss]"));
+            ClassicAssert.AreEqual("121", dfUS.FormatRawCellContents(121 * second, -1, "[ss]"));
 
             //boolean jdk_1_5 = System.getProperty("java.vm.version").startsWith("1.5");
             //if(!jdk_1_5) {
@@ -493,21 +493,21 @@ namespace TestCases.SS.UserModel
            // It is not so JDK 1.5 where the default rounding mode is HALV_EVEN and cannot be changed.
 
 
-            Assert.AreEqual("27:18:08", dfUS.FormatRawCellContents(1.1376, -1, "[h]:mm:ss"));
-            Assert.AreEqual("28:48:00", dfUS.FormatRawCellContents(1.2, -1, "[h]:mm:ss"));
-            Assert.AreEqual("29:31:12", dfUS.FormatRawCellContents(1.23, -1, "[h]:mm:ss"));
-            Assert.AreEqual("31:26:24", dfUS.FormatRawCellContents(1.31, -1, "[h]:mm:ss"));
+            ClassicAssert.AreEqual("27:18:08", dfUS.FormatRawCellContents(1.1376, -1, "[h]:mm:ss"));
+            ClassicAssert.AreEqual("28:48:00", dfUS.FormatRawCellContents(1.2, -1, "[h]:mm:ss"));
+            ClassicAssert.AreEqual("29:31:12", dfUS.FormatRawCellContents(1.23, -1, "[h]:mm:ss"));
+            ClassicAssert.AreEqual("31:26:24", dfUS.FormatRawCellContents(1.31, -1, "[h]:mm:ss"));
 
-            Assert.AreEqual("27:18:08", dfUS.FormatRawCellContents(1.1376, -1, "[hh]:mm:ss"));
-            Assert.AreEqual("28:48:00", dfUS.FormatRawCellContents(1.2, -1, "[hh]:mm:ss"));
-            Assert.AreEqual("29:31:12", dfUS.FormatRawCellContents(1.23, -1, "[hh]:mm:ss"));
-            Assert.AreEqual("31:26:24", dfUS.FormatRawCellContents(1.31, -1, "[hh]:mm:ss"));
+            ClassicAssert.AreEqual("27:18:08", dfUS.FormatRawCellContents(1.1376, -1, "[hh]:mm:ss"));
+            ClassicAssert.AreEqual("28:48:00", dfUS.FormatRawCellContents(1.2, -1, "[hh]:mm:ss"));
+            ClassicAssert.AreEqual("29:31:12", dfUS.FormatRawCellContents(1.23, -1, "[hh]:mm:ss"));
+            ClassicAssert.AreEqual("31:26:24", dfUS.FormatRawCellContents(1.31, -1, "[hh]:mm:ss"));
 
-            Assert.AreEqual("57:07.2", dfUS.FormatRawCellContents(.123, -1, "mm:ss.0;@"));
-            Assert.AreEqual("57:41.8", dfUS.FormatRawCellContents(.1234, -1, "mm:ss.0;@"));
-            Assert.AreEqual("57:41.76", dfUS.FormatRawCellContents(.1234, -1, "mm:ss.00;@"));
-            Assert.AreEqual("57:41.760", dfUS.FormatRawCellContents(.1234, -1, "mm:ss.000;@"));
-            Assert.AreEqual("24:00.0", dfUS.FormatRawCellContents(123456.6, -1, "mm:ss.0"));
+            ClassicAssert.AreEqual("57:07.2", dfUS.FormatRawCellContents(.123, -1, "mm:ss.0;@"));
+            ClassicAssert.AreEqual("57:41.8", dfUS.FormatRawCellContents(.1234, -1, "mm:ss.0;@"));
+            ClassicAssert.AreEqual("57:41.76", dfUS.FormatRawCellContents(.1234, -1, "mm:ss.00;@"));
+            ClassicAssert.AreEqual("57:41.760", dfUS.FormatRawCellContents(.1234, -1, "mm:ss.000;@"));
+            ClassicAssert.AreEqual("24:00.0", dfUS.FormatRawCellContents(123456.6, -1, "mm:ss.0"));
 
             //}
         }
@@ -516,9 +516,9 @@ namespace TestCases.SS.UserModel
         {
             //DataFormatter dfUS = new DataFormatter(Locale.US);
             DataFormatter dfUS = new DataFormatter(CultureInfo.GetCultureInfo("en-US"));
-            Assert.AreEqual("1899-12-31 00:00:00", dfUS.FormatRawCellContents(0.0, -1, "yyyy-mm-dd hh:mm:ss"));
-            Assert.AreEqual("1899-12-31 00:00:00", dfUS.FormatRawCellContents(0.0, -1, "yyyy-mm-dd hh:mm:ss", false));
-            Assert.AreEqual("1904-01-01 00:00:00", dfUS.FormatRawCellContents(0.0, -1, "yyyy-mm-dd hh:mm:ss", true));
+            ClassicAssert.AreEqual("1899-12-31 00:00:00", dfUS.FormatRawCellContents(0.0, -1, "yyyy-mm-dd hh:mm:ss"));
+            ClassicAssert.AreEqual("1899-12-31 00:00:00", dfUS.FormatRawCellContents(0.0, -1, "yyyy-mm-dd hh:mm:ss", false));
+            ClassicAssert.AreEqual("1904-01-01 00:00:00", dfUS.FormatRawCellContents(0.0, -1, "yyyy-mm-dd hh:mm:ss", true));
         }
         [Test]
         public void TestScientificNotation()
@@ -526,35 +526,35 @@ namespace TestCases.SS.UserModel
             //DataFormatter dfUS = new DataFormatter(Locale.US);
             DataFormatter dfUS = new DataFormatter(CultureInfo.GetCultureInfo("en-US"));
 
-            Assert.AreEqual("1.23E+01", dfUS.FormatRawCellContents(12.343, -1, "0.00E+00"));
-            Assert.AreEqual("-1.23E+01", dfUS.FormatRawCellContents(-12.343, -1, "0.00E+00"));
-            Assert.AreEqual("0.00E+00", dfUS.FormatRawCellContents(0.0, -1, "0.00E+00"));
+            ClassicAssert.AreEqual("1.23E+01", dfUS.FormatRawCellContents(12.343, -1, "0.00E+00"));
+            ClassicAssert.AreEqual("-1.23E+01", dfUS.FormatRawCellContents(-12.343, -1, "0.00E+00"));
+            ClassicAssert.AreEqual("0.00E+00", dfUS.FormatRawCellContents(0.0, -1, "0.00E+00"));
         }
         [Test]
         public void TestInvalidDate()
         {
             //DataFormatter df1 = new DataFormatter(Locale.US);
             DataFormatter df1 = new DataFormatter(CultureInfo.GetCultureInfo("en-US"));
-            //Assert.AreEqual("-1.0", df1.FormatRawCellContents(-1, -1, "mm/dd/yyyy"));
+            //ClassicAssert.AreEqual("-1.0", df1.FormatRawCellContents(-1, -1, "mm/dd/yyyy"));
             //in java -1.toString() is "-1.0", but in C# -1.ToString() is "-1".
-            Assert.AreEqual("-1", df1.FormatRawCellContents(-1, -1, "mm/dd/yyyy"));
+            ClassicAssert.AreEqual("-1", df1.FormatRawCellContents(-1, -1, "mm/dd/yyyy"));
             //DataFormatter df2 = new DataFormatter(Locale.US);
             DataFormatter df2 = new DataFormatter(CultureInfo.GetCultureInfo("en-US"), true);
-            Assert.AreEqual("###############################################################################################################################################################################################################################################################",
+            ClassicAssert.AreEqual("###############################################################################################################################################################################################################################################################",
                     df2.FormatRawCellContents(-1, -1, "mm/dd/yyyy"));
         }
         [Test]
         public void TestEscapes()
         {
             DataFormatter dfUS = new DataFormatter(CultureInfo.GetCultureInfo("en-US"));
-            Assert.AreEqual("1901-01-01", dfUS.FormatRawCellContents(367.0, -1, "yyyy-mm-dd"));
-            Assert.AreEqual("1901-01-01", dfUS.FormatRawCellContents(367.0, -1, "yyyy\\-mm\\-dd"));
+            ClassicAssert.AreEqual("1901-01-01", dfUS.FormatRawCellContents(367.0, -1, "yyyy-mm-dd"));
+            ClassicAssert.AreEqual("1901-01-01", dfUS.FormatRawCellContents(367.0, -1, "yyyy\\-mm\\-dd"));
 
-            Assert.AreEqual("1901.01.01", dfUS.FormatRawCellContents(367.0, -1, "yyyy.mm.dd"));
-            Assert.AreEqual("1901.01.01", dfUS.FormatRawCellContents(367.0, -1, "yyyy\\.mm\\.dd"));
+            ClassicAssert.AreEqual("1901.01.01", dfUS.FormatRawCellContents(367.0, -1, "yyyy.mm.dd"));
+            ClassicAssert.AreEqual("1901.01.01", dfUS.FormatRawCellContents(367.0, -1, "yyyy\\.mm\\.dd"));
 
-            Assert.AreEqual("1901/01/01", dfUS.FormatRawCellContents(367.0, -1, "yyyy/mm/dd"));
-            Assert.AreEqual("1901/01/01", dfUS.FormatRawCellContents(367.0, -1, "yyyy\\/mm\\/dd"));
+            ClassicAssert.AreEqual("1901/01/01", dfUS.FormatRawCellContents(367.0, -1, "yyyy/mm/dd"));
+            ClassicAssert.AreEqual("1901/01/01", dfUS.FormatRawCellContents(367.0, -1, "yyyy\\/mm\\/dd"));
         }
         [Test]
         public void TestFormatsWithPadding()
@@ -566,20 +566,20 @@ namespace TestCases.SS.UserModel
             // Because the Cell Width isn't available, this gets emulated with
             //  4 leading spaces, or a minus then 3 leading spaces
             // This isn't all that consistent, but it's the best we can really manage...
-            Assert.AreEqual("    1,234.56 ", dfUS.FormatRawCellContents(1234.56, -1, "_-* #,##0.00_-;-* #,##0.00_-;_-* \"-\"??_-;_-@_-"));
-            Assert.AreEqual("-   1,234.56 ", dfUS.FormatRawCellContents(-1234.56, -1, "_-* #,##0.00_-;-* #,##0.00_-;_-* \"-\"??_-;_-@_-"));
-            Assert.AreEqual("    12.34 ", dfUS.FormatRawCellContents(12.34, -1, "_-* #,##0.00_-;-* #,##0.00_-;_-* \"-\"??_-;_-@_-"));
-            Assert.AreEqual("-   12.34 ", dfUS.FormatRawCellContents(-12.34, -1, "_-* #,##0.00_-;-* #,##0.00_-;_-* \"-\"??_-;_-@_-"));
+            ClassicAssert.AreEqual("    1,234.56 ", dfUS.FormatRawCellContents(1234.56, -1, "_-* #,##0.00_-;-* #,##0.00_-;_-* \"-\"??_-;_-@_-"));
+            ClassicAssert.AreEqual("-   1,234.56 ", dfUS.FormatRawCellContents(-1234.56, -1, "_-* #,##0.00_-;-* #,##0.00_-;_-* \"-\"??_-;_-@_-"));
+            ClassicAssert.AreEqual("    12.34 ", dfUS.FormatRawCellContents(12.34, -1, "_-* #,##0.00_-;-* #,##0.00_-;_-* \"-\"??_-;_-@_-"));
+            ClassicAssert.AreEqual("-   12.34 ", dfUS.FormatRawCellContents(-12.34, -1, "_-* #,##0.00_-;-* #,##0.00_-;_-* \"-\"??_-;_-@_-"));
 
-            Assert.AreEqual("    0.10 ", dfUS.FormatRawCellContents(0.1, -1, "_-* #,##0.00_-;-* #,##0.00_-;_-* \"-\"??_-;_-@_-"));
-            Assert.AreEqual("-   0.10 ", dfUS.FormatRawCellContents(-0.1, -1, "_-* #,##0.00_-;-* #,##0.00_-;_-* \"-\"??_-;_-@_-"));
+            ClassicAssert.AreEqual("    0.10 ", dfUS.FormatRawCellContents(0.1, -1, "_-* #,##0.00_-;-* #,##0.00_-;_-* \"-\"??_-;_-@_-"));
+            ClassicAssert.AreEqual("-   0.10 ", dfUS.FormatRawCellContents(-0.1, -1, "_-* #,##0.00_-;-* #,##0.00_-;_-* \"-\"??_-;_-@_-"));
             // TODO Fix this, we are randomly adding a 0 at the end that souldn't be there
-            //Assert.AreEqual("     -   ", dfUS.FormatRawCellContents(0.0, -1, "_-* #,##0.00_-;-* #,##0.00_-;_-* \"-\"??_-;_-@_-"));
+            //ClassicAssert.AreEqual("     -   ", dfUS.FormatRawCellContents(0.0, -1, "_-* #,##0.00_-;-* #,##0.00_-;_-* \"-\"??_-;_-@_-"));
 
-            Assert.AreEqual(" $   1.10 ", dfUS.FormatRawCellContents(1.1, -1, "_-$* #,##0.00_-;-$* #,##0.00_-;_-$* \"-\"??_-;_-@_-"));
-            Assert.AreEqual("-$   1.10 ", dfUS.FormatRawCellContents(-1.1, -1, "_-$* #,##0.00_-;-$* #,##0.00_-;_-$* \"-\"??_-;_-@_-"));
+            ClassicAssert.AreEqual(" $   1.10 ", dfUS.FormatRawCellContents(1.1, -1, "_-$* #,##0.00_-;-$* #,##0.00_-;_-$* \"-\"??_-;_-@_-"));
+            ClassicAssert.AreEqual("-$   1.10 ", dfUS.FormatRawCellContents(-1.1, -1, "_-$* #,##0.00_-;-$* #,##0.00_-;_-$* \"-\"??_-;_-@_-"));
             // TODO Fix this, we are randomly adding a 0 at the end that souldn't be there
-            //Assert.AreEqual(" $    -   ", dfUS.FormatRawCellContents( 0.0, -1, "_-$* #,##0.00_-;-$* #,##0.00_-;_-$* \"-\"??_-;_-@_-"));
+            //ClassicAssert.AreEqual(" $    -   ", dfUS.FormatRawCellContents( 0.0, -1, "_-$* #,##0.00_-;-$* #,##0.00_-;_-$* \"-\"??_-;_-@_-"));
         }
         [Test]
         public void TestErrors()
@@ -593,10 +593,10 @@ namespace TestCases.SS.UserModel
             ICell c = r.CreateCell(0, CellType.Error);
 
             c.SetCellErrorValue(FormulaError.DIV0.Code);
-            Assert.AreEqual(FormulaError.DIV0.String, dfUS.FormatCellValue(c));
+            ClassicAssert.AreEqual(FormulaError.DIV0.String, dfUS.FormatCellValue(c));
 
             c.SetCellErrorValue(FormulaError.REF.Code);
-            Assert.AreEqual(FormulaError.REF.String, dfUS.FormatCellValue(c));
+            ClassicAssert.AreEqual(FormulaError.REF.String, dfUS.FormatCellValue(c));
         }
 
         [Test]
@@ -611,9 +611,9 @@ namespace TestCases.SS.UserModel
                 IRow r = s.CreateRow(0);
                 ICell c = r.CreateCell(0);
                 c.SetCellValue(true);
-                Assert.AreEqual("TRUE", formatter.FormatCellValue(c));
+                ClassicAssert.AreEqual("TRUE", formatter.FormatCellValue(c));
                 c.SetCellValue(false);
-                Assert.AreEqual("FALSE", formatter.FormatCellValue(c));
+                ClassicAssert.AreEqual("FALSE", formatter.FormatCellValue(c));
             }
             finally
             {
@@ -636,14 +636,14 @@ namespace TestCases.SS.UserModel
 
             // Check we format the English one correctly
             double date = 26995.477777777778;
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                     "November 27 1973  11:28 AM",
                     dfUS.FormatRawCellContents(date, -1, dateFormatEnglish)
             );
 
             // Check that, in the absence of locale support, we handle
             //  the Chinese one the same as the English one
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                     "November 27 1973  11:28 AM",
                     dfUS.FormatRawCellContents(date, -1, dateFormatChinese)
             );
@@ -658,13 +658,13 @@ namespace TestCases.SS.UserModel
             String fmt;
 
             fmt = "\"At\" H:MM AM/PM \"on\" DDDD MMMM D\",\" YYYY";
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                   "At 4:20 AM on Thursday May 17, 2007",
                   dfUS.FormatRawCellContents(39219.1805636921, -1, fmt)
             );
 
             fmt = "0 \"dollars and\" .00 \"cents\"";
-            Assert.AreEqual("19 dollars and .99 cents", dfUS.FormatRawCellContents(19.99, -1, fmt));
+            ClassicAssert.AreEqual("19 dollars and .99 cents", dfUS.FormatRawCellContents(19.99, -1, fmt));
         }
         /**
          * ExcelStyleDateFormatter should work for Milliseconds too
@@ -676,79 +676,79 @@ namespace TestCases.SS.UserModel
             SimpleDateFormat formatter1 = new ExcelStyleDateFormatter("ss.000");
             CultureInfo culture = CultureInfo.GetCultureInfo("en-US");
             DateTime dt = DateTime.Now.Date;
-            Assert.AreEqual("00.001", formatter1.Format(dt.AddMilliseconds(1L), culture));
-            Assert.AreEqual("00.010", formatter1.Format(dt.AddMilliseconds(10L), culture));
-            Assert.AreEqual("00.100", formatter1.Format(dt.AddMilliseconds(100L), culture));
-            Assert.AreEqual("01.000", formatter1.Format(dt.AddMilliseconds(1000L), culture));
-            Assert.AreEqual("01.001", formatter1.Format(dt.AddMilliseconds(1001L), culture));
-            Assert.AreEqual("10.000", formatter1.Format(dt.AddMilliseconds(10000L), culture));
-            Assert.AreEqual("10.001", formatter1.Format(dt.AddMilliseconds(10001L), culture));
+            ClassicAssert.AreEqual("00.001", formatter1.Format(dt.AddMilliseconds(1L), culture));
+            ClassicAssert.AreEqual("00.010", formatter1.Format(dt.AddMilliseconds(10L), culture));
+            ClassicAssert.AreEqual("00.100", formatter1.Format(dt.AddMilliseconds(100L), culture));
+            ClassicAssert.AreEqual("01.000", formatter1.Format(dt.AddMilliseconds(1000L), culture));
+            ClassicAssert.AreEqual("01.001", formatter1.Format(dt.AddMilliseconds(1001L), culture));
+            ClassicAssert.AreEqual("10.000", formatter1.Format(dt.AddMilliseconds(10000L), culture));
+            ClassicAssert.AreEqual("10.001", formatter1.Format(dt.AddMilliseconds(10001L), culture));
 
             // Test directly with the .SSS style
             SimpleDateFormat formatter2 = new ExcelStyleDateFormatter("ss.fff");
 
-            Assert.AreEqual("00.001", formatter2.Format(dt.AddMilliseconds(1L), culture));
-            Assert.AreEqual("00.010", formatter2.Format(dt.AddMilliseconds(10L), culture));
-            Assert.AreEqual("00.100", formatter2.Format(dt.AddMilliseconds(100L), culture));
-            Assert.AreEqual("01.000", formatter2.Format(dt.AddMilliseconds(1000L), culture));
-            Assert.AreEqual("01.001", formatter2.Format(dt.AddMilliseconds(1001L), culture));
-            Assert.AreEqual("10.000", formatter2.Format(dt.AddMilliseconds(10000L), culture));
-            Assert.AreEqual("10.001", formatter2.Format(dt.AddMilliseconds(10001L), culture));
+            ClassicAssert.AreEqual("00.001", formatter2.Format(dt.AddMilliseconds(1L), culture));
+            ClassicAssert.AreEqual("00.010", formatter2.Format(dt.AddMilliseconds(10L), culture));
+            ClassicAssert.AreEqual("00.100", formatter2.Format(dt.AddMilliseconds(100L), culture));
+            ClassicAssert.AreEqual("01.000", formatter2.Format(dt.AddMilliseconds(1000L), culture));
+            ClassicAssert.AreEqual("01.001", formatter2.Format(dt.AddMilliseconds(1001L), culture));
+            ClassicAssert.AreEqual("10.000", formatter2.Format(dt.AddMilliseconds(10000L), culture));
+            ClassicAssert.AreEqual("10.001", formatter2.Format(dt.AddMilliseconds(10001L), culture));
 
 
             // Test via DataFormatter
             DataFormatter dfUS = new DataFormatter(culture, true);
-            Assert.AreEqual("01.010", dfUS.FormatRawCellContents(0.0000116898, -1, "ss.000"));
+            ClassicAssert.AreEqual("01.010", dfUS.FormatRawCellContents(0.0000116898, -1, "ss.000"));
         }
         [Test]
         public void TestBug54786()
         {
             DataFormatter formatter = new DataFormatter();
             String format = "[h]\"\"h\"\" m\"\"m\"\"";
-            Assert.IsTrue(DateUtil.IsADateFormat(-1, format));
-            Assert.IsTrue(DateUtil.IsValidExcelDate(_15_MINUTES));
+            ClassicAssert.IsTrue(DateUtil.IsADateFormat(-1, format));
+            ClassicAssert.IsTrue(DateUtil.IsValidExcelDate(_15_MINUTES));
 
-            Assert.AreEqual("1h 0m", formatter.FormatRawCellContents(_15_MINUTES, -1, format, false));
-            Assert.AreEqual("0.041666667", formatter.FormatRawCellContents(_15_MINUTES, -1, "[h]'h'", false));
-            Assert.AreEqual("1h 0m\"", formatter.FormatRawCellContents(_15_MINUTES, -1, "[h]\"\"h\"\" m\"\"m\"\"\"", false));
-            Assert.AreEqual("1h", formatter.FormatRawCellContents(_15_MINUTES, -1, "[h]\"\"h\"\"", false));
-            Assert.AreEqual("h1", formatter.FormatRawCellContents(_15_MINUTES, -1, "\"\"h\"\"[h]", false));
-            Assert.AreEqual("h1", formatter.FormatRawCellContents(_15_MINUTES, -1, "\"\"h\"\"h", false));
-            Assert.AreEqual(" 60", formatter.FormatRawCellContents(_15_MINUTES, -1, " [m]", false));
-            Assert.AreEqual("h60", formatter.FormatRawCellContents(_15_MINUTES, -1, "\"\"h\"\"[m]", false));
-            Assert.AreEqual("m1", formatter.FormatRawCellContents(_15_MINUTES, -1, "\"\"m\"\"h", false));
+            ClassicAssert.AreEqual("1h 0m", formatter.FormatRawCellContents(_15_MINUTES, -1, format, false));
+            ClassicAssert.AreEqual("0.041666667", formatter.FormatRawCellContents(_15_MINUTES, -1, "[h]'h'", false));
+            ClassicAssert.AreEqual("1h 0m\"", formatter.FormatRawCellContents(_15_MINUTES, -1, "[h]\"\"h\"\" m\"\"m\"\"\"", false));
+            ClassicAssert.AreEqual("1h", formatter.FormatRawCellContents(_15_MINUTES, -1, "[h]\"\"h\"\"", false));
+            ClassicAssert.AreEqual("h1", formatter.FormatRawCellContents(_15_MINUTES, -1, "\"\"h\"\"[h]", false));
+            ClassicAssert.AreEqual("h1", formatter.FormatRawCellContents(_15_MINUTES, -1, "\"\"h\"\"h", false));
+            ClassicAssert.AreEqual(" 60", formatter.FormatRawCellContents(_15_MINUTES, -1, " [m]", false));
+            ClassicAssert.AreEqual("h60", formatter.FormatRawCellContents(_15_MINUTES, -1, "\"\"h\"\"[m]", false));
+            ClassicAssert.AreEqual("m1", formatter.FormatRawCellContents(_15_MINUTES, -1, "\"\"m\"\"h", false));
 
             try
             {
-                Assert.AreEqual("1h 0m\"", formatter.FormatRawCellContents(_15_MINUTES, -1, "[h]\"\"h\"\" m\"\"m\"\"\"\"", false));
+                ClassicAssert.AreEqual("1h 0m\"", formatter.FormatRawCellContents(_15_MINUTES, -1, "[h]\"\"h\"\" m\"\"m\"\"\"\"", false));
                 Assert.Fail("Catches exception because of invalid format, i.e. trailing quoting");
             }
             catch (Exception)
             {
-                //Assert.IsTrue(e.Message.Contains("Cannot format given Object as a Number"));
+                //ClassicAssert.IsTrue(e.Message.Contains("Cannot format given Object as a Number"));
             }
         }
         [Test]
         public void TestIsADateFormat()
         {
             // first check some cases that should not be a date, also call multiple times to ensure the cache is used
-            Assert.IsFalse(DateUtil.IsADateFormat(-1, null));
-            Assert.IsFalse(DateUtil.IsADateFormat(-1, null));
-            Assert.IsFalse(DateUtil.IsADateFormat(123, null));
-            Assert.IsFalse(DateUtil.IsADateFormat(123, ""));
-            Assert.IsFalse(DateUtil.IsADateFormat(124, ""));
-            Assert.IsFalse(DateUtil.IsADateFormat(-1, ""));
-            Assert.IsFalse(DateUtil.IsADateFormat(-1, ""));
-            Assert.IsFalse(DateUtil.IsADateFormat(-1, "nodateformat"));
+            ClassicAssert.IsFalse(DateUtil.IsADateFormat(-1, null));
+            ClassicAssert.IsFalse(DateUtil.IsADateFormat(-1, null));
+            ClassicAssert.IsFalse(DateUtil.IsADateFormat(123, null));
+            ClassicAssert.IsFalse(DateUtil.IsADateFormat(123, ""));
+            ClassicAssert.IsFalse(DateUtil.IsADateFormat(124, ""));
+            ClassicAssert.IsFalse(DateUtil.IsADateFormat(-1, ""));
+            ClassicAssert.IsFalse(DateUtil.IsADateFormat(-1, ""));
+            ClassicAssert.IsFalse(DateUtil.IsADateFormat(-1, "nodateformat"));
 
             // then also do the same for some valid date formats
-            Assert.IsTrue(DateUtil.IsADateFormat(0x0e, null));
-            Assert.IsTrue(DateUtil.IsADateFormat(0x2f, null));
-            Assert.IsTrue(DateUtil.IsADateFormat(-1, "yyyy"));
-            Assert.IsTrue(DateUtil.IsADateFormat(-1, "yyyy"));
-            Assert.IsTrue(DateUtil.IsADateFormat(-1, "dd/mm/yy;[red]dd/mm/yy"));
-            Assert.IsTrue(DateUtil.IsADateFormat(-1, "dd/mm/yy;[red]dd/mm/yy"));
-            Assert.IsTrue(DateUtil.IsADateFormat(-1, "[h]"));
+            ClassicAssert.IsTrue(DateUtil.IsADateFormat(0x0e, null));
+            ClassicAssert.IsTrue(DateUtil.IsADateFormat(0x2f, null));
+            ClassicAssert.IsTrue(DateUtil.IsADateFormat(-1, "yyyy"));
+            ClassicAssert.IsTrue(DateUtil.IsADateFormat(-1, "yyyy"));
+            ClassicAssert.IsTrue(DateUtil.IsADateFormat(-1, "dd/mm/yy;[red]dd/mm/yy"));
+            ClassicAssert.IsTrue(DateUtil.IsADateFormat(-1, "dd/mm/yy;[red]dd/mm/yy"));
+            ClassicAssert.IsTrue(DateUtil.IsADateFormat(-1, "[h]"));
         }
 
         [Test]
@@ -799,7 +799,7 @@ namespace TestCases.SS.UserModel
                 IDataFormat dataFormat = wb.CreateDataFormat();
                 newStyle.DataFormat = (dataFormat.GetFormat("General"));
                 String actual = new DataFormatter().FormatCellValue(rawValue);
-                Assert.AreEqual(expected, actual);
+                ClassicAssert.AreEqual(expected, actual);
             }
             finally
             {
@@ -814,11 +814,11 @@ namespace TestCases.SS.UserModel
             CellReference ref1 = new CellReference("D47");
             ICell cell = wb.GetSheetAt(0).GetRow(ref1.Row).GetCell(ref1.Col);
             //noinspection deprecation
-            Assert.AreEqual(CellType.Formula, cell.CellType);
-            Assert.AreEqual("G9:K9 I7:I12", cell.CellFormula);
+            ClassicAssert.AreEqual(CellType.Formula, cell.CellType);
+            ClassicAssert.AreEqual("G9:K9 I7:I12", cell.CellFormula);
             DataFormatter formatter = new DataFormatter();
             IFormulaEvaluator evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
-            Assert.AreEqual("5.6789", formatter.FormatCellValue(cell, evaluator));
+            ClassicAssert.AreEqual("5.6789", formatter.FormatCellValue(cell, evaluator));
             wb.Close();
         }
 
@@ -831,12 +831,12 @@ namespace TestCases.SS.UserModel
             // 23-08-2016 08:51:01 which is 42605.368761574071 as double will be parsed
             // with format "yyyy-dd-MM HH:mm:ss" into "2016-23-51 08:51:01".
             DataFormatter dfUS = new DataFormatter(CultureInfo.GetCultureInfo("en-US"));
-            Assert.AreEqual("2016-23-08 08:51:01", dfUS.FormatRawCellContents(42605.368761574071, -1, "yyyy-dd-MM HH:mm:ss"));
-            Assert.AreEqual("2016-23 08:51:01 08", dfUS.FormatRawCellContents(42605.368761574071, -1, "yyyy-dd HH:mm:ss MM"));
-            Assert.AreEqual("2017-12-01 January 09:54:33", dfUS.FormatRawCellContents(42747.412892397523, -1, "yyyy-dd-MM MMMM HH:mm:ss"));
+            ClassicAssert.AreEqual("2016-23-08 08:51:01", dfUS.FormatRawCellContents(42605.368761574071, -1, "yyyy-dd-MM HH:mm:ss"));
+            ClassicAssert.AreEqual("2016-23 08:51:01 08", dfUS.FormatRawCellContents(42605.368761574071, -1, "yyyy-dd HH:mm:ss MM"));
+            ClassicAssert.AreEqual("2017-12-01 January 09:54:33", dfUS.FormatRawCellContents(42747.412892397523, -1, "yyyy-dd-MM MMMM HH:mm:ss"));
 
-            Assert.AreEqual("08", dfUS.FormatRawCellContents(42605.368761574071, -1, "MM"));
-            Assert.AreEqual("01", dfUS.FormatRawCellContents(42605.368761574071, -1, "ss"));
+            ClassicAssert.AreEqual("08", dfUS.FormatRawCellContents(42605.368761574071, -1, "MM"));
+            ClassicAssert.AreEqual("01", dfUS.FormatRawCellContents(42605.368761574071, -1, "ss"));
 
             // From Excel help:
             /*
@@ -844,9 +844,9 @@ namespace TestCases.SS.UserModel
                 code or immediately before the "ss" code; otherwise, Microsoft
                 Excel displays the month instead of minutes."
               */
-            Assert.AreEqual("08", dfUS.FormatRawCellContents(42605.368761574071, -1, "mm"));
-            Assert.AreEqual("08:51", dfUS.FormatRawCellContents(42605.368761574071, -1, "hh:mm"));
-            Assert.AreEqual("51:01", dfUS.FormatRawCellContents(42605.368761574071, -1, "mm:ss"));
+            ClassicAssert.AreEqual("08", dfUS.FormatRawCellContents(42605.368761574071, -1, "mm"));
+            ClassicAssert.AreEqual("08:51", dfUS.FormatRawCellContents(42605.368761574071, -1, "hh:mm"));
+            ClassicAssert.AreEqual("51:01", dfUS.FormatRawCellContents(42605.368761574071, -1, "mm:ss"));
         }
     }
 }

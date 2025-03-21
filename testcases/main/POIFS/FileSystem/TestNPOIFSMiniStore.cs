@@ -19,7 +19,7 @@ using System;
 using System.IO;
 using System.Collections;
 
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 
 using NPOI.POIFS.Common;
 using TestCases;
@@ -60,67 +60,67 @@ namespace TestCases.POIFS.FileSystem
                 // 0 -> 51 is one stream
                 for (int i = 0; i < 50; i++)
                 {
-                    Assert.AreEqual(i + 1, ministore.GetNextBlock(i));
+                    ClassicAssert.AreEqual(i + 1, ministore.GetNextBlock(i));
                 }
-                Assert.AreEqual(POIFSConstants.END_OF_CHAIN, ministore.GetNextBlock(50));
+                ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, ministore.GetNextBlock(50));
 
                 // 51 -> 103 is the next
                 for (int i = 51; i < 103; i++)
                 {
-                    Assert.AreEqual(i + 1, ministore.GetNextBlock(i));
+                    ClassicAssert.AreEqual(i + 1, ministore.GetNextBlock(i));
                 }
-                Assert.AreEqual(POIFSConstants.END_OF_CHAIN, ministore.GetNextBlock(103));
+                ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, ministore.GetNextBlock(103));
 
                 // Then there are 3 one block ones
-                Assert.AreEqual(POIFSConstants.END_OF_CHAIN, ministore.GetNextBlock(104));
-                Assert.AreEqual(POIFSConstants.END_OF_CHAIN, ministore.GetNextBlock(105));
-                Assert.AreEqual(POIFSConstants.END_OF_CHAIN, ministore.GetNextBlock(106));
+                ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, ministore.GetNextBlock(104));
+                ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, ministore.GetNextBlock(105));
+                ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, ministore.GetNextBlock(106));
 
                 // 107 -> 154 is the next
                 for (int i = 107; i < 154; i++)
                 {
-                    Assert.AreEqual(i + 1, ministore.GetNextBlock(i));
+                    ClassicAssert.AreEqual(i + 1, ministore.GetNextBlock(i));
                 }
-                Assert.AreEqual(POIFSConstants.END_OF_CHAIN, ministore.GetNextBlock(154));
+                ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, ministore.GetNextBlock(154));
 
                 // 155 -> 160 is the next
                 for (int i = 155; i < 160; i++)
                 {
-                    Assert.AreEqual(i + 1, ministore.GetNextBlock(i));
+                    ClassicAssert.AreEqual(i + 1, ministore.GetNextBlock(i));
                 }
-                Assert.AreEqual(POIFSConstants.END_OF_CHAIN, ministore.GetNextBlock(160));
+                ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, ministore.GetNextBlock(160));
 
                 // 161 -> 166 is the next
                 for (int i = 161; i < 166; i++)
                 {
-                    Assert.AreEqual(i + 1, ministore.GetNextBlock(i));
+                    ClassicAssert.AreEqual(i + 1, ministore.GetNextBlock(i));
                 }
-                Assert.AreEqual(POIFSConstants.END_OF_CHAIN, ministore.GetNextBlock(166));
+                ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, ministore.GetNextBlock(166));
 
                 // 167 -> 172 is the next
                 for (int i = 167; i < 172; i++)
                 {
-                    Assert.AreEqual(i + 1, ministore.GetNextBlock(i));
+                    ClassicAssert.AreEqual(i + 1, ministore.GetNextBlock(i));
                 }
-                Assert.AreEqual(POIFSConstants.END_OF_CHAIN, ministore.GetNextBlock(172));
+                ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, ministore.GetNextBlock(172));
 
                 // Now some short ones
-                Assert.AreEqual(174, ministore.GetNextBlock(173));
-                Assert.AreEqual(POIFSConstants.END_OF_CHAIN, ministore.GetNextBlock(174));
+                ClassicAssert.AreEqual(174, ministore.GetNextBlock(173));
+                ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, ministore.GetNextBlock(174));
 
-                Assert.AreEqual(POIFSConstants.END_OF_CHAIN, ministore.GetNextBlock(175));
+                ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, ministore.GetNextBlock(175));
 
-                Assert.AreEqual(177, ministore.GetNextBlock(176));
-                Assert.AreEqual(POIFSConstants.END_OF_CHAIN, ministore.GetNextBlock(177));
+                ClassicAssert.AreEqual(177, ministore.GetNextBlock(176));
+                ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, ministore.GetNextBlock(177));
 
-                Assert.AreEqual(179, ministore.GetNextBlock(178));
-                Assert.AreEqual(180, ministore.GetNextBlock(179));
-                Assert.AreEqual(POIFSConstants.END_OF_CHAIN, ministore.GetNextBlock(180));
+                ClassicAssert.AreEqual(179, ministore.GetNextBlock(178));
+                ClassicAssert.AreEqual(180, ministore.GetNextBlock(179));
+                ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, ministore.GetNextBlock(180));
 
                 // 181 onwards is free
                 for (int i = 181; i < fs.GetBigBlockSizeDetails().GetBATEntriesPerBlock(); i++)
                 {
-                    Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, ministore.GetNextBlock(i));
+                    ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, ministore.GetNextBlock(i));
                 }
                 fs.Close();
             }
@@ -143,7 +143,7 @@ namespace TestCases.POIFS.FileSystem
             foreach (NPOIFSFileSystem fs in new NPOIFSFileSystem[] { fsA, fsB, fsC, fsD })
             {
                 // Mini stream should be at big block zero
-                Assert.AreEqual(0, fs.PropertyTable.Root.StartBlock);
+                ClassicAssert.AreEqual(0, fs.PropertyTable.Root.StartBlock);
 
                 // Grab the ministore
                 NPOIFSMiniStore ministore = fs.GetMiniStore();
@@ -151,49 +151,49 @@ namespace TestCases.POIFS.FileSystem
 
                 // Runs from the start of the data section in 64 byte chungs
                 b = ministore.GetBlockAt(0);
-                Assert.AreEqual((byte)0x9e, b[0]);
-                Assert.AreEqual((byte)0x75, b[1]);
-                Assert.AreEqual((byte)0x97, b[2]);
-                Assert.AreEqual((byte)0xf6, b[3]);
-                Assert.AreEqual((byte)0xff, b[4]);
-                Assert.AreEqual((byte)0x21, b[5]);
-                Assert.AreEqual((byte)0xd2, b[6]);
-                Assert.AreEqual((byte)0x11, b[7]);
+                ClassicAssert.AreEqual((byte)0x9e, b[0]);
+                ClassicAssert.AreEqual((byte)0x75, b[1]);
+                ClassicAssert.AreEqual((byte)0x97, b[2]);
+                ClassicAssert.AreEqual((byte)0xf6, b[3]);
+                ClassicAssert.AreEqual((byte)0xff, b[4]);
+                ClassicAssert.AreEqual((byte)0x21, b[5]);
+                ClassicAssert.AreEqual((byte)0xd2, b[6]);
+                ClassicAssert.AreEqual((byte)0x11, b[7]);
 
                 // And the next block
                 b = ministore.GetBlockAt(1);
-                Assert.AreEqual((byte)0x00, b[0]);
-                Assert.AreEqual((byte)0x00, b[1]);
-                Assert.AreEqual((byte)0x03, b[2]);
-                Assert.AreEqual((byte)0x00, b[3]);
-                Assert.AreEqual((byte)0x12, b[4]);
-                Assert.AreEqual((byte)0x02, b[5]);
-                Assert.AreEqual((byte)0x00, b[6]);
-                Assert.AreEqual((byte)0x00, b[7]);
+                ClassicAssert.AreEqual((byte)0x00, b[0]);
+                ClassicAssert.AreEqual((byte)0x00, b[1]);
+                ClassicAssert.AreEqual((byte)0x03, b[2]);
+                ClassicAssert.AreEqual((byte)0x00, b[3]);
+                ClassicAssert.AreEqual((byte)0x12, b[4]);
+                ClassicAssert.AreEqual((byte)0x02, b[5]);
+                ClassicAssert.AreEqual((byte)0x00, b[6]);
+                ClassicAssert.AreEqual((byte)0x00, b[7]);
 
                 // Check the last data block
                 b = ministore.GetBlockAt(180);
-                Assert.AreEqual((byte)0x30, b[0]);
-                Assert.AreEqual((byte)0x00, b[1]);
-                Assert.AreEqual((byte)0x00, b[2]);
-                Assert.AreEqual((byte)0x00, b[3]);
-                Assert.AreEqual((byte)0x00, b[4]);
-                Assert.AreEqual((byte)0x00, b[5]);
-                Assert.AreEqual((byte)0x00, b[6]);
-                Assert.AreEqual((byte)0x80, b[7]);
+                ClassicAssert.AreEqual((byte)0x30, b[0]);
+                ClassicAssert.AreEqual((byte)0x00, b[1]);
+                ClassicAssert.AreEqual((byte)0x00, b[2]);
+                ClassicAssert.AreEqual((byte)0x00, b[3]);
+                ClassicAssert.AreEqual((byte)0x00, b[4]);
+                ClassicAssert.AreEqual((byte)0x00, b[5]);
+                ClassicAssert.AreEqual((byte)0x00, b[6]);
+                ClassicAssert.AreEqual((byte)0x80, b[7]);
 
                 // And the rest until the end of the big block is zeros
                 for (int i = 181; i < 184; i++)
                 {
                     b = ministore.GetBlockAt(i);
-                    Assert.AreEqual((byte)0, b[0]);
-                    Assert.AreEqual((byte)0, b[1]);
-                    Assert.AreEqual((byte)0, b[2]);
-                    Assert.AreEqual((byte)0, b[3]);
-                    Assert.AreEqual((byte)0, b[4]);
-                    Assert.AreEqual((byte)0, b[5]);
-                    Assert.AreEqual((byte)0, b[6]);
-                    Assert.AreEqual((byte)0, b[7]);
+                    ClassicAssert.AreEqual((byte)0, b[0]);
+                    ClassicAssert.AreEqual((byte)0, b[1]);
+                    ClassicAssert.AreEqual((byte)0, b[2]);
+                    ClassicAssert.AreEqual((byte)0, b[3]);
+                    ClassicAssert.AreEqual((byte)0, b[4]);
+                    ClassicAssert.AreEqual((byte)0, b[5]);
+                    ClassicAssert.AreEqual((byte)0, b[6]);
+                    ClassicAssert.AreEqual((byte)0, b[7]);
                 }
 
                 fs.Close();
@@ -212,24 +212,24 @@ namespace TestCases.POIFS.FileSystem
             NPOIFSMiniStore ministore = fs.GetMiniStore();
 
             // Our 2nd SBAT block has spares
-            Assert.AreEqual(false, ministore.GetBATBlockAndIndex(0).Block.HasFreeSectors);
-            Assert.AreEqual(true, ministore.GetBATBlockAndIndex(128).Block.HasFreeSectors);
+            ClassicAssert.AreEqual(false, ministore.GetBATBlockAndIndex(0).Block.HasFreeSectors);
+            ClassicAssert.AreEqual(true, ministore.GetBATBlockAndIndex(128).Block.HasFreeSectors);
 
             // First free one at 181
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, ministore.GetNextBlock(181));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, ministore.GetNextBlock(182));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, ministore.GetNextBlock(183));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, ministore.GetNextBlock(184));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, ministore.GetNextBlock(181));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, ministore.GetNextBlock(182));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, ministore.GetNextBlock(183));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, ministore.GetNextBlock(184));
 
             // Ask, will get 181
-            Assert.AreEqual(181, ministore.GetFreeBlock());
+            ClassicAssert.AreEqual(181, ministore.GetFreeBlock());
 
             // Ask again, will still get 181 as not written to
-            Assert.AreEqual(181, ministore.GetFreeBlock());
+            ClassicAssert.AreEqual(181, ministore.GetFreeBlock());
 
             // Allocate it, then ask again
             ministore.SetNextBlock(181, POIFSConstants.END_OF_CHAIN);
-            Assert.AreEqual(182, ministore.GetFreeBlock());
+            ClassicAssert.AreEqual(182, ministore.GetFreeBlock());
 
             fs.Close();
         }
@@ -243,12 +243,12 @@ namespace TestCases.POIFS.FileSystem
             // We've spare ones from 181 to 255
             for (int i = 181; i < 256; i++)
             {
-                Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, ministore.GetNextBlock(i));
+                ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, ministore.GetNextBlock(i));
             }
 
             // Check our SBAT free stuff is correct
-            Assert.AreEqual(false, ministore.GetBATBlockAndIndex(0).Block.HasFreeSectors);
-            Assert.AreEqual(true, ministore.GetBATBlockAndIndex(128).Block.HasFreeSectors);
+            ClassicAssert.AreEqual(false, ministore.GetBATBlockAndIndex(0).Block.HasFreeSectors);
+            ClassicAssert.AreEqual(true, ministore.GetBATBlockAndIndex(128).Block.HasFreeSectors);
 
             // Allocate all the spare ones
             for (int i = 181; i < 256; i++)
@@ -257,25 +257,25 @@ namespace TestCases.POIFS.FileSystem
             }
 
             // SBAT are now full, but there's only the two
-            Assert.AreEqual(false, ministore.GetBATBlockAndIndex(0).Block.HasFreeSectors);
-            Assert.AreEqual(false, ministore.GetBATBlockAndIndex(128).Block.HasFreeSectors);
+            ClassicAssert.AreEqual(false, ministore.GetBATBlockAndIndex(0).Block.HasFreeSectors);
+            ClassicAssert.AreEqual(false, ministore.GetBATBlockAndIndex(128).Block.HasFreeSectors);
             try
             {
-                Assert.AreEqual(false, ministore.GetBATBlockAndIndex(256).Block.HasFreeSectors);
+                ClassicAssert.AreEqual(false, ministore.GetBATBlockAndIndex(256).Block.HasFreeSectors);
                 Assert.Fail("Should only be two SBATs");
             }
             catch (ArgumentOutOfRangeException) { }
 
             // Now ask for a free one, will need to extend the SBAT chain
-            Assert.AreEqual(256, ministore.GetFreeBlock());
+            ClassicAssert.AreEqual(256, ministore.GetFreeBlock());
 
-            Assert.AreEqual(false, ministore.GetBATBlockAndIndex(0).Block.HasFreeSectors);
-            Assert.AreEqual(false, ministore.GetBATBlockAndIndex(128).Block.HasFreeSectors);
-            Assert.AreEqual(true, ministore.GetBATBlockAndIndex(256).Block.HasFreeSectors);
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, ministore.GetNextBlock(254)); // 2nd SBAT 
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, ministore.GetNextBlock(255)); // 2nd SBAT
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, ministore.GetNextBlock(256)); // 3rd SBAT
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, ministore.GetNextBlock(257)); // 3rd SBAT
+            ClassicAssert.AreEqual(false, ministore.GetBATBlockAndIndex(0).Block.HasFreeSectors);
+            ClassicAssert.AreEqual(false, ministore.GetBATBlockAndIndex(128).Block.HasFreeSectors);
+            ClassicAssert.AreEqual(true, ministore.GetBATBlockAndIndex(256).Block.HasFreeSectors);
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, ministore.GetNextBlock(254)); // 2nd SBAT 
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, ministore.GetNextBlock(255)); // 2nd SBAT
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, ministore.GetNextBlock(256)); // 3rd SBAT
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, ministore.GetNextBlock(257)); // 3rd SBAT
 
             fs.Close();
         }
@@ -287,12 +287,12 @@ namespace TestCases.POIFS.FileSystem
             NPOIFSMiniStore ministore = fs.GetMiniStore();
 
             // 178 -> 179 -> 180, 181+ is free
-            Assert.AreEqual(179, ministore.GetNextBlock(178));
-            Assert.AreEqual(180, ministore.GetNextBlock(179));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, ministore.GetNextBlock(180));
+            ClassicAssert.AreEqual(179, ministore.GetNextBlock(178));
+            ClassicAssert.AreEqual(180, ministore.GetNextBlock(179));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, ministore.GetNextBlock(180));
             for (int i = 181; i < 256; i++)
             {
-                Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, ministore.GetNextBlock(i));
+                ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, ministore.GetNextBlock(i));
             }
 
             // However, the ministore data only covers blocks to 183
@@ -316,7 +316,7 @@ namespace TestCases.POIFS.FileSystem
                 count++;
                 //it.MoveNext();
             }
-            Assert.AreEqual(23, count);
+            ClassicAssert.AreEqual(23, count);
 
             // Ask it to get block 184 with creating, it will do
             ministore.CreateBlockIfNeeded(184);
@@ -329,7 +329,7 @@ namespace TestCases.POIFS.FileSystem
                 count++;
                 //it.MoveNext();
             }
-            Assert.AreEqual(24, count);
+            ClassicAssert.AreEqual(24, count);
 
             // The mini block block counts now run to 191
             for (int i = 0; i <= 191; i++)
@@ -350,24 +350,24 @@ namespace TestCases.POIFS.FileSystem
             stream.UpdateContents(data);
 
             // Check now
-            Assert.AreEqual(179, ministore.GetNextBlock(178));
-            Assert.AreEqual(180, ministore.GetNextBlock(179));
-            Assert.AreEqual(181, ministore.GetNextBlock(180));
-            Assert.AreEqual(182, ministore.GetNextBlock(181));
-            Assert.AreEqual(183, ministore.GetNextBlock(182));
-            Assert.AreEqual(184, ministore.GetNextBlock(183));
-            Assert.AreEqual(185, ministore.GetNextBlock(184));
-            Assert.AreEqual(186, ministore.GetNextBlock(185));
-            Assert.AreEqual(187, ministore.GetNextBlock(186));
-            Assert.AreEqual(188, ministore.GetNextBlock(187));
-            Assert.AreEqual(189, ministore.GetNextBlock(188));
-            Assert.AreEqual(190, ministore.GetNextBlock(189));
-            Assert.AreEqual(191, ministore.GetNextBlock(190));
-            Assert.AreEqual(192, ministore.GetNextBlock(191));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, ministore.GetNextBlock(192));
+            ClassicAssert.AreEqual(179, ministore.GetNextBlock(178));
+            ClassicAssert.AreEqual(180, ministore.GetNextBlock(179));
+            ClassicAssert.AreEqual(181, ministore.GetNextBlock(180));
+            ClassicAssert.AreEqual(182, ministore.GetNextBlock(181));
+            ClassicAssert.AreEqual(183, ministore.GetNextBlock(182));
+            ClassicAssert.AreEqual(184, ministore.GetNextBlock(183));
+            ClassicAssert.AreEqual(185, ministore.GetNextBlock(184));
+            ClassicAssert.AreEqual(186, ministore.GetNextBlock(185));
+            ClassicAssert.AreEqual(187, ministore.GetNextBlock(186));
+            ClassicAssert.AreEqual(188, ministore.GetNextBlock(187));
+            ClassicAssert.AreEqual(189, ministore.GetNextBlock(188));
+            ClassicAssert.AreEqual(190, ministore.GetNextBlock(189));
+            ClassicAssert.AreEqual(191, ministore.GetNextBlock(190));
+            ClassicAssert.AreEqual(192, ministore.GetNextBlock(191));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, ministore.GetNextBlock(192));
             for (int i = 193; i < 256; i++)
             {
-                Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, ministore.GetNextBlock(i));
+                ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, ministore.GetNextBlock(i));
             }
 
             fs.Close();
@@ -381,9 +381,9 @@ namespace TestCases.POIFS.FileSystem
             DocumentEntry entry;
 
             // Initially has Properties + BAT but nothing else
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(0));
-            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(1));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(2));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(0));
+            ClassicAssert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(1));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(2));
             // Ministore has no blocks, so can't iterate until used
             try
             {
@@ -400,31 +400,31 @@ namespace TestCases.POIFS.FileSystem
             fs.Root.CreateDocument("mini", new ByteArrayInputStream(data));
 
             // Should now have a mini-fat and a mini-stream
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(0));
-            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(1));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(2));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(3));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(4));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, ministore.GetNextBlock(0));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, ministore.GetNextBlock(1));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(0));
+            ClassicAssert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(1));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(2));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(3));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(4));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, ministore.GetNextBlock(0));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, ministore.GetNextBlock(1));
 
             // Re-fetch the mini store, and add it a second time
             ministore = fs.GetMiniStore();
             fs.Root.CreateDocument("mini2", new ByteArrayInputStream(data));
 
             // Main unchanged, ministore has a second
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(0));
-            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(1));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(2));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(3));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(4));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, ministore.GetNextBlock(0));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, ministore.GetNextBlock(1));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, ministore.GetNextBlock(2));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(0));
+            ClassicAssert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(1));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(2));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(3));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(4));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, ministore.GetNextBlock(0));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, ministore.GetNextBlock(1));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, ministore.GetNextBlock(2));
 
             // Check the data is unchanged and the right length
             entry = (DocumentEntry)fs.Root.GetEntry("mini");
-            Assert.AreEqual(data.Length, entry.Size);
+            ClassicAssert.AreEqual(data.Length, entry.Size);
             byte[] rdata = new byte[data.Length];
             dis = new DocumentInputStream(entry);
             IOUtils.ReadFully(dis, rdata);
@@ -433,7 +433,7 @@ namespace TestCases.POIFS.FileSystem
             dis.Close();
 
             entry = (DocumentEntry)fs.Root.GetEntry("mini2");
-            Assert.AreEqual(data.Length, entry.Size);
+            ClassicAssert.AreEqual(data.Length, entry.Size);
             rdata = new byte[data.Length];
             dis = new DocumentInputStream(entry);
             IOUtils.ReadFully(dis, rdata);
@@ -463,9 +463,9 @@ namespace TestCases.POIFS.FileSystem
             NPOIFSMiniStore ministore = fs.GetMiniStore();
 
             // Initially has Properties + BAT but nothing else
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(0));
-            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(1));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(2));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(0));
+            ClassicAssert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(1));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(2));
 
             // Store the 2 block one, should use 2 mini blocks, and request
             // the use of 2 big blocks
@@ -473,26 +473,26 @@ namespace TestCases.POIFS.FileSystem
             fs.Root.CreateDocument("mini2", new ByteArrayInputStream(data2B));
 
             // Check
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(0));
-            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(1));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(2)); // SBAT
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(3)); // Mini
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(4));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(0));
+            ClassicAssert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(1));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(2)); // SBAT
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(3)); // Mini
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(4));
 
             // First 2 Mini blocks will be used
-            Assert.AreEqual(2, ministore.GetFreeBlock());
+            ClassicAssert.AreEqual(2, ministore.GetFreeBlock());
 
             // Add one more mini-stream, and check
             fs.Root.CreateDocument("mini1", new ByteArrayInputStream(data1B));
 
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(0));
-            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(1));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(2)); // SBAT
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(3)); // Mini
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(4));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(0));
+            ClassicAssert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(1));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(2)); // SBAT
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(3)); // Mini
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(4));
 
             // One more mini-block will be used
-            Assert.AreEqual(3, ministore.GetFreeBlock());
+            ClassicAssert.AreEqual(3, ministore.GetFreeBlock());
 
             // Check the contents too
             byte[] r1 = new byte[data1B.Length];

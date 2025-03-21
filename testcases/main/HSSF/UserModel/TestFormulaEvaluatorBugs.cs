@@ -21,7 +21,7 @@ namespace TestCases.HSSF.UserModel
     using System.Collections;
     using System.Configuration;
     using System.IO;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.Record.Aggregates;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Formula;
@@ -73,7 +73,7 @@ namespace TestCases.HSSF.UserModel
             row.GetCell(2).SetCellValue(25);
 
             HSSFFormulaEvaluator.EvaluateAllFormulaCells(wb);
-            Assert.AreEqual(4.2 * 25, row.GetCell(3).NumericCellValue, 0.0001);
+            ClassicAssert.AreEqual(4.2 * 25, row.GetCell(3).NumericCellValue, 0.0001);
 
 
             if (OUTPUT_TEST_FILES)
@@ -99,7 +99,7 @@ namespace TestCases.HSSF.UserModel
             row.CreateCell(0).CellFormula = ("SUM(A1:B1)");
 
             HSSFFormulaEvaluator.EvaluateAllFormulaCells(wb);
-            Assert.AreEqual(5.4, row.GetCell(0).NumericCellValue, 0.0001);
+            ClassicAssert.AreEqual(5.4, row.GetCell(0).NumericCellValue, 0.0001);
 
             if (OUTPUT_TEST_FILES)
             {
@@ -136,48 +136,48 @@ namespace TestCases.HSSF.UserModel
 
             row = sheet.GetRow(0);
             cell = row.GetCell(0);
-            Assert.AreEqual("31+46", cell.CellFormula);
-            Assert.AreEqual(77, eva.Evaluate(cell).NumberValue, 0);
+            ClassicAssert.AreEqual("31+46", cell.CellFormula);
+            ClassicAssert.AreEqual(77, eva.Evaluate(cell).NumberValue, 0);
 
             row = sheet.GetRow(1);
             cell = row.GetCell(0);
-            Assert.AreEqual("30+53", cell.CellFormula);
-            Assert.AreEqual(83, eva.Evaluate(cell).NumberValue, 0);
+            ClassicAssert.AreEqual("30+53", cell.CellFormula);
+            ClassicAssert.AreEqual(83, eva.Evaluate(cell).NumberValue, 0);
 
             row = sheet.GetRow(2);
             cell = row.GetCell(0);
-            Assert.AreEqual("SUM(A1:A2)", cell.CellFormula);
-            Assert.AreEqual(160, eva.Evaluate(cell).NumberValue, 0);
+            ClassicAssert.AreEqual("SUM(A1:A2)", cell.CellFormula);
+            ClassicAssert.AreEqual(160, eva.Evaluate(cell).NumberValue, 0);
 
             row = sheet.GetRow(4);
             cell = row.GetCell(0);
-            Assert.AreEqual("32767+32768", cell.CellFormula);
-            Assert.AreEqual(65535, eva.Evaluate(cell).NumberValue, 0);
+            ClassicAssert.AreEqual("32767+32768", cell.CellFormula);
+            ClassicAssert.AreEqual(65535, eva.Evaluate(cell).NumberValue, 0);
 
             row = sheet.GetRow(7);
             cell = row.GetCell(0);
-            Assert.AreEqual("32744+42333", cell.CellFormula);
-            Assert.AreEqual(75077, eva.Evaluate(cell).NumberValue, 0);
+            ClassicAssert.AreEqual("32744+42333", cell.CellFormula);
+            ClassicAssert.AreEqual(75077, eva.Evaluate(cell).NumberValue, 0);
 
             row = sheet.GetRow(8);
             cell = row.GetCell(0);
-            Assert.AreEqual("327680/32768", cell.CellFormula);
-            Assert.AreEqual(10, eva.Evaluate(cell).NumberValue, 0);
+            ClassicAssert.AreEqual("327680/32768", cell.CellFormula);
+            ClassicAssert.AreEqual(10, eva.Evaluate(cell).NumberValue, 0);
 
             row = sheet.GetRow(9);
             cell = row.GetCell(0);
-            Assert.AreEqual("32767+32769", cell.CellFormula);
-            Assert.AreEqual(65536, eva.Evaluate(cell).NumberValue, 0);
+            ClassicAssert.AreEqual("32767+32769", cell.CellFormula);
+            ClassicAssert.AreEqual(65536, eva.Evaluate(cell).NumberValue, 0);
 
             row = sheet.GetRow(10);
             cell = row.GetCell(0);
-            Assert.AreEqual("35000+36000", cell.CellFormula);
-            Assert.AreEqual(71000, eva.Evaluate(cell).NumberValue, 0);
+            ClassicAssert.AreEqual("35000+36000", cell.CellFormula);
+            ClassicAssert.AreEqual(71000, eva.Evaluate(cell).NumberValue, 0);
 
             row = sheet.GetRow(11);
             cell = row.GetCell(0);
-            Assert.AreEqual("-1000000-3000000", cell.CellFormula);
-            Assert.AreEqual(-4000000, eva.Evaluate(cell).NumberValue, 0);
+            ClassicAssert.AreEqual("-1000000-3000000", cell.CellFormula);
+            ClassicAssert.AreEqual(-4000000, eva.Evaluate(cell).NumberValue, 0);
 
             wb.Close();
         }
@@ -210,39 +210,39 @@ namespace TestCases.HSSF.UserModel
 
             FormulaRecordAggregate frec = (FormulaRecordAggregate)((HSSFCell)cellSUM).CellValueRecord;
             Ptg[] ops = frec.FormulaRecord.ParsedExpression;
-            Assert.AreEqual(2, ops.Length);
-            Assert.AreEqual(typeof(AreaPtg), ops[0].GetType());
-            Assert.AreEqual(typeof(FuncVarPtg), ops[1].GetType());
+            ClassicAssert.AreEqual(2, ops.Length);
+            ClassicAssert.AreEqual(typeof(AreaPtg), ops[0].GetType());
+            ClassicAssert.AreEqual(typeof(FuncVarPtg), ops[1].GetType());
 
             // Actually stored as C1 to C65536
             // (last row is -1 === 65535)
             AreaPtg ptg = (AreaPtg)ops[0];
-            Assert.AreEqual(2, ptg.FirstColumn);
-            Assert.AreEqual(2, ptg.LastColumn);
-            Assert.AreEqual(0, ptg.FirstRow);
-            Assert.AreEqual(65535, ptg.LastRow);
-            Assert.AreEqual("C:C", ptg.ToFormulaString());
+            ClassicAssert.AreEqual(2, ptg.FirstColumn);
+            ClassicAssert.AreEqual(2, ptg.LastColumn);
+            ClassicAssert.AreEqual(0, ptg.FirstRow);
+            ClassicAssert.AreEqual(65535, ptg.LastRow);
+            ClassicAssert.AreEqual("C:C", ptg.ToFormulaString());
 
             // Will show as C:C, but won't know how many
             // rows it covers as we don't have the sheet
             // to hand when turning the Ptgs into a string
-            Assert.AreEqual("SUM(C:C)", cellSUM.CellFormula);
+            ClassicAssert.AreEqual("SUM(C:C)", cellSUM.CellFormula);
 
             // But the evaluator knows the sheet, so it
             // can do it properly
-            Assert.AreEqual(6, eva.Evaluate(cellSUM).NumberValue, 0);
+            ClassicAssert.AreEqual(6, eva.Evaluate(cellSUM).NumberValue, 0);
 
             // Test the index
             // Again, the formula string will be right but
             // lacking row count, Evaluated will be right
             ICell cellIDX = rowIDX.GetCell(0);
-            Assert.AreEqual("INDEX(C:C,2,1)", cellIDX.CellFormula);
-            Assert.AreEqual(2, eva.Evaluate(cellIDX).NumberValue, 0);
+            ClassicAssert.AreEqual("INDEX(C:C,2,1)", cellIDX.CellFormula);
+            ClassicAssert.AreEqual(2, eva.Evaluate(cellIDX).NumberValue, 0);
 
             // Across two colums
             ICell cellSUM2D = rowSUM2D.GetCell(0);
-            Assert.AreEqual("SUM(C:D)", cellSUM2D.CellFormula);
-            Assert.AreEqual(66, eva.Evaluate(cellSUM2D).NumberValue, 0);
+            ClassicAssert.AreEqual("SUM(C:D)", cellSUM2D.CellFormula);
+            ClassicAssert.AreEqual(66, eva.Evaluate(cellSUM2D).NumberValue, 0);
 
             wb.Close();
         }
@@ -270,7 +270,7 @@ namespace TestCases.HSSF.UserModel
             {
                 Assert.Fail("Identified bug 44508");
             }
-            Assert.AreEqual(true, cell.BooleanCellValue);
+            ClassicAssert.AreEqual(true, cell.BooleanCellValue);
 
             wb.Close();
         }
@@ -404,17 +404,17 @@ namespace TestCases.HSSF.UserModel
             // With caching, the evaluationCount is 8 which is a big improvement
             // Note - these expected values may change if the WorkbookEvaluator is 
             // ever optimised to short circuit 'if' functions.
-            Assert.AreEqual(8, evalCount);
+            ClassicAssert.AreEqual(8, evalCount);
 
             // The cache hits would be 24 if fully evaluating all arguments of the
             // "IF()" functions (Each of the 8 formulas has 4 refs to formula cells
             // which result in 1 cache miss and 3 cache hits). However with the
             // short-circuit-if optimisation, 2 of the cell refs get skipped
             // reducing this metric 8.
-            Assert.AreEqual(8, evalListener.GetCountCacheHits());
+            ClassicAssert.AreEqual(8, evalListener.GetCountCacheHits());
 
             // confirm the evaluation result too
-            Assert.AreEqual(ErrorEval.NA, ve);
+            ClassicAssert.AreEqual(ErrorEval.NA, ve);
 
             wb.Close();
         }
@@ -435,31 +435,31 @@ namespace TestCases.HSSF.UserModel
 
             cell.CellFormula = ("DATE(2012,2,1)");
             fe.NotifyUpdateCell(cell);
-            Assert.AreEqual(40940.0, fe.Evaluate(cell).NumberValue);
+            ClassicAssert.AreEqual(40940.0, fe.Evaluate(cell).NumberValue);
 
             cell.CellFormula = ("DATE(2012,2,1+4)");
             fe.NotifyUpdateCell(cell);
-            Assert.AreEqual(40944.0, fe.Evaluate(cell).NumberValue);
+            ClassicAssert.AreEqual(40944.0, fe.Evaluate(cell).NumberValue);
 
             cell.CellFormula = ("DATE(2012,2-1,1+4)");
             fe.NotifyUpdateCell(cell);
-            Assert.AreEqual(40913.0, fe.Evaluate(cell).NumberValue);
+            ClassicAssert.AreEqual(40913.0, fe.Evaluate(cell).NumberValue);
 
             cell.CellFormula = ("DATE(2012,2,1-27)");
             fe.NotifyUpdateCell(cell);
-            Assert.AreEqual(40913.0, fe.Evaluate(cell).NumberValue);
+            ClassicAssert.AreEqual(40913.0, fe.Evaluate(cell).NumberValue);
 
             cell.CellFormula = ("DATE(2012,2-2,1+4)");
             fe.NotifyUpdateCell(cell);
-            Assert.AreEqual(40882.0, fe.Evaluate(cell).NumberValue);
+            ClassicAssert.AreEqual(40882.0, fe.Evaluate(cell).NumberValue);
 
             cell.CellFormula = ("DATE(2012,2,1-58)");
             fe.NotifyUpdateCell(cell);
-            Assert.AreEqual(40882.0, fe.Evaluate(cell).NumberValue);
+            ClassicAssert.AreEqual(40882.0, fe.Evaluate(cell).NumberValue);
 
             cell.CellFormula = ("DATE(2012,2-12,1+4)");
             fe.NotifyUpdateCell(cell);
-            Assert.AreEqual(40579.0, fe.Evaluate(cell).NumberValue);
+            ClassicAssert.AreEqual(40579.0, fe.Evaluate(cell).NumberValue);
 
             wb.Close();
         }
@@ -522,9 +522,9 @@ namespace TestCases.HSSF.UserModel
             {
                 cell = row.GetCell(i) as HSSFCell;
                 Ptg[] ptgs = getPtgs(cell);
-                Assert.AreEqual(4, ptgs.Length);
-                Assert.AreEqual(typeof(FuncPtg), ptgs[3].GetType());
-                Assert.AreEqual("MID", ((FuncPtg)ptgs[3]).Name);
+                ClassicAssert.AreEqual(4, ptgs.Length);
+                ClassicAssert.AreEqual(typeof(FuncPtg), ptgs[3].GetType());
+                ClassicAssert.AreEqual("MID", ((FuncPtg)ptgs[3]).Name);
                 assertRefPtgA1('V', ptgs, 0);
             }
 
@@ -564,21 +564,21 @@ namespace TestCases.HSSF.UserModel
 
             // Check our cached values were correctly evaluated
             cell = row.GetCell(CellReference.ConvertColStringToIndex("A")) as HSSFCell;
-            Assert.AreEqual("abc", cell.StringCellValue);
+            ClassicAssert.AreEqual("abc", cell.StringCellValue);
             cell = row.GetCell(CellReference.ConvertColStringToIndex("B")) as HSSFCell;
-            Assert.AreEqual("ab", cell.StringCellValue);
+            ClassicAssert.AreEqual("ab", cell.StringCellValue);
             cell = row.GetCell(CellReference.ConvertColStringToIndex("C")) as HSSFCell;
-            Assert.AreEqual("A", cell.StringCellValue);
+            ClassicAssert.AreEqual("A", cell.StringCellValue);
             cell = row.GetCell(CellReference.ConvertColStringToIndex("D")) as HSSFCell;
-            Assert.AreEqual("ab", cell.StringCellValue);
+            ClassicAssert.AreEqual("ab", cell.StringCellValue);
             cell = row.GetCell(CellReference.ConvertColStringToIndex("E")) as HSSFCell;
-            Assert.AreEqual("X", cell.StringCellValue);
+            ClassicAssert.AreEqual("X", cell.StringCellValue);
             cell = row.GetCell(CellReference.ConvertColStringToIndex("F")) as HSSFCell;
-            Assert.AreEqual("bc", cell.StringCellValue);
+            ClassicAssert.AreEqual("bc", cell.StringCellValue);
             cell = row.GetCell(CellReference.ConvertColStringToIndex("G")) as HSSFCell;
-            Assert.AreEqual("ab", cell.StringCellValue);
+            ClassicAssert.AreEqual("ab", cell.StringCellValue);
             cell = row.GetCell(CellReference.ConvertColStringToIndex("H")) as HSSFCell;
-            Assert.AreEqual("A", cell.StringCellValue);
+            ClassicAssert.AreEqual("A", cell.StringCellValue);
 
             // Enable this to write out + check in Excel
             if (OUTPUT_TEST_FILES)
@@ -590,8 +590,8 @@ namespace TestCases.HSSF.UserModel
         }
         private Ptg[] getPtgs(HSSFCell cell)
         {
-            Assert.AreEqual(CellType.Formula, cell.CellType);
-            Assert.AreEqual(typeof(FormulaRecordAggregate), cell.CellValueRecord.GetType());
+            ClassicAssert.AreEqual(CellType.Formula, cell.CellType);
+            ClassicAssert.AreEqual(typeof(FormulaRecordAggregate), cell.CellValueRecord.GetType());
             FormulaRecordAggregate agg = (FormulaRecordAggregate)cell.CellValueRecord;
             FormulaRecord rec = agg.FormulaRecord;
             return rec.ParsedExpression;
@@ -599,10 +599,10 @@ namespace TestCases.HSSF.UserModel
         private void assertRefPtgA1(char rv, Ptg[] ptgs, int at)
         {
             Ptg ptg = ptgs[at];
-            Assert.AreEqual(typeof(RefPtg), ptg.GetType());
-            Assert.AreEqual(0, ((RefPtg)ptg).Row);
-            Assert.AreEqual(0, ((RefPtg)ptg).Column);
-            Assert.AreEqual(rv, ((RefPtg)ptg).RVAType);
+            ClassicAssert.AreEqual(typeof(RefPtg), ptg.GetType());
+            ClassicAssert.AreEqual(0, ((RefPtg)ptg).Row);
+            ClassicAssert.AreEqual(0, ((RefPtg)ptg).Column);
+            ClassicAssert.AreEqual(rv, ((RefPtg)ptg).RVAType);
         }
 
     }

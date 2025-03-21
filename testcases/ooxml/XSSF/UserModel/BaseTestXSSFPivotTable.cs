@@ -24,7 +24,7 @@ namespace TestCases.XSSF.UserModel
     using NPOI.SS.Util;
     using NPOI.XSSF;
     using NPOI.XSSF.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
 
     public abstract class BaseTestXSSFPivotTable
@@ -56,21 +56,21 @@ namespace TestCases.XSSF.UserModel
         {
             int columnIndex = 0;
 
-            Assert.AreEqual(0, pivotTable.GetRowLabelColumns().Count);
+            ClassicAssert.AreEqual(0, pivotTable.GetRowLabelColumns().Count);
 
             pivotTable.AddRowLabel(columnIndex);
             CT_PivotTableDefinition defintion = pivotTable.GetCTPivotTableDefinition();
 
-            Assert.AreEqual(defintion.rowFields.GetFieldArray(0).x, columnIndex);
-            Assert.AreEqual(defintion.rowFields.count, 1);
-            Assert.AreEqual(1, pivotTable.GetRowLabelColumns().Count);
+            ClassicAssert.AreEqual(defintion.rowFields.GetFieldArray(0).x, columnIndex);
+            ClassicAssert.AreEqual(defintion.rowFields.count, 1);
+            ClassicAssert.AreEqual(1, pivotTable.GetRowLabelColumns().Count);
 
             columnIndex = 1;
             pivotTable.AddRowLabel(columnIndex);
-            Assert.AreEqual(2, pivotTable.GetRowLabelColumns().Count);
+            ClassicAssert.AreEqual(2, pivotTable.GetRowLabelColumns().Count);
 
-            Assert.AreEqual(0, (int)pivotTable.GetRowLabelColumns()[(0)]);
-            Assert.AreEqual(1, (int)pivotTable.GetRowLabelColumns()[(1)]);
+            ClassicAssert.AreEqual(0, (int)pivotTable.GetRowLabelColumns()[(0)]);
+            ClassicAssert.AreEqual(1, (int)pivotTable.GetRowLabelColumns()[(1)]);
         }
         /**
          * Verify that it's not possible to create a row label outside of the referenced area.
@@ -102,7 +102,7 @@ namespace TestCases.XSSF.UserModel
             pivotTable.AddColumnLabel(DataConsolidateFunction.SUM, columnIndex);
             CT_PivotTableDefinition defintion = pivotTable.GetCTPivotTableDefinition();
 
-            Assert.AreEqual(defintion.colFields, null);
+            ClassicAssert.AreEqual(defintion.colFields, null);
         }
 
         /**
@@ -120,7 +120,7 @@ namespace TestCases.XSSF.UserModel
             pivotTable.AddColumnLabel(DataConsolidateFunction.MIN, columnThree);
             CT_PivotTableDefinition defintion = pivotTable.GetCTPivotTableDefinition();
 
-            Assert.AreEqual(defintion.dataFields.dataField.Count, 3);
+            ClassicAssert.AreEqual(defintion.dataFields.dataField.Count, 3);
         }
 
 
@@ -139,7 +139,7 @@ namespace TestCases.XSSF.UserModel
             pivotTable.AddColumnLabel(DataConsolidateFunction.SUM, columnThree);
             CT_PivotTableDefinition defintion = pivotTable.GetCTPivotTableDefinition();
 
-            Assert.AreEqual(defintion.dataFields.dataField.Count, 3);
+            ClassicAssert.AreEqual(defintion.dataFields.dataField.Count, 3);
         }
 
         /**
@@ -155,7 +155,7 @@ namespace TestCases.XSSF.UserModel
             pivotTable.AddColumnLabel(DataConsolidateFunction.SUM, columnTwo);
             CT_PivotTableDefinition defintion = pivotTable.GetCTPivotTableDefinition();
 
-            Assert.AreEqual(defintion.colFields.field[0].x, -2);
+            ClassicAssert.AreEqual(defintion.colFields.field[0].x, -2);
         }
 
         /**
@@ -170,8 +170,8 @@ namespace TestCases.XSSF.UserModel
 
             CT_PivotTableDefinition defintion = pivotTable.GetCTPivotTableDefinition();
 
-            Assert.AreEqual(defintion.dataFields.dataField[(0)].fld, columnIndex);
-            Assert.AreEqual(defintion.dataFields.dataField[(0)].subtotal,
+            ClassicAssert.AreEqual(defintion.dataFields.dataField[(0)].fld, columnIndex);
+            ClassicAssert.AreEqual(defintion.dataFields.dataField[(0)].subtotal,
                     (ST_DataConsolidateFunction)(DataConsolidateFunction.SUM.Value));
         }
 
@@ -189,8 +189,8 @@ namespace TestCases.XSSF.UserModel
 
             CT_PivotTableDefinition defintion = pivotTable.GetCTPivotTableDefinition();
 
-            Assert.AreEqual(defintion.dataFields.dataField[(0)].fld, columnIndex);
-            Assert.AreEqual(defintion.dataFields.dataField[(0)].name, customName);
+            ClassicAssert.AreEqual(defintion.dataFields.dataField[(0)].fld, columnIndex);
+            ClassicAssert.AreEqual(defintion.dataFields.dataField[(0)].name, customName);
         }
 
         /**
@@ -224,7 +224,7 @@ namespace TestCases.XSSF.UserModel
 
             pivotTable.AddDataColumn(columnIndex, isDataField);
             CT_PivotFields pivotFields = pivotTable.GetCTPivotTableDefinition().pivotFields;
-            Assert.AreEqual(pivotFields.GetPivotFieldArray(columnIndex).dataField, isDataField);
+            ClassicAssert.AreEqual(pivotFields.GetPivotFieldArray(columnIndex).dataField, isDataField);
         }
 
         /**
@@ -258,9 +258,9 @@ namespace TestCases.XSSF.UserModel
             pivotTable.AddReportFilter(columnIndex);
             CT_PageFields fields = pivotTable.GetCTPivotTableDefinition().pageFields;
             CT_PageField field = fields.pageField[(0)];
-            Assert.AreEqual(field.fld, columnIndex);
-            Assert.AreEqual(field.hier, -1);
-            Assert.AreEqual(fields.count, 1);
+            ClassicAssert.AreEqual(field.fld, columnIndex);
+            ClassicAssert.AreEqual(field.hier, -1);
+            ClassicAssert.AreEqual(fields.count, 1);
         }
 
         /**
@@ -289,26 +289,26 @@ namespace TestCases.XSSF.UserModel
         public void TestAddDataColumnWithOffsetData()
         {
             offsetPivotTable.AddColumnLabel(DataConsolidateFunction.SUM, 1);
-            Assert.AreEqual(CellType.Numeric, offsetOuterCell.CellType);
+            ClassicAssert.AreEqual(CellType.Numeric, offsetOuterCell.CellType);
 
             offsetPivotTable.AddColumnLabel(DataConsolidateFunction.SUM, 0);
         }
         private void checkPivotTables(XSSFWorkbook wb)
         {
             IList<XSSFPivotTable> pivotTables = (wb.GetSheetAt(0) as XSSFSheet).GetPivotTables();
-            Assert.IsNotNull(pivotTables);
-            Assert.AreEqual(3, pivotTables.Count);
+            ClassicAssert.IsNotNull(pivotTables);
+            ClassicAssert.AreEqual(3, pivotTables.Count);
             XSSFPivotTable pivotTable = pivotTables[0];
             checkPivotTable(pivotTable);
         }
         private void checkPivotTable(XSSFPivotTable pivotTableBack)
         {
-            Assert.IsNotNull(pivotTableBack.GetPivotCacheDefinition());
-            Assert.IsNotNull(pivotTableBack.GetPivotCacheDefinition().GetCTPivotCacheDefinition());
+            ClassicAssert.IsNotNull(pivotTableBack.GetPivotCacheDefinition());
+            ClassicAssert.IsNotNull(pivotTableBack.GetPivotCacheDefinition().GetCTPivotCacheDefinition());
             CT_CacheFields cacheFields = pivotTableBack.GetPivotCacheDefinition().GetCTPivotCacheDefinition().cacheFields;
-            Assert.IsNotNull(cacheFields);
-            Assert.AreEqual(8, cacheFields.SizeOfCacheFieldArray());
-            Assert.AreEqual("A", cacheFields.cacheField[0].name);
+            ClassicAssert.IsNotNull(cacheFields);
+            ClassicAssert.AreEqual(8, cacheFields.SizeOfCacheFieldArray());
+            ClassicAssert.AreEqual("A", cacheFields.cacheField[0].name);
         }
 
     }

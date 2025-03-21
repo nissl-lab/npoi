@@ -19,7 +19,7 @@ using System;
 using System.IO;
 using NPOI.HSSF.Record;
 using NPOI.Util;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 
 namespace TestCases.HSSF.Record
 {
@@ -227,7 +227,7 @@ namespace TestCases.HSSF.Record
             d.Serialize(o);
             o.Flush();
 
-            Assert.IsTrue(Arrays.Equals(data, bos.ToArray()), message);
+            ClassicAssert.IsTrue(Arrays.Equals(data, bos.ToArray()), message);
         }
 
         /**
@@ -261,13 +261,13 @@ namespace TestCases.HSSF.Record
             DConRefRecord instance = new DConRefRecord(TestcaseRecordInputStream.Create(81, data1));
             int expResult = data1.Length;
             int result = instance.RecordSize - 4;
-            Assert.AreEqual(expResult, result, "single byte external reference, volume type path data size");
+            ClassicAssert.AreEqual(expResult, result, "single byte external reference, volume type path data size");
             instance = new DConRefRecord(TestcaseRecordInputStream.Create(81, data2));
-            Assert.AreEqual(data2.Length, instance.RecordSize - 4, "double byte self reference data size");
+            ClassicAssert.AreEqual(data2.Length, instance.RecordSize - 4, "double byte self reference data size");
             instance = new DConRefRecord(TestcaseRecordInputStream.Create(81, data3));
-            Assert.AreEqual(data3.Length, instance.RecordSize - 4, "single byte self reference data size");
+            ClassicAssert.AreEqual(data3.Length, instance.RecordSize - 4, "single byte self reference data size");
             instance = new DConRefRecord(TestcaseRecordInputStream.Create(81, data4));
-            Assert.AreEqual(data4.Length, instance.RecordSize - 4, "double byte external reference, UNC volume type path data size");
+            ClassicAssert.AreEqual(data4.Length, instance.RecordSize - 4, "double byte external reference, UNC volume type path data size");
         }
 
         /**
@@ -279,7 +279,7 @@ namespace TestCases.HSSF.Record
             DConRefRecord instance = new DConRefRecord(TestcaseRecordInputStream.Create(81, data1));
             short expResult = 81;
             short result = instance.Sid;
-            Assert.AreEqual(expResult, result, "SID");
+            ClassicAssert.AreEqual(expResult, result, "SID");
         }
 
         /**
@@ -292,7 +292,7 @@ namespace TestCases.HSSF.Record
             DConRefRecord instance = new DConRefRecord(TestcaseRecordInputStream.Create(81, data1));
             byte[] expResult = Arrays.CopyOfRange(data1, 9, data1.Length);
             byte[] result = instance.GetPath();
-            Assert.IsTrue(Arrays.Equals(expResult, result), "get path");
+            ClassicAssert.IsTrue(Arrays.Equals(expResult, result), "get path");
         }
 
         /**
@@ -302,9 +302,9 @@ namespace TestCases.HSSF.Record
         public void TestIsExternalRef()
         {
             DConRefRecord instance = new DConRefRecord(TestcaseRecordInputStream.Create(81, data1));
-            Assert.IsTrue(instance.IsExternalRef, "external reference");
+            ClassicAssert.IsTrue(instance.IsExternalRef, "external reference");
             instance = new DConRefRecord(TestcaseRecordInputStream.Create(81, data2));
-            Assert.IsFalse(instance.IsExternalRef, "internal reference");
+            ClassicAssert.IsFalse(instance.IsExternalRef, "internal reference");
         }
     }
 }

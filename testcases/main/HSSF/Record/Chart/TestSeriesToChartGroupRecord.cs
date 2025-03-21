@@ -23,7 +23,7 @@ namespace TestCases.HSSF.Record.Chart
     using System;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.Chart;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     /**
      * Tests the serialization and deserialization of the SeriesToChartGroupRecord
@@ -49,10 +49,10 @@ namespace TestCases.HSSF.Record.Chart
         public void TestLoad()
         {
             SeriesToChartGroupRecord record = new SeriesToChartGroupRecord(TestcaseRecordInputStream.Create(0x1045, data));
-            Assert.AreEqual(0x0, record.ChartGroupIndex);
+            ClassicAssert.AreEqual(0x0, record.ChartGroupIndex);
 
 
-            Assert.AreEqual(0x6, record.RecordSize);
+            ClassicAssert.AreEqual(0x6, record.RecordSize);
         }
         [Test]
         public void TestStore()
@@ -62,9 +62,9 @@ namespace TestCases.HSSF.Record.Chart
 
 
             byte[] recordBytes = record.Serialize();
-            Assert.AreEqual(recordBytes.Length - 4, data.Length);
+            ClassicAssert.AreEqual(recordBytes.Length - 4, data.Length);
             for (int i = 0; i < data.Length; i++)
-                Assert.AreEqual(data[i], recordBytes[i + 4], "At offset " + i);
+                ClassicAssert.AreEqual(data[i], recordBytes[i + 4], "At offset " + i);
         }
     }
 }

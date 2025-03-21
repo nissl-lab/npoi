@@ -2,7 +2,7 @@
 using NPOI.SS.Util;
 using NPOI.Util;
 using NPOI.XSSF.UserModel;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -31,9 +31,9 @@ namespace TestCases.XSSF
             {
                 wb.Write(file, false);
             }
-            Assert.AreEqual("Dianne Pugh", row1.GetCell(2).StringCellValue);
+            ClassicAssert.AreEqual("Dianne Pugh", row1.GetCell(2).StringCellValue);
             //next assertion fails, cell D2 ends up with Dianne Pugh
-            Assert.AreEqual("Finance", row1.GetCell(3).StringCellValue);
+            ClassicAssert.AreEqual("Finance", row1.GetCell(3).StringCellValue);
         }
         private XSSFWorkbook initWorkbook2()
         {

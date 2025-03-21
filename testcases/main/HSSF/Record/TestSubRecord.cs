@@ -19,7 +19,7 @@
 namespace TestCases.HSSF.Record
 {
     using System;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     using NPOI.Util;
     using TestCases.HSSF.Record;
@@ -83,8 +83,8 @@ namespace TestCases.HSSF.Record
             {
                 throw new AssertionException("Identified bug 45778");
             }
-            Assert.AreEqual(74, data2.Length);
-            Assert.IsTrue(Arrays.Equals(dataAutoFilter, data2));
+            ClassicAssert.AreEqual(74, data2.Length);
+            ClassicAssert.IsTrue(Arrays.Equals(dataAutoFilter, data2));
         }
         [Test]
         public void TestReadManualComboWithFormula()
@@ -107,7 +107,7 @@ namespace TestCases.HSSF.Record
             {
                 throw new AssertionException("Identified bug 45778");
             }
-            Assert.AreEqual(data.Length, data2.Length, "Encoded length");
+            ClassicAssert.AreEqual(data.Length, data2.Length, "Encoded length");
             for (int i = 0; i < data.Length; i++)
             {
                 if (data[i] != data2[i])
@@ -115,7 +115,7 @@ namespace TestCases.HSSF.Record
                     throw new AssertionException("Encoded data differs at index " + i);
                 }
             }
-            Assert.IsTrue(Arrays.Equals(data, data2));
+            ClassicAssert.IsTrue(Arrays.Equals(data, data2));
         }
 
         /**
@@ -146,8 +146,8 @@ namespace TestCases.HSSF.Record
             );
             int LBS_START_POS = 0x002E;
             int WRONG_LBS_SIZE = 0x1FEE;
-            Assert.AreEqual(0x0013, LittleEndian.GetShort(data, LBS_START_POS + 0));
-            Assert.AreEqual(WRONG_LBS_SIZE, LittleEndian.GetShort(data, LBS_START_POS + 2));
+            ClassicAssert.AreEqual(0x0013, LittleEndian.GetShort(data, LBS_START_POS + 0));
+            ClassicAssert.AreEqual(WRONG_LBS_SIZE, LittleEndian.GetShort(data, LBS_START_POS + 2));
             int wrongTotalSize = LBS_START_POS + 4 + WRONG_LBS_SIZE;
             byte[] wrongData = new byte[wrongTotalSize];
             Array.Copy(data, 0, wrongData, 0, data.Length);

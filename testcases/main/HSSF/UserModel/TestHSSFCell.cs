@@ -22,7 +22,7 @@ namespace TestCases.HSSF.UserModel
     using NPOI.HSSF.Util;
     using NPOI.HSSF.UserModel;
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using TestCases.HSSF;
     using NPOI.SS.UserModel;
     using NPOI.HSSF.Record;
@@ -69,14 +69,14 @@ namespace TestCases.HSSF.UserModel
             HSSFWorkbook wb = OpenSample("1900DateWindowing.xls");
             NPOI.SS.UserModel.ISheet sheet = wb.GetSheetAt(0);
 
-            Assert.AreEqual(date, sheet.GetRow(0).GetCell(0).DateCellValue,
+            ClassicAssert.AreEqual(date, sheet.GetRow(0).GetCell(0).DateCellValue,
                                "Date from file using 1900 Date Windowing");
 
             // now Check a file with 1904 Date Windowing
             wb = OpenSample("1904DateWindowing.xls");
             sheet = wb.GetSheetAt(0);
 
-            Assert.AreEqual(date, sheet.GetRow(0).GetCell(0).DateCellValue,
+            ClassicAssert.AreEqual(date, sheet.GetRow(0).GetCell(0).DateCellValue,
                              "Date from file using 1904 Date Windowing");
 
             wb.Close();
@@ -100,7 +100,7 @@ namespace TestCases.HSSF.UserModel
             HSSFWorkbook wb2 = WriteOutAndReadBack(wb1);
             wb1.Close();
 
-            Assert.AreEqual(date,
+            ClassicAssert.AreEqual(date,
                             ReadCell(wb2, 0, 1), "Date from file using 1900 Date Windowing");
 
             // now Check a file with 1904 Date Windowing
@@ -108,7 +108,7 @@ namespace TestCases.HSSF.UserModel
 
             SetCell(wb1, 0, 1, date);
             wb2 = WriteOutAndReadBack(wb1);
-            Assert.AreEqual(date,
+            ClassicAssert.AreEqual(date,
                             ReadCell(wb2, 0, 1), "Date from file using 1900 Date Windowing");
 
             wb1.Close();
@@ -156,21 +156,21 @@ namespace TestCases.HSSF.UserModel
         private static void ConfirmStringRecord(HSSFSheet sheet, bool isPresent)
         {
             Record[] recs = RecordInspector.GetRecords(sheet, 0);
-            Assert.AreEqual(isPresent ? 29 : 28, recs.Length); //for SheetExtRecord
-            //Assert.AreEqual(isPresent ? 28 : 27, recs.Length);  // statement in poi, why use above line?
+            ClassicAssert.AreEqual(isPresent ? 29 : 28, recs.Length); //for SheetExtRecord
+            //ClassicAssert.AreEqual(isPresent ? 28 : 27, recs.Length);  // statement in poi, why use above line?
             int index = 22;
             Record fr = recs[index++];
-            Assert.AreEqual(typeof(FormulaRecord), fr.GetType());
+            ClassicAssert.AreEqual(typeof(FormulaRecord), fr.GetType());
             if (isPresent)
             {
-                Assert.AreEqual(typeof(StringRecord), recs[index++].GetType());
+                ClassicAssert.AreEqual(typeof(StringRecord), recs[index++].GetType());
             }
             else
             {
-                Assert.IsFalse(typeof(StringRecord) == recs[index].GetType());
+                ClassicAssert.IsFalse(typeof(StringRecord) == recs[index].GetType());
             }
             Record dbcr = recs[index];
-            Assert.AreEqual(typeof(DBCellRecord), dbcr.GetType());
+            ClassicAssert.AreEqual(typeof(DBCellRecord), dbcr.GetType());
         }
 
         private static void SetCell(HSSFWorkbook workbook, int rowIdx, int colIdx, DateTime date)
@@ -206,14 +206,14 @@ namespace TestCases.HSSF.UserModel
             //Check initial position
             HSSFSheet umSheet = (HSSFSheet)wb1.GetSheetAt(0);
             InternalSheet s = umSheet.Sheet;
-            Assert.AreEqual(0, s.ActiveCellCol, "Initial active cell should be in col 0");
-            Assert.AreEqual(1, s.ActiveCellRow, "Initial active cell should be on row 1");
+            ClassicAssert.AreEqual(0, s.ActiveCellCol, "Initial active cell should be in col 0");
+            ClassicAssert.AreEqual(1, s.ActiveCellRow, "Initial active cell should be on row 1");
 
             //modify position through Cell
             ICell cell = umSheet.CreateRow(3).CreateCell(2);
             cell.SetAsActiveCell();
-            Assert.AreEqual(2, s.ActiveCellCol, "After modify, active cell should be in col 2");
-            Assert.AreEqual(3, s.ActiveCellRow, "After modify, active cell should be on row 3");
+            ClassicAssert.AreEqual(2, s.ActiveCellCol, "After modify, active cell should be in col 2");
+            ClassicAssert.AreEqual(3, s.ActiveCellRow, "After modify, active cell should be on row 3");
 
             //Write book to temp file; read and Verify that position is serialized
             HSSFWorkbook wb2 = WriteOutAndReadBack(wb1);
@@ -222,8 +222,8 @@ namespace TestCases.HSSF.UserModel
             umSheet = (HSSFSheet)wb2.GetSheetAt(0);
             s = umSheet.Sheet;
 
-            Assert.AreEqual(2, s.ActiveCellCol, "After serialize, active cell should be in col 2");
-            Assert.AreEqual(3, s.ActiveCellRow, "After serialize, active cell should be on row 3");
+            ClassicAssert.AreEqual(2, s.ActiveCellCol, "After serialize, active cell should be in col 2");
+            ClassicAssert.AreEqual(3, s.ActiveCellRow, "After serialize, active cell should be on row 3");
 
             wb2.Close();
         }
@@ -242,13 +242,13 @@ namespace TestCases.HSSF.UserModel
             ICell cell = sh.GetRow(1).CreateCell(3);
             sh.GetRow(3).CreateCell(3);
 
-            Assert.AreEqual(0, ((HSSFSheet)wb.GetSheetAt(0)).Sheet.ActiveCellRow);
-            Assert.AreEqual(0, ((HSSFSheet)wb.GetSheetAt(0)).Sheet.ActiveCellCol);
+            ClassicAssert.AreEqual(0, ((HSSFSheet)wb.GetSheetAt(0)).Sheet.ActiveCellRow);
+            ClassicAssert.AreEqual(0, ((HSSFSheet)wb.GetSheetAt(0)).Sheet.ActiveCellCol);
 
             cell.SetAsActiveCell();
 
-            Assert.AreEqual(1, ((HSSFSheet)wb.GetSheetAt(0)).Sheet.ActiveCellRow);
-            Assert.AreEqual(3, ((HSSFSheet)wb.GetSheetAt(0)).Sheet.ActiveCellCol);
+            ClassicAssert.AreEqual(1, ((HSSFSheet)wb.GetSheetAt(0)).Sheet.ActiveCellRow);
+            ClassicAssert.AreEqual(3, ((HSSFSheet)wb.GetSheetAt(0)).Sheet.ActiveCellCol);
 
             //	    FileOutputStream fos = new FileOutputStream("/tmp/56114.xls");
             //
@@ -258,13 +258,13 @@ namespace TestCases.HSSF.UserModel
 
             IWorkbook wbBack = _testDataProvider.WriteOutAndReadBack(wb);
 
-            Assert.AreEqual(1, ((HSSFSheet)wbBack.GetSheetAt(0)).Sheet.ActiveCellRow);
-            Assert.AreEqual(3, ((HSSFSheet)wbBack.GetSheetAt(0)).Sheet.ActiveCellCol);
+            ClassicAssert.AreEqual(1, ((HSSFSheet)wbBack.GetSheetAt(0)).Sheet.ActiveCellRow);
+            ClassicAssert.AreEqual(3, ((HSSFSheet)wbBack.GetSheetAt(0)).Sheet.ActiveCellCol);
 
             wbBack.GetSheetAt(0).GetRow(3).GetCell(3).SetAsActiveCell();
 
-            Assert.AreEqual(3, ((HSSFSheet)wbBack.GetSheetAt(0)).Sheet.ActiveCellRow);
-            Assert.AreEqual(3, ((HSSFSheet)wbBack.GetSheetAt(0)).Sheet.ActiveCellCol);
+            ClassicAssert.AreEqual(3, ((HSSFSheet)wbBack.GetSheetAt(0)).Sheet.ActiveCellRow);
+            ClassicAssert.AreEqual(3, ((HSSFSheet)wbBack.GetSheetAt(0)).Sheet.ActiveCellCol);
 
             //	    fos = new FileOutputStream("/tmp/56114a.xls");
             //
@@ -275,8 +275,8 @@ namespace TestCases.HSSF.UserModel
             IWorkbook wbBack2 = _testDataProvider.WriteOutAndReadBack(wbBack);
             wbBack.Close();
 
-            Assert.AreEqual(3, ((HSSFSheet)wbBack2.GetSheetAt(0)).Sheet.ActiveCellRow);
-            Assert.AreEqual(3, ((HSSFSheet)wbBack2.GetSheetAt(0)).Sheet.ActiveCellCol);
+            ClassicAssert.AreEqual(3, ((HSSFSheet)wbBack2.GetSheetAt(0)).Sheet.ActiveCellRow);
+            ClassicAssert.AreEqual(3, ((HSSFSheet)wbBack2.GetSheetAt(0)).Sheet.ActiveCellCol);
 
             wbBack2.Close();
         }
@@ -294,12 +294,12 @@ namespace TestCases.HSSF.UserModel
             NPOI.SS.UserModel.ISheet sheet = wb.GetSheetAt(0);
             ICell cell = sheet.GetRow(4).GetCell(0);
             IHyperlink link = cell.Hyperlink;
-            Assert.IsNotNull(link);
+            ClassicAssert.IsNotNull(link);
 
-            Assert.AreEqual("Foo", link.Label);
-            Assert.AreEqual(link.Address, "http://poi.apache.org/");
-            Assert.AreEqual(4, link.FirstRow);
-            Assert.AreEqual(0, link.FirstColumn);
+            ClassicAssert.AreEqual("Foo", link.Label);
+            ClassicAssert.AreEqual(link.Address, "http://poi.apache.org/");
+            ClassicAssert.AreEqual(4, link.FirstRow);
+            ClassicAssert.AreEqual(0, link.FirstColumn);
 
             wb.Close();
         }
@@ -317,19 +317,19 @@ namespace TestCases.HSSF.UserModel
 
             ICell cell1 = sheet.GetRow(4).GetCell(0);
             IHyperlink link1 = cell1.Hyperlink;
-            Assert.IsNotNull(link1);
-            Assert.AreEqual("Foo", link1.Label);
-            Assert.AreEqual("http://poi.apache.org/", link1.Address);
-            Assert.AreEqual(4, link1.FirstRow);
-            Assert.AreEqual(0, link1.FirstColumn);
+            ClassicAssert.IsNotNull(link1);
+            ClassicAssert.AreEqual("Foo", link1.Label);
+            ClassicAssert.AreEqual("http://poi.apache.org/", link1.Address);
+            ClassicAssert.AreEqual(4, link1.FirstRow);
+            ClassicAssert.AreEqual(0, link1.FirstColumn);
 
             ICell cell2 = sheet.GetRow(8).GetCell(1);
             IHyperlink link2 = cell2.Hyperlink;
-            Assert.IsNotNull(link2);
-            Assert.AreEqual("Bar", link2.Label);
-            Assert.AreEqual("http://poi.apache.org/hssf/", link2.Address);
-            Assert.AreEqual(8, link2.FirstRow);
-            Assert.AreEqual(1, link2.FirstColumn);
+            ClassicAssert.IsNotNull(link2);
+            ClassicAssert.AreEqual("Bar", link2.Label);
+            ClassicAssert.AreEqual("http://poi.apache.org/hssf/", link2.Address);
+            ClassicAssert.AreEqual(8, link2.FirstRow);
+            ClassicAssert.AreEqual(1, link2.FirstColumn);
 
             wb.Close();
         }
@@ -345,13 +345,13 @@ namespace TestCases.HSSF.UserModel
             NPOI.SS.UserModel.ICellStyle cellStyle = wb.CreateCellStyle();
             cellStyle.DataFormat = HSSFDataFormat.GetBuiltinFormat("m/d/yy");
             cell.CellStyle = cellStyle;
-            Assert.AreEqual("8/20/09", cell.ToString());
+            ClassicAssert.AreEqual("8/20/09", cell.ToString());
 
             NPOI.SS.UserModel.ICellStyle cellStyle2 = wb.CreateCellStyle();
             IDataFormat format = wb.CreateDataFormat();
             cellStyle2.DataFormat = format.GetFormat("YYYY-mm/dd");
             cell.CellStyle = cellStyle2;
-            Assert.AreEqual("2009-08/20", cell.ToString());
+            ClassicAssert.AreEqual("2009-08/20", cell.ToString());
 
             wb.Close();
         }
@@ -363,9 +363,9 @@ namespace TestCases.HSSF.UserModel
             IDataFormat format = wb.CreateDataFormat();
             short formatidx1 = format.GetFormat("YYYY-mm/dd");
             short formatidx2 = format.GetFormat("YYYY-mm/dd");
-            Assert.AreEqual(formatidx1, formatidx2);
+            ClassicAssert.AreEqual(formatidx1, formatidx2);
             short formatidx3 = format.GetFormat("000000.000");
-            Assert.AreNotEqual(formatidx1, formatidx3);
+            ClassicAssert.AreNotEqual(formatidx1, formatidx3);
 
             wb.Close();
         }
@@ -425,7 +425,7 @@ namespace TestCases.HSSF.UserModel
         public void TestReadNaN()
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("49761.xls");
-            Assert.IsNotNull(wb);
+            ClassicAssert.IsNotNull(wb);
             wb.Close();
         }
 
@@ -437,7 +437,7 @@ namespace TestCases.HSSF.UserModel
             HSSFRow row = sheet.CreateRow(0) as HSSFRow;
             row.CreateCell(0);
             HSSFCell cell = new HSSFCell(wb, sheet, 0, (short)0);
-            Assert.IsNotNull(cell);
+            ClassicAssert.IsNotNull(cell);
             wb.Close();
         }
 
@@ -450,7 +450,7 @@ namespace TestCases.HSSF.UserModel
             HSSFCell cell = row.CreateCell(0) as HSSFCell;
 
             // cover some deprecated methods and other smaller stuff...
-            Assert.AreEqual(wb.Workbook, cell.BoundWorkbook);
+            ClassicAssert.AreEqual(wb.Workbook, cell.BoundWorkbook);
 
             try
             {
@@ -463,7 +463,7 @@ namespace TestCases.HSSF.UserModel
 
             try
             {
-                Assert.IsNotNull(new HSSFCell(wb, sheet, 0, (short)0, CellType.Error + 1));
+                ClassicAssert.IsNotNull(new HSSFCell(wb, sheet, 0, (short)0, CellType.Error + 1));
                 Assert.Fail("Should catch exception");
             }
             catch (Exception)
@@ -485,28 +485,28 @@ namespace TestCases.HSSF.UserModel
             HSSFCell cell = row.CreateCell(0) as HSSFCell;
 
             cell.SetCellType(CellType.Blank);
-            Assert.IsNull(cell.DateCellValue);
-            Assert.IsFalse(cell.BooleanCellValue);
-            Assert.AreEqual("", cell.ToString());
+            ClassicAssert.IsNull(cell.DateCellValue);
+            ClassicAssert.IsFalse(cell.BooleanCellValue);
+            ClassicAssert.AreEqual("", cell.ToString());
 
             cell.SetCellType(CellType.String);
-            Assert.AreEqual("", cell.ToString());
+            ClassicAssert.AreEqual("", cell.ToString());
             cell.SetCellType(CellType.String);
             cell.SetCellValue(1.2);
             cell.SetCellType(CellType.Numeric);
-            Assert.AreEqual("1.2", cell.ToString());
+            ClassicAssert.AreEqual("1.2", cell.ToString());
             cell.SetCellType(CellType.Boolean);
-            Assert.AreEqual("TRUE", cell.ToString());
+            ClassicAssert.AreEqual("TRUE", cell.ToString());
             cell.SetCellType(CellType.Boolean);
             cell.SetCellValue("" + FormulaError.VALUE.String);
             cell.SetCellType(CellType.Error);
-            Assert.AreEqual("#VALUE!", cell.ToString());
+            ClassicAssert.AreEqual("#VALUE!", cell.ToString());
             cell.SetCellType(CellType.Error);
             cell.SetCellType(CellType.Boolean);
-            Assert.AreEqual("FALSE", cell.ToString());
+            ClassicAssert.AreEqual("FALSE", cell.ToString());
             cell.SetCellValue(1.2);
             cell.SetCellType(CellType.Numeric);
-            Assert.AreEqual("1.2", cell.ToString());
+            ClassicAssert.AreEqual("1.2", cell.ToString());
             cell.SetCellType(CellType.Boolean);
             cell.SetCellType(CellType.String);
             cell.SetCellType(CellType.Error);
@@ -514,7 +514,7 @@ namespace TestCases.HSSF.UserModel
             cell.SetCellValue(1.2);
             cell.SetCellType(CellType.Numeric);
             cell.SetCellType(CellType.String);
-            Assert.AreEqual("1.2", cell.ToString());
+            ClassicAssert.AreEqual("1.2", cell.ToString());
 
             cell.SetCellValue((String)null);
             cell.SetCellValue((IRichTextString)null);
@@ -529,15 +529,15 @@ namespace TestCases.HSSF.UserModel
             HSSFRow row = sheet.CreateRow(0) as HSSFRow;
             HSSFCell cell = row.CreateCell(0) as HSSFCell;
             cell.SetCellValue(new DateTime(2022, 5, 10, 13, 20, 50));
-            Assert.IsNotNull(cell.DateCellValue);
-            Assert.AreEqual(new DateTime(2022, 5, 10, 13, 20, 50), cell.DateCellValue);
+            ClassicAssert.IsNotNull(cell.DateCellValue);
+            ClassicAssert.AreEqual(new DateTime(2022, 5, 10, 13, 20, 50), cell.DateCellValue);
 #if NET6_0_OR_GREATER
-            Assert.AreEqual(new DateOnly(2022, 5, 10), cell.DateOnlyCellValue);
-            Assert.AreEqual(new TimeOnly(13, 20, 50), cell.TimeOnlyCellValue);
+            ClassicAssert.AreEqual(new DateOnly(2022, 5, 10), cell.DateOnlyCellValue);
+            ClassicAssert.AreEqual(new TimeOnly(13, 20, 50), cell.TimeOnlyCellValue);
 #endif
             HSSFCell cell2 = row.CreateCell(1) as HSSFCell;
             cell2.SetCellValue("test");
-            Assert.IsNull(cell2.DateCellValue);
+            ClassicAssert.IsNull(cell2.DateCellValue);
         }
     }
 

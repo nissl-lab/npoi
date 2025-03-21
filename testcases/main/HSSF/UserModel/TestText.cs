@@ -18,7 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.HSSF.Model;
@@ -43,35 +43,35 @@ namespace TestCases.HSSF.UserModel
             HSSFSheet sh = wb.CreateSheet() as HSSFSheet;
             HSSFPatriarch patriarch = sh.CreateDrawingPatriarch() as HSSFPatriarch;
             HSSFTextbox textbox = patriarch.CreateTextbox(new HSSFClientAnchor()) as HSSFTextbox;
-            Assert.AreEqual(textbox.GetEscherContainer().ChildRecords.Count, 5);
+            ClassicAssert.AreEqual(textbox.GetEscherContainer().ChildRecords.Count, 5);
             //sp record
             byte[] expected = Decompress("H4sIAAAAAAAAAFvEw/WBg4GBgZEFSHAxMAAA9gX7nhAAAAA=");
             byte[] actual = textbox.GetEscherContainer().GetChild(0).Serialize();
-            Assert.AreEqual(expected.Length, actual.Length);
+            ClassicAssert.AreEqual(expected.Length, actual.Length);
             //assertArrayEquals(expected, actual)
             CollectionAssert.AreEqual(expected, actual);
             expected = Decompress("H4sIAAAAAAAAAGNgEPggxIANAABK4+laGgAAAA==");
             actual = textbox.GetEscherContainer().GetChild(2).Serialize();
-            Assert.AreEqual(expected.Length, actual.Length);
+            ClassicAssert.AreEqual(expected.Length, actual.Length);
             CollectionAssert.AreEqual(expected, actual);
             expected = Decompress("H4sIAAAAAAAAAGNgEPzAAAQACl6c5QgAAAA=");
             actual = textbox.GetEscherContainer().GetChild(3).Serialize();
-            Assert.AreEqual(expected.Length, actual.Length);
+            ClassicAssert.AreEqual(expected.Length, actual.Length);
             CollectionAssert.AreEqual(expected, actual);
             expected = Decompress("H4sIAAAAAAAAAGNg4P3AAAQA6pyIkQgAAAA=");
             actual = textbox.GetEscherContainer().GetChild(4).Serialize();
-            Assert.AreEqual(expected.Length, actual.Length);
+            ClassicAssert.AreEqual(expected.Length, actual.Length);
             CollectionAssert.AreEqual(expected, actual);
             ObjRecord obj = textbox.GetObjRecord();
             expected = Decompress("H4sIAAAAAAAAAItlkGIQZRBiYGNgZBBMYEADAOdCLuweAAAA");
             actual = obj.Serialize();
-            Assert.AreEqual(expected.Length, actual.Length);
+            ClassicAssert.AreEqual(expected.Length, actual.Length);
             CollectionAssert.AreEqual(expected, actual);
 
             TextObjectRecord tor = textbox.GetTextObjectRecord();
             expected = Decompress("H4sIAAAAAAAAANvGKMQgxMSABgBGi8T+FgAAAA==");
             actual = tor.Serialize();
-            Assert.AreEqual(expected.Length, actual.Length);
+            ClassicAssert.AreEqual(expected.Length, actual.Length);
             CollectionAssert.AreEqual(expected, actual);
 
             wb.Close();
@@ -88,7 +88,7 @@ namespace TestCases.HSSF.UserModel
             HSSFTextbox textbox2 = patriarch.CreateTextbox(new HSSFClientAnchor()) as HSSFTextbox;
             textbox2.String=(new HSSFRichTextString("just for Test2"));
 
-            Assert.AreEqual(patriarch.Children.Count, 2);
+            ClassicAssert.AreEqual(patriarch.Children.Count, 2);
 
             HSSFWorkbook wb2 = HSSFTestDataSamples.WriteOutAndReadBack(wb1);
             wb1.Close();
@@ -96,10 +96,10 @@ namespace TestCases.HSSF.UserModel
             sh = wb2.GetSheetAt(0) as HSSFSheet;
             patriarch = sh.DrawingPatriarch as HSSFPatriarch;
 
-            Assert.AreEqual(patriarch.Children.Count, 2);
+            ClassicAssert.AreEqual(patriarch.Children.Count, 2);
             HSSFTextbox text3 = patriarch.CreateTextbox(new HSSFClientAnchor()) as HSSFTextbox;
             text3.String=(new HSSFRichTextString("text3"));
-            Assert.AreEqual(patriarch.Children.Count, 3);
+            ClassicAssert.AreEqual(patriarch.Children.Count, 3);
 
             HSSFWorkbook wb3 = HSSFTestDataSamples.WriteOutAndReadBack(wb2);
             wb2.Close();
@@ -107,10 +107,10 @@ namespace TestCases.HSSF.UserModel
             sh = wb3.GetSheetAt(0) as HSSFSheet;
             patriarch = sh.DrawingPatriarch as HSSFPatriarch;
 
-            Assert.AreEqual(patriarch.Children.Count, 3);
-            Assert.AreEqual(((HSSFTextbox)patriarch.Children[0]).String.String, "just for Test");
-            Assert.AreEqual(((HSSFTextbox)patriarch.Children[1]).String.String, "just for Test2");
-            Assert.AreEqual(((HSSFTextbox)patriarch.Children[2]).String.String, "text3");
+            ClassicAssert.AreEqual(patriarch.Children.Count, 3);
+            ClassicAssert.AreEqual(((HSSFTextbox)patriarch.Children[0]).String.String, "just for Test");
+            ClassicAssert.AreEqual(((HSSFTextbox)patriarch.Children[1]).String.String, "just for Test2");
+            ClassicAssert.AreEqual(((HSSFTextbox)patriarch.Children[2]).String.String, "text3");
 
             wb3.Close();
         }
@@ -122,25 +122,25 @@ namespace TestCases.HSSF.UserModel
             HSSFPatriarch patriarch = sh.CreateDrawingPatriarch() as HSSFPatriarch;
             HSSFTextbox textbox = patriarch.CreateTextbox(new HSSFClientAnchor()) as HSSFTextbox;
             textbox.String = (new HSSFRichTextString("test"));
-            Assert.AreEqual(textbox.String.String, "test");
+            ClassicAssert.AreEqual(textbox.String.String, "test");
 
             textbox.HorizontalAlignment=((HorizontalTextAlignment)5);
-            Assert.AreEqual((HorizontalTextAlignment)5, textbox.HorizontalAlignment);
+            ClassicAssert.AreEqual((HorizontalTextAlignment)5, textbox.HorizontalAlignment);
 
             textbox.VerticalAlignment=((VerticalTextAlignment)6);
-            Assert.AreEqual( (VerticalTextAlignment)6,textbox.VerticalAlignment);
+            ClassicAssert.AreEqual( (VerticalTextAlignment)6,textbox.VerticalAlignment);
 
             textbox.MarginBottom=(7);
-            Assert.AreEqual(textbox.MarginBottom, 7);
+            ClassicAssert.AreEqual(textbox.MarginBottom, 7);
 
             textbox.MarginLeft=(8);
-            Assert.AreEqual(textbox.MarginLeft, 8);
+            ClassicAssert.AreEqual(textbox.MarginLeft, 8);
 
             textbox.MarginRight=(9);
-            Assert.AreEqual(textbox.MarginRight, 9);
+            ClassicAssert.AreEqual(textbox.MarginRight, 9);
 
             textbox.MarginTop=(10);
-            Assert.AreEqual(textbox.MarginTop, 10);
+            ClassicAssert.AreEqual(textbox.MarginTop, 10);
 
             HSSFWorkbook wb2 = HSSFTestDataSamples.WriteOutAndReadBack(wb1);
             wb1.Close();
@@ -148,13 +148,13 @@ namespace TestCases.HSSF.UserModel
             sh = wb2.GetSheetAt(0) as HSSFSheet;
             patriarch = sh.DrawingPatriarch as HSSFPatriarch;
             textbox = (HSSFTextbox)patriarch.Children[0];
-            Assert.AreEqual(textbox.String.String, "test");
-            Assert.AreEqual(textbox.HorizontalAlignment, (HorizontalTextAlignment)5);
-            Assert.AreEqual(textbox.VerticalAlignment, (VerticalTextAlignment)6);
-            Assert.AreEqual(textbox.MarginBottom, 7);
-            Assert.AreEqual(textbox.MarginLeft, 8);
-            Assert.AreEqual(textbox.MarginRight, 9);
-            Assert.AreEqual(textbox.MarginTop, 10);
+            ClassicAssert.AreEqual(textbox.String.String, "test");
+            ClassicAssert.AreEqual(textbox.HorizontalAlignment, (HorizontalTextAlignment)5);
+            ClassicAssert.AreEqual(textbox.VerticalAlignment, (VerticalTextAlignment)6);
+            ClassicAssert.AreEqual(textbox.MarginBottom, 7);
+            ClassicAssert.AreEqual(textbox.MarginLeft, 8);
+            ClassicAssert.AreEqual(textbox.MarginRight, 9);
+            ClassicAssert.AreEqual(textbox.MarginTop, 10);
 
             textbox.String = (new HSSFRichTextString("test1"));
             textbox.HorizontalAlignment = HorizontalTextAlignment.Center;
@@ -164,13 +164,13 @@ namespace TestCases.HSSF.UserModel
             textbox.MarginRight = (91);
             textbox.MarginTop = (101);
 
-            Assert.AreEqual(textbox.String.String, "test1");
-            Assert.AreEqual(textbox.HorizontalAlignment, HorizontalTextAlignment.Center);
-            Assert.AreEqual(textbox.VerticalAlignment, VerticalTextAlignment.Top);
-            Assert.AreEqual(textbox.MarginBottom, 71);
-            Assert.AreEqual(textbox.MarginLeft, 81);
-            Assert.AreEqual(textbox.MarginRight, 91);
-            Assert.AreEqual(textbox.MarginTop, 101);
+            ClassicAssert.AreEqual(textbox.String.String, "test1");
+            ClassicAssert.AreEqual(textbox.HorizontalAlignment, HorizontalTextAlignment.Center);
+            ClassicAssert.AreEqual(textbox.VerticalAlignment, VerticalTextAlignment.Top);
+            ClassicAssert.AreEqual(textbox.MarginBottom, 71);
+            ClassicAssert.AreEqual(textbox.MarginLeft, 81);
+            ClassicAssert.AreEqual(textbox.MarginRight, 91);
+            ClassicAssert.AreEqual(textbox.MarginTop, 101);
 
             HSSFWorkbook wb3 = HSSFTestDataSamples.WriteOutAndReadBack(wb2);
             wb2.Close();
@@ -179,13 +179,13 @@ namespace TestCases.HSSF.UserModel
             patriarch = sh.DrawingPatriarch as HSSFPatriarch;
             textbox = (HSSFTextbox)patriarch.Children[0];
 
-            Assert.AreEqual(textbox.String.String, "test1");
-            Assert.AreEqual(textbox.HorizontalAlignment, HorizontalTextAlignment.Center);
-            Assert.AreEqual(textbox.VerticalAlignment, VerticalTextAlignment.Top);
-            Assert.AreEqual(textbox.MarginBottom, 71);
-            Assert.AreEqual(textbox.MarginLeft, 81);
-            Assert.AreEqual(textbox.MarginRight, 91);
-            Assert.AreEqual(textbox.MarginTop, 101);
+            ClassicAssert.AreEqual(textbox.String.String, "test1");
+            ClassicAssert.AreEqual(textbox.HorizontalAlignment, HorizontalTextAlignment.Center);
+            ClassicAssert.AreEqual(textbox.VerticalAlignment, VerticalTextAlignment.Top);
+            ClassicAssert.AreEqual(textbox.MarginBottom, 71);
+            ClassicAssert.AreEqual(textbox.MarginLeft, 81);
+            ClassicAssert.AreEqual(textbox.MarginRight, 91);
+            ClassicAssert.AreEqual(textbox.MarginTop, 101);
 
             wb3.Close();
         }
@@ -195,15 +195,15 @@ namespace TestCases.HSSF.UserModel
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("drawings.xls");
             HSSFSheet sheet = wb.GetSheet("text") as HSSFSheet;
             HSSFPatriarch Drawing = sheet.DrawingPatriarch as HSSFPatriarch;
-            Assert.AreEqual(1, Drawing.Children.Count);
+            ClassicAssert.AreEqual(1, Drawing.Children.Count);
             HSSFTextbox textbox = (HSSFTextbox)Drawing.Children[0];
-            Assert.AreEqual(HorizontalTextAlignment.Left, textbox.HorizontalAlignment);
-            Assert.AreEqual(VerticalTextAlignment.Top, textbox.VerticalAlignment);
-            Assert.AreEqual(textbox.MarginTop, 0);
-            Assert.AreEqual(textbox.MarginBottom, 3600000);
-            Assert.AreEqual(textbox.MarginLeft, 3600000);
-            Assert.AreEqual(textbox.MarginRight, 0);
-            Assert.AreEqual(textbox.String.String, "teeeeesssstttt");
+            ClassicAssert.AreEqual(HorizontalTextAlignment.Left, textbox.HorizontalAlignment);
+            ClassicAssert.AreEqual(VerticalTextAlignment.Top, textbox.VerticalAlignment);
+            ClassicAssert.AreEqual(textbox.MarginTop, 0);
+            ClassicAssert.AreEqual(textbox.MarginBottom, 3600000);
+            ClassicAssert.AreEqual(textbox.MarginLeft, 3600000);
+            ClassicAssert.AreEqual(textbox.MarginRight, 0);
+            ClassicAssert.AreEqual(textbox.String.String, "teeeeesssstttt");
 
             wb.Close();
         }
