@@ -111,8 +111,6 @@ namespace TestCases.XSSF.Streaming
             // properties on Cells...
         }
 
-
-        [Test]
         public override void DefaultColumnStyle() {
             //TODO column styles are not yet supported by XSSF
         }
