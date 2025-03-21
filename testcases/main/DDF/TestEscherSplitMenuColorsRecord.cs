@@ -26,7 +26,6 @@ namespace TestCases.DDF
     using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.DDF;
     using NPOI.Util;
-    using NUnit.Framework.Legacy;
     [TestFixture]
     public class TestEscherSplitMenuColorsRecord
     {

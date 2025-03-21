@@ -28,7 +28,6 @@ namespace TestCases.HPSF.Basic
     using NPOI.POIFS.FileSystem;
 
     using NUnit.Framework;using NUnit.Framework.Legacy;
-    using NUnit.Framework.Legacy;
 
     /**
      * Tests HPSF's high-level writing functionality for the well-known property

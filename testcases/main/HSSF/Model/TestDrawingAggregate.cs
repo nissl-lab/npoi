@@ -28,7 +28,6 @@ using NPOI.HSSF.Model;
 using NPOI.DDF;
 using NPOI.HSSF.Record.Aggregates;
 using static TestCases.POIFS.Storage.RawDataUtil;
-using NUnit.Framework.Legacy;
 
 namespace TestCases.HSSF.Model
 {

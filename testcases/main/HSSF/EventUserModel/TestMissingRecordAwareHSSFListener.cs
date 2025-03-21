@@ -28,7 +28,6 @@ namespace TestCases.HSSF.EventUserModel
     using NPOI.HSSF.EventUserModel.DummyRecord;
 
     using NUnit.Framework;using NUnit.Framework.Legacy;
-    using NUnit.Framework.Legacy;
 
     [TestFixture]
     public class TestMissingRecordAwareHSSFListener

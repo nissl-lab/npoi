@@ -34,6 +34,8 @@ namespace TestCases.Util
     using NUnit.Framework;
     using System.IO;
     using NPOI.Util;
+    using NPOI.HPSF;
+    using NUnit.Framework.Legacy;
 
     /**
      * Tests ClassID structure.
@@ -76,8 +78,8 @@ namespace TestCases.Util
             );
             ClassicAssert.AreEqual(clsidTest1, clsidTest1);
             ClassicAssert.AreEqual(clsidTest1, clsidTest2);
-            Assert.IsFalse(clsidTest1.Equals(clsidTest3));
-            Assert.IsFalse(clsidTest1.Equals(null));
+            ClassicAssert.IsFalse(clsidTest1.Equals(clsidTest3));
+            ClassicAssert.IsFalse(clsidTest1.Equals(null));
         }
         /**
          * Try to Write to a buffer that is too small. This should
@@ -100,7 +102,7 @@ namespace TestCases.Util
             {
                 bExceptionOccurred = true;
             }
-            Assert.IsTrue(bExceptionOccurred);
+            ClassicAssert.IsTrue(bExceptionOccurred);
 
             bExceptionOccurred = false;
             try
@@ -111,7 +113,7 @@ namespace TestCases.Util
             {
                 bExceptionOccurred = true;
             }
-            Assert.IsTrue(bExceptionOccurred);
+            ClassicAssert.IsTrue(bExceptionOccurred);
 
             // These should work without throwing an Exception
             bExceptionOccurred = false;
@@ -124,7 +126,7 @@ namespace TestCases.Util
             {
                 bExceptionOccurred = true;
             }
-            Assert.IsFalse(bExceptionOccurred);
+            ClassicAssert.IsFalse(bExceptionOccurred);
         }
         /**
          * Tests the {@link PropertySet} methods. The Test file has two

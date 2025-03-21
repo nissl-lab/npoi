@@ -28,7 +28,6 @@ namespace TestCases.HSSF.Extractor
 
     using NUnit.Framework;using NUnit.Framework.Legacy;
 using NPOI.HSSF.Record.Crypto;
-    using NUnit.Framework.Legacy;
 
     [TestFixture]
     public class TestExcelExtractor

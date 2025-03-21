@@ -20,7 +20,6 @@ using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.Util;
 using NUnit.Framework;using NUnit.Framework.Legacy;
-using NUnit.Framework.Legacy;
 using System;
 using System.Collections.Generic;
 using TestCases.HSSF.UserModel;

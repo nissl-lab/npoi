@@ -32,7 +32,6 @@ namespace TestCases.HPSF.Basic
 
     using NUnit.Framework;using NUnit.Framework.Legacy;
     using NUnit.Framework.Constraints;
-    using NUnit.Framework.Legacy;
 
     /**
      * Tests HPSF's writing functionality.

@@ -28,7 +28,6 @@ namespace TestCases.DDF
     using NPOI.DDF;
     using NPOI.Util;
     using System.Collections.Generic;
-    using NUnit.Framework.Legacy;
 
     /**
      * @author Glen Stampoultzis  (glens @ superlinksoftware.com)

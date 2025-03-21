@@ -21,7 +21,6 @@ namespace TestCases.HSSF.Model
     using NPOI.HSSF.Model;
 
     using NUnit.Framework;using NUnit.Framework.Legacy;
-    using NUnit.Framework.Legacy;
 
     [TestFixture]
     [Obsolete("deprecated in POI 3.15-beta2, scheduled for removal in 3.17, use DrawingManager2 instead")]

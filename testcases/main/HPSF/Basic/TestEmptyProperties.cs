@@ -22,7 +22,6 @@ namespace TestCases.HPSF.Basic
     using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HPSF;
     using NPOI.Util;
-    using NUnit.Framework.Legacy;
 
     /**
      * Test case for OLE2 files with empty properties. An empty property's type

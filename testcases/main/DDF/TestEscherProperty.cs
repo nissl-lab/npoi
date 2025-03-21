@@ -24,7 +24,6 @@ namespace TestCases.DDF
     using System.IO;
 
     using NUnit.Framework;using NUnit.Framework.Legacy;
-    using NUnit.Framework.Legacy;
     using NPOI.DDF;
     using NPOI.Util;
 

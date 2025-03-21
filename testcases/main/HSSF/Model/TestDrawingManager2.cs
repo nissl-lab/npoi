@@ -20,7 +20,6 @@ namespace TestCases.HSSF.Model
     using NPOI.DDF;
     using NPOI.HSSF.Model;
     using NUnit.Framework;using NUnit.Framework.Legacy;
-    using NUnit.Framework.Legacy;
 
     [TestFixture]
     public class TestDrawingManager2

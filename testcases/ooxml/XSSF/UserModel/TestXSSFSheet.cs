@@ -28,7 +28,7 @@ using NPOI.XSSF.Model;
 using NPOI.XSSF.Streaming;
 using NPOI.XSSF.UserModel;
 using NPOI.XSSF.UserModel.Helpers;
-using NUnit.Framework;using NUnit.Framework.Legacy;
+using NUnit.Framework;
 using NUnit.Framework.Legacy;
 using System;
 using System.Collections.Generic;
