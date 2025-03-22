@@ -413,6 +413,10 @@ namespace NPOI.XSSF.Streaming
          * <p>
          *     Please note the the "compress" option may cause performance penalty.
          * </p>
+         * <p>
+         *     Setting this option only affects compression for subsequent <code>createSheet()</code> 
+         *     calls.
+         * </p>
          * @param compress whether to compress temp files
          */
         public bool CompressTempFiles

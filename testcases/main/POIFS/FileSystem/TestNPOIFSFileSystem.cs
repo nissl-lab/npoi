@@ -25,9 +25,7 @@ using NPOI.POIFS.Properties;
 using NPOI.POIFS.FileSystem;
 using NPOI.POIFS.Common;
 using NPOI.HPSF;
-using NPOI.POIFS.NIO;
 using NPOI.Util;
-using NPOI.POIFS.EventFileSystem;
 using NUnit.Framework.Constraints;
 using Property = NPOI.POIFS.Properties.Property;
 
@@ -524,7 +522,10 @@ namespace TestCases.POIFS.FileSystem
             ClassicAssert.AreEqual(109, header.BATCount);
             ClassicAssert.AreEqual(0, header.XBATCount);
 
+            // Ask for another, will get our first XBAT
             free = fs.GetFreeBlock();
+            ClassicAssert.IsTrue(free > 0, "Had: " + free);
+
             ClassicAssert.AreEqual(false, fs.GetBATBlockAndIndex(109 * 128 - 1).Block.HasFreeSectors);
             ClassicAssert.AreEqual(true, fs.GetBATBlockAndIndex(110 * 128 - 1).Block.HasFreeSectors);
             try
@@ -570,6 +571,8 @@ namespace TestCases.POIFS.FileSystem
 
             // Ask for another, will get our 2nd XBAT
             free = fs.GetFreeBlock();
+            ClassicAssert.IsTrue(free > 0, "Had: " + free);
+
             ClassicAssert.AreEqual(false, fs.GetBATBlockAndIndex(236 * 128 - 1).Block.HasFreeSectors);
             ClassicAssert.AreEqual(true, fs.GetBATBlockAndIndex(237 * 128 - 1).Block.HasFreeSectors);
             try
@@ -587,7 +590,7 @@ namespace TestCases.POIFS.FileSystem
 
             // Check the header
             header = WriteOutAndReadHeader(fs);
-
+            ClassicAssert.IsNotNull(header);
 
             // Now, write it out, and read it back in again fully
             fs = WriteOutAndReadBack(fs);
@@ -1578,6 +1581,306 @@ namespace TestCases.POIFS.FileSystem
             int count = 0;
             foreach (Property cp in p) { count++; }
             return count;
+        }
+
+        /// <summary>
+        /// <para>
+        /// To ensure we can create a file >2gb in size, as well as to
+        /// extend existing files past the 2gb boundary.
+        /// </para>
+        /// <para>
+        /// Note that to run this test, you will require 2.5+gb of free
+        /// space on your TMP/TEMP partition/disk
+        /// </para>
+        /// <para>
+        /// Note that to run this test, you need to be able to mmap 2.5+gb
+        /// files, which may need bigger kernel.shmmax and vm.max_map_count
+        /// Settings on Linux.
+        /// </para>
+        /// <para>
+        /// TODO Fix this to work...
+        /// </para>
+        /// </summary>
+        [Test]
+        [Ignore("Work in progress test for #60670")]
+        public void CreationAndExtensionPast2GB()
+        {
+        
+            FileInfo big = TempFile.CreateTempFile("poi-test-", ".ole2");
+            //Assume.AssumeTrue("2.5gb of free space is required on your tmp/temp " +
+            //                  "partition/disk to run large file tests",
+            //                  big.GetFreeSpace() > 2.5 * 1024 * 1024 * 1024);
+            Console.WriteLine("Slow, memory heavy test in progress....");
+        
+            int s100mb = 100 * 1024 * 1024;
+            int s512mb = 512 * 1024 * 1024;
+            long s2gb = 2L * 1024 * 1024 * 1024;
+            DocumentEntry entry;
+            NPOIFSFileSystem fs;
+        
+            // Create a just-sub 2gb file
+            fs = POIFSFileSystem.Create(big);
+            for (int i = 0; i < 19; i++)
+            {
+                fs.CreateDocument(new DummyDataInputStream(s100mb), "Entry" + i);
+            }
+            fs.WriteFileSystem();
+            fs.Close();
+        
+            // Extend it past the 2gb mark
+            fs = new NPOIFSFileSystem(big, false);
+            for (int i = 0; i < 19; i++)
+            {
+                entry = (DocumentEntry)fs.Root.GetEntry("Entry" + i);
+                ClassicAssert.IsNotNull(entry);
+                ClassicAssert.AreEqual(s100mb, entry.Size);
+            }
+        
+            fs.CreateDocument(new DummyDataInputStream(s512mb), "Bigger");
+            fs.WriteFileSystem();
+            fs.Close();
+        
+            // Check it still works
+            fs = new NPOIFSFileSystem(big, false);
+            for (int i = 0; i < 19; i++)
+            {
+                entry = (DocumentEntry)fs.Root.GetEntry("Entry" + i);
+                ClassicAssert.IsNotNull(entry);
+                ClassicAssert.AreEqual(s100mb, entry.Size);
+            }
+            entry = (DocumentEntry)fs.Root.GetEntry("Bigger");
+            ClassicAssert.IsNotNull(entry);
+            ClassicAssert.AreEqual(s512mb, entry.Size);
+        
+            // Tidy
+            fs.Close();
+            big.Delete();
+            ClassicAssert.IsTrue(!File.Exists(big.FullName));
+        
+        
+            // Create a >2gb file
+            fs = POIFSFileSystem.Create(big);
+            for (int i = 0; i < 4; i++)
+            {
+                fs.CreateDocument(new DummyDataInputStream(s512mb), "Entry" + i);
+            }
+            fs.WriteFileSystem();
+            fs.Close();
+        
+            // Read it
+            fs = new NPOIFSFileSystem(big, false);
+            for (int i = 0; i < 4; i++)
+            {
+                entry = (DocumentEntry)fs.Root.GetEntry("Entry" + i);
+                ClassicAssert.IsNotNull(entry);
+                ClassicAssert.AreEqual(s512mb, entry.Size);
+            }
+        
+            // Extend it
+            fs.CreateDocument(new DummyDataInputStream(s512mb), "Entry4");
+            fs.WriteFileSystem();
+            fs.Close();
+        
+            // Check it worked
+            fs = new NPOIFSFileSystem(big, false);
+            for (int i = 0; i < 5; i++)
+            {
+                entry = (DocumentEntry)fs.Root.GetEntry("Entry" + i);
+                ClassicAssert.IsNotNull(entry);
+                ClassicAssert.AreEqual(s512mb, entry.Size);
+            }
+        
+            // Tidy
+            fs.Close();
+            big.Delete();
+            ClassicAssert.IsTrue(!File.Exists(big.FullName));
+        
+            // Create a file with a 2gb entry
+            fs = POIFSFileSystem.Create(big);
+            fs.CreateDocument(new DummyDataInputStream(s100mb), "Small");
+            // TODO Check we Get a helpful error about the max size
+            fs.CreateDocument(new DummyDataInputStream(s2gb), "Big");
+        }
+        
+        protected class DummyDataInputStream : InputStream
+        {
+            protected long maxSize;
+            protected long size;
+            public DummyDataInputStream(long maxSize)
+            {
+                this.maxSize = maxSize;
+                this.size = 0;
+            }
+        
+            public override bool CanRead => throw new NotImplementedException();
+        
+            public override bool CanSeek => throw new NotImplementedException();
+        
+            public override long Length => throw new NotImplementedException();
+        
+            public override long Position { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        
+            public override void Flush()
+            {
+                throw new NotImplementedException();
+            }
+        
+            public override int Read()
+            {
+        
+                if (size >= maxSize) return -1;
+                size++;
+                return (int)(size % 128);
+            }
+        
+            public override int Read(byte[] b)
+            {
+        
+                return Read(b, 0, b.Length);
+            }
+            public override int Read(byte[] b, int offset, int len)
+            {
+        
+                if (size >= maxSize) return -1;
+                int sz = (int)Math.Min(len, maxSize - size);
+                for (int i = 0; i < sz; i++)
+                {
+                    b[i + offset] = (byte)((size + i) % 128);
+                }
+                size += sz;
+                return sz;
+            }
+        
+            public override long Seek(long offset, SeekOrigin origin)
+            {
+                throw new NotImplementedException();
+            }
+        
+            public override void SetLength(long value)
+            {
+                throw new NotImplementedException();
+            }
+        }
+        
+        [Ignore("Takes a long time to run")]
+        [Test]
+        public void testPerformance()
+        {
+        
+            int iterations = 200;//1_000;
+        
+            Console.WriteLine("OPOI:");
+            long start = DateTime.Now.Ticks;
+        
+            for (int i = 0; i < iterations; i++)
+            {
+                Stream inputStream = POIDataSamples.GetHSMFInstance().OpenResourceAsStream("lots-of-recipients.msg");
+                try
+                {
+                    OPOIFSFileSystem srcFileSystem = new OPOIFSFileSystem(inputStream);
+                    OPOIFSFileSystem destFileSystem = new OPOIFSFileSystem();
+        
+                    copyAllEntries(srcFileSystem.Root, destFileSystem.Root);
+        
+                    FileInfo file = TempFile.CreateTempFile("opoi", ".dat");
+                    Stream outputStream = new FileStream(file.FullName, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                    try
+                    {
+                        destFileSystem.WriteFileSystem(outputStream);
+                    }
+                    finally
+                    {
+                        outputStream.Close();
+                    }
+                    file.Delete();
+                    ClassicAssert.IsTrue(!File.Exists(file.FullName));
+                    if (i % 10 == 0) Console.Write(".");
+                    if (i % 800 == 0 && i > 0) Console.WriteLine();
+                }
+                finally
+                {
+                    inputStream.Close();
+                }
+            }
+        
+            Console.WriteLine();
+            Console.WriteLine("OPOI took: " + (DateTime.Now.Ticks - start));
+        
+        
+            Console.WriteLine();
+            Console.WriteLine("NPOI:");
+            start = DateTime.Now.Ticks;
+        
+            for (int i = 0; i < iterations; i++)
+            {
+        
+                Stream inputStream = POIDataSamples.GetHSMFInstance().OpenResourceAsStream("lots-of-recipients.msg");
+                try
+                {
+                    NPOIFSFileSystem srcFileSystem = new NPOIFSFileSystem(inputStream);
+                    NPOIFSFileSystem destFileSystem = new NPOIFSFileSystem();
+        
+                    copyAllEntries(srcFileSystem.Root, destFileSystem.Root);
+        
+                    FileInfo file = TempFile.CreateTempFile("npoi", ".dat");
+                    Stream outputStream = new FileStream(file.FullName, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                    try
+                    {
+                        destFileSystem.WriteFileSystem(outputStream);
+                    }
+                    finally
+                    {
+                        outputStream.Close();
+                    }
+        
+                    file.Delete();
+                    ClassicAssert.IsTrue(!File.Exists(file.FullName));
+                    if (i % 10 == 0) Console.Write(".");
+                    if (i % 800 == 0 && i > 0) Console.WriteLine();
+                }
+                finally
+                {
+                    inputStream.Close();
+                }
+            }
+        
+            Console.WriteLine();
+            Console.WriteLine("NPOI took: " + (DateTime.Now.Ticks - start));
+        
+            Console.WriteLine();
+            Console.WriteLine();
+        }
+        
+        private static void copyAllEntries(DirectoryEntry srcDirectory, DirectoryEntry destDirectory)
+        {
+        
+            IEnumerator<Entry> iterator = srcDirectory.Entries;
+        
+            while (iterator.MoveNext())
+            {
+                Entry entry = iterator.Current;
+        
+                if (entry.IsDirectoryEntry)
+                {
+                    DirectoryEntry childDest = destDirectory.CreateDirectory(entry.Name);
+                    copyAllEntries((DirectoryEntry)entry, childDest);
+        
+                }
+                else
+                {
+                    DocumentEntry srcEntry = (DocumentEntry)entry;
+        
+                    InputStream inputStream = new DocumentInputStream(srcEntry);
+                    try
+                    {
+                        destDirectory.CreateDocument(entry.Name, inputStream);
+                    }
+                    finally
+                    {
+                        inputStream.Close();
+                    }
+                }
+            }
         }
     }
 }
