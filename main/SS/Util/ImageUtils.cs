@@ -22,7 +22,8 @@ namespace NPOI.SS.Util
     using NPOI.SS.UserModel;
     using NPOI.Util;
     using SixLabors.ImageSharp;
-
+    using SixLabors.ImageSharp.Metadata;
+    
     /**
      * @author Yegor Kozlov
      */
