@@ -1223,11 +1223,11 @@ namespace NPOI.OpenXmlFormats.Dml
 
         /// <remarks/>
         [XmlEnum("3dDkShadow")]
-        Item3dDkShadow,
+        x3dDkShadow,
 
         /// <remarks/>
         [XmlEnum("3dLight")]
-        Item3dLight,
+        x3dLight,
 
         /// <remarks/>
         infoText,

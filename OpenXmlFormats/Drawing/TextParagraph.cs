@@ -144,6 +144,26 @@ namespace NPOI.OpenXmlFormats.Dml
             sw.Write("/>");
         }
 
+        public bool IsSetAlgn()
+        {
+            return this.algn == ST_TextTabAlignType.l;
+        }
+
+        public void UnsetAlgn()
+        {
+            this.algn = ST_TextTabAlignType.l;
+        }
+
+        public bool IsSetPos()
+        {
+            return this.pos > 0;
+        }
+
+        public void UnsetPos()
+        {
+            this.pos = 0;
+        }
+
         [XmlAttribute]
         public int pos
         {
@@ -408,11 +428,22 @@ namespace NPOI.OpenXmlFormats.Dml
         {
             return this.spcPctField != null;
         }
+        public void UnsetSpcPct()
+        {
+            this.spcPctField = null;
+        }
 
         public bool IsSetSpcPts()
         {
             return this.spcPtsField != null;
         }
+
+        public void UnsetSpcPts()
+        {
+            this.spcPtsField = null;
+        }
+
+        
     }
 
 
