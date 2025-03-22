@@ -102,25 +102,11 @@ namespace TestCases.POIFS.FileSystem
         }
         private void ConfirmIsPOIFS(String sampleFileName, bool expectedResult)
         {
-            Stream in1 = OpenSampleStream(sampleFileName);
-            try
+            using(Stream fs = OpenSampleStream(sampleFileName))
             {
-                bool actualResult;
-                try
-                {
-                    actualResult = POIFSFileSystem.HasPOIFSHeader(in1);
-                }
-                catch (IOException ex)
-                {
-                    throw new RuntimeException(ex);
-                }
+                bool actualResult = POIFSFileSystem.HasPOIFSHeader(fs);
                 ClassicAssert.AreEqual(expectedResult, actualResult);
-            }
-            finally
-            {
-                in1.Close();
-            }
-
+             }
         }
         [Test]
         public void TestFileCorruption()
