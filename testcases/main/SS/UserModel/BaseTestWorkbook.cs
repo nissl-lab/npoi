@@ -411,71 +411,71 @@ namespace TestCases.SS.UserModel
         [Test]
         public void TestSetSheetOrder()
         {
-            IWorkbook wb = _testDataProvider.CreateWorkbook();
-
-            for (int i = 0; i < 10; i++)
+            using(var wb = _testDataProvider.CreateWorkbook())
             {
-                wb.CreateSheet("Sheet " + i);
+                for(int i = 0; i < 10; i++)
+                {
+                    wb.CreateSheet("Sheet " + i);
+                }
+
+                // Check the Initial order
+                ClassicAssert.AreEqual(0, wb.GetSheetIndex("Sheet 0"));
+                ClassicAssert.AreEqual(1, wb.GetSheetIndex("Sheet 1"));
+                ClassicAssert.AreEqual(2, wb.GetSheetIndex("Sheet 2"));
+                ClassicAssert.AreEqual(3, wb.GetSheetIndex("Sheet 3"));
+                ClassicAssert.AreEqual(4, wb.GetSheetIndex("Sheet 4"));
+                ClassicAssert.AreEqual(5, wb.GetSheetIndex("Sheet 5"));
+                ClassicAssert.AreEqual(6, wb.GetSheetIndex("Sheet 6"));
+                ClassicAssert.AreEqual(7, wb.GetSheetIndex("Sheet 7"));
+                ClassicAssert.AreEqual(8, wb.GetSheetIndex("Sheet 8"));
+                ClassicAssert.AreEqual(9, wb.GetSheetIndex("Sheet 9"));
+
+                // check active sheet
+                ClassicAssert.AreEqual(0, wb.ActiveSheetIndex);
+
+                // Change
+                wb.SetSheetOrder("Sheet 6", 0);
+                ClassicAssert.AreEqual(1, wb.ActiveSheetIndex);
+                wb.SetSheetOrder("Sheet 3", 7);
+                wb.SetSheetOrder("Sheet 1", 9);
+                // now the first sheet is at index 1
+                ClassicAssert.AreEqual(1, wb.ActiveSheetIndex);
+
+                // Check they're currently right
+                ClassicAssert.AreEqual(0, wb.GetSheetIndex("Sheet 6"));
+                ClassicAssert.AreEqual(1, wb.GetSheetIndex("Sheet 0"));
+                ClassicAssert.AreEqual(2, wb.GetSheetIndex("Sheet 2"));
+                ClassicAssert.AreEqual(3, wb.GetSheetIndex("Sheet 4"));
+                ClassicAssert.AreEqual(4, wb.GetSheetIndex("Sheet 5"));
+                ClassicAssert.AreEqual(5, wb.GetSheetIndex("Sheet 7"));
+                ClassicAssert.AreEqual(6, wb.GetSheetIndex("Sheet 3"));
+                ClassicAssert.AreEqual(7, wb.GetSheetIndex("Sheet 8"));
+                ClassicAssert.AreEqual(8, wb.GetSheetIndex("Sheet 9"));
+                ClassicAssert.AreEqual(9, wb.GetSheetIndex("Sheet 1"));
+
+                using(var wbr = _testDataProvider.WriteOutAndReadBack(wb))
+                {
+                    ClassicAssert.AreEqual(0, wbr.GetSheetIndex("Sheet 6"));
+                    ClassicAssert.AreEqual(1, wbr.GetSheetIndex("Sheet 0"));
+                    ClassicAssert.AreEqual(2, wbr.GetSheetIndex("Sheet 2"));
+                    ClassicAssert.AreEqual(3, wbr.GetSheetIndex("Sheet 4"));
+                    ClassicAssert.AreEqual(4, wbr.GetSheetIndex("Sheet 5"));
+                    ClassicAssert.AreEqual(5, wbr.GetSheetIndex("Sheet 7"));
+                    ClassicAssert.AreEqual(6, wbr.GetSheetIndex("Sheet 3"));
+                    ClassicAssert.AreEqual(7, wbr.GetSheetIndex("Sheet 8"));
+                    ClassicAssert.AreEqual(8, wbr.GetSheetIndex("Sheet 9"));
+                    ClassicAssert.AreEqual(9, wbr.GetSheetIndex("Sheet 1"));
+
+                    ClassicAssert.AreEqual(1, wb.ActiveSheetIndex);
+
+                    // Now Get the index by the sheet, not the name
+                    for(int i = 0; i < 10; i++)
+                    {
+                        ISheet s = wbr.GetSheetAt(i);
+                        ClassicAssert.AreEqual(i, wbr.GetSheetIndex(s));
+                    }
+                }
             }
-
-            // Check the Initial order
-            ClassicAssert.AreEqual(0, wb.GetSheetIndex("Sheet 0"));
-            ClassicAssert.AreEqual(1, wb.GetSheetIndex("Sheet 1"));
-            ClassicAssert.AreEqual(2, wb.GetSheetIndex("Sheet 2"));
-            ClassicAssert.AreEqual(3, wb.GetSheetIndex("Sheet 3"));
-            ClassicAssert.AreEqual(4, wb.GetSheetIndex("Sheet 4"));
-            ClassicAssert.AreEqual(5, wb.GetSheetIndex("Sheet 5"));
-            ClassicAssert.AreEqual(6, wb.GetSheetIndex("Sheet 6"));
-            ClassicAssert.AreEqual(7, wb.GetSheetIndex("Sheet 7"));
-            ClassicAssert.AreEqual(8, wb.GetSheetIndex("Sheet 8"));
-            ClassicAssert.AreEqual(9, wb.GetSheetIndex("Sheet 9"));
-
-            // check active sheet
-            ClassicAssert.AreEqual(0, wb.ActiveSheetIndex);
-
-            // Change
-            wb.SetSheetOrder("Sheet 6", 0);
-            ClassicAssert.AreEqual(1, wb.ActiveSheetIndex);
-            wb.SetSheetOrder("Sheet 3", 7);
-            wb.SetSheetOrder("Sheet 1", 9);
-            // now the first sheet is at index 1
-            ClassicAssert.AreEqual(1, wb.ActiveSheetIndex);
-
-            // Check they're currently right
-            ClassicAssert.AreEqual(0, wb.GetSheetIndex("Sheet 6"));
-            ClassicAssert.AreEqual(1, wb.GetSheetIndex("Sheet 0"));
-            ClassicAssert.AreEqual(2, wb.GetSheetIndex("Sheet 2"));
-            ClassicAssert.AreEqual(3, wb.GetSheetIndex("Sheet 4"));
-            ClassicAssert.AreEqual(4, wb.GetSheetIndex("Sheet 5"));
-            ClassicAssert.AreEqual(5, wb.GetSheetIndex("Sheet 7"));
-            ClassicAssert.AreEqual(6, wb.GetSheetIndex("Sheet 3"));
-            ClassicAssert.AreEqual(7, wb.GetSheetIndex("Sheet 8"));
-            ClassicAssert.AreEqual(8, wb.GetSheetIndex("Sheet 9"));
-            ClassicAssert.AreEqual(9, wb.GetSheetIndex("Sheet 1"));
-
-            IWorkbook wbr = _testDataProvider.WriteOutAndReadBack(wb);
-            wb.Close();
-
-            ClassicAssert.AreEqual(0, wbr.GetSheetIndex("Sheet 6"));
-            ClassicAssert.AreEqual(1, wbr.GetSheetIndex("Sheet 0"));
-            ClassicAssert.AreEqual(2, wbr.GetSheetIndex("Sheet 2"));
-            ClassicAssert.AreEqual(3, wbr.GetSheetIndex("Sheet 4"));
-            ClassicAssert.AreEqual(4, wbr.GetSheetIndex("Sheet 5"));
-            ClassicAssert.AreEqual(5, wbr.GetSheetIndex("Sheet 7"));
-            ClassicAssert.AreEqual(6, wbr.GetSheetIndex("Sheet 3"));
-            ClassicAssert.AreEqual(7, wbr.GetSheetIndex("Sheet 8"));
-            ClassicAssert.AreEqual(8, wbr.GetSheetIndex("Sheet 9"));
-            ClassicAssert.AreEqual(9, wbr.GetSheetIndex("Sheet 1"));
-
-            ClassicAssert.AreEqual(1, wb.ActiveSheetIndex);
-
-            // Now Get the index by the sheet, not the name
-            for (int i = 0; i < 10; i++)
-            {
-                ISheet s = wbr.GetSheetAt(i);
-                ClassicAssert.AreEqual(i, wbr.GetSheetIndex(s));
-            }
-            wbr.Close();
         }
 
         [Test]

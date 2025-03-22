@@ -193,23 +193,25 @@ namespace TestCases.XSSF.UserModel
         [Test]
         public void GetColumn_GetNonExistingColumn_ReturnsNull()
         {
-            XSSFWorkbook wb = new XSSFWorkbook();
-            XSSFSheet sheet = (XSSFSheet)wb.CreateSheet("sheet1");
-
-            IColumn column = sheet.GetColumn(10);
-
-            ClassicAssert.IsNull(column);
-
             FileInfo file = TempFile.CreateTempFile("poi-", ".xlsx");
-            Stream output = File.OpenWrite(file.FullName);
-            wb.Write(output);
-            output.Close();
+            using(XSSFWorkbook wb = new XSSFWorkbook())
+            {
+                XSSFSheet sheet = (XSSFSheet)wb.CreateSheet("sheet1");
+                IColumn column = sheet.GetColumn(10);
+                ClassicAssert.IsNull(column);
 
-            XSSFWorkbook wbLoaded = new XSSFWorkbook(file.ToString());
-            XSSFSheet sheetLoaded = (XSSFSheet)wbLoaded.GetSheet("sheet1");
-            IColumn columnLoaded = sheetLoaded.GetColumn(10);
+                using(Stream output = File.OpenWrite(file.FullName))
+                {
+                    wb.Write(output);
+                }
+            }
 
-            ClassicAssert.IsNull(columnLoaded);
+            using(XSSFWorkbook wbLoaded = new XSSFWorkbook(file.ToString()))
+            {
+                XSSFSheet sheetLoaded = (XSSFSheet)wbLoaded.GetSheet("sheet1");
+                IColumn columnLoaded = sheetLoaded.GetColumn(10);
+                ClassicAssert.IsNull(columnLoaded);
+            }
         }
 
         [Test]
