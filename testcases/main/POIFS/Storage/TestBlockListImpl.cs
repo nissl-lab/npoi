@@ -28,7 +28,7 @@ using System;
 using System.IO;
 using System.Collections;
 
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using NPOI.POIFS.Storage;
 using NPOI.Util;
 using NPOI.POIFS.FileSystem;
@@ -140,7 +140,7 @@ namespace TestCases.POIFS.Storage
 
                 for (int k = 0; k < 512; k++)
                 {
-                    Assert.AreEqual(data[(j * 512) + k], outPut[k], "testing block " + j + ", index " + k);
+                    ClassicAssert.AreEqual(data[(j * 512) + k], outPut[k], "testing block " + j + ", index " + k);
                 }
             }
 
@@ -290,7 +290,7 @@ namespace TestCases.POIFS.Storage
                     }
                     else
                     {
-                        Assert.AreEqual(expected_Length[j], dataBlocks.Length);
+                        ClassicAssert.AreEqual(expected_Length[j], dataBlocks.Length);
                     }
                 }
                 catch (IOException)

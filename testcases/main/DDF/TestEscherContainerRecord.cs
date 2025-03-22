@@ -24,7 +24,7 @@ namespace TestCases.DDF
     using System.Collections.Generic;
     using System.IO;
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.DDF;
     using NPOI.Util;
 
@@ -47,18 +47,18 @@ using System.Configuration;
             byte[] data = HexRead.ReadFromString("0F 02 11 F1 00 00 00 00");
             EscherRecord r = f.CreateRecord(data, 0);
             r.FillFields(data, 0, f);
-            Assert.IsTrue(r is EscherContainerRecord);
-            Assert.AreEqual((short)0x020F, r.Options);
-            Assert.AreEqual(unchecked((short)0xF111), r.RecordId);
+            ClassicAssert.IsTrue(r is EscherContainerRecord);
+            ClassicAssert.AreEqual((short)0x020F, r.Options);
+            ClassicAssert.AreEqual(unchecked((short)0xF111), r.RecordId);
 
             data = HexRead.ReadFromString("0F 02 11 F1 08 00 00 00" +
                     " 02 00 22 F2 00 00 00 00");
             r = f.CreateRecord(data, 0);
             r.FillFields(data, 0, f);
             EscherRecord c = r.GetChild(0);
-            Assert.IsFalse(c is EscherContainerRecord);
-            Assert.AreEqual(unchecked((short)0x0002), c.Options);
-            Assert.AreEqual(unchecked((short)0xF222), c.RecordId);
+            ClassicAssert.IsFalse(c is EscherContainerRecord);
+            ClassicAssert.AreEqual(unchecked((short)0x0002), c.Options);
+            ClassicAssert.AreEqual(unchecked((short)0xF222), c.RecordId);
         }
         [Test]
         public void TestSerialize()
@@ -69,7 +69,7 @@ using System.Configuration;
             byte[] data = new byte[8];
             r.Serialize(0, data);
 
-            Assert.AreEqual("[3F, 12, 12, F1, 00, 00, 00, 00]", HexDump.ToHex(data));
+            ClassicAssert.AreEqual("[3F, 12, 12, F1, 00, 00, 00, 00]", HexDump.ToHex(data));
 
             EscherRecord childRecord = new UnknownEscherRecord();
             childRecord.Options=unchecked((short)0x9999);
@@ -78,7 +78,7 @@ using System.Configuration;
             data = new byte[16];
             r.Serialize(0, data);
 
-            Assert.AreEqual("[3F, 12, 12, F1, 08, 00, 00, 00, 99, 99, 01, FF, 00, 00, 00, 00]", HexDump.ToHex(data));
+            ClassicAssert.AreEqual("[3F, 12, 12, F1, 08, 00, 00, 00, 99, 99, 01, FF, 00, 00, 00, 00]", HexDump.ToHex(data));
 
         }
         [Test]
@@ -88,7 +88,7 @@ using System.Configuration;
             r.RecordId=EscherContainerRecord.SP_CONTAINER;
             r.Options=(short)0x000F;
             String nl = Environment.NewLine;
-            Assert.AreEqual("EscherContainerRecord (SpContainer):" + nl +
+            ClassicAssert.AreEqual("EscherContainerRecord (SpContainer):" + nl +
                     "  isContainer: True" + nl +
                     "  version: 0x000F" + nl +
                     "  instance: 0x0000" + nl +
@@ -119,7 +119,7 @@ using System.Configuration;
                        "      numchildren: 0" + nl +
                        "      properties:" + nl +
                        "    " + nl;
-            Assert.AreEqual(expected, r.ToString());
+            ClassicAssert.AreEqual(expected, r.ToString());
 
             r.AddChildRecord(r2);
             expected = "EscherContainerRecord (SpContainer):" + nl +
@@ -147,7 +147,7 @@ using System.Configuration;
                        "      numchildren: 0" + nl +
                        "      properties:" + nl +
                        "    " + nl;
-            Assert.AreEqual(expected, r.ToString());
+            ClassicAssert.AreEqual(expected, r.ToString());
         }
 
         private class DummyEscherRecord : EscherRecord
@@ -167,7 +167,7 @@ using System.Configuration;
 
             r.AddChildRecord(new DummyEscherRecord());
 
-            Assert.AreEqual(18, r.RecordSize);
+            ClassicAssert.AreEqual(18, r.RecordSize);
         }
 
         /**
@@ -191,7 +191,7 @@ using System.Configuration;
         {
             EscherContainerRecord ecr = new EscherContainerRecord();
             List<EscherRecord> children0 = ecr.ChildRecords;
-            Assert.AreEqual(0, children0.Count);
+            ClassicAssert.AreEqual(0, children0.Count);
 
             EscherRecord chA = new DummyEscherRecord();
             EscherRecord chB = new DummyEscherRecord();
@@ -202,19 +202,19 @@ using System.Configuration;
             children0.Add(chC);
 
             List<EscherRecord> children1 = ecr.ChildRecords;
-            Assert.IsTrue(children0 != children1);
-            Assert.AreEqual(2, children1.Count);
-            Assert.AreEqual(chA, children1[0]);
-            Assert.AreEqual(chB, children1[1]);
+            ClassicAssert.IsTrue(children0 != children1);
+            ClassicAssert.AreEqual(2, children1.Count);
+            ClassicAssert.AreEqual(chA, children1[0]);
+            ClassicAssert.AreEqual(chB, children1[1]);
 
-            Assert.AreEqual(1, children0.Count); // first copy unchanged
+            ClassicAssert.AreEqual(1, children0.Count); // first copy unchanged
 
             ecr.ChildRecords=(children0);
             ecr.AddChildRecord(chA);
             List<EscherRecord> children2 = ecr.ChildRecords;
-            Assert.AreEqual(2, children2.Count);
-            Assert.AreEqual(chC, children2[0]);
-            Assert.AreEqual(chA, children2[1]);
+            ClassicAssert.AreEqual(2, children2.Count);
+            ClassicAssert.AreEqual(chC, children2[0]);
+            ClassicAssert.AreEqual(chA, children2[1]);
         }
     }
 }

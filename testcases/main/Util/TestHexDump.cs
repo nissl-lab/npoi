@@ -31,7 +31,7 @@ using System.Text;
 using System.Collections.Generic;
 using System.IO;
 
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using NPOI.Util;
 using System.Reflection;
 
@@ -107,12 +107,12 @@ namespace TestCases.Util
             }
             byte[] actualOutput = stream.ToArray();
 
-            Assert.AreEqual(outputArray.Length,
+            ClassicAssert.AreEqual(outputArray.Length,
                          actualOutput.Length, "array size mismatch");
 
             for (int j = 0; j < outputArray.Length; j++)
             {
-                Assert.AreEqual(outputArray[j],
+                ClassicAssert.AreEqual(outputArray[j],
                              actualOutput[j], "array[ " + j + "] mismatch");
             }
 
@@ -147,11 +147,11 @@ namespace TestCases.Util
                                  Encoding.UTF8.GetBytes(HexDump.EOL).Length);
             }
             actualOutput = stream.ToArray();
-            Assert.AreEqual(outputArray.Length,
+            ClassicAssert.AreEqual(outputArray.Length,
                          actualOutput.Length, "array size mismatch");
             for (int j = 0; j < outputArray.Length; j++)
             {
-                Assert.AreEqual(outputArray[j], actualOutput[j], "array[ " + j + "] mismatch");
+                ClassicAssert.AreEqual(outputArray[j], actualOutput[j], "array[ " + j + "] mismatch");
             }
 
             // verify proper behavior with negative offset
@@ -185,10 +185,10 @@ namespace TestCases.Util
                                  Encoding.UTF8.GetBytes(HexDump.EOL).Length);
             }
             actualOutput = stream.ToArray();
-            Assert.AreEqual(outputArray.Length, actualOutput.Length, "array size mismatch");
+            ClassicAssert.AreEqual(outputArray.Length, actualOutput.Length, "array size mismatch");
             for (int j = 0; j < outputArray.Length; j++)
             {
-                Assert.AreEqual(outputArray[j],
+                ClassicAssert.AreEqual(outputArray[j],
                              actualOutput[j], "array[ " + j + "] mismatch");
             }
 
@@ -238,11 +238,11 @@ namespace TestCases.Util
                                  Encoding.UTF8.GetBytes(HexDump.EOL).Length);
             }
             actualOutput = stream.ToArray();
-            Assert.AreEqual(outputArray.Length,
+            ClassicAssert.AreEqual(outputArray.Length,
                          actualOutput.Length, "array size mismatch");
             for (int j = 0; j < outputArray.Length; j++)
             {
-                Assert.AreEqual(outputArray[j],
+                ClassicAssert.AreEqual(outputArray[j],
                              actualOutput[j], "array[ " + j + "] mismatch");
             }
 
@@ -275,35 +275,35 @@ namespace TestCases.Util
             // verify proper behaviour with empty byte array
             MemoryStream os = new MemoryStream();
             HexDump.Dump(new byte[0], 0, os, 0);
-            Assert.AreEqual("No Data" + Environment.NewLine, Encoding.UTF8.GetString(os.ToArray()));
+            ClassicAssert.AreEqual("No Data" + Environment.NewLine, Encoding.UTF8.GetString(os.ToArray()));
 
         }
 
         [Test]
         public void TestToHex()
         {
-            Assert.AreEqual("000A", HexDump.ToHex((short)0xA));
+            ClassicAssert.AreEqual("000A", HexDump.ToHex((short)0xA));
 
-            Assert.AreEqual("[]", HexDump.ToHex(new short[] { }));
-            Assert.AreEqual("[000A]", HexDump.ToHex(new short[] { 0xA }));
-            Assert.AreEqual(HexDump.ToHex(new short[] { 0xA, 0xB }), "[000A, 000B]");
+            ClassicAssert.AreEqual("[]", HexDump.ToHex(new short[] { }));
+            ClassicAssert.AreEqual("[000A]", HexDump.ToHex(new short[] { 0xA }));
+            ClassicAssert.AreEqual(HexDump.ToHex(new short[] { 0xA, 0xB }), "[000A, 000B]");
 
-            Assert.AreEqual("0A", HexDump.ToHex((byte)0xA));
-            Assert.AreEqual("0000000A", HexDump.ToHex(0xA));
+            ClassicAssert.AreEqual("0A", HexDump.ToHex((byte)0xA));
+            ClassicAssert.AreEqual("0000000A", HexDump.ToHex(0xA));
 
-            Assert.AreEqual("[]", HexDump.ToHex(new byte[] { }));
-            Assert.AreEqual("[0A]", HexDump.ToHex(new byte[] { 0xA }));
-            Assert.AreEqual(HexDump.ToHex(new byte[] { 0xA, 0xB }), "[0A, 0B]");
+            ClassicAssert.AreEqual("[]", HexDump.ToHex(new byte[] { }));
+            ClassicAssert.AreEqual("[0A]", HexDump.ToHex(new byte[] { 0xA }));
+            ClassicAssert.AreEqual(HexDump.ToHex(new byte[] { 0xA, 0xB }), "[0A, 0B]");
 
-            Assert.AreEqual(HexDump.ToHex(new byte[] { }, 10), ": 0");
-            Assert.AreEqual(HexDump.ToHex(new byte[] { 0xA }, 10), "0: 0A");
-            Assert.AreEqual(HexDump.ToHex(new byte[] { 0xA, 0xB }, 10), "0: 0A, 0B");
-            Assert.AreEqual(HexDump.ToHex(new byte[] { 0xA, 0xB, 0xC, 0xD }, 2), "0: 0A, 0B\n2: 0C, 0D");
-            Assert.AreEqual(HexDump.ToHex(new byte[] { 0xA, 0xB, 0xC, 0xD, 0xE, 0xF }, 2), "0: 0A, 0B\n2: 0C, 0D\n4: 0E, 0F");
+            ClassicAssert.AreEqual(HexDump.ToHex(new byte[] { }, 10), ": 0");
+            ClassicAssert.AreEqual(HexDump.ToHex(new byte[] { 0xA }, 10), "0: 0A");
+            ClassicAssert.AreEqual(HexDump.ToHex(new byte[] { 0xA, 0xB }, 10), "0: 0A, 0B");
+            ClassicAssert.AreEqual(HexDump.ToHex(new byte[] { 0xA, 0xB, 0xC, 0xD }, 2), "0: 0A, 0B\n2: 0C, 0D");
+            ClassicAssert.AreEqual(HexDump.ToHex(new byte[] { 0xA, 0xB, 0xC, 0xD, 0xE, 0xF }, 2), "0: 0A, 0B\n2: 0C, 0D\n4: 0E, 0F");
 
-            Assert.AreEqual("FFFF", HexDump.ToHex(unchecked((short)0xFFFF)));
+            ClassicAssert.AreEqual("FFFF", HexDump.ToHex(unchecked((short)0xFFFF)));
 
-            Assert.AreEqual("00000000000004D2", HexDump.ToHex(1234L));
+            ClassicAssert.AreEqual("00000000000004D2", HexDump.ToHex(1234L));
 
             ConfirmStr("0xFE", HexDump.ByteToHex(-2));
             ConfirmStr("0x25", HexDump.ByteToHex(37));
@@ -316,7 +316,7 @@ namespace TestCases.Util
         }
         private static void ConfirmStr(String expected, char[] actualChars)
         {
-            Assert.AreEqual(expected, new String(actualChars));
+            ClassicAssert.AreEqual(expected, new String(actualChars));
         }
         [Test]
         public void TestDumpToString()
@@ -329,11 +329,11 @@ namespace TestCases.Util
             }
             String dump = HexDump.Dump(testArray, 0, 0);
             //System.out.Println("Hex: \n" + dump);
-            Assert.IsTrue(dump.Contains("0123456789:;<=>?"), "Had: \n" + dump);
+            ClassicAssert.IsTrue(dump.Contains("0123456789:;<=>?"), "Had: \n" + dump);
 
             dump = HexDump.Dump(testArray, 2, 1);
             //System.out.Println("Hex: \n" + dump);
-            Assert.IsTrue(dump.Contains("123456789:;<=>?@"), "Had: \n" + dump);
+            ClassicAssert.IsTrue(dump.Contains("123456789:;<=>?@"), "Had: \n" + dump);
         }
 
         [Test]
@@ -397,7 +397,7 @@ namespace TestCases.Util
                 }
 
                 String str = Encoding.UTF8.GetString(byteOut.ToArray());
-                Assert.IsTrue(str.Contains("0123456789:;<=>?"),"Had: \n" + str);
+                ClassicAssert.IsTrue(str.Contains("0123456789:;<=>?"),"Had: \n" + str);
             }
             finally
             {
@@ -420,7 +420,7 @@ namespace TestCases.Util
                 }
 
                 String str = Encoding.UTF8.GetString(byteOut.ToArray());
-                Assert.IsTrue(str.Contains("0123456789:;<=>?"), "Had: \n" + str);
+                ClassicAssert.IsTrue(str.Contains("0123456789:;<=>?"), "Had: \n" + str);
             }
             finally
             {
@@ -443,7 +443,7 @@ namespace TestCases.Util
                 }
 
                 String str = Encoding.UTF8.GetString(byteOut.ToArray());
-                Assert.IsTrue(str.Contains("0123456789:;<=>?"), "Had: \n" + str);
+                ClassicAssert.IsTrue(str.Contains("0123456789:;<=>?"), "Had: \n" + str);
             }
             finally
             {
@@ -465,7 +465,7 @@ namespace TestCases.Util
                 }
 
                 String str = Encoding.UTF8.GetString(byteOut.ToArray());
-                Assert.IsTrue(str.Contains("123456789:;<=>?@"), 
+                ClassicAssert.IsTrue(str.Contains("123456789:;<=>?@"), 
                     "Line contents should be Moved by one now, but Had: \n" + str);
             }
             finally
@@ -486,7 +486,7 @@ namespace TestCases.Util
             //c.=(/*setter*/true);
 
             // call it
-            //Assert.IsNotNull(c.Invoke((Object[]) null));        
+            //ClassicAssert.IsNotNull(c.Invoke((Object[]) null));        
         }
 
         [Test]
@@ -505,15 +505,15 @@ namespace TestCases.Util
                 {
                     out1.Close();
                 }
-                Assert.IsTrue(file.Exists);
-                Assert.IsTrue(file.Length > 0);
+                ClassicAssert.IsTrue(file.Exists);
+                ClassicAssert.IsTrue(file.Length > 0);
 
                 //HexDump.Main(new String[] { file.AbsolutePath });
             }
             finally
             {
                 file.Delete();
-                //Assert.IsTrue(file.Exists);
+                //ClassicAssert.IsTrue(file.Exists);
             }
         }
 

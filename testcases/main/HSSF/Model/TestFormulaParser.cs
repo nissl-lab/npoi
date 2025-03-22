@@ -18,7 +18,7 @@
 namespace TestCases.HSSF.Model
 {
     using System;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.Model;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.UserModel;
@@ -57,55 +57,55 @@ namespace TestCases.HSSF.Model
         public static Ptg[] ParseFormula(String formula)
         {
             Ptg[] result = HSSFFormulaParser.Parse(formula, null);
-            Assert.IsNotNull(result, "Ptg array should not be null");
+            ClassicAssert.IsNotNull(result, "Ptg array should not be null");
             return result;
         }
         [Test]
         public void TestSimpleFormula()
         {
             Ptg[] ptgs = ParseFormula("2+2");
-            Assert.AreEqual(3, ptgs.Length);
+            ClassicAssert.AreEqual(3, ptgs.Length);
         }
         [Test]
         public void TestFormulaWithSpace1()
         {
             Ptg[] ptgs = ParseFormula(" 2 + 2 ");
-            Assert.AreEqual(3, ptgs.Length);
-            Assert.IsTrue((ptgs[0] is IntPtg));
-            Assert.IsTrue((ptgs[1] is IntPtg));
-            Assert.IsTrue((ptgs[2] is AddPtg));
+            ClassicAssert.AreEqual(3, ptgs.Length);
+            ClassicAssert.IsTrue((ptgs[0] is IntPtg));
+            ClassicAssert.IsTrue((ptgs[1] is IntPtg));
+            ClassicAssert.IsTrue((ptgs[2] is AddPtg));
         }
         [Test]
         public void TestFormulaWithSpace2()
         {
             Ptg[] ptgs = ParseFormula("2+ sum( 3 , 4) ");
-            Assert.AreEqual(5, ptgs.Length);
+            ClassicAssert.AreEqual(5, ptgs.Length);
         }
         [Test]
         public void TestFormulaWithSpaceNRef()
         {
             Ptg[] ptgs = ParseFormula("sum( A2:A3 )");
-            Assert.AreEqual(2, ptgs.Length);
+            ClassicAssert.AreEqual(2, ptgs.Length);
         }
         [Test]
         public void TestFormulaWithString()
         {
             Ptg[] ptgs = ParseFormula("\"hello\" & \"world\" ");
-            Assert.AreEqual(3, ptgs.Length);
+            ClassicAssert.AreEqual(3, ptgs.Length);
         }
         [Test]
         public void TestTRUE()
         {
             Ptg[] ptgs = ParseFormula("TRUE");
-            Assert.AreEqual(1, ptgs.Length);
+            ClassicAssert.AreEqual(1, ptgs.Length);
             BoolPtg flag = (BoolPtg)ptgs[0];
-            Assert.AreEqual(true, flag.Value);
+            ClassicAssert.AreEqual(true, flag.Value);
         }
         [Test]
         public void TestSumIf()
         {
             Ptg[] ptgs = ParseFormula("SUMIF(A1:A5,\">4000\",B1:B5)");
-            Assert.AreEqual(4, ptgs.Length);
+            ClassicAssert.AreEqual(4, ptgs.Length);
         }
 
         /**
@@ -118,11 +118,11 @@ namespace TestCases.HSSF.Model
         {
             String currencyCell = "F3";
             Ptg[] ptgs = ParseFormula("\"TOTAL[\"&" + currencyCell + "&\"]\"");
-            Assert.AreEqual(5, ptgs.Length);
-            Assert.IsTrue((ptgs[0] is StringPtg), "Ptg[0] is1 a string");
+            ClassicAssert.AreEqual(5, ptgs.Length);
+            ClassicAssert.IsTrue((ptgs[0] is StringPtg), "Ptg[0] is1 a string");
             StringPtg firstString = (StringPtg)ptgs[0];
 
-            Assert.AreEqual("TOTAL[", firstString.Value);
+            ClassicAssert.AreEqual("TOTAL[", firstString.Value);
             //the PTG order isn't 100% correct but it still works - dmui
         }
         [Test]
@@ -137,21 +137,21 @@ namespace TestCases.HSSF.Model
 
                 //Expected ptg stack: [NamePtg(myFunc), StringPtg(arg), (additional operands go here...), FunctionPtg(myFunc)]
                 Ptg[] ptg = FormulaParser.Parse("myFunc(\"arg\")", book, FormulaType.Cell, -1);
-                Assert.AreEqual(3, ptg.Length);
+                ClassicAssert.AreEqual(3, ptg.Length);
 
                 // the name gets encoded as the first operand on the stack
                 NamePtg tname = (NamePtg)ptg[0];
-                Assert.AreEqual("myFunc", tname.ToFormulaString(book));
+                ClassicAssert.AreEqual("myFunc", tname.ToFormulaString(book));
 
                 // the function's arguments are pushed onto the stack from left-to-right as OperandPtgs
                 StringPtg arg = (StringPtg)ptg[1];
-                Assert.AreEqual("arg", arg.Value);
+                ClassicAssert.AreEqual("arg", arg.Value);
 
                 // The external FunctionPtg is the last Ptg added to the stack
                 // During formula evaluation, this Ptg pops off the the appropriate number of
                 // arguments (getNumberOfOperands()) and pushes the result on the stack
                 AbstractFunctionPtg tfunc = (AbstractFunctionPtg)ptg[2]; //FuncVarPtg
-                Assert.IsTrue(tfunc.IsExternalFunction);
+                ClassicAssert.IsTrue(tfunc.IsExternalFunction);
 
                 // confirm formula parsing is case-insensitive
                 FormulaParser.Parse("mYfUnC(\"arg\")", book, FormulaType.Cell, -1);
@@ -170,9 +170,9 @@ namespace TestCases.HSSF.Model
                 try
                 {
                     // HSSFWorkbook/EXCEL97-specific side-effects user-defined function names must be added to Workbook's defined names in order to be saved.
-                    Assert.IsNotNull(wb2.GetName("myFunc"));
+                    ClassicAssert.IsNotNull(wb2.GetName("myFunc"));
                     assertEqualsIgnoreCase("myFunc", wb2.GetName("myFunc").NameName);
-                    Assert.IsNotNull(wb2.GetName("yourFunc"));
+                    ClassicAssert.IsNotNull(wb2.GetName("yourFunc"));
                     assertEqualsIgnoreCase("yourFunc", wb2.GetName("yourFunc").NameName);
 
                     // Manually check to make sure file isn't corrupted
@@ -200,22 +200,22 @@ namespace TestCases.HSSF.Model
         private static void assertEqualsIgnoreCase(String expected, String actual)
         {
             CultureInfo cultureUS = CultureInfo.GetCultureInfo("en-US");
-            Assert.AreEqual(expected.ToLower(cultureUS), actual.ToLower(cultureUS));
+            ClassicAssert.AreEqual(expected.ToLower(cultureUS), actual.ToLower(cultureUS));
         }
 
         [Test]
         public void TestEmbeddedSlash()
         {
             Ptg[] ptgs = ParseFormula("HYPERLINK(\"http://www.jakarta.org\",\"Jakarta\")");
-            Assert.IsTrue(ptgs[0] is StringPtg, "first ptg is1 string");
-            Assert.IsTrue(ptgs[1] is StringPtg, "second ptg is1 string");
+            ClassicAssert.IsTrue(ptgs[0] is StringPtg, "first ptg is1 string");
+            ClassicAssert.IsTrue(ptgs[1] is StringPtg, "second ptg is1 string");
         }
         [Test]
         public void TestConcatenate()
         {
             Ptg[] ptgs = ParseFormula("CONCATENATE(\"first\",\"second\")");
-            Assert.IsTrue(ptgs[0] is StringPtg, "first ptg is1 string");
-            Assert.IsTrue(ptgs[1] is StringPtg, "second ptg is1 string");
+            ClassicAssert.IsTrue(ptgs[0] is StringPtg, "first ptg is1 string");
+            ClassicAssert.IsTrue(ptgs[1] is StringPtg, "second ptg is1 string");
         }
         [Test]
         public void TestWorksheetReferences()
@@ -241,17 +241,17 @@ namespace TestCases.HSSF.Model
         public void TestUnaryMinus()
         {
             Ptg[] ptgs = ParseFormula("-A1");
-            Assert.AreEqual(2, ptgs.Length);
-            Assert.IsTrue(ptgs[0] is RefPtg, "first ptg is1 reference");
-            Assert.IsTrue(ptgs[1] is UnaryMinusPtg, "second ptg is1 Minus");
+            ClassicAssert.AreEqual(2, ptgs.Length);
+            ClassicAssert.IsTrue(ptgs[0] is RefPtg, "first ptg is1 reference");
+            ClassicAssert.IsTrue(ptgs[1] is UnaryMinusPtg, "second ptg is1 Minus");
         }
         [Test]
         public void TestUnaryPlus()
         {
             Ptg[] ptgs = ParseFormula("+A1");
-            Assert.AreEqual(2, ptgs.Length);
-            Assert.IsTrue(ptgs[0] is RefPtg, "first ptg is1 reference");
-            Assert.IsTrue(ptgs[1] is UnaryPlusPtg, "second ptg is1 Plus");
+            ClassicAssert.AreEqual(2, ptgs.Length);
+            ClassicAssert.IsTrue(ptgs[0] is RefPtg, "first ptg is1 reference");
+            ClassicAssert.IsTrue(ptgs[1] is UnaryPlusPtg, "second ptg is1 Plus");
         }
         [Test]
         public void TestLeadingSpaceInString()
@@ -259,22 +259,22 @@ namespace TestCases.HSSF.Model
             String value = "  hi  ";
             Ptg[] ptgs = ParseFormula("\"" + value + "\"");
 
-            Assert.AreEqual(1, ptgs.Length);
-            Assert.IsTrue(ptgs[0] is StringPtg, "ptg0 is1 a StringPtg");
-            Assert.IsTrue(((StringPtg)ptgs[0]).Value.Equals(value), "ptg0 contains exact value");
+            ClassicAssert.AreEqual(1, ptgs.Length);
+            ClassicAssert.IsTrue(ptgs[0] is StringPtg, "ptg0 is1 a StringPtg");
+            ClassicAssert.IsTrue(((StringPtg)ptgs[0]).Value.Equals(value), "ptg0 contains exact value");
         }
         [Test]
         public void TestLookupAndMatchFunctionArgs()
         {
             Ptg[] ptgs = ParseFormula("lookup(A1, A3:A52, B3:B52)");
 
-            Assert.AreEqual(4, ptgs.Length);
-            Assert.IsTrue(ptgs[0].PtgClass == Ptg.CLASS_VALUE, "ptg0 has Value class");
+            ClassicAssert.AreEqual(4, ptgs.Length);
+            ClassicAssert.IsTrue(ptgs[0].PtgClass == Ptg.CLASS_VALUE, "ptg0 has Value class");
 
             ptgs = ParseFormula("match(A1, A3:A52)");
 
-            Assert.AreEqual(3, ptgs.Length);
-            Assert.IsTrue(ptgs[0].PtgClass == Ptg.CLASS_VALUE, "ptg0 has Value class");
+            ClassicAssert.AreEqual(3, ptgs.Length);
+            ClassicAssert.IsTrue(ptgs[0].PtgClass == Ptg.CLASS_VALUE, "ptg0 has Value class");
         }
 
         /** bug 33160*/
@@ -282,10 +282,10 @@ namespace TestCases.HSSF.Model
         public void TestLargeInt()
         {
             Ptg[] ptgs = ParseFormula("40");
-            Assert.IsTrue(ptgs[0] is IntPtg, "ptg is1 Int, is1 " + ptgs[0].GetType());
+            ClassicAssert.IsTrue(ptgs[0] is IntPtg, "ptg is1 Int, is1 " + ptgs[0].GetType());
 
             ptgs = ParseFormula("40000");
-            Assert.IsTrue(ptgs[0] is IntPtg, "ptg should be  IntPtg, is1 " + ptgs[0].GetType());
+            ClassicAssert.IsTrue(ptgs[0] is IntPtg, "ptg should be  IntPtg, is1 " + ptgs[0].GetType());
         }
 
         /** bug 33160, Testcase by Amol Deshmukh*/
@@ -293,10 +293,10 @@ namespace TestCases.HSSF.Model
         public void TestSimpleLongFormula()
         {
             Ptg[] ptgs = ParseFormula("40000/2");
-            Assert.AreEqual(3, ptgs.Length);
-            Assert.IsTrue((ptgs[0] is IntPtg), "IntPtg");
-            Assert.IsTrue((ptgs[1] is IntPtg), "IntPtg");
-            Assert.IsTrue((ptgs[2] is DividePtg), "DividePtg");
+            ClassicAssert.AreEqual(3, ptgs.Length);
+            ClassicAssert.IsTrue((ptgs[0] is IntPtg), "IntPtg");
+            ClassicAssert.IsTrue((ptgs[1] is IntPtg), "IntPtg");
+            ClassicAssert.IsTrue((ptgs[2] is DividePtg), "DividePtg");
         }
 
         /** bug 35027, underscore in sheet name */
@@ -353,13 +353,13 @@ namespace TestCases.HSSF.Model
             ICell cell = row.CreateCell(0);
 
             cell.CellFormula = ("DA6_LEO_WBS_Number*2");
-            Assert.AreEqual("DA6_LEO_WBS_Number*2", cell.CellFormula);
+            ClassicAssert.AreEqual("DA6_LEO_WBS_Number*2", cell.CellFormula);
 
             cell.CellFormula = ("(A1_*_A1+A_1)/A_1_");
-            Assert.AreEqual("(A1_*_A1+A_1)/A_1_", cell.CellFormula);
+            ClassicAssert.AreEqual("(A1_*_A1+A_1)/A_1_", cell.CellFormula);
 
             cell.CellFormula = ("INDEX(DA6_LEO_WBS_Name,MATCH($A3,DA6_LEO_WBS_Number,0))");
-            Assert.AreEqual("INDEX(DA6_LEO_WBS_Name,MATCH($A3,DA6_LEO_WBS_Number,0))", cell.CellFormula);
+            ClassicAssert.AreEqual("INDEX(DA6_LEO_WBS_Name,MATCH($A3,DA6_LEO_WBS_Number,0))", cell.CellFormula);
 
             wb.Close();
         }
@@ -369,22 +369,22 @@ namespace TestCases.HSSF.Model
         {
             Ptg[] ptgs;
             ptgs = ParseFormula("1.3E21/2");
-            Assert.AreEqual(3, ptgs.Length);
-            Assert.IsTrue((ptgs[0] is NumberPtg), "NumberPtg");
-            Assert.IsTrue((ptgs[1] is IntPtg), "IntPtg");
-            Assert.IsTrue((ptgs[2] is DividePtg), "DividePtg");
+            ClassicAssert.AreEqual(3, ptgs.Length);
+            ClassicAssert.IsTrue((ptgs[0] is NumberPtg), "NumberPtg");
+            ClassicAssert.IsTrue((ptgs[1] is IntPtg), "IntPtg");
+            ClassicAssert.IsTrue((ptgs[2] is DividePtg), "DividePtg");
 
             ptgs = ParseFormula("1322E21/2");
-            Assert.AreEqual(3, ptgs.Length);
-            Assert.IsTrue((ptgs[0] is NumberPtg), "NumberPtg");
-            Assert.IsTrue((ptgs[1] is IntPtg), "IntPtg");
-            Assert.IsTrue((ptgs[2] is DividePtg), "DividePtg");
+            ClassicAssert.AreEqual(3, ptgs.Length);
+            ClassicAssert.IsTrue((ptgs[0] is NumberPtg), "NumberPtg");
+            ClassicAssert.IsTrue((ptgs[1] is IntPtg), "IntPtg");
+            ClassicAssert.IsTrue((ptgs[2] is DividePtg), "DividePtg");
 
             ptgs = ParseFormula("1.3E1/2");
-            Assert.AreEqual(3, ptgs.Length);
-            Assert.IsTrue((ptgs[0] is NumberPtg), "NumberPtg");
-            Assert.IsTrue((ptgs[1] is IntPtg), "IntPtg");
-            Assert.IsTrue((ptgs[2] is DividePtg), "DividePtg");
+            ClassicAssert.AreEqual(3, ptgs.Length);
+            ClassicAssert.IsTrue((ptgs[0] is NumberPtg), "NumberPtg");
+            ClassicAssert.IsTrue((ptgs[1] is IntPtg), "IntPtg");
+            ClassicAssert.IsTrue((ptgs[2] is DividePtg), "DividePtg");
         }
         /// <summary>
         /// Tests the exponential in sheet.
@@ -406,63 +406,63 @@ namespace TestCases.HSSF.Model
 
             cell.CellFormula = ("1.3E21/3");
             formula = cell.CellFormula;
-            Assert.AreEqual("1.3E+21/3", formula, "Exponential formula string");
+            ClassicAssert.AreEqual("1.3E+21/3", formula, "Exponential formula string");
 
             cell.CellFormula = ("-1.3E21/3");
             formula = cell.CellFormula;
-            Assert.AreEqual("-1.3E+21/3", formula, "Exponential formula string");
+            ClassicAssert.AreEqual("-1.3E+21/3", formula, "Exponential formula string");
 
             cell.CellFormula = ("1322E21/3");
             formula = cell.CellFormula;
-            Assert.AreEqual("1.322E+24/3", formula, "Exponential formula string");
+            ClassicAssert.AreEqual("1.322E+24/3", formula, "Exponential formula string");
 
             cell.CellFormula = ("-1322E21/3");
             formula = cell.CellFormula;
-            Assert.AreEqual("-1.322E+24/3", formula, "Exponential formula string");
+            ClassicAssert.AreEqual("-1.322E+24/3", formula, "Exponential formula string");
 
             cell.CellFormula = ("1.3E1/3");
             formula = cell.CellFormula;
-            Assert.AreEqual("13/3", formula, "Exponential formula string");
+            ClassicAssert.AreEqual("13/3", formula, "Exponential formula string");
 
             cell.CellFormula = ("-1.3E1/3");
             formula = cell.CellFormula;
-            Assert.AreEqual("-13/3", formula, "Exponential formula string");
+            ClassicAssert.AreEqual("-13/3", formula, "Exponential formula string");
 
             cell.CellFormula = ("1.3E-4/3");
             formula = cell.CellFormula;
-            Assert.AreEqual("0.00013/3", formula, "Exponential formula string");
+            ClassicAssert.AreEqual("0.00013/3", formula, "Exponential formula string");
 
             cell.CellFormula = ("-1.3E-4/3");
             formula = cell.CellFormula;
-            Assert.AreEqual("-0.00013/3", formula, "Exponential formula string");
+            ClassicAssert.AreEqual("-0.00013/3", formula, "Exponential formula string");
 
             cell.CellFormula = ("13E-15/3");
             formula = cell.CellFormula;
-            Assert.AreEqual("0.000000000000013/3", formula, "Exponential formula string");
+            ClassicAssert.AreEqual("0.000000000000013/3", formula, "Exponential formula string");
 
             cell.CellFormula = ("-13E-15/3");
             formula = cell.CellFormula;
-            Assert.AreEqual("-0.000000000000013/3", formula, "Exponential formula string");
+            ClassicAssert.AreEqual("-0.000000000000013/3", formula, "Exponential formula string");
 
             cell.CellFormula = ("1.3E3/3");
             formula = cell.CellFormula;
-            Assert.AreEqual("1300/3", formula, "Exponential formula string");
+            ClassicAssert.AreEqual("1300/3", formula, "Exponential formula string");
 
             cell.CellFormula = ("-1.3E3/3");
             formula = cell.CellFormula;
-            Assert.AreEqual("-1300/3", formula, "Exponential formula string");
+            ClassicAssert.AreEqual("-1300/3", formula, "Exponential formula string");
 
             cell.CellFormula = ("1300000000000000/3");
             formula = cell.CellFormula;
-            Assert.AreEqual("1300000000000000/3", formula, "Exponential formula string");
+            ClassicAssert.AreEqual("1300000000000000/3", formula, "Exponential formula string");
 
             cell.CellFormula = ("-1300000000000000/3");
             formula = cell.CellFormula;
-            Assert.AreEqual("-1300000000000000/3", formula, "Exponential formula string");
+            ClassicAssert.AreEqual("-1300000000000000/3", formula, "Exponential formula string");
 
             cell.CellFormula = ("-10E-1/3.1E2*4E3/3E4");
             formula = cell.CellFormula;
-            Assert.AreEqual("-1/310*4000/30000", formula, "Exponential formula string");
+            ClassicAssert.AreEqual("-1/310*4000/30000", formula, "Exponential formula string");
 
             wb.Close();
         }
@@ -484,29 +484,29 @@ namespace TestCases.HSSF.Model
 
             cell.CellFormula = (".1");
             formula = cell.CellFormula;
-            Assert.AreEqual("0.1", formula);
+            ClassicAssert.AreEqual("0.1", formula);
 
             cell.CellFormula = ("+.1");
             formula = cell.CellFormula;
-            Assert.AreEqual("0.1", formula);
+            ClassicAssert.AreEqual("0.1", formula);
 
             cell.CellFormula = ("-.1");
             formula = cell.CellFormula;
-            Assert.AreEqual("-0.1", formula);
+            ClassicAssert.AreEqual("-0.1", formula);
 
             // has exponent
 
             cell.CellFormula = ("10E1");
             formula = cell.CellFormula;
-            Assert.AreEqual("100", formula);
+            ClassicAssert.AreEqual("100", formula);
 
             cell.CellFormula = ("10E+1");
             formula = cell.CellFormula;
-            Assert.AreEqual("100", formula);
+            ClassicAssert.AreEqual("100", formula);
 
             cell.CellFormula = ("10E-1");
             formula = cell.CellFormula;
-            Assert.AreEqual("1", formula);
+            ClassicAssert.AreEqual("1", formula);
 
             wb.Close();
         }
@@ -524,15 +524,15 @@ namespace TestCases.HSSF.Model
 
             cell.CellFormula = ("A1.A2");
             formula = cell.CellFormula;
-            Assert.AreEqual("A1:A2", formula);
+            ClassicAssert.AreEqual("A1:A2", formula);
 
             cell.CellFormula = ("A1..A2");
             formula = cell.CellFormula;
-            Assert.AreEqual("A1:A2", formula);
+            ClassicAssert.AreEqual("A1:A2", formula);
 
             cell.CellFormula = ("A1...A2");
             formula = cell.CellFormula;
-            Assert.AreEqual("A1:A2", formula);
+            ClassicAssert.AreEqual("A1:A2", formula);
 
             wb.Close();
         }
@@ -555,34 +555,34 @@ namespace TestCases.HSSF.Model
             // One sheet
             cell.CellFormula = (/*setter*/"Cash_Flow!A1");
             formula = cell.CellFormula;
-            Assert.AreEqual("Cash_Flow!A1", formula);
+            ClassicAssert.AreEqual("Cash_Flow!A1", formula);
 
             // Then the other
             cell.CellFormula = (/*setter*/"\'Test Sheet\'!A1");
             formula = cell.CellFormula;
-            Assert.AreEqual("\'Test Sheet\'!A1", formula);
+            ClassicAssert.AreEqual("\'Test Sheet\'!A1", formula);
 
             // Now both
             cell.CellFormula = (/*setter*/"Cash_Flow:\'Test Sheet\'!A1");
             formula = cell.CellFormula;
-            Assert.AreEqual("Cash_Flow:\'Test Sheet\'!A1", formula);
+            ClassicAssert.AreEqual("Cash_Flow:\'Test Sheet\'!A1", formula);
 
             // References to a range (area) of cells:
 
             // One sheet
             cell.CellFormula = ("Cash_Flow!A1:B2");
             formula = cell.CellFormula;
-            Assert.AreEqual("Cash_Flow!A1:B2", formula);
+            ClassicAssert.AreEqual("Cash_Flow!A1:B2", formula);
 
             // Then the other
             cell.CellFormula = ("\'Test Sheet\'!A1:B2");
             formula = cell.CellFormula;
-            Assert.AreEqual("\'Test Sheet\'!A1:B2", formula);
+            ClassicAssert.AreEqual("\'Test Sheet\'!A1:B2", formula);
 
             // Now both
             cell.CellFormula = ("Cash_Flow:\'Test Sheet\'!A1:B2");
             formula = cell.CellFormula;
-            Assert.AreEqual("Cash_Flow:\'Test Sheet\'!A1:B2", formula);
+            ClassicAssert.AreEqual("Cash_Flow:\'Test Sheet\'!A1:B2", formula);
 
             wb.Close();
         }
@@ -600,7 +600,7 @@ namespace TestCases.HSSF.Model
             Ptg[] ptgs = {
                 FuncPtg.Create(10),
         };
-            Assert.AreEqual("NA()", HSSFFormulaParser.ToFormulaString(book, ptgs));
+            ClassicAssert.AreEqual("NA()", HSSFFormulaParser.ToFormulaString(book, ptgs));
 
             book.Close();
         }
@@ -609,56 +609,56 @@ namespace TestCases.HSSF.Model
         {
             Ptg[] ptgs;
             ptgs = ParseFormula("5%");
-            Assert.AreEqual(2, ptgs.Length);
-            Assert.AreEqual(ptgs[0].GetType(), typeof(IntPtg));
-            Assert.AreEqual(ptgs[1].GetType(), typeof(PercentPtg));
+            ClassicAssert.AreEqual(2, ptgs.Length);
+            ClassicAssert.AreEqual(ptgs[0].GetType(), typeof(IntPtg));
+            ClassicAssert.AreEqual(ptgs[1].GetType(), typeof(PercentPtg));
 
             // spaces OK
             ptgs = ParseFormula(" 250 % ");
-            Assert.AreEqual(2, ptgs.Length);
-            Assert.AreEqual(ptgs[0].GetType(), typeof(IntPtg));
-            Assert.AreEqual(ptgs[1].GetType(), typeof(PercentPtg));
+            ClassicAssert.AreEqual(2, ptgs.Length);
+            ClassicAssert.AreEqual(ptgs[0].GetType(), typeof(IntPtg));
+            ClassicAssert.AreEqual(ptgs[1].GetType(), typeof(PercentPtg));
 
 
             // double percent OK
             ptgs = ParseFormula("12345.678%%");
-            Assert.AreEqual(3, ptgs.Length);
-            Assert.AreEqual(ptgs[0].GetType(), typeof(NumberPtg));
-            Assert.AreEqual(ptgs[1].GetType(), typeof(PercentPtg));
-            Assert.AreEqual(ptgs[2].GetType(), typeof(PercentPtg));
+            ClassicAssert.AreEqual(3, ptgs.Length);
+            ClassicAssert.AreEqual(ptgs[0].GetType(), typeof(NumberPtg));
+            ClassicAssert.AreEqual(ptgs[1].GetType(), typeof(PercentPtg));
+            ClassicAssert.AreEqual(ptgs[2].GetType(), typeof(PercentPtg));
 
             // percent of a bracketed expression
             ptgs = ParseFormula("(A1+35)%*B1%");
-            Assert.AreEqual(8, ptgs.Length);
-            Assert.AreEqual(ptgs[4].GetType(), typeof(PercentPtg));
-            Assert.AreEqual(ptgs[6].GetType(), typeof(PercentPtg));
+            ClassicAssert.AreEqual(8, ptgs.Length);
+            ClassicAssert.AreEqual(ptgs[4].GetType(), typeof(PercentPtg));
+            ClassicAssert.AreEqual(ptgs[6].GetType(), typeof(PercentPtg));
 
             // percent of a text quantity
             ptgs = ParseFormula("\"8.75\"%");
-            Assert.AreEqual(2, ptgs.Length);
-            Assert.AreEqual(ptgs[0].GetType(), typeof(StringPtg));
-            Assert.AreEqual(ptgs[1].GetType(), typeof(PercentPtg));
+            ClassicAssert.AreEqual(2, ptgs.Length);
+            ClassicAssert.AreEqual(ptgs[0].GetType(), typeof(StringPtg));
+            ClassicAssert.AreEqual(ptgs[1].GetType(), typeof(PercentPtg));
 
             // percent to the power of
             ptgs = ParseFormula("50%^3");
-            Assert.AreEqual(4, ptgs.Length);
-            Assert.AreEqual(ptgs[0].GetType(), typeof(IntPtg));
-            Assert.AreEqual(ptgs[1].GetType(), typeof(PercentPtg));
-            Assert.AreEqual(ptgs[2].GetType(), typeof(IntPtg));
-            Assert.AreEqual(ptgs[3].GetType(), typeof(PowerPtg));
+            ClassicAssert.AreEqual(4, ptgs.Length);
+            ClassicAssert.AreEqual(ptgs[0].GetType(), typeof(IntPtg));
+            ClassicAssert.AreEqual(ptgs[1].GetType(), typeof(PercentPtg));
+            ClassicAssert.AreEqual(ptgs[2].GetType(), typeof(IntPtg));
+            ClassicAssert.AreEqual(ptgs[3].GetType(), typeof(PowerPtg));
 
             //
             // things that Parse OK but would *evaluate* to an error
 
             ptgs = ParseFormula("\"abc\"%");
-            Assert.AreEqual(2, ptgs.Length);
-            Assert.AreEqual(ptgs[0].GetType(), typeof(StringPtg));
-            Assert.AreEqual(ptgs[1].GetType(), typeof(PercentPtg));
+            ClassicAssert.AreEqual(2, ptgs.Length);
+            ClassicAssert.AreEqual(ptgs[0].GetType(), typeof(StringPtg));
+            ClassicAssert.AreEqual(ptgs[1].GetType(), typeof(PercentPtg));
 
             ptgs = ParseFormula("#N/A%");
-            Assert.AreEqual(2, ptgs.Length);
-            Assert.AreEqual(ptgs[0].GetType(), typeof(ErrPtg));
-            Assert.AreEqual(ptgs[1].GetType(), typeof(PercentPtg));
+            ClassicAssert.AreEqual(2, ptgs.Length);
+            ClassicAssert.AreEqual(ptgs[0].GetType(), typeof(ErrPtg));
+            ClassicAssert.AreEqual(ptgs[1].GetType(), typeof(PercentPtg));
         }
 
         /**
@@ -706,7 +706,7 @@ namespace TestCases.HSSF.Model
         public static Ptg[] ConfirmTokenClasses(String formula, params Type[] expectedClasses)
         {
             Ptg[] ptgs = ParseFormula(formula);
-            Assert.AreEqual(expectedClasses.Length, ptgs.Length);
+            ClassicAssert.AreEqual(expectedClasses.Length, ptgs.Length);
             for (int i = 0; i < expectedClasses.Length; i++)
             {
                 if (expectedClasses[i] != ptgs[i].GetType())
@@ -750,12 +750,12 @@ namespace TestCases.HSSF.Model
             if (ptg0 is IntPtg)
             {
                 IntPtg intPtg = (IntPtg)ptg0;
-                Assert.AreEqual((int)val, intPtg.Value);
+                ClassicAssert.AreEqual((int)val, intPtg.Value);
             }
             else if (ptg0 is NumberPtg)
             {
                 NumberPtg numberPtg = (NumberPtg)ptg0;
-                Assert.AreEqual(val, numberPtg.Value, 0.0);
+                ClassicAssert.AreEqual(val, numberPtg.Value, 0.0);
             }
             else
             {
@@ -771,9 +771,9 @@ namespace TestCases.HSSF.Model
         private static Ptg ParseSingleToken(String formula, Type ptgClass)
         {
             Ptg[] ptgs = ParseFormula(formula);
-            Assert.AreEqual(1, ptgs.Length);
+            ClassicAssert.AreEqual(1, ptgs.Length);
             Ptg result = ptgs[0];
-            Assert.AreEqual(ptgClass, result.GetType());
+            ClassicAssert.AreEqual(ptgClass, result.GetType());
             return result;
         }
         [Test]
@@ -786,18 +786,18 @@ namespace TestCases.HSSF.Model
 
             // bug 33160
             ip = (IntPtg)ParseSingleToken("40", typeof(IntPtg));
-            Assert.AreEqual(40, ip.Value);
+            ClassicAssert.AreEqual(40, ip.Value);
             ip = (IntPtg)ParseSingleToken("40000", typeof(IntPtg));
-            Assert.AreEqual(40000, ip.Value);
+            ClassicAssert.AreEqual(40000, ip.Value);
 
             // check the upper edge of the IntPtg range:
             ip = (IntPtg)ParseSingleToken("65535", typeof(IntPtg));
-            Assert.AreEqual(65535, ip.Value);
+            ClassicAssert.AreEqual(65535, ip.Value);
             NumberPtg np = (NumberPtg)ParseSingleToken("65536", typeof(NumberPtg));
-            Assert.AreEqual(65536, np.Value, 0);
+            ClassicAssert.AreEqual(65536, np.Value, 0);
 
             np = (NumberPtg)ParseSingleToken("65534.6", typeof(NumberPtg));
-            Assert.AreEqual(65534.6, np.Value, 0);
+            ClassicAssert.AreEqual(65534.6, np.Value, 0);
         }
         [Test]
         public void TestMissingArgs()
@@ -836,7 +836,7 @@ namespace TestCases.HSSF.Model
 
         private static void ConfirmParseErrorLiteral(ErrPtg expectedToken, String formula)
         {
-            Assert.AreEqual(expectedToken, ParseSingleToken(formula, typeof(ErrPtg)));
+            ClassicAssert.AreEqual(expectedToken, ParseSingleToken(formula, typeof(ErrPtg)));
         }
 
         /**
@@ -851,7 +851,7 @@ namespace TestCases.HSSF.Model
             String expectedValue = singleQuotedValue.Replace('\'', '"');
 
             StringPtg sp = (StringPtg)ParseSingleToken(formula, typeof(StringPtg));
-            Assert.AreEqual(expectedValue, sp.Value);
+            ClassicAssert.AreEqual(expectedValue, sp.Value);
         }
         [Test]
         public void TestParseStringLiterals_bug28754()
@@ -870,7 +870,7 @@ namespace TestCases.HSSF.Model
                 }
                 throw;
             }
-            Assert.AreEqual("test\"ing", sp.Value);
+            ClassicAssert.AreEqual("test\"ing", sp.Value);
 
             HSSFWorkbook wb = new HSSFWorkbook();
             try
@@ -886,7 +886,7 @@ namespace TestCases.HSSF.Model
                 {
                     Assert.Fail("Identified bug 28754b");
                 }
-                Assert.AreEqual("RIGHT(\"test\"\"ing\",3)", actualCellFormula);
+                ClassicAssert.AreEqual("RIGHT(\"test\"\"ing\",3)", actualCellFormula);
             }
             finally
             {
@@ -913,11 +913,11 @@ namespace TestCases.HSSF.Model
             Ptg[] ptgs;
             ptgs = ParseFormula("sum(5, 2, if(3>2, sum(A1:A2), 6))");
             formulaString = HSSFFormulaParser.ToFormulaString(null, ptgs);
-            Assert.AreEqual("SUM(5,2,IF(3>2,SUM(A1:A2),6))", formulaString);
+            ClassicAssert.AreEqual("SUM(5,2,IF(3>2,SUM(A1:A2),6))", formulaString);
 
             ptgs = ParseFormula("if(1<2,sum(5, 2, if(3>2, sum(A1:A2), 6)),4)");
             formulaString = HSSFFormulaParser.ToFormulaString(null, ptgs);
-            Assert.AreEqual("IF(1<2,SUM(5,2,IF(3>2,SUM(A1:A2),6)),4)", formulaString);
+            ClassicAssert.AreEqual("IF(1<2,SUM(5,2,IF(3>2,SUM(A1:A2),6)),4)", formulaString);
         }
         [Test]
         public void TestParserErrors()
@@ -952,7 +952,7 @@ namespace TestCases.HSSF.Model
             catch (FormulaParseException e)
             {
                 // expected during successful test
-                Assert.IsNotNull(e.Message);
+                ClassicAssert.IsNotNull(e.Message);
             }
         }
         [Test]
@@ -970,7 +970,7 @@ namespace TestCases.HSSF.Model
             {
                 Assert.Fail("Identified bug 44539");
             }
-            Assert.AreEqual("SUM(A32769:A32770)", cell.CellFormula);
+            ClassicAssert.AreEqual("SUM(A32769:A32770)", cell.CellFormula);
 
             wb.Close();
         }
@@ -997,11 +997,11 @@ namespace TestCases.HSSF.Model
                 throw e;
             }
             // FormulaParser strips spaces anyway
-            Assert.AreEqual("4", formulaString);
+            ClassicAssert.AreEqual("4", formulaString);
 
             ptgs = new Ptg[] { new IntPtg(3), spacePtg, new IntPtg(4), spacePtg, AddPtg.instance, };
             formulaString = HSSFFormulaParser.ToFormulaString(null, ptgs);
-            Assert.AreEqual("3+4", formulaString);
+            ClassicAssert.AreEqual("3+4", formulaString);
         }
 
         /**
@@ -1025,7 +1025,7 @@ namespace TestCases.HSSF.Model
             catch (InvalidOperationException e)
             {
                 // expected during successful Test
-                Assert.IsTrue(e.Message.StartsWith("Too few arguments supplied to operation"));
+                ClassicAssert.IsTrue(e.Message.StartsWith("Too few arguments supplied to operation"));
             }
         }
         /**
@@ -1042,15 +1042,15 @@ namespace TestCases.HSSF.Model
 
             Ptg[] ptgs;
             ptgs = ParseFormula("countif(A1:A2, 1)");
-            Assert.AreEqual(3, ptgs.Length);
+            ClassicAssert.AreEqual(3, ptgs.Length);
             if (typeof(FuncVarPtg) == ptgs[2].GetType())
             {
                 Assert.Fail("Identified bug 44675");
             }
-            Assert.AreEqual(typeof(FuncPtg), ptgs[2].GetType());
+            ClassicAssert.AreEqual(typeof(FuncPtg), ptgs[2].GetType());
             ptgs = ParseFormula("sin(1)");
-            Assert.AreEqual(2, ptgs.Length);
-            Assert.AreEqual(typeof(FuncPtg), ptgs[1].GetType());
+            ClassicAssert.AreEqual(2, ptgs.Length);
+            ClassicAssert.AreEqual(typeof(FuncPtg), ptgs[1].GetType());
         }
         [Test]
         public void TestWrongNumberOfFunctionArgs()
@@ -1071,7 +1071,7 @@ namespace TestCases.HSSF.Model
             }
             catch (Exception e)
             {
-                Assert.AreEqual(expectedMessage, e.Message);
+                ClassicAssert.AreEqual(expectedMessage, e.Message);
             }
         }
 
@@ -1096,12 +1096,12 @@ namespace TestCases.HSSF.Model
                     typeof(RangePtg)
             );
             MemFuncPtg mf = (MemFuncPtg)ptgs[0];
-            Assert.AreEqual(15, mf.LenRefSubexpression);
+            ClassicAssert.AreEqual(15, mf.LenRefSubexpression);
         }
         /* package */
         private static void ConfirmTokenClasses(Ptg[] ptgs, params Type[] expectedClasses)
         {
-            Assert.AreEqual(expectedClasses.Length, ptgs.Length);
+            ClassicAssert.AreEqual(expectedClasses.Length, ptgs.Length);
             for (int i = 0; i < expectedClasses.Length; i++)
             {
                 if (expectedClasses[i] != ptgs[i].GetType())
@@ -1160,7 +1160,7 @@ namespace TestCases.HSSF.Model
                 throw e;
             }
             ConfirmTokenClasses(ptgs, typeof(RefPtg), typeof(FuncPtg));
-            Assert.AreEqual("ERROR.TYPE", ((FuncPtg)ptgs[1]).Name);
+            ClassicAssert.AreEqual("ERROR.TYPE", ((FuncPtg)ptgs[1]).Name);
         }
         [Test]
         public void TestNamedRangeThatLooksLikeCell()
@@ -1189,7 +1189,7 @@ namespace TestCases.HSSF.Model
 
             ICell cell = sheet.CreateRow(0).CreateCell(0);
             cell.CellFormula = ("count(pfy1)");
-            Assert.AreEqual("COUNT(pfy1)", cell.CellFormula);
+            ClassicAssert.AreEqual("COUNT(pfy1)", cell.CellFormula);
             try
             {
                 cell.CellFormula = ("count(pf1)");
@@ -1218,16 +1218,16 @@ namespace TestCases.HSSF.Model
             {
                 Assert.Fail("Identified bug 45358");
             }
-            Assert.AreEqual(39999, aptg.LastRow);
+            ClassicAssert.AreEqual(39999, aptg.LastRow);
 
             ptgs = HSSFFormulaParser.Parse("Sheet1!A10:A65536", book);
             aptg = (AreaI)ptgs[0];
-            Assert.AreEqual(65535, aptg.LastRow);
+            ClassicAssert.AreEqual(65535, aptg.LastRow);
 
             // plain area refs should be ok too
             ptgs = ParseFormula("A10:A65536");
             aptg = (AreaI)ptgs[0];
-            Assert.AreEqual(65535, aptg.LastRow);
+            ClassicAssert.AreEqual(65535, aptg.LastRow);
             book.Close();
         }
         [Test]
@@ -1236,12 +1236,12 @@ namespace TestCases.HSSF.Model
             Ptg[] ptgs;
             ptgs = ParseFormula("mode({1,2,2,#REF!;FALSE,3,3,2})");
             ConfirmTokenClasses(ptgs, typeof(ArrayPtg), typeof(FuncVarPtg));
-            Assert.AreEqual("{1,2,2,#REF!;FALSE,3,3,2}", ptgs[0].ToFormulaString());
+            ClassicAssert.AreEqual("{1,2,2,#REF!;FALSE,3,3,2}", ptgs[0].ToFormulaString());
 
             ArrayPtg aptg = (ArrayPtg)ptgs[0];
             Object[,] values = aptg.GetTokenArrayValues();
-            Assert.AreEqual(ErrorConstant.ValueOf(FormulaError.REF.Code), values[0, 3]);
-            Assert.AreEqual(false, values[1, 0]);
+            ClassicAssert.AreEqual(ErrorConstant.ValueOf(FormulaError.REF.Code), values[0, 3]);
+            ClassicAssert.AreEqual(false, values[1, 0]);
         }
         [Test]
         public void TestParseStringElementInArray()
@@ -1255,7 +1255,7 @@ namespace TestCases.HSSF.Model
                 // this would cause ClassCastException below
                 Assert.Fail("Wrong encoding of array element value");
             }
-            Assert.AreEqual(typeof(String), element.GetType());
+            ClassicAssert.AreEqual(typeof(String), element.GetType());
 
             // make sure the formula encodes OK
             int encSize = Ptg.GetEncodedSize(ptgs);
@@ -1268,7 +1268,7 @@ namespace TestCases.HSSF.Model
                     + "00 00 00 "      // Array data: 1 col, 1 row
                     + "02 01 00 00 35" // elem (type=string, len=1, "5")
             );
-            Assert.IsTrue(Arrays.Equals(expData, data));
+            ClassicAssert.IsTrue(Arrays.Equals(expData, data));
             int initSize = Ptg.GetEncodedSizeWithoutArrayData(ptgs);
             Ptg[] ptgs2 = Ptg.ReadTokens(initSize, new LittleEndianByteArrayInputStream(data));
             ConfirmTokenClasses(ptgs2, typeof(ArrayPtg), typeof(IntPtg), typeof(FuncVarPtg));
@@ -1292,13 +1292,13 @@ namespace TestCases.HSSF.Model
             ConfirmTokenClasses(ptgs, typeof(ArrayPtg));
             Object element = ((ArrayPtg)ptgs[0]).GetTokenArrayValues()[0, 0];
 
-            Assert.AreEqual(-42.0, (Double)element, 0.0);
+            ClassicAssert.AreEqual(-42.0, (Double)element, 0.0);
 
             // Should be able to handle whitespace between unary minus and digits (Excel
             // accepts this formula after presenting the user with a Confirmation dialog).
             ptgs = ParseFormula("{- 5}");
             element = ((ArrayPtg)ptgs[0]).GetTokenArrayValues()[0, 0];
-            Assert.AreEqual(-5.0, (Double)element, 0.0);
+            ClassicAssert.AreEqual(-5.0, (Double)element, 0.0);
         }
         [Test]
         public void TestRangeOperator()
@@ -1309,18 +1309,18 @@ namespace TestCases.HSSF.Model
 
             wb.SetSheetName(0, "Sheet1");
             cell.CellFormula = ("Sheet1!B$4:Sheet1!$C1"); // explicit range ':' operator
-            Assert.AreEqual("Sheet1!B$4:Sheet1!$C1", cell.CellFormula);
+            ClassicAssert.AreEqual("Sheet1!B$4:Sheet1!$C1", cell.CellFormula);
 
             cell.CellFormula = ("Sheet1!B$4:$C1"); // plain area ref
-            Assert.AreEqual("Sheet1!B1:$C$4", cell.CellFormula); // note - area ref is normalised
+            ClassicAssert.AreEqual("Sheet1!B1:$C$4", cell.CellFormula); // note - area ref is normalised
 
             cell.CellFormula = ("Sheet1!$C1...B$4"); // different syntax for plain area ref
-            Assert.AreEqual("Sheet1!B1:$C$4", cell.CellFormula);
+            ClassicAssert.AreEqual("Sheet1!B1:$C$4", cell.CellFormula);
 
             // with funny sheet name
             wb.SetSheetName(0, "A1...A2");
             cell.CellFormula = ("A1...A2!B1");
-            Assert.AreEqual("A1...A2!B1", cell.CellFormula);
+            ClassicAssert.AreEqual("A1...A2!B1", cell.CellFormula);
 
             wb.Close();
         }
@@ -1333,7 +1333,7 @@ namespace TestCases.HSSF.Model
             ICell cell = sheet.CreateRow(0).CreateCell(0);
             cell.CellFormula = ("'true'!B2");
 
-            Assert.AreEqual("'true'!B2", cell.CellFormula);
+            ClassicAssert.AreEqual("'true'!B2", cell.CellFormula);
 
             wb.Close();
         }
@@ -1344,7 +1344,7 @@ namespace TestCases.HSSF.Model
             ICell cell = wbA.GetSheetAt(0).GetRow(0).GetCell(0);
 
             // make sure formula in sample is as expected
-            Assert.AreEqual("[multibookFormulaB.xls]BSheet1!B1", cell.CellFormula);
+            ClassicAssert.AreEqual("[multibookFormulaB.xls]BSheet1!B1", cell.CellFormula);
             Ptg[] expectedPtgs = FormulaExtractor.GetPtgs(cell);
             ConfirmSingle3DRef(expectedPtgs, 1);
 
@@ -1358,16 +1358,16 @@ namespace TestCases.HSSF.Model
 
             // try setting the same formula in a cell
             cell.CellFormula = ("[multibookFormulaB.xls]AnotherSheet!B1");
-            Assert.AreEqual("[multibookFormulaB.xls]AnotherSheet!B1", cell.CellFormula);
+            ClassicAssert.AreEqual("[multibookFormulaB.xls]AnotherSheet!B1", cell.CellFormula);
 
             wbA.Close();
         }
         private static void ConfirmSingle3DRef(Ptg[] ptgs, int expectedExternSheetIndex)
         {
-            Assert.AreEqual(1, ptgs.Length);
+            ClassicAssert.AreEqual(1, ptgs.Length);
             Ptg ptg0 = ptgs[0];
-            Assert.IsTrue(ptg0 is Ref3DPtg);
-            Assert.AreEqual(expectedExternSheetIndex, ((Ref3DPtg)ptg0).ExternSheetIndex);
+            ClassicAssert.IsTrue(ptg0 is Ref3DPtg);
+            ClassicAssert.AreEqual(expectedExternSheetIndex, ((Ref3DPtg)ptg0).ExternSheetIndex);
         }
         [Test]
         public void TestUnion()
@@ -1390,7 +1390,7 @@ namespace TestCases.HSSF.Model
                     typeof(UnionPtg)
             );
             MemFuncPtg mf = (MemFuncPtg)ptgs[0];
-            Assert.AreEqual(45, mf.LenRefSubexpression);
+            ClassicAssert.AreEqual(45, mf.LenRefSubexpression);
 
             // We don't check the type of the operands.
             ConfirmTokenClasses("1,2", typeof(MemAreaPtg), typeof(IntPtg), typeof(IntPtg), typeof(UnionPtg));
@@ -1418,7 +1418,7 @@ namespace TestCases.HSSF.Model
                 typeof(IntersectionPtg)
         );
             MemFuncPtg mf = (MemFuncPtg)ptgs[0];
-            Assert.AreEqual(45, mf.LenRefSubexpression);
+            ClassicAssert.AreEqual(45, mf.LenRefSubexpression);
             // This used to be an error but now parses.  Union has the same behaviour.
             ConfirmTokenClasses("1 2", typeof(MemAreaPtg), typeof(IntPtg), typeof(IntPtg), typeof(IntersectionPtg));
 
@@ -1473,11 +1473,11 @@ namespace TestCases.HSSF.Model
 
             ICell cell_C1 = row.CreateCell(2);
             cell_C1.CellFormula = ("POI\\2009");
-            Assert.AreEqual("POI\\2009", cell_C1.CellFormula);
+            ClassicAssert.AreEqual("POI\\2009", cell_C1.CellFormula);
 
             ICell cell_D1 = row.CreateCell(2);
             cell_D1.CellFormula = ("NOT(POI\\2009=\"3.5-final\")");
-            Assert.AreEqual("NOT(POI\\2009=\"3.5-final\")", cell_D1.CellFormula);
+            ClassicAssert.AreEqual("NOT(POI\\2009=\"3.5-final\")", cell_D1.CellFormula);
 
             wb.Close();
         }
@@ -1585,7 +1585,7 @@ namespace TestCases.HSSF.Model
             );
             MemFuncPtg mf;
             mf = (MemFuncPtg)ptgs[0];
-            Assert.AreEqual(15, mf.LenRefSubexpression);
+            ClassicAssert.AreEqual(15, mf.LenRefSubexpression);
             wb.Close();
         }
 
@@ -1620,9 +1620,9 @@ namespace TestCases.HSSF.Model
             );
 
             MemFuncPtg mf = (MemFuncPtg)ptgs[0];
-            Assert.AreEqual(57, mf.LenRefSubexpression);
-            Assert.AreEqual("D4:E5", ((AreaPtgBase)ptgs[7]).ToFormulaString());
-            Assert.IsTrue(((AttrPtg)ptgs[16]).IsSum);
+            ClassicAssert.AreEqual(57, mf.LenRefSubexpression);
+            ClassicAssert.AreEqual("D4:E5", ((AreaPtgBase)ptgs[7]).ToFormulaString());
+            ClassicAssert.IsTrue(((AttrPtg)ptgs[16]).IsSum);
 
             ptgs = ParseFormula("SUM(A1:B2:C3:D4)");
             ConfirmTokenClasses(ptgs,
@@ -1634,7 +1634,7 @@ namespace TestCases.HSSF.Model
                     typeof(AttrPtg) // [sum ]
             );
             MemAreaPtg ma = (MemAreaPtg)ptgs[0];
-            Assert.AreEqual(19, ma.LenRefSubexpression);
+            ClassicAssert.AreEqual(19, ma.LenRefSubexpression);
         }
 
 
@@ -1745,7 +1745,7 @@ namespace TestCases.HSSF.Model
             try
             {
                 ptgs = HSSFFormulaParser.Parse(leadingZeroCellRef, wb);
-                Assert.AreEqual("B1", ((RefPtg)ptgs[0]).ToFormulaString());
+                ClassicAssert.AreEqual("B1", ((RefPtg)ptgs[0]).ToFormulaString());
             }
             catch (FormulaParseException e)
             {
@@ -1767,7 +1767,7 @@ namespace TestCases.HSSF.Model
 
         private static void ConfirmParseException(FormulaParseException e, String expMsg)
         {
-            Assert.AreEqual(expMsg, e.Message);
+            ClassicAssert.AreEqual(expMsg, e.Message);
         }
 
         [Test]
@@ -1775,7 +1775,7 @@ namespace TestCases.HSSF.Model
         {
             HSSFWorkbook wb = new HSSFWorkbook();
             Ptg[] ptgs = HSSFFormulaParser.Parse("DEC2HEX(HEX2DEC(O8)-O2+D2)", wb, FormulaType.Cell, -1);
-            Assert.IsNotNull(ptgs, "Ptg array should not be null");
+            ClassicAssert.IsNotNull(ptgs, "Ptg array should not be null");
 
             ConfirmTokenClasses(ptgs,
                 typeof(NameXPtg), // ??
@@ -1795,12 +1795,12 @@ namespace TestCases.HSSF.Model
             RefPtg d2 = (RefPtg)ptgs[6];
             FuncVarPtg dec2Hex = (FuncVarPtg)ptgs[8];
 
-            Assert.AreEqual("O8", o8.ToFormulaString());
-            Assert.AreEqual(255, hex2Dec.FunctionIndex);
-            //Assert.AreEqual("", hex2Dec.ToString());
-            Assert.AreEqual("O2", o2.ToFormulaString());
-            Assert.AreEqual("D2", d2.ToFormulaString());
-            Assert.AreEqual(255, dec2Hex.FunctionIndex);
+            ClassicAssert.AreEqual("O8", o8.ToFormulaString());
+            ClassicAssert.AreEqual(255, hex2Dec.FunctionIndex);
+            //ClassicAssert.AreEqual("", hex2Dec.ToString());
+            ClassicAssert.AreEqual("O2", o2.ToFormulaString());
+            ClassicAssert.AreEqual("D2", d2.ToFormulaString());
+            ClassicAssert.AreEqual(255, dec2Hex.FunctionIndex);
             wb.Close();
         }
 

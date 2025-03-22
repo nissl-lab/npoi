@@ -15,7 +15,7 @@
    limitations under the License.
 ==================================================================== */
 
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using NPOI.SS.UserModel;
 using System;
 using NPOI.HSSF.Record.CF;
@@ -46,19 +46,19 @@ namespace TestCases.SS.UserModel
             //get default font and check against default value
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
             IFont fontFind = workbook.FindFont(false, defaultColor, defaultSize, defaultName, false, false, FontSuperScript.None, FontUnderlineType.None);
-            Assert.IsNotNull(fontFind);
+            ClassicAssert.IsNotNull(fontFind);
 
             //get default font, then change 2 values and check against different values (height Changes)
             IFont font = workbook.CreateFont();
             font.IsBold = true;
-            Assert.IsTrue(font.IsBold);
+            ClassicAssert.IsTrue(font.IsBold);
             font.Underline = FontUnderlineType.Double;
-            Assert.AreEqual(FontUnderlineType.Double, font.Underline);
+            ClassicAssert.AreEqual(FontUnderlineType.Double, font.Underline);
             font.FontHeightInPoints = ((short)15);
-            Assert.AreEqual(15 * 20, font.FontHeight);
-            Assert.AreEqual(15, font.FontHeightInPoints);
+            ClassicAssert.AreEqual(15 * 20, font.FontHeight);
+            ClassicAssert.AreEqual(15, font.FontHeightInPoints);
             fontFind = workbook.FindFont(true, defaultColor, (short)(15 * 20), defaultName, false, false, FontSuperScript.None, FontUnderlineType.Double);
-            Assert.IsNotNull(fontFind);
+            ClassicAssert.IsNotNull(fontFind);
         }
         [Test]
         public void TestNumberOfFonts()
@@ -81,10 +81,10 @@ namespace TestCases.SS.UserModel
             short idx3 = f3.Index;
             wb.CreateCellStyle().SetFont(f3);
 
-            Assert.AreEqual(num0 + 3, wb.NumberOfFonts);
-            Assert.IsTrue(wb.GetFontAt(idx1).IsBold);
-            Assert.AreEqual(FontUnderlineType.Double, wb.GetFontAt(idx2).Underline);
-            Assert.AreEqual(23, wb.GetFontAt(idx3).FontHeightInPoints);
+            ClassicAssert.AreEqual(num0 + 3, wb.NumberOfFonts);
+            ClassicAssert.IsTrue(wb.GetFontAt(idx1).IsBold);
+            ClassicAssert.AreEqual(FontUnderlineType.Double, wb.GetFontAt(idx2).Underline);
+            ClassicAssert.AreEqual(23, wb.GetFontAt(idx3).FontHeightInPoints);
         }
 
         /**
@@ -109,7 +109,7 @@ namespace TestCases.SS.UserModel
             font.FontName = ("Courier");
             short font1Idx = font.Index;
             wb.CreateCellStyle().SetFont(font);
-            Assert.AreEqual(num0 + 1, wb.NumberOfFonts);
+            ClassicAssert.AreEqual(num0 + 1, wb.NumberOfFonts);
 
             ICellStyle cellStyleTitle = wb.CreateCellStyle();
             cellStyleTitle.SetFont(font);
@@ -119,12 +119,12 @@ namespace TestCases.SS.UserModel
             wb = _testDataProvider.WriteOutAndReadBack(wb);
             s1 = wb.GetSheetAt(0);
 
-            Assert.AreEqual(num0 + 1, wb.NumberOfFonts);
+            ClassicAssert.AreEqual(num0 + 1, wb.NumberOfFonts);
             short idx = s1.GetRow(0).GetCell(0).CellStyle.FontIndex;
             IFont fnt = wb.GetFontAt(idx);
-            Assert.IsNotNull(fnt);
-            Assert.AreEqual(HSSFColor.Yellow.Index, fnt.Color);
-            Assert.AreEqual("Courier", fnt.FontName);
+            ClassicAssert.IsNotNull(fnt);
+            ClassicAssert.AreEqual(HSSFColor.Yellow.Index, fnt.Color);
+            ClassicAssert.AreEqual("Courier", fnt.FontName);
 
             // Now add an orphaned one
             IFont font2 = wb.CreateFont();
@@ -132,18 +132,18 @@ namespace TestCases.SS.UserModel
             font2.FontHeightInPoints = (short)15;
             short font2Idx = font2.Index;
             wb.CreateCellStyle().SetFont(font2);
-            Assert.AreEqual(num0 + 2, wb.NumberOfFonts);
+            ClassicAssert.AreEqual(num0 + 2, wb.NumberOfFonts);
 
             // Save and re-load
             wb = _testDataProvider.WriteOutAndReadBack(wb);
             s1 = wb.GetSheetAt(0);
 
-            Assert.AreEqual(num0 + 2, wb.NumberOfFonts);
-            Assert.IsNotNull(wb.GetFontAt(font1Idx));
-            Assert.IsNotNull(wb.GetFontAt(font2Idx));
+            ClassicAssert.AreEqual(num0 + 2, wb.NumberOfFonts);
+            ClassicAssert.IsNotNull(wb.GetFontAt(font1Idx));
+            ClassicAssert.IsNotNull(wb.GetFontAt(font2Idx));
 
-            Assert.AreEqual(15, wb.GetFontAt(font2Idx).FontHeightInPoints);
-            Assert.IsTrue(wb.GetFontAt(font2Idx).IsItalic);
+            ClassicAssert.AreEqual(15, wb.GetFontAt(font2Idx).FontHeightInPoints);
+            ClassicAssert.IsTrue(wb.GetFontAt(font2Idx).IsItalic);
         }
 
         /**
@@ -165,16 +165,16 @@ namespace TestCases.SS.UserModel
 
             //default font
             IFont f1 = wb.GetFontAt((short)0);
-            Assert.IsFalse(f1.IsBold);
+            ClassicAssert.IsFalse(f1.IsBold);
 
             // Check that asking for the same font
             //  multiple times gives you the same thing.
             // Otherwise, our Tests wouldn't work!
-            Assert.AreSame(wb.GetFontAt((short)0), wb.GetFontAt((short)0));
+            ClassicAssert.AreSame(wb.GetFontAt((short)0), wb.GetFontAt((short)0));
 
             // Look for a new font we have
             //  yet to add
-            Assert.IsNull(
+            ClassicAssert.IsNull(
                 wb.FindFont(
                     true, (short)123, (short)(22 * 20),
                     "Thingy", false, true, FontSuperScript.Sub, FontUnderlineType.Double
@@ -183,9 +183,9 @@ namespace TestCases.SS.UserModel
 
             IFont nf = wb.CreateFont();
             short nfIdx = nf.Index;
-            Assert.AreEqual(num0 + 1, wb.NumberOfFonts);
+            ClassicAssert.AreEqual(num0 + 1, wb.NumberOfFonts);
 
-            Assert.AreEqual(nf, wb.GetFontAt(nfIdx));
+            ClassicAssert.AreEqual(nf, wb.GetFontAt(nfIdx));
 
             nf.IsBold = true;
             nf.Color = (short)123;
@@ -196,20 +196,20 @@ namespace TestCases.SS.UserModel
             nf.TypeOffset = FontSuperScript.Sub;
             nf.Underline = FontUnderlineType.Double;
 
-            Assert.AreEqual(num0 + 1, wb.NumberOfFonts);
-            Assert.AreEqual(nf, wb.GetFontAt(nfIdx));
+            ClassicAssert.AreEqual(num0 + 1, wb.NumberOfFonts);
+            ClassicAssert.AreEqual(nf, wb.GetFontAt(nfIdx));
 
-            Assert.AreEqual(wb.GetFontAt(nfIdx), wb.GetFontAt(nfIdx));
-            Assert.IsTrue(wb.GetFontAt((short)0) != wb.GetFontAt(nfIdx));
+            ClassicAssert.AreEqual(wb.GetFontAt(nfIdx), wb.GetFontAt(nfIdx));
+            ClassicAssert.IsTrue(wb.GetFontAt((short)0) != wb.GetFontAt(nfIdx));
 
             // Find it now
-            Assert.IsNotNull(
+            ClassicAssert.IsNotNull(
                 wb.FindFont(
                     true, (short)123, (short)(22 * 20),
                     "Thingy", false, true, FontSuperScript.Sub, FontUnderlineType.Double
                 )
             );
-            Assert.AreSame(nf,
+            ClassicAssert.AreSame(nf,
                    wb.FindFont(
                        true, (short)123, (short)(22 * 20),
                        "Thingy", false, true, FontSuperScript.Sub, FontUnderlineType.Double

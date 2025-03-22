@@ -28,7 +28,7 @@ namespace TestCases.HSSF.UserModel
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
     using NPOI.Util;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using System;
     using System.Collections;
     using System.Collections.Generic;
@@ -69,23 +69,23 @@ namespace TestCases.HSSF.UserModel
 
             WindowOneRecord w1 = wb.Workbook.WindowOne;
 
-            Assert.AreEqual(false, wb.IsHidden);
-            Assert.AreEqual(false, w1.Hidden);
+            ClassicAssert.AreEqual(false, wb.IsHidden);
+            ClassicAssert.AreEqual(false, w1.Hidden);
 
             wb.IsHidden = (true);
-            Assert.AreEqual(true, wb.IsHidden);
-            Assert.AreEqual(true, w1.Hidden);
+            ClassicAssert.AreEqual(true, wb.IsHidden);
+            ClassicAssert.AreEqual(true, w1.Hidden);
 
             HSSFWorkbook wbBack = HSSFTestDataSamples.WriteOutAndReadBack(wb);
             w1 = wbBack.Workbook.WindowOne;
 
             wbBack.IsHidden = (true);
-            Assert.AreEqual(true, wbBack.IsHidden);
-            Assert.AreEqual(true, w1.Hidden);
+            ClassicAssert.AreEqual(true, wbBack.IsHidden);
+            ClassicAssert.AreEqual(true, w1.Hidden);
 
             wbBack.IsHidden = (false);
-            Assert.AreEqual(false, wbBack.IsHidden);
-            Assert.AreEqual(false, w1.Hidden);
+            ClassicAssert.AreEqual(false, wbBack.IsHidden);
+            ClassicAssert.AreEqual(false, w1.Hidden);
 
             wbBack.Close();
             wb.Close();
@@ -97,16 +97,16 @@ namespace TestCases.HSSF.UserModel
             ISheet s;
             // Single chart, two sheets
             HSSFWorkbook b1 = HSSFTestDataSamples.OpenSampleWorkbook("44010-SingleChart.xls");
-            Assert.AreEqual(2, b1.NumberOfSheets);
-            Assert.AreEqual("Graph2", b1.GetSheetName(1));
+            ClassicAssert.AreEqual(2, b1.NumberOfSheets);
+            ClassicAssert.AreEqual("Graph2", b1.GetSheetName(1));
             s = b1.GetSheetAt(1);
-            Assert.AreEqual(0, s.FirstRowNum);
-            Assert.AreEqual(8, s.LastRowNum);
+            ClassicAssert.AreEqual(0, s.FirstRowNum);
+            ClassicAssert.AreEqual(8, s.LastRowNum);
             // Has chart on 1st sheet??
             // FIXME
-            Assert.IsNotNull(b1.GetSheetAt(0).DrawingPatriarch);
-            Assert.IsNull(b1.GetSheetAt(1).DrawingPatriarch);
-            Assert.IsFalse((b1.GetSheetAt(0).DrawingPatriarch as HSSFPatriarch).ContainsChart());
+            ClassicAssert.IsNotNull(b1.GetSheetAt(0).DrawingPatriarch);
+            ClassicAssert.IsNull(b1.GetSheetAt(1).DrawingPatriarch);
+            ClassicAssert.IsFalse((b1.GetSheetAt(0).DrawingPatriarch as HSSFPatriarch).ContainsChart());
             b1.Close();
             // We've now called getDrawingPatriarch() so
             //  everything will be all screwy
@@ -114,26 +114,26 @@ namespace TestCases.HSSF.UserModel
             HSSFWorkbook b2 = HSSFTestDataSamples.OpenSampleWorkbook("44010-SingleChart.xls");
             HSSFWorkbook b3 = HSSFTestDataSamples.WriteOutAndReadBack(b2);
             b2.Close();
-            Assert.AreEqual(2, b3.NumberOfSheets);
+            ClassicAssert.AreEqual(2, b3.NumberOfSheets);
             s = b3.GetSheetAt(1) as HSSFSheet;
-            Assert.AreEqual(0, s.FirstRowNum);
-            Assert.AreEqual(8, s.LastRowNum);
+            ClassicAssert.AreEqual(0, s.FirstRowNum);
+            ClassicAssert.AreEqual(8, s.LastRowNum);
             b3.Close();
             // Two charts, three sheets
             HSSFWorkbook b4 = HSSFTestDataSamples.OpenSampleWorkbook("44010-TwoCharts.xls");
-            Assert.AreEqual(3, b4.NumberOfSheets);
+            ClassicAssert.AreEqual(3, b4.NumberOfSheets);
             s = b4.GetSheetAt(1) as HSSFSheet;
-            Assert.AreEqual(0, s.FirstRowNum);
-            Assert.AreEqual(8, s.LastRowNum);
+            ClassicAssert.AreEqual(0, s.FirstRowNum);
+            ClassicAssert.AreEqual(8, s.LastRowNum);
             s = b4.GetSheetAt(2) as HSSFSheet;
-            Assert.AreEqual(0, s.FirstRowNum);
-            Assert.AreEqual(8, s.LastRowNum);
+            ClassicAssert.AreEqual(0, s.FirstRowNum);
+            ClassicAssert.AreEqual(8, s.LastRowNum);
             // Has chart on 1st sheet??
             // FIXME
-            Assert.IsNotNull(b4.GetSheetAt(0).DrawingPatriarch);
-            Assert.IsNull(b4.GetSheetAt(1).DrawingPatriarch);
-            Assert.IsNull(b4.GetSheetAt(2).DrawingPatriarch);
-            Assert.IsFalse((b4.GetSheetAt(0).DrawingPatriarch as HSSFPatriarch).ContainsChart());
+            ClassicAssert.IsNotNull(b4.GetSheetAt(0).DrawingPatriarch);
+            ClassicAssert.IsNull(b4.GetSheetAt(1).DrawingPatriarch);
+            ClassicAssert.IsNull(b4.GetSheetAt(2).DrawingPatriarch);
+            ClassicAssert.IsFalse((b4.GetSheetAt(0).DrawingPatriarch as HSSFPatriarch).ContainsChart());
             b4.Close();
             // We've now called getDrawingPatriarch() so
             //  everything will be all screwy
@@ -141,13 +141,13 @@ namespace TestCases.HSSF.UserModel
             HSSFWorkbook b5 = HSSFTestDataSamples.OpenSampleWorkbook("44010-TwoCharts.xls");
             HSSFWorkbook b6 = HSSFTestDataSamples.WriteOutAndReadBack(b5);
             b5.Close();
-            Assert.AreEqual(3, b6.NumberOfSheets);
+            ClassicAssert.AreEqual(3, b6.NumberOfSheets);
             s = b6.GetSheetAt(1) as HSSFSheet;
-            Assert.AreEqual(0, s.FirstRowNum);
-            Assert.AreEqual(8, s.LastRowNum);
+            ClassicAssert.AreEqual(0, s.FirstRowNum);
+            ClassicAssert.AreEqual(8, s.LastRowNum);
             s = b6.GetSheetAt(2) as HSSFSheet;
-            Assert.AreEqual(0, s.FirstRowNum);
-            Assert.AreEqual(8, s.LastRowNum);
+            ClassicAssert.AreEqual(0, s.FirstRowNum);
+            ClassicAssert.AreEqual(8, s.LastRowNum);
             b6.Close();
 
         }
@@ -202,14 +202,14 @@ namespace TestCases.HSSF.UserModel
 
         private static void assertCollectionsEquals(List<int> expected, List<int> actual)
         {
-            Assert.AreEqual(expected.Count, actual.Count, "size");
+            ClassicAssert.AreEqual(expected.Count, actual.Count, "size");
             foreach (int e in expected)
             {
-                Assert.IsTrue(actual.Contains(e));
+                ClassicAssert.IsTrue(actual.Contains(e));
             }
             foreach (int a in actual)
             {
-                Assert.IsTrue(expected.Contains(a));
+                ClassicAssert.IsTrue(expected.Contains(a));
             }
         }
         [Test]
@@ -227,30 +227,30 @@ namespace TestCases.HSSF.UserModel
             wb.SetSelectedTabs(selected);
 
             CollectionAssert.AreEqual(selected, wb.GetSelectedTabs());
-            Assert.AreEqual(true, sheet0.IsSelected);
-            Assert.AreEqual(false, sheet1.IsSelected);
-            Assert.AreEqual(true, sheet2.IsSelected);
-            Assert.AreEqual(true, sheet3.IsSelected);
-            Assert.AreEqual(false, sheet4.IsSelected);
-            Assert.AreEqual(false, sheet5.IsSelected);
+            ClassicAssert.AreEqual(true, sheet0.IsSelected);
+            ClassicAssert.AreEqual(false, sheet1.IsSelected);
+            ClassicAssert.AreEqual(true, sheet2.IsSelected);
+            ClassicAssert.AreEqual(true, sheet3.IsSelected);
+            ClassicAssert.AreEqual(false, sheet4.IsSelected);
+            ClassicAssert.AreEqual(false, sheet5.IsSelected);
 
             selected = arrayToList(new int[] { 1, 3, 5 });
             wb.SetSelectedTabs(selected);
 
             // previous selection should be cleared
             CollectionAssert.AreEqual(selected, wb.GetSelectedTabs());
-            Assert.AreEqual(false, sheet0.IsSelected);
-            Assert.AreEqual(true, sheet1.IsSelected);
-            Assert.AreEqual(false, sheet2.IsSelected);
-            Assert.AreEqual(true, sheet3.IsSelected);
-            Assert.AreEqual(false, sheet4.IsSelected);
-            Assert.AreEqual(true, sheet5.IsSelected);
-            Assert.AreEqual(true, sheet0.IsActive);
-            Assert.AreEqual(false, sheet2.IsActive);
+            ClassicAssert.AreEqual(false, sheet0.IsSelected);
+            ClassicAssert.AreEqual(true, sheet1.IsSelected);
+            ClassicAssert.AreEqual(false, sheet2.IsSelected);
+            ClassicAssert.AreEqual(true, sheet3.IsSelected);
+            ClassicAssert.AreEqual(false, sheet4.IsSelected);
+            ClassicAssert.AreEqual(true, sheet5.IsSelected);
+            ClassicAssert.AreEqual(true, sheet0.IsActive);
+            ClassicAssert.AreEqual(false, sheet2.IsActive);
 
             wb.SetActiveSheet(2);
-            Assert.AreEqual(false, sheet0.IsActive);
-            Assert.AreEqual(true, sheet2.IsActive);
+            ClassicAssert.AreEqual(false, sheet0.IsActive);
+            ClassicAssert.AreEqual(true, sheet2.IsActive);
 
 
             /*{ // helpful if viewing this workbook in excel:
@@ -352,8 +352,8 @@ namespace TestCases.HSSF.UserModel
         private static void ConfirmActiveSelected(ISheet sheet,
                 bool expectedActive, bool expectedSelected)
         {
-            Assert.AreEqual(expectedActive, sheet.IsActive, "active");
-            Assert.AreEqual(expectedSelected, sheet.IsSelected, "selected");
+            ClassicAssert.AreEqual(expectedActive, sheet.IsActive, "active");
+            ClassicAssert.AreEqual(expectedSelected, sheet.IsSelected, "selected");
         }
 
         /**
@@ -379,7 +379,7 @@ namespace TestCases.HSSF.UserModel
             catch (InvalidOperationException e)
             {
                 // Expected badly behaved sheet record to cause exception
-                Assert.IsTrue(e.Message.StartsWith("Actual serialized sheet size"));
+                ClassicAssert.IsTrue(e.Message.StartsWith("Actual serialized sheet size"));
             }
         }
 
@@ -391,11 +391,11 @@ namespace TestCases.HSSF.UserModel
         public void NamesToDeleteSheets()
         {
             HSSFWorkbook b = OpenSample("30978-deleted.xls");
-            Assert.AreEqual(3, b.NumberOfNames);
+            ClassicAssert.AreEqual(3, b.NumberOfNames);
 
             // Sheet 2 is deleted
-            Assert.AreEqual("Sheet1", b.GetSheetName(0));
-            Assert.AreEqual("Sheet3", b.GetSheetName(1));
+            ClassicAssert.AreEqual("Sheet1", b.GetSheetName(0));
+            ClassicAssert.AreEqual("Sheet3", b.GetSheetName(1));
 
             Area3DPtg ptg;
             NameRecord nr;
@@ -405,69 +405,69 @@ namespace TestCases.HSSF.UserModel
 
             // First at low level
             nr = b.Workbook.GetNameRecord(0);
-            Assert.AreEqual("On2", nr.NameText);
-            Assert.AreEqual(0, nr.SheetNumber);
-            Assert.AreEqual(1, nr.ExternSheetNumber);
-            Assert.AreEqual(1, nr.NameDefinition.Length);
+            ClassicAssert.AreEqual("On2", nr.NameText);
+            ClassicAssert.AreEqual(0, nr.SheetNumber);
+            ClassicAssert.AreEqual(1, nr.ExternSheetNumber);
+            ClassicAssert.AreEqual(1, nr.NameDefinition.Length);
 
             ptg = (Area3DPtg)nr.NameDefinition[0];
-            Assert.AreEqual(1, ptg.ExternSheetIndex);
-            Assert.AreEqual(0, ptg.FirstColumn);
-            Assert.AreEqual(0, ptg.FirstRow);
-            Assert.AreEqual(0, ptg.LastColumn);
-            Assert.AreEqual(2, ptg.LastRow);
+            ClassicAssert.AreEqual(1, ptg.ExternSheetIndex);
+            ClassicAssert.AreEqual(0, ptg.FirstColumn);
+            ClassicAssert.AreEqual(0, ptg.FirstRow);
+            ClassicAssert.AreEqual(0, ptg.LastColumn);
+            ClassicAssert.AreEqual(2, ptg.LastRow);
 
             // Now at high level
             n = b.GetNameAt(0);
-            Assert.AreEqual("On2", n.NameName);
-            Assert.AreEqual("", n.SheetName);
-            Assert.AreEqual("#REF!$A$1:$A$3", n.RefersToFormula);
+            ClassicAssert.AreEqual("On2", n.NameName);
+            ClassicAssert.AreEqual("", n.SheetName);
+            ClassicAssert.AreEqual("#REF!$A$1:$A$3", n.RefersToFormula);
 
 
             /* ======= Name pointing to 1st sheet ====== */
 
             // First at low level
             nr = b.Workbook.GetNameRecord(1);
-            Assert.AreEqual("OnOne", nr.NameText);
-            Assert.AreEqual(0, nr.SheetNumber);
-            Assert.AreEqual(0, nr.ExternSheetNumber);
-            Assert.AreEqual(1, nr.NameDefinition.Length);
+            ClassicAssert.AreEqual("OnOne", nr.NameText);
+            ClassicAssert.AreEqual(0, nr.SheetNumber);
+            ClassicAssert.AreEqual(0, nr.ExternSheetNumber);
+            ClassicAssert.AreEqual(1, nr.NameDefinition.Length);
 
             ptg = (Area3DPtg)nr.NameDefinition[0];
-            Assert.AreEqual(0, ptg.ExternSheetIndex);
-            Assert.AreEqual(0, ptg.FirstColumn);
-            Assert.AreEqual(2, ptg.FirstRow);
-            Assert.AreEqual(0, ptg.LastColumn);
-            Assert.AreEqual(3, ptg.LastRow);
+            ClassicAssert.AreEqual(0, ptg.ExternSheetIndex);
+            ClassicAssert.AreEqual(0, ptg.FirstColumn);
+            ClassicAssert.AreEqual(2, ptg.FirstRow);
+            ClassicAssert.AreEqual(0, ptg.LastColumn);
+            ClassicAssert.AreEqual(3, ptg.LastRow);
 
             // Now at high level
             n = b.GetNameAt(1);
-            Assert.AreEqual("OnOne", n.NameName);
-            Assert.AreEqual("Sheet1", n.SheetName);
-            Assert.AreEqual("Sheet1!$A$3:$A$4", n.RefersToFormula);
+            ClassicAssert.AreEqual("OnOne", n.NameName);
+            ClassicAssert.AreEqual("Sheet1", n.SheetName);
+            ClassicAssert.AreEqual("Sheet1!$A$3:$A$4", n.RefersToFormula);
 
 
             /* ======= Name pointing to 3rd sheet ====== */
 
             // First at low level
             nr = b.Workbook.GetNameRecord(2);
-            Assert.AreEqual("OnSheet3", nr.NameText);
-            Assert.AreEqual(0, nr.SheetNumber);
-            Assert.AreEqual(2, nr.ExternSheetNumber);
-            Assert.AreEqual(1, nr.NameDefinition.Length);
+            ClassicAssert.AreEqual("OnSheet3", nr.NameText);
+            ClassicAssert.AreEqual(0, nr.SheetNumber);
+            ClassicAssert.AreEqual(2, nr.ExternSheetNumber);
+            ClassicAssert.AreEqual(1, nr.NameDefinition.Length);
 
             ptg = (Area3DPtg)nr.NameDefinition[0];
-            Assert.AreEqual(2, ptg.ExternSheetIndex);
-            Assert.AreEqual(0, ptg.FirstColumn);
-            Assert.AreEqual(0, ptg.FirstRow);
-            Assert.AreEqual(0, ptg.LastColumn);
-            Assert.AreEqual(1, ptg.LastRow);
+            ClassicAssert.AreEqual(2, ptg.ExternSheetIndex);
+            ClassicAssert.AreEqual(0, ptg.FirstColumn);
+            ClassicAssert.AreEqual(0, ptg.FirstRow);
+            ClassicAssert.AreEqual(0, ptg.LastColumn);
+            ClassicAssert.AreEqual(1, ptg.LastRow);
 
             // Now at high level
             n = b.GetNameAt(2);
-            Assert.AreEqual("OnSheet3", n.NameName);
-            Assert.AreEqual("Sheet3", n.SheetName);
-            Assert.AreEqual("Sheet3!$A$1:$A$2", n.RefersToFormula);
+            ClassicAssert.AreEqual("OnSheet3", n.NameName);
+            ClassicAssert.AreEqual("Sheet3", n.SheetName);
+            ClassicAssert.AreEqual("Sheet3!$A$1:$A$2", n.RefersToFormula);
 
             b.Close();
         }
@@ -531,10 +531,10 @@ namespace TestCases.HSSF.UserModel
             // The second print titles name record has SheetNumber==4
             HSSFWorkbook wb1 = HSSFTestDataSamples.OpenSampleWorkbook("testRRaC.xls");
             NameRecord nr;
-            Assert.AreEqual(3, wb1.Workbook.NumNames);
+            ClassicAssert.AreEqual(3, wb1.Workbook.NumNames);
             nr = wb1.Workbook.GetNameRecord(2);
             // TODO - render full row and full column refs properly
-            Assert.AreEqual("Sheet2!$A$1:$IV$1", HSSFFormulaParser.ToFormulaString(wb1, nr.NameDefinition)); // 1:1
+            ClassicAssert.AreEqual("Sheet2!$A$1:$IV$1", HSSFFormulaParser.ToFormulaString(wb1, nr.NameDefinition)); // 1:1
 
             try
             {
@@ -553,9 +553,9 @@ namespace TestCases.HSSF.UserModel
             HSSFWorkbook wb2 = HSSFTestDataSamples.WriteOutAndReadBack(wb1);
             wb1.Close();
 
-            Assert.AreEqual(3, wb2.Workbook.NumNames);
+            ClassicAssert.AreEqual(3, wb2.Workbook.NumNames);
             nr = wb2.Workbook.GetNameRecord(2);
-            Assert.AreEqual("Sheet2!E:F,Sheet2!$A$9:$IV$12", HSSFFormulaParser.ToFormulaString(wb2, nr.NameDefinition)); // E:F,9:12
+            ClassicAssert.AreEqual("Sheet2!E:F,Sheet2!$A$9:$IV$12", HSSFFormulaParser.ToFormulaString(wb2, nr.NameDefinition)); // E:F,9:12
             wb2.Close();
         }
         /**
@@ -574,7 +574,7 @@ namespace TestCases.HSSF.UserModel
             POIFSFileSystem fs2 = new POIFSFileSystem(new MemoryStream(bytes));
             ClassID clsid2 = fs2.Root.StorageClsid;
 
-            Assert.IsTrue(clsid1.Equals(clsid2));
+            ClassicAssert.IsTrue(clsid1.Equals(clsid2));
 
             fs2.Close();
             wb.Close();
@@ -645,7 +645,7 @@ namespace TestCases.HSSF.UserModel
                 IWorkbook workbook = new HSSFWorkbook(dir, false);
                 ISheet sheet = workbook.GetSheetAt(0);
                 ICell cell = sheet.GetRow(0).GetCell(0);
-                Assert.AreEqual("replaceMe", cell.RichStringCellValue.String);
+                ClassicAssert.AreEqual("replaceMe", cell.RichStringCellValue.String);
             }
 
             // Now re-check with preserving
@@ -654,7 +654,7 @@ namespace TestCases.HSSF.UserModel
                 IWorkbook workbook = new HSSFWorkbook(dir, true);
                 ISheet sheet = workbook.GetSheetAt(0);
                 ICell cell = sheet.GetRow(0).GetCell(0);
-                Assert.AreEqual("replaceMe", cell.RichStringCellValue.String);
+                ClassicAssert.AreEqual("replaceMe", cell.RichStringCellValue.String);
             }
         }
 
@@ -688,7 +688,7 @@ namespace TestCases.HSSF.UserModel
                         }
                     }
                 }
-                Assert.IsTrue(found);
+                ClassicAssert.IsTrue(found);
             }
         }
 
@@ -708,13 +708,13 @@ namespace TestCases.HSSF.UserModel
                 {
                     // Start as NPOIFS
                     HSSFWorkbook wb = new HSSFWorkbook(fs.Root, true);
-                    Assert.AreEqual(3, wb.NumberOfSheets);
-                    Assert.AreEqual("Root xls", wb.GetSheetAt(0).GetRow(0).GetCell(0).StringCellValue);
+                    ClassicAssert.AreEqual(3, wb.NumberOfSheets);
+                    ClassicAssert.AreEqual("Root xls", wb.GetSheetAt(0).GetRow(0).GetCell(0).StringCellValue);
 
                     // Will switch to POIFS
                     wb = HSSFTestDataSamples.WriteOutAndReadBack(wb);
-                    Assert.AreEqual(3, wb.NumberOfSheets);
-                    Assert.AreEqual("Root xls", wb.GetSheetAt(0).GetRow(0).GetCell(0).StringCellValue);
+                    ClassicAssert.AreEqual(3, wb.NumberOfSheets);
+                    ClassicAssert.AreEqual("Root xls", wb.GetSheetAt(0).GetRow(0).GetCell(0).StringCellValue);
                 }
                 finally
                 {
@@ -739,7 +739,7 @@ namespace TestCases.HSSF.UserModel
                 ICellStyle style = wb.CreateCellStyle();
             }
 
-            Assert.AreEqual(MAX_STYLES, wb.NumCellStyles);
+            ClassicAssert.AreEqual(MAX_STYLES, wb.NumCellStyles);
             try
             {
                 ICellStyle style = wb.CreateCellStyle();
@@ -747,10 +747,10 @@ namespace TestCases.HSSF.UserModel
             }
             catch (InvalidOperationException e)
             {
-                Assert.AreEqual("The maximum number of cell styles was exceeded. " +
+                ClassicAssert.AreEqual("The maximum number of cell styles was exceeded. " +
                         "You can define up to 4000 styles in a .xls workbook", e.Message);
             }
-            Assert.AreEqual(MAX_STYLES, wb.NumCellStyles);
+            ClassicAssert.AreEqual(MAX_STYLES, wb.NumCellStyles);
         }
         [Test]
         public void SetSheetOrderHSSF()
@@ -795,18 +795,18 @@ namespace TestCases.HSSF.UserModel
             wb.SetSheetOrder("other sheet", 0);
 
             // names
-            Assert.AreEqual("'first sheet'!D1", wb.GetName("name1").RefersToFormula);
-            Assert.AreEqual("'other sheet'!C1", wb.GetName("name2").RefersToFormula);
+            ClassicAssert.AreEqual("'first sheet'!D1", wb.GetName("name1").RefersToFormula);
+            ClassicAssert.AreEqual("'other sheet'!C1", wb.GetName("name2").RefersToFormula);
 
             // cells
-            Assert.AreEqual("SUM('other sheet'!C1,'first sheet'!C1)", c2.CellFormula);
-            Assert.AreEqual("'first sheet'!D3", c3.CellFormula);
-            Assert.AreEqual("'other sheet'!D3", c4.CellFormula);
+            ClassicAssert.AreEqual("SUM('other sheet'!C1,'first sheet'!C1)", c2.CellFormula);
+            ClassicAssert.AreEqual("'first sheet'!D3", c3.CellFormula);
+            ClassicAssert.AreEqual("'other sheet'!D3", c4.CellFormula);
 
             // conditional formatting
             IConditionalFormatting cf = sheetCF.GetConditionalFormattingAt(0);
-            Assert.AreEqual("'first sheet'!D1", cf.GetRule(0).Formula1);
-            Assert.AreEqual("'other sheet'!D1", cf.GetRule(0).Formula2);
+            ClassicAssert.AreEqual("'first sheet'!D1", cf.GetRule(0).Formula1);
+            ClassicAssert.AreEqual("'other sheet'!D1", cf.GetRule(0).Formula2);
         }
 
         private bool HasEntry(DirectoryNode dirNode, String entryName)
@@ -832,21 +832,21 @@ namespace TestCases.HSSF.UserModel
             for (int pictureIndex = 1; pictureIndex <= 4; pictureIndex++)
             {
                 EscherBSERecord bse = iwb.GetBSERecord(pictureIndex);
-                Assert.AreEqual(1, bse.Ref);
+                ClassicAssert.AreEqual(1, bse.Ref);
             }
 
             wb.CloneSheet(0);
             for (int pictureIndex = 1; pictureIndex <= 4; pictureIndex++)
             {
                 EscherBSERecord bse = iwb.GetBSERecord(pictureIndex);
-                Assert.AreEqual(2, bse.Ref);
+                ClassicAssert.AreEqual(2, bse.Ref);
             }
 
             wb.CloneSheet(0);
             for (int pictureIndex = 1; pictureIndex <= 4; pictureIndex++)
             {
                 EscherBSERecord bse = iwb.GetBSERecord(pictureIndex);
-                Assert.AreEqual(3, bse.Ref);
+                ClassicAssert.AreEqual(3, bse.Ref);
             }
             wb.Close();
         }
@@ -866,7 +866,7 @@ namespace TestCases.HSSF.UserModel
             }
             catch (ArgumentException ex)
             {
-                Assert.IsTrue(ex.Message.StartsWith("The supplied POIFSFileSystem does not contain a BIFF8"));
+                ClassicAssert.IsTrue(ex.Message.StartsWith("The supplied POIFSFileSystem does not contain a BIFF8"));
             }
             finally
             {
@@ -908,9 +908,9 @@ namespace TestCases.HSSF.UserModel
             ConfirmActiveSelected(sheet3, false);
             ConfirmActiveSelected(sheet4, false);
 
-            Assert.AreEqual(0, wb.FirstVisibleTab);
+            ClassicAssert.AreEqual(0, wb.FirstVisibleTab);
             wb.FirstVisibleTab = 2;
-            Assert.AreEqual(2, wb.FirstVisibleTab);
+            ClassicAssert.AreEqual(2, wb.FirstVisibleTab);
 
             wb.Close();
         }
@@ -927,19 +927,19 @@ namespace TestCases.HSSF.UserModel
             }
             catch (InvalidOperationException e)
             {
-                Assert.IsTrue(e.Message.Contains("no defined names"), e.Message);
+                ClassicAssert.IsTrue(e.Message.Contains("no defined names"), e.Message);
             }
 
             HSSFName name = (HSSFName)wb.CreateName();
-            Assert.IsNotNull(name);
+            ClassicAssert.IsNotNull(name);
 
-            Assert.IsNull(wb.GetName("somename"));
+            ClassicAssert.IsNull(wb.GetName("somename"));
 
             name.NameName = ("myname");
-            Assert.IsNotNull(wb.GetName("myname"));
+            ClassicAssert.IsNotNull(wb.GetName("myname"));
 
-            Assert.AreEqual(0, wb.GetNameIndex(name));
-            Assert.AreEqual(0, wb.GetNameIndex("myname"));
+            ClassicAssert.AreEqual(0, wb.GetNameIndex(name));
+            ClassicAssert.AreEqual(0, wb.GetNameIndex("myname"));
 
             try
             {
@@ -948,7 +948,7 @@ namespace TestCases.HSSF.UserModel
             }
             catch (ArgumentOutOfRangeException e)
             {
-                Assert.IsTrue(e.Message.Contains("outside the allowable range"), e.Message);
+                ClassicAssert.IsTrue(e.Message.Contains("outside the allowable range"), e.Message);
             }
 
             try
@@ -958,7 +958,7 @@ namespace TestCases.HSSF.UserModel
             }
             catch (ArgumentOutOfRangeException e)
             {
-                Assert.IsTrue(e.Message.Contains("outside the allowable range"), e.Message);
+                ClassicAssert.IsTrue(e.Message.Contains("outside the allowable range"), e.Message);
             }
         }
         [Test]
@@ -974,13 +974,13 @@ namespace TestCases.HSSF.UserModel
         {
             HSSFWorkbook wb = new HSSFWorkbook();
 
-            Assert.IsFalse(wb.IsWriteProtected);
+            ClassicAssert.IsFalse(wb.IsWriteProtected);
 
             wb.WriteProtectWorkbook("mypassword", "myuser");
-            Assert.IsTrue(wb.IsWriteProtected);
+            ClassicAssert.IsTrue(wb.IsWriteProtected);
 
             wb.UnwriteProtectWorkbook();
-            Assert.IsFalse(wb.IsWriteProtected);
+            ClassicAssert.IsFalse(wb.IsWriteProtected);
         }
         [Test]
         public void Bug50298()
@@ -1010,7 +1010,7 @@ namespace TestCases.HSSF.UserModel
             int expected = wb.Workbook.Size;
             int written = wb.Workbook.Serialize(0, new byte[expected * 2]);
 
-            Assert.AreEqual(expected, written, "Did not have the expected size when writing the workbook: written: " + written + ", but expected: " + expected);
+            ClassicAssert.AreEqual(expected, written, "Did not have the expected size when writing the workbook: written: " + written + ", but expected: " + expected);
 
             HSSFWorkbook read = HSSFTestDataSamples.WriteOutAndReadBack(wb);
             assertSheetOrder(read, "Invoice", "Invoice1", "Digest", "Deferred", "Received");
@@ -1053,7 +1053,7 @@ namespace TestCases.HSSF.UserModel
             int expected = wb.Workbook.Size;
             int written = wb.Workbook.Serialize(0, new byte[expected * 2]);
 
-            Assert.AreEqual(expected, written, "Did not have the expected size when writing the workbook: written: " + written + ", but expected: " + expected);
+            ClassicAssert.AreEqual(expected, written, "Did not have the expected size when writing the workbook: written: " + written + ", but expected: " + expected);
 
             HSSFWorkbook read = HSSFTestDataSamples.WriteOutAndReadBack(wb);
             assertSheetOrder(wb, "Invoice", "Deferred", "Received", "Digest");
@@ -1081,25 +1081,25 @@ namespace TestCases.HSSF.UserModel
 
             assertSheetOrder(wb, "Sheet1", "Sheet2", "Sheet3", "ASheet");
             HSSFName name = wb.GetName(nameName) as HSSFName;
-            Assert.IsNotNull(name);
-            Assert.AreEqual("ASheet!A1", name.RefersToFormula);
+            ClassicAssert.IsNotNull(name);
+            ClassicAssert.AreEqual("ASheet!A1", name.RefersToFormula);
 
             MemoryStream stream = new MemoryStream();
             wb.Write(stream, false);
 
             assertSheetOrder(wb, "Sheet1", "Sheet2", "Sheet3", "ASheet");
-            Assert.AreEqual("ASheet!A1", name.RefersToFormula);
+            ClassicAssert.AreEqual("ASheet!A1", name.RefersToFormula);
 
             wb.RemoveSheetAt(1);
 
             assertSheetOrder(wb, "Sheet1", "Sheet3", "ASheet");
-            Assert.AreEqual("ASheet!A1", name.RefersToFormula);
+            ClassicAssert.AreEqual("ASheet!A1", name.RefersToFormula);
 
             MemoryStream stream2 = new MemoryStream();
             wb.Write(stream2, false);
 
             assertSheetOrder(wb, "Sheet1", "Sheet3", "ASheet");
-            Assert.AreEqual("ASheet!A1", name.RefersToFormula);
+            ClassicAssert.AreEqual("ASheet!A1", name.RefersToFormula);
 
             HSSFWorkbook wb2 = new HSSFWorkbook(new ByteArrayInputStream(stream.ToArray()));
             ExpectName(wb2, nameName, "ASheet!A1");
@@ -1113,8 +1113,8 @@ namespace TestCases.HSSF.UserModel
         private void ExpectName(HSSFWorkbook wb, String name, String expect)
         {
             HSSFName hssfName = wb.GetName(name) as HSSFName;
-            Assert.IsNotNull(hssfName);
-            Assert.AreEqual(expect, hssfName.RefersToFormula);
+            ClassicAssert.IsNotNull(hssfName);
+            ClassicAssert.AreEqual(expect, hssfName.RefersToFormula);
         }
 
         [Test]
@@ -1135,7 +1135,7 @@ namespace TestCases.HSSF.UserModel
                     if (anchor is HSSFClientAnchor)
                     {                        // absolute coordinates
                         HSSFClientAnchor clientAnchor = (HSSFClientAnchor)anchor;
-                        Assert.IsNotNull(clientAnchor);
+                        ClassicAssert.IsNotNull(clientAnchor);
                         //System.out.Println(clientAnchor.Row1 + "," + clientAnchor.Row2);
                         found = true;
                     }
@@ -1143,14 +1143,14 @@ namespace TestCases.HSSF.UserModel
                     {
                         // shape is grouped and the anchor is expressed in the coordinate system of the group 
                         HSSFChildAnchor childAnchor = (HSSFChildAnchor)anchor;
-                        Assert.IsNotNull(childAnchor);
+                        ClassicAssert.IsNotNull(childAnchor);
                         //System.out.Println(childAnchor.Dy1 + "," + childAnchor.Dy2);
                         found = true;
                     }
                 }
             }
 
-            Assert.IsTrue(found, "Should find some images via Client or Child anchors, but did not find any at all");
+            ClassicAssert.IsTrue(found, "Should find some images via Client or Child anchors, but did not find any at all");
             workbook.Close();
         }
 
@@ -1198,9 +1198,9 @@ namespace TestCases.HSSF.UserModel
             }
             finally
             {
-                Assert.IsTrue(file.Exists);
+                ClassicAssert.IsTrue(file.Exists);
                 file.Delete();
-                Assert.IsTrue(!File.Exists(file.FullName));
+                ClassicAssert.IsTrue(!File.Exists(file.FullName));
             }
         }
 
@@ -1348,7 +1348,7 @@ namespace TestCases.HSSF.UserModel
 
             // Open from the temp file in read-write mode
             HSSFWorkbook wb = new HSSFWorkbook(new NPOIFSFileSystem(file, false));
-            Assert.AreEqual(3, wb.NumberOfSheets);
+            ClassicAssert.AreEqual(3, wb.NumberOfSheets);
 
             // Change
             wb.RemoveSheetAt(2);
@@ -1360,8 +1360,8 @@ namespace TestCases.HSSF.UserModel
             wb.Close();
 
             wb = new HSSFWorkbook(new NPOIFSFileSystem(file));
-            Assert.AreEqual(1, wb.NumberOfSheets);
-            Assert.AreEqual("Changed!", wb.GetSheetAt(0).GetRow(0).GetCell(0).ToString());
+            ClassicAssert.AreEqual(1, wb.NumberOfSheets);
+            ClassicAssert.AreEqual("Changed!", wb.GetSheetAt(0).GetRow(0).GetCell(0).ToString());
 
             wb.Close();
         }
@@ -1380,7 +1380,7 @@ namespace TestCases.HSSF.UserModel
 
             // Read and check
             wb = new HSSFWorkbook(new NPOIFSFileSystem(file));
-            Assert.AreEqual(3, wb.NumberOfSheets);
+            ClassicAssert.AreEqual(3, wb.NumberOfSheets);
             wb.Close();
         }
 

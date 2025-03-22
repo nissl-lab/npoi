@@ -18,7 +18,7 @@
 using System;
 using System.Collections.Generic;
 using NPOI.XWPF.UserModel;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 
 namespace TestCases.XWPF.UserModel
 {
@@ -46,10 +46,10 @@ namespace TestCases.XWPF.UserModel
                     break;
                 }
             }
-            Assert.AreEqual(13, sdts.Count, "controls size");
+            ClassicAssert.AreEqual(13, sdts.Count, "controls size");
 
-            Assert.AreEqual("MyTag", tag, "tag");
-            Assert.AreEqual("MyTitle", title, "title");
+            ClassicAssert.AreEqual("MyTag", tag, "tag");
+            ClassicAssert.AreEqual("MyTitle", title, "title");
         }
 
         [Test]
@@ -74,13 +74,13 @@ namespace TestCases.XWPF.UserModel
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("Bug54849.docx");
             List<AbstractXWPFSDT> sdts = ExtractAllSDTs(doc);
 
-            Assert.AreEqual(contents.Length, sdts.Count, "number of sdts");
+            ClassicAssert.AreEqual(contents.Length, sdts.Count, "number of sdts");
 
             for (int i = 0; i < contents.Length; i++)
             {//contents.Length; i++){
                 AbstractXWPFSDT sdt = sdts[i];
 
-                Assert.AreEqual(contents[i], sdt.Content.ToString(), i + ": " + contents[i]);
+                ClassicAssert.AreEqual(contents[i], sdt.Content.ToString(), i + ": " + contents[i]);
             }
         }
         /**
@@ -94,17 +94,17 @@ namespace TestCases.XWPF.UserModel
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("Bug54771a.docx");
             List<AbstractXWPFSDT> sdts = ExtractAllSDTs(doc);
             String text = sdts[(0)].Content.Text;
-            Assert.AreEqual(2, sdts.Count);
+            ClassicAssert.AreEqual(2, sdts.Count);
             AssertContains(text, "Test");
 
             text = sdts[(1)].Content.Text;
             AssertContains(text, "Test Subtitle");
             AssertContains(text, "Test User");
-            Assert.IsTrue(text.IndexOf("Test") < text.IndexOf("Test Subtitle"));
+            ClassicAssert.IsTrue(text.IndexOf("Test") < text.IndexOf("Test Subtitle"));
 
             doc = XWPFTestDataSamples.OpenSampleDocument("Bug54771b.docx");
             sdts = ExtractAllSDTs(doc);
-            Assert.AreEqual(3, sdts.Count);
+            ClassicAssert.AreEqual(3, sdts.Count);
             AssertContains(sdts[0].Content.Text, "Test");
 
             AssertContains(sdts[1].Content.Text, "Test Subtitle");
@@ -135,7 +135,7 @@ namespace TestCases.XWPF.UserModel
             for (int i = 0; i < sdts.Count; i++)
             {
                 AbstractXWPFSDT sdt = sdts[i];
-                Assert.AreEqual(targs[i], sdt.Content.Text, targs[i]);
+                ClassicAssert.AreEqual(targs[i], sdt.Content.Text, targs[i]);
             }
         }
 
@@ -145,9 +145,9 @@ namespace TestCases.XWPF.UserModel
             //handle sdtbody without an sdtpr
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("Bug60341.docx");
             List<AbstractXWPFSDT> sdts = ExtractAllSDTs(doc);
-            Assert.AreEqual(1, sdts.Count);
-            Assert.AreEqual("", sdts[0].GetTag());
-            Assert.AreEqual("", sdts[0].GetTitle());
+            ClassicAssert.AreEqual(1, sdts.Count);
+            ClassicAssert.AreEqual("", sdts[0].GetTag());
+            ClassicAssert.AreEqual("", sdts[0].GetTitle());
         }
 
         private List<AbstractXWPFSDT> ExtractAllSDTs(XWPFDocument doc)

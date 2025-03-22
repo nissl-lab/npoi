@@ -23,7 +23,7 @@ namespace TestCases.HSSF.Record.Chart
     using System;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.Chart;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.Util;
 
     /**
@@ -49,13 +49,13 @@ namespace TestCases.HSSF.Record.Chart
         {
             SeriesTextRecord record = new SeriesTextRecord(TestcaseRecordInputStream.Create(0x100d, SIMPLE_DATA));
 
-            Assert.AreEqual((short)0, record.Id);
-            Assert.AreEqual((byte)0x0C, record.Text.Length);
+            ClassicAssert.AreEqual((short)0, record.Id);
+            ClassicAssert.AreEqual((byte)0x0C, record.Text.Length);
 
-            Assert.AreEqual("Value Number", record.Text);
+            ClassicAssert.AreEqual("Value Number", record.Text);
 
 
-            Assert.AreEqual(SIMPLE_DATA.Length+4, record.RecordSize);
+            ClassicAssert.AreEqual(SIMPLE_DATA.Length+4, record.RecordSize);
         }
         [Test]
         public void TestStore()

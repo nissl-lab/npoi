@@ -19,7 +19,7 @@ namespace TestCases.SS.Format
     using NPOI.SS.Format;
     using NPOI.SS.UserModel;
     using NPOI.XSSF;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using System;
     using System.Globalization;
     using System.Text;
@@ -83,7 +83,7 @@ namespace TestCases.SS.Format
                 double actualVal = ExtractNumber(actual);
                 // equal within 1%
                 double delta = expectedVal / 100;
-                Assert.AreEqual(expectedVal, actualVal, delta, "format \"" + format + "\"," + expected + " ~= " +
+                ClassicAssert.AreEqual(expectedVal, actualVal, delta, "format \"" + format + "\"," + expected + " ~= " +
                         actual);
             }
         }

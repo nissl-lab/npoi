@@ -23,7 +23,7 @@ namespace TestCases.HSSF.Record.Chart
     using System;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.Chart;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     /**
      * Tests the serialization and deserialization of the SeriesListRecord
@@ -49,11 +49,11 @@ namespace TestCases.HSSF.Record.Chart
         {
 
             SeriesListRecord record = new SeriesListRecord(TestcaseRecordInputStream.Create(0x1016, data));
-            Assert.AreEqual((short)0x2001, record.SeriesNumbers[0]);
-            Assert.AreEqual(unchecked((short)0xf0ff), record.SeriesNumbers[1]);
-            Assert.AreEqual(2, record.SeriesNumbers.Length);
+            ClassicAssert.AreEqual((short)0x2001, record.SeriesNumbers[0]);
+            ClassicAssert.AreEqual(unchecked((short)0xf0ff), record.SeriesNumbers[1]);
+            ClassicAssert.AreEqual(2, record.SeriesNumbers.Length);
 
-            Assert.AreEqual(4 + 6, record.RecordSize);
+            ClassicAssert.AreEqual(4 + 6, record.RecordSize);
         }
         [Test]
         public void TestStore()
@@ -61,9 +61,9 @@ namespace TestCases.HSSF.Record.Chart
             SeriesListRecord record = new SeriesListRecord(new short[] { (short)0x2001, unchecked((short)0xf0ff) });
 
             byte[] recordBytes = record.Serialize();
-            Assert.AreEqual(recordBytes.Length - 4, data.Length);
+            ClassicAssert.AreEqual(recordBytes.Length - 4, data.Length);
             for (int i = 0; i < data.Length; i++)
-                Assert.AreEqual(data[i], recordBytes[i + 4], "At offset " + i);
+                ClassicAssert.AreEqual(data[i], recordBytes[i + 4], "At offset " + i);
         }
     }
 }

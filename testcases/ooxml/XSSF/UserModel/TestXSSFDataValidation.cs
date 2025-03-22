@@ -17,7 +17,7 @@
 using TestCases.SS.UserModel;
 using NPOI.SS.UserModel;
 using System.Collections.Generic;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using NPOI.SS.Util;
 using System;
 using System.Text;
@@ -57,7 +57,7 @@ namespace TestCases.XSSF.UserModel
              * 
              * 		= 52 ( Total )
              */
-            Assert.AreEqual(52, dataValidations.Count);
+            ClassicAssert.AreEqual(52, dataValidations.Count);
 
             IDataValidationHelper dataValidationHelper = sheet.GetDataValidationHelper();
             int[] validationTypes = new int[] { ValidationType.INTEGER, ValidationType.DECIMAL, ValidationType.TEXT_LENGTH };
@@ -146,7 +146,7 @@ namespace TestCases.XSSF.UserModel
                     IDataValidation validation = dataValidationHelper.CreateValidation(constraint, cellRangeAddressList);
                     SetOtherValidationParameters(validation);
                     sheet.AddValidationData(validation);
-                    Assert.AreEqual(++lastKnownNumValidations, ((XSSFSheet)sheet).GetDataValidations().Count);
+                    ClassicAssert.AreEqual(++lastKnownNumValidations, ((XSSFSheet)sheet).GetDataValidations().Count);
 
                     //Now create real formula based validation.
                     String formula1 = new CellReference(cell_13.RowIndex, cell_13.ColumnIndex).FormatAsString();
@@ -158,14 +158,14 @@ namespace TestCases.XSSF.UserModel
                         validation = dataValidationHelper.CreateValidation(constraint, cellRangeAddressList);
                         SetOtherValidationParameters(validation);
                         sheet.AddValidationData(validation);
-                        Assert.AreEqual(++lastKnownNumValidations, ((XSSFSheet)sheet).GetDataValidations().Count);
+                        ClassicAssert.AreEqual(++lastKnownNumValidations, ((XSSFSheet)sheet).GetDataValidations().Count);
 
                         cellRangeAddressList = new CellRangeAddressList();
                         cellRangeAddressList.AddCellRangeAddress(new CellRangeAddress(cell_22.RowIndex, cell_22.RowIndex, cell_22.ColumnIndex, cell_22.ColumnIndex));
                         validation = dataValidationHelper.CreateValidation(constraint, cellRangeAddressList);
                         SetOtherValidationParameters(validation);
                         sheet.AddValidationData(validation);
-                        Assert.AreEqual(++lastKnownNumValidations, ((XSSFSheet)sheet).GetDataValidations().Count);
+                        ClassicAssert.AreEqual(++lastKnownNumValidations, ((XSSFSheet)sheet).GetDataValidations().Count);
                     }
                     else if (i == 0 && j == 1)
                     {
@@ -175,7 +175,7 @@ namespace TestCases.XSSF.UserModel
                         validation = dataValidationHelper.CreateValidation(constraint, cellRangeAddressList);
                         SetOtherValidationParameters(validation);
                         sheet.AddValidationData(validation);
-                        Assert.AreEqual(++lastKnownNumValidations, ((XSSFSheet)sheet).GetDataValidations().Count);
+                        ClassicAssert.AreEqual(++lastKnownNumValidations, ((XSSFSheet)sheet).GetDataValidations().Count);
                     }
                     else
                     {
@@ -184,7 +184,7 @@ namespace TestCases.XSSF.UserModel
                         validation = dataValidationHelper.CreateValidation(constraint, cellRangeAddressList);
                         SetOtherValidationParameters(validation);
                         sheet.AddValidationData(validation);
-                        Assert.AreEqual(++lastKnownNumValidations, ((XSSFSheet)sheet).GetDataValidations().Count);
+                        ClassicAssert.AreEqual(++lastKnownNumValidations, ((XSSFSheet)sheet).GetDataValidations().Count);
                     }
                 }
 
@@ -219,7 +219,7 @@ namespace TestCases.XSSF.UserModel
                     IDataValidation validation = dataValidationHelper.CreateValidation(constraint, cellRangeAddressList);
                     SetOtherValidationParameters(validation);
                     sheet.AddValidationData(validation);
-                    Assert.AreEqual(++lastKnownNumValidations, ((XSSFSheet)sheet).GetDataValidations().Count);
+                    ClassicAssert.AreEqual(++lastKnownNumValidations, ((XSSFSheet)sheet).GetDataValidations().Count);
 
 
                     //Now create real formula based validation.
@@ -232,13 +232,13 @@ namespace TestCases.XSSF.UserModel
 
                     SetOtherValidationParameters(validation);
                     sheet.AddValidationData(validation);
-                    Assert.AreEqual(++lastKnownNumValidations, ((XSSFSheet)sheet).GetDataValidations().Count);
+                    ClassicAssert.AreEqual(++lastKnownNumValidations, ((XSSFSheet)sheet).GetDataValidations().Count);
                 }
             }
 
             workbook = (XSSFWorkbook)XSSFTestDataSamples.WriteOutAndReadBack(workbook);
             ISheet sheetAt = workbook.GetSheetAt(0);
-            Assert.AreEqual(lastKnownNumValidations, ((XSSFSheet)sheetAt).GetDataValidations().Count);
+            ClassicAssert.AreEqual(lastKnownNumValidations, ((XSSFSheet)sheetAt).GetDataValidations().Count);
         }
 
         protected void SetOtherValidationParameters(IDataValidation validation)
@@ -260,7 +260,7 @@ namespace TestCases.XSSF.UserModel
             {
                 XSSFSheet sheet = wb.CreateSheet() as XSSFSheet;
                 List<IDataValidation> lst = sheet.GetDataValidations();    //<-- works
-                Assert.AreEqual(0, lst.Count);
+                ClassicAssert.AreEqual(0, lst.Count);
 
                 //create the cell that will have the validation applied
                 sheet.CreateRow(0).CreateCell(0);
@@ -273,7 +273,7 @@ namespace TestCases.XSSF.UserModel
 
                 // this line caused XmlValueOutOfRangeException , see Bugzilla 3965
                 lst = sheet.GetDataValidations();
-                Assert.AreEqual(1, lst.Count);
+                ClassicAssert.AreEqual(1, lst.Count);
             }
             finally
             {
@@ -293,7 +293,7 @@ namespace TestCases.XSSF.UserModel
                 sheet.AddValidationData(validation);
 
                 List<IDataValidation> dataValidations = sheet.GetDataValidations();
-                Assert.AreEqual(true, (dataValidations[0] as XSSFDataValidation).GetCTDataValidation().allowBlank);
+                ClassicAssert.AreEqual(true, (dataValidations[0] as XSSFDataValidation).GetCTDataValidation().allowBlank);
             }
             finally
             {
@@ -315,7 +315,7 @@ namespace TestCases.XSSF.UserModel
                 sheet.AddValidationData(validation);
 
                 List<IDataValidation> dataValidations = sheet.GetDataValidations();
-                Assert.AreEqual(false, (dataValidations[0] as XSSFDataValidation).GetCTDataValidation().allowBlank);
+                ClassicAssert.AreEqual(false, (dataValidations[0] as XSSFDataValidation).GetCTDataValidation().allowBlank);
             }
             finally
             {
@@ -337,7 +337,7 @@ namespace TestCases.XSSF.UserModel
                 sheet.AddValidationData(validation);
 
                 List<IDataValidation> dataValidations = sheet.GetDataValidations();
-                Assert.AreEqual(true, (dataValidations[0] as XSSFDataValidation).GetCTDataValidation().allowBlank);
+                ClassicAssert.AreEqual(true, (dataValidations[0] as XSSFDataValidation).GetCTDataValidation().allowBlank);
             }
             finally
             {
@@ -361,10 +361,10 @@ namespace TestCases.XSSF.UserModel
                 XSSFDataValidation dataValidation = dataValidationHelper.CreateValidation(constraint, cellRangeAddressList) as XSSFDataValidation;
                 sheet.AddValidationData(dataValidation);
 
-                Assert.AreEqual(new CellRangeAddress(0, 0, 0, 0), sheet.GetDataValidations()[0].Regions.CellRangeAddresses[0]);
-                Assert.AreEqual(new CellRangeAddress(0, 0, 1, 1), sheet.GetDataValidations()[0].Regions.CellRangeAddresses[1]);
-                Assert.AreEqual(new CellRangeAddress(0, 0, 2, 2), sheet.GetDataValidations()[0].Regions.CellRangeAddresses[2]);
-                Assert.AreEqual("A1 B1 C1", dataValidation.GetCTDataValidation().sqref);
+                ClassicAssert.AreEqual(new CellRangeAddress(0, 0, 0, 0), sheet.GetDataValidations()[0].Regions.CellRangeAddresses[0]);
+                ClassicAssert.AreEqual(new CellRangeAddress(0, 0, 1, 1), sheet.GetDataValidations()[0].Regions.CellRangeAddresses[1]);
+                ClassicAssert.AreEqual(new CellRangeAddress(0, 0, 2, 2), sheet.GetDataValidations()[0].Regions.CellRangeAddresses[2]);
+                ClassicAssert.AreEqual("A1 B1 C1", dataValidation.GetCTDataValidation().sqref);
             }
             finally
             {
@@ -387,11 +387,11 @@ namespace TestCases.XSSF.UserModel
                 XSSFDataValidation dataValidation = dataValidationHelper.CreateValidation(constraint, cellRangeAddressList) as XSSFDataValidation;
                 sheet.AddValidationData(dataValidation);
 
-                Assert.AreEqual(1, sheet.GetDataValidations().Count);
+                ClassicAssert.AreEqual(1, sheet.GetDataValidations().Count);
 
                 sheet.RemoveDataValidation(dataValidation);
 
-                Assert.AreEqual(0, sheet.GetDataValidations().Count);
+                ClassicAssert.AreEqual(0, sheet.GetDataValidations().Count);
             }
             finally {
                 wb.Close();

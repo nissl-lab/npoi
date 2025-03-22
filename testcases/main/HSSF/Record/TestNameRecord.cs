@@ -18,7 +18,7 @@
 namespace TestCases.HSSF.Record
 {
     using System;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Formula.PTG;
     using NPOI.SS.UserModel;
@@ -50,8 +50,8 @@ namespace TestCases.HSSF.Record
 
             NameRecord name = new NameRecord(TestcaseRecordInputStream.Create(NameRecord.sid, examples));
             String description = name.DescriptionText;
-            Assert.IsNotNull(description);
-            Assert.IsTrue(description.EndsWith("Macro recorded 27-Sep-93 by ALLWOR"));
+            ClassicAssert.IsNotNull(description);
+            ClassicAssert.IsTrue(description.EndsWith("Macro recorded 27-Sep-93 by ALLWOR"));
         }
         [Test]
         public void TestReSerialize()
@@ -61,7 +61,7 @@ namespace TestCases.HSSF.Record
                             + "20 00 00 01 0B 00 00 00 01 00 00 00 00 00 00 06 3B 00 00 00 00 02 00 00 00 09 00]");
             RecordInputStream in1 = TestcaseRecordInputStream.Create(NameRecord.sid, data);
             NameRecord nr = new NameRecord(in1);
-            Assert.AreEqual(0x0020, nr.OptionFlag);
+            ClassicAssert.AreEqual(0x0020, nr.OptionFlag);
             byte[] data2 = nr.Serialize();
             TestcaseRecordInputStream.ConfirmRecordEncoding(NameRecord.sid, data, data2);
         }
@@ -78,7 +78,7 @@ namespace TestCases.HSSF.Record
             {
                 Assert.Fail("Identified bug 46174");
             }
-            Assert.AreEqual("Sheet1!$B$3", name.RefersToFormula);
+            ClassicAssert.AreEqual("Sheet1!$B$3", name.RefersToFormula);
             wb.Close();
         }
         [Test]
@@ -90,9 +90,9 @@ namespace TestCases.HSSF.Record
             wb.CreateSheet("Sheet1");
             name.NameName = (/*setter*/"test");
             name.RefersToFormula = (/*setter*/"Sheet1!A1+Sheet1!A2");
-            Assert.AreEqual("Sheet1!A1+Sheet1!A2", name.RefersToFormula);
+            ClassicAssert.AreEqual("Sheet1!A1+Sheet1!A2", name.RefersToFormula);
             name.RefersToFormula = (/*setter*/"5*6");
-            Assert.AreEqual("5*6", name.RefersToFormula);
+            ClassicAssert.AreEqual("5*6", name.RefersToFormula);
             wb.Close();
         }
 
@@ -684,7 +684,7 @@ namespace TestCases.HSSF.Record
 
             byte[] data2 = nr1.Serialize();
 
-            Assert.AreEqual(data1.Length, data2.Length);
+            ClassicAssert.AreEqual(data1.Length, data2.Length);
             RecordInputStream in2 = TestcaseRecordInputStream.Create(data2);
             NameRecord nr2 = new NameRecord(in2);
             assert_bug50244(nr2);
@@ -692,33 +692,33 @@ namespace TestCases.HSSF.Record
 
         private void assert_bug50244(NameRecord nr)
         {
-            Assert.AreEqual("wDataGruppeSerie.", nr.NameText);
+            ClassicAssert.AreEqual("wDataGruppeSerie.", nr.NameText);
             Ptg[] ptg = nr.NameDefinition;
-            Assert.AreEqual(1, ptg.Length);
+            ClassicAssert.AreEqual(1, ptg.Length);
             ArrayPtg arr = (ArrayPtg)ptg[0];
-            Assert.AreEqual(696, arr.RowCount);
-            Assert.AreEqual(1, arr.ColumnCount);
+            ClassicAssert.AreEqual(696, arr.RowCount);
+            ClassicAssert.AreEqual(1, arr.ColumnCount);
             Object[,] vals = arr.GetTokenArrayValues();
-            Assert.AreEqual("1.T20.001", vals[0,0]);
-            Assert.AreEqual("1.T20.010", vals[vals.Length - 1,0]);
+            ClassicAssert.AreEqual("1.T20.001", vals[0,0]);
+            ClassicAssert.AreEqual("1.T20.010", vals[vals.Length - 1,0]);
         }
         [Test]
         public void TestBug57923()
         {
             NameRecord record = new NameRecord();
-            Assert.AreEqual(0, record.ExternSheetNumber);
+            ClassicAssert.AreEqual(0, record.ExternSheetNumber);
 
             record.NameDefinition = (new Ptg[] { });
-            Assert.AreEqual(0, record.ExternSheetNumber);
+            ClassicAssert.AreEqual(0, record.ExternSheetNumber);
 
             record.NameDefinition = (new Ptg[] { new NamePtg(1) });
-            Assert.AreEqual(0, record.ExternSheetNumber);
+            ClassicAssert.AreEqual(0, record.ExternSheetNumber);
 
             record.NameDefinition = (new Ptg[] { new Area3DPtg("area", 1) });
-            Assert.AreEqual(1, record.ExternSheetNumber);
+            ClassicAssert.AreEqual(1, record.ExternSheetNumber);
 
             record.NameDefinition = (new Ptg[] { new Ref3DPtg("A1", 1) });
-            Assert.AreEqual(1, record.ExternSheetNumber);
+            ClassicAssert.AreEqual(1, record.ExternSheetNumber);
         }
     }
 

@@ -22,7 +22,7 @@ namespace TestCases.HSSF.UserModel
     using NPOI.HSSF.UserModel;
 
     using TestCases.HSSF;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.Record;
     using NPOI.Util;
     using NPOI.SS.UserModel;
@@ -71,24 +71,24 @@ namespace TestCases.HSSF.UserModel
             ICell d1 = row.GetCell(3);
             ICell e1 = row.GetCell(2);
 
-            Assert.AreEqual("SUM(BOB+JIM)", c1.CellFormula);
+            ClassicAssert.AreEqual("SUM(BOB+JIM)", c1.CellFormula);
 
             // Problem 1: java.lang.ArrayIndexOutOfBoundsException in NPOI.HSSF.Model.LinkTable$ExternalBookBlock.GetNameText
-            Assert.AreEqual("SUM('49612.xls'!BOB+'49612.xls'!JIM)", d1.CellFormula);
+            ClassicAssert.AreEqual("SUM('49612.xls'!BOB+'49612.xls'!JIM)", d1.CellFormula);
 
             //Problem 2
             //junit.framework.ComparisonFailure:
             //Expected :SUM('49612.xls'!BOB+'49612.xls'!JIM)
             //Actual   :SUM(BOB+JIM)
-            Assert.AreEqual("SUM('49612.xls'!BOB+'49612.xls'!JIM)", e1.CellFormula);
+            ClassicAssert.AreEqual("SUM('49612.xls'!BOB+'49612.xls'!JIM)", e1.CellFormula);
 
             HSSFFormulaEvaluator eval = new HSSFFormulaEvaluator(wb);
-            Assert.AreEqual(30.0, eval.Evaluate(c1).NumberValue, "Evaluating c1");
+            ClassicAssert.AreEqual(30.0, eval.Evaluate(c1).NumberValue, "Evaluating c1");
 
             //Problem 3:  java.lang.Exception: Unexpected arg eval type (NPOI.HSSF.Record.Formula.Eval.NameXEval)
-            Assert.AreEqual(30, eval.Evaluate(d1).NumberValue, "Evaluating d1");
+            ClassicAssert.AreEqual(30, eval.Evaluate(d1).NumberValue, "Evaluating d1");
 
-            Assert.AreEqual(30, eval.Evaluate(e1).NumberValue, "Evaluating e1");
+            ClassicAssert.AreEqual(30, eval.Evaluate(e1).NumberValue, "Evaluating e1");
         }
     }
 }

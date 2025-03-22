@@ -18,7 +18,7 @@
 using NPOI.SS.Util;
 using NPOI.SS.UserModel;
 using System;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using NPOI.SS.UserModel.Charts;
 using NPOI.XSSF.UserModel;
 
@@ -55,10 +55,10 @@ namespace TestCases.XSSF.UserModel.Charts
             IChartDataSource<double> ys = DataSources.FromNumericCellRange(sheet, CellRangeAddress.ValueOf("A2:J2"));
             IScatterChartSeries<string, double> series = scatterChartData.AddSeries(xs, ys);
 
-            Assert.IsNotNull(series);
+            ClassicAssert.IsNotNull(series);
 
-            Assert.AreEqual(1, scatterChartData.GetSeries().Count);
-            Assert.IsTrue(scatterChartData.GetSeries().Contains(series));
+            ClassicAssert.AreEqual(1, scatterChartData.GetSeries().Count);
+            ClassicAssert.IsTrue(scatterChartData.GetSeries().Contains(series));
 
             chart.Plot(scatterChartData, bottomAxis, leftAxis);
             wb.Close();

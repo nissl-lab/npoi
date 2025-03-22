@@ -26,6 +26,7 @@ namespace TestCases.HPSF.Basic
     using NPOI.HPSF;
     using NPOI.HPSF.Wellknown;
     using NPOI.Util;
+    using NUnit.Framework.Legacy;
 
 
     /**
@@ -91,7 +92,7 @@ namespace TestCases.HPSF.Basic
         {
             String[] expected = POI_FILES;
             for (int i = 0; i < expected.Length; i++)
-                Assert.AreEqual(poiFiles[i].GetName(), expected[i]);
+                ClassicAssert.AreEqual(poiFiles[i].GetName(), expected[i]);
         }
 
 
@@ -138,7 +139,7 @@ namespace TestCases.HPSF.Basic
                     o = ex;
                 }
                 in1.Close();
-                Assert.AreEqual(expected[i], o.GetType());
+                ClassicAssert.AreEqual(expected[i], o.GetType());
             }
         }
 
@@ -160,13 +161,13 @@ namespace TestCases.HPSF.Basic
             {
                 byte[] b = poiFiles[i].GetBytes();
                 PropertySet ps = PropertySetFactory.Create(new ByteArrayInputStream(b));
-                Assert.AreEqual(ps.ByteOrder, BYTE_ORDER);
-                Assert.AreEqual(ps.Format, FORMAT);
-                Assert.AreEqual(ps.OSVersion, OS_VERSION);
+                ClassicAssert.AreEqual(ps.ByteOrder, BYTE_ORDER);
+                ClassicAssert.AreEqual(ps.Format, FORMAT);
+                ClassicAssert.AreEqual(ps.OSVersion, OS_VERSION);
                 CollectionAssert.AreEqual(CLASS_ID, ps.ClassID.Bytes);
-                Assert.AreEqual(SECTION_COUNT[i], ps.SectionCount);
-                Assert.AreEqual(IS_SUMMARY_INFORMATION[i], ps.IsSummaryInformation);
-                Assert.AreEqual(IS_DOCUMENT_SUMMARY_INFORMATION[i], ps.IsDocumentSummaryInformation);
+                ClassicAssert.AreEqual(SECTION_COUNT[i], ps.SectionCount);
+                ClassicAssert.AreEqual(IS_SUMMARY_INFORMATION[i], ps.IsSummaryInformation);
+                ClassicAssert.AreEqual(IS_DOCUMENT_SUMMARY_INFORMATION[i], ps.IsDocumentSummaryInformation);
             }
         }
 
@@ -188,13 +189,12 @@ namespace TestCases.HPSF.Basic
                     (poiFiles[0].GetBytes()));
             IList sections = si.Sections;
             Section s = (Section)sections[0];
-            Assert.IsTrue(Arrays.Equals
+            ClassicAssert.IsTrue(Arrays.Equals
                 (s.FormatID.Bytes, SectionIDMap.SUMMARY_INFORMATION_ID));
-            Assert.IsNotNull(s.Properties);
-            Assert.AreEqual(17, s.PropertyCount);
-            Assert.AreEqual("Titel", s.GetProperty(2));
-            //Assert.assertEquals(1764, s.getSize());
-            Assert.AreEqual(1764, s.Size);
+            ClassicAssert.IsNotNull(s.Properties);
+            ClassicAssert.AreEqual(17, s.PropertyCount);
+            ClassicAssert.AreEqual("Titel", s.GetProperty(2));
+            ClassicAssert.AreEqual(1764, s.Size);
         }
 
     }

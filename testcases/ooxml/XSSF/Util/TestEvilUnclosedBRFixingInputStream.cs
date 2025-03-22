@@ -16,7 +16,7 @@
 ==================================================================== */
 
 using System.IO;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using System.Text;
 using NPOI.Util;
 using NPOI.XSSF.Util;
@@ -37,7 +37,7 @@ namespace TestCases.XSSF.Util
                   new ByteArrayInputStream(ok)
             );
 
-            Assert.IsTrue(Arrays.Equals(ok, IOUtils.ToByteArray(inp)));
+            ClassicAssert.IsTrue(Arrays.Equals(ok, IOUtils.ToByteArray(inp)));
             inp.Close();
         }
         [Test]
@@ -50,7 +50,7 @@ namespace TestCases.XSSF.Util
                   new ByteArrayInputStream(orig)
             );
 
-            Assert.IsTrue(Arrays.Equals(fixed1, IOUtils.ToByteArray(inp)));
+            ClassicAssert.IsTrue(Arrays.Equals(fixed1, IOUtils.ToByteArray(inp)));
             inp.Close();
         }
 
@@ -88,7 +88,7 @@ namespace TestCases.XSSF.Util
                 }
 
                 byte[] result = bout.ToArray();
-                Assert.IsTrue(Arrays.Equals(fixed1, result));
+                ClassicAssert.IsTrue(Arrays.Equals(fixed1, result));
                 inp.Close();
             }
         }

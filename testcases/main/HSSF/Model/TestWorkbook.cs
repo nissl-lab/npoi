@@ -18,7 +18,7 @@
 namespace TestCases.HSSF.Model
 {
     using System;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Formula;
@@ -42,56 +42,56 @@ namespace TestCases.HSSF.Model
             HSSFWorkbook hwb = new HSSFWorkbook();
             InternalWorkbook wb = TestHSSFWorkbook.GetInternalWorkbook(hwb);
 
-            Assert.AreEqual(4, wb.NumberOfFontRecords);
-            Assert.AreEqual(68, wb.Records.Count);
+            ClassicAssert.AreEqual(4, wb.NumberOfFontRecords);
+            ClassicAssert.AreEqual(68, wb.Records.Count);
 
             FontRecord f1 = wb.GetFontRecordAt(0);
             FontRecord f4 = wb.GetFontRecordAt(3);
 
-            Assert.AreEqual(0, wb.GetFontIndex(f1));
-            Assert.AreEqual(3, wb.GetFontIndex(f4));
+            ClassicAssert.AreEqual(0, wb.GetFontIndex(f1));
+            ClassicAssert.AreEqual(3, wb.GetFontIndex(f4));
 
-            Assert.AreEqual(f1, wb.GetFontRecordAt(0));
-            Assert.AreEqual(f4, wb.GetFontRecordAt(3));
+            ClassicAssert.AreEqual(f1, wb.GetFontRecordAt(0));
+            ClassicAssert.AreEqual(f4, wb.GetFontRecordAt(3));
 
             // There is no 4! new ones go in at 5
 
             FontRecord n = wb.CreateNewFont();
-            Assert.AreEqual(69, wb.Records.Count);
-            Assert.AreEqual(5, wb.NumberOfFontRecords);
-            Assert.AreEqual(5, wb.GetFontIndex(n));
-            Assert.AreEqual(n, wb.GetFontRecordAt(5));
+            ClassicAssert.AreEqual(69, wb.Records.Count);
+            ClassicAssert.AreEqual(5, wb.NumberOfFontRecords);
+            ClassicAssert.AreEqual(5, wb.GetFontIndex(n));
+            ClassicAssert.AreEqual(n, wb.GetFontRecordAt(5));
 
             // And another
             FontRecord n6 = wb.CreateNewFont();
-            Assert.AreEqual(70, wb.Records.Count);
-            Assert.AreEqual(6, wb.NumberOfFontRecords);
-            Assert.AreEqual(6, wb.GetFontIndex(n6));
-            Assert.AreEqual(n6, wb.GetFontRecordAt(6));
+            ClassicAssert.AreEqual(70, wb.Records.Count);
+            ClassicAssert.AreEqual(6, wb.NumberOfFontRecords);
+            ClassicAssert.AreEqual(6, wb.GetFontIndex(n6));
+            ClassicAssert.AreEqual(n6, wb.GetFontRecordAt(6));
 
 
             // Now remove the one formerly at 5
-            Assert.AreEqual(70, wb.Records.Count);
+            ClassicAssert.AreEqual(70, wb.Records.Count);
             wb.RemoveFontRecord(n);
 
             // Check that 6 has gone to 5
-            Assert.AreEqual(69, wb.Records.Count);
-            Assert.AreEqual(5, wb.NumberOfFontRecords);
-            Assert.AreEqual(5, wb.GetFontIndex(n6));
-            Assert.AreEqual(n6, wb.GetFontRecordAt(5));
+            ClassicAssert.AreEqual(69, wb.Records.Count);
+            ClassicAssert.AreEqual(5, wb.NumberOfFontRecords);
+            ClassicAssert.AreEqual(5, wb.GetFontIndex(n6));
+            ClassicAssert.AreEqual(n6, wb.GetFontRecordAt(5));
 
             // Check that the earlier ones are unChanged
-            Assert.AreEqual(0, wb.GetFontIndex(f1));
-            Assert.AreEqual(3, wb.GetFontIndex(f4));
-            Assert.AreEqual(f1, wb.GetFontRecordAt(0));
-            Assert.AreEqual(f4, wb.GetFontRecordAt(3));
+            ClassicAssert.AreEqual(0, wb.GetFontIndex(f1));
+            ClassicAssert.AreEqual(3, wb.GetFontIndex(f4));
+            ClassicAssert.AreEqual(f1, wb.GetFontRecordAt(0));
+            ClassicAssert.AreEqual(f4, wb.GetFontRecordAt(3));
 
             // Finally, add another one
             FontRecord n7 = wb.CreateNewFont();
-            Assert.AreEqual(70, wb.Records.Count);
-            Assert.AreEqual(6, wb.NumberOfFontRecords);
-            Assert.AreEqual(6, wb.GetFontIndex(n7));
-            Assert.AreEqual(n7, wb.GetFontRecordAt(6));
+            ClassicAssert.AreEqual(70, wb.Records.Count);
+            ClassicAssert.AreEqual(6, wb.NumberOfFontRecords);
+            ClassicAssert.AreEqual(6, wb.GetFontIndex(n7));
+            ClassicAssert.AreEqual(n7, wb.GetFontRecordAt(6));
 
             hwb.Close();
         }
@@ -111,7 +111,7 @@ namespace TestCases.HSSF.Model
         {
             HSSFWorkbook hwb = new HSSFWorkbook();
             InternalWorkbook wb = TestHSSFWorkbook.GetInternalWorkbook(hwb);
-            Assert.IsNotNull(wb.GetNameXPtg("ISODD", UDFFinder.GetDefault()));
+            ClassicAssert.IsNotNull(wb.GetNameXPtg("ISODD", UDFFinder.GetDefault()));
 
             FreeRefFunction1 NotImplemented = new FreeRefFunction1();
 
@@ -123,10 +123,10 @@ namespace TestCases.HSSF.Model
             UDFFinder udff2 = new DefaultUDFFinder(new String[] { "myFunc2", },
                     new FreeRefFunction[] { NotImplemented });
             UDFFinder udff = new AggregatingUDFFinder(udff1, udff2);
-            Assert.IsNotNull(wb.GetNameXPtg("myFunc", udff));
-            Assert.IsNotNull(wb.GetNameXPtg("myFunc2", udff));
+            ClassicAssert.IsNotNull(wb.GetNameXPtg("myFunc", udff));
+            ClassicAssert.IsNotNull(wb.GetNameXPtg("myFunc2", udff));
 
-            Assert.IsNull(wb.GetNameXPtg("myFunc3", udff));  // myFunc3 is unknown
+            ClassicAssert.IsNull(wb.GetNameXPtg("myFunc3", udff));  // myFunc3 is unknown
 
             hwb.Close();
         }
@@ -134,27 +134,27 @@ namespace TestCases.HSSF.Model
         public void TestRecalcId()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
-            Assert.IsFalse(wb.ForceFormulaRecalculation);
+            ClassicAssert.IsFalse(wb.ForceFormulaRecalculation);
 
             InternalWorkbook iwb = TestHSSFWorkbook.GetInternalWorkbook(wb);
             int countryPos = iwb.FindFirstRecordLocBySid(CountryRecord.sid);
-            Assert.IsTrue(countryPos != -1);
+            ClassicAssert.IsTrue(countryPos != -1);
             // RecalcIdRecord is not present in new workbooks
-            Assert.AreEqual(null, iwb.FindFirstRecordBySid(RecalcIdRecord.sid));
+            ClassicAssert.AreEqual(null, iwb.FindFirstRecordBySid(RecalcIdRecord.sid));
             RecalcIdRecord record = iwb.RecalcId;
-            Assert.IsNotNull(record);
-            Assert.AreSame(record, iwb.RecalcId);
+            ClassicAssert.IsNotNull(record);
+            ClassicAssert.AreSame(record, iwb.RecalcId);
 
-            Assert.AreSame(record, iwb.FindFirstRecordBySid(RecalcIdRecord.sid));
-            Assert.AreEqual(countryPos + 1, iwb.FindFirstRecordLocBySid(RecalcIdRecord.sid));
+            ClassicAssert.AreSame(record, iwb.FindFirstRecordBySid(RecalcIdRecord.sid));
+            ClassicAssert.AreEqual(countryPos + 1, iwb.FindFirstRecordLocBySid(RecalcIdRecord.sid));
 
             record.EngineId = (/*setter*/100);
-            Assert.AreEqual(100, record.EngineId);
-            Assert.IsTrue(wb.ForceFormulaRecalculation);
+            ClassicAssert.AreEqual(100, record.EngineId);
+            ClassicAssert.IsTrue(wb.ForceFormulaRecalculation);
 
             wb.ForceFormulaRecalculation = (/*setter*/true); // resets the EngineId flag to zero
-            Assert.AreEqual(0, record.EngineId);
-            Assert.IsFalse(wb.ForceFormulaRecalculation);
+            ClassicAssert.AreEqual(0, record.EngineId);
+            ClassicAssert.IsFalse(wb.ForceFormulaRecalculation);
 
             wb.Close();
         }

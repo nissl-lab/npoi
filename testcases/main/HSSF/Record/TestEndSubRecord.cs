@@ -23,7 +23,7 @@ namespace TestCases.HSSF.Record
 
     using System;
     using NPOI.HSSF.Record;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     /**
      * Tests the serialization and deserialization of the EndSubRecord
@@ -42,7 +42,7 @@ namespace TestCases.HSSF.Record
         {
             EndSubRecord record = new EndSubRecord(TestcaseRecordInputStream.Create((short)0x00,  data),data.Length);
 
-            Assert.AreEqual(0, record.DataSize);
+            ClassicAssert.AreEqual(0, record.DataSize);
         }
         [Test]
         public void TestStore()
@@ -50,9 +50,9 @@ namespace TestCases.HSSF.Record
             EndSubRecord record = new EndSubRecord();
 
             byte[] recordBytes = record.Serialize();
-            Assert.AreEqual(recordBytes.Length - 4, data.Length);
+            ClassicAssert.AreEqual(recordBytes.Length - 4, data.Length);
             for (int i = 0; i < data.Length; i++)
-                Assert.AreEqual(data[i], recordBytes[i + 4], "At offset " + i);
+                ClassicAssert.AreEqual(data[i], recordBytes[i + 4], "At offset " + i);
         }
     }
 }

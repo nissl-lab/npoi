@@ -21,7 +21,7 @@ namespace TestCases.HSSF.Model
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.PivotTable;
     using NPOI.Util;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.Model;
 
     /**
@@ -51,12 +51,12 @@ namespace TestCases.HSSF.Model
                 Assert.Fail("Identified bug 46280b");
             }
             RecordStream rbStream = rbr.PlainRecordStream;
-            Assert.AreEqual(inRecs[0], rbStream.GetNext());
-            Assert.AreEqual(inRecs[1], rbStream.GetNext());
-            Assert.IsFalse(rbStream.HasNext());
-            Assert.IsTrue(rs.HasNext());
-            Assert.AreEqual(inRecs[2], rs.GetNext());
-            Assert.AreEqual(inRecs[3], rs.GetNext());
+            ClassicAssert.AreEqual(inRecs[0], rbStream.GetNext());
+            ClassicAssert.AreEqual(inRecs[1], rbStream.GetNext());
+            ClassicAssert.IsFalse(rbStream.HasNext());
+            ClassicAssert.IsTrue(rs.HasNext());
+            ClassicAssert.AreEqual(inRecs[2], rs.GetNext());
+            ClassicAssert.AreEqual(inRecs[3], rs.GetNext());
         }
     }
 }

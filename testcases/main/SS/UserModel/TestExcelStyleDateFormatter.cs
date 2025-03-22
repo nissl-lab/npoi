@@ -8,7 +8,7 @@ namespace TestCases.SS.UserModel
 {
     using NPOI.Util;
     using NPOI.SS.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using System.Globalization;
     using NPOI.SS.Util;
 
@@ -91,7 +91,7 @@ namespace TestCases.SS.UserModel
                                     locale).ToString();
                                     //new FieldPosition(java.text.DateFormat.MONTH_FIELD)).ToString();
                     //System.err.Println(result +  " - " + GetUnicode(result[0]));
-                    Assert.AreEqual(GetUnicode(testMap[locale][i]), GetUnicode(result[0]),
+                    ClassicAssert.AreEqual(GetUnicode(testMap[locale][i]), GetUnicode(result[0]),
                         "current culture:"+ locale.ToString() + ", date="+ testDates[i]);
                 }
             }
@@ -105,8 +105,8 @@ namespace TestCases.SS.UserModel
         [Test]
         public void TestConstruct()
         {
-            Assert.IsNotNull(new ExcelStyleDateFormatter(EXCEL_DATE_FORMAT, LocaleUtil.GetUserLocale()));
-            Assert.IsNotNull(new ExcelStyleDateFormatter(EXCEL_DATE_FORMAT));
+            ClassicAssert.IsNotNull(new ExcelStyleDateFormatter(EXCEL_DATE_FORMAT, LocaleUtil.GetUserLocale()));
+            ClassicAssert.IsNotNull(new ExcelStyleDateFormatter(EXCEL_DATE_FORMAT));
         }
 
         [Test]
@@ -120,7 +120,7 @@ namespace TestCases.SS.UserModel
                 String dateStr = new ExcelStyleDateFormatter(EXCEL_DATE_FORMAT).Format(
                         new SimpleDateFormat("yyyy-MM-dd", ROOT).Parse("2016-03-26"),
                         CultureInfo.GetCultureInfo("de-DE"));
-                Assert.AreEqual("M", dateStr);
+                ClassicAssert.AreEqual("M", dateStr);
             }
             finally
             {
@@ -133,7 +133,7 @@ namespace TestCases.SS.UserModel
         {
             String dateStr = new ExcelStyleDateFormatter("yyyy|" + EXCEL_DATE_FORMAT + "|").Format(
                     new SimpleDateFormat("yyyy-MM-dd", ROOT).Parse("2016-03-26"), ROOT);
-            Assert.AreEqual("2016|M|", dateStr);
+            ClassicAssert.AreEqual("2016|M|", dateStr);
         }
     }
 }

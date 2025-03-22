@@ -19,7 +19,7 @@ namespace TestCases.HSSF.UserModel
 {
     using System;
     using System.IO;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using TestCases.HSSF;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
@@ -53,34 +53,34 @@ namespace TestCases.HSSF.UserModel
             sheet = wb.GetSheet("WebLinks");
             cell = sheet.GetRow(4).GetCell(0);
             link = cell.Hyperlink;
-            Assert.IsNotNull(link);
-            Assert.AreEqual("POI", link.Label);
-            Assert.AreEqual("POI", cell.RichStringCellValue.String);
-            Assert.AreEqual("http://poi.apache.org/", link.Address);
+            ClassicAssert.IsNotNull(link);
+            ClassicAssert.AreEqual("POI", link.Label);
+            ClassicAssert.AreEqual("POI", cell.RichStringCellValue.String);
+            ClassicAssert.AreEqual("http://poi.apache.org/", link.Address);
 
             cell = sheet.GetRow(8).GetCell(0);
             link = cell.Hyperlink;
-            Assert.IsNotNull(link);
-            Assert.AreEqual("HSSF", link.Label);
-            Assert.AreEqual("HSSF", cell.RichStringCellValue.String);
-            Assert.AreEqual("http://poi.apache.org/hssf/", link.Address);
+            ClassicAssert.IsNotNull(link);
+            ClassicAssert.AreEqual("HSSF", link.Label);
+            ClassicAssert.AreEqual("HSSF", cell.RichStringCellValue.String);
+            ClassicAssert.AreEqual("http://poi.apache.org/hssf/", link.Address);
 
             sheet = wb.GetSheet("Emails");
             cell = sheet.GetRow(4).GetCell(0);
             link = cell.Hyperlink;
-            Assert.IsNotNull(link);
-            Assert.AreEqual("dev", link.Label);
-            Assert.AreEqual("dev", cell.RichStringCellValue.String);
-            Assert.AreEqual("mailto:dev@poi.apache.org", link.Address);
+            ClassicAssert.IsNotNull(link);
+            ClassicAssert.AreEqual("dev", link.Label);
+            ClassicAssert.AreEqual("dev", cell.RichStringCellValue.String);
+            ClassicAssert.AreEqual("mailto:dev@poi.apache.org", link.Address);
 
             sheet = wb.GetSheet("Internal");
             cell = sheet.GetRow(4).GetCell(0);
             link = cell.Hyperlink;
-            Assert.IsNotNull(link);
-            Assert.AreEqual("Link To First Sheet", link.Label);
-            Assert.AreEqual("Link To First Sheet", cell.RichStringCellValue.String);
-            Assert.AreEqual("WebLinks!A1", link.TextMark);
-            Assert.AreEqual("WebLinks!A1", link.Address);
+            ClassicAssert.IsNotNull(link);
+            ClassicAssert.AreEqual("Link To First Sheet", link.Label);
+            ClassicAssert.AreEqual("Link To First Sheet", cell.RichStringCellValue.String);
+            ClassicAssert.AreEqual("WebLinks!A1", link.TextMark);
+            ClassicAssert.AreEqual("WebLinks!A1", link.Address);
         }
         [Test]
         public void TestModify()
@@ -105,8 +105,8 @@ namespace TestCases.HSSF.UserModel
             sheet = wb.GetSheet("WebLinks");
             cell = sheet.GetRow(4).GetCell(0);
             link = cell.Hyperlink;
-            Assert.IsNotNull(link);
-            Assert.AreEqual("www.apache.org", link.Address);
+            ClassicAssert.IsNotNull(link);
+            ClassicAssert.AreEqual("www.apache.org", link.Address);
 
         }
         /**
@@ -149,15 +149,15 @@ namespace TestCases.HSSF.UserModel
 
             cell = sheet.GetRow(0).GetCell(0);
             link = cell.Hyperlink;
-            Assert.IsNotNull(link);
-            Assert.AreEqual("'Target Sheet'!A1", link.TextMark);
-            Assert.AreEqual("'Target Sheet'!A1", link.Address);
+            ClassicAssert.IsNotNull(link);
+            ClassicAssert.AreEqual("'Target Sheet'!A1", link.TextMark);
+            ClassicAssert.AreEqual("'Target Sheet'!A1", link.Address);
 
             cell = sheet.GetRow(1).GetCell(0);
             link = cell.Hyperlink;
-            Assert.IsNotNull(link);
-            Assert.AreEqual("'Hyperlinks'!A1", link.TextMark);
-            Assert.AreEqual("'Hyperlinks'!A1", link.Address);
+            ClassicAssert.IsNotNull(link);
+            ClassicAssert.AreEqual("'Hyperlinks'!A1", link.TextMark);
+            ClassicAssert.AreEqual("'Hyperlinks'!A1", link.Address);
         }
                 /**
          * Test that NPOI.SS.UserModel.Sheet#shiftRows moves hyperlinks,
@@ -174,36 +174,36 @@ namespace TestCases.HSSF.UserModel
             //verify existing hyperlink in A3
             ICell cell1 = sheet.GetRow(2).GetCell(0);
             IHyperlink link1 = cell1.Hyperlink;
-            Assert.IsNotNull(link1);
-            Assert.AreEqual(2, link1.FirstRow);
-            Assert.AreEqual(2, link1.LastRow);
+            ClassicAssert.IsNotNull(link1);
+            ClassicAssert.AreEqual(2, link1.FirstRow);
+            ClassicAssert.AreEqual(2, link1.LastRow);
 
             //assign a hyperlink to A4
             HSSFHyperlink link2 = new HSSFHyperlink(HyperlinkType.Document);
             link2.Address=("Sheet2!A2");
             ICell cell2 = sheet.GetRow(3).GetCell(0);
             cell2.Hyperlink=(link2);
-            Assert.AreEqual(3, link2.FirstRow);
-            Assert.AreEqual(3, link2.LastRow);
+            ClassicAssert.AreEqual(3, link2.FirstRow);
+            ClassicAssert.AreEqual(3, link2.LastRow);
 
             //move the 3rd row two rows down
             sheet.ShiftRows(sheet.FirstRowNum, sheet.LastRowNum, 2);
 
             //cells A3 and A4 don't contain hyperlinks anymore
-            Assert.IsNull(sheet.GetRow(2).GetCell(0).Hyperlink);
-            Assert.IsNull(sheet.GetRow(3).GetCell(0).Hyperlink);
+            ClassicAssert.IsNull(sheet.GetRow(2).GetCell(0).Hyperlink);
+            ClassicAssert.IsNull(sheet.GetRow(3).GetCell(0).Hyperlink);
 
             //the first hypelink now belongs to A5
             IHyperlink link1_shifted = sheet.GetRow(2 + 2).GetCell(0).Hyperlink;
-            Assert.IsNotNull(link1_shifted);
-            Assert.AreEqual(4, link1_shifted.FirstRow);
-            Assert.AreEqual(4, link1_shifted.LastRow);
+            ClassicAssert.IsNotNull(link1_shifted);
+            ClassicAssert.AreEqual(4, link1_shifted.FirstRow);
+            ClassicAssert.AreEqual(4, link1_shifted.LastRow);
 
             //the second hypelink now belongs to A6
             IHyperlink link2_shifted = sheet.GetRow(3 + 2).GetCell(0).Hyperlink;
-            Assert.IsNotNull(link2_shifted);
-            Assert.AreEqual(5, link2_shifted.FirstRow);
-            Assert.AreEqual(5, link2_shifted.LastRow);
+            ClassicAssert.IsNotNull(link2_shifted);
+            ClassicAssert.AreEqual(5, link2_shifted.FirstRow);
+            ClassicAssert.AreEqual(5, link2_shifted.LastRow);
         }
         [Test]
         public void TestCreate()
@@ -255,23 +255,23 @@ namespace TestCases.HSSF.UserModel
             sheet = wb.GetSheet("Hyperlinks");
             cell = sheet.GetRow(0).GetCell(0);
             link = cell.Hyperlink;
-            Assert.IsNotNull(link);
-            Assert.AreEqual("http://poi.apache.org/", link.Address);
+            ClassicAssert.IsNotNull(link);
+            ClassicAssert.AreEqual("http://poi.apache.org/", link.Address);
 
             cell = sheet.GetRow(1).GetCell(0);
             link = cell.Hyperlink;
-            Assert.IsNotNull(link);
-            Assert.AreEqual("link1.xls", link.Address);
+            ClassicAssert.IsNotNull(link);
+            ClassicAssert.AreEqual("link1.xls", link.Address);
 
             cell = sheet.GetRow(2).GetCell(0);
             link = cell.Hyperlink;
-            Assert.IsNotNull(link);
-            Assert.AreEqual("mailto:poi@apache.org?subject=Hyperlinks", link.Address);
+            ClassicAssert.IsNotNull(link);
+            ClassicAssert.AreEqual("mailto:poi@apache.org?subject=Hyperlinks", link.Address);
 
             cell = sheet.GetRow(3).GetCell(0);
             link = cell.Hyperlink;
-            Assert.IsNotNull(link);
-            Assert.AreEqual("'Target Sheet'!A1", link.TextMark);
+            ClassicAssert.IsNotNull(link);
+            ClassicAssert.AreEqual("'Target Sheet'!A1", link.TextMark);
         }
         [Test]
         public void TestCloneSheet()
@@ -285,13 +285,13 @@ namespace TestCases.HSSF.UserModel
 
             cell = sheet.GetRow(4).GetCell(0);
             link = cell.Hyperlink;
-            Assert.IsNotNull(link);
-            Assert.AreEqual("http://poi.apache.org/", link.Address);
+            ClassicAssert.IsNotNull(link);
+            ClassicAssert.AreEqual("http://poi.apache.org/", link.Address);
 
             cell = sheet.GetRow(8).GetCell(0);
             link = cell.Hyperlink;
-            Assert.IsNotNull(link);
-            Assert.AreEqual("http://poi.apache.org/hssf/", link.Address);
+            ClassicAssert.IsNotNull(link);
+            ClassicAssert.AreEqual("http://poi.apache.org/hssf/", link.Address);
         }
 
         public override IHyperlink CopyHyperlink(IHyperlink link)
@@ -310,10 +310,10 @@ namespace TestCases.HSSF.UserModel
             xlink.setTooltip("tooltip");
             HSSFHyperlink hlink = new HSSFHyperlink(xlink);
 
-            Assert.AreEqual("http://poi.apache.org/", hlink.Address);
-            Assert.AreEqual("D3", new CellReference(hlink.FirstRow, hlink.FirstColumn).formatAsString());
+            ClassicAssert.AreEqual("http://poi.apache.org/", hlink.Address);
+            ClassicAssert.AreEqual("D3", new CellReference(hlink.FirstRow, hlink.FirstColumn).formatAsString());
             // Are HSSFHyperlink.label and XSSFHyperlink.tooltip the same? If so, perhaps one of these needs renamed for a consistent Hyperlink interface
-            // Assert.AreEqual("tooltip", hlink.Label);
+            // ClassicAssert.AreEqual("tooltip", hlink.Label);
 
             wb.close();
         }*/

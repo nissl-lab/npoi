@@ -23,7 +23,7 @@ namespace TestCases.HSSF.Record.Chart
     using System;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.Chart;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     /**
      * Tests the serialization and deserialization of the ValueRangeRecord
@@ -54,23 +54,23 @@ namespace TestCases.HSSF.Record.Chart
         {
 
             ValueRangeRecord record = new ValueRangeRecord(TestcaseRecordInputStream.Create(0x101f, data));
-            Assert.AreEqual(0.0, record.MinimumAxisValue, 0.001);
-            Assert.AreEqual(0.0, record.MaximumAxisValue, 0.001);
-            Assert.AreEqual(0.0, record.MajorIncrement, 0.001);
-            Assert.AreEqual(0.0, record.MinorIncrement, 0.001);
-            Assert.AreEqual(0.0, record.CategoryAxisCross, 0.001);
-            Assert.AreEqual(0x011f, record.Options);
-            Assert.AreEqual(true, record.IsAutomaticMinimum);
-            Assert.AreEqual(true, record.IsAutomaticMaximum);
-            Assert.AreEqual(true, record.IsAutomaticMajor);
-            Assert.AreEqual(true, record.IsAutomaticMinor);
-            Assert.AreEqual(true, record.IsAutomaticCategoryCrossing);
-            Assert.AreEqual(false, record.IsLogarithmicScale);
-            Assert.AreEqual(false, record.IsValuesInReverse);
-            Assert.AreEqual(false, record.IsCrossCategoryAxisAtMaximum);
-            Assert.AreEqual(true, record.IsReserved);
+            ClassicAssert.AreEqual(0.0, record.MinimumAxisValue, 0.001);
+            ClassicAssert.AreEqual(0.0, record.MaximumAxisValue, 0.001);
+            ClassicAssert.AreEqual(0.0, record.MajorIncrement, 0.001);
+            ClassicAssert.AreEqual(0.0, record.MinorIncrement, 0.001);
+            ClassicAssert.AreEqual(0.0, record.CategoryAxisCross, 0.001);
+            ClassicAssert.AreEqual(0x011f, record.Options);
+            ClassicAssert.AreEqual(true, record.IsAutomaticMinimum);
+            ClassicAssert.AreEqual(true, record.IsAutomaticMaximum);
+            ClassicAssert.AreEqual(true, record.IsAutomaticMajor);
+            ClassicAssert.AreEqual(true, record.IsAutomaticMinor);
+            ClassicAssert.AreEqual(true, record.IsAutomaticCategoryCrossing);
+            ClassicAssert.AreEqual(false, record.IsLogarithmicScale);
+            ClassicAssert.AreEqual(false, record.IsValuesInReverse);
+            ClassicAssert.AreEqual(false, record.IsCrossCategoryAxisAtMaximum);
+            ClassicAssert.AreEqual(true, record.IsReserved);
 
-            Assert.AreEqual(42 + 4, record.RecordSize);
+            ClassicAssert.AreEqual(42 + 4, record.RecordSize);
         }
         [Test]
         public void TestStore()
@@ -92,9 +92,9 @@ namespace TestCases.HSSF.Record.Chart
             record.IsReserved=(true);
 
             byte[] recordBytes = record.Serialize();
-            Assert.AreEqual(recordBytes.Length - 4, data.Length);
+            ClassicAssert.AreEqual(recordBytes.Length - 4, data.Length);
             for (int i = 0; i < data.Length; i++)
-                Assert.AreEqual(data[i], recordBytes[i + 4], "At offset " + i);
+                ClassicAssert.AreEqual(data[i], recordBytes[i + 4], "At offset " + i);
         }
     }
 }

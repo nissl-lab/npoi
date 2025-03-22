@@ -16,7 +16,7 @@
 ==================================================================== */
 
 using NPOI.SS.UserModel;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using NPOI.Util;
 using NPOI.SS.Util;
 using System.IO;
@@ -53,12 +53,12 @@ namespace TestCases.SS.UserModel
 
             double emuPX = Units.EMU_PER_PIXEL;
 
-            Assert.AreEqual(inpDim.Height, cmpDim.Height, emuPX * 6, "the image height differs");
-            Assert.AreEqual(inpDim.Width, cmpDim.Width, emuPX * 6, "the image width differs");
-            Assert.AreEqual(inpCA.Col1, cmpCA.Col1, "the starting column differs");
-            Assert.AreEqual(inpCA.Dx1, cmpCA.Dx1, 1, "the column x-offset differs");
-            Assert.AreEqual(inpCA.Dy1, cmpCA.Dy1, 1, "the column y-offset differs");
-            Assert.AreEqual(inpCA.Col2, cmpCA.Col2, "the ending columns differs");
+            ClassicAssert.AreEqual(inpDim.Height, cmpDim.Height, emuPX * 6, "the image height differs");
+            ClassicAssert.AreEqual(inpDim.Width, cmpDim.Width, emuPX * 6, "the image width differs");
+            ClassicAssert.AreEqual(inpCA.Col1, cmpCA.Col1, "the starting column differs");
+            ClassicAssert.AreEqual(inpCA.Dx1, cmpCA.Dx1, 1, "the column x-offset differs");
+            ClassicAssert.AreEqual(inpCA.Dy1, cmpCA.Dy1, 1, "the column y-offset differs");
+            ClassicAssert.AreEqual(inpCA.Col2, cmpCA.Col2, "the ending columns differs");
             // can't compare row heights because of variable test heights
 
             input.Resize();
@@ -66,8 +66,8 @@ namespace TestCases.SS.UserModel
 
             Size imgDim = input.GetImageDimension();
 
-            Assert.AreEqual(imgDim.Height, inpDim.Height / emuPX, 1, "the image height differs");
-            Assert.AreEqual(imgDim.Width, inpDim.Width / emuPX, 1, "the image width differs");
+            ClassicAssert.AreEqual(imgDim.Height, inpDim.Height / emuPX, 1, "the image height differs");
+            ClassicAssert.AreEqual(imgDim.Width, inpDim.Width / emuPX, 1, "the image width differs");
         }
 
         [Test]
@@ -136,7 +136,7 @@ namespace TestCases.SS.UserModel
         {
             Image img = Image.Load(new MemoryStream(image));
 
-            Assert.IsNotNull(img);
+            ClassicAssert.IsNotNull(img);
 
             return new Point(img.Width, img.Height);
         }

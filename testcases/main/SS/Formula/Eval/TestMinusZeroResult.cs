@@ -18,7 +18,7 @@
 namespace TestCases.SS.Formula.Eval
 {
     using System;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.Formula.Functions;
     using NPOI.Util;
@@ -96,7 +96,7 @@ namespace TestCases.SS.Formula.Eval
             ValueEval[] args = { StringEval.EMPTY_INSTANCE, new NumberEval(d), };
             StringEval se = (StringEval)EvalInstances.Concat.Evaluate(args, -1, (short)-1);
             String result = se.StringValue;
-            Assert.AreEqual(expRendering, result);
+            ClassicAssert.AreEqual(expRendering, result);
         }
 
         private static void CheckEval(double expectedResult, Function instance, params double[] dArgs)
@@ -107,7 +107,7 @@ namespace TestCases.SS.Formula.Eval
         private static void CheckEval(bool expectedResult, Function instance, params double[] dArgs)
         {
             BoolEval result = (BoolEval)Evaluate(instance, dArgs);
-            Assert.AreEqual(expectedResult, result.BooleanValue);
+            ClassicAssert.AreEqual(expectedResult, result.BooleanValue);
         }
         private static ValueEval Evaluate(Function instance, params double[] dArgs)
         {
@@ -128,15 +128,15 @@ namespace TestCases.SS.Formula.Eval
         public void TestJava()
         {
 
-            Assert.AreEqual(unchecked((long)0x8000000000000000L), BitConverter.DoubleToInt64Bits(MINUS_ZERO));
+            ClassicAssert.AreEqual(unchecked((long)0x8000000000000000L), BitConverter.DoubleToInt64Bits(MINUS_ZERO));
 
             // The simple operators consider all zeros to be the same
-            //Assert.IsTrue(MINUS_ZERO == MINUS_ZERO);
-            Assert.IsTrue(MINUS_ZERO == +0.0);
-            Assert.IsFalse(MINUS_ZERO < +0.0);
+            //ClassicAssert.IsTrue(MINUS_ZERO == MINUS_ZERO);
+            ClassicAssert.IsTrue(MINUS_ZERO == +0.0);
+            ClassicAssert.IsFalse(MINUS_ZERO < +0.0);
 
             // Double.Compare() considers them different
-            //Assert.IsTrue((MINUS_ZERO - +0.0) < 0);
+            //ClassicAssert.IsTrue((MINUS_ZERO - +0.0) < 0);
 
             // multiplying zero by any negative quantity yields minus zero
             assertDouble(MINUS_ZERO, 0.0 * -1);

@@ -16,7 +16,7 @@
 ==================================================================== */
 
 using TestCases.SS.UserModel;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using NPOI.XSSF;
@@ -58,21 +58,21 @@ namespace TestCases.XSSF.UserModel
                 sheet1.RepeatingColumns = (CellRangeAddress.ValueOf("A:A"));
                 //sheet.CreateFreezePane(0, 3);
             }
-            Assert.AreEqual(1, wb.NumberOfNames);
+            ClassicAssert.AreEqual(1, wb.NumberOfNames);
             IName nr1 = wb.GetName(XSSFName.BUILTIN_PRINT_TITLE);
 
-            Assert.AreEqual("'First Sheet'!$A:$A,'First Sheet'!$1:$4", nr1.RefersToFormula);
+            ClassicAssert.AreEqual("'First Sheet'!$A:$A,'First Sheet'!$1:$4", nr1.RefersToFormula);
 
             //remove the columns part
             sheet1.RepeatingColumns = (null);
-            Assert.AreEqual("'First Sheet'!$1:$4", nr1.RefersToFormula);
+            ClassicAssert.AreEqual("'First Sheet'!$1:$4", nr1.RefersToFormula);
 
             //revert
             sheet1.RepeatingColumns = (CellRangeAddress.ValueOf("A:A"));
 
             //remove the rows part
             sheet1.RepeatingRows=(null);
-            Assert.AreEqual("'First Sheet'!$A:$A", nr1.RefersToFormula);
+            ClassicAssert.AreEqual("'First Sheet'!$A:$A", nr1.RefersToFormula);
 
             //revert
             sheet1.RepeatingRows = (CellRangeAddress.ValueOf("1:4"));
@@ -80,10 +80,10 @@ namespace TestCases.XSSF.UserModel
             // Save and re-open
             IWorkbook nwb = XSSFTestDataSamples.WriteOutAndReadBack(wb);
 
-            Assert.AreEqual(1, nwb.NumberOfNames);
+            ClassicAssert.AreEqual(1, nwb.NumberOfNames);
             nr1 = nwb.GetName(XSSFName.BUILTIN_PRINT_TITLE);
 
-            Assert.AreEqual("'First Sheet'!$A:$A,'First Sheet'!$1:$4", nr1.RefersToFormula);
+            ClassicAssert.AreEqual("'First Sheet'!$A:$A,'First Sheet'!$1:$4", nr1.RefersToFormula);
 
             // check that Setting RR&C on a second sheet causes a new Print_Titles built-in
             // name to be Created
@@ -91,11 +91,11 @@ namespace TestCases.XSSF.UserModel
             sheet2.RepeatingRows = (CellRangeAddress.ValueOf("1:1"));
             sheet2.RepeatingColumns = (CellRangeAddress.ValueOf("B:C"));
 
-            Assert.AreEqual(2, nwb.NumberOfNames);
+            ClassicAssert.AreEqual(2, nwb.NumberOfNames);
             IName nr2 = nwb.GetNameAt(1);
 
-            Assert.AreEqual(XSSFName.BUILTIN_PRINT_TITLE, nr2.NameName);
-            Assert.AreEqual("SecondSheet!$B:$C,SecondSheet!$1:$1", nr2.RefersToFormula);
+            ClassicAssert.AreEqual(XSSFName.BUILTIN_PRINT_TITLE, nr2.NameName);
+            ClassicAssert.AreEqual("SecondSheet!$B:$C,SecondSheet!$1:$1", nr2.RefersToFormula);
 
             sheet2.RepeatingRows = (null);
             sheet2.RepeatingColumns = (null);
@@ -118,16 +118,16 @@ namespace TestCases.XSSF.UserModel
             // Rename sheet-scoped name to "name2", check everything is updated properly
             // and that the other name is unaffected
             nameSheet1.NameName = "name2";
-            Assert.AreEqual(1, wb.GetNames("name1").Count);
-            Assert.AreEqual(1, wb.GetNames("name2").Count);
-            Assert.AreEqual(nameGlobal, wb.GetName("name1"));
-            Assert.AreEqual(nameSheet1, wb.GetName("name2"));
+            ClassicAssert.AreEqual(1, wb.GetNames("name1").Count);
+            ClassicAssert.AreEqual(1, wb.GetNames("name2").Count);
+            ClassicAssert.AreEqual(nameGlobal, wb.GetName("name1"));
+            ClassicAssert.AreEqual(nameSheet1, wb.GetName("name2"));
             // Rename the other name to "name" and check everything again
             nameGlobal.NameName = "name2";
-            Assert.AreEqual(0, wb.GetNames("name1").Count);
-            Assert.AreEqual(2, wb.GetNames("name2").Count);
-            Assert.IsTrue(wb.GetNames("name2").Contains(nameGlobal));
-            Assert.IsTrue(wb.GetNames("name2").Contains(nameSheet1));
+            ClassicAssert.AreEqual(0, wb.GetNames("name1").Count);
+            ClassicAssert.AreEqual(2, wb.GetNames("name2").Count);
+            ClassicAssert.IsTrue(wb.GetNames("name2").Contains(nameGlobal));
+            ClassicAssert.IsTrue(wb.GetNames("name2").Contains(nameSheet1));
             wb.Close();
         }
 

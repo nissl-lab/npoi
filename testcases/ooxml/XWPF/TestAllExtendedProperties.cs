@@ -19,7 +19,7 @@ namespace TestCases.XWPF
 {
     using NPOI.XWPF.UserModel;
     using NPOI.OpenXmlFormats;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     /**
      * Tests if the {@link CoreProperties#getKeywords()} method. This test has been
@@ -42,52 +42,52 @@ namespace TestCases.XWPF
         {
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("TestPoiXMLDocumentCorePropertiesGetKeywords.docx");
             CT_ExtendedProperties ctProps = doc.GetProperties().ExtendedProperties.GetUnderlyingProperties();
-            Assert.AreEqual("Microsoft Office Word", ctProps.Application);
-            Assert.AreEqual("14.0000", ctProps.AppVersion);
-            Assert.AreEqual(57, ctProps.Characters);
-            Assert.AreEqual(66, ctProps.CharactersWithSpaces);
-            Assert.AreEqual("", ctProps.Company);
-            Assert.IsNull(ctProps.DigSig);
-            Assert.AreEqual(0, ctProps.DocSecurity);
-            //Assert.IsNotNull(ctProps.DomNode);
+            ClassicAssert.AreEqual("Microsoft Office Word", ctProps.Application);
+            ClassicAssert.AreEqual("14.0000", ctProps.AppVersion);
+            ClassicAssert.AreEqual(57, ctProps.Characters);
+            ClassicAssert.AreEqual(66, ctProps.CharactersWithSpaces);
+            ClassicAssert.AreEqual("", ctProps.Company);
+            ClassicAssert.IsNull(ctProps.DigSig);
+            ClassicAssert.AreEqual(0, ctProps.DocSecurity);
+            //ClassicAssert.IsNotNull(ctProps.DomNode);
 
             CT_VectorVariant vec = ctProps.HeadingPairs;
-            Assert.AreEqual(2, vec.vector.SizeOfVariantArray());
-            Assert.AreEqual("Title", vec.vector.GetVariantArray(0).lpstr);
-            Assert.AreEqual(1, vec.vector.GetVariantArray(1).i4);
+            ClassicAssert.AreEqual(2, vec.vector.SizeOfVariantArray());
+            ClassicAssert.AreEqual("Title", vec.vector.GetVariantArray(0).lpstr);
+            ClassicAssert.AreEqual(1, vec.vector.GetVariantArray(1).i4);
 
-            Assert.IsFalse(ctProps.IsSetHiddenSlides());
-            Assert.AreEqual(0, ctProps.HiddenSlides);
-            Assert.IsFalse(ctProps.IsSetHLinks());
-            Assert.IsNull(ctProps.HLinks);
-            Assert.IsNull(ctProps.HyperlinkBase);
-            Assert.IsTrue(ctProps.IsSetHyperlinksChanged());
-            Assert.IsFalse(ctProps.HyperlinksChanged);
-            Assert.AreEqual(1, ctProps.Lines);
-            Assert.IsTrue(ctProps.IsSetLinksUpToDate());
-            Assert.IsFalse(ctProps.LinksUpToDate);
-            Assert.IsNull(ctProps.Manager);
-            Assert.IsFalse(ctProps.IsSetMMClips());
-            Assert.AreEqual(0, ctProps.MMClips);
-            Assert.IsFalse(ctProps.IsSetNotes());
-            Assert.AreEqual(0, ctProps.Notes);
-            Assert.AreEqual(1, ctProps.Pages);
-            Assert.AreEqual(1, ctProps.Paragraphs);
-            Assert.IsNull(ctProps.PresentationFormat);
-            Assert.IsTrue(ctProps.IsSetScaleCrop());
-            Assert.IsFalse(ctProps.ScaleCrop);
-            Assert.IsTrue(ctProps.IsSetSharedDoc());
-            Assert.IsFalse(ctProps.SharedDoc);
-            Assert.IsFalse(ctProps.IsSetSlides());
-            Assert.AreEqual(0, ctProps.Slides);
-            Assert.AreEqual("Normal.dotm", ctProps.Template);
+            ClassicAssert.IsFalse(ctProps.IsSetHiddenSlides());
+            ClassicAssert.AreEqual(0, ctProps.HiddenSlides);
+            ClassicAssert.IsFalse(ctProps.IsSetHLinks());
+            ClassicAssert.IsNull(ctProps.HLinks);
+            ClassicAssert.IsNull(ctProps.HyperlinkBase);
+            ClassicAssert.IsTrue(ctProps.IsSetHyperlinksChanged());
+            ClassicAssert.IsFalse(ctProps.HyperlinksChanged);
+            ClassicAssert.AreEqual(1, ctProps.Lines);
+            ClassicAssert.IsTrue(ctProps.IsSetLinksUpToDate());
+            ClassicAssert.IsFalse(ctProps.LinksUpToDate);
+            ClassicAssert.IsNull(ctProps.Manager);
+            ClassicAssert.IsFalse(ctProps.IsSetMMClips());
+            ClassicAssert.AreEqual(0, ctProps.MMClips);
+            ClassicAssert.IsFalse(ctProps.IsSetNotes());
+            ClassicAssert.AreEqual(0, ctProps.Notes);
+            ClassicAssert.AreEqual(1, ctProps.Pages);
+            ClassicAssert.AreEqual(1, ctProps.Paragraphs);
+            ClassicAssert.IsNull(ctProps.PresentationFormat);
+            ClassicAssert.IsTrue(ctProps.IsSetScaleCrop());
+            ClassicAssert.IsFalse(ctProps.ScaleCrop);
+            ClassicAssert.IsTrue(ctProps.IsSetSharedDoc());
+            ClassicAssert.IsFalse(ctProps.SharedDoc);
+            ClassicAssert.IsFalse(ctProps.IsSetSlides());
+            ClassicAssert.AreEqual(0, ctProps.Slides);
+            ClassicAssert.AreEqual("Normal.dotm", ctProps.Template);
 
             CT_VectorLpstr vec2 = ctProps.TitlesOfParts;
-            Assert.AreEqual(1, vec2.vector.SizeOfLpstrArray());
-            Assert.AreEqual("Example Word 2010 Document", vec2.vector.GetLpstrArray(0));
+            ClassicAssert.AreEqual(1, vec2.vector.SizeOfLpstrArray());
+            ClassicAssert.AreEqual("Example Word 2010 Document", vec2.vector.GetLpstrArray(0));
 
-            Assert.AreEqual(3, ctProps.TotalTime);
-            Assert.AreEqual(10, ctProps.Words);
+            ClassicAssert.AreEqual(3, ctProps.TotalTime);
+            ClassicAssert.AreEqual(10, ctProps.Words);
 
             // Check the digital signature part
             // Won't be there in this file, but we
@@ -95,7 +95,7 @@ namespace TestCases.XWPF
             //  appropriate parts end up in the
             //  smaller ooxml schemas file
             CT_DigSigBlob blob = ctProps.DigSig;
-            Assert.IsNull(blob);
+            ClassicAssert.IsNull(blob);
 
             blob = new CT_DigSigBlob();
             blob.blob = (new byte[] { 2, 6, 7, 2, 3, 4, 5, 1, 2, 3 });

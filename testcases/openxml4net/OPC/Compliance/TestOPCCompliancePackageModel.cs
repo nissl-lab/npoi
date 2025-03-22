@@ -18,7 +18,7 @@
 using NPOI.OpenXml4Net.OPC;
 using System;
 using NPOI.OpenXml4Net.Exceptions;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 namespace TestCases.OpenXml4Net.OPC.Compliance
 {
     /**

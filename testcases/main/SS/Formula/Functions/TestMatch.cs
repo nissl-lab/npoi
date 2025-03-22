@@ -19,7 +19,7 @@ namespace TestCases.SS.Formula.Functions
 {
 
     using System;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.SS.Formula.Eval;
     using TestCases.SS.Formula.Functions;
     using NPOI.SS.Formula.Functions;
@@ -58,7 +58,7 @@ namespace TestCases.SS.Formula.Functions
                 Assert.Fail("Expected numeric result but had " + actualEval);
             }
             NumericValueEval nve = (NumericValueEval)actualEval;
-            Assert.AreEqual(expected, nve.NumberValue, 0);
+            ClassicAssert.AreEqual(expected, nve.NumberValue, 0);
         }
         [Test]
         public void TestSimpleNumber()
@@ -80,7 +80,7 @@ namespace TestCases.SS.Formula.Functions
             ConfirmInt(4, invokeMatch(new NumberEval(10), ae, MATCH_LARGEST_LTE));
             ConfirmInt(3, invokeMatch(new NumberEval(10), ae, MATCH_EXACT));
             ConfirmInt(4, invokeMatch(new NumberEval(20), ae, MATCH_LARGEST_LTE));
-            Assert.AreEqual(ErrorEval.NA, invokeMatch(new NumberEval(20), ae, MATCH_EXACT));
+            ClassicAssert.AreEqual(ErrorEval.NA, invokeMatch(new NumberEval(20), ae, MATCH_EXACT));
         }
         [Test]
         public void TestReversedNumber()
@@ -101,8 +101,8 @@ namespace TestCases.SS.Formula.Functions
             ConfirmInt(4, invokeMatch(new NumberEval(9), ae, MATCH_SMALLEST_GTE));
             ConfirmInt(1, invokeMatch(new NumberEval(20), ae, MATCH_SMALLEST_GTE));
             ConfirmInt(5, invokeMatch(new NumberEval(3), ae, MATCH_SMALLEST_GTE));
-            Assert.AreEqual(ErrorEval.NA, invokeMatch(new NumberEval(20), ae, MATCH_EXACT));
-            Assert.AreEqual(ErrorEval.NA, invokeMatch(new NumberEval(26), ae, MATCH_SMALLEST_GTE));
+            ClassicAssert.AreEqual(ErrorEval.NA, invokeMatch(new NumberEval(20), ae, MATCH_EXACT));
+            ClassicAssert.AreEqual(ErrorEval.NA, invokeMatch(new NumberEval(26), ae, MATCH_SMALLEST_GTE));
         }
         [Test]
         public void TestSimpleString()
@@ -124,7 +124,7 @@ namespace TestCases.SS.Formula.Functions
             ConfirmInt(3, invokeMatch(new StringEval("Ed"), ae, MATCH_EXACT));
             ConfirmInt(3, invokeMatch(new StringEval("ed"), ae, MATCH_EXACT));
             ConfirmInt(4, invokeMatch(new StringEval("Hugh"), ae, MATCH_LARGEST_LTE));
-            Assert.AreEqual(ErrorEval.NA, invokeMatch(new StringEval("Hugh"), ae, MATCH_EXACT));
+            ClassicAssert.AreEqual(ErrorEval.NA, invokeMatch(new StringEval("Hugh"), ae, MATCH_EXACT));
         }
         [Test]
         public void TestSimpleWildcardValuesString()
@@ -211,7 +211,7 @@ namespace TestCases.SS.Formula.Functions
 
             AreaEval ae = EvalFactory.CreateAreaEval("A1:A13", values);
 
-            Assert.AreEqual(ErrorEval.NA, invokeMatch(new StringEval("Aaron"), ae, MATCH_LARGEST_LTE));
+            ClassicAssert.AreEqual(ErrorEval.NA, invokeMatch(new StringEval("Aaron"), ae, MATCH_LARGEST_LTE));
 
             ConfirmInt(5, invokeMatch(BoolEval.FALSE, ae, MATCH_LARGEST_LTE));
             ConfirmInt(2, invokeMatch(BoolEval.FALSE, ae, MATCH_EXACT));
@@ -226,7 +226,7 @@ namespace TestCases.SS.Formula.Functions
             ConfirmInt(9, invokeMatch(new StringEval("ED"), ae, MATCH_EXACT));
 
             ConfirmInt(13, invokeMatch(new StringEval("Hugh"), ae, MATCH_LARGEST_LTE));
-            Assert.AreEqual(ErrorEval.NA, invokeMatch(new StringEval("Hugh"), ae, MATCH_EXACT));
+            ClassicAssert.AreEqual(ErrorEval.NA, invokeMatch(new StringEval("Hugh"), ae, MATCH_EXACT));
 
             ConfirmInt(11, invokeMatch(new NumberEval(30), ae, MATCH_LARGEST_LTE));
             ConfirmInt(12, invokeMatch(BoolEval.TRUE, ae, MATCH_LARGEST_LTE));
@@ -285,7 +285,7 @@ namespace TestCases.SS.Formula.Functions
 
             ConfirmInt(2, invokeMatch(new NumberEval(5), ae, MATCH_LARGEST_LTE));
 
-            Assert.AreEqual(ErrorEval.REF_INVALID, invokeMatch(new StringEval("Ben"), ae, MATCH_INVALID), "Should return #REF! for invalid match type");
+            ClassicAssert.AreEqual(ErrorEval.REF_INVALID, invokeMatch(new StringEval("Ben"), ae, MATCH_INVALID), "Should return #REF! for invalid match type");
         }
     }
 

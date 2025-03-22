@@ -20,7 +20,7 @@ namespace TestCases.HSSF.Record
 
     using System;
     using NPOI.HSSF.Record;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.Util;
 
     /**
@@ -46,20 +46,20 @@ namespace TestCases.HSSF.Record
 
             NoteRecord record = new NoteRecord(TestcaseRecordInputStream.Create(NoteRecord.sid, testData));
 
-            Assert.AreEqual(NoteRecord.sid, record.Sid);
+            ClassicAssert.AreEqual(NoteRecord.sid, record.Sid);
 
-            Assert.AreEqual(6, record.Row);
-            Assert.AreEqual(1, record.Column);
-            Assert.AreEqual(NoteRecord.NOTE_VISIBLE, record.Flags);
-            Assert.AreEqual(1026, record.ShapeId);
-            Assert.AreEqual("Apache Software Foundation", record.Author);
+            ClassicAssert.AreEqual(6, record.Row);
+            ClassicAssert.AreEqual(1, record.Column);
+            ClassicAssert.AreEqual(NoteRecord.NOTE_VISIBLE, record.Flags);
+            ClassicAssert.AreEqual(1026, record.ShapeId);
+            ClassicAssert.AreEqual("Apache Software Foundation", record.Author);
 
         }
         [Test]
         public void TestWrite()
         {
             NoteRecord record = new NoteRecord();
-            Assert.AreEqual(NoteRecord.sid, record.Sid);
+            ClassicAssert.AreEqual(NoteRecord.sid, record.Sid);
 
             record.Row = ((short)6);
             record.Column = ((short)1);
@@ -82,16 +82,16 @@ namespace TestCases.HSSF.Record
             record.Author = ("Apache Software Foundation");
 
             NoteRecord cloned = (NoteRecord)record.Clone();
-            Assert.AreEqual(record.Row, cloned.Row);
-            Assert.AreEqual(record.Column, cloned.Column);
-            Assert.AreEqual(record.Flags, cloned.Flags);
-            Assert.AreEqual(record.ShapeId, cloned.ShapeId);
-            Assert.AreEqual(record.Author, cloned.Author);
+            ClassicAssert.AreEqual(record.Row, cloned.Row);
+            ClassicAssert.AreEqual(record.Column, cloned.Column);
+            ClassicAssert.AreEqual(record.Flags, cloned.Flags);
+            ClassicAssert.AreEqual(record.ShapeId, cloned.ShapeId);
+            ClassicAssert.AreEqual(record.Author, cloned.Author);
 
             //finally check that the Serialized data is1 the same
             byte[] src = record.Serialize();
             byte[] cln = cloned.Serialize();
-            Assert.IsTrue(NPOI.Util.Arrays.Equals(src, cln));
+            ClassicAssert.IsTrue(NPOI.Util.Arrays.Equals(src, cln));
         }
         [Test]
         public void TestUnicodeAuthor()
@@ -110,8 +110,8 @@ namespace TestCases.HSSF.Record
             {
                 throw new AssertionException("Identified bug in reading note with unicode author");
             }
-            Assert.AreEqual("\u30A2\u30D1\u30C3\u30C1\u65CF", nr.Author);
-            Assert.IsTrue(nr.AuthorIsMultibyte);
+            ClassicAssert.AreEqual("\u30A2\u30D1\u30C3\u30C1\u65CF", nr.Author);
+            ClassicAssert.IsTrue(nr.AuthorIsMultibyte);
 
             byte[] ser = nr.Serialize();
             TestcaseRecordInputStream.ConfirmRecordEncoding(NoteRecord.sid, data, ser);
@@ -119,8 +119,8 @@ namespace TestCases.HSSF.Record
             // Re-check
             in1 = TestcaseRecordInputStream.Create(ser);
             nr = new NoteRecord(in1);
-            Assert.AreEqual("\u30A2\u30D1\u30C3\u30C1\u65CF", nr.Author);
-            Assert.IsTrue(nr.AuthorIsMultibyte);
+            ClassicAssert.AreEqual("\u30A2\u30D1\u30C3\u30C1\u65CF", nr.Author);
+            ClassicAssert.IsTrue(nr.AuthorIsMultibyte);
 
 
             // Change to a non unicode author, will stop being unicode
@@ -129,8 +129,8 @@ namespace TestCases.HSSF.Record
             in1 = TestcaseRecordInputStream.Create(ser);
             nr = new NoteRecord(in1);
 
-            Assert.AreEqual("Simple", nr.Author);
-            Assert.IsFalse(nr.AuthorIsMultibyte);
+            ClassicAssert.AreEqual("Simple", nr.Author);
+            ClassicAssert.IsFalse(nr.AuthorIsMultibyte);
 
             // Now set it back again
             nr.Author = ("Unicode\u1234");
@@ -138,8 +138,8 @@ namespace TestCases.HSSF.Record
             in1 = TestcaseRecordInputStream.Create(ser);
             nr = new NoteRecord(in1);
 
-            Assert.AreEqual("Unicode\u1234", nr.Author);
-            Assert.IsTrue(nr.AuthorIsMultibyte);
+            ClassicAssert.AreEqual("Unicode\u1234", nr.Author);
+            ClassicAssert.IsTrue(nr.AuthorIsMultibyte);
         }
     }
 }

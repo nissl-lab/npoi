@@ -19,7 +19,7 @@ namespace TestCases.SS.Formula.Eval
 {
 
     using System;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.UserModel;
@@ -42,7 +42,7 @@ namespace TestCases.SS.Formula.Eval
 
             double result = NumericFunctionInvoker.Invoke(PercentEval.instance, args, 0, 0);
 
-            Assert.AreEqual(expectedResult, result, 0);
+            ClassicAssert.AreEqual(expectedResult, result, 0);
         }
         [Test]
         public void TestBasic()
@@ -86,8 +86,8 @@ namespace TestCases.SS.Formula.Eval
                 // else some other unexpected error
                 throw e;
             }
-            Assert.AreEqual(CellType.Numeric, cv.CellType);
-            Assert.AreEqual(0.5, cv.NumberValue, 0.0);
+            ClassicAssert.AreEqual(CellType.Numeric, cv.CellType);
+            ClassicAssert.AreEqual(0.5, cv.NumberValue, 0.0);
         }
     }
 

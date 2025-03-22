@@ -20,7 +20,7 @@ namespace TestCases.HSSF.Record
     using System;
     using System.Collections;
     using System.IO;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
     using NPOI.Util;
@@ -80,8 +80,8 @@ namespace TestCases.HSSF.Record
             RecordInputStream in1 = new RecordInputStream(new MemoryStream(rawData));
             in1.NextRecord();
             SSTRecord result = new SSTRecord(in1);
-            Assert.AreEqual(0, in1.Remaining);
-            Assert.IsTrue(!in1.HasNextRecord);
+            ClassicAssert.AreEqual(0, in1.Remaining);
+            ClassicAssert.IsTrue(!in1.HasNextRecord);
             return result;
         }
 
@@ -97,11 +97,11 @@ namespace TestCases.HSSF.Record
 
             origData = concatHexDumps("BigSSTRecord", "BigSSTRecordCR");
             record = CreateSSTFromRawData(origData);
-            Assert.AreEqual(1464, record.NumStrings);
-            Assert.AreEqual(688, record.NumUniqueStrings);
-            Assert.AreEqual(688, record.CountStrings);
+            ClassicAssert.AreEqual(1464, record.NumStrings);
+            ClassicAssert.AreEqual(688, record.NumUniqueStrings);
+            ClassicAssert.AreEqual(688, record.CountStrings);
             ser_output = record.Serialize();
-            Assert.IsTrue(Arrays.Equals(origData, ser_output));
+            ClassicAssert.IsTrue(Arrays.Equals(origData, ser_output));
 
             // Testing based on new bug report
             origData = concatHexDumps("BigSSTRecord2", "BigSSTRecord2CR1", "BigSSTRecord2CR2", "BigSSTRecord2CR3",
@@ -109,9 +109,9 @@ namespace TestCases.HSSF.Record
             record = CreateSSTFromRawData(origData);
 
 
-            Assert.AreEqual(158642, record.NumStrings);
-            Assert.AreEqual(5249, record.NumUniqueStrings);
-            Assert.AreEqual(5249, record.CountStrings);
+            ClassicAssert.AreEqual(158642, record.NumStrings);
+            ClassicAssert.AreEqual(5249, record.NumUniqueStrings);
+            ClassicAssert.AreEqual(5249, record.CountStrings);
             ser_output = record.Serialize();
 #if !HIDE_UNREACHABLE_CODE
             if (false)
@@ -131,7 +131,7 @@ namespace TestCases.HSSF.Record
                 // TODO - trivial differences in ContinueRecord break locations
                 // Sample data should be Checked against what most recent Excel version produces.
                 // maybe tweaks are required in ContinuableRecordOutput
-                Assert.IsTrue(Arrays.Equals(origData, ser_output));
+                ClassicAssert.IsTrue(Arrays.Equals(origData, ser_output));
             }
 #endif
         }
@@ -202,19 +202,19 @@ namespace TestCases.HSSF.Record
             byte[] content = new byte[record.RecordSize];
 
             record.Serialize(0, content);
-            Assert.AreEqual(total_length, content.Length);
+            ClassicAssert.AreEqual(total_length, content.Length);
 
             //Deserialize the record.
             RecordInputStream recStream = new RecordInputStream(new MemoryStream(content));
             recStream.NextRecord();
             record = new SSTRecord(recStream);
 
-            Assert.AreEqual(strings.Length, record.NumStrings);
-            Assert.AreEqual(strings.Length, record.NumUniqueStrings);
-            Assert.AreEqual(strings.Length, record.CountStrings);
+            ClassicAssert.AreEqual(strings.Length, record.NumStrings);
+            ClassicAssert.AreEqual(strings.Length, record.NumUniqueStrings);
+            ClassicAssert.AreEqual(strings.Length, record.CountStrings);
             for (int k = 0; k < strings.Length; k++)
             {
-                Assert.AreEqual(strings[k], record.GetString(k));
+                ClassicAssert.AreEqual(strings[k], record.GetString(k));
             }
             record = new SSTRecord();
             bstrings[1] = new byte[bstrings[1].Length - 1];
@@ -237,18 +237,18 @@ namespace TestCases.HSSF.Record
             content = new byte[record.RecordSize];
             record.Serialize(0, content);
             total_length--;
-            Assert.AreEqual(total_length, content.Length);
+            ClassicAssert.AreEqual(total_length, content.Length);
 
             recStream = new RecordInputStream(new MemoryStream(content));
             recStream.NextRecord();
             record = new SSTRecord(recStream);
 
-            Assert.AreEqual(strings.Length, record.NumStrings);
-            Assert.AreEqual(strings.Length, record.NumUniqueStrings);
-            Assert.AreEqual(strings.Length, record.CountStrings);
+            ClassicAssert.AreEqual(strings.Length, record.NumStrings);
+            ClassicAssert.AreEqual(strings.Length, record.NumUniqueStrings);
+            ClassicAssert.AreEqual(strings.Length, record.CountStrings);
             for (int k = 0; k < strings.Length; k++)
             {
-                Assert.AreEqual(strings[k], record.GetString(k));
+                ClassicAssert.AreEqual(strings[k], record.GetString(k));
             }
         }
 
@@ -278,15 +278,15 @@ namespace TestCases.HSSF.Record
             byte[] content = new byte[record.RecordSize];
 
             record.Serialize(0, content);
-            Assert.AreEqual(8224, LittleEndian.GetShort(content, 2));
-            Assert.AreEqual(ContinueRecord.sid, LittleEndian.GetShort(content, 8228));
-            Assert.AreEqual(8224, LittleEndian.GetShort(content, 8228 + 2));
-            Assert.AreEqual((byte)13, content[4 + 8228]);
-            Assert.AreEqual(ContinueRecord.sid, LittleEndian.GetShort(content, 2 * 8228));
-            Assert.AreEqual(8224, LittleEndian.GetShort(content, 8228 * 2 + 2));
-            Assert.AreEqual((byte)13, content[4 + 8228 * 2]);
-            Assert.AreEqual(ContinueRecord.sid, LittleEndian.GetShort(content, 3 * 8228));
-            Assert.AreEqual((byte)13, content[4 + 8228 * 3]);
+            ClassicAssert.AreEqual(8224, LittleEndian.GetShort(content, 2));
+            ClassicAssert.AreEqual(ContinueRecord.sid, LittleEndian.GetShort(content, 8228));
+            ClassicAssert.AreEqual(8224, LittleEndian.GetShort(content, 8228 + 2));
+            ClassicAssert.AreEqual((byte)13, content[4 + 8228]);
+            ClassicAssert.AreEqual(ContinueRecord.sid, LittleEndian.GetShort(content, 2 * 8228));
+            ClassicAssert.AreEqual(8224, LittleEndian.GetShort(content, 8228 * 2 + 2));
+            ClassicAssert.AreEqual((byte)13, content[4 + 8228 * 2]);
+            ClassicAssert.AreEqual(ContinueRecord.sid, LittleEndian.GetShort(content, 3 * 8228));
+            ClassicAssert.AreEqual((byte)13, content[4 + 8228 * 3]);
         }
 
         /**
@@ -301,21 +301,21 @@ namespace TestCases.HSSF.Record
             // \u2122 is the encoding of the trademark symbol ...
             UnicodeString s2 = new UnicodeString("Hello world\u2122");
 
-            Assert.AreEqual(0, record.AddString(s1));
-            Assert.AreEqual(s1, record.GetString(0));
-            Assert.AreEqual(1, record.CountStrings);
-            Assert.AreEqual(1, record.NumStrings);
-            Assert.AreEqual(1, record.NumUniqueStrings);
-            Assert.AreEqual(0, record.AddString(s1));
-            Assert.AreEqual(s1, record.GetString(0));
-            Assert.AreEqual(1, record.CountStrings);
-            Assert.AreEqual(2, record.NumStrings);
-            Assert.AreEqual(1, record.NumUniqueStrings);
-            Assert.AreEqual(1, record.AddString(s2));
-            Assert.AreEqual(s2, record.GetString(1));
-            Assert.AreEqual(2, record.CountStrings);
-            Assert.AreEqual(3, record.NumStrings);
-            Assert.AreEqual(2, record.NumUniqueStrings);
+            ClassicAssert.AreEqual(0, record.AddString(s1));
+            ClassicAssert.AreEqual(s1, record.GetString(0));
+            ClassicAssert.AreEqual(1, record.CountStrings);
+            ClassicAssert.AreEqual(1, record.NumStrings);
+            ClassicAssert.AreEqual(1, record.NumUniqueStrings);
+            ClassicAssert.AreEqual(0, record.AddString(s1));
+            ClassicAssert.AreEqual(s1, record.GetString(0));
+            ClassicAssert.AreEqual(1, record.CountStrings);
+            ClassicAssert.AreEqual(2, record.NumStrings);
+            ClassicAssert.AreEqual(1, record.NumUniqueStrings);
+            ClassicAssert.AreEqual(1, record.AddString(s2));
+            ClassicAssert.AreEqual(s2, record.GetString(1));
+            ClassicAssert.AreEqual(2, record.CountStrings);
+            ClassicAssert.AreEqual(3, record.NumStrings);
+            ClassicAssert.AreEqual(2, record.NumUniqueStrings);
             IEnumerator iter = record.GetStrings();
 
             while (iter.MoveNext())
@@ -324,11 +324,11 @@ namespace TestCases.HSSF.Record
 
                 if (ucs.Equals(s1))
                 {
-                    Assert.AreEqual((byte)0, ucs.OptionFlags);
+                    ClassicAssert.AreEqual((byte)0, ucs.OptionFlags);
                 }
                 else if (ucs.Equals(s2))
                 {
-                    Assert.AreEqual((byte)1, ucs.OptionFlags);
+                    ClassicAssert.AreEqual((byte)1, ucs.OptionFlags);
                 }
                 else
                 {
@@ -345,9 +345,9 @@ namespace TestCases.HSSF.Record
         {
             SSTRecord record = new SSTRecord();
 
-            Assert.AreEqual(0, record.NumStrings);
-            Assert.AreEqual(0, record.NumUniqueStrings);
-            Assert.AreEqual(0, record.CountStrings);
+            ClassicAssert.AreEqual(0, record.NumStrings);
+            ClassicAssert.AreEqual(0, record.NumUniqueStrings);
+            ClassicAssert.AreEqual(0, record.CountStrings);
             byte[] output = record.Serialize();
             byte[] expected =
                 {
@@ -356,10 +356,10 @@ namespace TestCases.HSSF.Record
                     (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0
                 };
 
-            Assert.AreEqual(expected.Length, output.Length);
+            ClassicAssert.AreEqual(expected.Length, output.Length);
             for (int k = 0; k < expected.Length; k++)
             {
-                Assert.AreEqual(expected[k], output[k], k.ToString());
+                ClassicAssert.AreEqual(expected[k], output[k], k.ToString());
             }
         }
 
@@ -371,8 +371,8 @@ namespace TestCases.HSSF.Record
         {
             IWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("duprich1.xls");
             ISheet sheet = wb.GetSheetAt(1);
-            Assert.AreEqual("01/05 (Wed)", sheet.GetRow(0).GetCell(8).StringCellValue);
-            Assert.AreEqual("01/05 (Wed)", sheet.GetRow(1).GetCell(8).StringCellValue);
+            ClassicAssert.AreEqual("01/05 (Wed)", sheet.GetRow(0).GetCell(8).StringCellValue);
+            ClassicAssert.AreEqual("01/05 (Wed)", sheet.GetRow(1).GetCell(8).StringCellValue);
 
             HSSFTestDataSamples.WriteOutAndReadBack((HSSFWorkbook)wb).Close();
             wb.Close();
@@ -380,12 +380,12 @@ namespace TestCases.HSSF.Record
             wb = HSSFTestDataSamples.OpenSampleWorkbook("duprich2.xls");
             sheet = wb.GetSheetAt(0);
             int row = 0;
-            Assert.AreEqual("Testing", sheet.GetRow(row++).GetCell(0).StringCellValue);
-            Assert.AreEqual("rich", sheet.GetRow(row++).GetCell(0).StringCellValue);
-            Assert.AreEqual("text", sheet.GetRow(row++).GetCell(0).StringCellValue);
-            Assert.AreEqual("strings", sheet.GetRow(row++).GetCell(0).StringCellValue);
-            Assert.AreEqual("Testing", sheet.GetRow(row++).GetCell(0).StringCellValue);
-            Assert.AreEqual("Testing", sheet.GetRow(row++).GetCell(0).StringCellValue);
+            ClassicAssert.AreEqual("Testing", sheet.GetRow(row++).GetCell(0).StringCellValue);
+            ClassicAssert.AreEqual("rich", sheet.GetRow(row++).GetCell(0).StringCellValue);
+            ClassicAssert.AreEqual("text", sheet.GetRow(row++).GetCell(0).StringCellValue);
+            ClassicAssert.AreEqual("strings", sheet.GetRow(row++).GetCell(0).StringCellValue);
+            ClassicAssert.AreEqual("Testing", sheet.GetRow(row++).GetCell(0).StringCellValue);
+            ClassicAssert.AreEqual("Testing", sheet.GetRow(row++).GetCell(0).StringCellValue);
 
             HSSFTestDataSamples.WriteOutAndReadBack((HSSFWorkbook)wb).Close();
             wb.Close();
@@ -1484,15 +1484,15 @@ namespace TestCases.HSSF.Record
          */
         private static void assertRecordEquals(SSTRecord expected, SSTRecord actual)
         {
-            Assert.AreEqual(expected.NumStrings, actual.NumStrings, "number of strings");
-            Assert.AreEqual(expected.NumUniqueStrings, actual.NumUniqueStrings, "number of unique strings");
-            Assert.AreEqual(expected.CountStrings, actual.CountStrings, "count of strings");
+            ClassicAssert.AreEqual(expected.NumStrings, actual.NumStrings, "number of strings");
+            ClassicAssert.AreEqual(expected.NumUniqueStrings, actual.NumUniqueStrings, "number of unique strings");
+            ClassicAssert.AreEqual(expected.CountStrings, actual.CountStrings, "count of strings");
             for (int k = 0; k < expected.CountStrings; k++)
             {
                 UnicodeString us1 = expected.GetString(k);
                 UnicodeString us2 = actual.GetString(k);
 
-                Assert.IsTrue(us1.Equals(us2), "String at idx=" + k);
+                ClassicAssert.IsTrue(us1.Equals(us2), "String at idx=" + k);
             }
         }
 
@@ -1502,16 +1502,16 @@ namespace TestCases.HSSF.Record
             byte[] bytes = HexRead.ReadFromString(data_50779_1);
 
             RecordInputStream in1 = TestcaseRecordInputStream.Create(bytes);
-            Assert.AreEqual(SSTRecord.sid, in1.Sid);
+            ClassicAssert.AreEqual(SSTRecord.sid, in1.Sid);
             SSTRecord src = new SSTRecord(in1);
-            Assert.AreEqual(81, src.NumStrings);
+            ClassicAssert.AreEqual(81, src.NumStrings);
 
             byte[] Serialized = src.Serialize();
 
             in1 = TestcaseRecordInputStream.Create(Serialized);
-            Assert.AreEqual(SSTRecord.sid, in1.Sid);
+            ClassicAssert.AreEqual(SSTRecord.sid, in1.Sid);
             SSTRecord dst = new SSTRecord(in1);
-            Assert.AreEqual(81, dst.NumStrings);
+            ClassicAssert.AreEqual(81, dst.NumStrings);
 
             assertRecordEquals(src, dst);
         }
@@ -1521,16 +1521,16 @@ namespace TestCases.HSSF.Record
             byte[] bytes = HexRead.ReadFromString(data_50779_2);
 
             RecordInputStream in1 = TestcaseRecordInputStream.Create(bytes);
-            Assert.AreEqual(SSTRecord.sid, in1.Sid);
+            ClassicAssert.AreEqual(SSTRecord.sid, in1.Sid);
             SSTRecord src = new SSTRecord(in1);
-            Assert.AreEqual(81, src.NumStrings);
+            ClassicAssert.AreEqual(81, src.NumStrings);
 
             byte[] Serialized = src.Serialize();
 
             in1 = TestcaseRecordInputStream.Create(Serialized);
-            Assert.AreEqual(SSTRecord.sid, in1.Sid);
+            ClassicAssert.AreEqual(SSTRecord.sid, in1.Sid);
             SSTRecord dst = new SSTRecord(in1);
-            Assert.AreEqual(81, dst.NumStrings);
+            ClassicAssert.AreEqual(81, dst.NumStrings);
 
             assertRecordEquals(src, dst);
         }

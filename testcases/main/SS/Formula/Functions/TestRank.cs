@@ -19,7 +19,7 @@
 
 using NPOI.HSSF.UserModel;
 using NPOI.SS.Util;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using TestCases.HSSF;
 
 namespace TestCases.SS.Formula.Functions
@@ -39,16 +39,16 @@ namespace TestCases.SS.Formula.Functions
 
             HSSFSheet example1 = (HSSFSheet)wb.GetSheet("Example 1");
             HSSFCell ex1cell1 = (HSSFCell)example1.GetRow(7).GetCell(0);
-            Assert.AreEqual(3.0, fe.Evaluate(ex1cell1).NumberValue);
+            ClassicAssert.AreEqual(3.0, fe.Evaluate(ex1cell1).NumberValue);
             HSSFCell ex1cell2 = (HSSFCell)example1.GetRow(8).GetCell(0);
-            Assert.AreEqual(5.0, fe.Evaluate(ex1cell2).NumberValue);
+            ClassicAssert.AreEqual(5.0, fe.Evaluate(ex1cell2).NumberValue);
 
             HSSFSheet example2 = (HSSFSheet)wb.GetSheet("Example 2");
             for (int rownum = 1; rownum <= 10; rownum++)
             {
                 HSSFCell cell = (HSSFCell)example2.GetRow(rownum).GetCell(2);
                 double cachedResult = cell.NumericCellValue; //cached formula result
-                Assert.AreEqual(cachedResult, fe.Evaluate(cell).NumberValue);
+                ClassicAssert.AreEqual(cachedResult, fe.Evaluate(cell).NumberValue);
             }
 
             HSSFSheet example3 = (HSSFSheet)wb.GetSheet("Example 3");
@@ -56,15 +56,15 @@ namespace TestCases.SS.Formula.Functions
             {
                 HSSFCell cellD = (HSSFCell)example3.GetRow(rownum).GetCell(3);
                 double cachedResultD = cellD.NumericCellValue; //cached formula result
-                Assert.AreEqual(cachedResultD, fe.Evaluate(cellD).NumberValue, new CellReference(cellD).FormatAsString());
+                ClassicAssert.AreEqual(cachedResultD, fe.Evaluate(cellD).NumberValue, new CellReference(cellD).FormatAsString());
 
                 HSSFCell cellE = (HSSFCell)example3.GetRow(rownum).GetCell(4);
                 double cachedResultE = cellE.NumericCellValue; //cached formula result
-                Assert.AreEqual(cachedResultE, fe.Evaluate(cellE).NumberValue, new CellReference(cellE).FormatAsString());
+                ClassicAssert.AreEqual(cachedResultE, fe.Evaluate(cellE).NumberValue, new CellReference(cellE).FormatAsString());
 
                 HSSFCell cellF = (HSSFCell)example3.GetRow(rownum).GetCell(5);
                 double cachedResultF = cellF.NumericCellValue; //cached formula result
-                Assert.AreEqual(cachedResultF, fe.Evaluate(cellF).NumberValue, new CellReference(cellF).FormatAsString());
+                ClassicAssert.AreEqual(cachedResultF, fe.Evaluate(cellF).NumberValue, new CellReference(cellF).FormatAsString());
             }
         }
     }

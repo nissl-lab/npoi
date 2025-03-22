@@ -19,7 +19,7 @@ using TestCases.HSSF;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using System;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using NPOI.Util;
 using NPOI.HSSF.Model;
 using TestCases.HSSF.UserModel;
@@ -104,7 +104,7 @@ namespace TestCases.HSSF.Record.Aggregates
             TestCases.HSSF.UserModel.RecordInspector.RecordCollector rv = new TestCases.HSSF.UserModel.RecordInspector.RecordCollector();
             sheet.VisitContainedRecords(rv, rowIx);
             NPOI.HSSF.Record.Record[] outRecs = rv.Records;
-            Assert.AreEqual(13, outRecs.Length);
+            ClassicAssert.AreEqual(13, outRecs.Length);
         }
 
         /**
@@ -140,16 +140,16 @@ namespace TestCases.HSSF.Record.Aggregates
             {
                 throw new AssertionException("Identified bug 46953 - EOF incorrectly Appended to PSB");
             }
-            Assert.AreEqual(recs.Length + 1, outRecs.Length); // +1 for index record
+            ClassicAssert.AreEqual(recs.Length + 1, outRecs.Length); // +1 for index record
 
-            Assert.AreEqual(typeof(BOFRecord), outRecs[0].GetType());
-            Assert.AreEqual(typeof(IndexRecord), outRecs[1].GetType());
-            Assert.AreEqual(typeof(HeaderRecord), outRecs[2].GetType());
-            Assert.AreEqual(typeof(FooterRecord), outRecs[3].GetType());
-            Assert.AreEqual(typeof(HeaderFooterRecord), outRecs[4].GetType());
-            Assert.AreEqual(typeof(DimensionsRecord), outRecs[5].GetType());
-            Assert.AreEqual(typeof(WindowTwoRecord), outRecs[6].GetType());
-            Assert.AreEqual(typeof(EOFRecord), outRecs[7].GetType());
+            ClassicAssert.AreEqual(typeof(BOFRecord), outRecs[0].GetType());
+            ClassicAssert.AreEqual(typeof(IndexRecord), outRecs[1].GetType());
+            ClassicAssert.AreEqual(typeof(HeaderRecord), outRecs[2].GetType());
+            ClassicAssert.AreEqual(typeof(FooterRecord), outRecs[3].GetType());
+            ClassicAssert.AreEqual(typeof(HeaderFooterRecord), outRecs[4].GetType());
+            ClassicAssert.AreEqual(typeof(DimensionsRecord), outRecs[5].GetType());
+            ClassicAssert.AreEqual(typeof(WindowTwoRecord), outRecs[6].GetType());
+            ClassicAssert.AreEqual(typeof(EOFRecord), outRecs[7].GetType());
         }
         /**
          * Bug 47199 was due to the margin records being located well after the Initial PSB records.
@@ -195,15 +195,15 @@ namespace TestCases.HSSF.Record.Aggregates
             TestCases.HSSF.UserModel.RecordInspector.RecordCollector rv = new TestCases.HSSF.UserModel.RecordInspector.RecordCollector();
             sheet.VisitContainedRecords(rv, 0);
             NPOI.HSSF.Record.Record[] outRecs = rv.Records;
-            Assert.AreEqual(recs.Length + 1, outRecs.Length); // +1 for index record
+            ClassicAssert.AreEqual(recs.Length + 1, outRecs.Length); // +1 for index record
 
-            Assert.AreEqual(typeof(BOFRecord), outRecs[0].GetType());
-            Assert.AreEqual(typeof(IndexRecord), outRecs[1].GetType());
-            Assert.AreEqual(typeof(HeaderRecord), outRecs[2].GetType());
-            Assert.AreEqual(typeof(FooterRecord), outRecs[3].GetType());
-            Assert.AreEqual(typeof(DimensionsRecord), outRecs[5].GetType());
-            Assert.AreEqual(typeof(WindowTwoRecord), outRecs[6].GetType());
-            Assert.AreEqual(typeof(EOFRecord), outRecs[7].GetType());
+            ClassicAssert.AreEqual(typeof(BOFRecord), outRecs[0].GetType());
+            ClassicAssert.AreEqual(typeof(IndexRecord), outRecs[1].GetType());
+            ClassicAssert.AreEqual(typeof(HeaderRecord), outRecs[2].GetType());
+            ClassicAssert.AreEqual(typeof(FooterRecord), outRecs[3].GetType());
+            ClassicAssert.AreEqual(typeof(DimensionsRecord), outRecs[5].GetType());
+            ClassicAssert.AreEqual(typeof(WindowTwoRecord), outRecs[6].GetType());
+            ClassicAssert.AreEqual(typeof(EOFRecord), outRecs[7].GetType());
         }
 
         private NPOI.HSSF.Record.Record CreateBottomMargin(float value)
@@ -276,17 +276,17 @@ namespace TestCases.HSSF.Record.Aggregates
             {
                 throw new AssertionException("PageSettingsBlock didn't add missing header/footer records");
             }
-            Assert.AreEqual(4, outRecs.Length);
-            Assert.AreEqual(typeof(HeaderRecord), outRecs[0].GetType());
-            Assert.AreEqual(typeof(FooterRecord), outRecs[1].GetType());
-            Assert.AreEqual(typeof(HCenterRecord), outRecs[2].GetType());
-            Assert.AreEqual(typeof(VCenterRecord), outRecs[3].GetType());
+            ClassicAssert.AreEqual(4, outRecs.Length);
+            ClassicAssert.AreEqual(typeof(HeaderRecord), outRecs[0].GetType());
+            ClassicAssert.AreEqual(typeof(FooterRecord), outRecs[1].GetType());
+            ClassicAssert.AreEqual(typeof(HCenterRecord), outRecs[2].GetType());
+            ClassicAssert.AreEqual(typeof(VCenterRecord), outRecs[3].GetType());
 
             // make sure the Added header / footer records are empty
             HeaderRecord hr = (HeaderRecord)outRecs[0];
-            Assert.AreEqual("", hr.Text);
+            ClassicAssert.AreEqual("", hr.Text);
             FooterRecord fr = (FooterRecord)outRecs[1];
-            Assert.AreEqual("", fr.Text);
+            ClassicAssert.AreEqual("", fr.Text);
         }
 
         /**
@@ -334,7 +334,7 @@ namespace TestCases.HSSF.Record.Aggregates
             NPOI.HSSF.Record.Record[] outRecs = rc.Records;
 
             // records were assembled in standard order, so this simple check is OK
-            Assert.IsTrue(Arrays.Equals(recs, outRecs));
+            ClassicAssert.IsTrue(Arrays.Equals(recs, outRecs));
         }
         [Test]
         public void TestDuplicateHeaderFooter_bug48026()
@@ -382,7 +382,7 @@ namespace TestCases.HSSF.Record.Aggregates
             sheet.VisitContainedRecords(rv, 0);
             NPOI.HSSF.Record.Record[] outRecs = rv.Records;
 
-            Assert.AreEqual(recs.Length, outRecs.Length);
+            ClassicAssert.AreEqual(recs.Length, outRecs.Length);
             //expected order of records:
             NPOI.HSSF.Record.Record[] expectedRecs = {
                 recs[0],  //BOFRecord
@@ -405,18 +405,18 @@ namespace TestCases.HSSF.Record.Aggregates
             };
             for (int i = 0; i < expectedRecs.Length; i++)
             {
-                Assert.AreEqual(expectedRecs[i].GetType(), outRecs[i].GetType(), "Record mismatch at index " + i);
+                ClassicAssert.AreEqual(expectedRecs[i].GetType(), outRecs[i].GetType(), "Record mismatch at index " + i);
             }
             HeaderFooterRecord hd1 = (HeaderFooterRecord)expectedRecs[4];
             //GUID is zero
-            Assert.IsTrue(Arrays.Equals(new byte[16], hd1.Guid));
-            Assert.IsTrue(hd1.IsCurrentSheet);
+            ClassicAssert.IsTrue(Arrays.Equals(new byte[16], hd1.Guid));
+            ClassicAssert.IsTrue(hd1.IsCurrentSheet);
 
             UserSViewBegin svb = (UserSViewBegin)expectedRecs[7];
             HeaderFooterRecord hd2 = (HeaderFooterRecord)expectedRecs[9];
-            Assert.IsFalse(hd2.IsCurrentSheet);
+            ClassicAssert.IsFalse(hd2.IsCurrentSheet);
             //GUIDs of HeaderFooterRecord and UserSViewBegin must be the same
-            Assert.IsTrue(Arrays.Equals(svb.Guid, hd2.Guid));
+            ClassicAssert.IsTrue(Arrays.Equals(svb.Guid, hd2.Guid));
         }
 
     }

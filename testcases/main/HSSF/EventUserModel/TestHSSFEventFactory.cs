@@ -26,7 +26,7 @@ namespace TestCases.HSSF.EventUserModel
     using NPOI.HSSF.Record;
     using NPOI.POIFS.FileSystem;
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     [TestFixture]
     public class TestHSSFEventFactory
@@ -50,14 +50,14 @@ namespace TestCases.HSSF.EventUserModel
 
             Record[] recs = mockListen.GetRecords();
             // Check we got the records
-            Assert.IsTrue(recs.Length > 100);
+            ClassicAssert.IsTrue(recs.Length > 100);
 
             // Check that the last few records are as we expect
             // (Makes sure we don't accidently skip the end ones)
             int numRec = recs.Length;
-            Assert.AreEqual(typeof(WindowTwoRecord), recs[numRec - 3].GetType());
-            Assert.AreEqual(typeof(SelectionRecord), recs[numRec - 2].GetType());
-            Assert.AreEqual(typeof(EOFRecord), recs[numRec - 1].GetType());
+            ClassicAssert.AreEqual(typeof(WindowTwoRecord), recs[numRec - 3].GetType());
+            ClassicAssert.AreEqual(typeof(SelectionRecord), recs[numRec - 2].GetType());
+            ClassicAssert.AreEqual(typeof(EOFRecord), recs[numRec - 1].GetType());
         }
 
         public void TestWithCrazyContinueRecords()
@@ -75,20 +75,20 @@ namespace TestCases.HSSF.EventUserModel
 
             Record[] recs = mockListen.GetRecords();
             // Check we got the records
-            Assert.IsTrue(recs.Length > 100);
+            ClassicAssert.IsTrue(recs.Length > 100);
 
             // And none of them are continue ones
             for (int i = 0; i < recs.Length; i++)
             {
-                Assert.IsFalse(recs[i] is ContinueRecord);
+                ClassicAssert.IsFalse(recs[i] is ContinueRecord);
             }
 
             // Check that the last few records are as we expect
             // (Makes sure we don't accidently skip the end ones)
             int numRec = recs.Length;
-            Assert.AreEqual(typeof(DVALRecord), recs[numRec - 3].GetType());
-            Assert.AreEqual(typeof(DVRecord), recs[numRec - 2].GetType());
-            Assert.AreEqual(typeof(EOFRecord), recs[numRec - 1].GetType());
+            ClassicAssert.AreEqual(typeof(DVALRecord), recs[numRec - 3].GetType());
+            ClassicAssert.AreEqual(typeof(DVRecord), recs[numRec - 2].GetType());
+            ClassicAssert.AreEqual(typeof(EOFRecord), recs[numRec - 1].GetType());
         }
 
         /**
@@ -108,7 +108,7 @@ namespace TestCases.HSSF.EventUserModel
             HSSFEventFactory factory = new HSSFEventFactory();
             factory.ProcessWorkbookEvents(req, fs);
 
-            Assert.IsTrue(true, "no errors while Processing the file");
+            ClassicAssert.IsTrue(true, "no errors while Processing the file");
         }
 
         private class MockHSSFListener : IHSSFListener

@@ -20,7 +20,7 @@ namespace TestCases.HSSF.Record
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.Util;
     using NPOI.HSSF.Record;
 
@@ -40,7 +40,7 @@ namespace TestCases.HSSF.Record
         public void TestCreate()
         {
             InterfaceEndRecord record = InterfaceEndRecord.Instance;
-            Assert.AreEqual(0, record.GetDataSize());
+            ClassicAssert.AreEqual(0, record.GetDataSize());
         }
 
         /**
@@ -57,11 +57,11 @@ namespace TestCases.HSSF.Record
                     "0A 00 00 00";    // EOF
             byte[] data = HexRead.ReadFromString(hex);
             List<Record> records = RecordFactory.CreateRecords(new MemoryStream(data));
-            Assert.AreEqual(3, records.Count);
+            ClassicAssert.AreEqual(3, records.Count);
             Record rec1 = records[(1)];
-            Assert.AreEqual(typeof(InterfaceHdrRecord), rec1.GetType());
+            ClassicAssert.AreEqual(typeof(InterfaceHdrRecord), rec1.GetType());
             InterfaceHdrRecord r = (InterfaceHdrRecord)rec1;
-            Assert.AreEqual("[E1, 00, 02, 00, B0, 04]", HexDump.ToHex(r.Serialize()));
+            ClassicAssert.AreEqual("[E1, 00, 02, 00, B0, 04]", HexDump.ToHex(r.Serialize()));
         }
     }
 

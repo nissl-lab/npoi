@@ -19,7 +19,7 @@ namespace TestCases.SS.Formula
 {
 
     using NPOI.SS.Formula.PTG;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.SS.Formula;
     using NPOI.SS;
     using NPOI.SS.Util;
@@ -169,13 +169,13 @@ namespace TestCases.SS.Formula
             bool actualChanged = fs.AdjustFormula(ptgs, 0);
             if (expectedAreaFirstRow < 0)
             {
-                Assert.AreEqual(typeof(AreaErrPtg), ptgs[0].GetType());
+                ClassicAssert.AreEqual(typeof(AreaErrPtg), ptgs[0].GetType());
                 return;
             }
-            Assert.AreEqual(expectedChanged, actualChanged);
-            Assert.AreEqual(copyPtg, ptgs[0]);  // expected to change in place (although this is not a strict requirement)
-            Assert.AreEqual(expectedAreaFirstRow, copyPtg.FirstRow);
-            Assert.AreEqual(expectedAreaLastRow, copyPtg.LastRow);
+            ClassicAssert.AreEqual(expectedChanged, actualChanged);
+            ClassicAssert.AreEqual(copyPtg, ptgs[0]);  // expected to change in place (although this is not a strict requirement)
+            ClassicAssert.AreEqual(expectedAreaFirstRow, copyPtg.FirstRow);
+            ClassicAssert.AreEqual(expectedAreaLastRow, copyPtg.LastRow);
 
         }
 
@@ -192,15 +192,15 @@ namespace TestCases.SS.Formula
             // DeletedAreaRef
             if (expectedFirstRow < 0 || expectedLastRow < 0)
             {
-                Assert.AreEqual(typeof(AreaErrPtg), ptgs[0].GetType(),
+                ClassicAssert.AreEqual(typeof(AreaErrPtg), ptgs[0].GetType(),
                     "Reference should have shifted off worksheet, producing #REF! error: " + ptgs[0]);
                 return;
             }
 
-            Assert.AreEqual(expectedChanged, actualChanged, "Should this AreaPtg change due to row copy?");
-            Assert.AreEqual(copyPtg, ptgs[0], "AreaPtgs should be modified in-place when a row containing the AreaPtg is copied");  // expected to change in place (although this is not a strict requirement)
-            Assert.AreEqual(expectedFirstRow, copyPtg.FirstRow, "AreaPtg first row");
-            Assert.AreEqual(expectedLastRow, copyPtg.LastRow, "AreaPtg last row");
+            ClassicAssert.AreEqual(expectedChanged, actualChanged, "Should this AreaPtg change due to row copy?");
+            ClassicAssert.AreEqual(copyPtg, ptgs[0], "AreaPtgs should be modified in-place when a row containing the AreaPtg is copied");  // expected to change in place (although this is not a strict requirement)
+            ClassicAssert.AreEqual(expectedFirstRow, copyPtg.FirstRow, "AreaPtg first row");
+            ClassicAssert.AreEqual(expectedLastRow, copyPtg.LastRow, "AreaPtg last row");
 
         }
 
@@ -229,13 +229,13 @@ namespace TestCases.SS.Formula
 
             shifter.AdjustFormula(ptgs, -1);
 
-            Assert.AreEqual(1, ((Ref3DPtg)ptgs[0]).ExternSheetIndex,
+            ClassicAssert.AreEqual(1, ((Ref3DPtg)ptgs[0]).ExternSheetIndex,
                 "formula previously pointing to sheet 0 should now point to sheet 1");
-            Assert.AreEqual(2, ((Ref3DPtg)ptgs[1]).ExternSheetIndex,
+            ClassicAssert.AreEqual(2, ((Ref3DPtg)ptgs[1]).ExternSheetIndex,
                 "formula previously pointing to sheet 1 should now point to sheet 2");
-            Assert.AreEqual(0, ((Ref3DPtg)ptgs[2]).ExternSheetIndex,
+            ClassicAssert.AreEqual(0, ((Ref3DPtg)ptgs[2]).ExternSheetIndex,
                 "formula previously pointing to sheet 2 should now point to sheet 0");
-            Assert.AreEqual(3, ((Ref3DPtg)ptgs[3]).ExternSheetIndex,
+            ClassicAssert.AreEqual(3, ((Ref3DPtg)ptgs[3]).ExternSheetIndex,
                 "formula previously pointing to sheet 3 should be unchanged");
         }
 
@@ -253,13 +253,13 @@ namespace TestCases.SS.Formula
         };
             shifter.AdjustFormula(ptgs, -1);
 
-            Assert.AreEqual(0, ((Ref3DPtg)ptgs[0]).ExternSheetIndex,
+            ClassicAssert.AreEqual(0, ((Ref3DPtg)ptgs[0]).ExternSheetIndex,
                 "formula previously pointing to sheet 0 should be unchanged");
-            Assert.AreEqual(2, ((Ref3DPtg)ptgs[1]).ExternSheetIndex,
+            ClassicAssert.AreEqual(2, ((Ref3DPtg)ptgs[1]).ExternSheetIndex,
                 "formula previously pointing to sheet 1 should now point to sheet 2");
-            Assert.AreEqual(1, ((Ref3DPtg)ptgs[2]).ExternSheetIndex,
+            ClassicAssert.AreEqual(1, ((Ref3DPtg)ptgs[2]).ExternSheetIndex,
                 "formula previously pointing to sheet 2 should now point to sheet 1");
-            Assert.AreEqual(3, ((Ref3DPtg)ptgs[3]).ExternSheetIndex,
+            ClassicAssert.AreEqual(3, ((Ref3DPtg)ptgs[3]).ExternSheetIndex,
                 "formula previously pointing to sheet 3 should be unchanged");
         }
 
@@ -288,18 +288,18 @@ namespace TestCases.SS.Formula
         [Test]
         public void TestConstructor()
         {
-            Assert.IsNotNull(FormulaShifter.CreateForRowShift(1, "name", 1, 2, 2, SpreadsheetVersion.EXCEL2007));
+            ClassicAssert.IsNotNull(FormulaShifter.CreateForRowShift(1, "name", 1, 2, 2, SpreadsheetVersion.EXCEL2007));
         }
         [Test]
         public void TestToString()
         {
             FormulaShifter shifter = FormulaShifter.CreateForRowShift(0, "sheet", 123, 456, 789,
                     SpreadsheetVersion.EXCEL2007);
-            Assert.IsNotNull(shifter);
-            Assert.IsNotNull(shifter.ToString());
-            Assert.IsTrue(shifter.ToString().Contains("123"));
-            Assert.IsTrue(shifter.ToString().Contains("456"));
-            Assert.IsTrue(shifter.ToString().Contains("789"));
+            ClassicAssert.IsNotNull(shifter);
+            ClassicAssert.IsNotNull(shifter.ToString());
+            ClassicAssert.IsTrue(shifter.ToString().Contains("123"));
+            ClassicAssert.IsTrue(shifter.ToString().Contains("456"));
+            ClassicAssert.IsTrue(shifter.ToString().Contains("789"));
         }
     }
 

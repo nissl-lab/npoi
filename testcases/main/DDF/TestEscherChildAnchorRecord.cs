@@ -24,7 +24,7 @@ namespace TestCases.DDF
     using System.Collections.Generic;
     using System.IO;
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.DDF;
     using NPOI.Util;
     [TestFixture]
@@ -37,8 +37,8 @@ namespace TestCases.DDF
 
             byte[] data = new byte[8 + 16];
             int bytesWritten = r.Serialize(0, data);
-            Assert.AreEqual(24, bytesWritten);
-            Assert.AreEqual("[01, 00, " +
+            ClassicAssert.AreEqual(24, bytesWritten);
+            ClassicAssert.AreEqual("[01, 00, " +
                     "0F, F0, " +
                     "10, 00, 00, 00, " +
                     "01, 00, 00, 00, " +
@@ -61,12 +61,12 @@ namespace TestCases.DDF
             EscherChildAnchorRecord r = new EscherChildAnchorRecord();
             int bytesWritten = r.FillFields(data, new DefaultEscherRecordFactory());
 
-            Assert.AreEqual(24, bytesWritten);
-            Assert.AreEqual(1, r.Dx1);
-            Assert.AreEqual(2, r.Dy1);
-            Assert.AreEqual(3, r.Dx2);
-            Assert.AreEqual(4, r.Dy2);
-            Assert.AreEqual((short)0x0001, r.Options);
+            ClassicAssert.AreEqual(24, bytesWritten);
+            ClassicAssert.AreEqual(1, r.Dx1);
+            ClassicAssert.AreEqual(2, r.Dy1);
+            ClassicAssert.AreEqual(3, r.Dx2);
+            ClassicAssert.AreEqual(4, r.Dy2);
+            ClassicAssert.AreEqual((short)0x0001, r.Options);
         }
         [Test]
         public void TestToString()
@@ -81,7 +81,7 @@ namespace TestCases.DDF
                     "  Y1: 2" + nl +
                     "  X2: 3" + nl +
                     "  Y2: 4" + nl;
-            Assert.AreEqual(expected, CreateRecord().ToString());
+            ClassicAssert.AreEqual(expected, CreateRecord().ToString());
         }
 
         private EscherChildAnchorRecord CreateRecord()

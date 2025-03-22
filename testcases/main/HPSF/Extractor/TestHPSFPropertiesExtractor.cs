@@ -17,13 +17,13 @@
 
 namespace TestCases.HPSF.Extractor
 {
+    using System;
     using NPOI.HPSF;
     using NPOI.HPSF.Extractor;
     using NPOI.HSSF.Extractor;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.UserModel;
     using NPOI.POIFS.FileSystem;
-    using NUnit.Framework;
-    using System;
     using System.IO;
     using TestCases.HSSF;
 
@@ -150,8 +150,8 @@ namespace TestCases.HPSF.Extractor
                 wb.Close();
             }
 
-            Assert.AreEqual(fsText, hwText);
-            Assert.AreEqual(fsText, eeText);
+            ClassicAssert.AreEqual(fsText, hwText);
+            ClassicAssert.AreEqual(fsText, eeText);
 
             AssertContains(fsText, "AUTHOR = marshall");
             AssertContains(fsText, "TITLE = Titel: \u00c4h");
@@ -174,9 +174,9 @@ namespace TestCases.HPSF.Extractor
             POIFSFileSystem fs = new POIFSFileSystem(_samples.OpenResourceAsStream("TestThumbnail.xls"));
             HSSFWorkbook wb = new HSSFWorkbook(fs);
             Thumbnail thumbnail = new Thumbnail(wb.SummaryInformation.Thumbnail);
-            Assert.AreEqual(-1, thumbnail.ClipboardFormatTag);
-            Assert.AreEqual(3, thumbnail.GetClipboardFormat());
-            Assert.IsNotNull(thumbnail.GetThumbnailAsWMF());
+            ClassicAssert.AreEqual(-1, thumbnail.ClipboardFormatTag);
+            ClassicAssert.AreEqual(3, thumbnail.GetClipboardFormat());
+            ClassicAssert.IsNotNull(thumbnail.GetThumbnailAsWMF());
             //wb.Close();
         }
 
@@ -187,11 +187,11 @@ namespace TestCases.HPSF.Extractor
             HPSFPropertiesExtractor ext = new HPSFPropertiesExtractor(fs);
             try
             {
-                Assert.IsNotNull(ext.DocSummaryInformation);
-                Assert.IsNotNull(ext.DocumentSummaryInformationText);
-                Assert.IsNotNull(ext.SummaryInformation);
-                Assert.IsNotNull(ext.SummaryInformationText);
-                Assert.IsNotNull(ext.Text);
+                ClassicAssert.IsNotNull(ext.DocSummaryInformation);
+                ClassicAssert.IsNotNull(ext.DocumentSummaryInformationText);
+                ClassicAssert.IsNotNull(ext.SummaryInformation);
+                ClassicAssert.IsNotNull(ext.SummaryInformationText);
+                ClassicAssert.IsNotNull(ext.Text);
             }
             finally
             {

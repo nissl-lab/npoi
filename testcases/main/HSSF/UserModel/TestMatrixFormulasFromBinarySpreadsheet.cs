@@ -1,7 +1,7 @@
 ﻿using NPOI.HSSF.UserModel;
 using NPOI.SS.Formula.Eval;
 using NPOI.SS.UserModel;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -76,7 +76,7 @@ namespace TestCases.HSSF.UserModel
             {
                 IRow r = sheet.GetRow(rowIndex);
                 String targetFunctionName = getTargetFunctionName(r);
-                Assert.IsNotNull("Test spreadsheet cell empty on row ("
+                ClassicAssert.IsNotNull("Test spreadsheet cell empty on row ("
                         + (rowIndex) + "). Expected function name or '"
                         + Navigator.END_OF_TESTS + "'", targetFunctionName);
                 if (targetFunctionName.Equals(Navigator.END_OF_TESTS))
@@ -120,33 +120,33 @@ namespace TestCases.HSSF.UserModel
                     String msg = String.Format("Function '{0}': Formula: {1} @ {2}:{3}"
                             , targetFunctionName, c.CellFormula, rowNum, colNum);
 
-                    Assert.IsNotNull(expValue, msg + " - Bad setup data expected value is null");
-                    Assert.IsNotNull(actValue, msg + " - actual value was null");
+                    ClassicAssert.IsNotNull(expValue, msg + " - Bad setup data expected value is null");
+                    ClassicAssert.IsNotNull(actValue, msg + " - actual value was null");
 
                     CellType cellType = expValue.CellType;
                     switch (cellType)
                     {
                         case CellType.Blank:
-                            Assert.AreEqual(CellType.Blank, actValue.CellType, msg);
+                            ClassicAssert.AreEqual(CellType.Blank, actValue.CellType, msg);
                             break;
                         case CellType.Boolean:
-                            Assert.AreEqual(CellType.Boolean, actValue.CellType, msg);
-                            Assert.AreEqual(expValue.BooleanCellValue, actValue.BooleanValue, msg);
+                            ClassicAssert.AreEqual(CellType.Boolean, actValue.CellType, msg);
+                            ClassicAssert.AreEqual(expValue.BooleanCellValue, actValue.BooleanValue, msg);
                             break;
                         case CellType.Error:
-                            Assert.AreEqual(CellType.Error, actValue.CellType, msg);
-                            Assert.AreEqual(ErrorEval.GetText(expValue.ErrorCellValue), ErrorEval.GetText(actValue.ErrorValue), msg);
+                            ClassicAssert.AreEqual(CellType.Error, actValue.CellType, msg);
+                            ClassicAssert.AreEqual(ErrorEval.GetText(expValue.ErrorCellValue), ErrorEval.GetText(actValue.ErrorValue), msg);
                             break;
                         case CellType.Formula: // will never be used, since we will call method after formula evaluation
                             Assert.Fail("Cannot expect formula as result of formula evaluation: " + msg);
                             break;
                         case CellType.Numeric:
-                            Assert.AreEqual(CellType.Numeric, actValue.CellType, msg);
-                            Assert.AreEqual(expValue.NumericCellValue, actValue.NumberValue, msg);
+                            ClassicAssert.AreEqual(CellType.Numeric, actValue.CellType, msg);
+                            ClassicAssert.AreEqual(expValue.NumericCellValue, actValue.NumberValue, msg);
                             break;
                         case CellType.String:
-                            Assert.AreEqual(CellType.String, actValue.CellType, msg);
-                            Assert.AreEqual(expValue.RichStringCellValue.String, actValue.StringValue, msg);
+                            ClassicAssert.AreEqual(CellType.String, actValue.CellType, msg);
+                            ClassicAssert.AreEqual(expValue.RichStringCellValue.String, actValue.StringValue, msg);
                             break;
                         default:
                             Assert.Fail("Unexpected cell type: " + cellType);

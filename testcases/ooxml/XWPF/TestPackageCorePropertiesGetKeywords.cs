@@ -18,7 +18,7 @@
 namespace TestCases.XWPF
 {
     using NPOI.XWPF.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using System;
 
     /**
@@ -42,12 +42,12 @@ namespace TestCases.XWPF
         {
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("TestPoiXMLDocumentCorePropertiesGetKeywords.docx");
             String keywords = doc.GetProperties().CoreProperties.Keywords;
-            Assert.AreEqual("extractor, test, rdf", keywords);
+            ClassicAssert.AreEqual("extractor, test, rdf", keywords);
 
             doc.GetProperties().CoreProperties.Keywords =  ("test, keywords");
             doc = XWPFTestDataSamples.WriteOutAndReadBack(doc);
             keywords = doc.GetProperties().CoreProperties.Keywords;
-            Assert.AreEqual("test, keywords", keywords);
+            ClassicAssert.AreEqual("test, keywords", keywords);
         }
     }
 

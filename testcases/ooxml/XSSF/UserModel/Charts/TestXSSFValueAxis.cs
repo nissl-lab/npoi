@@ -18,7 +18,7 @@
 using NPOI.SS.UserModel;
 using NPOI.SS.UserModel.Charts;
 using NPOI.XSSF.UserModel;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 
 namespace TestCases.XSSF.UserModel.Charts
 {
@@ -36,12 +36,12 @@ namespace TestCases.XSSF.UserModel.Charts
             IValueAxis axis = chart.ChartAxisFactory.CreateValueAxis(AxisPosition.Bottom);
 
             axis.SetCrossBetween(AxisCrossBetween.MidpointCategory);
-            Assert.AreEqual(axis.GetCrossBetween(), AxisCrossBetween.MidpointCategory);
+            ClassicAssert.AreEqual(axis.GetCrossBetween(), AxisCrossBetween.MidpointCategory);
 
             axis.Crosses=(AxisCrosses.AutoZero);
-            Assert.AreEqual(axis.Crosses, AxisCrosses.AutoZero);
+            ClassicAssert.AreEqual(axis.Crosses, AxisCrosses.AutoZero);
 
-            Assert.AreEqual(chart.GetAxis().Count, 1);
+            ClassicAssert.AreEqual(chart.GetAxis().Count, 1);
         }
     }
 }

@@ -15,7 +15,7 @@
    limitations under the License.
 ==================================================================== */
 using System.Collections.Generic;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using System;
 using NPOI.OpenXml4Net.OPC;
 using NPOI.SS.UserModel;
@@ -43,32 +43,32 @@ namespace TestCases.XSSF.UserModel
             XSSFSheet sheet = (XSSFSheet)wb.GetSheetAt(0);
             //the sheet has one relationship and it is XSSFDrawing
             IList<POIXMLDocumentPart.RelationPart> rels = sheet.RelationParts;
-            Assert.AreEqual(1, rels.Count);
+            ClassicAssert.AreEqual(1, rels.Count);
             POIXMLDocumentPart.RelationPart rp = rels[0];
-            Assert.IsTrue(rp.DocumentPart is XSSFDrawing);
+            ClassicAssert.IsTrue(rp.DocumentPart is XSSFDrawing);
 
             XSSFDrawing drawing = (XSSFDrawing)rp.DocumentPart;
             //sheet.CreateDrawingPatriarch() should return the same instance of XSSFDrawing
-            Assert.AreSame(drawing, sheet.CreateDrawingPatriarch());
+            ClassicAssert.AreSame(drawing, sheet.CreateDrawingPatriarch());
             String drawingId = rp.Relationship.Id;
 
             //there should be a relation to this Drawing in the worksheet
-            Assert.IsTrue(sheet.GetCTWorksheet().IsSetDrawing());
-            Assert.AreEqual(drawingId, sheet.GetCTWorksheet().drawing.id);
+            ClassicAssert.IsTrue(sheet.GetCTWorksheet().IsSetDrawing());
+            ClassicAssert.AreEqual(drawingId, sheet.GetCTWorksheet().drawing.id);
 
 
             List<XSSFShape> shapes = drawing.GetShapes();
-            Assert.AreEqual(6, shapes.Count);
+            ClassicAssert.AreEqual(6, shapes.Count);
 
-            Assert.IsTrue(shapes[(0)] is XSSFPicture);
-            Assert.IsTrue(shapes[(1)] is XSSFPicture);
-            Assert.IsTrue(shapes[(2)] is XSSFPicture);
-            Assert.IsTrue(shapes[(3)] is XSSFPicture);
-            Assert.IsTrue(shapes[(4)] is XSSFSimpleShape);
-            Assert.IsTrue(shapes[(5)] is XSSFPicture);
+            ClassicAssert.IsTrue(shapes[(0)] is XSSFPicture);
+            ClassicAssert.IsTrue(shapes[(1)] is XSSFPicture);
+            ClassicAssert.IsTrue(shapes[(2)] is XSSFPicture);
+            ClassicAssert.IsTrue(shapes[(3)] is XSSFPicture);
+            ClassicAssert.IsTrue(shapes[(4)] is XSSFSimpleShape);
+            ClassicAssert.IsTrue(shapes[(5)] is XSSFPicture);
 
             foreach (XSSFShape sh in shapes)
-                Assert.IsNotNull(sh.GetAnchor());
+                ClassicAssert.IsNotNull(sh.GetAnchor());
 
             checkRewrite(wb);
             wb.Close();
@@ -81,19 +81,19 @@ namespace TestCases.XSSF.UserModel
             //multiple calls of CreateDrawingPatriarch should return the same instance of XSSFDrawing
             XSSFDrawing dr1 = (XSSFDrawing)sheet.CreateDrawingPatriarch();
             XSSFDrawing dr2 = (XSSFDrawing)sheet.CreateDrawingPatriarch();
-            Assert.AreSame(dr1, dr2);
+            ClassicAssert.AreSame(dr1, dr2);
 
             IList<POIXMLDocumentPart.RelationPart> rels = sheet.RelationParts;
-            Assert.AreEqual(1, rels.Count);
+            ClassicAssert.AreEqual(1, rels.Count);
             POIXMLDocumentPart.RelationPart rp = rels[0];
-            Assert.IsTrue(rp.DocumentPart is XSSFDrawing);
+            ClassicAssert.IsTrue(rp.DocumentPart is XSSFDrawing);
 
             XSSFDrawing drawing = (XSSFDrawing)rp.DocumentPart;
             String drawingId = rp.Relationship.Id;
 
             //there should be a relation to this Drawing in the worksheet
-            Assert.IsTrue(sheet.GetCTWorksheet().IsSetDrawing());
-            Assert.AreEqual(drawingId, sheet.GetCTWorksheet().drawing.id);
+            ClassicAssert.IsTrue(sheet.GetCTWorksheet().IsSetDrawing());
+            ClassicAssert.AreEqual(drawingId, sheet.GetCTWorksheet().drawing.id);
 
             //XSSFClientAnchor anchor = new XSSFClientAnchor();
 
@@ -102,7 +102,7 @@ namespace TestCases.XSSF.UserModel
             c1.LineStyle = LineStyle.DashDotSys;
 
             XSSFShapeGroup c2 = drawing.CreateGroup(new XSSFClientAnchor(0, 0, 0, 0, 0, 0, 5, 5));
-            Assert.IsNotNull(c2);
+            ClassicAssert.IsNotNull(c2);
 
             XSSFSimpleShape c3 = drawing.CreateSimpleShape(new XSSFClientAnchor(0, 0, 0, 0, 2, 2, 3, 4));
             c3.SetText(new XSSFRichTextString("Test String"));
@@ -116,14 +116,14 @@ namespace TestCases.XSSF.UserModel
 
             c4.IsNoFill = (true);
 
-            Assert.AreEqual(4, drawing.GetCTDrawing().SizeOfTwoCellAnchorArray());
+            ClassicAssert.AreEqual(4, drawing.GetCTDrawing().SizeOfTwoCellAnchorArray());
 
             List<XSSFShape> shapes = drawing.GetShapes();
-            Assert.AreEqual(4, shapes.Count);
-            Assert.IsTrue(shapes[(0)] is XSSFConnector);
-            Assert.IsTrue(shapes[(1)] is XSSFShapeGroup);
-            Assert.IsTrue(shapes[(2)] is XSSFSimpleShape);
-            Assert.IsTrue(shapes[(3)] is XSSFSimpleShape);
+            ClassicAssert.AreEqual(4, shapes.Count);
+            ClassicAssert.IsTrue(shapes[(0)] is XSSFConnector);
+            ClassicAssert.IsTrue(shapes[(1)] is XSSFShapeGroup);
+            ClassicAssert.IsTrue(shapes[(2)] is XSSFSimpleShape);
+            ClassicAssert.IsTrue(shapes[(3)] is XSSFSimpleShape);
 
             // Save and re-load it
             XSSFWorkbook wb2 = XSSFTestDataSamples.WriteOutAndReadBack(wb1) as XSSFWorkbook;
@@ -136,21 +136,21 @@ namespace TestCases.XSSF.UserModel
             CT_Drawing ctDrawing = dr1.GetCTDrawing();
 
             // Connector, shapes and text boxes are all two cell anchors
-            Assert.AreEqual(0, ctDrawing.SizeOfAbsoluteAnchorArray());
-            Assert.AreEqual(0, ctDrawing.SizeOfOneCellAnchorArray());
-            Assert.AreEqual(4, ctDrawing.SizeOfTwoCellAnchorArray());
+            ClassicAssert.AreEqual(0, ctDrawing.SizeOfAbsoluteAnchorArray());
+            ClassicAssert.AreEqual(0, ctDrawing.SizeOfOneCellAnchorArray());
+            ClassicAssert.AreEqual(4, ctDrawing.SizeOfTwoCellAnchorArray());
 
             shapes = dr1.GetShapes();
-            Assert.AreEqual(4, shapes.Count);
-            Assert.IsTrue(shapes[0] is XSSFConnector);
-            Assert.IsTrue(shapes[1] is XSSFShapeGroup);
-            Assert.IsTrue(shapes[2] is XSSFSimpleShape);
-            Assert.IsTrue(shapes[3] is XSSFSimpleShape); //
+            ClassicAssert.AreEqual(4, shapes.Count);
+            ClassicAssert.IsTrue(shapes[0] is XSSFConnector);
+            ClassicAssert.IsTrue(shapes[1] is XSSFShapeGroup);
+            ClassicAssert.IsTrue(shapes[2] is XSSFSimpleShape);
+            ClassicAssert.IsTrue(shapes[3] is XSSFSimpleShape); //
 
             // Ensure it got the right namespaces
             //String xml = ctDrawing.ToString();
-            //Assert.IsTrue(xml.Contains("xmlns:xdr=\"http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing\""));
-            //Assert.IsTrue(xml.Contains("xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\""));
+            //ClassicAssert.IsTrue(xml.Contains("xmlns:xdr=\"http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing\""));
+            //ClassicAssert.IsTrue(xml.Contains("xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\""));
 
             checkRewrite(wb2);
             wb2.Close();
@@ -164,12 +164,12 @@ namespace TestCases.XSSF.UserModel
             {
                 XSSFSheet sheet = (XSSFSheet)wb.CreateSheet();
                 XSSFDrawing drawing = (XSSFDrawing)sheet.CreateDrawingPatriarch();
-                Assert.IsNotNull(drawing);
+                ClassicAssert.IsNotNull(drawing);
             }
             OPCPackage pkg = wb.Package;
             try
             {
-                Assert.AreEqual(3, pkg.GetPartsByContentType(XSSFRelation.DRAWINGS.ContentType).Count);
+                ClassicAssert.AreEqual(3, pkg.GetPartsByContentType(XSSFRelation.DRAWINGS.ContentType).Count);
                 checkRewrite(wb);
             }
             finally
@@ -188,28 +188,28 @@ namespace TestCases.XSSF.UserModel
 
             //the source sheet has one relationship and it is XSSFDrawing
             IList<POIXMLDocumentPart> rels1 = sheet1.GetRelations();
-            Assert.AreEqual(1, rels1.Count);
-            Assert.IsTrue(rels1[(0)] is XSSFDrawing);
+            ClassicAssert.AreEqual(1, rels1.Count);
+            ClassicAssert.IsTrue(rels1[(0)] is XSSFDrawing);
 
             IList<POIXMLDocumentPart> rels2 = sheet2.GetRelations();
-            Assert.AreEqual(1, rels2.Count);
-            Assert.IsTrue(rels2[(0)] is XSSFDrawing);
+            ClassicAssert.AreEqual(1, rels2.Count);
+            ClassicAssert.IsTrue(rels2[(0)] is XSSFDrawing);
 
             XSSFDrawing drawing1 = (XSSFDrawing)rels1[0];
             XSSFDrawing drawing2 = (XSSFDrawing)rels2[0];
-            Assert.AreNotSame(drawing1, drawing2);  // Drawing2 is a clone of Drawing1
+            ClassicAssert.AreNotSame(drawing1, drawing2);  // Drawing2 is a clone of Drawing1
 
             List<XSSFShape> shapes1 = drawing1.GetShapes();
             List<XSSFShape> shapes2 = drawing2.GetShapes();
-            Assert.AreEqual(shapes1.Count, shapes2.Count);
+            ClassicAssert.AreEqual(shapes1.Count, shapes2.Count);
 
             for (int i = 0; i < shapes1.Count; i++)
             {
                 XSSFShape sh1 = (XSSFShape)shapes1[(i)];
                 XSSFShape sh2 = (XSSFShape)shapes2[i];
 
-                Assert.IsTrue(sh1.GetType() == sh2.GetType());
-                Assert.AreEqual(sh1.GetShapeProperties().ToString(), sh2.GetShapeProperties().ToString());
+                ClassicAssert.IsTrue(sh1.GetType() == sh2.GetType());
+                ClassicAssert.AreEqual(sh1.GetShapeProperties().ToString(), sh2.GetShapeProperties().ToString());
             }
 
             checkRewrite(wb);
@@ -242,13 +242,13 @@ namespace TestCases.XSSF.UserModel
             shape.SetText(rt);
 
             CT_TextParagraph pr = shape.GetCTShape().txBody.p[0];
-            Assert.AreEqual(1, pr.SizeOfRArray());
+            ClassicAssert.AreEqual(1, pr.SizeOfRArray());
 
             CT_TextCharacterProperties rPr = pr.r[0].rPr;
-            Assert.AreEqual(true, rPr.b);
-            Assert.AreEqual(true, rPr.i);
-            Assert.AreEqual(ST_TextUnderlineType.sng, rPr.u);
-            Assert.IsTrue(Arrays.Equals(
+            ClassicAssert.AreEqual(true, rPr.b);
+            ClassicAssert.AreEqual(true, rPr.i);
+            ClassicAssert.AreEqual(ST_TextUnderlineType.sng, rPr.u);
+            ClassicAssert.IsTrue(Arrays.Equals(
                     new byte[] { 0, (byte)128, (byte)128 },
                     rPr.solidFill.srgbClr.val));
 
@@ -268,26 +268,26 @@ namespace TestCases.XSSF.UserModel
 
             XSSFClientAnchor anchor1 = new XSSFClientAnchor(0, 0, 0, 0, 2, 2, 3, 4);
             XSSFShape shape1 = Drawing.CreateTextbox(anchor1) as XSSFShape;
-            Assert.IsNotNull(shape1);
+            ClassicAssert.IsNotNull(shape1);
 
             XSSFClientAnchor anchor2 = new XSSFClientAnchor(0, 0, 0, 0, 2, 2, 3, 5);
             XSSFShape shape2 = Drawing.CreateTextbox(anchor2) as XSSFShape;
-            Assert.IsNotNull(shape2);
+            ClassicAssert.IsNotNull(shape2);
 
             int pictureIndex = wb1.AddPicture(new byte[] { }, XSSFWorkbook.PICTURE_TYPE_PNG);
             XSSFClientAnchor anchor3 = new XSSFClientAnchor(0, 0, 0, 0, 2, 2, 3, 6);
             XSSFShape shape3 = Drawing.CreatePicture(anchor3, pictureIndex) as XSSFShape;
-            Assert.IsNotNull(shape3);
+            ClassicAssert.IsNotNull(shape3);
 
             XSSFWorkbook wb2 = XSSFTestDataSamples.WriteOutAndReadBack(wb1);
             wb1.Close();
             sheet = wb2.GetSheetAt(0) as XSSFSheet;
             Drawing = sheet.CreateDrawingPatriarch() as XSSFDrawing;
             List<XSSFShape> shapes = Drawing.GetShapes();
-            Assert.AreEqual(3, shapes.Count);
-            Assert.AreEqual(shapes[0].GetAnchor(), anchor1);
-            Assert.AreEqual(shapes[1].GetAnchor(), anchor2);
-            Assert.AreEqual(shapes[2].GetAnchor(), anchor3);
+            ClassicAssert.AreEqual(3, shapes.Count);
+            ClassicAssert.AreEqual(shapes[0].GetAnchor(), anchor1);
+            ClassicAssert.AreEqual(shapes[1].GetAnchor(), anchor2);
+            ClassicAssert.AreEqual(shapes[2].GetAnchor(), anchor3);
 
             checkRewrite(wb2);
             wb2.Close();
@@ -318,11 +318,11 @@ namespace TestCases.XSSF.UserModel
             shape.SetText(rt);
 
             CT_TextParagraph pr = shape.GetCTShape().txBody.GetPArray(0);
-            Assert.AreEqual(1, pr.SizeOfRArray());
+            ClassicAssert.AreEqual(1, pr.SizeOfRArray());
 
             CT_TextCharacterProperties rPr = pr.GetRArray(0).rPr;
-            Assert.AreEqual("Arial", rPr.latin.typeface);
-            Assert.IsTrue(Arrays.Equals(
+            ClassicAssert.AreEqual("Arial", rPr.latin.typeface);
+            ClassicAssert.IsTrue(Arrays.Equals(
                     new byte[] { 0, (byte)128, (byte)128 },
                     rPr.solidFill.srgbClr.val));
 
@@ -351,15 +351,15 @@ namespace TestCases.XSSF.UserModel
             shape.SetText(rt);
 
             List<XSSFTextParagraph> paras = shape.TextParagraphs;
-            Assert.AreEqual(1, paras.Count);
-            Assert.AreEqual("Test String", paras[0].Text);
+            ClassicAssert.AreEqual(1, paras.Count);
+            ClassicAssert.AreEqual("Test String", paras[0].Text);
 
             List<XSSFTextRun> runs = paras[0].TextRuns;
-            Assert.AreEqual(1, runs.Count);
-            Assert.AreEqual("Arial", runs[0].FontFamily);
+            ClassicAssert.AreEqual(1, runs.Count);
+            ClassicAssert.AreEqual("Arial", runs[0].FontFamily);
 
             var clr = runs[0].FontColor;
-            Assert.IsTrue(Arrays.Equals(
+            ClassicAssert.IsTrue(Arrays.Equals(
                     new int[] { 0, 255, 255 },
                     new int[] { clr.R, clr.G, clr.B }));
 
@@ -383,11 +383,11 @@ namespace TestCases.XSSF.UserModel
             para.AddNewTextRun().Text = ("Line 1");
 
             List<XSSFTextParagraph> paras = shape.TextParagraphs;
-            Assert.AreEqual(2, paras.Count);	// this should be 2 as XSSFSimpleShape Creates a default paragraph (no text), and then we add a string to that.
+            ClassicAssert.AreEqual(2, paras.Count);	// this should be 2 as XSSFSimpleShape Creates a default paragraph (no text), and then we add a string to that.
 
             List<XSSFTextRun> runs = para.TextRuns;
-            Assert.AreEqual(1, runs.Count);
-            Assert.AreEqual("Line 1", runs[0].Text);
+            ClassicAssert.AreEqual(1, runs.Count);
+            ClassicAssert.AreEqual("Line 1", runs[0].Text);
 
             checkRewrite(wb);
             wb.Close();
@@ -426,40 +426,40 @@ namespace TestCases.XSSF.UserModel
             drawing = sheet.CreateDrawingPatriarch() as XSSFDrawing;
 
             List<XSSFShape> shapes = drawing.GetShapes();
-            Assert.AreEqual(1, shapes.Count);
-            Assert.IsTrue(shapes[0] is XSSFSimpleShape);
+            ClassicAssert.AreEqual(1, shapes.Count);
+            ClassicAssert.IsTrue(shapes[0] is XSSFSimpleShape);
 
             XSSFSimpleShape sshape = (XSSFSimpleShape)shapes[0];
 
             List<XSSFTextParagraph> paras = sshape.TextParagraphs;
-            Assert.AreEqual(2, paras.Count);	// this should be 2 as XSSFSimpleShape Creates a default paragraph (no text), and then we add a string to that.  
+            ClassicAssert.AreEqual(2, paras.Count);	// this should be 2 as XSSFSimpleShape Creates a default paragraph (no text), and then we add a string to that.  
 
             List<XSSFTextRun> runs = para.TextRuns;
-            Assert.AreEqual(3, runs.Count);
+            ClassicAssert.AreEqual(3, runs.Count);
 
             // first run properties
-            Assert.AreEqual("Test ", runs[0].Text);
-            Assert.AreEqual("Arial", runs[0].FontFamily);
+            ClassicAssert.AreEqual("Test ", runs[0].Text);
+            ClassicAssert.AreEqual("Arial", runs[0].FontFamily);
 
             var clr = runs[0].FontColor;
-            Assert.IsTrue(Arrays.Equals(
+            ClassicAssert.IsTrue(Arrays.Equals(
                     new int[] { 0, 255, 255 },
                     new int[] { clr.R, clr.G, clr.B }));
 
             // second run properties        
-            Assert.AreEqual("Rich Text", runs[1].Text);
-            Assert.AreEqual(XSSFFont.DEFAULT_FONT_NAME, runs[1].FontFamily);
+            ClassicAssert.AreEqual("Rich Text", runs[1].Text);
+            ClassicAssert.AreEqual(XSSFFont.DEFAULT_FONT_NAME, runs[1].FontFamily);
 
             clr = runs[1].FontColor;
-            Assert.IsTrue(Arrays.Equals(
+            ClassicAssert.IsTrue(Arrays.Equals(
                     new int[] { 0, 255, 0 },
                     new int[] { clr.R, clr.G, clr.B }));
 
             // third run properties
-            Assert.AreEqual(" String", runs[2].Text);
-            Assert.AreEqual("Arial", runs[2].FontFamily);
+            ClassicAssert.AreEqual(" String", runs[2].Text);
+            ClassicAssert.AreEqual("Arial", runs[2].FontFamily);
             clr = runs[2].FontColor;
-            Assert.IsTrue(Arrays.Equals(
+            ClassicAssert.IsTrue(Arrays.Equals(
                     new int[] { 0, 255, 255 },
                     new int[] { clr.R, clr.G, clr.B }));
 
@@ -489,8 +489,8 @@ namespace TestCases.XSSF.UserModel
             para.AddNewTextRun().Text = ("Line 3");
 
             List<XSSFTextParagraph> paras = shape.TextParagraphs;
-            Assert.AreEqual(4, paras.Count);	// this should be 4 as XSSFSimpleShape Creates a default paragraph (no text), and then we Added 3 paragraphs
-            Assert.AreEqual("Line 1\nLine 2\nLine 3", shape.Text);
+            ClassicAssert.AreEqual(4, paras.Count);	// this should be 4 as XSSFSimpleShape Creates a default paragraph (no text), and then we Added 3 paragraphs
+            ClassicAssert.AreEqual("Line 1\nLine 2\nLine 3", shape.Text);
 
             checkRewrite(wb);
             wb.Close();
@@ -517,8 +517,8 @@ namespace TestCases.XSSF.UserModel
             para.AddNewTextRun().Text = ("Line 3");
 
             List<XSSFTextParagraph> paras = shape.TextParagraphs;
-            Assert.AreEqual(3, paras.Count);	// this should be 3 as we overwrote the default paragraph with SetText, then Added 2 new paragraphs
-            Assert.AreEqual("Line 1\nLine 2\nLine 3", shape.Text);
+            ClassicAssert.AreEqual(3, paras.Count);	// this should be 3 as we overwrote the default paragraph with SetText, then Added 2 new paragraphs
+            ClassicAssert.AreEqual("Line 1\nLine 2\nLine 3", shape.Text);
 
             checkRewrite(wb);
             wb.Close();
@@ -534,26 +534,26 @@ namespace TestCases.XSSF.UserModel
             XSSFSheet sheet = wb.GetSheetAt(0) as XSSFSheet;
             //the sheet has one relationship and it is XSSFDrawing
             IList<POIXMLDocumentPart.RelationPart> rels = sheet.RelationParts;
-            Assert.AreEqual(1, rels.Count);
+            ClassicAssert.AreEqual(1, rels.Count);
             POIXMLDocumentPart.RelationPart rp = rels[0];
-            Assert.IsTrue(rp.DocumentPart is XSSFDrawing);
+            ClassicAssert.IsTrue(rp.DocumentPart is XSSFDrawing);
 
             XSSFDrawing drawing = (XSSFDrawing)rp.DocumentPart;
             //sheet.CreateDrawingPatriarch() should return the same instance of XSSFDrawing
-            Assert.AreSame(drawing, sheet.CreateDrawingPatriarch());
+            ClassicAssert.AreSame(drawing, sheet.CreateDrawingPatriarch());
             String drawingId = rp.Relationship.Id;
 
             //there should be a relation to this Drawing in the worksheet
-            Assert.IsTrue(sheet.GetCTWorksheet().IsSetDrawing());
-            Assert.AreEqual(drawingId, sheet.GetCTWorksheet().drawing.id);
+            ClassicAssert.IsTrue(sheet.GetCTWorksheet().IsSetDrawing());
+            ClassicAssert.AreEqual(drawingId, sheet.GetCTWorksheet().drawing.id);
 
             List<XSSFShape> shapes = drawing.GetShapes();
-            Assert.AreEqual(6, shapes.Count);
+            ClassicAssert.AreEqual(6, shapes.Count);
 
-            Assert.IsTrue(shapes[4] is XSSFSimpleShape);
+            ClassicAssert.IsTrue(shapes[4] is XSSFSimpleShape);
 
             XSSFSimpleShape textbox = (XSSFSimpleShape)shapes[4];
-            Assert.AreEqual("Sheet with various pictures\n(jpeg, png, wmf, emf and pict)", textbox.Text);
+            ClassicAssert.AreEqual("Sheet with various pictures\n(jpeg, png, wmf, emf and pict)", textbox.Text);
 
             checkRewrite(wb);
             wb.Close();
@@ -570,51 +570,51 @@ namespace TestCases.XSSF.UserModel
             XSSFSheet sheet = wb.GetSheetAt(0) as XSSFSheet;
             //the sheet has one relationship and it is XSSFDrawing
             IList<POIXMLDocumentPart.RelationPart> rels = sheet.RelationParts;
-            Assert.AreEqual(1, rels.Count);
+            ClassicAssert.AreEqual(1, rels.Count);
             POIXMLDocumentPart.RelationPart rp = rels[0];
-            Assert.IsTrue(rp.DocumentPart is XSSFDrawing);
+            ClassicAssert.IsTrue(rp.DocumentPart is XSSFDrawing);
 
             XSSFDrawing drawing = (XSSFDrawing)rp.DocumentPart;
 
             //sheet.CreateDrawingPatriarch() should return the same instance of XSSFDrawing
-            Assert.AreSame(drawing, sheet.CreateDrawingPatriarch());
+            ClassicAssert.AreSame(drawing, sheet.CreateDrawingPatriarch());
             String drawingId = rp.Relationship.Id;
 
             //there should be a relation to this Drawing in the worksheet
-            Assert.IsTrue(sheet.GetCTWorksheet().IsSetDrawing());
-            Assert.AreEqual(drawingId, sheet.GetCTWorksheet().drawing.id);
+            ClassicAssert.IsTrue(sheet.GetCTWorksheet().IsSetDrawing());
+            ClassicAssert.AreEqual(drawingId, sheet.GetCTWorksheet().drawing.id);
 
             List<XSSFShape> shapes = drawing.GetShapes();
-            Assert.AreEqual(1, shapes.Count);
+            ClassicAssert.AreEqual(1, shapes.Count);
 
-            Assert.IsTrue(shapes[0] is XSSFSimpleShape);
+            ClassicAssert.IsTrue(shapes[0] is XSSFSimpleShape);
 
             XSSFSimpleShape textbox = (XSSFSimpleShape)shapes[0];
 
             List<XSSFTextParagraph> paras = textbox.TextParagraphs;
-            Assert.AreEqual(3, paras.Count);
+            ClassicAssert.AreEqual(3, paras.Count);
 
-            Assert.AreEqual("Line 2", paras[1].Text);	// check content of second paragraph
+            ClassicAssert.AreEqual("Line 2", paras[1].Text);	// check content of second paragraph
 
-            Assert.AreEqual("Line 1\nLine 2\nLine 3", textbox.Text);	// check content of entire textbox
+            ClassicAssert.AreEqual("Line 1\nLine 2\nLine 3", textbox.Text);	// check content of entire textbox
 
             // check attributes of paragraphs
-            Assert.AreEqual(TextAlign.LEFT, paras[0].TextAlign);
-            Assert.AreEqual(TextAlign.CENTER, paras[1].TextAlign);
-            Assert.AreEqual(TextAlign.RIGHT, paras[2].TextAlign);
+            ClassicAssert.AreEqual(TextAlign.LEFT, paras[0].TextAlign);
+            ClassicAssert.AreEqual(TextAlign.CENTER, paras[1].TextAlign);
+            ClassicAssert.AreEqual(TextAlign.RIGHT, paras[2].TextAlign);
 
             var clr = paras[0].TextRuns[0].FontColor;
-            Assert.IsTrue(Arrays.Equals(
+            ClassicAssert.IsTrue(Arrays.Equals(
                     new int[] { 255, 0, 0 },
                     new int[] { clr.R, clr.G, clr.B }));
 
             clr = paras[1].TextRuns[0].FontColor;
-            Assert.IsTrue(Arrays.Equals(
+            ClassicAssert.IsTrue(Arrays.Equals(
                     new int[] { 0, 255, 0 },
                     new int[] { clr.R, clr.G, clr.B }));
 
             clr = paras[2].TextRuns[0].FontColor;
-            Assert.IsTrue(Arrays.Equals(
+            ClassicAssert.IsTrue(Arrays.Equals(
                     new int[] { 0, 0, 255 },
                     new int[] { clr.R, clr.G, clr.B }));
 
@@ -647,7 +647,7 @@ namespace TestCases.XSSF.UserModel
             String paraString10 = "Fifth Bullet";
 
             XSSFTextParagraph para = shape.AddNewTextParagraph(paraString1);
-            Assert.IsNotNull(para);
+            ClassicAssert.IsNotNull(para);
             para = shape.AddNewTextParagraph(paraString2);
             para.SetBullet(true);
 
@@ -659,7 +659,7 @@ namespace TestCases.XSSF.UserModel
             para.SetBullet(true);
 
             para = shape.AddNewTextParagraph(paraString5);
-            Assert.IsNotNull(para);
+            ClassicAssert.IsNotNull(para);
             para = shape.AddNewTextParagraph(paraString6);
             para.SetBullet(ListAutoNumber.ARABIC_PERIOD);
 
@@ -690,13 +690,13 @@ namespace TestCases.XSSF.UserModel
             drawing = sheet.CreateDrawingPatriarch() as XSSFDrawing;
 
             List<XSSFShape> shapes = drawing.GetShapes();
-            Assert.AreEqual(1, shapes.Count);
-            Assert.IsTrue(shapes[0] is XSSFSimpleShape);
+            ClassicAssert.AreEqual(1, shapes.Count);
+            ClassicAssert.IsTrue(shapes[0] is XSSFSimpleShape);
 
             XSSFSimpleShape sshape = (XSSFSimpleShape)shapes[0];
 
             List<XSSFTextParagraph> paras = sshape.TextParagraphs;
-            Assert.AreEqual(12, paras.Count);  // this should be 12 as XSSFSimpleShape Creates a default paragraph (no text), and then we Added to that
+            ClassicAssert.AreEqual(12, paras.Count);  // this should be 12 as XSSFSimpleShape Creates a default paragraph (no text), and then we Added to that
 
             StringBuilder builder = new StringBuilder();
 
@@ -730,7 +730,7 @@ namespace TestCases.XSSF.UserModel
             builder.Append("2. ");
             builder.Append(paraString10);
 
-            Assert.AreEqual(builder.ToString(), sshape.Text);
+            ClassicAssert.AreEqual(builder.ToString(), sshape.Text);
 
             checkRewrite(wb2);
             wb2.Close();
@@ -759,7 +759,7 @@ namespace TestCases.XSSF.UserModel
             sb.Append("4. content2BStartAt3Incremented\n");
             sb.Append("\t\n\t\n\t\n\t");
 
-            Assert.AreEqual(sb.ToString(), extracted);
+            ClassicAssert.AreEqual(sb.ToString(), extracted);
 
             checkRewrite(wb);
             wb.Close();
@@ -772,14 +772,14 @@ namespace TestCases.XSSF.UserModel
             XSSFSheet sheet = wb1.GetSheetAt(0) as XSSFSheet;
             XSSFDrawing drawing = sheet.CreateDrawingPatriarch() as XSSFDrawing;
             List<XSSFShape> shapes = drawing.GetShapes();
-            Assert.AreEqual(4, shapes.Count);
+            ClassicAssert.AreEqual(4, shapes.Count);
 
             XSSFWorkbook wb2 = XSSFTestDataSamples.WriteOutAndReadBack(wb1) as XSSFWorkbook;
             wb1.Close();
             sheet = wb2.GetSheetAt(0) as XSSFSheet;
             drawing = sheet.CreateDrawingPatriarch() as XSSFDrawing;
             shapes = drawing.GetShapes();
-            Assert.AreEqual(4, shapes.Count);
+            ClassicAssert.AreEqual(4, shapes.Count);
             wb2.Close();
         }
 
@@ -796,7 +796,7 @@ namespace TestCases.XSSF.UserModel
                 // first comment works
                 IClientAnchor anchor = new XSSFClientAnchor(1, 1, 2, 2, 3, 3, 4, 4);
                 XSSFComment comment = Drawing.CreateCellComment(anchor) as XSSFComment;
-                Assert.IsNotNull(comment);
+                ClassicAssert.IsNotNull(comment);
 
                 try
                 {
@@ -816,7 +816,7 @@ namespace TestCases.XSSF.UserModel
         private static void checkRewrite(XSSFWorkbook wb)
         {
             XSSFWorkbook wb2 = XSSFTestDataSamples.WriteOutAndReadBack(wb);
-            Assert.IsNotNull(wb2);
+            ClassicAssert.IsNotNull(wb2);
             wb2.Close();
         }
     }

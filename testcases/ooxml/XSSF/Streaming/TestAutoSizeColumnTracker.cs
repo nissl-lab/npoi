@@ -21,7 +21,7 @@ namespace TestCases.XSSF.Streaming
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
     using NPOI.XSSF.Streaming;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
 
     /**
@@ -71,33 +71,33 @@ namespace TestCases.XSSF.Streaming
             tracker.TrackColumn(0);
             ISet<int> expected = new HashSet<int>();
             expected.Add(0);
-            Assert.AreEqual(expected, tracker.TrackedColumns);
+            ClassicAssert.AreEqual(expected, tracker.TrackedColumns);
             tracker.UntrackColumn(0);
-            Assert.IsTrue(tracker.TrackedColumns.Count == 0);
+            ClassicAssert.IsTrue(tracker.TrackedColumns.Count == 0);
         }
 
         [Test]
         public void trackAndUntrackColumns() {
             Assume.That(tracker.TrackedColumns.Count == 0);
             tracker.TrackColumns(columns);
-            Assert.AreEqual(columns, tracker.TrackedColumns);
+            ClassicAssert.AreEqual(columns, tracker.TrackedColumns);
             tracker.UntrackColumn(3);
             tracker.UntrackColumn(0);
             tracker.UntrackColumn(1);
-            Assert.IsTrue(tracker.TrackedColumns.Count == 0);
+            ClassicAssert.IsTrue(tracker.TrackedColumns.Count == 0);
             tracker.TrackColumn(0);
             tracker.TrackColumns(columns);
             tracker.UntrackColumn(4);
-            Assert.AreEqual(columns, tracker.TrackedColumns);
+            ClassicAssert.AreEqual(columns, tracker.TrackedColumns);
             tracker.UntrackColumns(columns);
-            Assert.IsTrue(tracker.TrackedColumns.Count == 0);
+            ClassicAssert.IsTrue(tracker.TrackedColumns.Count == 0);
         }
 
         [Test]
         public void trackAndUntrackAllColumns() {
             Assume.That(tracker.TrackedColumns.Count == 0);
             tracker.TrackAllColumns();
-            Assert.IsTrue(tracker.TrackedColumns.Count == 0);
+            ClassicAssert.IsTrue(tracker.TrackedColumns.Count == 0);
 
             IRow row = sheet.CreateRow(0);
             foreach (int column in columns) {
@@ -105,19 +105,19 @@ namespace TestCases.XSSF.Streaming
             }
             // implicitly track the columns
             tracker.UpdateColumnWidths(row);
-            Assert.AreEqual(columns, tracker.TrackedColumns);
+            ClassicAssert.AreEqual(columns, tracker.TrackedColumns);
 
             tracker.UntrackAllColumns();
-            Assert.IsTrue(tracker.TrackedColumns.Count == 0);
+            ClassicAssert.IsTrue(tracker.TrackedColumns.Count == 0);
         }
 
         [Test]
         public void isColumnTracked() {
-            Assert.IsFalse(tracker.IsColumnTracked(0));
+            ClassicAssert.IsFalse(tracker.IsColumnTracked(0));
             tracker.TrackColumn(0);
-            Assert.IsTrue(tracker.IsColumnTracked(0));
+            ClassicAssert.IsTrue(tracker.IsColumnTracked(0));
             tracker.UntrackColumn(0);
-            Assert.IsFalse(tracker.IsColumnTracked(0));
+            ClassicAssert.IsFalse(tracker.IsColumnTracked(0));
         }
 
         [Test]
@@ -128,17 +128,17 @@ namespace TestCases.XSSF.Streaming
                 tracker.TrackColumn(column);
             }
 
-            Assert.AreEqual(3, tracker.TrackedColumns.Count);
-            Assert.AreEqual(columns, tracker.TrackedColumns);
+            ClassicAssert.AreEqual(3, tracker.TrackedColumns.Count);
+            ClassicAssert.AreEqual(columns, tracker.TrackedColumns);
         }
 
         [Test]
         public void isAllColumnsTracked() {
-            Assert.IsFalse(tracker.IsAllColumnsTracked());
+            ClassicAssert.IsFalse(tracker.IsAllColumnsTracked());
             tracker.TrackAllColumns();
-            Assert.IsTrue(tracker.IsAllColumnsTracked());
+            ClassicAssert.IsTrue(tracker.IsAllColumnsTracked());
             tracker.UntrackAllColumns();
-            Assert.IsFalse(tracker.IsAllColumnsTracked());
+            ClassicAssert.IsFalse(tracker.IsAllColumnsTracked());
         }
 
         [Test]

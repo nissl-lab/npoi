@@ -18,7 +18,7 @@
 namespace TestCases.SS.UserModel
 {
     using System;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using TestCases.SS;
     using NPOI.SS.UserModel;
 
@@ -51,7 +51,7 @@ namespace TestCases.SS.UserModel
             wb1.Close();
 
             // invalid characters are Replaced with question marks
-            Assert.AreEqual("???<>\t\n\u00a0 &\"POI\'\u2122", wb2.GetSheetAt(0).GetRow(0).GetCell(0).StringCellValue);
+            ClassicAssert.AreEqual("???<>\t\n\u00a0 &\"POI\'\u2122", wb2.GetSheetAt(0).GetRow(0).GetCell(0).StringCellValue);
             wb2.Close();
         }
 

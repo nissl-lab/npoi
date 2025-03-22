@@ -20,7 +20,7 @@ using System.Linq;
 using System.Text;
 using NPOI.HSSF.UserModel;
 using NPOI.DDF;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using TestCases.HSSF.UserModel;
 using NPOI.SS.UserModel;
 
@@ -33,38 +33,38 @@ namespace TestCases.HSSF.Model
         public void TestDefaultValues()
         {
             HSSFClientAnchor clientAnchor = new HSSFClientAnchor();
-            Assert.AreEqual((int)clientAnchor.AnchorType, 0);
-            Assert.AreEqual(clientAnchor.Col1, 0);
-            Assert.AreEqual(clientAnchor.Col2, 0);
-            Assert.AreEqual(clientAnchor.Dx1, 0);
-            Assert.AreEqual(clientAnchor.Dx2, 0);
-            Assert.AreEqual(clientAnchor.Dy1, 0);
-            Assert.AreEqual(clientAnchor.Dy2, 0);
-            Assert.AreEqual(clientAnchor.Row1, 0);
-            Assert.AreEqual(clientAnchor.Row2, 0);
+            ClassicAssert.AreEqual((int)clientAnchor.AnchorType, 0);
+            ClassicAssert.AreEqual(clientAnchor.Col1, 0);
+            ClassicAssert.AreEqual(clientAnchor.Col2, 0);
+            ClassicAssert.AreEqual(clientAnchor.Dx1, 0);
+            ClassicAssert.AreEqual(clientAnchor.Dx2, 0);
+            ClassicAssert.AreEqual(clientAnchor.Dy1, 0);
+            ClassicAssert.AreEqual(clientAnchor.Dy2, 0);
+            ClassicAssert.AreEqual(clientAnchor.Row1, 0);
+            ClassicAssert.AreEqual(clientAnchor.Row2, 0);
 
             clientAnchor = new HSSFClientAnchor(new EscherClientAnchorRecord());
-            Assert.AreEqual((int)clientAnchor.AnchorType, 0);
-            Assert.AreEqual(clientAnchor.Col1, 0);
-            Assert.AreEqual(clientAnchor.Col2, 0);
-            Assert.AreEqual(clientAnchor.Dx1, 0);
-            Assert.AreEqual(clientAnchor.Dx2, 0);
-            Assert.AreEqual(clientAnchor.Dy1, 0);
-            Assert.AreEqual(clientAnchor.Dy2, 0);
-            Assert.AreEqual(clientAnchor.Row1, 0);
-            Assert.AreEqual(clientAnchor.Row2, 0);
+            ClassicAssert.AreEqual((int)clientAnchor.AnchorType, 0);
+            ClassicAssert.AreEqual(clientAnchor.Col1, 0);
+            ClassicAssert.AreEqual(clientAnchor.Col2, 0);
+            ClassicAssert.AreEqual(clientAnchor.Dx1, 0);
+            ClassicAssert.AreEqual(clientAnchor.Dx2, 0);
+            ClassicAssert.AreEqual(clientAnchor.Dy1, 0);
+            ClassicAssert.AreEqual(clientAnchor.Dy2, 0);
+            ClassicAssert.AreEqual(clientAnchor.Row1, 0);
+            ClassicAssert.AreEqual(clientAnchor.Row2, 0);
 
             HSSFChildAnchor childAnchor = new HSSFChildAnchor();
-            Assert.AreEqual(childAnchor.Dx1, 0);
-            Assert.AreEqual(childAnchor.Dx2, 0);
-            Assert.AreEqual(childAnchor.Dy1, 0);
-            Assert.AreEqual(childAnchor.Dy2, 0);
+            ClassicAssert.AreEqual(childAnchor.Dx1, 0);
+            ClassicAssert.AreEqual(childAnchor.Dx2, 0);
+            ClassicAssert.AreEqual(childAnchor.Dy1, 0);
+            ClassicAssert.AreEqual(childAnchor.Dy2, 0);
 
             childAnchor = new HSSFChildAnchor(new EscherChildAnchorRecord());
-            Assert.AreEqual(childAnchor.Dx1, 0);
-            Assert.AreEqual(childAnchor.Dx2, 0);
-            Assert.AreEqual(childAnchor.Dy1, 0);
-            Assert.AreEqual(childAnchor.Dy2, 0);
+            ClassicAssert.AreEqual(childAnchor.Dx1, 0);
+            ClassicAssert.AreEqual(childAnchor.Dx2, 0);
+            ClassicAssert.AreEqual(childAnchor.Dy1, 0);
+            ClassicAssert.AreEqual(childAnchor.Dy2, 0);
         }
         [Test]
         public void TestCorrectOrderInSpContainer()
@@ -75,17 +75,17 @@ namespace TestCases.HSSF.Model
 
             HSSFSimpleShape rectangle = (HSSFSimpleShape)drawing.Children[0];
 
-            Assert.AreEqual(HSSFTestHelper.GetEscherContainer(rectangle).GetChild(0).RecordId, EscherSpRecord.RECORD_ID);
-            Assert.AreEqual(HSSFTestHelper.GetEscherContainer(rectangle).GetChild(1).RecordId, EscherOptRecord.RECORD_ID);
-            Assert.AreEqual(HSSFTestHelper.GetEscherContainer(rectangle).GetChild(2).RecordId, EscherClientAnchorRecord.RECORD_ID);
-            Assert.AreEqual(HSSFTestHelper.GetEscherContainer(rectangle).GetChild(3).RecordId, EscherClientDataRecord.RECORD_ID);
+            ClassicAssert.AreEqual(HSSFTestHelper.GetEscherContainer(rectangle).GetChild(0).RecordId, EscherSpRecord.RECORD_ID);
+            ClassicAssert.AreEqual(HSSFTestHelper.GetEscherContainer(rectangle).GetChild(1).RecordId, EscherOptRecord.RECORD_ID);
+            ClassicAssert.AreEqual(HSSFTestHelper.GetEscherContainer(rectangle).GetChild(2).RecordId, EscherClientAnchorRecord.RECORD_ID);
+            ClassicAssert.AreEqual(HSSFTestHelper.GetEscherContainer(rectangle).GetChild(3).RecordId, EscherClientDataRecord.RECORD_ID);
 
             rectangle.Anchor = (new HSSFClientAnchor());
 
-            Assert.AreEqual(HSSFTestHelper.GetEscherContainer(rectangle).GetChild(0).RecordId, EscherSpRecord.RECORD_ID);
-            Assert.AreEqual(HSSFTestHelper.GetEscherContainer(rectangle).GetChild(1).RecordId, EscherOptRecord.RECORD_ID);
-            Assert.AreEqual(HSSFTestHelper.GetEscherContainer(rectangle).GetChild(2).RecordId, EscherClientAnchorRecord.RECORD_ID);
-            Assert.AreEqual(HSSFTestHelper.GetEscherContainer(rectangle).GetChild(3).RecordId, EscherClientDataRecord.RECORD_ID);
+            ClassicAssert.AreEqual(HSSFTestHelper.GetEscherContainer(rectangle).GetChild(0).RecordId, EscherSpRecord.RECORD_ID);
+            ClassicAssert.AreEqual(HSSFTestHelper.GetEscherContainer(rectangle).GetChild(1).RecordId, EscherOptRecord.RECORD_ID);
+            ClassicAssert.AreEqual(HSSFTestHelper.GetEscherContainer(rectangle).GetChild(2).RecordId, EscherClientAnchorRecord.RECORD_ID);
+            ClassicAssert.AreEqual(HSSFTestHelper.GetEscherContainer(rectangle).GetChild(3).RecordId, EscherClientDataRecord.RECORD_ID);
         }
         [Test]
         public void TestCreateClientAnchorFromContainer()
@@ -104,22 +104,22 @@ namespace TestCases.HSSF.Model
             container.AddChildRecord(escher);
 
             HSSFClientAnchor anchor = (HSSFClientAnchor)HSSFAnchor.CreateAnchorFromEscher(container);
-            Assert.AreEqual(anchor.Col1, 11);
-            Assert.AreEqual(escher.Col1, 11);
-            Assert.AreEqual(anchor.Col2, 12);
-            Assert.AreEqual(escher.Col2, 12);
-            Assert.AreEqual(anchor.Row1, 13);
-            Assert.AreEqual(escher.Row1, 13);
-            Assert.AreEqual(anchor.Row2, 14);
-            Assert.AreEqual(escher.Row2, 14);
-            Assert.AreEqual(anchor.Dx1, 15);
-            Assert.AreEqual(escher.Dx1, 15);
-            Assert.AreEqual(anchor.Dx2, 16);
-            Assert.AreEqual(escher.Dx2, 16);
-            Assert.AreEqual(anchor.Dy1, 17);
-            Assert.AreEqual(escher.Dy1, 17);
-            Assert.AreEqual(anchor.Dy2, 18);
-            Assert.AreEqual(escher.Dy2, 18);
+            ClassicAssert.AreEqual(anchor.Col1, 11);
+            ClassicAssert.AreEqual(escher.Col1, 11);
+            ClassicAssert.AreEqual(anchor.Col2, 12);
+            ClassicAssert.AreEqual(escher.Col2, 12);
+            ClassicAssert.AreEqual(anchor.Row1, 13);
+            ClassicAssert.AreEqual(escher.Row1, 13);
+            ClassicAssert.AreEqual(anchor.Row2, 14);
+            ClassicAssert.AreEqual(escher.Row2, 14);
+            ClassicAssert.AreEqual(anchor.Dx1, 15);
+            ClassicAssert.AreEqual(escher.Dx1, 15);
+            ClassicAssert.AreEqual(anchor.Dx2, 16);
+            ClassicAssert.AreEqual(escher.Dx2, 16);
+            ClassicAssert.AreEqual(anchor.Dy1, 17);
+            ClassicAssert.AreEqual(escher.Dy1, 17);
+            ClassicAssert.AreEqual(anchor.Dy2, 18);
+            ClassicAssert.AreEqual(escher.Dy2, 18);
         }
         [Test]
         public void TestCreateChildAnchorFromContainer()
@@ -133,14 +133,14 @@ namespace TestCases.HSSF.Model
             container.AddChildRecord(escher);
 
             HSSFChildAnchor anchor = (HSSFChildAnchor)HSSFAnchor.CreateAnchorFromEscher(container);
-            Assert.AreEqual(anchor.Dx1, 15);
-            Assert.AreEqual(escher.Dx1, 15);
-            Assert.AreEqual(anchor.Dx2, 16);
-            Assert.AreEqual(escher.Dx2, 16);
-            Assert.AreEqual(anchor.Dy1, 17);
-            Assert.AreEqual(escher.Dy1, 17);
-            Assert.AreEqual(anchor.Dy2, 18);
-            Assert.AreEqual(escher.Dy2, 18);
+            ClassicAssert.AreEqual(anchor.Dx1, 15);
+            ClassicAssert.AreEqual(escher.Dx1, 15);
+            ClassicAssert.AreEqual(anchor.Dx2, 16);
+            ClassicAssert.AreEqual(escher.Dx2, 16);
+            ClassicAssert.AreEqual(anchor.Dy1, 17);
+            ClassicAssert.AreEqual(escher.Dy1, 17);
+            ClassicAssert.AreEqual(anchor.Dy2, 18);
+            ClassicAssert.AreEqual(escher.Dy2, 18);
         }
         [Test]
         public void TestShapeEscherMustHaveAnchorRecord()
@@ -157,9 +157,9 @@ namespace TestCases.HSSF.Model
 
             rectangle.Anchor = (anchor);
 
-            Assert.IsNotNull(HSSFTestHelper.GetEscherAnchor(anchor));
-            Assert.IsNotNull(HSSFTestHelper.GetEscherContainer(rectangle));
-            Assert.IsTrue(HSSFTestHelper.GetEscherAnchor(anchor).Equals(HSSFTestHelper.GetEscherContainer(rectangle).GetChildById(EscherClientAnchorRecord.RECORD_ID)));
+            ClassicAssert.IsNotNull(HSSFTestHelper.GetEscherAnchor(anchor));
+            ClassicAssert.IsNotNull(HSSFTestHelper.GetEscherContainer(rectangle));
+            ClassicAssert.IsTrue(HSSFTestHelper.GetEscherAnchor(anchor).Equals(HSSFTestHelper.GetEscherContainer(rectangle).GetChildById(EscherClientAnchorRecord.RECORD_ID)));
         }
         [Test]
         public void TestClientAnchorFromEscher()
@@ -175,22 +175,22 @@ namespace TestCases.HSSF.Model
             escher.Dy2=((short)18);
 
             HSSFClientAnchor anchor = new HSSFClientAnchor(escher);
-            Assert.AreEqual(anchor.Col1, 11);
-            Assert.AreEqual(escher.Col1, 11);
-            Assert.AreEqual(anchor.Col2, 12);
-            Assert.AreEqual(escher.Col2, 12);
-            Assert.AreEqual(anchor.Row1, 13);
-            Assert.AreEqual(escher.Row1, 13);
-            Assert.AreEqual(anchor.Row2, 14);
-            Assert.AreEqual(escher.Row2, 14);
-            Assert.AreEqual(anchor.Dx1, 15);
-            Assert.AreEqual(escher.Dx1, 15);
-            Assert.AreEqual(anchor.Dx2, 16);
-            Assert.AreEqual(escher.Dx2, 16);
-            Assert.AreEqual(anchor.Dy1, 17);
-            Assert.AreEqual(escher.Dy1, 17);
-            Assert.AreEqual(anchor.Dy2, 18);
-            Assert.AreEqual(escher.Dy2, 18);
+            ClassicAssert.AreEqual(anchor.Col1, 11);
+            ClassicAssert.AreEqual(escher.Col1, 11);
+            ClassicAssert.AreEqual(anchor.Col2, 12);
+            ClassicAssert.AreEqual(escher.Col2, 12);
+            ClassicAssert.AreEqual(anchor.Row1, 13);
+            ClassicAssert.AreEqual(escher.Row1, 13);
+            ClassicAssert.AreEqual(anchor.Row2, 14);
+            ClassicAssert.AreEqual(escher.Row2, 14);
+            ClassicAssert.AreEqual(anchor.Dx1, 15);
+            ClassicAssert.AreEqual(escher.Dx1, 15);
+            ClassicAssert.AreEqual(anchor.Dx2, 16);
+            ClassicAssert.AreEqual(escher.Dx2, 16);
+            ClassicAssert.AreEqual(anchor.Dy1, 17);
+            ClassicAssert.AreEqual(escher.Dy1, 17);
+            ClassicAssert.AreEqual(anchor.Dy2, 18);
+            ClassicAssert.AreEqual(escher.Dy2, 18);
         }
         [Test]
         public void TestClientAnchorFromScratch()
@@ -199,47 +199,47 @@ namespace TestCases.HSSF.Model
             EscherClientAnchorRecord escher = (EscherClientAnchorRecord)HSSFTestHelper.GetEscherAnchor(anchor);
             anchor.SetAnchor((short)11, 12, 13, 14, (short)15, 16, 17, 18);
 
-            Assert.AreEqual(anchor.Col1, 11);
-            Assert.AreEqual(escher.Col1, 11);
-            Assert.AreEqual(anchor.Col2, 15);
-            Assert.AreEqual(escher.Col2, 15);
-            Assert.AreEqual(anchor.Row1, 12);
-            Assert.AreEqual(escher.Row1, 12);
-            Assert.AreEqual(anchor.Row2, 16);
-            Assert.AreEqual(escher.Row2, 16);
-            Assert.AreEqual(anchor.Dx1, 13);
-            Assert.AreEqual(escher.Dx1, 13);
-            Assert.AreEqual(anchor.Dx2, 17);
-            Assert.AreEqual(escher.Dx2, 17);
-            Assert.AreEqual(anchor.Dy1, 14);
-            Assert.AreEqual(escher.Dy1, 14);
-            Assert.AreEqual(anchor.Dy2, 18);
-            Assert.AreEqual(escher.Dy2, 18);
+            ClassicAssert.AreEqual(anchor.Col1, 11);
+            ClassicAssert.AreEqual(escher.Col1, 11);
+            ClassicAssert.AreEqual(anchor.Col2, 15);
+            ClassicAssert.AreEqual(escher.Col2, 15);
+            ClassicAssert.AreEqual(anchor.Row1, 12);
+            ClassicAssert.AreEqual(escher.Row1, 12);
+            ClassicAssert.AreEqual(anchor.Row2, 16);
+            ClassicAssert.AreEqual(escher.Row2, 16);
+            ClassicAssert.AreEqual(anchor.Dx1, 13);
+            ClassicAssert.AreEqual(escher.Dx1, 13);
+            ClassicAssert.AreEqual(anchor.Dx2, 17);
+            ClassicAssert.AreEqual(escher.Dx2, 17);
+            ClassicAssert.AreEqual(anchor.Dy1, 14);
+            ClassicAssert.AreEqual(escher.Dy1, 14);
+            ClassicAssert.AreEqual(anchor.Dy2, 18);
+            ClassicAssert.AreEqual(escher.Dy2, 18);
 
             anchor.Col1=(111);
-            Assert.AreEqual(anchor.Col1, 111);
-            Assert.AreEqual(escher.Col1, 111);
+            ClassicAssert.AreEqual(anchor.Col1, 111);
+            ClassicAssert.AreEqual(escher.Col1, 111);
             anchor.Col2=(112);
-            Assert.AreEqual(anchor.Col2, 112);
-            Assert.AreEqual(escher.Col2, 112);
+            ClassicAssert.AreEqual(anchor.Col2, 112);
+            ClassicAssert.AreEqual(escher.Col2, 112);
             anchor.Row1=(113);
-            Assert.AreEqual(anchor.Row1, 113);
-            Assert.AreEqual(escher.Row1, 113);
+            ClassicAssert.AreEqual(anchor.Row1, 113);
+            ClassicAssert.AreEqual(escher.Row1, 113);
             anchor.Row2=(114);
-            Assert.AreEqual(anchor.Row2, 114);
-            Assert.AreEqual(escher.Row2, 114);
+            ClassicAssert.AreEqual(anchor.Row2, 114);
+            ClassicAssert.AreEqual(escher.Row2, 114);
             anchor.Dx1=(115);
-            Assert.AreEqual(anchor.Dx1, 115);
-            Assert.AreEqual(escher.Dx1, 115);
+            ClassicAssert.AreEqual(anchor.Dx1, 115);
+            ClassicAssert.AreEqual(escher.Dx1, 115);
             anchor.Dx2=(116);
-            Assert.AreEqual(anchor.Dx2, 116);
-            Assert.AreEqual(escher.Dx2, 116);
+            ClassicAssert.AreEqual(anchor.Dx2, 116);
+            ClassicAssert.AreEqual(escher.Dx2, 116);
             anchor.Dy1=(117);
-            Assert.AreEqual(anchor.Dy1, 117);
-            Assert.AreEqual(escher.Dy1, 117);
+            ClassicAssert.AreEqual(anchor.Dy1, 117);
+            ClassicAssert.AreEqual(escher.Dy1, 117);
             anchor.Dy2=(118);
-            Assert.AreEqual(anchor.Dy2, 118);
-            Assert.AreEqual(escher.Dy2, 118);
+            ClassicAssert.AreEqual(anchor.Dy2, 118);
+            ClassicAssert.AreEqual(escher.Dy2, 118);
         }
         [Test]
         public void TestChildAnchorFromEscher()
@@ -251,14 +251,14 @@ namespace TestCases.HSSF.Model
             escher.Dy2=((short)18);
 
             HSSFChildAnchor anchor = new HSSFChildAnchor(escher);
-            Assert.AreEqual(anchor.Dx1, 15);
-            Assert.AreEqual(escher.Dx1, 15);
-            Assert.AreEqual(anchor.Dx2, 16);
-            Assert.AreEqual(escher.Dx2, 16);
-            Assert.AreEqual(anchor.Dy1, 17);
-            Assert.AreEqual(escher.Dy1, 17);
-            Assert.AreEqual(anchor.Dy2, 18);
-            Assert.AreEqual(escher.Dy2, 18);
+            ClassicAssert.AreEqual(anchor.Dx1, 15);
+            ClassicAssert.AreEqual(escher.Dx1, 15);
+            ClassicAssert.AreEqual(anchor.Dx2, 16);
+            ClassicAssert.AreEqual(escher.Dx2, 16);
+            ClassicAssert.AreEqual(anchor.Dy1, 17);
+            ClassicAssert.AreEqual(escher.Dy1, 17);
+            ClassicAssert.AreEqual(anchor.Dy2, 18);
+            ClassicAssert.AreEqual(escher.Dy2, 18);
         }
         [Test]
         public void TestChildAnchorFromScratch()
@@ -267,54 +267,54 @@ namespace TestCases.HSSF.Model
             EscherChildAnchorRecord escher = (EscherChildAnchorRecord)HSSFTestHelper.GetEscherAnchor(anchor);
             anchor.SetAnchor(11, 12, 13, 14);
 
-            Assert.AreEqual(anchor.Dx1, 11);
-            Assert.AreEqual(escher.Dx1, 11);
-            Assert.AreEqual(anchor.Dx2, 13);
-            Assert.AreEqual(escher.Dx2, 13);
-            Assert.AreEqual(anchor.Dy1, 12);
-            Assert.AreEqual(escher.Dy1, 12);
-            Assert.AreEqual(anchor.Dy2, 14);
-            Assert.AreEqual(escher.Dy2, 14);
+            ClassicAssert.AreEqual(anchor.Dx1, 11);
+            ClassicAssert.AreEqual(escher.Dx1, 11);
+            ClassicAssert.AreEqual(anchor.Dx2, 13);
+            ClassicAssert.AreEqual(escher.Dx2, 13);
+            ClassicAssert.AreEqual(anchor.Dy1, 12);
+            ClassicAssert.AreEqual(escher.Dy1, 12);
+            ClassicAssert.AreEqual(anchor.Dy2, 14);
+            ClassicAssert.AreEqual(escher.Dy2, 14);
 
             anchor.Dx1=(115);
-            Assert.AreEqual(anchor.Dx1, 115);
-            Assert.AreEqual(escher.Dx1, 115);
+            ClassicAssert.AreEqual(anchor.Dx1, 115);
+            ClassicAssert.AreEqual(escher.Dx1, 115);
             anchor.Dx2=(116);
-            Assert.AreEqual(anchor.Dx2, 116);
-            Assert.AreEqual(escher.Dx2, 116);
+            ClassicAssert.AreEqual(anchor.Dx2, 116);
+            ClassicAssert.AreEqual(escher.Dx2, 116);
             anchor.Dy1=(117);
-            Assert.AreEqual(anchor.Dy1, 117);
-            Assert.AreEqual(escher.Dy1, 117);
+            ClassicAssert.AreEqual(anchor.Dy1, 117);
+            ClassicAssert.AreEqual(escher.Dy1, 117);
             anchor.Dy2=(118);
-            Assert.AreEqual(anchor.Dy2, 118);
-            Assert.AreEqual(escher.Dy2, 118);
+            ClassicAssert.AreEqual(anchor.Dy2, 118);
+            ClassicAssert.AreEqual(escher.Dy2, 118);
         }
         [Test]
         public void TestEqualsToSelf()
         {
             HSSFClientAnchor clientAnchor = new HSSFClientAnchor(0, 1, 2, 3, (short)4, 5, (short)6, 7);
-            Assert.AreEqual(clientAnchor, clientAnchor);
+            ClassicAssert.AreEqual(clientAnchor, clientAnchor);
 
             HSSFChildAnchor childAnchor = new HSSFChildAnchor(0, 1, 2, 3);
-            Assert.AreEqual(childAnchor, childAnchor);
+            ClassicAssert.AreEqual(childAnchor, childAnchor);
         }
         [Test]
         public void TestPassIncompatibleTypeIsFalse()
         {
             HSSFClientAnchor clientAnchor = new HSSFClientAnchor(0, 1, 2, 3, (short)4, 5, (short)6, 7);
-            Assert.AreNotSame(clientAnchor, "wrongType");
+            ClassicAssert.AreNotSame(clientAnchor, "wrongType");
 
             HSSFChildAnchor childAnchor = new HSSFChildAnchor(0, 1, 2, 3);
-            Assert.AreNotSame(childAnchor, "wrongType");
+            ClassicAssert.AreNotSame(childAnchor, "wrongType");
         }
         [Test]
         public void TestNullReferenceIsFalse()
         {
             HSSFClientAnchor clientAnchor = new HSSFClientAnchor(0, 1, 2, 3, (short)4, 5, (short)6, 7);
-            Assert.IsFalse(clientAnchor.Equals(null), "Passing null to equals should return false");
+            ClassicAssert.IsFalse(clientAnchor.Equals(null), "Passing null to equals should return false");
 
             HSSFChildAnchor childAnchor = new HSSFChildAnchor(0, 1, 2, 3);
-            Assert.IsFalse(childAnchor.Equals(null), "Passing null to equals should return false");
+            ClassicAssert.IsFalse(childAnchor.Equals(null), "Passing null to equals should return false");
         }
         [Test]
         public void TestEqualsIsReflexiveIsSymmetric()
@@ -322,124 +322,124 @@ namespace TestCases.HSSF.Model
             HSSFClientAnchor clientAnchor1 = new HSSFClientAnchor(0, 1, 2, 3, (short)4, 5, (short)6, 7);
             HSSFClientAnchor clientAnchor2 = new HSSFClientAnchor(0, 1, 2, 3, (short)4, 5, (short)6, 7);
 
-            Assert.IsTrue(clientAnchor1.Equals(clientAnchor2));
-            Assert.IsTrue(clientAnchor1.Equals(clientAnchor2));
+            ClassicAssert.IsTrue(clientAnchor1.Equals(clientAnchor2));
+            ClassicAssert.IsTrue(clientAnchor1.Equals(clientAnchor2));
 
             HSSFChildAnchor childAnchor1 = new HSSFChildAnchor(0, 1, 2, 3);
             HSSFChildAnchor childAnchor2 = new HSSFChildAnchor(0, 1, 2, 3);
 
-            Assert.IsTrue(childAnchor1.Equals(childAnchor2));
-            Assert.IsTrue(childAnchor2.Equals(childAnchor1));
+            ClassicAssert.IsTrue(childAnchor1.Equals(childAnchor2));
+            ClassicAssert.IsTrue(childAnchor2.Equals(childAnchor1));
         }
         [Test]
         public void TestEqualsValues()
         {
             HSSFClientAnchor clientAnchor1 = new HSSFClientAnchor(0, 1, 2, 3, (short)4, 5, (short)6, 7);
             HSSFClientAnchor clientAnchor2 = new HSSFClientAnchor(0, 1, 2, 3, (short)4, 5, (short)6, 7);
-            Assert.AreEqual(clientAnchor1, clientAnchor2);
+            ClassicAssert.AreEqual(clientAnchor1, clientAnchor2);
 
             clientAnchor2.Dx1=(10);
-            Assert.AreNotSame(clientAnchor1, clientAnchor2);
+            ClassicAssert.AreNotSame(clientAnchor1, clientAnchor2);
             clientAnchor2.Dx1=(0);
-            Assert.AreEqual(clientAnchor1, clientAnchor2);
+            ClassicAssert.AreEqual(clientAnchor1, clientAnchor2);
 
             clientAnchor2.Dy1=(10);
-            Assert.AreNotSame(clientAnchor1, clientAnchor2);
+            ClassicAssert.AreNotSame(clientAnchor1, clientAnchor2);
             clientAnchor2.Dy1=(1);
-            Assert.AreEqual(clientAnchor1, clientAnchor2);
+            ClassicAssert.AreEqual(clientAnchor1, clientAnchor2);
 
             clientAnchor2.Dx2=(10);
-            Assert.AreNotSame(clientAnchor1, clientAnchor2);
+            ClassicAssert.AreNotSame(clientAnchor1, clientAnchor2);
             clientAnchor2.Dx2=(2);
-            Assert.AreEqual(clientAnchor1, clientAnchor2);
+            ClassicAssert.AreEqual(clientAnchor1, clientAnchor2);
 
             clientAnchor2.Dy2=(10);
-            Assert.AreNotSame(clientAnchor1, clientAnchor2);
+            ClassicAssert.AreNotSame(clientAnchor1, clientAnchor2);
             clientAnchor2.Dy2=(3);
-            Assert.AreEqual(clientAnchor1, clientAnchor2);
+            ClassicAssert.AreEqual(clientAnchor1, clientAnchor2);
 
             clientAnchor2.Col1=(10);
-            Assert.AreNotSame(clientAnchor1, clientAnchor2);
+            ClassicAssert.AreNotSame(clientAnchor1, clientAnchor2);
             clientAnchor2.Col1=(4);
-            Assert.AreEqual(clientAnchor1, clientAnchor2);
+            ClassicAssert.AreEqual(clientAnchor1, clientAnchor2);
 
             clientAnchor2.Row1=(10);
-            Assert.AreNotSame(clientAnchor1, clientAnchor2);
+            ClassicAssert.AreNotSame(clientAnchor1, clientAnchor2);
             clientAnchor2.Row1=(5);
-            Assert.AreEqual(clientAnchor1, clientAnchor2);
+            ClassicAssert.AreEqual(clientAnchor1, clientAnchor2);
 
             clientAnchor2.Col2=(10);
-            Assert.AreNotSame(clientAnchor1, clientAnchor2);
+            ClassicAssert.AreNotSame(clientAnchor1, clientAnchor2);
             clientAnchor2.Col2=(6);
-            Assert.AreEqual(clientAnchor1, clientAnchor2);
+            ClassicAssert.AreEqual(clientAnchor1, clientAnchor2);
 
             clientAnchor2.Row2=(10);
-            Assert.AreNotSame(clientAnchor1, clientAnchor2);
+            ClassicAssert.AreNotSame(clientAnchor1, clientAnchor2);
             clientAnchor2.Row2=(7);
-            Assert.AreEqual(clientAnchor1, clientAnchor2);
+            ClassicAssert.AreEqual(clientAnchor1, clientAnchor2);
 
             clientAnchor2.AnchorType = (AnchorType)(3);
-            Assert.AreNotSame(clientAnchor1, clientAnchor2);
+            ClassicAssert.AreNotSame(clientAnchor1, clientAnchor2);
             clientAnchor2.AnchorType=(0);
-            Assert.AreEqual(clientAnchor1, clientAnchor2);
+            ClassicAssert.AreEqual(clientAnchor1, clientAnchor2);
 
             HSSFChildAnchor childAnchor1 = new HSSFChildAnchor(0, 1, 2, 3);
             HSSFChildAnchor childAnchor2 = new HSSFChildAnchor(0, 1, 2, 3);
 
             childAnchor1.Dx1=(10);
-            Assert.AreNotSame(childAnchor1, childAnchor2);
+            ClassicAssert.AreNotSame(childAnchor1, childAnchor2);
             childAnchor1.Dx1=(0);
-            Assert.AreEqual(childAnchor1, childAnchor2);
+            ClassicAssert.AreEqual(childAnchor1, childAnchor2);
 
             childAnchor2.Dy1=(10);
-            Assert.AreNotSame(childAnchor1, childAnchor2);
+            ClassicAssert.AreNotSame(childAnchor1, childAnchor2);
             childAnchor2.Dy1=(1);
-            Assert.AreEqual(childAnchor1, childAnchor2);
+            ClassicAssert.AreEqual(childAnchor1, childAnchor2);
 
             childAnchor2.Dx2=(10);
-            Assert.AreNotSame(childAnchor1, childAnchor2);
+            ClassicAssert.AreNotSame(childAnchor1, childAnchor2);
             childAnchor2.Dx2=(2);
-            Assert.AreEqual(childAnchor1, childAnchor2);
+            ClassicAssert.AreEqual(childAnchor1, childAnchor2);
 
             childAnchor2.Dy2=(10);
-            Assert.AreNotSame(childAnchor1, childAnchor2);
+            ClassicAssert.AreNotSame(childAnchor1, childAnchor2);
             childAnchor2.Dy2=(3);
-            Assert.AreEqual(childAnchor1, childAnchor2);
+            ClassicAssert.AreEqual(childAnchor1, childAnchor2);
         }
         [Test]
         public void testFlipped()
         {
             HSSFChildAnchor child = new HSSFChildAnchor(2, 2, 1, 1);
-            Assert.AreEqual(child.IsHorizontallyFlipped, true);
-            Assert.AreEqual(child.IsVerticallyFlipped, true);
-            Assert.AreEqual(child.Dx1, 1);
-            Assert.AreEqual(child.Dx2, 2);
-            Assert.AreEqual(child.Dy1, 1);
-            Assert.AreEqual(child.Dy2, 2);
+            ClassicAssert.AreEqual(child.IsHorizontallyFlipped, true);
+            ClassicAssert.AreEqual(child.IsVerticallyFlipped, true);
+            ClassicAssert.AreEqual(child.Dx1, 1);
+            ClassicAssert.AreEqual(child.Dx2, 2);
+            ClassicAssert.AreEqual(child.Dy1, 1);
+            ClassicAssert.AreEqual(child.Dy2, 2);
 
             child = new HSSFChildAnchor(3, 3, 4, 4);
-            Assert.AreEqual(child.IsHorizontallyFlipped, false);
-            Assert.AreEqual(child.IsVerticallyFlipped, false);
-            Assert.AreEqual(child.Dx1, 3);
-            Assert.AreEqual(child.Dx2, 4);
-            Assert.AreEqual(child.Dy1, 3);
-            Assert.AreEqual(child.Dy2, 4);
+            ClassicAssert.AreEqual(child.IsHorizontallyFlipped, false);
+            ClassicAssert.AreEqual(child.IsVerticallyFlipped, false);
+            ClassicAssert.AreEqual(child.Dx1, 3);
+            ClassicAssert.AreEqual(child.Dx2, 4);
+            ClassicAssert.AreEqual(child.Dy1, 3);
+            ClassicAssert.AreEqual(child.Dy2, 4);
 
             HSSFClientAnchor client = new HSSFClientAnchor(1, 1, 1, 1, (short)4, 4, (short)3, 3);
-            Assert.AreEqual(client.IsVerticallyFlipped, true);
-            Assert.AreEqual(client.IsHorizontallyFlipped, true);
-            Assert.AreEqual(client.Col1, 3);
-            Assert.AreEqual(client.Col2, 4);
-            Assert.AreEqual(client.Row1, 3);
-            Assert.AreEqual(client.Row2, 4);
+            ClassicAssert.AreEqual(client.IsVerticallyFlipped, true);
+            ClassicAssert.AreEqual(client.IsHorizontallyFlipped, true);
+            ClassicAssert.AreEqual(client.Col1, 3);
+            ClassicAssert.AreEqual(client.Col2, 4);
+            ClassicAssert.AreEqual(client.Row1, 3);
+            ClassicAssert.AreEqual(client.Row2, 4);
 
             client = new HSSFClientAnchor(1, 1, 1, 1, (short)5, 5, (short)6, 6);
-            Assert.AreEqual(client.IsVerticallyFlipped, false);
-            Assert.AreEqual(client.IsHorizontallyFlipped, false);
-            Assert.AreEqual(client.Col1, 5);
-            Assert.AreEqual(client.Col2, 6);
-            Assert.AreEqual(client.Row1, 5);
-            Assert.AreEqual(client.Row2, 6);
+            ClassicAssert.AreEqual(client.IsVerticallyFlipped, false);
+            ClassicAssert.AreEqual(client.IsHorizontallyFlipped, false);
+            ClassicAssert.AreEqual(client.Col1, 5);
+            ClassicAssert.AreEqual(client.Col2, 6);
+            ClassicAssert.AreEqual(client.Row1, 5);
+            ClassicAssert.AreEqual(client.Row2, 6);
         }
     }
 }

@@ -20,7 +20,7 @@ namespace TestCases.SS.Formula.Functions
 
     using NPOI.SS.Formula.Eval;
     using NPOI.HSSF.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.SS.Formula.Functions;
     using NPOI.SS.UserModel;
 
@@ -34,7 +34,7 @@ namespace TestCases.SS.Formula.Functions
         private static void Confirm(double expected, NumberEval ne)
         {
             // only asserting accuracy to 4 fractional digits
-            Assert.AreEqual(expected, ne.NumberValue, 0.00005);
+            ClassicAssert.AreEqual(expected, ne.NumberValue, 0.00005);
         }
         private static ValueEval invoke(ValueEval[] args)
         {

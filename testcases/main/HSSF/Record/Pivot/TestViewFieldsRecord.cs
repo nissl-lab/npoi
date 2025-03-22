@@ -19,7 +19,7 @@ namespace TestCases.HSSF.Record.Pivot
 {
     using System;
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     using NPOI.HSSF.Record;
     using NPOI.Util;
@@ -45,8 +45,8 @@ namespace TestCases.HSSF.Record.Pivot
             {
                 throw new AssertionException("Identified bug 46693b");
             }
-            Assert.AreEqual(0, in1.Remaining);
-            Assert.AreEqual(4 + data.Length, rec.RecordSize);
+            ClassicAssert.AreEqual(0, in1.Remaining);
+            ClassicAssert.AreEqual(4 + data.Length, rec.RecordSize);
         }
 
         [Test]
@@ -64,8 +64,8 @@ namespace TestCases.HSSF.Record.Pivot
             byte[] data = HexRead.ReadFromString(hexDump);
             RecordInputStream in1 = TestcaseRecordInputStream.Create(ViewFieldsRecord.sid, data);
             ViewFieldsRecord rec = new ViewFieldsRecord(in1);
-            Assert.AreEqual(0, in1.Remaining);
-            Assert.AreEqual(4 + data.Length, rec.RecordSize);
+            ClassicAssert.AreEqual(0, in1.Remaining);
+            ClassicAssert.AreEqual(4 + data.Length, rec.RecordSize);
             byte[] data2 = rec.Serialize();
             TestcaseRecordInputStream.ConfirmRecordEncoding(ViewFieldsRecord.sid, data, data2);
             return rec;

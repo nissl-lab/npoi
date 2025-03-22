@@ -1,4 +1,4 @@
-﻿using NUnit.Framework;
+﻿using NUnit.Framework;using NUnit.Framework.Legacy;
 using System.IO;
 
 namespace NPOI.XSSF.UserModel

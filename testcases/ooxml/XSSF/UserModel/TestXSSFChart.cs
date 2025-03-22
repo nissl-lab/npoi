@@ -15,7 +15,7 @@
    limitations under the License.
 ==================================================================== */
 
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using NPOI.SS.UserModel;
 using System.Collections.Generic;
 using NPOI.SS.UserModel.Charts;
@@ -37,11 +37,11 @@ namespace TestCases.XSSF.UserModel
             XSSFSheet s2 = (XSSFSheet)wb.GetSheetAt(1);
             XSSFSheet s3 = (XSSFSheet)wb.GetSheetAt(2);
 
-            Assert.AreEqual(0, s1.GetRelations().Count);
-            Assert.AreEqual(1, s2.GetRelations().Count);
-            Assert.AreEqual(1, s3.GetRelations().Count);
+            ClassicAssert.AreEqual(0, s1.GetRelations().Count);
+            ClassicAssert.AreEqual(1, s2.GetRelations().Count);
+            ClassicAssert.AreEqual(1, s3.GetRelations().Count);
 
-            Assert.IsNotNull(XSSFTestDataSamples.WriteOutAndReadBack(wb));
+            ClassicAssert.IsNotNull(XSSFTestDataSamples.WriteOutAndReadBack(wb));
         }
         [Test]
         public void TestGetCharts()
@@ -52,21 +52,21 @@ namespace TestCases.XSSF.UserModel
             XSSFSheet s2 = (XSSFSheet)wb.GetSheetAt(1);
             XSSFSheet s3 = (XSSFSheet)wb.GetSheetAt(2);
 
-            Assert.AreEqual(0, (s1.CreateDrawingPatriarch() as XSSFDrawing).GetCharts().Count);
-            Assert.AreEqual(2, (s2.CreateDrawingPatriarch() as XSSFDrawing).GetCharts().Count);
-            Assert.AreEqual(1, (s3.CreateDrawingPatriarch() as XSSFDrawing).GetCharts().Count);
+            ClassicAssert.AreEqual(0, (s1.CreateDrawingPatriarch() as XSSFDrawing).GetCharts().Count);
+            ClassicAssert.AreEqual(2, (s2.CreateDrawingPatriarch() as XSSFDrawing).GetCharts().Count);
+            ClassicAssert.AreEqual(1, (s3.CreateDrawingPatriarch() as XSSFDrawing).GetCharts().Count);
 
             // Check the titles
             XSSFChart chart = (s2.CreateDrawingPatriarch() as XSSFDrawing).GetCharts()[(0)];
-            Assert.AreEqual(null, chart.Title);
+            ClassicAssert.AreEqual(null, chart.Title);
 
             chart = (s2.CreateDrawingPatriarch() as XSSFDrawing).GetCharts()[(1)];
-            Assert.AreEqual("Pie Chart Title Thingy", chart.Title.String);
+            ClassicAssert.AreEqual("Pie Chart Title Thingy", chart.Title.String);
 
             chart = (s3.CreateDrawingPatriarch() as XSSFDrawing).GetCharts()[(0)];
-            Assert.AreEqual("Sheet 3 Chart with Title", chart.Title.String);
+            ClassicAssert.AreEqual("Sheet 3 Chart with Title", chart.Title.String);
 
-            Assert.IsNotNull(XSSFTestDataSamples.WriteOutAndReadBack(wb));
+            ClassicAssert.IsNotNull(XSSFTestDataSamples.WriteOutAndReadBack(wb));
         }
 
         [Test]
@@ -78,17 +78,17 @@ namespace TestCases.XSSF.UserModel
             XSSFClientAnchor a1 = new XSSFClientAnchor(0, 0, 0, 0, 1, 1, 10, 30);
             XSSFChart c1 = (XSSFChart)d1.CreateChart(a1);
 
-            Assert.AreEqual(1, d1.GetCharts().Count);
+            ClassicAssert.AreEqual(1, d1.GetCharts().Count);
             
-            Assert.IsNotNull(c1.GetGraphicFrame());
-            Assert.IsNotNull(c1.GetOrCreateLegend());
+            ClassicAssert.IsNotNull(c1.GetGraphicFrame());
+            ClassicAssert.IsNotNull(c1.GetOrCreateLegend());
 
             XSSFClientAnchor a2 = new XSSFClientAnchor(0, 0, 0, 0, 1, 11, 10, 60);
             XSSFChart c2 = (XSSFChart)d1.CreateChart(a2);
 
-            Assert.IsNotNull(c2);
-            Assert.AreEqual(2, d1.GetCharts().Count);
-            Assert.IsNotNull(XSSFTestDataSamples.WriteOutAndReadBack(wb));
+            ClassicAssert.IsNotNull(c2);
+            ClassicAssert.AreEqual(2, d1.GetCharts().Count);
+            ClassicAssert.IsNotNull(XSSFTestDataSamples.WriteOutAndReadBack(wb));
         }
 
         [Test]
@@ -102,11 +102,11 @@ namespace TestCases.XSSF.UserModel
             XSSFClientAnchor anchor2 = new XSSFClientAnchor(0, 0, 0, 0, 1, 11, 10, 60);
             _ = (XSSFChart)drawingPatriarch.CreateChart(anchor2);
 
-            Assert.AreEqual(2, drawingPatriarch.GetCharts().Count);
+            ClassicAssert.AreEqual(2, drawingPatriarch.GetCharts().Count);
 
             drawingPatriarch.RemoveChart(chart);
 
-            Assert.AreEqual(1, drawingPatriarch.GetCharts().Count);
+            ClassicAssert.AreEqual(1, drawingPatriarch.GetCharts().Count);
         }
 
         [Test]
@@ -120,16 +120,16 @@ namespace TestCases.XSSF.UserModel
             XSSFClientAnchor anchor2 = new XSSFClientAnchor(0, 0, 0, 0, 1, 11, 10, 60);
             _ = (XSSFChart)drawingPatriarch.CreateChart(anchor2);
 
-            Assert.AreEqual(2, drawingPatriarch.GetCharts().Count);
+            ClassicAssert.AreEqual(2, drawingPatriarch.GetCharts().Count);
 
             drawingPatriarch.RemoveChart(chart);
 
-            Assert.AreEqual(1, drawingPatriarch.GetCharts().Count);
+            ClassicAssert.AreEqual(1, drawingPatriarch.GetCharts().Count);
 
             XSSFClientAnchor a3 = new XSSFClientAnchor(0, 0, 0, 0, 1, 111, 10, 90);
             _ = (XSSFChart)drawingPatriarch.CreateChart(a3);
 
-            Assert.AreEqual(2, drawingPatriarch.GetCharts().Count);
+            ClassicAssert.AreEqual(2, drawingPatriarch.GetCharts().Count);
         }
 
         [Test]
@@ -144,11 +144,11 @@ namespace TestCases.XSSF.UserModel
 
             List<IChartAxis> axisList = chart.GetAxis();
 
-            Assert.AreEqual(4, axisList.Count);
-            Assert.IsNotNull(axisList[(0)]);
-            Assert.IsNotNull(axisList[(1)]);
-            Assert.IsNotNull(axisList[(2)]);
-            Assert.IsNotNull(axisList[(3)]);
+            ClassicAssert.AreEqual(4, axisList.Count);
+            ClassicAssert.IsNotNull(axisList[(0)]);
+            ClassicAssert.IsNotNull(axisList[(1)]);
+            ClassicAssert.IsNotNull(axisList[(2)]);
+            ClassicAssert.IsNotNull(axisList[(3)]);
         }
 
     }

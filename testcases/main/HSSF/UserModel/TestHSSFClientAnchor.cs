@@ -21,7 +21,7 @@ namespace TestCases.HSSF.UserModel
     using NPOI.DDF;
     using NPOI.HSSF.Model;
     using NPOI.HSSF.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     /**
      * Various Tests for HSSFClientAnchor.
      *
@@ -38,29 +38,29 @@ namespace TestCases.HSSF.UserModel
             HSSFSheet sheet = (HSSFSheet)wb.CreateSheet("Test");
             HSSFClientAnchor a = new HSSFClientAnchor(0, 0, 1023, 255, (short)0, 0, (short)0, 0);
             float p = a.GetAnchorHeightInPoints(sheet);
-            Assert.AreEqual(12.7, p, 0.001);
+            ClassicAssert.AreEqual(12.7, p, 0.001);
 
             sheet.CreateRow(0).HeightInPoints = (14);
             a = new HSSFClientAnchor(0, 0, 1023, 255, (short)0, 0, (short)0, 0);
             p = a.GetAnchorHeightInPoints(sheet);
-            Assert.AreEqual(13.945, p, 0.001);
+            ClassicAssert.AreEqual(13.945, p, 0.001);
 
             a = new HSSFClientAnchor(0, 0, 1023, 127, (short)0, 0, (short)0, 0);
             p = a.GetAnchorHeightInPoints(sheet);
-            Assert.AreEqual(6.945, p, 0.001);
+            ClassicAssert.AreEqual(6.945, p, 0.001);
 
             a = new HSSFClientAnchor(0, 126, 1023, 127, (short)0, 0, (short)0, 0);
             p = a.GetAnchorHeightInPoints(sheet);
-            Assert.AreEqual(0.054, p, 0.001);
+            ClassicAssert.AreEqual(0.054, p, 0.001);
 
             a = new HSSFClientAnchor(0, 0, 1023, 0, (short)0, 0, (short)0, 1);
             p = a.GetAnchorHeightInPoints(sheet);
-            Assert.AreEqual(14.0, p, 0.001);
+            ClassicAssert.AreEqual(14.0, p, 0.001);
 
             sheet.CreateRow(0).HeightInPoints = (12);
             a = new HSSFClientAnchor(0, 127, 1023, 127, (short)0, 0, (short)0, 1);
             p = a.GetAnchorHeightInPoints(sheet);
-            Assert.AreEqual(12.372, p, 0.001);
+            ClassicAssert.AreEqual(12.372, p, 0.001);
 
         }
 
@@ -80,14 +80,14 @@ namespace TestCases.HSSF.UserModel
             for (int i = 0; i < anchor.Length; i++)
             {
                 EscherClientAnchorRecord record = (EscherClientAnchorRecord)ConvertAnchor.CreateAnchor(anchor[i]);
-                Assert.AreEqual(anchor[i].Dx1, record.Dx1);
-                Assert.AreEqual(anchor[i].Dx2, record.Dx2);
-                Assert.AreEqual(anchor[i].Dy1, record.Dy1);
-                Assert.AreEqual(anchor[i].Dy2, record.Dy2);
-                Assert.AreEqual(anchor[i].Col1, record.Col1);
-                Assert.AreEqual(anchor[i].Col2, record.Col2);
-                Assert.AreEqual(anchor[i].Row1, record.Row1);
-                Assert.AreEqual(anchor[i].Row2, record.Row2);
+                ClassicAssert.AreEqual(anchor[i].Dx1, record.Dx1);
+                ClassicAssert.AreEqual(anchor[i].Dx2, record.Dx2);
+                ClassicAssert.AreEqual(anchor[i].Dy1, record.Dy1);
+                ClassicAssert.AreEqual(anchor[i].Dy2, record.Dy2);
+                ClassicAssert.AreEqual(anchor[i].Col1, record.Col1);
+                ClassicAssert.AreEqual(anchor[i].Col2, record.Col2);
+                ClassicAssert.AreEqual(anchor[i].Row1, record.Row1);
+                ClassicAssert.AreEqual(anchor[i].Row2, record.Row2);
             }
         }
 
@@ -107,7 +107,7 @@ namespace TestCases.HSSF.UserModel
             for (int i = 0; i < anchor.Length; i++)
             {
                 float height = anchor[i].GetAnchorHeightInPoints(sheet);
-                Assert.AreEqual(ref1[i], height, 0);
+                ClassicAssert.AreEqual(ref1[i], height, 0);
             }
 
         }
@@ -122,8 +122,8 @@ namespace TestCases.HSSF.UserModel
             // Maximum permitted row number should be 65535.
             HSSFClientAnchor anchor = new HSSFClientAnchor(0, 0, 0, 0, (short)0, 32768, (short)0, 32768);
 
-            Assert.AreEqual(32768, anchor.Row1);
-            Assert.AreEqual(32768, anchor.Row2);
+            ClassicAssert.AreEqual(32768, anchor.Row1);
+            ClassicAssert.AreEqual(32768, anchor.Row2);
         }
 
         /**
@@ -134,8 +134,8 @@ namespace TestCases.HSSF.UserModel
         {
             HSSFClientAnchor anchor = new HSSFClientAnchor(0, 0, 0, 0, (short)0, 65535, (short)0, 65535);
 
-            Assert.AreEqual(65535, anchor.Row1);
-            Assert.AreEqual(65535, anchor.Row2);
+            ClassicAssert.AreEqual(65535, anchor.Row1);
+            ClassicAssert.AreEqual(65535, anchor.Row2);
         }
         [Test]
         public void TestCannotHaveRowGreaterThan65535()
@@ -161,8 +161,8 @@ namespace TestCases.HSSF.UserModel
             anchor.Row1 = (65535);
             anchor.Row2 = (65535);
 
-            Assert.AreEqual(65535, anchor.Row1);
-            Assert.AreEqual(65535, anchor.Row2);
+            ClassicAssert.AreEqual(65535, anchor.Row1);
+            ClassicAssert.AreEqual(65535, anchor.Row2);
         }
 
         [Test]

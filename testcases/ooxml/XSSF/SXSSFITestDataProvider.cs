@@ -26,7 +26,7 @@ namespace NPOI.XSSF
     using NPOI.SS.UserModel;
     using NPOI.XSSF.Streaming;
     using NPOI.XSSF.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using TestCases;
     using TestCases.SS;
 

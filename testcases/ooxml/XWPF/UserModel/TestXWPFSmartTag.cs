@@ -17,7 +17,7 @@
 namespace TestCases.XWPF.UserModel
 {
     using NPOI.XWPF.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     /**
      * Tests for Reading SmartTags from Word docx.

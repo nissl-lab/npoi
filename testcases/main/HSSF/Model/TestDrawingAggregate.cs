@@ -22,7 +22,7 @@ using NPOI.HSSF.Record;
 using NPOI.HSSF.UserModel;
 using System.IO;
 using NPOI.Util;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using TestCases.HSSF.UserModel;
 using NPOI.HSSF.Model;
 using NPOI.DDF;
@@ -144,8 +144,8 @@ namespace TestCases.HSSF.Model
                     byte[] dgBytes1 = info.GetRawBytes();
                     byte[] dgBytes2 = agg.Serialize();
 
-                    Assert.AreEqual(dgBytes1.Length, dgBytes2.Length, "different size of raw data ande aggregate.Serialize()");
-                    Assert.IsTrue(Arrays.Equals(dgBytes1, dgBytes2), "raw Drawing data (" + dgBytes1.Length + " bytes) and aggregate.Serialize() are different.");
+                    ClassicAssert.AreEqual(dgBytes1.Length, dgBytes2.Length, "different size of raw data ande aggregate.Serialize()");
+                    ClassicAssert.IsTrue(Arrays.Equals(dgBytes1, dgBytes2), "raw Drawing data (" + dgBytes1.Length + " bytes) and aggregate.Serialize() are different.");
                 }
             }
 
@@ -161,8 +161,8 @@ namespace TestCases.HSSF.Model
                         DrawingAggregateInfo info2 = DrawingAggregateInfo.Get(sheet2);
                         byte[] dgBytes1 = info1.GetRawBytes();
                         byte[] dgBytes2 = info2.GetRawBytes();
-                        Assert.AreEqual(dgBytes1.Length, dgBytes2.Length, "different size of Drawing data before and After save");
-                        Assert.IsTrue(Arrays.Equals(dgBytes1, dgBytes2), "drawing data (" + dgBytes1.Length + " bytes) before and After save is different.");
+                        ClassicAssert.AreEqual(dgBytes1.Length, dgBytes2.Length, "different size of Drawing data before and After save");
+                        ClassicAssert.IsTrue(Arrays.Equals(dgBytes1, dgBytes2), "drawing data (" + dgBytes1.Length + " bytes) before and After save is different.");
                     }
                 }
                 wb2.Close();
@@ -184,7 +184,7 @@ namespace TestCases.HSSF.Model
             //            }
             //        }
             //);
-            //Assert.IsNotNull(xls,
+            //ClassicAssert.IsNotNull(xls,
             //    "Need to find files in test-data path, had path: " + new File(System.getProperty("POI.testdata.path"), "spreadsheet"));
             //foreach(File file in xls) {
             //    HSSFWorkbook wb;
@@ -235,7 +235,7 @@ namespace TestCases.HSSF.Model
                 records.Add(r);
                 pos += bytesRead;
             }
-            Assert.AreEqual(dgBytes.Length, pos, "data was not fully Read");
+            ClassicAssert.AreEqual(dgBytes.Length, pos, "data was not fully Read");
 
             // serialize to byte array
             MemoryStream out1 = new MemoryStream();
@@ -246,7 +246,7 @@ namespace TestCases.HSSF.Model
                 out1.Write(data1, 0, data1.Length);
             }
 
-            Assert.AreEqual(HexDump.ToHex(dgBytes, 10), HexDump.ToHex(out1.ToArray(), 10));
+            ClassicAssert.AreEqual(HexDump.ToHex(dgBytes, 10), HexDump.ToHex(out1.ToArray(), 10));
         }
 
         /**
@@ -294,23 +294,23 @@ namespace TestCases.HSSF.Model
             byte[] dgBytes = ToArray(dgRecords);
             HSSFPatriarch p = sh.DrawingPatriarch as HSSFPatriarch;
             EscherAggregate agg = (EscherAggregate)ish.FindFirstRecordBySid(EscherAggregate.sid);
-            Assert.AreEqual(agg.EscherRecords[0].ChildRecords.Count, 3);
-            Assert.AreEqual(agg.EscherRecords[0].GetChild(2).RecordId, EscherContainerRecord.SOLVER_CONTAINER);
+            ClassicAssert.AreEqual(agg.EscherRecords[0].ChildRecords.Count, 3);
+            ClassicAssert.AreEqual(agg.EscherRecords[0].GetChild(2).RecordId, EscherContainerRecord.SOLVER_CONTAINER);
             HSSFWorkbook wb2 = HSSFTestDataSamples.WriteOutAndReadBack(wb1);
             wb1.Close();
             sh = wb2.GetSheetAt(0) as HSSFSheet;
             p = sh.DrawingPatriarch as HSSFPatriarch;
             ish = HSSFTestHelper.GetSheetForTest(sh);
             agg = (EscherAggregate)ish.FindFirstRecordBySid(EscherAggregate.sid);
-            Assert.AreEqual(agg.EscherRecords[0].ChildRecords.Count, 3);
-            Assert.AreEqual(agg.EscherRecords[0].GetChild(2).RecordId, EscherContainerRecord.SOLVER_CONTAINER);
+            ClassicAssert.AreEqual(agg.EscherRecords[0].ChildRecords.Count, 3);
+            ClassicAssert.AreEqual(agg.EscherRecords[0].GetChild(2).RecordId, EscherContainerRecord.SOLVER_CONTAINER);
 
 
             // collect Drawing records into a byte buffer.
             agg = (EscherAggregate)ish.FindFirstRecordBySid(EscherAggregate.sid);
             byte[] dgBytesAfterSave = agg.Serialize();
-            Assert.AreEqual(dgBytes.Length, dgBytesAfterSave.Length, "different size of Drawing data before and After save");
-            Assert.IsTrue(Arrays.Equals(dgBytes, dgBytesAfterSave), "drawing data before and After save is different");
+            ClassicAssert.AreEqual(dgBytes.Length, dgBytesAfterSave.Length, "different size of Drawing data before and After save");
+            ClassicAssert.IsTrue(Arrays.Equals(dgBytes, dgBytesAfterSave), "drawing data before and After save is different");
             wb2.Close();
         }
 
@@ -329,8 +329,8 @@ namespace TestCases.HSSF.Model
             // collect Drawing records into a byte buffer.
             EscherAggregate agg = (EscherAggregate)ish.FindFirstRecordBySid(EscherAggregate.sid);
             byte[] dgBytesAfterSave = agg.Serialize();
-            Assert.AreEqual(dgBytes.Length, dgBytesAfterSave.Length, "different size of Drawing data before and After save");
-            Assert.IsTrue(Arrays.Equals(dgBytes, dgBytesAfterSave), "drawing data before and After save is different");
+            ClassicAssert.AreEqual(dgBytes.Length, dgBytesAfterSave.Length, "different size of Drawing data before and After save");
+            ClassicAssert.IsTrue(Arrays.Equals(dgBytes, dgBytesAfterSave), "drawing data before and After save is different");
 
             wb.Close();
         }
@@ -349,7 +349,7 @@ namespace TestCases.HSSF.Model
             // collect Drawing records into a byte buffer.
             EscherAggregate agg = (EscherAggregate)ish.FindFirstRecordBySid(EscherAggregate.sid);
             byte[] dgBytesAfterSave = agg.Serialize();
-            Assert.AreEqual(dgBytes.Length, dgBytesAfterSave.Length, "different size of Drawing data before and After save");
+            ClassicAssert.AreEqual(dgBytes.Length, dgBytesAfterSave.Length, "different size of Drawing data before and After save");
             for (int i = 0; i < dgBytes.Length; i++)
             {
                 if (dgBytes[i] != dgBytesAfterSave[i])
@@ -357,7 +357,7 @@ namespace TestCases.HSSF.Model
                     Console.WriteLine("pos = " + i);
                 }
             }
-            Assert.IsTrue(Arrays.Equals(dgBytes, dgBytesAfterSave), "drawing data before and After save is different");
+            ClassicAssert.IsTrue(Arrays.Equals(dgBytes, dgBytesAfterSave), "drawing data before and After save is different");
 
             wb.Close();
         }
@@ -377,9 +377,9 @@ namespace TestCases.HSSF.Model
             List<RecordBase> records = isheet.Records;
 
             // the sheet's Drawing is not aggregated
-            Assert.AreEqual(394, records.Count, "wrong size of sheet records stream");
+            ClassicAssert.AreEqual(394, records.Count, "wrong size of sheet records stream");
             // the last record before the Drawing block
-            Assert.IsTrue(records[(18)] is RowRecordsAggregate,
+            ClassicAssert.IsTrue(records[(18)] is RowRecordsAggregate,
                 "records.Get(18) is expected to be RowRecordsAggregate but was " + records[(18)].GetType().Name);
 
             // records to be aggregated
@@ -393,7 +393,7 @@ namespace TestCases.HSSF.Model
                 short sid = r.Sid;
                 // we expect that Drawing block consists of either
                 // DrawingRecord or ContinueRecord or ObjRecord or TextObjectRecord
-                Assert.IsTrue(
+                ClassicAssert.IsTrue(
                         sid == DrawingRecord.sid ||
                                 sid == ContinueRecord.sid ||
                                 sid == ObjRecord.sid ||
@@ -401,7 +401,7 @@ namespace TestCases.HSSF.Model
             }
 
             // the first record After the Drawing block
-            Assert.IsTrue(records[(389)] is WindowTwoRecord, "records.Get(389) is expected to be Window2");
+            ClassicAssert.IsTrue(records[(389)] is WindowTwoRecord, "records.Get(389) is expected to be Window2");
 
             // aggregate Drawing records.
             // The subrange [19, 388] is expected to be Replaced with a EscherAggregate object
@@ -409,17 +409,17 @@ namespace TestCases.HSSF.Model
             int loc = isheet.AggregateDrawingRecords(drawingManager, false);
             EscherAggregate agg = (EscherAggregate)records[(loc)];
 
-            Assert.AreEqual(25, records.Count, "wrong size of the aggregated sheet records stream");
-            Assert.IsTrue(records[18] is RowRecordsAggregate,
+            ClassicAssert.AreEqual(25, records.Count, "wrong size of the aggregated sheet records stream");
+            ClassicAssert.IsTrue(records[18] is RowRecordsAggregate,
                 "records.Get(18) is expected to be RowRecordsAggregate but was " + records[18].GetType().Name);
-            Assert.IsTrue(records[19] is EscherAggregate,
+            ClassicAssert.IsTrue(records[19] is EscherAggregate,
                 "records.Get(19) is expected to be EscherAggregate but was " + records[19].GetType().Name);
-            Assert.IsTrue(records[20] is WindowTwoRecord,
+            ClassicAssert.IsTrue(records[20] is WindowTwoRecord,
                 "records.Get(20) is expected to be Window2 but was " + records[20].GetType().Name);
 
             byte[] dgBytesAfterSave = agg.Serialize();
-            Assert.AreEqual(dgBytes.Length, dgBytesAfterSave.Length, "different size of Drawing data before and After save");
-            Assert.IsTrue(Arrays.Equals(dgBytes, dgBytesAfterSave), "drawing data before and After save is different");
+            ClassicAssert.AreEqual(dgBytes.Length, dgBytesAfterSave.Length, "different size of Drawing data before and After save");
+            ClassicAssert.IsTrue(Arrays.Equals(dgBytes, dgBytesAfterSave), "drawing data before and After save is different");
 
             wb.Close();
         }
@@ -443,9 +443,9 @@ namespace TestCases.HSSF.Model
             List<RecordBase> records = isheet.Records;
 
             // the sheet's Drawing is not aggregated
-            Assert.AreEqual(32, records.Count, "wrong size of sheet records stream");
+            ClassicAssert.AreEqual(32, records.Count, "wrong size of sheet records stream");
             // the last record before the Drawing block
-            Assert.IsTrue(records[18] is RowRecordsAggregate,
+            ClassicAssert.IsTrue(records[18] is RowRecordsAggregate,
                 "records.Get(18) is expected to be RowRecordsAggregate but was " + records[18].GetType().Name);
 
             // records to be aggregated
@@ -456,7 +456,7 @@ namespace TestCases.HSSF.Model
                 short sid = r.Sid;
                 // we expect that Drawing block consists of either
                 // DrawingRecord or ContinueRecord or ObjRecord or TextObjectRecord
-                Assert.IsTrue(
+                ClassicAssert.IsTrue(
                         sid == DrawingRecord.sid ||
                                 sid == ContinueRecord.sid ||
                                 sid == ObjRecord.sid ||
@@ -467,7 +467,7 @@ namespace TestCases.HSSF.Model
             byte[] dgBytes = ToArray(dgRecords);
 
             // the first record After the Drawing block
-            Assert.IsTrue(records[(26)] is WindowTwoRecord, "records.Get(26) is expected to be Window2");
+            ClassicAssert.IsTrue(records[(26)] is WindowTwoRecord, "records.Get(26) is expected to be Window2");
 
             // aggregate Drawing records.
             // The subrange [19, 38] is expected to be Replaced with a EscherAggregate object
@@ -475,17 +475,17 @@ namespace TestCases.HSSF.Model
             int loc = isheet.AggregateDrawingRecords(drawingManager, false);
             EscherAggregate agg = (EscherAggregate)records[(loc)];
 
-            Assert.AreEqual(26, records.Count, "wrong size of the aggregated sheet records stream");
-            Assert.IsTrue(records[(18)] is RowRecordsAggregate, 
+            ClassicAssert.AreEqual(26, records.Count, "wrong size of the aggregated sheet records stream");
+            ClassicAssert.IsTrue(records[(18)] is RowRecordsAggregate, 
                 "records.Get(18) is expected to be RowRecordsAggregate but was " + records[(18)].GetType().Name);
-            Assert.IsTrue(records[(19)] is EscherAggregate,
+            ClassicAssert.IsTrue(records[(19)] is EscherAggregate,
                 "records.Get(19) is expected to be EscherAggregate but was " + records[19].GetType().Name);
-            Assert.IsTrue(records[(20)] is WindowTwoRecord,
+            ClassicAssert.IsTrue(records[(20)] is WindowTwoRecord,
                 "records.Get(20) is expected to be Window2 but was " + records[20].GetType().Name);
 
             byte[] dgBytesAfterSave = agg.Serialize();
-            Assert.AreEqual(dgBytes.Length, dgBytesAfterSave.Length,"different size of Drawing data before and After save");
-            Assert.IsTrue(Arrays.Equals(dgBytes, dgBytesAfterSave), "drawing data before and After save is different");
+            ClassicAssert.AreEqual(dgBytes.Length, dgBytesAfterSave.Length,"different size of Drawing data before and After save");
+            ClassicAssert.IsTrue(Arrays.Equals(dgBytes, dgBytesAfterSave), "drawing data before and After save is different");
 
             wb.Close();
 
@@ -504,17 +504,17 @@ namespace TestCases.HSSF.Model
             InternalSheet isheet2 = HSSFTestHelper.GetSheetForTest(wb2.GetSheetAt(0) as HSSFSheet);
             List<RecordBase> records2 = isheet2.Records;
 
-            Assert.AreEqual(records.Count, records2.Count);
+            ClassicAssert.AreEqual(records.Count, records2.Count);
             for (int i = 0; i < records.Count; i++)
             {
                 RecordBase r1 = records[(i)];
                 RecordBase r2 = records2[(i)];
-                Assert.IsTrue(r1.GetType() == r2.GetType());
-                Assert.AreEqual(r1.RecordSize, r2.RecordSize);
+                ClassicAssert.IsTrue(r1.GetType() == r2.GetType());
+                ClassicAssert.AreEqual(r1.RecordSize, r2.RecordSize);
                 if (r1 is NPOI.HSSF.Record.Record)
                 {
-                    Assert.AreEqual(((NPOI.HSSF.Record.Record)r1).Sid, ((NPOI.HSSF.Record.Record)r2).Sid);
-                    Assert.IsTrue(Arrays.Equals(((NPOI.HSSF.Record.Record)r1).Serialize(), ((NPOI.HSSF.Record.Record)r2).Serialize()));
+                    ClassicAssert.AreEqual(((NPOI.HSSF.Record.Record)r1).Sid, ((NPOI.HSSF.Record.Record)r2).Sid);
+                    ClassicAssert.IsTrue(Arrays.Equals(((NPOI.HSSF.Record.Record)r1).Serialize(), ((NPOI.HSSF.Record.Record)r2).Serialize()));
                 }
             }
             wb2.Close();
@@ -530,9 +530,9 @@ namespace TestCases.HSSF.Model
             List<RecordBase> records = isheet.Records;
 
             // the sheet's Drawing is not aggregated
-            Assert.AreEqual(46, records.Count, "wrong size of sheet records stream");
+            ClassicAssert.AreEqual(46, records.Count, "wrong size of sheet records stream");
             // the last record before the Drawing block
-            Assert.IsTrue(records[(18)] is RowRecordsAggregate,
+            ClassicAssert.IsTrue(records[(18)] is RowRecordsAggregate,
                 "records.Get(18) is expected to be RowRecordsAggregate but was " + records[(18)].GetType().Name);
 
             // records to be aggregated
@@ -543,7 +543,7 @@ namespace TestCases.HSSF.Model
                 short sid = r.Sid;
                 // we expect that Drawing block consists of either
                 // DrawingRecord or ContinueRecord or ObjRecord or TextObjectRecord
-                Assert.IsTrue(
+                ClassicAssert.IsTrue(
                         sid == DrawingRecord.sid ||
                                 sid == ContinueRecord.sid ||
                                 sid == ObjRecord.sid ||
@@ -554,7 +554,7 @@ namespace TestCases.HSSF.Model
             byte[] dgBytes = ToArray(dgRecords);
 
             // the first record After the Drawing block
-            Assert.IsTrue(records[(39)] is WindowTwoRecord, "records.Get(39) is expected to be Window2");
+            ClassicAssert.IsTrue(records[(39)] is WindowTwoRecord, "records.Get(39) is expected to be Window2");
 
             // aggregate Drawing records.
             // The subrange [19, 38] is expected to be Replaced with a EscherAggregate object
@@ -562,17 +562,17 @@ namespace TestCases.HSSF.Model
             int loc = isheet.AggregateDrawingRecords(drawingManager, false);
             EscherAggregate agg = (EscherAggregate)records[(loc)];
 
-            Assert.AreEqual(27, records.Count, "wrong size of the aggregated sheet records stream");
-            Assert.IsTrue(records[(18)] is RowRecordsAggregate,
+            ClassicAssert.AreEqual(27, records.Count, "wrong size of the aggregated sheet records stream");
+            ClassicAssert.IsTrue(records[(18)] is RowRecordsAggregate,
                 "records.Get(18) is expected to be RowRecordsAggregate but was " + records[(18)].GetType().Name);
-            Assert.IsTrue(records[(19)] is EscherAggregate,
+            ClassicAssert.IsTrue(records[(19)] is EscherAggregate,
                 "records.Get(19) is expected to be EscherAggregate but was " + records[(19)].GetType().Name);
-            Assert.IsTrue(records[(20)] is WindowTwoRecord,
+            ClassicAssert.IsTrue(records[(20)] is WindowTwoRecord,
                 "records.Get(20) is expected to be Window2 but was " + records[20].GetType().Name);
 
             byte[] dgBytesAfterSave = agg.Serialize();
-            Assert.AreEqual(dgBytes.Length, dgBytesAfterSave.Length, "different size of Drawing data before and After save");
-            Assert.IsTrue(Arrays.Equals(dgBytes, dgBytesAfterSave), "drawing data before and After save is different");
+            ClassicAssert.AreEqual(dgBytes.Length, dgBytesAfterSave.Length, "different size of Drawing data before and After save");
+            ClassicAssert.IsTrue(Arrays.Equals(dgBytes, dgBytesAfterSave), "drawing data before and After save is different");
             wb.Close();
         }
 
@@ -588,9 +588,9 @@ namespace TestCases.HSSF.Model
             List<RecordBase> records = isheet.Records;
 
             // the sheet's Drawing is not aggregated
-            Assert.AreEqual(315, records.Count, "wrong size of sheet records stream");
+            ClassicAssert.AreEqual(315, records.Count, "wrong size of sheet records stream");
             // the last record before the Drawing block
-            Assert.IsTrue(records[(21)] is RowRecordsAggregate,
+            ClassicAssert.IsTrue(records[(21)] is RowRecordsAggregate,
                 "records.Get(21) is expected to be RowRecordsAggregate but was " + records[(21)].GetType().Name);
 
             // records to be aggregated
@@ -601,7 +601,7 @@ namespace TestCases.HSSF.Model
                 short sid = r.Sid;
                 // we expect that Drawing block consists of either
                 // DrawingRecord or ContinueRecord or ObjRecord or TextObjectRecord
-                Assert.IsTrue(
+                ClassicAssert.IsTrue(
                         sid == DrawingRecord.sid ||
                                 sid == ContinueRecord.sid ||
                                 sid == ObjRecord.sid ||
@@ -611,7 +611,7 @@ namespace TestCases.HSSF.Model
             byte[] dgBytes = ToArray(dgRecords);
 
             // the first record After the Drawing block
-            Assert.IsTrue(records[(300)] is WindowTwoRecord, "records.Get(300) is expected to be Window2");
+            ClassicAssert.IsTrue(records[(300)] is WindowTwoRecord, "records.Get(300) is expected to be Window2");
 
             // aggregate Drawing records.
             // The subrange [19, 299] is expected to be Replaced with a EscherAggregate object
@@ -619,17 +619,17 @@ namespace TestCases.HSSF.Model
             int loc = isheet.AggregateDrawingRecords(drawingManager, false);
             EscherAggregate agg = (EscherAggregate)records[(loc)];
 
-            Assert.AreEqual(38, records.Count, "wrong size of the aggregated sheet records stream");
-            Assert.IsTrue(records[(21)] is RowRecordsAggregate,
+            ClassicAssert.AreEqual(38, records.Count, "wrong size of the aggregated sheet records stream");
+            ClassicAssert.IsTrue(records[(21)] is RowRecordsAggregate,
                 "records.Get(21) is expected to be RowRecordsAggregate but was " + records[(21)].GetType().Name);
-            Assert.IsTrue(records[(22)] is EscherAggregate,
+            ClassicAssert.IsTrue(records[(22)] is EscherAggregate,
                 "records.Get(22) is expected to be EscherAggregate but was " + records[22].GetType().Name);
-            Assert.IsTrue(records[23] is WindowTwoRecord,
+            ClassicAssert.IsTrue(records[23] is WindowTwoRecord,
             "records.Get(23) is expected to be Window2 but was " + records[23].GetType().Name);
 
             byte[] dgBytesAfterSave = agg.Serialize();
-            Assert.AreEqual(dgBytes.Length, dgBytesAfterSave.Length, "different size of Drawing data before and After save");
-            Assert.IsTrue(Arrays.Equals(dgBytes, dgBytesAfterSave), "drawing data before and After save is different");
+            ClassicAssert.AreEqual(dgBytes.Length, dgBytesAfterSave.Length, "different size of Drawing data before and After save");
+            ClassicAssert.IsTrue(Arrays.Equals(dgBytes, dgBytesAfterSave), "drawing data before and After save is different");
             wb.Close();
         }
         [Test]
@@ -738,7 +738,7 @@ namespace TestCases.HSSF.Model
             byte[] dgBytes = Decompress(data);
 
             IList<NPOI.HSSF.Record.Record> dgRecords = RecordFactory.CreateRecords(new MemoryStream(dgBytes));
-            Assert.AreEqual(20, dgRecords.Count);
+            ClassicAssert.AreEqual(20, dgRecords.Count);
 
             short[] expectedSids = {
                     DrawingRecord.sid,
@@ -764,7 +764,7 @@ namespace TestCases.HSSF.Model
             };
             for (int i = 0; i < expectedSids.Length; i++)
             {
-                Assert.AreEqual(expectedSids[i], dgRecords[(i)].Sid, "unexpected record.sid and index[" + i + "]");
+                ClassicAssert.AreEqual(expectedSids[i], dgRecords[(i)].Sid, "unexpected record.sid and index[" + i + "]");
             }
             DrawingManager2 drawingManager = new DrawingManager2(new EscherDggRecord());
 
@@ -777,14 +777,14 @@ namespace TestCases.HSSF.Model
 
 
             sheet.AggregateDrawingRecords(drawingManager, false);
-            Assert.AreEqual(2, records.Count, "drawing was not fully aggregated");
-            Assert.IsTrue(records[(0)] is EscherAggregate, "expected EscherAggregate");
-            Assert.IsTrue(records[(1)] is EOFRecord, "expected EOFRecord");
+            ClassicAssert.AreEqual(2, records.Count, "drawing was not fully aggregated");
+            ClassicAssert.IsTrue(records[(0)] is EscherAggregate, "expected EscherAggregate");
+            ClassicAssert.IsTrue(records[(1)] is EOFRecord, "expected EOFRecord");
             EscherAggregate agg = (EscherAggregate)records[(0)];
 
             byte[] dgBytesAfterSave = agg.Serialize();
-            Assert.AreEqual(dgBytes.Length, dgBytesAfterSave.Length, "different size of Drawing data before and After save");
-            Assert.IsTrue(Arrays.Equals(dgBytes, dgBytesAfterSave), "drawing data before and After save is different");
+            ClassicAssert.AreEqual(dgBytes.Length, dgBytesAfterSave.Length, "different size of Drawing data before and After save");
+            ClassicAssert.IsTrue(Arrays.Equals(dgBytes, dgBytesAfterSave), "drawing data before and After save is different");
         }
         [Test]
         public void TestUnhandledContinue2()
@@ -918,7 +918,7 @@ namespace TestCases.HSSF.Model
             byte[] dgBytes = Decompress(data);
 
             IList<NPOI.HSSF.Record.Record> dgRecords = RecordFactory.CreateRecords(new MemoryStream(dgBytes));
-            Assert.AreEqual(14, dgRecords.Count);
+            ClassicAssert.AreEqual(14, dgRecords.Count);
 
             short[] expectedSids = {
                     DrawingRecord.sid,
@@ -939,7 +939,7 @@ namespace TestCases.HSSF.Model
 
             for (int i = 0; i < expectedSids.Length; i++)
             {
-                Assert.AreEqual(expectedSids[i], dgRecords[(i)].Sid, "unexpected record.sid and index[" + i + "]");
+                ClassicAssert.AreEqual(expectedSids[i], dgRecords[(i)].Sid, "unexpected record.sid and index[" + i + "]");
             }
             DrawingManager2 drawingManager = new DrawingManager2(new EscherDggRecord());
 
@@ -951,15 +951,15 @@ namespace TestCases.HSSF.Model
             records.Add(EOFRecord.instance);
 
             sheet.AggregateDrawingRecords(drawingManager, false);
-            Assert.AreEqual(2, records.Count, "drawing was not fully aggregated");
-            Assert.IsTrue(records[(0)] is EscherAggregate , "expected EscherAggregate");
-            Assert.IsTrue(records[(1)] is EOFRecord , "expected EOFRecord");
+            ClassicAssert.AreEqual(2, records.Count, "drawing was not fully aggregated");
+            ClassicAssert.IsTrue(records[(0)] is EscherAggregate , "expected EscherAggregate");
+            ClassicAssert.IsTrue(records[(1)] is EOFRecord , "expected EOFRecord");
 
             EscherAggregate agg = (EscherAggregate)records[(0)];
 
             byte[] dgBytesAfterSave = agg.Serialize();
-            Assert.AreEqual(dgBytes.Length, dgBytesAfterSave.Length, "different size of Drawing data before and After save");
-            Assert.IsTrue(Arrays.Equals(dgBytes, dgBytesAfterSave), "drawing data brefpore and After save is different");
+            ClassicAssert.AreEqual(dgBytes.Length, dgBytesAfterSave.Length, "different size of Drawing data before and After save");
+            ClassicAssert.IsTrue(Arrays.Equals(dgBytes, dgBytesAfterSave), "drawing data brefpore and After save is different");
         }
     }
 }

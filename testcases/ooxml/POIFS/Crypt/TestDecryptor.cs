@@ -21,7 +21,7 @@ namespace TestCases.POIFS.Crypt
     using NPOI.POIFS.FileSystem;
     using NPOI.Util;
     using NPOI.XSSF;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using System.IO;
     using TestCases;
 
@@ -41,7 +41,7 @@ namespace TestCases.POIFS.Crypt
 
             Decryptor d = Decryptor.GetInstance(info);
 
-            Assert.IsTrue(d.VerifyPassword(Decryptor.DEFAULT_PASSWORD));
+            ClassicAssert.IsTrue(d.VerifyPassword(Decryptor.DEFAULT_PASSWORD));
         }
 
         [Test]
@@ -67,11 +67,11 @@ namespace TestCases.POIFS.Crypt
 
             EncryptionInfo info = new EncryptionInfo(fs);
 
-            Assert.IsTrue(info.VersionMajor == 4 && info.VersionMinor == 4);
+            ClassicAssert.IsTrue(info.VersionMajor == 4 && info.VersionMinor == 4);
 
             Decryptor d = Decryptor.GetInstance(info);
 
-            Assert.IsTrue(d.VerifyPassword(Decryptor.DEFAULT_PASSWORD));
+            ClassicAssert.IsTrue(d.VerifyPassword(Decryptor.DEFAULT_PASSWORD));
 
             ZipOk(fs.Root, d);
         }
@@ -90,7 +90,7 @@ namespace TestCases.POIFS.Crypt
                 byte[] buf = new byte[10];
                 int ReadBytes = zin.Read(buf, 0, buf.Length);
                 // zin.Available() doesn't work for entries
-                Assert.AreEqual(-1, ReadBytes, "size failed for " + entry.Name);
+                ClassicAssert.AreEqual(-1, ReadBytes, "size failed for " + entry.Name);
             }
 
             zin.Close();
@@ -111,7 +111,7 @@ namespace TestCases.POIFS.Crypt
             Stream is1 = d.GetDataStream(fs);
 
             long len = d.GetLength();
-            Assert.AreEqual(12810, len);
+            ClassicAssert.AreEqual(12810, len);
 
             byte[] buf = new byte[(int)len];
 
@@ -153,7 +153,7 @@ namespace TestCases.POIFS.Crypt
                 bos.Seek(0, SeekOrigin.Begin);
                 bos.SetLength(0);
                 IOUtils.Copy(zis, bos);
-                Assert.AreEqual(ze.Size, bos.Length);
+                ClassicAssert.AreEqual(ze.Size, bos.Length);
             }
 
             zis.Close();

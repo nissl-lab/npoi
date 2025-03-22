@@ -1,5 +1,5 @@
 ﻿using NPOI.SS.UserModel;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using System;
 
 namespace TestCases.SS.Util
@@ -44,8 +44,8 @@ namespace TestCases.SS.Util
             cell.SetCellFormula(formula);
             fe.NotifyUpdateCell(cell);
             CellValue result = fe.Evaluate(cell);
-            Assert.AreEqual(CellType.String, result.CellType);
-            Assert.AreEqual(expectedResult, result.StringValue);
+            ClassicAssert.AreEqual(CellType.String, result.CellType);
+            ClassicAssert.AreEqual(expectedResult, result.StringValue);
         }
 
         public static void AssertDouble(IFormulaEvaluator fe, ICell cell, string formulaText, double expectedResult, double delta = 0.0)
@@ -53,8 +53,8 @@ namespace TestCases.SS.Util
             cell.SetCellFormula(formulaText);
             fe.NotifyUpdateCell(cell);
             CellValue result = fe.Evaluate(cell);
-            Assert.AreEqual(CellType.Numeric, result.CellType);
-            Assert.AreEqual(expectedResult, result.NumberValue, delta);
+            ClassicAssert.AreEqual(CellType.Numeric, result.CellType);
+            ClassicAssert.AreEqual(expectedResult, result.NumberValue, delta);
         }
 
         public static void AssertBoolean(IFormulaEvaluator fe, ICell cell, string formulaText, bool expectedResult)
@@ -62,8 +62,8 @@ namespace TestCases.SS.Util
             cell.SetCellFormula(formulaText);
             fe.NotifyUpdateCell(cell);
             CellValue result = fe.Evaluate(cell);
-            Assert.AreEqual(CellType.Boolean, result.CellType);
-            Assert.AreEqual(expectedResult, result.BooleanValue);
+            ClassicAssert.AreEqual(CellType.Boolean, result.CellType);
+            ClassicAssert.AreEqual(expectedResult, result.BooleanValue);
         }
 
         public static void AssertError(IFormulaEvaluator fe, ICell cell, string formula, FormulaError expectedError)
@@ -71,8 +71,8 @@ namespace TestCases.SS.Util
             cell.SetCellFormula(formula);
             fe.NotifyUpdateCell(cell);
             CellValue result = fe.Evaluate(cell);
-            Assert.AreEqual(CellType.Error, result.CellType);
-            Assert.AreEqual(expectedError.Code, result.ErrorValue);
+            ClassicAssert.AreEqual(CellType.Error, result.CellType);
+            ClassicAssert.AreEqual(expectedError.Code, result.ErrorValue);
         }
     }
 }

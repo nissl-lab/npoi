@@ -15,7 +15,7 @@
    limitations under the License.
    ==================================================================== */
 
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using TestCases.HSSF;
 
 namespace TestCases.SS.Util

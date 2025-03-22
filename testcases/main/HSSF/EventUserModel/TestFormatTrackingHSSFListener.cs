@@ -28,7 +28,7 @@ namespace TestCases.HSSF.EventUserModel
     using NPOI.HSSF.Record;
     using NPOI.POIFS.FileSystem;
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     [TestFixture]
     public class TestFormatTrackingHSSFListener
@@ -60,10 +60,10 @@ namespace TestCases.HSSF.EventUserModel
         {
             ProcessFile("MissingBits.xls");
 
-            Assert.AreEqual("_(* #,##0_);_(* (#,##0);_(* \"-\"_);_(@_)", listener.GetFormatString(41));
-            Assert.AreEqual("_(\"$\"* #,##0_);_(\"$\"* (#,##0);_(\"$\"* \"-\"_);_(@_)", listener.GetFormatString(42));
-            Assert.AreEqual("_(* #,##0.00_);_(* (#,##0.00);_(* \"-\"??_);_(@_)", listener.GetFormatString(43));
-            Assert.AreEqual("_(\"$\"* #,##0.00_);_(\"$\"* (#,##0.00);_(\"$\"* \"-\"??_);_(@_)", listener.GetFormatString(44));
+            ClassicAssert.AreEqual("_(* #,##0_);_(* (#,##0);_(* \"-\"_);_(@_)", listener.GetFormatString(41));
+            ClassicAssert.AreEqual("_(\"$\"* #,##0_);_(\"$\"* (#,##0);_(\"$\"* \"-\"_);_(@_)", listener.GetFormatString(42));
+            ClassicAssert.AreEqual("_(* #,##0.00_);_(* (#,##0.00);_(* \"-\"??_);_(@_)", listener.GetFormatString(43));
+            ClassicAssert.AreEqual("_(\"$\"* #,##0.00_);_(\"$\"* (#,##0.00);_(\"$\"* \"-\"??_);_(@_)", listener.GetFormatString(44));
         }
 
         /**
@@ -84,8 +84,8 @@ namespace TestCases.HSSF.EventUserModel
                 ProcessFile(files[k]);
 
                 // Check we found our formats
-                Assert.IsTrue(listener.NumberOfCustomFormats > 5);
-                Assert.IsTrue(listener.NumberOfExtendedFormats > 5);
+                ClassicAssert.IsTrue(listener.NumberOfCustomFormats > 5);
+                ClassicAssert.IsTrue(listener.NumberOfExtendedFormats > 5);
 
                 // Now check we can turn all the numeric
                 //  cells into strings without error
@@ -107,8 +107,8 @@ namespace TestCases.HSSF.EventUserModel
                     {
                         // Should always give us a string 
                         String s = listener.FormatNumberDateCell(cvr);
-                        Assert.IsNotNull(s);
-                        Assert.IsTrue(s.Length > 0);
+                        ClassicAssert.IsNotNull(s);
+                        ClassicAssert.IsTrue(s.Length > 0);
                     }
                 }
 

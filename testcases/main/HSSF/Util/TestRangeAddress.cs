@@ -22,7 +22,7 @@ namespace TestCases.HSSF.Util
 
     using System;
     using NPOI.HSSF.Util;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     /**
      * Tests the Range Address Utility Functionality
@@ -42,7 +42,7 @@ namespace TestCases.HSSF.Util
             String reference = "Sheet2!$A$1:$C$3";
             RangeAddress ra = new RangeAddress(reference);
 
-            Assert.AreEqual("Sheet2!A1:C3", ra.Address);
+            ClassicAssert.AreEqual("Sheet2!A1:C3", ra.Address);
 
         }
     }

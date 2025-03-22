@@ -22,7 +22,7 @@ namespace TestCases.SS.Formula.Eval
 
     using System;
     using System.IO;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.UserModel;
@@ -111,33 +111,33 @@ namespace TestCases.SS.Formula.Eval
 
         private static void ConfirmExpectedResult(String msg, ICell expected, CellValue actual)
         {
-            Assert.IsNotNull(expected, msg + " - Bad setup data expected value is null");
-            Assert.IsNotNull(actual, msg + " - actual value was null");
+            ClassicAssert.IsNotNull(expected, msg + " - Bad setup data expected value is null");
+            ClassicAssert.IsNotNull(actual, msg + " - actual value was null");
             
             switch (expected.CellType)
             {
                 case CellType.Blank:
-                    Assert.AreEqual(CellType.Blank, actual.CellType, msg);
+                    ClassicAssert.AreEqual(CellType.Blank, actual.CellType, msg);
                     break;
                 case CellType.Boolean:
-                    Assert.AreEqual(CellType.Boolean, actual.CellType, msg);
-                    Assert.AreEqual(expected.BooleanCellValue, actual.BooleanValue, msg);
+                    ClassicAssert.AreEqual(CellType.Boolean, actual.CellType, msg);
+                    ClassicAssert.AreEqual(expected.BooleanCellValue, actual.BooleanValue, msg);
                     break;
                 case CellType.Error:
-                    Assert.AreEqual(CellType.Error, actual.CellType, msg);
-                    Assert.AreEqual(ErrorEval.GetText(expected.ErrorCellValue), ErrorEval.GetText(actual.ErrorValue), msg);
+                    ClassicAssert.AreEqual(CellType.Error, actual.CellType, msg);
+                    ClassicAssert.AreEqual(ErrorEval.GetText(expected.ErrorCellValue), ErrorEval.GetText(actual.ErrorValue), msg);
                     break;
                 case CellType.Formula: // will never be used, since we will call method After formula Evaluation
                     Assert.Fail("Cannot expect formula as result of formula Evaluation: " + msg);
                     break;
                 case CellType.Numeric:
-                    Assert.AreEqual(CellType.Numeric, actual.CellType, msg);
+                    ClassicAssert.AreEqual(CellType.Numeric, actual.CellType, msg);
                     AbstractNumericTestCase.AssertEquals(msg, expected.NumericCellValue, actual.NumberValue,
                         AbstractNumericTestCase.POS_ZERO, AbstractNumericTestCase.DIFF_TOLERANCE_FACTOR);
                     break;
                 case CellType.String:
-                    Assert.AreEqual(CellType.String, actual.CellType, msg);
-                    Assert.AreEqual(expected.RichStringCellValue.String, actual.StringValue, msg);
+                    ClassicAssert.AreEqual(CellType.String, actual.CellType, msg);
+                    ClassicAssert.AreEqual(expected.RichStringCellValue.String, actual.StringValue, msg);
                     break;
             }
         }
@@ -173,7 +173,7 @@ namespace TestCases.SS.Formula.Eval
             
             String msg = _functionFailureCount + " function(s) failed in "
             + _EvaluationFailureCount + " Evaluation(s).  " + successMsg;
-            Assert.AreEqual(_functionFailureCount, 0, msg);
+            ClassicAssert.AreEqual(_functionFailureCount, 0, msg);
 
 
             Debug.WriteLine(this.GetType().Name + ": " + successMsg);
@@ -195,7 +195,7 @@ namespace TestCases.SS.Formula.Eval
             {
                 IRow r = sheet.GetRow(rowIndex);
                 String targetFunctionName = GetTargetFunctionName(r);
-                Assert.IsNotNull(targetFunctionName, "Test spreadsheet cell empty on row ("
+                ClassicAssert.IsNotNull(targetFunctionName, "Test spreadsheet cell empty on row ("
                             + (rowIndex + 1) + "). Expected function name or '"
                             + SS.FUNCTION_NAMES_END_SENTINEL + "'");
                 
@@ -210,7 +210,7 @@ namespace TestCases.SS.Formula.Eval
                     IRow expectedValuesRow = sheet.GetRow(rowIndex + 1);
                     
                     int missingRowNum = rowIndex + 2; //+1 for 1-based, +1 for next row
-                    Assert.IsNotNull(expectedValuesRow, "Missing expected values row for function '"
+                    ClassicAssert.IsNotNull(expectedValuesRow, "Missing expected values row for function '"
                             + targetFunctionName + " (row " + missingRowNum + ")");
                     
                     switch (ProcessFunctionRow(evaluator, targetFunctionName, r, expectedValuesRow))

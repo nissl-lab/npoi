@@ -16,7 +16,7 @@
 ==================================================================== */
 
 using System;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.XSSF.UserModel;
 
@@ -38,56 +38,56 @@ namespace TestCases.XSSF.UserModel
             String withOtherAnds = "I am a&P Test header&&";
             String withOtherAnds2 = "I am a&P Test header&a&b";
 
-            Assert.AreEqual(simple, XSSFOddHeader.StripFields(simple));
-            Assert.AreEqual(simple, XSSFOddHeader.StripFields(withPage));
-            Assert.AreEqual(simple, XSSFOddHeader.StripFields(withLots));
-            Assert.AreEqual(simple, XSSFOddHeader.StripFields(withFont));
-            Assert.AreEqual(simple + "&&", XSSFOddHeader.StripFields(withOtherAnds));
-            Assert.AreEqual(simple + "&a&b", XSSFOddHeader.StripFields(withOtherAnds2));
+            ClassicAssert.AreEqual(simple, XSSFOddHeader.StripFields(simple));
+            ClassicAssert.AreEqual(simple, XSSFOddHeader.StripFields(withPage));
+            ClassicAssert.AreEqual(simple, XSSFOddHeader.StripFields(withLots));
+            ClassicAssert.AreEqual(simple, XSSFOddHeader.StripFields(withFont));
+            ClassicAssert.AreEqual(simple + "&&", XSSFOddHeader.StripFields(withOtherAnds));
+            ClassicAssert.AreEqual(simple + "&a&b", XSSFOddHeader.StripFields(withOtherAnds2));
 
             // Now Test the default strip flag
             XSSFEvenHeader head = new XSSFEvenHeader(new CT_HeaderFooter());
             head.Center = ("Center");
             head.Left = ("In the left");
 
-            Assert.AreEqual("In the left", head.Left);
-            Assert.AreEqual("Center", head.Center);
-            Assert.AreEqual("", head.Right);
+            ClassicAssert.AreEqual("In the left", head.Left);
+            ClassicAssert.AreEqual("Center", head.Center);
+            ClassicAssert.AreEqual("", head.Right);
 
             head.Left = ("Top &P&F&D Left");
-            Assert.AreEqual("Top &P&F&D Left", head.Left);
-            Assert.IsFalse(head.AreFieldsStripped());
+            ClassicAssert.AreEqual("Top &P&F&D Left", head.Left);
+            ClassicAssert.IsFalse(head.AreFieldsStripped());
 
             head.SetAreFieldsStripped(true);
-            Assert.AreEqual("Top  Left", head.Left);
-            Assert.IsTrue(head.AreFieldsStripped());
+            ClassicAssert.AreEqual("Top  Left", head.Left);
+            ClassicAssert.IsTrue(head.AreFieldsStripped());
 
             // Now even more complex
             head.Center = ("HEADER TEXT &P&N&D&T&Z&F&F&A&V");
-            Assert.AreEqual("HEADER TEXT &V", head.Center);
+            ClassicAssert.AreEqual("HEADER TEXT &V", head.Center);
         }
         [Test]
         public void TestGetSetCenterLeftRight()
         {
 
             XSSFOddFooter footer = new XSSFOddFooter(new CT_HeaderFooter());
-            Assert.AreEqual("", footer.Center);
+            ClassicAssert.AreEqual("", footer.Center);
             footer.Center = ("My first center section");
-            Assert.AreEqual("My first center section", footer.Center);
+            ClassicAssert.AreEqual("My first center section", footer.Center);
             footer.Center = ("No, let's update the center section");
-            Assert.AreEqual("No, let's update the center section", footer.Center);
+            ClassicAssert.AreEqual("No, let's update the center section", footer.Center);
             footer.Left = ("And add a left one");
             footer.Right = ("Finally the right section is Added");
-            Assert.AreEqual("And add a left one", footer.Left);
-            Assert.AreEqual("Finally the right section is Added", footer.Right);
+            ClassicAssert.AreEqual("And add a left one", footer.Left);
+            ClassicAssert.AreEqual("Finally the right section is Added", footer.Right);
 
             // Test changing the three sections value
             footer.Center = ("Second center version");
             footer.Left = ("Second left version");
             footer.Right = ("Second right version");
-            Assert.AreEqual("Second center version", footer.Center);
-            Assert.AreEqual("Second left version", footer.Left);
-            Assert.AreEqual("Second right version", footer.Right);
+            ClassicAssert.AreEqual("Second center version", footer.Center);
+            ClassicAssert.AreEqual("Second left version", footer.Left);
+            ClassicAssert.AreEqual("Second right version", footer.Right);
 
         }
 

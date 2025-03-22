@@ -25,7 +25,7 @@ namespace TestCases.HSSF.UserModel
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
     using NPOI.Util;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using TestCases.HSSF;
     using TestCases.SS.UserModel;
 
@@ -177,7 +177,7 @@ namespace TestCases.HSSF.UserModel
 
             byte[] dvHeaderRecStart = { (byte)0xB2, 0x01, 0x12, 0x00, };
             int dvHeaderOffset = FindIndex(wbData, dvHeaderRecStart);
-            Assert.IsTrue(dvHeaderOffset > 0);
+            ClassicAssert.IsTrue(dvHeaderOffset > 0);
             int nextRecIndex = dvHeaderOffset + 22;
             int nextSid
                 = ((wbData[nextRecIndex + 0] << 0) & 0x00FF)
@@ -190,7 +190,7 @@ namespace TestCases.HSSF.UserModel
             {
                 throw new AssertionException("Identified bug 45519");
             }
-            Assert.AreEqual(DVRecord.sid, nextSid);
+            ClassicAssert.AreEqual(DVRecord.sid, nextSid);
         }
         private int FindIndex(byte[] largeData, byte[] searchPattern)
         {
@@ -224,7 +224,7 @@ namespace TestCases.HSSF.UserModel
             HSSFWorkbook wb = new HSSFWorkbook();
             HSSFSheet sheet = wb.CreateSheet() as HSSFSheet;
             List<IDataValidation> list = sheet.GetDataValidations();
-            Assert.AreEqual(0, list.Count);
+            ClassicAssert.AreEqual(0, list.Count);
 
             IDataValidationHelper dataValidationHelper = sheet.GetDataValidationHelper();
             IDataValidationConstraint constraint = dataValidationHelper.CreateNumericConstraint(ValidationType.ANY,
@@ -237,31 +237,31 @@ namespace TestCases.HSSF.UserModel
             sheet.AddValidationData(validation);
 
             list = sheet.GetDataValidations(); // <-- works
-            Assert.AreEqual(1, list.Count);
+            ClassicAssert.AreEqual(1, list.Count);
 
             HSSFDataValidation dv = list[(0)] as HSSFDataValidation;
             {
                 CellRangeAddressList regions = dv.Regions;
-                Assert.AreEqual(1, regions.CountRanges());
+                ClassicAssert.AreEqual(1, regions.CountRanges());
 
                 CellRangeAddress Address = regions.GetCellRangeAddress(0);
-                Assert.AreEqual(1, Address.FirstRow);
-                Assert.AreEqual(2, Address.LastRow);
-                Assert.AreEqual(3, Address.FirstColumn);
-                Assert.AreEqual(4, Address.LastColumn);
+                ClassicAssert.AreEqual(1, Address.FirstRow);
+                ClassicAssert.AreEqual(2, Address.LastRow);
+                ClassicAssert.AreEqual(3, Address.FirstColumn);
+                ClassicAssert.AreEqual(4, Address.LastColumn);
             }
-            Assert.AreEqual(true, dv.EmptyCellAllowed);
-            Assert.AreEqual(false, dv.SuppressDropDownArrow);
-            Assert.AreEqual(true, dv.ShowErrorBox);
-            Assert.AreEqual("error-title", dv.ErrorBoxTitle);
-            Assert.AreEqual("error-text", dv.ErrorBoxText);
-            Assert.AreEqual(true, dv.ShowPromptBox);
-            Assert.AreEqual("prompt-title", dv.PromptBoxTitle);
-            Assert.AreEqual("prompt-text", dv.PromptBoxText);
+            ClassicAssert.AreEqual(true, dv.EmptyCellAllowed);
+            ClassicAssert.AreEqual(false, dv.SuppressDropDownArrow);
+            ClassicAssert.AreEqual(true, dv.ShowErrorBox);
+            ClassicAssert.AreEqual("error-title", dv.ErrorBoxTitle);
+            ClassicAssert.AreEqual("error-text", dv.ErrorBoxText);
+            ClassicAssert.AreEqual(true, dv.ShowPromptBox);
+            ClassicAssert.AreEqual("prompt-title", dv.PromptBoxTitle);
+            ClassicAssert.AreEqual("prompt-text", dv.PromptBoxText);
 
             IDataValidationConstraint c = dv.ValidationConstraint;
-            Assert.AreEqual(ValidationType.ANY, c.GetValidationType());
-            Assert.AreEqual(OperatorType.IGNORED, c.Operator);
+            ClassicAssert.AreEqual(ValidationType.ANY, c.GetValidationType());
+            ClassicAssert.AreEqual(OperatorType.IGNORED, c.Operator);
         }
 
         [Test]
@@ -270,7 +270,7 @@ namespace TestCases.HSSF.UserModel
             HSSFWorkbook wb = new HSSFWorkbook();
             HSSFSheet sheet = wb.CreateSheet() as HSSFSheet;
             List<IDataValidation> list = sheet.GetDataValidations();
-            Assert.AreEqual(0, list.Count);
+            ClassicAssert.AreEqual(0, list.Count);
 
             IDataValidationHelper dataValidationHelper = sheet.GetDataValidationHelper();
             IDataValidationConstraint constraint = dataValidationHelper.CreateintConstraint(OperatorType.BETWEEN, "=A2",
@@ -280,16 +280,16 @@ namespace TestCases.HSSF.UserModel
             sheet.AddValidationData(validation);
 
             list = sheet.GetDataValidations(); // <-- works
-            Assert.AreEqual(1, list.Count);
+            ClassicAssert.AreEqual(1, list.Count);
 
             HSSFDataValidation dv = list[(0)] as HSSFDataValidation;
             DVConstraint c = dv.Constraint;
-            Assert.AreEqual(ValidationType.INTEGER, c.GetValidationType());
-            Assert.AreEqual(OperatorType.BETWEEN, c.Operator);
-            Assert.AreEqual("A2", c.Formula1);
-            Assert.AreEqual("A3", c.Formula2);
-            Assert.AreEqual(double.NaN, c.Value1);
-            Assert.AreEqual(double.NaN, c.Value2);
+            ClassicAssert.AreEqual(ValidationType.INTEGER, c.GetValidationType());
+            ClassicAssert.AreEqual(OperatorType.BETWEEN, c.Operator);
+            ClassicAssert.AreEqual("A2", c.Formula1);
+            ClassicAssert.AreEqual("A3", c.Formula2);
+            ClassicAssert.AreEqual(double.NaN, c.Value1);
+            ClassicAssert.AreEqual(double.NaN, c.Value2);
         }
 
         [Test]
@@ -297,7 +297,7 @@ namespace TestCases.HSSF.UserModel
         HSSFWorkbook wb = new HSSFWorkbook();
         HSSFSheet sheet = wb.CreateSheet() as HSSFSheet;
         List<IDataValidation> list = sheet.GetDataValidations();
-        Assert.AreEqual(0, list.Count);
+        ClassicAssert.AreEqual(0, list.Count);
 
         IDataValidationHelper dataValidationHelper = sheet.GetDataValidationHelper();
         IDataValidationConstraint constraint = dataValidationHelper.CreateintConstraint(OperatorType.BETWEEN, "100",
@@ -307,16 +307,16 @@ namespace TestCases.HSSF.UserModel
         sheet.AddValidationData(validation);
 
         list = sheet.GetDataValidations(); // <-- works
-        Assert.AreEqual(1, list.Count);
+        ClassicAssert.AreEqual(1, list.Count);
 
         HSSFDataValidation dv = list[(0)] as HSSFDataValidation;
         DVConstraint c = dv.Constraint;
-        Assert.AreEqual(ValidationType.INTEGER, c.GetValidationType());
-        Assert.AreEqual(OperatorType.BETWEEN, c.Operator);
-        Assert.AreEqual(null, c.Formula1);
-        Assert.AreEqual(null, c.Formula2);
-        Assert.AreEqual(100, c.Value1);
-        Assert.AreEqual(200, c.Value2);
+        ClassicAssert.AreEqual(ValidationType.INTEGER, c.GetValidationType());
+        ClassicAssert.AreEqual(OperatorType.BETWEEN, c.Operator);
+        ClassicAssert.AreEqual(null, c.Formula1);
+        ClassicAssert.AreEqual(null, c.Formula2);
+        ClassicAssert.AreEqual(100, c.Value1);
+        ClassicAssert.AreEqual(200, c.Value2);
     }
 
         [Test]
@@ -324,7 +324,7 @@ namespace TestCases.HSSF.UserModel
         HSSFWorkbook wb = new HSSFWorkbook();
         HSSFSheet sheet = wb.CreateSheet() as HSSFSheet;
         List<IDataValidation> list = sheet.GetDataValidations();
-        Assert.AreEqual(0, list.Count);
+        ClassicAssert.AreEqual(0, list.Count);
 
         IDataValidationHelper dataValidationHelper = sheet.GetDataValidationHelper();
         IDataValidationConstraint constraint = dataValidationHelper.CreateDecimalConstraint(OperatorType.BETWEEN, "=A2",
@@ -334,16 +334,16 @@ namespace TestCases.HSSF.UserModel
         sheet.AddValidationData(validation);
 
         list = sheet.GetDataValidations(); // <-- works
-        Assert.AreEqual(1, list.Count);
+        ClassicAssert.AreEqual(1, list.Count);
 
         HSSFDataValidation dv = list[(0)] as HSSFDataValidation;
         DVConstraint c = dv.Constraint;
-        Assert.AreEqual(ValidationType.DECIMAL, c.GetValidationType());
-        Assert.AreEqual(OperatorType.BETWEEN, c.Operator);
-        Assert.AreEqual("A2", c.Formula1);
-        Assert.AreEqual(null, c.Formula2);
-        Assert.AreEqual(double.NaN, c.Value1);
-        Assert.AreEqual(200, c.Value2);
+        ClassicAssert.AreEqual(ValidationType.DECIMAL, c.GetValidationType());
+        ClassicAssert.AreEqual(OperatorType.BETWEEN, c.Operator);
+        ClassicAssert.AreEqual("A2", c.Formula1);
+        ClassicAssert.AreEqual(null, c.Formula2);
+        ClassicAssert.AreEqual(double.NaN, c.Value1);
+        ClassicAssert.AreEqual(200, c.Value2);
     }
 
         [Test]
@@ -352,7 +352,7 @@ namespace TestCases.HSSF.UserModel
             HSSFWorkbook wb = new HSSFWorkbook();
             HSSFSheet sheet = wb.CreateSheet() as HSSFSheet;
             List<IDataValidation> list = sheet.GetDataValidations();
-            Assert.AreEqual(0, list.Count);
+            ClassicAssert.AreEqual(0, list.Count);
 
             IDataValidationHelper dataValidationHelper = sheet.GetDataValidationHelper();
             IDataValidationConstraint constraint = dataValidationHelper.CreateDateConstraint(OperatorType.EQUAL,
@@ -362,16 +362,16 @@ namespace TestCases.HSSF.UserModel
             sheet.AddValidationData(validation);
 
             list = sheet.GetDataValidations(); // <-- works
-            Assert.AreEqual(1, list.Count);
+            ClassicAssert.AreEqual(1, list.Count);
 
             HSSFDataValidation dv = list[(0)] as HSSFDataValidation;
             DVConstraint c = dv.Constraint;
-            Assert.AreEqual(ValidationType.DATE, c.GetValidationType());
-            Assert.AreEqual(OperatorType.EQUAL, c.Operator);
-            Assert.AreEqual(null, c.Formula1);
-            Assert.AreEqual(null, c.Formula2);
-            Assert.AreEqual(DateUtil.GetExcelDate(DateUtil.ParseYYYYMMDDDate("2014/10/25")), c.Value1);
-            Assert.AreEqual(double.NaN, c.Value2);
+            ClassicAssert.AreEqual(ValidationType.DATE, c.GetValidationType());
+            ClassicAssert.AreEqual(OperatorType.EQUAL, c.Operator);
+            ClassicAssert.AreEqual(null, c.Formula1);
+            ClassicAssert.AreEqual(null, c.Formula2);
+            ClassicAssert.AreEqual(DateUtil.GetExcelDate(DateUtil.ParseYYYYMMDDDate("2014/10/25")), c.Value1);
+            ClassicAssert.AreEqual(double.NaN, c.Value2);
         }
 
         [Test]
@@ -380,7 +380,7 @@ namespace TestCases.HSSF.UserModel
             HSSFWorkbook wb = new HSSFWorkbook();
             HSSFSheet sheet = wb.CreateSheet() as HSSFSheet;
             List<IDataValidation> list = sheet.GetDataValidations();
-            Assert.AreEqual(0, list.Count);
+            ClassicAssert.AreEqual(0, list.Count);
 
             IDataValidationHelper dataValidationHelper = sheet.GetDataValidationHelper();
             IDataValidationConstraint constraint = dataValidationHelper.CreateExplicitListConstraint(new String[] { "aaa",
@@ -391,22 +391,22 @@ namespace TestCases.HSSF.UserModel
             sheet.AddValidationData(validation);
 
             list = sheet.GetDataValidations(); // <-- works
-            Assert.AreEqual(1, list.Count);
+            ClassicAssert.AreEqual(1, list.Count);
 
             HSSFDataValidation dv = list[(0)] as HSSFDataValidation;
-            Assert.AreEqual(true, dv.SuppressDropDownArrow);
+            ClassicAssert.AreEqual(true, dv.SuppressDropDownArrow);
 
             DVConstraint c = dv.Constraint;
-            Assert.AreEqual(ValidationType.LIST, c.GetValidationType());
-            Assert.AreEqual(null, c.Formula1);
-            Assert.AreEqual(null, c.Formula2);
-            Assert.AreEqual(double.NaN, c.Value1);
-            Assert.AreEqual(double.NaN, c.Value2);
+            ClassicAssert.AreEqual(ValidationType.LIST, c.GetValidationType());
+            ClassicAssert.AreEqual(null, c.Formula1);
+            ClassicAssert.AreEqual(null, c.Formula2);
+            ClassicAssert.AreEqual(double.NaN, c.Value1);
+            ClassicAssert.AreEqual(double.NaN, c.Value2);
             String[] values = c.ExplicitListValues;
-            Assert.AreEqual(3, values.Length);
-            Assert.AreEqual("aaa", values[0]);
-            Assert.AreEqual("bbb", values[1]);
-            Assert.AreEqual("ccc", values[2]);
+            ClassicAssert.AreEqual(3, values.Length);
+            ClassicAssert.AreEqual("aaa", values[0]);
+            ClassicAssert.AreEqual("bbb", values[1]);
+            ClassicAssert.AreEqual("ccc", values[2]);
         }
 
         [Test]
@@ -415,7 +415,7 @@ namespace TestCases.HSSF.UserModel
             HSSFWorkbook wb = new HSSFWorkbook();
             HSSFSheet sheet = wb.CreateSheet() as HSSFSheet;
             List<IDataValidation> list = sheet.GetDataValidations();
-            Assert.AreEqual(0, list.Count);
+            ClassicAssert.AreEqual(0, list.Count);
 
             IDataValidationHelper dataValidationHelper = sheet.GetDataValidationHelper();
             IDataValidationConstraint constraint = dataValidationHelper.CreateFormulaListConstraint("A2");
@@ -425,17 +425,17 @@ namespace TestCases.HSSF.UserModel
             sheet.AddValidationData(validation);
 
             list = sheet.GetDataValidations(); // <-- works
-            Assert.AreEqual(1, list.Count);
+            ClassicAssert.AreEqual(1, list.Count);
 
             HSSFDataValidation dv = list[(0)] as HSSFDataValidation;
-            Assert.AreEqual(true, dv.SuppressDropDownArrow);
+            ClassicAssert.AreEqual(true, dv.SuppressDropDownArrow);
 
             DVConstraint c = dv.Constraint;
-            Assert.AreEqual(ValidationType.LIST, c.GetValidationType());
-            Assert.AreEqual("A2", c.Formula1);
-            Assert.AreEqual(null, c.Formula2);
-            Assert.AreEqual(double.NaN, c.Value1);
-            Assert.AreEqual(double.NaN, c.Value2);
+            ClassicAssert.AreEqual(ValidationType.LIST, c.GetValidationType());
+            ClassicAssert.AreEqual("A2", c.Formula1);
+            ClassicAssert.AreEqual(null, c.Formula2);
+            ClassicAssert.AreEqual(double.NaN, c.Value1);
+            ClassicAssert.AreEqual(double.NaN, c.Value2);
         }
 
         [Test]
@@ -444,7 +444,7 @@ namespace TestCases.HSSF.UserModel
             HSSFWorkbook wb = new HSSFWorkbook();
             HSSFSheet sheet = wb.CreateSheet() as HSSFSheet;
             List<IDataValidation> list = sheet.GetDataValidations();
-            Assert.AreEqual(0, list.Count);
+            ClassicAssert.AreEqual(0, list.Count);
 
             IDataValidationHelper dataValidationHelper = sheet.GetDataValidationHelper();
             IDataValidationConstraint constraint = dataValidationHelper.CreateCustomConstraint("A2:A3");
@@ -453,15 +453,15 @@ namespace TestCases.HSSF.UserModel
             sheet.AddValidationData(validation);
 
             list = sheet.GetDataValidations(); // <-- works
-            Assert.AreEqual(1, list.Count);
+            ClassicAssert.AreEqual(1, list.Count);
 
             HSSFDataValidation dv = list[(0)] as HSSFDataValidation;
             DVConstraint c = dv.Constraint;
-            Assert.AreEqual(ValidationType.FORMULA, c.GetValidationType());
-            Assert.AreEqual("A2:A3", c.Formula1);
-            Assert.AreEqual(null, c.Formula2);
-            Assert.AreEqual(double.NaN, c.Value1);
-            Assert.AreEqual(double.NaN, c.Value2);
+            ClassicAssert.AreEqual(ValidationType.FORMULA, c.GetValidationType());
+            ClassicAssert.AreEqual("A2:A3", c.Formula1);
+            ClassicAssert.AreEqual(null, c.Formula2);
+            ClassicAssert.AreEqual(double.NaN, c.Value1);
+            ClassicAssert.AreEqual(double.NaN, c.Value2);
         }
 
         [Test]
@@ -471,7 +471,7 @@ namespace TestCases.HSSF.UserModel
             HSSFWorkbook wb = new HSSFWorkbook();
             HSSFSheet sheet = wb.CreateSheet() as HSSFSheet;
             List<IDataValidation> list = sheet.GetDataValidations();
-            Assert.AreEqual(0, list.Count);
+            ClassicAssert.AreEqual(0, list.Count);
 
             IDataValidationHelper dataValidationHelper = sheet.GetDataValidationHelper();
             IDataValidationConstraint constraint = dataValidationHelper.CreateCustomConstraint("A2:A3");
@@ -480,12 +480,12 @@ namespace TestCases.HSSF.UserModel
             sheet.AddValidationData(validation);
 
             list = sheet.GetDataValidations();
-            Assert.AreEqual(1, list.Count);
+            ClassicAssert.AreEqual(1, list.Count);
 
             sheet.RemoveDataValidation(validation);
 
             list = sheet.GetDataValidations();
-            Assert.AreEqual(0, list.Count);
+            ClassicAssert.AreEqual(0, list.Count);
         }
     }
 }

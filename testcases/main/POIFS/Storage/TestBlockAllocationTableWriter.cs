@@ -30,7 +30,7 @@ using System.Text;
 using System.Collections.Generic;
 using System.IO;
 
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 
 using NPOI.POIFS.Storage;
 using NPOI.Util;
@@ -72,7 +72,7 @@ namespace TestCases.POIFS.Storage
 
             for (int i = 0; i < blockSizes.Length; i++)
             {
-                Assert.AreEqual(expectedIndex, table.AllocateSpace(blockSizes[i]));
+                ClassicAssert.AreEqual(expectedIndex, table.AllocateSpace(blockSizes[i]));
                 expectedIndex += blockSizes[i];
             }
         }
@@ -146,7 +146,7 @@ namespace TestCases.POIFS.Storage
             table.WriteBlocks(stream);
             byte[] output = stream.ToArray();
 
-            Assert.AreEqual(1024, output.Length);
+            ClassicAssert.AreEqual(1024, output.Length);
             byte[] expected = new byte[1024];
 
             for (int i = 0; i < expected.Length; i++)
@@ -177,7 +177,7 @@ namespace TestCases.POIFS.Storage
             LittleEndian.PutInt(expected, offset, POIFSConstants.END_OF_CHAIN);
 
             for (int i = 0; i < expected.Length; i++)
-                Assert.AreEqual(expected[i], output[i], "At offset " + i);
+                ClassicAssert.AreEqual(expected[i], output[i], "At offset " + i);
         }
 
         public static void VerifyBlocksCreated(BlockAllocationTableWriter table, int count)
@@ -187,7 +187,7 @@ namespace TestCases.POIFS.Storage
             table.WriteBlocks(stream);
             byte[] output = stream.ToArray();
 
-            Assert.AreEqual(count * 512, output.Length);
+            ClassicAssert.AreEqual(count * 512, output.Length);
         }
 
     }

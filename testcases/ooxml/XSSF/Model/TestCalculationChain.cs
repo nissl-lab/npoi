@@ -16,7 +16,7 @@
 ==================================================================== */
 
 using NPOI.XSSF.UserModel;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using NPOI.SS.UserModel;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.XSSF;
@@ -37,26 +37,26 @@ namespace TestCases.XSSF.Model
             //the bean holding the reference to the formula to be deleted
             CT_CalcCell c = chain.GetCTCalcChain().GetCArray(0);
             int cnt = chain.GetCTCalcChain().c.Count;
-            Assert.AreEqual(10, c.i);
-            Assert.AreEqual("E1", c.r);
+            ClassicAssert.AreEqual(10, c.i);
+            ClassicAssert.AreEqual("E1", c.r);
 
             ISheet sheet = wb.GetSheet("Test");
             ICell cell = sheet.GetRow(0).GetCell(4);
 
-            Assert.AreEqual(CellType.Formula, cell.CellType);
+            ClassicAssert.AreEqual(CellType.Formula, cell.CellType);
             cell.SetCellFormula(null);
 
             //the count of items is less by one
             c = chain.GetCTCalcChain().GetCArray(0);
             int cnt2 = chain.GetCTCalcChain().c.Count;
-            Assert.AreEqual(cnt - 1, cnt2);
+            ClassicAssert.AreEqual(cnt - 1, cnt2);
             //the first item in the calculation chain is the former second one
-            Assert.AreEqual(10, c.i);
-            Assert.AreEqual("C1", c.r);
+            ClassicAssert.AreEqual(10, c.i);
+            ClassicAssert.AreEqual("C1", c.r);
 
-            Assert.AreEqual(CellType.String, cell.CellType);
+            ClassicAssert.AreEqual(CellType.String, cell.CellType);
             cell.SetCellValue("ABC");
-            Assert.AreEqual(CellType.String, cell.CellType);
+            ClassicAssert.AreEqual(CellType.String, cell.CellType);
         }
 
         [Test]
@@ -68,33 +68,33 @@ namespace TestCases.XSSF.Model
             //the bean holding the reference to the formula to be deleted
             CT_CalcCell c = chain.GetCTCalcChain().GetCArray(0);
             int cnt = chain.GetCTCalcChain().c.Count;
-            Assert.AreEqual(1, c.i);
-            Assert.AreEqual("A5", c.r);
-            Assert.AreEqual(2, cnt);
+            ClassicAssert.AreEqual(1, c.i);
+            ClassicAssert.AreEqual("A5", c.r);
+            ClassicAssert.AreEqual(2, cnt);
 
             ISheet sheet = wb.GetSheet("Sheet1");
             ICell cell = sheet.GetRow(4).GetCell(0);
 
-            Assert.AreEqual(CellType.Formula, cell.CellType);
+            ClassicAssert.AreEqual(CellType.Formula, cell.CellType);
             cell.SetCellFormula(null);
 
             //the count of items is less by one
             c = chain.GetCTCalcChain().GetCArray(0);
             int cnt2 = chain.GetCTCalcChain().c.Count;
-            Assert.AreEqual(cnt - 1, cnt2);
+            ClassicAssert.AreEqual(cnt - 1, cnt2);
             //the first item in the calculation chain is the former second one
-            Assert.AreEqual(1, c.i);
-            Assert.AreEqual("A4", c.r);
-            Assert.AreEqual(1, cnt2);
+            ClassicAssert.AreEqual(1, c.i);
+            ClassicAssert.AreEqual("A4", c.r);
+            ClassicAssert.AreEqual(1, cnt2);
 
             //remove final formula from spread sheet
             ICell cell2 = sheet.GetRow(3).GetCell(0);
-            Assert.AreEqual(CellType.Formula, cell2.CellType);
+            ClassicAssert.AreEqual(CellType.Formula, cell2.CellType);
             cell2.SetCellFormula(null);
 
             //the count of items within the chain should be 0
             int cnt3 = chain.GetCTCalcChain().c.Count;
-            Assert.AreEqual(0, cnt3);
+            ClassicAssert.AreEqual(0, cnt3);
         }
     }
 }

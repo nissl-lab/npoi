@@ -18,7 +18,7 @@
 namespace TestCases.SS.Formula.Functions
 {
     using System;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.UserModel;
     using NPOI.SS.Formula.Functions;
@@ -174,11 +174,11 @@ namespace TestCases.SS.Formula.Functions
             {
                 ve = invokeDays360(Convert(firstArg), Convert(secondArg));
             }
-            Assert.IsTrue(ve is NumberEval, "wrong return type (" + ve.GetType().Name + ")");
+            ClassicAssert.IsTrue(ve is NumberEval, "wrong return type (" + ve.GetType().Name + ")");
 
             NumberEval numberEval = (NumberEval)ve;
             String err = String.Format("days360({0},{1},{2}) wrong result", firstArg, secondArg, method);
-            Assert.AreEqual(expResult, numberEval.NumberValue, err);
+            ClassicAssert.AreEqual(expResult, numberEval.NumberValue, err);
         }
         private static ValueEval invokeDays360(params ValueEval[] args)
         {

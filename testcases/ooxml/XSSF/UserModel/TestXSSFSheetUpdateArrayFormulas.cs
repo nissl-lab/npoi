@@ -15,7 +15,7 @@
    limitations under the License.
 ==================================================================== */
 
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using System;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.SS.UserModel;
@@ -55,13 +55,13 @@ namespace TestCases.XSSF.UserModel
             String formula1 = "123";
             CellRangeAddress range = CellRangeAddress.ValueOf("C3:C3");
             cells = sheet.SetArrayFormula(formula1, range);
-            Assert.AreEqual(1, cells.Size);
+            ClassicAssert.AreEqual(1, cells.Size);
 
             // check GetFirstCell...
             XSSFCell firstCell = (XSSFCell)cells.TopLeftCell;
-            Assert.AreSame(firstCell, sheet.GetFirstCellInArrayFormula(firstCell));
+            ClassicAssert.AreSame(firstCell, sheet.GetFirstCellInArrayFormula(firstCell));
             //retrieve the range and check it is the same
-            Assert.AreEqual(range.FormatAsString(), firstCell.ArrayFormulaRange.FormatAsString());
+            ClassicAssert.AreEqual(range.FormatAsString(), firstCell.ArrayFormulaRange.FormatAsString());
             ConfirmArrayFormulaCell(firstCell, "C3", formula1, "C3");
 
             workbook.Close();
@@ -77,7 +77,7 @@ namespace TestCases.XSSF.UserModel
 
             CellRangeAddress range = CellRangeAddress.ValueOf("C4:C6");
             cells = sheet.SetArrayFormula(formula2, range);
-            Assert.AreEqual(3, cells.Size);
+            ClassicAssert.AreEqual(3, cells.Size);
 
             // sheet.SetArrayFormula Creates rows and cells for the designated range
             /*
@@ -91,7 +91,7 @@ namespace TestCases.XSSF.UserModel
             ConfirmArrayFormulaCell(cells.GetCell(1, 0), "C5");
             ConfirmArrayFormulaCell(cells.GetCell(2, 0), "C6");
 
-            Assert.AreSame(firstCell, sheet.GetFirstCellInArrayFormula(firstCell));
+            ClassicAssert.AreSame(firstCell, sheet.GetFirstCellInArrayFormula(firstCell));
             workbook.Close();
         }
 
@@ -106,18 +106,18 @@ namespace TestCases.XSSF.UserModel
                 throw new AssertionException("Cell should not be null.");
             }
             CT_Cell ctCell = ((XSSFCell)c).GetCTCell();
-            Assert.AreEqual(cellRef, ctCell.r);
+            ClassicAssert.AreEqual(cellRef, ctCell.r);
             if (formulaText == null)
             {
-                Assert.IsFalse(ctCell.IsSetF());
-                Assert.IsNull(ctCell.f);
+                ClassicAssert.IsFalse(ctCell.IsSetF());
+                ClassicAssert.IsNull(ctCell.f);
             }
             else
             {
                 CT_CellFormula f = ctCell.f;
-                Assert.AreEqual(arrayRangeRef, f.@ref);
-                Assert.AreEqual(formulaText, f.Value);
-                Assert.AreEqual(ST_CellFormulaType.array, f.t);
+                ClassicAssert.AreEqual(arrayRangeRef, f.@ref);
+                ClassicAssert.AreEqual(formulaText, f.Value);
+                ClassicAssert.AreEqual(ST_CellFormulaType.array, f.t);
             }
         }
 

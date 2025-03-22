@@ -19,7 +19,7 @@ namespace TestCases.SS.Formula.Eval
 {
 
     using System;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.Formula.Functions;
     using TestCases.SS.Formula.Functions;
@@ -56,8 +56,8 @@ namespace TestCases.SS.Formula.Eval
                     throw new AssertionException("Identified bug in Evaluation of 1x1 area");
                 }
             }
-            Assert.AreEqual(typeof(BoolEval), result.GetType());
-            Assert.IsTrue(((BoolEval)result).BooleanValue);
+            ClassicAssert.AreEqual(typeof(BoolEval), result.GetType());
+            ClassicAssert.IsTrue(((BoolEval)result).BooleanValue);
         }
         /**
          * Empty string is equal to blank
@@ -71,13 +71,13 @@ namespace TestCases.SS.Formula.Eval
 			BlankEval.instance,
 		};
             ValueEval result = Evaluate(EvalInstances.Equal, args, 10, 10);
-            Assert.AreEqual(typeof(BoolEval), result.GetType());
+            ClassicAssert.AreEqual(typeof(BoolEval), result.GetType());
             BoolEval be = (BoolEval)result;
             if (!be.BooleanValue)
             {
                 throw new AssertionException("Identified bug blank/empty string Equality");
             }
-            Assert.IsTrue(be.BooleanValue);
+            ClassicAssert.IsTrue(be.BooleanValue);
         }
 
         /**
@@ -90,11 +90,11 @@ namespace TestCases.SS.Formula.Eval
             {
                 throw new AssertionException("Identified bug 46613");
             }
-            Assert.IsTrue(EvalStringCmp("abc", "aBc", EvalInstances.Equal));
-            Assert.IsTrue(EvalStringCmp("ABC", "azz", EvalInstances.LessThan));
-            Assert.IsTrue(EvalStringCmp("abc", "AZZ", EvalInstances.LessThan));
-            Assert.IsTrue(EvalStringCmp("ABC", "aaa", EvalInstances.GreaterThan));
-            Assert.IsTrue(EvalStringCmp("abc", "AAA", EvalInstances.GreaterThan));
+            ClassicAssert.IsTrue(EvalStringCmp("abc", "aBc", EvalInstances.Equal));
+            ClassicAssert.IsTrue(EvalStringCmp("ABC", "azz", EvalInstances.LessThan));
+            ClassicAssert.IsTrue(EvalStringCmp("abc", "AZZ", EvalInstances.LessThan));
+            ClassicAssert.IsTrue(EvalStringCmp("ABC", "aaa", EvalInstances.GreaterThan));
+            ClassicAssert.IsTrue(EvalStringCmp("abc", "AAA", EvalInstances.GreaterThan));
         }
 
 
@@ -105,7 +105,7 @@ namespace TestCases.SS.Formula.Eval
 			new StringEval(b),
 		};
             ValueEval result = Evaluate(cmpOp, args, 10, 20);
-            Assert.AreEqual(typeof(BoolEval), result.GetType());
+            ClassicAssert.AreEqual(typeof(BoolEval), result.GetType());
             BoolEval be = (BoolEval)result;
             return be.BooleanValue;
         }
@@ -140,8 +140,8 @@ namespace TestCases.SS.Formula.Eval
         {
             ValueEval[] args = { a, b, };
             ValueEval result = Evaluate(cmpOp, args, 10, 20);
-            Assert.AreEqual(typeof(BoolEval), result.GetType());
-            Assert.AreEqual(expectedResult, ((BoolEval)result).BooleanValue);
+            ClassicAssert.AreEqual(typeof(BoolEval), result.GetType());
+            ClassicAssert.AreEqual(expectedResult, ((BoolEval)result).BooleanValue);
         }
 
         /**
@@ -173,11 +173,11 @@ namespace TestCases.SS.Formula.Eval
         public void TestRounding_bug47598()
         {
             double x = 1 + 1.0028 - 0.9973; // should be 1.0055, but has IEEE rounding
-            Assert.IsFalse(x == 1.0055);
+            ClassicAssert.IsFalse(x == 1.0055);
 
             NumberEval a = new NumberEval(x);
             NumberEval b = new NumberEval(1.0055);
-            Assert.AreEqual("1.0055", b.StringValue);
+            ClassicAssert.AreEqual("1.0055", b.StringValue);
 
             ValueEval[] args = { a, b, };
             BoolEval result = (BoolEval)Evaluate(EvalInstances.Equal, args, 0, 0);

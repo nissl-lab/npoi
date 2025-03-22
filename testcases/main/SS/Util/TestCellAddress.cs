@@ -21,7 +21,7 @@ namespace TestCases.SS.Util
 
     using NPOI.SS.Util;
     using NPOI.Util;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
 
 
@@ -44,26 +44,26 @@ namespace TestCases.SS.Util
             int col = 0;
 
             cellAddress = new CellAddress(row, col);
-            Assert.AreEqual(CellAddress.A1, cellAddress);
+            ClassicAssert.AreEqual(CellAddress.A1, cellAddress);
 
             cellAddress = new CellAddress(Address);
-            Assert.AreEqual(CellAddress.A1, cellAddress);
+            ClassicAssert.AreEqual(CellAddress.A1, cellAddress);
 
             cellAddress = new CellAddress(cellRef);
-            Assert.AreEqual(CellAddress.A1, cellAddress);
+            ClassicAssert.AreEqual(CellAddress.A1, cellAddress);
         }
 
         [Test]
         public void TestFormatAsString()
         {
-            Assert.AreEqual("A1", CellAddress.A1.FormatAsString());
+            ClassicAssert.AreEqual("A1", CellAddress.A1.FormatAsString());
         }
 
         [Test]
         public void TestEquals()
         {
-            Assert.AreEqual(new CellReference(6, 4), new CellReference(6, 4));
-            Assert.AreNotEqual(new CellReference(4, 6), new CellReference(6, 4));
+            ClassicAssert.AreEqual(new CellReference(6, 4), new CellReference(6, 4));
+            ClassicAssert.AreNotEqual(new CellReference(4, 6), new CellReference(6, 4));
         }
 
         [Test]
@@ -74,25 +74,25 @@ namespace TestCases.SS.Util
             CellAddress B1 = new CellAddress(0, 1);
             CellAddress B2 = new CellAddress(1, 1);
 
-            Assert.AreEqual(0, A1.CompareTo(A1));
-            Assert.AreEqual(-1, A1.CompareTo(B1));
-            Assert.AreEqual(-1, A1.CompareTo(A2));
-            Assert.AreEqual(-1, A1.CompareTo(B2));
+            ClassicAssert.AreEqual(0, A1.CompareTo(A1));
+            ClassicAssert.AreEqual(-1, A1.CompareTo(B1));
+            ClassicAssert.AreEqual(-1, A1.CompareTo(A2));
+            ClassicAssert.AreEqual(-1, A1.CompareTo(B2));
 
-            Assert.AreEqual(1, B1.CompareTo(A1));
-            Assert.AreEqual(0, B1.CompareTo(B1));
-            Assert.AreEqual(-1, B1.CompareTo(A2));
-            Assert.AreEqual(-1, B1.CompareTo(B2));
+            ClassicAssert.AreEqual(1, B1.CompareTo(A1));
+            ClassicAssert.AreEqual(0, B1.CompareTo(B1));
+            ClassicAssert.AreEqual(-1, B1.CompareTo(A2));
+            ClassicAssert.AreEqual(-1, B1.CompareTo(B2));
 
-            Assert.AreEqual(1, A2.CompareTo(A1));
-            Assert.AreEqual(1, A2.CompareTo(B1));
-            Assert.AreEqual(0, A2.CompareTo(A2));
-            Assert.AreEqual(-1, A2.CompareTo(B2));
+            ClassicAssert.AreEqual(1, A2.CompareTo(A1));
+            ClassicAssert.AreEqual(1, A2.CompareTo(B1));
+            ClassicAssert.AreEqual(0, A2.CompareTo(A2));
+            ClassicAssert.AreEqual(-1, A2.CompareTo(B2));
 
-            Assert.AreEqual(1, B2.CompareTo(A1));
-            Assert.AreEqual(1, B2.CompareTo(B1));
-            Assert.AreEqual(1, B2.CompareTo(A2));
-            Assert.AreEqual(0, B2.CompareTo(B2));
+            ClassicAssert.AreEqual(1, B2.CompareTo(A1));
+            ClassicAssert.AreEqual(1, B2.CompareTo(B1));
+            ClassicAssert.AreEqual(1, B2.CompareTo(A2));
+            ClassicAssert.AreEqual(0, B2.CompareTo(B2));
 
             CellAddress[] sorted = { A1, B1, A2, B2 };
             CellAddress[] unsorted = { B1, B2, A1, A2 };
@@ -104,14 +104,14 @@ namespace TestCases.SS.Util
         public void TestGetRow()
         {
             CellAddress Addr = new CellAddress(6, 4);
-            Assert.AreEqual(6, Addr.Row);
+            ClassicAssert.AreEqual(6, Addr.Row);
         }
 
         [Test]
         public void TestGetColumn()
         {
             CellAddress Addr = new CellAddress(6, 4);
-            Assert.AreEqual(4, Addr.Column);
+            ClassicAssert.AreEqual(4, Addr.Column);
         }
 
     }

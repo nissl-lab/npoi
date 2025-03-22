@@ -20,7 +20,7 @@ namespace TestCases.HSSF.Record
     using System;
     using NPOI.Util;
     using TestCases.HSSF.Record;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.Record;
 
 
@@ -69,7 +69,7 @@ namespace TestCases.HSSF.Record
                 }
                 throw e;
             }
-            Assert.AreEqual("Java Excel API v2.6.4", rec.Username);
+            ClassicAssert.AreEqual("Java Excel API v2.6.4", rec.Username);
 
 
             byte[] expectedEncoding = HexRead.ReadFromString(""
@@ -100,7 +100,7 @@ namespace TestCases.HSSF.Record
 
             RecordInputStream in1 = TestcaseRecordInputStream.Create(data);
             WriteAccessRecord rec = new WriteAccessRecord(in1);
-            Assert.AreEqual("A satisfied Microsoft Office9 User", rec.Username);
+            ClassicAssert.AreEqual("A satisfied Microsoft Office9 User", rec.Username);
             byte[] expectedEncoding = HexRead.ReadFromString(""
                     + "22 00 00 41 20 73 61 74 69 73 66 69 65 64 20 4D "
                     + "69 63 72 6F 73 6F 66 74 20 4F 66 66 69 63 65 39 "

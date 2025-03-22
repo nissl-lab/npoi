@@ -21,7 +21,7 @@ namespace NPOI
     using NPOI.Util;
     using NPOI.XSSF.Extractor;
     using NPOI.XSSF.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using TestCases;
 
     [TestFixture]
@@ -42,8 +42,8 @@ namespace NPOI
             POIXMLPropertiesTextExtractor textExt = (POIXMLPropertiesTextExtractor)ext.MetadataTextExtractor;
 
             // Check basics
-            Assert.IsNotNull(textExt);
-            Assert.IsTrue(textExt.Text.Length > 0);
+            ClassicAssert.IsNotNull(textExt);
+            ClassicAssert.IsTrue(textExt.Text.Length > 0);
 
             // Check some of the content
             String text = textExt.Text;

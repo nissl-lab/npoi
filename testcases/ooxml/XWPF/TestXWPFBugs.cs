@@ -24,7 +24,7 @@ namespace TestCases.XWPF
     using NPOI.Util;
     using NPOI.XWPF;
     using NPOI.XWPF.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using System;
     using System.IO;
     using System.Xml;
@@ -53,12 +53,12 @@ namespace TestCases.XWPF
 
             run.FontFamily = (/*setter*/"Times New Roman");
             run.FontSize = (/*setter*/20);
-            Assert.AreEqual(run.FontFamily, "Times New Roman");
-            Assert.AreEqual(run.GetFontFamily(FontCharRange.CS), "Times New Roman");
-            Assert.AreEqual(run.GetFontFamily(FontCharRange.EastAsia), "Times New Roman");
-            Assert.AreEqual(run.GetFontFamily(FontCharRange.HAnsi), "Times New Roman");
+            ClassicAssert.AreEqual(run.FontFamily, "Times New Roman");
+            ClassicAssert.AreEqual(run.GetFontFamily(FontCharRange.CS), "Times New Roman");
+            ClassicAssert.AreEqual(run.GetFontFamily(FontCharRange.EastAsia), "Times New Roman");
+            ClassicAssert.AreEqual(run.GetFontFamily(FontCharRange.HAnsi), "Times New Roman");
             run.SetFontFamily("Arial", FontCharRange.HAnsi);
-            Assert.AreEqual(run.GetFontFamily(FontCharRange.HAnsi), "Arial");
+            ClassicAssert.AreEqual(run.GetFontFamily(FontCharRange.HAnsi), "Arial");
 
             doc.Close();
         }
@@ -78,13 +78,13 @@ namespace TestCases.XWPF
 /*
                 // Check the encryption details
                 EncryptionInfo info = new EncryptionInfo(filesystem);
-                Assert.AreEqual(128, info.Header.KeySize);
-                Assert.AreEqual(EncryptionHeader.ALGORITHM_AES_128, info.Header.Algorithm);
-                Assert.AreEqual(EncryptionHeader.HASH_SHA1, info.Header.HashAlgorithm);
+                ClassicAssert.AreEqual(128, info.Header.KeySize);
+                ClassicAssert.AreEqual(EncryptionHeader.ALGORITHM_AES_128, info.Header.Algorithm);
+                ClassicAssert.AreEqual(EncryptionHeader.HASH_SHA1, info.Header.HashAlgorithm);
 
                 // Check it can be decoded
                 Decryptor d = Decryptor.GetInstance(info);
-                Assert.IsTrue("Unable to Process: document is encrypted", d.VerifyPassword("solrcell"));
+                ClassicAssert.IsTrue("Unable to Process: document is encrypted", d.VerifyPassword("solrcell"));
 
                 // Check we can read the word document in that
                 InputStream dataStream = d.GetDataStream(filesystem);
@@ -92,8 +92,8 @@ namespace TestCases.XWPF
                 XWPFDocument doc = new XWPFDocument(opc);
                 XWPFWordExtractor ex = new XWPFWordExtractor(doc);
                 String text = ex.Text;
-                Assert.IsNotNull(text);
-                Assert.AreEqual("This is password protected Word document.", text.Trim());
+                ClassicAssert.IsNotNull(text);
+                ClassicAssert.AreEqual("This is password protected Word document.", text.Trim());
                 ex.Close();
  */
                 filesystem.Close();
@@ -113,10 +113,10 @@ namespace TestCases.XWPF
                 doc.CreateTable(2, 2);
             }
             XWPFTable table = doc.GetTableArray(0);
-            Assert.IsNotNull(table);
+            ClassicAssert.IsNotNull(table);
             //let's check also that returns the correct table
             XWPFTable same = doc.Tables[0];
-            Assert.AreEqual(table, same);
+            ClassicAssert.AreEqual(table, same);
         }
         [Test]
         public void Bug57495_getParagraphArrayInTableCell()
@@ -124,12 +124,12 @@ namespace TestCases.XWPF
             XWPFDocument doc = new XWPFDocument();
             //let's create a table for the test
             XWPFTable table = doc.CreateTable(2, 2);
-            Assert.IsNotNull(table);
+            ClassicAssert.IsNotNull(table);
             XWPFParagraph p = table.GetRow(0).GetCell(0).GetParagraphArray(0);
-            Assert.IsNotNull(p);
+            ClassicAssert.IsNotNull(p);
             //let's check also that returns the correct paragraph
             XWPFParagraph same = table.GetRow(0).GetCell(0).Paragraphs[0];
-            Assert.AreEqual(p, same);
+            ClassicAssert.AreEqual(p, same);
         }
 
         [Test]
@@ -138,13 +138,13 @@ namespace TestCases.XWPF
             int pixels = 100;
             int expectedEMU = 952500;
             int result = Units.PixelToEMU(pixels);
-            Assert.AreEqual(expectedEMU, result);
+            ClassicAssert.AreEqual(expectedEMU, result);
         }
         [Test]
         public void Bug57312_NullPointException()
         {
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("57312.docx");
-            Assert.IsNotNull(doc);
+            ClassicAssert.IsNotNull(doc);
 
             foreach (IBodyElement bodyElement in doc.BodyElements)
             {
@@ -162,7 +162,7 @@ namespace TestCases.XWPF
                             XWPFRun RunElement = (XWPFRun)iRunElem;
 
                             UnderlinePatterns underline = RunElement.Underline;
-                            Assert.IsNotNull(underline);
+                            ClassicAssert.IsNotNull(underline);
 
                             //System.out.Println("Found: " + underline + ": " + RunElement.GetText(0));
                         }
@@ -175,7 +175,7 @@ namespace TestCases.XWPF
         public void Test56392()
         {
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("56392.docx");
-            Assert.IsNotNull(doc);
+            ClassicAssert.IsNotNull(doc);
         }
 
         /**
@@ -185,13 +185,13 @@ namespace TestCases.XWPF
         public void Test57829()
         {
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("sample.docx");
-            Assert.IsNotNull(doc);
-            Assert.AreEqual(3, doc.Paragraphs.Count);
+            ClassicAssert.IsNotNull(doc);
+            ClassicAssert.AreEqual(3, doc.Paragraphs.Count);
 
             foreach (XWPFParagraph paragraph in doc.Paragraphs)
             {
                 paragraph.RemoveRun(0);
-                Assert.IsNotNull(paragraph.Text);
+                ClassicAssert.IsNotNull(paragraph.Text);
             }
         }
         /**
@@ -202,13 +202,13 @@ namespace TestCases.XWPF
         {
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("58618.docx");
             XWPFParagraph para = (XWPFParagraph)doc.BodyElements[0];
-            Assert.IsNotNull(para);
-            Assert.AreEqual("Some text  some hyper links link link and some text.....", para.Text);
+            ClassicAssert.IsNotNull(para);
+            ClassicAssert.AreEqual("Some text  some hyper links link link and some text.....", para.Text);
             XWPFRun run = para.InsertNewRun(para.Runs.Count);
             run.SetText("New Text");
-            Assert.AreEqual("Some text  some hyper links link link and some text.....New Text", para.Text);
+            ClassicAssert.AreEqual("Some text  some hyper links link link and some text.....New Text", para.Text);
             para.RemoveRun(para.Runs.Count - 2);
-            Assert.AreEqual("Some text  some hyper links link linkNew Text", para.Text);
+            ClassicAssert.AreEqual("Some text  some hyper links link linkNew Text", para.Text);
         }
         [Test]
         public void Bug59058()
@@ -220,7 +220,7 @@ namespace TestCases.XWPF
                 ZipEntry entry = zf.GetEntry("word/document.xml");
                 XmlDocument xml = POIXMLDocumentPart.ConvertStreamToXml(zf.GetInputStream(entry));
                 DocumentDocument document = DocumentDocument.Parse(xml, POIXMLDocumentPart.NamespaceManager);
-                Assert.IsNotNull(document);
+                ClassicAssert.IsNotNull(document);
                 zf.Close();
             }
         }

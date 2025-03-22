@@ -30,7 +30,7 @@ using System;
 using System.Collections;
 using System.IO;
 
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 
 using NPOI.POIFS.FileSystem;
 using NPOI.Util;
@@ -158,10 +158,10 @@ namespace TestCases.POIFS.FileSystem
             ( byte ) 0, ( byte ) 0, ( byte ) 0, ( byte ) 0
         };
 
-            Assert.AreEqual(array2.Length, output.Length);
+            ClassicAssert.AreEqual(array2.Length, output.Length);
             for (int j = 0; j < output.Length; j++)
             {
-                Assert.AreEqual(array2[j],
+                ClassicAssert.AreEqual(array2[j],
                              output[j], "Checking property offset " + j);
             }
         }
@@ -231,7 +231,7 @@ namespace TestCases.POIFS.FileSystem
                                     int total_output, OPOIFSDocument document,
                                     byte[] input)
         {
-            Assert.AreEqual(document, document.DocumentProperty.Document);
+            ClassicAssert.AreEqual(document, document.DocumentProperty.Document);
             int increment = (int)Math.Sqrt(input.Length);
 
             for (int j = 1; j <= input.Length; j += increment)
@@ -244,30 +244,30 @@ namespace TestCases.POIFS.FileSystem
                     document.Read(buffer, offset);
                     for (int n = 0; n < buffer.Length; n++)
                     {
-                        Assert.AreEqual(input[(k * j) + n], buffer[n]
+                        ClassicAssert.AreEqual(input[(k * j) + n], buffer[n]
                             , "checking byte " + (k * j) + n);
                     }
                     offset += j;
                 }
             }
-            Assert.AreEqual(big_blocks, document.CountBlocks);
-            Assert.AreEqual(small_blocks, document.SmallBlocks.Length);
+            ClassicAssert.AreEqual(big_blocks, document.CountBlocks);
+            ClassicAssert.AreEqual(small_blocks, document.SmallBlocks.Length);
             MemoryStream stream = new MemoryStream();
 
             document.WriteBlocks(stream);
             byte[] output = stream.ToArray();
 
-            Assert.AreEqual(total_output, output.Length);
+            ClassicAssert.AreEqual(total_output, output.Length);
             int limit = Math.Min(total_output, input.Length);
 
             for (int j = 0; j < limit; j++)
             {
-                Assert.AreEqual(input[j],
+                ClassicAssert.AreEqual(input[j],
                              output[j], "Checking document offset " + j);
             }
             for (int j = limit; j < output.Length; j++)
             {
-                Assert.AreEqual(unchecked((byte)-1),
+                ClassicAssert.AreEqual(unchecked((byte)-1),
                              output[j], "Checking document offset " + j);
             }
             return output;

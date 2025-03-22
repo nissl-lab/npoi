@@ -24,7 +24,7 @@ namespace TestCases.XWPF.UserModel
     using NPOI.XWPF;
     using NPOI.XWPF.Extractor;
     using NPOI.XWPF.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using System;
     using System.Collections.Generic;
     using System.IO;
@@ -55,7 +55,7 @@ namespace TestCases.XWPF.UserModel
                     System.Console.WriteLine(part);
                 }
             }
-            Assert.IsTrue(found);
+            ClassicAssert.IsTrue(found);
         }
 
         [Test]
@@ -66,45 +66,45 @@ namespace TestCases.XWPF.UserModel
             // Simple file
             xml = XWPFTestDataSamples.OpenSampleDocument("sample.docx");
             // Check it has key parts
-            Assert.IsNotNull(xml.Document);
-            Assert.IsNotNull(xml.Document.body);
-            Assert.IsNotNull(xml.GetStyles());
+            ClassicAssert.IsNotNull(xml.Document);
+            ClassicAssert.IsNotNull(xml.Document.body);
+            ClassicAssert.IsNotNull(xml.GetStyles());
 
             // Complex file
             xml = XWPFTestDataSamples.OpenSampleDocument("IllustrativeCases.docx");
-            Assert.IsNotNull(xml.Document);
-            Assert.IsNotNull(xml.Document.body);
-            Assert.IsNotNull(xml.GetStyles());
+            ClassicAssert.IsNotNull(xml.Document);
+            ClassicAssert.IsNotNull(xml.Document.body);
+            ClassicAssert.IsNotNull(xml.GetStyles());
         }
 
         [Test]
         public void TestMetadataBasics()
         {
             XWPFDocument xml = XWPFTestDataSamples.OpenSampleDocument("sample.docx");
-            Assert.IsNotNull(xml.GetProperties().CoreProperties);
-            Assert.IsNotNull(xml.GetProperties().ExtendedProperties);
+            ClassicAssert.IsNotNull(xml.GetProperties().CoreProperties);
+            ClassicAssert.IsNotNull(xml.GetProperties().ExtendedProperties);
 
-            Assert.AreEqual("Microsoft Office Word", xml.GetProperties().ExtendedProperties.GetUnderlyingProperties().Application);
-            Assert.AreEqual(1315, xml.GetProperties().ExtendedProperties.GetUnderlyingProperties().Characters);
-            Assert.AreEqual(10, xml.GetProperties().ExtendedProperties.GetUnderlyingProperties().Lines);
+            ClassicAssert.AreEqual("Microsoft Office Word", xml.GetProperties().ExtendedProperties.GetUnderlyingProperties().Application);
+            ClassicAssert.AreEqual(1315, xml.GetProperties().ExtendedProperties.GetUnderlyingProperties().Characters);
+            ClassicAssert.AreEqual(10, xml.GetProperties().ExtendedProperties.GetUnderlyingProperties().Lines);
 
-            Assert.AreEqual(null, xml.GetProperties().CoreProperties.Title);
-            Assert.AreEqual(null, xml.GetProperties().CoreProperties.GetUnderlyingProperties().GetSubjectProperty());
+            ClassicAssert.AreEqual(null, xml.GetProperties().CoreProperties.Title);
+            ClassicAssert.AreEqual(null, xml.GetProperties().CoreProperties.GetUnderlyingProperties().GetSubjectProperty());
         }
 
         [Test]
         public void TestMetadataComplex()
         {
             XWPFDocument xml = XWPFTestDataSamples.OpenSampleDocument("IllustrativeCases.docx");
-            Assert.IsNotNull(xml.GetProperties().CoreProperties);
-            Assert.IsNotNull(xml.GetProperties().ExtendedProperties);
+            ClassicAssert.IsNotNull(xml.GetProperties().CoreProperties);
+            ClassicAssert.IsNotNull(xml.GetProperties().ExtendedProperties);
 
-            Assert.AreEqual("Microsoft Office Outlook", xml.GetProperties().ExtendedProperties.GetUnderlyingProperties().Application);
-            Assert.AreEqual(5184, xml.GetProperties().ExtendedProperties.GetUnderlyingProperties().Characters);
-            Assert.AreEqual(0, xml.GetProperties().ExtendedProperties.GetUnderlyingProperties().Lines);
+            ClassicAssert.AreEqual("Microsoft Office Outlook", xml.GetProperties().ExtendedProperties.GetUnderlyingProperties().Application);
+            ClassicAssert.AreEqual(5184, xml.GetProperties().ExtendedProperties.GetUnderlyingProperties().Characters);
+            ClassicAssert.AreEqual(0, xml.GetProperties().ExtendedProperties.GetUnderlyingProperties().Lines);
 
-            Assert.AreEqual(" ", xml.GetProperties().CoreProperties.Title);
-            Assert.AreEqual(" ", xml.GetProperties().CoreProperties.GetUnderlyingProperties().GetSubjectProperty());
+            ClassicAssert.AreEqual(" ", xml.GetProperties().CoreProperties.Title);
+            ClassicAssert.AreEqual(" ", xml.GetProperties().CoreProperties.GetUnderlyingProperties().GetSubjectProperty());
         }
 
         [Test]
@@ -112,30 +112,30 @@ namespace TestCases.XWPF.UserModel
         {
             XWPFDocument doc = new XWPFDocument();
             POIXMLProperties props = doc.GetProperties();
-            Assert.IsNotNull(props);
-            Assert.AreEqual("NPOI", props.ExtendedProperties.GetUnderlyingProperties().Application);
+            ClassicAssert.IsNotNull(props);
+            ClassicAssert.AreEqual("NPOI", props.ExtendedProperties.GetUnderlyingProperties().Application);
         }
 
         [Test]
         public void TestAddParagraph()
         {
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("sample.docx");
-            Assert.AreEqual(3, doc.Paragraphs.Count);
+            ClassicAssert.AreEqual(3, doc.Paragraphs.Count);
 
             XWPFParagraph p = doc.CreateParagraph();
-            Assert.AreEqual(p, doc.Paragraphs[(3)]);
-            Assert.AreEqual(4, doc.Paragraphs.Count);
+            ClassicAssert.AreEqual(p, doc.Paragraphs[(3)]);
+            ClassicAssert.AreEqual(4, doc.Paragraphs.Count);
 
-            Assert.AreEqual(3, doc.GetParagraphPos(3));
-            Assert.AreEqual(3, doc.GetPosOfParagraph(p));
+            ClassicAssert.AreEqual(3, doc.GetParagraphPos(3));
+            ClassicAssert.AreEqual(3, doc.GetPosOfParagraph(p));
 
             //CTP ctp = p.CTP;
             //XWPFParagraph newP = doc.GetParagraph(ctp);
-            //Assert.AreSame(p, newP);
+            //ClassicAssert.AreSame(p, newP);
             //XmlCursor cursor = doc.Document.Body.GetPArray(0).newCursor();
             //XWPFParagraph cP = doc.InsertNewParagraph(cursor);
-            //Assert.AreSame(cP, doc.Paragraphs[(0)]);
-            //Assert.AreEqual(5, doc.Paragraphs.Count);
+            //ClassicAssert.AreSame(cP, doc.Paragraphs[(0)]);
+            //ClassicAssert.AreEqual(5, doc.Paragraphs.Count);
         }
 
         [Test]
@@ -163,11 +163,11 @@ namespace TestCases.XWPF.UserModel
             }
 
             //Check 
-            Assert.AreEqual("Regel1\nRegel2\nRegel3", builder.ToString());
+            ClassicAssert.AreEqual("Regel1\nRegel2\nRegel3", builder.ToString());
 
             //Check text was replaced correctly in table cell
             var table = outputDocument.Tables.FirstOrDefault();
-            Assert.IsNotNull(table);
+            ClassicAssert.IsNotNull(table);
 
             var dataRow = table.Rows[1];
             builder.Clear();
@@ -180,7 +180,7 @@ namespace TestCases.XWPF.UserModel
             }
 
             //Check 
-            Assert.AreEqual("Table replace multiple enters Regel1\nRegel2\nRegel3 text after last enter", builder.ToString());
+            ClassicAssert.AreEqual("Table replace multiple enters Regel1\nRegel2\nRegel3 text after last enter", builder.ToString());
 
         }
 
@@ -192,10 +192,10 @@ namespace TestCases.XWPF.UserModel
             String relationId = doc.AddPictureData(jpeg, (int)PictureType.JPEG);
 
             byte[] newJpeg = ((XWPFPictureData)doc.GetRelationById(relationId)).Data;
-            Assert.AreEqual(newJpeg.Length, jpeg.Length);
+            ClassicAssert.AreEqual(newJpeg.Length, jpeg.Length);
             for(int i = 0; i < jpeg.Length; i++)
             {
-                Assert.AreEqual(newJpeg[i], jpeg[i]);
+                ClassicAssert.AreEqual(newJpeg[i], jpeg[i]);
             }
         }
         [Test]
@@ -215,73 +215,73 @@ namespace TestCases.XWPF.UserModel
             doc.AddPictureData(new byte[19], (int) PictureType.BMP);
             doc.AddPictureData(new byte[20], (int) PictureType.WPG);
 
-            Assert.AreEqual(11, doc.AllPictures.Count);
+            ClassicAssert.AreEqual(11, doc.AllPictures.Count);
 
             doc = XWPFTestDataSamples.WriteOutAndReadBack(doc);
-            Assert.AreEqual(11, doc.AllPictures.Count);
+            ClassicAssert.AreEqual(11, doc.AllPictures.Count);
 
         }
         [Test]
         public void TestRemoveBodyElement()
         {
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("sample.docx");
-            Assert.AreEqual(3, doc.Paragraphs.Count);
-            Assert.AreEqual(3, doc.BodyElements.Count);
+            ClassicAssert.AreEqual(3, doc.Paragraphs.Count);
+            ClassicAssert.AreEqual(3, doc.BodyElements.Count);
 
             XWPFParagraph p1 = doc.Paragraphs[(0)];
             XWPFParagraph p2 = doc.Paragraphs[(1)];
             XWPFParagraph p3 = doc.Paragraphs[(2)];
 
-            Assert.AreEqual(p1, doc.BodyElements[(0)]);
-            Assert.AreEqual(p1, doc.Paragraphs[(0)]);
-            Assert.AreEqual(p2, doc.BodyElements[(1)]);
-            Assert.AreEqual(p2, doc.Paragraphs[(1)]);
-            Assert.AreEqual(p3, doc.BodyElements[(2)]);
-            Assert.AreEqual(p3, doc.Paragraphs[(2)]);
+            ClassicAssert.AreEqual(p1, doc.BodyElements[(0)]);
+            ClassicAssert.AreEqual(p1, doc.Paragraphs[(0)]);
+            ClassicAssert.AreEqual(p2, doc.BodyElements[(1)]);
+            ClassicAssert.AreEqual(p2, doc.Paragraphs[(1)]);
+            ClassicAssert.AreEqual(p3, doc.BodyElements[(2)]);
+            ClassicAssert.AreEqual(p3, doc.Paragraphs[(2)]);
 
             // Add another
             XWPFParagraph p4 = doc.CreateParagraph();
 
-            Assert.AreEqual(4, doc.Paragraphs.Count);
-            Assert.AreEqual(4, doc.BodyElements.Count);
-            Assert.AreEqual(p1, doc.BodyElements[(0)]);
-            Assert.AreEqual(p1, doc.Paragraphs[(0)]);
-            Assert.AreEqual(p2, doc.BodyElements[(1)]);
-            Assert.AreEqual(p2, doc.Paragraphs[(1)]);
-            Assert.AreEqual(p3, doc.BodyElements[(2)]);
-            Assert.AreEqual(p3, doc.Paragraphs[(2)]);
-            Assert.AreEqual(p4, doc.BodyElements[(3)]);
-            Assert.AreEqual(p4, doc.Paragraphs[(3)]);
+            ClassicAssert.AreEqual(4, doc.Paragraphs.Count);
+            ClassicAssert.AreEqual(4, doc.BodyElements.Count);
+            ClassicAssert.AreEqual(p1, doc.BodyElements[(0)]);
+            ClassicAssert.AreEqual(p1, doc.Paragraphs[(0)]);
+            ClassicAssert.AreEqual(p2, doc.BodyElements[(1)]);
+            ClassicAssert.AreEqual(p2, doc.Paragraphs[(1)]);
+            ClassicAssert.AreEqual(p3, doc.BodyElements[(2)]);
+            ClassicAssert.AreEqual(p3, doc.Paragraphs[(2)]);
+            ClassicAssert.AreEqual(p4, doc.BodyElements[(3)]);
+            ClassicAssert.AreEqual(p4, doc.Paragraphs[(3)]);
 
             // Remove the 2nd
-            Assert.AreEqual(true, doc.RemoveBodyElement(1));
-            Assert.AreEqual(3, doc.Paragraphs.Count);
-            Assert.AreEqual(3, doc.BodyElements.Count);
+            ClassicAssert.AreEqual(true, doc.RemoveBodyElement(1));
+            ClassicAssert.AreEqual(3, doc.Paragraphs.Count);
+            ClassicAssert.AreEqual(3, doc.BodyElements.Count);
 
-            Assert.AreEqual(p1, doc.BodyElements[(0)]);
-            Assert.AreEqual(p1, doc.Paragraphs[(0)]);
-            Assert.AreEqual(p3, doc.BodyElements[(1)]);
-            Assert.AreEqual(p3, doc.Paragraphs[(1)]);
-            Assert.AreEqual(p4, doc.BodyElements[(2)]);
-            Assert.AreEqual(p4, doc.Paragraphs[(2)]);
+            ClassicAssert.AreEqual(p1, doc.BodyElements[(0)]);
+            ClassicAssert.AreEqual(p1, doc.Paragraphs[(0)]);
+            ClassicAssert.AreEqual(p3, doc.BodyElements[(1)]);
+            ClassicAssert.AreEqual(p3, doc.Paragraphs[(1)]);
+            ClassicAssert.AreEqual(p4, doc.BodyElements[(2)]);
+            ClassicAssert.AreEqual(p4, doc.Paragraphs[(2)]);
 
             // Remove the 1st
-            Assert.AreEqual(true, doc.RemoveBodyElement(0));
-            Assert.AreEqual(2, doc.Paragraphs.Count);
-            Assert.AreEqual(2, doc.BodyElements.Count);
+            ClassicAssert.AreEqual(true, doc.RemoveBodyElement(0));
+            ClassicAssert.AreEqual(2, doc.Paragraphs.Count);
+            ClassicAssert.AreEqual(2, doc.BodyElements.Count);
 
-            Assert.AreEqual(p3, doc.BodyElements[(0)]);
-            Assert.AreEqual(p3, doc.Paragraphs[(0)]);
-            Assert.AreEqual(p4, doc.BodyElements[(1)]);
-            Assert.AreEqual(p4, doc.Paragraphs[(1)]);
+            ClassicAssert.AreEqual(p3, doc.BodyElements[(0)]);
+            ClassicAssert.AreEqual(p3, doc.Paragraphs[(0)]);
+            ClassicAssert.AreEqual(p4, doc.BodyElements[(1)]);
+            ClassicAssert.AreEqual(p4, doc.Paragraphs[(1)]);
 
             // Remove the last
-            Assert.AreEqual(true, doc.RemoveBodyElement(1));
-            Assert.AreEqual(1, doc.Paragraphs.Count);
-            Assert.AreEqual(1, doc.BodyElements.Count);
+            ClassicAssert.AreEqual(true, doc.RemoveBodyElement(1));
+            ClassicAssert.AreEqual(1, doc.Paragraphs.Count);
+            ClassicAssert.AreEqual(1, doc.BodyElements.Count);
 
-            Assert.AreEqual(p3, doc.BodyElements[(0)]);
-            Assert.AreEqual(p3, doc.Paragraphs[(0)]);
+            ClassicAssert.AreEqual(p3, doc.BodyElements[(0)]);
+            ClassicAssert.AreEqual(p3, doc.Paragraphs[(0)]);
         }
 
         [Test]
@@ -303,15 +303,15 @@ namespace TestCases.XWPF.UserModel
             XWPFPictureData newPicData = new XWPFPictureData(newImagePart, relationship);
             /* new part is now Ready to rumble */
 
-            Assert.IsFalse(xwpfHeader.AllPictures.Contains(newPicData));
-            Assert.IsFalse(doc.AllPictures.Contains(newPicData));
-            Assert.IsFalse(doc.AllPackagePictures.Contains(newPicData));
+            ClassicAssert.IsFalse(xwpfHeader.AllPictures.Contains(newPicData));
+            ClassicAssert.IsFalse(doc.AllPictures.Contains(newPicData));
+            ClassicAssert.IsFalse(doc.AllPackagePictures.Contains(newPicData));
 
             doc.RegisterPackagePictureData(newPicData);
 
-            Assert.IsFalse(xwpfHeader.AllPictures.Contains(newPicData));
-            Assert.IsFalse(doc.AllPictures.Contains(newPicData));
-            Assert.IsTrue(doc.AllPackagePictures.Contains(newPicData));
+            ClassicAssert.IsFalse(xwpfHeader.AllPictures.Contains(newPicData));
+            ClassicAssert.IsFalse(doc.AllPictures.Contains(newPicData));
+            ClassicAssert.IsTrue(doc.AllPackagePictures.Contains(newPicData));
 
             doc.Package.Revert();
         }
@@ -322,9 +322,9 @@ namespace TestCases.XWPF.UserModel
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("issue_51265_1.docx");
             byte[] nature1 = XWPFTestDataSamples.GetImage("nature1.gif");
             XWPFPictureData part = doc.FindPackagePictureData(nature1, (int)PictureType.GIF);
-            Assert.IsNotNull(part);
-            Assert.IsTrue(doc.AllPictures.Contains(part));
-            Assert.IsTrue(doc.AllPackagePictures.Contains(part));
+            ClassicAssert.IsNotNull(part);
+            ClassicAssert.IsTrue(doc.AllPictures.Contains(part));
+            ClassicAssert.IsTrue(doc.AllPackagePictures.Contains(part));
             doc.Package.Revert();
         }
 
@@ -335,11 +335,11 @@ namespace TestCases.XWPF.UserModel
             IList<XWPFPictureData> allPictures = doc.AllPictures;
             IList<XWPFPictureData> allPackagePictures = doc.AllPackagePictures;
 
-            Assert.IsNotNull(allPictures);
-            Assert.AreEqual(3, allPictures.Count);
+            ClassicAssert.IsNotNull(allPictures);
+            ClassicAssert.AreEqual(3, allPictures.Count);
             foreach(XWPFPictureData xwpfPictureData in allPictures)
             {
-                Assert.IsTrue(allPackagePictures.Contains(xwpfPictureData));
+                ClassicAssert.IsTrue(allPackagePictures.Contains(xwpfPictureData));
             }
 
             try
@@ -361,8 +361,8 @@ namespace TestCases.XWPF.UserModel
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("issue_51265_3.docx");
             IList<XWPFPictureData> allPackagePictures = doc.AllPackagePictures;
 
-            Assert.IsNotNull(allPackagePictures);
-            Assert.AreEqual(5, allPackagePictures.Count);
+            ClassicAssert.IsNotNull(allPackagePictures);
+            ClassicAssert.AreEqual(5, allPackagePictures.Count);
 
             try
             {
@@ -381,14 +381,14 @@ namespace TestCases.XWPF.UserModel
         public void TestPictureHandlingSimpleFile()
         {
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("issue_51265_1.docx");
-            Assert.AreEqual(1, doc.AllPackagePictures.Count);
+            ClassicAssert.AreEqual(1, doc.AllPackagePictures.Count);
             byte[] newPic = XWPFTestDataSamples.GetImage("abstract4.jpg");
             String id1 = doc.AddPictureData(newPic, (int)PictureType.JPEG);
-            Assert.AreEqual(2, doc.AllPackagePictures.Count);
+            ClassicAssert.AreEqual(2, doc.AllPackagePictures.Count);
             /* copy data, to avoid instance-Equality */
             byte[] newPicCopy = Arrays.CopyOf(newPic, newPic.Length);
             String id2 = doc.AddPictureData(newPicCopy, (int)PictureType.JPEG);
-            Assert.AreEqual(id1, id2);
+            ClassicAssert.AreEqual(id1, id2);
             doc.Package.Revert();
         }
 
@@ -396,9 +396,9 @@ namespace TestCases.XWPF.UserModel
         public void TestPictureHandlingHeaderDocumentImages()
         {
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("issue_51265_2.docx");
-            Assert.AreEqual(1, doc.AllPictures.Count);
-            Assert.AreEqual(1, doc.AllPackagePictures.Count);
-            Assert.AreEqual(1, doc.HeaderList[(0)].AllPictures.Count);
+            ClassicAssert.AreEqual(1, doc.AllPictures.Count);
+            ClassicAssert.AreEqual(1, doc.AllPackagePictures.Count);
+            ClassicAssert.AreEqual(1, doc.HeaderList[(0)].AllPictures.Count);
             doc.Package.Revert();
         }
 
@@ -408,15 +408,15 @@ namespace TestCases.XWPF.UserModel
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("issue_51265_3.docx");
             XWPFHeader xwpfHeader = doc.HeaderList[(0)];
 
-            Assert.AreEqual(3, doc.AllPictures.Count);
-            Assert.AreEqual(3, xwpfHeader.AllPictures.Count);
-            Assert.AreEqual(5, doc.AllPackagePictures.Count);
+            ClassicAssert.AreEqual(3, doc.AllPictures.Count);
+            ClassicAssert.AreEqual(3, xwpfHeader.AllPictures.Count);
+            ClassicAssert.AreEqual(5, doc.AllPackagePictures.Count);
 
             byte[] nature1 = XWPFTestDataSamples.GetImage("nature1.jpg");
             String id = doc.AddPictureData(nature1, (int)PictureType.JPEG);
             POIXMLDocumentPart part1 = xwpfHeader.GetRelationById("rId1");
             XWPFPictureData part2 = (XWPFPictureData)doc.GetRelationById(id);
-            Assert.AreSame(part1, part2);
+            ClassicAssert.AreSame(part1, part2);
 
             doc.Package.Revert();
         }
@@ -427,16 +427,16 @@ namespace TestCases.XWPF.UserModel
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("zero-length.docx");
             POIXMLProperties properties = doc.GetProperties();
 
-            Assert.IsNotNull(properties.CoreProperties);
+            ClassicAssert.IsNotNull(properties.CoreProperties);
 
             XWPFHeader headerArray = doc.GetHeaderArray(0);
-            Assert.AreEqual(1, headerArray.AllPictures.Count);
-            Assert.AreEqual("image1.png", headerArray.AllPictures[0].FileName);
-            Assert.AreEqual("", headerArray.Text);
+            ClassicAssert.AreEqual(1, headerArray.AllPictures.Count);
+            ClassicAssert.AreEqual("image1.png", headerArray.AllPictures[0].FileName);
+            ClassicAssert.AreEqual("", headerArray.Text);
 
             ExtendedProperties extendedProperties = properties.ExtendedProperties;
-            Assert.IsNotNull(extendedProperties);
-            Assert.AreEqual(0, extendedProperties.GetUnderlyingProperties().Characters);
+            ClassicAssert.IsNotNull(extendedProperties);
+            ClassicAssert.AreEqual(0, extendedProperties.GetUnderlyingProperties().Characters);
         }
 
         [Test]
@@ -444,14 +444,14 @@ namespace TestCases.XWPF.UserModel
         {
             XWPFSettings settings = new XWPFSettings();
             settings.SetZoomPercent(50);
-            Assert.AreEqual(50, settings.GetZoomPercent());
+            ClassicAssert.AreEqual(50, settings.GetZoomPercent());
         }
 
         [Test]
         public void TestEnforcedWith()
         {
             XWPFDocument docx = XWPFTestDataSamples.OpenSampleDocument("EnforcedWith.docx");
-            Assert.IsTrue(docx.IsEnforcedProtection());
+            ClassicAssert.IsTrue(docx.IsEnforcedProtection());
             docx.Close();
         }
 
@@ -470,7 +470,7 @@ namespace TestCases.XWPF.UserModel
             doc = XWPFTestDataSamples.WriteOutAndReadBack(doc);
             ext = new XWPFWordExtractor(doc);
 
-            Assert.AreEqual(origText, ext.Text);
+            ClassicAssert.AreEqual(origText, ext.Text);
         }
 
         [Test]
@@ -491,11 +491,11 @@ namespace TestCases.XWPF.UserModel
                         var ctSettings = SettingsDocument.Parse(xmldoc, POIXMLDocumentPart.NamespaceManager).Settings;
                         var variables = ctSettings.docVars;
 
-                        Assert.IsNotNull(variables);
-                        Assert.AreEqual(5, variables.docVar.Count);
+                        ClassicAssert.IsNotNull(variables);
+                        ClassicAssert.AreEqual(5, variables.docVar.Count);
 
                         for(int i = 0; i<variables.docVar.Count; i++)
-                            Assert.AreEqual((i+1).ToString(), variables.docVar[i].val);
+                            ClassicAssert.AreEqual((i+1).ToString(), variables.docVar[i].val);
                     }
                 }
             }

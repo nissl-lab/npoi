@@ -1,7 +1,7 @@
 ﻿using NPOI.OpenXmlFormats.Shared;
 using NPOI.XWPF.Usermodel;
 using NPOI.XWPF.UserModel;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 
 namespace TestCases.XWPF.UserModel
 {
@@ -26,13 +26,13 @@ namespace TestCases.XWPF.UserModel
             rpr.AddNewSz().val = 14;
 
             XWPFSharedRun run = new XWPFSharedRun(ctRun, p);
-            Assert.AreEqual(7.0, run.FontSize);
+            ClassicAssert.AreEqual(7.0, run.FontSize);
 
             run.FontSize = 24;
-            Assert.AreEqual(48, (int) rpr.sz.val);
+            ClassicAssert.AreEqual(48, (int) rpr.sz.val);
 
             run.FontSize = 24.5;
-            Assert.AreEqual(24.5, run.FontSize);
+            ClassicAssert.AreEqual(24.5, run.FontSize);
         }
     }
 }

@@ -20,7 +20,7 @@ namespace TestCases.XWPF.UserModel
 
     using NPOI.OpenXmlFormats.Wordprocessing;
     using NPOI.XWPF.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using System;
     using System.Collections.Generic;
 
@@ -32,9 +32,9 @@ namespace TestCases.XWPF.UserModel
         {
             XWPFDocument docOut = new XWPFDocument();
             XWPFFootnotes footnotes = docOut.CreateFootnotes();
-            Assert.IsNotNull(footnotes);
+            ClassicAssert.IsNotNull(footnotes);
             XWPFFootnotes secondFootnotes = docOut.CreateFootnotes();
-            Assert.AreSame(footnotes, secondFootnotes);
+            ClassicAssert.AreSame(footnotes, secondFootnotes);
             docOut.Close();
         }
         [Test]
@@ -52,8 +52,8 @@ namespace TestCases.XWPF.UserModel
             XWPFDocument docIn = XWPFTestDataSamples.WriteOutAndReadBack(docOut);
 
             XWPFFootnote note = docIn.GetFootnoteByID(noteId);
-            Assert.IsNotNull(note);
-            Assert.AreEqual(note.GetCTFtnEdn().type, ST_FtnEdn.normal);
+            ClassicAssert.IsNotNull(note);
+            ClassicAssert.AreEqual(note.GetCTFtnEdn().type, ST_FtnEdn.normal);
         }
 
         /**
@@ -79,7 +79,7 @@ namespace TestCases.XWPF.UserModel
                     }
                 }
             }
-            Assert.AreEqual(1, hits, "Load footnotes once");
+            ClassicAssert.AreEqual(1, hits, "Load footnotes once");
         }
     }
 

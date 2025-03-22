@@ -21,7 +21,7 @@ namespace TestCases.HSSF.Record
     using System.IO;
     using System.Collections;
     using NPOI.HSSF.Record;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.Util;
     using NPOI.POIFS.FileSystem;
     using System.Collections.Generic;
@@ -61,18 +61,18 @@ namespace TestCases.HSSF.Record
         };
             Record[] record = RecordFactory.CreateRecord(TestcaseRecordInputStream.Create(recType, data));
 
-            Assert.AreEqual(typeof(BOFRecord).Name,
+            ClassicAssert.AreEqual(typeof(BOFRecord).Name,
                          record[0].GetType().Name);
             BOFRecord bofRecord = (BOFRecord)record[0];
 
-            Assert.AreEqual(7422, bofRecord.Build);
-            Assert.AreEqual(1997, bofRecord.BuildYear);
-            Assert.AreEqual(16585, bofRecord.HistoryBitMask);
-            Assert.AreEqual(20, bofRecord.RecordSize);
-            Assert.AreEqual(262, bofRecord.RequiredVersion);
-            Assert.AreEqual(2057, bofRecord.Sid);
-            Assert.AreEqual(BOFRecordType.Workbook, bofRecord.Type);
-            Assert.AreEqual(1536, bofRecord.Version);
+            ClassicAssert.AreEqual(7422, bofRecord.Build);
+            ClassicAssert.AreEqual(1997, bofRecord.BuildYear);
+            ClassicAssert.AreEqual(16585, bofRecord.HistoryBitMask);
+            ClassicAssert.AreEqual(20, bofRecord.RecordSize);
+            ClassicAssert.AreEqual(262, bofRecord.RequiredVersion);
+            ClassicAssert.AreEqual(2057, bofRecord.Sid);
+            ClassicAssert.AreEqual(BOFRecordType.Workbook, bofRecord.Type);
+            ClassicAssert.AreEqual(1536, bofRecord.Version);
             recType = MMSRecord.sid;
             //size = 2;
             data = new byte[]
@@ -80,14 +80,14 @@ namespace TestCases.HSSF.Record
                 0, 0
             };
             record = RecordFactory.CreateRecord(TestcaseRecordInputStream.Create(recType, data));
-            Assert.AreEqual(typeof(MMSRecord).Name,
+            ClassicAssert.AreEqual(typeof(MMSRecord).Name,
                          record[0].GetType().Name);
             MMSRecord mmsRecord = (MMSRecord)record[0];
 
-            Assert.AreEqual(0, mmsRecord.AddMenuCount);
-            Assert.AreEqual(0, mmsRecord.DelMenuCount);
-            Assert.AreEqual(6, mmsRecord.RecordSize);
-            Assert.AreEqual(193, mmsRecord.Sid);
+            ClassicAssert.AreEqual(0, mmsRecord.AddMenuCount);
+            ClassicAssert.AreEqual(0, mmsRecord.DelMenuCount);
+            ClassicAssert.AreEqual(6, mmsRecord.RecordSize);
+            ClassicAssert.AreEqual(193, mmsRecord.Sid);
         }
 
         /**
@@ -107,16 +107,16 @@ namespace TestCases.HSSF.Record
             };
             Record[] record = RecordFactory.CreateRecord(TestcaseRecordInputStream.Create(recType, data));
 
-            Assert.AreEqual(typeof(NumberRecord).Name,
+            ClassicAssert.AreEqual(typeof(NumberRecord).Name,
                          record[0].GetType().Name);
             NumberRecord numberRecord = (NumberRecord)record[0];
 
-            Assert.AreEqual(0, numberRecord.Column);
-            Assert.AreEqual(18, numberRecord.RecordSize);
-            Assert.AreEqual(0, numberRecord.Row);
-            Assert.AreEqual(515, numberRecord.Sid);
-            Assert.AreEqual(0.0, numberRecord.Value, 0.001);
-            Assert.AreEqual(21, numberRecord.XFIndex);
+            ClassicAssert.AreEqual(0, numberRecord.Column);
+            ClassicAssert.AreEqual(18, numberRecord.RecordSize);
+            ClassicAssert.AreEqual(0, numberRecord.Row);
+            ClassicAssert.AreEqual(515, numberRecord.Sid);
+            ClassicAssert.AreEqual(0.0, numberRecord.Value, 0.001);
+            ClassicAssert.AreEqual(21, numberRecord.XFIndex);
         }
 
         /**
@@ -139,24 +139,24 @@ namespace TestCases.HSSF.Record
             MemoryStream bois = new MemoryStream(data);
             Record[] records = (Record[])
               RecordFactory.CreateRecords(bois).ToArray();
-            Assert.AreEqual(3, records.Length, "Created record count");
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(3, records.Length, "Created record count");
+            ClassicAssert.AreEqual(
                          typeof(UnknownRecord).Name,
                          records[0].GetType().Name, "1st record's type");
-            Assert.AreEqual((short)-256, records[0].Sid, "1st record's sid");
-            Assert.AreEqual(typeof(ContinueRecord).Name,
+            ClassicAssert.AreEqual((short)-256, records[0].Sid, "1st record's sid");
+            ClassicAssert.AreEqual(typeof(ContinueRecord).Name,
                          records[1].GetType().Name, "2nd record's type");
             ContinueRecord record = (ContinueRecord)records[1];
-            Assert.AreEqual(0x3C, record.Sid, "2nd record's sid");
-            Assert.AreEqual(1, record.Data[0], "1st data byte");
-            Assert.AreEqual(2, record.Data[1], "2nd data byte");
-            Assert.AreEqual(3, record.Data[2], "3rd data byte");
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(0x3C, record.Sid, "2nd record's sid");
+            ClassicAssert.AreEqual(1, record.Data[0], "1st data byte");
+            ClassicAssert.AreEqual(2, record.Data[1], "2nd data byte");
+            ClassicAssert.AreEqual(3, record.Data[2], "3rd data byte");
+            ClassicAssert.AreEqual(
                          typeof(ContinueRecord).Name,
                          records[2].GetType().Name, "3rd record's type");
             record = (ContinueRecord)records[2];
-            Assert.AreEqual(0x3C, record.Sid, "3nd record's sid");
-            Assert.AreEqual(4, record.Data[0], "4th data byte");
+            ClassicAssert.AreEqual(0x3C, record.Sid, "3nd record's sid");
+            ClassicAssert.AreEqual(4, record.Data[0], "4th data byte");
         }
 
         /**
@@ -202,12 +202,12 @@ namespace TestCases.HSSF.Record
             byte[] data = HexRead.ReadFromString(dump);
 
             IList records = RecordFactory.CreateRecords(new MemoryStream(data));
-            Assert.AreEqual(5, records.Count);
-            Assert.IsTrue(records[0] is ObjRecord);
-            Assert.IsTrue(records[1] is DrawingRecord);
-            Assert.IsTrue(records[2] is TextObjectRecord);
-            Assert.IsTrue(records[3] is ContinueRecord);
-            Assert.IsTrue(records[4] is ObjRecord);
+            ClassicAssert.AreEqual(5, records.Count);
+            ClassicAssert.IsTrue(records[0] is ObjRecord);
+            ClassicAssert.IsTrue(records[1] is DrawingRecord);
+            ClassicAssert.IsTrue(records[2] is TextObjectRecord);
+            ClassicAssert.IsTrue(records[3] is ContinueRecord);
+            ClassicAssert.IsTrue(records[4] is ObjRecord);
 
             //Serialize and verify that the Serialized data is1 the same as the original
             MemoryStream out1 = new MemoryStream();
@@ -218,8 +218,8 @@ namespace TestCases.HSSF.Record
             }
 
             byte[] ser = out1.ToArray();
-            Assert.AreEqual(data.Length, ser.Length);
-            Assert.IsTrue(Arrays.Equals(data, ser));
+            ClassicAssert.AreEqual(data.Length, ser.Length);
+            ClassicAssert.IsTrue(Arrays.Equals(data, ser));
         }
         [Test]
         public void TestNonZeroPadding_bug46987()
@@ -254,7 +254,7 @@ namespace TestCases.HSSF.Record
 
             List<Record> outRecs = RecordFactory.CreateRecords(is1);
             // Buffer underrun - requested 512 bytes but 192 was available
-            Assert.AreEqual(5, outRecs.Count);
+            ClassicAssert.AreEqual(5, outRecs.Count);
             fs.Close();
         }
         [Test]

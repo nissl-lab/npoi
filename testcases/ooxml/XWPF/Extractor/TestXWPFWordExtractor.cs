@@ -21,6 +21,7 @@ namespace TestCases.XWPF.Extractor
     using NPOI.XWPF.Extractor;
     using NPOI.XWPF.UserModel;
     using NUnit.Framework;
+    using NUnit.Framework.Legacy;
     using System;
     using System.Diagnostics;
     using System.Linq;
@@ -44,7 +45,7 @@ namespace TestCases.XWPF.Extractor
             XWPFWordExtractor extractor = new XWPFWordExtractor(doc);
 
             String text = extractor.Text;
-            Assert.IsTrue(text.Length > 0);
+            ClassicAssert.IsTrue(text.Length > 0);
 
             // Check contents
             POITestCase.AssertStartsWith(text,
@@ -57,7 +58,7 @@ namespace TestCases.XWPF.Extractor
             // Check number of paragraphs
             // Check number of paragraphs by counting number of newlines
             int numberOfParagraphs = StringUtil.CountMatches(text, '\n');
-            Assert.AreEqual(3, numberOfParagraphs);
+            ClassicAssert.AreEqual(3, numberOfParagraphs);
         }
 
         /**
@@ -71,7 +72,7 @@ namespace TestCases.XWPF.Extractor
             XWPFWordExtractor extractor = new XWPFWordExtractor(doc);
 
             String text = extractor.Text;
-            Assert.IsTrue(text.Length > 0);
+            ClassicAssert.IsTrue(text.Length > 0);
 
             char euro = '\u20ac';
             Debug.WriteLine("'" + text.Substring(text.Length - 40) + "'");
@@ -97,7 +98,7 @@ namespace TestCases.XWPF.Extractor
                     ps++;
                 }
             }
-            Assert.AreEqual(134, ps);
+            ClassicAssert.AreEqual(134, ps);
         }
 
         [Test]
@@ -108,7 +109,7 @@ namespace TestCases.XWPF.Extractor
 
             // Now check contents
             extractor.SetFetchHyperlinks(false);
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                     "This is a test document.\nThis bit is in bold and italic\n" +
                     "Back to normal\n" +
                     "This contains BOLD, ITALIC and BOTH, as well as RED and YELLOW text.\n" +
@@ -118,7 +119,7 @@ namespace TestCases.XWPF.Extractor
 
             // One hyperlink is a real one, one is just to the top of page
             extractor.SetFetchHyperlinks(true);
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                     "This is a test document.\nThis bit is in bold and italic\n" +
                     "Back to normal\n" +
                     "This contains BOLD, ITALIC and BOTH, as well as RED and YELLOW text.\n" +
@@ -133,7 +134,7 @@ namespace TestCases.XWPF.Extractor
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("ThreeColHeadFoot.docx");
             XWPFWordExtractor extractor = new XWPFWordExtractor(doc);
 
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                     "First header column!\tMid header\tRight header!\n" +
                             "This is a sample word document. It has two pages. It has a three column heading, and a three column footer\n" +
                             "\n" +
@@ -155,7 +156,7 @@ namespace TestCases.XWPF.Extractor
                     new XWPFWordExtractor(doc);
             //extractor.Text;
 
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                     "I am the header on the first page, and I" + '\u2019' + "m nice and simple\n" +
                             "First header column!\tMid header\tRight header!\n" +
                             "This is a sample word document. It has two pages. It has a simple header and footer, which is different to all the other pages.\n" +
@@ -282,9 +283,9 @@ namespace TestCases.XWPF.Extractor
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("FieldCodes.docx");
             XWPFWordExtractor extractor = new XWPFWordExtractor(doc);
             String text = extractor.Text;
-            Assert.IsTrue(text.Length > 0);
-            Assert.IsFalse(text.Contains("AUTHOR"));
-            Assert.IsFalse(text.Contains("CREATEDATE"));
+            ClassicAssert.IsTrue(text.Length > 0);
+            ClassicAssert.IsFalse(text.Contains("AUTHOR"));
+            ClassicAssert.IsFalse(text.Contains("CREATEDATE"));
 
             extractor.Close();
         }
@@ -300,7 +301,7 @@ namespace TestCases.XWPF.Extractor
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("FldSimple.docx");
             XWPFWordExtractor extractor = new XWPFWordExtractor(doc);
             String text = extractor.Text;
-            Assert.IsTrue(text.Length > 0);
+            ClassicAssert.IsTrue(text.Length > 0);
             POITestCase.AssertContains(text, "FldSimple.docx");
         }
 
@@ -314,7 +315,7 @@ namespace TestCases.XWPF.Extractor
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("drawing.docx");
             XWPFWordExtractor extractor = new XWPFWordExtractor(doc);
             String text = extractor.Text;
-            Assert.IsTrue(text.Length > 0);
+            ClassicAssert.IsTrue(text.Length > 0);
         }
 
         /**
@@ -353,9 +354,9 @@ namespace TestCases.XWPF.Extractor
                     hitted = true;
                     hits++;
                 }
-                Assert.AreEqual(true, hitted, "controlled content loading-" + targ);
+                ClassicAssert.AreEqual(true, hitted, "controlled content loading-" + targ);
             }
-            Assert.AreEqual(targs.Length, hits, "controlled content loading hit count");
+            ClassicAssert.AreEqual(targs.Length, hits, "controlled content loading hit count");
 
             ex.Close();
 
@@ -381,7 +382,7 @@ namespace TestCases.XWPF.Extractor
                     if (m.Success)
                         hit++;
                 }
-                Assert.AreEqual(1, hit, "controlled content loading-" + targ);
+                ClassicAssert.AreEqual(1, hit, "controlled content loading-" + targ);
             }
             //"test\n" appears twice: once as the "title" and once in the text.
             //This also happens when you save this document as text from MSWord.
@@ -392,7 +393,7 @@ namespace TestCases.XWPF.Extractor
                 if (m.Success)
                     hit++;
             }
-            Assert.AreEqual(2, hit, "test<N>");
+            ClassicAssert.AreEqual(2, hit, "test<N>");
             ex.Close();
 
         }
@@ -416,7 +417,7 @@ namespace TestCases.XWPF.Extractor
             Console.WriteLine(doc);
             XWPFWordExtractor extractor = new XWPFWordExtractor(doc);
 
-            Assert.AreEqual("This is a small test for checkboxes \nunchecked: |_| \n" +
+            ClassicAssert.AreEqual("This is a small test for checkboxes \nunchecked: |_| \n" +
                          "Or checked: |X|\n\n\n\n\n" +
                          "Test a checkbox within a textbox: |_| -> |X|\n\n\n" +
                          "In Table:\n|_|\t|X|\n\n\n" +

@@ -25,7 +25,7 @@ namespace TestCases.HSSF.UserModel
     using System.IO;
     using System;
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     using TestCases.HSSF;
     using NPOI.Util;
@@ -81,8 +81,8 @@ namespace TestCases.HSSF.UserModel
 
             SanityChecker sanityChecker = new SanityChecker();
             sanityChecker.CheckHSSFWorkbook(wb);
-            Assert.AreEqual(99, s.LastRowNum, "LAST ROW == 99");
-            Assert.AreEqual(0, s.FirstRowNum, "FIRST ROW == 0");
+            ClassicAssert.AreEqual(99, s.LastRowNum, "LAST ROW == 99");
+            ClassicAssert.AreEqual(0, s.FirstRowNum, "FIRST ROW == 0");
         }
 
         /**
@@ -113,8 +113,8 @@ namespace TestCases.HSSF.UserModel
             SanityChecker sanityChecker = new SanityChecker();
             sanityChecker.CheckHSSFWorkbook(wb);
 
-            Assert.AreEqual(1, s.LastRowNum, "LAST ROW ");
-            Assert.AreEqual(0, s.FirstRowNum, "FIRST ROW ");
+            ClassicAssert.AreEqual(1, s.LastRowNum, "LAST ROW ");
+            ClassicAssert.AreEqual(0, s.FirstRowNum, "FIRST ROW ");
 
         }
 
@@ -167,34 +167,34 @@ namespace TestCases.HSSF.UserModel
 
             SanityChecker sanityChecker = new SanityChecker();
             sanityChecker.CheckHSSFWorkbook(wb);
-            Assert.AreEqual(99, s.LastRowNum, "LAST ROW == 99");
-            Assert.AreEqual(0, s.FirstRowNum, "FIRST ROW == 0");
+            ClassicAssert.AreEqual(99, s.LastRowNum, "LAST ROW == 99");
+            ClassicAssert.AreEqual(0, s.FirstRowNum, "FIRST ROW == 0");
 
             s = wb.GetSheetAt(0);
-            Assert.IsNotNull(s, "Sheet is not null");
+            ClassicAssert.IsNotNull(s, "Sheet is not null");
 
             for (short rownum = (short)0; rownum < 100; rownum++)
             {
                 r = s.GetRow(rownum);
-                Assert.IsNotNull(r, "Row is not null");
+                ClassicAssert.IsNotNull(r, "Row is not null");
 
                 cs = r.RowStyle;
-                Assert.AreEqual(cs.BorderBottom, BorderStyle.Thin, "Bottom Border Style for row: ");
-                Assert.AreEqual(cs.BorderLeft, BorderStyle.Thin, "Left Border Style for row: ");
-                Assert.AreEqual(cs.BorderRight, BorderStyle.Thin, "Right Border Style for row: ");
-                Assert.AreEqual(cs.BorderTop, BorderStyle.Thin, "Top Border Style for row: ");
-                Assert.AreEqual(0xA, cs.FillForegroundColor, "FillForegroundColor for row: ");
-                Assert.AreEqual((short)0x1, (short)cs.FillPattern, "FillPattern for row: ");
+                ClassicAssert.AreEqual(cs.BorderBottom, BorderStyle.Thin, "Bottom Border Style for row: ");
+                ClassicAssert.AreEqual(cs.BorderLeft, BorderStyle.Thin, "Left Border Style for row: ");
+                ClassicAssert.AreEqual(cs.BorderRight, BorderStyle.Thin, "Right Border Style for row: ");
+                ClassicAssert.AreEqual(cs.BorderTop, BorderStyle.Thin, "Top Border Style for row: ");
+                ClassicAssert.AreEqual(0xA, cs.FillForegroundColor, "FillForegroundColor for row: ");
+                ClassicAssert.AreEqual((short)0x1, (short)cs.FillPattern, "FillPattern for row: ");
 
                 rownum++;
                 if (rownum >= 100)
                     break; // I feel too lazy to Check if this isreqd :-/ 
 
                 r = s.GetRow(rownum);
-                Assert.IsNotNull(r, "Row is not null");
+                ClassicAssert.IsNotNull(r, "Row is not null");
                 cs2 = r.RowStyle;
-                Assert.AreEqual(cs2.FillForegroundColor, (short)0x0, "FillForegroundColor for row: ");
-                Assert.AreEqual((short)cs2.FillPattern, (short)0x1, "FillPattern for row: ");
+                ClassicAssert.AreEqual(cs2.FillForegroundColor, (short)0x0, "FillForegroundColor for row: ");
+                ClassicAssert.AreEqual((short)cs2.FillPattern, (short)0x1, "FillPattern for row: ");
             }
         }
     }

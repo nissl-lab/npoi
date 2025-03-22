@@ -17,7 +17,7 @@
 
 namespace TestCases.SS.Formula.PTG
 {
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
 
@@ -37,8 +37,8 @@ namespace TestCases.SS.Formula.PTG
         {
             HSSFWorkbook workbook = LoadWorkbook("ErrPtg.xls");
             ICell cell = workbook.GetSheetAt(0).GetRow(3).GetCell(0);
-            Assert.AreEqual(4.0, cell.NumericCellValue, 0.0, "Wrong cell value");
-            Assert.AreEqual("ERROR.TYPE(#REF!)", cell.CellFormula, "Wrong cell formula");
+            ClassicAssert.AreEqual(4.0, cell.NumericCellValue, 0.0, "Wrong cell value");
+            ClassicAssert.AreEqual("ERROR.TYPE(#REF!)", cell.CellFormula, "Wrong cell formula");
         }
     }
 

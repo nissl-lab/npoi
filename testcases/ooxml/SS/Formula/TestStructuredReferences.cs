@@ -23,7 +23,7 @@ namespace TestCases.SS.Formula
     using NPOI.SS.Util;
     using NPOI.XSSF;
     using NPOI.XSSF.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     /**
      * Tests Excel Table expressions (structured references)
@@ -41,16 +41,16 @@ namespace TestCases.SS.Formula
         [Test]
         public void TestTableExpressionSyntax()
         {
-            Assert.IsTrue(Table.IsStructuredReference.Match("abc[col1]").Success, "Valid structured reference syntax didn't match expression");
-            Assert.IsTrue(Table.IsStructuredReference.Match("_abc[col1]").Success, "Valid structured reference syntax didn't match expression");
-            Assert.IsTrue(Table.IsStructuredReference.Match("_[col1]").Success, "Valid structured reference syntax didn't match expression");
-            Assert.IsTrue(Table.IsStructuredReference.Match("\\[col1]").Success, "Valid structured reference syntax didn't match expression");
-            Assert.IsTrue(Table.IsStructuredReference.Match("\\[col1]").Success, "Valid structured reference syntax didn't match expression");
-            Assert.IsTrue(Table.IsStructuredReference.Match("\\[#This Row]").Success, "Valid structured reference syntax didn't match expression");
-            Assert.IsTrue(Table.IsStructuredReference.Match("\\[ [col1], [col2] ]").Success, "Valid structured reference syntax didn't match expression");
+            ClassicAssert.IsTrue(Table.IsStructuredReference.Match("abc[col1]").Success, "Valid structured reference syntax didn't match expression");
+            ClassicAssert.IsTrue(Table.IsStructuredReference.Match("_abc[col1]").Success, "Valid structured reference syntax didn't match expression");
+            ClassicAssert.IsTrue(Table.IsStructuredReference.Match("_[col1]").Success, "Valid structured reference syntax didn't match expression");
+            ClassicAssert.IsTrue(Table.IsStructuredReference.Match("\\[col1]").Success, "Valid structured reference syntax didn't match expression");
+            ClassicAssert.IsTrue(Table.IsStructuredReference.Match("\\[col1]").Success, "Valid structured reference syntax didn't match expression");
+            ClassicAssert.IsTrue(Table.IsStructuredReference.Match("\\[#This Row]").Success, "Valid structured reference syntax didn't match expression");
+            ClassicAssert.IsTrue(Table.IsStructuredReference.Match("\\[ [col1], [col2] ]").Success, "Valid structured reference syntax didn't match expression");
 
             // can't have a space between the table name and open bracket
-            Assert.IsFalse(Table.IsStructuredReference.Match("\\abc [ [col1], [col2] ]").Success, "Invalid structured reference syntax didn't fail expression");
+            ClassicAssert.IsFalse(Table.IsStructuredReference.Match("\\abc [ [col1], [col2] ]").Success, "Invalid structured reference syntax didn't fail expression");
         }
 
         [Test]
@@ -110,7 +110,7 @@ namespace TestCases.SS.Formula
             {
                 Assert.Fail("expected numeric cell type but got " + cv.FormatAsString());
             }
-            Assert.AreEqual(expectedResult, cv.NumberValue, 0.0);
+            ClassicAssert.AreEqual(expectedResult, cv.NumberValue, 0.0);
         }
 
         private static void Confirm(IFormulaEvaluator fe, ICell cell, String expectedResult)
@@ -121,7 +121,7 @@ namespace TestCases.SS.Formula
             {
                 Assert.Fail("expected String cell type but got " + cv.FormatAsString());
             }
-            Assert.AreEqual(expectedResult, cv.StringValue);
+            ClassicAssert.AreEqual(expectedResult, cv.StringValue);
         }
     }
 

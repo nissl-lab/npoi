@@ -23,7 +23,7 @@ namespace TestCases.DDF
     using System.Collections;
     using System.IO;
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.DDF;
     using NPOI.Util;
 
@@ -41,23 +41,23 @@ namespace TestCases.DDF
         public void TestPropertyNames()
         {
             EscherProperty p1 = new EscherSimpleProperty(EscherProperties.GROUPSHAPE__SHAPENAME, 0);
-            Assert.AreEqual("groupshape.shapename", p1.Name);
-            Assert.AreEqual(EscherProperties.GROUPSHAPE__SHAPENAME, p1.PropertyNumber);
-            Assert.IsFalse(p1.IsComplex);
+            ClassicAssert.AreEqual("groupshape.shapename", p1.Name);
+            ClassicAssert.AreEqual(EscherProperties.GROUPSHAPE__SHAPENAME, p1.PropertyNumber);
+            ClassicAssert.IsFalse(p1.IsComplex);
 
             EscherProperty p2 = new EscherComplexProperty(
                     EscherProperties.GROUPSHAPE__SHAPENAME, false, new byte[10]);
-            Assert.AreEqual("groupshape.shapename", p2.Name);
-            Assert.AreEqual(EscherProperties.GROUPSHAPE__SHAPENAME, p2.PropertyNumber);
-            Assert.IsTrue(p2.IsComplex);
-            Assert.IsFalse(p2.IsBlipId);
+            ClassicAssert.AreEqual("groupshape.shapename", p2.Name);
+            ClassicAssert.AreEqual(EscherProperties.GROUPSHAPE__SHAPENAME, p2.PropertyNumber);
+            ClassicAssert.IsTrue(p2.IsComplex);
+            ClassicAssert.IsFalse(p2.IsBlipId);
 
             EscherProperty p3 = new EscherComplexProperty(
                     EscherProperties.GROUPSHAPE__SHAPENAME, true, new byte[10]);
-            Assert.AreEqual("groupshape.shapename", p3.Name);
-            Assert.AreEqual(EscherProperties.GROUPSHAPE__SHAPENAME, p3.PropertyNumber);
-            Assert.IsTrue(p3.IsComplex);
-            Assert.IsTrue(p3.IsBlipId);
+            ClassicAssert.AreEqual("groupshape.shapename", p3.Name);
+            ClassicAssert.AreEqual(EscherProperties.GROUPSHAPE__SHAPENAME, p3.PropertyNumber);
+            ClassicAssert.IsTrue(p3.IsComplex);
+            ClassicAssert.IsTrue(p3.IsBlipId);
         }
     }
 }

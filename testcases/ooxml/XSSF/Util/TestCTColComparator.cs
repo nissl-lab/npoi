@@ -16,7 +16,7 @@
 ==================================================================== */
 
 using NPOI.OpenXmlFormats.Spreadsheet;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using System;
 using NPOI.XSSF.Util;
 
@@ -36,14 +36,14 @@ namespace TestCases.XSSF.Util
             CT_Col o2 = new CT_Col();
             o2.min = 11;
             o2.max = 12;
-            Assert.AreEqual(-1, comparator.Compare(o1, o2));
+            ClassicAssert.AreEqual(-1, comparator.Compare(o1, o2));
             CT_Col o3 = new CT_Col();
             o3.min = 5;
             o3.max = 8;
             CT_Col o4 = new CT_Col();
             o4.min = 5;
             o4.max = 80;
-            Assert.AreEqual(-1, comparator.Compare(o3, o4));
+            ClassicAssert.AreEqual(-1, comparator.Compare(o3, o4));
         }
         [Test]
         public void TestArraysSort()
@@ -55,25 +55,25 @@ namespace TestCases.XSSF.Util
             CT_Col o2 = new CT_Col();
             o2.min = 11;
             o2.max = 12;
-            Assert.AreEqual(-1, comparator.Compare(o1, o2));
+            ClassicAssert.AreEqual(-1, comparator.Compare(o1, o2));
             CT_Col o3 = new CT_Col();
             o3.min = 5;
             o3.max = 80;
             CT_Col o4 = new CT_Col();
             o4.min = 5;
             o4.max = 8;
-            Assert.AreEqual(1, comparator.Compare(o3, o4));
+            ClassicAssert.AreEqual(1, comparator.Compare(o3, o4));
             CT_Col[] cols = new CT_Col[4];
             cols[0] = o1;
             cols[1] = o2;
             cols[2] = o3;
             cols[3] = o4;
-            Assert.AreEqual((uint)80, cols[2].max);
-            Assert.AreEqual((uint)8, cols[3].max);
+            ClassicAssert.AreEqual((uint)80, cols[2].max);
+            ClassicAssert.AreEqual((uint)8, cols[3].max);
             Array.Sort(cols, comparator);
-            Assert.AreEqual((uint)12, cols[3].max);
-            Assert.AreEqual((uint)8, cols[1].max);
-            Assert.AreEqual((uint)80, cols[2].max);
+            ClassicAssert.AreEqual((uint)12, cols[3].max);
+            ClassicAssert.AreEqual((uint)8, cols[1].max);
+            ClassicAssert.AreEqual((uint)80, cols[2].max);
         }
     }
 }

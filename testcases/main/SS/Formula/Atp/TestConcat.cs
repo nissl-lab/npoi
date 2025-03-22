@@ -1,7 +1,7 @@
 ﻿using NPOI.HSSF.UserModel;
 using NPOI.SS.Formula.Eval;
 using NPOI.SS.UserModel;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -70,7 +70,7 @@ namespace TestCases.SS.Formula.Atp
             evaluator.ClearAllCachedResultValues();
             formulaCell.SetCellFormula("CONCAT(\"The\",\" \",\"sun\",\" \",\"will\",\" \",\"come\",\" \",\"up\",\" \",\"tomorrow.\")");
             evaluator.EvaluateFormulaCell(formulaCell);
-            Assert.AreEqual("The sun will come up tomorrow.", formulaCell.StringCellValue);
+            ClassicAssert.AreEqual("The sun will come up tomorrow.", formulaCell.StringCellValue);
         }
 
         [Test]
@@ -79,7 +79,7 @@ namespace TestCases.SS.Formula.Atp
             evaluator.ClearAllCachedResultValues();
             formulaCell.SetCellFormula("CONCAT(B:B, C:C)");
             evaluator.EvaluateFormulaCell(formulaCell);
-            Assert.AreEqual("TwoThree", formulaCell.StringCellValue);
+            ClassicAssert.AreEqual("TwoThree", formulaCell.StringCellValue);
         }
 
         [Test]
@@ -88,7 +88,7 @@ namespace TestCases.SS.Formula.Atp
             evaluator.ClearAllCachedResultValues();
             formulaCell.SetCellFormula("CONCAT(A1:C1)");
             evaluator.EvaluateFormulaCell(formulaCell);
-            Assert.AreEqual("OneTwoThree", formulaCell.StringCellValue);
+            ClassicAssert.AreEqual("OneTwoThree", formulaCell.StringCellValue);
         }
 
         [Test]
@@ -97,7 +97,7 @@ namespace TestCases.SS.Formula.Atp
             evaluator.ClearAllCachedResultValues();
             formulaCell.SetCellFormula("CONCAT(\"ONE\", A1, \"TWO\",B1, \"THREE\",C1, \".\")");
             evaluator.EvaluateFormulaCell(formulaCell);
-            Assert.AreEqual("ONEOneTWOTwoTHREEThree.", formulaCell.StringCellValue);
+            ClassicAssert.AreEqual("ONEOneTWOTwoTHREEThree.", formulaCell.StringCellValue);
         }
 
     }

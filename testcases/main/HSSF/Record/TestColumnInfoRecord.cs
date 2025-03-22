@@ -17,7 +17,7 @@
 
 namespace TestCases.HSSF.Record
 {
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     using NPOI.Util;
     using TestCases.HSSF.Record;
@@ -37,16 +37,16 @@ namespace TestCases.HSSF.Record
 
 		RecordInputStream in1 = TestcaseRecordInputStream.Create(data);
 		ColumnInfoRecord cir = new ColumnInfoRecord(in1);
-		Assert.AreEqual(0, in1.Remaining);
+		ClassicAssert.AreEqual(0, in1.Remaining);
 
-		Assert.AreEqual(20, cir.FirstColumn);
-		Assert.AreEqual(155, cir.LastColumn);
-		Assert.AreEqual(6599, cir.ColumnWidth);
-		Assert.AreEqual(15, cir.XFIndex);
-		Assert.AreEqual(true, cir.IsHidden);
-		Assert.AreEqual(3, cir.OutlineLevel);
-		Assert.AreEqual(true, cir.IsCollapsed);
-		Assert.IsTrue(Arrays.Equals(data, cir.Serialize()));
+		ClassicAssert.AreEqual(20, cir.FirstColumn);
+		ClassicAssert.AreEqual(155, cir.LastColumn);
+		ClassicAssert.AreEqual(6599, cir.ColumnWidth);
+		ClassicAssert.AreEqual(15, cir.XFIndex);
+		ClassicAssert.AreEqual(true, cir.IsHidden);
+		ClassicAssert.AreEqual(3, cir.OutlineLevel);
+		ClassicAssert.AreEqual(true, cir.IsCollapsed);
+		ClassicAssert.IsTrue(Arrays.Equals(data, cir.Serialize()));
 	}
 
         /**
@@ -75,8 +75,8 @@ namespace TestCases.HSSF.Record
                 }
                 throw e;
             }
-            Assert.AreEqual(0, in1.Remaining);
-            Assert.IsTrue(Arrays.Equals(outData, cir.Serialize()));
+            ClassicAssert.AreEqual(0, in1.Remaining);
+            ClassicAssert.IsTrue(Arrays.Equals(outData, cir.Serialize()));
         }
 
         /**
@@ -91,8 +91,8 @@ namespace TestCases.HSSF.Record
             byte[] outData = HexRead.ReadFromString("7D 00 0C 00 00 00 00 00 24 02 0F 00 00 00 01 00");
             RecordInputStream in1 = TestcaseRecordInputStream.Create(inpData);
             ColumnInfoRecord cir = new ColumnInfoRecord(in1);
-            Assert.AreEqual(0, in1.Remaining);
-            Assert.IsTrue(Arrays.Equals(outData, cir.Serialize()));
+            ClassicAssert.AreEqual(0, in1.Remaining);
+            ClassicAssert.IsTrue(Arrays.Equals(outData, cir.Serialize()));
         }
     }
 

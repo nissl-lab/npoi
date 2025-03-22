@@ -24,7 +24,7 @@ namespace TestCases.SS.Formula.Functions
     using NPOI.SS.Util;
     using NPOI.Util;
     using NPOI.XSSF;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     [TestFixture]
     public class TestSumifsXSSF
     {
@@ -37,7 +37,7 @@ namespace TestCases.SS.Formula.Functions
             ISheet sheet = wb.GetSheetAt(0);
             ICell cell = sheet.GetRow(1).GetCell(5);
             fe.Evaluate(cell);
-            Assert.AreEqual(0.0, cell.NumericCellValue, 0.0000000000000001);
+            ClassicAssert.AreEqual(0.0, cell.NumericCellValue, 0.0000000000000001);
         }
     }
 }

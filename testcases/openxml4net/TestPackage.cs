@@ -23,7 +23,7 @@ using System;
 using NPOI.Util;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using System.Xml;
 using System.Text;
 using NPOI.SS.UserModel;
@@ -52,7 +52,7 @@ namespace TestCases.OpenXml4Net.OPC
                 p.Save(targetFile.FullName);
 
                 // Compare the original and newly saved document
-                Assert.IsTrue(File.Exists(targetFile.FullName));
+                ClassicAssert.IsTrue(File.Exists(targetFile.FullName));
                 ZipFileAssert.AssertEqual(new FileInfo(originalFile), targetFile);
                 File.Delete(targetFile.FullName);
             }
@@ -76,7 +76,7 @@ namespace TestCases.OpenXml4Net.OPC
             if (File.Exists(targetFile.FullName))
             {
                 File.Delete(targetFile.FullName);
-                Assert.IsFalse(File.Exists(targetFile.FullName));
+                ClassicAssert.IsFalse(File.Exists(targetFile.FullName));
             }
                 
 
@@ -84,19 +84,19 @@ namespace TestCases.OpenXml4Net.OPC
 
             // Check it has content types for rels and xml
             ContentTypeManager ctm = GetContentTypeManager(pkg);
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                     "application/xml",
                     ctm.GetContentType(
                             PackagingUriHelper.CreatePartName("/foo.xml")
                     )
             );
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                     ContentTypes.RELATIONSHIPS_PART,
                     ctm.GetContentType(
                             PackagingUriHelper.CreatePartName("/foo.rels")
                     )
             );
-            Assert.IsNull(
+            ClassicAssert.IsNull(
                     ctm.GetContentType(
                             PackagingUriHelper.CreatePartName("/foo.txt")
                     )
@@ -118,7 +118,7 @@ namespace TestCases.OpenXml4Net.OPC
             {
                 targetFile.Delete();
                 targetFile.Refresh();
-                Assert.IsFalse(targetFile.Exists);
+                ClassicAssert.IsFalse(targetFile.Exists);
             }
 
             // Create a namespace
@@ -186,10 +186,10 @@ namespace TestCases.OpenXml4Net.OPC
             PackagePartName sheetPartName = PackagingUriHelper.CreatePartName("/xl/worksheets/sheet1.xml");
             PackageRelationship rel =
                  corePart.AddRelationship(sheetPartName, TargetMode.Internal, "http://schemas.Openxmlformats.org/officeDocument/2006/relationships/worksheet", "rSheet1");
-            Assert.IsNotNull(rel);
+            ClassicAssert.IsNotNull(rel);
 
             PackagePart part = pkg.CreatePart(sheetPartName, "application/vnd.Openxmlformats-officedocument.spreadsheetml.worksheet+xml");
-            Assert.IsNotNull(part);
+            ClassicAssert.IsNotNull(part);
 
             // Dummy content again
             coreOut = corePart.GetOutputStream();
@@ -203,12 +203,12 @@ namespace TestCases.OpenXml4Net.OPC
             // Check things are as expected
             PackageRelationshipCollection coreRels =
                 pkg.GetRelationshipsByType(PackageRelationshipTypes.CORE_DOCUMENT);
-            Assert.AreEqual(1, coreRels.Size);
+            ClassicAssert.AreEqual(1, coreRels.Size);
             PackageRelationship coreRel = coreRels.GetRelationship(0);
-            Assert.IsNotNull(coreRel);
-            Assert.AreEqual("/", coreRel.SourceUri.ToString());
-            Assert.AreEqual("/xl/workbook.xml", coreRel.TargetUri.ToString());
-            Assert.IsNotNull(pkg.GetPart(coreRel));
+            ClassicAssert.IsNotNull(coreRel);
+            ClassicAssert.AreEqual("/", coreRel.SourceUri.ToString());
+            ClassicAssert.AreEqual("/xl/workbook.xml", coreRel.TargetUri.ToString());
+            ClassicAssert.IsNotNull(pkg.GetPart(coreRel));
 
 
             // Save and re-load
@@ -231,21 +231,21 @@ namespace TestCases.OpenXml4Net.OPC
             {
                 // Check still right
                 coreRels = pkg.GetRelationshipsByType(PackageRelationshipTypes.CORE_DOCUMENT);
-                Assert.AreEqual(1, coreRels.Size);
+                ClassicAssert.AreEqual(1, coreRels.Size);
                 coreRel = coreRels.GetRelationship(0);
-                Assert.IsNotNull(coreRel);
+                ClassicAssert.IsNotNull(coreRel);
 
-                Assert.AreEqual("/", coreRel.SourceUri.ToString());
-                Assert.AreEqual("/xl/workbook.xml", coreRel.TargetUri.ToString());
+                ClassicAssert.AreEqual("/", coreRel.SourceUri.ToString());
+                ClassicAssert.AreEqual("/xl/workbook.xml", coreRel.TargetUri.ToString());
                 corePart = pkg.GetPart(coreRel);
-                Assert.IsNotNull(corePart);
+                ClassicAssert.IsNotNull(corePart);
 
                 PackageRelationshipCollection rels = corePart.GetRelationshipsByType("http://schemas.Openxmlformats.org/officeDocument/2006/relationships/hyperlink");
-                Assert.AreEqual(1, rels.Size);
+                ClassicAssert.AreEqual(1, rels.Size);
                 rel = rels.GetRelationship(0);
-                Assert.IsNotNull(rel);
+                ClassicAssert.IsNotNull(rel);
                 //Assert.Warn(" 'Sheet1!A1' and rel.TargetUri.Fragment should be equal.");
-                Assert.AreEqual("/xl/workbook.xml#Sheet1!A1", rel.TargetUri.OriginalString);
+                ClassicAssert.AreEqual("/xl/workbook.xml#Sheet1!A1", rel.TargetUri.OriginalString);
 
                 assertMSCompatibility(pkg);
             }
@@ -269,7 +269,7 @@ namespace TestCases.OpenXml4Net.OPC
             {
                 XmlElement element = (XmlElement)nodeList.Item(i);
                 String value = element.GetAttribute(PackageRelationship.TARGET_ATTRIBUTE_NAME);
-                Assert.IsTrue(value[0] != '/', "Root target must not start with a leading slash ('/'): " + value);
+                ClassicAssert.IsTrue(value[0] != '/', "Root target must not start with a leading slash ('/'): " + value);
             }
 
         }
@@ -339,7 +339,7 @@ namespace TestCases.OpenXml4Net.OPC
             ZipFileAssert.AssertEqual(expectedFile, targetFile);
             File.Delete(targetFile.FullName);
 
-            Assert.IsFalse(File.Exists(targetFile.FullName), $"{targetFile.FullName} file exists!");
+            ClassicAssert.IsFalse(File.Exists(targetFile.FullName), $"{targetFile.FullName} file exists!");
         }
 
         /**
@@ -367,7 +367,7 @@ namespace TestCases.OpenXml4Net.OPC
                 }
                 
                 // Compare the original and newly saved document
-                Assert.IsTrue(File.Exists(targetFile.FullName));
+                ClassicAssert.IsTrue(File.Exists(targetFile.FullName));
                 ZipFileAssert.AssertEqual(new FileInfo(originalFile), targetFile);
                 File.Delete(targetFile.FullName);
             }
@@ -391,13 +391,13 @@ namespace TestCases.OpenXml4Net.OPC
 
             OPCPackage p = OPCPackage.Open(finp);
 
-            Assert.IsNotNull(p);
-            Assert.IsNotNull(p.Relationships);
-            Assert.AreEqual(12, p.GetParts().Count);
+            ClassicAssert.IsNotNull(p);
+            ClassicAssert.IsNotNull(p.Relationships);
+            ClassicAssert.AreEqual(12, p.GetParts().Count);
 
             // Check it has the usual bits
-            Assert.IsTrue(p.HasRelationships);
-            Assert.IsTrue(p.ContainPart(PackagingUriHelper.CreatePartName("/_rels/.rels")));
+            ClassicAssert.IsTrue(p.HasRelationships);
+            ClassicAssert.IsTrue(p.ContainPart(PackagingUriHelper.CreatePartName("/_rels/.rels")));
         }
 
         /**
@@ -416,7 +416,7 @@ namespace TestCases.OpenXml4Net.OPC
             p.Save(tempFile.FullName);
 
             // Compare the original and newly saved document
-            Assert.IsTrue(File.Exists(targetFile.FullName));
+            ClassicAssert.IsTrue(File.Exists(targetFile.FullName));
             ZipFileAssert.AssertEqual(targetFile, tempFile);
             File.Delete(targetFile.FullName);
         }
@@ -474,8 +474,8 @@ namespace TestCases.OpenXml4Net.OPC
             // Compare expected values with values return by the namespace
             foreach (PackagePartName partName in expectedValues.Keys)
             {
-                Assert.IsNotNull(values[partName]);
-                Assert.AreEqual(expectedValues[partName], values[partName]);
+                ClassicAssert.IsNotNull(values[partName]);
+                ClassicAssert.AreEqual(expectedValues[partName], values[partName]);
             }
             // Don't save modifications
             p.Revert();
@@ -515,8 +515,8 @@ namespace TestCases.OpenXml4Net.OPC
             // Compare expected values with values return by the namespace
             foreach (PackagePartName partName in expectedValues.Keys)
             {
-                Assert.IsNotNull(values[partName]);
-                Assert.AreEqual(expectedValues[partName], values[partName]);
+                ClassicAssert.IsNotNull(values[partName]);
+                ClassicAssert.AreEqual(expectedValues[partName], values[partName]);
             }
             // Don't save modifications
             p.Revert();
@@ -563,7 +563,7 @@ namespace TestCases.OpenXml4Net.OPC
             p.Close();
             File.Delete(tempFile);
 
-            Assert.IsFalse(File.Exists(tempFile), $"{tempFile} file exists!");
+            ClassicAssert.IsFalse(File.Exists(tempFile), $"{tempFile} file exists!");
         }
         /**
          * Test that we can open a file by path, save it
@@ -588,8 +588,8 @@ namespace TestCases.OpenXml4Net.OPC
             File.Delete(tempFile);
             File.Delete(tempFile2);
 
-            Assert.IsFalse(File.Exists(tempFile), $"{tempFile} file exists!");
-            Assert.IsFalse(File.Exists(tempFile2), $"{tempFile2} file exists!");
+            ClassicAssert.IsFalse(File.Exists(tempFile), $"{tempFile} file exists!");
+            ClassicAssert.IsFalse(File.Exists(tempFile2), $"{tempFile2} file exists!");
         }
 
         private static ContentTypeManager GetContentTypeManager(OPCPackage pkg)
@@ -612,13 +612,13 @@ namespace TestCases.OpenXml4Net.OPC
                 foreach (PackagePart p in rs)
                     selected.Add(p.PartName.Name, p);
 
-                Assert.AreEqual(6, selected.Count);
-                Assert.IsTrue(selected.ContainsKey("/word/document.xml"));
-                Assert.IsTrue(selected.ContainsKey("/word/fontTable.xml"));
-                Assert.IsTrue(selected.ContainsKey("/word/settings.xml"));
-                Assert.IsTrue(selected.ContainsKey("/word/styles.xml"));
-                Assert.IsTrue(selected.ContainsKey("/word/theme/theme1.xml"));
-                Assert.IsTrue(selected.ContainsKey("/word/webSettings.xml"));
+                ClassicAssert.AreEqual(6, selected.Count);
+                ClassicAssert.IsTrue(selected.ContainsKey("/word/document.xml"));
+                ClassicAssert.IsTrue(selected.ContainsKey("/word/fontTable.xml"));
+                ClassicAssert.IsTrue(selected.ContainsKey("/word/settings.xml"));
+                ClassicAssert.IsTrue(selected.ContainsKey("/word/styles.xml"));
+                ClassicAssert.IsTrue(selected.ContainsKey("/word/theme/theme1.xml"));
+                ClassicAssert.IsTrue(selected.ContainsKey("/word/webSettings.xml"));
             }
             finally
             {
@@ -640,26 +640,26 @@ namespace TestCases.OpenXml4Net.OPC
                     if (part.PartName.Name.Equals("/word/document.xml"))
                     {
                         checked1++;
-                        Assert.AreEqual(typeof(ZipPackagePart), part.GetType());
-                        Assert.AreEqual(6031L, part.Size);
+                        ClassicAssert.AreEqual(typeof(ZipPackagePart), part.GetType());
+                        ClassicAssert.AreEqual(6031L, part.Size);
                     }
                     if (part.PartName.Name.Equals("/word/fontTable.xml"))
                     {
                         checked1++;
-                        Assert.AreEqual(typeof(ZipPackagePart), part.GetType());
-                        Assert.AreEqual(1312L, part.Size);
+                        ClassicAssert.AreEqual(typeof(ZipPackagePart), part.GetType());
+                        ClassicAssert.AreEqual(1312L, part.Size);
                     }
 
                     // But not from the others
                     if (part.PartName.Name.Equals("/docProps/core.xml"))
                     {
                         checked1++;
-                        Assert.AreEqual(typeof(PackagePropertiesPart), part.GetType());
-                        Assert.AreEqual(-1, part.Size);
+                        ClassicAssert.AreEqual(typeof(PackagePropertiesPart), part.GetType());
+                        ClassicAssert.AreEqual(-1, part.Size);
                     }
                 }
                 // Ensure we actually found the parts we want to check
-                Assert.AreEqual(3, checked1);
+                ClassicAssert.AreEqual(3, checked1);
             }
             finally
             {
@@ -674,17 +674,17 @@ namespace TestCases.OpenXml4Net.OPC
 
             ContentTypeManager mgr = GetContentTypeManager(p);
 
-            Assert.True(mgr.IsContentTypeRegister("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"));
-            Assert.False(mgr.IsContentTypeRegister("application/vnd.ms-excel.sheet.macroEnabled.main+xml"));
+            ClassicAssert.True(mgr.IsContentTypeRegister("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"));
+            ClassicAssert.False(mgr.IsContentTypeRegister("application/vnd.ms-excel.sheet.macroEnabled.main+xml"));
 
-            Assert.True(
+            ClassicAssert.True(
                     p.ReplaceContentType(
                     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml",
                     "application/vnd.ms-excel.sheet.macroEnabled.main+xml")
             );
 
-            Assert.False(mgr.IsContentTypeRegister("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"));
-            Assert.True(mgr.IsContentTypeRegister("application/vnd.ms-excel.sheet.macroEnabled.main+xml"));
+            ClassicAssert.False(mgr.IsContentTypeRegister("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"));
+            ClassicAssert.True(mgr.IsContentTypeRegister("application/vnd.ms-excel.sheet.macroEnabled.main+xml"));
         }
 
         /**
@@ -714,8 +714,8 @@ namespace TestCases.OpenXml4Net.OPC
             }
             catch (OLE2NotOfficeXmlFileException e)
             {
-                Assert.IsTrue(e.Message.Contains("The supplied data appears to be in the OLE2 Format"));
-                Assert.IsTrue(e.Message.Contains("You are calling the part of POI that deals with OOXML"));
+                ClassicAssert.IsTrue(e.Message.Contains("The supplied data appears to be in the OLE2 Format"));
+                ClassicAssert.IsTrue(e.Message.Contains("You are calling the part of POI that deals with OOXML"));
             }
             // OLE2 - File
             try
@@ -725,8 +725,8 @@ namespace TestCases.OpenXml4Net.OPC
             }
             catch (OLE2NotOfficeXmlFileException e)
             {
-                Assert.IsTrue(e.Message.Contains("The supplied data appears to be in the OLE2 Format"));
-                Assert.IsTrue(e.Message.Contains("You are calling the part of POI that deals with OOXML"));
+                ClassicAssert.IsTrue(e.Message.Contains("The supplied data appears to be in the OLE2 Format"));
+                ClassicAssert.IsTrue(e.Message.Contains("You are calling the part of POI that deals with OOXML"));
             }
 
             // Raw XML - Stream
@@ -745,8 +745,8 @@ namespace TestCases.OpenXml4Net.OPC
             }
             catch (NotOfficeXmlFileException e)
             {
-                Assert.IsTrue(e.Message.Contains("The supplied data appears to be a raw XML file"));
-                Assert.IsTrue(e.Message.Contains("Formats such as Office 2003 XML"));
+                ClassicAssert.IsTrue(e.Message.Contains("The supplied data appears to be a raw XML file"));
+                ClassicAssert.IsTrue(e.Message.Contains("Formats such as Office 2003 XML"));
             }
             // Raw XML - File
             try
@@ -756,8 +756,8 @@ namespace TestCases.OpenXml4Net.OPC
             }
             catch (NotOfficeXmlFileException e)
             {
-                Assert.IsTrue(e.Message.Contains("The supplied data appears to be a raw XML file"));
-                Assert.IsTrue(e.Message.Contains("Formats such as Office 2003 XML"));
+                ClassicAssert.IsTrue(e.Message.Contains("The supplied data appears to be a raw XML file"));
+                ClassicAssert.IsTrue(e.Message.Contains("Formats such as Office 2003 XML"));
             }
 
             // ODF / ODS - Stream
@@ -776,8 +776,8 @@ namespace TestCases.OpenXml4Net.OPC
             }
             catch (ODFNotOfficeXmlFileException e)
             {
-                Assert.IsTrue(e.ToString().Contains("The supplied data appears to be in ODF"));
-                Assert.IsTrue(e.ToString().Contains("Formats like these (eg ODS"));
+                ClassicAssert.IsTrue(e.ToString().Contains("The supplied data appears to be in ODF"));
+                ClassicAssert.IsTrue(e.ToString().Contains("Formats like these (eg ODS"));
             }
             // ODF / ODS - File
             try
@@ -787,8 +787,8 @@ namespace TestCases.OpenXml4Net.OPC
             }
             catch (ODFNotOfficeXmlFileException e)
             {
-                Assert.IsTrue(e.ToString().Contains("The supplied data appears to be in ODF"));
-                Assert.IsTrue(e.ToString().Contains("Formats like these (eg ODS"));
+                ClassicAssert.IsTrue(e.ToString().Contains("The supplied data appears to be in ODF"));
+                ClassicAssert.IsTrue(e.ToString().Contains("Formats like these (eg ODS"));
             }
 
             // Plain Text - Stream
@@ -807,8 +807,8 @@ namespace TestCases.OpenXml4Net.OPC
             }
             catch (NotOfficeXmlFileException e)
             {
-                Assert.IsTrue(e.Message.Contains("No valid entries or contents found"));
-                Assert.IsTrue(e.Message.Contains("not a valid OOXML"));
+                ClassicAssert.IsTrue(e.Message.Contains("No valid entries or contents found"));
+                ClassicAssert.IsTrue(e.Message.Contains("not a valid OOXML"));
             }
             // Plain Text - File
             try
@@ -829,7 +829,7 @@ namespace TestCases.OpenXml4Net.OPC
         //{
         //    // #50090 / #56865
         //    ZipFile zipFile = ZipHelper.OpenZipFile(OpenXml4NetTestDataSamples.GetSampleFile("sample.xlsx"));
-        //    Assert.IsNotNull(zipFile);
+        //    ClassicAssert.IsNotNull(zipFile);
 
         //    ByteArrayOutputStream bos = new ByteArrayOutputStream(2500000);
         //    ZipOutputStream append = new ZipOutputStream(bos);
@@ -904,7 +904,7 @@ namespace TestCases.OpenXml4Net.OPC
                 //POITextExtractor extractor = ExtractorFactory.CreateExtractor(TestCases.HSSF.HSSFTestDataSamples.GetSampleFile("poc-shared-strings.xlsx"));
                 //try
                 //{
-                //    Assert.IsNotNull(extractor);
+                //    ClassicAssert.IsNotNull(extractor);
                 //    var _ = extractor.Text;
                 //}
                 //finally
@@ -1031,13 +1031,13 @@ namespace TestCases.OpenXml4Net.OPC
             //// verify the various ways to construct a ZipSecureFile
             //File file = OpenXML4JTestDataSamples.GetSampleFile("sample.xlsx");
             //ZipSecureFile zipFile = new ZipSecureFile(file);
-            //Assert.IsNotNull(zipFile.Name);
+            //ClassicAssert.IsNotNull(zipFile.Name);
             //zipFile.close();
             //zipFile = new ZipSecureFile(file, ZipFile.OPEN_READ);
-            //Assert.IsNotNull(zipFile.Name);
+            //ClassicAssert.IsNotNull(zipFile.Name);
             //zipFile.close();
             //zipFile = new ZipSecureFile(file.AbsolutePath);
-            //Assert.IsNotNull(zipFile.Name);
+            //ClassicAssert.IsNotNull(zipFile.Name);
             //zipFile.close();
         }
         [Ignore("need ZipSecureFile class")]
@@ -1048,7 +1048,7 @@ namespace TestCases.OpenXml4Net.OPC
             //try
             //{
             //    ZipSecureFile.MaxTextSize = 12345;
-            //    Assert.AreEqual(12345, ZipSecureFile.MaxTextSize);
+            //    ClassicAssert.AreEqual(12345, ZipSecureFile.MaxTextSize);
             //}
             //finally
             //{

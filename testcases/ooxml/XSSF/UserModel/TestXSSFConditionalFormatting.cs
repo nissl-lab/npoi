@@ -1,7 +1,7 @@
 using NPOI.SS.UserModel;
 using NPOI.XSSF;
 using NPOI.XSSF.UserModel;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using System;
 /*
 *  ====================================================================
@@ -32,15 +32,15 @@ namespace TestCases.XSSF.UserModel
     {
         protected override void AssertColour(String hexExpected, IColor actual)
         {
-            Assert.IsNotNull(actual, "Colour must be given");
+            ClassicAssert.IsNotNull(actual, "Colour must be given");
             XSSFColor colour = (XSSFColor)actual;
             if (hexExpected.Length == 8)
             {
-                Assert.AreEqual(hexExpected, colour.ARGBHex);
+                ClassicAssert.AreEqual(hexExpected, colour.ARGBHex);
             }
             else
             {
-                Assert.AreEqual(hexExpected, colour.ARGBHex.Substring(2));
+                ClassicAssert.AreEqual(hexExpected, colour.ARGBHex.Substring(2));
             }
         }
 

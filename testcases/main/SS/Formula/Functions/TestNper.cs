@@ -20,7 +20,7 @@ namespace TestCases.SS.Formula.Functions
 {
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.Formula.Functions;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
 
@@ -43,8 +43,8 @@ namespace TestCases.SS.Formula.Functions
 		};
             ValueEval result = FinanceFunction.NPER.Evaluate(args, 0, (short)0);
 
-            Assert.AreEqual(typeof(NumberEval), result.GetType());
-            Assert.AreEqual(4.57353557, ((NumberEval)result).NumberValue, 0.00000001);
+            ClassicAssert.AreEqual(typeof(NumberEval), result.GetType());
+            ClassicAssert.AreEqual(4.57353557, ((NumberEval)result).NumberValue, 0.00000001);
         }
         [Test]
         public void TestEvaluate_bug_45732()
@@ -55,14 +55,14 @@ namespace TestCases.SS.Formula.Functions
 
             cell.CellFormula = ("NPER(12,4500,100000,100000)");
             cell.SetCellValue(15.0);
-            Assert.AreEqual("NPER(12,4500,100000,100000)", cell.CellFormula);
-            Assert.AreEqual(CellType.Numeric, cell.CachedFormulaResultType);
-            Assert.AreEqual(15.0, cell.NumericCellValue, 0.0);
+            ClassicAssert.AreEqual("NPER(12,4500,100000,100000)", cell.CellFormula);
+            ClassicAssert.AreEqual(CellType.Numeric, cell.CachedFormulaResultType);
+            ClassicAssert.AreEqual(15.0, cell.NumericCellValue, 0.0);
 
             HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
             fe.EvaluateFormulaCell(cell);
-            Assert.AreEqual(CellType.Error, cell.CachedFormulaResultType);
-            Assert.AreEqual(FormulaError.NUM.Code, cell.ErrorCellValue);
+            ClassicAssert.AreEqual(CellType.Error, cell.CachedFormulaResultType);
+            ClassicAssert.AreEqual(FormulaError.NUM.Code, cell.ErrorCellValue);
             wb.Close();
         }
     }

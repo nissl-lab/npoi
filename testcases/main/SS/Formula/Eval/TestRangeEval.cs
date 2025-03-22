@@ -19,7 +19,7 @@ namespace TestCases.SS.Formula.Eval
 {
 
     using System;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.Eval;
@@ -64,12 +64,12 @@ namespace TestCases.SS.Formula.Eval
             };
 
             ValueEval result = EvalInstances.Range.Evaluate(args, 0, (short)0);
-            Assert.IsTrue(result is AreaEval);
+            ClassicAssert.IsTrue(result is AreaEval);
             AreaEval ae = (AreaEval)result;
-            Assert.AreEqual(firstRow, ae.FirstRow);
-            Assert.AreEqual(lastRow, ae.LastRow);
-            Assert.AreEqual(firstColumn, ae.FirstColumn);
-            Assert.AreEqual(lastColumn, ae.LastColumn);
+            ClassicAssert.AreEqual(firstRow, ae.FirstRow);
+            ClassicAssert.AreEqual(lastRow, ae.LastRow);
+            ClassicAssert.AreEqual(firstColumn, ae.FirstColumn);
+            ClassicAssert.AreEqual(lastColumn, ae.LastColumn);
         }
 
         private static ValueEval CreateRefEval(String refStr)
@@ -181,17 +181,17 @@ namespace TestCases.SS.Formula.Eval
                 throw e;
             }
 
-            Assert.AreEqual(12.0, cv.NumberValue, 0.0);
+            ClassicAssert.AreEqual(12.0, cv.NumberValue, 0.0);
 
             cellB1.SetCellValue(2.0); // range will be C1:E1
             fe.NotifyUpdateCell(cellB1);
             cv = fe.Evaluate(cellA1);
-            Assert.AreEqual(21.0, cv.NumberValue, 0.0);
+            ClassicAssert.AreEqual(21.0, cv.NumberValue, 0.0);
 
             cellB1.SetCellValue(0.0); // range will be C1:C1
             fe.NotifyUpdateCell(cellB1);
             cv = fe.Evaluate(cellA1);
-            Assert.AreEqual(5.0, cv.NumberValue, 0.0);
+            ClassicAssert.AreEqual(5.0, cv.NumberValue, 0.0);
         }
     }
 

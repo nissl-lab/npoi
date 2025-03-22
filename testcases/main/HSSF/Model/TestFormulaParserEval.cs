@@ -18,7 +18,7 @@
 namespace TestCases.HSSF.Model
 {
     using System;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.Model;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Formula.PTG;
@@ -62,9 +62,9 @@ namespace TestCases.HSSF.Model
         private static void ConfirmParseFormula(HSSFWorkbook workbook)
         {
             Ptg[] ptgs = HSSFFormulaParser.Parse("SUM(testName)", workbook);
-            Assert.IsTrue(ptgs.Length == 2, "two tokens expected, got " + ptgs.Length);
-            Assert.AreEqual(typeof(NamePtg), ptgs[0].GetType());
-            Assert.AreEqual(typeof(AttrPtg), ptgs[1].GetType());
+            ClassicAssert.IsTrue(ptgs.Length == 2, "two tokens expected, got " + ptgs.Length);
+            ClassicAssert.AreEqual(typeof(NamePtg), ptgs[0].GetType());
+            ClassicAssert.AreEqual(typeof(AttrPtg), ptgs[1].GetType());
         }
 
         [Test]
@@ -98,8 +98,8 @@ namespace TestCases.HSSF.Model
                 }
                 throw;
             }
-            Assert.AreEqual(NPOI.SS.UserModel.CellType.Numeric, result.CellType);
-            Assert.AreEqual(42.0, result.NumberValue, 0.0);
+            ClassicAssert.AreEqual(NPOI.SS.UserModel.CellType.Numeric, result.CellType);
+            ClassicAssert.AreEqual(42.0, result.NumberValue, 0.0);
         }
     }
 }

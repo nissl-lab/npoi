@@ -32,7 +32,7 @@ namespace TestCases.POIFS.Storage
     using System.IO;
     using System.Collections;
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.POIFS.Storage;
     using NPOI.Util;
     using NPOI.POIFS.FileSystem;
@@ -86,7 +86,7 @@ namespace TestCases.POIFS.Storage
             byte[] content = RawDataUtil.Decode(hexData);
             HeaderBlockReader block = new HeaderBlockReader(new MemoryStream(content));
 
-            Assert.AreEqual(-2, block.PropertyStart);
+            ClassicAssert.AreEqual(-2, block.PropertyStart);
 
             // verify we can't Read a short block
             byte[] shortblock = new byte[511];

@@ -1,6 +1,6 @@
 ﻿using NPOI.SS.Formula.Eval;
 using NPOI.SS.Formula.Functions;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -18,21 +18,21 @@ namespace TestCases.SS.Formula.Functions
 		private void confirmDateValue(ValueEval text, double expected)
 		{
 			ValueEval result = invokeDateValue(text);
-			Assert.IsTrue(result is NumberEval);
-			Assert.AreEqual(expected, ((NumberEval)result).NumberValue, 0.0001);
+			ClassicAssert.IsTrue(result is NumberEval);
+			ClassicAssert.AreEqual(expected, ((NumberEval)result).NumberValue, 0.0001);
 		}
 
 		private void confirmDateValue(ValueEval text, BlankEval expected)
 		{
 			ValueEval result = invokeDateValue(text);
-			Assert.IsTrue(result is BlankEval);
+			ClassicAssert.IsTrue(result is BlankEval);
 		}
 
 		private void confirmDateValue(ValueEval text, ErrorEval expected)
 		{
 			ValueEval result = invokeDateValue(text);
-			Assert.IsTrue(result is ErrorEval);
-			Assert.AreEqual(expected.ErrorCode, ((ErrorEval)result).ErrorCode);
+			ClassicAssert.IsTrue(result is ErrorEval);
+			ClassicAssert.AreEqual(expected.ErrorCode, ((ErrorEval)result).ErrorCode);
 		}
 		[Test]
 		public void TestDateValues()
