@@ -1005,6 +1005,7 @@ namespace NPOI.OpenXmlFormats.Dml
         private ST_SystemColorVal valField;
 
         private byte[] lastClrField;
+        private bool lastClrFieldSpecified;
 
         public CT_SystemColor()
         {
@@ -1019,6 +1020,7 @@ namespace NPOI.OpenXmlFormats.Dml
             CT_SystemColor ctObj = new CT_SystemColor();
             if (node.Attributes["val"] != null)
                 ctObj.val = (ST_SystemColorVal)Enum.Parse(typeof(ST_SystemColorVal), node.Attributes["val"].Value);
+            ctObj.lastClrFieldSpecified = node.Attributes["lastClr"] != null;
             ctObj.lastClr = XmlHelper.ReadBytes(node.Attributes["lastClr"]);
 
             foreach (XmlNode childNode in node.ChildNodes)
@@ -1092,7 +1094,8 @@ namespace NPOI.OpenXmlFormats.Dml
         {
             sw.Write(string.Format("<a:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "val", this.val.ToString());
-            XmlHelper.WriteAttribute(sw, "lastClr", this.lastClr);
+            if(lastClrFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "lastClr", this.lastClr);
             if (this.ItemsElementName.Count > 0)
             {
                 sw.Write(">");
@@ -1113,6 +1116,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 sw.Write(string.Format("/>", nodeName));
             }
         }
+
         [XmlIgnore]
         public List<EG_ColorTransform> ItemsElementName
         {
@@ -1148,8 +1152,15 @@ namespace NPOI.OpenXmlFormats.Dml
             }
             set
             {
+                this.lastClrSpecified = true;
                 this.lastClrField = value;
             }
+        }
+
+        public bool lastClrSpecified
+        {
+            get { return this.lastClrFieldSpecified; }
+            set { this.lastClrFieldSpecified = value; }
         }
     }
 
@@ -1517,6 +1528,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
             set
             {
+                this.valFieldSpecified = true;
                 this.valField = value;
             }
         }
@@ -1539,6 +1551,7 @@ namespace NPOI.OpenXmlFormats.Dml
             if (node == null)
                 return null;
             CT_PresetColor ctObj = new CT_PresetColor();
+            ctObj.valSpecified = node.Attributes["val"] != null;
             if (node.Attributes["val"] != null)
                 ctObj.val = (ST_PresetColorVal)Enum.Parse(typeof(ST_PresetColorVal), node.Attributes["val"].Value);
             foreach (XmlNode childNode in node.ChildNodes)

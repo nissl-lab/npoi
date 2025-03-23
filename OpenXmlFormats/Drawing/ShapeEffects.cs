@@ -2949,12 +2949,20 @@ namespace NPOI.OpenXmlFormats.Dml
             if (node == null)
                 return null;
             CT_TileInfoProperties ctObj = new CT_TileInfoProperties();
+            ctObj.txSpecified = node.Attributes["tx"] != null;
             ctObj.tx = XmlHelper.ReadLong(node.Attributes["tx"]);
+            ctObj.tySpecified = node.Attributes["ty"] != null;
             ctObj.ty = XmlHelper.ReadLong(node.Attributes["ty"]);
+            ctObj.sxSpecified = node.Attributes["sx"] != null;
             ctObj.sx = XmlHelper.ReadInt(node.Attributes["sx"]);
+            ctObj.sySpecified = node.Attributes["sy"] != null;
             ctObj.sy = XmlHelper.ReadInt(node.Attributes["sy"]);
+
+            ctObj.flipSpecified = node.Attributes["flip"] != null;
             if (node.Attributes["flip"] != null)
                 ctObj.flip = (ST_TileFlipMode)Enum.Parse(typeof(ST_TileFlipMode), node.Attributes["flip"].Value);
+            
+            ctObj.algnSpecified = node.Attributes["algn"] != null;
             if (node.Attributes["algn"] != null)
                 ctObj.algn = (ST_RectAlignment)Enum.Parse(typeof(ST_RectAlignment), node.Attributes["algn"].Value);
             return ctObj;
@@ -2965,12 +2973,18 @@ namespace NPOI.OpenXmlFormats.Dml
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<a:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "tx", this.tx);
-            XmlHelper.WriteAttribute(sw, "ty", this.ty);
-            XmlHelper.WriteAttribute(sw, "sx", this.sx);
-            XmlHelper.WriteAttribute(sw, "sy", this.sy);
-            XmlHelper.WriteAttribute(sw, "flip", this.flip.ToString());
-            XmlHelper.WriteAttribute(sw, "algn", this.algn.ToString());
+            if(txSpecified)
+                XmlHelper.WriteAttribute(sw, "tx", this.tx);
+            if(tySpecified)
+                XmlHelper.WriteAttribute(sw, "ty", this.ty);
+            if(sxSpecified)
+                XmlHelper.WriteAttribute(sw, "sx", this.sx);
+            if(sySpecified)
+                XmlHelper.WriteAttribute(sw, "sy", this.sy);
+            if(flipSpecified)
+                XmlHelper.WriteAttribute(sw, "flip", this.flip.ToString());
+            if(algnSpecified)
+                XmlHelper.WriteAttribute(sw, "algn", this.algn.ToString());
             sw.Write(">");
             sw.Write(string.Format("</a:{0}>", nodeName));
         }
@@ -2984,6 +2998,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
             set
             {
+                this.txFieldSpecified = true;
                 this.txField = value;
             }
         }
@@ -3010,6 +3025,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
             set
             {
+                this.tyFieldSpecified = true;
                 this.tyField = value;
             }
         }
@@ -3036,6 +3052,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
             set
             {
+                this.sxFieldSpecified = true;
                 this.sxField = value;
             }
         }
@@ -3062,6 +3079,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
             set
             {
+                this.syFieldSpecified = true;
                 this.syField = value;
             }
         }
@@ -3088,6 +3106,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
             set
             {
+                this.flipFieldSpecified = true;
                 this.flipField = value;
             }
         }
@@ -3114,6 +3133,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
             set
             {
+                this.algnFieldSpecified = true;
                 this.algnField = value;
             }
         }
