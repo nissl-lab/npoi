@@ -1,7 +1,7 @@
 What's NPOI
 ===================
 [![NuGet](https://img.shields.io/nuget/dt/npoi)](https://www.nuget.org/packages/NPOI)
-[![Discord](https://img.shields.io/badge/Chat-Discord-72890a.svg?logo=discord&logoColor=white)](https://discord.gg/rABUseUHme)
+[![Discord](https://img.shields.io/badge/Chat-Discord-d82679.svg?logo=discord&logoColor=white)](https://discord.gg/rABUseUHme)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=flat-square&logo=Apache)](LICENSE)
 [![traffic](https://api.segment.io/v1/pixel/track?data=ewogICJ3cml0ZUtleSI6ICJBV2NjaWd1UkhKODBuNkJ4WlI4cHRaRzBINzY0RmJObCIsCiAgInVzZXJJZCI6ICJ0b255cXVzIiwKICAiZXZlbnQiOiAiTlBPSSBIb21lcGFnZSIKfQ==
 )](#)
