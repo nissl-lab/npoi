@@ -2719,18 +2719,22 @@ namespace NPOI.OpenXmlFormats.Dml
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
     public class CT_RelativeRect
     {
-        private int? lField; // all attributes are percentage
-        private int? tField;
-        private int? rField;
-        private int? bField;
+        private int lField; // all attributes are percentage
+        private int tField;
+        private int rField;
+        private int bField;
         public static CT_RelativeRect Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
                 return null;
             CT_RelativeRect ctObj = new CT_RelativeRect();
+            ctObj.lSpecified = node.Attributes["l"]!=null;
             ctObj.l = XmlHelper.ReadInt(node.Attributes["l"]);
+            ctObj.tSpecified = node.Attributes["t"]!=null;
             ctObj.t = XmlHelper.ReadInt(node.Attributes["t"]);
+            ctObj.rSpecified = node.Attributes["r"]!=null;
             ctObj.r = XmlHelper.ReadInt(node.Attributes["r"]);
+            ctObj.bSpecified = node.Attributes["b"]!=null;
             ctObj.b = XmlHelper.ReadInt(node.Attributes["b"]);
             return ctObj;
         }
@@ -2740,10 +2744,14 @@ namespace NPOI.OpenXmlFormats.Dml
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<a:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "l", this.l);
-            XmlHelper.WriteAttribute(sw, "t", this.t);
-            XmlHelper.WriteAttribute(sw, "r", this.r);
-            XmlHelper.WriteAttribute(sw, "b", this.b);
+            if(lSpecified)
+                XmlHelper.WriteAttribute(sw, "l", this.l);
+            if(tSpecified)
+                XmlHelper.WriteAttribute(sw, "t", this.t);
+            if(rSpecified)
+                XmlHelper.WriteAttribute(sw, "r", this.r);
+            if(bSpecified)
+                XmlHelper.WriteAttribute(sw, "b", this.b);
             sw.Write("/>");
         }
 
@@ -2751,66 +2759,49 @@ namespace NPOI.OpenXmlFormats.Dml
         [DefaultValue(0)]
         public int l
         {
-            get {
-                if (this.lField == null)
-                    return 0; 
-                return (int)this.lField; 
-            }
-            set { this.lField = value; }
+            get{ return lField; }
+            set{ lSpecified = true; lField = value; }
         }
         [XmlIgnore]
         public bool lSpecified
         {
-            get { return (null != lField); }
+            get; set;
         }
         [XmlAttribute]
         [DefaultValue(0)]
         public int t
         {
-            get {
-                if (this.tField == null)
-                    return 0; 
-                return (int)this.tField; 
-            }
-            set { this.tField = value; }
+            get{ return tField; }
+            set{ tSpecified = true; tField = value; }
         }
         [XmlIgnore]
         public bool tSpecified
         {
-            get { return (null != tField); }
+            get; set;
         }
         [XmlAttribute]
         [DefaultValue(0)]
         public int r
         {
-            get
-            {
-                if (this.rField == null)
-                    return 0; 
-                return (int)this.rField;
-            }
-            set { this.rField = value; }
+            get{ return rField; }
+            set{ rSpecified = true; rField = value; }
         }
         [XmlIgnore]
         public bool rSpecified
         {
-            get { return (null != rField); }
+            get; set;
         }
         [XmlAttribute]
         [DefaultValue(0)]
         public int b
         {
-            get {
-                if (this.bField == null)
-                    return 0;
-                return (int)this.bField; 
-            }
-            set { this.bField = value; }
+            get{ return bField; }
+            set{ bSpecified = true; bField = value; }
         }
         [XmlIgnore]
         public bool bSpecified
         {
-            get { return (null != bField); }
+            get; set;
         }
     }
 

@@ -29,7 +29,7 @@ namespace NPOI.XDDF.UserModel
         {
             Value = color;
         }
-        protected XDDFColorRgbBinary(CT_SRgbColor color)
+        public XDDFColorRgbBinary(CT_SRgbColor color)
             : this(color, null)
         {
 
@@ -39,7 +39,7 @@ namespace NPOI.XDDF.UserModel
         {
             this.color = color;
         }
-        protected override object GetXmlobject()
+        public override object GetXmlobject()
         {
             return color;
         }

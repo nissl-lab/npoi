@@ -18,43 +18,25 @@
 namespace NPOI.XDDF.UserModel
 {
     using NPOI.OpenXmlFormats.Dml;
-
-    public class XDDFColorSchemeBased : XDDFColor
+    public class XDDFNoFillProperties : IXDDFFillProperties
     {
-        private CT_SchemeColor color;
+        private CT_NoFillProperties props;
 
-        public XDDFColorSchemeBased(SchemeColor color)
-                : this(new CT_SchemeColor(), new CT_Color())
-        {
-
-            Value = color;
-        }
-        public XDDFColorSchemeBased(CT_SchemeColor color)
-                : this(color, null)
+        public XDDFNoFillProperties()
+            : this(new CT_NoFillProperties())
         {
 
         }
-        public XDDFColorSchemeBased(CT_SchemeColor color, CT_Color container)
-                : base(container)
-        {
 
-            this.color = color;
-        }
-        public override object GetXmlobject()
+        protected XDDFNoFillProperties(CT_NoFillProperties properties)
         {
-            return color;
+            this.props = properties;
         }
-
-        public SchemeColor Value
+        public CT_NoFillProperties GetXmlobject()
         {
-            get
-            {
-                return SchemeColorExtensions.ValueOf(color.val);
-            }
-            set
-            {
-                color.val = value.ToST_SchemeColorVal();
-            }
+            return props;
         }
     }
 }
+
+

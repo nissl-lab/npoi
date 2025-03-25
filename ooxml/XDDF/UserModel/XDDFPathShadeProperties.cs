@@ -15,56 +15,44 @@
    limitations under the License.
 ==================================================================== */
 
+
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using System.Text;
+
 namespace NPOI.XDDF.UserModel
 {
+    using NPOI.Util;
+
 
     using NPOI.OpenXmlFormats.Dml;
-
-    public class XDDFColorSystemDefined : XDDFColor
+    public class XDDFPathShadeProperties
     {
-        private CT_SystemColor color;
+        private CT_PathShadeProperties props;
 
-        public XDDFColorSystemDefined(SystemColor color)
-                : this(new CT_SystemColor(), new CT_Color())
+        public XDDFPathShadeProperties()
+            : this(new CT_PathShadeProperties())
         {
-
-            Value = color;
-        }
-        public XDDFColorSystemDefined(CT_SystemColor color)
-                : this(color, null)
-        {
-
-        }
-        public XDDFColorSystemDefined(CT_SystemColor color, CT_Color container)
-                : base(container)
-        {
-
-            this.color = color;
-        }
-        public override object GetXmlobject()
-        {
-            return color;
         }
 
-        public SystemColor Value
+        public XDDFPathShadeProperties(CT_PathShadeProperties properties)
+        {
+            this.props = properties;
+        }
+        public CT_PathShadeProperties GetXmlobject()
+        {
+            return props;
+        }
+
+        public XDDFRelativeRectangle FillToRectangle
         {
             get
             {
-                return SystemColorExtensions.ValueOf(color.val);
-            }
-            set
-            {
-                color.val = value.ToST_SystemColorVal();
-            }
-        }
-
-        public byte[] LastColor
-        {
-            get
-            {
-                if(color.lastClrSpecified)
+                if(props.IsSetFillToRect())
                 {
-                    return color.lastClr;
+                    return new XDDFRelativeRectangle(props.fillToRect);
                 }
                 else
                 {
@@ -75,14 +63,43 @@ namespace NPOI.XDDF.UserModel
             {
                 if(value == null)
                 {
-                    if(color.lastClrSpecified)
+                    if(props.IsSetFillToRect())
                     {
-                        color.lastClrSpecified = false;
+                        props.UnsetFillToRect();
                     }
                 }
                 else
                 {
-                    color.lastClr = value;
+                    props.fillToRect = value.GetXmlobject();
+                }
+            }
+        }
+
+        public PathShadeType? PathShadeType
+        {
+            get
+            {
+                if(props.IsSetPath())
+                {
+                    return PathShadeTypeExtensions.ValueOf(props.path);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                if(value == null)
+                {
+                    if(props.IsSetPath())
+                    {
+                        props.UnsetPath();
+                    }
+                }
+                else
+                {
+                    props.path = value.Value.ToST_PathShadeType();
                 }
             }
         }

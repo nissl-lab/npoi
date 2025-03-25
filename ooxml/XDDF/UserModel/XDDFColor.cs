@@ -15,19 +15,8 @@
    limitations under the License.
 ==================================================================== */
 
-
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-
 namespace NPOI.XDDF.UserModel
 {
-    using NPOI.Util;
-
-
-
     using NPOI.OpenXmlFormats.Dml;
     public abstract class XDDFColor
     {
@@ -97,6 +86,6 @@ namespace NPOI.XDDF.UserModel
             }
             
         }
-        protected abstract object GetXmlobject();
+        public abstract object GetXmlobject();
     }
 }

@@ -15,56 +15,36 @@
    limitations under the License.
 ==================================================================== */
 
+
+using NPOI.OpenXmlFormats.Dml;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using System.Text;
+
 namespace NPOI.XDDF.UserModel
 {
-
-    using NPOI.OpenXmlFormats.Dml;
-
-    public class XDDFColorSystemDefined : XDDFColor
+    public class XDDFLinearShadeProperties
     {
-        private CT_SystemColor color;
+        private CT_LinearShadeProperties props;
 
-        public XDDFColorSystemDefined(SystemColor color)
-                : this(new CT_SystemColor(), new CT_Color())
+        public XDDFLinearShadeProperties(CT_LinearShadeProperties properties)
         {
-
-            Value = color;
+            this.props = properties;
         }
-        public XDDFColorSystemDefined(CT_SystemColor color)
-                : this(color, null)
+        public CT_LinearShadeProperties GetXmlobject()
         {
-
-        }
-        public XDDFColorSystemDefined(CT_SystemColor color, CT_Color container)
-                : base(container)
-        {
-
-            this.color = color;
-        }
-        public override object GetXmlobject()
-        {
-            return color;
+            return props;
         }
 
-        public SystemColor Value
+        public int? Angle
         {
             get
             {
-                return SystemColorExtensions.ValueOf(color.val);
-            }
-            set
-            {
-                color.val = value.ToST_SystemColorVal();
-            }
-        }
-
-        public byte[] LastColor
-        {
-            get
-            {
-                if(color.lastClrSpecified)
+                if(props.angSpecified)
                 {
-                    return color.lastClr;
+                    return props.ang;
                 }
                 else
                 {
@@ -75,18 +55,39 @@ namespace NPOI.XDDF.UserModel
             {
                 if(value == null)
                 {
-                    if(color.lastClrSpecified)
-                    {
-                        color.lastClrSpecified = false;
-                    }
+                    props.angSpecified = false;
                 }
                 else
                 {
-                    color.lastClr = value;
+                    props.ang = value.Value;
+                }
+            }
+        }
+
+        public bool? Scaled
+        {
+            get
+            {
+                if(props.scaledSpecified)
+                {
+                    return props.scaled;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                if(value == null)
+                {
+                    props.scaledSpecified = false;
+                }
+                else
+                {
+                    props.scaled = value.Value;
                 }
             }
         }
     }
 }
-
-

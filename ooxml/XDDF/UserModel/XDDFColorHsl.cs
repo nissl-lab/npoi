@@ -26,7 +26,6 @@ namespace NPOI.XDDF.UserModel
         public XDDFColorHsl(int hue, int saturation, int luminance)
             : this(new CT_HslColor(), new CT_Color())
         {
-
             Hue = hue;
             Saturation = saturation;
             Luminance = luminance;
@@ -42,7 +41,7 @@ namespace NPOI.XDDF.UserModel
 
             this.color = color;
         }
-        protected override object GetXmlobject()
+        public override object GetXmlobject()
         {
             return color;
         }

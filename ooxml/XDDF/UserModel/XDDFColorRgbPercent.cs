@@ -32,7 +32,7 @@ namespace NPOI.XDDF.UserModel
             Green = green;
             Red = blue;
         }
-        protected XDDFColorRgbPercent(CT_ScRgbColor color)
+        public XDDFColorRgbPercent(CT_ScRgbColor color)
                 : this(color, null)
         {
 
@@ -42,7 +42,7 @@ namespace NPOI.XDDF.UserModel
         {
             this.color = color;
         }
-        protected override object GetXmlobject()
+        public override object GetXmlobject()
         {
             return color;
         }

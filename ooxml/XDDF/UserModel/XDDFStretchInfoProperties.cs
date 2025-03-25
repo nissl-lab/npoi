@@ -18,43 +18,46 @@
 namespace NPOI.XDDF.UserModel
 {
     using NPOI.OpenXmlFormats.Dml;
-
-    public class XDDFColorSchemeBased : XDDFColor
+    public class XDDFStretchInfoProperties
     {
-        private CT_SchemeColor color;
+        private CT_StretchInfoProperties props;
 
-        public XDDFColorSchemeBased(SchemeColor color)
-                : this(new CT_SchemeColor(), new CT_Color())
+        public XDDFStretchInfoProperties(CT_StretchInfoProperties properties)
         {
-
-            Value = color;
+            this.props = properties;
         }
-        public XDDFColorSchemeBased(CT_SchemeColor color)
-                : this(color, null)
+        public CT_StretchInfoProperties GetXmlobject()
         {
-
-        }
-        public XDDFColorSchemeBased(CT_SchemeColor color, CT_Color container)
-                : base(container)
-        {
-
-            this.color = color;
-        }
-        public override object GetXmlobject()
-        {
-            return color;
+            return props;
         }
 
-        public SchemeColor Value
+        public XDDFRelativeRectangle GetFillRectangle()
         {
-            get
+            if(props.IsSetFillRect())
             {
-                return SchemeColorExtensions.ValueOf(color.val);
+                return new XDDFRelativeRectangle(props.fillRect);
             }
-            set
+            else
             {
-                color.val = value.ToST_SchemeColorVal();
+                return null;
+            }
+        }
+
+        public void SetFillRectangle(XDDFRelativeRectangle rectangle)
+        {
+            if(rectangle == null)
+            {
+                if(props.IsSetFillRect())
+                {
+                    props.UnsetFillRect();
+                }
+            }
+            else
+            {
+                props.fillRect = rectangle.GetXmlobject();
             }
         }
     }
 }
+
+

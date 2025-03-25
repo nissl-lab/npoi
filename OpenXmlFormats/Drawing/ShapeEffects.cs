@@ -2186,6 +2186,11 @@ namespace NPOI.OpenXmlFormats.Dml
         {
             this.sysClrField = null;
         }
+
+        public void UnsetSrgbClr()
+        {
+            this.srgbClrField = null;
+        }
     }
 
     [Serializable]
@@ -2222,9 +2227,14 @@ namespace NPOI.OpenXmlFormats.Dml
             if (node == null)
                 return null;
             CT_GradientFillProperties ctObj = new CT_GradientFillProperties();
+            
+            ctObj.flipFieldSpecified = node.Attributes["flip"] != null;
             if (node.Attributes["flip"] != null)
                 ctObj.flip = (ST_TileFlipMode)Enum.Parse(typeof(ST_TileFlipMode), node.Attributes["flip"].Value);
+            
+            ctObj.rotWithShapeSpecified = node.Attributes["rotWithShape"] != null;
             ctObj.rotWithShape = XmlHelper.ReadBool(node.Attributes["rotWithShape"]);
+            
             foreach (XmlNode childNode in node.ChildNodes)
             {
                 if (childNode.LocalName == "gsLst")
@@ -2244,9 +2254,12 @@ namespace NPOI.OpenXmlFormats.Dml
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<a:{0}", nodeName));
-            if(this.flip!= ST_TileFlipMode.none)
+            if(this.flipFieldSpecified && this.flip!= ST_TileFlipMode.none)
                 XmlHelper.WriteAttribute(sw, "flip", this.flip.ToString());
-            XmlHelper.WriteAttribute(sw, "rotWithShape", this.rotWithShape);
+            
+            if(this.rotWithShapeSpecified)
+                XmlHelper.WriteAttribute(sw, "rotWithShape", this.rotWithShape);
+            
             sw.Write(">");
             if (this.gsLst != null)
                 this.gsLst.Write(sw, "gsLst");
@@ -2258,6 +2271,47 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.tileRect.Write(sw, "tileRect");
             sw.Write(string.Format("</a:{0}>", nodeName));
         }
+
+        public bool IsSetTileRect()
+        {
+            return this.tileRectField != null;
+        }
+
+        public void UnsetTileRect()
+        {
+            this.tileRect = null;
+        }
+
+        public bool IsSetPath()
+        {
+            return this.pathField != null;
+        }
+
+        public void UnsetPath()
+        {
+            this.path = null;
+        }
+
+        public bool IsSetLin()
+        {
+            return this.linField != null;
+        }
+
+        public void UnsetLin()
+        {
+            this.linField = null;
+        }
+
+        public bool IsSetGsLst()
+        {
+            return this.gsLstField != null;
+        }
+
+        public void AddNewGsLst()
+        {
+            this.gsLstField = new CT_GradientStopList();
+        }
+
         [XmlElement(Order = 0)]
         public CT_GradientStopList gsLst
         {
@@ -2319,6 +2373,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
             set
             {
+                this.flipFieldSpecified = true;
                 this.flipField = value;
             }
         }
@@ -2345,6 +2400,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
             set
             {
+                this.rotWithShapeFieldSpecified = true;
                 this.rotWithShapeField = value;
             }
         }
@@ -2431,6 +2487,66 @@ namespace NPOI.OpenXmlFormats.Dml
             if (this.prstClr != null)
                 this.prstClr.Write(sw, "prstClr");
             sw.Write(string.Format("</a:{0}>", nodeName));
+        }
+
+        public bool IsSetHslClr()
+        {
+            return this.hslClr != null;
+        }
+
+        public bool IsSetPrstClr()
+        {
+            return this.prstClr != null;
+        }
+
+        public bool IsSetSchemeClr()
+        {
+            return this.schemeClr != null;
+        }
+
+        public bool IsSetScrgbClr()
+        {
+            return this.srgbClr != null;
+        }
+
+        public bool IsSetSrgbClr()
+        {
+            return this.srgbClr != null;
+        }
+
+        public bool IsSetSysClr()
+        {
+            return this.sysClr != null;
+        }
+
+        public void UnsetHslClr()
+        {
+            this.hslClr = null;
+        }
+
+        public void UnsetPrstClr()
+        {
+            this.prstClr = null;
+        }
+
+        public void UnsetSchemeClr()
+        {
+            this.schemeClr = null;
+        }
+
+        public void UnsetScrgbClr()
+        {
+            this.scrgbClr = null;
+        }
+
+        public void UnsetSrgbClr()
+        {
+            this.srgbClr = null;
+        }
+
+        public void UnsetSysClr()
+        {
+            this.sysClr = null;
         }
 
         [XmlElement(Order = 0)]
@@ -2567,6 +2683,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
             set
             {
+                this.angFieldSpecified = true;
                 this.angField = value;
             }
         }
@@ -2593,6 +2710,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
             set
             {
+                this.scaledFieldSpecified = true;
                 this.scaledField = value;
             }
         }
@@ -2632,6 +2750,8 @@ namespace NPOI.OpenXmlFormats.Dml
             if (node == null)
                 return null;
             CT_PathShadeProperties ctObj = new CT_PathShadeProperties();
+
+            ctObj.pathSpecified = node.Attributes["path"] != null;
             if (node.Attributes["path"] != null)
                 ctObj.path = (ST_PathShadeType)Enum.Parse(typeof(ST_PathShadeType), node.Attributes["path"].Value);
             foreach (XmlNode childNode in node.ChildNodes)
@@ -2647,13 +2767,33 @@ namespace NPOI.OpenXmlFormats.Dml
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<a:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "path", this.path.ToString());
+            if(this.pathSpecified)
+                XmlHelper.WriteAttribute(sw, "path", this.path.ToString());
             sw.Write(">");
             if (this.fillToRect != null)
                 this.fillToRect.Write(sw, "fillToRect");
             sw.Write(string.Format("</a:{0}>", nodeName));
         }
 
+        public bool IsSetPath()
+        {
+            return this.pathSpecified;
+        }
+
+        public void UnsetPath()
+        {
+            pathSpecified = false;
+        }
+
+        public bool IsSetFillToRect()
+        {
+            return this.fillToRectField != null;
+        }
+
+        public void UnsetFillToRect()
+        {
+            this.fillToRectField = null;
+        }
 
         [XmlElement(Order = 0)]
         public CT_RelativeRect fillToRect
@@ -2910,6 +3050,40 @@ namespace NPOI.OpenXmlFormats.Dml
             return this.blipField != null;
         }
 
+        public void UnsetBlip()
+        {
+            this.blipField = null;
+        }
+
+        public bool IsSetSrcRect()
+        {
+            return this.srcRect != null;
+        }
+
+        public void UnsetSrcRect()
+        {
+            this.srcRect = null;
+        }
+
+        public bool IsSetTile()
+        {
+            return this.tileField != null;
+        }
+
+        public void UnsetTile()
+        {
+            this.tileField = null;
+        }
+
+        public bool IsSetStretch()
+        {
+            return this.stretchField != null;
+        }
+
+        public void UnsetStretch()
+        {
+            this.stretchField = null;
+        }
     }
 
 
@@ -3190,6 +3364,16 @@ namespace NPOI.OpenXmlFormats.Dml
             return this.fillRectField;
         }
 
+        public bool IsSetFillRect()
+        {
+            return this.fillRectField != null;
+        }
+
+        public void UnsetFillRect()
+        {
+            this.fillRectField = null;
+        }
+
         [XmlElement(Order = 0)]
         public CT_RelativeRect fillRect
         {
@@ -3222,6 +3406,7 @@ namespace NPOI.OpenXmlFormats.Dml
             if (node == null)
                 return null;
             CT_PatternFillProperties ctObj = new CT_PatternFillProperties();
+            ctObj.prstSpecified = node.Attributes["prst"] != null;
             if (node.Attributes["prst"] != null)
                 ctObj.prst = (ST_PresetPatternVal)Enum.Parse(typeof(ST_PresetPatternVal), node.Attributes["prst"].Value);
             foreach (XmlNode childNode in node.ChildNodes)
@@ -3239,7 +3424,8 @@ namespace NPOI.OpenXmlFormats.Dml
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<a:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "prst", this.prst.ToString());
+            if(prstFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "prst", this.prst.ToString());
             sw.Write(">");
             if (this.fgClr != null)
                 this.fgClr.Write(sw, "fgClr");
@@ -3248,11 +3434,28 @@ namespace NPOI.OpenXmlFormats.Dml
             sw.Write(string.Format("</a:{0}>", nodeName));
         }
 
+        public bool IsSetBgClr()
+        {
+            return this.bgClr != null;
+        }
+
+        public void UnsetBgClr()
+        {
+            this.bgClr = null;
+        }
+
+        public bool IsSetFgClr()
+        {
+            return (this.fgClr != null);
+        }
+
+        public void UnsetFgClr()
+        {
+            this.fgClr = null;
+        }
 
         public CT_PatternFillProperties()
         {
-            //this.bgClrField = new CT_Color();
-            //this.fgClrField = new CT_Color();
         }
 
         [XmlElement(Order = 0)]
@@ -4473,6 +4676,37 @@ namespace NPOI.OpenXmlFormats.Dml
                 }
             }
             sw.Write(string.Format("</a:{0}>", nodeName));
+        }
+
+        public CT_GradientStop AddNewGs()
+        {
+            CT_GradientStop gs = new CT_GradientStop();
+            this.gsField.Add(gs);
+            return gs;
+        }
+
+        public CT_GradientStop InsertNewGs(int index)
+        {
+            CT_GradientStop gs = new CT_GradientStop();
+            this.gsField.Insert(index, gs);
+            return gs;
+        }
+
+        public void RemoveGs(int index)
+        {
+            this.gsField.RemoveAt(index);
+        }
+
+        public CT_GradientStop GetGsArray(int index)
+        {
+            if(index < 0 || index >= this.gsField.Count)
+                throw new IndexOutOfRangeException();
+            return this.gsField[index];
+        }
+
+        public int SizeOfGsArray()
+        {
+            return this.gsField.Count;
         }
 
         private List<CT_GradientStop> gsField;
