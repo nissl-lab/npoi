@@ -19,6 +19,7 @@ using NPOI.OpenXml4Net.Util;
 using System.Xml;
 using NPOI.OpenXmlFormats.Dml.WordProcessing;
 using System.Text;
+using Cysharp.Text;
 
 namespace NPOI.OpenXmlFormats.Wordprocessing
 {
@@ -2253,7 +2254,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
             //Check if the current Xml Node contains "<w:cr/>" elements.
             //Each cr element should be replaced with \n
-            StringBuilder sb = new StringBuilder();
+            // StringBuilder sb = new StringBuilder();
+            var sb = ZString.CreateStringBuilder();
             foreach (XmlNode elem in node.ChildNodes)
             {
                 if(elem.NodeType==XmlNodeType.Element && elem.LocalName=="cr")

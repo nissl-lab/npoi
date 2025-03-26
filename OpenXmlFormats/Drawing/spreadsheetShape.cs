@@ -1,4 +1,5 @@
-﻿using NPOI.OpenXml4Net.Util;
+﻿using Cysharp.Text;
+using NPOI.OpenXml4Net.Util;
 using NPOI.OpenXmlFormats.Dml.Spreadsheet;
 using System;
 using System.Collections.Generic;
@@ -276,7 +277,8 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
         {
             if (p == null || p.Count == 0)
                 return string.Empty;
-            StringBuilder sb = new StringBuilder();
+            // StringBuilder sb = new StringBuilder();
+            var sb = ZString.CreateStringBuilder();
             foreach (CT_TextParagraph tp in p)
             {
                 foreach (CT_RegularTextRun tr in tp.r)
