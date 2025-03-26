@@ -2255,21 +2255,23 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             //Check if the current Xml Node contains "<w:cr/>" elements.
             //Each cr element should be replaced with \n
             // StringBuilder sb = new StringBuilder();
-            var sb = ZString.CreateStringBuilder();
-            foreach (XmlNode elem in node.ChildNodes)
+            using(var sb = ZString.CreateStringBuilder())
             {
-                if(elem.NodeType==XmlNodeType.Element && elem.LocalName=="cr")
+                foreach(XmlNode elem in node.ChildNodes)
                 {
-                    sb.Append("\n");
+                    if(elem.NodeType==XmlNodeType.Element && elem.LocalName=="cr")
+                    {
+                        sb.Append("\n");
+                    }
+                    else
+                    {
+                        sb.Append(elem.InnerText);
+                    }
                 }
-                else
-                {
-                    sb.Append(elem.InnerText);
-                }
-            }
 
-            ctObj.Value = sb.ToString();          
-            return ctObj;
+                ctObj.Value = sb.ToString();
+                return ctObj;
+            }
         }
 
         internal void Write(StreamWriter sw, string nodeName)
