@@ -27,7 +27,6 @@ namespace NPOI.XDDF.UserModel.Chart
     using NPOI.Util;
     using NPOI.XDDF.UserModel;
     using NPOI.OpenXmlFormats.Dml.Chart;
-    using NPOI.OpenXmlFormats.Dml;
 
     /// <summary>
     /// Base class for all axis types.
@@ -399,9 +398,9 @@ namespace NPOI.XDDF.UserModel.Chart
             GetMinorCTTickMark().val =tickMark.ToST_TickMark();
         }
 
-        protected OpenXmlFormats.Dml.Chart.CT_ShapeProperties GetOrAddLinesProperties(CT_ChartLines gridlines)
+        protected CT_ShapeProperties GetOrAddLinesProperties(CT_ChartLines gridlines)
         {
-            OpenXmlFormats.Dml.Chart.CT_ShapeProperties properties;
+            CT_ShapeProperties properties;
             if(gridlines.IsSetSpPr())
             {
                 properties = gridlines.spPr;

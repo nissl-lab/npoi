@@ -39,7 +39,7 @@ namespace NPOI.XDDF.UserModel
         {
             this.props = properties;
         }
-        public CT_ShapeProperties GetXmlobject()
+        public CT_ShapeProperties GetXmlObject()
         {
             return props;
         }

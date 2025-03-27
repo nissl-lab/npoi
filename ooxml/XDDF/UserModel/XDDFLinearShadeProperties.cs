@@ -33,7 +33,7 @@ namespace NPOI.XDDF.UserModel
         {
             this.props = properties;
         }
-        public CT_LinearShadeProperties GetXmlobject()
+        public CT_LinearShadeProperties GetXmlObject()
         {
             return props;
         }

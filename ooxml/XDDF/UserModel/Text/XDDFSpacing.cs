@@ -43,7 +43,7 @@ namespace NPOI.XDDF.UserModel.Text {
         public abstract Kind Type { get; }
 
 
-        protected CT_TextSpacing GetXmlobject()
+        protected CT_TextSpacing GetXmlObject()
         {
             return spacing;
         }

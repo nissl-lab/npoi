@@ -34,7 +34,7 @@ namespace NPOI.XDDF.UserModel.Text
         {
             this.style = style;
         }
-        protected CT_TextBlipBullet GetXmlobject()
+        protected CT_TextBlipBullet GetXmlObject()
         {
             return style;
         }
@@ -48,7 +48,7 @@ namespace NPOI.XDDF.UserModel.Text
         {
             if(picture != null)
             {
-                style.blip = picture.GetXmlobject();
+                style.blip = picture.GetXmlObject();
             }
         }
     }

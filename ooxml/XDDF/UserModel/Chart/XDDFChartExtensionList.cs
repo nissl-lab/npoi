@@ -31,7 +31,7 @@ namespace NPOI.XDDF.UserModel.Chart
         {
             this.list = list;
         }
-        public CT_ExtensionList GetXmlobject()
+        public CT_ExtensionList GetXmlObject()
         {
             return list;
         }

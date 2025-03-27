@@ -42,7 +42,7 @@ namespace NPOI.XDDF.UserModel
         {
             this.color = color;
         }
-        public override object GetXmlobject()
+        public override object GetXmlObject()
         {
             return color;
         }

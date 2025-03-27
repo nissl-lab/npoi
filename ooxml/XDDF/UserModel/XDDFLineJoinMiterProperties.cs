@@ -22,30 +22,60 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace NPOI.XDDF.UserModel.Text
+namespace NPOI.XDDF.UserModel
 {
     using NPOI.Util;
+
+
     using NPOI.OpenXmlFormats.Dml;
-    public class XDDFBulletStyleCharacter : IXDDFBulletStyle
+    public class XDDFLineJoinMiterProperties : IXDDFLineJoinProperties
     {
-        private CT_TextCharBullet style;
-        protected XDDFBulletStyleCharacter(CT_TextCharBullet style)
+        private CT_LineJoinMiterProperties join;
+
+        public XDDFLineJoinMiterProperties()
+            : this(new CT_LineJoinMiterProperties())
         {
-            this.style = style;
-        }
-        protected CT_TextCharBullet GetXmlObject()
-        {
-            return style;
+
         }
 
-        public string GetCharacter()
+        public XDDFLineJoinMiterProperties(CT_LineJoinMiterProperties join)
         {
-            return style.@char;
+            this.join = join;
+        }
+        public CT_LineJoinMiterProperties GetXmlObject()
+        {
+            return join;
         }
 
-        public void SetCharacter(string value)
+        public int? Limit
         {
-            style.@char = value;
+            get
+            {
+                if(join.limSpecified)
+                {
+                    return join.lim;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                if(value == null)
+                {
+                    if(join.limSpecified)
+                    {
+                        join.limSpecified = false;
+                    }
+                }
+                else
+                {
+                    join.lim = value.Value;
+                }
+            }
         }
     }
 }
+
+

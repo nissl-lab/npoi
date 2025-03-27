@@ -15,37 +15,56 @@
    limitations under the License.
 ==================================================================== */
 
-
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-
-namespace NPOI.XDDF.UserModel.Text
+namespace NPOI.XDDF.UserModel
 {
-    using NPOI.Util;
     using NPOI.OpenXmlFormats.Dml;
-    public class XDDFBulletStyleCharacter : IXDDFBulletStyle
+    public class XDDFLineEndProperties
     {
-        private CT_TextCharBullet style;
-        protected XDDFBulletStyleCharacter(CT_TextCharBullet style)
+        private CT_LineEndProperties props;
+
+        public XDDFLineEndProperties(CT_LineEndProperties properties)
         {
-            this.style = style;
+            this.props = properties;
         }
-        protected CT_TextCharBullet GetXmlObject()
+        public CT_LineEndProperties GetXmlObject()
         {
-            return style;
+            return props;
         }
 
-        public string GetCharacter()
+        public LineEndLength Length
         {
-            return style.@char;
+            get
+            {
+                return LineEndLengthExtensions.ValueOf(props.len);
+            }
+            set 
+            {
+                props.len = value.ToST_LineEndLength();
+            }
         }
 
-        public void SetCharacter(string value)
+        public LineEndType Type
         {
-            style.@char = value;
+            get
+            {
+                return LineEndTypeExtensions.ValueOf(props.type);
+            }
+            set
+            {
+                props.type = value.ToST_LineEndType();
+            }
+        }
+
+        public LineEndWidth Width
+        {
+            get
+            {
+                return LineEndWidthExtensions.ValueOf(props.w);
+            }
+            set
+            {
+                props.w = value.ToST_LineEndWidth();
+            }
         }
     }
 }

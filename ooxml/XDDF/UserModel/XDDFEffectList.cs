@@ -15,37 +15,21 @@
    limitations under the License.
 ==================================================================== */
 
-
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-
-namespace NPOI.XDDF.UserModel.Text
+namespace NPOI.XDDF.UserModel
 {
-    using NPOI.Util;
     using NPOI.OpenXmlFormats.Dml;
-    public class XDDFBulletStyleCharacter : IXDDFBulletStyle
+    public class XDDFEffectList
     {
-        private CT_TextCharBullet style;
-        protected XDDFBulletStyleCharacter(CT_TextCharBullet style)
+        private CT_EffectList list;
+        public XDDFEffectList(CT_EffectList list)
         {
-            this.style = style;
+            this.list = list;
         }
-        protected CT_TextCharBullet GetXmlObject()
+        public CT_EffectList GetXmlObject()
         {
-            return style;
-        }
-
-        public string GetCharacter()
-        {
-            return style.@char;
-        }
-
-        public void SetCharacter(string value)
-        {
-            style.@char = value;
+            return list;
         }
     }
 }
+
+

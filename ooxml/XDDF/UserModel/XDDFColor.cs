@@ -86,6 +86,6 @@ namespace NPOI.XDDF.UserModel
             }
             
         }
-        public abstract object GetXmlobject();
+        public abstract object GetXmlObject();
     }
 }

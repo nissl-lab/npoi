@@ -41,7 +41,7 @@ namespace NPOI.XDDF.UserModel
         {
             this.props = properties;
         }
-        public CT_BlipFillProperties GetXmlobject()
+        public CT_BlipFillProperties GetXmlObject()
         {
             return props;
         }
@@ -67,7 +67,7 @@ namespace NPOI.XDDF.UserModel
                 }
                 else
                 {
-                    props.blip = value.GetXmlobject();
+                    props.blip = value.GetXmlObject();
                 }
             }
         }
@@ -148,7 +148,7 @@ namespace NPOI.XDDF.UserModel
                 }
                 else
                 {
-                    props.srcRect = value.GetXmlobject();
+                    props.srcRect = value.GetXmlObject();
                 }
             }
         }
@@ -177,7 +177,7 @@ namespace NPOI.XDDF.UserModel
                 }
                 else
                 {
-                    props.stretch = value.GetXmlobject();
+                    props.stretch = value.GetXmlObject();
                 }
             }
         }
@@ -206,7 +206,7 @@ namespace NPOI.XDDF.UserModel
                 }
                 else
                 {
-                    props.tile = value.GetXmlobject();
+                    props.tile = value.GetXmlObject();
                 }
             }
         }

@@ -25,7 +25,7 @@ namespace NPOI.XDDF.UserModel
         {
             this.stop = stop;
         }
-        public CT_GradientStop GetXmlobject()
+        public CT_GradientStop GetXmlObject()
         {
             return stop;
         }
@@ -105,27 +105,27 @@ namespace NPOI.XDDF.UserModel
                 }
                 if(color is XDDFColorHsl)
                 {
-                    stop.hslClr = (CT_HslColor) color.GetXmlobject();
+                    stop.hslClr = (CT_HslColor) color.GetXmlObject();
                 }
                 else if(color is XDDFColorPreset)
                 {
-                    stop.prstClr = (CT_PresetColor) color.GetXmlobject();
+                    stop.prstClr = (CT_PresetColor) color.GetXmlObject();
                 }
                 else if(color is XDDFColorSchemeBased)
                 {
-                    stop.schemeClr = (CT_SchemeColor) color.GetXmlobject();
+                    stop.schemeClr = (CT_SchemeColor) color.GetXmlObject();
                 }
                 else if(color is XDDFColorRgbPercent)
                 {
-                    stop.scrgbClr = (CT_ScRgbColor) color.GetXmlobject();
+                    stop.scrgbClr = (CT_ScRgbColor) color.GetXmlObject();
                 }
                 else if(color is XDDFColorRgbBinary)
                 {
-                    stop.srgbClr = (CT_SRgbColor) color.GetXmlobject();
+                    stop.srgbClr = (CT_SRgbColor) color.GetXmlObject();
                 }
                 else if(color is XDDFColorSystemDefined)
                 {
-                    stop.sysClr = (CT_SystemColor) color.GetXmlobject();
+                    stop.sysClr = (CT_SystemColor) color.GetXmlObject();
                 }
             }
         }

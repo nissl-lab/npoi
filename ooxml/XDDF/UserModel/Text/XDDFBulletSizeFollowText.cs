@@ -39,7 +39,7 @@ namespace NPOI.XDDF.UserModel.Text
         {
             this.follow = follow;
         }
-        protected CT_TextBulletSizeFollowText GetXmlobject()
+        protected CT_TextBulletSizeFollowText GetXmlObject()
         {
             return follow;
         }

@@ -33,7 +33,7 @@ namespace NPOI.XDDF.UserModel.Text
         {
             this.style = style;
         }
-        protected CT_TextNoBullet GetXmlobject()
+        protected CT_TextNoBullet GetXmlObject()
         {
             return style;
         }

@@ -33,7 +33,7 @@ namespace NPOI.XDDF.UserModel.Text
         {
             this.stop = stop;
         }
-        protected CT_TextTabStop GetXmlobject()
+        protected CT_TextTabStop GetXmlObject()
         {
             return stop;
         }

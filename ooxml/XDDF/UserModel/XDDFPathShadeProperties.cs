@@ -41,7 +41,7 @@ namespace NPOI.XDDF.UserModel
         {
             this.props = properties;
         }
-        public CT_PathShadeProperties GetXmlobject()
+        public CT_PathShadeProperties GetXmlObject()
         {
             return props;
         }
@@ -70,7 +70,7 @@ namespace NPOI.XDDF.UserModel
                 }
                 else
                 {
-                    props.fillToRect = value.GetXmlobject();
+                    props.fillToRect = value.GetXmlObject();
                 }
             }
         }

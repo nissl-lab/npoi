@@ -35,11 +35,11 @@ namespace NPOI.XDDF.UserModel
 
         }
 
-        protected XDDFGradientFillProperties(CT_GradientFillProperties properties)
+        public XDDFGradientFillProperties(CT_GradientFillProperties properties)
         {
             this.props = properties;
         }
-        public CT_GradientFillProperties GetXmlobject()
+        public CT_GradientFillProperties GetXmlObject()
         {
             return props;
         }
@@ -182,7 +182,7 @@ namespace NPOI.XDDF.UserModel
                 }
                 else
                 {
-                    props.lin = value.GetXmlobject();
+                    props.lin = value.GetXmlObject();
                 }
             }
         }
@@ -211,7 +211,7 @@ namespace NPOI.XDDF.UserModel
                 }
                 else
                 {
-                    props.path = value.GetXmlobject();
+                    props.path = value.GetXmlObject();
                 }
             }
         }
@@ -240,7 +240,7 @@ namespace NPOI.XDDF.UserModel
                 }
                 else
                 {
-                    props.tileRect = value.GetXmlobject();
+                    props.tileRect = value.GetXmlObject();
                 }
             }
         }

@@ -40,7 +40,7 @@ namespace NPOI.XDDF.UserModel.Text
         {
             this.points = points;
         }
-        protected CT_TextBulletSizePoint GetXmlobject()
+        protected CT_TextBulletSizePoint GetXmlObject()
         {
             return points;
         }

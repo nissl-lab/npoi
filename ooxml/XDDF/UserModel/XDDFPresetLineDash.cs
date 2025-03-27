@@ -22,30 +22,60 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace NPOI.XDDF.UserModel.Text
+namespace NPOI.XDDF.UserModel
 {
     using NPOI.Util;
+
+
     using NPOI.OpenXmlFormats.Dml;
-    public class XDDFBulletStyleCharacter : IXDDFBulletStyle
+    using System.Security.Policy;
+
+    public class XDDFPresetLineDash
     {
-        private CT_TextCharBullet style;
-        protected XDDFBulletStyleCharacter(CT_TextCharBullet style)
+        private CT_PresetLineDashProperties props;
+
+        public XDDFPresetLineDash(PresetLineDash dash)
+                : this(new CT_PresetLineDashProperties())
         {
-            this.style = style;
-        }
-        protected CT_TextCharBullet GetXmlObject()
-        {
-            return style;
+
+            Value = dash;
         }
 
-        public string GetCharacter()
+        public XDDFPresetLineDash(CT_PresetLineDashProperties properties)
         {
-            return style.@char;
+            this.props = properties;
+        }
+        public CT_PresetLineDashProperties GetXmlObject()
+        {
+            return props;
         }
 
-        public void SetCharacter(string value)
+        public PresetLineDash? Value
         {
-            style.@char = value;
+            get
+            {
+                if(props.valSpecified)
+                {
+                    return PresetLineDashExtensions.ValueOf(props.val);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                if(value == null)
+                {
+                    props.valSpecified = false;
+                }
+                else
+                {
+                    props.val = value.Value.ToST_PresetLineDashVal();
+                }
+            }
         }
     }
 }
+
+

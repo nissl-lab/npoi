@@ -31,7 +31,7 @@ namespace NPOI.XDDF.UserModel
         {
             this.props = properties;
         }
-        public CT_GroupFillProperties GetXmlobject()
+        public CT_GroupFillProperties GetXmlObject()
         {
             return props;
         }

@@ -26,7 +26,7 @@ namespace NPOI.XDDF.UserModel
         {
             this.props = properties;
         }
-        public CT_StretchInfoProperties GetXmlobject()
+        public CT_StretchInfoProperties GetXmlObject()
         {
             return props;
         }
@@ -54,7 +54,7 @@ namespace NPOI.XDDF.UserModel
             }
             else
             {
-                props.fillRect = rectangle.GetXmlobject();
+                props.fillRect = rectangle.GetXmlObject();
             }
         }
     }

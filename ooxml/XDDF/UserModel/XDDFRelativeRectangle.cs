@@ -42,7 +42,7 @@ namespace NPOI.XDDF.UserModel
         {
             this.rect = rectangle;
         }
-        public CT_RelativeRect GetXmlobject()
+        public CT_RelativeRect GetXmlObject()
         {
             return rect;
         }

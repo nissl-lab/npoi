@@ -33,7 +33,7 @@ namespace NPOI.XDDF.UserModel
         {
             this.props = properties;
         }
-        public CT_TileInfoProperties GetXmlobject()
+        public CT_TileInfoProperties GetXmlObject()
         {
             return props;
         }

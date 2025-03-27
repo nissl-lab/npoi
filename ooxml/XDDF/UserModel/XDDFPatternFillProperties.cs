@@ -37,11 +37,11 @@ namespace NPOI.XDDF.UserModel
         {
         }
 
-        protected XDDFPatternFillProperties(CT_PatternFillProperties properties)
+        public XDDFPatternFillProperties(CT_PatternFillProperties properties)
         {
             this.props = properties;
         }
-        public CT_PatternFillProperties GetXmlobject()
+        public CT_PatternFillProperties GetXmlObject()
         {
             return props;
         }

@@ -39,7 +39,7 @@ namespace NPOI.XDDF.UserModel.Text
         {
             this.autofit = autofit;
         }
-        protected CT_TextNoAutofit GetXmlobject()
+        protected CT_TextNoAutofit GetXmlObject()
         {
             return autofit;
         }

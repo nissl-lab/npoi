@@ -15,37 +15,43 @@
    limitations under the License.
 ==================================================================== */
 
-
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-
-namespace NPOI.XDDF.UserModel.Text
+namespace NPOI.XDDF.UserModel
 {
-    using NPOI.Util;
     using NPOI.OpenXmlFormats.Dml;
-    public class XDDFBulletStyleCharacter : IXDDFBulletStyle
+    public class XDDFDashStop
     {
-        private CT_TextCharBullet style;
-        protected XDDFBulletStyleCharacter(CT_TextCharBullet style)
+        private CT_DashStop stop;
+        public XDDFDashStop(CT_DashStop stop)
         {
-            this.style = style;
+            this.stop = stop;
         }
-        protected CT_TextCharBullet GetXmlObject()
+        protected CT_DashStop GetXmlObject()
         {
-            return style;
-        }
-
-        public string GetCharacter()
-        {
-            return style.@char;
+            return stop;
         }
 
-        public void SetCharacter(string value)
+        public int DashLength
         {
-            style.@char = value;
+            get
+            {
+                return stop.d;
+            }
+            set
+            {
+                stop.d = value;
+            }
+        }
+
+        public int SpaceLength
+        {
+            get
+            {
+                return stop.sp;
+            }
+            set
+            {
+                stop.sp = value;
+            }
         }
     }
 }

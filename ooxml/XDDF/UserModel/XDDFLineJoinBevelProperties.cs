@@ -15,37 +15,27 @@
    limitations under the License.
 ==================================================================== */
 
-
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-
-namespace NPOI.XDDF.UserModel.Text
+namespace NPOI.XDDF.UserModel
 {
-    using NPOI.Util;
     using NPOI.OpenXmlFormats.Dml;
-    public class XDDFBulletStyleCharacter : IXDDFBulletStyle
+    public class XDDFLineJoinBevelProperties : IXDDFLineJoinProperties
     {
-        private CT_TextCharBullet style;
-        protected XDDFBulletStyleCharacter(CT_TextCharBullet style)
-        {
-            this.style = style;
-        }
-        protected CT_TextCharBullet GetXmlObject()
-        {
-            return style;
-        }
+        private CT_LineJoinBevel join;
 
-        public string GetCharacter()
+        public XDDFLineJoinBevelProperties()
+            : this(new CT_LineJoinBevel())
         {
-            return style.@char;
-        }
 
-        public void SetCharacter(string value)
+        }
+        public XDDFLineJoinBevelProperties(CT_LineJoinBevel join)
         {
-            style.@char = value;
+            this.join = join;
+        }
+        public CT_LineJoinBevel GetXmlObject()
+        {
+            return join;
         }
     }
 }
+
+

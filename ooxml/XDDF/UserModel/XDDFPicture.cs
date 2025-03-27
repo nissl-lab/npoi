@@ -33,7 +33,7 @@ namespace NPOI.XDDF.UserModel
         {
             this.blip = blip;
         }
-        public CT_Blip GetXmlobject()
+        public CT_Blip GetXmlObject()
         {
             return blip;
         }

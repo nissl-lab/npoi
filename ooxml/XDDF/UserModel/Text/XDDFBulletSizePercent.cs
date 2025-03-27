@@ -41,7 +41,7 @@ namespace NPOI.XDDF.UserModel.Text
             this.percent = percent;
             this.scale = (scale == null) ? 0.001 : scale.Value * 0.001;
         }
-        protected CT_TextBulletSizePercent GetXmlobject()
+        protected CT_TextBulletSizePercent GetXmlObject()
         {
             return percent;
         }

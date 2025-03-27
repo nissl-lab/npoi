@@ -28,11 +28,11 @@ namespace NPOI.XDDF.UserModel
 
         }
 
-        protected XDDFNoFillProperties(CT_NoFillProperties properties)
+        public XDDFNoFillProperties(CT_NoFillProperties properties)
         {
             this.props = properties;
         }
-        public CT_NoFillProperties GetXmlobject()
+        public CT_NoFillProperties GetXmlObject()
         {
             return props;
         }

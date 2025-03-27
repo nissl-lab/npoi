@@ -41,7 +41,7 @@ namespace NPOI.XDDF.UserModel
         {
             this.props = properties;
         }
-        public CT_SolidColorFillProperties GetXmlobject()
+        public CT_SolidColorFillProperties GetXmlObject()
         {
             return props;
         }
@@ -109,27 +109,27 @@ namespace NPOI.XDDF.UserModel
                 }
                 if(color is XDDFColorHsl)
                 {
-                    props.hslClr = (CT_HslColor) color.GetXmlobject();
+                    props.hslClr = (CT_HslColor) color.GetXmlObject();
                 }
                 else if(color is XDDFColorPreset)
                 {
-                    props.prstClr = (CT_PresetColor) color.GetXmlobject();
+                    props.prstClr = (CT_PresetColor) color.GetXmlObject();
                 }
                 else if(color is XDDFColorSchemeBased)
                 {
-                    props.schemeClr = (CT_SchemeColor) color.GetXmlobject();
+                    props.schemeClr = (CT_SchemeColor) color.GetXmlObject();
                 }
                 else if(color is XDDFColorRgbPercent)
                 {
-                    props.scrgbClr = (CT_ScRgbColor) color.GetXmlobject();
+                    props.scrgbClr = (CT_ScRgbColor) color.GetXmlObject();
                 }
                 else if(color is XDDFColorRgbBinary)
                 {
-                    props.srgbClr = (CT_SRgbColor) color.GetXmlobject();
+                    props.srgbClr = (CT_SRgbColor) color.GetXmlObject();
                 }
                 else if(color is XDDFColorSystemDefined)
                 {
-                    props.sysClr = (CT_SystemColor) color.GetXmlobject();
+                    props.sysClr = (CT_SystemColor) color.GetXmlObject();
                 }
             }
         }
