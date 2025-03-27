@@ -1881,14 +1881,14 @@ namespace NPOI.XWPF.UserModel
         {
             return this;
         }
-        private void FindAndReplaceTextInParagraph(XWPFParagraph paragraph, string oldValue, string newValue)
+        private void FindAndReplaceTextInParagraph(XWPFParagraph paragraph, string oldValue, string newValue, int startPos = 0)
         {
             if(paragraph == null)
                 return;
 
             string paragraphText = string.Concat(paragraph.Runs.Select(p => p.Text));
 
-            var startIndex = paragraphText.IndexOf(oldValue);
+            var startIndex = paragraphText.IndexOf(oldValue, startPos);
             if(startIndex == -1)
                 return;
 
@@ -1945,6 +1945,8 @@ namespace NPOI.XWPF.UserModel
             int removeTo = lastParagraph == -1 ? paragraph.Runs.Count : lastParagraph;
             for(int i = firstParagraph + 1; i < removeTo; i++)
                 paragraph.RemoveRun(firstParagraph + 1);
+
+            FindAndReplaceTextInParagraph(paragraph, oldValue, newValue, startIndex + newValue.Length);
         }
 
         private void FindAndReplaceTextInTable(XWPFTable table, string oldValue, string newValue)

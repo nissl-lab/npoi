@@ -199,7 +199,7 @@ namespace TestCases.XWPF.UserModel
                 {"$STUDENT_FULL$", "Ќа русском с пробелами" },
                 {"$FINALQUALIFYINGWORK_GRADE$", "5" },
                 {"$SIMPLE$", "Last text" },
-
+                {"$DOUBLE$", "Twice" },
             };
 
             //This is calling FindAndReplaceTextInParagraph for each paragraph in document
@@ -218,7 +218,7 @@ namespace TestCases.XWPF.UserModel
             ClassicAssert.AreEqual(initialText, savedText);
 
             //Check
-            ClassicAssert.AreEqual("Some initial text на разный манер (inserted) and so on:Asking1: Question1Asking2: Question2Result on:1. Say that Ќа русском с пробелами with a very long sentence and one more replacer in the end for (русский €зык) sure 5Last text", 
+            ClassicAssert.AreEqual("Some initial text на разный манер (inserted) and so on:Asking1: Question1Asking2: Question2Result on:1. Say that Ќа русском с пробелами with a very long sentence and one more replacer in the end for (русский €зык) sure 5Triple replace with TwiceTwice и ещЄ одним Twice повторением.Last text", 
                 savedText);
         }
 
