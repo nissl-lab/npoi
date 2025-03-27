@@ -277,7 +277,7 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
         {
             if (p == null || p.Count == 0)
                 return string.Empty;
-            // StringBuilder sb = new StringBuilder();
+            
             using(var sb = ZString.CreateStringBuilder())
             {
                 foreach(CT_TextParagraph tp in p)

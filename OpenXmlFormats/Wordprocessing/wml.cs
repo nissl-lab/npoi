@@ -2254,7 +2254,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
             //Check if the current Xml Node contains "<w:cr/>" elements.
             //Each cr element should be replaced with \n
-            // StringBuilder sb = new StringBuilder();
+            
             using(var sb = ZString.CreateStringBuilder())
             {
                 foreach(XmlNode elem in node.ChildNodes)
