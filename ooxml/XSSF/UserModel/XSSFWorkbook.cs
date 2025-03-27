@@ -2462,7 +2462,7 @@ namespace NPOI.XSSF.UserModel
             int imageNumber = 1;
             List<XSSFPictureData> allPics = (List<XSSFPictureData>)GetAllPictures();
 
-            if (allPics.Any())
+            if (allPics.Count > 0)
             {
                 List<int> sortedIndexs = new List<int> { 0 };
 
