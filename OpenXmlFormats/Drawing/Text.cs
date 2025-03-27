@@ -343,7 +343,27 @@ namespace NPOI.OpenXmlFormats.Dml
             sw.Write(">");
             sw.Write(string.Format("</a:{0}>", nodeName));
         }
-    
+
+        public bool IsSetFontScale()
+        {
+            return this.fontScaleField != 100000;
+        }
+
+        public void UnsetFontScale()
+        {
+            this.fontScaleField = 100000;
+        }
+
+        public bool IsSetLnSpcReduction()
+        {
+            return this.lnSpcReductionField != 0;
+        }
+
+        public void UnsetLnSpcReduction()
+        {
+            this.lnSpcReductionField = 0;
+        }
+
         [XmlAttribute]
         [DefaultValue(100000)]
         public int fontScale {
