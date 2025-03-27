@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using NPOI.OpenXml4Net.Util;
 using NPOI.OpenXmlFormats.Vml;
+using Cysharp.Text;
 
 namespace NPOI.OpenXmlFormats.Wordprocessing
 {
@@ -64,7 +65,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 foreach (var item in group.Items)
                 {
                     /*XmlSerializer xmlse = new XmlSerializer(item.GetType());
-                    StringBuilder output = new StringBuilder();
+                    // StringBuilder output = new StringBuilder();
                     XmlWriterSettings settings = new XmlWriterSettings();
 
                     settings.Encoding = Encoding.UTF8;

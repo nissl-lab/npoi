@@ -5,6 +5,7 @@ using System.IO;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
+using Cysharp.Text;
 using NPOI.OpenXml4Net.Util;
 
 namespace NPOI.OpenXmlFormats.Spreadsheet
