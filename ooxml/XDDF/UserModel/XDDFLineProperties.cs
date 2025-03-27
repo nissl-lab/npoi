@@ -25,6 +25,8 @@ using System.Text;
 namespace NPOI.XDDF.UserModel
 {
     using NPOI.OpenXmlFormats.Dml;
+    using System.Linq;
+
     public class XDDFLineProperties
     {
         private CT_LineProperties props;
@@ -163,12 +165,7 @@ namespace NPOI.XDDF.UserModel
         {
             if(props.IsSetCustDash())
             {
-                return Collections.unmodifiableList(props
-                    .CustDash
-                    .DsList
-                    .stream()
-                    .map(ds-> new XDDFDashStop(ds))
-                    .collect(Collectors.ToList()));
+                return props.custDash.ds.Select(x => new XDDFDashStop(x)).ToList();
             }
             else
             {

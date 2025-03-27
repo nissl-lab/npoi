@@ -2186,19 +2186,32 @@ namespace NPOI.OpenXmlFormats.Dml
 
         private CT_PositiveSize2D extField = null;
 
-        private int? rotField = null;
+        private int rotField;
+        private bool rotFieldSpecified;
 
-        private bool? flipHField = null;
+        private bool flipHField;
+        private bool flipHFieldSpecified;
 
-        private bool? flipVField = null;
+        private bool flipVField;
+        private bool flipVFieldSpecified;
         public static CT_Transform2D Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
                 return null;
             CT_Transform2D ctObj = new CT_Transform2D();
-            ctObj.rot = XmlHelper.ReadInt(node.Attributes["rot"]);
-            ctObj.flipH = XmlHelper.ReadBool(node.Attributes["flipH"]);
-            ctObj.flipV = XmlHelper.ReadBool(node.Attributes["flipV"]);
+            
+            ctObj.rotFieldSpecified = node.Attributes["rot"] != null;
+            if(ctObj.rotFieldSpecified)
+                ctObj.rotField = XmlHelper.ReadInt(node.Attributes["rot"]);
+
+            ctObj.flipHFieldSpecified = node.Attributes["flipH"] != null;
+            if(ctObj.flipHFieldSpecified)
+                ctObj.flipH = XmlHelper.ReadBool(node.Attributes["flipH"]);
+
+            ctObj.flipVFieldSpecified = node.Attributes["flipV"] != null;
+            if(ctObj.flipVFieldSpecified)
+                ctObj.flipV = XmlHelper.ReadBool(node.Attributes["flipV"]);
+
             foreach (XmlNode childNode in node.ChildNodes)
             {
                 if (childNode.LocalName == "off")
@@ -2213,9 +2226,12 @@ namespace NPOI.OpenXmlFormats.Dml
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "rot", this.rot);
-            XmlHelper.WriteAttribute(sw, "flipH", this.flipH, false);
-            XmlHelper.WriteAttribute(sw, "flipV", this.flipV,false);
+            if(this.rotFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "rot", this.rot);
+            if(this.flipHFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "flipH", this.flipH, false);
+            if(this.flipVFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "flipV", this.flipV,false);
             sw.Write(">");
             if (this.off != null)
                 this.off.Write(sw, "off");
@@ -2234,6 +2250,26 @@ namespace NPOI.OpenXmlFormats.Dml
         {
             this.offField = new CT_Point2D();
             return this.offField;
+        }
+
+        public bool IsSetOff()
+        {
+            return this.offField != null;
+        }
+
+        public void UnsetOff()
+        {
+            this.offField = null;
+        }
+
+        public bool IsSetExt()
+        {
+            return this.ext != null;
+        }
+
+        public void UnsetExt()
+        {
+            this.ext = null;
         }
 
         [XmlElement(Order = 0)]
@@ -2268,11 +2304,24 @@ namespace NPOI.OpenXmlFormats.Dml
         {
             get
             {
-                return null == this.rotField ? 0 : (int)rotField;
+                return rotField;
             }
             set
             {
                 this.rotField = value;
+            }
+        }
+
+        [XmlIgnore]
+        public bool rotSpecified
+        {
+            get
+            {
+                return rotFieldSpecified;
+            }
+            set
+            {
+                this.rotFieldSpecified = value;
             }
         }
 
@@ -2282,24 +2331,51 @@ namespace NPOI.OpenXmlFormats.Dml
         {
             get
             {
-                return null == this.flipHField ? false : (bool)flipHField;
+                return flipHField;
             }
             set
             {
                 this.flipHField = value;
             }
         }
+
+        [XmlIgnore]
+        public bool flipHSpecified
+        {
+            get
+            {
+                return flipHFieldSpecified;
+            }
+            set
+            {
+                this.flipHFieldSpecified = value;
+            }
+        }
+
         [XmlAttribute]
         [DefaultValue(false)]
         public bool flipV
         {
             get
             {
-                return null == this.flipVField ? false : (bool)flipVField;
+                return flipVField;
             }
             set
             {
                 this.flipVField = value;
+            }
+        }
+
+        [XmlIgnore]
+        public bool flipVSpecified
+        {
+            get
+            {
+                return flipVFieldSpecified;
+            }
+            set
+            {
+                this.flipVFieldSpecified = value;
             }
         }
     }

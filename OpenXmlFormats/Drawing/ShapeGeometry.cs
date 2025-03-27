@@ -947,7 +947,33 @@ namespace NPOI.OpenXmlFormats.Dml
             return avLst;
         }
 
+        public CT_GeomGuide AddNewGd()
+        {
+            CT_GeomGuide obj = new CT_GeomGuide();
+            this.gdField.Add(obj);
+            return obj;
+        }
 
+        public CT_GeomGuide GetGdArray(int index)
+        {
+            if(index<0||index>=this.gdField.Count)
+                throw new IndexOutOfRangeException();
+            return this.gdField[index];
+        }
+
+        public CT_GeomGuide InsertNewGd(int index)
+        {
+            CT_GeomGuide obj = new CT_GeomGuide();
+            this.gdField.Insert(index, obj);
+            return obj;
+        }
+
+        public void RemoveGd(int index)
+        {
+            if(index<0||index>=this.gdField.Count)
+                throw new IndexOutOfRangeException();
+            this.gdField.RemoveAt(index);
+        }
 
         internal void Write(StreamWriter sw, string nodeName)
         {
@@ -2033,7 +2059,10 @@ namespace NPOI.OpenXmlFormats.Dml
             sw.Write(string.Format("</a:{0}>", nodeName));
         }
 
-
+        public bool IsSetAvLst()
+        {
+            return this.avLst != null;
+        }
 
         [XmlElement(Order = 0)]
         public CT_GeomGuideList avLst
