@@ -716,14 +716,14 @@ namespace NPOI
 
         public TValue PutDictionary<TKey, TValue>(Dictionary<TKey, TValue> dict, TKey key, TValue value)
         {
-            TValue oldValue = default(TValue);
-            if (dict.ContainsKey(key))
+            if (dict.TryGetValue(key, out TValue oldValue))
             {
-                oldValue = dict[key];
                 dict[key] = value;
             }
             else
+            {
                 dict.Add(key, value);
+            }
             return oldValue;
         }
 
