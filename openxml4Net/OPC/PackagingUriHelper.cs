@@ -148,7 +148,7 @@ namespace NPOI.OpenXml4Net.OPC
             {
                 if (kind == UriKind.Absolute)
                     throw new UriFormatException();
-                if (kind == UriKind.RelativeOrAbsolute && s.StartsWith("/"))
+                if (kind == UriKind.RelativeOrAbsolute && s.StartsWith('/'))
                     kind = UriKind.Relative;
             }
             return new Uri(s, kind);
@@ -198,7 +198,7 @@ namespace NPOI.OpenXml4Net.OPC
         public static String GetFilenameWithoutExtension(Uri uri)
         {
             String filename = GetFilename(uri);
-            int dotIndex = filename.LastIndexOf(".", StringComparison.Ordinal);
+            int dotIndex = filename.LastIndexOf('.');
             if (dotIndex == -1)
                 return filename;
             return filename.Substring(0, dotIndex);
@@ -474,7 +474,7 @@ namespace NPOI.OpenXml4Net.OPC
                 path = Path.GetDirectoryName(sourcePartUri.OriginalString).Replace("\\", "/");
 
             string targetPath = targetUri.OriginalString;
-            if (targetPath.StartsWith("#"))
+            if (targetPath.StartsWith('#'))
             {
                 path += "/" + Path.GetFileName(sourcePartUri.OriginalString) + targetPath;
             }
@@ -749,10 +749,7 @@ namespace NPOI.OpenXml4Net.OPC
         public static Uri ToUri(String value)
         {
             //5. Convert all back slashes to forward slashes
-            if (value.IndexOf("\\") != -1)
-            {
-                value = value.Replace('\\', '/');
-            }
+            value = value.Replace('\\', '/');
 
             // URI fragemnts (those starting with '#') are not encoded
             // and may contain white spaces and raw unicode characters

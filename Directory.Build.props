@@ -99,8 +99,6 @@
     <NoWarn>$(NoWarn);CA1862</NoWarn> <!-- Prefer the string comparison method overload -->
     <NoWarn>$(NoWarn);CA1864</NoWarn> <!-- To avoid double lookup, call 'TryAdd' instead of calling 'Add' with a 'ContainsKey' -->
     <NoWarn>$(NoWarn);CA1853</NoWarn> <!-- Do not guard 'Dictionary.Remove(key)' with 'Dictionary.ContainsKey(key)' -->
-    <NoWarn>$(NoWarn);CA1865</NoWarn> <!-- Use 'string.EndsWith(char)' instead of 'string.EndsWith(string)' when you have a string with a single char -->
-    <NoWarn>$(NoWarn);CA1866</NoWarn> <!-- Use 'string.IndexOf(char)' instead of 'string.IndexOf(string)' when you have a string with a single char -->
     <NoWarn>$(NoWarn);CA1872</NoWarn> <!-- Prefer 'System.Convert.ToHexString(byte[])' over call chains based on 'System.BitConverter.ToString(byte[])' -->
     <NoWarn>$(NoWarn);CA2019</NoWarn> <!-- 'ThreadStatic' fields should not use inline initialization -->
     <NoWarn>$(NoWarn);CA2022</NoWarn> <!-- Avoid inexact read -->
@@ -109,8 +107,6 @@
     <NoWarn>$(NoWarn);CA2211</NoWarn> <!-- Non-constant fields should not be visible -->
     <NoWarn>$(NoWarn);CA2219</NoWarn> <!-- Do not raise an exception from within a finally clause -->
     <NoWarn>$(NoWarn);CA2241</NoWarn> <!-- Provide correct arguments to formatting methods -->
-    <NoWarn>$(NoWarn);CA2249</NoWarn> <!-- Use 'string.Contains' instead of 'string.IndexOf' -->
-    <NoWarn>$(NoWarn);CA2251</NoWarn> <!-- Use 'string.Equals' instead of comparing the result of 'string.Compare' to 0 -->
     <NoWarn>$(NoWarn);CA2263</NoWarn> <!-- Prefer the generic overload 'System.Enum.GetValues<TEnum>()' instead of 'System.Enum.GetValues(System.Type)' -->
     <NoWarn>$(NoWarn);CA3075</NoWarn> <!-- Unsafe overload of 'LoadXml' method -->
     <NoWarn>$(NoWarn);CA5351</NoWarn> <!-- broken cryptographic algorithm -->

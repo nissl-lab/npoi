@@ -326,8 +326,7 @@ namespace NPOI.SS.UserModel
             //  handle these ourselves in a special way.
             // For now, if we detect 3+ parts, we call out to CellFormat to handle it
             // TODO Going forward, we should really merge the logic between the two classes
-            if (formatStr.IndexOf(';') != -1 &&
-                    formatStr.IndexOf(';') != formatStr.LastIndexOf(';'))
+            if (formatStr.Contains(';') && formatStr.IndexOf(';') != formatStr.LastIndexOf(';'))
             {
                 try
                 {
@@ -466,7 +465,7 @@ namespace NPOI.SS.UserModel
             }
 
             // Excel supports fractions in format strings, which Java doesn't
-            if (formatStr.IndexOf("#/") >= 0 || formatStr.IndexOf("?/") >= 0)
+            if (formatStr.Contains("#/") || formatStr.Contains("?/"))
             {
                 String[] chunks = formatStr.Split(";".ToCharArray());
                 for (int i = 0; i < chunks.Length; i++)
@@ -908,7 +907,7 @@ namespace NPOI.SS.UserModel
             }
             //return numberFormat.Format(d, currentCulture);
             string formatted = numberFormat.Format(d);
-            if (formatted.StartsWith("."))
+            if (formatted.StartsWith('.'))
                 formatted = "0" + formatted;
             if (formatted.StartsWith("-."))
                 formatted = "-0" + formatted.Substring(1);

@@ -98,7 +98,7 @@ namespace NPOI.OpenXml4Net.OPC
 
         public static String GetContentTypeFromFileExtension(String filename)
         {
-            String extension = filename.Substring(filename.LastIndexOf(".") + 1)
+            String extension = filename.Substring(filename.LastIndexOf('.') + 1)
                     .ToLower();
             if (extension.Equals(EXTENSION_JPG_1)
                     || extension.Equals(EXTENSION_JPG_2))

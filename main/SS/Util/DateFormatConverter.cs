@@ -342,8 +342,10 @@ namespace NPOI.SS.Util
             string result = null;
             if (!localePrefixes.TryGetValue(localeString, out string prefix))
             {
-                string name = localeString.IndexOf("-") > 0 ? localeString.Substring(0, localeString.IndexOf("-")) :
-                    localeString;
+                string name = localeString.IndexOf('-') > 0
+                    ? localeString.Substring(0, localeString.IndexOf('-'))
+                    : localeString;
+
                 if (!localePrefixes.TryGetValue(name, out string localePrefix))
                 {
                     CultureInfo parentLocale = CultureInfo.GetCultureInfo(name);
@@ -379,7 +381,7 @@ namespace NPOI.SS.Util
             string token;
             while ((token = tokenizer.GetNextToken()) != null)
             {
-                if (token.StartsWith("'"))
+                if (token.StartsWith('\''))
                 {
                     result.Append(token.Replace("'", "\""));
                 }
