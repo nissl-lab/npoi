@@ -802,10 +802,14 @@ namespace NPOI.XSSF.UserModel
 
         private void PutValuesMapping(string key, XSSFName name)
         {
-            if (namedRangesByName.ContainsKey(key))
-                namedRangesByName[key].Add(name);
+            if(namedRangesByName.TryGetValue(key, out List<XSSFName> value))
+            {
+                value.Add(name);
+            }
             else
-                namedRangesByName.Add(key, new List<XSSFName>() { name });
+            {
+                namedRangesByName.Add(key, [name]);
+            }
         }
 
         private XSSFName CreateAndStoreName(CT_DefinedName ctName)

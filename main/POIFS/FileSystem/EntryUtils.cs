@@ -213,7 +213,7 @@ namespace NPOI.POIFS.FileSystem
             foreach (Entry b in dirB)
             {
                 String bName = b.Name;
-                if (!aSizes.ContainsKey(bName))
+                if (!aSizes.TryGetValue(bName, out int value))
                 {
                     // In B but not A
                     return false;
@@ -228,7 +228,7 @@ namespace NPOI.POIFS.FileSystem
                 {
                     size = ((DocumentNode)b).Size;
                 }
-                if (size != aSizes[(bName)])
+                if (size != value)
                 {
                     // Either the wrong type, or they're different sizes
                     return false;

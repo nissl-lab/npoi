@@ -614,9 +614,9 @@ namespace NPOI.HSSF.Record
                     throw new RecordFormatException(
                         "Unable to determine record types", ArgumentException);
                 }
-                if (result.ContainsKey(sid))
+                if (result.TryGetValue(sid, out I_RecordCreator value))
                 {
-                    Type prevClass = result[sid].GetRecordClass();
+                    Type prevClass = value.GetRecordClass();
                     throw new RuntimeException("duplicate record sid 0x" + sid.ToString("X", CultureInfo.CurrentCulture)
                             + " for classes (" + recClass.Name + ") and (" + prevClass.Name + ")");
                 }

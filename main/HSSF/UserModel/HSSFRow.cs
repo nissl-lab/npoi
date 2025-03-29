@@ -167,7 +167,7 @@ namespace NPOI.HSSF.UserModel
                 throw new Exception("Negative cell indexes not allowed");
             }
             //if (column >= cells.Count || cell != cells[column])
-            if(!cells.ContainsKey(column)|| cell!=cells[column])
+            if(!cells.TryGetValue(column, out ICell value) || cell != value)
             {
                 throw new Exception("Specified cell is not from this row");
             }
@@ -400,12 +400,8 @@ namespace NPOI.HSSF.UserModel
             //    cells = new HSSFCell[newSize];
             //    Array.Copy(oldCells, 0, cells, 0, oldCells.Length);
             //}
-            if (cells.ContainsKey(column))
-            {
-                cells.Remove(column);
-            }
-            cells.Add(column, cell);
-            
+            cells[column] = cell;
+
             // fix up firstCol and lastCol indexes
             if (row.IsEmpty|| column < row.FirstCol)
             {

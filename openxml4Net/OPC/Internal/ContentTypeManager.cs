@@ -269,8 +269,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal
             if (contentType == null)
                 throw new ArgumentException("contentType");
 
-            return (this.defaultContentType.Values.Contains(contentType) || (this.overrideContentType != null && this.overrideContentType
-                    .Values.Contains(contentType)));
+            return defaultContentType.ContainsValue(contentType) || (overrideContentType != null && overrideContentType.ContainsValue(contentType));
         }
 
         /**
