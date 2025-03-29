@@ -60,8 +60,8 @@ namespace TestCases.HSSF.EventUserModel
         {
             ProcessFile("MissingBits.xls");
 
-            ClassicAssert.AreEqual("_(\"$\"* #,##0_);_(\"$\"* (#,##0);_(\"$\"* \"-\"_);_(@_)", listener.GetFormatString(41));
-            ClassicAssert.AreEqual("_(* #,##0_);_(* (#,##0);_(* \"-\"_);_(@_)", listener.GetFormatString(42));
+            ClassicAssert.AreEqual("_(* #,##0_);_(* (#,##0);_(* \"-\"_);_(@_)", listener.GetFormatString(41));
+            ClassicAssert.AreEqual("_(\"$\"* #,##0_);_(\"$\"* (#,##0);_(\"$\"* \"-\"_);_(@_)", listener.GetFormatString(42));
             ClassicAssert.AreEqual("_(* #,##0.00_);_(* (#,##0.00);_(* \"-\"??_);_(@_)", listener.GetFormatString(43));
             ClassicAssert.AreEqual("_(\"$\"* #,##0.00_);_(\"$\"* (#,##0.00);_(\"$\"* \"-\"??_);_(@_)", listener.GetFormatString(44));
         }
