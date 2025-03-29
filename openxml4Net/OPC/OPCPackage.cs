@@ -540,7 +540,7 @@ namespace NPOI.OpenXml4Net.OPC
             catch (InvalidFormatException)
             {
                 String partName = "/docProps/thumbnail" +
-                         filename.Substring(filename.LastIndexOf(".") + 1);
+                         filename.Substring(filename.LastIndexOf('.') + 1);
                 try
                 {
                     thumbnailPartName = PackagingUriHelper.CreatePartName(partName);

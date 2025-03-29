@@ -329,15 +329,15 @@ namespace NPOI.SS.Formula.Functions
             if (condition is StringEval eval) {
                 String conditionString = eval.StringValue;
 
-                if (conditionString.StartsWith("<"))
+                if (conditionString.StartsWith('<'))
                 { // It's a </<= condition.
                     String number = conditionString.Substring(1);
-                    if(number.StartsWith("="))
+                    if(number.StartsWith('='))
                     {
                         number = number.Substring(1);
                         return testNumericCondition(value, Operator.smallerEqualThan, number);
                     }
-                    else if(number.StartsWith(">"))
+                    else if(number.StartsWith('>'))
                     {
                         number = number.Substring(1);
                         bool itsANumber = IsNumber(number);
@@ -355,10 +355,10 @@ namespace NPOI.SS.Formula.Functions
                         return testNumericCondition(value, Operator.smallerThan, number);
                     }
                 }
-                else if (conditionString.StartsWith(">"))
+                else if (conditionString.StartsWith('>'))
                 { // It's a >/>= condition.
                     String number = conditionString.Substring(1);
-                    if (number.StartsWith("="))
+                    if (number.StartsWith('='))
                     {
                         number = number.Substring(1);
                         return testNumericCondition(value, Operator.largerEqualThan, number);
@@ -368,7 +368,7 @@ namespace NPOI.SS.Formula.Functions
                         return testNumericCondition(value, Operator.largerThan, number);
                     }
                 }
-                else if (conditionString.StartsWith("="))
+                else if (conditionString.StartsWith('='))
                 { // It's a = condition.
                     String stringOrNumber = conditionString.Substring(1);
 

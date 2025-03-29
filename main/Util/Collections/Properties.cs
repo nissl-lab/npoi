@@ -153,7 +153,7 @@ namespace NPOI.Util.Collections
                     int len = line.Length;
                     int keyStart;
                     for (keyStart=0; keyStart<len; keyStart++)
-                        if (whiteSpaceChars.IndexOf(line[keyStart]) == -1)
+                        if (!whiteSpaceChars.Contains(line[keyStart]))
                             break;
 
                     // Blank lines are ignored
@@ -171,7 +171,7 @@ namespace NPOI.Util.Collections
                             // Advance beyond whitespace on new line
                             int startIndex;
                             for (startIndex=0; startIndex<nextLine.Length; startIndex++)
-                                if (whiteSpaceChars.IndexOf(nextLine[startIndex]) == -1)
+                                if (!whiteSpaceChars.Contains(nextLine[startIndex]))
                                     break;
                             nextLine = nextLine.Substring(startIndex,nextLine.Length - startIndex);
                             line = loppedLine+nextLine;
@@ -184,24 +184,24 @@ namespace NPOI.Util.Collections
                             char currentChar = line[separatorIndex];
                             if (currentChar == '\\')
                                 separatorIndex++;
-                            else if (keyValueSeparators.IndexOf(currentChar) != -1)
+                            else if (keyValueSeparators.Contains(currentChar))
                                 break;
                         }
 
                         // Skip over whitespace after key if any
                         int valueIndex;
                         for (valueIndex=separatorIndex; valueIndex<len; valueIndex++)
-                            if (whiteSpaceChars.IndexOf(line[valueIndex]) == -1)
+                            if (!whiteSpaceChars.Contains(line[valueIndex]))
                                 break;
 
                         // Skip over one non whitespace key value separators if any
                         if (valueIndex < len)
-                            if (strictKeyValueSeparators.IndexOf(line[valueIndex]) != -1)
+                            if (strictKeyValueSeparators.Contains(line[valueIndex]))
                                 valueIndex++;
 
                         // Skip over white space after other separators if any
                         while (valueIndex < len) {
-                            if (whiteSpaceChars.IndexOf(line[valueIndex]) == -1)
+                            if (!whiteSpaceChars.Contains(line[valueIndex]))
                                 break;
                             valueIndex++;
                         }

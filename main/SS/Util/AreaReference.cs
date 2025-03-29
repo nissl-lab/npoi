@@ -268,7 +268,7 @@ namespace NPOI.SS.Util
             }
 
             // Check for the , as a sign of non-coniguous
-            if (reference.IndexOf(',') == -1)
+            if (!reference.Contains(','))
             {
                 return true;
             }
@@ -494,7 +494,7 @@ namespace NPOI.SS.Util
 
             String partA = reference.Substring(0, delimiterPos);
             String partB = reference.Substring(delimiterPos + 1);
-            if (partB.IndexOf(SHEET_NAME_DELIMITER) >= 0)
+            if (partB.Contains(SHEET_NAME_DELIMITER))
             {
                 // TODO - are references like "Sheet1!A1:Sheet1:B2" ever valid?  
                 // FormulaParser has code to handle that.

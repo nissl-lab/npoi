@@ -160,7 +160,7 @@ namespace NPOI.XSSF.UserModel
                 {
                     String style = _vmlShape.style;
                     if (style != null)
-                        visible = style.IndexOf("visibility:visible") != -1;
+                        visible = style.Contains("visibility:visible");
                     else
                     {
                         if (_vmlShape.GetClientDataArray(0) == null)

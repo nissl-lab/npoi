@@ -95,7 +95,7 @@ namespace NPOI.XSSF.UserModel
                     if(pr != null && pr.SizeOfRFontArray() > 0)
                     {
                         String fontName = pr.GetRFontArray(0).val;
-                        if(fontName.StartsWith("#"))
+                        if(fontName.StartsWith('#'))
                         {
                             int idx = int.Parse(fontName.Substring(1));
                             XSSFFont font = styles.GetFontAt(idx);

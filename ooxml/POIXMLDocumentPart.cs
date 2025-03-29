@@ -769,7 +769,7 @@ namespace NPOI
                     // check for internal references (e.g. '#Sheet1!A1')
                     PackagePartName relName;
                     //if (uri.getRawFragment() != null)
-                    if (uri.OriginalString.IndexOf('#') >= 0)
+                    if (uri.OriginalString.Contains('#'))
                     {
                         string path = string.Empty;
                         try

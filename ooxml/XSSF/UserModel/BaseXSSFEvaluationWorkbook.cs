@@ -80,7 +80,7 @@ namespace NPOI.XSSF.UserModel
         private int ResolveBookIndex(String bookName)
         {
             // Strip the [] wrapper, if still present
-            if (bookName.StartsWith("[") && bookName.EndsWith("]"))
+            if (bookName.StartsWith('[') && bookName.EndsWith(']'))
             {
                 bookName = bookName.Substring(1, bookName.Length - 2);
             }
@@ -98,7 +98,7 @@ namespace NPOI.XSSF.UserModel
             if (index != -1) return index;
 
             // Is it an absolute file reference?
-            if (bookName.StartsWith("'file:///") && bookName.EndsWith("'"))
+            if (bookName.StartsWith("'file:///") && bookName.EndsWith('\''))
             {
                 String relBookName = bookName.Substring(bookName.LastIndexOf('/') + 1);
                 relBookName = relBookName.Substring(0, relBookName.Length - 1); // Trailing '

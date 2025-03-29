@@ -353,7 +353,7 @@ namespace NPOI.XSSF.UserModel
             // Strip the sheet name,
             // CTWorksheet.getTableParts defines in which sheet the table is
             String reference = refs.FormatAsString();
-            if (reference.IndexOf('!') != -1)
+            if (reference.Contains('!'))
             {
                 reference = reference.Substring(reference.IndexOf('!') + 1);
             }

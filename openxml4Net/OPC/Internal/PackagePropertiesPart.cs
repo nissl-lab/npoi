@@ -580,7 +580,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal
                     }
                 }
             }
-            dateTzStr = dateStr.EndsWith("Z") ? dateStr : (dateStr + "Z");
+            dateTzStr = dateStr.EndsWith('Z') ? dateStr : (dateStr + "Z");
             foreach (String fStr in DATE_FORMATS)
             {
                 SimpleDateFormat df = new SimpleDateFormat(fStr);

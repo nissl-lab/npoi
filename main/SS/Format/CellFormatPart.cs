@@ -610,7 +610,7 @@ namespace NPOI.SS.Format
         }
         public static String QuoteReplacement(String s)
         {
-            if ((s.IndexOf('\\') == -1) && (s.IndexOf('$') == -1))
+            if (!s.Contains('\\') && !s.Contains('$'))
                 return s;
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < s.Length; i++)

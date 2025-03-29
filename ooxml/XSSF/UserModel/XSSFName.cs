@@ -399,7 +399,7 @@ namespace NPOI.XSSF.UserModel
             // is first character valid?
             char c = name[0];
             string allowedSymbols = "_\\";
-            bool characterIsValid = (char.IsLetter(c) || allowedSymbols.IndexOf(c) != -1);
+            bool characterIsValid = (char.IsLetter(c) || allowedSymbols.Contains(c));
             if (!characterIsValid)
             {
                 throw new ArgumentException("Invalid name: '" + name + "': first character must be underscore or a letter");
@@ -409,7 +409,7 @@ namespace NPOI.XSSF.UserModel
             allowedSymbols = "_.\\"; //backslashes needed for unicode escape
             foreach (char ch in name.ToCharArray())
             {
-                characterIsValid = (char.IsLetterOrDigit(ch) || allowedSymbols.IndexOf(ch) != -1);
+                characterIsValid = (char.IsLetterOrDigit(ch) || allowedSymbols.Contains(ch));
                 if (!characterIsValid)
                 {
                     throw new ArgumentException("Invalid name: '" + name + "': name must be letter, digit, period, or underscore");

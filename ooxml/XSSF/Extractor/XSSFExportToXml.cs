@@ -353,7 +353,7 @@ namespace NPOI.XSSF.Extractor
                 String axisName = RemoveNamespace(xpathTokens[i]);
 
 
-                if (!axisName.StartsWith("@"))
+                if (!axisName.StartsWith('@'))
                 {
 
                     XmlNodeList list = currentNode.ChildNodes;

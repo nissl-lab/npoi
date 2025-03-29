@@ -782,7 +782,7 @@ namespace NPOI.SS.Format
 
             // (2) Determine the result's sign.
             string tmp = result.ToString();
-            int ePos = tmp.IndexOf("E");// fractionPos.EndIndex;
+            int ePos = tmp.IndexOf('E');// fractionPos.EndIndex;
             int signPos = ePos + 1;
             char expSignRes = result[signPos];
 
@@ -941,11 +941,11 @@ namespace NPOI.SS.Format
                 bool ShowCommas)
         {
 
-            int pos = result.ToString().IndexOf(".") - 1;
+            int pos = result.ToString().IndexOf('.') - 1;
             if (pos < 0)
             {
                 if (exponent != null && numSpecials == integerSpecials)
-                    pos = result.ToString().IndexOf("E") - 1;
+                    pos = result.ToString().IndexOf('E') - 1;
                 else
                     pos = result.Length - 1;
             }
@@ -1017,9 +1017,10 @@ namespace NPOI.SS.Format
             int strip;
             if (fractionalSpecials.Count > 0)
             {
-                digit = result.ToString().IndexOf(".") + 1;
+                string resultString = result.ToString();
+                digit = resultString.IndexOf('.') + 1;
                 if (exponent != null)
-                    strip = result.ToString().IndexOf("E") - 1;
+                    strip = resultString.IndexOf('E') - 1;
                 else
                     strip = result.Length - 1;
                 while (strip > digit && result[strip] == '0')
