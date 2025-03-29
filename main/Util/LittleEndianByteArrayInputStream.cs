@@ -20,7 +20,7 @@ namespace NPOI.Util
     using System;
 
     /// <summary>
-    /// Adapts a plain byte array to <see cref="T:NPOI.Util.ILittleEndianInput"/>
+    /// Adapts a plain byte array to <see cref="NPOI.Util.ILittleEndianInput"/>
     /// </summary>
     /// <remarks>@author Josh Micich</remarks>
     public class LittleEndianByteArrayInputStream : ILittleEndianInput

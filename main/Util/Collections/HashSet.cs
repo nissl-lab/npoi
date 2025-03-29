@@ -71,25 +71,25 @@ namespace NPOI.Util.Collections
 		}
 
         /// <summary>
-        /// Copies the elements of the <see cref="T:System.Collections.ICollection"/> to an <see cref="T:System.Array"/>, starting at a particular <see cref="T:System.Array"/> index.
+        /// Copies the elements of the <see cref="System.Collections.ICollection"/> to an <see cref="System.Array"/>, starting at a particular <see cref="System.Array"/> index.
         /// </summary>
-        /// <param name="array">The one-dimensional <see cref="T:System.Array"/> that is the destination of the elements copied from <see cref="T:System.Collections.ICollection"/>. The <see cref="T:System.Array"/> must have zero-based indexing.</param>
+        /// <param name="array">The one-dimensional <see cref="System.Array"/> that is the destination of the elements copied from <see cref="System.Collections.ICollection"/>. The <see cref="System.Array"/> must have zero-based indexing.</param>
         /// <param name="index">The zero-based index in <paramref name="array"/> at which copying begins.</param>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="System.ArgumentNullException">
         /// 	<paramref name="array"/> is null.
         /// </exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="System.ArgumentOutOfRangeException">
         /// 	<paramref name="index"/> is less than zero.
         /// </exception>
-        /// <exception cref="T:System.ArgumentException">
+        /// <exception cref="System.ArgumentException">
         /// 	<paramref name="array"/> is multidimensional.
         /// -or-
         /// <paramref name="index"/> is equal to or greater than the length of <paramref name="array"/>.
         /// -or-
-        /// The number of elements in the source <see cref="T:System.Collections.ICollection"/> is greater than the available space from <paramref name="index"/> to the end of the destination <paramref name="array"/>.
+        /// The number of elements in the source <see cref="System.Collections.ICollection"/> is greater than the available space from <paramref name="index"/> to the end of the destination <paramref name="array"/>.
         /// </exception>
-        /// <exception cref="T:System.ArgumentException">
-        /// The type of the source <see cref="T:System.Collections.ICollection"/> cannot be cast automatically to the type of the destination <paramref name="array"/>.
+        /// <exception cref="System.ArgumentException">
+        /// The type of the source <see cref="System.Collections.ICollection"/> cannot be cast automatically to the type of the destination <paramref name="array"/>.
         /// </exception>
 		public void CopyTo(T[] array, int index)
 		{
@@ -97,11 +97,11 @@ namespace NPOI.Util.Collections
 		}
 
         /// <summary>
-        /// Gets the number of elements contained in the <see cref="T:System.Collections.ICollection"/>.
+        /// Gets the number of elements contained in the <see cref="System.Collections.ICollection"/>.
         /// </summary>
         /// <value></value>
         /// <returns>
-        /// The number of elements contained in the <see cref="T:System.Collections.ICollection"/>.
+        /// The number of elements contained in the <see cref="System.Collections.ICollection"/>.
         /// </returns>
 		public int Count
 		{
@@ -112,7 +112,7 @@ namespace NPOI.Util.Collections
         /// Returns an enumerator that iterates through a collection.
         /// </summary>
         /// <returns>
-        /// An <see cref="T:System.Collections.IEnumerator"/> object that can be used to iterate through the collection.
+        /// An <see cref="System.Collections.IEnumerator"/> object that can be used to iterate through the collection.
         /// </returns>
 		public IEnumerator<T> GetEnumerator()
 		{
