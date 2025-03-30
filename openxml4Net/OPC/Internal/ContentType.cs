@@ -257,7 +257,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal
         public String[] GetParameterKeys()
         {
             if (parameters == null)
-                return Array.Empty<String>();
+                return [];
             List<string> keys = new List<string>();
             keys.AddRange(parameters.Keys);
             return keys.ToArray();

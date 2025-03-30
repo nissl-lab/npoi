@@ -49,7 +49,7 @@ namespace NPOI.POIFS.FileSystem
         /// </summary>
         public POIFSDocumentPath()
         {
-            this.components = Array.Empty<string>();
+            this.components = [];
         }
         /// <summary>
         /// constructor for the path of a document that is not in the root
@@ -71,7 +71,7 @@ namespace NPOI.POIFS.FileSystem
         {
             if (components == null)
             {
-                this.components = Array.Empty<string>();
+                this.components = [];
             }
             else
             {

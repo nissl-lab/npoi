@@ -554,7 +554,7 @@ namespace NPOI.POIFS.FileSystem
         {
             get
             {
-                return Array.Empty<Object>();
+                return [];
             }
         }
 
