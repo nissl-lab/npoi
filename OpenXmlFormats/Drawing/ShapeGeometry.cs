@@ -1104,16 +1104,22 @@ namespace NPOI.OpenXmlFormats.Dml
         private CT_AdjPoint2D posField;
 
         private string gdRefXField;
+        private bool gdRefXFieldSpecified;
 
         private string minXField;
+        private bool minXFieldSpecified;
 
         private string maxXField;
+        private bool maxXFieldSpecified;
 
         private string gdRefYField;
+        private bool gdRefYFieldSpecified;
 
         private string minYField;
+        private bool minYFieldSpecified;
 
         private string maxYField;
+        private bool maxYFieldSpecified;
 
         [XmlElement(Order = 0)]
         public CT_AdjPoint2D pos
@@ -1138,10 +1144,23 @@ namespace NPOI.OpenXmlFormats.Dml
             }
             set
             {
+                this.gdRefXFieldSpecified = true;
                 this.gdRefXField = value;
             }
         }
 
+        [XmlIgnore]
+        public bool gdRefXSpecified
+        {
+            get 
+            {
+                return this.gdRefXFieldSpecified;
+            }
+            set
+            {
+                this.gdRefXFieldSpecified = value;
+            }
+        }
 
         [XmlAttribute]
         public string minX
@@ -1152,10 +1171,23 @@ namespace NPOI.OpenXmlFormats.Dml
             }
             set
             {
+                this.minXFieldSpecified = true;
                 this.minXField = value;
             }
         }
 
+        [XmlIgnore]
+        public bool minXSpecified
+        {
+            get
+            {
+                return this.minXFieldSpecified;
+            }
+            set
+            {
+                this.minXFieldSpecified = value;
+            }
+        }
 
         [XmlAttribute]
         public string maxX
@@ -1166,7 +1198,21 @@ namespace NPOI.OpenXmlFormats.Dml
             }
             set
             {
+                this.maxXFieldSpecified = true;
                 this.maxXField = value;
+            }
+        }
+
+        [XmlIgnore]
+        public bool maxXSpecified
+        {
+            get
+            {
+                return this.maxXFieldSpecified;
+            }
+            set
+            {
+                this.maxXFieldSpecified = value;
             }
         }
 
@@ -1184,6 +1230,19 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlIgnore]
+        public bool gdRefYSpecified
+        {
+            get 
+            {
+                return this.gdRefYFieldSpecified;
+            }
+            set
+            {
+                this.gdRefYFieldSpecified = value;
+            }
+        }
+
 
         [XmlAttribute]
         public string minY
@@ -1198,6 +1257,18 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        [XmlIgnore]
+        public bool minYSpecified
+        {
+            get
+            {
+                return this.minYFieldSpecified;
+            }
+            set
+            {
+                this.minYFieldSpecified = value;
+            }
+        }
 
         [XmlAttribute]
         public string maxY
@@ -1208,7 +1279,93 @@ namespace NPOI.OpenXmlFormats.Dml
             }
             set
             {
+                this.maxYFieldSpecified = true;
                 this.maxYField = value;
+            }
+        }
+
+        [XmlIgnore]
+        public bool maxYSpecified
+        {
+            get
+            {
+                return this.maxYFieldSpecified;
+            }
+            set
+            {
+                this.maxYFieldSpecified = value;
+            }
+        }
+        
+        internal static CT_XYAdjustHandle Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_XYAdjustHandle ctObj = new CT_XYAdjustHandle();
+
+            ctObj.gdRefXFieldSpecified = node.Attributes["gdRefX"] != null;
+            if(ctObj.gdRefXFieldSpecified)
+                ctObj.gdRefXField = XmlHelper.ReadString(node.Attributes["gdRefX"]);
+
+            ctObj.minXFieldSpecified = node.Attributes["minX"] != null;
+            if(ctObj.minXFieldSpecified)
+                ctObj.minXField = XmlHelper.ReadString(node.Attributes["minX"]);
+
+            ctObj.maxXFieldSpecified = node.Attributes["maxX"] != null;
+            if(ctObj.maxXFieldSpecified)
+                ctObj.maxXField = XmlHelper.ReadString(node.Attributes["maxX"]);
+
+            ctObj.gdRefYFieldSpecified = node.Attributes["gdRefY"] != null;
+            if(ctObj.gdRefYFieldSpecified)
+                ctObj.gdRefYField = XmlHelper.ReadString(node.Attributes["gdRefY"]);
+
+            ctObj.minYFieldSpecified = node.Attributes["minY"] != null;
+            if(ctObj.minYFieldSpecified)
+                ctObj.minYField = XmlHelper.ReadString(node.Attributes["minY"]);
+
+            ctObj.maxYFieldSpecified = node.Attributes["maxY"] != null;
+            if(ctObj.maxYFieldSpecified)
+                ctObj.maxYField = XmlHelper.ReadString(node.Attributes["maxY"]);
+
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if(childNode.LocalName == "pos")
+                    ctObj.posField = CT_AdjPoint2D.Parse(node, namespaceManager);
+            }
+            
+            return ctObj;
+        }
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<a:{0}", nodeName));
+            if(this.gdRefXFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "gdRefX", this.gdRefXField);
+
+            if(this.minXFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "minX", this.minXFieldSpecified);
+
+            if(this.maxXFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "maxX", this.maxXFieldSpecified);
+            
+            if(this.gdRefYFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "gdRefY", this.gdRefYField);
+
+            if(this.minYFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "minY", this.minYFieldSpecified);
+
+            if(this.maxYFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "maxY", this.maxYFieldSpecified);
+
+            if(this.posField == null)
+            {
+                sw.Write("/>");
+            }
+            else
+            {
+                sw.Write(">");
+                posField.Write(sw, "pos");
+                sw.Write("</a:{0}", nodeName);
             }
         }
     }
@@ -1225,16 +1382,22 @@ namespace NPOI.OpenXmlFormats.Dml
         private CT_AdjPoint2D posField;
 
         private string gdRefRField;
+        private bool gdRefRFieldSpecified;
 
         private string minRField;
+        private bool minRFieldSpecified;
 
         private string maxRField;
+        private bool maxRFieldSpecified;
 
         private string gdRefAngField;
+        private bool gdRefAngFieldSpecified;
 
         private string minAngField;
+        private bool minAngFieldSpecified;
 
         private string maxAngField;
+        private bool maxAngFieldSpecified;
 
         [XmlElement(Order = 0)]
         public CT_AdjPoint2D pos
@@ -1259,10 +1422,23 @@ namespace NPOI.OpenXmlFormats.Dml
             }
             set
             {
+                this.gdRefRFieldSpecified = true;
                 this.gdRefRField = value;
             }
         }
 
+        [XmlIgnore]
+        public bool gdRefRSpecified
+        {
+            get 
+            {
+                return this.gdRefRFieldSpecified;
+            }
+            set
+            {
+                this.gdRefRFieldSpecified = value;
+            }
+        }
 
         [XmlAttribute]
         public string minR
@@ -1273,7 +1449,21 @@ namespace NPOI.OpenXmlFormats.Dml
             }
             set
             {
+                this.minRFieldSpecified = true;
                 this.minRField = value;
+            }
+        }
+
+        [XmlIgnore]
+        public bool minRSpecified
+        {
+            get
+            {
+                return this.minRFieldSpecified;
+            }
+            set
+            {
+                this.minRFieldSpecified = value;
             }
         }
 
@@ -1287,10 +1477,24 @@ namespace NPOI.OpenXmlFormats.Dml
             }
             set
             {
+                this.maxRFieldSpecified = true;
                 this.maxRField = value;
             }
         }
 
+
+        [XmlIgnore]
+        public bool maxRSpecified
+        {
+            get
+            {
+                return this.maxRFieldSpecified;
+            }
+            set
+            {
+                this.maxRFieldSpecified = value;
+            }
+        }
 
         [XmlAttribute(DataType = "token")]
         public string gdRefAng
@@ -1301,10 +1505,23 @@ namespace NPOI.OpenXmlFormats.Dml
             }
             set
             {
+                this.gdRefAngFieldSpecified = true;
                 this.gdRefAngField = value;
             }
         }
 
+        [XmlIgnore]
+        public bool gdRefAngSpecified
+        {
+            get 
+            {
+                return this.gdRefAngFieldSpecified;
+            }
+            set
+            {
+                this.gdRefAngFieldSpecified = value;
+            }
+        }
 
         [XmlAttribute]
         public string minAng
@@ -1315,10 +1532,23 @@ namespace NPOI.OpenXmlFormats.Dml
             }
             set
             {
+                this.minAngFieldSpecified = true;
                 this.minAngField = value;
             }
         }
 
+        [XmlIgnore]
+        public bool minAngSpecified
+        {
+            get
+            {
+                return this.minAngFieldSpecified;
+            }
+            set
+            {
+                this.minAngFieldSpecified = value;
+            }
+        }
 
         [XmlAttribute]
         public string maxAng
@@ -1329,7 +1559,93 @@ namespace NPOI.OpenXmlFormats.Dml
             }
             set
             {
+                this.maxAngFieldSpecified = true;
                 this.maxAngField = value;
+            }
+        }
+
+        [XmlIgnore]
+        public bool maxAngSpecified
+        {
+            get
+            {
+                return this.maxAngFieldSpecified;
+            }
+            set
+            {
+                this.maxAngFieldSpecified = value;
+            }
+        }
+
+        internal static object Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_PolarAdjustHandle ctObj = new CT_PolarAdjustHandle();
+
+            ctObj.gdRefRFieldSpecified = node.Attributes["gdRefR"] != null;
+            if(ctObj.gdRefRFieldSpecified)
+                ctObj.gdRefRField = XmlHelper.ReadString(node.Attributes["gdRefR"]);
+
+            ctObj.minRFieldSpecified = node.Attributes["minR"] != null;
+            if(ctObj.minRFieldSpecified)
+                ctObj.minRField = XmlHelper.ReadString(node.Attributes["minR"]);
+
+            ctObj.maxRFieldSpecified = node.Attributes["maxR"] != null;
+            if(ctObj.maxRFieldSpecified)
+                ctObj.maxRField = XmlHelper.ReadString(node.Attributes["maxR"]);
+
+            ctObj.gdRefAngFieldSpecified = node.Attributes["gdRefAng"] != null;
+            if(ctObj.gdRefAngFieldSpecified)
+                ctObj.gdRefAngField = XmlHelper.ReadString(node.Attributes["gdRefAng"]);
+
+            ctObj.minAngFieldSpecified = node.Attributes["minAng"] != null;
+            if(ctObj.minAngFieldSpecified)
+                ctObj.minAngField = XmlHelper.ReadString(node.Attributes["minAng"]);
+
+            ctObj.maxAngFieldSpecified = node.Attributes["maxAng"] != null;
+            if(ctObj.maxAngFieldSpecified)
+                ctObj.maxAngField = XmlHelper.ReadString(node.Attributes["maxAng"]);
+
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if(childNode.LocalName == "pos")
+                    ctObj.posField = CT_AdjPoint2D.Parse(node, namespaceManager);
+            }
+            
+            return ctObj;
+        }
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<a:{0}", nodeName));
+            if(this.gdRefRFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "gdRefR", this.gdRefRField);
+
+            if(this.minRFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "minR", this.minRFieldSpecified);
+
+            if(this.maxRFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "maxX", this.maxRFieldSpecified);
+            
+            if(this.gdRefAngFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "gdRefAng", this.gdRefAngField);
+
+            if(this.minAngFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "minAng", this.minAngFieldSpecified);
+
+            if(this.maxAngFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "maxAng", this.maxAngFieldSpecified);
+
+            if(this.posField == null)
+            {
+                sw.Write("/>");
+            }
+            else
+            {
+                sw.Write(">");
+                posField.Write(sw, "pos");
+                sw.Write("</a:{0}", nodeName);
             }
         }
     }
@@ -1409,12 +1725,12 @@ namespace NPOI.OpenXmlFormats.Dml
     public class CT_AdjustHandleList
     {
 
-        private object[] itemsField;
+        private List<object> itemsField;
 
 
         [XmlElement("ahPolar", typeof(CT_PolarAdjustHandle), Order = 0)]
         [XmlElement("ahXY", typeof(CT_XYAdjustHandle), Order = 0)]
-        public object[] Items
+        public List<object> Items
         {
             get
             {
@@ -1424,6 +1740,110 @@ namespace NPOI.OpenXmlFormats.Dml
             {
                 this.itemsField = value;
             }
+        }
+
+        internal static CT_AdjustHandleList Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            CT_AdjustHandleList ctObj = new CT_AdjustHandleList();
+            ctObj.itemsField = new List<object>();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.LocalName == "ahXY")
+                    ctObj.itemsField.Add(CT_XYAdjustHandle.Parse(childNode, namespaceManager));
+                else if (childNode.LocalName == "ahPolar") 
+                    ctObj.itemsField.Add(CT_PolarAdjustHandle.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+        public CT_PolarAdjustHandle AddNewAhPolar()
+        {
+            var obj = new CT_PolarAdjustHandle();
+            this.itemsField.Add(obj);
+            return (obj);
+        }
+
+        public CT_XYAdjustHandle AddNewAhXY()
+        {
+            var obj = new CT_XYAdjustHandle();
+            this.itemsField.Add(obj);
+            return (obj);
+        }
+
+        public CT_PolarAdjustHandle GetAhPolarArray(int index)
+        {
+            if(index<0||index>=this.itemsField.Count)
+                throw new IndexOutOfRangeException();
+            return this.itemsField[index] as CT_PolarAdjustHandle;
+        }
+
+        public IEnumerable<CT_PolarAdjustHandle> GetAhPolarList()
+        {
+            foreach(var item in this.itemsField)
+            {
+                if(item is CT_PolarAdjustHandle)
+                    yield return item as CT_PolarAdjustHandle;
+            }
+        }
+
+        public CT_XYAdjustHandle GetAhXYArray(int index)
+        {
+            if(index<0||index>=this.itemsField.Count)
+                throw new IndexOutOfRangeException();
+            return this.itemsField[index] as CT_XYAdjustHandle;
+        }
+
+        public IEnumerable<CT_XYAdjustHandle> GetAhXYList()
+        {
+            foreach(var item in this.itemsField)
+            {
+                if(item is CT_XYAdjustHandle)
+                    yield return item as CT_XYAdjustHandle;
+            }
+        }
+        public CT_PolarAdjustHandle InsertNewAhPolar(int index)
+        {
+            var obj = new CT_PolarAdjustHandle();
+            this.itemsField.Insert(index, obj);
+            return (obj);
+        }
+
+        public CT_XYAdjustHandle InsertNewAhXY(int index)
+        {
+            var obj = new CT_XYAdjustHandle();
+            this.itemsField.Insert(index, obj);
+            return (obj);
+        }
+
+        public void RemoveAhPolar(int index)
+        {
+            if(index<0||index>=this.itemsField.Count)
+                throw new IndexOutOfRangeException();
+            this.itemsField.RemoveAt(index);
+        }
+
+        public void RemoveAhXY(int index)
+        {
+            if(index<0||index>=this.itemsField.Count)
+                throw new IndexOutOfRangeException();
+            this.itemsField.RemoveAt(index);
+        }
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write("<a:{0}>", nodeName);
+            foreach (object obj in Items) {
+                if(obj is CT_PolarAdjustHandle polar)
+                {
+                    polar.Write(sw, "ahPolar");
+                }
+                else if(obj is CT_XYAdjustHandle xy) 
+                {
+                    xy.Write(sw, "ahXY");
+                }
+            }
+            sw.Write("</a:{0}>", nodeName);
+
         }
     }
 
@@ -1463,7 +1883,33 @@ namespace NPOI.OpenXmlFormats.Dml
             return cxnLst;
         }
 
+        public CT_ConnectionSite AddNewCxn()
+        {
+            var obj = new CT_ConnectionSite();
+            this.cxnField.Add(obj);
+            return obj;
+        }
 
+        public CT_ConnectionSite GetCxnArray(int index)
+        {
+            if(index<=0||index>=this.cxnField.Count)
+                throw new IndexOutOfRangeException();
+            return this.cxnField[index];
+        }
+
+        public CT_ConnectionSite InsertNewCxn(int index)
+        {
+            var obj = new CT_ConnectionSite();
+            this.cxnField.Insert(index, obj);
+            return obj;
+        }
+
+        public void RemoveCxn(int index)
+        {
+            if(index<=0||index>=this.cxnField.Count)
+                throw new IndexOutOfRangeException();
+            this.cxnField.RemoveAt(index);
+        }
 
         internal void Write(StreamWriter sw, string nodeName)
         {
@@ -1989,7 +2435,37 @@ namespace NPOI.OpenXmlFormats.Dml
             return pathList;
         }
 
+        public CT_Path2D AddNewPath()
+        {
+            if(this.pathField == null)
+                this.pathField = new List<CT_Path2D>();
+            var p = new CT_Path2D();
+            this.pathField.Add(p);
+            return p;
+        }
 
+        public CT_Path2D GetPathArray(int index)
+        {
+            if(index < 0 && index >= this.pathField.Count)
+                throw new IndexOutOfRangeException();
+            return this.pathField[index];
+        }
+
+        public CT_Path2D InsertNewPath(int index)
+        {
+            if(this.pathField == null)
+                this.pathField = new List<CT_Path2D>();
+            var p = new CT_Path2D();
+            this.pathField.Insert(index, p);
+            return p;
+        }
+
+        public void RemovePath(int index)
+        {
+            if(index < 0 && index >= this.pathField.Count)
+                throw new IndexOutOfRangeException();
+            this.pathField.RemoveAt(index);
+        }
 
         internal void Write(StreamWriter sw, string nodeName)
         {
@@ -2179,7 +2655,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         private CT_GeomGuideList gdLstField;
 
-        private List<object> ahLstField;
+        private CT_AdjustHandleList ahLstField;
 
         private CT_ConnectionSiteList cxnLstField;
 
@@ -2191,7 +2667,7 @@ namespace NPOI.OpenXmlFormats.Dml
             if (node == null)
                 return null;
             CT_CustomGeometry2D ctObj = new CT_CustomGeometry2D();
-            ctObj.ahLst = new List<Object>();
+            ctObj.ahLst = new CT_AdjustHandleList();
             foreach (XmlNode childNode in node.ChildNodes)
             {
                 if (childNode.LocalName == "rect")
@@ -2200,8 +2676,8 @@ namespace NPOI.OpenXmlFormats.Dml
                     ctObj.avLst = CT_GeomGuideList.Parse(childNode, namespaceManager);
                 else if (childNode.LocalName == "gdLst")
                     ctObj.gdLst = CT_GeomGuideList.Parse(childNode, namespaceManager);
-                //else if (childNode.LocalName == "ahLst")
-                //    ctObj.ahLst.Add(Object.Parse(childNode, namespaceManager));
+                else if (childNode.LocalName == "ahLst")
+                    ctObj.ahLst = CT_AdjustHandleList.Parse(childNode, namespaceManager);
                 else if (childNode.LocalName == "cxnLst")
                     ctObj.cxnLst = CT_ConnectionSiteList.Parse(childNode, namespaceManager);
                 else if (childNode.LocalName == "pathLst")
@@ -2237,6 +2713,60 @@ namespace NPOI.OpenXmlFormats.Dml
             sw.Write(string.Format("</a:{0}>", nodeName));
         }
 
+        public bool IsSetRect()
+        {
+            return this.rect != null;
+        }
+
+        public void UnsetRect()
+        {
+            this.rect = null;
+        }
+
+        public bool IsSetAhLst()
+        {
+            return this.ahLst != null;
+        }
+
+        public void AddNewAhLst()
+        {
+            this.ahLst = new CT_AdjustHandleList();
+            this.ahLst.Items = new List<object>();
+        }
+
+        public bool IsSetAvLst()
+        {
+            return this.avLst != null;
+        }
+
+        public void AddNewAvLst()
+        {
+            this.avLst = new CT_GeomGuideList();
+            this.avLst.gd = new List<CT_GeomGuide>();
+        }
+
+        public bool IsSetCxnLst()
+        {
+            return this.cxnLst != null;
+        }
+
+        public void AddNewCxnLst()
+        {
+            this.cxnLst = new CT_ConnectionSiteList();
+            this.cxnLst.cxn = new List<CT_ConnectionSite>();
+        }
+
+        public bool IsSetGdLst()
+        {
+            return this.gdLst != null;
+        }
+
+        public void AddNewGdLst()
+        {
+            this.gdLst = new CT_GeomGuideList();
+            this.gdLst.gd = new List<CT_GeomGuide>();
+        }
+
         [XmlElement(Order = 0)]
         //[XmlArrayItem("gd", IsNullable = false)]
         public CT_GeomGuideList avLst
@@ -2268,7 +2798,7 @@ namespace NPOI.OpenXmlFormats.Dml
         [XmlArray(Order = 2)]
         [XmlArrayItem("ahPolar", typeof(CT_PolarAdjustHandle), IsNullable = false)]
         [XmlArrayItem("ahXY", typeof(CT_XYAdjustHandle), IsNullable = false)]
-        public List<object> ahLst
+        public CT_AdjustHandleList ahLst
         {
             get
             {

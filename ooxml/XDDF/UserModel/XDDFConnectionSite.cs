@@ -20,16 +20,16 @@
 namespace NPOI.XDDF.UserModel
 {
     using NPOI.OpenXmlFormats.Dml;
-    public class XDDFPath
+    public class XDDFConnectionSite
     {
-        private CT_Path2D path;
-        public XDDFPath(CT_Path2D path)
+        private CT_ConnectionSite site;
+        public XDDFConnectionSite(CT_ConnectionSite site)
         {
-            this.path = path;
+            this.site = site;
         }
-        public CT_Path2D GetXmlObject()
+        public CT_ConnectionSite GetXmlObject()
         {
-            return path;
+            return site;
         }
     }
 }
