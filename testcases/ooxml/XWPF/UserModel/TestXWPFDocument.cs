@@ -196,7 +196,7 @@ namespace TestCases.XWPF.UserModel
                 {"$FINALQUALIFYINGWORK_QUESTION_1_QUESTION$", "Question1" },
                 {"$FINALQUALIFYINGWORK_QUESTION_2_ASKING_SHORT$", "Asking2" },
                 {"$FINALQUALIFYINGWORK_QUESTION_2_QUESTION$", "Question2" },
-                {"$STUDENT_FULL$", "На русском с пробелами" },
+                {"$STUDENT_FULL$", "РќР° СЂСѓСЃСЃРєРѕРј СЃ РїСЂРѕР±РµР»Р°РјРё" },
                 {"$FINALQUALIFYINGWORK_GRADE$", "5" },
                 {"$SIMPLE$", "Last text" },
                 {"$DOUBLE$", "Twice" },
@@ -218,7 +218,7 @@ namespace TestCases.XWPF.UserModel
             ClassicAssert.AreEqual(initialText, savedText);
 
             //Check
-            ClassicAssert.AreEqual("Some initial text на разный манер (inserted) and so on:Asking1: Question1Asking2: Question2Result on:1. Say that На русском с пробелами with a very long sentence and one more replacer in the end for (русский язык) sure 5Triple replace with TwiceTwice и ещё одним Twice повторением.Last text", 
+            ClassicAssert.AreEqual("Some initial text РЅР° СЂР°Р·РЅС‹Р№ РјР°РЅРµСЂ (inserted) and so on:Asking1: Question1Asking2: Question2Result on:1. Say that РќР° СЂСѓСЃСЃРєРѕРј СЃ РїСЂРѕР±РµР»Р°РјРё with a very long sentence and one more replacer in the end for (СЂСѓСЃСЃРєРёР№ СЏР·С‹Рє) sure 5Triple replace with TwiceTwice Рё РµС‰С‘ РѕРґРЅРёРј Twice РїРѕРІС‚РѕСЂРµРЅРёРµРј.Last text", 
                 savedText);
         }
 
