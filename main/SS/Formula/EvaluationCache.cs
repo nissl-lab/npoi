@@ -192,7 +192,8 @@ namespace NPOI.SS.Formula
             }
             return result;
         }
-        private bool AreValuesEqual(ValueEval a, ValueEval b)
+
+        private static bool AreValuesEqual(ValueEval a, ValueEval b)
         {
             if (a == null)
             {

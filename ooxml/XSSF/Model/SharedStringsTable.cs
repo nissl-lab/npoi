@@ -126,7 +126,7 @@ namespace NPOI.XSSF.Model
             }
         }
 
-        private String GetKey(CT_Rst st)
+        private static String GetKey(CT_Rst st)
         {
             return st.XmlText;
         }

@@ -546,7 +546,7 @@ namespace NPOI.XWPF.UserModel
             return text.ToString();
         }
 
-        private void AppendBodyElementText(StringBuilder text, IBodyElement e, bool isLast)
+        private static void AppendBodyElementText(StringBuilder text, IBodyElement e, bool isLast)
         {
             if (e is XWPFParagraph paragraph)
             {

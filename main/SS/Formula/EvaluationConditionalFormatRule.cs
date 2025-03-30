@@ -419,7 +419,8 @@ namespace NPOI.SS.Formula
             }
             return RuleIndex-o.RuleIndex;
         }
-        private ValueEval UnwrapEval(ValueEval eval)
+
+        private static ValueEval UnwrapEval(ValueEval eval)
         {
             ValueEval comp = eval;
 
@@ -428,6 +429,7 @@ namespace NPOI.SS.Formula
             }
             return comp;
         }
+
         private bool CheckValue(ICell cell, CellRangeAddress region)
         {
             if (cell == null || DataValidationEvaluator.IsType(cell, CellType.Blank)

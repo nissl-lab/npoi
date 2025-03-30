@@ -76,7 +76,7 @@ namespace NPOI.SS.Formula.Functions
          * 
          * @(#VALUE!) if colIndex Is negative, (#REF!) if colIndex Is too high
          */
-        private ValueVector CreateResultColumnVector(AreaEval tableArray, int rowIndex)
+        private static ValueVector CreateResultColumnVector(AreaEval tableArray, int rowIndex)
         {
             if (rowIndex >= tableArray.Height)
             {

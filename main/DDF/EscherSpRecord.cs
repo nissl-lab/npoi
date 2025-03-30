@@ -154,7 +154,7 @@ namespace NPOI.DDF
         /// </summary>
         /// <param name="flags">The flags.</param>
         /// <returns></returns>
-        private String DecodeFlags(int flags)
+        private static String DecodeFlags(int flags)
         {
             StringBuilder result = new StringBuilder();
             result.Append((flags & FLAG_GROUP) != 0 ? "|GROUP" : "");

@@ -161,7 +161,8 @@ namespace NPOI.SS.Formula
             }
 
         }
-        private void UnhookOldEnvironments(WorkbookEvaluator[] evaluators)
+
+        private static void UnhookOldEnvironments(WorkbookEvaluator[] evaluators)
         {
             ArrayList oldEnvs = new ArrayList();
             for (int i = 0; i < evaluators.Length; i++)

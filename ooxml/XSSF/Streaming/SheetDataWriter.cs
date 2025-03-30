@@ -409,7 +409,7 @@ namespace NPOI.XSSF.Streaming
          * @return  whether the string has leading / trailing spaces that
          *  need to be preserved with the xml:space=\"preserve\" attribute
          */
-        private bool HasLeadingTrailingSpaces(string str)
+        private static bool HasLeadingTrailingSpaces(string str)
         {
             if (!string.IsNullOrEmpty(str))
             {

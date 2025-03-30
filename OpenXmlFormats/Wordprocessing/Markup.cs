@@ -235,7 +235,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         }
 
 
-        private void WriteXmlNamespace(StreamWriter sw, Dictionary<string, string> ns)
+        private static void WriteXmlNamespace(StreamWriter sw, Dictionary<string, string> ns)
         {
             if(ns == null || ns.Count == 0)
                 return;
@@ -244,6 +244,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 sw.Write(string.Format($"xmlns:{kv.Key}=\"{kv.Value}\" ", kv.Key, kv.Value));
             }
         }
+
         internal void Write(StreamWriter sw)
         {
             sw.Write("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>");

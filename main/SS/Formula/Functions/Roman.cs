@@ -88,7 +88,7 @@ namespace NPOI.SS.Formula.Functions
                 return ErrorEval.VALUE_INVALID;
             }
 
-            String result = this.integerToRoman(number);
+            String result = integerToRoman(number);
 
             if (form == 0)
             {
@@ -104,7 +104,7 @@ namespace NPOI.SS.Formula.Functions
          * @param number
          * @return
          */
-        private String integerToRoman(int number)
+        private static String integerToRoman(int number)
         {
             StringBuilder result = new StringBuilder();
             for (int i = 0; i < 13; i++)

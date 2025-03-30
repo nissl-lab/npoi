@@ -396,16 +396,12 @@ namespace NPOI.HPSF
             return _value.Equals(pValue);
         }
 
-
-
-        private bool typesAreEqual(long t1, long t2)
+        private static bool typesAreEqual(long t1, long t2)
         {
             return (t1 == t2 ||
                 (t1 == Variant.VT_LPSTR && t2 == Variant.VT_LPWSTR) ||
                 (t2 == Variant.VT_LPSTR && t1 == Variant.VT_LPWSTR));
         }
-
-
 
         /// <summary>
         /// </summary>

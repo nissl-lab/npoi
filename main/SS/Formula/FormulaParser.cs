@@ -421,7 +421,7 @@ namespace NPOI.SS.Formula
         /**
          * @param currentParsePosition used to format a potential error message
          */
-        private void CheckValidRangeOperand(String sideName, int currentParsePosition, ParseNode pn)
+        private static void CheckValidRangeOperand(String sideName, int currentParsePosition, ParseNode pn)
         {
             if (!IsValidRangeOperand(pn))
             {
@@ -434,7 +434,7 @@ namespace NPOI.SS.Formula
           * @return false if sub-expression represented the specified ParseNode definitely
           * cannot appear on either side of the range (':') operator
           */
-        private bool IsValidRangeOperand(ParseNode a)
+        private static bool IsValidRangeOperand(ParseNode a)
         {
             Ptg tkn = a.GetToken();
             // Note - order is important for these instance-of checks
@@ -1480,7 +1480,7 @@ namespace NPOI.SS.Formula
             {
                 StringBuilder sb = new StringBuilder();
                 // can concatenate idens with dots
-                while (IsUnquotedSheetNameChar(look))
+                while (FormulaParser.IsUnquotedSheetNameChar(look))
                 {
                     sb.Append(char.ConvertFromUtf32(look));
                     GetChar();
@@ -1510,7 +1510,7 @@ namespace NPOI.SS.Formula
         }
 
         /**
-         * If we have something that looks like [book]Sheet1: or 
+         * If we have something that looks like [book]Sheet1: or
          *  Sheet1, see if it's actually a range eg Sheet1:Sheet2!
          */
         private SheetIdentifier ParseSheetRange(String bookname, NameIdentifier sheet1Name)
@@ -1526,7 +1526,7 @@ namespace NPOI.SS.Formula
         /**
           * very similar to {@link SheetNameFormatter#isSpecialChar(char)}
           */
-        private bool IsUnquotedSheetNameChar(int ch)
+        private static bool IsUnquotedSheetNameChar(int ch)
         {
             if (IsLetterOrDigit(ch))
             {
@@ -1966,7 +1966,8 @@ namespace NPOI.SS.Formula
 
             return new ParseNode(new ArrayPtg(values2d));
         }
-        private void CheckRowLengths(Object[][] values2d, int nColumns)
+
+        private static void CheckRowLengths(Object[][] values2d, int nColumns)
         {
             for (int i = 0; i < values2d.Length; i++)
             {

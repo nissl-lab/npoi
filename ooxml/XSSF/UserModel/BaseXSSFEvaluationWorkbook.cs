@@ -48,10 +48,11 @@ namespace NPOI.XSSF.UserModel
             _uBook = book;
         }
 
-        private int ConvertFromExternalSheetIndex(int externSheetIndex)
+        private static int ConvertFromExternalSheetIndex(int externSheetIndex)
         {
             return externSheetIndex;
         }
+
         /**
          * XSSF doesn't use external sheet indexes, so when asked treat
          * it just as a local index
@@ -60,13 +61,14 @@ namespace NPOI.XSSF.UserModel
         {
             return externSheetIndex;
         }
+
         /**
          * @return  the external sheet index of the sheet with the given internal
          * index. Used by some of the more obscure formula and named range things.
          * Fairly easy on XSSF (we think...) since the internal and external
          * indices are the same
          */
-        private int ConvertToExternalSheetIndex(int sheetIndex)
+        private static int ConvertToExternalSheetIndex(int sheetIndex)
         {
             return sheetIndex;
         }
@@ -118,8 +120,9 @@ namespace NPOI.XSSF.UserModel
             // Not properly referenced
             throw new Exception("Book not linked for filename " + bookName);
         }
+
         /* case-sensitive */
-        private int FindExternalLinkIndex(String bookName, List<ExternalLinksTable> tables)
+        private static int FindExternalLinkIndex(String bookName, List<ExternalLinksTable> tables)
         {
             int i = 0;
             foreach (ExternalLinksTable table in tables)
@@ -132,6 +135,7 @@ namespace NPOI.XSSF.UserModel
             }
             return -1;
         }
+
         private sealed class FakeExternalLinksTable : ExternalLinksTable
         {
             private readonly String fileName;

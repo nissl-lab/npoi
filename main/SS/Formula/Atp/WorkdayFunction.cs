@@ -67,10 +67,10 @@ namespace NPOI.SS.Formula.Atp
             double[] holidays;
             try
             {
-                start = this.evaluator.EvaluateDateArg(args[0], srcCellRow, srcCellCol);
-                days = (int)Math.Floor(this.evaluator.EvaluateNumberArg(args[1], srcCellRow, srcCellCol));
+                start = ArgumentsEvaluator.EvaluateDateArg(args[0], srcCellRow, srcCellCol);
+                days = (int)Math.Floor(ArgumentsEvaluator.EvaluateNumberArg(args[1], srcCellRow, srcCellCol));
                 ValueEval holidaysCell = args.Length == 3 ? args[2] : null;
-                holidays = this.evaluator.EvaluateDatesArg(holidaysCell, srcCellRow, srcCellCol);
+                holidays = ArgumentsEvaluator.EvaluateDatesArg(holidaysCell, srcCellRow, srcCellCol);
                 return new NumberEval(DateUtil.GetExcelDate(WorkdayCalculator.instance.CalculateWorkdays(start, days, holidays)));
             }
             catch (EvaluationException)

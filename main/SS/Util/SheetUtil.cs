@@ -709,7 +709,9 @@ namespace NPOI.SS.Util
             return null;
         }
 
+#pragma warning disable CA2231 // implement equality operators
         private readonly struct FontCacheKey : IEquatable<FontCacheKey>
+#pragma warning restore CA2231
         {
             public FontCacheKey(string fontName, float fontHeightInPoints, FontStyle style)
             {

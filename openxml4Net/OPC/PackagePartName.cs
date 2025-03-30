@@ -132,7 +132,7 @@ namespace NPOI.OpenXml4Net.OPC
          * @return <code>true</code> if this part name respect the relationship
          *         part naming convention else <code>false</code>.
          */
-        private bool IsRelationshipPartURI(Uri partUri)
+        private static bool IsRelationshipPartURI(Uri partUri)
         {
             if (partUri == null)
                 throw new ArgumentException("partUri");

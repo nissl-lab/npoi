@@ -430,7 +430,7 @@ namespace NPOI.POIFS.Macros
             }
         }
 
-        private string ReadUnicodeString(RLEDecompressingInputStream in1, int unicodeNameRecordLength)
+        private static string ReadUnicodeString(RLEDecompressingInputStream in1, int unicodeNameRecordLength)
         {
             byte[] buffer = new byte[unicodeNameRecordLength];
             IOUtils.ReadFully(in1, buffer);

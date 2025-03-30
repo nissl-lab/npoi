@@ -600,7 +600,7 @@ namespace NPOI.Util
          * Multiplies int arrays x and y to the specified lengths and places
          * the result into z. There will be no leading zeros in the resultant array.
          */
-        private int[] MultiplyToLen(int[] x, int xlen, int[] y, int ylen, int[] z)
+        private static int[] MultiplyToLen(int[] x, int xlen, int[] y, int ylen, int[] z)
         {
             int xstart = xlen - 1;
             int ystart = ylen - 1;
@@ -1403,7 +1403,8 @@ namespace NPOI.Util
 
             return new BigInteger(newMag, _signum);
         }
-        int[] Increment(int[] val)
+
+        private static int[] Increment(int[] val)
         {
             int lastSum = 0;
             for (int i = val.Length - 1; i >= 0 && lastSum == 0; i--)
@@ -1415,6 +1416,7 @@ namespace NPOI.Util
             }
             return val;
         }
+
         public BigInteger and(BigInteger val)
         {
             int[] result = new int[Math.Max(intLength(), val.intLength())];
@@ -1424,6 +1426,7 @@ namespace NPOI.Util
 
             return ValueOf(result);
         }
+
         /**
          * Returns a BigInteger whose value is {@code (~this)}.  (This method
          * returns a negative value if and only if this BigInteger is
@@ -1439,6 +1442,7 @@ namespace NPOI.Util
 
             return ValueOf(result);
         }
+
         /**
          * Returns a BigInteger whose value is {@code (this | val)}.  (This method
          * returns a negative BigInteger if and only if either this or val is
@@ -2283,7 +2287,7 @@ namespace NPOI.Util
          * divisor a back to the dividend result at a specified offset. It is used
          * when qhat was estimated too large, and must be adjusted.
          */
-        private int divadd(int[] a, int[] result, int offset)
+        private static int divadd(int[] a, int[] result, int offset)
         {
             long carry = 0;
 
@@ -2302,7 +2306,7 @@ namespace NPOI.Util
          * word input x, and subtracts the n word product from q. This is needed
          * when subtracting qhat*divisor from dividend.
          */
-        private int mulsub(int[] q, int[] a, int x, int len, int offset)
+        private static int mulsub(int[] q, int[] a, int x, int len, int offset)
         {
             long xLong = x & LONG_MASK;
             long carry = 0;
@@ -2908,7 +2912,7 @@ namespace NPOI.Util
          * Compare two longs as if they were unsigned.
          * Returns true iff one is bigger than two.
          */
-        private bool unsignedLongCompare(long one, long two)
+        private static bool unsignedLongCompare(long one, long two)
         {
             return (one + long.MinValue) > (two + long.MinValue);
         }
@@ -2918,7 +2922,7 @@ namespace NPOI.Util
          * qhat for two multi precision numbers. It is used when
          * the signed value of n is less than zero.
          */
-        private void divWord(int[] result, long n, int d)
+        private static void divWord(int[] result, long n, int d)
         {
             long dLong = d & LONG_MASK;
 

@@ -108,7 +108,7 @@ namespace NPOI.SS.Formula.Functions
             return new NumberEval(long.Parse(value));
         }
 
-        private int getDecimalValue(String unsigned)
+        private static int getDecimalValue(String unsigned)
         {
             int sum = 0;
             int numBits = unsigned.Length;

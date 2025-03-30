@@ -40,7 +40,7 @@ namespace NPOI.XWPF.Usermodel
         /**
          * For isBold, isItalic etc
          */
-        private bool IsCTOnOff(W.CT_OnOff onoff)
+        private static bool IsCTOnOff(W.CT_OnOff onoff)
         {
             if (!onoff.IsSetVal())
                 return true;

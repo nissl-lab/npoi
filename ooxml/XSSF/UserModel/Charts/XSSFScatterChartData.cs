@@ -176,7 +176,7 @@ namespace NPOI.XSSF.UserModel.Charts
             return series;
         }
 
-        private void AddStyle(CT_ScatterChart ctScatterChart)
+        private static void AddStyle(CT_ScatterChart ctScatterChart)
         {
             ctScatterChart.varyColors = new CT_Boolean { val = 0 };
             CT_ScatterStyle scatterStyle = ctScatterChart.AddNewScatterStyle();

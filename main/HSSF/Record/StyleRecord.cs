@@ -193,11 +193,9 @@ namespace NPOI.HSSF.Record
             return buffer.ToString();
         }
 
-        private short SetField(int fieldValue, int new_value, int mask,
-                               int ShiftLeft)
+        private static short SetField(int fieldValue, int new_value, int mask, int ShiftLeft)
         {
-            return (short)((fieldValue & ~mask)
-                              | ((new_value << ShiftLeft) & mask));
+            return (short)((fieldValue & ~mask) | ((new_value << ShiftLeft) & mask));
         }
 
         public override void Serialize(ILittleEndianOutput o)

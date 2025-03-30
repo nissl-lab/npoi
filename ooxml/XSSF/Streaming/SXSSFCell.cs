@@ -825,10 +825,12 @@ namespace NPOI.XSSF.Streaming
                 ((FormulaValue)_value).Value = value.Value;
             }
         }
-        private CellType ComputeTypeFromFormula(String formula)
+
+        private static CellType ComputeTypeFromFormula(String formula)
         {
             return CellType.Numeric;
         }
+
         //COPIED FROM https://svn.apache.org/repos/asf/poi/trunk/src/ooxml/java/org/apache/poi/xssf/usermodel/XSSFCell.java since the functions are declared private there
         /**
          * Used to help format error messages
