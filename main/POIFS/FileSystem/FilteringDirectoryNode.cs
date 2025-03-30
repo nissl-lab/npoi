@@ -58,11 +58,13 @@ namespace NPOI.POIFS.FileSystem
                     // Applies to a child
                     String child = excl.Substring(0, splitAt);
                     String childExcl = excl.Substring(splitAt + 1);
-                    if (!this.childExcludes.ContainsKey(child))
+                    if (!this.childExcludes.TryGetValue(child, out List<String> value))
                     {
-                        this.childExcludes.Add(child, new List<String>());
+                        value = new List<String>();
+                        this.childExcludes.Add(child, value);
                     }
-                    this.childExcludes[child].Add(childExcl);
+
+                    value.Add(childExcl);
                 }
             }
         }
@@ -134,10 +136,9 @@ namespace NPOI.POIFS.FileSystem
         private Entry WrapEntry(Entry entry)
         {
             String name = entry.Name;
-            if (childExcludes.ContainsKey(name) && entry is DirectoryEntry directoryEntry)
+            if (childExcludes.TryGetValue(name, out List<string> value) && entry is DirectoryEntry directoryEntry)
             {
-                return new FilteringDirectoryNode(
-                      directoryEntry, childExcludes[name]);
+                return new FilteringDirectoryNode(directoryEntry, value);
             }
             return entry;
         }

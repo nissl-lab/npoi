@@ -4438,22 +4438,22 @@ namespace NPOI.XSSF.UserModel
         /// <returns>Map of error type to the range(s) where they are ignored.</returns>
         public Dictionary<IgnoredErrorType, ISet<CellRangeAddress>> GetIgnoredErrors()
         {
-            Dictionary<IgnoredErrorType, ISet<CellRangeAddress>> result =
-                new Dictionary<IgnoredErrorType, ISet<CellRangeAddress>>();
+            Dictionary<IgnoredErrorType, ISet<CellRangeAddress>> result = new();
             if(worksheet.IsSetIgnoredErrors())
             {
                 foreach(CT_IgnoredError err in worksheet.ignoredErrors.ignoredError)
                 {
                     foreach(IgnoredErrorType errType in GetErrorTypes(err))
                     {
-                        if(!result.ContainsKey(errType))
+                        if(!result.TryGetValue(errType, out ISet<CellRangeAddress> value))
                         {
-                            result.Add(errType, new HashSet<CellRangeAddress>());
+                            value = new HashSet<CellRangeAddress>();
+                            result.Add(errType, value);
                         }
 
-                        foreach(object ref1 in err.sqref)
+                        foreach(string ref1 in err.sqref)
                         {
-                            result[errType].Add(CellRangeAddress.ValueOf(ref1.ToString()));
+                            value.Add(CellRangeAddress.ValueOf(ref1));
                         }
                     }
                 }

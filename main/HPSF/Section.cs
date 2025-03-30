@@ -437,7 +437,7 @@ namespace NPOI.HPSF
         /// @see Variant
         public void SetProperty(Property p)
         {
-            Property old = properties.ContainsKey(p.ID)? properties[p.ID] : null;
+            Property old = properties.TryGetValue(p.ID, out Property value) ? value : null;
             if(old == null || !old.Equals(p))
             {
                 properties[p.ID] = p;
