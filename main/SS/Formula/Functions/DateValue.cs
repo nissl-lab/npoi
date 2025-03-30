@@ -22,13 +22,14 @@ namespace NPOI.SS.Formula.Functions
             public Format(string patternString, String groupOrder)
             {
                 this.pattern = new Regex(patternString, RegexOptions.Compiled);
-                this.hasYear = groupOrder.Contains("y");
+                var idx = groupOrder.IndexOf('y');
+                this.hasYear = idx != -1;
                 if (hasYear)
                 {
-                    yearIndex = groupOrder.IndexOf("y");
+                    yearIndex = idx;
                 }
-                monthIndex = groupOrder.IndexOf("m");
-                dayIndex = groupOrder.IndexOf("d");
+                monthIndex = groupOrder.IndexOf('m');
+                dayIndex = groupOrder.IndexOf('d');
             }
             private static List<Format> formats = new List<Format>();
             static Format()

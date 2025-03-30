@@ -575,7 +575,7 @@ namespace NPOI.SS.Converter
                 }
             }
 
-            if (OutputLeadingSpacesAsNonBreaking && value.StartsWith(" "))
+            if (OutputLeadingSpacesAsNonBreaking && value.StartsWith(' '))
             {
                 StringBuilder builder = new StringBuilder();
                 for (int c = 0; c < value.Length; c++)

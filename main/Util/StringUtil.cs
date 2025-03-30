@@ -481,7 +481,7 @@ namespace NPOI.Util
 
             if (chr > 127)
                 return true;
-            if (char.IsLetterOrDigit(chr) || reservedChars.IndexOf(chr) >= 0)
+            if (char.IsLetterOrDigit(chr) || reservedChars.Contains(chr))
                 return false;
 
             return true;

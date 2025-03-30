@@ -75,7 +75,7 @@ namespace NPOI.SS.Formula.Functions
             else
             {
                 unsigned = number.Substring(1);
-                isPositive = number.StartsWith("0");
+                isPositive = number.StartsWith('0');
             }
 
             String value;

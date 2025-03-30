@@ -75,8 +75,8 @@ namespace NPOI.SS.Format
                 {
                     // strip off trailing zeros
                     int RemoveFrom;
-                    if (fmt.StartsWith("E"))
-                        RemoveFrom = toAppendTo.ToString().LastIndexOf("E") - 1;
+                    if (fmt.StartsWith('E'))
+                        RemoveFrom = toAppendTo.ToString().LastIndexOf('E') - 1;
                     else
                         RemoveFrom = toAppendTo.Length - 1;
                     while (toAppendTo[RemoveFrom] == '0')
@@ -89,7 +89,7 @@ namespace NPOI.SS.Format
                     }
                     // remove zeros after E   by antony.liu
                     string text = toAppendTo.ToString();
-                    RemoveFrom = toAppendTo.ToString().LastIndexOf("E");
+                    RemoveFrom = toAppendTo.ToString().LastIndexOf('E');
                     if (RemoveFrom > 0)
                     {
                         RemoveFrom++;
