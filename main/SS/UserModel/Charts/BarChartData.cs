@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace NPOI.SS.UserModel.Charts
 {
@@ -23,5 +21,11 @@ namespace NPOI.SS.UserModel.Charts
          * @return list of all series.
          */
         List<IBarChartSeries<Tx, Ty>> GetSeries();
+        
+        /// <summary>
+        /// Sets bar grouping
+        /// </summary>
+        /// <param name="grouping">The type of bar grouping</param>
+        void SetBarGrouping(BarGrouping grouping);
     }
 }

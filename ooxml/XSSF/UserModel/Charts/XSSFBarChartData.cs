@@ -1,10 +1,10 @@
 ﻿using NPOI.OpenXmlFormats.Dml;
 using NPOI.OpenXmlFormats.Dml.Chart;
 using NPOI.SS.UserModel.Charts;
+using NPOI.XSSF.UserModel.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Text;
 
 namespace NPOI.XSSF.UserModel.Charts
 {
@@ -19,6 +19,7 @@ namespace NPOI.XSSF.UserModel.Charts
          * List of all data series.
          */
         private List<IBarChartSeries<Tx, Ty>> series;
+        private BarGrouping grouping = BarGrouping.Clustered;
 
         public XSSFBarChartData()
         {
@@ -32,15 +33,18 @@ namespace NPOI.XSSF.UserModel.Charts
             private byte[] fillColor;
             private IChartDataSource<Tx> categories;
             private IChartDataSource<Ty> values;
+            private readonly BarGrouping grouping;
 
             internal Series(int id, int order,
                 IChartDataSource<Tx> categories,
-                IChartDataSource<Ty> values)
+                IChartDataSource<Ty> values,
+                BarGrouping grouping)
             {
                 this.id = id;
                 this.order = order;
                 this.categories = categories;
                 this.values = values;
+                this.grouping = grouping;
             }
 
             public void SetId(int id)
@@ -75,7 +79,7 @@ namespace NPOI.XSSF.UserModel.Charts
             {
                 CT_BarSer ctBarSer = ctBarChart.AddNewSer();
                 CT_BarGrouping ctGrouping = ctBarChart.AddNewGrouping();
-                ctGrouping.val = ST_BarGrouping.clustered;
+                ctGrouping.val = grouping.ToST_BarGrouping();
                 ctBarSer.AddNewIdx().val = (uint)id;
                 ctBarSer.AddNewOrder().val = (uint)order;
                 CT_Boolean ctNoInvertIfNegative = new CT_Boolean();
@@ -112,7 +116,7 @@ namespace NPOI.XSSF.UserModel.Charts
                 throw new ArgumentException("Value data source must be numeric.");
             }
             int numOfSeries = series.Count;
-            Series newSeries = new Series(numOfSeries, numOfSeries, categoryAxisData, values);
+            Series newSeries = new Series(numOfSeries, numOfSeries, categoryAxisData, values, grouping);
             series.Add(newSeries);
             return newSeries;
         }
@@ -120,6 +124,11 @@ namespace NPOI.XSSF.UserModel.Charts
         public List<IBarChartSeries<Tx, Ty>> GetSeries()
         {
             return series;
+        }
+
+        public void SetBarGrouping(BarGrouping grouping)
+        {
+            this.grouping = grouping;
         }
 
         public void FillChart(SS.UserModel.IChart chart, params IChartAxis[] axis)
