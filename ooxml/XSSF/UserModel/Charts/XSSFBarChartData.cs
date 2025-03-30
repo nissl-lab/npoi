@@ -33,18 +33,15 @@ namespace NPOI.XSSF.UserModel.Charts
             private byte[] fillColor;
             private IChartDataSource<Tx> categories;
             private IChartDataSource<Ty> values;
-            private readonly BarGrouping grouping;
 
             internal Series(int id, int order,
                 IChartDataSource<Tx> categories,
-                IChartDataSource<Ty> values,
-                BarGrouping grouping)
+                IChartDataSource<Ty> values)
             {
                 this.id = id;
                 this.order = order;
                 this.categories = categories;
                 this.values = values;
-                this.grouping = grouping;
             }
 
             public void SetId(int id)
@@ -75,11 +72,11 @@ namespace NPOI.XSSF.UserModel.Charts
                 return values;
             }
 
-            internal void AddToChart(CT_BarChart ctBarChart)
+            internal void AddToChart(CT_BarChart ctBarChart, BarGrouping barGrouping)
             {
                 CT_BarSer ctBarSer = ctBarChart.AddNewSer();
                 CT_BarGrouping ctGrouping = ctBarChart.AddNewGrouping();
-                ctGrouping.val = grouping.ToST_BarGrouping();
+                ctGrouping.val = barGrouping.ToST_BarGrouping();
                 ctBarSer.AddNewIdx().val = (uint)id;
                 ctBarSer.AddNewOrder().val = (uint)order;
                 CT_Boolean ctNoInvertIfNegative = new CT_Boolean();
@@ -116,7 +113,7 @@ namespace NPOI.XSSF.UserModel.Charts
                 throw new ArgumentException("Value data source must be numeric.");
             }
             int numOfSeries = series.Count;
-            Series newSeries = new Series(numOfSeries, numOfSeries, categoryAxisData, values, grouping);
+            Series newSeries = new Series(numOfSeries, numOfSeries, categoryAxisData, values);
             series.Add(newSeries);
             return newSeries;
         }
@@ -148,7 +145,7 @@ namespace NPOI.XSSF.UserModel.Charts
                 Series s = (Series)series[i];
                 s.SetId(allSeriesCount + i);
                 s.SetOrder(allSeriesCount + i);
-                s.AddToChart(barChart);
+                s.AddToChart(barChart, grouping);
             }
 
             foreach (IChartAxis ax in axis)

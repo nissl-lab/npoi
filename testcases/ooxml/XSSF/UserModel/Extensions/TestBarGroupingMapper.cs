@@ -17,7 +17,7 @@ namespace TestCases.XSSF.UserModel.Extensions
         {
             ST_BarGrouping actual = barGrouping.ToST_BarGrouping();
             
-            ClassicAssert.AreEqual(actual, expected);
+            ClassicAssert.AreEqual(expected, actual);
         }
     }
 }
