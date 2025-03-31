@@ -261,11 +261,6 @@ namespace NPOI.POIFS.FileSystem
             //    return e;
             //}
 
-            public void Remove()
-            {
-                throw new InvalidOperationException("Remove not supported");
-            }
-
             #region IEnumerator<Entry> 成员
 
             public Entry Current

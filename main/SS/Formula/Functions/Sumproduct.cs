@@ -87,7 +87,7 @@ namespace NPOI.SS.Formula.Functions
                     + firstArg.GetType().Name + ")");
         }
 
-        private ValueEval EvaluateSingleProduct(ValueEval[] evalArgs)
+        private static ValueEval EvaluateSingleProduct(ValueEval[] evalArgs)
         {
             int maxN = evalArgs.Length;
 
@@ -99,6 +99,7 @@ namespace NPOI.SS.Formula.Functions
             }
             return new NumberEval(term);
         }
+
         private static double GetScalarValue(ValueEval arg)
         {
 
@@ -138,7 +139,8 @@ namespace NPOI.SS.Formula.Functions
 
             return GetProductTerm(valueEval, true);
         }
-        private ValueEval EvaluateAreaSumProduct(ValueEval[] evalArgs)
+
+        private static ValueEval EvaluateAreaSumProduct(ValueEval[] evalArgs)
         {
             int maxN = evalArgs.Length;
             AreaEval[] args = new AreaEval[maxN];

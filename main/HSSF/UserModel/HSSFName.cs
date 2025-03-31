@@ -147,7 +147,7 @@ namespace NPOI.HSSF.UserModel
          *
          * @param name
          */
-        private void ValidateName(String name)
+        private static void ValidateName(String name)
         {
             /* equivalent to:
             Pattern.compile(

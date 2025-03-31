@@ -193,3 +193,7 @@ csharp_preserve_single_line_statements = false
 # 記号の仕様
 
 # 命名スタイル
+
+
+# Analysis rules
+dotnet_code_quality.api_surface = private, internal

@@ -94,7 +94,7 @@ namespace NPOI.SS.Formula.Eval
             return aeA.Offset(top - aeAfr, bottom - aeAfr, left - aeAfc, right - aeAfc);
         }
 
-        private AreaEval EvaluateRef(ValueEval arg)
+        private static AreaEval EvaluateRef(ValueEval arg)
         {
             if (arg is AreaEval eval)
             {

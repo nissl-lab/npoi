@@ -146,7 +146,8 @@ namespace NPOI.XWPF.UserModel
             //}
             text = sb.ToString();
         }
-        private bool IsStartToken(XmlReader cursor, String string1)
+
+        private static bool IsStartToken(XmlReader cursor, String string1)
         {
             if (!cursor.IsStartElement())
             {

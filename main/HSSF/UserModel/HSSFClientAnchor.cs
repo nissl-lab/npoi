@@ -129,7 +129,7 @@ namespace NPOI.HSSF.UserModel
         /// <param name="sheet">The sheet.</param>
         /// <param name="rowNum">The row num.</param>
         /// <returns></returns>
-        private float GetRowHeightInPoints(NPOI.SS.UserModel.ISheet sheet, int rowNum)
+        private static float GetRowHeightInPoints(NPOI.SS.UserModel.ISheet sheet, int rowNum)
         {
             NPOI.SS.UserModel.IRow row = sheet.GetRow(rowNum);
             if (row == null)
@@ -278,11 +278,12 @@ namespace NPOI.HSSF.UserModel
         /// <param name="minRange">The min range.</param>
         /// <param name="maxRange">The max range.</param>
         /// <param name="varName">Name of the variable.</param>
-        private void CheckRange(int value, int minRange, int maxRange, String varName)
+        private static void CheckRange(int value, int minRange, int maxRange, String varName)
         {
             if (value < minRange || value > maxRange)
                 throw new ArgumentOutOfRangeException(varName + " must be between " + minRange + " and " + maxRange + ", but was: " + value);
         }
+
         internal override EscherRecord GetEscherAnchor()
         {
             return _escherClientAnchor;

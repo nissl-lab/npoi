@@ -226,7 +226,8 @@ namespace NPOI.Util.Collections
         /// Converts encoded &#92;uxxxx to unicode chars
         /// and changes special saved chars to their original forms
         /// </remarks>
-        private String LoadConvert(String theString) {
+        private static String LoadConvert(String theString)
+        {
             char aChar;
             int len = theString.Length;
             StringBuilder outBuffer = new StringBuilder(len);
@@ -277,7 +278,7 @@ namespace NPOI.Util.Collections
         /// </summary>
         /// <param name="line">The line.</param>
         /// <returns></returns>
-        private bool ContinueLine(String line) {
+        private static bool ContinueLine(String line) {
             int slashCount = 0;
             int index = line.Length - 1;
             while ((index >= 0) && (line[index--] == '\\'))

@@ -300,7 +300,7 @@ namespace NPOI.SS.Format
          *
          * @return The condition specification or <tt>null</tt>.
          */
-        private CellFormatCondition GetCondition(Match m)
+        private static CellFormatCondition GetCondition(Match m)
         {
             String mdesc = m.Groups[(CONDITION_OPERATOR_GROUP)].Value;
             if (mdesc == null || mdesc.Length == 0)
@@ -308,6 +308,7 @@ namespace NPOI.SS.Format
             return CellFormatCondition.GetInstance(m.Groups[(
                     CONDITION_OPERATOR_GROUP)].Value, m.Groups[(CONDITION_VALUE_GROUP)].Value);
         }
+
         /**
          * Returns the CellFormatType object implied by the format specification for
          * the format part.
@@ -316,11 +317,12 @@ namespace NPOI.SS.Format
          *
          * @return The CellFormatType.
          */
-        private CellFormatType GetCellFormatType(Match matcher)
+        private static CellFormatType GetCellFormatType(Match matcher)
         {
             String fdesc = matcher.Groups[SPECIFICATION_GROUP].Value;
             return formatType(fdesc);
         }
+
         /**
          * Returns the formatter object implied by the format specification for the
          * format part.
@@ -361,7 +363,7 @@ namespace NPOI.SS.Format
          *
          * @return The type of format.
          */
-        private CellFormatType formatType(String fdesc)
+        private static CellFormatType formatType(String fdesc)
         {
             fdesc = fdesc.Trim();
             if (fdesc.Equals("") || fdesc.Equals("General", StringComparison.InvariantCultureIgnoreCase))

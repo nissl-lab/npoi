@@ -87,7 +87,8 @@ namespace NPOI.SS.Formula.Functions
             }
             return ErrorEval.VALUE_INVALID;
         }
-        private int parseMonth(String monthPart)
+
+        private static int parseMonth(String monthPart)
         {
             try
             {

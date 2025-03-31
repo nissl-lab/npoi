@@ -245,7 +245,7 @@ namespace NPOI.XWPF.Model
          * that had previoulsy been instantiated in the CreateHeader(int, XWPFParagraph[]) or 
          * CreateFooter(int, XWPFParagraph[]) methods.
          */
-        private CT_HdrFtr buildHdrFtr(String pStyle, XWPFParagraph[] paragraphs, XWPFHeaderFooter wrapper)
+        private static CT_HdrFtr buildHdrFtr(String pStyle, XWPFParagraph[] paragraphs, XWPFHeaderFooter wrapper)
         {
             CT_HdrFtr ftr = wrapper._getHdrFtr();
             if (paragraphs != null) {
@@ -291,7 +291,7 @@ namespace NPOI.XWPF.Model
         }
 
 
-        private XmlSerializerNamespaces Commit(XWPFHeaderFooter wrapper)
+        private static XmlSerializerNamespaces Commit(XWPFHeaderFooter wrapper)
         {
             XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new XmlQualifiedName[] {
                 new XmlQualifiedName("ve", "http://schemas.openxmlformats.org/markup-compatibility/2006"),
