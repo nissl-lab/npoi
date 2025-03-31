@@ -193,6 +193,7 @@ namespace NPOI.OpenXmlFormats.Dml
             if (node == null)
                 return null;
             CT_LineJoinMiterProperties ctObj = new CT_LineJoinMiterProperties();
+            ctObj.limFieldSpecified = node.Attributes["lim"] != null;
             ctObj.lim = XmlHelper.ReadInt(node.Attributes["lim"]);
             return ctObj;
         }
@@ -202,7 +203,10 @@ namespace NPOI.OpenXmlFormats.Dml
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<a:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "lim", this.lim);
+            if(this.limFieldSpecified) 
+            {
+                XmlHelper.WriteAttribute(sw, "lim", this.lim);
+            }
             sw.Write("/>");
         }
 
@@ -219,6 +223,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
             set
             {
+                this.limFieldSpecified = true;
                 this.limField = value;
             }
         }
@@ -250,7 +255,8 @@ namespace NPOI.OpenXmlFormats.Dml
             if (node == null)
                 return null;
             CT_PresetLineDashProperties ctObj = new CT_PresetLineDashProperties();
-            if (node.Attributes["val"] != null)
+            ctObj.valFieldSpecified = node.Attributes["val"] != null;
+            if (ctObj.valFieldSpecified)
                 ctObj.val = (ST_PresetLineDashVal)Enum.Parse(typeof(ST_PresetLineDashVal), node.Attributes["val"].Value);
             return ctObj;
         }
@@ -260,7 +266,8 @@ namespace NPOI.OpenXmlFormats.Dml
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<a:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "val", this.val.ToString());
+            if (valFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "val", this.val.ToString());
             sw.Write("/>");
         }
 
@@ -277,6 +284,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
             set
             {
+                this.valFieldSpecified = true;
                 this.valField = value;
             }
         }
@@ -423,6 +431,55 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.dsField = value;
             }
         }
+
+        internal static CT_DashStopList Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            CT_DashStopList ctObj = new CT_DashStopList();
+            ctObj.dsField = new List<CT_DashStop>();
+            foreach(XmlNode childNode in node.ChildNodes)
+            {
+                ctObj.ds.Add(CT_DashStop.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+        public CT_DashStop AddNewDs()
+        {
+            var obj = new CT_DashStop();
+            this.ds.Add(obj);
+            return obj;
+        }
+
+        public CT_DashStop GetDsArray(int index)
+        {
+            if(index < 0 || index >= ds.Count)
+                throw new IndexOutOfRangeException();
+            return ds[index];
+        }
+
+        public CT_DashStop InsertNewDs(int index)
+        {
+            var obj = new CT_DashStop();
+            this.ds.Insert(index, obj);
+            return obj;
+        }
+
+        public void RemoveDs(int index)
+        {
+            if(index < 0 || index >= ds.Count)
+                throw new IndexOutOfRangeException();
+            this.ds.RemoveAt(index);
+        }
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<a:{0}>", nodeName));
+            foreach(var child in this.ds)
+            {
+                child.Write(sw, "ds");
+            }
+            sw.Write(string.Format("</a:{0}>", nodeName));
+        }
     }
 
     
@@ -444,7 +501,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         private CT_PresetLineDashProperties prstDashField;
 
-        private List<CT_DashStop> custDashField;
+        private CT_DashStopList custDashField;
 
         private CT_LineJoinRound roundField;
 
@@ -479,13 +536,18 @@ namespace NPOI.OpenXmlFormats.Dml
                 return null;
             CT_LineProperties ctObj = new CT_LineProperties();
             ctObj.w = XmlHelper.ReadInt(node.Attributes["w"]);
-            if (node.Attributes["cap"] != null)
+            ctObj.capFieldSpecified = node.Attributes["cap"] != null;
+            if (ctObj.capFieldSpecified)
                 ctObj.cap = (ST_LineCap)Enum.Parse(typeof(ST_LineCap), node.Attributes["cap"].Value);
-            if (node.Attributes["cmpd"] != null)
+            
+            ctObj.cmpdFieldSpecified = node.Attributes["cmpd"] != null;
+            if (ctObj.cmpdFieldSpecified)
                 ctObj.cmpd = (ST_CompoundLine)Enum.Parse(typeof(ST_CompoundLine), node.Attributes["cmpd"].Value);
-            if (node.Attributes["algn"] != null)
+            
+            ctObj.algnFieldSpecified = node.Attributes["algn"] != null;
+            if (ctObj.algnFieldSpecified)
                 ctObj.algn = (ST_PenAlignment)Enum.Parse(typeof(ST_PenAlignment), node.Attributes["algn"].Value);
-            ctObj.custDash = new List<CT_DashStop>();
+            ctObj.custDash = new CT_DashStopList();
             foreach (XmlNode childNode in node.ChildNodes)
             {
                 if (childNode.LocalName == "noFill")
@@ -511,7 +573,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 else if (childNode.LocalName == "extLst")
                     ctObj.extLst = CT_OfficeArtExtensionList.Parse(childNode, namespaceManager);
                 else if (childNode.LocalName == "custDash")
-                    ctObj.custDash.Add(CT_DashStop.Parse(childNode, namespaceManager));
+                    ctObj.custDash = CT_DashStopList.Parse(childNode, namespaceManager);
             }
             return ctObj;
         }
@@ -522,11 +584,11 @@ namespace NPOI.OpenXmlFormats.Dml
         {
             sw.Write(string.Format("<a:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "w", this.w);
-            if(this.cap!= ST_LineCap.NONE)
+            if(this.capFieldSpecified && this.cap!= ST_LineCap.NONE)
                 XmlHelper.WriteAttribute(sw, "cap", this.cap.ToString());
-            if(this.cmpd !=  ST_CompoundLine.NONE)
+            if(this.cmpdFieldSpecified && this.cmpd !=  ST_CompoundLine.NONE)
                 XmlHelper.WriteAttribute(sw, "cmpd", this.cmpd.ToString());
-            if(this.algn!= ST_PenAlignment.NONE)
+            if(this.algnFieldSpecified && this.algn!= ST_PenAlignment.NONE)
                 XmlHelper.WriteAttribute(sw, "algn", this.algn.ToString());
             sw.Write(">");
             if (this.noFill != null)
@@ -541,10 +603,11 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.prstDash.Write(sw, "prstDash");
             if (this.custDash != null)
             {
-                foreach (CT_DashStop x in this.custDash)
-                {
-                    x.Write(sw, "custDash");
-                }
+                this.custDash.Write(sw, "custDash");
+                //foreach (CT_DashStop x in this.custDash)
+                //{
+                //    x.Write(sw, "custDash");
+                //}
             }
             if (this.round != null)
                 sw.Write("<a:round/>");
@@ -633,7 +696,7 @@ namespace NPOI.OpenXmlFormats.Dml
         }
 
         [XmlElement(Order = 5)]
-        public List<CT_DashStop> custDash
+        public CT_DashStopList custDash
         {
             get
             {
@@ -732,6 +795,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
             set
             {
+                this.wFieldSpecified = true;
                 this.wField = value;
             }
         }
@@ -758,6 +822,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
             set
             {
+                this.capFieldSpecified = true;
                 this.capField = value;
             }
         }
@@ -785,6 +850,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
             set
             {
+                this.cmpdFieldSpecified = true;
                 this.cmpdField = value;
             }
         }
@@ -812,6 +878,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
             set
             {
+                this.algnFieldSpecified = true;
                 this.algnField = value;
             }
         }
@@ -840,6 +907,120 @@ namespace NPOI.OpenXmlFormats.Dml
             return this.solidFillField != null;
         }
 
+        public bool IsSetCustDash()
+        {
+            return this.custDashField != null;
+        }
+
+        public void AddNewCustDash()
+        {
+            this.custDashField = new CT_DashStopList();
+        }
+
+        public bool IsSetTailEnd()
+        {
+            return this.tailEndField != null;
+        }
+
+        public void UnsetTailEnd()
+        {
+            this.tailEndField = null;
+        }
+
+        public bool IsSetHeadEnd()
+        {
+            return this.headEndField != null;
+        }
+
+        public void UnsetHeadEnd()
+        {
+            this.headEndField = null;
+        }
+
+        public bool IsSetBevel()
+        {
+            return this.bevelField != null;
+        }
+
+        public void UnsetBevel()
+        {
+            this.bevelField = null;
+        }
+
+        public bool IsSetMiter()
+        {
+            return this.miterField != null;
+        }
+
+        public void UnsetMiter()
+        {
+            this.miterField = null;
+        }
+
+        public bool IsSetRound()
+        {
+            return this.roundField != null;
+        }
+
+        public void UnsetRound()
+        {
+            this.roundField = null;
+        }
+
+        public bool IsSetGradFill()
+        {
+            return this.gradFillField != null;
+        }
+
+        public void UnsetGradFill()
+        {
+            this.gradFillField = null;
+        }
+
+        public bool IsSetNoFill()
+        {
+            return this.noFillField != null;
+        }
+
+        public void UnsetNoFill()
+        {
+            this.noFillField = null;
+        }
+
+        public bool IsSetPattFill()
+        {
+            return this.pattFillField != null;
+        }
+
+        public void UnsetPattFill()
+        {
+            this.pattFillField = null;
+        }
+
+        public void UnsetSolidFill()
+        {
+            this.solidFillField = null;
+        }
+
+        public bool IsSetPrstDash()
+        {
+            return this.prstDashField != null;
+        }
+
+        public void UnsetPrstDash()
+        {
+            this.prstDashField = null;
+        }
+
+        public bool IsSetExtLst()
+        {
+            return this.extLstField != null;
+        }
+
+        public void UnsetExtLst()
+        {
+            this.extLstField = null;
+        }
     }
 
     
