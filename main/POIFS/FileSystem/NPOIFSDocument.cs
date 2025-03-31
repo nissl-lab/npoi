@@ -23,7 +23,8 @@ using NPOI.Util;
 using System.IO;
 using System.Collections.Generic;
 using System;
-using System.Text;
+using System.Text; 
+using Cysharp.Text;
 using System.Collections;
 using NPOI.POIFS.EventFileSystem;
 

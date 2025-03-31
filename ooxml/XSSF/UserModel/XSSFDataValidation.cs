@@ -18,7 +18,8 @@ using System.Collections.Generic;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.SS.UserModel;
 using System;
-using System.Text;
+using System.Text; 
+using Cysharp.Text;
 using NPOI.SS.Util;
 using NPOI.Util;
 

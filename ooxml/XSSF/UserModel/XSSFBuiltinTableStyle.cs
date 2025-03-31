@@ -4,7 +4,8 @@ using NPOI.XSSF.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Text; 
+using Cysharp.Text;
 using System.Xml;
 
 namespace NPOI.XSSF.UserModel

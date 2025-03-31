@@ -24,7 +24,8 @@ namespace NPOI.SS.Formula.Eval
     using NPOI.SS.Formula.PTG;
     using NPOI.SS.Util;
     using System.Globalization;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
 
     /**
      * @author Amol S. Deshmukh &lt; amolweb at ya hoo dot com &gt;

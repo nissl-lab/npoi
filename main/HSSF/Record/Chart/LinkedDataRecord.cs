@@ -23,7 +23,8 @@ namespace NPOI.HSSF.Record.Chart
     using NPOI.SS.Formula.PTG;
     using NPOI.SS.Formula;
     using NPOI.Util;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
 
     /**
      * Describes a linked data record.  This record refers to the series data or text.<p/>

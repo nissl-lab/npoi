@@ -20,7 +20,8 @@ namespace NPOI.HSSF.UserModel
     using System;
     using System.Collections;
     using System.Text.RegularExpressions;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
 

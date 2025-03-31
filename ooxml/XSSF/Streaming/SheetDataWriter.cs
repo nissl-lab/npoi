@@ -17,7 +17,8 @@
 using System;
 using System.Globalization;
 using System.IO;
-using System.Text;
+using System.Text; 
+using Cysharp.Text;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using NPOI.Util;

@@ -18,7 +18,8 @@ namespace NPOI.XWPF.UserModel
 {
     using System;
     using NPOI.OpenXmlFormats.Wordprocessing;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
 
 
     public class TOC

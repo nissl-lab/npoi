@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections;
-using System.Text;
+using System.Text; 
+using Cysharp.Text;
 using System.IO;
 using ICSharpCode.SharpZipLib.Zip;
 using NPOI.POIFS.Common;

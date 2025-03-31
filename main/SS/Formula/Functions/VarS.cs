@@ -20,7 +20,8 @@ using NPOI.SS.Formula.Eval;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Text; 
+using Cysharp.Text;
 using System.Threading.Tasks;
 
 namespace NPOI.SS.Formula.Functions

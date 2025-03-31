@@ -15,6 +15,10 @@
   </ItemGroup>
 
   <ItemGroup>
+	  <PackageReference Include="ZString" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Enums.NET" />
     <PackageReference Include="ExtendedNumerics.BigDecimal" />
     <PackageReference Include="MathNet.Numerics.Signed" />

@@ -20,7 +20,8 @@ using NPOI.POIFS.Crypt;
 using NPOI.Util;
 using System;
 using System.IO;
-using System.Text;
+using System.Text; 
+using Cysharp.Text;
 
 namespace NPOI.POIFS.FileSystem
 {

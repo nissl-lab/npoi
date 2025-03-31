@@ -19,7 +19,8 @@ namespace NPOI.HSSF.Extractor
 {
     using System;
     using System.IO;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
     using NPOI.HSSF;
     using NPOI.HSSF.Model;
     using NPOI.HSSF.Record;

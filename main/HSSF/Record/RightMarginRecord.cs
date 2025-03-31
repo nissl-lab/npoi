@@ -22,7 +22,8 @@ namespace NPOI.HSSF.Record
     using NPOI.Util;
 
     using System;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
 
     /**
      * Record for the right margin. * NOTE: This source was automatically generated. * @author Shawn Laubach (slaubach at apache dot org)

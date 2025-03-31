@@ -16,7 +16,8 @@
    limitations under the License.
 ==================================================================== */
 
-using System.Text;
+using System.Text; 
+using Cysharp.Text;
 
 namespace NPOI.DDF
 {

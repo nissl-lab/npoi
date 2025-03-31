@@ -2,7 +2,8 @@
 using NPOI.SS.Formula.Functions;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Text; 
+using Cysharp.Text;
 
 namespace NPOI.SS.Formula.Atp
 {

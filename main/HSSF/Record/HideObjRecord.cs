@@ -21,7 +21,8 @@ namespace NPOI.HSSF.Record
 {
     using System;
     using NPOI.Util;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
 
     /**
      * Title:        Hide Object Record

@@ -16,7 +16,8 @@
 ==================================================================== */
 using System;
 using NPOI.OpenXmlFormats.Wordprocessing;
-using System.Text;
+using System.Text; 
+using Cysharp.Text;
 using System.Collections.Generic;
 namespace NPOI.XWPF.UserModel
 {

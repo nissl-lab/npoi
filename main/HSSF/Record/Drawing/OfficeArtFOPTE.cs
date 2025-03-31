@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Text; 
+using Cysharp.Text;
 using NPOI.Util;
 using NPOI.SS.UserModel.Drawing;
 

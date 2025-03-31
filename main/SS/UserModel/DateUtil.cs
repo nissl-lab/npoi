@@ -20,7 +20,8 @@ namespace NPOI.SS.UserModel
     using System.Globalization;
     using System;
     using System.Text.RegularExpressions;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
     using NPOI.Util;
 
     /// <summary>

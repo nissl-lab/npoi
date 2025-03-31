@@ -19,7 +19,8 @@ namespace NPOI.POIFS.Crypt.Agile
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
     using NPOI.OpenXmlFormats.Encryption;
     using NPOI.POIFS.Crypt;
     using NPOI.POIFS.FileSystem;

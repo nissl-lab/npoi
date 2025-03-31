@@ -22,7 +22,8 @@ namespace NPOI.HSSF.Record
     using System;
     using NPOI.HSSF.Record;
     using NPOI.Util;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
 
     using NPOI.SS.Formula.PTG;
 

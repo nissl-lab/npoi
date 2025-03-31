@@ -17,7 +17,7 @@
 namespace NPOI.XWPF.UserModel
 {
     using System;
-    using System.Text;
+    using System.Text; 
     using NPOI.OpenXmlFormats.Wordprocessing;
     using System.Collections.Generic;
 

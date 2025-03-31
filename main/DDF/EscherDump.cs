@@ -21,7 +21,8 @@ namespace NPOI.DDF
 {
     using System;
     using System.IO;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
 
 
     using NPOI.Util;
@@ -70,7 +71,7 @@ namespace NPOI.DDF
             short options;      // 4 bits for the version and 12 bits for the instance
             short recordId;
             int recordBytesRemaining;       // including enclosing records
-            StringBuilder stringBuf = new StringBuilder();
+            StringBuilder  stringBuf;
             short nDumpSize;
             String recordName;
 

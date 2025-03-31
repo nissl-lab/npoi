@@ -20,7 +20,8 @@ namespace NPOI.SS.Formula.Functions
     using NPOI.SS.Formula.Eval;
     using System;
     using NPOI.SS.Util;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
     /**
      * Creates a text reference as text, given specified row and column numbers.
      *

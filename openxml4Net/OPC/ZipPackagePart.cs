@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Text; 
+using Cysharp.Text;
 using System.IO;
 using NPOI.OpenXml4Net.OPC.Internal.Marshallers;
 using ICSharpCode.SharpZipLib.Zip;

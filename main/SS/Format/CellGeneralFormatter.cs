@@ -17,7 +17,8 @@
 namespace NPOI.SS.Format
 {
     using System;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
 
 
 

@@ -22,7 +22,8 @@ namespace NPOI.SS.Format
     using System.Collections.Generic;
     using System.Collections;
     using System.Text.RegularExpressions;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
     using SixLabors.ImageSharp;
     using NPOI.Util;
 
@@ -446,8 +447,9 @@ namespace NPOI.SS.Format
          */
         static String QuoteSpecial(String repl, CellFormatType type)
         {
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < repl.Length; i++)
+            using var sb = ZString.CreateStringBuilder();
+
+            for(int i = 0; i < repl.Length; i++)
             {
                 char ch = repl[i];
                 if (ch == '\'' && type.IsSpecial('\''))
@@ -612,8 +614,9 @@ namespace NPOI.SS.Format
         {
             if ((s.IndexOf('\\') == -1) && (s.IndexOf('$') == -1))
                 return s;
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < s.Length; i++)
+            using var sb = ZString.CreateStringBuilder();
+
+            for(int i = 0; i < s.Length; i++)
             {
                 char c = s[(i)];
                 if (c == '\\' || c == '$')

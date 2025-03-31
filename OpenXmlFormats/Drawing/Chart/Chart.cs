@@ -17,7 +17,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     using System.Linq;
     using System.Xml;
     using NPOI.OpenXml4Net.Util;
-    using System.Text;
+    using System.Text; 
     using System.Globalization;
     using Cysharp.Text;
 

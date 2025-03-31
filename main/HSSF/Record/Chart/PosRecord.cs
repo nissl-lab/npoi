@@ -16,7 +16,8 @@
    limitations Under the License.
 ==================================================================== */
 
-using System.Text;
+using System.Text; 
+using Cysharp.Text;
 using NPOI.Util;
 
 namespace NPOI.HSSF.Record.Chart

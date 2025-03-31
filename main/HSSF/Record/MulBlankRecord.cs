@@ -26,7 +26,8 @@ namespace NPOI.HSSF.Record
 {
     using NPOI.Util;
     using System;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
 
     /**
      * Title:        Mulitple Blank cell record 

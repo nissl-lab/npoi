@@ -13,7 +13,8 @@ namespace NPOI.OpenXmlFormats.Encryption
     using System.Xml.Schema;
     using System.ComponentModel;
     using System.IO;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
     using System.Xml;
     using System.Collections.Generic;
     using NPOI.OpenXml4Net.Util;

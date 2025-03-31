@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Text;
+using System.Text; 
+using Cysharp.Text;
 using NPOI.SS.Formula.Eval;
 
 namespace NPOI.SS.Formula.Functions

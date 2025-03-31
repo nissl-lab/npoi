@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Text; 
+using Cysharp.Text;
 using System.IO;
 using NPOI.OpenXml4Net.Exceptions;
 using NPOI.OpenXml4Net.OPC;
@@ -595,6 +596,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal
             }
             //if you're here, no pattern matched, throw exception
             StringBuilder sb = new StringBuilder();
+
             int i = 0;
             foreach (String fStr in TZ_DATE_FORMATS)
             {

@@ -21,7 +21,8 @@ namespace NPOI.HSSF.Record.Common
 
     using NPOI.HSSF.Record;
     using NPOI.Util;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
 
     /**
      * Title: FeatProtection (Protection Shared Feature) common record part

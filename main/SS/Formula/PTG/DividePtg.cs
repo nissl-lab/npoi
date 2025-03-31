@@ -18,7 +18,8 @@
 namespace NPOI.SS.Formula.PTG
 {
     using System;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
 
     /**
      * This PTG implements the standard binomial divide "/"

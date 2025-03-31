@@ -18,7 +18,8 @@
 namespace NPOI.HSSF.Record.Aggregates
 {
     using System;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
     using System.Collections;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Model;

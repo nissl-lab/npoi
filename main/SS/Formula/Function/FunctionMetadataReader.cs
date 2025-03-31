@@ -24,7 +24,8 @@ namespace NPOI.SS.Formula.Function
     using System.Text.RegularExpressions;
     using NPOI.SS.Formula.PTG;
     using System.Globalization;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
 
     /**
      * Converts the text meta-data file into a <c>FunctionMetadataRegistry</c>

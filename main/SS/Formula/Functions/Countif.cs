@@ -19,7 +19,8 @@
 namespace NPOI.SS.Formula.Functions
 {
     using System;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
     using System.Text.RegularExpressions;
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.UserModel;

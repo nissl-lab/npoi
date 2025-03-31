@@ -18,7 +18,8 @@
 namespace NPOI.SS.Formula.Eval
 {
     using System;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
     using System.Collections.Generic;

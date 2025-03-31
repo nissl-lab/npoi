@@ -21,7 +21,8 @@ namespace NPOI.SS.Formula.Functions
     using NPOI.SS.Formula.Eval;
     
     using NPOI.SS.Formula;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
     using NPOI.SS.Formula.PTG;
     using NPOI.SS.UserModel;
 

@@ -18,7 +18,8 @@
 namespace NPOI.XSSF.UserModel.Helpers
 {
     using System;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
 
     public class HeaderFooterHelper
     {
@@ -116,8 +117,7 @@ namespace NPOI.XSSF.UserModel.Helpers
         }
         private String JoinParts(String l, String c, String r)
         {
-            StringBuilder ret = new StringBuilder();
-
+            using var ret = ZString.CreateStringBuilder();
             // Join as c, l, r
             if (c.Length > 0)
             {

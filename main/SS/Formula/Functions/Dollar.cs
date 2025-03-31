@@ -21,7 +21,8 @@
 using NPOI.SS.Formula.Eval;
 using NPOI.SS.Util;
 using System;
-using System.Text;
+using System.Text; 
+using Cysharp.Text;
 
 namespace NPOI.SS.Formula.Functions
 {

@@ -19,7 +19,8 @@ namespace NPOI.SS.Formula.Functions
 {
     using System;
     using NPOI.SS.Formula.Eval;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
     using System.Globalization;
 
     /// <summary>
@@ -31,7 +32,8 @@ namespace NPOI.SS.Formula.Functions
     {
         public override ValueEval Evaluate(String text)
         {
-            StringBuilder sb = new StringBuilder();
+            using var sb = ZString.CreateStringBuilder();
+
             bool shouldMakeUppercase = true;
 
             foreach (char ch in text.ToCharArray())

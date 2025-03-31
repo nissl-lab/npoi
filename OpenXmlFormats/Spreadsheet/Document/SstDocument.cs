@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Security;
-using System.Text;
+using System.Text; 
+using Cysharp.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Serialization;

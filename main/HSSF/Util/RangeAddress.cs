@@ -17,7 +17,8 @@
 
 
 using System;
-using System.Text;
+using System.Text; 
+using Cysharp.Text;
 using System.Globalization;
 
 namespace NPOI.HSSF.Util

@@ -18,7 +18,8 @@ namespace NPOI.POIFS.Crypt.Standard
 {
     using System;
     using NPOI.Util;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
 
     public class StandardEncryptionHeader : EncryptionHeader, EncryptionRecord
     {

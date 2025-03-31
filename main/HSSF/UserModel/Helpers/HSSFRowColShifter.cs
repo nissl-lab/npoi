@@ -4,7 +4,8 @@ using NPOI.SS.UserModel;
 using NPOI.Util;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Text; 
+using Cysharp.Text;
 
 namespace NPOI.HSSF.UserModel.Helpers
 {

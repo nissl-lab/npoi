@@ -26,7 +26,8 @@ namespace NPOI.XSSF.UserModel
     using System;
     using NPOI.OpenXmlFormats;
     using System.IO;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
     using NPOI.SS.UserModel.Charts;
     using NPOI.XSSF.UserModel.Charts;
     using System.Xml.Serialization;

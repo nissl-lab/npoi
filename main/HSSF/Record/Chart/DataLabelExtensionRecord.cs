@@ -19,7 +19,8 @@ namespace NPOI.HSSF.Record.Chart
 {
     using System;
     using System.IO;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
     using NPOI.Util;
 
 

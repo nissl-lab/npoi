@@ -21,7 +21,8 @@
 namespace NPOI.SS.Formula.Functions
 {
     using System;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
     using NPOI.SS.Formula.Eval;
     using System.Globalization;
 
