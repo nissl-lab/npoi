@@ -97,7 +97,7 @@ namespace NPOI.SS.Util
         {
             if (cellRanges.Length < 1)
             {
-                return new CellRangeAddress[] { };
+                return [];
             }
             //ArrayList temp = MergeCellRanges(NPOI.Util.Arrays.AsList(cellRanges));
             List<CellRangeAddress> lst = new List<CellRangeAddress>(cellRanges);

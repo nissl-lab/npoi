@@ -527,7 +527,7 @@ namespace NPOI.HSSF.Record
             int size = Remaining;
             if (size == 0)
             {
-                return Array.Empty<byte>();
+                return [];
             }
             byte[] result = new byte[size];
             ReadFully(result);

@@ -29,7 +29,7 @@ namespace NPOI.SS.Formula.Functions
      */
     public abstract class MultiOperandNumericFunction : Function
     {
-        static readonly double[] EMPTY_DOUBLE_ARRAY = { };
+        static readonly double[] EMPTY_DOUBLE_ARRAY = [];
         private readonly bool _isReferenceBoolCounted;
         private readonly bool _isBlankCounted;
 

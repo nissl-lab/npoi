@@ -109,7 +109,7 @@ namespace NPOI.DDF
 
             try
             {
-                escherRecord = (EscherRecord)recordConstructor.Invoke(new object[] { });
+                escherRecord = (EscherRecord)recordConstructor.Invoke([]);
                 //escherRecord = (EscherRecord)Activator.CreateInstance(recordConstructor);
             }
             catch
@@ -133,7 +133,7 @@ namespace NPOI.DDF
         {
             Dictionary<short, ConstructorInfo> result = new Dictionary<short, ConstructorInfo>();
             //ConstructorInfo constructor;
-            Type[] EMPTY_CLASS_ARRAY = Array.Empty<Type>();
+            Type[] EMPTY_CLASS_ARRAY = [];
             for (int i = 0; i < records.Length; i++)
             {
                 Type recordType = records[i];

@@ -27,7 +27,7 @@ namespace NPOI.SS.Formula
      */
     public class FormulaCellCacheEntry : CellCacheEntry
     {
-        public static new FormulaCellCacheEntry[] EMPTY_ARRAY = { };
+        public static new FormulaCellCacheEntry[] EMPTY_ARRAY = [];
 
         /**
          * Cells 'used' in the current evaluation of the formula corresponding To this cache entry

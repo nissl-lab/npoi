@@ -36,7 +36,7 @@ namespace NPOI.HSSF.Record
         public const short sid = 0x06;
 
         private byte[] reserved;    // would really love to know what goes in here.
-        private static byte[] EMPTY_BYTE_ARRAY = { };
+        private static byte[] EMPTY_BYTE_ARRAY = [];
 
         public GroupMarkerSubRecord()
         {

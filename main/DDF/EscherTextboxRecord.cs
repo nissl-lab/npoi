@@ -37,7 +37,7 @@ namespace NPOI.DDF
         public const short RECORD_ID = unchecked((short)0xF00D);
         public const string RECORD_DESCRIPTION = "msofbtClientTextbox";
 
-        private static readonly byte[] NO_BYTES = Array.Empty<byte>();
+        private static readonly byte[] NO_BYTES = [];
 
         /** The data for this record not including the the 8 byte header */
         private byte[] _thedata = NO_BYTES;

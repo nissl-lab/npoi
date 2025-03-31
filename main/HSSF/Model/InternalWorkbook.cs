@@ -2787,7 +2787,7 @@ namespace NPOI.HSSF.Model
                 dgg.ShapeIdMax=1024;
                 dgg.NumShapesSaved=0;
                 dgg.DrawingsSaved=0;
-                dgg.FileIdClusters=new EscherDggRecord.FileIdCluster[] { };
+                dgg.FileIdClusters= [];
                 drawingManager = new DrawingManager2(dgg);
                 EscherContainerRecord bstoreContainer = null;
                 if (escherBSERecords.Count > 0)

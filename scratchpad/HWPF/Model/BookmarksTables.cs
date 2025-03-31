@@ -27,7 +27,7 @@ namespace NPOI.HWPF.Model
 
         private PlexOfCps descriptorsLim = new PlexOfCps(0);
 
-        private String[] names = Array.Empty<String>();
+        private String[] names = [];
 
         public BookmarksTables(byte[] tableStream, FileInformationBlock fib)
         {

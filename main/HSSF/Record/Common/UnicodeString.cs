@@ -137,8 +137,8 @@ namespace NPOI.HSSF.Record
             {
                 reserved = 1;
                 phoneticText = "";
-                phRuns = Array.Empty<PhRun>();
-                extraData = Array.Empty<byte>();
+                phRuns = [];
+                extraData = [];
             }
             public override int GetHashCode()
             {

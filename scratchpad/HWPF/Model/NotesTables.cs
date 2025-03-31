@@ -39,7 +39,7 @@ namespace NPOI.HWPF.Model
         {
             this.noteType = noteType;
             textPositions
-                    .AddProperty(new GenericPropertyNode(0, 1, Array.Empty<byte>()));
+                    .AddProperty(new GenericPropertyNode(0, 1, []));
         }
 
         public NotesTables(NoteType noteType, byte[] tableStream,

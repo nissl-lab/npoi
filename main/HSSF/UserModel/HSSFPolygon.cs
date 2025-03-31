@@ -140,7 +140,7 @@ namespace NPOI.HSSF.UserModel
                 EscherArrayProperty verticesProp = (EscherArrayProperty)GetOptRecord().Lookup(EscherProperties.GEOMETRY__VERTICES);
                 if (null == verticesProp)
                 {
-                    return new int[] { };
+                    return [];
                 }
                 int[] array = new int[verticesProp.NumberOfElementsInArray - 1];
                 for (int i = 0; i < verticesProp.NumberOfElementsInArray - 1; i++)
@@ -163,7 +163,7 @@ namespace NPOI.HSSF.UserModel
                 EscherArrayProperty verticesProp = (EscherArrayProperty)GetOptRecord().Lookup(EscherProperties.GEOMETRY__VERTICES);
                 if (null == verticesProp)
                 {
-                    return new int[] { };
+                    return [];
                 }
                 int[] array = new int[verticesProp.NumberOfElementsInArray - 1];
                 for (int i = 0; i < verticesProp.NumberOfElementsInArray - 1; i++)
@@ -191,7 +191,7 @@ namespace NPOI.HSSF.UserModel
             {
                 logger.Log(POILogger.ERROR, "HSSFPolygon must have at least one point");
             }
-            EscherArrayProperty verticesProp = new EscherArrayProperty(EscherProperties.GEOMETRY__VERTICES, false, System.Array.Empty<byte>());
+            EscherArrayProperty verticesProp = new EscherArrayProperty(EscherProperties.GEOMETRY__VERTICES, false, []);
             verticesProp.NumberOfElementsInArray = (xPoints.Length + 1);
             verticesProp.NumberOfElementsInMemory = (xPoints.Length + 1);
             verticesProp.SizeOfElements = unchecked((short)(0xFFF0));

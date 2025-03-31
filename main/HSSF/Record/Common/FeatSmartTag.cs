@@ -39,7 +39,7 @@ namespace NPOI.HSSF.Record.Common
 
         public FeatSmartTag()
         {
-            data = Array.Empty<byte>();
+            data = [];
         }
 
         public FeatSmartTag(RecordInputStream in1)

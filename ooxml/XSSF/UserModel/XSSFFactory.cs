@@ -58,7 +58,7 @@ namespace NPOI.XSSF.UserModel
         {
             if (classes == null)
             {
-                classes = Array.Empty<Type>();
+                classes = [];
             }
             
             ConstructorInfo constructor = cls.GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public,
@@ -67,7 +67,7 @@ namespace NPOI.XSSF.UserModel
                 throw new MissingMethodException();
             if (values == null)
             {
-                values = Array.Empty<object>();
+                values = [];
             }
             return constructor.Invoke(values) as POIXMLDocumentPart;
         }

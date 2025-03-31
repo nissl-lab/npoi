@@ -663,7 +663,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             this.decimalSymbolField = new CT_String();
             this.decimalSymbol.val = ".";
             //this.doNotEmbedSmartTagsField = new CT_OnOff();
-            this.shapeDefaultsField = new System.Xml.XmlElement[0];
+            this.shapeDefaultsField = [];
             //this.schemaLibraryField = new List<CT_Schema>();
             //this.smartTagTypeField = new List<CT_SmartTagType>();
             //this.readModeInkLockDownField = new CT_ReadingModeInkLockDown();
@@ -7478,7 +7478,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_ShapeDefaults()
         {
-            this.itemsField = new System.Xml.XmlElement[0];
+            this.itemsField = [];
         }
 
         [XmlAnyElement(Namespace = "urn:schemas-microsoft-com:office:office", Order = 0)]

@@ -47,8 +47,8 @@ namespace NPOI.POIFS.FileSystem
     /// </summary>
     public class OPOIFSDocument : BATManaged, BlockWritable, POIFSViewable
     {
-        private static readonly DocumentBlock[] EMPTY_BIG_BLOCK_ARRAY = { };
-        private static readonly SmallDocumentBlock[] EMPTY_SMALL_BLOCK_ARRAY = { };
+        private static readonly DocumentBlock[] EMPTY_BIG_BLOCK_ARRAY = [];
+        private static readonly SmallDocumentBlock[] EMPTY_SMALL_BLOCK_ARRAY = [];
 
         private readonly DocumentProperty _property;
         private readonly int _size;
@@ -153,7 +153,7 @@ namespace NPOI.POIFS.FileSystem
             if (_property.ShouldUseSmallBlocks)
             {
                 _small_store = new SmallBlockStore(bigBlockSize, SmallDocumentBlock.Convert(bigBlockSize, bigBlocks, _size));
-                _big_store = new BigBlockStore(bigBlockSize, Array.Empty<DocumentBlock>());
+                _big_store = new BigBlockStore(bigBlockSize, []);
             }
             else
             {
@@ -476,7 +476,7 @@ namespace NPOI.POIFS.FileSystem
             internal SmallBlockStore(POIFSBigBlockSize bigBlockSize, POIFSDocumentPath path, string name, int size, POIFSWriterListener writer)
             {
                 this.bigBlockSize = bigBlockSize;
-                this.smallBlocks = Array.Empty<SmallDocumentBlock>();
+                this.smallBlocks = [];
                 this.path = path;
                 this.name = name;
                 this.size = size;
@@ -532,7 +532,7 @@ namespace NPOI.POIFS.FileSystem
             internal BigBlockStore(POIFSBigBlockSize bigBlockSize, POIFSDocumentPath path, string name, int size, POIFSWriterListener writer)
             {
                 this.bigBlockSize = bigBlockSize;
-                this.bigBlocks = Array.Empty<DocumentBlock>();
+                this.bigBlocks = [];
                 this.path = path;
                 this.name = name;
                 this.size = size;

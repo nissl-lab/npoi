@@ -105,7 +105,7 @@ namespace NPOI.POIFS.FileSystem
 
         public Object[] ViewableArray
         {
-            get { return Array.Empty<Object>(); }
+            get { return []; }
         }
 
         /**

@@ -57,7 +57,7 @@ namespace NPOI.HWPF.Model
                 // check for the optimization
                 if (fileOffset == unchecked((int)0xffffffff))
                 {
-                    sepx = new SEPX(sed, startAt, endAt, Array.Empty<byte>());
+                    sepx = new SEPX(sed, startAt, endAt, []);
                 }
                 else
                 {

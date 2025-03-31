@@ -29,7 +29,7 @@ namespace NPOI.SS.Formula
     class ParseNode
     {
 
-        public static ParseNode[] EMPTY_ARRAY = { };
+        public static ParseNode[] EMPTY_ARRAY = [];
         private readonly Ptg _token;
         private readonly ParseNode[] _children;
         private readonly bool _isIf;

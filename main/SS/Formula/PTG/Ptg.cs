@@ -46,7 +46,7 @@ namespace NPOI.SS.Formula.PTG
     [Serializable]
     public abstract class Ptg : ICloneable
     {
-        public static Ptg[] EMPTY_PTG_ARRAY = { };
+        public static Ptg[] EMPTY_PTG_ARRAY = [];
 
         /**
          * Reads <c>size</c> bytes of the input stream, to Create an array of <c>Ptg</c>s.

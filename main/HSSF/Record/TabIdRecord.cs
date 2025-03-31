@@ -36,7 +36,7 @@ namespace NPOI.HSSF.Record
        : StandardRecord
     {
         public const short sid = 0x13d;
-        private static short[] EMPTY_SHORT_ARRAY = { };
+        private static short[] EMPTY_SHORT_ARRAY = [];
         public short[] _tabids;
 
         public TabIdRecord()
