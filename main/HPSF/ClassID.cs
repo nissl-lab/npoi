@@ -258,7 +258,7 @@ namespace NPOI.HPSF
         /// Serves as a hash function for a particular type.
         /// </summary>
         /// <returns>
-        /// A hash code for the current <see cref="T:System.Object"/>.
+        /// A hash code for the current <see cref="System.Object"/>.
         /// </returns>
         public override int GetHashCode()
         {

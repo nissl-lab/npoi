@@ -80,7 +80,8 @@ namespace NPOI.SS.Formula.Functions
                 return e.GetErrorEval();
             }
         }
-        private double GetValue(ValueEval arg)
+
+        private static double GetValue(ValueEval arg)
         {
             if (arg is NumberEval eval)
             {

@@ -177,7 +177,8 @@ namespace NPOI.HSSF.Record.Aggregates
             }
             return true;
         }
-        private void CheckNotPresent(Record rec)
+
+        private static void CheckNotPresent(Record rec)
         {
             if (rec != null)
             {
@@ -185,6 +186,7 @@ namespace NPOI.HSSF.Record.Aggregates
                         + StringUtil.ToHexString(rec.Sid) + ")");
             }
         }
+
         private PageBreakRecord RowBreaksRecord
         {
             get

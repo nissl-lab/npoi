@@ -58,7 +58,7 @@ namespace NPOI.HSSF.UserModel
             }
         }
 
-        private void CreateAutoFilterInfoRecord(HSSFSheet sheet, int insertPos, Area3DPtg ptg)
+        private static void CreateAutoFilterInfoRecord(HSSFSheet sheet, int insertPos, Area3DPtg ptg)
         {
             //look for the AutoFilterInfo Record
             NPOI.HSSF.Record.Record record = sheet.Sheet.FindFirstRecordBySid(AutoFilterInfoRecord.sid);

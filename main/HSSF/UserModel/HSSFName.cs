@@ -147,7 +147,7 @@ namespace NPOI.HSSF.UserModel
          *
          * @param name
          */
-        private void ValidateName(String name)
+        private static void ValidateName(String name)
         {
             /* equivalent to:
             Pattern.compile(
@@ -175,7 +175,7 @@ namespace NPOI.HSSF.UserModel
             // is first character valid?
             char c = name[0];
             String allowedSymbols = "_\\";
-            bool characterIsValid = (char.IsLetter(c) || allowedSymbols.IndexOf(c) != -1);
+            bool characterIsValid = (char.IsLetter(c) || allowedSymbols.Contains(c));
             if (!characterIsValid)
             {
                 throw new ArgumentException("Invalid name: '" + name + "': first character must be underscore or a letter");
@@ -185,7 +185,7 @@ namespace NPOI.HSSF.UserModel
             allowedSymbols = "_.\\"; //backslashes needed for unicode escape
             foreach (char ch in name.ToCharArray())
             {
-                characterIsValid = (char.IsLetterOrDigit(ch) || allowedSymbols.IndexOf(ch) != -1);
+                characterIsValid = (char.IsLetterOrDigit(ch) || allowedSymbols.Contains(ch));
                 if (!characterIsValid)
                 {
                     throw new ArgumentException("Invalid name: '" + name + "': name must be letter, digit, period, or underscore");
@@ -325,10 +325,10 @@ namespace NPOI.HSSF.UserModel
             _definedNameRec.SetFunction(value);
         }
         /// <summary>
-        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+        /// Returns a <see cref="System.String"/> that represents the current <see cref="System.Object"/>.
         /// </summary>
         /// <returns>
-        /// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+        /// A <see cref="System.String"/> that represents the current <see cref="System.Object"/>.
         /// </returns>
         public override String ToString()
         {

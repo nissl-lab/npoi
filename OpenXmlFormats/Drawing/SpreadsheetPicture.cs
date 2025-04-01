@@ -152,7 +152,7 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             this.nvPicPr = pict.nvPicPr;
             this.spPr = pict.spPr;
             this.macro = pict.macro;
-            this.macroSpecified = this.macroSpecified;
+            this.macroSpecified = pict.macroSpecified;
             this.style = pict.style;
             this.styleSpecified = pict.styleSpecified;
             this.fPublished = pict.fPublished;

@@ -1771,7 +1771,8 @@ namespace NPOI.HSSF.UserModel
             int window2Loc = _sheet.FindFirstRecordLocBySid(WindowTwoRecord.sid);
             _sheet.Records.InsertRange(window2Loc, records);
         }
-        private void NotifyRowShifting(HSSFRow row)
+
+        private static void NotifyRowShifting(HSSFRow row)
         {
             String msg = "Row[rownum=" + row.RowNum + "] contains cell(s) included in a multi-cell array formula. " +
                     "You cannot change part of an array.";
@@ -1784,6 +1785,7 @@ namespace NPOI.HSSF.UserModel
                 }
             }
         }
+
         /// <summary>
         /// Creates a split (freezepane). Any existing freezepane or split pane is overwritten.
         /// </summary>
@@ -2729,17 +2731,17 @@ namespace NPOI.HSSF.UserModel
             {
                 patriarch = CreateDrawingPatriarch() as HSSFPatriarch;
             }
-            return LookForComment(patriarch, row, column);
+            return HSSFSheet.LookForComment(patriarch, row, column);
         }
 
-        private HSSFComment LookForComment(HSSFShapeContainer container, int row, int column)
+        private static HSSFComment LookForComment(HSSFShapeContainer container, int row, int column)
         {
             foreach (Object obj in container.Children)
             {
                 HSSFShape shape = (HSSFShape)obj;
                 if (shape is HSSFShapeGroup group)
                 {
-                    HSSFShape res = LookForComment(group, row, column);
+                    HSSFShape res = HSSFSheet.LookForComment(group, row, column);
                     if (null != res)
                     {
                         return (HSSFComment)res;
@@ -2770,7 +2772,7 @@ namespace NPOI.HSSF.UserModel
             }
 
             Dictionary<CellAddress, IComment> locations = new Dictionary<CellAddress, IComment>();
-            FindCellCommentLocations(patriarch, locations);
+            HSSFSheet.FindCellCommentLocations(patriarch, locations);
             return locations;
         }
 
@@ -2780,14 +2782,14 @@ namespace NPOI.HSSF.UserModel
          * @param container a container that may contain HSSFComments
          * @param locations the map to store the HSSFComments in
          */
-        private void FindCellCommentLocations(HSSFShapeContainer container, Dictionary<CellAddress, IComment> locations)
+        private static void FindCellCommentLocations(HSSFShapeContainer container, Dictionary<CellAddress, IComment> locations)
         {
             foreach (object obj in container.Children)
             {
                 HSSFShape shape = (HSSFShape)obj;
                 if (shape is HSSFShapeGroup group)
                 {
-                    FindCellCommentLocations(group, locations);
+                    HSSFSheet.FindCellCommentLocations(group, locations);
                     continue;
                 }
                 if (shape is HSSFComment comment)
@@ -3157,7 +3159,7 @@ namespace NPOI.HSSF.UserModel
                 //Note: This logic assumes that image id's go from 1 to N in the source document. It usually does
                 //Note: This logic assumes that no images are shared between sheets of the source document. If they
                 //are and you're copying multiple sheets, the file may be larger than expected due to duplicates.
-                IEnumerable<int> usedImages = FindUsedPictures(escher.EscherRecords);
+                IEnumerable<int> usedImages = HSSFSheet.FindUsedPictures(escher.EscherRecords);
                 Dictionary<int,int> remap = new Dictionary<int, int>();
                 IList pics = Workbook.GetAllPictures();
                 foreach (int imgId in usedImages)
@@ -3172,22 +3174,22 @@ namespace NPOI.HSSF.UserModel
                 //Apply the new image Id's the destination
                 foreach (EscherRecord escherRecord in destEscher.EscherRecords)
                 {
-                    ApplyEscherRemap(escherRecord, remap);
+                    HSSFSheet.ApplyEscherRemap(escherRecord, remap);
                 }
             }
         }
 
-        private IEnumerable<int> FindUsedPictures(IEnumerable<EscherRecord> escherRecords)
+        private static List<int> FindUsedPictures(IEnumerable<EscherRecord> escherRecords)
         {
             List<int> retval = new List<int>();
             foreach (EscherRecord escherRecord in escherRecords)
             {
-                GetSheetImageIds(escherRecord, retval);
+                HSSFSheet.GetSheetImageIds(escherRecord, retval);
             }
             return retval;
         }
 
-        private void GetSheetImageIds(EscherRecord parent, List<int> usedIds)
+        private static void GetSheetImageIds(EscherRecord parent, List<int> usedIds)
         {
             foreach (EscherRecord child in parent.ChildRecords)
             {
@@ -3211,13 +3213,13 @@ namespace NPOI.HSSF.UserModel
                 {
                     foreach (EscherRecord grandKid in child.ChildRecords)
                     {
-                        GetSheetImageIds(grandKid, usedIds);
+                        HSSFSheet.GetSheetImageIds(grandKid, usedIds);
                     }
                 }
             }
         }
 
-        private void ApplyEscherRemap(EscherRecord parent, Dictionary<int,int> mappings)
+        private static void ApplyEscherRemap(EscherRecord parent, Dictionary<int,int> mappings)
         {
             foreach (EscherRecord child in parent.ChildRecords)
             {
@@ -3241,7 +3243,7 @@ namespace NPOI.HSSF.UserModel
                 {
                     foreach (EscherRecord grandKid in child.ChildRecords)
                     {
-                        ApplyEscherRemap(grandKid, mappings);
+                        HSSFSheet.ApplyEscherRemap(grandKid, mappings);
                     }
                 }
             }

@@ -131,7 +131,7 @@ namespace NPOI.XWPF.UserModel
             }
         }
         
-        private void CreateEmptyTable(CT_Tbl table)
+        private static void CreateEmptyTable(CT_Tbl table)
         {
             // MINIMUM ELEMENTS FOR A TABLE
             table.AddNewTr().AddNewTc().AddNewP();
@@ -267,7 +267,7 @@ namespace NPOI.XWPF.UserModel
                     .AddNewTblPr();
         }
 
-        private void AddColumn(XWPFTableRow tabRow, int sizeCol)
+        private static void AddColumn(XWPFTableRow tabRow, int sizeCol)
         {
             if (sizeCol > 0)
             {

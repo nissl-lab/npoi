@@ -185,7 +185,7 @@ namespace NPOI.XSSF.UserModel
          ///   <attribute name="uri" type="xsd:token"/>
          /// </complexType>
         /// </example>
-        private void AppendChartElement(CT_GraphicalObjectData data, String id)
+        private static void AppendChartElement(CT_GraphicalObjectData data, String id)
         {
             String r_namespaceUri = ST_RelationshipId.NamespaceURI;
             String c_namespaceUri = XSSFDrawing.NAMESPACE_C;

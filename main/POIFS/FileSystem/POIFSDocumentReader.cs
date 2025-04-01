@@ -247,17 +247,17 @@ namespace NPOI.POIFS.FileSystem
         /// When overridden in a derived class, sets the position within the current stream.
         /// </summary>
         /// <param name="offset">A byte offset relative to the <paramref name="origin"/> parameter.</param>
-        /// <param name="origin">A value of type <see cref="T:System.IO.SeekOrigin"/> indicating the reference point used to obtain the new position.</param>
+        /// <param name="origin">A value of type <see cref="System.IO.SeekOrigin"/> indicating the reference point used to obtain the new position.</param>
         /// <returns>
         /// The new position within the current stream.
         /// </returns>
-        /// <exception cref="T:System.IO.IOException">
+        /// <exception cref="System.IO.IOException">
         /// An I/O error occurs.
         /// </exception>
-        /// <exception cref="T:System.NotSupportedException">
+        /// <exception cref="System.NotSupportedException">
         /// The stream does not support seeking, such as if the stream is constructed from a pipe or console output.
         /// </exception>
-        /// <exception cref="T:System.ObjectDisposedException">
+        /// <exception cref="System.ObjectDisposedException">
         /// Methods were called after the stream was closed.
         /// </exception>
         public override long Seek(long offset, SeekOrigin origin)
@@ -326,22 +326,22 @@ namespace NPOI.POIFS.FileSystem
         /// <param name="buffer">An array of bytes. This method copies <paramref name="count"/> bytes from <paramref name="buffer"/> to the current stream.</param>
         /// <param name="offset">The zero-based byte offset in <paramref name="buffer"/> at which to begin copying bytes to the current stream.</param>
         /// <param name="count">The number of bytes to be written to the current stream.</param>
-        /// <exception cref="T:System.ArgumentException">
+        /// <exception cref="System.ArgumentException">
         /// The sum of <paramref name="offset"/> and <paramref name="count"/> is greater than the buffer length.
         /// </exception>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="System.ArgumentNullException">
         /// 	<paramref name="buffer"/> is null.
         /// </exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="System.ArgumentOutOfRangeException">
         /// 	<paramref name="offset"/> or <paramref name="count"/> is negative.
         /// </exception>
-        /// <exception cref="T:System.IO.IOException">
+        /// <exception cref="System.IO.IOException">
         /// An I/O error occurs.
         /// </exception>
-        /// <exception cref="T:System.NotSupportedException">
+        /// <exception cref="System.NotSupportedException">
         /// The stream does not support writing.
         /// </exception>
-        /// <exception cref="T:System.ObjectDisposedException">
+        /// <exception cref="System.ObjectDisposedException">
         /// Methods were called after the stream was closed.
         /// </exception>
         public override void Write(byte[] buffer, int offset, int count)
@@ -399,10 +399,10 @@ namespace NPOI.POIFS.FileSystem
         /// <returns>
         /// A long value representing the length of the stream in bytes.
         /// </returns>
-        /// <exception cref="T:System.NotSupportedException">
+        /// <exception cref="System.NotSupportedException">
         /// A class derived from Stream does not support seeking.
         /// </exception>
-        /// <exception cref="T:System.ObjectDisposedException">
+        /// <exception cref="System.ObjectDisposedException">
         /// Methods were called after the stream was closed.
         /// </exception>
         public override long Length
@@ -420,13 +420,13 @@ namespace NPOI.POIFS.FileSystem
         /// <returns>
         /// The current position within the stream.
         /// </returns>
-        /// <exception cref="T:System.IO.IOException">
+        /// <exception cref="System.IO.IOException">
         /// An I/O error occurs.
         /// </exception>
-        /// <exception cref="T:System.NotSupportedException">
+        /// <exception cref="System.NotSupportedException">
         /// The stream does not support seeking.
         /// </exception>
-        /// <exception cref="T:System.ObjectDisposedException">
+        /// <exception cref="System.ObjectDisposedException">
         /// Methods were called after the stream was closed.
         /// </exception>
         public override long Position

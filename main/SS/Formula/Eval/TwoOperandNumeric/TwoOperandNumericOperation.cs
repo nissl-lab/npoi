@@ -11,6 +11,7 @@ namespace NPOI.SS.Formula.Eval
             ValueEval ve = OperandResolver.GetSingleValue(arg, srcCellRow, srcCellCol);
             return OperandResolver.CoerceValueToDouble(ve);
         }
+
         public ValueEval EvaluateArray(ValueEval[] args, int srcRowIndex, int srcColumnIndex)
         {
             if (args.Length != 2)

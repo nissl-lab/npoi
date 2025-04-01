@@ -185,8 +185,7 @@ namespace NPOI.SS.Formula
             return false;
         }
 
-        private byte TransformClass(byte currentOperandClass, byte desiredOperandClass,
-                bool callerForceArrayFlag)
+        private static byte TransformClass(byte currentOperandClass, byte desiredOperandClass, bool callerForceArrayFlag)
         {
             switch (desiredOperandClass)
             {
@@ -311,10 +310,8 @@ namespace NPOI.SS.Formula
             }
         }
 
-        private void SetSimpleValueFuncClass(AbstractFunctionPtg afp,
-                byte desiredOperandClass, bool callerForceArrayFlag)
+        private static void SetSimpleValueFuncClass(AbstractFunctionPtg afp, byte desiredOperandClass, bool callerForceArrayFlag)
         {
-
             if (callerForceArrayFlag || desiredOperandClass == Ptg.CLASS_ARRAY)
             {
                 afp.PtgClass = (Ptg.CLASS_ARRAY);

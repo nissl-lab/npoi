@@ -56,7 +56,7 @@ namespace NPOI.SS.Formula
                     }
                     else if (cellValue is String equalString)
                     {
-                        return string.Compare(equalString, (String)v1, true) == 0;
+                        return string.Equals(equalString, (String)v1, StringComparison.Ordinal);
                     }
                     else if (cellValue is Boolean b)
                     {
@@ -70,7 +70,7 @@ namespace NPOI.SS.Formula
                     if (cellValue is String s)
                     {
                         String n1 = (String)v1;
-                        return string.Compare(s, n1, true) != 0;
+                        return !string.Equals(s, n1, StringComparison.Ordinal);
                     }
                     else if (cellValue is Boolean b)
                     {
@@ -419,7 +419,8 @@ namespace NPOI.SS.Formula
             }
             return RuleIndex-o.RuleIndex;
         }
-        private ValueEval UnwrapEval(ValueEval eval)
+
+        private static ValueEval UnwrapEval(ValueEval eval)
         {
             ValueEval comp = eval;
 
@@ -428,6 +429,7 @@ namespace NPOI.SS.Formula
             }
             return comp;
         }
+
         private bool CheckValue(ICell cell, CellRangeAddress region)
         {
             if (cell == null || DataValidationEvaluator.IsType(cell, CellType.Blank)

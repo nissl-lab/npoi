@@ -437,7 +437,7 @@ namespace NPOI.HPSF
         /// @see Variant
         public void SetProperty(Property p)
         {
-            Property old = properties.ContainsKey(p.ID)? properties[p.ID] : null;
+            Property old = properties.TryGetValue(p.ID, out Property value) ? value : null;
             if(old == null || !old.Equals(p))
             {
                 properties[p.ID] = p;
@@ -811,7 +811,7 @@ namespace NPOI.HPSF
         /// <param name="pa">The property array.</param>
         /// <param name="i">The index of the field to be removed.</param>
         /// <return>compactified array.</return>
-        private Property[] Remove(Property[] pa, int i)
+        private static Property[] Remove(Property[] pa, int i)
         {
             Property[] h = new Property[pa.Length - 1];
             if(i > 0)

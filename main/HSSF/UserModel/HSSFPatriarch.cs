@@ -353,10 +353,7 @@ namespace NPOI.HSSF.UserModel
             return CreateComment((HSSFAnchor)anchor);
         }
 
-
-
-
-        private void SetFlipFlags(HSSFShape shape)
+        private static void SetFlipFlags(HSSFShape shape)
         {
             EscherSpRecord sp = (EscherSpRecord)shape.GetEscherContainer().GetChildById(EscherSpRecord.RECORD_ID);
             if ((shape.Anchor as HSSFAnchor).IsHorizontallyFlipped)
@@ -368,6 +365,7 @@ namespace NPOI.HSSF.UserModel
                 sp.Flags = (sp.Flags | EscherSpRecord.FLAG_FLIPVERT);
             }
         }
+
         /// <summary>
         /// Returns a list of all shapes contained by the patriarch.
         /// </summary>
