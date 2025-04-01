@@ -1598,7 +1598,7 @@ namespace NPOI.XWPF.UserModel
                     if (!(currRun is XWPFHyperlinkRun || currRun is XWPFFieldRun))
                         rPos++;
                 }
-                GetCTP().RemoveR(pos);
+                GetCTP().RemoveR(rPos);
                 return true;
             }
             return false;
