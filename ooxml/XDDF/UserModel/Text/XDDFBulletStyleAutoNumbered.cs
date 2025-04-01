@@ -29,11 +29,11 @@ namespace NPOI.XDDF.UserModel.Text
     public class XDDFBulletStyleAutoNumbered : IXDDFBulletStyle
     {
         private CT_TextAutonumberBullet style;
-        protected XDDFBulletStyleAutoNumbered(CT_TextAutonumberBullet style)
+        public XDDFBulletStyleAutoNumbered(CT_TextAutonumberBullet style)
         {
             this.style = style;
         }
-        protected CT_TextAutonumberBullet GetXmlObject()
+        public CT_TextAutonumberBullet GetXmlObject()
         {
             return style;
         }

@@ -36,12 +36,12 @@ namespace NPOI.XDDF.UserModel.Text
         {
             SetPercent(value);
         }
-        protected XDDFBulletSizePercent(CT_TextBulletSizePercent percent, double? scale)
+        internal XDDFBulletSizePercent(CT_TextBulletSizePercent percent, double? scale)
         {
             this.percent = percent;
             this.scale = (scale == null) ? 0.001 : scale.Value * 0.001;
         }
-        protected CT_TextBulletSizePercent GetXmlObject()
+        internal CT_TextBulletSizePercent GetXmlObject()
         {
             return percent;
         }

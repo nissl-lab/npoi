@@ -1396,6 +1396,16 @@ namespace NPOI.OpenXmlFormats.Dml
         {
             this.wrapFieldSpecified = false;
         }
+
+        public bool IsSetExtLst()
+        {
+            return this.extLstField != null;
+        }
+
+        public void UnsetExtLst()
+        {
+            this.extLstField = null;
+        }
     }
     
 

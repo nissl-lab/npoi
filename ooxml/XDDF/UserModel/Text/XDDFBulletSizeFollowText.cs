@@ -35,11 +35,11 @@ namespace NPOI.XDDF.UserModel.Text
         {
 
         }
-        protected XDDFBulletSizeFollowText(CT_TextBulletSizeFollowText follow)
+        internal XDDFBulletSizeFollowText(CT_TextBulletSizeFollowText follow)
         {
             this.follow = follow;
         }
-        protected CT_TextBulletSizeFollowText GetXmlObject()
+        internal CT_TextBulletSizeFollowText GetXmlObject()
         {
             return follow;
         }

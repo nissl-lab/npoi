@@ -30,11 +30,11 @@ namespace NPOI.XDDF.UserModel.Text
     public class XDDFBulletStylePicture : IXDDFBulletStyle
     {
         private CT_TextBlipBullet style;
-        protected XDDFBulletStylePicture(CT_TextBlipBullet style)
+        public XDDFBulletStylePicture(CT_TextBlipBullet style)
         {
             this.style = style;
         }
-        protected CT_TextBlipBullet GetXmlObject()
+        public CT_TextBlipBullet GetXmlObject()
         {
             return style;
         }

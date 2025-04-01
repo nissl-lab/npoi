@@ -35,11 +35,11 @@ namespace NPOI.XDDF.UserModel.Text
         {
 
         }
-        protected XDDFNoAutoFit(CT_TextNoAutofit autofit)
+        internal XDDFNoAutoFit(CT_TextNoAutofit autofit)
         {
             this.autofit = autofit;
         }
-        protected CT_TextNoAutofit GetXmlObject()
+        internal CT_TextNoAutofit GetXmlObject()
         {
             return autofit;
         }

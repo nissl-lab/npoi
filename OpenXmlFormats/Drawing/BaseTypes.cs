@@ -3173,32 +3173,48 @@ namespace NPOI.OpenXmlFormats.Dml
         private CT_OfficeArtExtensionList extLstField;
 
         private string idField;
+        private bool idFieldSpecified;
 
         private string invalidUrlField;
+        private bool invalidUrlFieldSpecified;
 
         private string actionField;
+        private bool actionFieldSpecified;
 
         private string tgtFrameField;
+        private bool tgtFrameFieldSpecified;
 
         private string tooltipField;
+        private bool tooltipFieldSpecified;
 
         private bool historyField;
+        private bool historyFieldSpecified;
 
         private bool highlightClickField;
+        private bool highlightClickFieldSpecified;
 
         private bool endSndField;
+        private bool endSndFieldSpecified;
         public static CT_Hyperlink Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
                 return null;
             CT_Hyperlink ctObj = new CT_Hyperlink();
+            ctObj.idFieldSpecified = node.Attributes["r:id"]!=null;
             ctObj.id = XmlHelper.ReadString(node.Attributes["r:id"]);
-            ctObj.invalidUrl = XmlHelper.ReadString(node.Attributes["invalidUrl"]);
-            ctObj.action = XmlHelper.ReadString(node.Attributes["action"]);
-            ctObj.tgtFrame = XmlHelper.ReadString(node.Attributes["tgtFrame"]);
-            ctObj.tooltip = XmlHelper.ReadString(node.Attributes["tooltip"]);
-            ctObj.history = XmlHelper.ReadBool(node.Attributes["history"]);
+            ctObj.invalidUrlFieldSpecified = node.Attributes["invalidUrl"]!=null;
+            ctObj.invalidUrl = XmlHelper.ReadString(node.Attributes["invalidUrl"], "");
+            ctObj.actionFieldSpecified = node.Attributes["action"] != null;
+            ctObj.action = XmlHelper.ReadString(node.Attributes["action"], "");
+            ctObj.tgtFrameFieldSpecified = node.Attributes["tgtFrame"] != null;
+            ctObj.tgtFrame = XmlHelper.ReadString(node.Attributes["tgtFrame"], "");
+            ctObj.tooltipFieldSpecified = node.Attributes["tooltip"] != null;
+            ctObj.tooltip = XmlHelper.ReadString(node.Attributes["tooltip"], "");
+            ctObj.historyFieldSpecified = node.Attributes["history"] != null;
+            ctObj.history = XmlHelper.ReadBool(node.Attributes["history"], true);
+            ctObj.highlightClickFieldSpecified = node.Attributes["highlightClick"] != null;
             ctObj.highlightClick = XmlHelper.ReadBool(node.Attributes["highlightClick"]);
+            ctObj.endSndFieldSpecified = node.Attributes["endSnd"] != null;
             ctObj.endSnd = XmlHelper.ReadBool(node.Attributes["endSnd"]);
             foreach (XmlNode childNode in node.ChildNodes)
             {
@@ -3215,11 +3231,17 @@ namespace NPOI.OpenXmlFormats.Dml
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<a:{0} xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\"", nodeName));
-            XmlHelper.WriteAttribute(sw, "r:id", this.id);
-            XmlHelper.WriteAttribute(sw, "invalidUrl", this.invalidUrl);
-            XmlHelper.WriteAttribute(sw, "action", this.action);
-            XmlHelper.WriteAttribute(sw, "tgtFrame", this.tgtFrame);
-            XmlHelper.WriteAttribute(sw, "tooltip", this.tooltip);
+            if(idFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "r:id", this.id);
+            if(this.invalidUrlFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "invalidUrl", this.invalidUrl);
+            if(this.actionFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "action", this.action);
+            if(this.tgtFrameFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "tgtFrame", this.tgtFrame);
+            if(this.tooltipFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "tooltip", this.tooltip);
+
             XmlHelper.WriteAttribute(sw, "history", this.history, false, true);
             XmlHelper.WriteAttribute(sw, "highlightClick", this.highlightClick, false, false);
             XmlHelper.WriteAttribute(sw, "endSnd", this.endSnd, false, false);
@@ -3230,6 +3252,17 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.extLst.Write(sw, "extLst");
             sw.Write(string.Format("</a:{0}>", nodeName));
         }
+
+        public bool IsSetExtLst()
+        {
+            return this.extLst != null;
+        }
+
+        public void UnsetExtLst()
+        {
+            this.extLst = null;
+        }
+
         public CT_Hyperlink()
         {
             this.invalidUrlField = "";
@@ -3276,7 +3309,21 @@ namespace NPOI.OpenXmlFormats.Dml
             }
             set
             {
+                this.idFieldSpecified = true;
                 this.idField = value;
+            }
+        }
+
+        [XmlIgnore]
+        public bool idSpecified
+        {
+            get
+            {
+                return this.idFieldSpecified;
+            }
+            set
+            {
+                this.idFieldSpecified = value;
             }
         }
 
@@ -3290,7 +3337,21 @@ namespace NPOI.OpenXmlFormats.Dml
             }
             set
             {
+                this.invalidUrlFieldSpecified = true;
                 this.invalidUrlField = value;
+            }
+        }
+
+        [XmlIgnore]
+        public bool invalidUrlSpecified
+        {
+            get
+            {
+                return this.invalidUrlFieldSpecified;
+            }
+            set
+            {
+                this.invalidUrlFieldSpecified = value;
             }
         }
 
@@ -3304,7 +3365,21 @@ namespace NPOI.OpenXmlFormats.Dml
             }
             set
             {
+                this.actionFieldSpecified = true;
                 this.actionField = value;
+            }
+        }
+
+        [XmlIgnore]
+        public bool actionSpecified
+        {
+            get
+            {
+                return this.actionFieldSpecified;
+            }
+            set
+            {
+                this.actionFieldSpecified = value;
             }
         }
 
@@ -3318,7 +3393,21 @@ namespace NPOI.OpenXmlFormats.Dml
             }
             set
             {
+                this.tgtFrameFieldSpecified = true;
                 this.tgtFrameField = value;
+            }
+        }
+
+        [XmlIgnore]
+        public bool tgtFrameSpecified
+        {
+            get
+            {
+                return this.tgtFrameFieldSpecified;
+            }
+            set
+            {
+                this.tgtFrameFieldSpecified = value;
             }
         }
 
@@ -3332,7 +3421,21 @@ namespace NPOI.OpenXmlFormats.Dml
             }
             set
             {
+                this.tooltipFieldSpecified = true;
                 this.tooltipField = value;
+            }
+        }
+
+        [XmlIgnore]
+        public bool tooltipSpecified
+        {
+            get
+            {
+                return this.tooltipFieldSpecified;
+            }
+            set
+            {
+                this.tooltipFieldSpecified = value;
             }
         }
 
@@ -3346,7 +3449,21 @@ namespace NPOI.OpenXmlFormats.Dml
             }
             set
             {
+                this.historyFieldSpecified = true;
                 this.historyField = value;
+            }
+        }
+
+        [XmlIgnore]
+        public bool historySpecified
+        {
+            get
+            {
+                return this.historyFieldSpecified;
+            }
+            set
+            {
+                this.historyFieldSpecified = value;
             }
         }
 
@@ -3360,7 +3477,21 @@ namespace NPOI.OpenXmlFormats.Dml
             }
             set
             {
+                this.highlightClickFieldSpecified = true;
                 this.highlightClickField = value;
+            }
+        }
+
+        [XmlIgnore]
+        public bool highlightClickSpecified
+        {
+            get
+            {
+                return this.highlightClickFieldSpecified;
+            }
+            set
+            {
+                this.highlightClickFieldSpecified = value;
             }
         }
 
@@ -3374,7 +3505,21 @@ namespace NPOI.OpenXmlFormats.Dml
             }
             set
             {
+                this.endSndFieldSpecified = true;
                 this.endSndField = value;
+            }
+        }
+
+        [XmlIgnore]
+        public bool endSndSpecified
+        {
+            get
+            {
+                return this.endSndFieldSpecified;
+            }
+            set
+            {
+                this.endSndFieldSpecified = value;
             }
         }
     }

@@ -29,11 +29,11 @@ namespace NPOI.XDDF.UserModel.Text
     public class XDDFBulletStyleCharacter : IXDDFBulletStyle
     {
         private CT_TextCharBullet style;
-        protected XDDFBulletStyleCharacter(CT_TextCharBullet style)
+        public XDDFBulletStyleCharacter(CT_TextCharBullet style)
         {
             this.style = style;
         }
-        protected CT_TextCharBullet GetXmlObject()
+        public CT_TextCharBullet GetXmlObject()
         {
             return style;
         }

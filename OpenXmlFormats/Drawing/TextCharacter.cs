@@ -29,10 +29,13 @@ namespace NPOI.OpenXmlFormats.Dml
         private string typefaceField;
 
         private byte[] panoseField;
+        private bool panoseFieldSpecified;
 
         private sbyte pitchFamilyField;
+        private bool pitchFamilyFieldSpecified;
 
         private sbyte charsetField;
+        private bool charsetFieldSpecified;
 
         public CT_TextFont()
         {
@@ -46,10 +49,13 @@ namespace NPOI.OpenXmlFormats.Dml
                 return null;
             CT_TextFont ctObj = new CT_TextFont();
             ctObj.typeface = XmlHelper.ReadString(node.Attributes["typeface"]);
+            ctObj.panoseFieldSpecified = node.Attributes["panose"] != null;
             ctObj.panose = XmlHelper.ReadBytes(node.Attributes["panose"]);
+            ctObj.pitchFamilyFieldSpecified = node.Attributes["pitchFamily"] != null;
             ctObj.pitchFamily = XmlHelper.ReadSByte(node.Attributes["pitchFamily"]);
-            if (node.Attributes["charset"]!=null)
-                ctObj.charsetField = XmlHelper.ReadSByte(node.Attributes["charset"]);
+            ctObj.charsetFieldSpecified = node.Attributes["charset"]!=null;
+            if (ctObj.charsetFieldSpecified)
+                ctObj.charsetField = XmlHelper.ReadSByte(node.Attributes["charset"], 1);
             return ctObj;
         }
 
@@ -59,9 +65,11 @@ namespace NPOI.OpenXmlFormats.Dml
         {
             sw.Write(string.Format("<a:{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "typeface", this.typeface,true);
-            XmlHelper.WriteAttribute(sw, "panose", this.panose);
-            XmlHelper.WriteAttribute(sw, "pitchFamily", this.pitchFamily);
-            if(charsetField!=(sbyte)1)
+            if(this.panoseFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "panose", this.panose);
+            if (this.pitchFamilyFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "pitchFamily", this.pitchFamily);
+            if(this.charsetFieldSpecified)
                 XmlHelper.WriteAttribute(sw, "charset", this.charset, true);
             sw.Write("/>");
         }
@@ -80,7 +88,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        [System.Xml.Serialization.XmlAttributeAttribute(DataType = "hexBinary")]
+        [XmlAttribute(DataType = "hexBinary")]
         public byte[] panose
         {
             get
@@ -89,7 +97,21 @@ namespace NPOI.OpenXmlFormats.Dml
             }
             set
             {
+                this.panoseFieldSpecified = true;
                 this.panoseField = value;
+            }
+        }
+
+        [XmlIgnore]
+        public bool panoseSpecified
+        {
+            get
+            {
+                return this.panoseFieldSpecified;
+            }
+            set
+            {
+                this.panoseFieldSpecified = value;
             }
         }
 
@@ -103,7 +125,21 @@ namespace NPOI.OpenXmlFormats.Dml
             }
             set
             {
+                this.pitchFamilyFieldSpecified = true;
                 this.pitchFamilyField = value;
+            }
+        }
+
+        [XmlIgnore]
+        public bool pitchFamilySpecified
+        {
+            get
+            {
+                return this.pitchFamilyFieldSpecified;
+            }
+            set
+            {
+                this.pitchFamilyFieldSpecified = value;
             }
         }
 
@@ -117,7 +153,21 @@ namespace NPOI.OpenXmlFormats.Dml
             }
             set
             {
+                this.charsetFieldSpecified = true;
                 this.charsetField = value;
+            }
+        }
+
+        [XmlIgnore]
+        public bool charsetSpecified
+        {
+            get
+            {
+                return this.charsetFieldSpecified;
+            }
+            set
+            {
+                this.charsetFieldSpecified = value;
             }
         }
     }
@@ -1361,6 +1411,141 @@ namespace NPOI.OpenXmlFormats.Dml
         {
             this.symField = new CT_TextFont();
             return this.symField;
+        }
+
+        public bool IsSetEa()
+        {
+            return this.eaField != null;
+        }
+
+        public void UnsetEa()
+        {
+            this.eaField = null;
+        }
+
+        public bool IsSetHlinkClick()
+        {
+            return this.hlinkClickField != null;
+        }
+
+        public void UnsetHlinkClick()
+        {
+            this.hlinkClickField = null;
+        }
+
+        public bool IsSetHlinkMouseOver()
+        {
+            return this.hlinkMouseOverField != null;
+        }
+
+        public void UnsetHlinkMouseOver()
+        {
+            this.hlinkMouseOverField = null;
+        }
+
+        public bool IsSetHighlight()
+        {
+            return this.highlightField != null;
+        }
+
+        public void UnsetHighlight()
+        {
+            this.highlightField = null;
+        }
+
+        public bool IsSetLn()
+        {
+            return this.lnField != null;
+        }
+
+        public void UnsetLn()
+        {
+            this.lnField = null;
+        }
+
+        public bool IsSetExtLst()
+        {
+            return this.extLstField != null;
+        }
+
+        public void UnsetExtLst()
+        {
+            this.extLstField = null;
+        }
+
+        public bool IsSetEffectDag()
+        {
+            return this.effectDagField != null;
+        }
+
+        public void UnsetEffectDag()
+        {
+            this.effectDagField = null;
+        }
+
+        public bool IsSetEffectLst()
+        {
+            return this.effectLstField != null;
+        }
+
+        public void UnsetEffectLst()
+        {
+            this.effectLstField = null;
+        }
+
+        public bool IsSetBlipFill()
+        {
+            return this.blipFillField != null;
+        }
+
+        public void UnsetBlipFill()
+        {
+            this.blipFillField  = null;
+        }
+
+        public bool IsSetGradFill()
+        {
+            return this.gradFillField != null;
+        }
+
+        public void UnsetGradFill()
+        {
+            this.gradFillField = null;
+        }
+
+        public bool IsSetGrpFill()
+        {
+            return this.grpFillField != null;
+        }
+
+        public void UnsetGrpFill()
+        {
+            this.grpFillField = null;
+        }
+
+        public bool IsSetNoFill()
+        {
+            return this.noFillField != null;
+        }
+
+        public void UnsetNoFill()
+        {
+            this.noFillField = null;
+        }
+
+        public bool IsSetPattFill()
+        {
+            return this.pattFillField != null;
+        }
+
+        public void UnsetPattFill()
+        {
+            this.pattFillField = null;
+        }
+
+        public void UnsetSolidFill()
+        {
+            this.solidFillField = null;
         }
     }
 

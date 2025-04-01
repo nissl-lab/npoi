@@ -29,11 +29,11 @@ namespace NPOI.XDDF.UserModel.Text
     public class XDDFTabStop
     {
         private CT_TextTabStop stop;
-        protected XDDFTabStop(CT_TextTabStop stop)
+        internal XDDFTabStop(CT_TextTabStop stop)
         {
             this.stop = stop;
         }
-        protected CT_TextTabStop GetXmlObject()
+        internal CT_TextTabStop GetXmlObject()
         {
             return stop;
         }

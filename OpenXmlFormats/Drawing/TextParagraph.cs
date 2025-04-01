@@ -305,6 +305,22 @@ namespace NPOI.OpenXmlFormats.Dml
         {
             return tabField[idx];
         }
+
+        public CT_TextTabStop InsertNewTab(int index)
+        {
+            if(index<0 || index>=tabField.Count) 
+                throw new IndexOutOfRangeException();
+            var obj = new CT_TextTabStop();
+            this.tabField.Insert(index, obj);
+            return obj;
+        }
+
+        public void RemoveTab(int index)
+        {
+            if(index<0 || index>=tabField.Count) 
+                throw new IndexOutOfRangeException();
+            this.tabField.RemoveAt(index);
+        }
     }
 
 
@@ -1194,6 +1210,12 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
+        public bool lvlSpecified
+        {
+            get => this.lvlFieldSpecified;
+            set => this.lvlFieldSpecified = value;
+        }
+
         [XmlAttribute]
         public int indent
         {
@@ -1610,6 +1632,11 @@ namespace NPOI.OpenXmlFormats.Dml
             return this.defTabSzFieldSpecified;
         }
 
+        public void UnsetDefTabSz()
+        {
+            this.defTabSzFieldSpecified = false;
+        }
+
         public bool IsSetTabLst()
         {
             return this.tabLstField != null;
@@ -1625,10 +1652,18 @@ namespace NPOI.OpenXmlFormats.Dml
         {
             return this.lnSpcField != null;
         }
-
+        public void UnsetLnSpc()
+        {
+            this.lnSpcField = null;
+        }
         public bool IsSetSpcBef()
         {
             return this.spcBefField != null;
+        }
+
+        public void UnsetSpcBef()
+        {
+            this.spcBefField = null;
         }
 
         public bool IsSetSpcAft()
@@ -1636,10 +1671,51 @@ namespace NPOI.OpenXmlFormats.Dml
             return this.spcAftField != null;
         }
 
+        public void UnsetSpcAft()
+        {
+            this.spcAftField = null;
+        }
+
         public CT_TextAutonumberBullet AddNewBuAutoNum()
         {
             this.buAutoNumField = new CT_TextAutonumberBullet();
             return this.buAutoNumField;
+        }
+
+        public void AddNewBuClrTx()
+        {
+            this.buClrTxField = new CT_TextBulletColorFollowText();
+        }
+
+        public void AddNewBuFontTx()
+        {
+            this.buFontTxField = new CT_TextBulletTypefaceFollowText();
+        }
+
+        public bool IsSetDefRPr()
+        {
+            return this.defRPrField != null;
+        }
+
+        public CT_TextCharacterProperties AddNewDefRPr()
+        {
+            this.defRPrField = new CT_TextCharacterProperties();
+            return this.defRPrField;
+        }
+
+        public void UnsetDefRPr()
+        {
+            this.defRPrField = null;
+        }
+
+        public bool IsSetExtLst()
+        {
+            return this.extLstField != null;
+        }
+
+        public void UnsetExtLst()
+        {
+            this.extLstField = null;
         }
     }
 

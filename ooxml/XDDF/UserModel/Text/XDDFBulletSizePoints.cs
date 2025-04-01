@@ -36,11 +36,11 @@ namespace NPOI.XDDF.UserModel.Text
 
             SetPoints(value);
         }
-        protected XDDFBulletSizePoints(CT_TextBulletSizePoint points)
+        internal XDDFBulletSizePoints(CT_TextBulletSizePoint points)
         {
             this.points = points;
         }
-        protected CT_TextBulletSizePoint GetXmlObject()
+        internal CT_TextBulletSizePoint GetXmlObject()
         {
             return points;
         }
