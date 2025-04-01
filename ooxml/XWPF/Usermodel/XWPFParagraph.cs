@@ -1702,6 +1702,61 @@ namespace NPOI.XWPF.UserModel
             return xwpfRun;
         }
         /// <summary>
+        /// insert a new hyperlink run in RunArray
+        /// </summary>
+        /// <param name="pos">The position at which the new run should be added.</param>
+        /// <param name="rId">a new hyperlink run</param>
+        /// <returns>the inserted hyperlink run or null if the given pos is out of bounds.</returns>
+        public XWPFHyperlinkRun InsertNewHyperlinkRun(int pos, string rId)
+        {
+            if(pos == runs.Count)
+            {
+                return CreateHyperlinkRun(rId);
+            }
+
+            if(pos >= 0 && pos < runs.Count)
+            {
+                //find on which position of the low level XML the new run is to be added (position of the element currently in pos in the Runs list)
+                int itemPos = paragraph.Items.IndexOf(runs[(pos)].GetCTR());
+                if(itemPos == -1)
+                {
+                    itemPos = paragraph.Items.Count;
+                }
+
+                CT_R r = new CT_R();
+                r.AddNewRPr().rStyle = new CT_String() { val = "Hyperlink" };
+
+                CT_Hyperlink1 hl = new CT_Hyperlink1();
+                paragraph.Items.Insert(itemPos, hl);
+                paragraph.ItemsElementName.Insert(itemPos, ParagraphItemsChoiceType.hyperlink);
+
+                hl.history = ST_OnOff.on;
+                hl.id=rId;
+                hl.Items.Add(r);
+                XWPFHyperlinkRun newRun = new XWPFHyperlinkRun(hl, r, this);
+
+                // To update the iRuns, find where we're going
+                // in the normal Runs, and go in there
+                int iPos = iRuns.Count;
+                if(pos < runs.Count)
+                {
+                    XWPFRun oldAtPos = runs[(pos)];
+                    int oldAt = iRuns.IndexOf(oldAtPos);
+                    if(oldAt != -1)
+                    {
+                        iPos = oldAt;
+                    }
+                }
+                iRuns.Insert(iPos, newRun);
+
+                // Runs itself is easy to update
+                runs.Insert(pos, newRun);
+
+                return newRun;
+            }
+            return null;
+        }
+        /// <summary>
         /// Add a new run with a reference to the specified footnote. The footnote reference run will have the style name "FootnoteReference".
         /// </summary>
         /// <param name="footnote">Footnote to which to add a reference.</param>
