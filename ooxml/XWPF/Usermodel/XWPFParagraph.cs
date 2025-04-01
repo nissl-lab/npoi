@@ -1486,7 +1486,12 @@ namespace NPOI.XWPF.UserModel
         /// <returns>the inserted run or null if the given pos is out of bounds.</returns>
         public XWPFRun InsertNewRun(int pos)
         {
-            if (pos >= 0 && pos <= runs.Count)
+            if(pos == runs.Count)
+            {
+                return CreateRun();
+            }
+
+            if (pos >= 0 && pos < runs.Count)
             {
                 // calculate the correct pos as our run/irun list contains
                 // hyperlinks
