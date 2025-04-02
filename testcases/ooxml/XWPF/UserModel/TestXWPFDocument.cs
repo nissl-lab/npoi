@@ -150,7 +150,7 @@ namespace TestCases.XWPF.UserModel
             doc.FindAndReplaceText("$replace_cell_text$", "Regel1\nRegel2\nRegel3");
 
             //Save Word Document
-            XWPFDocument outputDocument = outputDocument = XWPFTestDataSamples.WriteOutAndReadBack(doc);
+            XWPFDocument outputDocument = XWPFTestDataSamples.WriteOutAndReadBack(doc);
 
             //Combine all runs of all paragraphs
             StringBuilder builder = new StringBuilder();
@@ -207,7 +207,7 @@ namespace TestCases.XWPF.UserModel
                 doc.FindAndReplaceText(replacer.Key, replacer.Value);
             
             //Save Word Document
-            XWPFDocument outputDocument = outputDocument = XWPFTestDataSamples.WriteOutAndReadBack(doc);
+            XWPFDocument outputDocument = XWPFTestDataSamples.WriteOutAndReadBack(doc);
 
             foreach(var replacer in replacers)
                 initialText = initialText.Replace(replacer.Key, replacer.Value);

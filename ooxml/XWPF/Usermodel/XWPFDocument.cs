@@ -1892,10 +1892,10 @@ namespace NPOI.XWPF.UserModel
             if(startIndex == -1)
                 return;
 
-            int firstParagraph = -1;
+            int firstRun = -1;
             int firstIndex = -1;
 
-            int lastParagraph = -1;
+            int lastRun = -1;
             int lastIndex = -1;
 
             int processedRuns = 0;
@@ -1906,7 +1906,7 @@ namespace NPOI.XWPF.UserModel
                 var text = paragraph.Runs[processedRuns].Text;
                 if(processedChars + text.Length > startIndex)
                 {
-                    firstParagraph = processedRuns;
+                    firstRun = processedRuns;
                     firstIndex = startIndex - processedChars;
                     break;
                 }
@@ -1921,7 +1921,7 @@ namespace NPOI.XWPF.UserModel
                 var text = paragraph.Runs[processedRuns].Text;
                 if(processedChars + text.Length > endIndex)
                 {
-                    lastParagraph = processedRuns;
+                    lastRun = processedRuns;
                     lastIndex = endIndex - processedChars;
                     break;
                 }
@@ -1929,22 +1929,22 @@ namespace NPOI.XWPF.UserModel
                 processedChars += text.Length;
             }
 
-            var initialFirstText = paragraph.Runs[firstParagraph].Text;
-            if(firstParagraph == lastParagraph)
+            var initialFirstText = paragraph.Runs[firstRun].Text;
+            if(firstRun == lastRun)
             {
-                paragraph.Runs[firstParagraph].SetText(initialFirstText.Substring(0, firstIndex) + newValue + initialFirstText.Substring(lastIndex));
+                paragraph.Runs[firstRun].SetText(initialFirstText.Substring(0, firstIndex) + newValue + initialFirstText.Substring(lastIndex));
             }
             else
             {
-                paragraph.Runs[firstParagraph].SetText(initialFirstText.Substring(0, firstIndex) + newValue);
+                paragraph.Runs[firstRun].SetText(initialFirstText.Substring(0, firstIndex) + newValue);
 
-                if(lastParagraph != -1)
-                    paragraph.Runs[lastParagraph].SetText(paragraph.Runs[lastParagraph].Text.Substring(lastIndex));
+                if(lastRun != -1)
+                    paragraph.Runs[lastRun].SetText(paragraph.Runs[lastRun].Text.Substring(lastIndex));
             }
 
-            int removeTo = lastParagraph == -1 ? paragraph.Runs.Count : lastParagraph;
-            for(int i = firstParagraph + 1; i < removeTo; i++)
-                paragraph.RemoveRun(firstParagraph + 1);
+            int removeTo = lastRun == -1 ? paragraph.Runs.Count : lastRun;
+            for(int i = firstRun + 1; i < removeTo; i++)
+                paragraph.RemoveRun(firstRun + 1);
 
             FindAndReplaceTextInParagraph(paragraph, oldValue, newValue, startIndex + newValue.Length);
         }
