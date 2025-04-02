@@ -243,7 +243,7 @@ namespace NPOI.XSSF.UserModel.Charts
             }
         }
 
-        private ST_LayoutMode fromLayoutMode(LayoutMode mode)
+        private static ST_LayoutMode fromLayoutMode(LayoutMode mode)
         {
             switch (mode)
             {
@@ -254,7 +254,7 @@ namespace NPOI.XSSF.UserModel.Charts
             }
         }
 
-        private LayoutMode toLayoutMode(CT_LayoutMode ctLayoutMode)
+        private static LayoutMode toLayoutMode(CT_LayoutMode ctLayoutMode)
         {
             switch (ctLayoutMode.val)
             {
@@ -265,7 +265,7 @@ namespace NPOI.XSSF.UserModel.Charts
             }
         }
 
-        private ST_LayoutTarget fromLayoutTarget(LayoutTarget target)
+        private static ST_LayoutTarget fromLayoutTarget(LayoutTarget target)
         {
             switch (target)
             {
@@ -276,7 +276,7 @@ namespace NPOI.XSSF.UserModel.Charts
             }
         }
 
-        private LayoutTarget toLayoutTarget(CT_LayoutTarget ctLayoutTarget)
+        private static LayoutTarget toLayoutTarget(CT_LayoutTarget ctLayoutTarget)
         {
             switch (ctLayoutTarget.val)
             {

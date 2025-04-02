@@ -77,14 +77,14 @@ namespace NPOI.XSSF.UserModel.Charts
             {
                 if (legend.IsSetLegendPos())
                 {
-                    return ToLegendPosition(legend.legendPos);
+                    return XSSFChartLegend.ToLegendPosition(legend.legendPos);
                 }
                 else
                 {
                     return LegendPosition.Right;
                 }
             }
-            set 
+            set
             {
                 if (!legend.IsSetLegendPos())
                 {
@@ -110,7 +110,7 @@ namespace NPOI.XSSF.UserModel.Charts
             return new XSSFManualLayout(legend.layout);
         }
 
-        private ST_LegendPos FromLegendPosition(LegendPosition position)
+        private static ST_LegendPos FromLegendPosition(LegendPosition position)
         {
             switch (position)
             {
@@ -124,7 +124,7 @@ namespace NPOI.XSSF.UserModel.Charts
             }
         }
 
-        private LegendPosition ToLegendPosition(CT_LegendPos ctLegendPos)
+        private static LegendPosition ToLegendPosition(CT_LegendPos ctLegendPos)
         {
             switch (ctLegendPos.val)
             {

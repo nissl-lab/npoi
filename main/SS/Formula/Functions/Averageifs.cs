@@ -81,7 +81,7 @@ namespace NPOI.SS.Formula.Functions {
          *
          * @throws EvaluationException if
          */
-        private void ValidateCriteriaRanges(AreaEval[] criteriaRanges, AreaEval avgRange)
+        private static void ValidateCriteriaRanges(AreaEval[] criteriaRanges, AreaEval avgRange)
         {
             foreach (AreaEval r in criteriaRanges)
             {

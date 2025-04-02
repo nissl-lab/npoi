@@ -21,7 +21,7 @@ namespace NPOI.Util
     using System.IO;
 
     /// <summary>
-    /// <para>Wraps an <see cref="T:System.IO.Stream"/> providing <see cref="T:NPOI.Util.ILittleEndianInput"/><p/></para>
+    /// <para>Wraps an <see cref="System.IO.Stream"/> providing <see cref="NPOI.Util.ILittleEndianInput"/><p/></para>
     /// <para>
     /// This class does not buffer any input, so the stream Read position maintained
     /// by this class is consistent with that of the inner stream.

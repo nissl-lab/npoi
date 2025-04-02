@@ -358,10 +358,12 @@ namespace NPOI.SS.Converter
 
             return maxRenderedColumn + 1;
         }
-        private string GetRowName(IRow row)
+
+        private static string GetRowName(IRow row)
         {
             return (row.RowNum + 1).ToString();
         }
+
         protected void ProcessRowNumber(IRow row, XmlElement tableRowNumberCellElement)
         {
             tableRowNumberCellElement.SetAttribute("class", "rownumber");
@@ -575,7 +577,7 @@ namespace NPOI.SS.Converter
                 }
             }
 
-            if (OutputLeadingSpacesAsNonBreaking && value.StartsWith(" "))
+            if (OutputLeadingSpacesAsNonBreaking && value.StartsWith(' '))
             {
                 StringBuilder builder = new StringBuilder();
                 for (int c = 0; c < value.Length; c++)
@@ -722,13 +724,12 @@ namespace NPOI.SS.Converter
             BuildStyle_Border(workbook, style, "left", cellStyle.BorderLeft, cellStyle.LeftBorderColor);
 
             IFont font = cellStyle.GetFont(workbook);
-            BuildStyle_Font(workbook, style, font);
+            ExcelToHtmlConverter.BuildStyle_Font(workbook, style, font);
 
             return style.ToString();
         }
 
-        private void BuildStyle_Border(IWorkbook workbook, StringBuilder style,
-                String type, BorderStyle xlsBorder, short borderColor)
+        private static void BuildStyle_Border(IWorkbook workbook, StringBuilder style, String type, BorderStyle xlsBorder, short borderColor)
         {
             if (xlsBorder == BorderStyle.None)
                 return;
@@ -750,7 +751,7 @@ namespace NPOI.SS.Converter
                     borderStyle.Append(ExcelToHtmlUtils.GetColor(color));
                 }
             }
-            else 
+            else
             {
                 IndexedColors clr = IndexedColors.TryValueOf(borderColor);
                 if (clr != null)
@@ -778,8 +779,7 @@ namespace NPOI.SS.Converter
             style.AppendFormat("border-{0}: {1}; ",type, borderStyle);
         }
 
-        void BuildStyle_Font(IWorkbook workbook, StringBuilder style,
-                IFont font)
+        private static void BuildStyle_Font(IWorkbook workbook, StringBuilder style, IFont font)
         {
             switch (font.Boldweight)
             {

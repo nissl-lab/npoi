@@ -70,7 +70,8 @@ namespace NPOI.HSSF.UserModel
             this.record = record;
             link_type = getType(record);
         }
-        private HyperlinkType getType(HyperlinkRecord record)
+
+        private static HyperlinkType getType(HyperlinkRecord record)
         {
             HyperlinkType link_type;
             // Figure out the type

@@ -112,7 +112,7 @@ namespace NPOI.SS.Util
                     if (cellValue != null || shouldCreateEmptyCells)
                     {
                         currentCell = currentRow.CreateCell(cellIndex);
-                        SetCellValue(currentCell, cellValue);
+                        SheetBuilder.SetCellValue(currentCell, cellValue);
                     }
                 }
             }
@@ -124,7 +124,7 @@ namespace NPOI.SS.Util
          * @param cell cell to change
          * @param value value to set
          */
-        private void SetCellValue(ICell cell, Object value)
+        private static void SetCellValue(ICell cell, Object value)
         {
             if (value == null || cell == null)
             {
@@ -143,7 +143,7 @@ namespace NPOI.SS.Util
                 //} else if (value is Calendar) {
                 //    cell.SetCellValue((Calendar) value);
             }
-            else if (IsFormulaDefinition(value))
+            else if (SheetBuilder.IsFormulaDefinition(value))
             {
                 cell.CellFormula = (GetFormula(value));
             }
@@ -153,7 +153,7 @@ namespace NPOI.SS.Util
             }
         }
 
-        private bool IsFormulaDefinition(Object obj)
+        private static bool IsFormulaDefinition(Object obj)
         {
             if (obj is String str)
             {
@@ -172,7 +172,7 @@ namespace NPOI.SS.Util
             }
         }
 
-        private String GetFormula(Object obj)
+        private static String GetFormula(Object obj)
         {
             return ((String)obj).Substring(1);
         }

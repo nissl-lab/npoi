@@ -40,7 +40,7 @@ namespace NPOI.XWPF.Usermodel
         /**
          * For isBold, isItalic etc
          */
-        private bool IsCTOnOff(W.CT_OnOff onoff)
+        private static bool IsCTOnOff(W.CT_OnOff onoff)
         {
             if (!onoff.IsSetVal())
                 return true;
@@ -222,7 +222,7 @@ namespace NPOI.XWPF.Usermodel
         static void preserveSpaces(CT_Text1 xs)
         {
             String text = xs.Value;
-            if (text != null && (text.StartsWith(" ") || text.EndsWith(" ")))
+            if (text != null && (text.StartsWith(' ') || text.EndsWith(' ')))
             {
                 //    XmlCursor c = xs.NewCursor();
                 //    c.ToNextToken();

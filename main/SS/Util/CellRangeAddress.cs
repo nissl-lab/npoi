@@ -102,7 +102,7 @@ namespace NPOI.SS.Util
         /// <returns>a CellRangeAddress object</returns>
         public static CellRangeAddress ValueOf(String reference)
         {
-            int sep = reference.IndexOf(":", StringComparison.Ordinal);
+            int sep = reference.IndexOf(':');
             CellReference a;
             CellReference b;
             if (sep == -1)

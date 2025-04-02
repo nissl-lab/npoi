@@ -716,14 +716,14 @@ namespace NPOI
 
         public TValue PutDictionary<TKey, TValue>(Dictionary<TKey, TValue> dict, TKey key, TValue value)
         {
-            TValue oldValue = default(TValue);
-            if (dict.ContainsKey(key))
+            if (dict.TryGetValue(key, out TValue oldValue))
             {
-                oldValue = dict[key];
                 dict[key] = value;
             }
             else
+            {
                 dict.Add(key, value);
+            }
             return oldValue;
         }
 
@@ -769,7 +769,7 @@ namespace NPOI
                     // check for internal references (e.g. '#Sheet1!A1')
                     PackagePartName relName;
                     //if (uri.getRawFragment() != null)
-                    if (uri.OriginalString.IndexOf('#') >= 0)
+                    if (uri.OriginalString.Contains('#'))
                     {
                         string path = string.Empty;
                         try

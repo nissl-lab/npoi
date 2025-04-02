@@ -269,8 +269,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal
             if (contentType == null)
                 throw new ArgumentException("contentType");
 
-            return (this.defaultContentType.Values.Contains(contentType) || (this.overrideContentType != null && this.overrideContentType
-                    .Values.Contains(contentType)));
+            return defaultContentType.ContainsValue(contentType) || (overrideContentType != null && overrideContentType.ContainsValue(contentType));
         }
 
         /**
@@ -460,8 +459,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal
          *            The values to Append.
          * @see #save(java.io.OutputStream)
          */
-        private void AppendSpecificTypes(XmlDocument xmldoc, XmlElement root,
-                KeyValuePair<PackagePartName, String> entry)
+        private static void AppendSpecificTypes(XmlDocument xmldoc, XmlElement root, KeyValuePair<PackagePartName, String> entry)
         {
             XmlElement elem = xmldoc.CreateElement(OVERRIDE_TAG_NAME, PackageNamespaces.CONTENT_TYPES);
             root.AppendChild(elem);
@@ -481,7 +479,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal
          *            The values to Append.
          * @see #save(java.io.OutputStream)
          */
-        private void AppendDefaultType(XmlDocument xmldoc, XmlElement root, KeyValuePair<String, String> entry)
+        private static void AppendDefaultType(XmlDocument xmldoc, XmlElement root, KeyValuePair<String, String> entry)
         {
             XmlElement elem = xmldoc.CreateElement(DEFAULT_TAG_NAME,PackageNamespaces.CONTENT_TYPES);
             root.AppendChild(elem);

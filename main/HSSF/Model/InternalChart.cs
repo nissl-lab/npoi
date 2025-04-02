@@ -133,6 +133,7 @@ namespace NPOI.HSSF.Model
             }
             
         }
+
         private sealed class PLSAggregateVisitor : RecordVisitor
         {
             private List<RecordBase> container;
@@ -149,7 +150,8 @@ namespace NPOI.HSSF.Model
 
             #endregion
         }
-        private void CheckNotPresent(Record.Record rec)
+
+        private static void CheckNotPresent(Record.Record rec)
         {
             if (rec != null)
             {
@@ -157,6 +159,7 @@ namespace NPOI.HSSF.Model
                         + StringUtil.ToHexString(rec.Sid) + ")");
             }
         }
+
         private InternalChart()
         {
         }

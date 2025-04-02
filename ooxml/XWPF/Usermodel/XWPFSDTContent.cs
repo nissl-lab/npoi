@@ -119,7 +119,7 @@ namespace NPOI.XWPF.UserModel
             }
         }
 
-        private void AppendTable(XWPFTable table, StringBuilder text)
+        private static void AppendTable(XWPFTable table, StringBuilder text)
         {
             //this works recursively to pull embedded tables from within cells
             foreach (XWPFTableRow row in table.Rows)
@@ -145,7 +145,7 @@ namespace NPOI.XWPF.UserModel
             }
         }
 
-        private void AppendParagraph(XWPFParagraph paragraph, StringBuilder text)
+        private static void AppendParagraph(XWPFParagraph paragraph, StringBuilder text)
         {
             foreach (IRunElement run in paragraph.Runs)
             {

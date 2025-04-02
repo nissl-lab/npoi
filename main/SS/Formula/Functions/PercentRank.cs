@@ -11,10 +11,12 @@ namespace NPOI.SS.Formula.Functions
     public class PercentRank : Function
     {
         public static Function instance = new PercentRank();
+
         private PercentRank()
         {
             // Enforce singleton
         }
+
         public ValueEval Evaluate(ValueEval[] args, int srcRowIndex, int srcColumnIndex)
         {
             if (args.Length < 2)
@@ -84,7 +86,8 @@ namespace NPOI.SS.Formula.Functions
 
             return calculateRank(numbers, x, significance, true);
         }
-        private ValueEval calculateRank(List<Double> numbers, double x, int significance, bool recurse)
+
+        private static ValueEval calculateRank(List<Double> numbers, double x, int significance, bool recurse)
         {
             double closestMatchBelow = Double.MinValue;
             double closestMatchAbove = Double.MaxValue;
@@ -130,7 +133,8 @@ namespace NPOI.SS.Formula.Functions
                 return new NumberEval(Math.Round(result,significance));
             }
         }
-        private List<ValueEval> getValues(ValueEval eval, int srcRowIndex, int srcColumnIndex)
+
+        private static List<ValueEval> getValues(ValueEval eval, int srcRowIndex, int srcColumnIndex)
         {
             if (eval is AreaEval ae)
             {

@@ -497,7 +497,7 @@ namespace NPOI.OpenXml4Net.OPC
 
             // Get the target URI, excluding any relative fragments
             Uri target = rel.TargetUri;
-            if (target.OriginalString.IndexOf('#') >=0)
+            if (target.OriginalString.Contains('#'))
             {
                 String t = target.ToString();
                 try

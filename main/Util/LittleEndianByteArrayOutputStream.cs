@@ -21,7 +21,7 @@ namespace NPOI.Util
     using System.Globalization;
 
     /// <summary>
-    /// Adapts a plain byte array to <see cref="T:NPOI.Util.ILittleEndianOutput"/>
+    /// Adapts a plain byte array to <see cref="NPOI.Util.ILittleEndianOutput"/>
     /// </summary>
     /// <remarks>@author Josh Micich</remarks>
     public class LittleEndianByteArrayOutputStream : ILittleEndianOutput, IDelayableLittleEndianOutput

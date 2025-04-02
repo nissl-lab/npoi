@@ -449,7 +449,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                return _rows.Count == 0 ? 0 : GetLastKey(_rows.Keys);
+                return _rows.Count == 0 ? 0 : XSSFSheet.GetLastKey(_rows.Keys);
             }
         }
 
@@ -457,12 +457,12 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                return _columns.Count == 0 ? 0 : GetLastKey(_columns.Keys);
+                return _columns.Count == 0 ? 0 : XSSFSheet.GetLastKey(_columns.Keys);
             }
         }
 
         /// <summary>
-        /// Returns the list of merged regions. If you want multiple regions, 
+        /// Returns the list of merged regions. If you want multiple regions,
         /// this is faster than calling {@link #getMergedRegion(int)} each time.
         /// </summary>
         public List<CellRangeAddress> MergedRegions
@@ -509,7 +509,7 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Returns the information regarding the currently configured pane 
+        /// Returns the information regarding the currently configured pane
         /// (split or freeze).
         /// </summary>
         public PaneInformation PaneInformation
@@ -538,7 +538,7 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Returns the number of phsyically defined rows (NOT the number of 
+        /// Returns the number of phsyically defined rows (NOT the number of
         /// rows in the sheet)
         /// </summary>
         public int PhysicalNumberOfRows
@@ -550,7 +550,7 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Returns the number of phsyically defined columns (NOT the number of 
+        /// Returns the number of phsyically defined columns (NOT the number of
         /// columns in the sheet)
         /// </summary>
         public int PhysicalNumberOfColumns
@@ -584,8 +584,8 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Horizontal page break information used for print layout view, page 
-        /// layout view, drawing print breaks in normal view, and for printing 
+        /// Horizontal page break information used for print layout view, page
+        /// layout view, drawing print breaks in normal view, and for printing
         /// the worksheet.
         /// </summary>
         //YK: GetXYZArray() array accessors are deprecated in xmlbeans with JDK 1.5 support
@@ -611,10 +611,10 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Flag indicating whether summary rows appear below detail in an 
-        /// outline, when Applying an outline. When true a summary row is 
+        /// Flag indicating whether summary rows appear below detail in an
+        /// outline, when Applying an outline. When true a summary row is
         /// inserted below the detailed data being summarized and a new outline
-        /// level is established on that row. When false a summary row is 
+        /// level is established on that row. When false a summary row is
         /// inserted above the detailed data being summarized and a new outline
         /// level is established on that row.
         /// </summary>
@@ -636,9 +636,9 @@ namespace NPOI.XSSF.UserModel
 
         /// <summary>
         /// When true a summary column is inserted to the right of the detailed
-        /// data being summarized and a new outline level is established on 
+        /// data being summarized and a new outline level is established on
         /// that column. When false a summary column is inserted to the left of
-        /// the detailed data being summarized and a new outline level is 
+        /// the detailed data being summarized and a new outline level is
         /// established on that column.
         /// </summary>
         public bool RowSumsRight
@@ -658,7 +658,7 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// A flag indicating whether scenarios are locked when the sheet 
+        /// A flag indicating whether scenarios are locked when the sheet
         /// is protected.
         /// </summary>
         public bool ScenarioProtect
@@ -690,7 +690,7 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// The top row in the visible view when the sheet is first viewed 
+        /// The top row in the visible view when the sheet is first viewed
         /// after opening it in a viewer
         /// </summary>
         public short TopRow
@@ -713,7 +713,7 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Determine whether printed output for this sheet will be vertically 
+        /// Determine whether printed output for this sheet will be vertically
         /// centered.
         /// </summary>
         public bool VerticallyCenter
@@ -749,7 +749,7 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Gets the flag indicating whether this sheet displays the lines 
+        /// Gets the flag indicating whether this sheet displays the lines
         /// between rows and columns to make editing and Reading easier.
         /// </summary>
         public bool DisplayGridlines
@@ -765,9 +765,9 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Gets the flag indicating whether this sheet should display row and 
+        /// Gets the flag indicating whether this sheet should display row and
         /// column headings. Row heading are the row numbers to the side of the
-        /// sheet Column heading are the letters or numbers that appear above 
+        /// sheet Column heading are the letters or numbers that appear above
         /// the columns of the sheet
         /// </summary>
         public bool DisplayRowColHeadings
@@ -821,7 +821,7 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Whether Excel will be asked to recalculate all formulas when the 
+        /// Whether Excel will be asked to recalculate all formulas when the
         /// workbook is opened.
         /// </summary>
         public bool ForceFormulaRecalculation
@@ -886,11 +886,11 @@ namespace NPOI.XSSF.UserModel
         /// <summary>
         /// Returns a flag indicating whether this sheet is selected.
         /// <para>
-        /// When only 1 sheet is selected and active, this value should be in 
-        /// synch with the activeTab value. In case of a conflict, the Start 
+        /// When only 1 sheet is selected and active, this value should be in
+        /// synch with the activeTab value. In case of a conflict, the Start
         /// Part Setting wins and Sets the active sheet tab.
         /// </para>
-        /// Note: multiple sheets can be selected, but only one sheet can be 
+        /// Note: multiple sheets can be selected, but only one sheet can be
         /// active at one time.
         /// </summary>
         public bool IsSelected
@@ -1108,7 +1108,7 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// true when Selection of locked cells is locked and the sheet is 
+        /// true when Selection of locked cells is locked and the sheet is
         /// protected.
         /// </summary>
         public bool IsSelectLockedCellsLocked
@@ -1120,7 +1120,7 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// true when Selection of unlocked cells is locked and the sheet is 
+        /// true when Selection of unlocked cells is locked and the sheet is
         /// protected.
         /// </summary>
         public bool IsSelectUnlockedCellsLocked
@@ -1151,7 +1151,7 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Get or set background color of the sheet tab. The value is null 
+        /// Get or set background color of the sheet tab. The value is null
         /// if no sheet tab color is set.
         /// </summary>
         public XSSFColor TabColor
@@ -1214,7 +1214,7 @@ namespace NPOI.XSSF.UserModel
         #region Constructors
 
         /// <summary>
-        /// Creates new XSSFSheet   - called by XSSFWorkbook to create a sheet 
+        /// Creates new XSSFSheet   - called by XSSFWorkbook to create a sheet
         /// from scratch. See <see cref="XSSFWorkbook.CreateSheet"/>
         /// </summary>
         public XSSFSheet()
@@ -1226,11 +1226,11 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Creates an XSSFSheet representing the given namespace part and 
+        /// Creates an XSSFSheet representing the given namespace part and
         /// relationship. Should only be called by XSSFWorkbook when Reading in
         /// an exisiting file.
         /// </summary>
-        /// <param name="part">The namespace part that holds xml data 
+        /// <param name="part">The namespace part that holds xml data
         /// represenring this sheet.</param>
         protected internal XSSFSheet(PackagePart part)
             : base(part)
@@ -1319,9 +1319,9 @@ namespace NPOI.XSSF.UserModel
         /// <summary>
         /// Get VML drawing for this sheet (aka 'legacy' drawig)
         /// </summary>
-        /// <param name="autoCreate">if true, then a new VML drawing part 
+        /// <param name="autoCreate">if true, then a new VML drawing part
         /// is Created</param>
-        /// <returns>the VML drawing of null if the drawing was not found and 
+        /// <returns>the VML drawing of null if the drawing was not found and
         /// autoCreate=false</returns>
         internal XSSFVMLDrawing GetVMLDrawing(bool autoCreate)
         {
@@ -1382,7 +1382,7 @@ namespace NPOI.XSSF.UserModel
         /// <summary>
         /// Returns the sheet's comments object if there is one, or null if not
         /// </summary>
-        /// <param name="create">create a new comments table if it does not 
+        /// <param name="create">create a new comments table if it does not
         /// exist</param>
         /// <returns></returns>
         protected internal CommentsTable GetCommentsTable(bool create)
@@ -1413,7 +1413,7 @@ namespace NPOI.XSSF.UserModel
         /// Return a master shared formula by index
         /// </summary>
         /// <param name="sid">shared group index</param>
-        /// <returns>a CT_CellFormula bean holding shared formula or 
+        /// <returns>a CT_CellFormula bean holding shared formula or
         /// <code>null</code> if not found</returns>
         internal CT_CellFormula GetSharedFormula(int sid)
         {
@@ -1564,7 +1564,7 @@ namespace NPOI.XSSF.UserModel
 
             foreach(XSSFColumn column in _columns.Values)
             {
-                column.OnDocumentWrite();
+                XSSFColumn.OnDocumentWrite();
             }
 
             // finally, if we had at least one cell we can populate the optional dimension-field
@@ -1704,10 +1704,10 @@ namespace NPOI.XSSF.UserModel
         /// </summary>
         /// <param name="region">region to merge</param>
         /// <returns>index of this region</returns>
-        /// <exception cref="ArgumentException">if region contains fewer 
+        /// <exception cref="ArgumentException">if region contains fewer
         /// than 2 cells</exception>
-        /// <exception cref="InvalidOperationException">if region intersects 
-        /// with an existing merged region or multi-cell array formula on 
+        /// <exception cref="InvalidOperationException">if region intersects
+        /// with an existing merged region or multi-cell array formula on
         /// this sheet</exception>
         public int AddMergedRegion(CellRangeAddress region)
         {
@@ -1722,7 +1722,7 @@ namespace NPOI.XSSF.UserModel
         /// </summary>
         /// <param name="region">region to merge</param>
         /// <returns>index of this region</returns>
-        /// <exception cref="ArgumentException">if region contains fewer 
+        /// <exception cref="ArgumentException">if region contains fewer
         /// than 2 cells</exception>
         public int AddMergedRegionUnsafe(CellRangeAddress region)
         {
@@ -1730,8 +1730,8 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Verify that merged regions do not intersect multi-cell array 
-        /// formulas and no merged regions intersect another merged region 
+        /// Verify that merged regions do not intersect multi-cell array
+        /// formulas and no merged regions intersect another merged region
         /// in this sheet.
         /// </summary>
         public void ValidateMergedRegions()
@@ -1759,7 +1759,7 @@ namespace NPOI.XSSF.UserModel
         /// Processing.
         /// </summary>
         /// <param name="column">the column index</param>
-        /// <param name="useMergedCells">whether to use the contents of merged cells 
+        /// <param name="useMergedCells">whether to use the contents of merged cells
         /// when calculating the width of the column</param>
         public void AutoSizeColumn(int column, bool useMergedCells)
         {
@@ -1794,14 +1794,14 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Adjusts the row height to fit the contents. This process can be 
-        /// relatively slow on large sheets, so this should normally only be 
+        /// Adjusts the row height to fit the contents. This process can be
+        /// relatively slow on large sheets, so this should normally only be
         /// called once per row, at the end of your Processing. You can specify
-        /// whether the content of merged cells should be considered or 
+        /// whether the content of merged cells should be considered or
         /// ignored. Default is to ignore merged cells.
         /// </summary>
         /// <param name="row">the row index</param>
-        /// <param name="useMergedCells">whether to use the contents of merged 
+        /// <param name="useMergedCells">whether to use the contents of merged
         /// cells when  calculating the height of the row</param>
         public void AutoSizeRow(int row, bool useMergedCells)
         {
@@ -1858,7 +1858,7 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Create a new SpreadsheetML Drawing. If this sheet already 
+        /// Create a new SpreadsheetML Drawing. If this sheet already
         /// Contains a Drawing - return that.
         /// </summary>
         /// <returns>a SpreadsheetML Drawing</returns>
@@ -1894,7 +1894,7 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Creates a split (freezepane). Any existing freezepane or split 
+        /// Creates a split (freezepane). Any existing freezepane or split
         /// pane is overwritten.
         /// </summary>
         /// <param name="colSplit">Horizonatal position of split.</param>
@@ -1906,7 +1906,7 @@ namespace NPOI.XSSF.UserModel
 
         /// <summary>
         /// Creates a split (freezepane). Any existing freezepane or split pane
-        /// is overwritten. If both colSplit and rowSplit are zero then the 
+        /// is overwritten. If both colSplit and rowSplit are zero then the
         /// existing freeze pane is Removed
         /// </summary>
         /// <param name="colSplit">Horizonatal position of split.</param>
@@ -1985,11 +1985,11 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Create a new row within the sheet and return the high level 
+        /// Create a new row within the sheet and return the high level
         /// representation. See <see cref="RemoveRow"/>
         /// </summary>
         /// <param name="rownum">row number</param>
-        /// <returns>High level <see cref="XSSFRow"/> object representing a 
+        /// <returns>High level <see cref="XSSFRow"/> object representing a
         /// row in the sheet</returns>
         public virtual IRow CreateRow(int rownum)
         {
@@ -2013,7 +2013,7 @@ namespace NPOI.XSSF.UserModel
             }
             else
             {
-                if(_rows.Count == 0 || rownum > GetLastKey(_rows.Keys))
+                if(_rows.Count == 0 || rownum > XSSFSheet.GetLastKey(_rows.Keys))
                 {
                     // we can append the new row at the end
                     ctRow = worksheet.sheetData.AddNewRow();
@@ -2022,7 +2022,7 @@ namespace NPOI.XSSF.UserModel
                 {
                     // get number of rows where row index < rownum
                     // --> this tells us where our row should go
-                    int idx = HeadMapCount(_rows.Keys, rownum);
+                    int idx = XSSFSheet.HeadMapCount(_rows.Keys, rownum);
                     ctRow = worksheet.sheetData.InsertNewRow(idx);
                 }
             }
@@ -2033,11 +2033,11 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Create a new column within the sheet and return the high level 
+        /// Create a new column within the sheet and return the high level
         /// representation. See <see cref="RemoveColumn"/>
         /// </summary>
         /// <param name="columnnum">column number</param>
-        /// <returns>High level <see cref="XSSFColumn"/> object representing a 
+        /// <returns>High level <see cref="XSSFColumn"/> object representing a
         /// column in the sheet</returns>
         public virtual IColumn CreateColumn(int columnnum)
         {
@@ -2066,7 +2066,7 @@ namespace NPOI.XSSF.UserModel
                     worksheet.AddNewCols();
                 }
 
-                if(_columns.Count == 0 || columnnum > GetLastKey(_columns.Keys))
+                if(_columns.Count == 0 || columnnum > XSSFSheet.GetLastKey(_columns.Keys))
                 {
                     // we can append the new column at the end
                     ctCol = worksheet.cols.FirstOrDefault().AddNewCol();
@@ -2075,7 +2075,7 @@ namespace NPOI.XSSF.UserModel
                 {
                     // get number of columns where column index < columnnum
                     // --> this tells us where our column should go
-                    int idx = HeadMapCount(_columns.Keys, columnnum);
+                    int idx = XSSFSheet.HeadMapCount(_columns.Keys, columnnum);
 
                     ctCol = worksheet.cols.FirstOrDefault().InsertNewCol(idx);
                 }
@@ -2090,16 +2090,16 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Creates a split pane. Any existing freezepane or split pane is 
+        /// Creates a split pane. Any existing freezepane or split pane is
         /// overwritten.
         /// </summary>
-        /// <param name="xSplitPos">Horizonatal position of split (in 1/20th 
+        /// <param name="xSplitPos">Horizonatal position of split (in 1/20th
         /// of a point).</param>
-        /// <param name="ySplitPos">Vertical position of split (in 1/20th of 
+        /// <param name="ySplitPos">Vertical position of split (in 1/20th of
         /// a point).</param>
         /// <param name="leftmostColumn">Left column visible in right pane.</param>
         /// <param name="topRow">Top row visible in bottom pane</param>
-        /// <param name="activePane">Active pane.  One of: PANE_LOWER_RIGHT, 
+        /// <param name="activePane">Active pane.  One of: PANE_LOWER_RIGHT,
         /// PANE_UPPER_RIGHT, PANE_LOWER_LEFT, PANE_UPPER_LEFT</param>
         public void CreateSplitPane(int xSplitPos, int ySplitPos, int leftmostColumn, int topRow,
             PanePosition activePane)
@@ -2169,7 +2169,7 @@ namespace NPOI.XSSF.UserModel
         /// </summary>
         /// <param name="row"></param>
         /// <param name="column"></param>
-        /// <returns>return hyperlink if there is a hyperlink anchored at row, 
+        /// <returns>return hyperlink if there is a hyperlink anchored at row,
         /// column; otherwise returns null</returns>
         public IHyperlink GetHyperlink(int row, int column)
         {
@@ -2177,12 +2177,12 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Get a Hyperlink in this sheet located in a cell specified 
+        /// Get a Hyperlink in this sheet located in a cell specified
         /// by {code addr}
         /// </summary>
-        /// <param name="addr">The address of the cell containing the 
+        /// <param name="addr">The address of the cell containing the
         /// hyperlink</param>
-        /// <returns>return hyperlink if there is a hyperlink anchored at 
+        /// <returns>return hyperlink if there is a hyperlink anchored at
         /// {@code addr}; otherwise returns {@code null}</returns>
         public IHyperlink GetHyperlink(CellAddress addr)
         {
@@ -2306,11 +2306,11 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="index"></param>
         /// <returns>the merged region at the specified index</returns>
-        /// <exception cref="InvalidOperationException">if this worksheet 
+        /// <exception cref="InvalidOperationException">if this worksheet
         /// does not contain merged regions</exception>
         public CellRangeAddress GetMergedRegion(int index)
         {
@@ -2357,11 +2357,11 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Enables sheet protection and Sets the password for the sheet. 
-        /// Also Sets some attributes on the { @link CT_SheetProtection } 
+        /// Enables sheet protection and Sets the password for the sheet.
+        /// Also Sets some attributes on the { @link CT_SheetProtection }
         /// that correspond to the default values used by Excel
         /// </summary>
-        /// <param name="password">password to set for protection. Pass null 
+        /// <param name="password">password to set for protection. Pass null
         /// to remove protection</param>
         public void ProtectSheet(string password)
         {
@@ -2381,11 +2381,11 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Sets the sheet password. 
+        /// Sets the sheet password.
         /// </summary>
         /// <param name="password"> if null, the password will be removed</param>
-        /// <param name="hashAlgo">if null, the password will be set as XOR 
-        /// password (Excel 2010 and earlier)otherwise the given algorithm is 
+        /// <param name="hashAlgo">if null, the password will be set as XOR
+        /// password (Excel 2010 and earlier)otherwise the given algorithm is
         /// used for calculating the hash password (Excel 2013)</param>
         public void SetSheetPassword(string password, HashAlgorithm hashAlgo)
         {
@@ -2399,11 +2399,11 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Validate the password against the stored hash, the hashing method 
+        /// Validate the password against the stored hash, the hashing method
         /// will be determined by the existing password attributes
         /// </summary>
         /// <param name="password"></param>
-        /// <returns>true, if the hashes match (... though original password 
+        /// <returns>true, if the hashes match (... though original password
         /// may differ ...)</returns>
         public bool ValidateSheetPassword(string password)
         {
@@ -2417,12 +2417,12 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Returns the logical row ( 0-based).  If you ask for a row that is 
-        /// not defined you get a null.  This is to say row 4 represents the 
+        /// Returns the logical row ( 0-based).  If you ask for a row that is
+        /// not defined you get a null.  This is to say row 4 represents the
         /// fifth row on a sheet.
         /// </summary>
         /// <param name="rownum">row to get</param>
-        /// <returns><see cref="XSSFRow"/> representing the rownumber or null 
+        /// <returns><see cref="XSSFRow"/> representing the rownumber or null
         /// if its not defined on the sheet</returns>
         public IRow GetRow(int rownum)
         {
@@ -2435,12 +2435,12 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Returns the logical column ( 0-based).  If you ask for a column that is 
-        /// not defined you get a null.  This is to say column 4 represents the 
+        /// Returns the logical column ( 0-based).  If you ask for a column that is
+        /// not defined you get a null.  This is to say column 4 represents the
         /// fifth column on a sheet.
         /// </summary>
         /// <param name="columnnum">column to get</param>
-        /// <returns><see cref="XSSFColumn"/> representing the columnnumber or null 
+        /// <returns><see cref="XSSFColumn"/> representing the columnnumber or null
         /// if its not defined on the sheet</returns>
         public IColumn GetColumn(int columnnum, bool createIfNull = false)
         {
@@ -2523,12 +2523,12 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Sets a page break at the indicated row Breaks occur above the 
-        /// specified row and left of the specified column inclusive. For 
-        /// example, sheet.SetColumnBreak(2); breaks the sheet into two parts 
-        /// with columns A,B,C in the first and D,E,... in the second. 
-        /// Simuilar, sheet.SetRowBreak(2); breaks the sheet into two parts 
-        /// with first three rows (rownum=1...3) in the first part and rows 
+        /// Sets a page break at the indicated row Breaks occur above the
+        /// specified row and left of the specified column inclusive. For
+        /// example, sheet.SetColumnBreak(2); breaks the sheet into two parts
+        /// with columns A,B,C in the first and D,E,... in the second.
+        /// Simuilar, sheet.SetRowBreak(2); breaks the sheet into two parts
+        /// with first three rows (rownum=1...3) in the first part and rows
         /// starting with rownum=4 in the second.
         /// </summary>
         /// <param name="row">the row to break, inclusive</param>
@@ -2608,9 +2608,9 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Removes a number of merged regions of cells (hence letting them 
-        /// free) This method can be used to bulk-remove merged regions in a 
-        /// way much faster than calling RemoveMergedRegion() for every single 
+        /// Removes a number of merged regions of cells (hence letting them
+        /// free) This method can be used to bulk-remove merged regions in a
+        /// way much faster than calling RemoveMergedRegion() for every single
         /// merged region.
         /// </summary>
         /// <param name="indices">A Set of the regions to unmerge</param>
@@ -2637,7 +2637,7 @@ namespace NPOI.XSSF.UserModel
                 }
             }
 
-            if(ListIsEmpty(newMergeCells))
+            if(XSSFSheet.ListIsEmpty(newMergeCells))
             {
                 worksheet.UnsetMergeCells();
             }
@@ -2648,7 +2648,7 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Remove a row from this sheet.  All cells Contained in the row are 
+        /// Remove a row from this sheet.  All cells Contained in the row are
         /// Removed as well
         /// </summary>
         /// <param name="row">the row to Remove.</param>
@@ -2691,7 +2691,7 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Remove a column from this sheet.  All cells Contained in the column are 
+        /// Remove a column from this sheet.  All cells Contained in the column are
         /// Removed as well
         /// </summary>
         /// <param name="column">the column to Remove.</param>
@@ -2772,12 +2772,12 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Sets a page break at the indicated column. Breaks occur above the 
-        /// specified row and left of the specified column inclusive. For 
-        /// example, sheet.SetColumnBreak(2); breaks the sheet into two parts 
-        /// with columns A,B,C in the first and D,E,... in the second. 
-        /// Simuilar, sheet.SetRowBreak(2); breaks the sheet into two parts 
-        /// with first three rows (rownum=1...3) in the first part and rows 
+        /// Sets a page break at the indicated column. Breaks occur above the
+        /// specified row and left of the specified column inclusive. For
+        /// example, sheet.SetColumnBreak(2); breaks the sheet into two parts
+        /// with columns A,B,C in the first and D,E,... in the second.
+        /// Simuilar, sheet.SetRowBreak(2); breaks the sheet into two parts
+        /// with first three rows (rownum=1...3) in the first part and rows
         /// starting with rownum=4 in the second.
         /// </summary>
         /// <param name="column">the column to break, inclusive</param>
@@ -2836,59 +2836,59 @@ namespace NPOI.XSSF.UserModel
         /// <summary>
         /// Set the width (in units of 1/256th of a character width)
         /// <para>
-        /// The maximum column width for an individual cell is 255 
+        /// The maximum column width for an individual cell is 255
         /// characters. This value represents the number of characters that can
-        /// be displayed in a cell that is formatted with the standard font 
+        /// be displayed in a cell that is formatted with the standard font
         /// (first font in the workbook).
         /// </para>
         /// <para>
-        /// Character width is defined as the maximum digit width of the 
-        /// numbers 
+        /// Character width is defined as the maximum digit width of the
+        /// numbers
         /// <code>
         /// 0, 1, 2, ... 9
         /// </code>
-        /// as rendered using the default 
-        /// font (first font in the workbook). Unless you are using a very 
+        /// as rendered using the default
+        /// font (first font in the workbook). Unless you are using a very
         /// special font, the default character is '0' (zero), this is true for
-        /// Arial (default font font in HSSF) and Calibri (default font in 
+        /// Arial (default font font in HSSF) and Calibri (default font in
         /// XSSF)
         /// </para>
         /// <para>
-        /// Please note, that the width set by this method includes 4 
-        /// pixels of margin pAdding (two on each side), plus 1 pixel pAdding 
-        /// for the gridlines (Section 3.3.1.12 of the OOXML spec). This 
-        /// results is a slightly less value of visible characters than passed 
+        /// Please note, that the width set by this method includes 4
+        /// pixels of margin pAdding (two on each side), plus 1 pixel pAdding
+        /// for the gridlines (Section 3.3.1.12 of the OOXML spec). This
+        /// results is a slightly less value of visible characters than passed
         /// to this method (approx. 1/2 of a character).
         /// </para>
         /// <para>
         /// To compute
-        /// the actual number of visible characters, Excel uses the following 
+        /// the actual number of visible characters, Excel uses the following
         /// formula (Section 3.3.1.12 of the OOXML spec):
         /// </para>
         /// <code>
-        /// width = TRuncate([{Number of Visible Characters} * 
+        /// width = TRuncate([{Number of Visible Characters} *
         /// {Maximum Digit Width} + {5 pixel pAdding}]/{Maximum Digit Width}*256)/256
         /// </code>
         /// <para>
         /// Using the Calibri font as an example, the maximum digit width
-        /// of 11 point font size is 7 pixels (at 96 dpi). If you set a column 
-        /// width to be eight characters wide, e.g. 
+        /// of 11 point font size is 7 pixels (at 96 dpi). If you set a column
+        /// width to be eight characters wide, e.g.
         /// <code>
         /// SetColumnWidth(columnIndex, 8*256)
         /// </code>
-        /// , then the actual value of visible characters (the value Shown in 
-        /// Excel) is derived from the following equation: 
+        /// , then the actual value of visible characters (the value Shown in
+        /// Excel) is derived from the following equation:
         /// <code>
         /// TRuncate([numChars*7+5]/7*256)/256 = 8;
         /// </code>
-        /// which gives 
+        /// which gives
         /// <code>
         /// 7.29
         /// </code>.
         /// </para>
         /// </summary>
         /// <param name="columnIndex">the column to set (0-based)</param>
-        /// <param name="width">the width in units of 1/256th of a character 
+        /// <param name="width">the width in units of 1/256th of a character
         /// width</param>
         /// <exception cref="ArgumentException">if width more than 255*256 (the
         /// maximum column width in Excel is 255 characters)</exception>
@@ -2911,10 +2911,10 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// group the row It is possible for collapsed to be false and yet 
-        /// still have the rows in question hidden. This can be achieved by 
-        /// having a lower outline level collapsed, thus hiding all the child 
-        /// rows. Note that in this case, if the lowest level were expanded, 
+        /// group the row It is possible for collapsed to be false and yet
+        /// still have the rows in question hidden. This can be achieved by
+        /// having a lower outline level collapsed, thus hiding all the child
+        /// rows. Note that in this case, if the lowest level were expanded,
         /// the middle level would remain collapsed.
         /// </summary>
         /// <param name="rowIndex">the row involved, 0 based</param>
@@ -2932,13 +2932,13 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Sets the zoom magnification for the sheet.  The zoom is expressed 
-        /// as a fraction.  For example to express a zoom of 75% use 3 for the 
+        /// Sets the zoom magnification for the sheet.  The zoom is expressed
+        /// as a fraction.  For example to express a zoom of 75% use 3 for the
         /// numerator and 4 for the denominator.
         /// </summary>
-        /// <param name="numerator">The numerator for the zoom 
+        /// <param name="numerator">The numerator for the zoom
         /// magnification.</param>
-        /// <param name="denominator">The denominator for the zoom 
+        /// <param name="denominator">The denominator for the zoom
         /// magnification.</param>
         [Obsolete("deprecated 2015-11-23 (circa POI 3.14beta1). Use {@link #setZoom(int)} instead.")]
         public void SetZoom(int numerator, int denominator)
@@ -2948,8 +2948,8 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Window zoom magnification for current view representing percent 
-        /// values. Valid values range from 10 to 400. Horizontal &amp; 
+        /// Window zoom magnification for current view representing percent
+        /// values. Valid values range from 10 to 400. Horizontal &amp;
         /// Vertical scale toGether. For example:
         /// <code>
         /// 10 - 10%
@@ -2974,18 +2974,18 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// copyRows rows from srcRows to this sheet starting at destStartRow 
-        /// Additionally copies merged regions that are completely defined in 
+        /// copyRows rows from srcRows to this sheet starting at destStartRow
+        /// Additionally copies merged regions that are completely defined in
         /// these rows (ie. merged 2 cells on a row to be shifted).
         /// </summary>
-        /// <param name="srcRows">the rows to copy. Formulas will be offset by 
-        /// the difference in the row number of the first row in srcRows and 
+        /// <param name="srcRows">the rows to copy. Formulas will be offset by
+        /// the difference in the row number of the first row in srcRows and
         /// destStartRow (even if srcRows are from a different sheet).</param>
         /// <param name="destStartRow">the row in this sheet to paste the first
-        /// row of srcRows the remainder of srcRows will be pasted below 
+        /// row of srcRows the remainder of srcRows will be pasted below
         /// destStartRow per the cell copy policy</param>
-        /// <param name="policy">is the cell copy policy, which can be used to 
-        /// merge the source and destination when the source is blank, copy 
+        /// <param name="policy">is the cell copy policy, which can be used to
+        /// merge the source and destination when the source is blank, copy
         /// styles only, paste as value, etc</param>
         /// <exception cref="ArgumentException"></exception>
         public void CopyRows(List<XSSFRow> srcRows, int destStartRow, CellCopyPolicy policy)
@@ -3090,18 +3090,18 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Copies rows between srcStartRow and srcEndRow to the same sheet, 
-        /// starting at destStartRow Convenience function for 
-        /// <see cref="CopyRows"/> Equivalent to 
+        /// Copies rows between srcStartRow and srcEndRow to the same sheet,
+        /// starting at destStartRow Convenience function for
+        /// <see cref="CopyRows"/> Equivalent to
         /// copyRows(getRows(srcStartRow, srcEndRow, false), destStartRow, cellCopyPolicy)
         /// </summary>
-        /// <param name="srcStartRow">the index of the first row to copy the 
+        /// <param name="srcStartRow">the index of the first row to copy the
         /// cells from in this sheet</param>
         /// <param name="srcEndRow">the index of the last row to copy the cells
         /// from in this sheet</param>
-        /// <param name="destStartRow">the index of the first row to copy the 
+        /// <param name="destStartRow">the index of the first row to copy the
         /// cells to in this sheet</param>
-        /// <param name="cellCopyPolicy">the policy to use to determine how 
+        /// <param name="cellCopyPolicy">the policy to use to determine how
         /// cells are copied</param>
         public void CopyRows(int srcStartRow, int srcEndRow, int destStartRow, CellCopyPolicy cellCopyPolicy)
         {
@@ -3110,12 +3110,12 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Shifts rows between startRow and endRow n number of rows. If you 
-        /// use a negative number, it will shift rows up. Code ensures that 
-        /// rows don't wrap around. 
+        /// Shifts rows between startRow and endRow n number of rows. If you
+        /// use a negative number, it will shift rows up. Code ensures that
+        /// rows don't wrap around.
         /// Calls ShiftRows(startRow, endRow, n, false, false);
         /// <para>
-        /// Additionally Shifts merged regions that are completely defined in 
+        /// Additionally Shifts merged regions that are completely defined in
         /// these rows (ie. merged 2 cells on a row to be Shifted).
         /// </para>
         /// </summary>
@@ -3128,12 +3128,12 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Shifts columns between startColumn and endColumn n number of columns. If you 
-        /// use a negative number, it will shift columns left. Code ensures that 
-        /// columns don't wrap around. 
+        /// Shifts columns between startColumn and endColumn n number of columns. If you
+        /// use a negative number, it will shift columns left. Code ensures that
+        /// columns don't wrap around.
         /// Calls ShiftColumns(startColumn, endColumn, n, false, false);
         /// <para>
-        /// Additionally Shifts merged regions that are completely defined in 
+        /// Additionally Shifts merged regions that are completely defined in
         /// these columns (ie. merged 2 cells on a column to be Shifted).
         /// </para>
         /// </summary>
@@ -3146,20 +3146,20 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Shifts rows between startRow and endRow n number of rows. If you 
-        /// use a negative number, it will shift rows up. Code ensures that 
+        /// Shifts rows between startRow and endRow n number of rows. If you
+        /// use a negative number, it will shift rows up. Code ensures that
         /// rows don't wrap around
         /// <para>
-        /// Additionally Shifts merged regions thatare completely defined in 
+        /// Additionally Shifts merged regions thatare completely defined in
         /// these rows (ie. merged 2 cells on a row to be Shifted).
         /// </para>
         /// </summary>
         /// <param name="startRow">the row to start Shifting</param>
         /// <param name="endRow">the row to end Shifting</param>
         /// <param name="n">the number of rows to shift</param>
-        /// <param name="copyRowHeight">whether to copy the row height during 
+        /// <param name="copyRowHeight">whether to copy the row height during
         /// the shift</param>
-        /// <param name="resetOriginalRowHeight">whether to set the original 
+        /// <param name="resetOriginalRowHeight">whether to set the original
         /// row's height to the default</param>
         //YK: GetXYZArray() array accessors are deprecated in xmlbeans with JDK 1.5 support
         public void ShiftRows(int startRow, int endRow, int n, bool copyRowHeight, bool resetOriginalRowHeight)
@@ -3181,20 +3181,20 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Shifts columns between startColumn and endColumn n number of columns. If you 
-        /// use a negative number, it will shift columns left. Code ensures that 
+        /// Shifts columns between startColumn and endColumn n number of columns. If you
+        /// use a negative number, it will shift columns left. Code ensures that
         /// columns don't wrap around
         /// <para>
-        /// Additionally Shifts merged regions thatare completely defined in 
+        /// Additionally Shifts merged regions thatare completely defined in
         /// these columns (ie. merged 2 cells on a column to be Shifted).
         /// </para>
         /// </summary>
         /// <param name="startColumn">the column to start Shifting</param>
         /// <param name="endColumn">the column to end Shifting</param>
         /// <param name="n">the number of columns to shift</param>
-        /// <param name="copyColumnWidth">whether to copy the column width during 
+        /// <param name="copyColumnWidth">whether to copy the column width during
         /// the shift</param>
-        /// <param name="resetOriginalColumnWidth">whether to set the original 
+        /// <param name="resetOriginalColumnWidth">whether to set the original
         /// column's width to the default</param>
         //YK: GetXYZArray() array accessors are deprecated in xmlbeans with JDK 1.5 support
         public void ShiftColumns(
@@ -3221,7 +3221,7 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Returns the CellStyle that applies to the given (0 based) column, 
+        /// Returns the CellStyle that applies to the given (0 based) column,
         /// or null if no style has been set for that column
         /// </summary>
         /// <param name="column"></param>
@@ -3239,7 +3239,7 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Tie a range of cell toGether so that they can be collapsed 
+        /// Tie a range of cell toGether so that they can be collapsed
         /// or expanded
         /// </summary>
         /// <param name="fromRow">start row (0-based)</param>
@@ -3263,7 +3263,7 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="row">the zero based row index to find from</param>
         /// <returns></returns>
@@ -3398,8 +3398,8 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Enable or disable Autofilters locking. This does not modify sheet 
-        /// protection status. To enforce this un-/locking, call 
+        /// Enable or disable Autofilters locking. This does not modify sheet
+        /// protection status. To enforce this un-/locking, call
         /// <see cref="DisableLocking"/> or <see cref="EnableLocking"/>
         /// </summary>
         /// <param name="enabled"></param>
@@ -3409,8 +3409,8 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Enable or disable Deleting columns locking. This does not modify 
-        /// sheet protection status. To enforce this un-/locking, call 
+        /// Enable or disable Deleting columns locking. This does not modify
+        /// sheet protection status. To enforce this un-/locking, call
         /// <see cref="DisableLocking"/> or <see cref="EnableLocking"/>
         /// </summary>
         /// <param name="enabled"></param>
@@ -3420,9 +3420,9 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Enable or disable Deleting rows locking. This does not modify 
-        /// sheet protection status. To enforce this un-/locking, call 
-        /// 
+        /// Enable or disable Deleting rows locking. This does not modify
+        /// sheet protection status. To enforce this un-/locking, call
+        ///
         /// </summary>
         /// <param name="enabled"></param>
         public void LockDeleteRows(bool enabled)
@@ -3431,8 +3431,8 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Enable or disable Formatting cells locking. This does not modify 
-        /// sheet protection status. To enforce this un-/locking, call 
+        /// Enable or disable Formatting cells locking. This does not modify
+        /// sheet protection status. To enforce this un-/locking, call
         /// <see cref="DisableLocking"/> or <see cref="EnableLocking"/>
         /// </summary>
         /// <param name="enabled"></param>
@@ -3442,8 +3442,8 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Enable or disable Formatting columns locking. This does not modify 
-        /// sheet protection status. To enforce this un-/locking, call 
+        /// Enable or disable Formatting columns locking. This does not modify
+        /// sheet protection status. To enforce this un-/locking, call
         /// <see cref="DisableLocking"/> or <see cref="EnableLocking"/>
         /// </summary>
         /// <param name="enabled"></param>
@@ -3453,8 +3453,8 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Enable or disable Formatting rows locking. This does not modify 
-        /// sheet protection status. To enforce this un-/locking, call 
+        /// Enable or disable Formatting rows locking. This does not modify
+        /// sheet protection status. To enforce this un-/locking, call
         /// <see cref="DisableLocking"/> or <see cref="EnableLocking"/>
         /// </summary>
         /// <param name="enabled"></param>
@@ -3464,8 +3464,8 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Enable or disable Inserting columns locking. This does not modify 
-        /// sheet protection status. To enforce this un-/locking, call 
+        /// Enable or disable Inserting columns locking. This does not modify
+        /// sheet protection status. To enforce this un-/locking, call
         /// <see cref="DisableLocking"/> or <see cref="EnableLocking"/>
         /// </summary>
         /// <param name="enabled"></param>
@@ -3475,8 +3475,8 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Enable or disable Inserting hyperlinks locking. This does not 
-        /// modify sheet protection status. To enforce this un-/locking, call 
+        /// Enable or disable Inserting hyperlinks locking. This does not
+        /// modify sheet protection status. To enforce this un-/locking, call
         /// <see cref="DisableLocking"/> or <see cref="EnableLocking"/>
         /// </summary>
         /// <param name="enabled"></param>
@@ -3486,8 +3486,8 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Enable or disable Inserting rows locking. This does not modify 
-        /// sheet protection status. To enforce this un-/locking, call 
+        /// Enable or disable Inserting rows locking. This does not modify
+        /// sheet protection status. To enforce this un-/locking, call
         /// <see cref="DisableLocking"/> or <see cref="EnableLocking"/>
         /// </summary>
         /// <param name="enabled"></param>
@@ -3497,8 +3497,8 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Enable or disable Pivot Tables locking. This does not modify sheet 
-        /// protection status. To enforce this un-/locking, call 
+        /// Enable or disable Pivot Tables locking. This does not modify sheet
+        /// protection status. To enforce this un-/locking, call
         /// <see cref="DisableLocking"/> or <see cref="EnableLocking"/>
         /// </summary>
         /// <param name="enabled"></param>
@@ -3508,8 +3508,8 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Enable or disable Sort locking. This does not modify sheet 
-        /// protection status. To enforce this un-/locking, call 
+        /// Enable or disable Sort locking. This does not modify sheet
+        /// protection status. To enforce this un-/locking, call
         /// <see cref="DisableLocking"/> or <see cref="EnableLocking"/>
         /// </summary>
         /// <param name="enabled"></param>
@@ -3519,8 +3519,8 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Enable or disable Objects locking. This does not modify sheet 
-        /// protection status. To enforce this un-/locking, call 
+        /// Enable or disable Objects locking. This does not modify sheet
+        /// protection status. To enforce this un-/locking, call
         /// <see cref="DisableLocking"/> or <see cref="EnableLocking"/>
         /// </summary>
         /// <param name="enabled"></param>
@@ -3530,8 +3530,8 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Enable or disable Scenarios locking. This does not modify sheet 
-        /// protection status. To enforce this un-/locking, call 
+        /// Enable or disable Scenarios locking. This does not modify sheet
+        /// protection status. To enforce this un-/locking, call
         /// <see cref="DisableLocking"/> or <see cref="EnableLocking"/>
         /// </summary>
         /// <param name="enabled"></param>
@@ -3541,9 +3541,9 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Enable or disable Selection of locked cells locking. This does not 
-        /// modify sheet protection status. To enforce this un-/locking, call 
-        /// 
+        /// Enable or disable Selection of locked cells locking. This does not
+        /// modify sheet protection status. To enforce this un-/locking, call
+        ///
         /// </summary>
         /// <param name="enabled"></param>
         public void LockSelectLockedCells(bool enabled)
@@ -3552,8 +3552,8 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Enable or disable Selection of unlocked cells locking. This does 
-        /// not modify sheet protection status. To enforce this un-/locking, 
+        /// Enable or disable Selection of unlocked cells locking. This does
+        /// not modify sheet protection status. To enforce this un-/locking,
         /// call <see cref="DisableLocking"/> or <see cref="EnableLocking"/>
         /// </summary>
         /// <param name="enabled"></param>
@@ -3763,7 +3763,7 @@ namespace NPOI.XSSF.UserModel
         /// <summary>
         /// Set background color of the sheet tab
         /// </summary>
-        /// <param name="colorIndex">the indexed color to set, must be a 
+        /// <param name="colorIndex">the indexed color to set, must be a
         /// constant from <see cref="IndexedColors"/></param>
         [Obsolete("deprecated 3.15-beta2. Removed in 3.17. Use {@link #setTabColor(XSSFColor)}.")]
         public void SetTabColor(int colorIndex)
@@ -3910,8 +3910,8 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Copy the source column to the target column. If the target column 
-        /// exists, the new copied column will be inserted before the 
+        /// Copy the source column to the target column. If the target column
+        /// exists, the new copied column will be inserted before the
         /// existing one
         /// </summary>
         /// <param name="sourceIndex">source index</param>
@@ -3955,7 +3955,7 @@ namespace NPOI.XSSF.UserModel
 
                 if(oldCell.CellStyle != null)
                 {
-                    // apply style from old cell to new cell 
+                    // apply style from old cell to new cell
                     newCell.CellStyle = oldCell.CellStyle;
                 }
 
@@ -4061,7 +4061,7 @@ namespace NPOI.XSSF.UserModel
 
             CT_Cols ctCols = worksheet.cols.FirstOrDefault();
             CT_Col ctCol = ((XSSFColumn) column).GetCTCol();
-            int colIndex = GetIndexOfColumn(ctCols, ctCol);
+            int colIndex = XSSFSheet.GetIndexOfColumn(ctCols, ctCol);
 
             ctCols.RemoveCol(colIndex); // Note that columns in worksheet.sheetData is 1-based.
         }
@@ -4267,17 +4267,17 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Create a pivot table using the AreaReference range on sourceSheet, 
-        /// at the given position. If the source reference contains a sheet 
+        /// Create a pivot table using the AreaReference range on sourceSheet,
+        /// at the given position. If the source reference contains a sheet
         /// name, it must match the sourceSheet
         /// </summary>
         /// <param name="source">location of pivot data</param>
-        /// <param name="position">A reference to the top left cell where the 
+        /// <param name="position">A reference to the top left cell where the
         /// pivot table will start</param>
-        /// <param name="sourceSheet">The sheet containing the source data, if 
+        /// <param name="sourceSheet">The sheet containing the source data, if
         /// the source reference doesn't contain a sheet name</param>
         /// <returns>The pivot table</returns>
-        /// <exception cref="ArgumentException">if source references a sheet 
+        /// <exception cref="ArgumentException">if source references a sheet
         /// different than sourceSheet</exception>
         public XSSFPivotTable CreatePivotTable(AreaReference source, CellReference position, ISheet sourceSheet)
         {
@@ -4295,12 +4295,12 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Create a pivot table using the AreaReference range, at the given 
+        /// Create a pivot table using the AreaReference range, at the given
         /// position. If the source reference contains a sheet name, that sheet
         /// is used, otherwise this sheet is assumed as the source sheet.
         /// </summary>
         /// <param name="source">location of pivot data</param>
-        /// <param name="position">A reference to the top left cell where the 
+        /// <param name="position">A reference to the top left cell where the
         /// pivot table will start</param>
         /// <returns>The pivot table</returns>
         public XSSFPivotTable CreatePivotTable(AreaReference source, CellReference position)
@@ -4318,13 +4318,13 @@ namespace NPOI.XSSF.UserModel
 
         /// <summary>
         /// Create a pivot table using the Name range reference on sourceSheet,
-        /// at the given position. If the source reference contains a sheet 
+        /// at the given position. If the source reference contains a sheet
         /// name, it must match the sourceSheet
         /// </summary>
         /// <param name="source">location of pivot data</param>
-        /// <param name="position">A reference to the top left cell where the 
+        /// <param name="position">A reference to the top left cell where the
         /// pivot table will start</param>
-        /// <param name="sourceSheet">The sheet containing the source data, 
+        /// <param name="sourceSheet">The sheet containing the source data,
         /// if the source reference doesn't contain a sheet name</param>
         /// <returns>The pivot table</returns>
         /// <exception cref="ArgumentException"></exception>
@@ -4342,12 +4342,12 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Create a pivot table using the Name range, at the given position. 
-        /// If the source reference contains a sheet name, that sheet is used, 
+        /// Create a pivot table using the Name range, at the given position.
+        /// If the source reference contains a sheet name, that sheet is used,
         /// otherwise this sheet is assumed as the source sheet.
         /// </summary>
         /// <param name="source">location of pivot data</param>
-        /// <param name="position">A reference to the top left cell where the 
+        /// <param name="position">A reference to the top left cell where the
         /// pivot table will start</param>
         /// <returns>The pivot table</returns>
         public XSSFPivotTable CreatePivotTable(IName source, CellReference position)
@@ -4360,11 +4360,11 @@ namespace NPOI.XSSF.UserModel
 
         /// <summary>
         /// Create a pivot table using the Table, at the given position. Tables
-        /// are required to have a sheet reference, so no additional logic 
+        /// are required to have a sheet reference, so no additional logic
         /// around reference sheet is needed.
         /// </summary>
         /// <param name="source">location of pivot data</param>
-        /// <param name="position">A reference to the top left cell where the 
+        /// <param name="position">A reference to the top left cell where the
         /// pivot table will start</param>
         /// <returns>The pivot table</returns>
         public XSSFPivotTable CreatePivotTable(ITable source, CellReference position)
@@ -4410,7 +4410,7 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Add ignored errors (usually to suppress them in the UI of a 
+        /// Add ignored errors (usually to suppress them in the UI of a
         /// consuming application).
         /// </summary>
         /// <param name="cell">Cell</param>
@@ -4432,28 +4432,28 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Returns the errors currently being ignored and the ranges where 
+        /// Returns the errors currently being ignored and the ranges where
         /// they are ignored.
         /// </summary>
         /// <returns>Map of error type to the range(s) where they are ignored.</returns>
         public Dictionary<IgnoredErrorType, ISet<CellRangeAddress>> GetIgnoredErrors()
         {
-            Dictionary<IgnoredErrorType, ISet<CellRangeAddress>> result =
-                new Dictionary<IgnoredErrorType, ISet<CellRangeAddress>>();
+            Dictionary<IgnoredErrorType, ISet<CellRangeAddress>> result = new();
             if(worksheet.IsSetIgnoredErrors())
             {
                 foreach(CT_IgnoredError err in worksheet.ignoredErrors.ignoredError)
                 {
                     foreach(IgnoredErrorType errType in GetErrorTypes(err))
                     {
-                        if(!result.ContainsKey(errType))
+                        if(!result.TryGetValue(errType, out ISet<CellRangeAddress> value))
                         {
-                            result.Add(errType, new HashSet<CellRangeAddress>());
+                            value = new HashSet<CellRangeAddress>();
+                            result.Add(errType, value);
                         }
 
-                        foreach(object ref1 in err.sqref)
+                        foreach(string ref1 in err.sqref)
                         {
-                            result[errType].Add(CellRangeAddress.ValueOf(ref1.ToString()));
+                            value.Add(CellRangeAddress.ValueOf(ref1));
                         }
                     }
                 }
@@ -4609,10 +4609,10 @@ namespace NPOI.XSSF.UserModel
         /// <param name="region">region (rowfrom/colfrom-rowto/colto) to merge</param>
         /// <param name="validate">whether to validate merged region</param>
         /// <returns>index of this region</returns>
-        /// <exception cref="InvalidOperationException">if region intersects 
-        /// with a multi-cell array formula or if region intersects with an 
+        /// <exception cref="InvalidOperationException">if region intersects
+        /// with a multi-cell array formula or if region intersects with an
         /// existing region on this sheet</exception>
-        /// <exception cref="ArgumentException">if region contains fewer 
+        /// <exception cref="ArgumentException">if region contains fewer
         /// than 2 cells</exception>
         private int AddMergedRegion(CellRangeAddress region, bool validate)
         {
@@ -4631,7 +4631,7 @@ namespace NPOI.XSSF.UserModel
                 ValidateArrayFormulas(region);
                 // Throw InvalidOperationException if the argument
                 // CellRangeAddress intersects with a merged region already
-                // in this sheet 
+                // in this sheet
                 ValidateMergedRegions(region);
             }
 
@@ -4644,11 +4644,11 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Verify that the candidate region does not intersect with an 
+        /// Verify that the candidate region does not intersect with an
         /// existing multi-cell array formula in this sheet
         /// </summary>
         /// <param name="region"></param>
-        /// <exception cref="InvalidOperationException">if candidate region 
+        /// <exception cref="InvalidOperationException">if candidate region
         /// intersects an existing array formula in this sheet</exception>
         private void ValidateArrayFormulas(CellRangeAddress region)
         {
@@ -4705,11 +4705,11 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Verify that candidate region does not intersect with an existing 
+        /// Verify that candidate region does not intersect with an existing
         /// merged region in this sheet
         /// </summary>
         /// <param name="candidateRegion"></param>
-        /// <exception cref="InvalidOperationException">if candidate region 
+        /// <exception cref="InvalidOperationException">if candidate region
         /// intersects an existing merged region in this sheet</exception>
         private void ValidateMergedRegions(CellRangeAddress candidateRegion)
         {
@@ -4726,10 +4726,10 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Verify that no merged regions intersect another merged 
+        /// Verify that no merged regions intersect another merged
         /// region in this sheet.
         /// </summary>
-        /// <exception cref="InvalidOperationException">if at least one region 
+        /// <exception cref="InvalidOperationException">if at least one region
         /// intersects with another merged region in this sheet</exception>
         private void CheckForIntersectingMergedRegions()
         {
@@ -4751,13 +4751,13 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        private int GetLastKey(IList<int> keys)
+        private static int GetLastKey(IList<int> keys)
         {
             _ = keys.Count;
             return keys[keys.Count - 1];
         }
 
-        private int HeadMapCount(IList<int> keys, int rownum)
+        private static int HeadMapCount(IList<int> keys, int rownum)
         {
             int count = 0;
             foreach(int key in keys)
@@ -4801,17 +4801,17 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// returns all rows between startRow and endRow, inclusive. Rows 
-        /// between startRow and endRow that haven't been created are not 
+        /// returns all rows between startRow and endRow, inclusive. Rows
+        /// between startRow and endRow that haven't been created are not
         /// included in result unless createRowIfMissing is true
         /// </summary>
-        /// <param name="startRowNum">the first row number in this 
+        /// <param name="startRowNum">the first row number in this
         /// sheet to return</param>
-        /// <param name="endRowNum">the last row number in this 
+        /// <param name="endRowNum">the last row number in this
         /// sheet to return</param>
         /// <param name="createRowIfMissing"></param>
         /// <returns></returns>
-        /// <exception cref="ArgumentException">if startRowNum and endRowNum 
+        /// <exception cref="ArgumentException">if startRowNum and endRowNum
         /// are not in ascending order</exception>
         private List<XSSFRow> GetRows(int startRowNum, int endRowNum, bool createRowIfMissing)
         {
@@ -4905,7 +4905,7 @@ namespace NPOI.XSSF.UserModel
             return outlineLevel;
         }
 
-        private bool ListIsEmpty(List<CT_MergeCell> list)
+        private static bool ListIsEmpty(List<CT_MergeCell> list)
         {
             foreach(CT_MergeCell mc in list)
             {
@@ -4965,7 +4965,7 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="rowIndex">the zero based row index to collapse</param>
         private void CollapseRow(int rowIndex)
@@ -4990,7 +4990,7 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="rowIndex">the zero based row index to find from</param>
         /// <returns></returns>
@@ -5029,7 +5029,7 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="rowNumber">the zero based row index to expand</param>
         private void ExpandRow(int rowNumber)
@@ -5091,7 +5091,7 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="row">the zero based row index to find from</param>
         /// <returns></returns>
@@ -5141,7 +5141,7 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="row">the zero based row index to find from</param>
         /// <returns></returns>
@@ -5377,7 +5377,7 @@ namespace NPOI.XSSF.UserModel
             }
 
             // adjust all the affected comment-structures now
-            // the Map is sorted and thus provides them in the order that we need here, 
+            // the Map is sorted and thus provides them in the order that we need here,
             // i.e. from down to up if Shifting down, vice-versa otherwise
             foreach(KeyValuePair<XSSFComment, int> entry in commentsToShift)
             {
@@ -5491,7 +5491,7 @@ namespace NPOI.XSSF.UserModel
             }
 
             // adjust all the affected comment-structures now
-            // the Map is sorted and thus provides them in the order that we need here, 
+            // the Map is sorted and thus provides them in the order that we need here,
             // i.e. from right to left if Shifting right, vice-versa otherwise
             foreach(KeyValuePair<XSSFComment, int> entry in commentsToShift)
             {
@@ -5503,7 +5503,7 @@ namespace NPOI.XSSF.UserModel
             DestroyColumns(columnsToDestroy);
         }
 
-        private int GetIndexOfColumn(CT_Cols ctCols, CT_Col ctCol)
+        private static int GetIndexOfColumn(CT_Cols ctCols, CT_Col ctCol)
         {
             for(int i = 0; i < ctCols.sizeOfColArray(); i++)
             {
@@ -5525,7 +5525,7 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        private int ShiftedRowOrColumnNumber(int startIndex, int endIndex, int n, int index)
+        private static int ShiftedRowOrColumnNumber(int startIndex, int endIndex, int n, int index)
         {
             // no change if before any affected index
             if(index < startIndex && (n > 0 || (startIndex - index) > n))
@@ -5940,7 +5940,7 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        private XSSFPictureData FindPicture(IList<POIXMLDocumentPart> sheetPictures, string id)
+        private static XSSFPictureData FindPicture(IList<POIXMLDocumentPart> sheetPictures, string id)
         {
             foreach(POIXMLDocumentPart item in sheetPictures)
             {
@@ -6205,7 +6205,7 @@ namespace NPOI.XSSF.UserModel
             XSSFIgnoredErrorHelper.AddIgnoredErrors(ctIgnoredError, ref1, ignoredErrorTypes);
         }
 
-        private ISet<IgnoredErrorType> GetErrorTypes(CT_IgnoredError err)
+        private static ISet<IgnoredErrorType> GetErrorTypes(CT_IgnoredError err)
         {
             ISet<IgnoredErrorType> result = new HashSet<IgnoredErrorType>();
 

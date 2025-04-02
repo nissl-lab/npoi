@@ -172,7 +172,7 @@ namespace NPOI.POIFS.FileSystem
         /// Serves as a hash function for a particular type.
         /// </summary>
         /// <returns>
-        /// A hash code for the current <see cref="T:System.Object"/>.
+        /// A hash code for the current <see cref="System.Object"/>.
         /// </returns>
         public override int GetHashCode()
         {
@@ -192,10 +192,10 @@ namespace NPOI.POIFS.FileSystem
             return code;
         }
         /// <summary>
-        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+        /// Returns a <see cref="System.String"/> that represents the current <see cref="System.Object"/>.
         /// </summary>
         /// <returns>
-        /// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+        /// A <see cref="System.String"/> that represents the current <see cref="System.Object"/>.
         /// </returns>
         public override string ToString()
         {

@@ -52,7 +52,7 @@ namespace NPOI.SS.Formula.Eval
             return new StringEval(sb.ToString());
         }
 
-        private Object GetText(ValueEval ve)
+        private static Object GetText(ValueEval ve)
         {
             if (ve is StringValueEval sve)
             {

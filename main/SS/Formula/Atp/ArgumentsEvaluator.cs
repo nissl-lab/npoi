@@ -45,7 +45,7 @@ namespace NPOI.SS.Formula.Atp
          * @return a double representing a date in POI.
          * @throws EvaluationException exception upon argument evaluation.
          */
-        public double EvaluateDateArg(ValueEval arg, int srcCellRow, int srcCellCol)
+        public static double EvaluateDateArg(ValueEval arg, int srcCellRow, int srcCellCol)
         {
             ValueEval ve = OperandResolver.GetSingleValue(arg, srcCellRow, (short)srcCellCol);
 
@@ -65,14 +65,14 @@ namespace NPOI.SS.Formula.Atp
 
         /**
          * Evaluate a generic {@link ValueEval} argument to an array of double values that represents dates in POI.
-         * 
+         *
          * @param arg {@link ValueEval} an argument.
          * @param srcCellRow number cell row.
          * @param srcCellCol number cell column.
          * @return an array of doubles representing dates in POI.
          * @throws EvaluationException exception upon argument evaluation.
          */
-        public double[] EvaluateDatesArg(ValueEval arg, int srcCellRow, int srcCellCol)
+        public static double[] EvaluateDatesArg(ValueEval arg, int srcCellRow, int srcCellCol)
         {
             if (arg == null)
             {
@@ -81,7 +81,7 @@ namespace NPOI.SS.Formula.Atp
 
             if (arg is StringEval)
             {
-                return new double[] { EvaluateDateArg(arg, srcCellRow, srcCellCol) };
+                return new double[] { ArgumentsEvaluator.EvaluateDateArg(arg, srcCellRow, srcCellCol) };
             }
             else if (arg is AreaEvalBase area)
             {
@@ -92,7 +92,7 @@ namespace NPOI.SS.Formula.Atp
                     {
                         // getValue() is replaced with getAbsoluteValue() because loop variables i, j are
                         // absolute indexes values, but getValue() works with relative indexes values
-                        valuesList.Add(EvaluateDateArg(area.GetAbsoluteValue(i, j), i, j));
+                        valuesList.Add(ArgumentsEvaluator.EvaluateDateArg(area.GetAbsoluteValue(i, j), i, j));
                     }
                 }
                 double[] values = new double[valuesList.Count];
@@ -114,7 +114,7 @@ namespace NPOI.SS.Formula.Atp
          * @return a double value.
          * @throws EvaluationException exception upon argument evaluation.
          */
-        public double EvaluateNumberArg(ValueEval arg, int srcCellRow, int srcCellCol)
+        public static double EvaluateNumberArg(ValueEval arg, int srcCellRow, int srcCellCol)
         {
             if (arg == null)
             {

@@ -292,7 +292,8 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        private void AutoFit(CT_GroupShape CtGroup, Coords Min, Coords Max) {
+        private static void AutoFit(CT_GroupShape CtGroup, Coords Min, Coords Max)
+        {
             foreach(var cxn in CtGroup.Connectors) {
                 var cd = new Coords(cxn.spPr.xfrm.off.x, cxn.spPr.xfrm.off.y);
                 Min.Min(cd);

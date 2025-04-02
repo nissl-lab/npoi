@@ -60,7 +60,7 @@ namespace NPOI.SS.Formula.Functions
             return ErrorEval.VALUE_INVALID;
         }
 
-        private ValueEval doFixed(
+        private static ValueEval doFixed(
                 ValueEval numberParam, ValueEval placesParam,
                 ValueEval skipThousandsSeparatorParam,
                 int srcRowIndex, int srcColumnIndex)

@@ -198,7 +198,7 @@ namespace NPOI.HSSF.Record.Aggregates
             }
         }
 
-        private MulBlankRecord CreateMBR(CellValueRecordInterface[] cellValues, int startIx, int nBlank)
+        private static MulBlankRecord CreateMBR(CellValueRecordInterface[] cellValues, int startIx, int nBlank)
         {
 
             short[] xfs = new short[nBlank];
@@ -440,11 +440,6 @@ namespace NPOI.HSSF.Record.Aggregates
             object IEnumerator.Current
             {
                 get { return this.Current; }
-            }
-
-            public void Remove()
-            {
-                throw new InvalidOperationException("gibt's noch nicht");
             }
 
             private void FindNext()

@@ -29,11 +29,12 @@ namespace NPOI.SS.Formula.Atp
             return _evaluate(args, srcRowIndex, srcColumnIndex, false);
         }
 
-        private String LaxValueToString(ValueEval eval)
+        private static String LaxValueToString(ValueEval eval)
         {
             return (eval is MissingArgEval) ? "" : OperandResolver.CoerceValueToString(eval);
         }
-        private ValueEval _evaluate(ValueEval[] args, int srcRowIndex, int srcColumnIndex, bool isSingleValue)
+
+        private static ValueEval _evaluate(ValueEval[] args, int srcRowIndex, int srcColumnIndex, bool isSingleValue)
         {
             if (args.Length < 3)
             {
@@ -98,7 +99,8 @@ namespace NPOI.SS.Formula.Atp
             }
             return evaluate(srcRowIndex, srcColumnIndex, args[0], args[1], args[2], notFound, matchMode, searchMode, isSingleValue);
         }
-        private ValueEval evaluate(int srcRowIndex, int srcColumnIndex, ValueEval lookupEval, ValueEval indexEval,
+
+        private static ValueEval evaluate(int srcRowIndex, int srcColumnIndex, ValueEval lookupEval, ValueEval indexEval,
                            ValueEval returnEval, String notFound, LookupUtils.MatchMode matchMode,
                            LookupUtils.SearchMode searchMode, bool isSingleValue)
         {

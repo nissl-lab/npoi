@@ -140,7 +140,7 @@ namespace NPOI.SS.Formula.Functions
             return new StringEval(strb.ToString());
         }
 
-        private bool isDoubleAnInt(double number)
+        private static bool isDoubleAnInt(double number)
         {
             return (number == Math.Floor(number)) && !Double.IsInfinity(number);
         }

@@ -56,11 +56,11 @@ namespace NPOI.HSSF.UserModel
                 switch (text[1])
                 {
                     case 'L':
-                        if (text.IndexOf("&C", StringComparison.Ordinal) >= 0)
+                        if (text.Contains("&C"))
                         {
                             pos = Math.Min(pos, text.IndexOf("&C", StringComparison.Ordinal));
                         }
-                        if (text.IndexOf("&R", StringComparison.Ordinal) >= 0)
+                        if (text.Contains("&R"))
                         {
                             pos = Math.Min(pos, text.IndexOf("&R", StringComparison.Ordinal));
                         }
@@ -68,11 +68,11 @@ namespace NPOI.HSSF.UserModel
                         text = text.Substring(pos);
                         break;
                     case 'C':
-                        if (text.IndexOf("&L", StringComparison.Ordinal) >= 0)
+                        if (text.Contains("&L"))
                         {
                             pos = Math.Min(pos, text.IndexOf("&L", StringComparison.Ordinal));
                         }
-                        if (text.IndexOf("&R", StringComparison.Ordinal) >= 0)
+                        if (text.Contains("&R"))
                         {
                             pos = Math.Min(pos, text.IndexOf("&R", StringComparison.Ordinal));
                         }
@@ -80,11 +80,11 @@ namespace NPOI.HSSF.UserModel
                         text = text.Substring(pos);
                         break;
                     case 'R':
-                        if (text.IndexOf("&C", StringComparison.Ordinal) >= 0)
+                        if (text.Contains("&C"))
                         {
                             pos = Math.Min(pos, text.IndexOf("&C", StringComparison.Ordinal));
                         }
-                        if (text.IndexOf("&L", StringComparison.Ordinal) >= 0)
+                        if (text.Contains("&L"))
                         {
                             pos = Math.Min(pos, text.IndexOf("&L", StringComparison.Ordinal));
                         }

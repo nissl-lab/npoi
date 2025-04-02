@@ -69,7 +69,7 @@ namespace NPOI.XSSF.UserModel.Helpers
         /**
          * Split into left, center, right
          */
-        private String[] GetParts(String str)
+        private static String[] GetParts(String str)
         {
             String[] parts = new String[] { "", "", "" };
             if (str == null)
@@ -110,11 +110,13 @@ namespace NPOI.XSSF.UserModel.Helpers
 
             return parts;
         }
-        private String JoinParts(String[] parts)
+
+        private static String JoinParts(String[] parts)
         {
             return JoinParts(parts[0], parts[1], parts[2]);
         }
-        private String JoinParts(String l, String c, String r)
+
+        private static String JoinParts(String l, String c, String r)
         {
             StringBuilder ret = new StringBuilder();
 

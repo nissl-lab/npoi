@@ -1881,7 +1881,8 @@ namespace NPOI.XWPF.UserModel
         {
             return this;
         }
-        private void FindAndReplaceTextInParagraph(XWPFParagraph paragraph, string oldValue, string newValue, int startPos = 0)
+
+        private static void FindAndReplaceTextInParagraph(XWPFParagraph paragraph, string oldValue, string newValue, int startPos = 0)
         {
             if(paragraph == null)
                 return;
@@ -1949,7 +1950,7 @@ namespace NPOI.XWPF.UserModel
             FindAndReplaceTextInParagraph(paragraph, oldValue, newValue, startIndex + newValue.Length);
         }
 
-        private void FindAndReplaceTextInTable(XWPFTable table, string oldValue, string newValue)
+        private static void FindAndReplaceTextInTable(XWPFTable table, string oldValue, string newValue)
         {
             foreach (var row in table.Rows)
             {
