@@ -33,7 +33,7 @@ namespace TestCases.SS.UserModel
     /**
      * @author Yegor Kozlov
      */
-    public abstract class BaseTestWorkbook
+    public abstract class BaseTestWorkbook : POITestCase
     {
 
         protected ITestDataProvider _testDataProvider;

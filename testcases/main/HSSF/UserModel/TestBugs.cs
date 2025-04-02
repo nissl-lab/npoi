@@ -1247,6 +1247,7 @@ namespace TestCases.HSSF.UserModel
             // Check that asking for the same font
             //  multiple times gives you the same thing.
             // Otherwise, our Tests wouldn't work!
+            ClassicAssert.AreSame(wb.GetFontAt((short)0), wb.GetFontAt((short)0));
             ClassicAssert.AreEqual(
                     wb.GetFontAt((short)0),
                     wb.GetFontAt((short)0)
@@ -2732,10 +2733,11 @@ namespace TestCases.HSSF.UserModel
                 // Extract and check
                 ExcelExtractor ex = new ExcelExtractor(wb);
                 String text = ex.Text;
-                ClassicAssert.IsTrue(text.Contains("Top Left Cell"));
-                ClassicAssert.IsTrue(text.Contains("Top Right Cell"));
-                ClassicAssert.IsTrue(text.Contains("Bottom Left Cell"));
-                ClassicAssert.IsTrue(text.Contains("Bottom Right Cell"));
+
+                POITestCase.AssertContains(text, "Top Left Cell");
+                POITestCase.AssertContains(text, "Top Right Cell");
+                POITestCase.AssertContains(text, "Bottom Left Cell");
+                POITestCase.AssertContains(text, "Bottom Right Cell");
             }
         }
 
@@ -2837,7 +2839,7 @@ namespace TestCases.HSSF.UserModel
         }
 
         [Test]
-        public void bug51675()
+        public void Bug51675()
         {
             List<short> list = new List<short>();
             HSSFWorkbook workbook = OpenSample("51675.xls");
@@ -2845,8 +2847,8 @@ namespace TestCases.HSSF.UserModel
             InternalSheet ish = HSSFTestHelper.GetSheetForTest(sh);
             PageSettingsBlock psb = (PageSettingsBlock)ish.Records[(13)];
             psb.VisitContainedRecords(new RecordVisitor1(list));
-            ClassicAssert.IsTrue(list[(list.Count - 1)] == UnknownRecord.BITMAP_00E9);
-            ClassicAssert.IsTrue(list[(list.Count - 2)] == UnknownRecord.HEADER_FOOTER_089C);
+            ClassicAssert.AreEqual(UnknownRecord.BITMAP_00E9, list[(list.Count - 1)]);
+            ClassicAssert.AreEqual(UnknownRecord.HEADER_FOOTER_089C, list[(list.Count - 2)]);
         }
         public class RecordVisitor1 : RecordVisitor
         {
