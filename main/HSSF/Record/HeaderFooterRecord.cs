@@ -21,7 +21,6 @@ namespace NPOI.HSSF.Record
 
     using System;
     using System.Text; 
-using Cysharp.Text;
 
     /**
      * The HEADERFOOTER record stores information Added in Office Excel 2007 for headers/footers.

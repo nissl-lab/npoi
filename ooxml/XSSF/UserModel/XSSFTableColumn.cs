@@ -1,9 +1,8 @@
-﻿using NPOI.OpenXmlFormats.Spreadsheet;
+using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.XSSF.UserModel.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Text; 
-using Cysharp.Text;
 
 namespace NPOI.XSSF.UserModel
 {

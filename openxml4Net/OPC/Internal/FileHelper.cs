@@ -1,7 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text; 
-using Cysharp.Text;
 using System.IO;
 
 namespace NPOI.OpenXml4Net.OPC.Internal

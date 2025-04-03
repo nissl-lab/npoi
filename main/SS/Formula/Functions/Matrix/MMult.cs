@@ -1,9 +1,8 @@
-﻿using MathNet.Numerics.LinearAlgebra;
+using MathNet.Numerics.LinearAlgebra;
 using NPOI.SS.Formula.Eval;
 using System;
 using System.Collections.Generic;
 using System.Text; 
-using Cysharp.Text;
 using static NPOI.SS.Formula.Functions.MatrixFunction;
 
 namespace NPOI.SS.Formula.Functions

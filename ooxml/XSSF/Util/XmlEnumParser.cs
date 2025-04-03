@@ -1,10 +1,9 @@
-﻿using NPOI.OpenXmlFormats.Spreadsheet;
+using NPOI.OpenXmlFormats.Spreadsheet;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text; 
-using Cysharp.Text;
 using System.Xml.Serialization;
 
 namespace NPOI.XSSF.Util

@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Xml;
 using System.IO;
 using System.Text; 
-using Cysharp.Text;
 using NPOI.OpenXml4Net.Util;
 
 namespace NPOI.OpenXmlFormats.Vml.Office

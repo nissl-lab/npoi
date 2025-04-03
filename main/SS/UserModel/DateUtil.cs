@@ -21,7 +21,6 @@ namespace NPOI.SS.UserModel
     using System;
     using System.Text.RegularExpressions;
     using System.Text; 
-using Cysharp.Text;
     using NPOI.Util;
 
     /// <summary>
@@ -51,7 +50,7 @@ using Cysharp.Text;
         private static Regex date_ptrn1 = new Regex("^\\[\\$\\-.*?\\]", RegexOptions.Compiled);
         private static Regex date_ptrn2 = new Regex("^\\[[a-zA-Z]+\\]", RegexOptions.Compiled);
         private static Regex date_ptrn3a = new Regex("[yYmMdDhHsS]", RegexOptions.Compiled);
-        // add "\u5e74 \u6708 \u65e5"£¨ÄêÔÂÈÕ£© for Chinese/Japanese date format:2017Äê2ÔÂ7ÈÕ
+        // add "\u5e74 \u6708 \u65e5"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Õ£ï¿½ for Chinese/Japanese date format:2017ï¿½ï¿½2ï¿½ï¿½7ï¿½ï¿½
         private static Regex date_ptrn3b = new Regex("^[\\[\\]yYmMdDhHsS\\-T/\u5e74\u6708\u65e5,. :\"\\\\]+0*[ampAMP/]*$", RegexOptions.Compiled);
 
         //  elapsed time patterns: [h],[m] and [s]

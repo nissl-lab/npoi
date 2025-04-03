@@ -20,7 +20,6 @@ namespace NPOI.HSSF.Record
 
     using System;
     using System.Text; 
-using Cysharp.Text;
 
     [Obsolete("Not found in poi,is it useful?")]
     public interface CustomField

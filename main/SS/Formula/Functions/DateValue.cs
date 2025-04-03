@@ -1,11 +1,10 @@
-﻿using NPOI.SS.Formula.Eval;
+using NPOI.SS.Formula.Eval;
 using NPOI.SS.Formula.Functions;
 using NPOI.SS.UserModel;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text; 
-using Cysharp.Text;
 using System.Text.RegularExpressions;
 
 namespace NPOI.SS.Formula.Functions

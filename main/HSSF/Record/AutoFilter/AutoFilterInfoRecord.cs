@@ -1,6 +1,5 @@
-﻿using System;
+using System;
 using System.Text; 
-using Cysharp.Text;
 
 namespace NPOI.HSSF.Record.AutoFilter
 {

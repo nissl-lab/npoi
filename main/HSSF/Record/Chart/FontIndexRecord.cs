@@ -21,7 +21,6 @@ namespace NPOI.HSSF.Record.Chart
 {
     using System;
     using System.Text; 
-using Cysharp.Text;
     using NPOI.Util;
 
 
@@ -109,7 +108,7 @@ using Cysharp.Text;
         /// If iFont is less than or equal to the number of Font records in the globals substream, 
         ///     iFont is a one-based index to a Font record in the globals substream. 
         /// Otherwise iFont is a one-based index into the collection of Font records in this chart sheet substream 
-        ///     where the index is equal to iFont ¨C n, where n is the number of Font records in the globals substream.
+        ///     where the index is equal to iFont ï¿½C n, where n is the number of Font records in the globals substream.
         /// </summary>
         public short FontIndex
         {

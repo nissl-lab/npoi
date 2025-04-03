@@ -19,7 +19,6 @@ namespace NPOI.HSSF.UserModel
 {
     using System;
     using System.Text; 
-using Cysharp.Text;
     using System.IO;
     using NPOI.DDF;
     using NPOI.Util;

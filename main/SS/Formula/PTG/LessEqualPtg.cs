@@ -20,7 +20,6 @@ namespace NPOI.SS.Formula.PTG
 {
     using System;
     using System.Text; 
-using Cysharp.Text;
 
     /**
      * Ptg class to implement less than or equal

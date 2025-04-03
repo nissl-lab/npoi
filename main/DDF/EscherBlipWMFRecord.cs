@@ -21,7 +21,6 @@ namespace NPOI.DDF
 {
     using System;
     using System.Text; 
-using Cysharp.Text;
     using NPOI.Util;
     using System.IO;
     using ICSharpCode.SharpZipLib.Zip.Compression;

@@ -1,4 +1,4 @@
-﻿/* ====================================================================
+/* ====================================================================
    Licensed to the Apache Software Foundation (ASF) under one or more
    contributor license agreements.  See the NOTICE file distributed with
    this work for Additional information regarding copyright ownership.
@@ -21,7 +21,6 @@ namespace NPOI.XWPF.UserModel
     using System.Collections.Generic;
     using System.Linq;
     using System.Text; 
-using Cysharp.Text;
     using NPOI.OpenXmlFormats.Shared;
     using NPOI.XWPF.Usermodel;
 

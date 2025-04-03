@@ -21,7 +21,6 @@ namespace NPOI.POIFS.FileSystem
     using System.IO;
     using NPOI.Util;
     using System.Text; 
-using Cysharp.Text;
 
     /**
      * Represents an Ole10Native record which is wrapped around certain binary

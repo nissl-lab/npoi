@@ -21,7 +21,6 @@ namespace NPOI.XWPF.Extractor
     using NPOI.XWPF.UserModel;
     using NPOI.OpenXml4Net.OPC;
     using System.Text; 
-using Cysharp.Text;
     using System.Collections.Generic;
     using NPOI.OpenXmlFormats.Wordprocessing;
     using System.IO;

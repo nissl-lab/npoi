@@ -1,10 +1,9 @@
-﻿using NPOI.OpenXml4Net.OPC;
+using NPOI.OpenXml4Net.OPC;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text; 
-using Cysharp.Text;
 using System.Xml;
 
 namespace NPOI.OpenXmlFormats.Encryption

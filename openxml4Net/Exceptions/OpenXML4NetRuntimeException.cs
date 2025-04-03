@@ -1,9 +1,8 @@
-﻿using NPOI.Util;
+using NPOI.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text; 
-using Cysharp.Text;
 
 namespace NPOI.OpenXml4Net.Exceptions
 {

@@ -23,7 +23,6 @@ namespace NPOI.HSSF.UserModel
     using NPOI.SS.Formula;
     using NPOI.SS.UserModel;
     using System.Text; 
-using Cysharp.Text;
     using NPOI.SS.Util;
     using System.Globalization;
 using NPOI.HSSF.Record;

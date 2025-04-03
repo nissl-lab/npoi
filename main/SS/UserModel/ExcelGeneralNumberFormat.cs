@@ -25,7 +25,6 @@ namespace NPOI.SS.UserModel
     using System;
     using System.Globalization;
     using System.Text; 
-using Cysharp.Text;
 
     /**
      * A format that formats a double as Excel would, ignoring FieldPosition.

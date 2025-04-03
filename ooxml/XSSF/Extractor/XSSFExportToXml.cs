@@ -25,7 +25,6 @@ using System.Text.RegularExpressions;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.SS.UserModel;
 using System.Text; 
-using Cysharp.Text;
 using NPOI.SS.Util;
 using NPOI.Util;
 namespace NPOI.XSSF.Extractor

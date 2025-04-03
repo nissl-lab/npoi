@@ -21,7 +21,6 @@ namespace NPOI.POIFS.Macros
     using System.Collections.Generic;
     using System.IO;
     using System.Text; 
-using Cysharp.Text;
 
 
     /**

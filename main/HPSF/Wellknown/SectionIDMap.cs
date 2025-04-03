@@ -29,7 +29,6 @@ namespace NPOI.HPSF.Wellknown
 {
     using System;
     using System.Text; 
-using Cysharp.Text;
     using System.Collections;
 
     /// <summary>

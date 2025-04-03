@@ -1,4 +1,4 @@
-﻿/* ====================================================================
+/* ====================================================================
    Licensed to the Apache Software Foundation (ASF) Under one or more
    contributor license agreements.  See the NOTICE file distributed with
    this work for Additional information regarding copyright ownership.
@@ -16,7 +16,6 @@
 ==================================================================== */
 
 using System.Text; 
-using Cysharp.Text;
 using NPOI.Util;
 
 namespace NPOI.HSSF.Record.Chart

@@ -19,7 +19,6 @@ namespace NPOI.HSSF.Record
 {
     using System;
     using System.Text; 
-using Cysharp.Text;
     using NPOI.HSSF.Record.CF;
     using NPOI.SS.Util;
     using NPOI.Util;

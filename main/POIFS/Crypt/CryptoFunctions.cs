@@ -21,7 +21,6 @@ namespace NPOI.POIFS.Crypt
     using Org.BouncyCastle.Security;
     using System;
     using System.Text; 
-using Cysharp.Text;
 
     /**
      * Helper functions used for standard and agile encryption

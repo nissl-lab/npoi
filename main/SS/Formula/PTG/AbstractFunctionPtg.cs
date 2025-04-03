@@ -19,7 +19,6 @@ namespace NPOI.SS.Formula.PTG
 {
     using System;
     using System.Text; 
-using Cysharp.Text;
 
     using NPOI.SS.Formula.Function;
 

@@ -19,7 +19,6 @@ namespace NPOI.SS.Format
     using System;
     using System.Text.RegularExpressions;
     using System.Text; 
-using Cysharp.Text;
     using System.Collections.Generic;
     using NPOI.SS.Util;
     using System.Collections;

@@ -22,7 +22,6 @@ namespace NPOI.DDF
     using NPOI.Util;
     using System.Collections.Generic;
     using System.Text; 
-using Cysharp.Text;
 
     /// <summary>
     /// The base abstract record from which all escher records are defined.  Subclasses will need

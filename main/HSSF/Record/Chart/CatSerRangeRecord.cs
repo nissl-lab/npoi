@@ -22,7 +22,6 @@ namespace NPOI.HSSF.Record.Chart
 
     using System;
     using System.Text; 
-using Cysharp.Text;
     using NPOI.Util;
 
     /*
@@ -145,7 +144,7 @@ using Cysharp.Text;
         ///                     on this axis. MUST be greater than or equal to 1 and less than or equal to 31999.
         /// Series axis         MUST be 0.
         /// Date axis           catCross MUST be equal to the value given by the following formula:
-        ///                     catCross = catCrossDate ¨C catMin + 1
+        ///                     catCross = catCrossDate ï¿½C catMin + 1
         ///                     Where catCrossDate is the catCrossDate field of the AxcExt record 
         ///                     and catMin is the catMin field of the AxcExt record.
         /// </summary>

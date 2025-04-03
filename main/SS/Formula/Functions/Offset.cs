@@ -21,7 +21,6 @@ namespace NPOI.SS.Formula.Functions
     using System;
     using NPOI.SS.Formula.Eval;
     using System.Text; 
-using Cysharp.Text;
 
     /**
      * Implementation for Excel function OFFSet()<p/>

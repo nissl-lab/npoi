@@ -22,7 +22,6 @@ namespace NPOI.HSSF.Record.Aggregates
 {
     using System;
     using System.Text; 
-using Cysharp.Text;
     using System.Collections.Generic;
     using NPOI.HSSF.Record;
     using NPOI.SS.Util;

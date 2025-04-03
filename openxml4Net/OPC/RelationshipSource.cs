@@ -1,6 +1,5 @@
-﻿using System;
+using System;
 using System.Text; 
-using Cysharp.Text;
 using NPOI.OpenXml4Net.Exceptions;
 
 namespace NPOI.OpenXml4Net.OPC

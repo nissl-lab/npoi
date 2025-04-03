@@ -9,7 +9,6 @@ using NPOI.OpenXmlFormats.Vml.Presentation;
 using System.IO;
 using System.Xml;
 using System.Text; 
-using Cysharp.Text;
 using System.ComponentModel;
 using NPOI.OpenXml4Net.Util;
 using NPOI.Util;

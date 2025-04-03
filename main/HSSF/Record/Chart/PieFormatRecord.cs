@@ -1,5 +1,4 @@
-﻿using System.Text; 
-using Cysharp.Text;
+using System.Text; 
 using NPOI.Util;
 
 namespace NPOI.HSSF.Record.Chart

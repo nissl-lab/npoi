@@ -20,7 +20,6 @@ namespace NPOI.DDF
 {
     using System;
     using System.Text; 
-using Cysharp.Text;
 
     /// <summary>
     /// This is the abstract base class for all escher properties.

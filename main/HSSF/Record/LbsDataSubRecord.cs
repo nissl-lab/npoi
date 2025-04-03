@@ -1,6 +1,5 @@
-﻿using System;
+using System;
 using System.Text; 
-using Cysharp.Text;
 using NPOI.Util;
 using NPOI.SS.Formula.PTG;
 using System.Globalization;

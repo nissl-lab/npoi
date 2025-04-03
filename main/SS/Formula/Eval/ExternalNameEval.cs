@@ -21,7 +21,6 @@ namespace NPOI.SS.Formula.Eval
 
     using NPOI.SS.Formula;
     using System.Text; 
-using Cysharp.Text;
 
     /**
      * Evaluation of a Name defined in a Sheet or Workbook scope

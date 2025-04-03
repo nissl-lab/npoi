@@ -19,7 +19,6 @@ namespace NPOI.SS.Formula
 
     using System;
     using System.Text; 
-using Cysharp.Text;
     using System.Collections;
     using System.Collections.Generic;
     using NPOI.SS.UserModel;

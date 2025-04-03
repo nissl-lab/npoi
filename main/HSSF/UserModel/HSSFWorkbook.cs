@@ -25,7 +25,6 @@ namespace NPOI.HSSF.UserModel
     using System.IO;
     using System.Security.Cryptography;
     using System.Text; 
-using Cysharp.Text;
     using NPOI.DDF;
     using NPOI.HPSF;
     using NPOI.HSSF.Model;

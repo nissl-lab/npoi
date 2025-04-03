@@ -19,7 +19,6 @@ namespace NPOI.HSSF.Record.CF
 {
     using System;
     using System.Text; 
-using Cysharp.Text;
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.PTG;
     using NPOI.SS.UserModel;

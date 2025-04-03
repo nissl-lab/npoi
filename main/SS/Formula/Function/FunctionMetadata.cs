@@ -19,7 +19,6 @@ namespace NPOI.SS.Formula.Function
 {
     using System;
     using System.Text; 
-using Cysharp.Text;
     /**
      * Holds information about Excel built-in functions.
      * 

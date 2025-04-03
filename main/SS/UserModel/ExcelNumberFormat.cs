@@ -1,8 +1,7 @@
-﻿using NPOI.SS.Formula;
+using NPOI.SS.Formula;
 using System;
 using System.Collections.Generic;
 using System.Text; 
-using Cysharp.Text;
 
 namespace NPOI.SS.UserModel
 {

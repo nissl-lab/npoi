@@ -1,9 +1,8 @@
-﻿using MathNet.Numerics.Distributions;
+using MathNet.Numerics.Distributions;
 using NPOI.SS.Formula.Eval;
 using System;
 using System.Collections.Generic;
 using System.Text; 
-using Cysharp.Text;
 
 namespace NPOI.SS.Formula.Functions
 {

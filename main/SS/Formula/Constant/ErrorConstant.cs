@@ -19,7 +19,6 @@ namespace NPOI.SS.Formula.Constant
 {
     using System;
     using System.Text; 
-using Cysharp.Text;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
 
