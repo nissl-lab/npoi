@@ -19,7 +19,7 @@ namespace NPOI.XWPF.Model
     using System;
 
     using NPOI.XWPF.UserModel;
-    using System.Text;
+    using System.Text; 
     using NPOI.OpenXmlFormats.Wordprocessing;
 
     /**

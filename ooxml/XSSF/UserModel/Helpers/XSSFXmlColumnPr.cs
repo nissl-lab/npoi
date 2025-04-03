@@ -18,7 +18,8 @@
 using NPOI.XSSF.UserModel;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using System;
-using System.Text;
+using System.Text; 
+using Cysharp.Text;
 
 namespace NPOI.XSSF.UserModel.Helpers
 {
@@ -88,7 +89,7 @@ namespace NPOI.XSSF.UserModel.Helpers
         {
             get
             {
-                StringBuilder localXPath = new StringBuilder();
+                using var localXPath = ZString.CreateStringBuilder();
                 int numberOfCommonXPathAxis = table.GetCommonXpath().Split(new char[] { '/' }).Length - 1;
 
                 String[] xPathTokens = ctXmlColumnPr.xpath.Split(new char[] { '/' });

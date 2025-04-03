@@ -20,7 +20,7 @@ namespace NPOI.HSSF.Record
 
     using System;
     using NPOI.Util;
-    using System.Text;
+    using System.Text; 
 
     /**
      * The UserSViewEnd record marks the end of the Settings for a custom view associated with the sheet

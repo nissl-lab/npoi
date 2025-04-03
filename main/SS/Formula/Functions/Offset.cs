@@ -20,7 +20,7 @@ namespace NPOI.SS.Formula.Functions
 {
     using System;
     using NPOI.SS.Formula.Eval;
-    using System.Text;
+    using System.Text; 
 
     /**
      * Implementation for Excel function OFFSet()<p/>

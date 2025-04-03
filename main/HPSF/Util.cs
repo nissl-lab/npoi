@@ -21,7 +21,7 @@ namespace NPOI.HPSF
 {
     using System;
     using System.IO;
-    using System.Text;
+    using System.Text; 
 
     /// <summary>
     /// Provides various static utility methods.

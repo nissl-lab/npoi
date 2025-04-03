@@ -22,7 +22,7 @@ using NPOI.Util;
 namespace NPOI.POIFS.Crypt
 {
     using System;
-    using System.Text;
+    using System.Text; 
     using NPOI.POIFS.Crypt.Standard;
     using NPOI.POIFS.FileSystem;
 

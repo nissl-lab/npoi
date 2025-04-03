@@ -18,7 +18,7 @@
 namespace NPOI.SS.Formula.PTG
 {
     using System;
-    using System.Text;
+    using System.Text; 
 
     /**
      * Less than operator PTG "&lt;". The SID is taken from the 

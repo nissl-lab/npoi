@@ -21,7 +21,8 @@
 namespace NPOI.SS.Formula.Functions
 {
     using System;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
     using NPOI.SS.Formula.Eval;
 
     /**
@@ -55,7 +56,7 @@ namespace NPOI.SS.Formula.Functions
             {
                 return ErrorEval.VALUE_INVALID;
             }
-            StringBuilder strBuff = new StringBuilder(oldStr);
+            using var strBuff = ZString.CreateStringBuilder();
             // remove any characters that should be replaced
             if (startNum <= oldStr.Length && numChars != 0)
             {

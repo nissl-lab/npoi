@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 using System.IO;
-using System.Text;
+using System.Text; 
 
 namespace NPOI.OpenXml4Net.OPC.Internal
 {

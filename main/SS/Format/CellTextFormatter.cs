@@ -18,7 +18,7 @@ namespace NPOI.SS.Format
 {
     using System;
     using System.Text.RegularExpressions;
-    using System.Text;
+    using System.Text; 
 
 
     /**

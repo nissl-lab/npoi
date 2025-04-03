@@ -17,7 +17,8 @@
 namespace NPOI.HPSF.Extractor
 {
     using System;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
     using System.IO;
     using System.Collections;
 
@@ -67,7 +68,7 @@ namespace NPOI.HPSF.Extractor
                     return "";
                 }
                 DocumentSummaryInformation dsi = document.DocumentSummaryInformation;
-                StringBuilder text = new StringBuilder();
+                using var text = ZString.CreateStringBuilder();
 
                 // Normal properties
                 text.Append(GetPropertiesText(dsi));
@@ -121,7 +122,7 @@ namespace NPOI.HPSF.Extractor
                 return "";
             }
 
-            StringBuilder text = new StringBuilder();
+            using var text = ZString.CreateStringBuilder();
 
             Wellknown.PropertyIDMap idMap = ps.PropertySetIDMap;
             Property[] props = ps.Properties;

@@ -1,4 +1,4 @@
-﻿/* ====================================================================
+/* ====================================================================
    Licensed to the Apache Software Foundation (ASF) Under one or more
    contributor license agreements.  See the NOTICE file distributed with
    this work for Additional information regarding copyright ownership.
@@ -16,7 +16,7 @@
 ==================================================================== */
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Text; 
 using NPOI.Util;
 
 namespace NPOI.HSSF.Record.Drawing

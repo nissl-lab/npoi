@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Text;
+using System.Text; 
 using NPOI.OpenXml4Net.Util;
 using NPOI.OpenXmlFormats.Vml;
 

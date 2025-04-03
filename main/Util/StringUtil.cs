@@ -27,7 +27,8 @@
  * ==============================================================*/
 
 using System;
-using System.Text;
+using System.Text; 
+using Cysharp.Text;
 using System.Collections.Generic;
 
 
@@ -503,7 +504,8 @@ namespace NPOI.Util
             if (string1 == null || "".Equals(string1)) return string1;
             InitMsCodepointMap();
 
-            StringBuilder sb = new StringBuilder();
+            using var sb = ZString.CreateStringBuilder();
+
             int length = string1.Length;
             //char[] stringChars = string1.ToCharArray();
             for (int offset = 0; offset < length;)

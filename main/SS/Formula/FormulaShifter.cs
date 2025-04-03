@@ -20,7 +20,8 @@ namespace NPOI.SS.Formula
 
     using NPOI.SS.Formula.PTG;
     using System;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
     /**
      * @author Josh Micich
      */
@@ -210,7 +211,7 @@ namespace NPOI.SS.Formula
         }
         public override string ToString()
         {
-            StringBuilder sb = new StringBuilder();
+            using var sb = ZString.CreateStringBuilder();
 
             sb.Append(GetType().Name);
             sb.Append(" [");

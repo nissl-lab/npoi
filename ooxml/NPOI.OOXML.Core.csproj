@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>net472;netstandard2.0;netstandard2.1;net8.0</TargetFrameworks>
@@ -19,6 +19,10 @@
 
   <ItemGroup>
     <None Remove="XSSF\UserModel\presetTableStyles.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+	  <PackageReference Include="ZString" />
   </ItemGroup>
 
   <ItemGroup>

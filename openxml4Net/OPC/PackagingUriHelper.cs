@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Text;
+using System.Text; 
+using Cysharp.Text;
 using System.Text.RegularExpressions;
 using NPOI.OpenXml4Net.Exceptions;
 using System.IO;
@@ -695,7 +696,8 @@ namespace NPOI.OpenXml4Net.OPC
          */
         public static String DecodeURI(Uri uri)
         {
-            StringBuilder retVal = new StringBuilder();
+            using var retVal = ZString.CreateStringBuilder();
+
             String uriStr = uri.OriginalString;
             char c;
             int length = uriStr.Length;
@@ -764,7 +766,7 @@ namespace NPOI.OpenXml4Net.OPC
             // trailing white spaces must be url-encoded, see Bugzilla 53282
             if (value.Length > 0)
             {
-                StringBuilder b = new StringBuilder();
+               using var b= ZString.CreateStringBuilder();
                 int idx = value.Length - 1;
                 for (; idx >= 0; idx--)
                 {
@@ -810,8 +812,9 @@ namespace NPOI.OpenXml4Net.OPC
         if (n == 0) return s;
 
         byte[] bb = Encoding.UTF8.GetBytes(s);
-        StringBuilder sb = new StringBuilder();
-        foreach (byte b in bb)
+        using var sb = ZString.CreateStringBuilder();
+
+        foreach(byte b in bb)
         { 
             int b1 = (int)b & 0xff;
             if (IsUnsafe(b1)) {

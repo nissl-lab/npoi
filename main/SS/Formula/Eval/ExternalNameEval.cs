@@ -20,7 +20,7 @@ namespace NPOI.SS.Formula.Eval
     using System;
 
     using NPOI.SS.Formula;
-    using System.Text;
+    using System.Text; 
 
     /**
      * Evaluation of a Name defined in a Sheet or Workbook scope

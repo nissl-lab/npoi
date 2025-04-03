@@ -19,7 +19,8 @@ namespace NPOI.XWPF.UserModel
     using System;
     using NPOI.OpenXmlFormats.Wordprocessing;
     using System.Collections.Generic;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
     using System.Xml;
     using System.IO;
     using NPOI.Util;
@@ -88,7 +89,7 @@ namespace NPOI.XWPF.UserModel
             }
 
             //// Look for any text in any of our pictures or Drawings
-            StringBuilder text = new StringBuilder();
+            using var text = ZString.CreateStringBuilder();
             List<object> pictTextObjs = new List<object>();
             foreach (CT_Picture pic in r.GetPictList())
                 pictTextObjs.Add(pic);

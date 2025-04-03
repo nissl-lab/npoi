@@ -1,10 +1,11 @@
 
+using Cysharp.Text;
 using NPOI.OpenXml4Net.Util;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
-using System.Text;
+using System.Text; 
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -1472,15 +1473,19 @@ namespace NPOI.OpenXmlFormats.Dml
         {
             if (p == null||p.Count==0)
                 return string.Empty;
-            StringBuilder sb = new StringBuilder();
-            foreach (CT_TextParagraph tp in p)
+            
+            using(var sb = ZString.CreateStringBuilder())
             {
-                foreach (CT_RegularTextRun tr in tp.r)
+                foreach(CT_TextParagraph tp in p)
                 {
-                    sb.Append(tr.t);
+                    foreach(CT_RegularTextRun tr in tp.r)
+                    {
+                        sb.Append(tr.t);
+                    }
                 }
+                return sb.ToString();
             }
-            return sb.ToString();
+               
         }
     
         [XmlElement("p")]

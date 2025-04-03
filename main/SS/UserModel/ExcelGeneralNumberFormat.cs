@@ -24,7 +24,7 @@ namespace NPOI.SS.UserModel
     using NPOI.Util;
     using System;
     using System.Globalization;
-    using System.Text;
+    using System.Text; 
 
     /**
      * A format that formats a double as Excel would, ignoring FieldPosition.

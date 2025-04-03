@@ -1,10 +1,10 @@
-﻿using NPOI.OpenXmlFormats.Dml;
+using NPOI.OpenXmlFormats.Dml;
 using NPOI.OpenXmlFormats.Dml.Chart;
 using NPOI.SS.UserModel.Charts;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Text;
+using System.Text; 
 
 namespace NPOI.XSSF.UserModel.Charts
 {

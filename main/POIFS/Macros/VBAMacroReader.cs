@@ -20,7 +20,7 @@ namespace NPOI.POIFS.Macros
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using System.Text;
+    using System.Text; 
     using ICSharpCode.SharpZipLib.Zip;
     using NPOI.POIFS.FileSystem;
     using NPOI.Util;

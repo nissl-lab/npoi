@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Text; 
+using Cysharp.Text;
 using NPOI.OpenXmlFormats.Shared;
 using NPOI.WP.UserModel;
 using NPOI.XWPF.UserModel;
@@ -176,7 +177,7 @@ namespace NPOI.XWPF.Usermodel
         {
             get
             {
-                StringBuilder text = new StringBuilder();
+                using var text = ZString.CreateStringBuilder();
                 for (int i = 0; i < run.Items.Count; i++)
                 {
                     object o = run.Items[i];

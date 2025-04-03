@@ -19,7 +19,8 @@
 namespace NPOI.SS
 {
     using System.Collections.Generic;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
     using System.Xml;
 
     public class HtmlDocumentFacade
@@ -291,7 +292,7 @@ namespace NPOI.SS
 
         public void UpdateStylesheet()
         {
-            StringBuilder stringBuilder = new StringBuilder();
+           using var stringBuilder = ZString.CreateStringBuilder();
             foreach (KeyValuePair<string, Dictionary<string, string>> kvTag in stylesheet)
             {
                 string tagName = kvTag.Key;

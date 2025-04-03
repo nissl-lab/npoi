@@ -1,4 +1,4 @@
-﻿/* ====================================================================
+/* ====================================================================
    Licensed to the Apache Software Foundation (ASF) under one or more
    contributor license agreements.  See the NOTICE file distributed with
    this work for additional information regarding copyright ownership.
@@ -20,7 +20,7 @@ namespace NPOI.SS.Formula.Functions
     using NPOI.SS.Formula.Eval;
     using System;
     using NPOI.SS.Util;
-    using System.Text;
+    using System.Text; 
     /**
      * Creates a text reference as text, given specified row and column numbers.
      *

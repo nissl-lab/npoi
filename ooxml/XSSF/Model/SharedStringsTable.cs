@@ -26,7 +26,7 @@ namespace NPOI.XSSF.Model
     using System.Xml;
     using System.Security;
     using System.Text.RegularExpressions;
-    using System.Text;
+    using System.Text; 
 
     /**
      * Table of strings shared across all sheets in a workbook.

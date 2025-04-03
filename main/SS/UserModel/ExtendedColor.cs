@@ -17,7 +17,8 @@
 namespace NPOI.SS.UserModel
 {
     using System;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
     using NPOI.HSSF.Util;
     using NPOI.SS.UserModel;
     using NPOI.Util;
@@ -154,8 +155,9 @@ namespace NPOI.SS.UserModel
                 {
                     return null;
                 }
-                StringBuilder sb = new StringBuilder();
-                foreach (byte c in rgb)
+                using var sb = ZString.CreateStringBuilder();
+
+                foreach(byte c in rgb)
                 {
                     int i = c & 0xff;
                     String cs = string.Format("{0:x}", i);

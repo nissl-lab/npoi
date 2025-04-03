@@ -18,7 +18,7 @@
 namespace NPOI.SS.UserModel
 {
     using System;
-    using System.Text;
+    using System.Text; 
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.UserModel;
     using System.Globalization;

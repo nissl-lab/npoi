@@ -21,7 +21,7 @@ namespace NPOI.HSSF.Record.Chart
 {
 
     
-    using System.Text;
+    using System.Text; 
     using System;
     using NPOI.Util;
 

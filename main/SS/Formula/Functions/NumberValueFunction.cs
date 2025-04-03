@@ -1,7 +1,7 @@
-﻿using NPOI.SS.Formula.Eval;
+using NPOI.SS.Formula.Eval;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Text; 
 using System.Threading;
 
 namespace NPOI.SS.Formula.Functions
