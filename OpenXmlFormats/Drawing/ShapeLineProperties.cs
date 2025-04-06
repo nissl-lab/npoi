@@ -416,7 +416,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         public CT_DashStopList()
         {
-            //this.dsField = new List<CT_DashStop>();
+            this.dsField = new List<CT_DashStop>();
         }
 
         [XmlElement("ds", Order = 0)]
@@ -435,7 +435,7 @@ namespace NPOI.OpenXmlFormats.Dml
         internal static CT_DashStopList Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             CT_DashStopList ctObj = new CT_DashStopList();
-            ctObj.dsField = new List<CT_DashStop>();
+            //ctObj.dsField = new List<CT_DashStop>();
             foreach(XmlNode childNode in node.ChildNodes)
             {
                 ctObj.ds.Add(CT_DashStop.Parse(childNode, namespaceManager));

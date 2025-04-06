@@ -24,7 +24,6 @@ namespace NPOI.XWPF.UserModel
     using System.IO;
     using NPOI.Util;
     using NPOI.OpenXmlFormats.Dml;
-    using System.Xml.Serialization;
     using NPOI.OpenXmlFormats.Dml.WordProcessing;
     using NPOI.WP.UserModel;
 
@@ -174,15 +173,13 @@ namespace NPOI.XWPF.UserModel
 
         private void GetPictures(CT_GraphicalObjectData god, List<NPOI.OpenXmlFormats.Dml.Picture.CT_Picture> pictures)
         {
-            XmlSerializer xmlse = new XmlSerializer(typeof(NPOI.OpenXmlFormats.Dml.Picture.CT_Picture));
             foreach (string el in god.Any)
             {
-                if (el.IndexOf("pic:pic") < 0)
-                    continue;
-                System.IO.StringReader stringReader = new System.IO.StringReader(el);
+                XmlDocument xmlDoc = new XmlDocument();
+                xmlDoc.LoadXml(el);
 
-                NPOI.OpenXmlFormats.Dml.Picture.CT_Picture pict =
-                    xmlse.Deserialize(System.Xml.XmlReader.Create(stringReader)) as NPOI.OpenXmlFormats.Dml.Picture.CT_Picture;
+                XmlNode node = xmlDoc.DocumentElement;
+                var pict = NPOI.OpenXmlFormats.Dml.Picture.CT_Picture.Parse(node, POIXMLDocumentPart.NamespaceManager);
                 pictures.Add(pict);
             }
         }
