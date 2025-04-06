@@ -19,7 +19,8 @@ namespace NPOI.SS.Formula.PTG
 {
 
     using System;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
     using NPOI.Util;
 
 
@@ -201,7 +202,7 @@ namespace NPOI.SS.Formula.PTG
 
         public override String ToFormulaString()
         {
-            StringBuilder b = new StringBuilder();
+           using var b= ZString.CreateStringBuilder();
             b.Append("{");
             for (int y = 0; y < _nRows; y++)
             {

@@ -19,7 +19,8 @@ namespace NPOI.SS.UserModel
 {
     using System;
     using System.Collections;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
     using System.Text.RegularExpressions;
 
     using NPOI.SS.Util;
@@ -149,7 +150,7 @@ namespace NPOI.SS.UserModel
 
         static DataFormatter()
         {
-            StringBuilder buf = new StringBuilder();
+            using var buf = ZString.CreateStringBuilder();
             for (int i = 0; i < 255; i++) buf.Append('#');
             invalidDateTimeString = buf.ToString();
         }
@@ -441,7 +442,8 @@ namespace NPOI.SS.UserModel
 
                 if (symbol.IndexOf('$') > -1)
                 {
-                    StringBuilder sb = new StringBuilder();
+                    using var sb = ZString.CreateStringBuilder();
+
                     sb.Append(symbol.Substring(0, symbol.IndexOf('$')));
                     sb.Append('\\');
                     sb.Append(symbol.Substring(symbol.IndexOf('$'), symbol.Length- symbol.IndexOf('$')));
@@ -578,6 +580,7 @@ namespace NPOI.SS.UserModel
             */
 
             StringBuilder sb = new StringBuilder();
+
             char[] chars = formatStr.ToCharArray();
             bool mIsMonth = true;
             bool isElapsed = false;

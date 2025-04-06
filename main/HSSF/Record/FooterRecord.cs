@@ -20,7 +20,7 @@
 namespace NPOI.HSSF.Record
 {
     using System;
-    using System.Text;
+    using System.Text; 
 
     /**
      * Title:        Footer Record 

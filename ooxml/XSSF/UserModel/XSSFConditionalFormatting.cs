@@ -22,7 +22,8 @@ using NPOI.OpenXmlFormats.Spreadsheet;
 using System.Collections.Generic;
 using NPOI.SS.Util;
 using System;
-using System.Text;
+using System.Text; 
+using Cysharp.Text;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -77,7 +78,8 @@ namespace NPOI.XSSF.UserModel
             {
                 throw new ArgumentNullException("cellRanges must not be null");
             }
-            StringBuilder sb = new StringBuilder();
+            using var sb = ZString.CreateStringBuilder();
+
             bool first = true;
             foreach (CellRangeAddress range in ranges)
             {

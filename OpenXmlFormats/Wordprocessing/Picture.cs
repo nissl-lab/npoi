@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Xml;
 using System.Xml.Serialization;
-using System.Text;
+using System.Text; 
 using System.Collections.Generic;
 using System.IO;
 using NPOI.OpenXml4Net.Util;
@@ -64,7 +64,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 foreach (var item in group.Items)
                 {
                     /*XmlSerializer xmlse = new XmlSerializer(item.GetType());
-                    StringBuilder output = new StringBuilder();
+                    // StringBuilder output = new StringBuilder();
                     XmlWriterSettings settings = new XmlWriterSettings();
 
                     settings.Encoding = Encoding.UTF8;

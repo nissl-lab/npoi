@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 
-using System.Text;
+using System.Text; 
 using System.Xml.Serialization;
 using System.Xml;
 using NPOI.OpenXml4Net.Util;

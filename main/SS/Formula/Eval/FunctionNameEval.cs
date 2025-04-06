@@ -18,7 +18,7 @@
 namespace NPOI.SS.Formula.Eval
 {
     using System;
-    using System.Text;
+    using System.Text; 
     /**
      * @author Josh Micich
      */

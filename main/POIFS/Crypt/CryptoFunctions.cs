@@ -20,7 +20,7 @@ namespace NPOI.POIFS.Crypt
     using Org.BouncyCastle.Crypto;
     using Org.BouncyCastle.Security;
     using System;
-    using System.Text;
+    using System.Text; 
 
     /**
      * Helper functions used for standard and agile encryption

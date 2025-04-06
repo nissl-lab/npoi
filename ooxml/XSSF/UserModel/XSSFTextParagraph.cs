@@ -18,7 +18,8 @@ using System.Collections.Generic;
 using NPOI.OpenXmlFormats.Dml;
 using NPOI.OpenXmlFormats.Dml.Spreadsheet;
 using System;
-using System.Text;
+using System.Text; 
+using Cysharp.Text;
 using NPOI.XSSF.Model;
 using NPOI.Util;
 using SixLabors.ImageSharp.PixelFormats;
@@ -85,7 +86,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                StringBuilder out1 = new StringBuilder();
+                using var out1 = ZString.CreateStringBuilder();
                 foreach (XSSFTextRun r in _Runs)
                 {
                     out1.Append(r.Text);

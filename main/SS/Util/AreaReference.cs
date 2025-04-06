@@ -19,7 +19,7 @@ namespace NPOI.SS.Util
 {
 
     using System;
-    using System.Text;
+    using System.Text; 
     using System.Collections;
 
     public class AreaReference

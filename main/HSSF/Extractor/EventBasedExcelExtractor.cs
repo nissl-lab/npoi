@@ -18,7 +18,7 @@
 namespace NPOI.HSSF.Extractor
 {
     using System;
-    using System.Text;
+    using System.Text; 
     using System.IO;
     using System.Collections;
 

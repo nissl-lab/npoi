@@ -25,7 +25,8 @@
  * 
  * ==============================================================*/
 using System;
-using System.Text;
+using System.Text; 
+using Cysharp.Text;
 using System.IO;
 using System.Collections;
 
@@ -230,7 +231,7 @@ namespace NPOI.Util.Collections
         {
             char aChar;
             int len = theString.Length;
-            StringBuilder outBuffer = new StringBuilder(len);
+            using var outBuffer = ZString.CreateStringBuilder();
 
             for (int x=0; x<len; ) {
                 aChar = theString[x++];

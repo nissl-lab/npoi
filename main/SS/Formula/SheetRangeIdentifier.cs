@@ -18,7 +18,7 @@
 namespace NPOI.SS.Formula
 {
     using System;
-    using System.Text;
+    using System.Text; 
 
     public class SheetRangeIdentifier : SheetIdentifier
     {

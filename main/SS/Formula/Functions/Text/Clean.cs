@@ -1,5 +1,5 @@
-﻿using System;
-using System.Text;
+using System;
+using System.Text; 
 using NPOI.SS.Formula.Eval;
 
 namespace NPOI.SS.Formula.Functions

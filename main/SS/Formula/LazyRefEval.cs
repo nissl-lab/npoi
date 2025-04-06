@@ -19,7 +19,7 @@ namespace NPOI.SS.Formula
 {
 
     using System;
-    using System.Text;
+    using System.Text; 
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.Util;

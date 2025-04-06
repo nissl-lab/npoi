@@ -19,7 +19,7 @@ namespace NPOI.HSSF.Record
 {
     using System;
     using NPOI.Util;
-    using System.Text;
+    using System.Text; 
 
     /**
      * Biff2 - Biff 4 Label Record (0x0004 / 0x0204) - read only support for 

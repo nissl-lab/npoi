@@ -17,7 +17,8 @@
 using System.Collections.Generic;
 using NPOI.Util;
 using System;
-using System.Text;
+using System.Text; 
+using Cysharp.Text;
 namespace NPOI.DDF
 {
 
@@ -194,7 +195,7 @@ namespace NPOI.DDF
         {
             String nl = Environment.NewLine;
 
-            StringBuilder stringBuilder = new StringBuilder();
+           using var stringBuilder = ZString.CreateStringBuilder();
             stringBuilder.Append(GetType().Name);
             stringBuilder.Append(":");
             stringBuilder.Append(nl);

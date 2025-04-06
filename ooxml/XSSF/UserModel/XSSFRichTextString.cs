@@ -19,7 +19,8 @@ using NPOI.SS.UserModel;
 using System.Text.RegularExpressions;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using System;
-using System.Text;
+using System.Text; 
+using Cysharp.Text;
 using System.Collections.Generic;
 using NPOI.XSSF.Model;
 using System.Linq;
@@ -462,7 +463,7 @@ namespace NPOI.XSSF.UserModel
                 {
                     return UtfDecode(st.t);
                 }
-                StringBuilder buf = new StringBuilder();
+                using var buf = ZString.CreateStringBuilder();
                 foreach(CT_RElt r in st.r)
                 {
                     buf.Append(r.t);
@@ -684,7 +685,7 @@ namespace NPOI.XSSF.UserModel
             if(value == null)
                 return null;
 
-            StringBuilder buf = new StringBuilder();
+            using var buf = ZString.CreateStringBuilder();
             MatchCollection mc = utfPtrn.Matches(value);
             int idx = 0;
             for(int i = 0; i < mc.Count; i++)

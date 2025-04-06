@@ -1,7 +1,7 @@
-﻿using NPOI.SS.Util;
+using NPOI.SS.Util;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Text; 
 
 namespace NPOI.SS.UserModel.Charts
 {

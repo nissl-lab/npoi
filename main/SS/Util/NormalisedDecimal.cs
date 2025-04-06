@@ -18,7 +18,8 @@
 namespace NPOI.SS.Util
 {
     using System;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
     using NPOI.Util;
     using System.Globalization;
 
@@ -283,8 +284,8 @@ namespace NPOI.SS.Util
 
         public override String ToString()
         {
+            using var sb = ZString.CreateStringBuilder();
 
-            StringBuilder sb = new StringBuilder();
             sb.Append(this.GetType().Name);
             sb.Append(" [");
             String ws = _wholePart.ToString(CultureInfo.InvariantCulture);

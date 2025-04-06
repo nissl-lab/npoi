@@ -1,4 +1,4 @@
-﻿/* ====================================================================
+/* ====================================================================
    Licensed to the Apache Software Foundation (ASF) under one or more
    contributor license agreements.  See the NOTICE file distributed with
    this work for Additional information regarding copyright ownership.
@@ -20,7 +20,7 @@ namespace NPOI.SS.Formula.PTG
     using System;
 
     using NPOI.SS.Util;
-    using System.Text;
+    using System.Text; 
     using NPOI.Util;
 
     /**
@@ -122,6 +122,7 @@ namespace NPOI.SS.Formula.PTG
         public override String ToFormulaString()
         {
             StringBuilder sb = new StringBuilder();
+
             if (externalWorkbookNumber >= 0)
             {
                 sb.Append('[');

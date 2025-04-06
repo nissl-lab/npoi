@@ -20,7 +20,7 @@
 namespace NPOI.HSSF.Record
 {
     using System;
-    using System.Text;
+    using System.Text; 
     using NPOI.SS.UserModel;
     using NPOI.Util;
 

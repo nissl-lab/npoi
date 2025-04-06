@@ -18,7 +18,7 @@
 namespace NPOI.SS.Formula.Function
 {
     using System;
-    using System.Text;
+    using System.Text; 
     /**
      * Holds information about Excel built-in functions.
      * 

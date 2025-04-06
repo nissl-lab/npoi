@@ -18,7 +18,7 @@
 namespace NPOI.HSSF.Record
 {
     using System;
-    using System.Text;
+    using System.Text; 
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.PTG;

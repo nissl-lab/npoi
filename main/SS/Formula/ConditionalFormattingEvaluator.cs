@@ -1,8 +1,8 @@
-﻿using NPOI.SS.UserModel;
+using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Text; 
 
 namespace NPOI.SS.Formula
 {

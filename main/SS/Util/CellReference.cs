@@ -20,7 +20,7 @@
 namespace NPOI.SS.Util
 {
     using System;
-    using System.Text;
+    using System.Text; 
     using System.Text.RegularExpressions;
     using NPOI.SS.Formula;
     using NPOI.SS.UserModel;

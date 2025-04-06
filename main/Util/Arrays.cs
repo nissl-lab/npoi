@@ -1,4 +1,4 @@
-﻿
+
 /* ====================================================================
    Licensed to the Apache Software Foundation (ASF) under one or more
    contributor license agreements.  See the NOTICE file distributed with
@@ -28,7 +28,7 @@
 
 using System;
 using System.Collections;
-using System.Text;
+using System.Text; 
 using System.Collections.Generic;
 using NPOI.Util.Collections;
 

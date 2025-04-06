@@ -20,7 +20,8 @@ namespace NPOI.XWPF.UserModel
     using NPOI.OpenXmlFormats.Wordprocessing;
     using System;
     using System.Collections.Generic;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
     using System.Xml;
 
     /**
@@ -372,7 +373,7 @@ namespace NPOI.XWPF.UserModel
 
         public String GetText()
         {
-            StringBuilder text = new StringBuilder();
+            using var text = ZString.CreateStringBuilder();
             foreach (XWPFParagraph p in paragraphs)
             {
                 if (text.Length > 0)
