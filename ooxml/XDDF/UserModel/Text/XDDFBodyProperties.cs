@@ -30,11 +30,11 @@ namespace NPOI.XDDF.UserModel.Text
     public class XDDFBodyProperties
     {
         private CT_TextBodyProperties props;
-        protected XDDFBodyProperties(CT_TextBodyProperties properties)
+        internal XDDFBodyProperties(CT_TextBodyProperties properties)
         {
             this.props = properties;
         }
-        protected CT_TextBodyProperties GetXmlObject()
+        internal CT_TextBodyProperties GetXmlObject()
         {
             return props;
         }
@@ -143,30 +143,32 @@ namespace NPOI.XDDF.UserModel.Text
         }
 
 
-        public XDDFExtensionList GetExtensionList()
+        public XDDFExtensionList ExtensionList
         {
-            if(props.IsSetExtLst())
-            {
-                return new XDDFExtensionList(props.extLst);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        public void SetExtensionList(XDDFExtensionList list)
-        {
-            if(list == null)
+            get
             {
                 if(props.IsSetExtLst())
                 {
-                    props.UnsetExtLst();
+                    return new XDDFExtensionList(props.extLst);
+                }
+                else
+                {
+                    return null;
                 }
             }
-            else
+            set
             {
-                props.extLst = list.GetXmlObject();
+                if(value == null)
+                {
+                    if(props.IsSetExtLst())
+                    {
+                        props.UnsetExtLst();
+                    }
+                }
+                else
+                {
+                    props.extLst = value.GetXmlObject();
+                }
             }
         }
 
@@ -312,7 +314,7 @@ namespace NPOI.XDDF.UserModel.Text
             }
         }
 
-        public bool? IsRightToLeft
+        public bool? RightToLeft
         {
             get
             {

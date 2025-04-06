@@ -380,6 +380,11 @@ namespace NPOI.OpenXmlFormats.Dml
             this.rPr = new CT_TextCharacterProperties();
             return rPr;
         }
+
+        public bool IsSetRPr()
+        {
+            return this.rPrField != null;
+        }
     }
 
     [Serializable]
@@ -676,6 +681,10 @@ namespace NPOI.OpenXmlFormats.Dml
             return this.pPrField != null;
         }
 
+        public int SizeOfBrArray()
+        {
+            return brField.Count;
+        }
         public CT_TextLineBreak AddNewBr()
         {
             CT_TextLineBreak br = new CT_TextLineBreak();
@@ -697,6 +706,38 @@ namespace NPOI.OpenXmlFormats.Dml
         public CT_TextField GetFldArray(int v)
         {
             return fldField[v];
+        }
+
+        public bool IsSetEndParaRPr()
+        {
+            return this.endParaRPrField != null;
+        }
+
+        public void UnsetEndParaRPr()
+        {
+            this.endParaRPrField = null;
+        }
+
+        public void RemoveBr(int i)
+        {
+            this.brField.RemoveAt(i);
+        }
+
+        public void RemoveFld(int i)
+        {
+            this.fldField.RemoveAt(i);
+        }
+
+        public void RemoveR(int i)
+        {
+            this.rField.RemoveAt(i);
+        }
+
+        public CT_TextField AddNewFld()
+        {
+            CT_TextField tf = new CT_TextField();
+            this.fldField.Add(tf);
+            return tf;
         }
     }
 
@@ -1819,6 +1860,17 @@ namespace NPOI.OpenXmlFormats.Dml
             if (this.pPr != null)
                 this.pPr.Write(sw, "pPr");
             sw.Write(string.Format("</a:{0}>", nodeName));
+        }
+
+        public bool IsSetRPr()
+        {
+            return this.rPr != null;
+        }
+
+        public CT_TextCharacterProperties AddNewRPr()
+        {
+            this.rPr = new CT_TextCharacterProperties();
+            return this.rPr;
         }
 
         public CT_TextField()

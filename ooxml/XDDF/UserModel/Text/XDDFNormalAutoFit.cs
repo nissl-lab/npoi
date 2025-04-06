@@ -43,16 +43,20 @@ namespace NPOI.XDDF.UserModel.Text
         {
             return autofit;
         }
-        public int GetFontScale()
+        public int FontScale
         {
-            if(autofit.IsSetFontScale())
+            get
             {
-                return autofit.fontScale;
+                if(autofit.IsSetFontScale())
+                {
+                    return autofit.fontScale;
+                }
+                else
+                {
+                    return 100_000;
+                }
             }
-            else
-            {
-                return 100_000;
-            }
+            
         }
 
         public void SetFontScale(int? value)
@@ -71,19 +75,22 @@ namespace NPOI.XDDF.UserModel.Text
 
         }
 
-        public int GetLineSpaceReduction()
+        public int LineSpaceReduction
         {
-            if(autofit.IsSetLnSpcReduction())
+            get
             {
-                return autofit.lnSpcReduction;
-            }
-            else
-            {
-                return 0;
+                if(autofit.IsSetLnSpcReduction())
+                {
+                    return autofit.lnSpcReduction;
+                }
+                else
+                {
+                    return 0;
+                }
             }
         }
 
-        public void setLineSpaceReduction(int? value)
+        public void SetLineSpaceReduction(int? value)
         {
             if(value == null)
             {

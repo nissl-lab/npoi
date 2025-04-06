@@ -40,65 +40,68 @@ namespace NPOI.XDDF.UserModel.Text
             this.props = properties;
         }
 
-        public IXDDFBulletStyle GetBulletStyle()
+        public IXDDFBulletStyle BulletStyle
         {
-            if(props.IsSetBuAutoNum())
+            get
             {
-                return new XDDFBulletStyleAutoNumbered(props.buAutoNum);
-            }
-            else if(props.IsSetBuBlip())
-            {
-                return new XDDFBulletStylePicture(props.buBlip);
-            }
-            else if(props.IsSetBuChar())
-            {
-                return new XDDFBulletStyleCharacter(props.buChar);
-            }
-            else if(props.IsSetBuNone())
-            {
-                return new XDDFBulletStyleNone(props.buNone);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        public void SetBulletStyle(IXDDFBulletStyle style)
-        {
-            if(props.IsSetBuAutoNum())
-            {
-                props.UnsetBuAutoNum();
-            }
-            if(props.IsSetBuBlip())
-            {
-                props.UnsetBuBlip();
-            }
-            if(props.IsSetBuChar())
-            {
-                props.UnsetBuChar();
-            }
-            if(props.IsSetBuNone())
-            {
-                props.UnsetBuNone();
-            }
-            if(style != null)
-            {
-                if(style is XDDFBulletStyleAutoNumbered)
+                if(props.IsSetBuAutoNum())
                 {
-                    props.buAutoNum = ((XDDFBulletStyleAutoNumbered) style).GetXmlObject();
+                    return new XDDFBulletStyleAutoNumbered(props.buAutoNum);
                 }
-                else if(style is XDDFBulletStyleCharacter)
+                else if(props.IsSetBuBlip())
                 {
-                    props.buChar = ((XDDFBulletStyleCharacter) style).GetXmlObject();
+                    return new XDDFBulletStylePicture(props.buBlip);
                 }
-                else if(style is XDDFBulletStyleNone)
+                else if(props.IsSetBuChar())
                 {
-                    props.buNone = ((XDDFBulletStyleNone) style).GetXmlObject();
+                    return new XDDFBulletStyleCharacter(props.buChar);
                 }
-                else if(style is XDDFBulletStylePicture)
+                else if(props.IsSetBuNone())
                 {
-                    props.buBlip = ((XDDFBulletStylePicture) style).GetXmlObject();
+                    return new XDDFBulletStyleNone(props.buNone);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                if(props.IsSetBuAutoNum())
+                {
+                    props.UnsetBuAutoNum();
+                }
+                if(props.IsSetBuBlip())
+                {
+                    props.UnsetBuBlip();
+                }
+                if(props.IsSetBuChar())
+                {
+                    props.UnsetBuChar();
+                }
+                if(props.IsSetBuNone())
+                {
+                    props.UnsetBuNone();
+                }
+                IXDDFBulletStyle style = value;
+                if(style != null)
+                {
+                    if(style is XDDFBulletStyleAutoNumbered)
+                    {
+                        props.buAutoNum = ((XDDFBulletStyleAutoNumbered) style).GetXmlObject();
+                    }
+                    else if(style is XDDFBulletStyleCharacter)
+                    {
+                        props.buChar = ((XDDFBulletStyleCharacter) style).GetXmlObject();
+                    }
+                    else if(style is XDDFBulletStyleNone)
+                    {
+                        props.buNone = ((XDDFBulletStyleNone) style).GetXmlObject();
+                    }
+                    else if(style is XDDFBulletStylePicture)
+                    {
+                        props.buBlip = ((XDDFBulletStylePicture) style).GetXmlObject();
+                    }
                 }
             }
         }
@@ -152,7 +155,7 @@ namespace NPOI.XDDF.UserModel.Text
             }
         }
 
-        public XDDFFont GetBulletFont
+        public XDDFFont BulletFont
         {
             get
             {

@@ -42,7 +42,7 @@ namespace NPOI.XDDF.UserModel.Text
             spacing.spcPct = percent;
             SetPercent(value);
         }
-        protected XDDFSpacingPercent(CT_TextSpacing parent, CT_TextSpacingPercent percent, double? scale)
+        internal XDDFSpacingPercent(CT_TextSpacing parent, CT_TextSpacingPercent percent, double? scale)
             : base(parent)
         {
             

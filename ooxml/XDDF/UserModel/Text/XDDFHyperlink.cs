@@ -48,7 +48,7 @@ namespace NPOI.XDDF.UserModel.Text
 
             this.link.action = action;
         }
-        protected XDDFHyperlink(CT_Hyperlink link)
+        internal XDDFHyperlink(CT_Hyperlink link)
         {
             this.link = link;
         }

@@ -22,19 +22,25 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace NPOI.XDDF.UserModel.Text{
-
-
+namespace NPOI.XDDF.UserModel.Text
+{
     using NPOI.OpenXmlFormats.Dml;
+    using NPOI.Util.Optional;
+
     public interface ITextContainer
     {
-#nullable enable
-        R? FindDefinedParagraphProperty<R>(Func<CT_TextParagraphProperties, bool> isSet, 
-            Func<CT_TextParagraphProperties, R> getter);
 
-        R? FindDefinedRunProperty<R>(Func<CT_TextCharacterProperties, bool> isSet, 
-            Func<CT_TextCharacterProperties, R> getter);
-#nullable disable
+        Option<R> FindDefinedParagraphProperty<R>(Func<CT_TextParagraphProperties, bool> isSet, 
+            Func<CT_TextParagraphProperties, R> getter) where R : class;
+
+        Option<R> FindDefinedRunProperty<R>(Func<CT_TextCharacterProperties, bool> isSet, 
+            Func<CT_TextCharacterProperties, R> getter) where R : class;
+
+        ValueOption<V> FindDefinedParagraphValueProperty<V>(Func<CT_TextParagraphProperties, bool> isSet, 
+            Func<CT_TextParagraphProperties, V> getter) where V: struct;
+
+        ValueOption<V> FindDefinedRunValueProperty<V>(Func<CT_TextCharacterProperties, bool> isSet, 
+            Func<CT_TextCharacterProperties, V> getter) where V: struct;
     }
 }
 

@@ -41,7 +41,7 @@ namespace NPOI.XDDF.UserModel.Text
             spacing.spcPts = points;
             SetPoints(value);
         }
-        protected XDDFSpacingPoints(CT_TextSpacing parent, CT_TextSpacingPoint points)
+        internal XDDFSpacingPoints(CT_TextSpacing parent, CT_TextSpacingPoint points)
                 : base(parent)
         {
             ;

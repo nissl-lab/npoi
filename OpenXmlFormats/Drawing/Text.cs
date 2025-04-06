@@ -197,6 +197,108 @@ namespace NPOI.OpenXmlFormats.Dml
             sw.Write(string.Format("</a:{0}>", nodeName));
         }
 
+        public bool IsSetLvl1pPr()
+        {
+            return this.lvl1pPrField != null;
+        }
+
+        public void UnsetLvl1pPr()
+        {
+            this.lvl1pPrField = null;
+        }
+
+        public bool IsSetLvl2pPr()
+        {
+            return this.lvl2pPrField != null;
+        }
+
+        public void UnsetLvl2pPr()
+        {
+            this.lvl2pPrField = null;
+        }
+
+        public bool IsSetLvl3pPr()
+        {
+            return this.lvl3pPrField != null;
+        }
+
+        public void UnsetLvl3pPr()
+        {
+            this.lvl3pPrField = null;
+        }
+
+        public bool IsSetLvl4pPr()
+        {
+            return this.lvl4pPrField != null;
+        }
+
+        public void UnsetLvl4pPr()
+        {
+            this.lvl4pPrField = null;
+        }
+
+        public bool IsSetLvl5pPr()
+        {
+            return this.lvl5pPrField != null;
+        }
+
+        public void UnsetLvl5pPr()
+        {
+            this.lvl5pPrField = null;
+        }
+
+        public bool IsSetLvl6pPr()
+        {
+            return this.lvl6pPrField != null;
+        }
+
+        public void UnsetLvl6pPr()
+        {
+            this.lvl6pPrField = null;
+        }
+
+        public bool IsSetLvl7pPr()
+        {
+            return this.lvl7pPrField != null;
+        }
+
+        public void UnsetLvl7pPr()
+        {
+            this.lvl7pPrField = null;
+        }
+
+        public bool IsSetLvl8pPr()
+        {
+            return this.lvl8pPrField != null;
+        }
+
+        public void UnsetLvl8pPr()
+        {
+            this.lvl8pPrField = null;
+        }
+
+        public bool IsSetLvl9pPr()
+        {
+            return this.lvl9pPrField != null;
+        }
+
+        public void UnsetLvl9pPr()
+        {
+            this.lvl9pPrField = null;
+        }
+
+        public bool IsSetDefPPr()
+        {
+            return this.defPPrField != null;
+        }
+
+        public void UnsetDefPPr()
+        {
+            this.defPPrField = null;
+        }
+
+        
+
         public CT_TextParagraphProperties defPPr {
             get {
                 return this.defPPrField;
@@ -1512,7 +1614,38 @@ namespace NPOI.OpenXmlFormats.Dml
             }
             return sb.ToString();
         }
-    
+
+        public bool IsSetLstStyle()
+        {
+            return this.lstStyleField != null;
+        }
+
+        public int SizeOfPArray()
+        {
+            return this.pField.Count;
+        }
+
+        public void RemoveP(int i)
+        {
+            if(i <= 0 || i >= this.pField.Count)
+                throw new IndexOutOfRangeException();
+            this.pField.RemoveAt(i);
+        }
+
+        public CT_TextParagraph InsertNewP(int index)
+        {
+            CT_TextParagraph t = new CT_TextParagraph();
+            this.pField.Insert(index, t);
+            return t;
+        }
+
+        public CT_TextParagraph GetPArray(int index)
+        {
+            if(index <= 0 || index >= this.pField.Count)
+                throw new IndexOutOfRangeException();
+            return this.pField[index];
+        }
+
         [XmlElement("p")]
         public List<CT_TextParagraph> p {
             get {

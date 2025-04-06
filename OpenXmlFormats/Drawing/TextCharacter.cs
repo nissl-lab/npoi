@@ -438,11 +438,19 @@ namespace NPOI.OpenXmlFormats.Dml
 
         private bool dirtyField=true;
 
+        private bool dirtyFieldSpecified;
+
         private bool errField;
+
+        private bool errFieldSpecified;
 
         private bool smtCleanField=true;
 
+        private bool smtCleanFieldSpecified;
+
         private uint smtIdField;
+
+        private bool smtIdFieldSpecified;
 
         private string bmkField;
         public static CT_TextCharacterProperties Parse(XmlNode node, XmlNamespaceManager namespaceManager)
@@ -450,10 +458,16 @@ namespace NPOI.OpenXmlFormats.Dml
             if (node == null)
                 return null;
             CT_TextCharacterProperties ctObj = new CT_TextCharacterProperties();
+
+            ctObj.kumimojiFieldSpecified = node.Attributes["kumimoji"] != null;
             ctObj.kumimoji = XmlHelper.ReadBool(node.Attributes["kumimoji"]);
+
             ctObj.lang = XmlHelper.ReadString(node.Attributes["lang"]);
             ctObj.altLang = XmlHelper.ReadString(node.Attributes["altLang"]);
+
+            ctObj.szFieldSpecified = node.Attributes["sz"]!=null;
             ctObj.sz = XmlHelper.ReadInt(node.Attributes["sz"]);
+
             ctObj.bFieldSpecified = node.Attributes["b"] != null;
             if (node.Attributes["b"] != null)
                 ctObj.bField = XmlHelper.ReadBool(node.Attributes["b"]);
@@ -469,16 +483,31 @@ namespace NPOI.OpenXmlFormats.Dml
             ctObj.kern = XmlHelper.ReadInt(node.Attributes["kern"]);
             if (node.Attributes["cap"] != null)
                 ctObj.cap = (ST_TextCapsType)Enum.Parse(typeof(ST_TextCapsType), node.Attributes["cap"].Value);
+            
+            ctObj.spcFieldSpecified = node.Attributes["spc"] != null;
             ctObj.spc = XmlHelper.ReadInt(node.Attributes["spc"]);
+
+            ctObj.normalizeHFieldSpecified = node.Attributes["normalizeH"] != null;
             ctObj.normalizeH = XmlHelper.ReadBool(node.Attributes["normalizeH"]);
+
             ctObj.baselineFieldSpecified = node.Attributes["baseline"] != null;
             ctObj.baselineField = XmlHelper.ReadInt(node.Attributes["baseline"]);
+
+            ctObj.noProofFieldSpecified = node.Attributes["noProof"] != null;
             ctObj.noProof = XmlHelper.ReadBool(node.Attributes["noProof"]);
+
+            ctObj.dirtyFieldSpecified = node.Attributes["dirty"]!=null;
             if (node.Attributes["dirty"]!=null)
                 ctObj.dirty = XmlHelper.ReadBool(node.Attributes["dirty"]);
+
+            ctObj.errFieldSpecified = node.Attributes["err"]!=null;
             ctObj.err = XmlHelper.ReadBool(node.Attributes["err"]);
+
+            ctObj.smtCleanFieldSpecified = node.Attributes["smtClean"]!=null;
             if (node.Attributes["smtClean"] != null)
                 ctObj.smtClean = XmlHelper.ReadBool(node.Attributes["smtClean"]);
+
+            ctObj.smtCleanFieldSpecified = node.Attributes["smtId"]!=null;
             ctObj.smtId = XmlHelper.ReadUInt(node.Attributes["smtId"]);
             ctObj.bmk = XmlHelper.ReadString(node.Attributes["bmk"]);
             foreach (XmlNode childNode in node.ChildNodes)
@@ -534,10 +563,14 @@ namespace NPOI.OpenXmlFormats.Dml
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<a:{0}", nodeName));
-            XmlHelper.WriteAttribute(sw, "kumimoji", this.kumimoji, false);
-            XmlHelper.WriteAttribute(sw, "lang", this.lang);
-            XmlHelper.WriteAttribute(sw, "altLang", this.altLang);
-            XmlHelper.WriteAttribute(sw, "sz", this.sz);
+            if(this.kumimojiFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "kumimoji", this.kumimoji, false);
+            if(this.lang!=null)
+                XmlHelper.WriteAttribute(sw, "lang", this.lang);
+            if(this.altLangField!=null)
+                XmlHelper.WriteAttribute(sw, "altLang", this.altLang);
+            if(this.szFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "sz", this.sz);
             if(this.bFieldSpecified)
                 XmlHelper.WriteAttribute(sw, "b", this.bField, true);
             if (this.iFieldSpecified)
@@ -549,18 +582,24 @@ namespace NPOI.OpenXmlFormats.Dml
             XmlHelper.WriteAttribute(sw, "kern", this.kern);
             if(this.cap!= ST_TextCapsType.none)
                 XmlHelper.WriteAttribute(sw, "cap", this.cap.ToString());
-            XmlHelper.WriteAttribute(sw, "spc", this.spc);
-            XmlHelper.WriteAttribute(sw, "normalizeH", this.normalizeH, false);
+            if(this.spcFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "spc", this.spc);
+            if(this.normalizeHFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "normalizeH", this.normalizeH, false);
             if(this.baselineFieldSpecified)
                 XmlHelper.WriteAttribute(sw, "baseline", this.baseline,true);
-            XmlHelper.WriteAttribute(sw, "noProof", this.noProof, false);
-            if (!dirty)
+            if(this.noProofFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "noProof", this.noProof, false);
+            if (this.dirtyFieldSpecified)
                 XmlHelper.WriteAttribute(sw, "dirty", this.dirty);
-            XmlHelper.WriteAttribute(sw, "err", this.err, false);
-            if (!smtCleanField)
+            if(this.errFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "err", this.err, false);
+            if (this.smtCleanFieldSpecified)
                 XmlHelper.WriteAttribute(sw, "smtClean", this.smtClean);
-            XmlHelper.WriteAttribute(sw, "smtId", this.smtId);
-            XmlHelper.WriteAttribute(sw, "bmk", this.bmk);
+            if(this.smtIdFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "smtId", this.smtId);
+            if(this.bmkField != null)
+                XmlHelper.WriteAttribute(sw, "bmk", this.bmk);
             sw.Write(">");
             if (this.ln != null)
                 this.ln.Write(sw, "ln");
@@ -1249,7 +1288,21 @@ namespace NPOI.OpenXmlFormats.Dml
             }
             set
             {
+                this.dirtyFieldSpecified = !value;
                 this.dirtyField = value;
+            }
+        }
+
+        [XmlIgnore]
+        public bool dirtySpecified
+        {
+            get
+            {
+                return this.dirtyFieldSpecified;
+            }
+            set
+            {
+                this.dirtyFieldSpecified = value;
             }
         }
 
@@ -1263,7 +1316,22 @@ namespace NPOI.OpenXmlFormats.Dml
             }
             set
             {
+                this.errFieldSpecified = value;
                 this.errField = value;
+            }
+        }
+
+
+        [XmlIgnore]
+        public bool errSpecified
+        {
+            get
+            {
+                return this.errFieldSpecified;
+            }
+            set
+            {
+                this.errFieldSpecified = value;
             }
         }
 
@@ -1277,7 +1345,21 @@ namespace NPOI.OpenXmlFormats.Dml
             }
             set
             {
+                this.smtCleanFieldSpecified = !value;
                 this.smtCleanField = value;
+            }
+        }
+
+        [XmlIgnore]
+        public bool smtCleanSpecified
+        {
+            get
+            {
+                return this.smtCleanFieldSpecified;
+            }
+            set
+            {
+                this.smtCleanFieldSpecified = value;
             }
         }
 
@@ -1291,7 +1373,21 @@ namespace NPOI.OpenXmlFormats.Dml
             }
             set
             {
+                this.smtIdFieldSpecified = value != 0;
                 this.smtIdField = value;
+            }
+        }
+
+        [XmlIgnore]
+        public bool smtIdSpecified
+        {
+            get
+            {
+                return this.smtIdFieldSpecified;
+            }
+            set
+            {
+                this.smtIdFieldSpecified = value;
             }
         }
 
@@ -1333,11 +1429,6 @@ namespace NPOI.OpenXmlFormats.Dml
         public bool IsSetBaseline()
         {
             return this.baselineFieldSpecified && this.baselineField != 0;
-        }
-
-        public bool IsSetB()
-        {
-            return this.bFieldSpecified;
         }
 
         public bool IsSetI()
@@ -1546,6 +1637,21 @@ namespace NPOI.OpenXmlFormats.Dml
         public void UnsetSolidFill()
         {
             this.solidFillField = null;
+        }
+
+        public bool IsSetAltLang()
+        {
+            return this.altLangField != null;
+        }
+
+        public bool IsSetLang()
+        {
+            return this.langField != null;
+        }
+
+        public bool IsSetBmk()
+        {
+            return this.bmkField != null;
         }
     }
 

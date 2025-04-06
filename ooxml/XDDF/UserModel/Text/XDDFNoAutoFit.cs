@@ -43,14 +43,9 @@ namespace NPOI.XDDF.UserModel.Text
         {
             return autofit;
         }
-        public int GetFontScale()
-        {
-            return 100_000;
-        }
-        public int GetLineSpaceReduction()
-        {
-            return 0;
-        }
+        public int FontScale => 100_000;
+        
+        public int LineSpaceReduction => 0;
     }
 }
 

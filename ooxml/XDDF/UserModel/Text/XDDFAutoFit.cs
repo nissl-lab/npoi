@@ -27,8 +27,8 @@ namespace NPOI.XDDF.UserModel.Text
     using NPOI.Util;
     public interface IXDDFAutoFit
     {
-        int GetFontScale();
-        int GetLineSpaceReduction();
+        int FontScale { get; }
+        int LineSpaceReduction { get; }
     }
 }
 
