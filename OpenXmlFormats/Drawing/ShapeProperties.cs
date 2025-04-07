@@ -1834,11 +1834,11 @@ namespace NPOI.OpenXmlFormats.Dml
             this.lnField = new CT_LineProperties();
             return lnField;
         }
-        public void unsetPattFill()
+        public void UnsetPattFill()
         {
             this.pattFill = null;
         }
-        public void unsetSolidFill()
+        public void UnsetSolidFill()
         {
             this.solidFill = null;
         }
@@ -2054,6 +2054,34 @@ namespace NPOI.OpenXmlFormats.Dml
         public bool bwModeSpecified
         {
             get { return ST_BlackWhiteMode.none != this.bwModeField; }
+        }
+        public bool IsSetBwMode()
+        {
+            return bwModeField != ST_BlackWhiteMode.none;
+        }
+
+        public void UnsetBwMode()
+        {
+            this.bwModeField = ST_BlackWhiteMode.none;
+        }
+        public void Set(CT_ShapeProperties other)
+        {
+            this.xfrmField = other.xfrm;
+            this.custGeomField = other.custGeom;
+            this.prstGeomField = other.prstGeom;
+            this.noFillField = other.noFill;
+            this.solidFillField = other.solidFill;
+            this.gradFillField = other.gradFill;
+            this.blipFillField = other.blipFill;
+            this.pattFillField = other.pattFill;
+            this.grpFillField = other.grpFill;
+            this.lnField = other.ln;
+            this.effectLstField = other.effectLst;
+            this.effectDagField = other.effectDag;
+            this.scene3dField = other.scene3d;
+            this.sp3dField = other.sp3d;
+            this.extLstField = other.extLst;
+            this.bwModeField = other.bwModeField;
         }
 
         public static CT_ShapeProperties Parse(XmlNode node, XmlNamespaceManager namespaceManager)

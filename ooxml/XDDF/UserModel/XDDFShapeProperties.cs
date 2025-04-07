@@ -25,7 +25,7 @@ using System.Text;
 namespace NPOI.XDDF.UserModel
 {
     using NPOI.Util;
-    using NPOI.OpenXmlFormats.Dml.Chart;
+    using NPOI.OpenXmlFormats.Dml;
     public class XDDFShapeProperties
     {
         private CT_ShapeProperties props;

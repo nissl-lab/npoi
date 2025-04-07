@@ -1295,6 +1295,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
         private object itemField;
         private CT_Boolean deleteField;
 
+        private CT_TextBody txPrField;
+
         private CT_ExtensionList extLstField;
 
         public CT_LegendEntry()
@@ -1362,6 +1364,42 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             sw.Write(string.Format("</c:{0}>", nodeName));
         }
 
+        public bool IsSetTxPr()
+        {
+            return this.txPrField != null;
+        }
+
+        public void UnsetTxPr()
+        {
+            this.txPrField = null;
+        }
+
+        public bool IsSetDelete()
+        {
+            return this.deleteField != null;
+        }
+
+        public void UnsetDelete()
+        {
+            this.deleteField = null;
+        }
+
+        public CT_Boolean AddNewDelete()
+        {
+            this.deleteField = new CT_Boolean();
+            return this.deleteField;
+        }
+
+        public bool IsSetExtLst()
+        {
+            return this.extLstField != null;
+        }
+
+        public void UnsetExtLst()
+        {
+            this.extLstField = null;
+        }
+
         [XmlElement(Order = 0)]
         public CT_UnsignedInt idx
         {
@@ -1398,6 +1436,18 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             set
             {
                 deleteField = value;
+            }
+        }
+
+        public CT_TextBody txPr
+        {
+            get
+            {
+                return txPrField;
+            }
+            set
+            {
+                txPrField = value;
             }
         }
 
@@ -1616,7 +1666,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         private CT_TextBody txPrField;
 
-        private List<CT_Extension> extLstField;
+        private CT_ExtensionList extLstField;
 
         public CT_Legend()
         {
@@ -1628,7 +1678,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                 return null;
             CT_Legend ctObj = new CT_Legend();
             ctObj.legendEntry = new List<CT_LegendEntry>();
-            ctObj.extLst = new List<CT_Extension>();
+            ctObj.extLst = new CT_ExtensionList();
             foreach (XmlNode childNode in node.ChildNodes)
             {
                 if (childNode.LocalName == "legendPos")
@@ -1651,7 +1701,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                 else if (childNode.LocalName == "legendEntry")
                     ctObj.legendEntry.Add(CT_LegendEntry.Parse(childNode, namespaceManager));
                 else if (childNode.LocalName == "extLst")
-                    ctObj.extLst.Add(CT_Extension.Parse(childNode, namespaceManager));
+                    ctObj.extLst = CT_ExtensionList.Parse(childNode, namespaceManager);
             }
             return ctObj;
         }
@@ -1681,10 +1731,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
             if (this.extLst != null)
             {
-                foreach (CT_Extension x in this.extLst)
-                {
-                    x.Write(sw, "extLst");
-                }
+                this.extLst.Write(sw, "extLst");
             }
             sw.Write(string.Format("</c:{0}>", nodeName));
         }
@@ -1801,8 +1848,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
         }
 
         [XmlArray(Order = 6)]
-        [XmlArrayItem("ext", IsNullable = false)]
-        public List<CT_Extension> extLst
+        public CT_ExtensionList extLst
         {
             get
             {
@@ -1860,6 +1906,24 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             this.layout = null;
             this.layoutSpecifiedField = false;
         }
+
+        public CT_LegendEntry AddNewLegendEntry()
+        {
+            if(this.legendEntryField == null)
+                this.legendEntryField = new List<CT_LegendEntry>();
+            CT_LegendEntry le = new CT_LegendEntry();
+            this.legendEntryField.Add(le);
+            return le;
+        }
+
+        public CT_LegendEntry GetLegendEntryArray(int index)
+        {
+            if(this.legendEntryField==null)
+                return null;
+            if(index<0 || index>=this.legendEntryField.Count)
+                throw new IndexOutOfRangeException();
+            return this.legendEntryField[index];
+        }
     }
 
 
@@ -1873,7 +1937,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         private CT_ManualLayout manualLayoutField;
 
-        private List<CT_Extension> extLstField;
+        private CT_ExtensionList extLstField;
 
         public CT_Layout()
         {
@@ -1885,13 +1949,12 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             if (node == null)
                 return null;
             CT_Layout ctObj = new CT_Layout();
-            ctObj.extLst = new List<CT_Extension>();
             foreach (XmlNode childNode in node.ChildNodes)
             {
                 if (childNode.LocalName == "manualLayout")
                     ctObj.manualLayout = CT_ManualLayout.Parse(childNode, namespaceManager);
                 else if (childNode.LocalName == "extLst")
-                    ctObj.extLst.Add(CT_Extension.Parse(childNode, namespaceManager));
+                    ctObj.extLst = CT_ExtensionList.Parse(childNode, namespaceManager);
             }
             return ctObj;
         }
@@ -1906,10 +1969,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                 this.manualLayout.Write(sw, "manualLayout");
             if (this.extLst != null)
             {
-                foreach (CT_Extension x in this.extLst)
-                {
-                    x.Write(sw, "extLst");
-                }
+                this.extLst.Write(sw, "extLst");
             }
             sw.Write(string.Format("</c:{0}>", nodeName));
         }
@@ -1923,6 +1983,22 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             this.manualLayoutField = new CT_ManualLayout();
             return this.manualLayoutField;
         }
+
+        public bool IsSetExtLst()
+        {
+            return this.extLstField != null;
+        }
+
+        public void UnsetExtLst()
+        {
+            this.extLstField = null;
+        }
+
+        public void UnsetManualLayout()
+        {
+            this.manualLayoutField = null;
+        }
+
         [XmlElement(Order = 0)]
         public CT_ManualLayout manualLayout
         {
@@ -1937,7 +2013,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
         }
 
         [XmlElement(Order = 1)]
-        public List<CT_Extension> extLst
+        public CT_ExtensionList extLst
         {
             get
             {
@@ -1977,13 +2053,12 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         private CT_Double hField;
 
-        private List<CT_Extension> extLstField;
+        private CT_ExtensionList extLstField;
         public static CT_ManualLayout Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
                 return null;
             CT_ManualLayout ctObj = new CT_ManualLayout();
-            ctObj.extLst = new List<CT_Extension>();
             foreach (XmlNode childNode in node.ChildNodes)
             {
                 if (childNode.LocalName == "layoutTarget")
@@ -2005,7 +2080,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                 else if (childNode.LocalName == "h")
                     ctObj.h = CT_Double.Parse(childNode, namespaceManager);
                 else if (childNode.LocalName == "extLst")
-                    ctObj.extLst.Add(CT_Extension.Parse(childNode, namespaceManager));
+                    ctObj.extLst = CT_ExtensionList.Parse(childNode, namespaceManager);
             }
             return ctObj;
         }
@@ -2036,10 +2111,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                 this.h.Write(sw, "h");
             if (this.extLst != null)
             {
-                foreach (CT_Extension x in this.extLst)
-                {
-                    x.Write(sw, "extLst");
-                }
+                this.extLst.Write(sw, "extLst");
             }
             sw.Write(string.Format("</c:{0}>", nodeName));
         }
@@ -2146,6 +2218,17 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                 this.xField = new CT_Double();
             return xField;
         }
+
+        public bool IsSetExtLst()
+        {
+            return this.extLstField != null;
+        }
+
+        public void UnsetExtLst()
+        {
+            this.extLstField = null;
+        }
+
         [XmlElement(Order = 0)]
         public CT_LayoutTarget layoutTarget
         {
@@ -2264,7 +2347,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
         }
 
         [XmlElement(Order = 9)]
-        public List<CT_Extension> extLst
+        public CT_ExtensionList extLst
         {
             get
             {
@@ -11946,6 +12029,11 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             return this.titleField;
         }
 
+        public bool IsSetPlotVisOnly()
+        {
+            return this.plotVisOnlyField != null;
+        }
+
         [XmlElement(Order = 0)]
         public CT_Title title
         {
@@ -12655,411 +12743,411 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     }
 
 
-    [Serializable]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public class CT_ShapeProperties
-    {
+    //[Serializable]
+    //[XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
+    //[XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
+    //public class CT_ShapeProperties
+    //{
 
-        private CT_Transform2D xfrmField = null;
+    //    private CT_Transform2D xfrmField = null;
 
-        private CT_CustomGeometry2D custGeomField = null;
+    //    private CT_CustomGeometry2D custGeomField = null;
 
-        private CT_PresetGeometry2D prstGeomField = null;
+    //    private CT_PresetGeometry2D prstGeomField = null;
 
-        private CT_NoFillProperties noFillField = null;
+    //    private CT_NoFillProperties noFillField = null;
 
-        private CT_SolidColorFillProperties solidFillField = null;
+    //    private CT_SolidColorFillProperties solidFillField = null;
 
-        private CT_GradientFillProperties gradFillField = null;
+    //    private CT_GradientFillProperties gradFillField = null;
 
-        private CT_BlipFillProperties blipFillField = null;
+    //    private CT_BlipFillProperties blipFillField = null;
 
-        private CT_PatternFillProperties pattFillField = null;
+    //    private CT_PatternFillProperties pattFillField = null;
 
-        private CT_GroupFillProperties grpFillField = null;
+    //    private CT_GroupFillProperties grpFillField = null;
 
-        private CT_LineProperties lnField = null;
+    //    private CT_LineProperties lnField = null;
 
-        private CT_EffectList effectLstField = null;
+    //    private CT_EffectList effectLstField = null;
 
-        private CT_EffectContainer effectDagField = null;
+    //    private CT_EffectContainer effectDagField = null;
 
-        private CT_Scene3D scene3dField = null;
+    //    private CT_Scene3D scene3dField = null;
 
-        private CT_Shape3D sp3dField = null;
+    //    private CT_Shape3D sp3dField = null;
 
-        private CT_OfficeArtExtensionList extLstField = null;
+    //    private CT_OfficeArtExtensionList extLstField = null;
 
-        private ST_BlackWhiteMode bwModeField = ST_BlackWhiteMode.none;
-
-
-        public CT_PresetGeometry2D AddNewPrstGeom()
-        {
-            this.prstGeomField = new CT_PresetGeometry2D();
-            return this.prstGeomField;
-        }
-        public CT_Transform2D AddNewXfrm()
-        {
-            this.xfrmField = new CT_Transform2D();
-            return this.xfrmField;
-        }
-        public CT_SolidColorFillProperties AddNewSolidFill()
-        {
-            this.solidFillField = new CT_SolidColorFillProperties();
-            return this.solidFillField;
-        }
-        public bool IsSetPattFill()
-        {
-            return this.pattFillField != null;
-        }
-        public bool IsSetSolidFill()
-        {
-            return this.solidFillField != null;
-        }
-        public bool IsSetLn()
-        {
-            return this.lnField != null;
-        }
-        public CT_LineProperties AddNewLn()
-        {
-            this.lnField = new CT_LineProperties();
-            return lnField;
-        }
-        public void unsetPattFill()
-        {
-            this.pattFill = null;
-        }
-        public void unsetSolidFill()
-        {
-            this.solidFill = null;
-        }
-
-        [XmlElement(Order = 0)]
-        public CT_Transform2D xfrm
-        {
-            get
-            {
-                return this.xfrmField;
-            }
-            set
-            {
-                this.xfrmField = value;
-            }
-        }
-
-        [XmlElement(Order = 1)]
-        public CT_CustomGeometry2D custGeom
-        {
-            get
-            {
-                return this.custGeomField;
-            }
-            set
-            {
-                this.custGeomField = value;
-            }
-        }
-
-        [XmlElement(Order = 2)]
-        public CT_PresetGeometry2D prstGeom
-        {
-            get
-            {
-                return this.prstGeomField;
-            }
-            set
-            {
-                this.prstGeomField = value;
-            }
-        }
-
-        [XmlElement(Order = 3)]
-        public CT_NoFillProperties noFill
-        {
-            get
-            {
-                return this.noFillField;
-            }
-            set
-            {
-                this.noFillField = value;
-            }
-        }
-
-        [XmlElement(Order = 4)]
-        public CT_SolidColorFillProperties solidFill
-        {
-            get
-            {
-                return this.solidFillField;
-            }
-            set
-            {
-                this.solidFillField = value;
-            }
-        }
-
-        [XmlElement(Order = 5)]
-        public CT_GradientFillProperties gradFill
-        {
-            get
-            {
-                return this.gradFillField;
-            }
-            set
-            {
-                this.gradFillField = value;
-            }
-        }
-
-        [XmlElement(Order = 6)]
-        public CT_BlipFillProperties blipFill
-        {
-            get
-            {
-                return this.blipFillField;
-            }
-            set
-            {
-                this.blipFillField = value;
-            }
-        }
-
-        [XmlElement(Order = 7)]
-        public CT_PatternFillProperties pattFill
-        {
-            get
-            {
-                return this.pattFillField;
-            }
-            set
-            {
-                this.pattFillField = value;
-            }
-        }
-
-        [XmlElement(Order = 8)]
-        public CT_GroupFillProperties grpFill
-        {
-            get
-            {
-                return this.grpFillField;
-            }
-            set
-            {
-                this.grpFillField = value;
-            }
-        }
-
-        [XmlElement(Order = 9)]
-        public CT_LineProperties ln
-        {
-            get
-            {
-                return this.lnField;
-            }
-            set
-            {
-                this.lnField = value;
-            }
-        }
-
-        [XmlElement(Order = 10)]
-        public CT_EffectList effectLst
-        {
-            get
-            {
-                return this.effectLstField;
-            }
-            set
-            {
-                this.effectLstField = value;
-            }
-        }
-
-        [XmlElement(Order = 11)]
-        public CT_EffectContainer effectDag
-        {
-            get
-            {
-                return this.effectDagField;
-            }
-            set
-            {
-                this.effectDagField = value;
-            }
-        }
-
-        [XmlElement(Order = 12)]
-        public CT_Scene3D scene3d
-        {
-            get
-            {
-                return this.scene3dField;
-            }
-            set
-            {
-                this.scene3dField = value;
-            }
-        }
-
-        [XmlElement(Order = 13)]
-        public CT_Shape3D sp3d
-        {
-            get
-            {
-                return this.sp3dField;
-            }
-            set
-            {
-                this.sp3dField = value;
-            }
-        }
-
-        [XmlElement(Order = 14)]
-        public CT_OfficeArtExtensionList extLst
-        {
-            get
-            {
-                return this.extLstField;
-            }
-            set
-            {
-                this.extLstField = value;
-            }
-        }
-
-        [XmlAttribute]
-        public ST_BlackWhiteMode bwMode
-        {
-            get
-            {
-                return this.bwModeField;
-            }
-            set
-            {
-                this.bwModeField = value;
-            }
-        }
-        [XmlIgnore]
-        public bool bwModeSpecified
-        {
-            get { return ST_BlackWhiteMode.none != this.bwModeField; }
-        }
-
-        public static CT_ShapeProperties Parse(XmlNode node, XmlNamespaceManager namespaceManager)
-        {
-            if (node == null)
-                return null;
-            CT_ShapeProperties ctObj = new CT_ShapeProperties();
-            if (node.Attributes["bwMode"] != null)
-                ctObj.bwMode = (ST_BlackWhiteMode)Enum.Parse(typeof(ST_BlackWhiteMode), node.Attributes["bwMode"].Value);
-            foreach (XmlNode childNode in node.ChildNodes)
-            {
-                if (childNode.LocalName == "xfrm")
-                    ctObj.xfrm = CT_Transform2D.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "custGeom")
-                    ctObj.custGeom = CT_CustomGeometry2D.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "prstGeom")
-                    ctObj.prstGeom = CT_PresetGeometry2D.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "noFill")
-                    ctObj.noFill = new CT_NoFillProperties();
-                else if (childNode.LocalName == "solidFill")
-                    ctObj.solidFill = CT_SolidColorFillProperties.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "gradFill")
-                    ctObj.gradFill = CT_GradientFillProperties.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "blipFill")
-                    ctObj.blipFill = CT_BlipFillProperties.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "pattFill")
-                    ctObj.pattFill = CT_PatternFillProperties.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "grpFill")
-                    ctObj.grpFill = new CT_GroupFillProperties();
-                else if (childNode.LocalName == "ln")
-                    ctObj.ln = CT_LineProperties.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "effectLst")
-                    ctObj.effectLst = CT_EffectList.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "effectDag")
-                    ctObj.effectDag = CT_EffectContainer.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "scene3d")
-                    ctObj.scene3d = CT_Scene3D.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "sp3d")
-                    ctObj.sp3d = CT_Shape3D.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "extLst")
-                    ctObj.extLst = CT_OfficeArtExtensionList.Parse(childNode, namespaceManager);
-            }
-            return ctObj;
-        }
+    //    private ST_BlackWhiteMode bwModeField = ST_BlackWhiteMode.none;
 
 
+    //    public CT_PresetGeometry2D AddNewPrstGeom()
+    //    {
+    //        this.prstGeomField = new CT_PresetGeometry2D();
+    //        return this.prstGeomField;
+    //    }
+    //    public CT_Transform2D AddNewXfrm()
+    //    {
+    //        this.xfrmField = new CT_Transform2D();
+    //        return this.xfrmField;
+    //    }
+    //    public CT_SolidColorFillProperties AddNewSolidFill()
+    //    {
+    //        this.solidFillField = new CT_SolidColorFillProperties();
+    //        return this.solidFillField;
+    //    }
+    //    public bool IsSetPattFill()
+    //    {
+    //        return this.pattFillField != null;
+    //    }
+    //    public bool IsSetSolidFill()
+    //    {
+    //        return this.solidFillField != null;
+    //    }
+    //    public bool IsSetLn()
+    //    {
+    //        return this.lnField != null;
+    //    }
+    //    public CT_LineProperties AddNewLn()
+    //    {
+    //        this.lnField = new CT_LineProperties();
+    //        return lnField;
+    //    }
+    //    public void unsetPattFill()
+    //    {
+    //        this.pattFill = null;
+    //    }
+    //    public void unsetSolidFill()
+    //    {
+    //        this.solidFill = null;
+    //    }
 
-        internal void Write(StreamWriter sw, string nodeName)
-        {
-            sw.Write(string.Format("<c:{0}", nodeName));
-            if(this.bwMode!= ST_BlackWhiteMode.none)
-                XmlHelper.WriteAttribute(sw, "bwMode", this.bwMode.ToString());
-            sw.Write(">");
-            if (this.xfrm != null)
-                this.xfrm.Write(sw, "a:xfrm");
-            if (this.custGeom != null)
-                this.custGeom.Write(sw, "custGeom");
-            if (this.prstGeom != null)
-                this.prstGeom.Write(sw, "prstGeom");
-            if (this.noFill != null)
-                sw.Write("<a:noFill/>");
-            if (this.solidFill != null)
-                this.solidFill.Write(sw, "solidFill");
-            if (this.gradFill != null)
-                this.gradFill.Write(sw, "gradFill");
-            if (this.blipFill != null)
-                this.blipFill.Write(sw, "a:blipFill");
-            if (this.pattFill != null)
-                this.pattFill.Write(sw, "pattFill");
-            if (this.grpFill != null)
-                sw.Write("<a:grpFill/>");
-            if (this.ln != null)
-                this.ln.Write(sw, "ln");
-            if (this.effectLst != null)
-                this.effectLst.Write(sw, "effectLst");
-            if (this.effectDag != null)
-                this.effectDag.Write(sw, "effectDag");
-            if (this.scene3d != null)
-                this.scene3d.Write(sw, "scene3d");
-            if (this.sp3d != null)
-                this.sp3d.Write(sw, "sp3d");
-            if (this.extLst != null)
-                this.extLst.Write(sw, "extLst");
-            sw.Write(string.Format("</c:{0}>", nodeName));
-        }
+    //    [XmlElement(Order = 0)]
+    //    public CT_Transform2D xfrm
+    //    {
+    //        get
+    //        {
+    //            return this.xfrmField;
+    //        }
+    //        set
+    //        {
+    //            this.xfrmField = value;
+    //        }
+    //    }
 
-        public bool IsSetBwMode()
-        {
-            return bwModeField != ST_BlackWhiteMode.none;
-        }
+    //    [XmlElement(Order = 1)]
+    //    public CT_CustomGeometry2D custGeom
+    //    {
+    //        get
+    //        {
+    //            return this.custGeomField;
+    //        }
+    //        set
+    //        {
+    //            this.custGeomField = value;
+    //        }
+    //    }
 
-        public void UnsetBwMode()
-        {
-            this.bwModeField = ST_BlackWhiteMode.none;
-        }
+    //    [XmlElement(Order = 2)]
+    //    public CT_PresetGeometry2D prstGeom
+    //    {
+    //        get
+    //        {
+    //            return this.prstGeomField;
+    //        }
+    //        set
+    //        {
+    //            this.prstGeomField = value;
+    //        }
+    //    }
 
-        public void Set(CT_ShapeProperties other)
-        {
-            this.xfrmField = other.xfrm;
-            this.custGeomField = other.custGeom;
-            this.prstGeomField = other.prstGeom;
-            this.noFillField = other.noFill;
-            this.solidFillField = other.solidFill;
-            this.gradFillField = other.gradFill;
-            this.blipFillField = other.blipFill;
-            this.pattFillField = other.pattFill;
-            this.grpFillField = other.grpFill;
-            this.lnField = other.ln;
-            this.effectLstField = other.effectLst;
-            this.effectDagField = other.effectDag;
-            this.scene3dField = other.scene3d;
-            this.sp3dField = other.sp3d;
-            this.extLstField = other.extLst;
-            this.bwModeField = other.bwModeField;
-        }
-    }
+    //    [XmlElement(Order = 3)]
+    //    public CT_NoFillProperties noFill
+    //    {
+    //        get
+    //        {
+    //            return this.noFillField;
+    //        }
+    //        set
+    //        {
+    //            this.noFillField = value;
+    //        }
+    //    }
+
+    //    [XmlElement(Order = 4)]
+    //    public CT_SolidColorFillProperties solidFill
+    //    {
+    //        get
+    //        {
+    //            return this.solidFillField;
+    //        }
+    //        set
+    //        {
+    //            this.solidFillField = value;
+    //        }
+    //    }
+
+    //    [XmlElement(Order = 5)]
+    //    public CT_GradientFillProperties gradFill
+    //    {
+    //        get
+    //        {
+    //            return this.gradFillField;
+    //        }
+    //        set
+    //        {
+    //            this.gradFillField = value;
+    //        }
+    //    }
+
+    //    [XmlElement(Order = 6)]
+    //    public CT_BlipFillProperties blipFill
+    //    {
+    //        get
+    //        {
+    //            return this.blipFillField;
+    //        }
+    //        set
+    //        {
+    //            this.blipFillField = value;
+    //        }
+    //    }
+
+    //    [XmlElement(Order = 7)]
+    //    public CT_PatternFillProperties pattFill
+    //    {
+    //        get
+    //        {
+    //            return this.pattFillField;
+    //        }
+    //        set
+    //        {
+    //            this.pattFillField = value;
+    //        }
+    //    }
+
+    //    [XmlElement(Order = 8)]
+    //    public CT_GroupFillProperties grpFill
+    //    {
+    //        get
+    //        {
+    //            return this.grpFillField;
+    //        }
+    //        set
+    //        {
+    //            this.grpFillField = value;
+    //        }
+    //    }
+
+    //    [XmlElement(Order = 9)]
+    //    public CT_LineProperties ln
+    //    {
+    //        get
+    //        {
+    //            return this.lnField;
+    //        }
+    //        set
+    //        {
+    //            this.lnField = value;
+    //        }
+    //    }
+
+    //    [XmlElement(Order = 10)]
+    //    public CT_EffectList effectLst
+    //    {
+    //        get
+    //        {
+    //            return this.effectLstField;
+    //        }
+    //        set
+    //        {
+    //            this.effectLstField = value;
+    //        }
+    //    }
+
+    //    [XmlElement(Order = 11)]
+    //    public CT_EffectContainer effectDag
+    //    {
+    //        get
+    //        {
+    //            return this.effectDagField;
+    //        }
+    //        set
+    //        {
+    //            this.effectDagField = value;
+    //        }
+    //    }
+
+    //    [XmlElement(Order = 12)]
+    //    public CT_Scene3D scene3d
+    //    {
+    //        get
+    //        {
+    //            return this.scene3dField;
+    //        }
+    //        set
+    //        {
+    //            this.scene3dField = value;
+    //        }
+    //    }
+
+    //    [XmlElement(Order = 13)]
+    //    public CT_Shape3D sp3d
+    //    {
+    //        get
+    //        {
+    //            return this.sp3dField;
+    //        }
+    //        set
+    //        {
+    //            this.sp3dField = value;
+    //        }
+    //    }
+
+    //    [XmlElement(Order = 14)]
+    //    public CT_OfficeArtExtensionList extLst
+    //    {
+    //        get
+    //        {
+    //            return this.extLstField;
+    //        }
+    //        set
+    //        {
+    //            this.extLstField = value;
+    //        }
+    //    }
+
+    //    [XmlAttribute]
+    //    public ST_BlackWhiteMode bwMode
+    //    {
+    //        get
+    //        {
+    //            return this.bwModeField;
+    //        }
+    //        set
+    //        {
+    //            this.bwModeField = value;
+    //        }
+    //    }
+    //    [XmlIgnore]
+    //    public bool bwModeSpecified
+    //    {
+    //        get { return ST_BlackWhiteMode.none != this.bwModeField; }
+    //    }
+
+    //    public static CT_ShapeProperties Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+    //    {
+    //        if (node == null)
+    //            return null;
+    //        CT_ShapeProperties ctObj = new CT_ShapeProperties();
+    //        if (node.Attributes["bwMode"] != null)
+    //            ctObj.bwMode = (ST_BlackWhiteMode)Enum.Parse(typeof(ST_BlackWhiteMode), node.Attributes["bwMode"].Value);
+    //        foreach (XmlNode childNode in node.ChildNodes)
+    //        {
+    //            if (childNode.LocalName == "xfrm")
+    //                ctObj.xfrm = CT_Transform2D.Parse(childNode, namespaceManager);
+    //            else if (childNode.LocalName == "custGeom")
+    //                ctObj.custGeom = CT_CustomGeometry2D.Parse(childNode, namespaceManager);
+    //            else if (childNode.LocalName == "prstGeom")
+    //                ctObj.prstGeom = CT_PresetGeometry2D.Parse(childNode, namespaceManager);
+    //            else if (childNode.LocalName == "noFill")
+    //                ctObj.noFill = new CT_NoFillProperties();
+    //            else if (childNode.LocalName == "solidFill")
+    //                ctObj.solidFill = CT_SolidColorFillProperties.Parse(childNode, namespaceManager);
+    //            else if (childNode.LocalName == "gradFill")
+    //                ctObj.gradFill = CT_GradientFillProperties.Parse(childNode, namespaceManager);
+    //            else if (childNode.LocalName == "blipFill")
+    //                ctObj.blipFill = CT_BlipFillProperties.Parse(childNode, namespaceManager);
+    //            else if (childNode.LocalName == "pattFill")
+    //                ctObj.pattFill = CT_PatternFillProperties.Parse(childNode, namespaceManager);
+    //            else if (childNode.LocalName == "grpFill")
+    //                ctObj.grpFill = new CT_GroupFillProperties();
+    //            else if (childNode.LocalName == "ln")
+    //                ctObj.ln = CT_LineProperties.Parse(childNode, namespaceManager);
+    //            else if (childNode.LocalName == "effectLst")
+    //                ctObj.effectLst = CT_EffectList.Parse(childNode, namespaceManager);
+    //            else if (childNode.LocalName == "effectDag")
+    //                ctObj.effectDag = CT_EffectContainer.Parse(childNode, namespaceManager);
+    //            else if (childNode.LocalName == "scene3d")
+    //                ctObj.scene3d = CT_Scene3D.Parse(childNode, namespaceManager);
+    //            else if (childNode.LocalName == "sp3d")
+    //                ctObj.sp3d = CT_Shape3D.Parse(childNode, namespaceManager);
+    //            else if (childNode.LocalName == "extLst")
+    //                ctObj.extLst = CT_OfficeArtExtensionList.Parse(childNode, namespaceManager);
+    //        }
+    //        return ctObj;
+    //    }
+
+
+
+    //    internal void Write(StreamWriter sw, string nodeName)
+    //    {
+    //        sw.Write(string.Format("<c:{0}", nodeName));
+    //        if(this.bwMode!= ST_BlackWhiteMode.none)
+    //            XmlHelper.WriteAttribute(sw, "bwMode", this.bwMode.ToString());
+    //        sw.Write(">");
+    //        if (this.xfrm != null)
+    //            this.xfrm.Write(sw, "a:xfrm");
+    //        if (this.custGeom != null)
+    //            this.custGeom.Write(sw, "custGeom");
+    //        if (this.prstGeom != null)
+    //            this.prstGeom.Write(sw, "prstGeom");
+    //        if (this.noFill != null)
+    //            sw.Write("<a:noFill/>");
+    //        if (this.solidFill != null)
+    //            this.solidFill.Write(sw, "solidFill");
+    //        if (this.gradFill != null)
+    //            this.gradFill.Write(sw, "gradFill");
+    //        if (this.blipFill != null)
+    //            this.blipFill.Write(sw, "a:blipFill");
+    //        if (this.pattFill != null)
+    //            this.pattFill.Write(sw, "pattFill");
+    //        if (this.grpFill != null)
+    //            sw.Write("<a:grpFill/>");
+    //        if (this.ln != null)
+    //            this.ln.Write(sw, "ln");
+    //        if (this.effectLst != null)
+    //            this.effectLst.Write(sw, "effectLst");
+    //        if (this.effectDag != null)
+    //            this.effectDag.Write(sw, "effectDag");
+    //        if (this.scene3d != null)
+    //            this.scene3d.Write(sw, "scene3d");
+    //        if (this.sp3d != null)
+    //            this.sp3d.Write(sw, "sp3d");
+    //        if (this.extLst != null)
+    //            this.extLst.Write(sw, "extLst");
+    //        sw.Write(string.Format("</c:{0}>", nodeName));
+    //    }
+
+    //    public bool IsSetBwMode()
+    //    {
+    //        return bwModeField != ST_BlackWhiteMode.none;
+    //    }
+
+    //    public void UnsetBwMode()
+    //    {
+    //        this.bwModeField = ST_BlackWhiteMode.none;
+    //    }
+
+    //    public void Set(CT_ShapeProperties other)
+    //    {
+    //        this.xfrmField = other.xfrm;
+    //        this.custGeomField = other.custGeom;
+    //        this.prstGeomField = other.prstGeom;
+    //        this.noFillField = other.noFill;
+    //        this.solidFillField = other.solidFill;
+    //        this.gradFillField = other.gradFill;
+    //        this.blipFillField = other.blipFill;
+    //        this.pattFillField = other.pattFill;
+    //        this.grpFillField = other.grpFill;
+    //        this.lnField = other.ln;
+    //        this.effectLstField = other.effectLst;
+    //        this.effectDagField = other.effectDag;
+    //        this.scene3dField = other.scene3d;
+    //        this.sp3dField = other.sp3d;
+    //        this.extLstField = other.extLst;
+    //        this.bwModeField = other.bwModeField;
+    //    }
+    //}
 }
