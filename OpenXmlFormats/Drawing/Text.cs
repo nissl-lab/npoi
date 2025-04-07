@@ -1542,7 +1542,10 @@ namespace NPOI.OpenXmlFormats.Dml
             return ctObj;
         }
 
-
+        public CT_TextBody()
+        {
+            pField = new List<CT_TextParagraph>();
+        }
 
         internal void Write(StreamWriter sw, string nodeName)
         {
@@ -1627,7 +1630,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         public void RemoveP(int i)
         {
-            if(i <= 0 || i >= this.pField.Count)
+            if(i < 0 || i >= this.pField.Count)
                 throw new IndexOutOfRangeException();
             this.pField.RemoveAt(i);
         }
@@ -1641,7 +1644,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         public CT_TextParagraph GetPArray(int index)
         {
-            if(index <= 0 || index >= this.pField.Count)
+            if(index < 0 || index >= this.pField.Count)
                 throw new IndexOutOfRangeException();
             return this.pField[index];
         }

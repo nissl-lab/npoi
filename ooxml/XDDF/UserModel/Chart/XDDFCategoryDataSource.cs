@@ -27,8 +27,12 @@ using System.Text;
 namespace NPOI.XDDF.UserModel.Chart
 {
     using NPOI.Util;
-    public interface IXDDFCategoryDataSource : IXDDFDataSource<String>
+    /// <summary>
+    /// should use default interface
+    /// </summary>
+    public interface XDDFCategoryDataSource : IXDDFDataSource<string>
     {
+
     }
 }
 

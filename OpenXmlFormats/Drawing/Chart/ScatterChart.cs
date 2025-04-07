@@ -168,6 +168,69 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             return this.yValField;
         }
 
+        public bool IsSetTx()
+        {
+            return this.txField != null;
+        }
+
+        public CT_SerTx AddNewTx()
+        {
+            this.txField = new CT_SerTx();
+            return this.txField;
+        }
+
+        public bool IsSetDLbls()
+        {
+            return this.dLblsField != null;
+        }
+
+        public void AddNewDLbls()
+        {
+            this.dLblsField = new CT_DLbls();
+        }
+
+        public bool IsSetSpPr()
+        {
+            return this.spPrField != null;
+        }
+
+        public void UnsetSpPr()
+        {
+            this.spPrField = null;
+        }
+
+        public CT_ShapeProperties AddNewSpPr()
+        {
+            this.spPrField = new CT_ShapeProperties();
+            return this.spPrField;
+        }
+
+        public bool IsSetSmooth()
+        {
+            return this.smoothField != null;
+        }
+
+        public void UnsetSmooth()
+        {
+            this.smoothField = null;
+        }
+
+        public CT_Boolean AddNewSmooth()
+        {
+            this.smoothField = new CT_Boolean();
+            return this.smoothField;
+        }
+
+        public bool IsSetMarker()
+        {
+            return this.markerField != null;
+        }
+
+        public CT_Marker AddNewMarker()
+        {
+            this.markerField = new CT_Marker();
+            return this.markerField;
+        }
 
         [XmlElement(Order = 0)]
         public CT_UnsignedInt idx
@@ -528,6 +591,27 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
         public int GetSeriesCount()
         {
             return this.serField == null ? 0 : this.serField.Count;
+        }
+
+        public bool IsSetVaryColors()
+        {
+            return this.varyColorsField != null;
+        }
+
+        public CT_Boolean AddNewVaryColors()
+        {
+            this.varyColorsField = new CT_Boolean();
+            return this.varyColorsField;
+        }
+
+        public int SizeOfAxIdArray()
+        {
+            return this.axIdField.Count;
+        }
+
+        public CT_UnsignedInt[] GetAxIdArray()
+        {
+            return [.. this.axIdField];
         }
 
         [XmlElement(Order = 0)]

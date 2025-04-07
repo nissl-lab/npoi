@@ -17,26 +17,19 @@
  * ====================================================================
  */
 
+
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using System.Text;
 
 namespace NPOI.XDDF.UserModel.Chart
 {
-    public interface IXDDFDataSource
+    public interface IXDDFNumericalDataSource<T> : IXDDFDataSource<T>
     {
-        public int PointCount { get; }
-
-        public bool IsReference { get; }
-
-        public bool IsNumeric { get; }
-
-        public int ColIndex { get; }
-        public string DataRangeReference { get; }
-
-        string Formula { get; }
-    }
-
-    public interface IXDDFDataSource<T> : IXDDFDataSource
-    {
-        T GetPointAt(int index);
+        public string FormatCode { get;set; }
     }
 }
+
+
