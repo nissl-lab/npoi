@@ -687,6 +687,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public CT_TableColumn InsertNewTableColumn(int columnIndex)
         {
+            if (this.tableColumnField == null)
+            {
+                this.tableColumnField = new List<CT_TableColumn>();
+            }
             var newTableColumn = new CT_TableColumn();
             this.tableColumn.Insert(columnIndex,newTableColumn);
             return newTableColumn;
@@ -703,6 +707,27 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             this.tableColumn.RemoveAt(columnIndex);
         }
+
+        public CT_TableColumn AddNewTableColumn()
+        {
+            if (this.tableColumnField == null)
+            {
+                this.tableColumnField = new List<CT_TableColumn>();
+            }
+            var col = new CT_TableColumn();
+            tableColumn.Add(col);
+            return col;
+        }
+
+        public CT_TableColumn GetTableColumnArray(int index)
+        {
+            if(index < 0 || index >= this.tableColumn.Count)
+            {
+                throw new IndexOutOfRangeException();
+            }
+            return this.tableColumnField[index];
+        }
+
         [XmlElement]
         public List<CT_TableColumn> tableColumn
         {

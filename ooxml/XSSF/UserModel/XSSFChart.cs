@@ -360,7 +360,7 @@ namespace NPOI.XSSF.UserModel
         {
             if (chart.IsSetLegend())
             {
-                chart.unsetLegend();
+                chart.UnsetLegend();
             }
         }
 

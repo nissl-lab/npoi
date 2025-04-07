@@ -27,6 +27,7 @@ namespace NPOI.XDDF.UserModel.Chart
     using NPOI.Util;
     using NPOI.XDDF.UserModel;
     using NPOI.OpenXmlFormats.Dml.Chart;
+    using NPOI.OpenXmlFormats.Dml;
 
     /// <summary>
     /// Base class for all axis types.

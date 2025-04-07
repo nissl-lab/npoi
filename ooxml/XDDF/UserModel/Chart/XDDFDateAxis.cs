@@ -75,7 +75,7 @@ namespace NPOI.XDDF.UserModel.Chart
         }
         public override XDDFShapeProperties GetOrAddShapeProperties()
         {
-            OpenXmlFormats.Dml.Chart.CT_ShapeProperties properties;
+            CT_ShapeProperties properties;
             if(ctDateAx.IsSetSpPr())
             {
                 properties = ctDateAx.spPr;
