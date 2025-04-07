@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Text; 
+using Cysharp.Text;
 
 namespace NPOI.OpenXml4Net.OPC
 {
@@ -227,7 +228,8 @@ namespace NPOI.OpenXml4Net.OPC
 
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder();
+            using var sb = ZString.CreateStringBuilder();
+
             sb.Append(id == null ? "id=null" : "id=" + id);
             sb.Append(container == null ? " - container=null" : " - container="
                     + container.ToString());

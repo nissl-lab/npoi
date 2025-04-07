@@ -23,7 +23,8 @@ namespace NPOI.XSSF.UserModel
     using NPOI.SS.UserModel;
     using NPOI.OpenXmlFormats.Dml.Spreadsheet;
     using NPOI.OpenXmlFormats.Dml;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
     using NPOI.OpenXmlFormats.Spreadsheet;
     using NPOI.Util;
 
@@ -318,7 +319,7 @@ namespace NPOI.XSSF.UserModel
          */
         private String GetBulletPrefix(ListAutoNumber scheme, int value)
         {
-            StringBuilder out1 = new StringBuilder();
+            using var out1 = ZString.CreateStringBuilder();
 
             switch (scheme)
             {
@@ -407,7 +408,7 @@ namespace NPOI.XSSF.UserModel
          */
         private String valueToRoman(int value)
         {
-            StringBuilder out1 = new StringBuilder();
+            using var out1 = ZString.CreateStringBuilder();
             for (int i = 0; value > 0 && i < _romanChars.Length; i++)
             {
                 while (_romanAlphaValues[i] <= value)

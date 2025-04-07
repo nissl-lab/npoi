@@ -24,7 +24,8 @@ namespace NPOI.HPSF
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
 
     /// <summary>
     /// <para>
@@ -430,7 +431,7 @@ namespace NPOI.HPSF
         /// @see Object#toString()
         public override String ToString()
         {
-            StringBuilder b = new StringBuilder();
+           using var b= ZString.CreateStringBuilder();
             b.Append(GetType().Name);
             b.Append('[');
             b.Append("id: ");

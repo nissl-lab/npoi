@@ -26,7 +26,8 @@ namespace NPOI.HPSF
     using System.Collections.Generic;
     using System.Linq;
     using System.IO;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
 
     /// <summary>
     /// Represents a section in a {@link PropertySet}.
@@ -1081,7 +1082,7 @@ namespace NPOI.HPSF
         /// @see Object#toString()
         public override String ToString()
         {
-            StringBuilder b = new StringBuilder();
+           using var b= ZString.CreateStringBuilder();
             Property[] pa = Properties;
             b.Append(GetType().Name);
             b.Append('[');

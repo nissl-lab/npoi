@@ -18,7 +18,8 @@
 namespace NPOI
 {
 
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
     using NPOI.OpenXml4Net.OPC.Internal;
     using System;
     using System.Collections.Generic;
@@ -151,7 +152,7 @@ namespace NPOI
             {  // event based extractor does not have a document
                 return "";
             }
-            StringBuilder text = new StringBuilder();
+            using var text = ZString.CreateStringBuilder();
             CT_CustomProperties props = Document.GetProperties().CustomProperties.GetUnderlyingProperties();
 
             List<CT_Property> properties = props.GetPropertyList();

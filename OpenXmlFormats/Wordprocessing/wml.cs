@@ -18,7 +18,7 @@ using System.IO;
 using NPOI.OpenXml4Net.Util;
 using System.Xml;
 using NPOI.OpenXmlFormats.Dml.WordProcessing;
-using System.Text;
+using System.Text; 
 using Cysharp.Text;
 
 namespace NPOI.OpenXmlFormats.Wordprocessing
