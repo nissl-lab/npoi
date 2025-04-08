@@ -19,6 +19,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     using NPOI.OpenXml4Net.Util;
     using System.Text;
     using System.Globalization;
+    using NPOI.Util;
 
     [Serializable]
 
@@ -11329,6 +11330,80 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             this.radarChartField.Add(rc);
             return rc;
         }
+
+        public int SizeOfBarChartArray()
+        {
+            return this.barChartField == null ? 0 : this.barChartField.Count;
+        }
+
+        public CT_BarChart GetBarChartArray(int index)
+        {
+            if(index<0 || index >= this.barChartField.Count)
+                throw new ArgumentOutOfRangeException("index");
+            return this.barChartField[index];
+        }
+
+        public int SizeOfLineChartArray()
+        {
+            return this.lineChartField == null ? 0 : this.lineChartField.Count;
+        }
+
+        public CT_LineChart GetLineChartArray(int index)
+        {
+            if(index<0 || index >= this.lineChartField.Count)
+                throw new ArgumentOutOfRangeException("index");
+            return this.lineChartField[index];
+        }
+
+        public int SizeOfPieChartArray()
+        {
+            return this.pieChartField == null ? 0 : this.pieChartField.Count;
+        }
+
+        public CT_PieChart GetPieChartArray(int index)
+        {
+            if(index<0 || index >= this.pieChartField.Count)
+                throw new ArgumentOutOfRangeException("index");
+            return this.pieChartField[index];
+        }
+
+        public int SizeOfRadarChartArray()
+        {
+            return this.radarChartField == null ? 0 : this.radarChartField.Count;
+        }
+
+        public CT_RadarChart GetRadarChartArray(int index)
+        {
+            if(index<0 || index >= this.radarChartField.Count)
+                throw new ArgumentOutOfRangeException("index");
+            return this.radarChartField[index];
+        }
+
+        public int SizeOfScatterChartArray()
+        {
+            return this.scatterChartField == null ? 0 : this.scatterChartField.Count;
+        }
+
+        public CT_ScatterChart GetScatterChartArray(int index)
+        {
+            if(index<0 || index >= this.scatterChartField.Count)
+                throw new ArgumentOutOfRangeException("index");
+            return this.scatterChartField[index];
+        }
+
+        public CT_CatAx GetCatAxArray(int index)
+        {
+            if(index<0 || index >= this.catAxField.Count)
+                throw new ArgumentOutOfRangeException("index");
+            return this.catAxField[index];
+        }
+
+        public CT_ValAx GetValAxArray(int index)
+        {
+            if(index<0 || index >= this.valAxField.Count)
+                throw new ArgumentOutOfRangeException("index");
+            return this.valAxField[index];
+        }
     }
 
 
@@ -12100,6 +12175,23 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
         {
             dispBlanksAsField = new CT_DispBlanksAs();
             return this.dispBlanksAsField;
+        }
+
+        public void Set(CT_Chart other)
+        {
+            this.autoTitleDeletedField = other.autoTitleDeletedField;
+            this.backWallField = other.backWallField;
+            this.dispBlanksAsField = other.dispBlanksAsField;
+            this.extLstField = other.extLstField;
+            this.floorField = other.floorField;
+            this.legendField = other.legendField;
+            this.pivotFmtsField = other.pivotFmtsField;
+            this.plotAreaField = other.plotAreaField;
+            this.plotVisOnlyField = other.plotVisOnlyField;
+            this.showDLblsOverMaxField = other.showDLblsOverMaxField;
+            this.sideWallField = other.sideWallField;
+            this.titleField = other.titleField;
+            this.view3DField = other.view3DField;
         }
 
         [XmlElement(Order = 0)]
