@@ -611,7 +611,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                CT_IntProperty family = _ctFont.sizeOfFamilyArray() == 0 ? _ctFont.AddNewFamily() : _ctFont.GetFamilyArray(0);
+                CT_IntProperty family = _ctFont.sizeOfFamilyArray() == 0 ? null : _ctFont.GetFamilyArray(0);
                 return family == null ? FontFamily.NOT_APPLICABLE.Value : FontFamily.ValueOf(family.val).Value;
             }
             set 
