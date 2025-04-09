@@ -27,7 +27,8 @@ namespace NPOI.SS.UserModel
     using NPOI.SS.Format;
     using NPOI.Util;
     using System.Collections.Generic;
-
+    using NPOI.SS.Formula;
+    using System.Runtime.Serialization;
 
 
     /**
@@ -299,22 +300,32 @@ namespace NPOI.SS.UserModel
          */
         private FormatBase GetFormat(ICell cell)
         {
-            if (cell.CellStyle == null)
-            {
-                return null;
-            }
 
-            int formatIndex = cell.CellStyle.DataFormat;
-            string formatStr = cell.CellStyle.GetDataFormatString();
-            if (formatStr == null || formatStr.Trim().Length == 0)
-            {
-                return null;
-            }
-            return GetFormat(cell.NumericCellValue, formatIndex, formatStr);
+            return GetFormat(cell, null);
         }
 
-        private FormatBase GetFormat(double cellValue, int formatIndex, string formatStrIn)
+        private FormatBase GetFormat(ICell cell, ConditionalFormattingEvaluator cfEvaluator)
         {
+            if (cell == null) return null;
+
+            ExcelNumberFormat numFmt = ExcelNumberFormat.From(cell, cfEvaluator);
+
+            if (numFmt == null)
+            {
+                return null;
+            }
+
+            int formatIndex = numFmt.Idx;
+            String formatStr = numFmt.Format;
+             if (formatStr == null || formatStr.Trim().Length == 0)
+             {
+                 return null;
+             }
+             return GetFormat(cell.NumericCellValue, formatIndex, formatStr);
+         }
+
+         private FormatBase GetFormat(double cellValue, int formatIndex, String formatStrIn)
+         {
             //      // Might be better to separate out the n p and z formats, falling back to p when n and z are not set.
             //      // That however would require other code to be re factored.
             //      String[] formatBits = formatStrIn.split(";");
@@ -330,7 +341,7 @@ namespace NPOI.SS.UserModel
             // For now, if we detect 2+ parts, we call out to CellFormat to handle it
             // TODO Going forward, we should really merge the logic between the two classes
 
-            if (formatStr.IndexOf(';') != -1 &&
+            if (formatStr.Contains(';') &&
                 (formatStr.IndexOf(';') != formatStr.LastIndexOf(';')
                  || rangeConditionalPattern.IsMatch(formatStr)
                 ))
@@ -872,16 +883,21 @@ namespace NPOI.SS.UserModel
         }
 
         /**
-         * Returns the Formatted value of an Excel date as a <c>String</c> based
-         * on the cell's <c>DataFormat</c>. i.e. "Thursday, January 02, 2003"
+         * Returns the formatted value of an Excel date as a <tt>String</tt> based
+         * on the cell's <code>DataFormat</code>. i.e. "Thursday, January 02, 2003"
          * , "01/02/2003" , "02-Jan" , etc.
+         * <p/>
+         * If any conditional format rules apply, the highest priority with a number format is used.
+         * If no rules contain a number format, or no rules apply, the cell's style format is used.
+         * If the style does not have a format, the default date format is applied.
          *
-         * @param cell The cell
-         * @return a Formatted date string
+         * @param cell
+         * @param cfEvaluator ConditionalFormattingEvaluator (if available)
+         * @return
          */
-        private string GetFormattedDateString(ICell cell)
+        private String GetFormattedDateString(ICell cell, ConditionalFormattingEvaluator cfEvaluator)
         {
-            FormatBase dateFormat = GetFormat(cell);
+            FormatBase dateFormat = GetFormat(cell, cfEvaluator);
             if (dateFormat is ExcelStyleDateFormatter formatter) {
                 // Hint about the raw excel value
                 formatter.SetDateToBeFormatted(
@@ -895,18 +911,22 @@ namespace NPOI.SS.UserModel
         }
 
         /**
-         * Returns the Formatted value of an Excel number as a <c>String</c>
-         * based on the cell's <c>DataFormat</c>. Supported Formats include
+         * Returns the formatted value of an Excel number as a <tt>String</tt>
+         * based on the cell's <code>DataFormat</code>. Supported formats include
          * currency, percents, decimals, phone number, SSN, etc.:
          * "61.54%", "$100.00", "(800) 555-1234".
+         * <p/>
+         * Format comes from either the highest priority conditional format rule with a
+         * specified format, or from the cell style.
          *
          * @param cell The cell
-         * @return a Formatted number string
+         * @param cfEvaluator if available, or null
+         * @return a formatted number string
          */
-        private string GetFormattedNumberString(ICell cell)
+        private String GetFormattedNumberString(ICell cell, ConditionalFormattingEvaluator cfEvaluator)
         {
 
-            FormatBase numberFormat = GetFormat(cell);
+            FormatBase numberFormat = GetFormat(cell, cfEvaluator);
             double d = cell.NumericCellValue;
             if (numberFormat == null)
             {
@@ -1038,7 +1058,38 @@ namespace NPOI.SS.UserModel
          */
         public string FormatCellValue(ICell cell, IFormulaEvaluator evaluator)
         {
+            return FormatCellValue(cell, evaluator, null);
+        }
 
+        /**
+         * <p>
+         * Returns the formatted value of a cell as a <tt>String</tt> regardless
+         * of the cell type. If the Excel number format pattern cannot be parsed then the
+         * cell value will be formatted using a default format.
+         * </p>
+         * <p>When passed a null or blank cell, this method will return an empty
+         * String (""). Formula cells will be evaluated using the given
+         * {@link FormulaEvaluator} if the evaluator is non-null. If the
+         * evaluator is null, then the formula String will be returned. The caller
+         * is responsible for setting the currentRow on the evaluator
+         *</p>
+         * <p>
+         * When a ConditionalFormattingEvaluator is present, it is checked first to see
+         * if there is a number format to apply.  If multiple rules apply, the last one is used.
+         * If no ConditionalFormattingEvaluator is present, no rules apply, or the applied
+         * rules do not define a format, the cell's style format is used.
+         * </p>
+         * <p>
+         * The two evaluators should be from the same context, to avoid inconsistencies in cached values.
+         *</p>
+         *
+         * @param cell The cell (can be null)
+         * @param evaluator The FormulaEvaluator (can be null)
+         * @param cfEvaluator ConditionalFormattingEvaluator (can be null)
+         * @return a string value of the cell
+         */
+        public String FormatCellValue(ICell cell, IFormulaEvaluator evaluator, ConditionalFormattingEvaluator cfEvaluator)
+        {
             if (cell == null)
             {
                 return "";
@@ -1079,11 +1130,11 @@ namespace NPOI.SS.UserModel
 
                 case CellType.Numeric:
 
-                    if (DateUtil.IsCellDateFormatted(cell))
+                    if (DateUtil.IsCellDateFormatted(cell, cfEvaluator))
                     {
-                        return GetFormattedDateString(cell);
+                        return GetFormattedDateString(cell, cfEvaluator);
                     }
-                    return GetFormattedNumberString(cell);
+                    return GetFormattedNumberString(cell, cfEvaluator);
 
                 case CellType.String:
                     return cell.RichStringCellValue.String;

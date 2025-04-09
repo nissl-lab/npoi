@@ -22,6 +22,7 @@ namespace NPOI.SS.UserModel
     using System.Text.RegularExpressions;
     using System.Text;
     using NPOI.Util;
+    using NPOI.SS.Formula;
 
     /// <summary>
     /// Contains methods for dealing with Excel dates.
@@ -597,6 +598,27 @@ namespace NPOI.SS.UserModel
         /// date formatting Chars (ymd-/), which covers most
         /// non US date formats.
         /// </summary>
+        /// <param name="numFmt">The number format index and string expression, or null if not specified</param>
+        /// <returns>
+        /// 	<c>true</c> if it is a valid date format, <c>false</c> if not or null
+        /// </returns>
+        public static bool IsADateFormat(ExcelNumberFormat numFmt)
+        {
+
+            if (numFmt == null) return false;
+
+            return IsADateFormat(numFmt.Idx, numFmt.Format);
+        }
+
+        /// <summary>
+        /// Given a format ID and its format String, will Check to see if the
+        /// format represents a date format or not.
+        /// Firstly, it will Check to see if the format ID corresponds to an
+        /// internal excel date format (eg most US date formats)
+        /// If not, it will Check to see if the format string only Contains
+        /// date formatting Chars (ymd-/), which covers most
+        /// non US date formats.
+        /// </summary>
         /// <param name="formatIndex">The index of the format, eg from ExtendedFormatRecord.GetFormatIndex</param>
         /// <param name="formatString">The format string, eg from FormatRecord.GetFormatString</param>
         /// <returns>
@@ -845,18 +867,32 @@ namespace NPOI.SS.UserModel
         /// <param name="cell">The cell.</param>
         public static bool IsCellDateFormatted(ICell cell)
         {
+            return IsCellDateFormatted(cell, null);
+        }
+
+        /**
+         *  Check if a cell contains a date
+         *  Since dates are stored internally in Excel as double values
+         *  we infer it is a date if it is formatted as such.
+         *  Format is determined from applicable conditional formatting, if
+         *  any, or cell style.
+         * @param cell
+         * @param cfEvaluator if available, or null
+         * @return true if it looks like a date
+         *  @see #isADateFormat(int, String)
+         *  @see #isInternalDateFormat(int)
+         */
+        public static bool IsCellDateFormatted(ICell cell, ConditionalFormattingEvaluator cfEvaluator)
+        {
             if (cell == null) return false;
             bool bDate = false;
 
             double d = cell.NumericCellValue;
             if (DateUtil.IsValidExcelDate(d))
             {
-                ICellStyle style = cell.CellStyle;
-                if (style == null)
-                    return false;
-                int i = style.DataFormat;
-                String f = style.GetDataFormatString();
-                bDate = IsADateFormat(i, f);
+                ExcelNumberFormat nf = ExcelNumberFormat.From(cell, cfEvaluator);
+                if (nf == null) return false;
+                bDate = IsADateFormat(nf);
             }
             return bDate;
         }

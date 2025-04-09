@@ -53,7 +53,7 @@ namespace NPOI.SS.Util
      * <tt>CellReference</tt>s have a concept of "sheet", while <tt>CellAddress</tt>es do not.</p>
      */
 
-    public class CellReference
+    public class CellReference : IComparable
     {
         /** The character ($) that signifies a row or column value is absolute instead of relative */
         private const char ABSOLUTE_REFERENCE_MARKER = '$';
@@ -625,6 +625,19 @@ namespace NPOI.SS.Util
             result = 31 * result + (_isColAbs ? 1 : 0);
             result = 31 * result + (_sheetName == null ? 0 : _sheetName.GetHashCode());
             return result;
+        }
+
+        public int CompareTo(object obj)
+        {
+            if (obj == null) return 1;
+            CellReference otherRef = obj as CellReference;
+
+            if (otherRef != null)
+            {
+                return string.Compare(otherRef.ToString(), this.ToString());
+            }
+            else
+                throw new ArgumentException("Object is not a Person");
         }
     }
 }
