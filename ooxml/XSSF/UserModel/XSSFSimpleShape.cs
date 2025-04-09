@@ -26,14 +26,22 @@ namespace NPOI.XSSF.UserModel
     using System.Text;
     using NPOI.OpenXmlFormats.Spreadsheet;
     using NPOI.Util;
+    using NPOI.XDDF.UserModel.Text;
+    using NPOI.XDDF.UserModel;
+    using NPOI.Util.Optional;
 
 
     /**
      * Represents a shape with a predefined geometry in a SpreadsheetML Drawing.
      * Possible shape types are defined in {@link NPOI.SS.UserModel.ShapeTypes}
      */
-    public class XSSFSimpleShape : XSSFShape, IEnumerable<XSSFTextParagraph>, ISimpleShape
+    public class XSSFSimpleShape : XSSFShape, IEnumerable<XSSFTextParagraph>, 
+        ISimpleShape, ITextContainer
     { // TODO - instantiable superclass
+        /// <summary>
+        /// The text body containing the paragraphs for this shape.
+        /// </summary>
+        private XDDFTextBody _textBody;
         /**
          * List of the paragraphs that make up the text in this shape
          */
@@ -57,10 +65,15 @@ namespace NPOI.XSSF.UserModel
 
             // Initialize any existing paragraphs - this will be the default body paragraph in a new shape, 
             // or existing paragraphs that have been loaded from the file
-            NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_TextBody body = ctShape.txBody;
-            if (body != null)
+            CT_TextBody body = ctShape.txBody;
+            if(body == null)
             {
-                for (int i = 0; i < body.SizeOfPArray(); i++)
+                _textBody = null;
+            }
+            else
+            {
+                _textBody = new XDDFTextBody(this, body);
+                for(int i = 0; i < body.SizeOfPArray(); i++)
                 {
                     _paragraphs.Add(new XSSFTextParagraph(body.GetPArray(i), ctShape));
                 }
@@ -100,24 +113,31 @@ namespace NPOI.XSSF.UserModel
                 geom.prst = (/*setter*/ST_ShapeType.rect);
                 geom.AddNewAvLst();
 
-                NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_TextBody body = shape.AddNewTxBody();
-                CT_TextBodyProperties bodypr = body.AddNewBodyPr();
-                bodypr.anchor = (/*setter*/ST_TextAnchoringType.t);
-                bodypr.rtlCol = (/*setter*/false);
-                CT_TextParagraph p = body.AddNewP();
-                p.AddNewPPr().algn = (/*setter*/ST_TextAlignType.l);
-                CT_TextCharacterProperties endPr = p.AddNewEndParaRPr();
-                endPr.lang = (/*setter*/"en-US");
-                endPr.sz = (/*setter*/1100);
-                CT_SolidColorFillProperties scfpr = endPr.AddNewSolidFill();
-                scfpr.AddNewSrgbClr().val = (/*setter*/new byte[] { 0, 0, 0 });
+                //CT_TextBody body = shape.AddNewTxBody();
+                //CT_TextBodyProperties bodypr = body.AddNewBodyPr();
+                //bodypr.anchor = (/*setter*/ST_TextAnchoringType.t);
+                //bodypr.rtlCol = (/*setter*/false);
+                //CT_TextParagraph p = body.AddNewP();
+                //p.AddNewPPr().algn = (/*setter*/ST_TextAlignType.l);
+                //CT_TextCharacterProperties endPr = p.AddNewEndParaRPr();
+                //endPr.lang = (/*setter*/"en-US");
+                //endPr.sz = (/*setter*/1100);
+                //CT_SolidColorFillProperties scfpr = endPr.AddNewSolidFill();
+                //scfpr.AddNewSrgbClr().val = (/*setter*/new byte[] { 0, 0, 0 });
 
-                bodypr.lIns = 91440;    //default value
-                bodypr.tIns = 45720;    //default value
-                bodypr.rIns = 91440;    //default value
-                bodypr.bIns = 45720;    //default value
+                //bodypr.lIns = 91440;    //default value
+                //bodypr.tIns = 45720;    //default value
+                //bodypr.rIns = 91440;    //default value
+                //bodypr.bIns = 45720;    //default value
 
-                body.AddNewLstStyle();
+                //body.AddNewLstStyle();
+
+                XDDFTextBody body = new XDDFTextBody(null, shape.AddNewTxBody());
+                XDDFTextParagraph p = body.Initialize();
+                XDDFRunProperties rp = p.AfterLastRunProperties;
+                XDDFColor black = new XDDFColorRgbBinary(new byte[] { 0, 0, 0 });
+                IXDDFFillProperties fp = new XDDFSolidFillProperties(black);
+                rp.SetFillProperties(fp);
 
                 prototype = shape;
             }
@@ -130,6 +150,7 @@ namespace NPOI.XSSF.UserModel
             return ctShape;
         }
 
+        public XDDFTextBody TextBody => _textBody;
         /**
          * Returns the simple shape id.
          * @return id of the simple shape
@@ -425,7 +446,7 @@ namespace NPOI.XSSF.UserModel
         public void ClearText()
         {
             _paragraphs.Clear();
-            NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_TextBody txBody = ctShape.txBody;
+            CT_TextBody txBody = ctShape.txBody;
             txBody.SetPArray(null); // remove any existing paragraphs
         }
 
@@ -517,7 +538,7 @@ namespace NPOI.XSSF.UserModel
          */
         public XSSFTextParagraph AddNewTextParagraph()
         {
-            NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_TextBody txBody = ctShape.txBody;
+            CT_TextBody txBody = ctShape.txBody;
             CT_TextParagraph p = txBody.AddNewP();
             XSSFTextParagraph paragraph = new XSSFTextParagraph(p, ctShape);
             _paragraphs.Add(paragraph);
@@ -543,7 +564,7 @@ namespace NPOI.XSSF.UserModel
          */
         public XSSFTextParagraph AddNewTextParagraph(XSSFRichTextString str)
         {
-            NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_TextBody txBody = ctShape.txBody;
+            CT_TextBody txBody = ctShape.txBody;
             CT_TextParagraph p = txBody.AddNewP();
 
             if (str.NumFormattingRuns == 0)
@@ -1013,6 +1034,26 @@ namespace NPOI.XSSF.UserModel
                     }
                 }
             }
+        }
+
+        public Option<R> FindDefinedParagraphProperty<R>(Func<CT_TextParagraphProperties, bool> isSet, Func<CT_TextParagraphProperties, R> getter) where R : class
+        {
+            return Option<R>.None();
+        }
+
+        public Option<R> FindDefinedRunProperty<R>(Func<CT_TextCharacterProperties, bool> isSet, Func<CT_TextCharacterProperties, R> getter) where R : class
+        {
+            return Option<R>.None();
+        }
+
+        public ValueOption<V> FindDefinedParagraphValueProperty<V>(Func<CT_TextParagraphProperties, bool> isSet, Func<CT_TextParagraphProperties, V> getter) where V : struct
+        {
+            return ValueOption<V>.None();
+        }
+
+        public ValueOption<V> FindDefinedRunValueProperty<V>(Func<CT_TextCharacterProperties, bool> isSet, Func<CT_TextCharacterProperties, V> getter) where V : struct
+        {
+            return ValueOption<V>.None();
         }
 
         public override string ShapeName => ctShape.nvSpPr.cNvPr.name;

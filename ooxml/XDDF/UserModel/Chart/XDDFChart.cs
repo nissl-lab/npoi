@@ -115,7 +115,7 @@ namespace NPOI.XDDF.UserModel.Chart
         /// Return the underlying CTPlotArea bean, within the Chart
         /// </summary>
         /// <returns>the underlying CTPlotArea bean</returns>
-        protected CT_PlotArea GetCTPlotArea()
+        internal CT_PlotArea GetCTPlotArea()
         {
             return chart.plotArea;
         }

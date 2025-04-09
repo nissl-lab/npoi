@@ -30,7 +30,7 @@ namespace NPOI.XDDF.UserModel
 
             Red = red;
             Green = green;
-            Red = blue;
+            Blue = blue;
         }
         public XDDFColorRgbPercent(CT_ScRgbColor color)
                 : this(color, null)

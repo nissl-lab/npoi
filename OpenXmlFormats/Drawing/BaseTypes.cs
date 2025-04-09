@@ -3046,6 +3046,24 @@ namespace NPOI.OpenXmlFormats.Dml
             this.srgbClrField = new CT_SRgbColor();
             return this.srgbClrField;
         }
+
+        internal CT_ScRgbColor AddNewScRgbClr()
+        {
+            this.scrgbClrField = new CT_ScRgbColor();
+            return this.scrgbClrField;
+        }
+
+        internal CT_PresetColor AddNewPrstClr()
+        {
+            this.prstClrField = new CT_PresetColor();
+            return this.prstClrField;
+        }
+
+        internal CT_SystemColor AddNewSysClr()
+        {
+            this.sysClr = new CT_SystemColor();
+            return this.sysClr;
+        }
     }
 
     [Serializable]

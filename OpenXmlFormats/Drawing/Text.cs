@@ -1009,7 +1009,7 @@ namespace NPOI.OpenXmlFormats.Dml
             set
             {
                 this.lInsField = value;
-                this.lInsFieldSpecified = value == 91440 ? false : true;
+                this.lInsFieldSpecified = true;
             }
         }
 
@@ -1038,7 +1038,7 @@ namespace NPOI.OpenXmlFormats.Dml
             set
             {
                 this.tInsField = value;
-                this.tInsFieldSpecified = value == 45720 ? false : true;
+                this.tInsFieldSpecified = true;
             }
         }
 
@@ -1067,7 +1067,7 @@ namespace NPOI.OpenXmlFormats.Dml
             set
             {
                 this.rInsField = value;
-                this.rInsFieldSpecified = value == 91440 ? false : true;
+                this.rInsFieldSpecified = true;
             }
         }
 
@@ -1096,7 +1096,7 @@ namespace NPOI.OpenXmlFormats.Dml
             set
             {
                 this.bInsField = value;
-                this.bInsFieldSpecified = value == 45720 ? false : true;
+                this.bInsFieldSpecified = true;
             }
         }
 
@@ -1564,11 +1564,14 @@ namespace NPOI.OpenXmlFormats.Dml
 
         public void SetPArray(CT_TextParagraph[] array)
         {
-            pField = new List<CT_TextParagraph>(array);
+            if (array == null)
+                pField.Clear();
+            else
+                pField = new List<CT_TextParagraph>(array);
         }
         public CT_TextParagraph AddNewP()
         {
-            if (this.pField == null)
+            if(this.pField == null)
                 pField = new List<CT_TextParagraph>();
             CT_TextParagraph tp = new CT_TextParagraph();
             pField.Add(tp);
@@ -1581,36 +1584,42 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         public CT_TextListStyle AddNewLstStyle()
         {
-                this.lstStyleField=new CT_TextListStyle();
-            return this.lstStyleField;   
+            this.lstStyleField=new CT_TextListStyle();
+            return this.lstStyleField;
         }
-    
-        public CT_TextBodyProperties bodyPr {
-            get {
+
+        public CT_TextBodyProperties bodyPr
+        {
+            get
+            {
                 return this.bodyPrField;
             }
-            set {
+            set
+            {
                 this.bodyPrField = value;
             }
         }
-        
-    
-        public CT_TextListStyle lstStyle {
-            get {
+
+
+        public CT_TextListStyle lstStyle
+        {
+            get
+            {
                 return this.lstStyleField;
             }
-            set {
+            set
+            {
                 this.lstStyleField = value;
             }
         }
         public override string ToString()
         {
-            if (p == null||p.Count==0)
+            if(p == null||p.Count==0)
                 return string.Empty;
             StringBuilder sb = new StringBuilder();
-            foreach (CT_TextParagraph tp in p)
+            foreach(CT_TextParagraph tp in p)
             {
-                foreach (CT_RegularTextRun tr in tp.r)
+                foreach(CT_RegularTextRun tr in tp.r)
                 {
                     sb.Append(tr.t);
                 }
@@ -1628,11 +1637,11 @@ namespace NPOI.OpenXmlFormats.Dml
             return this.pField.Count;
         }
 
-        public void RemoveP(int i)
+        public void RemoveP(int index)
         {
-            if(i < 0 || i >= this.pField.Count)
-                throw new IndexOutOfRangeException();
-            this.pField.RemoveAt(i);
+            if(index < 0 || index >= this.pField.Count)
+                throw new ArgumentOutOfRangeException();
+            this.pField.RemoveAt(index);
         }
 
         public CT_TextParagraph InsertNewP(int index)
@@ -1645,7 +1654,7 @@ namespace NPOI.OpenXmlFormats.Dml
         public CT_TextParagraph GetPArray(int index)
         {
             if(index < 0 || index >= this.pField.Count)
-                throw new IndexOutOfRangeException();
+                throw new ArgumentOutOfRangeException();
             return this.pField[index];
         }
 

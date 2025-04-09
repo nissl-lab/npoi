@@ -114,10 +114,7 @@ namespace NPOI.XDDF.UserModel.Text
             return _parent;
         }
 
-        public List<XDDFTextRun> GetTextRuns()
-        {
-            return _runs;
-        }
+        public List<XDDFTextRun> TextRuns => _runs;
 
         public IEnumerator<XDDFTextRun> GetEnumerator()
         {
