@@ -813,6 +813,9 @@ namespace TestCases.SS.Formula.Functions
 
             d = 17.56; p = 2;
             AssertEquals("roundDown ", 17.56, MathX.RoundDown(d, p));
+
+            d = 3987 * 0.2; p = 2;
+            AssertEquals("roundDown ", 797.40, MathX.Round(d, p));
         }
         [Test]
         public void TestRoundUp()
@@ -863,31 +866,37 @@ namespace TestCases.SS.Formula.Functions
             AssertEquals("roundUp ", 200, MathX.RoundUp(d, p));
 
             d = 0.049999999999999975d; p = 2;
-            AssertEquals("round ", 0.05d, MathX.RoundUp(d, p));
+            AssertEquals("roundUp ", 0.05d, MathX.RoundUp(d, p));
 
             d = 0.049999999999999975d; p = 1;
-            AssertEquals("round ", 0.1d, MathX.RoundUp(d, p));
+            AssertEquals("roundUp ", 0.1d, MathX.RoundUp(d, p));
 
             d = Double.NaN; p = 1;
-            AssertEquals("round ", Double.NaN, MathX.RoundUp(d, p));
+            AssertEquals("roundUp ", Double.NaN, MathX.RoundUp(d, p));
 
             d = Double.PositiveInfinity; p = 1;
-            AssertEquals("round ", Double.NaN, MathX.RoundUp(d, p));
+            AssertEquals("roundUp ", Double.NaN, MathX.RoundUp(d, p));
 
             d = Double.NegativeInfinity; p = 1;
-            AssertEquals("round ", Double.NaN, MathX.RoundUp(d, p));
+            AssertEquals("roundUp ", Double.NaN, MathX.RoundUp(d, p));
 
             d = Double.MaxValue; p = 1;
-            AssertEquals("round ", Double.MaxValue, MathX.RoundUp(d, p));
+            AssertEquals("roundUp ", Double.MaxValue, MathX.RoundUp(d, p));
 
             d = Double.MinValue; p = 1;
-            AssertEquals("round ", 0.1d, MathX.RoundUp(d, p));
+            AssertEquals("roundUp ", 0.1d, MathX.RoundUp(d, p));
 
             d = 20.44; p = 2;
-            AssertEquals("round ", 20.44d, MathX.RoundUp(d, p));
+            AssertEquals("roundUp ", 20.44d, MathX.RoundUp(d, p));
 
             d = 20.445; p = 2;
-            AssertEquals("round ", 20.45d, MathX.RoundUp(d, p));
+            AssertEquals("roundUp ", 20.45d, MathX.RoundUp(d, p));
+
+            //github-43: https://github.com/apache/poi/pull/43
+            //@Ignore("ROUNDUP(3987*0.2, 2) currently fails by returning 797.41")
+            //but passed by using C# language.
+            d = 3987 * 0.2; p = 2;
+            AssertEquals("roundUp ", 797.40, MathX.RoundUp(d, p));
         }
         [Test]
         public void TestCeiling()
