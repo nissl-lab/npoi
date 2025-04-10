@@ -92,7 +92,7 @@ namespace NPOI.POIFS.Storage
             }
             else
             {
-                rvalue = BATBlock.CreateXBATBlocks(bigBlockSize, Array.Empty<int>(), 0);
+                rvalue = BATBlock.CreateXBATBlocks(bigBlockSize, [], 0);
                 _header_block.XBATStart = POIFSConstants.END_OF_CHAIN;
             }
 

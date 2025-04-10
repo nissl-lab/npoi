@@ -46,7 +46,7 @@ namespace NPOI.HSLF.Record
         protected SoundData()
         {
             _header = new byte[8];
-            _data = Array.Empty<byte>();
+            _data = [];
 
             LittleEndian.PutShort(_header, 2, (short)RecordType);
             LittleEndian.PutInt(_header, 4, _data.Length);

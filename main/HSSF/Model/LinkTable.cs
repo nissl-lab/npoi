@@ -124,8 +124,8 @@ namespace NPOI.HSSF.Model
             public ExternalBookBlock()
             {
                 _externalBookRecord = SupBookRecord.CreateAddInFunctions();
-                _externalNameRecords = Array.Empty<ExternalNameRecord>();
-                _crnBlocks = Array.Empty<CRNBlock>();
+                _externalNameRecords = [];
+                _crnBlocks = [];
             }
             public ExternalBookBlock(RecordStream rs)
             {
@@ -152,7 +152,7 @@ namespace NPOI.HSSF.Model
             public ExternalBookBlock(String url, String[] sheetNames)
             {
                 _externalBookRecord = SupBookRecord.CreateExternalReferences(url, sheetNames);
-                _crnBlocks = Array.Empty<CRNBlock>();
+                _crnBlocks = [];
             }
 
             /**
@@ -163,8 +163,8 @@ namespace NPOI.HSSF.Model
             public ExternalBookBlock(int numberOfSheets)
             {
                 _externalBookRecord = SupBookRecord.CreateInternalReferences((short)numberOfSheets);
-                _externalNameRecords = Array.Empty<ExternalNameRecord>();
-                _crnBlocks = Array.Empty<CRNBlock>();
+                _externalNameRecords = [];
+                _crnBlocks = [];
             }
 
             public int NumberOfNames

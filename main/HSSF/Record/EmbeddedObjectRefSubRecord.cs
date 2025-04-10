@@ -39,7 +39,7 @@ namespace NPOI.HSSF.Record
     {
         private static POILogger logger = POILogFactory.GetLogger(typeof(EmbeddedObjectRefSubRecord));
         public const short sid = 0x9;
-        private static byte[] EMPTY_BYTE_ARRAY = { };
+        private static byte[] EMPTY_BYTE_ARRAY = [];
 
         private int field_1_unknown_int;                            // Unknown stuff at the front.  TODO: Confirm that it's a short[]
         /** either an area or a cell ref */

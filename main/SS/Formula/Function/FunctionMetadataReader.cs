@@ -40,7 +40,7 @@ namespace NPOI.SS.Formula.Function
 
         private const string TAB_DELIM_PATTERN = @"\t";
         private const string SPACE_DELIM_PATTERN = @"\s";
-        private static readonly byte[] EMPTY_BYTE_ARRAY = { };
+        private static readonly byte[] EMPTY_BYTE_ARRAY = [];
 
         private static readonly string[] DIGIT_ENDING_FUNCTION_NAMES = {
 		// Digits at the end of a function might be due to a left-over footnote marker.

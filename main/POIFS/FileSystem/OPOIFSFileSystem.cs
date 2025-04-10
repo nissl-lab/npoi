@@ -481,7 +481,7 @@ namespace NPOI.POIFS.FileSystem
                 }
                 else
                 {
-                    return Array.Empty<Object>();
+                    return [];
                 }
             }
         }
