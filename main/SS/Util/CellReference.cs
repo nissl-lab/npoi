@@ -637,7 +637,7 @@ namespace NPOI.SS.Util
                 return string.Compare(otherRef.ToString(), this.ToString());
             }
             else
-                throw new ArgumentException("Object is not a Person");
+                throw new ArgumentException("Object is not a CellReference");
         }
     }
 }
