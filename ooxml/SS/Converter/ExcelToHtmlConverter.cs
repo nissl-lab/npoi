@@ -115,11 +115,56 @@ namespace NPOI.SS.Converter
         }
         public static XmlDocument Process(string excelFile)
         {
-            IWorkbook workbook = WorkbookFactory.Create(excelFile, null);
+            HSSFWorkbook workbook = (HSSFWorkbook)WorkbookFactory.Create(excelFile, null);
+            //TODO: HSSFWorkbook workbook = ExcelToHtmlUtils.loadXls(xlsFile);
+            try
+            {
+                return ExcelToHtmlConverter.Process(workbook);
+            }
+            finally
+            {
+                workbook.Close();
+            }
+        }
+
+        /**
+         * Converts Excel file (97-2007) into HTML file.
+         *
+         * @param xlsFile
+         *            workbook stream to process
+         * @return DOM representation of result HTML
+         * @throws IOException
+         * @throws ParserConfigurationException
+         */
+        public static XmlDocument Process(InputStream xlsStream)
+        {
+            HSSFWorkbook workbook = new HSSFWorkbook(xlsStream);
+            try
+            {
+                return ExcelToHtmlConverter.Process(workbook);
+            }
+            finally
+            {
+                workbook.Close();
+            }
+        }
+
+        /**
+         * Converts Excel file (97-2007) into HTML file.
+         *
+         * @param xlsFile
+         *            workbook instance to process
+         * @return DOM representation of result HTML
+         * @throws IOException
+         * @throws ParserConfigurationException
+         */
+        public static XmlDocument Process(HSSFWorkbook workbook)
+        {
             ExcelToHtmlConverter excelToHtmlConverter = new ExcelToHtmlConverter();
             excelToHtmlConverter.ProcessWorkbook(workbook);
             return excelToHtmlConverter.Document;
         }
+
         public XmlDocument Document
         {
             get
