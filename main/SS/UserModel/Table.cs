@@ -82,7 +82,10 @@ namespace NPOI.SS.UserModel
          */
         bool IsHasTotalsRow { get; }
 
-
+        /// <summary>
+        /// TableStyleInfo for this instance
+        /// </summary>
+        ITableStyleInfo Style { get; }
     }
 
 }

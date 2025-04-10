@@ -24,7 +24,7 @@ namespace NPOI.SS.UserModel
     /// <summary>
     /// Represents a description of a conditional formatting rule
     /// </summary>
-    public interface IConditionalFormattingRule
+    public interface IConditionalFormattingRule : IDifferentialStyleProvider
     {
         /// <summary>
         /// Create a new border formatting structure if it does not exist,
