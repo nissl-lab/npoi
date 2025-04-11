@@ -545,7 +545,7 @@ namespace NPOI.HSSF.Record
         }
 
 
-        private Ptg CreateNewPtg()
+        private static Ptg CreateNewPtg()
         {
             return new Area3DPtg("A1:A1", 0); // TODO - change to not be partially initialised
         }

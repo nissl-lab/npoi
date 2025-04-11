@@ -138,7 +138,7 @@ namespace NPOI.POIFS.Storage
         }
 	
 
-        private byte[] ReadFirst512(Stream stream)
+        private static byte[] ReadFirst512(Stream stream)
         {
             // Grab the first 512 bytes
             // (For 4096 sized blocks, the remaining 3584 bytes are zero)
@@ -159,7 +159,7 @@ namespace NPOI.POIFS.Storage
         /// </summary>
         /// <param name="read">The read.</param>
         /// <param name="expectedReadSize">expected size to read</param>
-        private void AlertShortRead(int read,int expectedReadSize)
+        private static void AlertShortRead(int read,int expectedReadSize)
         {
             if (read < 0)
     		    //Cant have -1 bytes Read in the error message!

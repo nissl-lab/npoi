@@ -30,7 +30,7 @@ namespace NPOI.HSSF.Record
      */
     public class NoteRecord : StandardRecord, ICloneable
     {
-        public static readonly NoteRecord[] EMPTY_ARRAY = { };
+        public static readonly NoteRecord[] EMPTY_ARRAY = [];
         public const short sid = 0x1C;
 
         /**

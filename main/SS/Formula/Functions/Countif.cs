@@ -543,7 +543,7 @@ namespace NPOI.SS.Formula.Functions
         /**
      * @return the number of evaluated cells in the range that match the specified criteria
      */
-        private double CountMatchingCellsInArea(ValueEval rangeArg, IMatchPredicate criteriaPredicate)
+        private static double CountMatchingCellsInArea(ValueEval rangeArg, IMatchPredicate criteriaPredicate)
         {
             if(rangeArg is RefEval arg)
             {

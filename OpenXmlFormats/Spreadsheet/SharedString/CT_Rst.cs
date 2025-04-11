@@ -5,6 +5,7 @@ using System.IO;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
+using Cysharp.Text;
 using NPOI.OpenXml4Net.Util;
 
 namespace NPOI.OpenXmlFormats.Spreadsheet
@@ -167,7 +168,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                             if (r.t != null)
                             {
                                 sw.Write("<t");
-                                if(r.t.IndexOf(' ')>=0)
+                                if(r.t.Contains(' '))
                                     sw.Write(" xml:space=\"preserve\"");
                                 sw.Write(">");
                                 sw.Write(XmlHelper.EncodeXml(r.t));
@@ -180,7 +181,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                     if (this.t != null)
                     {
                         sw.Write("<t");
-                        if (this.t.IndexOf(' ') >= 0)
+                        if (t.Contains(' '))
                             sw.Write(" xml:space=\"preserve\"");
                         sw.Write(">");
                         sw.Write(XmlHelper.EncodeXml(this.t));

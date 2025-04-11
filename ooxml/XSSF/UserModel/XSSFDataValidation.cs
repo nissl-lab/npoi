@@ -148,7 +148,7 @@ namespace NPOI.XSSF.UserModel
          * @param   text the string to encode
          * @return  the encoded string
          */
-        private String EncodeUtf(String text)
+        private static String EncodeUtf(String text)
         {
             if(text == null)
             {

@@ -19,7 +19,8 @@ namespace NPOI.XWPF.UserModel
     using System;
     using NPOI.OpenXmlFormats.Wordprocessing;
     using System.Collections.Generic;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
     using System.Xml;
     using System.IO;
     using NPOI.Util;
@@ -87,7 +88,7 @@ namespace NPOI.XWPF.UserModel
             }
 
             //// Look for any text in any of our pictures or Drawings
-            StringBuilder text = new StringBuilder();
+            using var text = ZString.CreateStringBuilder();
             List<object> pictTextObjs = new List<object>();
             foreach (CT_Picture pic in r.GetPictList())
                 pictTextObjs.Add(pic);
@@ -134,7 +135,8 @@ namespace NPOI.XWPF.UserModel
             : this(r, (IRunBody)p)
         {
         }
-        private List<NPOI.OpenXmlFormats.Dml.Picture.CT_Picture> GetCTPictures(object o)
+
+        private static List<NPOI.OpenXmlFormats.Dml.Picture.CT_Picture> GetCTPictures(object o)
         {
             List<NPOI.OpenXmlFormats.Dml.Picture.CT_Picture> pictures = new List<NPOI.OpenXmlFormats.Dml.Picture.CT_Picture>();
             //XmlObject[] picts = o.SelectPath("declare namespace pic='"+CT_Picture.type.Name.NamespaceURI+"' .//pic:pic");
@@ -171,7 +173,7 @@ namespace NPOI.XWPF.UserModel
             return pictures;
         }
 
-        private void GetPictures(CT_GraphicalObjectData god, List<NPOI.OpenXmlFormats.Dml.Picture.CT_Picture> pictures)
+        private static void GetPictures(CT_GraphicalObjectData god, List<NPOI.OpenXmlFormats.Dml.Picture.CT_Picture> pictures)
         {
             foreach (string el in god.Any)
             {
@@ -238,7 +240,7 @@ namespace NPOI.XWPF.UserModel
         /**
          * For isBold, isItalic etc
          */
-        private bool IsCTOnOff(CT_OnOff onoff)
+        private static bool IsCTOnOff(CT_OnOff onoff)
         {
             if (!onoff.IsSetVal())
                 return true;
@@ -1271,7 +1273,7 @@ namespace NPOI.XWPF.UserModel
         static void preserveSpaces(CT_Text xs)
         {
             String text = xs.Value;
-            if (text != null && text.Length>=1 && (text.StartsWith(" ") || text.EndsWith(" ")||text.StartsWith("\t")||text.EndsWith("\t")))
+            if (text != null && text.Length>=1 && (text.StartsWith(' ') || text.EndsWith(' ')||text.StartsWith('\t')||text.EndsWith('\t')))
             {
                 //    XmlCursor c = xs.NewCursor();
                 //    c.ToNextToken();

@@ -332,7 +332,7 @@ namespace NPOI.POIFS.FileSystem
          * @param stream the stream to be closed
          * @param success <code>false</code> if an exception is currently being thrown in the calling method
          */
-        private void CloseInputStream(Stream stream, bool success)
+        private static void CloseInputStream(Stream stream, bool success)
         {
             try
             {
@@ -953,7 +953,7 @@ namespace NPOI.POIFS.FileSystem
                 return rval;
 
             }
-            return Array.Empty<Object>();
+            return [];
         }
 
         /**

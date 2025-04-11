@@ -18,7 +18,8 @@
 namespace NPOI.HSSF.Extractor
 {
     using System;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
 
     using NPOI.HSSF.UserModel;
     using NPOI.POIFS.FileSystem;
@@ -144,7 +145,7 @@ namespace NPOI.HSSF.Extractor
         {
             get
             {
-                StringBuilder text = new StringBuilder();
+                using var text = ZString.CreateStringBuilder();
 
                 // We don't care about the differnce between
                 //  null (missing) and blank cells
@@ -307,7 +308,7 @@ namespace NPOI.HSSF.Extractor
         /// <returns></returns>
         public static String ExtractHeaderFooter(NPOI.SS.UserModel.IHeaderFooter hf)
         {
-            StringBuilder text = new StringBuilder();
+            using var text = ZString.CreateStringBuilder();
 
             if (hf.Left != null)
             {

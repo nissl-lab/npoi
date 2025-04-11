@@ -19,7 +19,8 @@ namespace NPOI.XWPF.UserModel
     using System;
     using NPOI.OpenXmlFormats.Wordprocessing;
     using System.Collections.Generic;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
     using System.Xml;
     /**
      * Represents a Cell within a {@link XWPFTable}. The
@@ -522,7 +523,7 @@ namespace NPOI.XWPF.UserModel
 
         public String GetText()
         {
-            StringBuilder text = new StringBuilder();
+            using var text = ZString.CreateStringBuilder();
             foreach (XWPFParagraph p in paragraphs)
             {
                 text.Append(p.Text);
@@ -546,7 +547,7 @@ namespace NPOI.XWPF.UserModel
             return text.ToString();
         }
 
-        private void AppendBodyElementText(StringBuilder text, IBodyElement e, bool isLast)
+        private static void AppendBodyElementText(StringBuilder text, IBodyElement e, bool isLast)
         {
             if (e is XWPFParagraph paragraph)
             {

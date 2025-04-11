@@ -18,7 +18,8 @@
 namespace NPOI.HSSF.UserModel
 {
     using System;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Util;
     using NPOI.Util;
@@ -212,13 +213,14 @@ namespace NPOI.HSSF.UserModel
             /// <value></value>
             public override String GetHexString()
             {
-                    StringBuilder sb = new StringBuilder();
-                    sb.Append(GetGnumericPart(red));
-                    sb.Append(':');
-                    sb.Append(GetGnumericPart(green));
-                    sb.Append(':');
-                    sb.Append(GetGnumericPart(blue));
-                    return sb.ToString();
+                using var sb = ZString.CreateStringBuilder();
+
+                sb.Append(GetGnumericPart(red));
+                sb.Append(':');
+                sb.Append(GetGnumericPart(green));
+                sb.Append(':');
+                sb.Append(GetGnumericPart(blue));
+                return sb.ToString();
             }
 
             /// <summary>
@@ -226,7 +228,7 @@ namespace NPOI.HSSF.UserModel
             /// </summary>
             /// <param name="color">The color.</param>
             /// <returns></returns>
-            private String GetGnumericPart(byte color)
+            private static String GetGnumericPart(byte color)
             {
                 String s;
                 if (color == 0)

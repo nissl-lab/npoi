@@ -73,7 +73,7 @@ namespace NPOI.SS.Formula.Functions
             //Multiple percent signs are additive if they are used in the Text argument just as they are if they are used in a formula.
             //For example, =NUMBERVALUE("9%%") returns the same result (0.0009) as the formula =9%%.
             int countPercent = 0;
-            while (text.EndsWith("%"))
+            while (text.EndsWith('%'))
             {
                 countPercent++;
                 text = text.Substring(0, text.Length - 1);

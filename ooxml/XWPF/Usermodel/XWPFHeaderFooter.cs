@@ -22,7 +22,8 @@ namespace NPOI.XWPF.UserModel
     using NPOI.OpenXml4Net.OPC;
     using System.IO;
     using NPOI.Util;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
     using NPOI.OpenXmlFormats.Wordprocessing;
 
     /**
@@ -143,7 +144,7 @@ namespace NPOI.XWPF.UserModel
         {
             get
             {
-                StringBuilder t = new StringBuilder();
+                using var t = ZString.CreateStringBuilder();
 
                 for (int i = 0; i < paragraphs.Count; i++)
                 {

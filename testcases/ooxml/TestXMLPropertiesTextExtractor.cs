@@ -49,8 +49,8 @@ namespace NPOI
             String text = textExt.Text;
             String cText = textExt.GetCorePropertiesText();
 
-            ClassicAssert.IsTrue(text.Contains("LastModifiedBy = Yury Batrakov"));
-            ClassicAssert.IsTrue(cText.Contains("LastModifiedBy = Yury Batrakov"));
+            POITestCase.AssertContains(text, "LastModifiedBy = Yury Batrakov");
+            POITestCase.AssertContains(text, "LastModifiedBy = Yury Batrakov");
 
             textExt.Close();
             ext.Close();
@@ -70,8 +70,8 @@ namespace NPOI
             String text = ext.Text;
             String cText = ext.GetCorePropertiesText();
 
-            ClassicAssert.IsTrue(text.Contains("LastModifiedBy = Yury Batrakov"));
-            ClassicAssert.IsTrue(cText.Contains("LastModifiedBy = Yury Batrakov"));
+            POITestCase.AssertContains(text, "LastModifiedBy = Yury Batrakov");
+            POITestCase.AssertContains(text, "LastModifiedBy = Yury Batrakov");
 
             ext.Close();
         }
@@ -90,10 +90,10 @@ namespace NPOI
             String text = ext.Text;
             String eText = ext.GetExtendedPropertiesText();
 
-            ClassicAssert.IsTrue(text.Contains("Application = Microsoft Excel"));
-            ClassicAssert.IsTrue(text.Contains("Company = Mera"));
-            ClassicAssert.IsTrue(eText.Contains("Application = Microsoft Excel"));
-            ClassicAssert.IsTrue(eText.Contains("Company = Mera"));
+            POITestCase.AssertContains(text, "Application = Microsoft Excel");
+            POITestCase.AssertContains(text, "Company = Mera");
+            POITestCase.AssertContains(text, "Application = Microsoft Excel");
+            POITestCase.AssertContains(text, "Company = Mera");
 
             ext.Close();
         }

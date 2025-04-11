@@ -163,7 +163,7 @@ namespace NPOI.SS.Format
                     String valueDesc = m.Groups[0].Value;
 
                     // Strip out the semicolon if it's there
-                    if (valueDesc.EndsWith(";"))
+                    if (valueDesc.EndsWith(';'))
                         valueDesc = valueDesc.Substring(0, valueDesc.Length - 1);
 
                     parts.Add(new CellFormatPart(valueDesc));

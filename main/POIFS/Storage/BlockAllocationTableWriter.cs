@@ -64,7 +64,7 @@ namespace NPOI.POIFS.Storage
         {
             _start_block = POIFSConstants.END_OF_CHAIN;
             _entries = new List<int>(_default_size);
-            _blocks      = new BATBlock[ 0 ];
+            _blocks      = [];
             _bigBlockSize = bigBlockSize;
         }
 

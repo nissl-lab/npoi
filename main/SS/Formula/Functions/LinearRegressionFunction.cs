@@ -262,7 +262,7 @@ namespace NPOI.SS.Formula.Functions
             }
         }
 
-        private ValueVector CreateValueVector(ValueEval arg)
+        private static ValueVector CreateValueVector(ValueEval arg)
         {
             if (arg is ErrorEval eval)
             {

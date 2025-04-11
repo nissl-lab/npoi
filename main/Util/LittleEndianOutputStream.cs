@@ -21,7 +21,7 @@ namespace NPOI.Util
     using System.IO;
 
     /// <summary>
-    /// Wraps an <see cref="T:System.IO.Stream"/> providing <see cref="T:NPOI.Util.ILittleEndianOutput"/>
+    /// Wraps an <see cref="System.IO.Stream"/> providing <see cref="NPOI.Util.ILittleEndianOutput"/>
     /// </summary>
     /// <remarks>@author Josh Micich</remarks>
     public class LittleEndianOutputStream : ILittleEndianOutput, IDisposable

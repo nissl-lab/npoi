@@ -42,7 +42,7 @@ namespace NPOI.SS.Formula.Functions
             double result;
             try
             {
-                result = Evaluate(EvalArg(arg0, srcRowIndex, srcColumnIndex), EvalArg(arg1, srcRowIndex, srcColumnIndex), EvalArg(arg2, srcRowIndex, srcColumnIndex));
+                result = TimeFunc.Evaluate(EvalArg(arg0, srcRowIndex, srcColumnIndex), EvalArg(arg1, srcRowIndex, srcColumnIndex), EvalArg(arg2, srcRowIndex, srcColumnIndex));
             }
             catch (EvaluationException e)
             {
@@ -50,7 +50,8 @@ namespace NPOI.SS.Formula.Functions
             }
             return new NumberEval(result);
         }
-        private int EvalArg(ValueEval arg, int srcRowIndex, int srcColumnIndex)
+
+        private static int EvalArg(ValueEval arg, int srcRowIndex, int srcColumnIndex)
         {
             if (arg == MissingArgEval.instance)
             {
@@ -60,6 +61,7 @@ namespace NPOI.SS.Formula.Functions
             // Excel silently tRuncates double values to integers
             return OperandResolver.CoerceValueToInt(ev);
         }
+
         /**
          * Converts the supplied hours, minutes and seconds to an Excel time value.
          *
@@ -75,7 +77,7 @@ namespace NPOI.SS.Formula.Functions
          * minutes and seconds when combined form a time value less than 0, the function
          * Evaluates to an error.
          */
-        private double Evaluate(int hours, int minutes, int seconds)
+        private static double Evaluate(int hours, int minutes, int seconds)
         {
 
             if (hours > 32767 || minutes > 32767 || seconds > 32767)

@@ -24,7 +24,8 @@ namespace NPOI.HPSF
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
 
     /// <summary>
     /// <para>
@@ -396,16 +397,12 @@ namespace NPOI.HPSF
             return _value.Equals(pValue);
         }
 
-
-
-        private bool typesAreEqual(long t1, long t2)
+        private static bool typesAreEqual(long t1, long t2)
         {
             return (t1 == t2 ||
                 (t1 == Variant.VT_LPSTR && t2 == Variant.VT_LPWSTR) ||
                 (t2 == Variant.VT_LPSTR && t1 == Variant.VT_LPWSTR));
         }
-
-
 
         /// <summary>
         /// </summary>
@@ -430,7 +427,7 @@ namespace NPOI.HPSF
         /// @see Object#toString()
         public override String ToString()
         {
-            StringBuilder b = new StringBuilder();
+           using var b= ZString.CreateStringBuilder();
             b.Append(GetType().Name);
             b.Append('[');
             b.Append("id: ");

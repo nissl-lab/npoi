@@ -141,7 +141,8 @@ namespace NPOI.SS.Formula.Atp
             }
             return endDate;
         }
-        private bool isWeekend(DateTime date, List<int> weekendDays)
+
+        private static bool isWeekend(DateTime date, List<int> weekendDays)
         {
             return weekendDays.Contains(((int)date.DayOfWeek) + 1);
         }
@@ -206,7 +207,7 @@ namespace NPOI.SS.Formula.Atp
             double endDay = end > start ? end : start;
             foreach (double holiday in holidays)
             {
-                if (IsInARange(startDay, endDay, holiday))
+                if (WorkdayCalculator.IsInARange(startDay, endDay, holiday))
                 {
                     if (!IsWeekend(holiday))
                     {
@@ -222,7 +223,7 @@ namespace NPOI.SS.Formula.Atp
          * @return <code>true</code> if date is weekend, <code>false</code> otherwise.
          */
 
-        private bool IsWeekend(double aDate)
+        private static bool IsWeekend(double aDate)
         {
             DateTime date = DateUtil.GetJavaDate(aDate);
             return date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday;
@@ -234,7 +235,7 @@ namespace NPOI.SS.Formula.Atp
          * @return <code>true</code> if date is a holiday, <code>false</code> otherwise.
          */
 
-        private bool IsHoliday(double aDate, double[] holidays)
+        private static bool IsHoliday(double aDate, double[] holidays)
         {
             foreach (double holiday in holidays)
             {
@@ -264,7 +265,7 @@ namespace NPOI.SS.Formula.Atp
          * @return <code>true</code> if aDate is between start and end dates, <code>false</code> otherwise.
          */
 
-        private bool IsInARange(double start, double end, double aDate)
+        private static bool IsInARange(double start, double end, double aDate)
         {
             return aDate >= start && aDate <= end;
         }

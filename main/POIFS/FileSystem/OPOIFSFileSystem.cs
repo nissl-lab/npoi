@@ -127,7 +127,7 @@ namespace NPOI.POIFS.FileSystem
             }
             finally
             {
-                CloseInputStream(stream, success);
+                OPOIFSFileSystem.CloseInputStream(stream, success);
             }
 
 
@@ -154,7 +154,8 @@ namespace NPOI.POIFS.FileSystem
          * @param stream the stream to be Closed
          * @param success <c>false</c> if an exception is currently being thrown in the calling method
          */
-        private void CloseInputStream(Stream stream, bool success) {
+        private static void CloseInputStream(Stream stream, bool success)
+        {
             
             if(stream is MemoryStream) {
                 String msg = "POIFS is closing the supplied input stream of type (" 
@@ -480,7 +481,7 @@ namespace NPOI.POIFS.FileSystem
                 }
                 else
                 {
-                    return Array.Empty<Object>();
+                    return [];
                 }
             }
         }

@@ -178,7 +178,7 @@ namespace NPOI.XSSF.UserModel.Helpers
             }
         }
 
-        private void UpdatePtg(Ptg ptg, String oldName, String newName)
+        private static void UpdatePtg(Ptg ptg, String oldName, String newName)
         {
             if (ptg is Pxg pxg)
             {

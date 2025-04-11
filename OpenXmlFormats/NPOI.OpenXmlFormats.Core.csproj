@@ -10,7 +10,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="ZString" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\main\NPOI.Core.csproj" />
     <ProjectReference Include="..\openxml4Net\NPOI.OpenXml4Net.Core.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\main\Polyfills.cs" Link="Polyfills.cs" />
+  </ItemGroup>
+
 </Project>

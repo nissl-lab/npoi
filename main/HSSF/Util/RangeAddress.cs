@@ -266,7 +266,7 @@ namespace NPOI.HSSF.Util
 
         }
 
-        private String[] ParseURL(String _url)
+        private static String[] ParseURL(String _url)
         {
             String[] result = new String[3];
             int index = _url.IndexOf(':');
@@ -389,7 +389,7 @@ namespace NPOI.HSSF.Util
             return result;
         }
 
-        private String Filter(String _range)
+        private static String Filter(String _range)
         {
             String res = "";
             for (int i = 0; i < _range.Length; i++)
@@ -403,7 +403,7 @@ namespace NPOI.HSSF.Util
             return res;
         }
 
-        private int GetFirstDigitPosition(String _value)
+        private static int GetFirstDigitPosition(String _value)
         {
             int result = WRONG_POS;
             if (_value != null && _value.Trim().Length == 0)
@@ -457,8 +457,7 @@ namespace NPOI.HSSF.Util
             return s;
         }
 
-        public String ReplaceString(String _source, String _oldPattern,
-        String _newPattern)
+        public String ReplaceString(String _source, String _oldPattern, String _newPattern)
         {
             StringBuilder res = new StringBuilder(_source);
             res = res.Replace(_oldPattern, _newPattern);

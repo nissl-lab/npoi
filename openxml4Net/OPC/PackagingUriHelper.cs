@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Text;
+using System.Text; 
+using Cysharp.Text;
 using System.Text.RegularExpressions;
 using NPOI.OpenXml4Net.Exceptions;
 using System.IO;
@@ -148,7 +149,7 @@ namespace NPOI.OpenXml4Net.OPC
             {
                 if (kind == UriKind.Absolute)
                     throw new UriFormatException();
-                if (kind == UriKind.RelativeOrAbsolute && s.StartsWith("/"))
+                if (kind == UriKind.RelativeOrAbsolute && s.StartsWith('/'))
                     kind = UriKind.Relative;
             }
             return new Uri(s, kind);
@@ -198,7 +199,7 @@ namespace NPOI.OpenXml4Net.OPC
         public static String GetFilenameWithoutExtension(Uri uri)
         {
             String filename = GetFilename(uri);
-            int dotIndex = filename.LastIndexOf(".", StringComparison.Ordinal);
+            int dotIndex = filename.LastIndexOf('.');
             if (dotIndex == -1)
                 return filename;
             return filename.Substring(0, dotIndex);
@@ -474,7 +475,7 @@ namespace NPOI.OpenXml4Net.OPC
                 path = Path.GetDirectoryName(sourcePartUri.OriginalString).Replace("\\", "/");
 
             string targetPath = targetUri.OriginalString;
-            if (targetPath.StartsWith("#"))
+            if (targetPath.StartsWith('#'))
             {
                 path += "/" + Path.GetFileName(sourcePartUri.OriginalString) + targetPath;
             }
@@ -695,7 +696,8 @@ namespace NPOI.OpenXml4Net.OPC
          */
         public static String DecodeURI(Uri uri)
         {
-            StringBuilder retVal = new StringBuilder();
+            using var retVal = ZString.CreateStringBuilder();
+
             String uriStr = uri.OriginalString;
             char c;
             int length = uriStr.Length;
@@ -749,10 +751,7 @@ namespace NPOI.OpenXml4Net.OPC
         public static Uri ToUri(String value)
         {
             //5. Convert all back slashes to forward slashes
-            if (value.IndexOf("\\") != -1)
-            {
-                value = value.Replace('\\', '/');
-            }
+            value = value.Replace('\\', '/');
 
             // URI fragemnts (those starting with '#') are not encoded
             // and may contain white spaces and raw unicode characters
@@ -767,7 +766,7 @@ namespace NPOI.OpenXml4Net.OPC
             // trailing white spaces must be url-encoded, see Bugzilla 53282
             if (value.Length > 0)
             {
-                StringBuilder b = new StringBuilder();
+               using var b= ZString.CreateStringBuilder();
                 int idx = value.Length - 1;
                 for (; idx >= 0; idx--)
                 {
@@ -813,8 +812,9 @@ namespace NPOI.OpenXml4Net.OPC
         if (n == 0) return s;
 
         byte[] bb = Encoding.UTF8.GetBytes(s);
-        StringBuilder sb = new StringBuilder();
-        foreach (byte b in bb)
+        using var sb = ZString.CreateStringBuilder();
+
+        foreach(byte b in bb)
         { 
             int b1 = (int)b & 0xff;
             if (IsUnsafe(b1)) {

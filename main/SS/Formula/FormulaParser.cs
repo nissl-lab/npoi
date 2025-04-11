@@ -22,7 +22,8 @@ namespace NPOI.SS.Formula
     using System.Collections;
     using System.Collections.Generic;
     using System.Globalization;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
     using System.Text.RegularExpressions;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Formula.Constant;
@@ -279,8 +280,10 @@ namespace NPOI.SS.Formula
             {
                 throw expected("unquoted identifier");
             }
-            StringBuilder sb = new StringBuilder();
-            while (IsLetterOrDigit(look) || look == '.')
+
+            using var sb = ZString.CreateStringBuilder();
+
+            while(IsLetterOrDigit(look) || look == '.')
             {
                 sb.Append(char.ConvertFromUtf32(look));
                 GetChar();
@@ -421,7 +424,7 @@ namespace NPOI.SS.Formula
         /**
          * @param currentParsePosition used to format a potential error message
          */
-        private void CheckValidRangeOperand(String sideName, int currentParsePosition, ParseNode pn)
+        private static void CheckValidRangeOperand(String sideName, int currentParsePosition, ParseNode pn)
         {
             if (!IsValidRangeOperand(pn))
             {
@@ -434,7 +437,7 @@ namespace NPOI.SS.Formula
           * @return false if sub-expression represented the specified ParseNode definitely
           * cannot appear on either side of the range (':') operator
           */
-        private bool IsValidRangeOperand(ParseNode a)
+        private static bool IsValidRangeOperand(ParseNode a)
         {
             Ptg tkn = a.GetToken();
             // Note - order is important for these instance-of checks
@@ -1098,10 +1101,10 @@ namespace NPOI.SS.Formula
 
         private String ParseAsName()
         {
-            StringBuilder sb = new StringBuilder();
+            using var sb = ZString.CreateStringBuilder();
 
             // defined names may begin with a letter or underscore  or backslash
-            if (!IsLetter(look) && look != '_' && look != '\\')
+            if(!IsLetter(look) && look != '_' && look != '\\')
             {
                 throw expected("number, string, defined name, or data table");
             }
@@ -1411,7 +1414,8 @@ namespace NPOI.SS.Formula
 
         private String GetBookName()
         {
-            StringBuilder sb = new StringBuilder();
+            using var sb = ZString.CreateStringBuilder();
+
             GetChar();
             while (look != ']')
             {
@@ -1446,7 +1450,8 @@ namespace NPOI.SS.Formula
                     bookName = GetBookName();
                 }
 
-                StringBuilder sb = new StringBuilder();
+                using var sb = ZString.CreateStringBuilder();
+
                 bool done = look == '\'';
                 while (!done)
                 {
@@ -1478,9 +1483,9 @@ namespace NPOI.SS.Formula
             // unquoted sheet names must start with underscore or a letter
             if (look == '_' || IsLetter(look))
             {
-                StringBuilder sb = new StringBuilder();
+                using var sb = ZString.CreateStringBuilder();
                 // can concatenate idens with dots
-                while (IsUnquotedSheetNameChar(look))
+                while (FormulaParser.IsUnquotedSheetNameChar(look))
                 {
                     sb.Append(char.ConvertFromUtf32(look));
                     GetChar();
@@ -1510,7 +1515,7 @@ namespace NPOI.SS.Formula
         }
 
         /**
-         * If we have something that looks like [book]Sheet1: or 
+         * If we have something that looks like [book]Sheet1: or
          *  Sheet1, see if it's actually a range eg Sheet1:Sheet2!
          */
         private SheetIdentifier ParseSheetRange(String bookname, NameIdentifier sheet1Name)
@@ -1526,7 +1531,7 @@ namespace NPOI.SS.Formula
         /**
           * very similar to {@link SheetNameFormatter#isSpecialChar(char)}
           */
-        private bool IsUnquotedSheetNameChar(int ch)
+        private static bool IsUnquotedSheetNameChar(int ch)
         {
             if (IsLetterOrDigit(ch))
             {
@@ -1966,7 +1971,8 @@ namespace NPOI.SS.Formula
 
             return new ParseNode(new ArrayPtg(values2d));
         }
-        private void CheckRowLengths(Object[][] values2d, int nColumns)
+
+        private static void CheckRowLengths(Object[][] values2d, int nColumns)
         {
             for (int i = 0; i < values2d.Length; i++)
             {
@@ -2192,7 +2198,7 @@ namespace NPOI.SS.Formula
          */
         private static Ptg GetNumberPtgFromString(String number1, String number2, String exponent)
         {
-            StringBuilder number = new StringBuilder();
+            using var number = ZString.CreateStringBuilder();
 
             if (number2 == null)
             {
@@ -2247,7 +2253,7 @@ namespace NPOI.SS.Formula
         {
             Match('"');
 
-            StringBuilder Token = new StringBuilder();
+            using var Token = ZString.CreateStringBuilder();
             while (true)
             {
                 if (look == '"')

@@ -3,7 +3,8 @@ using System;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
-using System.Text;
+using System.Text; 
+using Cysharp.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Serialization;
@@ -291,7 +292,7 @@ namespace NPOI.OpenXml4Net.Util
             if (!match.Success) return t;
 
             bool useNextValue = false;
-            StringBuilder ret = new StringBuilder();
+            using var ret = ZString.CreateStringBuilder();
             int prevIndex = 0;
             while (match.Success)
             {

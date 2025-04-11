@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Text;
+using System.Text; 
+using Cysharp.Text;
 using NPOI.Util;
 using NPOI.HSSF.Record;
 
@@ -57,8 +58,9 @@ namespace NPOI.SS.Util
          */
         public String FormatAsString(String sheetName, bool useAbsoluteAddress)
         {
-            StringBuilder sb = new StringBuilder();
-            if (sheetName != null)
+            using var sb = ZString.CreateStringBuilder();
+
+            if(sheetName != null)
             {
                 sb.Append(SheetNameFormatter.Format(sheetName));
                 sb.Append("!");
@@ -102,7 +104,7 @@ namespace NPOI.SS.Util
         /// <returns>a CellRangeAddress object</returns>
         public static CellRangeAddress ValueOf(String reference)
         {
-            int sep = reference.IndexOf(":", StringComparison.Ordinal);
+            int sep = reference.IndexOf(':');
             CellReference a;
             CellReference b;
             if (sep == -1)

@@ -25,7 +25,8 @@ using System;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using System.Xml;
 using NPOI.OpenXml4Net.OPC;
-using System.Text;
+using System.Text; 
+using Cysharp.Text;
 using NPOI.SS.Util;
 using NPOI.SS.Formula;
 using NPOI.XSSF.UserModel.Helpers;
@@ -728,7 +729,7 @@ namespace NPOI.XSSF.UserModel
             int uniqueIndex = 2;
             String baseName = srcName;
             int bracketPos = srcName.LastIndexOf('(');
-            if (bracketPos > 0 && srcName.EndsWith(")"))
+            if (bracketPos > 0 && srcName.EndsWith(')'))
             {
                 String suffix = srcName.Substring(bracketPos + 1, srcName.Length - ")".Length - bracketPos - 1);
                 try
@@ -802,10 +803,14 @@ namespace NPOI.XSSF.UserModel
 
         private void PutValuesMapping(string key, XSSFName name)
         {
-            if (namedRangesByName.ContainsKey(key))
-                namedRangesByName[key].Add(name);
+            if(namedRangesByName.TryGetValue(key, out List<XSSFName> value))
+            {
+                value.Add(name);
+            }
             else
-                namedRangesByName.Add(key, new List<XSSFName>() { name });
+            {
+                namedRangesByName.Add(key, [name]);
+            }
         }
 
         private XSSFName CreateAndStoreName(CT_DefinedName ctName)
@@ -1557,7 +1562,7 @@ namespace NPOI.XSSF.UserModel
                 }
             }
 
-            StringBuilder rng = new StringBuilder();
+            using var rng = ZString.CreateStringBuilder();
             rng.Append(c);
             if (rng.Length > 0 && r.Length > 0) rng.Append(',');
             rng.Append(r);
@@ -2462,7 +2467,7 @@ namespace NPOI.XSSF.UserModel
             int imageNumber = 1;
             List<XSSFPictureData> allPics = (List<XSSFPictureData>)GetAllPictures();
 
-            if (allPics.Any())
+            if (allPics.Count > 0)
             {
                 List<int> sortedIndexs = new List<int> { 0 };
 

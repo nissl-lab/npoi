@@ -1,6 +1,7 @@
 ﻿using NPOI.OpenXmlFormats.Dml;
 using NPOI.OpenXmlFormats.Dml.Chart;
 using NPOI.SS.UserModel.Charts;
+using NPOI.XSSF.UserModel.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -19,6 +20,7 @@ namespace NPOI.XSSF.UserModel.Charts
          * List of all data series.
          */
         private List<IColumnChartSeries<Tx, Ty>> series;
+        private BarGrouping grouping = BarGrouping.Clustered;
 
         public XSSFColumnChartData()
         {
@@ -71,11 +73,11 @@ namespace NPOI.XSSF.UserModel.Charts
                 return values;
             }
 
-            internal void AddToChart(CT_BarChart ctBarChart)
+            internal void AddToChart(CT_BarChart ctBarChart, BarGrouping grouping)
             {
                 CT_BarSer ctBarSer = ctBarChart.AddNewSer();
                 CT_BarGrouping ctGrouping = ctBarChart.AddNewGrouping();
-                ctGrouping.val = ST_BarGrouping.clustered;
+                ctGrouping.val = grouping.ToST_BarGrouping();
                 ctBarSer.AddNewIdx().val = (uint)id;
                 ctBarSer.AddNewOrder().val = (uint)order;
                 CT_Boolean ctNoInvertIfNegative = new CT_Boolean();
@@ -122,6 +124,11 @@ namespace NPOI.XSSF.UserModel.Charts
             return series;
         }
 
+        public void SetBarGrouping(BarGrouping grouping)
+        {
+            this.grouping = grouping;
+        }
+
         public void FillChart(SS.UserModel.IChart chart, params IChartAxis[] axis)
         {
             if (chart is not XSSFChart xssfChart)
@@ -139,7 +146,7 @@ namespace NPOI.XSSF.UserModel.Charts
                 Series s = (Series)series[i];
                 s.SetId(allSeriesCount + i);
                 s.SetOrder(allSeriesCount + i);
-                s.AddToChart(barChart);
+                s.AddToChart(barChart, grouping);
             }
 
             foreach (IChartAxis ax in axis)

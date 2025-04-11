@@ -410,7 +410,7 @@ namespace NPOI.SS.Formula
             return new CacheAreaEval(firstRowIndex, firstColumnIndex, lastRowIndex,
                                      lastColumnIndex, values);
         }
-        private ValueEval convertObjectEval(Object token)
+        private static ValueEval convertObjectEval(Object token)
         {
             if (token == null)
             {

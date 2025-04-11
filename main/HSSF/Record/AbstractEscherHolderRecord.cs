@@ -253,7 +253,8 @@ namespace NPOI.HSSF.Record
         {
             return FindFirstWithId(id, EscherRecords);
         }
-        private EscherRecord FindFirstWithId(short id, List<EscherRecord> records)
+
+        private static EscherRecord FindFirstWithId(short id, List<EscherRecord> records)
         {
             // Check at our level
             for (IEnumerator it = records.GetEnumerator(); it.MoveNext(); )

@@ -17,12 +17,11 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     using System.Linq;
     using System.Xml;
     using NPOI.OpenXml4Net.Util;
-    using System.Text;
+    using System.Text; 
     using System.Globalization;
     using NPOI.Util;
 
     [Serializable]
-
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot("chartSpace", Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = false)]

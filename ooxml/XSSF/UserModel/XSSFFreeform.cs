@@ -356,7 +356,7 @@ namespace NPOI.XSSF.UserModel
         /// P(t)=sigma(k=0..N,nCk*t^k*(1-t)^(N-k)Pk)
         /// </summary>
         /// <param name="p"></param>
-        private DblVect2D Bezier(List<DblVect2D> p, double t)
+        private static DblVect2D Bezier(List<DblVect2D> p, double t)
         {
             int n = p.Count - 1;
             DblVect2D res = new(0.0,0.0);
@@ -377,7 +377,7 @@ namespace NPOI.XSSF.UserModel
         /// <param name="n"></param>
         /// <param name="k"></param>
         /// <returns></returns>
-        private long BinomialCoefficients(int n, int k)
+        private static long BinomialCoefficients(int n, int k)
         {
             return Factorial(n)/(Factorial(k)*Factorial(n-k));
         }
@@ -387,7 +387,7 @@ namespace NPOI.XSSF.UserModel
         /// </summary>
         /// <param name="n"></param>
         /// <returns></returns>
-        private long Factorial(int n)
+        private static long Factorial(int n)
         {
             return n < 1 ? 1L : n * Factorial(n-1);
         }

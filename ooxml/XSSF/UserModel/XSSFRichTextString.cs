@@ -19,7 +19,8 @@ using NPOI.SS.UserModel;
 using System.Text.RegularExpressions;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using System;
-using System.Text;
+using System.Text; 
+using Cysharp.Text;
 using System.Collections.Generic;
 using NPOI.XSSF.Model;
 using System.Linq;
@@ -95,7 +96,7 @@ namespace NPOI.XSSF.UserModel
                     if(pr != null && pr.SizeOfRFontArray() > 0)
                     {
                         String fontName = pr.GetRFontArray(0).val;
-                        if(fontName.StartsWith("#"))
+                        if(fontName.StartsWith('#'))
                         {
                             int idx = int.Parse(fontName.Substring(1));
                             XSSFFont font = styles.GetFontAt(idx);
@@ -147,7 +148,7 @@ namespace NPOI.XSSF.UserModel
             ApplyFont(startIndex, endIndex, font);
         }
 
-        internal void ApplyFont(SortedDictionary<int, CT_RPrElt> formats, int startIndex, int endIndex, CT_RPrElt fmt)
+        internal static void ApplyFont(SortedDictionary<int, CT_RPrElt> formats, int startIndex, int endIndex, CT_RPrElt fmt)
         {
             // delete format runs that fit between startIndex and endIndex
             // runs intersecting startIndex and endIndex remain
@@ -198,7 +199,7 @@ namespace NPOI.XSSF.UserModel
                 var last = sub.Last();
                 sub.Remove(last);
                 formats.Remove(last);
-            }      
+            }
         }
 
         /**
@@ -227,16 +228,16 @@ namespace NPOI.XSSF.UserModel
             String text = this.String;
             XSSFFont xssfFont = (XSSFFont)font;
 
-            SortedDictionary<int, CT_RPrElt> formats = GetFormatMap(st);
+            SortedDictionary<int, CT_RPrElt> formats = XSSFRichTextString.GetFormatMap(st);
             CT_RPrElt fmt = new CT_RPrElt();
             SetRunAttributes(xssfFont.GetCTFont(), fmt);
-            ApplyFont(formats, startIndex, endIndex, fmt);
+            XSSFRichTextString.ApplyFont(formats, startIndex, endIndex, fmt);
 
             CT_Rst newSt = BuildCTRst(text, formats);
             st.Set(newSt);
         }
 
-        internal SortedDictionary<int, CT_RPrElt> GetFormatMap(CT_Rst entry)
+        internal static SortedDictionary<int, CT_RPrElt> GetFormatMap(CT_Rst entry)
         {
             int length = 0;
             SortedDictionary<int, CT_RPrElt> formats = new SortedDictionary<int, CT_RPrElt>();
@@ -322,7 +323,7 @@ namespace NPOI.XSSF.UserModel
         /**
          * Copy font attributes from CTFont bean into CTRPrElt bean
          */
-        private void SetRunAttributes(CT_Font ctFont, CT_RPrElt pr)
+        private static void SetRunAttributes(CT_Font ctFont, CT_RPrElt pr)
         {
             if(ctFont.SizeOfBArray() > 0)
                 pr.AddNewB().val = (ctFont.GetBArray(0).val);
@@ -462,7 +463,7 @@ namespace NPOI.XSSF.UserModel
                 {
                     return UtfDecode(st.t);
                 }
-                StringBuilder buf = new StringBuilder();
+                using var buf = ZString.CreateStringBuilder();
                 foreach(CT_RElt r in st.r)
                 {
                     buf.Append(r.t);
@@ -684,7 +685,7 @@ namespace NPOI.XSSF.UserModel
             if(value == null)
                 return null;
 
-            StringBuilder buf = new StringBuilder();
+            using var buf = ZString.CreateStringBuilder();
             MatchCollection mc = utfPtrn.Matches(value);
             int idx = 0;
             for(int i = 0; i < mc.Count; i++)

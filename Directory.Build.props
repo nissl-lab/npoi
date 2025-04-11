@@ -40,6 +40,8 @@
   </PropertyGroup>
 
   <PropertyGroup Label="Code Analysis">
+    <AnalysisLevel>latest-Recommended</AnalysisLevel>
+
     <NoWarn>$(NoWarn);CS0108</NoWarn> <!-- XXX hides inherited member -->
     <NoWarn>$(NoWarn);CS0114</NoWarn> <!-- XXX hides inherited member -->
     <NoWarn>$(NoWarn);CS0162</NoWarn> <!-- Unreachable code detected -->
@@ -52,6 +54,58 @@
 
     <NoWarn>$(NoWarn);CS0612</NoWarn> <!-- XXX is obsolete -->
     <NoWarn>$(NoWarn);CS0618</NoWarn> <!-- XXX is obsolete: deprecated POI XYZ -->
+
+    <NoWarn>$(NoWarn);CA1000</NoWarn> <!-- Do not declare static members on generic types -->
+    <NoWarn>$(NoWarn);CA1001</NoWarn> <!-- Type 'XXX' owns disposable field(s) 'YYY' but is not disposable -->
+    <NoWarn>$(NoWarn);CA1010</NoWarn> <!-- Publicly-visible types should implement the generic version to broaden usability -->
+    <NoWarn>$(NoWarn);CA1018</NoWarn> <!-- Specify AttributeUsage -->
+    <NoWarn>$(NoWarn);CA1036</NoWarn> <!-- should define operator(s) '==, !=, <, <=, >, >=' since it implements IComparable -->
+    <NoWarn>$(NoWarn);CA1041</NoWarn> <!-- Provide a message for the ObsoleteAttribute that marks Evaluate as Obsolete -->
+    <NoWarn>$(NoWarn);CA1051</NoWarn> <!-- Do not declare visible instance fields -->
+    <NoWarn>$(NoWarn);CA1061</NoWarn> <!-- XXX hides a more specific base class method -->
+    <NoWarn>$(NoWarn);CA1304</NoWarn> <!-- The behavior of 'string.Compare(string, string, bool)' could vary based on the current user's locale settings. -->
+    <NoWarn>$(NoWarn);CA1305</NoWarn> <!-- The behavior of XXX could vary based on the current user's locale settings.  -->
+    <NoWarn>$(NoWarn);CA1309</NoWarn> <!-- Use ordinal string comparison -->
+    <NoWarn>$(NoWarn);CA1310</NoWarn> <!-- The behavior could vary based on the current user's locale settings -->
+    <NoWarn>$(NoWarn);CA1311</NoWarn> <!-- Specify a culture or use an invariant version to avoid implicit dependency on current culture -->
+    <NoWarn>$(NoWarn);CA1507</NoWarn> <!-- Use nameof in place of string literal -->
+    <NoWarn>$(NoWarn);CA1510</NoWarn> <!-- Use 'ArgumentNullException.ThrowIfNull' instead of explicitly throwing a new exception instance -->
+    <NoWarn>$(NoWarn);CA1512</NoWarn> <!-- Use 'ArgumentOutOfRangeException.ThrowIfGreaterThan' instead of explicitly throwing a new exception instance  -->
+    <NoWarn>$(NoWarn);CA1514</NoWarn> <!-- 'string.Substring(int, int)' uses a redundant length calculation that can be removed  -->
+    <NoWarn>$(NoWarn);CA1707</NoWarn> <!-- Remove the underscores from member name -->
+    <NoWarn>$(NoWarn);CA1708</NoWarn> <!-- should differ by more than case -->
+    <NoWarn>$(NoWarn);CA1710</NoWarn> <!-- Rename type name XXX so that it does not end in YYY -->
+    <NoWarn>$(NoWarn);CA1711</NoWarn> <!-- Rename type name XXX so that it does not end in YYY -->
+    <NoWarn>$(NoWarn);CA1715</NoWarn> <!-- Prefix generic type parameter name with 'T' -->
+    <NoWarn>$(NoWarn);CA1716</NoWarn> <!-- Rename type XXX so that it no longer conflicts with the reserved language keyword -->
+    <NoWarn>$(NoWarn);CA1720</NoWarn> <!-- Identifier 'XXX' contains type name -->
+    <NoWarn>$(NoWarn);CA1725</NoWarn> <!-- Change parameter name -->
+    <NoWarn>$(NoWarn);CA1805</NoWarn> <!-- Member XXX is explicitly initialized to its default value -->
+    <NoWarn>$(NoWarn);CA1806</NoWarn> <!-- .ctor creates a new instance of XXX which is never used. -->
+    <NoWarn>$(NoWarn);CA1816</NoWarn> <!-- call GC.SuppressFinalize(object) -->
+    <NoWarn>$(NoWarn);CA1830</NoWarn> <!-- Remove the ToString call in order to use a strongly-typed StringBuilder overload -->
+    <NoWarn>$(NoWarn);CA1846</NoWarn> <!-- Prefer 'AsSpan' over 'Substring' when span-based overloads are available -->
+    <NoWarn>$(NoWarn);CA1834</NoWarn> <!-- Member XXX is explicitly initialized to its default value -->
+    <NoWarn>$(NoWarn);CA1845</NoWarn> <!-- Use span-based 'string.Concat' and 'AsSpan' instead of 'Substring' -->
+    <NoWarn>$(NoWarn);CA1847</NoWarn> <!-- Use 'string.Contains(char)' instead of 'string.Contains(string)' when searching for a single character -->
+    <NoWarn>$(NoWarn);CA1850</NoWarn> <!-- Prefer static 'System.Security.Cryptography.MD5.HashData' method over 'ComputeHash' -->
+    <NoWarn>$(NoWarn);CA1852</NoWarn> <!-- Type 'XXX' can be sealed because it has no subtypes in its containing assembly and is not externally visible -->
+    <NoWarn>$(NoWarn);CA1859</NoWarn> <!-- Change return type of method -->
+    <NoWarn>$(NoWarn);CA1861</NoWarn> <!-- Prefer 'static readonly' fields over constant array arguments -->
+    <NoWarn>$(NoWarn);CA1862</NoWarn> <!-- Prefer the string comparison method overload -->
+    <NoWarn>$(NoWarn);CA1864</NoWarn> <!-- To avoid double lookup, call 'TryAdd' instead of calling 'Add' with a 'ContainsKey' -->
+    <NoWarn>$(NoWarn);CA1872</NoWarn> <!-- Prefer 'System.Convert.ToHexString(byte[])' over call chains based on 'System.BitConverter.ToString(byte[])' -->
+    <NoWarn>$(NoWarn);CA2019</NoWarn> <!-- 'ThreadStatic' fields should not use inline initialization -->
+    <NoWarn>$(NoWarn);CA2022</NoWarn> <!-- Avoid inexact read -->
+    <NoWarn>$(NoWarn);CA2201</NoWarn> <!-- Exception type System.IndexOutOfRangeException is reserved by the runtime -->
+    <NoWarn>$(NoWarn);CA2208</NoWarn> <!-- Method XXX.Remove passes parameter name 'item' as the message argument to a ArgumentNullException constructor. -->
+    <NoWarn>$(NoWarn);CA2211</NoWarn> <!-- Non-constant fields should not be visible -->
+    <NoWarn>$(NoWarn);CA2219</NoWarn> <!-- Do not raise an exception from within a finally clause -->
+    <NoWarn>$(NoWarn);CA2241</NoWarn> <!-- Provide correct arguments to formatting methods -->
+    <NoWarn>$(NoWarn);CA2263</NoWarn> <!-- Prefer the generic overload 'System.Enum.GetValues<TEnum>()' instead of 'System.Enum.GetValues(System.Type)' -->
+    <NoWarn>$(NoWarn);CA3075</NoWarn> <!-- Unsafe overload of 'LoadXml' method -->
+    <NoWarn>$(NoWarn);CA5351</NoWarn> <!-- broken cryptographic algorithm -->
+    <NoWarn>$(NoWarn);CA5369</NoWarn> <!-- This overload of the 'XmlSerializer.Deserialize' method is potentially unsafe. -->
 
     <NoWarn>$(NoWarn);SYSLIB0021;SYSLIB0051</NoWarn> <!-- Deprecated API usage -->
   </PropertyGroup>

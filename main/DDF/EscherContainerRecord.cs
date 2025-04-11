@@ -19,7 +19,8 @@
 namespace NPOI.DDF
 {
     using System;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
     using System.Collections;
     using NPOI.Util;
     using System.Collections.Generic;
@@ -289,16 +290,16 @@ namespace NPOI.DDF
             }
         }
         /// <summary>
-        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+        /// Returns a <see cref="System.String"/> that represents the current <see cref="System.Object"/>.
         /// </summary>
         /// <returns>
-        /// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+        /// A <see cref="System.String"/> that represents the current <see cref="System.Object"/>.
         /// </returns>
         public override string ToString()
         {
             String nl = Environment.NewLine;
 
-            StringBuilder children = new StringBuilder();
+            using var children = ZString.CreateStringBuilder();
             if (ChildRecords.Count > 0)
             {
                 children.Append("  children: " + nl);

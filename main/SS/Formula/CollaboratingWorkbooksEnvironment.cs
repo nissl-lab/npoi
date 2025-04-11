@@ -50,7 +50,7 @@ namespace NPOI.SS.Formula
         private CollaboratingWorkbooksEnvironment()
         {
             _evaluatorsByName = new Dictionary<String, WorkbookEvaluator>();
-            _evaluators = Array.Empty<WorkbookEvaluator>();
+            _evaluators = [];
         }
         public static void Setup(String[] workbookNames, WorkbookEvaluator[] evaluators)
         {
@@ -161,7 +161,8 @@ namespace NPOI.SS.Formula
             }
 
         }
-        private void UnhookOldEnvironments(WorkbookEvaluator[] evaluators)
+
+        private static void UnhookOldEnvironments(WorkbookEvaluator[] evaluators)
         {
             ArrayList oldEnvs = new ArrayList();
             for (int i = 0; i < evaluators.Length; i++)

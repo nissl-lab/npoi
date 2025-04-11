@@ -592,7 +592,7 @@ namespace NPOI.XSSF.UserModel
             return lst;
         }
  
-        private XSSFAnchor GetAnchorFromIEGAnchor(IEG_Anchor ctAnchor)
+        private static XSSFAnchor GetAnchorFromIEGAnchor(IEG_Anchor ctAnchor)
         {
             CT_Marker ctFrom=null, ctTo=null;
             if (ctAnchor is CT_TwoCellAnchor cellAnchor)
@@ -607,7 +607,8 @@ namespace NPOI.XSSF.UserModel
             XSSFAnchor anchor = new XSSFClientAnchor(ctFrom, ctTo);
             return anchor;
         }
-        private XSSFAnchor GetAnchorFromParent(XmlNode obj)
+
+        private static XSSFAnchor GetAnchorFromParent(XmlNode obj)
         {
             XSSFAnchor anchor = null;
             XmlNode parentNode = obj.ParentNode;
