@@ -541,18 +541,18 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             if (node.Attributes["type"] != null)
                 ctObj.type = (ST_TableStyleType)Enum.Parse(typeof(ST_TableStyleType), node.Attributes["type"].Value);
             ctObj.size = XmlHelper.ReadUInt(node.Attributes["size"]);
+            ctObj.dxfIdFieldSpecified = node.Attributes["dxfId"] != null;
             ctObj.dxfId = XmlHelper.ReadUInt(node.Attributes["dxfId"]);
             return ctObj;
         }
-
-
 
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "type", this.type.ToString());
             XmlHelper.WriteAttribute(sw, "size", this.size);
-            XmlHelper.WriteAttribute(sw, "dxfId", this.dxfId);
+            if(this.dxfIdFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "dxfId", this.dxfId);
             sw.Write(">");
             sw.Write(string.Format("</{0}>", nodeName));
         }
@@ -591,6 +591,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
             set
             {
+                this.dxfIdFieldSpecified = true;
                 this.dxfIdField = value;
             }
         }

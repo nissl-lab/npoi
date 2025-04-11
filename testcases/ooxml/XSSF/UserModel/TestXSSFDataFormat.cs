@@ -1,3 +1,4 @@
+
 /* ====================================================================
    Licensed to the Apache Software Foundation (ASF) under one or more
    contributor license agreements.  See the NOTICE file distributed with
@@ -20,6 +21,8 @@ using NUnit.Framework;using NUnit.Framework.Legacy;
 using NPOI.SS.UserModel;
 using NPOI.XSSF;
 using NPOI.XSSF.UserModel;
+using NPOI.SS.Util;
+using NPOI.SS.Formula;
 
 namespace TestCases.XSSF.UserModel
 {
@@ -106,6 +109,41 @@ namespace TestCases.XSSF.UserModel
             // Verified with LibreOffice 4.2.8.2 on 2015-12-28
             wb2.Close();
             wb1.Close();
+        }
+
+        [Test]
+        public void TestConditionalFormattingEvaluation()
+        {
+
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("61060-conditional-number-formatting.xlsx");
+
+            DataFormatter formatter = new DataFormatter();
+            IFormulaEvaluator evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
+            ConditionalFormattingEvaluator cfEvaluator = new ConditionalFormattingEvaluator(wb, (IWorkbookEvaluatorProvider)evaluator);
+
+            CellReference ref1 = new CellReference("A1");
+            ICell cell = wb.GetSheetAt(0).GetRow(ref1.Row).GetCell(ref1.Col);
+            ClassicAssert.AreEqual("0.10", formatter.FormatCellValue(cell, evaluator, cfEvaluator));
+            // verify cell format without the conditional rule applied
+            ClassicAssert.AreEqual("0.1", formatter.FormatCellValue(cell, evaluator));
+
+            ref1 = new CellReference("A3");
+            cell = wb.GetSheetAt(0).GetRow(ref1.Row).GetCell(ref1.Col);
+            ClassicAssert.AreEqual("-2.00E+03", formatter.FormatCellValue(cell, evaluator, cfEvaluator));
+            // verify cell format without the conditional rule applied
+            ClassicAssert.AreEqual("-2000", formatter.FormatCellValue(cell, evaluator));
+
+            ref1 = new CellReference("A4");
+            cell = wb.GetSheetAt(0).GetRow(ref1.Row).GetCell(ref1.Col);
+            ClassicAssert.AreEqual("100", formatter.FormatCellValue(cell, evaluator, cfEvaluator));
+
+            ref1 = new CellReference("A5");
+            cell = wb.GetSheetAt(0).GetRow(ref1.Row).GetCell(ref1.Col);
+            ClassicAssert.AreEqual("$1,000", formatter.FormatCellValue(cell, evaluator, cfEvaluator));
+            // verify cell format without the conditional rule applied
+            ClassicAssert.AreEqual("1000", formatter.FormatCellValue(cell, evaluator));
+
+            wb.Close();
         }
 
     }

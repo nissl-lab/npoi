@@ -295,8 +295,8 @@ namespace NPOI.HSSF.UserModel
             return GetColorScaleFormatting(true);
         }
         /**
-	     * @return -  the conditiontype for the cfrule
-	     */
+         * @return -  the conditiontype for the cfrule
+         */
         public ConditionType ConditionType
         {
             get
@@ -305,8 +305,8 @@ namespace NPOI.HSSF.UserModel
             }
         }
         /**
-	     * @return - the comparisionoperatation for the cfrule
-	     */
+         * @return - the comparisionoperatation for the cfrule
+         */
         public ComparisonOperator ComparisonOperation
         {
             get
@@ -401,5 +401,10 @@ namespace NPOI.HSSF.UserModel
                 return null;
             }
         }
+
+        /// <summary>
+        /// Conditional format rules don't define stripes, so always 0
+        /// </summary>
+        public int StripeSize => 0;
     }
 }

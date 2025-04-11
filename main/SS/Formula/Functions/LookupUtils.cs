@@ -438,7 +438,7 @@ namespace NPOI.SS.Formula.Functions
                 // zero Is FALSE, everything else Is TRUE
                 return 0.0 != nve.NumberValue;
             }
-            throw new Exception("Unexpected eval type (" + valEval.GetType().Name + ")");
+            throw new Exception("Unexpected eval type (" + valEval + ")");
         }
 
         public static int lookupFirstIndexOfValue(ValueEval lookupValue, ValueVector vector, bool isRangeLookup)

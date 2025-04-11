@@ -20,17 +20,14 @@ namespace NPOI.SS.Formula.Functions
     using System;
     using NPOI.SS.Formula.Eval;
 
-    /**
-     * Calculates the internal rate of return.
-     *
-     * Syntax is IRR(values) or IRR(values,guess)
-     *
-     * @author Marcel May
-     * @author Yegor Kozlov
-     *
-     * @see <a href="http://en.wikipedia.org/wiki/Internal_rate_of_return#Numerical_solution">Wikipedia on IRR</a>
-     * @see <a href="http://office.microsoft.com/en-us/excel-help/irr-HP005209146.aspx">Excel IRR</a>
-     */
+    /// <summary>
+    /// Calculates the internal rate of return.
+    /// <para>
+    ///     Syntax is IRR(values) or IRR(values,guess)
+    /// </para>
+    /// </summary>
+    /// <see cref="http://en.wikipedia.org/wiki/Internal_rate_of_return#Numerical_solution">Wikipedia on IRR</see>
+    /// <see cref="http://office.microsoft.com/en-us/excel-help/irr-HP005209146.aspx">Excel IRR</see>
     public class Irr : Function
     {
 
@@ -111,12 +108,17 @@ namespace NPOI.SS.Formula.Functions
             {
 
                 // the value of the function (NPV) and its derivate can be calculated in the same loop
-                double fValue = 0;
+                double factor = 1.0 + x0;
+                int k = 0;
+                double fValue = values[k];
+
                 double fDerivative = 0;
-                for (int k = 0; k < values.Length; k++)
+                for (double denominator = factor; ++k < values.Length;)
                 {
-                    fValue += values[k] / Math.Pow(1.0 + x0, k);
-                    fDerivative += -k * values[k] / Math.Pow(1.0 + x0, k + 1);
+                    double value = values[k];
+                    fValue += value / denominator;
+                    denominator *= factor;
+                    fDerivative -= k * value / denominator;
                 }
 
                 // the essense of the Newton-Raphson Method

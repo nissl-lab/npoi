@@ -7,7 +7,7 @@ using System.Text;
 
 namespace NPOI.OOXML.XSSF.UserModel
 {
-    public class XSSFDxfStyleProvider : DifferentialStyleProvider
+    public class XSSFDxfStyleProvider : IDifferentialStyleProvider
     {
         private IIndexedColorMap colorMap;
         private IBorderFormatting border;
