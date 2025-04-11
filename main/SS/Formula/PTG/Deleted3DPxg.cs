@@ -20,7 +20,8 @@ namespace NPOI.SS.Formula.PTG
     using System;
 
     using NPOI.SS.UserModel;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
     using NPOI.Util;
 
 
@@ -85,8 +86,9 @@ namespace NPOI.SS.Formula.PTG
 
         public override String ToFormulaString()
         {
-            StringBuilder sb = new StringBuilder();
-            if (externalWorkbookNumber >= 0)
+            using var sb = ZString.CreateStringBuilder();
+
+            if(externalWorkbookNumber >= 0)
             {
                 sb.Append('[');
                 sb.Append(externalWorkbookNumber);

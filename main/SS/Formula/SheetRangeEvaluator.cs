@@ -20,7 +20,8 @@ namespace NPOI.SS.Formula
     using System;
 
     using NPOI.SS.Formula.Eval;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
 
     /**
      * Evaluator for returning cells or sheets for a range of sheets
@@ -84,7 +85,8 @@ namespace NPOI.SS.Formula
         {
             get
             {
-                StringBuilder sb = new StringBuilder();
+                using var sb = ZString.CreateStringBuilder();
+
                 sb.Append(GetSheetName(_firstSheetIndex));
                 if (_firstSheetIndex != _lastSheetIndex)
                 {

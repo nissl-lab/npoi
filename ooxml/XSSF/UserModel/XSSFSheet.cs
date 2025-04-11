@@ -34,7 +34,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
+using System.Text; 
+using Cysharp.Text;
 using System.Xml;
 using CT_Shape = NPOI.OpenXmlFormats.Vml.CT_Shape;
 using ST_EditAs = NPOI.OpenXmlFormats.Dml.Spreadsheet.ST_EditAs;
@@ -5737,7 +5738,7 @@ namespace NPOI.XSSF.UserModel
                 }
             }
 
-            StringBuilder rng = new StringBuilder();
+            using var rng = ZString.CreateStringBuilder();
             rng.Append(c);
             if(rng.Length > 0 && r.Length > 0)
             {

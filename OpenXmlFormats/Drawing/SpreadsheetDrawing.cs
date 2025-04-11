@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Text;
 using NPOI.OpenXml4Net.Util;
 using NPOI.OpenXmlFormats.Vml;
+using Cysharp.Text;
 
 namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
 {

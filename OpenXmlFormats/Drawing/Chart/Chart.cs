@@ -17,8 +17,9 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
     using System.Linq;
     using System.Xml;
     using NPOI.OpenXml4Net.Util;
-    using System.Text;
+    using System.Text; 
     using System.Globalization;
+    using Cysharp.Text;
 
     [Serializable]
 
@@ -12178,15 +12179,19 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
         {
             if (p == null || p.Count == 0)
                 return string.Empty;
-            StringBuilder sb = new StringBuilder();
-            foreach (CT_TextParagraph tp in p)
+            
+            using(var sb = ZString.CreateStringBuilder())
             {
-                foreach (CT_RegularTextRun tr in tp.r)
+                foreach(CT_TextParagraph tp in p)
                 {
-                    sb.Append(tr.t);
+                    foreach(CT_RegularTextRun tr in tp.r)
+                    {
+                        sb.Append(tr.t);
+                    }
                 }
+                return sb.ToString();
             }
-            return sb.ToString();
+                
         }
 
         public int SizeOfPArray()
