@@ -62,14 +62,7 @@ namespace NPOI.Util
         {
             int index = elements.Count;
             elements.Add(value);
-            if (valueKeyMap.ContainsKey(value))
-            {
-                valueKeyMap[value] = index;
-            }
-            else
-            {
-                valueKeyMap.Add(value, index);
-            }
+            valueKeyMap[value] = index;
             return true;
         }
         /// <summary>

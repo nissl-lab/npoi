@@ -62,16 +62,8 @@ namespace NPOI.SS.Formula.Eval.Forked
                 result = value;
             if (result == null)
             {
-                result = new ForkedEvaluationSheet(_masterBook.GetSheet(_masterBook
-                        .GetSheetIndex(sheetName)));
-                if (_sharedSheetsByName.ContainsKey(sheetName))
-                {
-                    _sharedSheetsByName[sheetName] = result;
-                }
-                else
-                {
-                    _sharedSheetsByName.Add(sheetName, result);
-                }
+                result = new ForkedEvaluationSheet(_masterBook.GetSheet(_masterBook.GetSheetIndex(sheetName)));
+                _sharedSheetsByName[sheetName] = result;
             }
             return result;
         }

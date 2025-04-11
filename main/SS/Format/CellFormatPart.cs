@@ -78,32 +78,22 @@ using Cysharp.Text;
             NAMED_COLORS = new Dictionary<String, Color>(CASE_INSENSITIVE_ORDER);
 
             var colors = HSSFColor.GetIndexHash();
-            foreach (object v in colors.Values)
+            foreach (HSSFColor hc in colors.Values)
             {
-                HSSFColor hc = (HSSFColor)v;
                 Type type = hc.GetType();
                 String name = type.Name;
                 if (name.Equals(name.ToUpper()))
                 {
                     byte[] rgb = hc.RGB;
                     Color c = Color.FromRgb(rgb[0], rgb[1], rgb[2]);
-                    if (!NAMED_COLORS.ContainsKey(name))
-                    {
-                        NAMED_COLORS.Add(name, c);
-                    }
+                    NAMED_COLORS.TryAdd(name, c);
                     if (name.IndexOf('_') > 0)
                     {
-                        if (!NAMED_COLORS.ContainsKey(name.Replace('_', ' ')))
-                        {
-                            NAMED_COLORS.Add(name.Replace('_', ' '), c);
-                        }
+                        NAMED_COLORS.TryAdd(name.Replace('_', ' '), c);
                     }
-                    if (name.IndexOf("_PERCENT") > 0)
+                    if (name.IndexOf("_PERCENT", StringComparison.Ordinal) > 0)
                     {
-                        if (!NAMED_COLORS.ContainsKey(name.Replace("_PERCENT", "%").Replace('_', ' ')))
-                        {
-                            NAMED_COLORS.Add(name.Replace("_PERCENT", "%").Replace('_', ' '), c);
-                        }
+                        NAMED_COLORS.TryAdd(name.Replace("_PERCENT", "%").Replace('_', ' '), c);
                     }
                 }
             }
