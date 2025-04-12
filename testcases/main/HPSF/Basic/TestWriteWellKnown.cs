@@ -647,7 +647,7 @@ namespace TestCases.HPSF.Basic
 
             /* Test an empty custom properties Set. */
             s = new MutableSection();
-            s.SetFormatID(SectionIDMap.DOCUMENT_SUMMARY_INFORMATION_ID[1]);
+            s.FormatID = SectionIDMap.DOCUMENT_SUMMARY_INFORMATION_ID[1];
             // s.SetCodepage(CodePageUtil.CP_UNICODE);
             dsi.AddSection(s);
             cps = dsi.CustomProperties;

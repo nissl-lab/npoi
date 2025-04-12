@@ -65,7 +65,10 @@ using Cysharp.Text;
     /// </summary>
     public class Property
     {
-
+        /// <summary>
+        /// Default codepage for <see cref="CodePageString"/>
+        /// </summary>
+        public static readonly int DEFAULT_CODEPAGE = CodePageUtil.CP_WINDOWS_1252; 
         /// <summary>
         /// The property's ID. */
         /// </summary>
@@ -160,7 +163,44 @@ using Cysharp.Text;
             }
         }
 
+        /// <summary>
+        /// Creates a <see cref="Property"/> instance by reading its bytes
+        /// from the property set stream.
+        /// </summary>
+        /// <param name="id">The property's ID.</param>
+        /// <param name="leis">The bytes the property set stream consists of.</param>
+        /// <param name="length">The property's type/value pair's length in bytes.</param>
+        /// <param name="codepage">The section's and thus the property's
+        /// codepage. It is needed only when reading string values.
+        /// </param>
+        /// <exception cref="UnsupportedEncodingException">if the specified codepage is not
+        /// supported.
+        /// </exception>
+        public Property(long id, LittleEndianByteArrayInputStream leis, int length, int codepage)
+        {
+            this.id = id;
 
+            /*
+             * ID 0 is a special case since it specifies a dictionary of
+             * property IDs and property names.
+             */
+            if (id == 0) 
+            {
+                throw new UnsupportedEncodingException("Dictionary not allowed here");
+            }
+
+            type = leis.ReadUInt();
+
+            try 
+            {
+                _value = VariantSupport.Read(leis, length, (int) type, codepage);
+            }
+            catch (UnsupportedVariantTypeException ex)
+            {
+                VariantSupport.WriteUnsupportedTypeMessage(ex);
+                _value = ex.Value;
+            }
+        }
 
         /// <summary>
         /// get or set the property's ID.

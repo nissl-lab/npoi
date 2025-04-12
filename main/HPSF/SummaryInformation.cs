@@ -42,7 +42,7 @@ namespace NPOI.HPSF
         /// </summary>
         public SummaryInformation()
         {
-            FirstSection.SetFormatID(SectionIDMap.SUMMARY_INFORMATION_ID);
+            FirstSection.FormatID = SectionIDMap.SUMMARY_INFORMATION_ID;
         }
 
         /// <summary>

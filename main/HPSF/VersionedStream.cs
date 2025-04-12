@@ -14,22 +14,21 @@
    See the License for the specific language governing permissions and
    limitations Under the License.
 ==================================================================== */
+using NPOI.Util;
+
 namespace NPOI.HPSF
 {
-    public class VersionedStream
+    internal class VersionedStream
     {
-        private GUID _versionGuid;
+        private readonly GUID _versionGuid = new GUID();
         private readonly IndirectPropertyName _streamName;
 
-        public VersionedStream(byte[] data, int offset)
-        {
-            _versionGuid = new GUID(data, offset);
-            _streamName = new IndirectPropertyName(data, offset + GUID.SIZE);
-        }
+        internal VersionedStream() {}
 
-        public int Size
+        internal void Read( LittleEndianByteArrayInputStream lei )
         {
-            get { return GUID.SIZE + _streamName.Size; }
+            _versionGuid.Read(lei);
+            _streamName.Read(lei);
         }
     }
 }

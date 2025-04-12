@@ -29,15 +29,6 @@ namespace NPOI.HPSF
 
         private Object _value;
 
-        public TypedPropertyValue()
-        {
-        }
-
-        public TypedPropertyValue(byte[] data, int startOffset)
-        {
-            Read(data, startOffset);
-        }
-
         public TypedPropertyValue(int type, Object value)
         {
             _type = type;
@@ -49,145 +40,163 @@ namespace NPOI.HPSF
             get { return _value; }
         }
 
-        public int Read(byte[] data, int startOffset)
-        {
-            int offset = startOffset;
-
-            _type = LittleEndian.GetShort(data, offset);
-            offset += LittleEndian.SHORT_SIZE;
-
-            short padding = LittleEndian.GetShort(data, offset);
-            offset += LittleEndian.SHORT_SIZE;
-            if (padding != 0)
-            {
-                logger.Log(POILogger.WARN, "TypedPropertyValue padding at offset "
-                        + offset + " MUST be 0, but it's value is " + padding);
+        internal void Read( LittleEndianByteArrayInputStream lei ) {
+            _type = lei.ReadShort();
+            short padding = lei.ReadShort();
+            if ( padding != 0 ) {
+                //LOG.log( POILogger.WARN, "TypedPropertyValue padding at offset "
+                //        + lei.getReadIndex() + " MUST be 0, but it's value is " + padding );
             }
-
-            offset += ReadValue(data, offset);
-
-            return offset - startOffset;
+            ReadValue( lei );
         }
 
-        public int ReadValue(byte[] data, int offset)
+        internal void ReadValue(LittleEndianByteArrayInputStream lei )
         {
             switch (_type)
             {
                 case Variant.VT_EMPTY:
                 case Variant.VT_NULL:
                     _value = null;
-                    return 0;
-
-                case Variant.VT_I2:
-                    _value = LittleEndian.GetShort(data, offset);
-                    return 4;
-
-                case Variant.VT_I4:
-                    _value = LittleEndian.GetInt(data, offset);
-                    return 4;
-
-                case Variant.VT_R4:
-                    _value = LittleEndian.GetShort(data, offset);
-                    return 4;
-
-                case Variant.VT_R8:
-                    _value = LittleEndian.GetDouble(data, offset);
-                    return 8;
-
-                case Variant.VT_CY:
-                    _value = new Currency(data, offset);
-                    return Currency.SIZE;
-
-                case Variant.VT_DATE:
-                    _value = new Date(data, offset);
-                    return Date.SIZE;
-
-                case Variant.VT_BSTR:
-                    _value = new CodePageString(data, offset);
-                    return ((CodePageString)_value).Size;
-
-                case Variant.VT_ERROR:
-                    _value = LittleEndian.GetUInt(data, offset);
-                    return 4;
-
-                case Variant.VT_BOOL:
-                    _value = new VariantBool(data, offset);
-                    return VariantBool.SIZE;
-
-                case Variant.VT_DECIMAL:
-                    _value = new Decimal(data, offset);
-                    return Decimal.SIZE;
+                    break;
 
                 case Variant.VT_I1:
-                    _value = data[offset];
-                    return 1;
+                    _value = lei.ReadByte();
+                    break;
 
                 case Variant.VT_UI1:
-                    _value = LittleEndian.GetUByte(data, offset);
-                    return 2;
+                    _value =  lei.ReadUByte();
+                    break;
+
+                case Variant.VT_I2:
+                    _value = lei.ReadShort();
+                    break;
 
                 case Variant.VT_UI2:
-                    _value = LittleEndian.GetUShort(data, offset);
-                    return 4;
-
-                case Variant.VT_UI4:
-                    _value = LittleEndian.GetUInt(data, offset);
-                    return 4;
-
-                case Variant.VT_I8:
-                    _value = LittleEndian.GetLong(data, offset);
-                    return 8;
-
-                case Variant.VT_UI8:
-                    _value = LittleEndian.GetByteArray(data, offset, 8);
-                    return 8;
-
+                    _value = lei.ReadUShort();
+                    break;
+            
                 case Variant.VT_INT:
-                    _value = LittleEndian.GetInt(data, offset);
-                    return 4;
+                case Variant.VT_I4:
+                    _value = lei.ReadInt();
+                    break;
 
                 case Variant.VT_UINT:
-                    _value = LittleEndian.GetUInt(data, offset);
-                    return 4;
+                case Variant.VT_UI4:
+                case Variant.VT_ERROR:
+                    _value = lei.ReadUInt();
+                    break;
 
+                case Variant.VT_I8:
+                    _value = lei.ReadLong();
+                    break;
+
+                case Variant.VT_UI8: {
+                    byte[] biBytesLE = new byte[LittleEndianConsts.LONG_SIZE];
+                    lei.ReadFully(biBytesLE);
+
+                    // first byte needs to be 0 for unsigned BigInteger
+                    byte[] biBytesBE = new byte[9];
+                    int i = biBytesLE.Length;
+                    foreach (byte b in biBytesLE)
+                    {
+                        if (i<=8) 
+                        {
+                            biBytesBE[i] = b;
+                        }
+                        i--;
+                    }
+                    _value = new BigInteger(biBytesBE);
+                    break;
+                }
+
+            
+                case Variant.VT_R4:
+                    byte[] b4 = new byte[LittleEndianConsts.INT_SIZE];
+                    lei.ReadFully(b4);
+                    _value = BitConverter.ToSingle(b4, 0); //Float.IntBitsToFloat(lei.ReadInt());
+                    break;
+            
+                case Variant.VT_R8:
+                    _value = lei.ReadDouble();
+                    break;
+
+                case Variant.VT_CY:
+                    Currency cur = new Currency();
+                    cur.Read(lei);
+                    _value = cur;
+                    break;
+            
+
+                case Variant.VT_DATE:
+                    Date date = new Date();
+                    date.Read(lei);
+                    _value = date;
+                    break;
+
+                case Variant.VT_BSTR:
                 case Variant.VT_LPSTR:
-                    _value = new CodePageString(data, offset);
-                    return ((CodePageString)_value).Size;
+                    CodePageString cps = new CodePageString();
+                    cps.Read(lei);
+                    _value = cps;
+                    break;
+
+                case Variant.VT_BOOL:
+                    VariantBool vb = new VariantBool();
+                    vb.Read(lei);
+                    _value = vb;
+                    break;
+
+                case Variant.VT_DECIMAL:
+                    Decimal dec = new Decimal();
+                    dec.Read(lei);
+                    _value = dec;
+                    break;
 
                 case Variant.VT_LPWSTR:
-                    _value = new UnicodeString(data, offset);
-                    return ((UnicodeString)_value).Size;
+                    UnicodeString us = new UnicodeString();
+                    us.Read(lei);
+                    _value = us;
+                    break;
 
                 case Variant.VT_FILETIME:
-                    _value = new Filetime(data, offset);
-                    return Filetime.SIZE;
+                    Filetime ft = new Filetime();
+                    ft.Read(lei);
+                    _value = ft;
+                    break;
 
                 case Variant.VT_BLOB:
-                    _value = new Blob(data, offset);
-                    return ((Blob)_value).Size;
+                case Variant.VT_BLOB_OBJECT:
+                    Blob blob = new Blob();
+                    blob.Read(lei);
+                    _value = blob;
+                    break;
 
                 case Variant.VT_STREAM:
                 case Variant.VT_STORAGE:
                 case Variant.VT_STREAMED_OBJECT:
                 case Variant.VT_STORED_OBJECT:
-                    _value = new IndirectPropertyName(data, offset);
-                    return ((IndirectPropertyName)_value).Size;
-
-                case Variant.VT_BLOB_OBJECT:
-                    _value = new Blob(data, offset);
-                    return ((Blob)_value).Size;
+                    IndirectPropertyName ipn = new IndirectPropertyName();
+                    ipn.Read(lei);
+                    _value = ipn;
+                    break;
 
                 case Variant.VT_CF:
-                    _value = new ClipboardData(data, offset);
-                    return ((ClipboardData)_value).Size;
+                    ClipboardData cd = new ClipboardData();
+                    cd.Read(lei);
+                    _value = cd;
+                    break;
 
                 case Variant.VT_CLSID:
-                    _value = new GUID(data, offset);
-                    return GUID.SIZE;
+                    GUID guid = new GUID();
+                    guid.Read(lei);
+                    _value = lei;
+                    break;
 
                 case Variant.VT_VERSIONED_STREAM:
-                    _value = new VersionedStream(data, offset);
-                    return ((VersionedStream)_value).Size;
+                    VersionedStream vs = new VersionedStream();
+                    vs.Read(lei);
+                    _value = vs;
+                    break;
 
                 case Variant.VT_VECTOR | Variant.VT_I2:
                 case Variant.VT_VECTOR | Variant.VT_I4:
@@ -210,8 +219,10 @@ namespace NPOI.HPSF
                 case Variant.VT_VECTOR | Variant.VT_FILETIME:
                 case Variant.VT_VECTOR | Variant.VT_CF:
                 case Variant.VT_VECTOR | Variant.VT_CLSID:
-                    _value = new Vector((short)(_type & 0x0FFF));
-                    return ((Vector)_value).Read(data, offset);
+                    Vector vec = new Vector( (short) ( _type & 0x0FFF ) );
+                    vec.Read(lei);
+                    _value = vec;
+                    break;
 
                 case Variant.VT_ARRAY | Variant.VT_I2:
                 case Variant.VT_ARRAY | Variant.VT_I4:
@@ -230,8 +241,10 @@ namespace NPOI.HPSF
                 case Variant.VT_ARRAY | Variant.VT_UI4:
                 case Variant.VT_ARRAY | Variant.VT_INT:
                 case Variant.VT_ARRAY | Variant.VT_UINT:
-                    _value = new Array();
-                    return ((Array)_value).Read(data, offset);
+                    Array arr = new Array();
+                    arr.Read(lei);
+                    _value = arr;
+                    break;
 
                 default:
                     throw new InvalidOperationException(
@@ -240,11 +253,18 @@ namespace NPOI.HPSF
             }
         }
 
-        internal int ReadValuePadded(byte[] data, int offset)
+        internal static void SkipPadding( LittleEndianByteArrayInputStream lei )
         {
-            int nonPadded = ReadValue(data, offset);
-            return (nonPadded & 0x03) == 0 ? nonPadded : nonPadded
-                    + (4 - (nonPadded & 0x03));
+            int offset = lei.GetReadIndex();
+            int skipBytes = (4 - (offset & 3)) & 3;
+            for (int i=0; i<skipBytes; i++) {
+                lei.Mark(1);
+                int b = lei.Read();
+                if (b == -1 || b != 0) {
+                    lei.Reset();
+                    break;
+                }
+            }
         }
     }
 

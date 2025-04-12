@@ -144,7 +144,7 @@ namespace TestCases.HPSF.Basic
                 POIFSFileSystem poiFs = new POIFSFileSystem();
                 MutablePropertySet ps = new MutablePropertySet();
                 MutableSection s = (MutableSection)ps.Sections[0];
-                s.SetFormatID(SectionIDMap.SUMMARY_INFORMATION_ID);
+                s.FormatID = SectionIDMap.SUMMARY_INFORMATION_ID;
 
                 ByteArrayOutputStream psStream = new ByteArrayOutputStream();
                 ps.Write(psStream);
@@ -210,7 +210,7 @@ namespace TestCases.HPSF.Basic
 
             MutablePropertySet ps = new MutablePropertySet();
             MutableSection si = new MutableSection();
-            si.SetFormatID(SectionIDMap.SUMMARY_INFORMATION_ID);
+            si.FormatID = SectionIDMap.SUMMARY_INFORMATION_ID;
             ps.Sections[0] = si;
 
             MutableProperty p = new MutableProperty();
@@ -519,7 +519,7 @@ namespace TestCases.HPSF.Basic
             String TITLE = "This is a sample title";
             MutablePropertySet mps = new MutablePropertySet();
             MutableSection ms = (MutableSection)mps.Sections[0];
-            ms.SetFormatID(SectionIDMap.SUMMARY_INFORMATION_ID);
+            ms.FormatID = SectionIDMap.SUMMARY_INFORMATION_ID;
             MutableProperty p = new MutableProperty();
             p.ID = PropertyIDMap.PID_TITLE;
             p.Type = Variant.VT_LPSTR;
@@ -745,7 +745,7 @@ namespace TestCases.HPSF.Basic
                 m[2] = "String 2";
                 m[3] = "String 3";
                 s.SetDictionary(m);
-                s.SetFormatID(SectionIDMap.DOCUMENT_SUMMARY_INFORMATION_ID[0]);
+                s.FormatID = SectionIDMap.DOCUMENT_SUMMARY_INFORMATION_ID[0];
                 int codepage = CodePageUtil.CP_UNICODE;
                 s.SetProperty(PropertyIDMap.PID_CODEPAGE, Variant.VT_I2, codepage);
                 poiFs.CreateDocument(ps1.ToInputStream(), "Test");
@@ -1010,7 +1010,7 @@ namespace TestCases.HPSF.Basic
                 {
                     Assert.Throws<IllegalPropertySetDataException>(() => {
                         s.SetDictionary(m);
-                        s.SetFormatID(SectionIDMap.DOCUMENT_SUMMARY_INFORMATION_ID[0]);
+                        s.FormatID = SectionIDMap.DOCUMENT_SUMMARY_INFORMATION_ID[0];
                         s.SetProperty(PropertyIDMap.PID_CODEPAGE, Variant.VT_I2, 12345);
                         poiFs.CreateDocument(ps1.ToInputStream(), "Test");
                         poiFs.WriteFileSystem(copy);

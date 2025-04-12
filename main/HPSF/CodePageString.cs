@@ -29,27 +29,38 @@ namespace NPOI.HPSF
 
         private byte[] _value;
 
-        public CodePageString(byte[] data, int startOffset)
+        internal CodePageString() {}
+        internal void Read( LittleEndianByteArrayInputStream lei )
         {
-            int offset = startOffset;
-
-            int size = LittleEndian.GetInt(data, offset);
-            offset += LittleEndian.INT_SIZE;
-
-            _value = LittleEndian.GetByteArray(data, offset, size);
-            if (size != 0 && _value[size - 1] != 0)
-            {
-                // TODO Some files, such as TestVisioWithCodepage.vsd, are currently
-                //  triggering this for values that don't look like codepages
-                // See Bug #52258 for details
-                Console.WriteLine("CodePageString started at offset #" + offset
-                            + " is not NULL-terminated" );
-                //            throw new IllegalPropertySetDataException(
-                //                    "CodePageString started at offset #" + offset
-                //                            + " is not NULL-terminated" );
+            int offset = lei.GetReadIndex();
+            int size = lei.ReadInt();
+            _value = new byte[size];
+            if (size == 0) {
+                return;
             }
+
+            // If Size is zero, this field MUST be zero bytes in length. If Size is
+            // nonzero and the CodePage property set's CodePage property has the value CP_WINUNICODE
+            // (0x04B0), then the value MUST be a null-terminated array of 16-bit Unicode characters,
+            // followed by zero padding to a multiple of 4 bytes. If Size is nonzero and the property set's
+            // CodePage property has any other value, it MUST be a null-terminated array of 8-bit characters
+            // from the code page identified by the CodePage property, followed by zero padding to a
+            // multiple of 4 bytes. The string represented by this field MAY contain embedded or additional
+            // trailing null characters and an OLEPS implementation MUST be able to handle such strings.        
+        
+            lei.ReadFully(_value);
+            if (_value[size - 1] != 0 ) {
+                // TODO Some files, such as TestVisioWithCodepage.vsd, are currently
+                // triggering this for values that don't look like codepages
+                // See Bug #52258 for details
+                //String msg = "CodePageString started at offset #" + offset + " is not NULL-terminated";
+                //LOG.log(POILogger.WARN, msg);
+            }
+
+            TypedPropertyValue.SkipPadding(lei);
         }
 
+        [Obsolete]
         public CodePageString(String aString, int codepage)
         {
             SetJavaValue(aString, codepage);
@@ -60,33 +71,32 @@ namespace NPOI.HPSF
 #if NETSTANDARD2_1 || NET6_0_OR_GREATER || NETSTANDARD2_0
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 #endif 
-            String result;
-            if (codepage == -1)
-                result = Encoding.UTF8.GetString(_value);
-            else
-                result = Encoding.GetEncoding(codepage).GetString(_value);
-            int terminator = result.IndexOf('\0');
-            if (terminator == -1)
+            int cp = ( codepage == -1 ) ? Property.DEFAULT_CODEPAGE : codepage;
+            String result = CodePageUtil.GetStringFromCodePage(_value, cp);
+
+        
+            int terminator = result.IndexOf( '\0' );
+            if ( terminator == -1 )
             {
-                //logger.log(
-                //        POILogger.WARN,
-                //        "String terminator (\\0) for CodePageString property value not found."
-                //                + "Continue without trimming and hope for the best." );
+                //String msg = 
+                //    "String terminator (\\0) for CodePageString property value not found." +
+                //    "Continue without trimming and hope for the best.";
+                //LOG.log(POILogger.WARN, msg);
                 return result;
             }
-            if (terminator != result.Length - 1)
+            if ( terminator != result.Length - 1 )
             {
-                //logger.log(
-                //        POILogger.WARN,
-                //        "String terminator (\\0) for CodePageString property value occured before the end of string. "
-                //                + "Trimming and hope for the best." );
+                //String msg = 
+                //    "String terminator (\\0) for CodePageString property value occured before the end of string. "+
+                //    "Trimming and hope for the best.";
+                //LOG.log(POILogger.WARN, msg );
             }
             return result.Substring(0, terminator);
         }
 
         public int Size
         {
-            get { return LittleEndian.INT_SIZE + _value.Length; }
+            get { return LittleEndianConsts.INT_SIZE + _value.Length; }
         }
 
         public void SetJavaValue(String aString, int codepage)
@@ -97,6 +107,8 @@ namespace NPOI.HPSF
             else
                 _value = CodePageUtil.GetBytesInCodePage(stringNT, codepage);
                 //_value = Encoding.GetEncoding(codepage).GetBytes(aString + "\0");
+            int cp = ( codepage == -1 ) ? Property.DEFAULT_CODEPAGE : codepage;
+            _value = CodePageUtil.GetBytesInCodePage(aString + "\0", cp);
         }
 
         public int Write(Stream out1)

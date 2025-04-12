@@ -20,13 +20,15 @@ namespace NPOI.HPSF
 {
     internal sealed class Currency
     {
-        public const int SIZE = 8;
+        private static readonly int SIZE = 8;
 
-        private byte[] _value;
+        private readonly byte[] _value = new byte[SIZE];
+    
+        internal Currency() {}
 
-        public Currency(byte[] data, int offset)
+        internal void Read( LittleEndianByteArrayInputStream lei )
         {
-            _value = LittleEndian.GetByteArray(data, offset, SIZE);
+            lei.ReadFully(_value);
         }
     }
 }

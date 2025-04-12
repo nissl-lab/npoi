@@ -21,7 +21,10 @@ using System.Linq;
 namespace NPOI.HPSF
 {
     using NPOI.HPSF.Wellknown;
+    using NPOI.Util;
     using System;
+    using System.Runtime.InteropServices;
+    using System.Text;
 
     /// <summary>
     /// <para>
@@ -71,7 +74,7 @@ namespace NPOI.HPSF
         /// </summary>
         private bool isPure = true;
 
-
+        private int codepage = -1;
         /// <summary>
         /// Puts a <see cref="CustomProperty"/> into this map. It is assumed that the
         /// <see cref="CustomProperty"/> already has a valid ID. Otherwise use
@@ -96,6 +99,8 @@ namespace NPOI.HPSF
                         ") and custom property's name (" + cp.Name +
                         ") do not match.");
             }
+
+            checkCodePage(name);
 
             /* Register name and ID in the dictionary. Mapping in both directions is possible. If there is already a  */
             if(dictionary.ContainsValue(name))
@@ -178,7 +183,7 @@ namespace NPOI.HPSF
         /// </return>
         public Object Put(String name, String value)
         {
-            Property p = new Property(-1, Variant.VT_LPWSTR, value);
+            Property p = new Property(-1, Variant.VT_LPSTR, value);
             return Put(new CustomProperty(p, name));
         }
 
@@ -304,11 +309,13 @@ namespace NPOI.HPSF
         /// <param name="codepage">the codepage</param>
         public void SetCodepage(int codepage)
         {
-            Property p = new Property(PropertyIDMap.PID_CODEPAGE, Variant.VT_I2, codepage);
-            Put(new CustomProperty(p));
+            this.codepage = codepage;
         }
 
-
+        public int GetCodepage() 
+        {
+            return codepage;
+        }
 
         /// <summary>
         /// <para>
@@ -358,17 +365,6 @@ namespace NPOI.HPSF
         }
 
         /// <summary>
-        /// Gets the codepage.
-        /// </summary>
-        /// <return>codepage or -1 if the codepage is undefined.</return>
-        public int GetCodepage()
-        {
-            CustomProperty cp = ContainsKey(PropertyIDMap.PID_CODEPAGE) ? this[PropertyIDMap.PID_CODEPAGE] as CustomProperty
-                : null;
-            return (cp == null) ? -1 : (int) cp.Value;
-        }
-
-        /// <summary>
         /// Tells whether this <see cref="CustomProperties"/> instance is pure or one or
         /// more properties of the underlying low-level property Set has been
         /// dropped.
@@ -382,6 +378,38 @@ namespace NPOI.HPSF
             set => isPure = value;
         }
 
+        private void checkCodePage(String value)
+        {
+            int cp = GetCodepage();
+            if (cp == -1)
+            {
+                cp = Property.DEFAULT_CODEPAGE;
+            }
+            if (cp == CodePageUtil.CP_UNICODE)
+            {
+                return;
+            }
+            String cps = "";
+            try 
+            {
+                cps = CodePageUtil.CodepageToEncoding(cp);
+            } catch (UnsupportedEncodingException e) {
+                //LOG.log(POILogger.ERROR, "Codepage '"+cp+"' can't be found.");
+            }
+            if (!string.IsNullOrEmpty(cps))
+                //&& Charset.forName(cps).newEncoder().canEncode(value)) 
+            {
+                try
+                {
+                    var _ = Encoding.GetEncoding(cps).GetBytes(value);
+                    return;
+                }
+                catch (Exception) { }
+                
+            }
+            //LOG.log(POILogger.DEBUG, "Charset '"+cps+"' can't encode '"+value+"' - switching to unicode.");
+            SetCodepage(CodePageUtil.CP_UNICODE);
+        }
     }
 }
 

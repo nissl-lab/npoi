@@ -4,25 +4,18 @@ namespace NPOI.HPSF
 {
     internal sealed class Blob
     {
-        private readonly byte[] _value;
+        private byte[] _value;
 
-        public Blob(byte[] data, int offset)
+        internal Blob() { }
+
+        internal void Read(ILittleEndianInput lei)
         {
-            int size = LittleEndian.GetInt(data, offset);
-
-            if (size == 0)
+            int size = lei.ReadInt();
+            _value = new byte[size];
+            if(size > 0)
             {
-                _value = [];
-                return;
+                lei.ReadFully(_value);
             }
-
-            _value = LittleEndian.GetByteArray(data, offset
-                    + LittleEndian.INT_SIZE, size);
-        }
-
-        public int Size
-        {
-            get { return LittleEndian.INT_SIZE + _value.Length; }
         }
     }
 }

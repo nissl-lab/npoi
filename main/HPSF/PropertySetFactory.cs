@@ -121,7 +121,7 @@ namespace NPOI.HPSF
         {
             MutablePropertySet ps = new MutablePropertySet();
             MutableSection s = (MutableSection)ps.FirstSection;
-            s.SetFormatID(SectionIDMap.SUMMARY_INFORMATION_ID);
+            s.FormatID = SectionIDMap.SUMMARY_INFORMATION_ID;
             try
             {
                 return new SummaryInformation(ps);
@@ -143,7 +143,7 @@ namespace NPOI.HPSF
         {
             MutablePropertySet ps = new MutablePropertySet();
             MutableSection s = (MutableSection)ps.FirstSection;
-            s.SetFormatID(SectionIDMap.DOCUMENT_SUMMARY_INFORMATION_ID[0]);
+            s.FormatID = SectionIDMap.DOCUMENT_SUMMARY_INFORMATION_ID[0];
             try
             {
                 return new DocumentSummaryInformation(ps);
@@ -159,7 +159,7 @@ namespace NPOI.HPSF
         {
             MutablePropertySet ps = new MutablePropertySet();
             MutableSection s = (MutableSection)ps.FirstSection;
-            s.SetFormatID(SectionIDMap.DOCUMENT_SUMMARY_INFORMATION_ID[0]);
+            s.FormatID = SectionIDMap.DOCUMENT_SUMMARY_INFORMATION_ID[0];
             try
             {
                 return new DocumentSummaryInformation(ps);
