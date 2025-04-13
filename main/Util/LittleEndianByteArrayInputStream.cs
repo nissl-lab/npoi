@@ -29,13 +29,14 @@ namespace NPOI.Util
         private readonly int _endIndex;
         private int _ReadIndex;
         private int _mark = 0;
-
+        private int count = 0;
         public LittleEndianByteArrayInputStream(byte[] buf, int startOffset, int maxReadLen)
         {
             _buf = buf;
             _ReadIndex = startOffset;
             _endIndex = startOffset + maxReadLen;
             _mark = startOffset;
+            count = Math.Min(startOffset + maxReadLen, buf.Length);
         }
         public LittleEndianByteArrayInputStream(byte[] buf, int startOffset) :
             this(buf, startOffset, buf.Length - startOffset)
@@ -166,6 +167,17 @@ namespace NPOI.Util
         public double ReadDouble()
         {
             return BitConverter.Int64BitsToDouble(ReadLong());
+        }
+
+        internal long Skip(long n)
+        {
+            long k = count - _ReadIndex;
+            if (n < k) {
+                k = n < 0 ? 0 : n;
+            }
+
+            _ReadIndex += (int)k;
+            return k;
         }
     }
 }

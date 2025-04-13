@@ -148,9 +148,12 @@ namespace NPOI.HPSF
         {
             int offset = lei.GetReadIndex();
             TypedPropertyValue typedPropertyValue = new TypedPropertyValue( (int) type, null );
-            try {
+            try
+            {
                 typedPropertyValue.ReadValue(lei);
-            } catch ( InvalidOperationException exc ) {
+            }
+            catch ( InvalidOperationException exc )
+            {
                 int propLength = Math.Min( length, lei.Available() );
                 byte[] v = new byte[propLength];
                 lei.ReadFully(v, 0, propLength);
@@ -285,7 +288,7 @@ namespace NPOI.HPSF
         public static int Write(Stream out1, long type,
                                  Object value, int codepage)
         {
-            int length = 0;
+            int length = -1;
             switch((int) type)
             {
                 case Variant.VT_BOOL:
@@ -349,34 +352,34 @@ namespace NPOI.HPSF
                     break;
 
                 case Variant.VT_I2:
-                    if(value is short)
+                    if(Number.IsNumber(value))
                     {
-                        LittleEndian.PutShort(out1, (short)value);
+                        LittleEndian.PutShort(out1, (short)(int)value);
                         length = LittleEndianConsts.SHORT_SIZE;
                     }
                     break;
                 case Variant.VT_UI2:
-                    if (value is ushort) {
-                        LittleEndian.PutUShort((ushort)value, out1);
+                    if (Number.IsNumber(value)) {
+                        LittleEndian.PutUShort((ushort)(int)value, out1);
                         length = LittleEndianConsts.SHORT_SIZE;
                     }
                 break;
                 case Variant.VT_I4:
-                    if(value is int)
+                    if(Number.IsNumber(value))
                     {
                         LittleEndian.PutInt((int)value, out1);
                         length = LittleEndianConsts.INT_SIZE;
                     }
                     break;
                 case Variant.VT_UI4:
-                    if (value is uint)
+                    if (Number.IsNumber(value))
                     {
-                        LittleEndian.PutUInt((uint)value, out1);
+                        LittleEndian.PutUInt((uint)(long)value, out1);
                         length = LittleEndianConsts.INT_SIZE;
                     }
                     break;
                 case Variant.VT_I8:
-                    if (value is long)
+                    if (Number.IsNumber(value))
                     {
                         LittleEndian.PutLong(Convert.ToInt64(value), out1);
                         length = LittleEndianConsts.LONG_SIZE;
@@ -384,7 +387,7 @@ namespace NPOI.HPSF
                     
                     break;
                 case Variant.VT_UI8: 
-                    if (value is BigInteger || value is ulong) {
+                    if (value is BigInteger || Number.IsNumber(value)) {
                         BigInteger bi = (value is BigInteger) ? (BigInteger)value : BigInteger.ValueOf((long)value);
                         if (bi.BitLength() > 64) {
                             throw new WritingNotSupportedException(type, value);

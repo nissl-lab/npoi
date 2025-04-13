@@ -51,90 +51,126 @@ namespace NPOI.HPSF.Wellknown
          * (and only) section of the Summary Information property Set.
          */
 
-        /** ID of the property that denotes the document's title */
-        public const int PID_TITLE = 2;
+        /// <summary>
+        /// ID of the property that denotes the document's title */
+        /// </summary>
+        public static  int PID_TITLE = 2;
 
-        /** ID of the property that denotes the document's subject */
-        public const int PID_SUBJECT = 3;
+        /// <summary>
+        /// ID of the property that denotes the document's subject */
+        /// </summary>
+        public static  int PID_SUBJECT = 3;
 
-        /** ID of the property that denotes the document's author */
-        public const int PID_AUTHOR = 4;
+        /// <summary>
+        /// ID of the property that denotes the document's author */
+        /// </summary>
+        public static  int PID_AUTHOR = 4;
 
-        /** ID of the property that denotes the document's keywords */
-        public const int PID_KEYWORDS = 5;
+        /// <summary>
+        /// ID of the property that denotes the document's keywords */
+        /// </summary>
+        public static  int PID_KEYWORDS = 5;
 
-        /** ID of the property that denotes the document's comments */
-        public const int PID_COMMENTS = 6;
+        /// <summary>
+        /// ID of the property that denotes the document's comments */
+        /// </summary>
+        public static  int PID_COMMENTS = 6;
 
-        /** ID of the property that denotes the document's template */
-        public const int PID_TEMPLATE = 7;
+        /// <summary>
+        /// ID of the property that denotes the document's template */
+        /// </summary>
+        public static  int PID_TEMPLATE = 7;
 
-        /** ID of the property that denotes the document's last author */
-        public const int PID_LASTAUTHOR = 8;
+        /// <summary>
+        /// ID of the property that denotes the document's last author */
+        /// </summary>
+        public static  int PID_LASTAUTHOR = 8;
 
-        /** ID of the property that denotes the document's revision number */
-        public const int PID_REVNUMBER = 9;
+        /// <summary>
+        /// ID of the property that denotes the document's revision number */
+        /// </summary>
+        public static  int PID_REVNUMBER = 9;
 
-        /** ID of the property that denotes the document's edit time */
-        public const int PID_EDITTIME = 10;
+        /// <summary>
+        /// ID of the property that denotes the document's edit time */
+        /// </summary>
+        public static  int PID_EDITTIME = 10;
 
-        /** ID of the property that denotes the DateTime and time the document was
-         * last printed */
-        public const int PID_LASTPRINTED = 11;
+        /// <summary>
+        /// ID of the property that denotes the date and time the document was
+        /// last printed */
+        /// </summary>
+        public static  int PID_LASTPRINTED = 11;
 
-        /** ID of the property that denotes the DateTime and time the document was
-         * Created. */
-        public const int PID_CREATE_DTM = 12;
+        /// <summary>
+        /// ID of the property that denotes the date and time the document was
+        /// created. */
+        /// </summary>
+        public static  int PID_CREATE_DTM = 12;
 
-        /** ID of the property that denotes the DateTime and time the document was
-         * saved */
-        public const int PID_LASTSAVE_DTM = 13;
+        /// <summary>
+        /// ID of the property that denotes the date and time the document was
+        /// saved */
+        /// </summary>
+        public static  int PID_LASTSAVE_DTM = 13;
 
-        /** ID of the property that denotes the number of pages in the
-         * document */
-        public const int PID_PAGECOUNT = 14;
+        /// <summary>
+        /// ID of the property that denotes the number of pages in the
+        /// document */
+        /// </summary>
+        public static  int PID_PAGECOUNT = 14;
 
-        /** ID of the property that denotes the number of words in the
-         * document */
-        public const int PID_WORDCOUNT = 15;
+        /// <summary>
+        /// ID of the property that denotes the number of words in the
+        /// document */
+        /// </summary>
+        public static  int PID_WORDCOUNT = 15;
 
-        /** ID of the property that denotes the number of characters in the
-         * document */
-        public const int PID_CHARCOUNT = 16;
+        /// <summary>
+        /// ID of the property that denotes the number of characters in the
+        /// document */
+        /// </summary>
+        public static  int PID_CHARCOUNT = 16;
 
-        /** ID of the property that denotes the document's thumbnail */
-        public const int PID_THUMBNAIL = 17;
+        /// <summary>
+        /// ID of the property that denotes the document's thumbnail */
+        /// </summary>
+        public static  int PID_THUMBNAIL = 17;
 
-        /** ID of the property that denotes the application that Created the
-         * document */
-        public const int PID_APPNAME = 18;
+        /// <summary>
+        /// ID of the property that denotes the application that created the
+        /// document */
+        /// </summary>
+        public static  int PID_APPNAME = 18;
 
-        /** ID of the property that denotes whether Read/Write access To the
-         * document is allowed or whether is should be opened as Read-only. It can
-         * have the following values:
-         * 
-         * <table>
-         *  <tbody>
-         *   <tr>
-         *    <th>Value</th>
-         *    <th>Description</th>
-         *   </tr>
-         *   <tr>
-         *    <th>0</th>
-         *    <th>No restriction</th>
-         *   </tr>
-         *   <tr>
-         *    <th>2</th>
-         *    <th>Read-only recommended</th>
-         *   </tr>
-         *   <tr>
-         *    <th>4</th>
-         *    <th>Read-only enforced</th>
-         *   </tr>
-         *  </tbody>
-         * </table>
-         */
-        public const int PID_SECURITY = 19;
+        /// <summary>
+        /// <para>
+        /// ID of the property that denotes whether read/write access to the
+        /// document is allowed or whether is should be opened as read-only. It can
+        /// have the following values:
+        /// </para>
+        /// <para>
+        /// <list type="table">
+        /// <listheader><term>Value</term><term>Description</term><term>0</term><term>No restriction</term><term>2</term><term>Read-only recommended</term><term>4</term><description>Read-only enforced</description></listheader>
+        /// <item><term>
+        ///    </term><term>Value</term><term>
+        ///    </term><term>Description</term><description>
+        ///   </description></item>
+        /// <item><term>
+        ///    </term><term>0</term><term>
+        ///    </term><term>No restriction</term><description>
+        ///   </description></item>
+        /// <item><term>
+        ///    </term><term>2</term><term>
+        ///    </term><term>Read-only recommended</term><description>
+        ///   </description></item>
+        /// <item><term>
+        ///    </term><term>4</term><term>
+        ///    </term><term>Read-only enforced</term><description>
+        ///   </description></item>
+        /// </para>
+        /// </summary>
+        public static  int PID_SECURITY = 19;
 
 
 
@@ -143,163 +179,189 @@ namespace NPOI.HPSF.Wellknown
          * section of the Document Summary Information property Set.
          */
 
-        /** 
-         * The entry is a dictionary.
-         */
-        public const int PID_DICTIONARY = 0;
+        /// <summary>
+        /// The entry is a dictionary.
+        /// </summary>
+        public static  int PID_DICTIONARY = 0;
 
-        /**
-         * The entry denotes a code page.
-         */
-        public const int PID_CODEPAGE = 1;
+        /// <summary>
+        /// The entry denotes a code page.
+        /// </summary>
+        public static  int PID_CODEPAGE = 1;
 
-        /** 
-         * The entry is a string denoting the category the file belongs
-         * To, e.g. review, memo, etc. This is useful To Find documents of
-         * same type.
-         */
-        public const int PID_CATEGORY = 2;
+        /// <summary>
+        /// The entry is a string denoting the category the file belongs
+        /// to, e.g. review, memo, etc. This is useful to find documents of
+        /// same type.
+        /// </summary>
+        public static  int PID_CATEGORY = 2;
 
-        /** 
-         * TarGet format for power point presentation, e.g. 35mm,
-         * printer, video etc.
-         */
-        public const int PID_PRESFORMAT = 3;
+        /// <summary>
+        /// Target format for power point presentation, e.g. 35mm,
+        /// printer, video etc.
+        /// </summary>
+        public static  int PID_PRESFORMAT = 3;
 
-        /** 
-         * Number of bytes.
-         */
-        public const int PID_BYTECOUNT = 4;
+        /// <summary>
+        /// Number of bytes.
+        /// </summary>
+        public static  int PID_BYTECOUNT = 4;
 
-        /** 
-         * Number of lines.
-         */
-        public const int PID_LINECOUNT = 5;
+        /// <summary>
+        /// Number of lines.
+        /// </summary>
+        public static  int PID_LINECOUNT = 5;
 
-        /** 
-         * Number of paragraphs.
-         */
-        public const int PID_PARCOUNT = 6;
+        /// <summary>
+        /// Number of paragraphs.
+        /// </summary>
+        public static  int PID_PARCOUNT = 6;
 
-        /** 
-         * Number of slides in a power point presentation.
-         */
-        public const int PID_SLIDECOUNT = 7;
+        /// <summary>
+        /// Number of slides in a power point presentation.
+        /// </summary>
+        public static  int PID_SLIDECOUNT = 7;
 
-        /** 
-         * Number of slides with notes.
-         */
-        public const int PID_NOTECOUNT = 8;
+        /// <summary>
+        /// Number of slides with notes.
+        /// </summary>
+        public static  int PID_NOTECOUNT = 8;
 
-        /** 
-         * Number of hidden slides.
-         */
-        public const int PID_HIDDENCOUNT = 9;
+        /// <summary>
+        /// Number of hidden slides.
+        /// </summary>
+        public static  int PID_HIDDENCOUNT = 9;
 
-        /** 
-         * Number of multimedia clips, e.g. sound or video.
-         */
-        public const int PID_MMCLIPCOUNT = 10;
+        /// <summary>
+        /// Number of multimedia clips, e.g. sound or video.
+        /// </summary>
+        public static  int PID_MMCLIPCOUNT = 10;
 
-        /** 
-         * This entry is Set To -1 when scaling of the thumbnail Is
-         * desired. Otherwise the thumbnail should be cropped.
-         */
-        public const int PID_SCALE = 11;
+        /// <summary>
+        /// This entry is Set to -1 when scaling of the thumbnail is
+        /// desired. Otherwise the thumbnail should be cropped.
+        /// </summary>
+        public static  int PID_SCALE = 11;
 
-        /** 
-         * This entry denotes an internally used property. It is a
-         * vector of variants consisting of pairs of a string (VT_LPSTR)
-         * and a number (VT_I4). The string is a heading name, and the
-         * number tells how many document parts are under that
-         * heading.
-         */
-        public const int PID_HEADINGPAIR = 12;
+        /// <summary>
+        /// This entry denotes an internally used property. It is a
+        /// vector of variants consisting of pairs of a string (VT_LPSTR)
+        /// and a number (VT_I4). The string is a heading name, and the
+        /// number tells how many document parts are under that
+        /// heading.
+        /// </summary>
+        public static  int PID_HEADINGPAIR = 12;
 
-        /** 
-         * This entry Contains the names of document parts (word: names
-         * of the documents in the master document, excel: sheet names,
-         * power point: slide titles, binder: document names).
-         */
-        public const int PID_DOCPARTS = 13;
+        /// <summary>
+        /// This entry contains the names of document parts (word: names
+        /// of the documents in the master document, excel: sheet names,
+        /// power point: slide titles, binder: document names).
+        /// </summary>
+        public static  int PID_DOCPARTS = 13;
 
-        /** 
-         * This entry Contains the name of the project manager.
-         */
-        public const int PID_MANAGER = 14;
+        /// <summary>
+        /// This entry contains the name of the project manager.
+        /// </summary>
+        public static  int PID_MANAGER = 14;
 
-        /** 
-         * This entry Contains the company name.
-         */
-        public const int PID_COMPANY = 15;
+        /// <summary>
+        /// This entry contains the company name.
+        /// </summary>
+        public static  int PID_COMPANY = 15;
 
-        /** 
-         * If this entry is -1 the links are dirty and should be
-         * re-evaluated.
-         */
-        public const int PID_LINKSDIRTY = 0x10;
-
-        /**
-         * The entry specifies an estimate of the number of characters 
-         *  in the document, including whitespace, as an integer
-         */
-        public static int PID_CCHWITHSPACES = 0x11;
-
+        /// <summary>
+        /// If this entry is -1 the links are dirty and should be
+        /// re-evaluated.
+        /// </summary>
+        public static  int PID_LINKSDIRTY = 0x10;
+    
+        /// <summary>
+        /// The entry specifies an estimate of the number of characters
+        ///  in the document, including whitespace, as an integer
+        /// </summary>
+        public static  int PID_CCHWITHSPACES = 0x11;
+    
         // 0x12 Unused
         // 0x13 GKPIDDSI_SHAREDDOC - Must be False
         // 0x14 GKPIDDSI_LINKBASE - Must not be written
         // 0x15 GKPIDDSI_HLINKS - Must not be written
-        /**
-         * This entry contains a boolean which marks if the User Defined
-         *  Property Set has been updated outside of the Application, if so the
-         *  hyperlinks should be updated on document load.
-         */
-        public static int PID_HYPERLINKSCHANGED = 0x16;
 
-        /**
-         * This entry contains the version of the Application which wrote the
-         *  Property set, stored with the two high order bytes having the major
-         *  version number, and the two low order bytes the minor version number.
-         */
-        public static int PID_VERSION = 0x17;
-
-        /**
-         * This entry contains the VBA digital signature for the VBA project 
-         *  embedded in the document.
-         */
-        public static int PID_DIGSIG = 0x18;
-
+        /// <summary>
+        /// This entry contains a bool which marks if the User Defined
+        ///  Property Set has been updated outside of the Application, if so the
+        ///  hyperlinks should be updated on document load.
+        /// </summary>
+        public static  int PID_HYPERLINKSCHANGED = 0x16;
+    
+        /// <summary>
+        /// This entry contains the version of the Application which wrote the
+        ///  Property Set, stored with the two high order bytes having the major
+        ///  version number, and the two low order bytes the minor version number.
+        /// </summary>
+        public static  int PID_VERSION = 0x17;
+    
+        /// <summary>
+        /// This entry contains the VBA digital signature for the VBA project
+        ///  embedded in the document.
+        /// </summary>
+        public static  int PID_DIGSIG = 0x18;
+    
         // 0x19 Unused
+    
+        /// <summary>
+        /// This entry contains a string of the content type of the file.
+        /// </summary>
+        public static  int PID_CONTENTTYPE = 0x1A;
+    
+        /// <summary>
+        /// This entry contains a string of the document status.
+        /// </summary>
+        public static  int PID_CONTENTSTATUS = 0x1B;
+    
+        /// <summary>
+        /// This entry contains a string of the document language, but
+        ///  normally should be empty.
+        /// </summary>
+        public static  int PID_LANGUAGE = 0x1C;
+    
+        /// <summary>
+        /// This entry contains a string of the document version, but
+        ///  normally should be empty
+        /// </summary>
+        public static  int PID_DOCVERSION = 0x1D;
+    
+        /// <summary>
+        /// The highest well-known property ID. Applications are free to use
+        ///  higher values for custom purposes. (This value is based on Office 12,
+        ///  earlier versions of Office had lower values)
+        /// </summary>
+        public static  int PID_MAX = 0x1F;
 
-        /**
-         * This entry contains a string of the content type of the file.
-         */
-        public static int PID_CONTENTTYPE = 0x1A;
-
-        /**
-         * This entry contains a string of the document status.
-         */
-        public static int PID_CONTENTSTATUS = 0x1B;
-
-        /**
-         * This entry contains a string of the document language, but
-         *  normally should be empty.
-         */
-        public static int PID_LANGUAGE = 0x1C;
-
-        /**
-         * This entry contains a string of the document version, but
-         *  normally should be empty
-         */
-        public static int PID_DOCVERSION = 0x1D;
-        /**
-         * <p>The highest well-known property ID. Applications are free to use 
-         *  higher values for custom purposes. (This value is based on Office 12,
-         *  earlier versions of Office had lower values)</p>
-         */
-        public const int PID_MAX = 0x1F;
+        /// <summary>
+        /// The Locale property, if present, MUST have the property identifier 0x80000000,
+        /// MUST NOT have a property name, and MUST have type VT_UI4 (0x0013).
+        /// If present, its value MUST be a valid language code identifier as specified in [MS-LCID].
+        /// Its value is selected in an implementation-specific manner.
+        /// </summary>
+        public static  int PID_LOCALE = unchecked((int) 0x80000000);
 
 
+        /// <summary>
+        /// <para>
+        /// The Behavior property, if present, MUST have the property identifier 0x80000003,
+        /// MUST NOT have a property name, and MUST have type VT_UI4 (0x0013).
+        /// A version 0 property Set, indicated by the value 0x0000 for the Version field of
+        /// the PropertySetStream packet, MUST NOT have a Behavior property.
+        /// If the Behavior property is present, it MUST have one of the following values.
+        /// </para>
+        /// <para>
+        /// <list type="bullet">
+        /// <item><description>0x00000000 = Property names are case-insensitive (default)</description></item>
+        /// <item><description>0x00000001 = Property names are case-sensitive.</description></item>
+        /// </list>
+        /// </para>
+        /// </summary>
+        public static  int PID_BEHAVIOUR = unchecked((int)0x80000003);
 
         /**
          * Contains the summary information property ID values and

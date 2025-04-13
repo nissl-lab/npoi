@@ -98,7 +98,7 @@ namespace TestCases
             }
             Assert.Fail("Unable to find " + key + " in " + map);
         }
-        public static void AssertEquals<T>(T[] expected, T[] actual, string message)
+        public static void AssertEquals<T>(T[] expected, T[] actual, string message = "")
         {
             ClassicAssert.AreEqual(expected.Length, actual.Length, $"{message} Non-matching lengths");
             for(int i = 0; i < expected.Length; i++)
@@ -106,7 +106,7 @@ namespace TestCases
                 ClassicAssert.AreEqual(expected[i], actual[i], $"{message} Mis-match at offset {i}");
             }
         }
-        public static void AssertEquals(byte[] expected, byte[] actual, string message)
+        public static void AssertEquals(byte[] expected, byte[] actual, string message = "")
         {
             ClassicAssert.AreEqual(expected.Length, actual.Length, $"{message} Non-matching lengths");
             for(int i = 0; i < expected.Length; i++)

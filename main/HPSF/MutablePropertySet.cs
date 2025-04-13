@@ -66,6 +66,10 @@ namespace NPOI.HPSF
         {
 
         }
+        public MutablePropertySet(InputStream stream)
+            : base(stream)
+        {
 
+        }
     }
 }

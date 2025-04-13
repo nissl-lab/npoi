@@ -94,17 +94,17 @@ namespace NPOI.HPSF
         /// <summary>
         /// The "byteOrder" field must equal this value.
         /// </summary>
-        private static int BYTE_ORDER_ASSERTION = 0xFFFE;
+        internal static int BYTE_ORDER_ASSERTION = 0xFFFE;
 
         /// <summary>
         /// The "format" field must equal this value.
         /// </summary>
-        private static int FORMAT_ASSERTION = 0x0000;
+        internal static int FORMAT_ASSERTION = 0x0000;
 
         /// <summary>
         /// The length of the property Set stream header.
         /// </summary>
-        private static int OFFSET_HEADER =
+        internal static int OFFSET_HEADER =
             LittleEndianConsts.SHORT_SIZE + /* Byte order    */
             LittleEndianConsts.SHORT_SIZE + /* Format        */
             LittleEndianConsts.INT_SIZE +   /* OS version    */
@@ -526,11 +526,6 @@ namespace NPOI.HPSF
             int nrSections = SectionCount;
 
             /* Write the property Set's header. */
-            //TypeWriter.WriteToStream(out1, (short) ByteOrder);
-            //TypeWriter.WriteToStream(out1, (short) Format);
-            //TypeWriter.WriteToStream(out1, OSVersion);
-            //TypeWriter.WriteToStream(out1, ClassID);
-            //TypeWriter.WriteToStream(out1, nrSections);
             LittleEndian.PutShort(out1, (short) ByteOrder);
             LittleEndian.PutShort(out1, (short) Format);
             LittleEndian.PutInt(OSVersion, out1);
@@ -550,8 +545,6 @@ namespace NPOI.HPSF
                 {
                     throw new NoFormatIDException();
                 }
-                //TypeWriter.WriteToStream(out1, section.FormatID);
-                //TypeWriter.WriteUIntToStream(out1, (uint) offset);
                 PutClassId(out1, formatID);
                 LittleEndian.PutUInt(offset, out1);
                 try
@@ -561,7 +554,7 @@ namespace NPOI.HPSF
                 catch(HPSFRuntimeException ex)
                 {
                     Exception cause = ex.InnerException;
-                    if(cause is ArgumentException)
+                    if(cause is UnsupportedEncodingException)
                     {
                         throw new IllegalPropertySetDataException(cause);
                     }

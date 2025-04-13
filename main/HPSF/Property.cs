@@ -26,6 +26,8 @@ namespace NPOI.HPSF
     using System.IO;
     using System.Text; 
 using Cysharp.Text;
+    using System.Runtime.InteropServices;
+    using Microsoft.VisualBasic;
 
     /// <summary>
     /// <para>
@@ -505,6 +507,10 @@ using Cysharp.Text;
                     b.Append(hex);
                 }
             }
+            else if (type == Variant.VT_EMPTY || type == Variant.VT_NULL || value == null)
+            {
+                b.Append("null");
+            }
             else
             {
                 b.Append(value.ToString());
@@ -526,21 +532,30 @@ using Cysharp.Text;
         /// </exception>
         public int Write(Stream out1, int codepage)
         {
-
             int length = 0;
             long variantType = Type;
 
             /* Ensure that wide strings are written if the codepage is Unicode. */
-            if(codepage == CodePageUtil.CP_UNICODE && variantType == Variant.VT_LPSTR)
+            //if(codepage == CodePageUtil.CP_UNICODE && variantType == Variant.VT_LPSTR)
+            //{
+            //    variantType = Variant.VT_LPWSTR;
+            //}
+            if (variantType == Variant.VT_LPSTR && codepage != CodePageUtil.CP_UTF16) 
             {
-                variantType = Variant.VT_LPWSTR;
+                String csStr = CodePageUtil.CodepageToEncoding(codepage > 0 ? codepage : Property.DEFAULT_CODEPAGE);
+                
+                //if (!Charset.forName(csStr).newEncoder().canEncode((String)_value))
+                
+                if(!CodePageUtil.CanEncode(csStr, (String)_value))
+                {
+                    variantType = Variant.VT_LPWSTR;
+                }
             }
-
-            length += TypeWriter.WriteUIntToStream(out1, (uint) variantType);
+            LittleEndian.PutUInt(variantType, out1);
+            length += LittleEndianConsts.INT_SIZE;
             length += VariantSupport.Write(out1, variantType, Value, codepage);
             return length;
         }
-
     }
 }
 

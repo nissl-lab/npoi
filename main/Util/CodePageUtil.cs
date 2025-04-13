@@ -15,6 +15,7 @@
    limitations under the License.
 ==================================================================== */
 
+using NPOI.HPSF;
 using System;
 using System.IO;
 using System.Text;
@@ -214,8 +215,15 @@ namespace NPOI.Util
         public static byte[] GetBytesInCodePage(String string1, int codepage)
         {
             String cp = CodepageToEncoding(codepage);
-            Encoding encoding = Encoding.GetEncoding(cp);
-            return encoding.GetBytes(string1);
+            try
+            {
+                Encoding encoding = Encoding.GetEncoding(cp);
+                return encoding.GetBytes(string1);
+            }
+            catch(Exception ex) when (ex is NotSupportedException || ex is ArgumentException)
+            {
+                throw new UnsupportedEncodingException("Codepage number may not be " + codepage);
+            }
             //return string1.GetBytes(encoding);
         }
 
@@ -226,9 +234,9 @@ namespace NPOI.Util
          * @param codepage The codepage number
          */
         public static String GetStringFromCodePage(byte[] string1, int codepage)
-    {
-        return GetStringFromCodePage(string1, 0, string1.Length, codepage);
-    }
+        {
+            return GetStringFromCodePage(string1, 0, string1.Length, codepage);
+        }
 
         /**
          * Converts the bytes into a String, based on the equivalent character encoding
@@ -241,6 +249,23 @@ namespace NPOI.Util
         {
             String encoding = CodepageToEncoding(codepage);
             return Encoding.GetEncoding(encoding).GetString(string1, offset, length);
+        }
+
+        public static bool CanEncode(string cpStr, string toEncodeString)
+        {
+            //can this codepage encode the _value
+            try
+            {
+                var testEncoding = (Encoding)Encoding.GetEncoding(cpStr,
+                    EncoderFallback.ExceptionFallback, DecoderFallback.ExceptionFallback);
+                testEncoding.GetBytes(toEncodeString);
+                return true;
+            }
+            catch(EncoderFallbackException)
+            {
+                return false;
+            }
+            return false;
         }
 
         /**
@@ -260,7 +285,7 @@ namespace NPOI.Util
         public static String CodepageToEncoding(int codepage)
         {
             if (codepage <= 0)
-                throw new ArgumentException("Codepage number may not be " + codepage);
+                throw new UnsupportedEncodingException("Codepage number may not be " + codepage);
 
             switch (codepage)
             {

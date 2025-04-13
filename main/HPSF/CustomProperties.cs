@@ -396,16 +396,10 @@ namespace NPOI.HPSF
             } catch (UnsupportedEncodingException e) {
                 //LOG.log(POILogger.ERROR, "Codepage '"+cp+"' can't be found.");
             }
-            if (!string.IsNullOrEmpty(cps))
+            if (!string.IsNullOrEmpty(cps) && CodePageUtil.CanEncode(cps, value))
                 //&& Charset.forName(cps).newEncoder().canEncode(value)) 
             {
-                try
-                {
-                    var _ = Encoding.GetEncoding(cps).GetBytes(value);
-                    return;
-                }
-                catch (Exception) { }
-                
+                return;
             }
             //LOG.log(POILogger.DEBUG, "Charset '"+cps+"' can't encode '"+value+"' - switching to unicode.");
             SetCodepage(CodePageUtil.CP_UNICODE);

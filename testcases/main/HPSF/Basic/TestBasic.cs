@@ -189,8 +189,8 @@ namespace TestCases.HPSF.Basic
                     (poiFiles[0].GetBytes()));
             IList sections = si.Sections;
             Section s = (Section)sections[0];
-            ClassicAssert.IsTrue(Arrays.Equals
-                (s.FormatID.Bytes, SectionIDMap.SUMMARY_INFORMATION_ID));
+            
+            ClassicAssert.AreEqual(s.FormatID, SectionIDMap.SUMMARY_INFORMATION_ID);
             ClassicAssert.IsNotNull(s.Properties);
             ClassicAssert.AreEqual(17, s.PropertyCount);
             ClassicAssert.AreEqual("Titel", s.GetProperty(2));

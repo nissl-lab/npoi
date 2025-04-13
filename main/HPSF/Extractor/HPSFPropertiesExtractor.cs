@@ -173,7 +173,6 @@ using Cysharp.Text;
         public abstract class HelperPropertySet : SpecialPropertySet
         {
             public HelperPropertySet()
-                : base(null)
             {
             }
             public static String GetPropertyValueText(Object val)

@@ -634,7 +634,8 @@ namespace NPOI.HPSF
                 {
                     cps = new CustomProperties();
                     Section section = Sections[1];
-                    IDictionary dictionary = section.Dictionary;
+                    Dictionary<long, String> dictionary = section.Dictionary;
+
                     Property[] properties = section.Properties;
                     int propertyCount = 0;
                     foreach(var p in properties)
@@ -647,8 +648,8 @@ namespace NPOI.HPSF
                         else if(id > PropertyIDMap.PID_CODEPAGE)
                         {
                             propertyCount++;
-                            CustomProperty cp = new CustomProperty(p,
-                                (string)dictionary[id]);
+                            dictionary.TryGetValue(id, out string name);
+                            CustomProperty cp = new CustomProperty(p, name);
                             cps.Put(cp.Name, cp);
                         }
                     }
@@ -679,7 +680,7 @@ namespace NPOI.HPSF
                     cpCodepage = Property.DEFAULT_CODEPAGE;
                 }
                 value.SetCodepage(cpCodepage);
-                section.SetCodepage(cpCodepage);
+                section.Codepage = cpCodepage;
                 section.SetDictionary(dictionary);
                 //i = section.Size;
                 foreach(CustomProperty p in value.Values)

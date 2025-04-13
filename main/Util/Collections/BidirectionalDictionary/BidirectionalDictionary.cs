@@ -353,13 +353,15 @@ namespace System.Collections.Generic
         /// an element with the specified key; otherwise, <see langword="false"/>.</returns>
 #nullable disable
         public bool TryGetValue(TKey key, out TValue value) => _baseDictionary.TryGetValue(key, out value);
-#nullable enable
 
         public TKey GetKey(TValue value)
         {
-            return this.Inverse[value];
+            if(this.Inverse.TryGetValue(value, out TKey key))
+                return key;
+            else
+                return default;
         }
-
+#nullable enable
         public TKey RemoveValue(TValue value)
         {
             TKey key = GetKey(value);

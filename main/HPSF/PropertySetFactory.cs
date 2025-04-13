@@ -93,22 +93,57 @@ namespace NPOI.HPSF
         /// <returns>The Created <see cref="PropertySet"/>.</returns>
         public static PropertySet Create(InputStream stream)
         {
-            PropertySet ps = new PropertySet(stream);
-            try
+            stream.Mark(PropertySet.OFFSET_HEADER + ClassID.LENGTH+1);
+            LittleEndianInputStream leis = new LittleEndianInputStream(stream);
+            int byteOrder =  leis.ReadUShort();
+            int format = leis.ReadUShort();
+            int osVersion = (int)leis.ReadUInt();
+            byte[] clsIdBuf = new byte[ClassID.LENGTH];
+            leis.ReadFully(clsIdBuf);
+            int sectionCount = (int)leis.ReadUInt();
+        
+            if (byteOrder != PropertySet.BYTE_ORDER_ASSERTION ||
+                format != PropertySet.FORMAT_ASSERTION ||
+                sectionCount < 0)
             {
-                if(ps.IsSummaryInformation)
-                    return new SummaryInformation(ps);
-                else if(ps.IsDocumentSummaryInformation)
-                    return new DocumentSummaryInformation(ps);
-                else
-                    return ps;
+                throw new NoPropertySetStreamException();
             }
-            catch(UnexpectedPropertySetTypeException ex)
+        
+            if (sectionCount > 0)
             {
-                /* This exception will never be throws because we alReady checked
-                 * explicitly for this case above. */
-                throw new InvalidOperationException(ex.Message, ex);
+                leis.ReadFully(clsIdBuf);
             }
+            stream.Reset();
+        
+            ClassID clsId = new ClassID(clsIdBuf, 0);
+            if (sectionCount > 0 && PropertySet.matchesSummary(clsId, SectionIDMap.SUMMARY_INFORMATION_ID))
+            {
+                return new SummaryInformation(stream);
+            }
+            else if (sectionCount > 0 && PropertySet.matchesSummary(clsId, SectionIDMap.DOCUMENT_SUMMARY_INFORMATION_ID))
+            {
+                return new DocumentSummaryInformation(stream);
+            }
+            else
+            {
+                return new PropertySet(stream);
+            }
+            //PropertySet ps = new PropertySet(stream);
+            //try
+            //{
+            //    if(ps.IsSummaryInformation)
+            //        return new SummaryInformation(ps);
+            //    else if(ps.IsDocumentSummaryInformation)
+            //        return new DocumentSummaryInformation(ps);
+            //    else
+            //        return ps;
+            //}
+            //catch(UnexpectedPropertySetTypeException ex)
+            //{
+            //    /* This exception will never be throws because we alReady checked
+            //     * explicitly for this case above. */
+            //    throw new InvalidOperationException(ex.Message, ex);
+            //}
         }
 
 
@@ -117,6 +152,7 @@ namespace NPOI.HPSF
         /// Creates a new summary information
         /// </summary>
         /// <returns>the new summary information.</returns>
+        [Obsolete("Removed POI 3.17")]
         public static SummaryInformation CreateSummaryInformation()
         {
             MutablePropertySet ps = new MutablePropertySet();
@@ -133,12 +169,11 @@ namespace NPOI.HPSF
             }
         }
 
-
-
         /// <summary>
         /// Creates a new document summary information.
         /// </summary>
         /// <returns>the new document summary information.</returns>
+        [Obsolete("Removed POI 3.17")]
         public static DocumentSummaryInformation CreateDocumentSummaryInformation()
         {
             MutablePropertySet ps = new MutablePropertySet();
@@ -155,20 +190,14 @@ namespace NPOI.HPSF
             }
         }
 
+        public static SummaryInformation NewSummaryInformation()
+        {
+            return new SummaryInformation();
+        }
+
         internal static DocumentSummaryInformation NewDocumentSummaryInformation()
         {
-            MutablePropertySet ps = new MutablePropertySet();
-            MutableSection s = (MutableSection)ps.FirstSection;
-            s.FormatID = SectionIDMap.DOCUMENT_SUMMARY_INFORMATION_ID[0];
-            try
-            {
-                return new DocumentSummaryInformation(ps);
-            }
-            catch(UnexpectedPropertySetTypeException ex)
-            {
-                /* This should never happen. */
-                throw new HPSFRuntimeException(ex);
-            }
+            return new DocumentSummaryInformation();
         }
     }
 }

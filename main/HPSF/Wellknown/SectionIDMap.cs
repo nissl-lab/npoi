@@ -48,7 +48,7 @@ namespace NPOI.HPSF.Wellknown
     /// @author Rainer Klute (klute@rainer-klute.de)
     /// @since 2002-02-09
     /// </summary>
-    public class SectionIDMap : Hashtable
+    public class SectionIDMap
     {
         private static ThreadLocal<Dictionary<ClassID,PropertyIDMap>> defaultMap =
         new ThreadLocal<Dictionary<ClassID,PropertyIDMap>>();
@@ -115,7 +115,7 @@ namespace NPOI.HPSF.Wellknown
         /// sectionFormatID combination is not well-known, the
         /// string "[undefined]" is returned.
         /// </returns>
-        public static String GetPIDString(byte[] sectionFormatID,
+        public static String GetPIDString(ClassID sectionFormatID,
                                           long pid)
         {
             PropertyIDMap m = GetInstance().Get(sectionFormatID);
@@ -138,9 +138,10 @@ namespace NPOI.HPSF.Wellknown
         /// </summary>
         /// <param name="sectionFormatID">The section format ID.</param>
         /// <returns>the property ID map</returns>
-        public PropertyIDMap Get(byte[] sectionFormatID)
+        public PropertyIDMap Get(ClassID sectionFormatID)
         {
-            return (PropertyIDMap) this[Encoding.UTF8.GetString(sectionFormatID)];
+            return GetInstance().Get(sectionFormatID);
+            //return (PropertyIDMap) this[Encoding.UTF8.GetString(sectionFormatID)];
         }
 
         /// <summary>
@@ -150,10 +151,20 @@ namespace NPOI.HPSF.Wellknown
         /// <param name="sectionFormatID">the section format ID</param>
         /// <param name="propertyIDMap">The property ID map.</param>
         /// <returns></returns>
-        public Object Put(byte[] sectionFormatID,
-                          PropertyIDMap propertyIDMap)
+        public Object Put(ClassID sectionFormatID, PropertyIDMap propertyIDMap)
         {
-            return this[sectionFormatID] = propertyIDMap;
+            return GetInstance().Put(sectionFormatID, propertyIDMap);
+        }
+        /**
+         * Associates the string representation of a section format ID with a {@link PropertyIDMap}
+         * 
+         * @param key the key of the PropertyIDMap
+         * @param value the PropertyIDMap itself
+         * 
+         * @return the previous PropertyIDMap stored under this key, or {@code null} if there wasn't one
+         */
+        protected PropertyIDMap Put(String key, PropertyIDMap value) {
+            return (PropertyIDMap)Put(new ClassID(key), value);
         }
     }
 }
