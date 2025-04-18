@@ -292,10 +292,7 @@ namespace NPOI.SS.Formula.Atp
                 throw new ArgumentException("POI already implememts " + name +
                         ". You cannot override POI's implementations of Excel functions");
             }
-            if (_functionsByName.ContainsKey(name))
-                _functionsByName[name] = func;
-            else
-                _functionsByName.Add(name, func);
+            _functionsByName[name] = func;
         }
     }
 }

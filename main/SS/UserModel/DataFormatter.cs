@@ -388,7 +388,7 @@ using Cysharp.Text;
             }
 
             // Excel's # with value 0 will output empty where Java will output 0. This hack removes the # from the format.
-            if (emulateCSV && cellValue == 0.0 && formatStr.Contains("#") && !formatStr.Contains("0"))
+            if (emulateCSV && cellValue == 0.0 && formatStr.Contains('#') && !formatStr.Contains('0'))
             {
                 formatStr = formatStr.Replace("#", "");
             }
@@ -996,7 +996,7 @@ using Cysharp.Text;
                 result = numberFormat.Format(decimal.Parse(textValue));
             }
             // Complete scientific notation by adding the missing +.
-            if (result.Contains("E") && !result.Contains("E-"))
+            if (result.Contains('E') && !result.Contains("E-"))
             {
                 result = result.Replace("E", "E+");
             }

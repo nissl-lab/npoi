@@ -79,10 +79,7 @@ namespace NPOI.SS.Formula.Eval.Forked
                             + cr.FormatAsString() + "' is missing in master sheet.");
                 }
                 result = new ForkedEvaluationCell(this, mcell);
-                if (_sharedCellsByRowCol.ContainsKey(key))
-                    _sharedCellsByRowCol[key] = result;
-                else
-                    _sharedCellsByRowCol.Add(key, result);
+                _sharedCellsByRowCol[key] = result;
             }
             return result;
         }
