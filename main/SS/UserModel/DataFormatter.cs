@@ -331,10 +331,8 @@ using Cysharp.Text;
             // For now, if we detect 2+ parts, we call out to CellFormat to handle it
             // TODO Going forward, we should really merge the logic between the two classes
 
-            if (formatStr.IndexOf(';') != -1 &&
-                (formatStr.IndexOf(';') != formatStr.LastIndexOf(';')
-                 || rangeConditionalPattern.IsMatch(formatStr)
-                ))
+            int firstSemiColon = formatStr.IndexOf(';');
+            if (firstSemiColon != -1 && (firstSemiColon != formatStr.LastIndexOf(';') || rangeConditionalPattern.IsMatch(formatStr)))
             {
                 try
                 {
@@ -343,7 +341,7 @@ using Cysharp.Text;
                     // CellFormat requires callers to identify date vs not, so do so
                     object cellValueO = (cellValue);
                     if (DateUtil.IsADateFormat(formatIndex, formatStr) &&
-                        // don't try to handle Date value 0, let a 3 or 4-part format take care of it 
+                        // don't try to handle Date value 0, let a 3 or 4-part format take care of it
                         (double)cellValueO != 0.0)
                     {
                         cellValueO = DateUtil.GetJavaDate(cellValue);
@@ -359,7 +357,7 @@ using Cysharp.Text;
 
             // Excel supports positive/negative/zero, but java
             // doesn't, so we need to do it specially
-            int firstAt = formatStr.IndexOf(';');
+            int firstAt = firstSemiColon;
             int lastAt = formatStr.LastIndexOf(';');
             // p and p;n are ok by default. p;n;z and p;n;z;s need to be fixed.
             if (firstAt != -1 && firstAt != lastAt)
