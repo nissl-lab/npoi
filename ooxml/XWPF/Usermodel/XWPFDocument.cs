@@ -1882,44 +1882,72 @@ namespace NPOI.XWPF.UserModel
             return this;
         }
 
-        private static void FindAndReplaceTextInParagraph(XWPFParagraph paragraph, string oldValue, string newValue)
+        private static void FindAndReplaceTextInParagraph(XWPFParagraph paragraph, string oldValue, string newValue, int startPos = 0)
         {
-            var index = paragraph?.Text.IndexOf(oldValue) ?? -1;
-            if (index != -1)
+            if(paragraph == null)
+                return;
+
+            string paragraphText = string.Concat(paragraph.Runs.Select(p => p.Text));
+
+            var startIndex = paragraphText.IndexOf(oldValue, startPos);
+            if(startIndex == -1)
+                return;
+
+            int firstRun = -1;
+            int firstIndex = -1;
+
+            int lastRun = -1;
+            int lastIndex = -1;
+
+            int processedRuns = 0;
+            int processedChars = 0;
+
+            for(; processedRuns < paragraph.Runs.Count; processedRuns++)
             {
-                int? firstIndex = null;
-                int? lastIndex = null;
-                for (var i = 0; i < paragraph.Runs.Count; ++i)
+                var text = paragraph.Runs[processedRuns].Text;
+                if(processedChars + text.Length > startIndex)
                 {
-                    if (index < paragraph.Runs[i].Text.Length)
-                    {
-                        if (-index <= oldValue.Length)
-                        {
-                            if (firstIndex == null)
-                            {
-                                firstIndex = i;
-                            }
-                        }
-                        else
-                        {
-                            lastIndex = i;
-                            break;
-                        }
-                    }
-                    index -= paragraph.Runs[i].Text.Length;
+                    firstRun = processedRuns;
+                    firstIndex = startIndex - processedChars;
+                    break;
                 }
-                if (lastIndex == null)
-                {
-                    lastIndex = paragraph.Runs.Count - 1;
-                }
-                var newText = String.Concat(paragraph.Runs.Skip(firstIndex ?? 0).Take((lastIndex ?? 0) - (firstIndex ?? 0) + 1).Select(_ => _.Text));
-                newText = newText.Replace(oldValue, newValue);
-                paragraph.Runs[firstIndex ?? 0].SetText(newText);
-                for (var i = (firstIndex ?? 0) + 1; i <= lastIndex; ++i)
-                {
-                    paragraph.RemoveRun((firstIndex ?? 0) + 1);
-                }
+
+                processedChars += text.Length;
             }
+
+            int endIndex = startIndex + oldValue.Length;
+
+            for(; processedRuns < paragraph.Runs.Count; processedRuns++)
+            {
+                var text = paragraph.Runs[processedRuns].Text;
+                if(processedChars + text.Length > endIndex)
+                {
+                    lastRun = processedRuns;
+                    lastIndex = endIndex - processedChars;
+                    break;
+                }
+
+                processedChars += text.Length;
+            }
+
+            var initialFirstText = paragraph.Runs[firstRun].Text;
+            if(firstRun == lastRun)
+            {
+                paragraph.Runs[firstRun].SetText(initialFirstText.Substring(0, firstIndex) + newValue + initialFirstText.Substring(lastIndex));
+            }
+            else
+            {
+                paragraph.Runs[firstRun].SetText(initialFirstText.Substring(0, firstIndex) + newValue);
+
+                if(lastRun != -1)
+                    paragraph.Runs[lastRun].SetText(paragraph.Runs[lastRun].Text.Substring(lastIndex));
+            }
+
+            int removeTo = lastRun == -1 ? paragraph.Runs.Count : lastRun;
+            for(int i = firstRun + 1; i < removeTo; i++)
+                paragraph.RemoveRun(firstRun + 1);
+
+            FindAndReplaceTextInParagraph(paragraph, oldValue, newValue, startIndex + newValue.Length);
         }
 
         private static void FindAndReplaceTextInTable(XWPFTable table, string oldValue, string newValue)
