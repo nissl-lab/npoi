@@ -67,7 +67,7 @@ namespace NPOI.XSSF.UserModel
             {
                 if (!_fill.IsSetPatternFill() || !_fill.GetPatternFill().IsSetFgColor())
                     return null;
-                return new XSSFColor(_fill.GetPatternFill().bgColor);
+                return new XSSFColor(_fill.GetPatternFill().fgColor);
             }
             set
             {

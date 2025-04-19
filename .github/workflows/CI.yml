@@ -5,7 +5,7 @@
 #
 #     - To turn off auto-generation set:
 #
-#         [GitHubActions (AutoGenerate = false)]
+#         [CustomGitHubActions (AutoGenerate = false)]
 #
 #     - To trigger manual generation invoke:
 #
@@ -30,6 +30,11 @@ jobs:
     runs-on: windows-latest
     timeout-minutes: 20
     steps:
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            8.0
+            9.0
       - uses: actions/checkout@v4
       - name: 'Run: Clean, Test, Pack'
         run: ./build.cmd Clean Test Pack
@@ -44,6 +49,11 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            8.0
+            9.0
       - uses: actions/checkout@v4
       - name: 'Run: Clean, Test, Pack'
         run: ./build.cmd Clean Test Pack

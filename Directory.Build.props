@@ -76,25 +76,20 @@
     <NoWarn>$(NoWarn);CA1708</NoWarn> <!-- should differ by more than case -->
     <NoWarn>$(NoWarn);CA1710</NoWarn> <!-- Rename type name XXX so that it does not end in YYY -->
     <NoWarn>$(NoWarn);CA1711</NoWarn> <!-- Rename type name XXX so that it does not end in YYY -->
-    <NoWarn>$(NoWarn);CA1715</NoWarn> <!-- Prefix generic type parameter name with 'T' -->
     <NoWarn>$(NoWarn);CA1716</NoWarn> <!-- Rename type XXX so that it no longer conflicts with the reserved language keyword -->
     <NoWarn>$(NoWarn);CA1720</NoWarn> <!-- Identifier 'XXX' contains type name -->
     <NoWarn>$(NoWarn);CA1725</NoWarn> <!-- Change parameter name -->
     <NoWarn>$(NoWarn);CA1805</NoWarn> <!-- Member XXX is explicitly initialized to its default value -->
     <NoWarn>$(NoWarn);CA1806</NoWarn> <!-- .ctor creates a new instance of XXX which is never used. -->
     <NoWarn>$(NoWarn);CA1816</NoWarn> <!-- call GC.SuppressFinalize(object) -->
-    <NoWarn>$(NoWarn);CA1825</NoWarn> <!-- Avoid unnecessary zero-length array allocations. -->
     <NoWarn>$(NoWarn);CA1830</NoWarn> <!-- Remove the ToString call in order to use a strongly-typed StringBuilder overload -->
     <NoWarn>$(NoWarn);CA1846</NoWarn> <!-- Prefer 'AsSpan' over 'Substring' when span-based overloads are available -->
     <NoWarn>$(NoWarn);CA1834</NoWarn> <!-- Member XXX is explicitly initialized to its default value -->
     <NoWarn>$(NoWarn);CA1845</NoWarn> <!-- Use span-based 'string.Concat' and 'AsSpan' instead of 'Substring' -->
-    <NoWarn>$(NoWarn);CA1847</NoWarn> <!-- Use 'string.Contains(char)' instead of 'string.Contains(string)' when searching for a single character -->
     <NoWarn>$(NoWarn);CA1850</NoWarn> <!-- Prefer static 'System.Security.Cryptography.MD5.HashData' method over 'ComputeHash' -->
-    <NoWarn>$(NoWarn);CA1852</NoWarn> <!-- Type 'XXX' can be sealed because it has no subtypes in its containing assembly and is not externally visible -->
     <NoWarn>$(NoWarn);CA1859</NoWarn> <!-- Change return type of method -->
     <NoWarn>$(NoWarn);CA1861</NoWarn> <!-- Prefer 'static readonly' fields over constant array arguments -->
     <NoWarn>$(NoWarn);CA1862</NoWarn> <!-- Prefer the string comparison method overload -->
-    <NoWarn>$(NoWarn);CA1864</NoWarn> <!-- To avoid double lookup, call 'TryAdd' instead of calling 'Add' with a 'ContainsKey' -->
     <NoWarn>$(NoWarn);CA1872</NoWarn> <!-- Prefer 'System.Convert.ToHexString(byte[])' over call chains based on 'System.BitConverter.ToString(byte[])' -->
     <NoWarn>$(NoWarn);CA2019</NoWarn> <!-- 'ThreadStatic' fields should not use inline initialization -->
     <NoWarn>$(NoWarn);CA2022</NoWarn> <!-- Avoid inexact read -->

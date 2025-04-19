@@ -150,7 +150,7 @@ namespace TestCases.XWPF.UserModel
             doc.FindAndReplaceText("$replace_cell_text$", "Regel1\nRegel2\nRegel3");
 
             //Save Word Document
-            XWPFDocument outputDocument = outputDocument = XWPFTestDataSamples.WriteOutAndReadBack(doc);
+            XWPFDocument outputDocument = XWPFTestDataSamples.WriteOutAndReadBack(doc);
 
             //Combine all runs of all paragraphs
             StringBuilder builder = new StringBuilder();
@@ -182,6 +182,44 @@ namespace TestCases.XWPF.UserModel
             //Check 
             ClassicAssert.AreEqual("Table replace multiple enters Regel1\nRegel2\nRegel3 text after last enter", builder.ToString());
 
+        }
+
+        [Test]
+        public void FindAndReplaceTextInParagraph()
+        {
+            XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("WordFindAndReplaceTextInParagraph.docx");
+            string initialText = string.Concat(doc.Paragraphs.Select(t => t.Text));
+
+            Dictionary<string, string> replacers = new Dictionary<string, string>
+            {
+                {"$FINALQUALIFYINGWORK_QUESTION_1_ASKING_SHORT$", "Asking1" },
+                {"$FINALQUALIFYINGWORK_QUESTION_1_QUESTION$", "Question1" },
+                {"$FINALQUALIFYINGWORK_QUESTION_2_ASKING_SHORT$", "Asking2" },
+                {"$FINALQUALIFYINGWORK_QUESTION_2_QUESTION$", "Question2" },
+                {"$STUDENT_FULL$", "На русском с пробелами" },
+                {"$FINALQUALIFYINGWORK_GRADE$", "5" },
+                {"$SIMPLE$", "Last text" },
+                {"$DOUBLE$", "Twice" },
+            };
+
+            //This is calling FindAndReplaceTextInParagraph for each paragraph in document
+            foreach(var replacer in replacers)
+                doc.FindAndReplaceText(replacer.Key, replacer.Value);
+            
+            //Save Word Document
+            XWPFDocument outputDocument = XWPFTestDataSamples.WriteOutAndReadBack(doc);
+
+            foreach(var replacer in replacers)
+                initialText = initialText.Replace(replacer.Key, replacer.Value);
+
+            string savedText = string.Concat(outputDocument.Paragraphs.Select(t => t.Text));
+
+            //Check that at least replacing in string equal to result file
+            ClassicAssert.AreEqual(initialText, savedText);
+
+            //Check
+            ClassicAssert.AreEqual("Some initial text на разный манер (inserted) and so on:Asking1: Question1Asking2: Question2Result on:1. Say that На русском с пробелами with a very long sentence and one more replacer in the end for (русский язык) sure 5Triple replace with TwiceTwice и ещё одним Twice повторением.Last text", 
+                savedText);
         }
 
         [Test]

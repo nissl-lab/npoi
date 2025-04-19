@@ -414,7 +414,7 @@ public class Slide : Sheet
     	}
 
     	// None found
-    	return Array.Empty<Comment>();
+    	return [];
     }
 
     public void Draw(Graphics2D graphics){

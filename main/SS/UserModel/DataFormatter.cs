@@ -19,7 +19,8 @@ namespace NPOI.SS.UserModel
 {
     using System;
     using System.Collections;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
     using System.Text.RegularExpressions;
 
     using NPOI.SS.Util;
@@ -150,7 +151,7 @@ namespace NPOI.SS.UserModel
 
         static DataFormatter()
         {
-            StringBuilder buf = new StringBuilder();
+            using var buf = ZString.CreateStringBuilder();
             for (int i = 0; i < 255; i++) buf.Append('#');
             invalidDateTimeString = buf.ToString();
         }
@@ -341,10 +342,8 @@ namespace NPOI.SS.UserModel
             // For now, if we detect 2+ parts, we call out to CellFormat to handle it
             // TODO Going forward, we should really merge the logic between the two classes
 
-            if (formatStr.Contains(';') &&
-                (formatStr.IndexOf(';') != formatStr.LastIndexOf(';')
-                 || rangeConditionalPattern.IsMatch(formatStr)
-                ))
+            int firstSemiColon = formatStr.IndexOf(';');
+            if (firstSemiColon != -1 && (firstSemiColon != formatStr.LastIndexOf(';') || rangeConditionalPattern.IsMatch(formatStr)))
             {
                 try
                 {
@@ -353,7 +352,7 @@ namespace NPOI.SS.UserModel
                     // CellFormat requires callers to identify date vs not, so do so
                     object cellValueO = (cellValue);
                     if (DateUtil.IsADateFormat(formatIndex, formatStr) &&
-                        // don't try to handle Date value 0, let a 3 or 4-part format take care of it 
+                        // don't try to handle Date value 0, let a 3 or 4-part format take care of it
                         (double)cellValueO != 0.0)
                     {
                         cellValueO = DateUtil.GetJavaDate(cellValue);
@@ -369,7 +368,7 @@ namespace NPOI.SS.UserModel
 
             // Excel supports positive/negative/zero, but java
             // doesn't, so we need to do it specially
-            int firstAt = formatStr.IndexOf(';');
+            int firstAt = firstSemiColon;
             int lastAt = formatStr.LastIndexOf(';');
             // p and p;n are ok by default. p;n;z and p;n;z;s need to be fixed.
             if (firstAt != -1 && firstAt != lastAt)
@@ -400,7 +399,7 @@ namespace NPOI.SS.UserModel
             }
 
             // Excel's # with value 0 will output empty where Java will output 0. This hack removes the # from the format.
-            if (emulateCSV && cellValue == 0.0 && formatStr.Contains("#") && !formatStr.Contains("0"))
+            if (emulateCSV && cellValue == 0.0 && formatStr.Contains('#') && !formatStr.Contains('0'))
             {
                 formatStr = formatStr.Replace("#", "");
             }
@@ -452,7 +451,8 @@ namespace NPOI.SS.UserModel
 
                 if (symbol.IndexOf('$') > -1)
                 {
-                    StringBuilder sb = new StringBuilder();
+                    using var sb = ZString.CreateStringBuilder();
+
                     sb.Append(symbol.Substring(0, symbol.IndexOf('$')));
                     sb.Append('\\');
                     sb.Append(symbol.Substring(symbol.IndexOf('$'), symbol.Length- symbol.IndexOf('$')));
@@ -589,6 +589,7 @@ namespace NPOI.SS.UserModel
             */
 
             StringBuilder sb = new StringBuilder();
+
             char[] chars = formatStr.ToCharArray();
             bool mIsMonth = true;
             bool isElapsed = false;
@@ -1015,7 +1016,7 @@ namespace NPOI.SS.UserModel
                 result = numberFormat.Format(decimal.Parse(textValue));
             }
             // Complete scientific notation by adding the missing +.
-            if (result.Contains("E") && !result.Contains("E-"))
+            if (result.Contains('E') && !result.Contains("E-"))
             {
                 result = result.Replace("E", "E+");
             }

@@ -19,7 +19,8 @@
 namespace NPOI.DDF
 {
     using System;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
     using System.Collections;
     using NPOI.Util;
     using System.Collections.Generic;
@@ -31,7 +32,7 @@ namespace NPOI.DDF
     /// </summary>
     public class UnknownEscherRecord : EscherRecord, ICloneable
     {
-        private static byte[] NO_BYTES = Array.Empty<byte>();
+        private static byte[] NO_BYTES = [];
 
         /** The data for this record not including the the 8 byte header */
         private byte[] _thedata = NO_BYTES;
@@ -65,7 +66,7 @@ namespace NPOI.DDF
             if (IsContainerRecord)
             {
                 int bytesWritten = 0;
-                _thedata = Array.Empty<byte>();
+                _thedata = [];
                 offset += 8;
                 bytesWritten += 8;
                 while (bytesRemaining > 0)
@@ -179,7 +180,7 @@ namespace NPOI.DDF
         {
             String nl = Environment.NewLine;
 
-            StringBuilder children = new StringBuilder();
+            using var children = ZString.CreateStringBuilder();
             if (ChildRecords.Count > 0)
             {
                 children.Append("  children: " + nl);

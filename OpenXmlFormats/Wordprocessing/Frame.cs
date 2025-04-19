@@ -23,7 +23,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_Frameset()
         {
-            this.itemsField = Array.Empty<object>();
+            this.itemsField = [];
             this.frameLayoutField = new CT_FrameLayout();
             this.framesetSplitbarField = new CT_FramesetSplitbar();
             this.szField = new CT_String();

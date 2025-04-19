@@ -18,7 +18,8 @@
 namespace NPOI.SS.Formula.PTG
 {
     using System;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
     using NPOI.Util;
 
     using NPOI.SS.Util;
@@ -78,7 +79,8 @@ namespace NPOI.SS.Formula.PTG
         }
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder();
+            using var sb = ZString.CreateStringBuilder();
+
             sb.Append(GetType().Name);
             sb.Append(" [");
             sb.Append(FormatReferenceAsString());

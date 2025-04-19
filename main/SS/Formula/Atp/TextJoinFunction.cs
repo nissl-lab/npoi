@@ -2,7 +2,8 @@
 using NPOI.SS.Formula.Functions;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Text; 
+using Cysharp.Text;
 
 namespace NPOI.SS.Formula.Atp
 {
@@ -83,8 +84,9 @@ namespace NPOI.SS.Formula.Atp
                     {
                         delimiters.Add(TextJoinFunction.LaxValueToString(delimiterArg));
                     }
-                    StringBuilder sb = new StringBuilder();
-                    for (int i = 0; i < textValues.Count; i++)
+                    using var sb = ZString.CreateStringBuilder();
+
+                    for(int i = 0; i < textValues.Count; i++)
                     {
                         if (i > 0)
                         {

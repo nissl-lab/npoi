@@ -22,7 +22,7 @@ namespace NPOI.HPSF
                 //                + "(doesn't even have format field!). "
                 //                + "Setting to format == 0 and hope for the best" );
                 _format = 0;
-                _value = System.Array.Empty<byte>();
+                _value = [];
                 return;
             }
 

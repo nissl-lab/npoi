@@ -1264,10 +1264,7 @@ namespace NPOI.HSSF.Record
         /// <param name="objRecord">Obj or TextObj record</param>
         public void AssociateShapeToObjRecord(EscherRecord r, Record objRecord)
         {
-            if(!shapeToObj.ContainsKey(r))
-                shapeToObj.Add(r, objRecord);
-            else
-                shapeToObj[r]= objRecord;
+            shapeToObj[r] = objRecord;
         }
         /// <summary>
         /// Remove echerRecord and associated to it Obj or TextObj record

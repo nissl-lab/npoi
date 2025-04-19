@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace NPOI
 {
@@ -13,6 +14,21 @@ namespace NPOI
 
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
     internal static bool EndsWith(this string source, char c) => source.Length > 0 && source[source.Length - 1] == c;
+
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    internal static string[] Split(this string source, char c, StringSplitOptions options) => source.Split([c], options);
+
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    internal static bool TryAdd<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key, TValue value)
+    {
+        if(dictionary.ContainsKey(key))
+        {
+            return false;
+        }
+
+        dictionary[key] = value;
+        return true;
+    }
 #endif
 
 #if NETFRAMEWORK

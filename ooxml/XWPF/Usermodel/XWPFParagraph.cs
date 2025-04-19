@@ -19,7 +19,8 @@ namespace NPOI.XWPF.UserModel
     using System;
     using System.Collections.Generic;
     using NPOI.OpenXmlFormats.Wordprocessing;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
     using NPOI.Util;
     using System.Collections;
     using NPOI.WP.UserModel;
@@ -258,7 +259,7 @@ namespace NPOI.XWPF.UserModel
         {
             get
             {
-                StringBuilder out1 = new StringBuilder();
+                using var out1 = ZString.CreateStringBuilder();
                 foreach (IRunElement run in iRuns)
                 {
                     if (run is XWPFRun xRun)
@@ -529,7 +530,7 @@ namespace NPOI.XWPF.UserModel
         {
             get
             {
-                StringBuilder text = new StringBuilder();
+                using var text = ZString.CreateStringBuilder();
                 foreach (XWPFRun run in runs)
                 {
                     text.Append(run.ToString());
@@ -544,7 +545,7 @@ namespace NPOI.XWPF.UserModel
         {
             get
             {
-                StringBuilder text = new StringBuilder();
+                using var text = ZString.CreateStringBuilder();
                 foreach (XWPFRun run in runs)
                 {
                     text.Append(run.PictureText);
@@ -1540,7 +1541,7 @@ namespace NPOI.XWPF.UserModel
             int RunEnd = segment.EndRun;
             int textEnd = segment.EndText;
             int charEnd = segment.EndChar;
-            StringBuilder text = new StringBuilder();
+            using var text = ZString.CreateStringBuilder();
             for (int i = RunBegin; i <= RunEnd; i++)
             {
                 int startText = 0, endText = paragraph.GetRList()[i].GetTList().Count - 1;

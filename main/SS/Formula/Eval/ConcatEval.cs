@@ -18,7 +18,8 @@
 namespace NPOI.SS.Formula.Eval
 {
     using System;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
     using NPOI.SS.Formula.Functions;
     /**
      * @author Amol S. Deshmukh &lt; amolweb at ya hoo dot com &gt;
@@ -46,7 +47,8 @@ namespace NPOI.SS.Formula.Eval
             {
                 return e.GetErrorEval();
             }
-            StringBuilder sb = new StringBuilder();
+            using var sb = ZString.CreateStringBuilder();
+
             sb.Append(GetText(ve0));
             sb.Append(GetText(ve1));
             return new StringEval(sb.ToString());

@@ -34,7 +34,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
+using System.Text; 
+using Cysharp.Text;
 using System.Xml;
 using CT_Shape = NPOI.OpenXmlFormats.Vml.CT_Shape;
 using ST_EditAs = NPOI.OpenXmlFormats.Dml.Spreadsheet.ST_EditAs;
@@ -134,7 +135,7 @@ namespace NPOI.XSSF.UserModel
             {
                 if(!worksheet.IsSetColBreaks() || worksheet.colBreaks.sizeOfBrkArray() == 0)
                 {
-                    return Array.Empty<int>();
+                    return [];
                 }
 
                 List<CT_Break> brkArray = worksheet.colBreaks.brk;
@@ -595,7 +596,7 @@ namespace NPOI.XSSF.UserModel
             {
                 if(!worksheet.IsSetRowBreaks() || worksheet.rowBreaks.sizeOfBrkArray() == 0)
                 {
-                    return Array.Empty<int>();
+                    return [];
                 }
 
                 List<CT_Break> brkArray = worksheet.rowBreaks.brk;
@@ -1530,7 +1531,7 @@ namespace NPOI.XSSF.UserModel
                     // For some reason, we have to remove the hyperlinks one by one from the CTHyperlinks array
                     // before unsetting the hyperlink array.
                     // Resetting the hyperlink array seems to break some XML nodes.
-                    //worksheet.getHyperlinks().setHyperlinkArray(Array.Empty<CTHyperlink>());
+                    //worksheet.getHyperlinks().setHyperlinkArray([]);
                     worksheet.UnsetHyperlinks();
                 }
                 else
@@ -5737,7 +5738,7 @@ namespace NPOI.XSSF.UserModel
                 }
             }
 
-            StringBuilder rng = new StringBuilder();
+            using var rng = ZString.CreateStringBuilder();
             rng.Append(c);
             if(rng.Length > 0 && r.Length > 0)
             {

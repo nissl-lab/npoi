@@ -84,7 +84,7 @@ namespace NPOI.POIFS.FileSystem
             _closed = false;
 
             // Have an empty one Created for now
-            DocumentEntry doc = parent.CreateDocument(name, new MemoryStream(Array.Empty<byte>()));
+            DocumentEntry doc = parent.CreateDocument(name, new MemoryStream([]));
             _property = (DocumentProperty)((DocumentNode)doc).Property;
             _document = new NPOIFSDocument((DocumentNode)doc);
         }

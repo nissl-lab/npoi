@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Text; 
+using Cysharp.Text;
 using System.Text.RegularExpressions;
 
 using NPOI.OpenXml4Net.Exceptions;
@@ -169,7 +170,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal
         }
         public String ToString(bool withParameters)
         {
-            StringBuilder retVal = new StringBuilder();
+            using var retVal = ZString.CreateStringBuilder();
             retVal.Append(this.Type);
             retVal.Append("/");
             retVal.Append(this.SubType);
@@ -187,7 +188,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal
         }
         public String ToStringWithParameters()
         {
-            StringBuilder retVal = new StringBuilder();
+            using var retVal = ZString.CreateStringBuilder();
             retVal.Append(ToString());
 
             foreach (String key in parameters.Keys)
@@ -257,7 +258,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal
         public String[] GetParameterKeys()
         {
             if (parameters == null)
-                return Array.Empty<String>();
+                return [];
             List<string> keys = new List<string>();
             keys.AddRange(parameters.Keys);
             return keys.ToArray();
