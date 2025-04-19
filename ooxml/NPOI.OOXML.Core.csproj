@@ -18,10 +18,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="XSSF\UserModel\presetTableStyles.xml" />
-  </ItemGroup>
-
-  <ItemGroup>
     <EmbeddedResource Include="Resources\presetTableStyles.xml" />
   </ItemGroup>
 
