@@ -21,8 +21,6 @@ using NPOI.SS.Formula.Atp;
 namespace NPOI.SS.Formula
 {
     using System;
-    using System.Collections;
-    using NPOI.SS.Formula;
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.Util;
     using NPOI.SS.Formula.Functions;
@@ -57,7 +55,7 @@ namespace NPOI.SS.Formula
         private readonly Dictionary<String, int> _sheetIndexesByName;
         private CollaboratingWorkbooksEnvironment _collaboratingWorkbookEnvironment;
         private readonly IStabilityClassifier _stabilityClassifier;
-        private readonly UDFFinder _udfFinder;
+        private readonly AggregatingUDFFinder _udfFinder;
 
         private bool _ignoreMissingWorkbooks = false;
 

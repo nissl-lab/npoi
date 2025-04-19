@@ -432,8 +432,8 @@ namespace NPOI.HSSF.Record
         {
             // Keep track of any shape records Created so we can match them back to the object id's.
             // Textbox objects are also treated as shape objects.
-            List<EscherRecord> shapeRecords = new List<EscherRecord>();
-            IEscherRecordFactory recordFactory = new CustomEscherRecordFactory(shapeRecords);
+            List<EscherRecord> shapeRecords = [];
+            CustomEscherRecordFactory recordFactory = new(shapeRecords);
 
             // Create one big buffer
             using (MemoryStream stream = RecyclableMemory.GetStream())

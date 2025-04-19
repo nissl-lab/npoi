@@ -15,15 +15,13 @@
    limitations under the License.
 ==================================================================== */
 
+using System;
+using System.Collections.Generic;
+
+using NPOI.SS.Formula.Eval;
+
 namespace NPOI.SS.Formula
 {
-
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using NPOI.SS.Formula.Eval;
-    
-
     /// <summary>
     /// Instances of this class keep track of multiple dependent cell evaluations due
     /// To recursive calls To <see cref="WorkbookEvaluator.Evaluate"/>
@@ -37,15 +35,15 @@ namespace NPOI.SS.Formula
     public class EvaluationTracker
     {
         // TODO - consider deleting this class and letting CellEvaluationFrame take care of itself
-        private readonly IList<CellEvaluationFrame> _evaluationFrames;
-        private readonly ISet<FormulaCellCacheEntry> _currentlyEvaluatingCells;
+        private readonly List<CellEvaluationFrame> _evaluationFrames;
+        private readonly HashSet<FormulaCellCacheEntry> _currentlyEvaluatingCells;
         private readonly EvaluationCache _cache;
 
         public EvaluationTracker(EvaluationCache cache)
         {
             _cache = cache;
-            _evaluationFrames = new List<CellEvaluationFrame>();
-            _currentlyEvaluatingCells = new HashSet<FormulaCellCacheEntry>();
+            _evaluationFrames = [];
+            _currentlyEvaluatingCells = [];
         }
 
         /**

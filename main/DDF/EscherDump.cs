@@ -48,7 +48,7 @@ namespace NPOI.DDF
         /// <param name="size">The number of bytes to Read.</param>
         public void Dump(byte[] data, int offset, int size)
         {
-            IEscherRecordFactory recordFactory = new DefaultEscherRecordFactory();
+            DefaultEscherRecordFactory recordFactory = new();
             int pos = offset;
             while (pos < offset + size)
             {

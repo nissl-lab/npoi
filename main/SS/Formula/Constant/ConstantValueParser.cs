@@ -81,7 +81,7 @@ namespace NPOI.SS.Formula.Constant
             throw new Exception("Unknown grbit value (" + grbit + ")");
         }
 
-        private static Object ReadBoolean(ILittleEndianInput in1)
+        private static bool ReadBoolean(ILittleEndianInput in1)
         {
             byte val = (byte)in1.ReadLong(); // 7 bytes 'not used'
             switch (val)

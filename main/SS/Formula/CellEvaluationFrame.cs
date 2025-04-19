@@ -15,32 +15,31 @@
    limitations under the License.
 ==================================================================== */
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+using NPOI.SS.Formula.Eval;
+
 namespace NPOI.SS.Formula
 {
-
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using NPOI.SS.Formula.Eval;
-
     /**
      * Stores details about the current evaluation of a cell.<br/>
      */
-    class CellEvaluationFrame
+    internal sealed class CellEvaluationFrame
     {
-
         private readonly FormulaCellCacheEntry _cce;
-        private readonly ISet<CellCacheEntry> _sensitiveInputCells;
+        private readonly HashSet<CellCacheEntry> _sensitiveInputCells;
         private FormulaUsedBlankCellSet _usedBlankCellGroup;
 
         public CellEvaluationFrame(FormulaCellCacheEntry cce)
         {
             _cce = cce;
-            _sensitiveInputCells = new HashSet<CellCacheEntry>();
+            _sensitiveInputCells = [];
         }
-        public CellCacheEntry GetCCE()
+
+        public FormulaCellCacheEntry GetCCE()
         {
             return _cce;
         }

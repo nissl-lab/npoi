@@ -1591,7 +1591,7 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        internal bool IsCellInArrayFormulaContext(ICell cell)
+        internal bool IsCellInArrayFormulaContext(XSSFCell cell)
         {
             foreach(CellRangeAddress range in arrayFormulas)
             {
@@ -1604,7 +1604,7 @@ namespace NPOI.XSSF.UserModel
             return false;
         }
 
-        internal XSSFCell GetFirstCellInArrayFormula(ICell cell)
+        internal XSSFCell GetFirstCellInArrayFormula(XSSFCell cell)
         {
             foreach(CellRangeAddress range in arrayFormulas)
             {
@@ -2996,8 +2996,8 @@ namespace NPOI.XSSF.UserModel
                 throw new ArgumentException("No rows to copy");
             }
 
-            IRow srcStartRow = srcRows[0];
-            IRow srcEndRow = srcRows[srcRows.Count - 1];
+            XSSFRow srcStartRow = srcRows[0];
+            XSSFRow srcEndRow = srcRows[srcRows.Count - 1];
 
             if(srcStartRow == null)
             {
@@ -3012,7 +3012,7 @@ namespace NPOI.XSSF.UserModel
             int size = srcRows.Count;
             for(int index = 1; index < size; index++)
             {
-                IRow curRow = srcRows[index];
+                XSSFRow curRow = srcRows[index];
                 if(curRow == null)
                 {
                     throw new ArgumentException(
@@ -3565,8 +3565,7 @@ namespace NPOI.XSSF.UserModel
 
         public ICellRange<ICell> SetArrayFormula(string formula, CellRangeAddress range)
         {
-
-            ICellRange<ICell> cr = GetCellRange(range);
+            SSCellRange<ICell> cr = GetCellRange(range);
 
             ICell mainArrayFormulaCell = cr.TopLeftCell;
             ((XSSFCell) mainArrayFormulaCell).SetCellArrayFormula(formula, range);
@@ -4181,7 +4180,7 @@ namespace NPOI.XSSF.UserModel
 
             XSSFSheet newSheet = (XSSFSheet) dest.CreateSheet(name);
             newSheet.sheet.state = sheet.state;
-            IDictionary<int, ICellStyle> styleMap = copyStyle ? new Dictionary<int, ICellStyle>() : null;
+            Dictionary<int, ICellStyle> styleMap = copyStyle ? new Dictionary<int, ICellStyle>() : null;
             for(int i = FirstRowNum; i <= LastRowNum; i++)
             {
                 XSSFRow srcRow = (XSSFRow) GetRow(i);
@@ -5669,7 +5668,7 @@ namespace NPOI.XSSF.UserModel
         /// </summary>
         /// <param name="range"></param>
         /// <returns></returns>
-        private ICellRange<ICell> GetCellRange(CellRangeAddress range)
+        private SSCellRange<ICell> GetCellRange(CellRangeAddress range)
         {
             int firstRow = range.FirstRow;
             int firstColumn = range.FirstColumn;
@@ -5955,7 +5954,7 @@ namespace NPOI.XSSF.UserModel
         }
 
         private static void CopyRow(XSSFSheet srcSheet, XSSFSheet destSheet, XSSFRow srcRow, XSSFRow destRow,
-            IDictionary<int, ICellStyle> styleMap, bool keepFormulas, bool keepMergedRegion)
+            Dictionary<int, ICellStyle> styleMap, bool keepFormulas, bool keepMergedRegion)
         {
             destRow.Height = srcRow.Height;
             if(!srcRow.GetCTRow().IsSetCustomHeight())
@@ -6017,8 +6016,7 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        private static void CopyCell(ICell oldCell, ICell newCell, IDictionary<int, ICellStyle> styleMap,
-            bool keepFormulas)
+        private static void CopyCell(XSSFCell oldCell, XSSFCell newCell, Dictionary<int, ICellStyle> styleMap, bool keepFormulas)
         {
             if(styleMap != null)
             {
@@ -6206,9 +6204,9 @@ namespace NPOI.XSSF.UserModel
             XSSFIgnoredErrorHelper.AddIgnoredErrors(ctIgnoredError, ref1, ignoredErrorTypes);
         }
 
-        private static ISet<IgnoredErrorType> GetErrorTypes(CT_IgnoredError err)
+        private static HashSet<IgnoredErrorType> GetErrorTypes(CT_IgnoredError err)
         {
-            ISet<IgnoredErrorType> result = new HashSet<IgnoredErrorType>();
+            HashSet<IgnoredErrorType> result = [];
 
             foreach(IgnoredErrorType errType in IgnoredErrorTypeValues.Values)
             {

@@ -2311,7 +2311,7 @@ namespace NPOI.XSSF.UserModel
          * @return wrapped instance of UDFFinder that allows seeking functions both by index and name
          */
         /*package*/
-        internal UDFFinder GetUDFFinder()
+        internal IndexedUDFFinder GetUDFFinder()
         {
             return _udfFinder;
         }

@@ -47,8 +47,8 @@ namespace NPOI.SS.UserModel.Helpers
         /// <returns>an array of affected merged regions, doesn't contain deleted ones</returns>
         public List<CellRangeAddress> ShiftMergedRegions(int startRow, int endRow, int n)
         {
-            var ShiftedRegions = new List<CellRangeAddress>();
-            ISet<int> removedIndices = new HashSet<int>();
+            List<CellRangeAddress> ShiftedRegions = [];
+            HashSet<int> removedIndices = [];
             var size = sheet.NumMergedRegions;
 
             for (var i = 0; i < size; i++)

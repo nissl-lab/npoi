@@ -14,17 +14,16 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
+
+using System;
+using System.Text;
+using System.Collections.Generic;
+
+using NPOI.SS.Util;
+using System.Collections;
+
 namespace NPOI.SS.Format
 {
-    using System;
-    using System.Text.RegularExpressions;
-    using System.Text;
-    using System.Collections.Generic;
-    using NPOI.SS.Util;
-    using System.Collections;
-    using NPOI.Util;
-
-
     /**
      * This class : printing out a value using a number format.
      *
@@ -56,9 +55,9 @@ namespace NPOI.SS.Format
         private DecimalFormat decimalFmt;
         private static List<Special> EmptySpecialList = new List<Special>();
 
-        private static readonly CellFormatter SIMPLE_NUMBER = new SimpleNumberCellFormatter("General");
-        private static readonly CellFormatter SIMPLE_INT = new CellNumberFormatter("#");
-        private static readonly CellFormatter SIMPLE_FLOAT = new CellNumberFormatter("#.#");
+        private static readonly SimpleNumberCellFormatter SIMPLE_NUMBER = new SimpleNumberCellFormatter("General");
+        private static readonly CellNumberFormatter SIMPLE_INT = new CellNumberFormatter("#");
+        private static readonly CellNumberFormatter SIMPLE_FLOAT = new CellNumberFormatter("#.#");
 
         /// <summary>
         /// The CellNumberFormatter.simpleValue() method uses the SIMPLE_NUMBER
@@ -409,7 +408,7 @@ namespace NPOI.SS.Format
         {
             if (pos >= specials.Count)
                 return EmptySpecialList;
-            IEnumerator<Special> it = specials.GetRange(pos + takeFirst, specials.Count - pos - takeFirst).GetEnumerator();
+            List<Special>.Enumerator it = specials.GetRange(pos + takeFirst, specials.Count - pos - takeFirst).GetEnumerator();
             //.ListIterator(pos + takeFirst);
             it.MoveNext();
             Special last = it.Current;
@@ -461,12 +460,8 @@ namespace NPOI.SS.Format
             if (idx != -1)
             {
                 // skip over the decimal point itself
-                IEnumerator<Special> it = specials.GetRange(idx + 1, specials.Count - idx - 1).GetEnumerator();//.ListIterator(specials.IndexOf(decimalPoint));
-                //if (it.HasNext())
-                //     it.Next();  // skip over the decimal point itself
-                while (it.MoveNext())
+                foreach (Special s in specials.GetRange(idx + 1, specials.Count - idx - 1))
                 {
-                    Special s = it.Current;
                     if (!IsDigitFmt(s))
                     {
                         break;
@@ -524,12 +519,10 @@ namespace NPOI.SS.Format
             }
 
             // Now strip them out -- we only need their interpretation, not their presence
-            IEnumerator<Special> it = specials.GetEnumerator();
             int Removed = 0;
-            List<Special> toRemove = new List<Special>();
-            while (it.MoveNext())
+            List<Special> toRemove = [];
+            foreach (var s in specials)
             {
-                Special s = it.Current;
                 s.pos -= Removed;
                 if (s.ch == ',')
                 {
@@ -797,7 +790,7 @@ namespace NPOI.SS.Format
             }
 
             // Now the result lines up like it is supposed to with the specials' indexes
-            IEnumerator<Special> it = exponentSpecials.GetEnumerator();//.ListIterator(1);
+            List<Special>.Enumerator it = exponentSpecials.GetEnumerator();//.ListIterator(1);
             it.MoveNext();
             it.MoveNext();
             Special expSign = it.Current;//.Next();

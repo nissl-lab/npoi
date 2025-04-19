@@ -222,11 +222,12 @@ using Cysharp.Text;
             builder.Append(tab).Append(FormatXmlRecordHeader(GetType().Name, HexDump.ToHex(RecordId), HexDump.ToHex(Version), HexDump.ToHex(Instance)))
                     .Append(tab).Append("\t").Append("<IsContainer>").Append(IsContainerRecord).Append("</IsContainer>\n")
                     .Append(tab).Append("\t").Append("<Numchildren>").Append(HexDump.ToHex(_childRecords.Count)).Append("</Numchildren>\n");
-            for (IEnumerator<EscherRecord> iterator = _childRecords.GetEnumerator(); iterator.MoveNext(); )
+
+            foreach (EscherRecord record in _childRecords)
             {
-                EscherRecord record = iterator.Current;
                 builder.Append(record.ToXml(tab + "\t"));
             }
+
             builder.Append(theDumpHex).Append("\n");
             builder.Append(tab).Append("</").Append(GetType().Name).Append(">\n");
             return builder.ToString();

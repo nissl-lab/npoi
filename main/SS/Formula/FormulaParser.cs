@@ -200,7 +200,7 @@ using Cysharp.Text;
         }
 
         /** Report What Was Expected */
-        private Exception expected(String s)
+        private FormulaParseException expected(String s)
         {
             String msg;
 
@@ -1518,7 +1518,7 @@ using Cysharp.Text;
          * If we have something that looks like [book]Sheet1: or
          *  Sheet1, see if it's actually a range eg Sheet1:Sheet2!
          */
-        private SheetIdentifier ParseSheetRange(String bookname, NameIdentifier sheet1Name)
+        private SheetRangeIdentifier ParseSheetRange(String bookname, NameIdentifier sheet1Name)
         {
             GetChar();
             SheetIdentifier sheet2 = ParseSheetName();
@@ -2316,7 +2316,7 @@ using Cysharp.Text;
             }
         }
 
-        private Ptg GetComparisonToken()
+        private ValueOperatorPtg GetComparisonToken()
         {
             if (look == '=')
             {

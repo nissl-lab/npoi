@@ -595,7 +595,7 @@ namespace NPOI.XSSF.Streaming
                 case CellType.Numeric:
                     if (DateUtil.IsCellDateFormatted(this))
                     {
-                        FormatBase sdf = new SimpleDateFormat("dd-MMM-yyyy");
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
                         //sdf.setTimeZone(LocaleUtil.getUserTimeZone());
                         return sdf.Format(DateCellValue);
                     }

@@ -43,7 +43,7 @@ namespace NPOI.POIFS.Storage
     public class SmallBlockTableWriter : BlockWritable, BATManaged
     {
         private readonly BlockAllocationTableWriter _sbat;
-        private readonly IList<SmallDocumentBlock>  _small_blocks;
+        private readonly List<SmallDocumentBlock>  _small_blocks;
         private readonly int                        _big_block_count;
         private readonly RootProperty               _root;
 

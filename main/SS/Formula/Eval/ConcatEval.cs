@@ -54,7 +54,7 @@ using Cysharp.Text;
             return new StringEval(sb.ToString());
         }
 
-        private static Object GetText(ValueEval ve)
+        private static string GetText(ValueEval ve)
         {
             if (ve is StringValueEval sve)
             {
@@ -64,8 +64,7 @@ using Cysharp.Text;
             {
                 return "";
             }
-            throw new InvalidOperationException("Unexpected value type ("
-                        + ve.GetType().Name + ")");
+            throw new InvalidOperationException($"Unexpected value type ({ve.GetType().Name})");
         }
     }
 }

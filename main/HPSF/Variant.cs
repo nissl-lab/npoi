@@ -25,12 +25,11 @@
  * 
  * ==============================================================*/
 
+using System;
+using System.Collections.Generic;
+
 namespace NPOI.HPSF
 {
-    using System;
-    using System.Collections;
-
-
     /// <summary>
     /// The <em>Variant</em> types as defined by Microsoft's COM. I
     /// found this information in <a href="http://www.marin.clara.net/COM/variant_type_definitions.htm">
@@ -358,9 +357,9 @@ namespace NPOI.HPSF
          * Maps the numbers denoting the variant types To their corresponding
          * variant type names.
          */
-        private static IDictionary numberToName;
+        private static readonly Dictionary<long, string> numberToName;
 
-        private static IDictionary numberToLength;
+        private static readonly Dictionary<long, int> numberToLength;
 
         /**
          * Denotes a variant type with a Length that is unknown To HPSF yet.
@@ -397,7 +396,7 @@ namespace NPOI.HPSF
         static Variant()
         {
             /* Initialize the number-to-name map: */
-            Hashtable tm1 = new Hashtable();
+            Dictionary<long, string> tm1 = [];
             tm1[0] = "VT_EMPTY";
             tm1[1] = "VT_NULL";
             tm1[2] = "VT_I2";
@@ -442,7 +441,7 @@ namespace NPOI.HPSF
             numberToName = tm1;
 
             /* Initialize the number-to-Length map: */
-            Hashtable tm2 = new Hashtable();
+            Dictionary<long, int> tm2 = [];
             tm2[0] = Length_0;
             tm2[1] = Length_UNKNOWN;
             tm2[2] = Length_2;
@@ -497,8 +496,11 @@ namespace NPOI.HPSF
         /// <returns>The variant type name or the string "unknown variant type"</returns>
         public static String GetVariantName(long variantType)
         {
-            String name = (String)numberToName[variantType];
-            return name != null ? name : "unknown variant type";
+            if (!numberToName.TryGetValue(variantType, out string name))
+            {
+                return "unknown variant type";
+            }
+            return name;
         }
 
         /// <summary>
@@ -512,11 +514,13 @@ namespace NPOI.HPSF
         public static int GetVariantLength(long variantType)
         {
             long key = (int)variantType;
-            if (numberToLength.Contains(key))
-                return -2;
-            long Length = (long)numberToLength[key];
-            return Convert.ToInt32(Length);
-        }
 
+            if(!numberToLength.TryGetValue(key, out int value))
+            {
+                return -2;
+            }
+
+            return Convert.ToInt32((long) value);
+        }
     }
 }

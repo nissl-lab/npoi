@@ -170,7 +170,7 @@ namespace NPOI.HSSF.Record
         public NameRecord(RecordInputStream ris)
         {
             byte[] remainder = ris.ReadAllContinuedRemainder();
-            ILittleEndianInput in1 = new LittleEndianByteArrayInputStream(remainder);
+            LittleEndianByteArrayInputStream in1 = new LittleEndianByteArrayInputStream(remainder);
             field_1_option_flag                 = in1.ReadShort();
 		    field_2_keyboard_shortcut           = (byte)in1.ReadByte();
 		    int field_3_length_name_text        = in1.ReadByte();
@@ -545,7 +545,7 @@ namespace NPOI.HSSF.Record
         }
 
 
-        private static Ptg CreateNewPtg()
+        private static Area3DPtg CreateNewPtg()
         {
             return new Area3DPtg("A1:A1", 0); // TODO - change to not be partially initialised
         }

@@ -15,23 +15,21 @@
    limitations under the License.
 ==================================================================== */
 
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Text;
+using System.Text.RegularExpressions;
+
+using NPOI.SS.Util;
+using NPOI.SS.Format;
+using NPOI.SS.Formula;
+using NPOI.Util;
+
+using Cysharp.Text;
+
 namespace NPOI.SS.UserModel
 {
-    using System;
-    using System.Collections;
-    using System.Text; 
-using Cysharp.Text;
-    using System.Text.RegularExpressions;
-
-    using NPOI.SS.Util;
-    using System.Globalization;
-    using NPOI.SS.Format;
-    using NPOI.Util;
-    using System.Collections.Generic;
-    using NPOI.SS.Formula;
-    using System.Runtime.Serialization;
-
-
     /**
      * HSSFDataFormatter contains methods for Formatting the value stored in an
      * Cell. This can be useful for reports and GUI presentations when you
@@ -169,7 +167,7 @@ using Cysharp.Text;
         /**
          * A default date format, if no date format was given
          */
-        private readonly DateFormat defaultDateformat;
+        private readonly SimpleDateFormat defaultDateformat;
 
         /** <em>General</em> FormatBase for whole numbers. */
         //private static DecimalFormat generalWholeNumFormat = new DecimalFormat("0");
@@ -186,7 +184,7 @@ using Cysharp.Text;
          * A map to cache formats.
          *  Map<String,FormatBase> Formats
          */
-        private readonly Hashtable formats;
+        private readonly Dictionary<string, FormatBase> formats;
 
         /** whether CSV friendly adjustments should be made to the formatted text **/
         private readonly bool emulateCSV = false;
@@ -267,7 +265,7 @@ using Cysharp.Text;
             defaultDateformat = new SimpleDateFormat(dateSymbols.FullDateTimePattern, dateSymbols);
             defaultDateformat.TimeZone = TimeZoneInfo.Local;
 
-            formats = new Hashtable();
+            formats = new Dictionary<string, FormatBase>();
 
             // init built-in Formats
             FormatBase zipFormat = ZipPlusFourFormat.Instance;
@@ -403,7 +401,8 @@ using Cysharp.Text;
             {
                 formatStr = formatStr.Replace("#", "");
             }
-            FormatBase format = (FormatBase)formats[formatStr];
+
+            formats.TryGetValue(formatStr, out FormatBase format);
             if (format != null)
             {
                 return format;
@@ -1170,10 +1169,8 @@ using Cysharp.Text;
          */
         public void SetDefaultNumberFormat(FormatBase format)
         {
-            IEnumerator itr = formats.Keys.GetEnumerator();
-            while (itr.MoveNext())
+            foreach (var key in formats.Keys)
             {
-                string key = (string)itr.Current;
                 if (formats[key] == generalNumberFormat)
                 {
                     formats[key] = format;

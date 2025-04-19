@@ -269,16 +269,16 @@ namespace NPOI.HSSF.Record
         }
         private static Ptg ReadRefPtg(byte[] formulaRawBytes)
         {
-            ILittleEndianInput in1 = new LittleEndianByteArrayInputStream(formulaRawBytes);
+            LittleEndianByteArrayInputStream in1 = new(formulaRawBytes);
             byte ptgSid = (byte)in1.ReadByte();
-            switch (ptgSid)
+            return ptgSid switch
             {
-                case AreaPtg.sid: return new AreaPtg(in1);
-                case Area3DPtg.sid: return new Area3DPtg(in1);
-                case RefPtg.sid: return new RefPtg(in1);
-                case Ref3DPtg.sid: return new Ref3DPtg(in1);
-            }
-            return null;
+                AreaPtg.sid => new AreaPtg(in1),
+                Area3DPtg.sid => new Area3DPtg(in1),
+                RefPtg.sid => new RefPtg(in1),
+                Ref3DPtg.sid => new Ref3DPtg(in1),
+                _ => null
+            };
         }
         public override Object Clone()
         {

@@ -15,16 +15,15 @@
    limitations under the License.
 ==================================================================== */
 
+using System;
+using System.IO;
+
+using NPOI.POIFS.EventFileSystem;
+using NPOI.POIFS.FileSystem;
+using NPOI.Util;
+
 namespace NPOI.POIFS.Crypt.Standard
 {
-    using System;
-    using System.IO;
-    using System.Security.AccessControl;
-    using NPOI.POIFS.Crypt;
-    using NPOI.POIFS.EventFileSystem;
-    using NPOI.POIFS.FileSystem;
-    using NPOI.Util;
-
     public class StandardEncryptor : Encryptor
     {
         private StandardEncryptionInfoBuilder builder;
@@ -109,8 +108,8 @@ namespace NPOI.POIFS.Crypt.Standard
             protected long countBytes;
             protected FileInfo fileOut;
             protected DirectoryNode dir;
-            ByteArrayOutputStream out1;
-            FileStream rawStream;// maybe has memory leak problem.
+            private readonly CipherOutputStream out1;
+            private readonly FileStream rawStream;// maybe has memory leak problem.
 
             protected internal StandardCipherOutputStream(DirectoryNode dir, StandardEncryptor encryptor)
             {

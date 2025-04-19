@@ -175,10 +175,8 @@ namespace NPOI.XWPF.UserModel
 
         public XWPFHyperlink GetHyperlinkByID(string id)
         {
-            IEnumerator<XWPFHyperlink> iter = hyperlinks.GetEnumerator();
-            while (iter.MoveNext())
+            foreach (XWPFHyperlink link in hyperlinks)
             {
-                XWPFHyperlink link = iter.Current;
                 if (link.Id.Equals(id))
                     return link;
             }

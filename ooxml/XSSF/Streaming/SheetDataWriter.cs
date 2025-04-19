@@ -136,7 +136,7 @@ namespace NPOI.XSSF.Streaming
          */
         public Stream GetWorksheetXmlInputStream()
         {
-            Stream fis = new FileStream(TemporaryFileInfo.FullName, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+            FileStream fis = new FileStream(TemporaryFileInfo.FullName, FileMode.OpenOrCreate, FileAccess.ReadWrite);
             try
             {
                 return DecorateInputStream(fis);

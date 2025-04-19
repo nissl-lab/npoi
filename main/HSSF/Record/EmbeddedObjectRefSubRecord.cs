@@ -183,19 +183,17 @@ namespace NPOI.HSSF.Record
 
         private static Ptg ReadRefPtg(byte[] formulaRawBytes)
         {
-            using (MemoryStream ms = RecyclableMemory.GetStream(formulaRawBytes))
+            using MemoryStream ms = RecyclableMemory.GetStream(formulaRawBytes);
+            LittleEndianInputStream in1 = new LittleEndianInputStream(ms);
+            byte ptgSid = (byte)in1.ReadByte();
+            switch (ptgSid)
             {
-                ILittleEndianInput in1 = new LittleEndianInputStream(ms);
-                byte ptgSid = (byte)in1.ReadByte();
-                switch (ptgSid)
-                {
-                    case AreaPtg.sid: return new AreaPtg(in1);
-                    case Area3DPtg.sid: return new Area3DPtg(in1);
-                    case RefPtg.sid: return new RefPtg(in1);
-                    case Ref3DPtg.sid: return new Ref3DPtg(in1);
-                }
-                return null;
+                case AreaPtg.sid: return new AreaPtg(in1);
+                case Area3DPtg.sid: return new Area3DPtg(in1);
+                case RefPtg.sid: return new RefPtg(in1);
+                case Ref3DPtg.sid: return new Ref3DPtg(in1);
             }
+            return null;
         }
 
         private static byte[] ReadRawData(ILittleEndianInput in1, int size)

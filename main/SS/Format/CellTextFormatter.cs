@@ -28,10 +28,11 @@ namespace NPOI.SS.Format
      */
     public class CellTextFormatter : CellFormatter
     {
-        private int[] textPos;
-        private String desc;
+        private readonly int[] textPos;
+        private readonly string desc;
 
-        internal static CellFormatter SIMPLE_TEXT = new CellTextFormatter("@");
+        internal static readonly CellTextFormatter SIMPLE_TEXT = new CellTextFormatter("@");
+
         private sealed class PartHandler : CellFormatPart.IPartHandler
         {
             private int numplace;

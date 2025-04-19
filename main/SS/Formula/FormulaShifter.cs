@@ -15,13 +15,14 @@
    limitations under the License.
 ==================================================================== */
 
+using System;
+
+using NPOI.SS.Formula.PTG;
+
+using Cysharp.Text;
+
 namespace NPOI.SS.Formula
 {
-
-    using NPOI.SS.Formula.PTG;
-    using System;
-    using System.Text; 
-using Cysharp.Text;
     /**
      * @author Josh Micich
      */
@@ -540,7 +541,7 @@ using Cysharp.Text;
             return null;
         }
 
-        private Ptg AdjustPtgDueToSheetMove(Ptg ptg)
+        private Ref3DPtg AdjustPtgDueToSheetMove(Ptg ptg)
         {
             if (ptg is Ref3DPtg refPtg)
             {
