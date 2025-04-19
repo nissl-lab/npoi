@@ -516,6 +516,11 @@ namespace NPOI.XSSF.UserModel
                 return new XSSFConditionFilterData(_cfRule);
             }
         }
+
+        /// <summary>
+        /// Conditional format rules don't define stripes, so always 0
+        /// </summary>
+        public int StripeSize => 0;
     }
 }
 

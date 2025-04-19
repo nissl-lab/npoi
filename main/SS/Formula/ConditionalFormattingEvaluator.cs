@@ -28,8 +28,7 @@ namespace NPOI.SS.Formula
         }
         public List<EvaluationConditionalFormatRule> GetConditionalFormattingForCell(CellReference cellRef)
         {
-            List<EvaluationConditionalFormatRule> rules = values[cellRef];
-
+            List<EvaluationConditionalFormatRule> rules = values.TryGetValue(cellRef, out List<EvaluationConditionalFormatRule> value) ? value : null;
             if (rules == null)
             {
                 // compute and cache them
@@ -84,7 +83,7 @@ namespace NPOI.SS.Formula
         protected List<EvaluationConditionalFormatRule> GetRules(ISheet sheet)
         {
             String sheetName = sheet.SheetName;
-            List<EvaluationConditionalFormatRule> rules = formats[sheetName];
+            List<EvaluationConditionalFormatRule> rules = formats.TryGetValue(sheetName, out List<EvaluationConditionalFormatRule> value) ? value : null;
             if (rules == null)
             {
                 if (formats.ContainsKey(sheetName))
