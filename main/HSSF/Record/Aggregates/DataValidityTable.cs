@@ -15,13 +15,12 @@
    limitations under the License.
 ==================================================================== */
 
+using System.Collections.Generic;
+
+using NPOI.HSSF.Model;
+
 namespace NPOI.HSSF.Record.Aggregates
 {
-    using System.Collections;
-
-    using NPOI.HSSF.Model;
-    using NPOI.HSSF.Record;
-
     /// <summary>
     /// Manages the DVALRecord and DVRecords for a single sheet
     /// See OOO excelfileformat.pdf section 4.14
@@ -35,15 +34,15 @@ namespace NPOI.HSSF.Record.Aggregates
          * The list of data validations for the current sheet.
          * Note - this may be empty (contrary to OOO documentation)
          */
-        private readonly IList _validationList;
+        private readonly List<DVRecord> _validationList;
 
         public DataValidityTable(RecordStream rs)
         {
             _headerRec = (DVALRecord)rs.GetNext();
-            IList temp = new ArrayList();
+            List<DVRecord> temp = new();
             while (rs.PeekNextClass() == typeof(DVRecord))
             {
-                temp.Add(rs.GetNext());
+                temp.Add((DVRecord) rs.GetNext());
             }
             _validationList = temp;
         }
@@ -51,7 +50,7 @@ namespace NPOI.HSSF.Record.Aggregates
         public DataValidityTable()
         {
             _headerRec = new DVALRecord();
-            _validationList = new ArrayList();
+            _validationList = new List<DVRecord>();
         }
 
         public override void VisitContainedRecords(RecordVisitor rv)

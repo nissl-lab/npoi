@@ -58,42 +58,36 @@ namespace NPOI.SS.Util
         public const string VERTICAL_ALIGNMENT = "verticalAlignment";
         public const string WRAP_TEXT = "wrapText";
 
-        private static ISet<String> shortValues = new HashSet<string>(new string[]{
-                    BOTTOM_BORDER_COLOR,
-                    LEFT_BORDER_COLOR,
-                    RIGHT_BORDER_COLOR,
-                    TOP_BORDER_COLOR,
-                    FILL_FOREGROUND_COLOR,
-                    FILL_BACKGROUND_COLOR,
-                    INDENTION,
-                    DATA_FORMAT,
-                    ROTATION
-            });
-        private static ISet<String> intValues = new HashSet<string>(new string[]{
-                        FONT
-        });
-        private static ISet<String> booleanValues = new HashSet<string>(new string[]{
-                        LOCKED,
-                        HIDDEN,
-                        WRAP_TEXT
-        });
-        private static ISet<String> borderTypeValues = new HashSet<string>(new string[]{
-                        BORDER_BOTTOM,
-                        BORDER_LEFT,
-                        BORDER_RIGHT,
-                        BORDER_TOP
-        });
+        private static readonly HashSet<string> shortValues =
+        [
+            BOTTOM_BORDER_COLOR,
+            LEFT_BORDER_COLOR,
+            RIGHT_BORDER_COLOR,
+            TOP_BORDER_COLOR,
+            FILL_FOREGROUND_COLOR,
+            FILL_BACKGROUND_COLOR,
+            INDENTION,
+            DATA_FORMAT,
+            ROTATION
+        ];
 
+        private static readonly HashSet<string> intValues = [FONT];
 
-        private static UnicodeMapping[] unicodeMappings;
+        private static readonly HashSet<string> booleanValues = [LOCKED, HIDDEN, WRAP_TEXT];
+
+        private static readonly HashSet<string> borderTypeValues =
+        [
+            BORDER_BOTTOM, BORDER_LEFT, BORDER_RIGHT, BORDER_TOP
+        ];
+
+        private static readonly UnicodeMapping[] unicodeMappings;
 
         private sealed class UnicodeMapping
         {
+            public readonly string entityName;
+            public readonly string resolvedValue;
 
-            public String entityName;
-            public String resolvedValue;
-
-            public UnicodeMapping(String pEntityName, String pResolvedValue)
+            public UnicodeMapping(string pEntityName, string pResolvedValue)
             {
                 entityName = "&" + pEntityName + ";";
                 resolvedValue = pResolvedValue;

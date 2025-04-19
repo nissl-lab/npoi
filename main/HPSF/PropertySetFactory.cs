@@ -25,14 +25,14 @@
  * 
  * ==============================================================*/
 
+using System;
+
+using NPOI.HPSF.Wellknown;
+using NPOI.POIFS.FileSystem;
 using NPOI.Util;
 
 namespace NPOI.HPSF
 {
-    using System.IO;
-    using NPOI.HPSF.Wellknown;
-    using System;
-    using NPOI.POIFS.FileSystem;
 
     /// <summary>
     /// Factory class To Create instances of {@link SummaryInformation},
@@ -63,7 +63,7 @@ namespace NPOI.HPSF
          */
         public static PropertySet Create(DirectoryEntry dir, String name)
         {
-            InputStream inp = null;
+            DocumentInputStream inp = null;
             try
             {
                 DocumentEntry entry = (DocumentEntry)dir.GetEntry(name);

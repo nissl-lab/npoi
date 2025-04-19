@@ -321,12 +321,8 @@ namespace NPOI.HSSF.Model
 
         public NameRecord GetSpecificBuiltinRecord(byte builtInCode, int sheetNumber)
         {
-
-            IEnumerator<NameRecord> iterator = _definedNames.GetEnumerator();
-            while (iterator.MoveNext())
+            foreach (var record in _definedNames)
             {
-                NameRecord record = iterator.Current;
-
                 //print areas are one based
                 if (record.BuiltInName == builtInCode && record.SheetNumber == sheetNumber)
                 {

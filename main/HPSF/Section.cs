@@ -26,8 +26,7 @@ namespace NPOI.HPSF
     using System.Collections.Generic;
     using System.Linq;
     using System.IO;
-    using System.Text; 
-using Cysharp.Text;
+    using Cysharp.Text;
 
     /// <summary>
     /// Represents a section in a {@link PropertySet}.
@@ -956,7 +955,7 @@ using Cysharp.Text;
         /// <param name="codepage">The codepage to be used to write the dictionary items.</param>
         /// <return>number of bytes written</return>
         /// <exception name="IOException">if an I/O exception occurs.</exception>
-        private static int WriteDictionary(Stream out1, IDictionary dictionary, int codepage)
+        private static int WriteDictionary(MemoryStream out1, IDictionary dictionary, int codepage)
         {
             int length = TypeWriter.WriteUIntToStream(out1, (uint)dictionary.Count);
             foreach(DictionaryEntry ls in dictionary)

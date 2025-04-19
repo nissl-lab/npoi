@@ -15,13 +15,13 @@
    limitations Under the License.
 ==================================================================== */
 
-using System.Collections.ObjectModel;
-
 namespace NPOI.HSSF.UserModel
 {
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Globalization;
+
     using NPOI.DDF;
     using NPOI.HSSF.Model;
     using NPOI.HSSF.Record;
@@ -33,13 +33,10 @@ namespace NPOI.HSSF.UserModel
     using NPOI.SS.Formula.PTG;
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
-    using System.Globalization;
-    using NPOI.Util;
     using NPOI.SS.UserModel.Helpers;
     using NPOI.HSSF.UserModel.helpers;
+
     using SixLabors.Fonts;
-
-
 
     /// <summary>
     /// High level representation of a worksheet.
@@ -2243,7 +2240,7 @@ namespace NPOI.HSSF.UserModel
         /// <summary>
         /// Also creates cells if they don't exist.
         /// </summary>
-        private ICellRange<ICell> GetCellRange(CellRangeAddress range)
+        private SSCellRange<ICell> GetCellRange(CellRangeAddress range)
         {
             int firstRow = range.FirstRow;
             int firstColumn = range.FirstColumn;
@@ -2283,7 +2280,7 @@ namespace NPOI.HSSF.UserModel
             // make sure the formula parses OK first
             int sheetIndex = _workbook.GetSheetIndex(this);
             Ptg[] ptgs = HSSFFormulaParser.Parse(formula, _workbook, FormulaType.Array, sheetIndex);
-            ICellRange<ICell> cells = GetCellRange(range);
+            SSCellRange<ICell> cells = GetCellRange(range);
 
             foreach (HSSFCell c in cells)
             {
@@ -2631,14 +2628,14 @@ namespace NPOI.HSSF.UserModel
         {
             get
             {
-                IList dvRecords = new ArrayList();
-                IList records = _sheet.Records;
+                List<DVRecord> dvRecords = [];
+                List<RecordBase> records = _sheet.Records;
 
                 for (int index = 0; index < records.Count; index++)
                 {
-                    if (records[index] is DVRecord)
+                    if (records[index] is DVRecord dvRecord)
                     {
-                        dvRecords.Add(records[index]);
+                        dvRecords.Add(dvRecord);
                     }
                 }
                 return dvRecords;

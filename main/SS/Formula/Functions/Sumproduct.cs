@@ -87,7 +87,7 @@ namespace NPOI.SS.Formula.Functions
                     + firstArg.GetType().Name + ")");
         }
 
-        private static ValueEval EvaluateSingleProduct(ValueEval[] evalArgs)
+        private static NumberEval EvaluateSingleProduct(ValueEval[] evalArgs)
         {
             int maxN = evalArgs.Length;
 

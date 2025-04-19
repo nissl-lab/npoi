@@ -33,8 +33,7 @@ namespace NPOI.SS.Formula
         int relFirstColIx, int relLastColIx)
         {
 
-            AreaI area = new OffsetArea(FirstRow, FirstColumn,
-                    relFirstRowIx, relLastRowIx, relFirstColIx, relLastColIx);
+            OffsetArea area = new(FirstRow, FirstColumn, relFirstRowIx, relLastRowIx, relFirstColIx, relLastColIx);
 
             int height = area.LastRow - area.FirstRow + 1;
             int width = area.LastColumn - area.FirstColumn + 1;

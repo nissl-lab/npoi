@@ -64,7 +64,8 @@ namespace NPOI.HPSF
         /// </summary>
         //private TreeBidiDictionary<long, string> dictionary = new TreeBidiDictionary<long, string>();
 
-        private BidirectionalDictionary<long, string> dictionary = new();
+        private readonly BidirectionalDictionary<long, string> dictionary = new();
+
         /// <summary>
         /// Tells whether this object is pure or not.
         /// </summary>
@@ -129,7 +130,7 @@ namespace NPOI.HPSF
         /// <param name="customProperty">customProperty</param>
         /// <return>there was already a property with the same name, the old property</return>
         /// <exception cref="ClassCastException">ClassCastException</exception>
-        private object Put(CustomProperty customProperty)
+        private CustomProperty Put(CustomProperty customProperty)
         {
             string name = customProperty.Name;
 
