@@ -544,6 +544,12 @@ namespace NPOI.SS.Util
             return IsRowWithinRange(rowStr, ssVersion);
         }
 
+        /// <summary>
+        /// Determines whether <c>rowStr</c> is a valid row number for a given SpreadsheetVersion.
+        /// </summary>
+        /// <param name="rowStr">the numeric portion of an A1-style cell reference (1-based index)</param>
+        /// <param name="ssVersion">the spreadsheet version</param>
+        /// <returns></returns>
         public static bool IsRowWithinRange(String rowStr, SpreadsheetVersion ssVersion)
             => IsRowWithinRange(rowStr.AsSpan(), ssVersion);
 
@@ -551,6 +557,17 @@ namespace NPOI.SS.Util
         {
             CellReferenceParser.TryParsePositiveInt32Fast(rowStr, out var rowNum);
             rowNum -= 1;
+            return IsRowWithinRange(rowNum, ssVersion);
+        }
+
+        /// <summary>
+        /// Determines whether <c>row</c> is a valid row number for a given SpreadsheetVersion.
+        /// </summary>
+        /// <param name="rowNum">the row number (0-based index)</param>
+        /// <param name="ssVersion">the spreadsheet version</param>
+        /// <returns></returns>
+        public static bool IsRowWithinRange(int rowNum, SpreadsheetVersion ssVersion)
+        {
             return 0 <= rowNum && rowNum <= ssVersion.LastRowIndex;
         }
 
