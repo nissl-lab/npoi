@@ -25,6 +25,7 @@ namespace TestCases.HSSF.UserModel
 
 
     using NUnit.Framework;using NUnit.Framework.Legacy;
+    using SixLabors.Fonts;
     using SixLabors.ImageSharp;
     using SixLabors.ImageSharp.PixelFormats;
 
@@ -39,7 +40,7 @@ namespace TestCases.HSSF.UserModel
      * @author Glen Stampoultzis (glens at apache.org)
      */
     [TestFixture]
-    [Platform("Win", Reason = "Fonts might not available on non-Windows platforms")]
+    //[Platform("Win", Reason = "Fonts might not available on non-Windows platforms")]
     public class TestEscherGraphics
     {
         private HSSFWorkbook workbook;
@@ -54,7 +55,7 @@ namespace TestCases.HSSF.UserModel
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
             workbook = new HSSFWorkbook();
 
-            NPOI.SS.UserModel.ISheet sheet = workbook.CreateSheet("Test");
+            ISheet sheet = workbook.CreateSheet("Test");
             patriarch = (HSSFPatriarch)sheet.CreateDrawingPatriarch();
             escherGroupA = patriarch.CreateGroup(new HSSFClientAnchor(0, 0, 1022, 255, (short)0, 0, (short)0, 0));
             escherGroupB = patriarch.CreateGroup(new HSSFClientAnchor(20, 30, 500, 200, (short)0, 0, (short)0, 0));
@@ -63,41 +64,46 @@ namespace TestCases.HSSF.UserModel
 
         }
 
-        /* TODO-Fonts:
         [Test]
         public void TestGetFont()
         {
-            System.Drawing.Font f = graphics.Font;
-            if (f.ToString().IndexOf("dialog") == -1 && f.ToString().IndexOf("Dialog") == -1)
+            Font f = graphics.Font;
+            if (!f.ToString().Contains("dialog") && !f.ToString().Contains("Dialog"))
             {
                 //ClassicAssert.AreEqual("java.awt.Font[family=Arial,name=Arial,style=plain,size=10]", f.ToString());
-                ClassicAssert.AreEqual("[Font: Name=Arial, Size=10, Units=3, GdiCharSet=1, GdiVerticalFont=False]", f.ToString());
+                //ClassicAssert.AreEqual("[Font: Name=Arial, Size=10, Units=3, GdiCharSet=1, GdiVerticalFont=False]", f.ToString());
+                ClassicAssert.AreEqual("Arial", f.Family.Name);
+                ClassicAssert.AreEqual("Arial", f.Name);
+                ClassicAssert.AreEqual(10, f.Size);
+                ClassicAssert.AreEqual(FontStyle.Regular, f.FontMetrics.Description.Style);
             }
         }
-        */
 
-        //[Test]
-        //public void TestGetFontMetrics()
-        //{
-        //    Font f = graphics.Font;
-        //    if (f.ToString().IndexOf("dialog") != -1 || f.ToString().IndexOf("Dialog") != -1)
-        //        return;
+        [Test]
+        public void TestGetFontMetrics()
+        {
+            Font f = graphics.Font;
+            if (f.ToString().Contains("dialog") || f.ToString().Contains("Dialog"))
+                return;
 
-        //    ClassicAssert.AreEqual(7, TextRenderer.MeasureText("X", f).Width);
-        //    ClassicAssert.AreEqual("Arial", f.FontFamily.Name);
-        //    ClassicAssert.AreEqual(10, f.Size);
-        //    //ClassicAssert.AreEqual("java.awt.Font[family=Arial,name=Arial,style=plain,size=10]", fontMetrics.GetFont().ToString());
-        //}
+            ClassicAssert.AreEqual(7, TextMeasurer.MeasureSize("X", new TextOptions(f)).Width);
+            ClassicAssert.AreEqual("Arial", f.Family.Name);
+            ClassicAssert.AreEqual(10, f.Size);
+            ClassicAssert.AreEqual(FontStyle.Regular, f.FontMetrics.Description.Style);
+            //ClassicAssert.AreEqual("java.awt.Font[family=Arial,name=Arial,style=plain,size=10]", fontMetrics.GetFont().ToString());
+        }
 
-        /* TODO-Fonts:
         [Test]
         public void TestSetFont()
         {
-            System.Drawing.Font f = new System.Drawing.Font("Helvetica", 12,FontStyle.Regular);
+            FontCollection fonts = new FontCollection();
+            var fi = POIDataSamples.GetSpreadSheetInstance().GetFileInfo("Helvetica.ttf");
+            SixLabors.Fonts.FontFamily font1 = fonts.Add(fi.FullName);
+            Font f = new Font(font1, 12, FontStyle.Regular);
             graphics.SetFont(f);
             ClassicAssert.AreEqual(f, graphics.Font);
         }
-*/
+
         [Test]
         public void TestSetColor()
         {
