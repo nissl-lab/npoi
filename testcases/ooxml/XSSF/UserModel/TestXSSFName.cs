@@ -16,11 +16,14 @@
 ==================================================================== */
 
 using TestCases.SS.UserModel;
-using NUnit.Framework;using NUnit.Framework.Legacy;
+using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using NPOI.XSSF;
 using NPOI.XSSF.UserModel;
+using System;
+using NPOI.Util;
 
 namespace TestCases.XSSF.UserModel
 {
@@ -131,6 +134,33 @@ namespace TestCases.XSSF.UserModel
             wb.Close();
         }
 
+        //github-55
+        [Test]
+        public void TestSetNameNameCellAddress()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            wb.CreateSheet("First Sheet");
+            XSSFName name = wb.CreateName() as XSSFName;
+
+            // Cell addresses/references are not allowed
+            foreach (string ref1 in Arrays.AsList("A1", "$A$1", "A1:B2"))
+            {
+                try
+                {
+                    name.NameName = ref1;
+                    Assert.Fail("cell addresses are not allowed: " + ref1);
+                }
+                catch (ArgumentException e)
+                {
+                    // expected
+                }
+            }
+
+            // Name that looks similar to a cell reference but is outside the cell reference row and column limits
+            name.NameName = ("A0");
+            name.NameName = ("F04030020010");
+            name.NameName = ("XFDXFD10");
+        }
     }
 }
 
