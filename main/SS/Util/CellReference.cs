@@ -544,15 +544,6 @@ namespace NPOI.SS.Util
             return IsRowWithinRange(rowStr, ssVersion);
         }
 
-        /**
-         * @deprecated 3.15 beta 2. Use {@link #isColumnWithinRange}.
-         */
-        [Obsolete("deprecated 3.15 beta 2. Use {@link #isColumnWithinRange}.")]
-        public static bool IsColumnWithnRange(String colStr, SpreadsheetVersion ssVersion)
-        {
-            return IsColumnWithinRange(colStr, ssVersion);
-        }
-
         public static bool IsRowWithinRange(String rowStr, SpreadsheetVersion ssVersion)
             => IsRowWithinRange(rowStr.AsSpan(), ssVersion);
 
@@ -561,12 +552,6 @@ namespace NPOI.SS.Util
             CellReferenceParser.TryParsePositiveInt32Fast(rowStr, out var rowNum);
             rowNum -= 1;
             return 0 <= rowNum && rowNum <= ssVersion.LastRowIndex;
-        }
-
-        [Obsolete("deprecated 3.15 beta 2. Use {@link #isRowWithinRange}")]
-        public static bool isRowWithnRange(String rowStr, SpreadsheetVersion ssVersion)
-        {
-            return IsRowWithinRange(rowStr, ssVersion);
         }
 
         public static bool IsColumnWithinRange(String colStr, SpreadsheetVersion ssVersion)
