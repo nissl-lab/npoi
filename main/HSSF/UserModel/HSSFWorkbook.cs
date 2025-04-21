@@ -614,7 +614,7 @@ namespace NPOI.HSSF.UserModel
                 ValidateSheetIndex(index);
             }
             // ignore duplicates
-            ISet<int> set = new HashSet<int>(indexes);
+            HashSet<int> set = new(indexes);
             int nSheets = _sheets.Count;
             for (int i = 0; i < nSheets; i++)
             {

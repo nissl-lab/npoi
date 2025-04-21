@@ -211,10 +211,9 @@ using Cysharp.Text;
         {
             get
             {
-                IList<EscherContainerRecord> containers = new List<EscherContainerRecord>();
-                for (IEnumerator iterator = ChildRecords.GetEnumerator(); iterator.MoveNext(); )
+                List<EscherContainerRecord> containers = [];
+                foreach (EscherRecord r in ChildRecords)
                 {
-                    EscherRecord r = (EscherRecord)iterator.Current;
                     if (r is EscherContainerRecord record)
                     {
                         containers.Add(record);
@@ -344,9 +343,8 @@ using Cysharp.Text;
         {
             StringBuilder builder = new StringBuilder();
             builder.Append(tab).Append(FormatXmlRecordHeader(RecordName, HexDump.ToHex(RecordId), HexDump.ToHex(Version), HexDump.ToHex(Instance)));
-            for (IEnumerator<EscherRecord> iterator = _childRecords.GetEnumerator(); iterator.MoveNext(); )
+            foreach (var record in _childRecords)
             {
-                EscherRecord record = iterator.Current;
                 builder.Append(record.ToXml(tab + "\t"));
             }
             builder.Append(tab).Append("</").Append(RecordName).Append(">\n");

@@ -335,7 +335,7 @@ namespace NPOI.XSSF.Extractor
 
         private static String GetFormattedDate(XSSFCell cell)
         {
-            DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             sdf.TimeZone= LocaleUtil.GetUserTimeZoneInfo();
             return sdf.Format(cell.DateCellValue);
         }

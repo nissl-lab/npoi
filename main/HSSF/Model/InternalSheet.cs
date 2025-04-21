@@ -20,7 +20,7 @@ namespace NPOI.HSSF.Model
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using System.Text;
+
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.Aggregates;
     using NPOI.SS.Formula;
@@ -461,9 +461,12 @@ namespace NPOI.HSSF.Model
                 _records.Add(r);
             }
         }
-        private static void SpillAggregate(RecordAggregate ra, List<RecordBase> recs) {
+
+        private static void SpillAggregate(ChartSubstreamRecordAggregate ra, List<RecordBase> recs)
+        {
             ra.VisitContainedRecords(new RecordVisitor1(recs));
         }
+
         /// <summary>
         /// Creates a sheet with all the usual records minus values and the "index"
         /// record (not required).  Sets the location pointer to where the first value
@@ -2079,14 +2082,16 @@ namespace NPOI.HSSF.Model
          */
         public void ShiftBreaks(PageBreakRecord breaks, short start, short stop, int count)
         {
-
             if (rowBreaks == null)
+            {
                 return;
-            IEnumerator iterator = breaks.GetBreaksEnumerator();
-            IList ShiftedBreak = new ArrayList();
+            }
+
+            IEnumerator<PageBreakRecord.Break> iterator = breaks.GetBreaksEnumerator();
+            List<PageBreakRecord.Break> ShiftedBreak = [];
             while (iterator.MoveNext())
             {
-                PageBreakRecord.Break breakItem = (PageBreakRecord.Break)iterator.Current;
+                PageBreakRecord.Break breakItem = iterator.Current;
                 int breakLocation = breakItem.main;
                 bool inStart = (breakLocation >= start);
                 bool inEnd = (breakLocation <= stop);
@@ -2097,7 +2102,7 @@ namespace NPOI.HSSF.Model
             iterator = ShiftedBreak.GetEnumerator();
             while (iterator.MoveNext())
             {
-                PageBreakRecord.Break breakItem = (PageBreakRecord.Break)iterator.Current;
+                PageBreakRecord.Break breakItem = iterator.Current;
                 breaks.RemoveBreak(breakItem.main);
                 breaks.AddBreak(breakItem.main + count, breakItem.subFrom, breakItem.subTo);
             }

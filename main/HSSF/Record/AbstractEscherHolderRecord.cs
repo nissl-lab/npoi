@@ -91,7 +91,7 @@ namespace NPOI.HSSF.Record
         private void ConvertToEscherRecords(int offset, int size, byte[] data)
         {
             escherRecords.Clear();
-            IEscherRecordFactory recordFactory = new DefaultEscherRecordFactory();
+            DefaultEscherRecordFactory recordFactory = new();
             int pos = offset;
             while (pos < offset + size)
             {

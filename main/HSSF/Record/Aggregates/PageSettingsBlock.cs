@@ -468,27 +468,28 @@ namespace NPOI.HSSF.Record.Aggregates
          * @param stop Ending "main" value to shift breaks
          * @param count number of units (rows/columns) to shift by
          */
-        private static void ShiftBreaks(PageBreakRecord breaks, int start, int stop, int count) {
+        private static void ShiftBreaks(PageBreakRecord breaks, int start, int stop, int count)
+        {
+            IEnumerator iterator = breaks.GetBreaksEnumerator();
+            List<PageBreakRecord.Break> shiftedBreak = [];
+            while(iterator.MoveNext())
+            {
+                PageBreakRecord.Break breakItem = (PageBreakRecord.Break) iterator.Current;
+                int breakLocation = breakItem.main;
+                bool inStart = (breakLocation >= start);
+                bool inEnd = (breakLocation <= stop);
+                if(inStart && inEnd)
+                    shiftedBreak.Add(breakItem);
+            }
 
-		IEnumerator iterator = breaks.GetBreaksEnumerator();
-		IList shiftedBreak = new ArrayList();
-		while(iterator.MoveNext())
-		{
-			PageBreakRecord.Break breakItem = (PageBreakRecord.Break)iterator.Current;
-			int breakLocation = breakItem.main;
-			bool inStart = (breakLocation >= start);
-			bool inEnd = (breakLocation <= stop);
-			if(inStart && inEnd)
-				shiftedBreak.Add(breakItem);
-		}
-
-		iterator = shiftedBreak.GetEnumerator();
-		while (iterator.MoveNext()) {
-			PageBreakRecord.Break breakItem = (PageBreakRecord.Break)iterator.Current;
-			breaks.RemoveBreak(breakItem.main);
-			breaks.AddBreak((short)(breakItem.main+count), breakItem.subFrom, breakItem.subTo);
-		}
-	}
+            iterator = shiftedBreak.GetEnumerator();
+            while(iterator.MoveNext())
+            {
+                PageBreakRecord.Break breakItem = (PageBreakRecord.Break) iterator.Current;
+                breaks.RemoveBreak(breakItem.main);
+                breaks.AddBreak((short) (breakItem.main + count), breakItem.subFrom, breakItem.subTo);
+            }
+        }
 
 
         /**

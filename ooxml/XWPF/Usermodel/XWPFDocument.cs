@@ -19,18 +19,17 @@
 namespace NPOI.XWPF.UserModel
 {
     using System;
-    using System.IO;
-    using NPOI.Util;
     using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Xml;
+
+    using NPOI.Util;
     using NPOI.OpenXml4Net.OPC;
     using NPOI.OpenXmlFormats.Wordprocessing;
-    using System.Xml;
     using NPOI.WP.UserModel;
     using NPOI.XWPF.Model;
-    using System.Xml.Serialization;
-    using System.Diagnostics;
     using NPOI.OOXML.XWPF.Util;
-    using System.Linq;
     using NPOI.POIFS.Crypt;
 
     /**
@@ -449,10 +448,8 @@ namespace NPOI.XWPF.UserModel
 
         public XWPFHyperlink GetHyperlinkByID(String id)
         {
-            IEnumerator<XWPFHyperlink> iter = hyperlinks.GetEnumerator();
-            while (iter.MoveNext())
+            foreach (XWPFHyperlink link in hyperlinks)
             {
-                XWPFHyperlink link = iter.Current;
                 if (link.Id.Equals(id))
                     return link;
             }
@@ -462,16 +459,11 @@ namespace NPOI.XWPF.UserModel
 
         public XWPFFootnote GetFootnoteByID(int id)
         {
-            if (footnotes == null) return null;
-            return footnotes.GetFootnoteById(id);
+            return footnotes?.GetFootnoteById(id);
         }
-        public Dictionary<int, XWPFFootnote> Endnotes
-        {
-            get
-            {
-                return endnotes;
-            }
-        }
+
+        public Dictionary<int, XWPFFootnote> Endnotes => endnotes;
+
         public XWPFFootnote GetEndnoteByID(int id)
         {
             if (endnotes == null || !endnotes.TryGetValue(id, out XWPFFootnote byId)) 
@@ -483,7 +475,7 @@ namespace NPOI.XWPF.UserModel
         {
             if (footnotes == null)
             {
-                return new List<XWPFFootnote>();
+                return [];
             }
             return footnotes.GetFootnotesList();
         }
@@ -1589,18 +1581,15 @@ namespace NPOI.XWPF.UserModel
              * Try to find PictureData with this Checksum. Create new, if none
              * exists.
              */
-            List<XWPFPictureData> xwpfPicDataList = null;
-            if(packagePictures.TryGetValue(Checksum, out List<XWPFPictureData> picture))
-               xwpfPicDataList = picture;
-            if (xwpfPicDataList != null)
+
+            if (packagePictures.TryGetValue(Checksum, out List<XWPFPictureData> xwpfPicDataList))
             {
-                IEnumerator<XWPFPictureData> iter = xwpfPicDataList.GetEnumerator();
-                while (iter.MoveNext() && xwpfPicData == null)
+                foreach (XWPFPictureData curElem in xwpfPicDataList)
                 {
-                    XWPFPictureData curElem = iter.Current;
                     if (Arrays.Equals(pictureData, curElem.Data))
                     {
                         xwpfPicData = curElem;
+                        break;
                     }
                 }
             }

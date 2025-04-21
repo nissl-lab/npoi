@@ -332,7 +332,7 @@ namespace NPOI.SS.Formula.Functions
      */
     public abstract class AggregateFunction : MultiOperandNumericFunction
     {
-        internal static Function SubtotalInstance(Function func, bool countHiddenRows)
+        internal static SubtotalInstance SubtotalInstance(Function func, bool countHiddenRows)
         {
             AggregateFunction arg = (AggregateFunction)func;
             return new SubtotalInstance(arg, countHiddenRows);

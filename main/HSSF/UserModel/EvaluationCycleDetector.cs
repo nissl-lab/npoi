@@ -106,7 +106,7 @@ namespace NPOI.HSSF.UserModel
             }
         }
 
-        private readonly IList _evaluationFrames;
+        private readonly ArrayList _evaluationFrames;
 
         public EvaluationCycleDetector()
         {

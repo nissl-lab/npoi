@@ -15,15 +15,14 @@
    limitations Under the License.
 ==================================================================== */
 
+using System;
+using System.Collections.Generic;
+
+using NPOI.HSSF.Record;
+using NPOI.HSSF.Model;
+
 namespace NPOI.HSSF.UserModel
 {
-    using System;
-    using System.Collections;
-
-    using NPOI.HSSF.Record;
-    using NPOI.HSSF.Model;
-    using System.Collections.Generic;
-
     /// <summary>
     /// Rich text Unicode string.  These strings can have fonts applied to
     /// arbitary parts of the string.
@@ -145,15 +144,13 @@ namespace NPOI.HSSF.UserModel
 
             //Need to clear the current formatting between the startIndex and endIndex
             _string = CloneStringIfRequired();
-            System.Collections.Generic.List<UnicodeString.FormatRun> formatting = _string.FormatIterator();
+            List<UnicodeString.FormatRun> formatting = _string.FormatIterator();
 
-            ArrayList deletedFR = new ArrayList();
+            List<UnicodeString.FormatRun> deletedFR = [];
             if (formatting != null)
             {
-                IEnumerator<UnicodeString.FormatRun> formats = formatting.GetEnumerator();
-                while (formats.MoveNext())
+                foreach (var r in formatting)
                 {
-                    UnicodeString.FormatRun r = formats.Current;
                     if ((r.CharacterPos >= startIndex) && (r.CharacterPos < endIndex))
                     {
                         deletedFR.Add(r);

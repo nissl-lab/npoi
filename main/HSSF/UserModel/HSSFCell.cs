@@ -19,7 +19,6 @@
 namespace NPOI.HSSF.UserModel
 {
     using System;
-    using System.Collections;
     using System.IO;
     using NPOI.HSSF.Model;
     using NPOI.HSSF.Record;
@@ -31,7 +30,6 @@ namespace NPOI.HSSF.UserModel
     using NPOI.SS.Formula;
     using System.Globalization;
     using System.Collections.Generic;
-    using NPOI.Util;
     using NPOI.SS.Formula.Eval;
 
     /// <summary>
@@ -831,7 +829,7 @@ namespace NPOI.HSSF.UserModel
         /// <param name="actualTypeCode">The actual type code.</param>
         /// <param name="isFormulaCell">if set to <c>true</c> [is formula cell].</param>
         /// <returns></returns>
-        private static Exception TypeMismatch(CellType expectedTypeCode, CellType actualTypeCode, bool isFormulaCell)
+        private static InvalidOperationException TypeMismatch(CellType expectedTypeCode, CellType actualTypeCode, bool isFormulaCell)
         {
             String msg = "Cannot get a "
                 + HSSFCell.GetCellTypeName(expectedTypeCode) + " value from a "
@@ -1358,9 +1356,8 @@ namespace NPOI.HSSF.UserModel
         public void RemoveHyperlink()
         {
             RecordBase toRemove = null;
-            for (IEnumerator<RecordBase> it = _sheet.Sheet.Records.GetEnumerator(); it.MoveNext(); )
+            foreach (var rec in _sheet.Sheet.Records)
             {
-                RecordBase rec = it.Current;
                 if (rec is HyperlinkRecord link)
                 {
                     if (link.FirstColumn == _record.Column && link.FirstRow == _record.Row)

@@ -184,15 +184,16 @@ namespace NPOI.SS.Formula.Functions
             }
         }
 
-
-        public static ValueVector CreateRowVector(TwoDEval tableArray, int relativeRowIndex)
+        public static RowVector CreateRowVector(TwoDEval tableArray, int relativeRowIndex)
         {
             return new RowVector((AreaEval)tableArray, relativeRowIndex);
         }
-        public static ValueVector CreateColumnVector(TwoDEval tableArray, int relativeColumnIndex)
+
+        public static ColumnVector CreateColumnVector(TwoDEval tableArray, int relativeColumnIndex)
         {
             return new ColumnVector((AreaEval)tableArray, relativeColumnIndex);
         }
+
         /**
          * @return <c>null</c> if the supplied area is neither a single row nor a single colum
          */

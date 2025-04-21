@@ -67,7 +67,7 @@ namespace NPOI.POIFS.FileSystem
         }
 
         private PropertyTable _property_table;
-        private IList<OPOIFSDocument>  _documents;
+        private List<OPOIFSDocument>  _documents;
         private DirectoryNode _root;
         /**
  * What big block size the file uses. Most files
