@@ -1515,7 +1515,7 @@ namespace NPOI.XWPF.UserModel
             int iPos = iRuns.Count;
                 if (pos < runs.Count)
                 {
-                    XWPFRun oldAtPos = runs[(pos)];
+                    XWPFRun oldAtPos = runs[pos];
                     int oldAt = iRuns.IndexOf(oldAtPos);
                     if (oldAt != -1)
                     {
@@ -1580,7 +1580,7 @@ namespace NPOI.XWPF.UserModel
             if (pos >= 0 && pos < runs.Count)
             {
                 // Remove the run from our high level lists
-                XWPFRun run = runs[(pos)];
+                XWPFRun run = runs[pos];
                 if (run is XWPFHyperlinkRun || run is XWPFFieldRun)
                 {
                     // TODO Add support for removing these kinds of nested runs,
@@ -1717,7 +1717,7 @@ namespace NPOI.XWPF.UserModel
             if(pos >= 0 && pos < runs.Count)
             {
                 //find on which position of the low level XML the new run is to be added (position of the element currently in pos in the Runs list)
-                int itemPos = paragraph.Items.IndexOf(runs[(pos)].GetCTR());
+                int itemPos = paragraph.Items.IndexOf(runs[pos].GetCTR());
                 if(itemPos == -1)
                 {
                     itemPos = paragraph.Items.Count;
@@ -1740,7 +1740,7 @@ namespace NPOI.XWPF.UserModel
                 int iPos = iRuns.Count;
                 if(pos < runs.Count)
                 {
-                    XWPFRun oldAtPos = runs[(pos)];
+                    XWPFRun oldAtPos = runs[pos];
                     int oldAt = iRuns.IndexOf(oldAtPos);
                     if(oldAt != -1)
                     {
