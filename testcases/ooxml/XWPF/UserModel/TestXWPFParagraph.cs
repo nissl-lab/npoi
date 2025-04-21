@@ -588,6 +588,30 @@ namespace TestCases.XWPF.UserModel
         }
 
         [Test]
+        public void TestAddingHyperlinks()
+        {
+            XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("sample.docx");
+            
+            XWPFParagraph p = doc.Paragraphs[0];
+
+            ClassicAssert.AreEqual(2, p.Runs.Count);
+
+            string rId = p.Part.GetPackagePart().AddExternalRelationship("https://www.google.com", XWPFRelation.HYPERLINK.Relation).Id;
+            
+            XWPFHyperlinkRun hr1 = p.CreateHyperlinkRun(rId);
+            hr1.SetText("link1");
+            ClassicAssert.AreEqual(3, p.Runs.Count);
+            ClassicAssert.AreEqual(2, p.Runs.IndexOf(hr1));
+            ClassicAssert.AreEqual(2, p.GetCTP().Items.IndexOf(hr1.GetCTHyperlink()));
+
+            XWPFHyperlinkRun hr2 = p.InsertNewHyperlinkRun(1, rId);
+            hr2.SetText("link2");
+            ClassicAssert.AreEqual(4, p.Runs.Count);
+            ClassicAssert.AreEqual(1, p.Runs.IndexOf(hr2));
+            ClassicAssert.AreEqual(1, p.GetCTP().Items.IndexOf(hr2.GetCTHyperlink()));
+        }
+
+        [Test]
         public void Test58067()
         {
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("58067.docx");
