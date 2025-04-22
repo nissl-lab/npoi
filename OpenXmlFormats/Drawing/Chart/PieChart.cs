@@ -296,6 +296,11 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             this.varyColorsField = new CT_Boolean();
             return this.varyColorsField;
         }
+
+        public bool IsSetVaryColors()
+        {
+            return this.varyColorsField != null;
+        }
     }
 
     [Serializable]
@@ -555,6 +560,54 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
         {
             this.valField = new CT_NumDataSource();
             return this.valField;
+        }
+
+        public bool IsSetTx()
+        {
+            return this.txField != null;
+        }
+
+        public CT_SerTx AddNewTx()
+        {
+            this.txField = new CT_SerTx();
+            return this.txField;
+        }
+
+        public bool IsSetDLbls()
+        {
+            return this.dLblsField != null;
+        }
+
+        public void AddNewDLbls()
+        {
+            this.dLblsField = new CT_DLbls();
+        }
+
+        public bool IsSetSpPr()
+        {
+            return this.spPrField != null;
+        }
+
+        public void UnsetSpPr()
+        {
+            this.spPrField = null;
+        }
+
+        public CT_ShapeProperties AddNewSpPr()
+        {
+            this.spPrField = new CT_ShapeProperties();
+            return this.spPrField;
+        }
+
+        public bool IsSetExplosion()
+        {
+            return this.explosionField != null;
+        }
+
+        public CT_UnsignedInt AddNewExplosion()
+        {
+            this.explosionField = new CT_UnsignedInt();
+            return this.explosionField;
         }
     }
 
