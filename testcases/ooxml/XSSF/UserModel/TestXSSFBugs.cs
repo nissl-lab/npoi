@@ -3460,7 +3460,6 @@ namespace TestCases.XSSF.UserModel
         }
 
         [Test]
-        [Ignore("TODO FIX CI TESTS")]
         public void Bug61063()
         {
             IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("61063.xlsx");

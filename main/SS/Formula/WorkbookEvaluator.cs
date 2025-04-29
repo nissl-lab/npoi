@@ -676,8 +676,6 @@ namespace NPOI.SS.Formula
                 ValueEval opResult;
                 if (ptg is OperationPtg optg)
                 {
-                    if (optg is UnionPtg) { continue; }
-
                     int numops = optg.NumberOfOperands;
                     ValueEval[] ops = new ValueEval[numops];
 
