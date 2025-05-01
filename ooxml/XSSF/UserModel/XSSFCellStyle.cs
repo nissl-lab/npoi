@@ -320,7 +320,7 @@ namespace NPOI.XSSF.UserModel
             {
                 CT_Border ct = GetCTBorder(copy: true);
                 CT_BorderPr pr = ct.IsSetLeft() ? ct.left : ct.AddNewLeft();
-                if (value == BorderStyle.None) ct.unsetLeft();
+                if (value == BorderStyle.None) ct.UnsetLeft();
                 else pr.style = (ST_BorderStyle)value;
 
                 int idx = _stylesSource.PutBorder(new XSSFCellBorder(ct, _theme, _stylesSource.IndexedColors));
@@ -355,7 +355,7 @@ namespace NPOI.XSSF.UserModel
             {
                 CT_Border ct = GetCTBorder(copy: true);
                 CT_BorderPr pr = ct.IsSetRight() ? ct.right : ct.AddNewRight();
-                if (value == BorderStyle.None) ct.unsetRight();
+                if (value == BorderStyle.None) ct.UnsetRight();
                 else pr.style = (ST_BorderStyle)value;
 
                 int idx = _stylesSource.PutBorder(new XSSFCellBorder(ct, _theme, _stylesSource.IndexedColors));
@@ -389,7 +389,7 @@ namespace NPOI.XSSF.UserModel
             {
                 CT_Border ct = GetCTBorder(copy: true);
                 CT_BorderPr pr = ct.IsSetTop() ? ct.top : ct.AddNewTop();
-                if (value == BorderStyle.None) ct.unsetTop();
+                if (value == BorderStyle.None) ct.UnsetTop();
                 else pr.style = (ST_BorderStyle)value;
 
                 int idx = _stylesSource.PutBorder(new XSSFCellBorder(ct, _theme, _stylesSource.IndexedColors));
@@ -1427,7 +1427,7 @@ namespace NPOI.XSSF.UserModel
                 CT_Border ct = GetCTBorder(copy: true);
                 CT_BorderPr pr = ct.IsSetDiagonal() ? ct.diagonal : ct.AddNewDiagonal();
                 if (value == BorderStyle.None)
-                    ct.unsetDiagonal();
+                    ct.UnsetDiagonal();
                 else
                     pr.style = (ST_BorderStyle)value;
 
@@ -1478,7 +1478,7 @@ namespace NPOI.XSSF.UserModel
                 }
                 else
                 {
-                    ct.unsetDiagonal();
+                    ct.UnsetDiagonal();
                     ct.diagonalDown = false;
                     ct.diagonalDownSpecified = false;
                     ct.diagonalUp = false;

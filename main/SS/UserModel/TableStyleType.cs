@@ -256,7 +256,8 @@ namespace NPOI.SS.UserModel
         /// <returns>range in the table representing this class of cells, if it contains the given cell, or null if not applicable.
         /// Stripe style types return only the stripe range containing the given cell, or null.
         /// </returns>
-        public static CellRangeAddressBase AppliesTo(this TableStyleType styleType, ITable table, ICell cell) {
+        public static CellRangeAddressBase AppliesTo(this TableStyleType styleType, ITable table, ICell cell)
+        {
             if (table == null || cell == null) return null;
             if ( ! cell.Sheet.SheetName.Equals(table.SheetName)) return null;
             if ( ! table.Contains(cell)) return null;

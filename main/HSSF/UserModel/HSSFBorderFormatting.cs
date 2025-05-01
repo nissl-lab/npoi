@@ -326,5 +326,80 @@ namespace NPOI.HSSF.UserModel
             }
         }
 
+        /// <summary>
+        /// HSSF doesn't support table borders, so always <see cref="BorderStyle.NONE" />
+        /// </summary>
+        /// <see cref="IBorderFormatting.BorderVertical" />
+        public BorderStyle BorderVertical { get => BorderStyle.None; set { /*nothing, Not available for HSSF.*/ ; } }
+
+        /// <summary>
+        /// HSSF doesn't support table borders, so always <see cref="BorderStyle.NONE" />
+        /// </summary>
+        /// <see cref="IBorderFormatting.BorderHorizontal" />
+        public BorderStyle BorderHorizontal { get => BorderStyle.None; set { /*nothing, Not available for HSSF.*/ ; } }
+
+        /// <summary>
+        /// HSSF Doesn't support table borders, so always <see cref="HSSFColorPredefined.AUTOMATIC" />
+        /// </summary>
+        /// <see cref="IBorderFormatting.VerticalBorderColor" />
+        public short VerticalBorderColor
+        {
+            get
+            {
+                return HSSFColor.Automatic.Index;
+            }
+            set
+            {
+                //nothing, Not available for HSSF.
+            }
+        }
+
+        /// <summary>
+        /// HSSF Doesn't support table borders, so always <see cref="HSSFColorPredefined.AUTOMATIC" />
+        /// </summary>
+        /// <see cref="IBorderFormatting.VerticalBorderColorColor" />
+        public IColor VerticalBorderColorColor
+        {
+            get
+            {
+                return HSSFColor.Automatic.GetInstance();
+            }
+            set
+            {
+                //nothing, Not available for HSSF.
+            }
+        }
+
+        /// <summary>
+        /// HSSF Doesn't support table borders, so always <see cref="HSSFColorPredefined.AUTOMATIC" />
+        /// </summary>
+        /// <see cref="NPOI.SS.UserModel.BorderFormatting.HorizontalBorderColor" />
+        public short HorizontalBorderColor
+        {
+            get
+            {
+                return HSSFColor.Automatic.Index;
+            }
+            set
+            {
+                //nothing, Not available for HSSF.
+            }
+        }
+
+        /// <summary>
+        /// HSSF Doesn't support table borders, so always <see cref="HSSFColorPredefined.AUTOMATIC" />
+        /// </summary>
+        /// <see cref="NPOI.SS.UserModel.BorderFormatting.HorizontalBorderColorColor" />
+        public IColor HorizontalBorderColorColor
+        {
+            get
+            {
+                return HSSFColor.Automatic.GetInstance();
+            }
+            set
+            {
+                //nothing, Not available for HSSF.
+            }
+        }
     }
 }
