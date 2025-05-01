@@ -181,6 +181,14 @@ namespace NPOI.XSSF.Model
         {
             return tableStyles[name];
         }
+
+        public ISet<string> ExplicitTableStyleNames
+        {
+            get
+            {
+                return new HashSet<string>(tableStyles.Keys);
+            }
+        }
         /**
          * If there isn't currently a {@link ThemesTable} for the
          *  current Workbook, then creates one and sets it up.
