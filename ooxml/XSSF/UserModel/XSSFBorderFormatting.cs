@@ -16,6 +16,7 @@
 ==================================================================== */
 using NPOI.SS.UserModel;
 using NPOI.OpenXmlFormats.Spreadsheet;
+using NPOI.OOXML.XSSF.UserModel;
 namespace NPOI.XSSF.UserModel
 {
 
@@ -24,12 +25,14 @@ namespace NPOI.XSSF.UserModel
  */
     public class XSSFBorderFormatting : IBorderFormatting
     {
+        IIndexedColorMap _colorMap;
         readonly CT_Border _border;
 
         /*package*/
-        internal XSSFBorderFormatting(CT_Border border)
+        internal XSSFBorderFormatting(CT_Border border, IIndexedColorMap colorMap)
         {
             _border = border;
+            _colorMap = colorMap;
         }
 
         #region IBorderFormatting Members
@@ -231,7 +234,7 @@ namespace NPOI.XSSF.UserModel
                 if (!_border.IsSetBottom()) return null;
 
                 CT_BorderPr pr = _border.bottom;
-                return new XSSFColor(pr.color);
+                return new XSSFColor(pr.color, _colorMap);
             }
             set
             {
@@ -259,7 +262,7 @@ namespace NPOI.XSSF.UserModel
                 if (!_border.IsSetDiagonal()) return null;
 
                 CT_BorderPr pr = _border.diagonal;
-                return new XSSFColor(pr.color);
+                return new XSSFColor(pr.color, _colorMap);
             }
             set
             {
@@ -287,7 +290,7 @@ namespace NPOI.XSSF.UserModel
                 if (!_border.IsSetLeft()) return null;
 
                 CT_BorderPr pr = _border.left;
-                return new XSSFColor(pr.color);
+                return new XSSFColor(pr.color, _colorMap);
             }
             set
             {
@@ -315,7 +318,7 @@ namespace NPOI.XSSF.UserModel
                 if (!_border.IsSetRight()) return null;
 
                 CT_BorderPr pr = _border.right;
-                return new XSSFColor(pr.color);
+                return new XSSFColor(pr.color, _colorMap);
             }
             set
             {
@@ -344,7 +347,7 @@ namespace NPOI.XSSF.UserModel
                 if (!_border.IsSetTop()) return null;
 
                 CT_BorderPr pr = _border.top;
-                return new XSSFColor(pr.color);
+                return new XSSFColor(pr.color, _colorMap);
             }
             set
             {

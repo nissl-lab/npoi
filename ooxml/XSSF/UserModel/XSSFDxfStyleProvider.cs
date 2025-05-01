@@ -29,8 +29,8 @@ namespace NPOI.OOXML.XSSF.UserModel
             }
             else
             {
-                border = dxf.IsSetBorder() ? new XSSFBorderFormatting(dxf.border) : null;
-                font = dxf.IsSetFont() ? new XSSFFontFormatting(dxf.font) : null;
+                border = dxf.IsSetBorder() ? new XSSFBorderFormatting(dxf.border, colorMap) : null;
+                font = dxf.IsSetFont() ? new XSSFFontFormatting(dxf.font, colorMap) : null;
                 if (dxf.IsSetNumFmt())
                 {
                     CT_NumFmt numFmt = dxf.numFmt;
@@ -40,7 +40,7 @@ namespace NPOI.OOXML.XSSF.UserModel
                 {
                     number = null;
                 }
-                fill = dxf.IsSetFill() ? new XSSFPatternFormatting(dxf.fill) : null;
+                fill = dxf.IsSetFill() ? new XSSFPatternFormatting(dxf.fill, colorMap) : null;
             }
         }
         public IBorderFormatting BorderFormatting => border;

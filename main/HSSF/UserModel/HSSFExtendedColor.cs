@@ -18,6 +18,7 @@
 namespace NPOI.HSSF.UserModel
 {
     using System;
+    using NPOI.HSSF.Util;
     using NPOI.SS.UserModel;
     using RecordExtendedColor = NPOI.HSSF.Record.Common.ExtendedColor;
 
@@ -175,6 +176,25 @@ namespace NPOI.HSSF.UserModel
             set
             {
                 color.Tint = (/*setter*/value);
+            }
+        }
+
+        protected override byte[] IndexedRGB
+        {
+            get
+            {
+                if (IsIndexed && Index > 0) {
+                    int indexNum = Index;
+                    HSSFColor indexed = HSSFColor.GetIndexHash()[indexNum];
+                    if (indexed != null) {
+                        byte[] rgb = new byte[3];
+                        rgb[0] = (byte) indexed.GetTriplet()[0];
+                        rgb[1] = (byte) indexed.GetTriplet()[1];
+                        rgb[2] = (byte) indexed.GetTriplet()[2];
+                        return rgb;
+                    }
+                } // else
+                return null;
             }
         }
     }

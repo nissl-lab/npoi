@@ -204,7 +204,7 @@ namespace NPOI.XSSF.UserModel
         }
         private void AddFill(CT_Fill fill)
         {
-            int idx = _stylesSource.PutFill(new XSSFCellFill(fill));
+            int idx = _stylesSource.PutFill(new XSSFCellFill(fill, _stylesSource.IndexedColors));
 
             _cellXf.fillId = (uint)(idx);
             _cellXf.applyFill = (true);
@@ -212,7 +212,7 @@ namespace NPOI.XSSF.UserModel
 
         private void AddBorder(CT_Border border)
         {
-            int idx = _stylesSource.PutBorder(new XSSFCellBorder(border, _theme));
+            int idx = _stylesSource.PutBorder(new XSSFCellBorder(border, _theme, _stylesSource.IndexedColors));
 
             _cellXf.borderId = (uint)(idx);
             _cellXf.applyBorder = (true);
@@ -289,7 +289,7 @@ namespace NPOI.XSSF.UserModel
                 else 
                     pr.style = (ST_BorderStyle)value;
 
-                int idx = _stylesSource.PutBorder(new XSSFCellBorder(ct, _theme));
+                int idx = _stylesSource.PutBorder(new XSSFCellBorder(ct, _theme, _stylesSource.IndexedColors));
 
                 _cellXf.borderId = (uint)idx;
                 _cellXf.applyBorder = (true);
@@ -323,7 +323,7 @@ namespace NPOI.XSSF.UserModel
                 if (value == BorderStyle.None) ct.unsetLeft();
                 else pr.style = (ST_BorderStyle)value;
 
-                int idx = _stylesSource.PutBorder(new XSSFCellBorder(ct, _theme));
+                int idx = _stylesSource.PutBorder(new XSSFCellBorder(ct, _theme, _stylesSource.IndexedColors));
 
                 _cellXf.borderId = (uint)idx;
                 _cellXf.applyBorder = (true);
@@ -358,7 +358,7 @@ namespace NPOI.XSSF.UserModel
                 if (value == BorderStyle.None) ct.unsetRight();
                 else pr.style = (ST_BorderStyle)value;
 
-                int idx = _stylesSource.PutBorder(new XSSFCellBorder(ct, _theme));
+                int idx = _stylesSource.PutBorder(new XSSFCellBorder(ct, _theme, _stylesSource.IndexedColors));
 
                 _cellXf.borderId = (uint)idx;
                 _cellXf.applyBorder = (true);
@@ -392,7 +392,7 @@ namespace NPOI.XSSF.UserModel
                 if (value == BorderStyle.None) ct.unsetTop();
                 else pr.style = (ST_BorderStyle)value;
 
-                int idx = _stylesSource.PutBorder(new XSSFCellBorder(ct, _theme));
+                int idx = _stylesSource.PutBorder(new XSSFCellBorder(ct, _theme, _stylesSource.IndexedColors));
 
                 _cellXf.borderId = (uint)idx;
                 _cellXf.applyBorder = (true);
@@ -993,7 +993,7 @@ namespace NPOI.XSSF.UserModel
             if (color != null) pr.SetColor(color.GetCTColor());
             else pr.UnsetColor();
 
-            int idx = _stylesSource.PutBorder(new XSSFCellBorder(ct, _theme));
+            int idx = _stylesSource.PutBorder(new XSSFCellBorder(ct, _theme, _stylesSource.IndexedColors));
 
             _cellXf.borderId = (uint)idx;
             _cellXf.applyBorder = (true);
@@ -1038,7 +1038,7 @@ namespace NPOI.XSSF.UserModel
                 ptrn.bgColor = color.GetCTColor();
             }
 
-            int idx = _stylesSource.PutFill(new XSSFCellFill(ct));
+            int idx = _stylesSource.PutFill(new XSSFCellFill(ct, _stylesSource.IndexedColors));
 
             _cellXf.fillId = (uint)idx;
             _cellXf.applyFill = (true);
@@ -1066,7 +1066,7 @@ namespace NPOI.XSSF.UserModel
                 ptrn.fgColor = (color.GetCTColor());
             }
 
-            int idx = _stylesSource.PutFill(new XSSFCellFill(ct));
+            int idx = _stylesSource.PutFill(new XSSFCellFill(ct, _stylesSource.IndexedColors));
 
             _cellXf.fillId = (uint)idx;
             _cellXf.applyFill = (true);
@@ -1154,7 +1154,7 @@ namespace NPOI.XSSF.UserModel
             if (color != null) pr.color = (color.GetCTColor());
             else pr.UnsetColor();
 
-            int idx = _stylesSource.PutBorder(new XSSFCellBorder(ct, _theme));
+            int idx = _stylesSource.PutBorder(new XSSFCellBorder(ct, _theme, _stylesSource.IndexedColors));
 
             _cellXf.borderId = (uint)idx;
             _cellXf.applyBorder = (true);
@@ -1173,7 +1173,7 @@ namespace NPOI.XSSF.UserModel
             if (color != null) pr.color = (color.GetCTColor());
             else pr.UnsetColor();
 
-            int idx = _stylesSource.PutBorder(new XSSFCellBorder(ct, _theme));
+            int idx = _stylesSource.PutBorder(new XSSFCellBorder(ct, _theme, _stylesSource.IndexedColors));
 
             _cellXf.borderId = (uint)idx;
             _cellXf.applyBorder = (true);
@@ -1193,7 +1193,7 @@ namespace NPOI.XSSF.UserModel
             if (color != null) pr.color = (color.GetCTColor());
             else pr.UnsetColor();
 
-            int idx = _stylesSource.PutBorder(new XSSFCellBorder(ct, _theme));
+            int idx = _stylesSource.PutBorder(new XSSFCellBorder(ct, _theme, _stylesSource.IndexedColors));
 
             _cellXf.borderId = (uint)(idx);
             _cellXf.applyBorder = (true);
@@ -1216,7 +1216,7 @@ namespace NPOI.XSSF.UserModel
             if (color != null) pr.color = color.GetCTColor();
             else pr.UnsetColor();
 
-            int idx = _stylesSource.PutBorder(new XSSFCellBorder(ct, _theme));
+            int idx = _stylesSource.PutBorder(new XSSFCellBorder(ct, _theme, _stylesSource.IndexedColors));
 
             _cellXf.borderId = (uint)idx;
             _cellXf.applyBorder = (true);
@@ -1431,7 +1431,7 @@ namespace NPOI.XSSF.UserModel
                 else
                     pr.style = (ST_BorderStyle)value;
 
-                int idx = _stylesSource.PutBorder(new XSSFCellBorder(ct, _theme));
+                int idx = _stylesSource.PutBorder(new XSSFCellBorder(ct, _theme, _stylesSource.IndexedColors));
 
                 _cellXf.borderId = (uint)idx;
                 _cellXf.applyBorder = (true);

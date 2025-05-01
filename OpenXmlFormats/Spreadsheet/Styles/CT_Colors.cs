@@ -75,6 +75,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             sw.Write(string.Format("</{0}>", nodeName));
         }
 
+        public bool IsSetIndexedColors()
+        {
+            return this.indexedColors != null;
+        }
+
         [XmlArray(Order = 0)]
         [XmlArrayItem("rgbColor", IsNullable = false)]
         public List<CT_RgbColor> indexedColors
@@ -112,6 +117,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             if (node == null)
                 return null;
             CT_RgbColor ctObj = new CT_RgbColor();
+            if(node.Attributes["rgb"] != null) 
+                ctObj.rgbHex = node.Attributes["rgb"].Value;
             ctObj.rgb = XmlHelper.ReadBytes(node.Attributes["rgb"]);
             return ctObj;
         }
@@ -139,6 +146,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             {
                 this.rgbField = value;
             }
+        }
+        [XmlIgnore]
+        public string rgbHex
+        {
+            get;
+            set;
         }
     }
 
