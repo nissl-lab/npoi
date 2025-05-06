@@ -339,7 +339,26 @@ namespace TestCases.SS.Util
             ClassicAssert.IsTrue(CellReference.IsRowWithinRange("1", ss), "first row");
             ClassicAssert.IsTrue(CellReference.IsRowWithinRange("1048576", ss), "last row");
             ClassicAssert.IsFalse(CellReference.IsRowWithinRange("1048577", ss), "1 beyond last row");
+
+            ClassicAssert.IsFalse(CellReference.IsRowWithinRange(-1, ss), "1 before first row");
+            ClassicAssert.IsTrue(CellReference.IsRowWithinRange(0, ss), "first row");
+            ClassicAssert.IsTrue(CellReference.IsRowWithinRange(1048575, ss), "last row");
+            ClassicAssert.IsFalse(CellReference.IsRowWithinRange(1048576, ss), "1 beyond last row");
         }
+
+        [Test] //(expected= NumberFormatException.class)
+        public void IsRowWithinRangeNonInteger_BigNumber()
+        {
+            String rowNum = "4000000000";
+            CellReference.IsRowWithinRange(rowNum, SpreadsheetVersion.EXCEL2007);
+        }
+
+        [Test] //(expected= NumberFormatException.class)
+        public void IsRowWithinRangeNonInteger_Alpha()
+        {
+            String rowNum = "NotANumber";
+            CellReference.IsRowWithinRange(rowNum, SpreadsheetVersion.EXCEL2007);
+         }
 
         [Test]
         public void IsColWithinRange()

@@ -544,15 +544,12 @@ namespace NPOI.SS.Util
             return IsRowWithinRange(rowStr, ssVersion);
         }
 
-        /**
-         * @deprecated 3.15 beta 2. Use {@link #isColumnWithinRange}.
-         */
-        [Obsolete("deprecated 3.15 beta 2. Use {@link #isColumnWithinRange}.")]
-        public static bool IsColumnWithnRange(String colStr, SpreadsheetVersion ssVersion)
-        {
-            return IsColumnWithinRange(colStr, ssVersion);
-        }
-
+        /// <summary>
+        /// Determines whether <c>rowStr</c> is a valid row number for a given SpreadsheetVersion.
+        /// </summary>
+        /// <param name="rowStr">the numeric portion of an A1-style cell reference (1-based index)</param>
+        /// <param name="ssVersion">the spreadsheet version</param>
+        /// <returns></returns>
         public static bool IsRowWithinRange(String rowStr, SpreadsheetVersion ssVersion)
             => IsRowWithinRange(rowStr.AsSpan(), ssVersion);
 
@@ -560,13 +557,18 @@ namespace NPOI.SS.Util
         {
             CellReferenceParser.TryParsePositiveInt32Fast(rowStr, out var rowNum);
             rowNum -= 1;
-            return 0 <= rowNum && rowNum <= ssVersion.LastRowIndex;
+            return IsRowWithinRange(rowNum, ssVersion);
         }
 
-        [Obsolete("deprecated 3.15 beta 2. Use {@link #isRowWithinRange}")]
-        public static bool isRowWithnRange(String rowStr, SpreadsheetVersion ssVersion)
+        /// <summary>
+        /// Determines whether <c>row</c> is a valid row number for a given SpreadsheetVersion.
+        /// </summary>
+        /// <param name="rowNum">the row number (0-based index)</param>
+        /// <param name="ssVersion">the spreadsheet version</param>
+        /// <returns></returns>
+        public static bool IsRowWithinRange(int rowNum, SpreadsheetVersion ssVersion)
         {
-            return IsRowWithinRange(rowStr, ssVersion);
+            return 0 <= rowNum && rowNum <= ssVersion.LastRowIndex;
         }
 
         public static bool IsColumnWithinRange(String colStr, SpreadsheetVersion ssVersion)
