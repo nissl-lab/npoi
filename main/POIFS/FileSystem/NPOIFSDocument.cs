@@ -173,7 +173,7 @@ namespace NPOI.POIFS.FileSystem
 
             Stream innerOs = _stream.GetOutputStream();
             DocumentOutputStream os = new DocumentOutputStream(innerOs, size);
-            POIFSDocumentPath path = new POIFSDocumentPath(name.Split(new string[] { "\\\\" }, StringSplitOptions.RemoveEmptyEntries));
+            POIFSDocumentPath path = new POIFSDocumentPath(name.Split([@"\\"], StringSplitOptions.RemoveEmptyEntries));
             String docName = path.GetComponent(path.Length - 1);
             POIFSWriterEvent event1 = new POIFSWriterEvent(os, path, docName, size);
             Writer.ProcessPOIFSWriterEvent(event1);

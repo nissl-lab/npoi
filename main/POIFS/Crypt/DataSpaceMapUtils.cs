@@ -32,14 +32,14 @@ namespace NPOI.POIFS.Crypt
         public static void AddDefaultDataSpace(DirectoryEntry dir)
         {
             DataSpaceMapEntry dsme = new DataSpaceMapEntry(
-                    new int[] { 0 }
-                  , new String[] { Decryptor.DEFAULT_POIFS_ENTRY }
-                  , "StrongEncryptionDataSpace"
+                [0]
+                , [Decryptor.DEFAULT_POIFS_ENTRY]
+                , "StrongEncryptionDataSpace"
               );
-            DataSpaceMap dsm = new DataSpaceMap(new DataSpaceMapEntry[] { dsme });
+            DataSpaceMap dsm = new DataSpaceMap([dsme]);
             CreateEncryptionEntry(dir, "\u0006DataSpaces/DataSpaceMap", dsm);
 
-            DataSpaceDefInition dsd = new DataSpaceDefInition(new String[] { "StrongEncryptionTransform" });
+            DataSpaceDefInition dsd = new DataSpaceDefInition(["StrongEncryptionTransform"]);
             CreateEncryptionEntry(dir, "\u0006DataSpaces/DataSpaceInfo/StrongEncryptionDataSpace", dsd);
 
             TransformInfoHeader tih = new TransformInfoHeader(

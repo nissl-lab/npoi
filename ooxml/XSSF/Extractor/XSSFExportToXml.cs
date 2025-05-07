@@ -330,7 +330,7 @@ namespace NPOI.XSSF.Extractor
 
         private static String RemoveNamespace(String elementName)
         {
-            return Regex.IsMatch(elementName,".*:.*") ? elementName.Split(new char[]{':'})[1] : elementName;
+            return Regex.IsMatch(elementName,".*:.*") ? elementName.Split(':')[1] : elementName;
         }
 
         private static String GetFormattedDate(XSSFCell cell)
@@ -342,7 +342,7 @@ namespace NPOI.XSSF.Extractor
 
         private XmlNode GetNodeByXPath(String xpath, XmlNode rootNode, XmlDocument doc, bool CreateMultipleInstances)
         {
-            String[] xpathTokens = xpath.Split(new char[]{'/'});
+            String[] xpathTokens = xpath.Split('/');
 
 
             XmlNode currentNode = rootNode;
@@ -451,8 +451,8 @@ namespace NPOI.XSSF.Extractor
             doc.LoadXml(xmlSchema);
 
 
-            String[] leftTokens = leftXpath.Split(new char[]{'/'});
-            String[] rightTokens = rightXpath.Split(new char[] { '/' });
+            String[] leftTokens = leftXpath.Split('/');
+            String[] rightTokens = rightXpath.Split('/');
 
             int minLength = leftTokens.Length < rightTokens.Length ? leftTokens.Length : rightTokens.Length;
 
