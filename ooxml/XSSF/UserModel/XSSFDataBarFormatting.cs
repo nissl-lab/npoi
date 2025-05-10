@@ -19,6 +19,7 @@
 namespace NPOI.XSSF.UserModel
 {
     using System;
+    using NPOI.OOXML.XSSF.UserModel;
     using NPOI.OpenXmlFormats.Spreadsheet;
     using NPOI.SS.UserModel;
 
@@ -28,12 +29,14 @@ namespace NPOI.XSSF.UserModel
      */
     public class XSSFDataBarFormatting : IDataBarFormatting
     {
+        IIndexedColorMap _colorMap;
         readonly CT_DataBar _databar;
 
         /*package*/
-        public XSSFDataBarFormatting(CT_DataBar databar)
+        public XSSFDataBarFormatting(CT_DataBar databar, IIndexedColorMap colorMap)
         {
             _databar = databar;
+            _colorMap = colorMap;
         }
 
         public bool IsIconOnly
@@ -92,7 +95,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                return new XSSFColor(_databar.color);
+                return new XSSFColor(_databar.color, _colorMap);
             }
             set
             {

@@ -1170,7 +1170,7 @@ namespace NPOI.XSSF.UserModel
                     return null;
                 }
 
-                return new XSSFColor(pr.tabColor);
+                return new XSSFColor(pr.tabColor, (Workbook as XSSFWorkbook).GetStylesSource().IndexedColors);
             }
             set
             {
@@ -3768,14 +3768,9 @@ namespace NPOI.XSSF.UserModel
         [Obsolete("deprecated 3.15-beta2. Removed in 3.17. Use {@link #setTabColor(XSSFColor)}.")]
         public void SetTabColor(int colorIndex)
         {
-            CT_SheetPr pr = worksheet.sheetPr;
-            if(pr == null)
-            {
-                pr = worksheet.AddNewSheetPr();
-            }
-
-            CT_Color color = new CT_Color { indexed = (uint) colorIndex };
-            pr.tabColor = color;
+            IndexedColors indexedColor = IndexedColors.FromInt(colorIndex);
+            XSSFColor color = new XSSFColor(indexedColor, (Workbook as XSSFWorkbook).GetStylesSource().IndexedColors);
+            TabColor = color;
         }
 
         #region ISheet Members

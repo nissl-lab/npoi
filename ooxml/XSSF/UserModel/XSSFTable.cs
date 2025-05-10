@@ -56,8 +56,12 @@ namespace NPOI.XSSF.UserModel
         private CellReference startCellReference;
         private CellReference endCellReference;
         private String commonXPath;
+        private String name;
+        private String styleName;
 
-
+        /// <summary>
+        /// empty implementation, not attached to a workbook/worksheet yet
+        /// </summary>
         public XSSFTable()
             : base()
         {
@@ -79,6 +83,11 @@ namespace NPOI.XSSF.UserModel
         {
 
         }
+        /// <summary>
+        /// read table XML
+        /// </summary>
+        /// <param name="xmlDoc"></param>
+        /// <exception cref="IOException"></exception>
         public void ReadFrom(XmlDocument xmlDoc)
         {
             try
@@ -92,11 +101,19 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns>owning sheet</returns>
         public XSSFSheet GetXSSFSheet()
         {
             return (XSSFSheet)GetParent();
         }
 
+        /// <summary>
+        /// write table XML to stream
+        /// </summary>
+        /// <param name="out1"></param>
         public void WriteTo(Stream out1)
         {
             UpdateHeaders();
@@ -114,6 +131,10 @@ namespace NPOI.XSSF.UserModel
             out1.Close();
         }
 
+        /// <summary>
+        /// get the underlying CTTable
+        /// </summary>
+        /// <returns></returns>
         public CT_Table GetCTTable()
         {
             return ctTable;
@@ -220,7 +241,6 @@ namespace NPOI.XSSF.UserModel
             }
             return xmlColumnPrs;
         }
-        private string name;
         /**
          * @return the name of the Table, if set
          */
@@ -246,6 +266,43 @@ namespace NPOI.XSSF.UserModel
                 name = value;
             }
         }
+
+   
+        /// <summary>
+        /// Get or set the name of the Table
+        /// </summary>
+        /// <remarks>
+        /// @since 3.17 beta 1
+        /// </remarks>
+        public string StyleName
+        {
+            get {
+                if (styleName == null && ctTable.IsSetTableStyleInfo())
+                {
+                    StyleName = ctTable.tableStyleInfo.name;
+                }
+                return styleName;
+            }
+            set
+            {
+                if (value == null)
+                {
+                    if (ctTable.IsSetTableStyleInfo())
+                    {
+                        ctTable.tableStyleInfo.name =null;
+                    }
+                    styleName = null;
+                    return;
+                }
+                if (!ctTable.IsSetTableStyleInfo())
+                {
+                    ctTable.AddNewTableStyleInfo();
+                }
+                ctTable.tableStyleInfo.name = value;
+                styleName = value;
+            }
+        }
+
         public XSSFTableColumn CreateColumn(String columnName)
         {
             return CreateColumn(columnName, this.ColumnCount);
@@ -383,35 +440,7 @@ namespace NPOI.XSSF.UserModel
             UpdateReferences();
             UpdateHeaders();
         }
-        private String styleName;
-        public string StyleName
-        {
-            get {
-                if (styleName == null && ctTable.IsSetTableStyleInfo())
-                {
-                    StyleName = ctTable.tableStyleInfo.name;
-                }
-                return styleName;
-            }
-            set
-            {
-                if (value == null)
-                {
-                    if (ctTable.IsSetTableStyleInfo())
-                    {
-                        ctTable.tableStyleInfo.name =null;
-                    }
-                    styleName = null;
-                    return;
-                }
-                if (!ctTable.IsSetTableStyleInfo())
-                {
-                    ctTable.AddNewTableStyleInfo();
-                }
-                ctTable.tableStyleInfo.name = value;
-                styleName = value;
-            }
-        }
+        
         public ITableStyleInfo Style
         {
             get
@@ -757,6 +786,27 @@ namespace NPOI.XSSF.UserModel
                 && cell.Col >= StartColIndex
                 && cell.Col <= EndColIndex)
             {
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// <see cref="NPOI.SS.UserModel.Table.Contains(ICell)" />
+        /// </summary>
+        /// <remarks>
+        /// @since 3.17 beta 1
+        /// </remarks>
+        public bool Contains(ICell cell)
+        {
+            if (cell == null) return false;
+            // check if cell is on the same sheet as the table
+            if (!SheetName.Equals(cell.Sheet.SheetName)) return false;
+            // check if the cell is inside the table
+            if (cell.RowIndex >= StartRowIndex
+                && cell.RowIndex <= EndRowIndex
+                && cell.ColumnIndex >= StartColIndex
+                && cell.ColumnIndex <= EndColIndex) {
                 return true;
             }
             return false;

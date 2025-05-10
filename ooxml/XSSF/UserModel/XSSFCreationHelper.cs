@@ -14,6 +14,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
+using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using System;
@@ -72,7 +73,8 @@ namespace NPOI.XSSF.UserModel
 
         public ExtendedColor CreateExtendedColor()
         {
-            return new XSSFColor();
+            return new XSSFColor(new CT_Color(),
+                (workbook as XSSFWorkbook).GetStylesSource().IndexedColors);
         }
     }
 

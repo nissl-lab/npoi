@@ -20,6 +20,7 @@ namespace NPOI.XSSF.UserModel
 {
     using System;
     using System.Collections.Generic;
+    using NPOI.OOXML.XSSF.UserModel;
     using NPOI.OpenXmlFormats.Spreadsheet;
     using NPOI.SS.UserModel;
 
@@ -27,24 +28,29 @@ namespace NPOI.XSSF.UserModel
      * High level representation for Color Scale / Color Gradient Formatting 
      *  component of Conditional Formatting Settings
      */
-    public class XSSFColorScaleFormatting : IColorScaleFormatting {
+    public class XSSFColorScaleFormatting : IColorScaleFormatting
+    {
         readonly CT_ColorScale _scale;
+        private IIndexedColorMap _indexedColorMap;
 
         /*package*/
-        public XSSFColorScaleFormatting(CT_ColorScale scale) {
+        public XSSFColorScaleFormatting(CT_ColorScale scale, IIndexedColorMap colorMap)
+        {
             _scale = scale;
+            _indexedColorMap = colorMap;
         }
 
         public int NumControlPoints
         {
             get { return _scale.SizeOfCfvoArray(); }
-            set {
-                while (value < _scale.SizeOfCfvoArray())
+            set
+            {
+                while(value < _scale.SizeOfCfvoArray())
                 {
                     _scale.RemoveCfvo(_scale.SizeOfCfvoArray() - 1);
                     _scale.RemoveColor(_scale.SizeOfColorArray() - 1);
                 }
-                while (value > _scale.SizeOfCfvoArray())
+                while(value > _scale.SizeOfCfvoArray())
                 {
                     _scale.AddNewCfvo();
                     _scale.AddNewColor();
@@ -58,18 +64,18 @@ namespace NPOI.XSSF.UserModel
             {
                 CT_Color[] ctcols = _scale.color.ToArray();//.ColorArray;
                 XSSFColor[] c = new XSSFColor[ctcols.Length];
-                for (int i = 0; i < ctcols.Length; i++)
+                for(int i = 0; i < ctcols.Length; i++)
                 {
-                    c[i] = new XSSFColor(ctcols[i]);
+                    c[i] = new XSSFColor(ctcols[i], _indexedColorMap);
                 }
                 return c;
             }
             set
             {
                 CT_Color[] ctcols = new CT_Color[value.Length];
-                for (int i = 0; i < value.Length; i++)
+                for(int i = 0; i < value.Length; i++)
                 {
-                    ctcols[i] = ((XSSFColor)value[i]).GetCTColor();
+                    ctcols[i] = ((XSSFColor) value[i]).GetCTColor();
                 }
                 _scale.color = new List<CT_Color>(ctcols);
             }
@@ -82,7 +88,7 @@ namespace NPOI.XSSF.UserModel
                 CT_Cfvo[] cfvos = _scale.cfvo.ToArray();
                 XSSFConditionalFormattingThreshold[] t =
                         new XSSFConditionalFormattingThreshold[cfvos.Length];
-                for (int i = 0; i < cfvos.Length; i++)
+                for(int i = 0; i < cfvos.Length; i++)
                 {
                     t[i] = new XSSFConditionalFormattingThreshold(cfvos[i]);
                 }
@@ -91,18 +97,20 @@ namespace NPOI.XSSF.UserModel
             set
             {
                 CT_Cfvo[] cfvos = new CT_Cfvo[value.Length];
-                for (int i = 0; i < value.Length; i++)
+                for(int i = 0; i < value.Length; i++)
                 {
-                    cfvos[i] = ((XSSFConditionalFormattingThreshold)value[i]).CTCfvo;
+                    cfvos[i] = ((XSSFConditionalFormattingThreshold) value[i]).CTCfvo;
                 }
                 _scale.cfvo = new List<CT_Cfvo>(cfvos);
             }
         }
 
-        public XSSFColor CreateColor() {
-            return new XSSFColor(_scale.AddNewColor());
+        public XSSFColor CreateColor()
+        {
+            return new XSSFColor(_scale.AddNewColor(), _indexedColorMap);
         }
-        public IConditionalFormattingThreshold CreateThreshold() {
+        public IConditionalFormattingThreshold CreateThreshold()
+        {
             return new XSSFConditionalFormattingThreshold(_scale.AddNewCfvo());
         }
     }

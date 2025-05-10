@@ -38,54 +38,89 @@ namespace NPOI.SS.UserModel
      */
     public interface ITable
     {
-        /**
-         *  Get the top-left column index relative to the sheet
-         * @return table start column index on sheet
-         */
+        /// <summary>
+        ///  Get the top-left column index relative to the sheet
+        /// </summary>
         int StartColIndex { get; }
-        /**
-         *  Get the top-left row index on the sheet
-         * @return table start row index on sheet
-         */
+        /// <summary>
+        /// Get the top-left row index on the sheet
+        /// </summary>
         int StartRowIndex { get; }
-        /**
-         *  Get the bottom-right column index on the sheet
-         * @return table end column index on sheet
-         */
+        /// <summary>
+        /// Get the bottom-right column index on the sheet
+        /// </summary>
         int EndColIndex { get; }
-        /**
-         *  Get the bottom-right row index
-         * @return table end row index on sheet
-         */
+        /// <summary>
+        /// Get the bottom-right row index
+        /// </summary>
         int EndRowIndex { get; }
-        /**
-         * Get the name of the table.
-         * @return table name
-         */
+        /// <summary>
+        /// Get the name of the table.
+        /// </summary>
         String Name { get; }
-
-        /**
-         * Returns the index of a given named column in the table (names are case insensitive in XSSF).
-         * Note this list is lazily loaded and cached for performance. 
-         * Changes to the underlying table structure are not reflected in later calls
-         * unless <code>XSSFTable.UpdateHeaders()</code> is called to reset the cache.
-         * @param columnHeader the column header name to Get the table column index of
-         * @return column index corresponding to <code>columnHeader</code>
-         */
+        /// <summary>
+        /// Get the name of the table style, if there is one. 
+        /// May be a built-in name or user-defined.
+        /// </summary>
+        string StyleName { get; }
+        /// <summary>
+        /// Returns the index of a given named column in the table (names are case insensitive in XSSF).
+        /// Note this list is lazily loaded and cached for performance.
+        /// Changes to the underlying table structure are not reflected in later calls
+        /// unless <c>XSSFTable.updateHeaders()</c> is called to reset the cache.
+        /// </summary>
+        /// <param name="columnHeader">the column header name to Get the table column index of</param>
+        /// <returns>column index corresponding to <c>columnHeader</c></returns>
         int FindColumnIndex(String columnHeader);
-        /**
-         * Returns the sheet name that the table belongs to.
-         */
+        /// <summary>
+        /// Returns the sheet name that the table belongs to.
+        /// </summary>
         String SheetName { get; }
-        /**
-         * Returns true iff the table has a 'Totals' row
-         */
+        /// <summary>
+        /// Note: This is misleading.  The OOXML spec indicates this is true if the totals row
+        /// has <b><i>ever</i></b> been shown, not whether or not it is currently displayed.
+        /// Use <see cref="getTotalsRowCount()" /> > 0 to decide whether or not the totals row is visible.
+        /// </summary>
+        /// <returns>true if a totals row has ever been shown for this table</returns>
+        /// @see #getTotalsRowCount()
+        /// <remarks>
+        /// @since 3.15 beta 2
+        /// </remarks>
         bool IsHasTotalsRow { get; }
 
+        /// <summary>
+        /// </summary>
+        /// <returns>0 for no totals rows, 1 for totals row shown.
+        /// Values > 1 are not currently used by Excel up through 2016, and the OOXML spec
+        /// doesn't define how they would be implemented.
+        /// </returns>
+        /// <remarks>
+        /// @since 3.17 beta 1
+        /// </remarks>
+        int TotalsRowCount { get; }
+    
+        /// <summary>
+        /// </summary>
+        /// <returns>0 for no header rows, 1 for table headers shown.
+        /// Values > 1 might be used by Excel for pivot tables?
+        /// </returns>
+        /// <remarks>
+        /// @since 3.17 beta 1
+        /// </remarks>
+        int HeaderRowCount { get; }
         /// <summary>
         /// TableStyleInfo for this instance
         /// </summary>
         ITableStyleInfo Style { get; }
+        /// <summary>
+        /// checks if the given cell is part of the table.  Includes checking that they are on the same sheet.
+        /// </summary>
+        /// <param name="cell"></param>
+        /// <returns>true if the table and cell are on the same sheet and the cell is within the table range.</returns>
+        /// <remarks>
+        /// @since 3.17 beta 1
+        /// </remarks>
+        bool Contains(ICell cell);
     }
 
 }

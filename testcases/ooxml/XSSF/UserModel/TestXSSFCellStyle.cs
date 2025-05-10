@@ -59,7 +59,7 @@ namespace TestCases.XSSF.UserModel
             ClassicAssert.AreEqual(1, stylesTable.PutBorder(borderB));
 
             ctFill = new CT_Fill();
-            XSSFCellFill fill = new XSSFCellFill(ctFill);
+            XSSFCellFill fill = new XSSFCellFill(ctFill, null);
             long fillId = stylesTable.PutFill(fill);
             ClassicAssert.AreEqual(2, fillId);
 

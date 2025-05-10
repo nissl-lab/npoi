@@ -154,20 +154,20 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             return this.diagonalField != null;
         }
-        public void unsetDiagonal()
+        public void UnsetDiagonal()
         {
             this.diagonalField = null;
         }
 
-        public void unsetRight()
+        public void UnsetRight()
         {
             this.rightField = null;
         }
-        public void unsetLeft()
+        public void UnsetLeft()
         {
             this.leftField = null;
         }
-        public void unsetTop()
+        public void UnsetTop()
         {
             this.topField = null;
         }
@@ -228,6 +228,38 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             if (this.bottomField == null)
                 this.bottomField = new CT_BorderPr();
             return this.bottomField;
+        }
+
+        public bool IsSetVertical()
+        {
+            return verticalField != null;
+        }
+
+        public CT_BorderPr AddNewVertical()
+        {
+            verticalField = new CT_BorderPr();
+            return verticalField;
+        }
+
+        public void UnsetVertical()
+        {
+            verticalField = null;
+        }
+
+        public bool IsSetHorizontal()
+        {
+            return horizontalField != null;
+        }
+
+        public CT_BorderPr AddNewHorizontal()
+        {
+            horizontalField = new CT_BorderPr();
+            return horizontalField;
+        }
+
+        public void UnsetHorizontal()
+        {
+            horizontalField = null;
         }
 
         [XmlElement(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]

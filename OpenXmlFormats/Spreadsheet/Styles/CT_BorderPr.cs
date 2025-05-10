@@ -17,11 +17,13 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         private CT_Color colorField;
 
         private ST_BorderStyle styleField;
+        private bool styleFieldSpecified;
         public static CT_BorderPr Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
                 return null;
             CT_BorderPr ctObj = new CT_BorderPr();
+            ctObj.styleFieldSpecified = node.Attributes["style"] != null;
             if (node.Attributes["style"] != null)
                 ctObj.style = (ST_BorderStyle)Enum.Parse(typeof(ST_BorderStyle), node.Attributes["style"].Value);
             foreach (XmlNode childNode in node.ChildNodes)
@@ -37,7 +39,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<{0}", nodeName));
-            if(this.style!= ST_BorderStyle.none)
+            if(styleFieldSpecified)
                 XmlHelper.WriteAttribute(sw, "style", this.style.ToString());
             if (this.color != null)
             {
@@ -71,7 +73,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public bool IsSetStyle()
         {
-            return styleField != ST_BorderStyle.none;
+            return styleFieldSpecified;
         }
 
         [XmlElement]
@@ -97,7 +99,20 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
             set
             {
+                this.styleFieldSpecified = value != ST_BorderStyle.none;
                 this.styleField = value;
+            }
+        }
+
+        public bool styleSpecified
+        {
+            get
+            {
+                return this.styleFieldSpecified;
+            }
+            set
+            {
+                this.styleFieldSpecified = value;
             }
         }
 
@@ -106,6 +121,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             var res = new CT_BorderPr();
             res.colorField = this.colorField == null ? null : this.colorField.Copy();
             res.style = this.style;
+            res.styleSpecified = this.styleSpecified;
             return res;
         }
     }

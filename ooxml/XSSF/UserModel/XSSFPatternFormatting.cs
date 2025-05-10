@@ -19,6 +19,7 @@
 using NPOI.SS.UserModel;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using System;
+using NPOI.OOXML.XSSF.UserModel;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -27,11 +28,13 @@ namespace NPOI.XSSF.UserModel
      */
     public class XSSFPatternFormatting : IPatternFormatting
     {
+        IIndexedColorMap _colorMap;
         readonly CT_Fill _fill;
 
-        public XSSFPatternFormatting(CT_Fill fill)
+        public XSSFPatternFormatting(CT_Fill fill, IIndexedColorMap colorMap)
         {
             _fill = fill;
+            _colorMap = colorMap;
         }
 
         public  IColor FillBackgroundColorColor
@@ -39,7 +42,7 @@ namespace NPOI.XSSF.UserModel
             get
             {
                 if (!_fill.IsSetPatternFill()) return null;
-                return new XSSFColor(_fill.GetPatternFill().bgColor);
+                return new XSSFColor(_fill.GetPatternFill().bgColor, _colorMap);
             }
             set
             {
@@ -67,7 +70,7 @@ namespace NPOI.XSSF.UserModel
             {
                 if (!_fill.IsSetPatternFill() || !_fill.GetPatternFill().IsSetFgColor())
                     return null;
-                return new XSSFColor(_fill.GetPatternFill().fgColor);
+                return new XSSFColor(_fill.GetPatternFill().fgColor, _colorMap);
             }
             set
             {

@@ -23,9 +23,11 @@ namespace NPOI.XSSF.UserModel.Extensions
     using NPOI.XSSF.UserModel;
     using NPOI.XSSF.Model;
     using NPOI.SS.UserModel;
+    using NPOI.OOXML.XSSF.UserModel;
+
     /**
- * The enumeration value indicating the side being used for a cell border.
- */
+* The enumeration value indicating the side being used for a cell border.
+*/
     public enum BorderSide
     {
         TOP, RIGHT, BOTTOM, LEFT, DIAGONAL
@@ -38,36 +40,43 @@ namespace NPOI.XSSF.UserModel.Extensions
      */
     public class XSSFCellBorder
     {
+        private IIndexedColorMap _indexedColorMap;
         private ThemesTable _theme;
         private CT_Border border;
 
         /**
          * Creates a Cell Border from the supplied XML defInition
          */
-        public XSSFCellBorder(CT_Border border, ThemesTable theme)
-            : this(border)
+        public XSSFCellBorder(CT_Border border, ThemesTable theme, IIndexedColorMap colorMap)
+            : this(border, colorMap)
         {
 
             this._theme = theme;
         }
 
-        /**
-         * Creates a Cell Border from the supplied XML defInition
-         */
-        public XSSFCellBorder(CT_Border border)
+        public XSSFCellBorder(CT_Border border, IIndexedColorMap colorMap)
         {
             this.border = border;
+            this._indexedColorMap = colorMap;
         }
 
-        /**
-         * Creates a new, empty Cell Border.
-         * You need to attach this to the Styles Table
-         */
+        /// <summary>
+        /// Creates a Cell Border from the supplied XML definition
+        /// </summary>
+        /// <param name="border"></param>
+        public XSSFCellBorder(CT_Border border)
+            : this(border, null)
+        {
+        }
+
+        /// <summary>
+        /// Creates a new, empty Cell Border.
+        /// You need to attach this to the Styles Table
+        /// </summary>
         public XSSFCellBorder()
         {
-            border = new CT_Border();
+            this.border = new CT_Border();
         }
-
         /**
          * Records the Themes Table that is associated with
          *  the current font, used when looking up theme
@@ -128,7 +137,7 @@ namespace NPOI.XSSF.UserModel.Extensions
 
             if (borderPr != null && borderPr.IsSetColor())
             {
-                XSSFColor clr = new XSSFColor(borderPr.color);
+                XSSFColor clr = new XSSFColor(borderPr.color, _indexedColorMap);
                 if (_theme != null)
                 {
                     _theme.InheritFromThemeAsRequired(clr);

@@ -23,6 +23,7 @@ using NPOI.OpenXmlFormats.Dml;
 using Dml = NPOI.OpenXmlFormats.Dml;
 using NPOI.XSSF.Model;
 using NPOI.Util;
+using NPOI.OOXML.XSSF.UserModel;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -49,6 +50,7 @@ namespace NPOI.XSSF.UserModel
          */
         public static short DEFAULT_FONT_COLOR = IndexedColors.Black.Index;
 
+        private IIndexedColorMap _indexedColorMap;
         private ThemesTable _themes;
         private readonly CT_Font _ctFont;
         private short _index;
@@ -64,10 +66,17 @@ namespace NPOI.XSSF.UserModel
             _index = 0;
         }
 
-        public XSSFFont(CT_Font font, int index)
+        /// <summary>
+        /// Called from parsing styles.xml
+        /// </summary>
+        /// <param name="font"></param>
+        /// <param name="index">font index</param>
+        /// <param name="colorMap">colorMap for default or custom indexed colors</param>
+        public XSSFFont(CT_Font font, int index, IIndexedColorMap colorMap)
         {
             _ctFont = font;
             _index = (short)index;
+            _indexedColorMap = colorMap;
         }
 
         /**
@@ -202,7 +211,7 @@ namespace NPOI.XSSF.UserModel
             Spreadsheet.CT_Color ctColor = _ctFont.sizeOfColorArray() == 0 ? null : _ctFont.GetColorArray(0);
             if (ctColor != null)
             {
-                XSSFColor color = new XSSFColor(ctColor);
+                XSSFColor color = new XSSFColor(ctColor, _indexedColorMap);
                 if (_themes != null)
                 {
                     _themes.InheritFromThemeAsRequired(color);
