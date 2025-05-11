@@ -296,5 +296,85 @@ namespace TestCases.XSSF.UserModel
             wb.Close();
         }
 
+        [Test]
+        public void TestDifferentHeaderTypes()
+        {
+
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("TablesWithDifferentHeaders.xlsx");
+            ClassicAssert.AreEqual(3, wb.NumberOfSheets);
+            XSSFSheet s;
+            XSSFTable t;
+
+            // TODO Nicer column fetching
+
+            s = wb.GetSheet("IntHeaders") as XSSFSheet;
+            ClassicAssert.AreEqual(1, s.GetTables().Count);
+            t = s.GetTables()[0];
+            ClassicAssert.AreEqual("A1:B2", t.References.FormatAsString());
+            ClassicAssert.AreEqual("12", t.GetCTTable().tableColumns.GetTableColumnArray(0).name);
+            ClassicAssert.AreEqual("34", t.GetCTTable().tableColumns.GetTableColumnArray(1).name);
+
+            s = wb.GetSheet("FloatHeaders") as XSSFSheet;
+            ClassicAssert.AreEqual(1, s.GetTables().Count);
+            t = s.GetTables()[0];
+            ClassicAssert.AreEqual("A1:B2", t.References.FormatAsString());
+            ClassicAssert.AreEqual("12.34", t.GetCTTable().tableColumns.GetTableColumnArray(0).name);
+            ClassicAssert.AreEqual("34.56", t.GetCTTable().tableColumns.GetTableColumnArray(1).name);
+
+            s = wb.GetSheet("NoExplicitHeaders") as XSSFSheet;
+            ClassicAssert.AreEqual(1, s.GetTables().Count);
+            t = s.GetTables()[0];
+            ClassicAssert.AreEqual("A1:B3", t.References.FormatAsString());
+            ClassicAssert.AreEqual("Column1", t.GetCTTable().tableColumns.GetTableColumnArray(0).name);
+            ClassicAssert.AreEqual("Column2", t.GetCTTable().tableColumns.GetTableColumnArray(1).name);
+        }
+
+        /// <summary>
+        /// See https://stackoverflow.com/questions/44407111/apache-poi-cant-format-filled-cells-as-numeric
+        /// </summary>
+        [Test]
+        public void TestNumericCellsInTable()
+        {
+
+            XSSFWorkbook wb = new XSSFWorkbook();
+            XSSFSheet s = wb.CreateSheet() as XSSFSheet;
+
+            //Setting up the CTTable
+            XSSFTable t = s.CreateTable();
+            CT_Table ctt = t.GetCTTable();
+            ctt.id = (1);
+            ctt.name = ("CT Table Test");
+            ctt.@ref =("A1:B2");
+            CT_TableColumns cttcs = ctt.AddNewTableColumns();
+            CT_TableColumn cttc1 = cttcs.AddNewTableColumn();
+            cttc1.id=(1);
+            CT_TableColumn cttc2 = cttcs.AddNewTableColumn();
+            cttc2.id=(2);
+
+            //Creating the cells
+            ICell c1 = s.CreateRow(0).CreateCell(0);
+            XSSFCell c2 = s.GetRow(0).CreateCell(1) as XSSFCell;
+            XSSFCell c3 = s.CreateRow(1).CreateCell(0) as XSSFCell;
+            XSSFCell c4 = s.GetRow(1).CreateCell(1) as XSSFCell;
+
+            // Inserting values; some numeric strings, some alphabetical strings
+            c1.SetCellValue(12);
+            c2.SetCellValue(34);
+            c3.SetCellValue("AB");
+            c4.SetCellValue("CD");
+
+            // Save and re-load
+            wb = XSSFTestDataSamples.WriteOutAndReadBack(wb);
+            s = wb.GetSheetAt(0) as XSSFSheet;
+
+            // Check
+            ClassicAssert.AreEqual(1, s.GetTables().Count);
+            t = s.GetTables()[0];
+            ClassicAssert.AreEqual("A1", t.StartCellReference.FormatAsString());
+            ClassicAssert.AreEqual("B2", t.EndCellReference.FormatAsString());
+
+            // Done
+            wb.Close();
+        }
     }
 }

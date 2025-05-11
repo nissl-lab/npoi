@@ -476,6 +476,27 @@ namespace NPOI.XSSF.UserModel
                 return ctTable.tableColumns.count;
             }
         }
+
+        /// <summary>
+        /// The reference for the cells of the table
+        /// (see Open Office XML Part 4: chapter 3.5.1.2, attribute ref) 
+        /// 
+        /// Does not track updates to underlying changes to CTTable
+        /// To synchronize with changes to the underlying CTTable,
+        /// call <see cref="UpdateReferences"/>
+        /// </summary>
+        /// <returns>The reference for the cells of the table</returns>
+        public AreaReference References
+        {
+            get
+            {
+                return new AreaReference(
+                    StartCellReference,
+                    EndCellReference
+                );
+            }
+            
+        }
         public int ColumnCount
         {
             get
@@ -610,15 +631,23 @@ namespace NPOI.XSSF.UserModel
         }
 
 
-        /**
-         * Synchronize table headers with cell values in the parent sheet.
-         * Headers <em>must</em> be in sync, otherwise Excel will display a
-         * "Found unreadable content" message on startup.
-         * 
-         * If calling both {@link #updateReferences()} and
-         * {@link #updateHeaders()}, {@link #updateReferences()}
-         * should be called first.
-         */
+        /// <summary>
+        /// <para>
+        /// Synchronize table headers with cell values in the parent sheet.
+        /// Headers <em>must</em> be in sync, otherwise Excel will display a
+        /// "Found unreadable content" message on startup.
+        /// </para>
+        /// <para>
+        /// If calling both <see cref="UpdateReferences()" /> and
+        /// <see cref="UpdateHeaders()" />, <see cref="UpdateReferences()" />
+        /// should be called first.
+        /// </para>
+        /// <para>
+        /// Note that a Table <em>must</em> have a header. To reproduce
+        ///  the equivalent of inserting a table in Excel without Headers,
+        ///  manually add cells with values of "Column1", "Column2" etc first.
+        /// </para>
+        /// </summary>
         public void UpdateHeaders()
         {
             XSSFSheet sheet = (XSSFSheet)GetParent();
@@ -630,6 +659,7 @@ namespace NPOI.XSSF.UserModel
             int firstHeaderColumn = ref1.Col;
 
             XSSFRow row = sheet.GetRow(headerRow) as XSSFRow;
+            DataFormatter formatter = new DataFormatter();
 
             if (row != null && row.GetCTRow() != null)
             {
@@ -642,7 +672,7 @@ namespace NPOI.XSSF.UserModel
                     {
                         if (row.GetCell(cellnum) is XSSFCell cell)
                         {
-                            col.name = cell.StringCellValue;
+                            col.name = formatter.FormatCellValue(cell);
                         }
                         cellnum++;
                     }
