@@ -241,6 +241,27 @@ namespace NPOI.XSSF.UserModel
             }
             return xmlColumnPrs;
         }
+
+        public void AddColumn()
+        {
+            // Ensure we have Table Columns
+            CT_TableColumns columns = ctTable.tableColumns;
+            if (columns == null)
+            {
+                columns = ctTable.AddNewTableColumns();
+            }
+
+            // Add another Column, and give it a sensible ID
+            CT_TableColumn column = columns.AddNewTableColumn();
+            int num = columns.tableColumn.Count;
+            columns.count = (uint)num;
+            column.id = (uint)num;
+
+            // Have the Headers updated if possible
+            UpdateHeaders();
+        }
+
+        private string name;
         /**
          * @return the name of the Table, if set
          */
@@ -369,41 +390,38 @@ namespace NPOI.XSSF.UserModel
 
             return GetColumns()[columnIndex];
         }
-        /**
-         * Get the area reference for the cells which this table covers. The area
-         * includes header rows and totals rows.
-         *
-         * Does not track updates to underlying changes to CTTable To synchronize
-         * with changes to the underlying CTTable, call {@link #updateReferences()}.
-         * 
-         * @return the area of the table
-         * @see "Open Office XML Part 4: chapter 3.5.1.2, attribute ref"
-         */
-        public AreaReference GetCellReferences()
+        
+        /// <summary>
+        /// <para>
+        /// Get or set the area reference for the cells which this table covers.
+        /// The area includes header rows and totals rows.</para>
+        /// <para>Does not track updates to underlying changes to CTTable To synchronize
+        /// with changes to the underlying CTTable, call <see cref="UpdateReferences"/></para>
+        /// </summary>
+        /// <remarks>
+        /// The area's width should be identical to the amount of columns in
+        /// the table or the table may be invalid. All header rows, totals rows and
+        /// at least one data row must fit inside the area. Updating the area with
+        /// this method does not create or remove any columns and does not change any
+        /// cell values.
+        /// @see "Open Office XML Part 4: chapter 3.5.1.2, attribute ref"
+        /// </remarks>
+        public AreaReference CellReferences
         {
-            return new AreaReference(
+            get
+            {
+                return new AreaReference(
                     StartCellReference,
                     EndCellReference,
                     SpreadsheetVersion.EXCEL2007
-            );
+                );
+            }
+            set
+            {
+                SetCellRef(value);
+            }
         }
-        /**
-         * Set the area reference for the cells which this table covers. The area
-         * includes includes header rows and totals rows. Automatically synchronizes
-         * any changes by calling {@link #updateHeaders()}.
-         * 
-         * Note: The area's width should be identical to the amount of columns in
-         * the table or the table may be invalid. All header rows, totals rows and
-         * at least one data row must fit inside the area. Updating the area with
-         * this method does not create or remove any columns and does not change any
-         * cell values.
-         * 
-         * @see "Open Office XML Part 4: chapter 3.5.1.2, attribute ref"
-         */
-        public void SetCellReferences(AreaReference refs)
-        {
-            SetCellRef(refs);
-        }
+        
         protected void SetCellRef(AreaReference refs)
         {
 
@@ -477,26 +495,6 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        /// <summary>
-        /// The reference for the cells of the table
-        /// (see Open Office XML Part 4: chapter 3.5.1.2, attribute ref) 
-        /// 
-        /// Does not track updates to underlying changes to CTTable
-        /// To synchronize with changes to the underlying CTTable,
-        /// call <see cref="UpdateReferences"/>
-        /// </summary>
-        /// <returns>The reference for the cells of the table</returns>
-        public AreaReference References
-        {
-            get
-            {
-                return new AreaReference(
-                    StartCellReference,
-                    EndCellReference
-                );
-            }
-            
-        }
         public int ColumnCount
         {
             get

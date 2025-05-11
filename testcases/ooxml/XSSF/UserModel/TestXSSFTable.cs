@@ -283,7 +283,7 @@ namespace TestCases.XSSF.UserModel
             row.CreateCell(2).SetCellValue("Value3");
 
             XSSFTable table = sh.CreateTable();
-            table.SetCellReferences(new AreaReference(new CellReference(0, 0), new CellReference(1, 2)));
+            table.CellReferences = new AreaReference(new CellReference(0, 0), new CellReference(1, 2));
             wb.Close();
         }
 
@@ -310,21 +310,21 @@ namespace TestCases.XSSF.UserModel
             s = wb.GetSheet("IntHeaders") as XSSFSheet;
             ClassicAssert.AreEqual(1, s.GetTables().Count);
             t = s.GetTables()[0];
-            ClassicAssert.AreEqual("A1:B2", t.References.FormatAsString());
+            ClassicAssert.AreEqual("A1:B2", t.CellReferences.FormatAsString());
             ClassicAssert.AreEqual("12", t.GetCTTable().tableColumns.GetTableColumnArray(0).name);
             ClassicAssert.AreEqual("34", t.GetCTTable().tableColumns.GetTableColumnArray(1).name);
 
             s = wb.GetSheet("FloatHeaders") as XSSFSheet;
             ClassicAssert.AreEqual(1, s.GetTables().Count);
             t = s.GetTables()[0];
-            ClassicAssert.AreEqual("A1:B2", t.References.FormatAsString());
+            ClassicAssert.AreEqual("A1:B2", t.CellReferences.FormatAsString());
             ClassicAssert.AreEqual("12.34", t.GetCTTable().tableColumns.GetTableColumnArray(0).name);
             ClassicAssert.AreEqual("34.56", t.GetCTTable().tableColumns.GetTableColumnArray(1).name);
 
             s = wb.GetSheet("NoExplicitHeaders") as XSSFSheet;
             ClassicAssert.AreEqual(1, s.GetTables().Count);
             t = s.GetTables()[0];
-            ClassicAssert.AreEqual("A1:B3", t.References.FormatAsString());
+            ClassicAssert.AreEqual("A1:B3", t.CellReferences.FormatAsString());
             ClassicAssert.AreEqual("Column1", t.GetCTTable().tableColumns.GetTableColumnArray(0).name);
             ClassicAssert.AreEqual("Column2", t.GetCTTable().tableColumns.GetTableColumnArray(1).name);
         }
@@ -339,29 +339,32 @@ namespace TestCases.XSSF.UserModel
             XSSFWorkbook wb = new XSSFWorkbook();
             XSSFSheet s = wb.CreateSheet() as XSSFSheet;
 
-            //Setting up the CTTable
-            XSSFTable t = s.CreateTable();
-            CT_Table ctt = t.GetCTTable();
-            ctt.id = (1);
-            ctt.name = ("CT Table Test");
-            ctt.@ref =("A1:B2");
-            CT_TableColumns cttcs = ctt.AddNewTableColumns();
-            CT_TableColumn cttc1 = cttcs.AddNewTableColumn();
-            cttc1.id=(1);
-            CT_TableColumn cttc2 = cttcs.AddNewTableColumn();
-            cttc2.id=(2);
-
-            //Creating the cells
+            // Create some cells, some numeric, some not
             ICell c1 = s.CreateRow(0).CreateCell(0);
-            XSSFCell c2 = s.GetRow(0).CreateCell(1) as XSSFCell;
-            XSSFCell c3 = s.CreateRow(1).CreateCell(0) as XSSFCell;
-            XSSFCell c4 = s.GetRow(1).CreateCell(1) as XSSFCell;
+            ICell c2 = s.GetRow(0).CreateCell(1);
+            ICell c3 = s.GetRow(0).CreateCell(2);
+            ICell c4 = s.CreateRow(1).CreateCell(0);
+            ICell c5 = s.GetRow(1).CreateCell(1);
+            ICell c6 = s.GetRow(1).CreateCell(2);
 
             // Inserting values; some numeric strings, some alphabetical strings
             c1.SetCellValue(12);
-            c2.SetCellValue(34);
-            c3.SetCellValue("AB");
-            c4.SetCellValue("CD");
+            c2.SetCellValue(34.56);
+            c3.SetCellValue("ABCD");
+            c4.SetCellValue("AB");
+            c5.SetCellValue("CD");
+            c6.SetCellValue("EF");
+
+            // Setting up the CTTable
+            XSSFTable t = s.CreateTable();
+            t.Name = "TableTest";
+            t.DisplayName = "CT_Table_Test";
+            t.AddColumn();
+            t.AddColumn();
+            t.AddColumn();
+            t.CellReferences = (new AreaReference(
+                    new CellReference(c1), new CellReference(c6)
+            ));
 
             // Save and re-load
             wb = XSSFTestDataSamples.WriteOutAndReadBack(wb);
@@ -371,8 +374,12 @@ namespace TestCases.XSSF.UserModel
             ClassicAssert.AreEqual(1, s.GetTables().Count);
             t = s.GetTables()[0];
             ClassicAssert.AreEqual("A1", t.StartCellReference.FormatAsString());
-            ClassicAssert.AreEqual("B2", t.EndCellReference.FormatAsString());
+            ClassicAssert.AreEqual("C2", t.EndCellReference.FormatAsString());
 
+            // TODO Nicer column fetching
+            ClassicAssert.AreEqual("12", t.GetCTTable().tableColumns.GetTableColumnArray(0).name);
+            ClassicAssert.AreEqual("34.56", t.GetCTTable().tableColumns.GetTableColumnArray(1).name);
+            ClassicAssert.AreEqual("ABCD", t.GetCTTable().tableColumns.GetTableColumnArray(2).name);
             // Done
             wb.Close();
         }
