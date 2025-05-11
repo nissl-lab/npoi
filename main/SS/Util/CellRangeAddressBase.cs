@@ -166,7 +166,7 @@
         /// <remarks>
         /// @since 3.17 beta 1
         /// </remarks>
-        public ISet<CellPosition> getPosition(int rowInd, int colInd)
+        public ISet<CellPosition> GetPosition(int rowInd, int colInd)
         {
 	        HashSet<CellPosition> positions = new HashSet<CellPosition>();
 	        if (rowInd > FirstRow && rowInd < LastRow && colInd > FirstColumn && colInd < LastColumn) {
