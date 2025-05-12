@@ -261,6 +261,15 @@ namespace NPOI.XWPF.UserModel
             }
         }
 
+        public int NumberOfColumns
+        {
+            get
+            {
+                return ctTbl.SizeOfTrArray() > 0 ? ctTbl.GetTrArray(0)
+                        .SizeOfTcArray() : 0;
+            }
+        }
+
         public CT_TblPr GetTrPr()
         {
             return (ctTbl.tblPr != null) ? ctTbl.tblPr : ctTbl
