@@ -115,7 +115,7 @@ namespace TestCases.XWPF.UserModel
             ClassicAssert.AreEqual(4, xtab.NumberOfRows);
 
             //check number of cols
-            ClassicAssert.AreEqual(2, table.GetTrArray(0).SizeOfTcArray());
+            ClassicAssert.AreEqual(2, xtab.NumberOfColumns);
 
             //check creation of first row
             xtab = new XWPFTable(new CT_Tbl(), doc);
