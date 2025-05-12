@@ -2871,7 +2871,7 @@ namespace TestCases.XSSF.UserModel
             {
                 XSSFSheet sh = wb.CreateSheet() as XSSFSheet;
                 ClassicAssert.IsTrue(sh.GetCTWorksheet().sheetPr == null || !sh.GetCTWorksheet().sheetPr.IsSetTabColor());
-                sh.TabColor = new XSSFColor(IndexedColors.Red);
+                sh.TabColor = new XSSFColor(IndexedColors.Red, null);
                 ClassicAssert.IsTrue(sh.GetCTWorksheet().sheetPr.IsSetTabColor());
                 ClassicAssert.AreEqual(IndexedColors.Red.Index,
                         sh.GetCTWorksheet().sheetPr.tabColor.indexed);
@@ -2891,8 +2891,8 @@ namespace TestCases.XSSF.UserModel
                 XSSFSheet sh = wb.CreateSheet() as XSSFSheet;
                 ClassicAssert.IsTrue(sh.GetCTWorksheet().sheetPr == null || !sh.GetCTWorksheet().sheetPr.IsSetTabColor());
                 ClassicAssert.IsNull(sh.TabColor);
-                sh.TabColor = new XSSFColor(IndexedColors.Red);
-                XSSFColor expected = new XSSFColor(IndexedColors.Red);
+                sh.TabColor = new XSSFColor(IndexedColors.Red, null);
+                XSSFColor expected = new XSSFColor(IndexedColors.Red, null);
                 ClassicAssert.AreEqual(expected, sh.TabColor);
             }
             finally
@@ -2912,7 +2912,7 @@ namespace TestCases.XSSF.UserModel
                 ClassicAssert.IsNull((wb.GetSheet("default") as XSSFSheet).TabColor);
 
                 // test indexed-colored sheet
-                XSSFColor expected = new XSSFColor(IndexedColors.Red);
+                XSSFColor expected = new XSSFColor(IndexedColors.Red, null);
                 ClassicAssert.AreEqual(expected, (wb.GetSheet("indexedRed") as XSSFSheet).TabColor);
 
                 // test regular-colored (non-indexed, ARGB) sheet

@@ -25,6 +25,7 @@ namespace NPOI.XSSF.Model
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using NPOI.OOXML.XSSF.UserModel;
 
     /**
      * Class that represents theme of XLSX document. The theme includes specific
@@ -45,6 +46,7 @@ namespace NPOI.XSSF.Model
         public const int THEME_HLINK = 10;
         public const int THEME_FOLHLINK = 11;
 
+        private IIndexedColorMap colorMap;
         private ThemeDocument theme;
         /**
      * Create a new, empty ThemesTable
@@ -89,6 +91,15 @@ namespace NPOI.XSSF.Model
         internal ThemesTable(ThemeDocument theme)
         {
             this.theme = theme;
+        }
+
+        /// <summary>
+        /// called from <see cref="StylesTable"/> when setting theme, used to adjust colors if a custom indexed mapping is defined
+        /// </summary>
+        /// <param name="colorMap"></param>
+        internal void SetColorMap(IIndexedColorMap colorMap)
+        {
+            this.colorMap = colorMap;
         }
         /**
          * Convert a theme "index" into a color.
@@ -135,7 +146,7 @@ namespace NPOI.XSSF.Model
             {
                 return null;
             }
-            return new XSSFColor(rgb);
+            return new XSSFColor(rgb, colorMap);
 
         }
 
@@ -172,7 +183,7 @@ namespace NPOI.XSSF.Model
          * @param out The stream to write to.
          * @throws IOException if an error occurs while writing.
          */
-        public void writeTo(Stream out1)
+        public void WriteTo(Stream out1)
         {
             //XmlOptions options = new XmlOptions(DEFAULT_XML_OPTIONS);
 
@@ -183,7 +194,7 @@ namespace NPOI.XSSF.Model
         {
             PackagePart part = GetPackagePart();
             Stream out1 = part.GetOutputStream();
-            writeTo(out1);
+            WriteTo(out1);
             out1.Close();
         }
     }

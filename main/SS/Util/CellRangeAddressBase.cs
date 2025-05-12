@@ -1,6 +1,8 @@
 ﻿namespace NPOI.SS.Util
 {
+    using EnumsNET;
     using System;
+    using System.Collections.Generic;
 
     /**
 * See OOO documentation: excelfileformat.pdf sec 2.5.14 - 'Cell Range Address'<p/>
@@ -76,8 +78,10 @@
         private static void ValidateRow(int row, SpreadsheetVersion ssVersion)
         {
             int maxrow = ssVersion.LastRowIndex;
-            if (row > maxrow) throw new ArgumentException("Maximum row number is " + maxrow);
-            if (row < 0) throw new ArgumentException("Minumum row number is 0");
+            if(row > maxrow)
+                throw new ArgumentException("Maximum row number is " + maxrow);
+            if(row < 0)
+                throw new ArgumentException("Minumum row number is 0");
         }
 
         /**
@@ -87,8 +91,10 @@
         private static void ValidateColumn(int column, SpreadsheetVersion ssVersion)
         {
             int maxcol = ssVersion.LastColumnIndex;
-            if (column > maxcol) throw new ArgumentException("Maximum column number is " + maxcol);
-            if (column < 0) throw new ArgumentException("Minimum column number is 0");
+            if(column > maxcol)
+                throw new ArgumentException("Maximum column number is " + maxcol);
+            if(column < 0)
+                throw new ArgumentException("Minimum column number is 0");
         }
         public bool IsInRange(int rowInd, int colInd)
         {
@@ -150,6 +156,31 @@
                 other._firstRow <= this._lastRow &&
                 other._firstCol <= this._lastCol;
         }
+
+        /// <summary>
+        /// Useful for logic like table/range styling, where some elements apply based on relative position in a range.
+        /// </summary>
+        /// <param name="rowInd"></param>
+        /// <param name="colInd"></param>
+        /// <returns>set of <see cref="CellPosition"/>s occupied by the given coordinates.  Empty if the coordinates are not in the range, never null.</returns>
+        /// <remarks>
+        /// @since 3.17 beta 1
+        /// </remarks>
+        public ISet<CellPosition> GetPosition(int rowInd, int colInd)
+        {
+	        HashSet<CellPosition> positions = new HashSet<CellPosition>();
+	        if (rowInd > FirstRow && rowInd < LastRow && colInd > FirstColumn && colInd < LastColumn) {
+	            positions.Add(CellPosition.INSIDE);
+	            return positions; // entirely inside, matches no boundaries
+	        }
+	        // check edges
+	        if (rowInd == FirstRow) positions.Add(CellPosition.TOP);
+	        if (rowInd == LastRow) positions.Add(CellPosition.BOTTOM);
+	        if (colInd == FirstColumn) positions.Add(CellPosition.LEFT);
+	        if (colInd == LastColumn) positions.Add(CellPosition.RIGHT);
+	    
+	        return positions;
+	    }
 
         /**
          * @return column number for the upper left hand corner
@@ -250,7 +281,8 @@
 
         public override bool Equals(Object other)
         {
-            if (other is CellRangeAddressBase @base) {
+            if(other is CellRangeAddressBase @base)
+            {
                 return ((MinRow == @base.MinRow) &&
                         (MaxRow == @base.MaxRow) &&
                         (MinColumn == @base.MinColumn) &&
@@ -267,5 +299,33 @@
                 (MaxRow << 24));
             return code;
         }
+    }
+
+    /// <summary>
+    /// Indicates a cell or range is in the given relative position in a range.
+    /// More than one of these may apply at once.
+    /// </summary>
+    public enum CellPosition
+    {
+        /// <summary>
+        /// range starting rows are equal */
+        /// </summary>
+        TOP,
+        /// <summary>
+        /// range ending rows are equal */
+        /// </summary>
+        BOTTOM,
+        /// <summary>
+        /// range starting columns are equal */
+        /// </summary>
+        LEFT,
+        /// <summary>
+        /// range ending columns are equal */
+        /// </summary>
+        RIGHT,
+        /// <summary>
+        /// a cell or range is completely inside another range, without touching any edges (a cell in this position can't be in any others) */
+        /// </summary>
+        INSIDE
     }
 }

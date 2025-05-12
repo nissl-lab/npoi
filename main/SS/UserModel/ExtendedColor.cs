@@ -91,17 +91,9 @@ using Cysharp.Text;
         {
             if (IsIndexed && Index > 0)
             {
-                int indexNum = Index;
-                var hashIndex = HSSFColor.GetIndexHash();
-                HSSFColor indexed = null;
-                if (hashIndex.TryGetValue(indexNum, out HSSFColor value))
-                    indexed = value;
-                if (indexed != null)
+                byte[] rgb = IndexedRGB;
+                if (rgb != null)
                 {
-                    byte[] rgb = new byte[3];
-                    rgb[0] = (byte)indexed.GetTriplet()[0];
-                    rgb[1] = (byte)indexed.GetTriplet()[1];
-                    rgb[2] = (byte)indexed.GetTriplet()[2];
                     return rgb;
                 }
             }
@@ -109,7 +101,10 @@ using Cysharp.Text;
             // Grab the colour
             return StoredRGB;
         }
-
+        /// <summary>
+        /// </summary>
+        /// <returns>index color RGB bytes, if <see cref="isIndexed()" /> == true, null if not indexed or index is invalid</returns>
+        protected abstract byte[] IndexedRGB { get; }
         /**
          * Standard Red Green Blue ctColor value (RGB) with applied tint.
          * Alpha values are ignored.

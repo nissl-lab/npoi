@@ -49,7 +49,7 @@ namespace NPOI.XSSF.Model
 
         private readonly List<CT_Dxf> dxfs = new List<CT_Dxf>();
         private readonly Dictionary<string, ITableStyle> tableStyles = new Dictionary<string, ITableStyle>();
-        private readonly IIndexedColorMap indexedColors = new DefaultIndexedColorMap();
+        private IIndexedColorMap indexedColors = new DefaultIndexedColorMap();
         /**
          * The first style id available for use as a custom style
          */
@@ -139,6 +139,7 @@ namespace NPOI.XSSF.Model
         {
             this.theme = theme;
 
+            if (theme != null) theme.SetColorMap(indexedColors);
             // Pass the themes table along to things which need to 
             //  know about it, but have already been Created by now
             foreach (XSSFFont font in fonts)
@@ -181,6 +182,14 @@ namespace NPOI.XSSF.Model
         {
             return tableStyles[name];
         }
+
+        public ISet<string> ExplicitTableStyleNames
+        {
+            get
+            {
+                return new HashSet<string>(tableStyles.Keys);
+            }
+        }
         /**
          * If there isn't currently a {@link ThemesTable} for the
          *  current Workbook, then creates one and sets it up.
@@ -190,7 +199,7 @@ namespace NPOI.XSSF.Model
         {
             if (theme != null) return;
 
-            theme = (ThemesTable)workbook.CreateRelationship(XSSFRelation.THEME, XSSFFactory.GetInstance());
+            SetTheme((ThemesTable)workbook.CreateRelationship(XSSFRelation.THEME, XSSFFactory.GetInstance()));
         }
         /**
          * Read this shared styles table from an XML file.
@@ -208,6 +217,9 @@ namespace NPOI.XSSF.Model
                 CT_Stylesheet styleSheet = doc.GetStyleSheet();
 
                 // Grab all the different bits we care about
+                // keep this first, as some constructors below want it
+                IIndexedColorMap customColors = CustomIndexedColorMap.FromColors(styleSheet.colors);
+                if (customColors != null) indexedColors = customColors;
                 CT_NumFmts ctfmts = styleSheet.numFmts;
                 if (ctfmts != null)
                 {
@@ -226,7 +238,7 @@ namespace NPOI.XSSF.Model
                     foreach (CT_Font font in ctfonts.font)
                     {
                         // Create the font and save it. Themes Table supplied later
-                        XSSFFont f = new XSSFFont(font, idx);
+                        XSSFFont f = new XSSFFont(font, idx, indexedColors);
                         fonts.Add(f);
                         idx++;
                     }
@@ -236,7 +248,7 @@ namespace NPOI.XSSF.Model
                 {
                     foreach (CT_Fill fill in ctFills.fill)
                     {
-                        fills.Add(new XSSFCellFill(fill));
+                        fills.Add(new XSSFCellFill(fill, indexedColors));
                     }
                 }
 
@@ -245,7 +257,7 @@ namespace NPOI.XSSF.Model
                 {
                     foreach (CT_Border border in ctborders.border)
                     {
-                        borders.Add(new XSSFCellBorder(border));
+                        borders.Add(new XSSFCellBorder(border, indexedColors));
                     }
                 }
 
@@ -817,8 +829,8 @@ namespace NPOI.XSSF.Model
             fonts.Add(xssfFont);
 
             CT_Fill[] ctFill = CreateDefaultFills();
-            fills.Add(new XSSFCellFill(ctFill[0]));
-            fills.Add(new XSSFCellFill(ctFill[1]));
+            fills.Add(new XSSFCellFill(ctFill[0], indexedColors));
+            fills.Add(new XSSFCellFill(ctFill[1], indexedColors));
 
             CT_Border ctBorder = CreateDefaultBorder();
             borders.Add(new XSSFCellBorder(ctBorder));
@@ -862,7 +874,7 @@ namespace NPOI.XSSF.Model
         private static XSSFFont CreateDefaultFont()
         {
             CT_Font ctFont = new CT_Font();
-            XSSFFont xssfFont = new XSSFFont(ctFont, 0);
+            XSSFFont xssfFont = new XSSFFont(ctFont, 0, null);
             xssfFont.FontHeightInPoints = (XSSFFont.DEFAULT_FONT_SIZE);
             xssfFont.Color = (XSSFFont.DEFAULT_FONT_COLOR);//SetTheme
             xssfFont.FontName = (XSSFFont.DEFAULT_FONT_NAME);
@@ -957,9 +969,15 @@ namespace NPOI.XSSF.Model
             return null;
         }
 
-        public IIndexedColorMap GetIndexedColors()
+        /// <summary>
+        /// default or custom indexed color to RGB mapping
+        /// </summary>
+        public IIndexedColorMap IndexedColors
         {
-            return indexedColors;
+            get
+            {
+                return indexedColors;
+            }
         }
     }
 }

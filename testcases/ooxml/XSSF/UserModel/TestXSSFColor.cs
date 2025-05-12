@@ -17,6 +17,7 @@
 
 namespace TestCases.XSSF.UserModel
 {
+    using NPOI.OpenXmlFormats.Spreadsheet;
     using NPOI.XSSF;
     using NPOI.XSSF.UserModel;
     using NUnit.Framework;using NUnit.Framework.Legacy;
@@ -174,6 +175,23 @@ namespace TestCases.XSSF.UserModel
             ClassicAssert.AreEqual(255, rgb4.GetRgbWithTint()[0]);
             ClassicAssert.AreEqual(102, rgb4.GetRgbWithTint()[1]);
             ClassicAssert.AreEqual(102, rgb4.GetRgbWithTint()[2]);
+
+            wb.Close();
+        }
+
+        [Test]
+        public void TestCustomIndexedColour()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("customIndexedColors.xlsx");
+            XSSFCell cell = wb.GetSheetAt(1).GetRow(0).GetCell(0) as XSSFCell;
+            XSSFColor color = cell.CellStyle.FillForegroundColorColor as XSSFColor;
+            CT_Colors ctColors = wb.GetStylesSource().GetCTStylesheet().colors;
+
+            CT_RgbColor ctRgbColor = ctColors.indexedColors[color.Index];
+
+            string hexRgb = ctRgbColor.rgbHex;
+
+            ClassicAssert.AreEqual(hexRgb, color.ARGBHex);
         }
     }
 

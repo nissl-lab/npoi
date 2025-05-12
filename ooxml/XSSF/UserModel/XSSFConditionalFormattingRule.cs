@@ -136,7 +136,7 @@ namespace NPOI.XSSF.UserModel
                 border = dxf.border;
             }
 
-            return new XSSFBorderFormatting(border);
+            return new XSSFBorderFormatting(border, (_sh.Workbook as XSSFWorkbook).GetStylesSource().IndexedColors);
         }
 
         /**
@@ -149,7 +149,7 @@ namespace NPOI.XSSF.UserModel
                 CT_Dxf dxf = GetDxf(false);
                 if (dxf == null || !dxf.IsSetBorder()) return null;
 
-                return new XSSFBorderFormatting(dxf.border);
+                return new XSSFBorderFormatting(dxf.border, (_sh.Workbook as XSSFWorkbook).GetStylesSource().IndexedColors);
             }
         }
 
@@ -172,7 +172,7 @@ namespace NPOI.XSSF.UserModel
                 font = dxf.font;
             }
 
-            return new XSSFFontFormatting(font);
+            return new XSSFFontFormatting(font, (_sh.Workbook as XSSFWorkbook).GetStylesSource().IndexedColors);
         }
 
         /**
@@ -185,7 +185,7 @@ namespace NPOI.XSSF.UserModel
                 CT_Dxf dxf = GetDxf(false);
                 if (dxf == null || !dxf.IsSetFont()) return null;
 
-                return new XSSFFontFormatting(dxf.font);
+                return new XSSFFontFormatting(dxf.font, (_sh.Workbook as XSSFWorkbook).GetStylesSource().IndexedColors);
             }
         }
 
@@ -208,7 +208,7 @@ namespace NPOI.XSSF.UserModel
                 fill = dxf.fill;
             }
 
-            return new XSSFPatternFormatting(fill);
+            return new XSSFPatternFormatting(fill, (_sh.Workbook as XSSFWorkbook).GetStylesSource().IndexedColors);
         }
 
         /**
@@ -221,7 +221,7 @@ namespace NPOI.XSSF.UserModel
                 CT_Dxf dxf = GetDxf(false);
                 if (dxf == null || !dxf.IsSetFill()) return null;
 
-                return new XSSFPatternFormatting(dxf.fill);
+                return new XSSFPatternFormatting(dxf.fill, (_sh.Workbook as XSSFWorkbook).GetStylesSource().IndexedColors);
             }
         }
 
@@ -254,7 +254,7 @@ namespace NPOI.XSSF.UserModel
             max.type = (ST_CfvoType)Enum.Parse(typeof(ST_CfvoType), RangeType.MAX.name);
 
             // Wrap and return
-            return new XSSFDataBarFormatting(bar);
+            return new XSSFDataBarFormatting(bar, (_sh.Workbook as XSSFWorkbook).GetStylesSource().IndexedColors);
         }
         public IDataBarFormatting DataBarFormatting
         {
@@ -263,7 +263,7 @@ namespace NPOI.XSSF.UserModel
                 if (_cfRule.IsSetDataBar())
                 {
                     CT_DataBar bar = _cfRule.dataBar;
-                    return new XSSFDataBarFormatting(bar);
+                    return new XSSFDataBarFormatting(bar, (_sh.Workbook as XSSFWorkbook).GetStylesSource().IndexedColors);
                 }
                 else
                 {
@@ -367,7 +367,7 @@ namespace NPOI.XSSF.UserModel
             }
 
             // Wrap and return
-            return new XSSFColorScaleFormatting(scale);
+            return new XSSFColorScaleFormatting(scale, (_sh.Workbook as XSSFWorkbook).GetStylesSource().IndexedColors);
         }
         public IColorScaleFormatting ColorScaleFormatting
         {
@@ -376,7 +376,7 @@ namespace NPOI.XSSF.UserModel
                 if (_cfRule.IsSetColorScale())
                 {
                     CT_ColorScale scale = _cfRule.colorScale;
-                    return new XSSFColorScaleFormatting(scale);
+                    return new XSSFColorScaleFormatting(scale, (_sh.Workbook as XSSFWorkbook).GetStylesSource().IndexedColors);
                 }
                 else
                 {
