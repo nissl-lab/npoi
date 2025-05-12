@@ -37,7 +37,7 @@ namespace NPOI.XSSF.Streaming
         internal XSSFSheet _sh;
         private readonly SXSSFWorkbook _workbook;
         //private TreeMap<Integer, SXSSFRow> _rows = new TreeMap<Integer, SXSSFRow>();
-        private readonly IDictionary<int, SXSSFRow> _rows = new Dictionary<int, SXSSFRow>();
+        private readonly Dictionary<int, SXSSFRow> _rows = new Dictionary<int, SXSSFRow>();
         private readonly SheetDataWriter _writer;
         private int _randomAccessWindowSize = SXSSFWorkbook.DEFAULT_WINDOW_SIZE;
         private readonly Lazy<AutoSizeColumnTracker> _autoSizeColumnTracker;
