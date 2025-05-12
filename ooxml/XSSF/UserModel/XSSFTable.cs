@@ -261,7 +261,6 @@ namespace NPOI.XSSF.UserModel
             UpdateHeaders();
         }
 
-        private string name;
         /**
          * @return the name of the Table, if set
          */
