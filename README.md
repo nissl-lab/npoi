@@ -68,6 +68,6 @@ Contributors
 
 
 ### Sponsored By
-![image](https://github.com/user-attachments/assets/88dd41a5-9c25-43dd-ba6b-2f4f82b60ecc)
+<img src="https://github.com/user-attachments/assets/88dd41a5-9c25-43dd-ba6b-2f4f82b60ecc" alt="drawing" width="200"/>
 
 
