@@ -45,7 +45,16 @@ namespace NPOI
         private PackagePart packagePart;
         private POIXMLDocumentPart parent;
         private readonly Dictionary<String, RelationPart> relations = new Dictionary<String, RelationPart>();
+        private bool isCommited = false;
 
+        /// <summary>
+        /// Get or set embedded part is committed
+        /// </summary>
+        public bool Commited
+        {
+            get => isCommited;
+            set => isCommited = value;
+        }
         /**
          * The RelationPart is a cached relationship between the document, which contains the RelationPart,
          * and one of its referenced child document parts.
@@ -556,6 +565,11 @@ namespace NPOI
 
         protected internal void OnSave(List<PackagePart> alreadySaved)
         {
+            //if part is already committed then return
+            if (this.isCommited) {
+                return;
+            }
+
             // this usually clears out previous content in the part...
             PrepareForCommit();
 

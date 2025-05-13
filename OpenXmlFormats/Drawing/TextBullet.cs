@@ -252,6 +252,11 @@ namespace NPOI.OpenXmlFormats.Dml
         {
             return this.startAtField >= 1;
         }
+
+        public void UnsetStartAt()
+        {
+            this.startAtField = 0;
+        }
     }
 
 
