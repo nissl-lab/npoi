@@ -3617,7 +3617,7 @@ namespace NPOI.XSSF.UserModel
                 {
                     CellRangeAddressList addressList = new CellRangeAddressList();
 
-                    string[] regions = ctDataValidation.sqref.Split(new char[] { ' ' });
+                    string[] regions = ctDataValidation.sqref.Split(' ');
                     for(int i = 0; i < regions.Length; i++)
                     {
                         if(regions[i].Length == 0)
@@ -3625,7 +3625,7 @@ namespace NPOI.XSSF.UserModel
                             continue;
                         }
 
-                        string[] parts = regions[i].Split(new char[] { ':' });
+                        string[] parts = regions[i].Split(':');
                         CellReference begin = new CellReference(parts[0]);
                         CellReference end = parts.Length > 1
                             ? new CellReference(parts[1])

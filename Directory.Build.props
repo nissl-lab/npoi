@@ -87,7 +87,6 @@
     <NoWarn>$(NoWarn);CA1834</NoWarn> <!-- Member XXX is explicitly initialized to its default value -->
     <NoWarn>$(NoWarn);CA1845</NoWarn> <!-- Use span-based 'string.Concat' and 'AsSpan' instead of 'Substring' -->
     <NoWarn>$(NoWarn);CA1850</NoWarn> <!-- Prefer static 'System.Security.Cryptography.MD5.HashData' method over 'ComputeHash' -->
-    <NoWarn>$(NoWarn);CA1861</NoWarn> <!-- Prefer 'static readonly' fields over constant array arguments -->
     <NoWarn>$(NoWarn);CA1862</NoWarn> <!-- Prefer the string comparison method overload -->
     <NoWarn>$(NoWarn);CA1872</NoWarn> <!-- Prefer 'System.Convert.ToHexString(byte[])' over call chains based on 'System.BitConverter.ToString(byte[])' -->
     <NoWarn>$(NoWarn);CA2019</NoWarn> <!-- 'ThreadStatic' fields should not use inline initialization -->

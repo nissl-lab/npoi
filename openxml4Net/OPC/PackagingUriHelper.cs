@@ -288,8 +288,8 @@ namespace NPOI.OpenXml4Net.OPC
         public static Uri RelativizeUri(Uri sourceURI, Uri targetURI, bool msCompatible)
         {
             StringBuilder retVal = new StringBuilder();
-            String[] segmentsSource = sourceURI.ToString().Split(new char[] { '/' });
-            String[] segmentsTarget = targetURI.ToString().Split(new char[] { '/' });
+            String[] segmentsSource = sourceURI.ToString().Split('/');
+            String[] segmentsTarget = targetURI.ToString().Split('/');
 
             // If the source Uri is empty
             if (segmentsSource.Length == 0)
@@ -481,7 +481,7 @@ namespace NPOI.OpenXml4Net.OPC
             }
             else if (targetPath.StartsWith("../"))
             {
-                string[] segments = path.Split(new char[] { '/' });
+                string[] segments = path.Split('/');
 
                 int segmentEnd = segments.Length - 1;
                 while (targetPath.StartsWith("../"))
@@ -493,8 +493,10 @@ namespace NPOI.OpenXml4Net.OPC
 
                 for (int i = 0; i <= segmentEnd;i++ )
                 {
-                    if(segments[i]!=string.Empty)
-                    path += segments[i]+"/";
+                    if(segments[i] != string.Empty)
+                    {
+                        path += segments[i]+"/";
+                    }
                 }
                 path += targetPath;
             }

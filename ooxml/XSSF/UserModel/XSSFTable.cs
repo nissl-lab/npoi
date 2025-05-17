@@ -182,7 +182,7 @@ namespace NPOI.XSSF.UserModel
                     if (column.GetXmlColumnPr() != null)
                     {
                         String xpath = column.GetXmlColumnPr().XPath;
-                        String[] tokens = xpath.Split(new char[] { '/' });
+                        String[] tokens = xpath.Split('/');
                         if (commonTokens==null)
                         {
                             commonTokens = tokens;
@@ -561,7 +561,7 @@ namespace NPOI.XSSF.UserModel
         {
             string ref1 = ctTable.@ref;
             if (ref1 != null) {
-                string[] boundaries = ref1.Split(new char[] { ':' }, 2);
+                string[] boundaries = ref1.Split([':'], 2);
                 string from = boundaries[0];
                 string to = boundaries.Length == 2 ? boundaries[1] : boundaries[0];
                 startCellReference = new CellReference(from);
