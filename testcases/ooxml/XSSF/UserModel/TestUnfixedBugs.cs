@@ -355,43 +355,6 @@ namespace TestCases.XSSF.UserModel
             ClassicAssert.AreEqual(contents, cell.ToString(), "Did not have expected contents at rownum " + rowNum);
             //ClassicAssert.AreEqual(contents + ".0", cell.ToString(), "Did not have expected contents at rownum " + rowNum);
         }
-
-        [Test]
-        public void test58325_one()
-        {
-            check58325(XSSFTestDataSamples.OpenSampleWorkbook("58325_lt.xlsx"), 1);
-        }
-        [Test]
-        [Ignore("TODO FIX CI TESTS")]
-        public void test58325_three()
-        {
-            check58325(XSSFTestDataSamples.OpenSampleWorkbook("58325_db.xlsx"), 3);
-        }
-        private void check58325(XSSFWorkbook wb, int expectedShapes)
-        {
-            XSSFSheet sheet = wb.GetSheet("MetasNM001") as XSSFSheet;
-            ClassicAssert.IsNotNull(sheet);
-            StringBuilder str = new StringBuilder();
-            str.Append("sheet " + sheet.SheetName + " - ");
-            XSSFDrawing drawing = sheet.GetDrawingPatriarch();
-            //drawing = ((XSSFSheet)sheet).createDrawingPatriarch();
-            List<XSSFShape> shapes = drawing.GetShapes();
-            str.Append("drawing.Shapes.size() = " + shapes.Count);
-            IEnumerator<XSSFShape> it = shapes.GetEnumerator();
-            while (it.MoveNext())
-            {
-                XSSFShape shape = it.Current;
-                str.Append(", " + shape.ToString());
-                str.Append(", Col1:" + ((XSSFClientAnchor)shape.GetAnchor()).Col1);
-                str.Append(", Col2:" + ((XSSFClientAnchor)shape.GetAnchor()).Col2);
-                str.Append(", Row1:" + ((XSSFClientAnchor)shape.GetAnchor()).Row1);
-                str.Append(", Row2:" + ((XSSFClientAnchor)shape.GetAnchor()).Row2);
-            }
-
-            ClassicAssert.AreEqual(expectedShapes, shapes.Count, 
-                "Having shapes: " + str);
-        }
-
     }
 }
 

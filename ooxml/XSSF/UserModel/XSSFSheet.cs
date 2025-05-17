@@ -3742,7 +3742,7 @@ namespace NPOI.XSSF.UserModel
                 false);
             XSSFTable table = rp.DocumentPart as XSSFTable;
             tbl.id = rp.Relationship.Id;
-
+            table.GetCTTable().id = (uint)tableNumber;
             tables[tbl.id] = table;
 
             return table;

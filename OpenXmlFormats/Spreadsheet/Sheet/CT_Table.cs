@@ -703,6 +703,25 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             this.tableColumn.RemoveAt(columnIndex);
         }
+
+        internal CT_TableColumn GetTableColumnArray(int v)
+        {
+            if (this.tableColumnField == null)
+                return null;
+            if (v < 0 || v >= this.tableColumn.Count)
+                throw new ArgumentOutOfRangeException();
+            return tableColumnField[v];
+        }
+
+        public CT_TableColumn AddNewTableColumn()
+        {
+            if(this.tableColumnField==null)
+                this.tableColumnField = new List<CT_TableColumn> ();
+            var c = new CT_TableColumn();
+            this.tableColumnField.Add(c);
+            return c;
+        }
+
         [XmlElement]
         public List<CT_TableColumn> tableColumn
         {
