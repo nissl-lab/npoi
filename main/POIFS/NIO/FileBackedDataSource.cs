@@ -53,25 +53,24 @@ namespace NPOI.POIFS.NIO
         }
         public FileBackedDataSource(FileInfo file, bool readOnly)
         {
-            if (!file.Exists)
+            if(!file.Exists)
+            {
                 throw new FileNotFoundException(file.FullName);
-            this.fileinfo = file;
-            FileStream stream = new FileStream(file.FullName, FileMode.Open, FileAccess.Read);
-            byte[] temp = new byte[stream.Length];
-            stream.Read(temp, 0, (int)stream.Length);
-            MemoryStream ms = new MemoryStream(temp, 0, temp.Length);
+            }
+            fileinfo = file;
+            using FileStream stream = File.OpenRead(file.FullName);
+            MemoryStream ms = new();
+            stream.CopyTo(ms);
             fileStream = ms;
-            this.writable = !readOnly;
-            stream.Position = 0;
+            writable = !readOnly;
         }
         public FileBackedDataSource(FileStream stream, bool readOnly)
         {
             stream.Position = 0;
-            byte[] temp = new byte[stream.Length];
-            stream.Read(temp, 0, (int)stream.Length);
-            MemoryStream ms = new MemoryStream(temp, 0, temp.Length);
+            MemoryStream ms = new();
+            stream.CopyTo(ms);
             fileStream = ms;
-            this.writable = !readOnly;
+            writable = !readOnly;
             stream.Position = 0;
         }
 
@@ -102,18 +101,9 @@ namespace NPOI.POIFS.NIO
 
         #endregion
 
-        public bool IsWriteable
-        {
-            get
-            {
-                return this.writable;
-            }
-        }
+        public bool IsWriteable => writable;
 
-        public Stream Stream
-        {
-            get { return this.fileStream; }
-        }
+        public Stream Stream => fileStream;
 
         /// <summary>
         /// Reads a sequence of bytes from this FileStream starting at the given file position.

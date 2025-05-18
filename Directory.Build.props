@@ -90,7 +90,6 @@
     <NoWarn>$(NoWarn);CA1862</NoWarn> <!-- Prefer the string comparison method overload -->
     <NoWarn>$(NoWarn);CA1872</NoWarn> <!-- Prefer 'System.Convert.ToHexString(byte[])' over call chains based on 'System.BitConverter.ToString(byte[])' -->
     <NoWarn>$(NoWarn);CA2019</NoWarn> <!-- 'ThreadStatic' fields should not use inline initialization -->
-    <NoWarn>$(NoWarn);CA2022</NoWarn> <!-- Avoid inexact read -->
     <NoWarn>$(NoWarn);CA2201</NoWarn> <!-- Exception type System.IndexOutOfRangeException is reserved by the runtime -->
     <NoWarn>$(NoWarn);CA2208</NoWarn> <!-- Method XXX.Remove passes parameter name 'item' as the message argument to a ArgumentNullException constructor. -->
     <NoWarn>$(NoWarn);CA2211</NoWarn> <!-- Non-constant fields should not be visible -->
