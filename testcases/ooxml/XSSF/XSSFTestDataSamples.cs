@@ -25,7 +25,9 @@ using NPOI.Util;
 using NPOI.HSSF;
 using TestCases.HSSF;
 using System.Diagnostics;
-using NUnit.Framework;using NUnit.Framework.Legacy;
+using NUnit.Framework;
+using NUnit.Framework.Legacy;
+using NPOI.XSSF.Streaming;
 
 namespace NPOI.XSSF
 {
@@ -85,6 +87,10 @@ namespace NPOI.XSSF
                             result = new XSSFWorkbook(is1);
                             sw2.Stop();
                             Debug.WriteLine("XSSFWorkbook parse time: " + sw2.ElapsedMilliseconds + "ms");
+                        }
+                        else if (wb is SXSSFWorkbook)
+                        {
+                            result = new SXSSFWorkbook(new XSSFWorkbook(is1));
                         }
                         else
                         {
