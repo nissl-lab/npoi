@@ -273,7 +273,7 @@ lblforbreak:
          * @return ending anchor point
          */
 
-        internal CT_Marker To
+        public CT_Marker To
         {
             get
             {

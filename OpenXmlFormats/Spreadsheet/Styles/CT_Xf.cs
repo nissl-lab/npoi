@@ -150,12 +150,13 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public override string ToString()
         {
-            XmlSerializer serializer = new XmlSerializer(typeof(CT_Xf));
-            using (StringWriter stream = new StringWriter())
-            {
-                serializer.Serialize(stream, this);
-                return stream.ToString();
-            }
+            using MemoryStream ms = new MemoryStream();
+            using StreamWriter sw = new StreamWriter(ms);
+            Write(sw, "xf", true);
+            sw.Flush();
+            ms.Position = 0;
+            using StreamReader sr = new StreamReader(ms);
+            return sr.ReadToEnd();
         }
 
         public bool IsSetFontId()
