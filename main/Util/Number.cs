@@ -44,6 +44,18 @@ namespace NPOI.Util
             }
             return false;
         }
+
+        public static bool IsNumber(Type objType)
+        {
+            if (objType.IsPrimitive || objType == DecimalType)
+            {
+                return (objType != BoolType &&
+                        objType != CharType &&
+                        objType != IntPtrType &&
+                        objType != UIntPtrType);
+            }
+            return false;
+        }
         public static bool IsInteger(object value)
         {
             if (value == null)

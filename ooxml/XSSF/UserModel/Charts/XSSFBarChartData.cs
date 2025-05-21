@@ -98,7 +98,7 @@ namespace NPOI.XSSF.UserModel.Charts
 
                 if (fillColor != null)
                 {
-                    ctBarSer.spPr = new OpenXmlFormats.Dml.Chart.CT_ShapeProperties();
+                    ctBarSer.spPr = new CT_ShapeProperties();
                     CT_SolidColorFillProperties ctSolidColorFillProperties = ctBarSer.spPr.AddNewSolidFill();
                     CT_SRgbColor ctSRgbColor = ctSolidColorFillProperties.AddNewSrgbClr();
                     ctSRgbColor.val = fillColor;

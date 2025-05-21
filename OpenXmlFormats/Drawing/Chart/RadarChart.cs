@@ -115,6 +115,66 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             sw.Write(string.Format("</c:{0}>", nodeName));
         }
 
+        public CT_AxDataSource AddNewCat()
+        {
+            this.catField = new CT_AxDataSource();
+            return this.catField;
+        }
+
+        public CT_NumDataSource AddNewVal()
+        {
+            this.valField = new CT_NumDataSource();
+            return this.valField;
+        }
+
+        public CT_UnsignedInt AddNewIdx()
+        {
+            this.idxField = new CT_UnsignedInt();
+            return this.idxField;
+        }
+
+        public CT_UnsignedInt AddNewOrder()
+        {
+            this.orderField = new CT_UnsignedInt();
+            return this.orderField;
+        }
+
+        public bool IsSetTx()
+        {
+            return this.txField != null;
+        }
+
+        public CT_SerTx AddNewTx()
+        {
+            this.txField = new CT_SerTx();
+            return this.txField;
+        }
+
+        public bool IsSetDLbls()
+        {
+            return this.dLblsField != null;
+        }
+
+        public void AddNewDLbls()
+        {
+            this.dLblsField = new CT_DLbls();
+        }
+
+        public bool IsSetSpPr()
+        {
+            return this.spPrField != null;
+        }
+
+        public void UnsetSpPr()
+        {
+            this.spPrField = null;
+        }
+
+        public CT_ShapeProperties AddNewSpPr()
+        {
+            this.spPrField = new CT_ShapeProperties();
+            return this.spPrField;
+        }
 
         [XmlElement(Order = 0)]
         public CT_UnsignedInt idx
@@ -400,6 +460,53 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
         public int GetSeriesCount()
         {
             return this.serField == null ? 0 : this.serField.Count;
+        }
+
+        public CT_Boolean AddNewVaryColors()
+        {
+            this.varyColorsField = new CT_Boolean();
+            return this.varyColorsField;
+        }
+
+        public CT_UnsignedInt AddNewAxId()
+        {
+            CT_UnsignedInt si = new CT_UnsignedInt();
+            if (this.axIdField == null)
+                this.axIdField = new List<CT_UnsignedInt>();
+            axIdField.Add(si);
+            return si;
+        }
+
+        public bool IsSetVaryColors()
+        {
+            return this.varyColorsField != null;
+        }
+
+        public int SizeOfAxIdArray()
+        {
+            return this.axIdField.Count;
+        }
+
+        public CT_UnsignedInt[] GetAxIdArray()
+        {
+            return [.. this.axIdField];
+        }
+
+        public CT_RadarStyle AddNewRadarStyle()
+        {
+            this.radarStyleField = new CT_RadarStyle();
+            return this.radarStyleField;
+        }
+
+        public CT_RadarSer AddNewSer()
+        {
+            CT_RadarSer newSer = new  CT_RadarSer();
+            if (this.serField == null)
+            {
+                this.serField = new List<CT_RadarSer>();
+            }
+            this.serField.Add(newSer);
+            return newSer;
         }
 
         [XmlElement(Order = 0)]
