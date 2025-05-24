@@ -1395,6 +1395,10 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
         public static CT_Drawing Parse(XmlDocument xmldoc, XmlNamespaceManager namespaceManager)
         {
             XmlNode root = xmldoc.SelectSingleNode("/xdr:wsDr", namespaceManager);
+            if (root == null)
+            {
+                return new CT_Drawing();
+            }
             XmlNodeList cellanchorNodes = root.SelectNodes("descendant::xdr:oneCellAnchor|descendant::xdr:twoCellAnchor|descendant::xdr:absCellAnchor", namespaceManager);
             CT_Drawing ctDrawing = new CT_Drawing();
             foreach (XmlNode node in cellanchorNodes)
