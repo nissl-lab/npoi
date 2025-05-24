@@ -1397,5 +1397,11 @@ namespace TestCases.HSSF.UserModel
         {
             Assert.DoesNotThrow(() => HSSFTestDataSamples.OpenSampleWorkbook("ATM.xls"));
         }
+
+        [Test]
+        public void TestMissingLabelOptionsForEmptyLabel()
+        {
+            Assert.DoesNotThrow(() => HSSFTestDataSamples.OpenSampleWorkbook("optional_label_options.xls"));
+        }
     }
 }
