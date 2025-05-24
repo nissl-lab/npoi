@@ -17,11 +17,12 @@
 
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
+using NPOI.XSSF;
 using NPOI.XSSF.UserModel;
-using NUnit.Framework;using NUnit.Framework.Legacy;
+using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using System;
 using System.Linq;
-using TestCases.SS.UserModel;
 
 namespace TestCases.XSSF.UserModel
 {
@@ -87,6 +88,27 @@ namespace TestCases.XSSF.UserModel
                 .SequenceEqual(
                     destSheet.MergedRegions
                              .Select(r => r.FormatAsString())));
+        }
+
+        [Test]
+        public void CopySheetToWorkbookShouldCopyCharts()
+        {
+            XSSFWorkbook sourceWorkbook = XSSFTestDataSamples.OpenSampleWorkbook("WithThreeCharts.xlsx");
+
+            XSSFSheet srcDataSheet = (XSSFSheet)sourceWorkbook.GetSheetAt(0);
+            XSSFWorkbook destWorkbook = new XSSFWorkbook();
+            srcDataSheet.CopyTo(destWorkbook, srcDataSheet.SheetName, true, true);
+
+            XSSFSheet srcChartSheet = (XSSFSheet)sourceWorkbook.GetSheetAt(1);
+            srcChartSheet.CopyTo(destWorkbook, srcChartSheet.SheetName, true, true);
+
+            var destSheet = destWorkbook.GetSheetAt(1);
+            
+            ClassicAssert.NotNull(destSheet);
+
+            ClassicAssert.AreEqual(2, (srcChartSheet.CreateDrawingPatriarch() as XSSFDrawing).GetCharts().Count);
+            ClassicAssert.AreEqual(2, (destSheet.CreateDrawingPatriarch() as XSSFDrawing).GetCharts().Count);
+            ClassicAssert.AreEqual(2, (destSheet.CreateDrawingPatriarch() as XSSFDrawing).GetCharts()[0].GetAxis().Count);
         }
     }
 }

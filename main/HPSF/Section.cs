@@ -76,7 +76,7 @@ namespace NPOI.HPSF
         /// <summary>
         /// This section's properties.
         /// </summary>
-        private IDictionary<long, Property> properties = new SortedDictionary<long, Property>();
+        private SortedDictionary<long, Property> properties = new SortedDictionary<long, Property>();
 
         /// <summary>
         /// This member is <c>true</c> if the last call to {@link
