@@ -327,6 +327,8 @@ namespace TestCases.XSSF.UserModel
             ClassicAssert.AreEqual("A1:B3", t.CellReferences.FormatAsString());
             ClassicAssert.AreEqual("Column1", t.GetCTTable().tableColumns.GetTableColumnArray(0).name);
             ClassicAssert.AreEqual("Column2", t.GetCTTable().tableColumns.GetTableColumnArray(1).name);
+
+            wb.Close();        
         }
 
         /// <summary>
