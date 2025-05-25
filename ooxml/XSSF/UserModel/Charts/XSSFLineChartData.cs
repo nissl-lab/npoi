@@ -90,7 +90,7 @@ namespace NPOI.XSSF.UserModel.Charts
 
                 if (fillColor != null)
                 {
-                    ctLineSer.spPr = new OpenXmlFormats.Dml.Chart.CT_ShapeProperties();
+                    ctLineSer.spPr = new CT_ShapeProperties();
                     CT_LineProperties ctLineProperties = ctLineSer.spPr.AddNewLn();
                     CT_SolidColorFillProperties ctSolidColorFillProperties = ctLineProperties.AddNewSolidFill();
                     CT_SRgbColor ctSRgbColor = ctSolidColorFillProperties.AddNewSrgbClr();
