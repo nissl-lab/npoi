@@ -183,15 +183,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             sw.Write(string.Format("</{0}>", nodeName));
         }
 
-
-        //public static string GetString(CT_Font font)
-        //{
-        //    using (StringWriter writer = new StringWriter())
-        //    {
-        //        serializer.Serialize(writer, font, namespaces);
-        //        return writer.ToString();
-        //    }
-        //}
         #region name
         [XmlElement]
         public CT_FontName name

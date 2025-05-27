@@ -61,16 +61,15 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public override string ToString()
         {
-            MemoryStream ms = new MemoryStream();
-            StreamWriter sw = new StreamWriter(ms);
+            using MemoryStream ms = new MemoryStream();
+            using StreamWriter sw = new StreamWriter(ms);
             this.Write(sw, "border");
             sw.Flush();
             ms.Position = 0;
-            using (StreamReader sr = new StreamReader(ms))
-            {
-                return sr.ReadToEnd();
-            }
+            using StreamReader sr = new StreamReader(ms);
+            return sr.ReadToEnd();
         }
+
         public static CT_Border Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
