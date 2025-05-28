@@ -42,13 +42,12 @@ namespace NPOI.HSSF.Record.Cont
         {
             _originalOut = out1;
             out1.WriteShort(sid);
-            if (out1 is IDelayableLittleEndianOutput)
+            if (out1 is IDelayableLittleEndianOutput dleo)
             {
                 // optimisation
-                IDelayableLittleEndianOutput dleo = (IDelayableLittleEndianOutput)out1;
                 _dataSizeOutput = dleo.CreateDelayedOutput(2);
                 _byteBuffer = null;
-                _out = out1;
+                _out = dleo;
             }
             else
             {

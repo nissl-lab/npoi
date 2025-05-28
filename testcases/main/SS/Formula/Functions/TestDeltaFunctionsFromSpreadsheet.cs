@@ -16,7 +16,7 @@
 ==================================================================== */
 
 using System;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 
 namespace TestCases.SS.Formula.Functions
 {

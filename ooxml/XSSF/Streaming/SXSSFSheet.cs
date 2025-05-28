@@ -14,6 +14,8 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
+
+using NPOI.HSSF.Util;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -25,6 +27,7 @@ using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using NPOI.Util;
 using NPOI.XSSF.UserModel;
+using NPOI.OpenXmlFormats.Spreadsheet;
 
 namespace NPOI.XSSF.Streaming
 {
@@ -1475,9 +1478,210 @@ namespace NPOI.XSSF.Streaming
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Enable sheet protection
+        /// </summary>
+        public void EnableLocking()
+        {
+            SafeGetProtectionField().sheet = true;
+        }
+
+        /// <summary>
+        /// Disable sheet protection
+        /// </summary>
+        public void DisableLocking()
+        {
+            SafeGetProtectionField().sheet = false;
+        }
+
+        /// <summary>
+        /// Enable or disable Autofilters locking.
+        /// This does not modify sheet protection status.
+        /// To enforce this un-/locking, call <see cref="DisableLocking()" /> or <see cref="EnableLocking()" />
+        /// </summary>
+        public void LockAutoFilter(bool enabled)
+        {
+            SafeGetProtectionField().autoFilter = enabled;
+        }
+
+        /// <summary>
+        /// Enable or disable Deleting columns locking.
+        /// This does not modify sheet protection status.
+        /// To enforce this un-/locking, call <see cref="DisableLocking()" /> or <see cref="EnableLocking()" />
+        /// </summary>
+        public void LockDeleteColumns(bool enabled)
+        {
+            SafeGetProtectionField().deleteColumns = enabled;
+        }
+
+        /// <summary>
+        /// Enable or disable Deleting rows locking.
+        /// This does not modify sheet protection status.
+        /// To enforce this un-/locking, call <see cref="DisableLocking()" /> or <see cref="EnableLocking()" />
+        /// </summary>
+        public void LockDeleteRows(bool enabled)
+        {
+            SafeGetProtectionField().deleteRows = enabled;
+        }
+
+        /// <summary>
+        /// Enable or disable Formatting cells locking.
+        /// This does not modify sheet protection status.
+        /// To enforce this un-/locking, call <see cref="DisableLocking()" /> or <see cref="EnableLocking()" />
+        /// </summary>
+        public void LockFormatCells(bool enabled)
+        {
+            SafeGetProtectionField().formatCells = enabled;
+        }
+
+        /// <summary>
+        /// Enable or disable Formatting columns locking.
+        /// This does not modify sheet protection status.
+        /// To enforce this un-/locking, call <see cref="DisableLocking()" /> or <see cref="EnableLocking()" />
+        /// </summary>
+        public void LockFormatColumns(bool enabled)
+        {
+            SafeGetProtectionField().formatColumns = enabled;
+        }
+
+        /// <summary>
+        /// Enable or disable Formatting rows locking.
+        /// This does not modify sheet protection status.
+        /// To enforce this un-/locking, call <see cref="DisableLocking()" /> or <see cref="EnableLocking()" />
+        /// </summary>
+        public void LockFormatRows(bool enabled)
+        {
+            SafeGetProtectionField().formatRows = enabled;
+        }
+
+        /// <summary>
+        /// Enable or disable Inserting columns locking.
+        /// This does not modify sheet protection status.
+        /// To enforce this un-/locking, call <see cref="DisableLocking()" /> or <see cref="EnableLocking()" />
+        /// </summary>
+        public void LockInsertColumns(bool enabled)
+        {
+            SafeGetProtectionField().insertColumns = enabled;
+        }
+
+        /// <summary>
+        /// Enable or disable Inserting hyperlinks locking.
+        /// This does not modify sheet protection status.
+        /// To enforce this un-/locking, call <see cref="DisableLocking()" /> or <see cref="EnableLocking()" />
+        /// </summary>
+        public void LockInsertHyperlinks(bool enabled)
+        {
+            SafeGetProtectionField().insertHyperlinks = enabled;
+        }
+
+        /// <summary>
+        /// Enable or disable Inserting rows locking.
+        /// This does not modify sheet protection status.
+        /// To enforce this un-/locking, call <see cref="DisableLocking()" /> or <see cref="EnableLocking()" />
+        /// </summary>
+        public void LockInsertRows(bool enabled)
+        {
+            SafeGetProtectionField().insertRows = enabled;
+        }
+
+        /// <summary>
+        /// Enable or disable Pivot Tables locking.
+        /// This does not modify sheet protection status.
+        /// To enforce this un-/locking, call <see cref="DisableLocking()" /> or <see cref="EnableLocking()" />
+        /// </summary>
+        public void LockPivotTables(bool enabled)
+        {
+            SafeGetProtectionField().pivotTables = enabled;
+        }
+
+        /// <summary>
+        /// Enable or disable Sort locking.
+        /// This does not modify sheet protection status.
+        /// To enforce this un-/locking, call <see cref="DisableLocking()" /> or <see cref="EnableLocking()" />
+        /// </summary>
+        public void LockSort(bool enabled)
+        {
+            SafeGetProtectionField().sort = enabled;
+        }
+
+        /// <summary>
+        /// Enable or disable Objects locking.
+        /// This does not modify sheet protection status.
+        /// To enforce this un-/locking, call <see cref="DisableLocking()" /> or <see cref="EnableLocking()" />
+        /// </summary>
+        public void LockObjects(bool enabled)
+        {
+            SafeGetProtectionField().objects = enabled;
+        }
+
+        /// <summary>
+        /// Enable or disable Scenarios locking.
+        /// This does not modify sheet protection status.
+        /// To enforce this un-/locking, call <see cref="DisableLocking()" /> or <see cref="EnableLocking()" />
+        /// </summary>
+        public void LockScenarios(bool enabled)
+        {
+            SafeGetProtectionField().scenarios = enabled;
+        }
+
+        /// <summary>
+        /// Enable or disable Selection of locked cells locking.
+        /// This does not modify sheet protection status.
+        /// To enforce this un-/locking, call <see cref="DisableLocking()" /> or <see cref="EnableLocking()" />
+        /// </summary>
+        public void LockSelectLockedCells(bool enabled)
+        {
+            SafeGetProtectionField().selectLockedCells = enabled;
+        }
+
+        /// <summary>
+        /// Enable or disable Selection of unlocked cells locking.
+        /// This does not modify sheet protection status.
+        /// To enforce this un-/locking, call <see cref="DisableLocking()" /> or <see cref="EnableLocking()" />
+        /// </summary>
+        public void LockSelectUnlockedCells(bool enabled)
+        {
+            SafeGetProtectionField().selectUnlockedCells = enabled;
+        }
+
+        private CT_SheetProtection SafeGetProtectionField()
+        {
+            CT_Worksheet ct = _sh.GetCTWorksheet();
+            if (!IsSheetProtectionEnabled())
+            {
+                return ct.AddNewSheetProtection();
+            }
+            return ct.sheetProtection;
+        }
+
+        /* package */
+        internal bool IsSheetProtectionEnabled()
+        {
+            CT_Worksheet ct = _sh.GetCTWorksheet();
+            return (ct.IsSetSheetProtection());
+        }
+
+        /// <summary>
+        /// Set background color of the sheet tab
+        /// </summary>
+        /// <param name="colorIndex"> the indexed color to Set, must be a constant from <see cref="IndexedColors"/></param>
+        public void SetTabColor(int colorIndex)
+        {
+            CT_Worksheet ct = _sh.GetCTWorksheet();
+            CT_SheetPr pr = ct.sheetPr;
+            if (pr == null) pr = ct.AddNewSheetPr();
+            CT_Color color = new CT_Color();
+            color.indexed = (uint)colorIndex;
+            pr.tabColor = color;
+        }
+
         IEnumerator<IRow> IEnumerable<IRow>.GetEnumerator()
         {
             return ((IEnumerable<IRow>) _sh).GetEnumerator();
+        }
+        public CellRangeAddressList GetCells(string cellranges)
+        {
+            return CellRangeAddressList.Parse(cellranges);
         }
     }
 }

@@ -18,7 +18,7 @@
 using NPOI.SS.UserModel;
 using NPOI.XSSF;
 using NPOI.XSSF.UserModel;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using TestCases.SS.UserModel;
 
 namespace TestCases.XSSF.UserModel
@@ -46,8 +46,8 @@ namespace TestCases.XSSF.UserModel
             XSSFRow destRow = sheet.CreateRow(1) as XSSFRow;
 
             destRow.CopyRowFrom(srcRow, new CellCopyPolicy());
-            Assert.IsNotNull(destRow.GetCell(0));
-            Assert.AreEqual("Hello", destRow.GetCell(0).StringCellValue);
+            ClassicAssert.IsNotNull(destRow.GetCell(0));
+            ClassicAssert.AreEqual("Hello", destRow.GetCell(0).StringCellValue);
 
             workbook.Close();
         }
@@ -87,39 +87,39 @@ namespace TestCases.XSSF.UserModel
             //Test 2D and 3D Ref Ptgs (Pxg for OOXML Workbooks)
             col = 0;
             ICell cell = destRow.GetCell(col++);
-            Assert.IsNotNull(cell);
-            Assert.AreEqual("B6", cell.CellFormula, "RefPtg");
+            ClassicAssert.IsNotNull(cell);
+            ClassicAssert.AreEqual("B6", cell.CellFormula, "RefPtg");
 
             cell = destRow.GetCell(col++);
-            Assert.IsNotNull(cell);
-            Assert.AreEqual("src!B6", cell.CellFormula, "Ref3DPtg");
+            ClassicAssert.IsNotNull(cell);
+            ClassicAssert.AreEqual("src!B6", cell.CellFormula, "Ref3DPtg");
 
             cell = destRow.GetCell(col++);
-            Assert.IsNotNull(cell);
-            Assert.AreEqual("dest!B6", cell.CellFormula, "Ref3DPtg");
+            ClassicAssert.IsNotNull(cell);
+            ClassicAssert.AreEqual("dest!B6", cell.CellFormula, "Ref3DPtg");
 
             cell = destRow.GetCell(col++);
-            Assert.IsNotNull(cell);
-            Assert.AreEqual("other!B6", cell.CellFormula, "Ref3DPtg");
+            ClassicAssert.IsNotNull(cell);
+            ClassicAssert.AreEqual("other!B6", cell.CellFormula, "Ref3DPtg");
 
             /////////////////////////////////////////////
 
             //Test 2D and 3D Ref Ptgs with absolute row (Ptg row number shouldn't change)
             cell = destRow.GetCell(col++);
-            Assert.IsNotNull(cell);
-            Assert.AreEqual("B$5", cell.CellFormula, "RefPtg");
+            ClassicAssert.IsNotNull(cell);
+            ClassicAssert.AreEqual("B$5", cell.CellFormula, "RefPtg");
 
             cell = destRow.GetCell(col++);
-            Assert.IsNotNull(cell);
-            Assert.AreEqual("src!B$5", cell.CellFormula, "Ref3DPtg");
+            ClassicAssert.IsNotNull(cell);
+            ClassicAssert.AreEqual("src!B$5", cell.CellFormula, "Ref3DPtg");
 
             cell = destRow.GetCell(col++);
-            Assert.IsNotNull(cell);
-            Assert.AreEqual("dest!B$5", cell.CellFormula, "Ref3DPtg");
+            ClassicAssert.IsNotNull(cell);
+            ClassicAssert.AreEqual("dest!B$5", cell.CellFormula, "Ref3DPtg");
 
             cell = destRow.GetCell(col++);
-            Assert.IsNotNull(cell);
-            Assert.AreEqual("other!B$5", cell.CellFormula, "Ref3DPtg") ;
+            ClassicAssert.IsNotNull(cell);
+            ClassicAssert.AreEqual("other!B$5", cell.CellFormula, "Ref3DPtg") ;
 
             //////////////////////////////////////////
 
@@ -127,20 +127,20 @@ namespace TestCases.XSSF.UserModel
             // Note: absolute row changes from last cell to first cell in order
             // to maintain topLeft:bottomRight order
             cell = destRow.GetCell(col++);
-            Assert.IsNotNull(cell);
-            Assert.AreEqual("SUM(B$5:D6)", cell.CellFormula, "Area2DPtg");
+            ClassicAssert.IsNotNull(cell);
+            ClassicAssert.AreEqual("SUM(B$5:D6)", cell.CellFormula, "Area2DPtg");
 
             cell = destRow.GetCell(col++);
-            Assert.IsNotNull(cell);
-            Assert.AreEqual("SUM(src!B$5:D6)", cell.CellFormula, "Area3DPtg");
+            ClassicAssert.IsNotNull(cell);
+            ClassicAssert.AreEqual("SUM(src!B$5:D6)", cell.CellFormula, "Area3DPtg");
 
             cell = destRow.GetCell(col++);
-            Assert.IsNotNull(destRow.GetCell(6));
-            Assert.AreEqual( "SUM(dest!B$5:D6)", cell.CellFormula, "Area3DPtg");
+            ClassicAssert.IsNotNull(destRow.GetCell(6));
+            ClassicAssert.AreEqual( "SUM(dest!B$5:D6)", cell.CellFormula, "Area3DPtg");
 
             cell = destRow.GetCell(col++);
-            Assert.IsNotNull(destRow.GetCell(7));
-            Assert.AreEqual( "SUM(other!B$5:D6)", cell.CellFormula, "Area3DPtg");
+            ClassicAssert.IsNotNull(destRow.GetCell(7));
+            ClassicAssert.AreEqual( "SUM(other!B$5:D6)", cell.CellFormula, "Area3DPtg");
 
             workbook.Close();
         }
@@ -172,19 +172,19 @@ namespace TestCases.XSSF.UserModel
             // this is mostly so existing references to rows that are overwritten are updated
             // rather than allowing users to continue updating rows that are no longer part of the sheet
 
-            Assert.AreSame(srcRow, sheet1.GetRow(0), "existing references to srcRow are still valid");
-            Assert.AreSame(destRow, sheet1.GetRow(1), "existing references to destRow are still valid");
-            Assert.AreSame(observerRow, sheet1.GetRow(2), "existing references to observerRow are still valid");
-            Assert.AreSame(externObserverRow, sheet2.GetRow(0), "existing references to externObserverRow are still valid");
+            ClassicAssert.AreSame(srcRow, sheet1.GetRow(0), "existing references to srcRow are still valid");
+            ClassicAssert.AreSame(destRow, sheet1.GetRow(1), "existing references to destRow are still valid");
+            ClassicAssert.AreSame(observerRow, sheet1.GetRow(2), "existing references to observerRow are still valid");
+            ClassicAssert.AreSame(externObserverRow, sheet2.GetRow(0), "existing references to externObserverRow are still valid");
 
             // Make sure copyRowFrom actually copied row (this is tested elsewhere)
-            Assert.AreEqual(CellType.String, destRow.GetCell(0).CellType);
-            Assert.AreEqual("hello", destRow.GetCell(0).StringCellValue);
+            ClassicAssert.AreEqual(CellType.String, destRow.GetCell(0).CellType);
+            ClassicAssert.AreEqual("hello", destRow.GetCell(0).StringCellValue);
 
             // We don't want #REF! errors if we copy a row that contains cells that are referred to by other cells outside of copied region
-            Assert.AreEqual("A2", observerRow.GetCell(0).CellFormula, "references to overwritten cells are unmodified");
-            Assert.AreEqual("B2", observerRow.GetCell(1).CellFormula, "references to overwritten cells are unmodified");
-            Assert.AreEqual("Sheet1!A2", externObserverRow.GetCell(0).CellFormula, "references to overwritten cells are unmodified");
+            ClassicAssert.AreEqual("A2", observerRow.GetCell(0).CellFormula, "references to overwritten cells are unmodified");
+            ClassicAssert.AreEqual("B2", observerRow.GetCell(1).CellFormula, "references to overwritten cells are unmodified");
+            ClassicAssert.AreEqual("Sheet1!A2", externObserverRow.GetCell(0).CellFormula, "references to overwritten cells are unmodified");
 
             workbook.Close();
         }

@@ -58,7 +58,7 @@ namespace NPOI.DDF
         private byte field_11_unused3;
         private EscherBlipRecord field_12_blipRecord;
 
-        private byte[] _remainingData = Array.Empty<byte>();
+        private byte[] _remainingData = [];
 
         /// <summary>
         /// This method deSerializes the record from a byte array.
@@ -114,7 +114,7 @@ namespace NPOI.DDF
             listener.BeforeRecordSerialize(offset, RecordId, this);
 
             if (_remainingData == null)
-                _remainingData = Array.Empty<byte>();
+                _remainingData = [];
 
             LittleEndian.PutShort(data, offset, Options);
             LittleEndian.PutShort(data, offset + 2, RecordId);
@@ -322,7 +322,7 @@ namespace NPOI.DDF
             {
                 if (value == null)
                 {
-                    _remainingData = Array.Empty<byte>();
+                    _remainingData = [];
                 }
                 else
                 {
@@ -333,10 +333,10 @@ namespace NPOI.DDF
             }
         }
         /// <summary>
-        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+        /// Returns a <see cref="System.String"/> that represents the current <see cref="System.Object"/>.
         /// </summary>
         /// <returns>
-        /// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+        /// A <see cref="System.String"/> that represents the current <see cref="System.Object"/>.
         /// </returns>
         public override String ToString()
         {

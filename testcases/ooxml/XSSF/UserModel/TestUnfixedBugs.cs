@@ -22,7 +22,7 @@ using NPOI.Util;
 using NPOI.XSSF;
 using NPOI.XSSF.Streaming;
 using NPOI.XSSF.UserModel;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -77,7 +77,7 @@ namespace TestCases.XSSF.UserModel
             String value = cell.StringCellValue;
             //Console.WriteLine(value);
 
-            Assert.AreEqual(testData, value, "The data in the text-file should exactly match the data that we read from the workbook");
+            ClassicAssert.AreEqual(testData, value, "The data in the text-file should exactly match the data that we read from the workbook");
         }
         [Test]
         public void Test54071()
@@ -103,7 +103,7 @@ namespace TestCases.XSSF.UserModel
                         Console.WriteLine("==Time:" + cell.DateCellValue);
                         if (prev != null)
                         {
-                            Assert.AreEqual(prev, cell.DateCellValue);
+                            ClassicAssert.AreEqual(prev, cell.DateCellValue);
                             prev = cell.DateCellValue;
                         }
                     }
@@ -123,10 +123,10 @@ namespace TestCases.XSSF.UserModel
             int wholeDays2 = (int)Math.Floor(value2);
             int millisecondsInDay2 = (int)((value2 - wholeDays2) * DateUtil.DAY_MILLISECONDS + 0.5);
 
-            Assert.AreEqual(wholeDays1, wholeDays2);
+            ClassicAssert.AreEqual(wholeDays1, wholeDays2);
             // here we see that the time-value is 5 milliseconds apart, one is 86399000 and the other is 86398995, 
             // thus one is one second higher than the other
-            Assert.AreEqual(millisecondsInDay1, millisecondsInDay2, "The time-values are 5 milliseconds apart");
+            ClassicAssert.AreEqual(millisecondsInDay1, millisecondsInDay2, "The time-values are 5 milliseconds apart");
 
             // when we do the calendar-stuff, there is a bool which determines if
             // the milliseconds are rounded or not, having this at "false" causes the 
@@ -154,9 +154,9 @@ namespace TestCases.XSSF.UserModel
             calendar2.AddMilliseconds(-calendar2.Millisecond);
 
             // now the calendars are equal
-            Assert.AreEqual(calendar1, calendar2);
+            ClassicAssert.AreEqual(calendar1, calendar2);
 
-            Assert.AreEqual(DateUtil.GetJavaDate(value1, false), DateUtil.GetJavaDate(value2, false));
+            ClassicAssert.AreEqual(DateUtil.GetJavaDate(value1, false), DateUtil.GetJavaDate(value2, false));
         }
 
 
@@ -174,7 +174,7 @@ namespace TestCases.XSSF.UserModel
 
             IRichTextString str = new XSSFRichTextString("Test rich text string");
             str.ApplyFont(2, 4, (short)0);
-            Assert.AreEqual(3, str.NumFormattingRuns);
+            ClassicAssert.AreEqual(3, str.NumFormattingRuns);
             cell.SetCellValue(str);
 
             IWorkbook wbBack = SXSSFITestDataProvider.instance.WriteOutAndReadBack(wb);
@@ -182,13 +182,13 @@ namespace TestCases.XSSF.UserModel
 
             // re-read after serializing and reading back
             ICell cellBack = wbBack.GetSheetAt(0).GetRow(0).GetCell(0);
-            Assert.IsNotNull(cellBack);
+            ClassicAssert.IsNotNull(cellBack);
             IRichTextString strBack = cellBack.RichStringCellValue;
-            Assert.IsNotNull(strBack);
-            Assert.AreEqual(3, strBack.NumFormattingRuns);
-            Assert.AreEqual(0, strBack.GetIndexOfFormattingRun(0));
-            Assert.AreEqual(2, strBack.GetIndexOfFormattingRun(1));
-            Assert.AreEqual(4, strBack.GetIndexOfFormattingRun(2));
+            ClassicAssert.IsNotNull(strBack);
+            ClassicAssert.AreEqual(3, strBack.NumFormattingRuns);
+            ClassicAssert.AreEqual(0, strBack.GetIndexOfFormattingRun(0));
+            ClassicAssert.AreEqual(2, strBack.GetIndexOfFormattingRun(1));
+            ClassicAssert.AreEqual(4, strBack.GetIndexOfFormattingRun(2));
 
             wbBack.Close();
         }
@@ -227,9 +227,9 @@ namespace TestCases.XSSF.UserModel
                 sheet.AddMergedRegion(range2);
                 CellRangeAddress range3 = new CellRangeAddress(2, 2, 0, 1);
                 sheet.AddMergedRegion(range3);
-                Assert.AreEqual(0, range3.FirstColumn);
-                Assert.AreEqual(1, range3.LastColumn);
-                Assert.AreEqual(2, range3.LastRow);
+                ClassicAssert.AreEqual(0, range3.FirstColumn);
+                ClassicAssert.AreEqual(1, range3.LastColumn);
+                ClassicAssert.AreEqual(2, range3.LastRow);
                 CellRangeAddress range4 = new CellRangeAddress(3, 3, 0, 1);
                 sheet.AddMergedRegion(range4);
 
@@ -307,7 +307,7 @@ namespace TestCases.XSSF.UserModel
             checkRow57423(testSheet, 8, "8");
             checkRow57423(testSheet, 9, "9");
 
-            Assert.IsNull(testSheet.GetRow(10),
+            ClassicAssert.IsNull(testSheet.GetRow(10),
                 "Row number 10 should be gone after the shift");
 
             checkRow57423(testSheet, 11, "11");
@@ -335,25 +335,25 @@ namespace TestCases.XSSF.UserModel
             int posR13 = xml.IndexOf("<row r=\"13\"");
 
             // both need to be found
-            Assert.IsTrue(posR12 != -1);
-            Assert.IsTrue(posR13 != -1);
+            ClassicAssert.IsTrue(posR12 != -1);
+            ClassicAssert.IsTrue(posR13 != -1);
 
-            Assert.IsTrue(posR12 < posR13,
+            ClassicAssert.IsTrue(posR12 < posR13,
                 "Need to find row 12 before row 13 after the shifting, but had row 12 at " + posR12 + " and row 13 at " + posR13);
         }
         private void checkRow57423(ISheet testSheet, int rowNum, String contents)
         {
             IRow row = testSheet.GetRow(rowNum);
-            Assert.IsNotNull(row, "Expecting row at rownum " + rowNum);
+            ClassicAssert.IsNotNull(row, "Expecting row at rownum " + rowNum);
 
             CT_Row ctRow = ((XSSFRow)row).GetCTRow();
-            Assert.AreEqual(rowNum + 1, ctRow.r);
+            ClassicAssert.AreEqual(rowNum + 1, ctRow.r);
 
             ICell cell = row.GetCell(0);
-            Assert.IsNotNull(cell, "Expecting cell at rownum " + rowNum);
+            ClassicAssert.IsNotNull(cell, "Expecting cell at rownum " + rowNum);
             //why concate ".0"? There is no ".0" in excel.
-            Assert.AreEqual(contents, cell.ToString(), "Did not have expected contents at rownum " + rowNum);
-            //Assert.AreEqual(contents + ".0", cell.ToString(), "Did not have expected contents at rownum " + rowNum);
+            ClassicAssert.AreEqual(contents, cell.ToString(), "Did not have expected contents at rownum " + rowNum);
+            //ClassicAssert.AreEqual(contents + ".0", cell.ToString(), "Did not have expected contents at rownum " + rowNum);
         }
 
         [Test]
@@ -370,7 +370,7 @@ namespace TestCases.XSSF.UserModel
         private void check58325(XSSFWorkbook wb, int expectedShapes)
         {
             XSSFSheet sheet = wb.GetSheet("MetasNM001") as XSSFSheet;
-            Assert.IsNotNull(sheet);
+            ClassicAssert.IsNotNull(sheet);
             StringBuilder str = new StringBuilder();
             str.Append("sheet " + sheet.SheetName + " - ");
             XSSFDrawing drawing = sheet.GetDrawingPatriarch();
@@ -388,7 +388,7 @@ namespace TestCases.XSSF.UserModel
                 str.Append(", Row2:" + ((XSSFClientAnchor)shape.GetAnchor()).Row2);
             }
 
-            Assert.AreEqual(expectedShapes, shapes.Count, 
+            ClassicAssert.AreEqual(expectedShapes, shapes.Count, 
                 "Having shapes: " + str);
         }
 

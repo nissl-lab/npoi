@@ -18,7 +18,7 @@
 namespace TestCases.POIFS.FileSystem
 {
     using System;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using TestCases;
     using System.IO;
     using System.Collections.Generic;
@@ -37,8 +37,8 @@ namespace TestCases.POIFS.FileSystem
 
             Ole10Native ole = Ole10Native.CreateFromEmbeddedOleObject(fs);
 
-            Assert.AreEqual("File1.svg", ole.Label);
-            Assert.AreEqual("D:\\Documents and Settings\\rsc\\My Documents\\file1.svg", ole.Command);
+            ClassicAssert.AreEqual("File1.svg", ole.Label);
+            ClassicAssert.AreEqual("D:\\Documents and Settings\\rsc\\My Documents\\file1.svg", ole.Command);
         }
 
         [Test]
@@ -73,7 +73,7 @@ namespace TestCases.POIFS.FileSystem
                     ole.WriteOut(bosAct);
 
                     //assertThat(bosExp.ToByteArray(), EqualTo(bosAct.ToByteArray()));
-                    Assert.IsTrue(Arrays.Equals(bosExp.ToArray(), bosAct.ToArray()));
+                    ClassicAssert.IsTrue(Arrays.Equals(bosExp.ToArray(), bosAct.ToArray()));
                 }
 
                 fs.Close();
@@ -123,7 +123,7 @@ namespace TestCases.POIFS.FileSystem
             }
             catch (Ole10NativeException e)
             {
-                Assert.IsTrue(e.Message.IndexOf("declared data length") > -1);
+                ClassicAssert.IsTrue(e.Message.IndexOf("declared data length") > -1);
             }
         }
     }

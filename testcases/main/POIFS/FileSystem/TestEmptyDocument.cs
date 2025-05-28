@@ -29,7 +29,7 @@ using System;
 using System.Collections;
 using System.IO;
 
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 
 using NPOI.POIFS.FileSystem;
 using NPOI.Util;
@@ -157,15 +157,15 @@ namespace TestCases.POIFS.FileSystem
             fs = new POIFSFileSystem(new MemoryStream(output.ToArray()));
 
             DocumentEntry entry = (DocumentEntry)fs.Root.GetEntry("Empty");
-            Assert.AreEqual(0, entry.Size, "Expected zero size");
+            ClassicAssert.AreEqual(0, entry.Size, "Expected zero size");
             byte[] actualReadbackData;
             actualReadbackData = NPOI.Util.IOUtils.ToByteArray(new DocumentInputStream(entry));
-            Assert.AreEqual(0, actualReadbackData.Length, "Expected zero read from stream");
+            ClassicAssert.AreEqual(0, actualReadbackData.Length, "Expected zero read from stream");
 
             entry = (DocumentEntry)fs.Root.GetEntry("NotEmpty");
             actualReadbackData = NPOI.Util.IOUtils.ToByteArray(new DocumentInputStream(entry));
-            Assert.AreEqual(TestData.Length, entry.Size, "Expected size was wrong");
-            Assert.IsTrue(
+            ClassicAssert.AreEqual(TestData.Length, entry.Size, "Expected size was wrong");
+            ClassicAssert.IsTrue(
                     Arrays.Equals(TestData,actualReadbackData), "Expected different data Read from stream");
 
             fs.Close();

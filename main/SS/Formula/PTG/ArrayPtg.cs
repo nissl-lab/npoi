@@ -19,7 +19,8 @@ namespace NPOI.SS.Formula.PTG
 {
 
     using System;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
     using NPOI.Util;
 
 
@@ -201,7 +202,7 @@ namespace NPOI.SS.Formula.PTG
 
         public override String ToFormulaString()
         {
-            StringBuilder b = new StringBuilder();
+           using var b= ZString.CreateStringBuilder();
             b.Append("{");
             for (int y = 0; y < _nRows; y++)
             {
@@ -230,9 +231,9 @@ namespace NPOI.SS.Formula.PTG
             {
                 return ""; // TODO - how is 'empty value' represented in formulas?
             }
-            if (o is String)
+            if (o is String s)
             {
-                return "\"" + (String)o + "\"";
+                return "\"" + s + "\"";
             }
             if (o is Double || o is double)
             {
@@ -242,9 +243,9 @@ namespace NPOI.SS.Formula.PTG
             {
                 return ((bool)o).ToString().ToUpper();
             }
-            if (o is ErrorConstant)
+            if (o is ErrorConstant constant)
             {
-                return ((ErrorConstant)o).Text;
+                return constant.Text;
             }
             throw new ArgumentException("Unexpected constant class (" + o.GetType().Name + ")");
         }

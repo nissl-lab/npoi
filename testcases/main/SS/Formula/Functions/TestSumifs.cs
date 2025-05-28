@@ -23,7 +23,7 @@ namespace TestCases.SS.Formula.Functions
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.Formula.Functions;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using TestCases.HSSF;
 
     /**
@@ -48,7 +48,7 @@ namespace TestCases.SS.Formula.Functions
                 throw new AssertionException("Expected numeric result");
             }
             NumericValueEval nve = (NumericValueEval)actualEval;
-            Assert.AreEqual(expected, nve.NumberValue, 0);
+            ClassicAssert.AreEqual(expected, nve.NumberValue, 0);
         }
 
         private static void Confirm(double expectedResult, ValueEval[] args)
@@ -142,7 +142,7 @@ namespace TestCases.SS.Formula.Functions
                 EvalFactory.CreateAreaEval("C2:C9", c2c9),
                 new NumberEval(1),
             };
-            Assert.AreEqual(ErrorEval.VALUE_INVALID, InvokeSumifs(args, EC));
+            ClassicAssert.AreEqual(ErrorEval.VALUE_INVALID, InvokeSumifs(args, EC));
         }
 
         /**
@@ -263,33 +263,33 @@ namespace TestCases.SS.Formula.Functions
             HSSFSheet example1 = (HSSFSheet)wb.GetSheet("Example 1");
             HSSFCell ex1cell1 = (HSSFCell)example1.GetRow(10).GetCell(2);
             fe.Evaluate(ex1cell1);
-            Assert.AreEqual(20.0, ex1cell1.NumericCellValue);
+            ClassicAssert.AreEqual(20.0, ex1cell1.NumericCellValue);
             HSSFCell ex1cell2 = (HSSFCell)example1.GetRow(11).GetCell(2);
             fe.Evaluate(ex1cell2);
-            Assert.AreEqual(30.0, ex1cell2.NumericCellValue);
+            ClassicAssert.AreEqual(30.0, ex1cell2.NumericCellValue);
 
             HSSFSheet example2 = (HSSFSheet)wb.GetSheet("Example 2");
             HSSFCell ex2cell1 = (HSSFCell)example2.GetRow(6).GetCell(2);
             fe.Evaluate(ex2cell1);
-            Assert.AreEqual(500.0, ex2cell1.NumericCellValue);
+            ClassicAssert.AreEqual(500.0, ex2cell1.NumericCellValue);
             HSSFCell ex2cell2 = (HSSFCell)example2.GetRow(7).GetCell(2);
             fe.Evaluate(ex2cell2);
-            Assert.AreEqual(8711.0, ex2cell2.NumericCellValue);
+            ClassicAssert.AreEqual(8711.0, ex2cell2.NumericCellValue);
 
             HSSFSheet example3 = (HSSFSheet)wb.GetSheet("Example 3");
             HSSFCell ex3cell = (HSSFCell)example3.GetRow(5).GetCell(2);
             fe.Evaluate(ex3cell);
-            Assert.AreEqual(8, 8, ex3cell.NumericCellValue);
+            ClassicAssert.AreEqual(8, 8, ex3cell.NumericCellValue);
 
             HSSFSheet example4 = (HSSFSheet)wb.GetSheet("Example 4");
             HSSFCell ex4cell = (HSSFCell)example4.GetRow(8).GetCell(2);
             fe.Evaluate(ex4cell);
-            Assert.AreEqual(3.5, ex4cell.NumericCellValue);
+            ClassicAssert.AreEqual(3.5, ex4cell.NumericCellValue);
 
             HSSFSheet example5 = (HSSFSheet)wb.GetSheet("Example 5");
             HSSFCell ex5cell = (HSSFCell)example5.GetRow(8).GetCell(2);
             fe.Evaluate(ex5cell);
-            Assert.AreEqual(625000.0, ex5cell.NumericCellValue);
+            ClassicAssert.AreEqual(625000.0, ex5cell.NumericCellValue);
         }
         [Test]
         public void TestBug56655()
@@ -312,7 +312,7 @@ namespace TestCases.SS.Formula.Functions
         };
 
             ValueEval result = InvokeSumifs(args, EC);
-            Assert.IsTrue(result is ErrorEval, "Expect to have an error when an input is an invalid value, but had: " + result.GetType());
+            ClassicAssert.IsTrue(result is ErrorEval, "Expect to have an error when an input is an invalid value, but had: " + result.GetType());
 
             args = new ValueEval[]{
                 EvalFactory.CreateAreaEval("A2:A9", a2a9),
@@ -321,7 +321,7 @@ namespace TestCases.SS.Formula.Functions
         };
 
             result = InvokeSumifs(args, EC);
-            Assert.IsTrue(result is ErrorEval, "Expect to have an error when an input is an invalid value, but had: " + result.GetType());
+            ClassicAssert.IsTrue(result is ErrorEval, "Expect to have an error when an input is an invalid value, but had: " + result.GetType());
         }
         [Test]
         public void TestBug56655b()
@@ -345,8 +345,8 @@ namespace TestCases.SS.Formula.Functions
         };
 
             ValueEval result = InvokeSumifs(args, EC);
-            Assert.IsTrue(result is ErrorEval, "Expect to have an error when an input is an invalid value, but had: " + result.GetType().Name);
-            Assert.AreEqual(ErrorEval.VALUE_INVALID, result);
+            ClassicAssert.IsTrue(result is ErrorEval, "Expect to have an error when an input is an invalid value, but had: " + result.GetType().Name);
+            ClassicAssert.AreEqual(ErrorEval.VALUE_INVALID, result);
         }
         [Test]
         public void TestBug56655c()
@@ -370,8 +370,8 @@ namespace TestCases.SS.Formula.Functions
         };
 
             ValueEval result = InvokeSumifs(args, EC);
-            Assert.IsTrue(result is ErrorEval, "Expect to have an error when an input is an invalid value, but had: " + result.GetType());
-            Assert.AreEqual(ErrorEval.NAME_INVALID, result);
+            ClassicAssert.IsTrue(result is ErrorEval, "Expect to have an error when an input is an invalid value, but had: " + result.GetType());
+            ClassicAssert.AreEqual(ErrorEval.NAME_INVALID, result);
         }
     }
 }

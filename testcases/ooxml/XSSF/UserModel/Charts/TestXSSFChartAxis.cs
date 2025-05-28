@@ -16,7 +16,7 @@
 ==================================================================== */
 
 using System;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using NPOI.SS.UserModel;
 using NPOI.SS.UserModel.Charts;
 using NPOI.XSSF.UserModel;
@@ -51,7 +51,7 @@ namespace TestCases.XSSF.UserModel.Charts
             {
                 iae = e;
             }
-            Assert.IsNotNull(iae);
+            ClassicAssert.IsNotNull(iae);
 
             iae = null;
             try
@@ -62,20 +62,20 @@ namespace TestCases.XSSF.UserModel.Charts
             {
                 iae = e;
             }
-            Assert.IsNotNull(iae);
+            ClassicAssert.IsNotNull(iae);
         }
         [Test]
         public void TestLogBaseLegalArgument()
         {
             axis.LogBase=(Math.E);
-            Assert.IsTrue(Math.Abs(axis.LogBase - Math.E) < EPSILON);
+            ClassicAssert.IsTrue(Math.Abs(axis.LogBase - Math.E) < EPSILON);
         }
         [Test]
         public void TestNumberFormat()
         {
             String numberFormat = "General";
             axis.NumberFormat=(numberFormat);
-            Assert.AreEqual(numberFormat, axis.NumberFormat);
+            ClassicAssert.AreEqual(numberFormat, axis.NumberFormat);
         }
         [Test]
         public void TestMaxAndMinAccessMethods()
@@ -83,51 +83,51 @@ namespace TestCases.XSSF.UserModel.Charts
             double newValue = 10.0;
 
             axis.Minimum=(newValue);
-            Assert.IsTrue(Math.Abs(axis.Minimum - newValue) < EPSILON);
+            ClassicAssert.IsTrue(Math.Abs(axis.Minimum - newValue) < EPSILON);
 
             axis.Maximum=(newValue);
-            Assert.IsTrue(Math.Abs(axis.Maximum - newValue) < EPSILON);
+            ClassicAssert.IsTrue(Math.Abs(axis.Maximum - newValue) < EPSILON);
         }
         [Test]
         public void TestVisibleAccessMethods()
         {
             axis.IsVisible = (/*setter*/true);
-            Assert.IsTrue(axis.IsVisible);
+            ClassicAssert.IsTrue(axis.IsVisible);
 
             axis.IsVisible = (/*setter*/false);
-            Assert.IsFalse(axis.IsVisible);
+            ClassicAssert.IsFalse(axis.IsVisible);
         }
 
         [Test]
         public void TestMajorTickMarkAccessMethods()
         {
             axis.MajorTickMark = (/*setter*/AxisTickMark.None);
-            Assert.AreEqual(AxisTickMark.None, axis.MajorTickMark);
+            ClassicAssert.AreEqual(AxisTickMark.None, axis.MajorTickMark);
 
             axis.MajorTickMark = (/*setter*/AxisTickMark.In);
-            Assert.AreEqual(AxisTickMark.In, axis.MajorTickMark);
+            ClassicAssert.AreEqual(AxisTickMark.In, axis.MajorTickMark);
 
             axis.MajorTickMark = (/*setter*/AxisTickMark.Out);
-            Assert.AreEqual(AxisTickMark.Out, axis.MajorTickMark);
+            ClassicAssert.AreEqual(AxisTickMark.Out, axis.MajorTickMark);
 
             axis.MajorTickMark = (/*setter*/AxisTickMark.Cross);
-            Assert.AreEqual(AxisTickMark.Cross, axis.MajorTickMark);
+            ClassicAssert.AreEqual(AxisTickMark.Cross, axis.MajorTickMark);
         }
 
         [Test]
         public void TestMinorTickMarkAccessMethods()
         {
             axis.MinorTickMark = (/*setter*/AxisTickMark.None);
-            Assert.AreEqual(AxisTickMark.None, axis.MinorTickMark);
+            ClassicAssert.AreEqual(AxisTickMark.None, axis.MinorTickMark);
 
             axis.MinorTickMark = (/*setter*/AxisTickMark.In);
-            Assert.AreEqual(AxisTickMark.In, axis.MinorTickMark);
+            ClassicAssert.AreEqual(AxisTickMark.In, axis.MinorTickMark);
 
             axis.MinorTickMark = (/*setter*/AxisTickMark.Out);
-            Assert.AreEqual(AxisTickMark.Out, axis.MinorTickMark);
+            ClassicAssert.AreEqual(AxisTickMark.Out, axis.MinorTickMark);
 
             axis.MinorTickMark = (/*setter*/AxisTickMark.Cross);
-            Assert.AreEqual(AxisTickMark.Cross, axis.MinorTickMark);
+            ClassicAssert.AreEqual(AxisTickMark.Cross, axis.MinorTickMark);
         }
 
     }

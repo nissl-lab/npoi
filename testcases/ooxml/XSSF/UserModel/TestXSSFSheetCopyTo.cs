@@ -18,7 +18,7 @@
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using NPOI.XSSF.UserModel;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using System;
 using System.Linq;
 using TestCases.SS.UserModel;
@@ -44,10 +44,10 @@ namespace TestCases.XSSF.UserModel
             srcSheet.CopyTo(destWorkbook, srcSheet.SheetName, true, true);
 
             var destSheet = destWorkbook.GetSheet("Sheet1");
-            Assert.NotNull(destSheet);
+            ClassicAssert.NotNull(destSheet);
 
-            Assert.AreEqual(1, destSheet.GetRow(0)?.GetCell(0).NumericCellValue);
-            Assert.AreEqual("A1+1", destSheet.GetRow(0)?.GetCell(1).CellFormula);
+            ClassicAssert.AreEqual(1, destSheet.GetRow(0)?.GetCell(0).NumericCellValue);
+            ClassicAssert.AreEqual("A1+1", destSheet.GetRow(0)?.GetCell(1).CellFormula);
 
             destSheet.GetRow(0)?.GetCell(0).SetCellValue(10);
             var evaluator = destWorkbook.GetCreationHelper()
@@ -57,7 +57,7 @@ namespace TestCases.XSSF.UserModel
             evaluator.EvaluateFormulaCell(destCell);
             var destCellValue = evaluator.Evaluate(destCell);
 
-            Assert.AreEqual(11, destCellValue.NumberValue);
+            ClassicAssert.AreEqual(11, destCellValue.NumberValue);
         }
 
         [Test]
@@ -75,10 +75,10 @@ namespace TestCases.XSSF.UserModel
             srcSheet.CopyTo(destWorkbook, srcSheet.SheetName, true, true);
 
             var destSheet = destWorkbook.GetSheet("Sheet1");
-            Assert.NotNull(destSheet);
-            Assert.AreEqual(2, destSheet.MergedRegions.Count);
+            ClassicAssert.NotNull(destSheet);
+            ClassicAssert.AreEqual(2, destSheet.MergedRegions.Count);
 
-            Assert.IsTrue(
+            ClassicAssert.IsTrue(
                 new string[]
                 {
                     "A1:B4",

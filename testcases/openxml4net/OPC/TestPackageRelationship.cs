@@ -8,7 +8,7 @@ using TestCases.OpenXml4Net;
 
 namespace TestCases.OPC
 {
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     [TestFixture]
     public class TestPackageRelationship
@@ -33,7 +33,7 @@ namespace TestCases.OPC
                 "http://schemas.openxmlformats.org/officeDocument/2006/relationships/webSettings", "rId4");
 
             var hashCode = relationShip.GetHashCode();
-            Assert.NotZero(hashCode);
+            ClassicAssert.NotZero(hashCode);
             
             pkg.Close();
             File.Delete(targetFile.FullName);

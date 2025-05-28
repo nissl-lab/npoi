@@ -32,7 +32,7 @@ namespace TestCases.POIFS.FileSystem
     using System.Collections;
     using System.IO;
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     using NPOI.POIFS.FileSystem;
     using NPOI.Util;
@@ -87,7 +87,7 @@ namespace TestCases.POIFS.FileSystem
             POIFSFileSystem fs = OpenSampleFS();
             Property[] props = GetVBAProperties(fs);
 
-            Assert.AreEqual(_entries.Length, props.Length);
+            ClassicAssert.AreEqual(_entries.Length, props.Length);
 
             // (1). See that there is a problem with the old case-sensitive property comparator
             Array.Sort(props, OldCaseSensitivePropertyComparator);
@@ -95,21 +95,21 @@ namespace TestCases.POIFS.FileSystem
             //{
             //    for (int i = 0; i < props.Length; i++)
             //    {
-            //        Assert.AreEqual(_entries[i], props[i].Name);
+            //        ClassicAssert.AreEqual(_entries[i], props[i].Name);
             //    }
             //    Assert.Fail("expected old case-sensitive property comparator to return properties in wrong order");
             //}
             //catch (AssertionException e)
             //{
             //    // expected during successful Test
-            //    Assert.IsNotNull(e.Message);
+            //    ClassicAssert.IsNotNull(e.Message);
             //}
 
             // (2) Verify that the fixed property comparator works right
             Array.Sort(props, new DirectoryProperty.PropertyComparator());
             for (int i = 0; i < props.Length; i++)
             {
-                Assert.AreEqual(_entries[i], props[i].Name);
+                ClassicAssert.AreEqual(_entries[i], props[i].Name);
             }
         }
 
@@ -130,10 +130,10 @@ namespace TestCases.POIFS.FileSystem
             Property[] props = GetVBAProperties(fs);
             Array.Sort(props, new DirectoryProperty.PropertyComparator());
 
-            Assert.AreEqual(_entries.Length, props.Length);
+            ClassicAssert.AreEqual(_entries.Length, props.Length);
             for (int i = 0; i < props.Length; i++)
             {
-                Assert.AreEqual(_entries[i], props[i].Name);
+                ClassicAssert.AreEqual(_entries[i], props[i].Name);
             }
         }
 

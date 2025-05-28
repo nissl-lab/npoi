@@ -20,7 +20,7 @@ namespace TestCases.HSSF.UserModel
     using System;
     using System.IO;
     using NPOI.HSSF.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     using TestCases.HSSF;
     using NPOI.HPSF;
@@ -61,7 +61,7 @@ namespace TestCases.HSSF.UserModel
             SummaryInformation summary2 = (SummaryInformation)PropertySetFactory.Create(fs2.CreateDocumentInputStream(SummaryInformation.DEFAULT_STREAM_NAME));
 
             //Assert.Failing assertion
-            Assert.AreEqual(title, summary2.Title);
+            ClassicAssert.AreEqual(title, summary2.Title);
         }
 
         [Test]
@@ -86,7 +86,7 @@ namespace TestCases.HSSF.UserModel
             //read the property
             POIFSFileSystem fs2 = new POIFSFileSystem(new MemoryStream(out1.ToArray()));
             SummaryInformation summary2 = (SummaryInformation)PropertySetFactory.Create(fs2.CreateDocumentInputStream(SummaryInformation.DEFAULT_STREAM_NAME));
-            Assert.AreEqual(title, summary2.Title);
+            ClassicAssert.AreEqual(title, summary2.Title);
 
         }
     }

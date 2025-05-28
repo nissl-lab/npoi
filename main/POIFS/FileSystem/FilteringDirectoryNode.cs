@@ -58,11 +58,13 @@ namespace NPOI.POIFS.FileSystem
                     // Applies to a child
                     String child = excl.Substring(0, splitAt);
                     String childExcl = excl.Substring(splitAt + 1);
-                    if (!this.childExcludes.ContainsKey(child))
+                    if (!this.childExcludes.TryGetValue(child, out List<String> value))
                     {
-                        this.childExcludes.Add(child, new List<String>());
+                        value = new List<String>();
+                        this.childExcludes.Add(child, value);
                     }
-                    this.childExcludes[child].Add(childExcl);
+
+                    value.Add(childExcl);
                 }
             }
         }
@@ -134,10 +136,9 @@ namespace NPOI.POIFS.FileSystem
         private Entry WrapEntry(Entry entry)
         {
             String name = entry.Name;
-            if (childExcludes.ContainsKey(name) && entry is DirectoryEntry)
+            if (childExcludes.TryGetValue(name, out List<string> value) && entry is DirectoryEntry directoryEntry)
             {
-                return new FilteringDirectoryNode(
-                      (DirectoryEntry)entry, childExcludes[name]);
+                return new FilteringDirectoryNode(directoryEntry, value);
             }
             return entry;
         }
@@ -156,7 +157,7 @@ namespace NPOI.POIFS.FileSystem
             return directory.CreateDirectory(name);
         }
 
-        public Util.ClassID StorageClsid
+        public HPSF.ClassID StorageClsid
         {
             get
             {
@@ -221,7 +222,7 @@ namespace NPOI.POIFS.FileSystem
         }
 
         #endregion
-        private class FilteringIterator : IEnumerator<Entry>
+        private sealed class FilteringIterator : IEnumerator<Entry>
         {
             private IEnumerator<Entry> parent;
             private Entry next;
@@ -259,11 +260,6 @@ namespace NPOI.POIFS.FileSystem
             //    LocateNext();
             //    return e;
             //}
-
-            public void Remove()
-            {
-                throw new InvalidOperationException("Remove not supported");
-            }
 
             #region IEnumerator<Entry> 成员
 

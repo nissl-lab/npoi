@@ -19,7 +19,7 @@ namespace TestCases.HSSF.UserModel
 {
     using System;
     using NPOI.HSSF.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     using TestCases.HSSF;
     using NPOI.SS.UserModel;
@@ -75,11 +75,11 @@ namespace TestCases.HSSF.UserModel
             {
                 Assert.Fail("Identified bug 46654a");
             }
-            Assert.AreEqual(COL_IX, row.FirstCellNum);
-            Assert.AreEqual(COL_IX + 1, row.LastCellNum);
+            ClassicAssert.AreEqual(COL_IX, row.FirstCellNum);
+            ClassicAssert.AreEqual(COL_IX + 1, row.LastCellNum);
             row.RemoveCell(cell);
-            Assert.AreEqual(-1, row.FirstCellNum);
-            Assert.AreEqual(-1, row.LastCellNum);
+            ClassicAssert.AreEqual(-1, row.FirstCellNum);
+            ClassicAssert.AreEqual(-1, row.LastCellNum);
             workbook.Close();
         }
 
@@ -92,17 +92,17 @@ namespace TestCases.HSSF.UserModel
             IRow rowB = sheet.CreateRow(1);
 
             ICell cellA2 = rowB.CreateCell(0);
-            Assert.AreEqual(0, rowB.FirstCellNum);
-            Assert.AreEqual(0, rowB.FirstCellNum);
+            ClassicAssert.AreEqual(0, rowB.FirstCellNum);
+            ClassicAssert.AreEqual(0, rowB.FirstCellNum);
 
-            Assert.AreEqual(-1, row.LastCellNum);
-            Assert.AreEqual(-1, row.FirstCellNum);
+            ClassicAssert.AreEqual(-1, row.LastCellNum);
+            ClassicAssert.AreEqual(-1, row.FirstCellNum);
             ICell cellB2 = row.CreateCell(1);
             ICell cellB3 = row.CreateCell(2);
             ICell cellB4 = row.CreateCell(3);
 
-            Assert.AreEqual(1, row.FirstCellNum);
-            Assert.AreEqual(4, row.LastCellNum);
+            ClassicAssert.AreEqual(1, row.FirstCellNum);
+            ClassicAssert.AreEqual(4, row.LastCellNum);
 
             // Try to move to somewhere else that's used
             try
@@ -127,14 +127,14 @@ namespace TestCases.HSSF.UserModel
             }
 
             // Move somewhere spare
-            Assert.IsNotNull(row.GetCell(1));
+            ClassicAssert.IsNotNull(row.GetCell(1));
             row.MoveCell(cellB2, (short)5);
-            Assert.IsNull(row.GetCell(1));
-            Assert.IsNotNull(row.GetCell(5));
+            ClassicAssert.IsNull(row.GetCell(1));
+            ClassicAssert.IsNotNull(row.GetCell(5));
 
-            Assert.AreEqual(5, cellB2.ColumnIndex);
-            Assert.AreEqual(2, row.FirstCellNum);
-            Assert.AreEqual(6, row.LastCellNum);
+            ClassicAssert.AreEqual(5, cellB2.ColumnIndex);
+            ClassicAssert.AreEqual(2, row.FirstCellNum);
+            ClassicAssert.AreEqual(6, row.LastCellNum);
 
             workbook.Close();
         }
@@ -146,28 +146,28 @@ namespace TestCases.HSSF.UserModel
             HSSFSheet sheet = workbook.CreateSheet() as HSSFSheet;
             HSSFRow row = sheet.CreateRow(0) as HSSFRow;
 
-            Assert.AreEqual(row.Height, sheet.DefaultRowHeight);
-            Assert.IsFalse(row.RowRecord.BadFontHeight);
+            ClassicAssert.AreEqual(row.Height, sheet.DefaultRowHeight);
+            ClassicAssert.IsFalse(row.RowRecord.BadFontHeight);
 
             row.Height=((short)123);
-            Assert.AreEqual(123, row.Height);
-            Assert.IsTrue(row.RowRecord.BadFontHeight);
+            ClassicAssert.AreEqual(123, row.Height);
+            ClassicAssert.IsTrue(row.RowRecord.BadFontHeight);
 
             row.Height = ((short)-1);
-            Assert.AreEqual(row.Height, sheet.DefaultRowHeight);
-            Assert.IsFalse(row.RowRecord.BadFontHeight);
+            ClassicAssert.AreEqual(row.Height, sheet.DefaultRowHeight);
+            ClassicAssert.IsFalse(row.RowRecord.BadFontHeight);
 
             row.Height=((short) 123);
-            Assert.AreEqual(123, row.Height);
-            Assert.IsTrue(row.RowRecord.BadFontHeight);
+            ClassicAssert.AreEqual(123, row.Height);
+            ClassicAssert.IsTrue(row.RowRecord.BadFontHeight);
 
             row.HeightInPoints = (-1);
-            Assert.AreEqual(row.Height, sheet.DefaultRowHeight);
-            Assert.IsFalse(row.RowRecord.BadFontHeight);
+            ClassicAssert.AreEqual(row.Height, sheet.DefaultRowHeight);
+            ClassicAssert.IsFalse(row.RowRecord.BadFontHeight);
 
             row.HeightInPoints = (432);
-            Assert.AreEqual(432*20, row.Height);
-            Assert.IsTrue(row.RowRecord.BadFontHeight);
+            ClassicAssert.AreEqual(432*20, row.Height);
+            ClassicAssert.IsTrue(row.RowRecord.BadFontHeight);
 
             workbook.Close();
         }

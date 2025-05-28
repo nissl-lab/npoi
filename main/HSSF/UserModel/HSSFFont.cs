@@ -198,10 +198,10 @@ namespace NPOI.HSSF.UserModel
         }
 
         /// <summary>
-        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+        /// Returns a <see cref="System.String"/> that represents the current <see cref="System.Object"/>.
         /// </summary>
         /// <returns>
-        /// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+        /// A <see cref="System.String"/> that represents the current <see cref="System.Object"/>.
         /// </returns>
         public override String ToString()
         {
@@ -214,7 +214,7 @@ namespace NPOI.HSSF.UserModel
         /// Serves as a hash function for a particular type.
         /// </summary>
         /// <returns>
-        /// A hash code for the current <see cref="T:System.Object"/>.
+        /// A hash code for the current <see cref="System.Object"/>.
         /// </returns>
         public override int GetHashCode()
         {
@@ -226,22 +226,21 @@ namespace NPOI.HSSF.UserModel
         }
 
         /// <summary>
-        /// Determines whether the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>.
+        /// Determines whether the specified <see cref="System.Object"/> is equal to the current <see cref="System.Object"/>.
         /// </summary>
-        /// <param name="obj">The <see cref="T:System.Object"/> to compare with the current <see cref="T:System.Object"/>.</param>
+        /// <param name="obj">The <see cref="System.Object"/> to compare with the current <see cref="System.Object"/>.</param>
         /// <returns>
-        /// true if the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>; otherwise, false.
+        /// true if the specified <see cref="System.Object"/> is equal to the current <see cref="System.Object"/>; otherwise, false.
         /// </returns>
-        /// <exception cref="T:System.NullReferenceException">
+        /// <exception cref="System.NullReferenceException">
         /// The <paramref name="obj"/> parameter is null.
         /// </exception>
         public override bool Equals(Object obj)
         {
             if (this == obj) return true;
             if (obj == null) return false;
-            if (obj is HSSFFont)
+            if (obj is HSSFFont other)
             {
-                HSSFFont other = (HSSFFont)obj;
                 if (font == null)
                 {
                     if (other.font != null)

@@ -68,34 +68,11 @@ namespace NPOI.Util
             byte[] header = new byte[8];
             int read = IOUtils.ReadFully(stream, header);
 
-            if (read < 1)
+            if(read < 1)
                 throw new EmptyFileException();
 
             // Wind back those 8 bytes
-            if (stream is PushbackInputStream) {
-                //PushbackInputStream pin = (PushbackInputStream)stream;
-                //pin.Unread(header, 0, read);
-                stream.Position -= read;
-            } else {
-                stream.Reset();
-            }
-
-            return header;
-        }
-
-        public static byte[] PeekFirst8Bytes(Stream stream)
-        {
-            // We want to peek at the first 8 bytes
-            long mark =  stream.Position;
-
-            byte[] header = new byte[8];
-            int read = IOUtils.ReadFully(stream, header);
-
-            if (read < 1)
-                throw new EmptyFileException();
-
-            // Wind back those 8 bytes
-            if (stream is PushbackInputStream)
+            if(stream is PushbackInputStream)
             {
                 //PushbackInputStream pin = (PushbackInputStream)stream;
                 //pin.Unread(header, 0, read);
@@ -103,10 +80,49 @@ namespace NPOI.Util
             }
             else
             {
-                stream.Position = mark;
+                stream.Reset();
             }
 
             return header;
+        }
+
+        public static byte[] PeekFirstNBytes(Stream stream, int limit)
+        {
+            long mark =  stream.Position;
+
+            ByteArrayOutputStream bos = new ByteArrayOutputStream(limit);
+            if(stream is ByteArrayInputStream inputStream)
+                Copy(new BoundedInputStream(inputStream, limit), bos);
+            else
+            {
+                MemoryStream ms = new MemoryStream();
+                stream.CopyTo(ms, limit);
+                Copy(new BoundedInputStream(new ByteArrayInputStream(ms.GetBuffer()), limit), bos);
+            }
+
+            int readBytes = (int)bos.Length;
+            if(readBytes == 0)
+            {
+                throw new EmptyFileException();
+            }
+            if(readBytes < limit)
+            {
+                bos.Write(new byte[limit - readBytes]);
+            }
+            byte[] peekedBytes = bos.ToByteArray();
+            if(stream is PushbackInputStream)
+            {
+                //PushbackInputStream pin = (PushbackInputStream)stream;
+                //pin.unread(peekedBytes, 0, readBytes);
+                stream.Position -= peekedBytes.Length;
+            }
+            else
+            {
+                stream.Position = mark;
+                (stream as InputStream)?.Reset();
+            }
+
+            return peekedBytes;
         }
 
         /// <summary>

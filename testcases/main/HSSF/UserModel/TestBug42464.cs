@@ -25,7 +25,7 @@ namespace TestCases.HSSF.UserModel
     using NPOI.SS.Formula;
     using NPOI.HSSF.UserModel;
     
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     using TestCases.HSSF;
     using NPOI.SS.UserModel;
@@ -97,7 +97,7 @@ namespace TestCases.HSSF.UserModel
 #endif
 
                 NPOI.SS.UserModel.CellValue evalResult = eval.Evaluate(cell);
-                Assert.IsNotNull(evalResult);
+                ClassicAssert.IsNotNull(evalResult);
             }
         }
     }

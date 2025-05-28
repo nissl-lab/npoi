@@ -19,7 +19,8 @@
 namespace NPOI.DDF
 {
     using System;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
     using System.Collections;
     using NPOI.Util;
     using System.Collections.Generic;
@@ -31,7 +32,7 @@ namespace NPOI.DDF
     /// </summary>
     public class UnknownEscherRecord : EscherRecord, ICloneable
     {
-        private static byte[] NO_BYTES = Array.Empty<byte>();
+        private static byte[] NO_BYTES = [];
 
         /** The data for this record not including the the 8 byte header */
         private byte[] _thedata = NO_BYTES;
@@ -65,7 +66,7 @@ namespace NPOI.DDF
             if (IsContainerRecord)
             {
                 int bytesWritten = 0;
-                _thedata = Array.Empty<byte>();
+                _thedata = [];
                 offset += 8;
                 bytesWritten += 8;
                 while (bytesRemaining > 0)
@@ -170,16 +171,16 @@ namespace NPOI.DDF
         }
 
         /// <summary>
-        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+        /// Returns a <see cref="System.String"/> that represents the current <see cref="System.Object"/>.
         /// </summary>
         /// <returns>
-        /// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+        /// A <see cref="System.String"/> that represents the current <see cref="System.Object"/>.
         /// </returns>
         public override String ToString()
         {
             String nl = Environment.NewLine;
 
-            StringBuilder children = new StringBuilder();
+            using var children = ZString.CreateStringBuilder();
             if (ChildRecords.Count > 0)
             {
                 children.Append("  children: " + nl);
@@ -221,11 +222,12 @@ namespace NPOI.DDF
             builder.Append(tab).Append(FormatXmlRecordHeader(GetType().Name, HexDump.ToHex(RecordId), HexDump.ToHex(Version), HexDump.ToHex(Instance)))
                     .Append(tab).Append("\t").Append("<IsContainer>").Append(IsContainerRecord).Append("</IsContainer>\n")
                     .Append(tab).Append("\t").Append("<Numchildren>").Append(HexDump.ToHex(_childRecords.Count)).Append("</Numchildren>\n");
-            for (IEnumerator<EscherRecord> iterator = _childRecords.GetEnumerator(); iterator.MoveNext(); )
+
+            foreach (EscherRecord record in _childRecords)
             {
-                EscherRecord record = iterator.Current;
                 builder.Append(record.ToXml(tab + "\t"));
             }
+
             builder.Append(theDumpHex).Append("\n");
             builder.Append(tab).Append("</").Append(GetType().Name).Append(">\n");
             return builder.ToString();

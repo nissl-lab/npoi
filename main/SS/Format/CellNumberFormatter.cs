@@ -14,17 +14,16 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
+
+using System;
+using System.Text;
+using System.Collections.Generic;
+
+using NPOI.SS.Util;
+using System.Collections;
+
 namespace NPOI.SS.Format
 {
-    using System;
-    using System.Text.RegularExpressions;
-    using System.Text;
-    using System.Collections.Generic;
-    using NPOI.SS.Util;
-    using System.Collections;
-    using NPOI.Util;
-
-
     /**
      * This class : printing out a value using a number format.
      *
@@ -56,9 +55,10 @@ namespace NPOI.SS.Format
         private DecimalFormat decimalFmt;
         private static List<Special> EmptySpecialList = new List<Special>();
 
-        private static readonly CellFormatter SIMPLE_NUMBER = new SimpleNumberCellFormatter("General");
-        private static readonly CellFormatter SIMPLE_INT = new CellNumberFormatter("#");
-        private static readonly CellFormatter SIMPLE_FLOAT = new CellNumberFormatter("#.#");
+        private static readonly SimpleNumberCellFormatter SIMPLE_NUMBER = new SimpleNumberCellFormatter("General");
+        private static readonly CellNumberFormatter SIMPLE_INT = new CellNumberFormatter("#");
+        private static readonly CellNumberFormatter SIMPLE_FLOAT = new CellNumberFormatter("#.#");
+
         /// <summary>
         /// The CellNumberFormatter.simpleValue() method uses the SIMPLE_NUMBER
         /// CellFormatter defined here. The CellFormat.GENERAL_FORMAT CellFormat
@@ -68,7 +68,7 @@ namespace NPOI.SS.Format
         /// different from the 'General' format for numbers ("#" for integer
         /// values and "#.#########" for floating-point values).
         /// </summary>
-        private class GeneralNumberFormatter : CellFormatter
+        private sealed class GeneralNumberFormatter : CellFormatter
         {
             private GeneralNumberFormatter()
                     : base("General")
@@ -103,7 +103,8 @@ namespace NPOI.SS.Format
                 FormatValue(toAppendTo, value);
             }
         }
-        private class SimpleNumberCellFormatter : CellFormatter
+
+        private sealed class SimpleNumberCellFormatter : CellFormatter
         {
             public SimpleNumberCellFormatter(string format)
                 : base(format)
@@ -407,7 +408,7 @@ namespace NPOI.SS.Format
         {
             if (pos >= specials.Count)
                 return EmptySpecialList;
-            IEnumerator<Special> it = specials.GetRange(pos + takeFirst, specials.Count - pos - takeFirst).GetEnumerator();
+            List<Special>.Enumerator it = specials.GetRange(pos + takeFirst, specials.Count - pos - takeFirst).GetEnumerator();
             //.ListIterator(pos + takeFirst);
             it.MoveNext();
             Special last = it.Current;
@@ -459,12 +460,8 @@ namespace NPOI.SS.Format
             if (idx != -1)
             {
                 // skip over the decimal point itself
-                IEnumerator<Special> it = specials.GetRange(idx + 1, specials.Count - idx - 1).GetEnumerator();//.ListIterator(specials.IndexOf(decimalPoint));
-                //if (it.HasNext())
-                //     it.Next();  // skip over the decimal point itself
-                while (it.MoveNext())
+                foreach (Special s in specials.GetRange(idx + 1, specials.Count - idx - 1))
                 {
-                    Special s = it.Current;
                     if (!IsDigitFmt(s))
                     {
                         break;
@@ -522,12 +519,10 @@ namespace NPOI.SS.Format
             }
 
             // Now strip them out -- we only need their interpretation, not their presence
-            IEnumerator<Special> it = specials.GetEnumerator();
             int Removed = 0;
-            List<Special> toRemove = new List<Special>();
-            while (it.MoveNext())
+            List<Special> toRemove = [];
+            foreach (var s in specials)
             {
-                Special s = it.Current;
                 s.pos -= Removed;
                 if (s.ch == ',')
                 {
@@ -780,7 +775,7 @@ namespace NPOI.SS.Format
 
             // (2) Determine the result's sign.
             string tmp = result.ToString();
-            int ePos = tmp.IndexOf("E");// fractionPos.EndIndex;
+            int ePos = tmp.IndexOf('E');// fractionPos.EndIndex;
             int signPos = ePos + 1;
             char expSignRes = result[signPos];
 
@@ -795,7 +790,7 @@ namespace NPOI.SS.Format
             }
 
             // Now the result lines up like it is supposed to with the specials' indexes
-            IEnumerator<Special> it = exponentSpecials.GetEnumerator();//.ListIterator(1);
+            List<Special>.Enumerator it = exponentSpecials.GetEnumerator();//.ListIterator(1);
             it.MoveNext();
             it.MoveNext();
             Special expSign = it.Current;//.Next();
@@ -939,11 +934,11 @@ namespace NPOI.SS.Format
                 bool ShowCommas)
         {
 
-            int pos = result.ToString().IndexOf(".") - 1;
+            int pos = result.ToString().IndexOf('.') - 1;
             if (pos < 0)
             {
                 if (exponent != null && numSpecials == integerSpecials)
-                    pos = result.ToString().IndexOf("E") - 1;
+                    pos = result.ToString().IndexOf('E') - 1;
                 else
                     pos = result.Length - 1;
             }
@@ -1015,9 +1010,10 @@ namespace NPOI.SS.Format
             int strip;
             if (fractionalSpecials.Count > 0)
             {
-                digit = result.ToString().IndexOf(".") + 1;
+                string resultString = result.ToString();
+                digit = resultString.IndexOf('.') + 1;
                 if (exponent != null)
-                    strip = result.ToString().IndexOf("E") - 1;
+                    strip = resultString.IndexOf('E') - 1;
                 else
                     strip = result.Length - 1;
                 while (strip > digit && result[strip] == '0')

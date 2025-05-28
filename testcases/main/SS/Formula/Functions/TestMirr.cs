@@ -23,7 +23,7 @@ namespace TestCases.SS.Formula.Functions
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.UserModel;
     using NPOI.Util;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using TestCases.HSSF;
     using NPOI.SS.Formula.Functions;
 
@@ -55,7 +55,7 @@ namespace TestCases.SS.Formula.Functions
             {
                 throw new AssertFailedException("MIRR should not failed with these parameters" + e);
             }
-            Assert.AreEqual(0.126094130366, mirrValue, 0.0000000001, "mirr");
+            ClassicAssert.AreEqual(0.126094130366, mirrValue, 0.0000000001, "mirr");
 
             reinvestRate = 0.05;
             financeRate = 0.08;
@@ -68,7 +68,7 @@ namespace TestCases.SS.Formula.Functions
             {
                 throw new AssertFailedException("MIRR should not failed with these parameters" + e);
             }
-            Assert.AreEqual(0.18736225093, mirrValue, 0.0000000001, "mirr");
+            ClassicAssert.AreEqual(0.18736225093, mirrValue, 0.0000000001, "mirr");
 
             reinvestRate = 0.065;
             financeRate = 0.1;
@@ -81,7 +81,7 @@ namespace TestCases.SS.Formula.Functions
             {
                 throw new AssertFailedException("MIRR should not failed with these parameters" + e);
             }
-            Assert.AreEqual(0.07039493966, mirrValue, 0.0000000001, "mirr");
+            ClassicAssert.AreEqual(0.07039493966, mirrValue, 0.0000000001, "mirr");
 
             reinvestRate = 0.07;
             financeRate = 0.01;
@@ -94,7 +94,7 @@ namespace TestCases.SS.Formula.Functions
             {
                 throw new AssertFailedException("MIRR should not failed with these parameters" + e);
             }
-            Assert.AreEqual(-1, mirrValue, 0.0, "mirr");
+            ClassicAssert.AreEqual(-1, mirrValue, 0.0, "mirr");
 
         }
 
@@ -112,7 +112,7 @@ namespace TestCases.SS.Formula.Functions
             }
             catch (EvaluationException e)
             {
-                Assert.AreEqual(ErrorEval.DIV_ZERO, e.GetErrorEval());
+                ClassicAssert.AreEqual(ErrorEval.DIV_ZERO, e.GetErrorEval());
                 return;
             }
             throw new AssertFailedException("MIRR should failed with all these positives values");
@@ -142,7 +142,7 @@ namespace TestCases.SS.Formula.Functions
             fe.ClearAllCachedResultValues();
             fe.EvaluateFormulaCell(cell);
             double res = cell.NumericCellValue;
-            Assert.AreEqual(0.18736225093, res, 0.00000001);
+            ClassicAssert.AreEqual(0.18736225093, res, 0.00000001);
         }
 
         [Test]
@@ -176,7 +176,7 @@ namespace TestCases.SS.Formula.Functions
             IRow row = sheet.GetRow(37);
             ICell cellA = row.GetCell(0);
             CellValue cv = fe.Evaluate(cellA);
-            Assert.AreEqual(ErrorEval.DIV_ZERO.ErrorCode, cv.ErrorValue);
+            ClassicAssert.AreEqual(ErrorEval.DIV_ZERO.ErrorCode, cv.ErrorValue);
 
             if (failures.Length > 0)
             {
@@ -189,8 +189,8 @@ namespace TestCases.SS.Formula.Functions
         {
             double actualValue = cv.NumberValue;
             double expectedValue = cell.NumericCellValue; // cached formula result calculated by Excel
-            Assert.AreEqual(CellType.Numeric, cv.CellType, "Invalid formula result: " + cv.ToString());
-            Assert.AreEqual(expectedValue, actualValue, 1E-8);
+            ClassicAssert.AreEqual(CellType.Numeric, cv.CellType, "Invalid formula result: " + cv.ToString());
+            ClassicAssert.AreEqual(expectedValue, actualValue, 1E-8);
         }
     }
 

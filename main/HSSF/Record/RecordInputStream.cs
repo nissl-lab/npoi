@@ -49,17 +49,18 @@ namespace NPOI.HSSF.Record
             return recordClass.Name;
         }
     }
-    internal class SimpleHeaderInput : BiffHeaderInput
+
+    internal sealed class SimpleHeaderInput : BiffHeaderInput
     {
 
         private readonly ILittleEndianInput _lei;
 
         internal static ILittleEndianInput GetLEI(Stream in1)
         {
-            if (in1 is ILittleEndianInput)
+            if (in1 is ILittleEndianInput input)
             {
                 // accessing directly is an optimisation
-                return (ILittleEndianInput)in1;
+                return input;
             }
             // less optimal, but should work OK just the same. Often occurs in junit tests.
             return new LittleEndianInputStream(in1);
@@ -526,7 +527,7 @@ namespace NPOI.HSSF.Record
             int size = Remaining;
             if (size == 0)
             {
-                return Array.Empty<byte>();
+                return [];
             }
             byte[] result = new byte[size];
             ReadFully(result);

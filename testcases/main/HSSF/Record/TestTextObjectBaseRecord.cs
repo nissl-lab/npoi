@@ -23,7 +23,7 @@ namespace TestCases.HSSF.Record
 
     using System;
     using NPOI.HSSF.Record;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
     using NPOI.Util;
@@ -63,13 +63,13 @@ namespace TestCases.HSSF.Record
         public void TestLoad()
         {
             TextObjectRecord record = new TextObjectRecord(TestcaseRecordInputStream.Create(data));
-            Assert.AreEqual(HorizontalTextAlignment.Center, record.HorizontalTextAlignment);
-            Assert.AreEqual(VerticalTextAlignment.Justify, record.VerticalTextAlignment);
-            Assert.AreEqual(true, record.IsTextLocked);
-            Assert.AreEqual(TextOrientation.RotRight, record.TextOrientation);
+            ClassicAssert.AreEqual(HorizontalTextAlignment.Center, record.HorizontalTextAlignment);
+            ClassicAssert.AreEqual(VerticalTextAlignment.Justify, record.VerticalTextAlignment);
+            ClassicAssert.AreEqual(true, record.IsTextLocked);
+            ClassicAssert.AreEqual(TextOrientation.RotRight, record.TextOrientation);
 
 
-            Assert.AreEqual(49, record.RecordSize);
+            ClassicAssert.AreEqual(49, record.RecordSize);
         }
 
         [Test]
@@ -87,9 +87,9 @@ namespace TestCases.HSSF.Record
             record.Str = (str);
 
             byte[] recordBytes = record.Serialize();
-            Assert.AreEqual(recordBytes.Length, data.Length);
+            ClassicAssert.AreEqual(recordBytes.Length, data.Length);
             for (int i = 0; i < data.Length; i++)
-                Assert.AreEqual(data[i], recordBytes[i], "At offset " + i);
+                ClassicAssert.AreEqual(data[i], recordBytes[i], "At offset " + i);
         }
     }
 }

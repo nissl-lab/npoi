@@ -90,7 +90,7 @@ namespace NPOI.Util
             _limit = 0;
         }
 
-        private void FillArray(int val, int[] array, int index)
+        private static void FillArray(int val, int[] array, int index)
         {
             for (int k = index; k < array.Length; k++)
             {

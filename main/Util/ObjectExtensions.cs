@@ -95,7 +95,7 @@ namespace NPOI.Util
             }
         }
 
-        internal class ArrayTraverse
+        internal sealed class ArrayTraverse
         {
             public int[] Position;
             private readonly int[] maxLengths;

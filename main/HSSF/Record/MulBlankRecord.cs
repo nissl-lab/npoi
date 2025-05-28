@@ -130,7 +130,7 @@ namespace NPOI.HSSF.Record
             return _xfs[coffset];
         }
 
-        private short[] ParseXFs(RecordInputStream in1)
+        private static short[] ParseXFs(RecordInputStream in1)
         {
             short[] retval = new short[(in1.Remaining - 2) / 2];
 

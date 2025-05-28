@@ -484,7 +484,7 @@ namespace NPOI.POIFS.FileSystem
         /// Gets or Sets the storage clsid for the directory entry
         /// </summary>
         /// <value>The storage ClassID.</value>
-        public ClassID StorageClsid
+        public HPSF.ClassID StorageClsid
         {
             set{
                 this.Property.StorageClsid=value;
@@ -554,7 +554,7 @@ namespace NPOI.POIFS.FileSystem
         {
             get
             {
-                return Array.Empty<Object>();
+                return [];
             }
         }
 

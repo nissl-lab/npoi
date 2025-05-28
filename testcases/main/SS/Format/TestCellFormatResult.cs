@@ -17,7 +17,7 @@
 namespace TestCases.SS.Format
 {
     using NPOI.SS.Format;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using SixLabors.ImageSharp.PixelFormats;
     using System;
 

@@ -22,7 +22,7 @@ namespace TestCases.HSSF.Record
     using TestCases.HSSF;
     using NPOI.HSSF.UserModel;
     using NPOI.HSSF.Record;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     /**
      * Tests for <c>LabelRecord</c>
      * 

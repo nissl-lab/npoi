@@ -19,7 +19,7 @@ namespace TestCases.HSSF.Record
 {
     using System;
     using System.IO;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.Crypto;
@@ -155,9 +155,9 @@ namespace TestCases.HSSF.Record
          */
         private void ConfirmReadInitialRecords(RecordFactoryInputStream rfis)
         {
-            Assert.AreEqual(typeof(BOFRecord), rfis.NextRecord().GetType());
+            ClassicAssert.AreEqual(typeof(BOFRecord), rfis.NextRecord().GetType());
             WindowOneRecord rec1 = (WindowOneRecord)rfis.NextRecord();
-            Assert.IsTrue(Arrays.Equals(HexRead.ReadFromString(SAMPLE_WINDOW1), rec1.Serialize()));
+            ClassicAssert.IsTrue(Arrays.Equals(HexRead.ReadFromString(SAMPLE_WINDOW1), rec1.Serialize()));
         }
 
         private static RecordFactoryInputStream CreateRFIS(byte[] data)

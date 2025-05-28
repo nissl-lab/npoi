@@ -15,6 +15,8 @@
    limitations under the License.
 ==================================================================== */
 
+using System.Collections.Generic;
+
 namespace NPOI.SS.Formula
 {
 
@@ -55,7 +57,7 @@ namespace NPOI.SS.Formula
 
         private  class BlankCellSheetGroup
         {
-            private readonly IList _rectangleGroups;
+            private readonly List<BlankCellRectangleGroup> _rectangleGroups;
             private int _currentRowIndex;
             private int _firstColumnIndex;
             private int _lastColumnIndex;
@@ -63,7 +65,7 @@ namespace NPOI.SS.Formula
 
             public BlankCellSheetGroup()
             {
-                _rectangleGroups = new ArrayList();
+                _rectangleGroups = [];
                 _currentRowIndex = -1;
             }
 
@@ -129,7 +131,7 @@ namespace NPOI.SS.Formula
 
         }
 
-        private class BlankCellRectangleGroup
+        private sealed class BlankCellRectangleGroup
         {
 
             private readonly int _firstRowIndex;

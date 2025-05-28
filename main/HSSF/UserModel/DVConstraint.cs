@@ -527,11 +527,11 @@ using NPOI.HSSF.Record;
                     if (dvRecord.ListExplicitFormula)
                     {
                         String values = toFormulaString(dvRecord.Formula1, book).AsString();
-                        if (values.StartsWith("\""))
+                        if (values.StartsWith('"'))
                         {
                             values = values.Substring(1);
                         }
-                        if (values.EndsWith("\""))
+                        if (values.EndsWith('"'))
                         {
                             values = values.Substring(0, values.Length - 1);
                         }
@@ -550,7 +550,7 @@ using NPOI.HSSF.Record;
             }
         }
 
-        private class FormulaValuePair
+        private sealed class FormulaValuePair
         {
             internal String _formula;
             internal String _value;

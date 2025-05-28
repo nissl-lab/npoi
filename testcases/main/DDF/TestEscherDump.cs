@@ -18,7 +18,7 @@
 namespace TestCases.DDF
 {
     using System;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using System.IO;
     using System.Text;
 
@@ -62,7 +62,7 @@ namespace TestCases.DDF
             //try
             //{
             //    int bytes = IOUtils.readFully(stream, data);
-            //    Assert.IsTrue(bytes != -1);
+            //    ClassicAssert.IsTrue(bytes != -1);
             //    //new EscherDump().dump(bytes, data, System.out);
             //    //new EscherDump().dumpOld(bytes, new ByteArrayInputStream(data), System.out);
             //}

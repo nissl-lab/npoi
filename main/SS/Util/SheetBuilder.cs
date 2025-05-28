@@ -112,7 +112,7 @@ namespace NPOI.SS.Util
                     if (cellValue != null || shouldCreateEmptyCells)
                     {
                         currentCell = currentRow.CreateCell(cellIndex);
-                        SetCellValue(currentCell, cellValue);
+                        SheetBuilder.SetCellValue(currentCell, cellValue);
                     }
                 }
             }
@@ -124,7 +124,7 @@ namespace NPOI.SS.Util
          * @param cell cell to change
          * @param value value to set
          */
-        private void SetCellValue(ICell cell, Object value)
+        private static void SetCellValue(ICell cell, Object value)
         {
             if (value == null || cell == null)
             {
@@ -137,13 +137,13 @@ namespace NPOI.SS.Util
                 double.TryParse(value.ToString(), out val);
                 cell.SetCellValue(val);
             }
-            else if (value is DateTime)
+            else if (value is DateTime time)
             {
-                cell.SetCellValue((DateTime)value);
+                cell.SetCellValue(time);
                 //} else if (value is Calendar) {
                 //    cell.SetCellValue((Calendar) value);
             }
-            else if (IsFormulaDefinition(value))
+            else if (SheetBuilder.IsFormulaDefinition(value))
             {
                 cell.CellFormula = (GetFormula(value));
             }
@@ -153,18 +153,17 @@ namespace NPOI.SS.Util
             }
         }
 
-        private bool IsFormulaDefinition(Object obj)
+        private static bool IsFormulaDefinition(Object obj)
         {
-            if (obj is String)
+            if (obj is String str)
             {
-                String str = (String)obj;
                 if (str.Length < 2)
                 {
                     return false;
                 }
                 else
                 {
-                    return ((String)obj)[0] == '=';
+                    return str[0] == '=';
                 }
             }
             else
@@ -173,7 +172,7 @@ namespace NPOI.SS.Util
             }
         }
 
-        private String GetFormula(Object obj)
+        private static String GetFormula(Object obj)
         {
             return ((String)obj).Substring(1);
         }

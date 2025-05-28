@@ -87,15 +87,15 @@ namespace NPOI.DDF
             for (IEnumerator iterator = results.GetEnumerator(); iterator.MoveNext(); )
             {
                 EscherProperty p = (EscherProperty)iterator.Current;
-                if (p is EscherComplexProperty)
+                if (p is EscherComplexProperty property)
                 {
-                    if (p is EscherArrayProperty)
+                    if (property is EscherArrayProperty arrayProperty)
                     {
-                        pos += ((EscherArrayProperty)p).SetArrayData(data, pos);
+                        pos += arrayProperty.SetArrayData(data, pos);
                     }
                     else
                     {
-                        byte[] complexData = ((EscherComplexProperty)p).ComplexData;
+                        byte[] complexData = property.ComplexData;
                         int leftover = data.Length - pos;
                         if (leftover < complexData.Length)
                         {

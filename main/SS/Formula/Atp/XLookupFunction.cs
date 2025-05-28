@@ -29,11 +29,12 @@ namespace NPOI.SS.Formula.Atp
             return _evaluate(args, srcRowIndex, srcColumnIndex, false);
         }
 
-        private String LaxValueToString(ValueEval eval)
+        private static String LaxValueToString(ValueEval eval)
         {
             return (eval is MissingArgEval) ? "" : OperandResolver.CoerceValueToString(eval);
         }
-        private ValueEval _evaluate(ValueEval[] args, int srcRowIndex, int srcColumnIndex, bool isSingleValue)
+
+        private static ValueEval _evaluate(ValueEval[] args, int srcRowIndex, int srcColumnIndex, bool isSingleValue)
         {
             if (args.Length < 3)
             {
@@ -98,7 +99,8 @@ namespace NPOI.SS.Formula.Atp
             }
             return evaluate(srcRowIndex, srcColumnIndex, args[0], args[1], args[2], notFound, matchMode, searchMode, isSingleValue);
         }
-        private ValueEval evaluate(int srcRowIndex, int srcColumnIndex, ValueEval lookupEval, ValueEval indexEval,
+
+        private static ValueEval evaluate(int srcRowIndex, int srcColumnIndex, ValueEval lookupEval, ValueEval indexEval,
                            ValueEval returnEval, String notFound, LookupUtils.MatchMode matchMode,
                            LookupUtils.SearchMode searchMode, bool isSingleValue)
         {
@@ -117,8 +119,7 @@ namespace NPOI.SS.Formula.Atp
                     {
                         if (string.IsNullOrEmpty(notFound))
                         {
-                            if (returnEval is AreaEval) {
-                                AreaEval area = (AreaEval)returnEval;
+                            if (returnEval is AreaEval area) {
                                 int width = area.Width;
                                 if (isSingleValue || width <= 1)
                                 {
@@ -137,13 +138,12 @@ namespace NPOI.SS.Formula.Atp
                         return e.GetErrorEval();
                     }
                 }
-                if (returnEval is AreaEval) {
-                    AreaEval area = (AreaEval)returnEval;
+                if (returnEval is AreaEval eval) {
                     if (isSingleValue)
                     {
-                        return area.GetRelativeValue(matchedRow, 0);
+                        return eval.GetRelativeValue(matchedRow, 0);
                     }
-                    return area.Offset(matchedRow, matchedRow, 0, area.Width - 1);
+                    return eval.Offset(matchedRow, matchedRow, 0, eval.Width - 1);
                 } else
                 {
                     return returnEval;

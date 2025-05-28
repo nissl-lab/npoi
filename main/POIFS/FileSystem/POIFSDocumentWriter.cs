@@ -212,10 +212,10 @@ namespace NPOI.POIFS.FileSystem
         /// <returns>
         /// A long value representing the length of the stream in bytes.
         /// </returns>
-        /// <exception cref="T:System.NotSupportedException">
+        /// <exception cref="System.NotSupportedException">
         /// A class derived from Stream does not support seeking.
         /// </exception>
-        /// <exception cref="T:System.ObjectDisposedException">
+        /// <exception cref="System.ObjectDisposedException">
         /// Methods were called after the stream was closed.
         /// </exception>
         public override long Length
@@ -233,13 +233,13 @@ namespace NPOI.POIFS.FileSystem
         /// <returns>
         /// The current position within the stream.
         /// </returns>
-        /// <exception cref="T:System.IO.IOException">
+        /// <exception cref="System.IO.IOException">
         /// An I/O error occurs.
         /// </exception>
-        /// <exception cref="T:System.NotSupportedException">
+        /// <exception cref="System.NotSupportedException">
         /// The stream does not support seeking.
         /// </exception>
-        /// <exception cref="T:System.ObjectDisposedException">
+        /// <exception cref="System.ObjectDisposedException">
         /// Methods were called after the stream was closed.
         /// </exception>
         public override long Position

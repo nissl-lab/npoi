@@ -21,7 +21,7 @@ namespace TestCases.SS.UserModel
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
     using NPOI.Util;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using System;
     using System.Collections;
     using System.IO;
@@ -33,7 +33,7 @@ namespace TestCases.SS.UserModel
     /**
      * @author Yegor Kozlov
      */
-    public abstract class BaseTestWorkbook
+    public abstract class BaseTestWorkbook : POITestCase
     {
 
         protected ITestDataProvider _testDataProvider;
@@ -53,7 +53,7 @@ namespace TestCases.SS.UserModel
             int i = 0;
             foreach (ISheet sh in wb)
             {
-                Assert.AreEqual("Sheet" + i, sh.SheetName);
+                ClassicAssert.AreEqual("Sheet" + i, sh.SheetName);
                 i++;
             }
             wb.Close();
@@ -78,7 +78,7 @@ namespace TestCases.SS.UserModel
                 it.MoveNext();
                 it.MoveNext();
                 it.MoveNext();
-                Assert.AreEqual("Sheet1", (it.Current as ISheet).SheetName);
+                ClassicAssert.AreEqual("Sheet1", (it.Current as ISheet).SheetName);
             }
             finally
             {
@@ -131,10 +131,10 @@ namespace TestCases.SS.UserModel
         public void TestCreateSheet()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
-            Assert.AreEqual(0, wb.NumberOfSheets);
+            ClassicAssert.AreEqual(0, wb.NumberOfSheets);
 
             //getting a sheet by invalid index or non-existing name
-            Assert.IsNull(wb.GetSheet("Sheet1"));
+            ClassicAssert.IsNull(wb.GetSheet("Sheet1"));
             try
             {
                 wb.GetSheetAt(0);
@@ -144,14 +144,14 @@ namespace TestCases.SS.UserModel
             {
                 // expected during successful Test
                 // no negative index in the range message
-                Assert.IsFalse(ex.Message.Contains("-1"));
+                ClassicAssert.IsFalse(ex.Message.Contains("-1"));
             }
 
             ISheet sheet0 = wb.CreateSheet();
             ISheet sheet1 = wb.CreateSheet();
-            Assert.AreEqual("Sheet0", sheet0.SheetName);
-            Assert.AreEqual("Sheet1", sheet1.SheetName);
-            Assert.AreEqual(2, wb.NumberOfSheets);
+            ClassicAssert.AreEqual("Sheet0", sheet0.SheetName);
+            ClassicAssert.AreEqual("Sheet1", sheet1.SheetName);
+            ClassicAssert.AreEqual(2, wb.NumberOfSheets);
 
             //fetching sheets by name is case-insensitive
             ISheet originalSheet = wb.CreateSheet("Sheet3");
@@ -160,9 +160,9 @@ namespace TestCases.SS.UserModel
             {
                 Assert.Fail("Identified bug 44892");
             }
-            Assert.AreEqual("Sheet3", fetchedSheet.SheetName);
-            Assert.AreEqual(3, wb.NumberOfSheets);
-            Assert.AreSame(originalSheet, fetchedSheet);
+            ClassicAssert.AreEqual("Sheet3", fetchedSheet.SheetName);
+            ClassicAssert.AreEqual(3, wb.NumberOfSheets);
+            ClassicAssert.AreSame(originalSheet, fetchedSheet);
             try
             {
                 wb.CreateSheet("sHeeT3");
@@ -171,7 +171,7 @@ namespace TestCases.SS.UserModel
             catch (ArgumentException e)
             {
                 // expected during successful Test
-                Assert.AreEqual("The workbook already contains a sheet named 'sHeeT3'", e.Message);
+                ClassicAssert.AreEqual("The workbook already contains a sheet named 'sHeeT3'", e.Message);
             }
 
             //names cannot be blank or contain any of /\*?[]
@@ -191,7 +191,7 @@ namespace TestCases.SS.UserModel
                 }
             }
             //still have 3 sheets
-            Assert.AreEqual(3, wb.NumberOfSheets);
+            ClassicAssert.AreEqual(3, wb.NumberOfSheets);
 
             //change the name of the 3rd sheet
             wb.SetSheetName(2, "I Changed!");
@@ -230,22 +230,22 @@ namespace TestCases.SS.UserModel
             }
 
             //check
-            Assert.AreEqual(0, wb.GetSheetIndex("sheet0"));
-            Assert.AreEqual(1, wb.GetSheetIndex("sheet1"));
-            Assert.AreEqual(2, wb.GetSheetIndex("I Changed!"));
+            ClassicAssert.AreEqual(0, wb.GetSheetIndex("sheet0"));
+            ClassicAssert.AreEqual(1, wb.GetSheetIndex("sheet1"));
+            ClassicAssert.AreEqual(2, wb.GetSheetIndex("I Changed!"));
 
-            Assert.AreSame(sheet0, wb.GetSheet("sheet0"));
-            Assert.AreSame(sheet1, wb.GetSheet("sheet1"));
-            Assert.AreSame(originalSheet, wb.GetSheet("I Changed!"));
-            Assert.IsNull(wb.GetSheet("unknown"));
+            ClassicAssert.AreSame(sheet0, wb.GetSheet("sheet0"));
+            ClassicAssert.AreSame(sheet1, wb.GetSheet("sheet1"));
+            ClassicAssert.AreSame(originalSheet, wb.GetSheet("I Changed!"));
+            ClassicAssert.IsNull(wb.GetSheet("unknown"));
 
             //serialize and read again
             IWorkbook wb2 = _testDataProvider.WriteOutAndReadBack(wb);
             wb.Close();
-            Assert.AreEqual(3, wb2.NumberOfSheets);
-            Assert.AreEqual(0, wb2.GetSheetIndex("sheet0"));
-            Assert.AreEqual(1, wb2.GetSheetIndex("sheet1"));
-            Assert.AreEqual(2, wb2.GetSheetIndex("I Changed!"));
+            ClassicAssert.AreEqual(3, wb2.NumberOfSheets);
+            ClassicAssert.AreEqual(0, wb2.GetSheetIndex("sheet0"));
+            ClassicAssert.AreEqual(1, wb2.GetSheetIndex("sheet1"));
+            ClassicAssert.AreEqual(2, wb2.GetSheetIndex("I Changed!"));
             wb.Close();
         }
 
@@ -270,7 +270,7 @@ namespace TestCases.SS.UserModel
             }
             catch (ArgumentException ex)
             {
-                Assert.IsTrue(ex.Message.StartsWith("sheetName 'My very long sheet name which is longer than 31 chars' is invalid"));
+                ClassicAssert.IsTrue(ex.Message.StartsWith("sheetName 'My very long sheet name which is longer than 31 chars' is invalid"));
             }
             try
             {
@@ -281,7 +281,7 @@ namespace TestCases.SS.UserModel
             }
             catch (ArgumentException ex)
             {
-                Assert.IsTrue(ex.Message.StartsWith("sheetName 'My very long sheet name which is longer than 31 chars' is invalid"));
+                ClassicAssert.IsTrue(ex.Message.StartsWith("sheetName 'My very long sheet name which is longer than 31 chars' is invalid"));
             }
             wb1.Close();
         }
@@ -295,44 +295,44 @@ namespace TestCases.SS.UserModel
                 workbook.CreateSheet("sheet1");
                 workbook.CreateSheet("sheet2");
                 workbook.CreateSheet("sheet3");
-                Assert.AreEqual(3, workbook.NumberOfSheets);
-                Assert.AreEqual(0, workbook.ActiveSheetIndex);
+                ClassicAssert.AreEqual(3, workbook.NumberOfSheets);
+                ClassicAssert.AreEqual(0, workbook.ActiveSheetIndex);
                 workbook.RemoveSheetAt(1);
-                Assert.AreEqual(2, workbook.NumberOfSheets);
-                Assert.AreEqual("sheet3", workbook.GetSheetName(1));
-                Assert.AreEqual(0, workbook.ActiveSheetIndex);
+                ClassicAssert.AreEqual(2, workbook.NumberOfSheets);
+                ClassicAssert.AreEqual("sheet3", workbook.GetSheetName(1));
+                ClassicAssert.AreEqual(0, workbook.ActiveSheetIndex);
                 workbook.RemoveSheetAt(0);
-                Assert.AreEqual(1, workbook.NumberOfSheets);
-                Assert.AreEqual("sheet3", workbook.GetSheetName(0));
-                Assert.AreEqual(0, workbook.ActiveSheetIndex);
+                ClassicAssert.AreEqual(1, workbook.NumberOfSheets);
+                ClassicAssert.AreEqual("sheet3", workbook.GetSheetName(0));
+                ClassicAssert.AreEqual(0, workbook.ActiveSheetIndex);
                 workbook.RemoveSheetAt(0);
-                Assert.AreEqual(0, workbook.NumberOfSheets);
-                Assert.AreEqual(0, workbook.ActiveSheetIndex);
+                ClassicAssert.AreEqual(0, workbook.NumberOfSheets);
+                ClassicAssert.AreEqual(0, workbook.ActiveSheetIndex);
 
                 //re-create the sheets
                 workbook.CreateSheet("sheet1");
                 workbook.CreateSheet("sheet2");
                 workbook.CreateSheet("sheet3");
-                Assert.AreEqual(3, workbook.NumberOfSheets);
+                ClassicAssert.AreEqual(3, workbook.NumberOfSheets);
 
                 workbook.CreateSheet("sheet4");
-                Assert.AreEqual(4, workbook.NumberOfSheets);
+                ClassicAssert.AreEqual(4, workbook.NumberOfSheets);
 
-                Assert.AreEqual(0, workbook.ActiveSheetIndex);
+                ClassicAssert.AreEqual(0, workbook.ActiveSheetIndex);
                 workbook.SetActiveSheet(2);
-                Assert.AreEqual(2, workbook.ActiveSheetIndex);
+                ClassicAssert.AreEqual(2, workbook.ActiveSheetIndex);
 
                 workbook.RemoveSheetAt(2);
-                Assert.AreEqual(2, workbook.ActiveSheetIndex);
+                ClassicAssert.AreEqual(2, workbook.ActiveSheetIndex);
 
                 workbook.RemoveSheetAt(1);
-                Assert.AreEqual(1, workbook.ActiveSheetIndex);
+                ClassicAssert.AreEqual(1, workbook.ActiveSheetIndex);
 
                 workbook.RemoveSheetAt(0);
-                Assert.AreEqual(0, workbook.ActiveSheetIndex);
+                ClassicAssert.AreEqual(0, workbook.ActiveSheetIndex);
 
                 workbook.RemoveSheetAt(0);
-                Assert.AreEqual(0, workbook.ActiveSheetIndex);
+                ClassicAssert.AreEqual(0, workbook.ActiveSheetIndex);
             }
             finally
             {
@@ -345,10 +345,10 @@ namespace TestCases.SS.UserModel
         public void TestDefaultValues()
         {
             IWorkbook b = _testDataProvider.CreateWorkbook();
-            Assert.AreEqual(0, b.ActiveSheetIndex);
-            Assert.AreEqual(0, b.FirstVisibleTab);
-            Assert.AreEqual(0, b.NumberOfNames);
-            Assert.AreEqual(0, b.NumberOfSheets);
+            ClassicAssert.AreEqual(0, b.ActiveSheetIndex);
+            ClassicAssert.AreEqual(0, b.FirstVisibleTab);
+            ClassicAssert.AreEqual(0, b.NumberOfNames);
+            ClassicAssert.AreEqual(0, b.NumberOfSheets);
             b.Close();
         }
 
@@ -361,8 +361,8 @@ namespace TestCases.SS.UserModel
             b.SetActiveSheet(1);
             b.SetSelectedTab(1);
             b.FirstVisibleTab = (/*setter*/1);
-            Assert.AreEqual(1, b.ActiveSheetIndex);
-            Assert.AreEqual(1, b.FirstVisibleTab);
+            ClassicAssert.AreEqual(1, b.ActiveSheetIndex);
+            ClassicAssert.AreEqual(1, b.FirstVisibleTab);
             b.Close();
         }
 
@@ -376,15 +376,15 @@ namespace TestCases.SS.UserModel
             // workbook.SetPrintArea(0, reference);
             workbook.SetPrintArea(0, 1, 5, 4, 9);
             String retrievedPrintArea = workbook.GetPrintArea(0);
-            Assert.AreEqual("'" + sheetName1 + "'!$B$5:$F$10", retrievedPrintArea);
+            ClassicAssert.AreEqual("'" + sheetName1 + "'!$B$5:$F$10", retrievedPrintArea);
 
             String reference = "$A$1:$B$1";
             workbook.SetPrintArea(0, reference);
             retrievedPrintArea = workbook.GetPrintArea(0);
-            Assert.AreEqual("'" + sheetName1 + "'!" + reference, retrievedPrintArea);
+            ClassicAssert.AreEqual("'" + sheetName1 + "'!" + reference, retrievedPrintArea);
 
             workbook.RemovePrintArea(0);
-            Assert.IsNull(workbook.GetPrintArea(0));
+            ClassicAssert.IsNull(workbook.GetPrintArea(0));
             workbook.Close();
         }
 
@@ -392,7 +392,7 @@ namespace TestCases.SS.UserModel
         public void TestGetSetActiveSheet()
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
-            Assert.AreEqual(0, workbook.ActiveSheetIndex);
+            ClassicAssert.AreEqual(0, workbook.ActiveSheetIndex);
 
             workbook.CreateSheet("sheet1");
             workbook.CreateSheet("sheet2");
@@ -400,82 +400,82 @@ namespace TestCases.SS.UserModel
             // Set second sheet
             workbook.SetActiveSheet(1);
             // Test if second sheet is Set up
-            Assert.AreEqual(1, workbook.ActiveSheetIndex);
+            ClassicAssert.AreEqual(1, workbook.ActiveSheetIndex);
 
             workbook.SetActiveSheet(0);
             // Test if second sheet is Set up
-            Assert.AreEqual(0, workbook.ActiveSheetIndex);
+            ClassicAssert.AreEqual(0, workbook.ActiveSheetIndex);
             workbook.Close();
         }
 
         [Test]
         public void TestSetSheetOrder()
         {
-            IWorkbook wb = _testDataProvider.CreateWorkbook();
-
-            for (int i = 0; i < 10; i++)
+            using(var wb = _testDataProvider.CreateWorkbook())
             {
-                wb.CreateSheet("Sheet " + i);
+                for(int i = 0; i < 10; i++)
+                {
+                    wb.CreateSheet("Sheet " + i);
+                }
+
+                // Check the Initial order
+                ClassicAssert.AreEqual(0, wb.GetSheetIndex("Sheet 0"));
+                ClassicAssert.AreEqual(1, wb.GetSheetIndex("Sheet 1"));
+                ClassicAssert.AreEqual(2, wb.GetSheetIndex("Sheet 2"));
+                ClassicAssert.AreEqual(3, wb.GetSheetIndex("Sheet 3"));
+                ClassicAssert.AreEqual(4, wb.GetSheetIndex("Sheet 4"));
+                ClassicAssert.AreEqual(5, wb.GetSheetIndex("Sheet 5"));
+                ClassicAssert.AreEqual(6, wb.GetSheetIndex("Sheet 6"));
+                ClassicAssert.AreEqual(7, wb.GetSheetIndex("Sheet 7"));
+                ClassicAssert.AreEqual(8, wb.GetSheetIndex("Sheet 8"));
+                ClassicAssert.AreEqual(9, wb.GetSheetIndex("Sheet 9"));
+
+                // check active sheet
+                ClassicAssert.AreEqual(0, wb.ActiveSheetIndex);
+
+                // Change
+                wb.SetSheetOrder("Sheet 6", 0);
+                ClassicAssert.AreEqual(1, wb.ActiveSheetIndex);
+                wb.SetSheetOrder("Sheet 3", 7);
+                wb.SetSheetOrder("Sheet 1", 9);
+                // now the first sheet is at index 1
+                ClassicAssert.AreEqual(1, wb.ActiveSheetIndex);
+
+                // Check they're currently right
+                ClassicAssert.AreEqual(0, wb.GetSheetIndex("Sheet 6"));
+                ClassicAssert.AreEqual(1, wb.GetSheetIndex("Sheet 0"));
+                ClassicAssert.AreEqual(2, wb.GetSheetIndex("Sheet 2"));
+                ClassicAssert.AreEqual(3, wb.GetSheetIndex("Sheet 4"));
+                ClassicAssert.AreEqual(4, wb.GetSheetIndex("Sheet 5"));
+                ClassicAssert.AreEqual(5, wb.GetSheetIndex("Sheet 7"));
+                ClassicAssert.AreEqual(6, wb.GetSheetIndex("Sheet 3"));
+                ClassicAssert.AreEqual(7, wb.GetSheetIndex("Sheet 8"));
+                ClassicAssert.AreEqual(8, wb.GetSheetIndex("Sheet 9"));
+                ClassicAssert.AreEqual(9, wb.GetSheetIndex("Sheet 1"));
+
+                using(var wbr = _testDataProvider.WriteOutAndReadBack(wb))
+                {
+                    ClassicAssert.AreEqual(0, wbr.GetSheetIndex("Sheet 6"));
+                    ClassicAssert.AreEqual(1, wbr.GetSheetIndex("Sheet 0"));
+                    ClassicAssert.AreEqual(2, wbr.GetSheetIndex("Sheet 2"));
+                    ClassicAssert.AreEqual(3, wbr.GetSheetIndex("Sheet 4"));
+                    ClassicAssert.AreEqual(4, wbr.GetSheetIndex("Sheet 5"));
+                    ClassicAssert.AreEqual(5, wbr.GetSheetIndex("Sheet 7"));
+                    ClassicAssert.AreEqual(6, wbr.GetSheetIndex("Sheet 3"));
+                    ClassicAssert.AreEqual(7, wbr.GetSheetIndex("Sheet 8"));
+                    ClassicAssert.AreEqual(8, wbr.GetSheetIndex("Sheet 9"));
+                    ClassicAssert.AreEqual(9, wbr.GetSheetIndex("Sheet 1"));
+
+                    ClassicAssert.AreEqual(1, wb.ActiveSheetIndex);
+
+                    // Now Get the index by the sheet, not the name
+                    for(int i = 0; i < 10; i++)
+                    {
+                        ISheet s = wbr.GetSheetAt(i);
+                        ClassicAssert.AreEqual(i, wbr.GetSheetIndex(s));
+                    }
+                }
             }
-
-            // Check the Initial order
-            Assert.AreEqual(0, wb.GetSheetIndex("Sheet 0"));
-            Assert.AreEqual(1, wb.GetSheetIndex("Sheet 1"));
-            Assert.AreEqual(2, wb.GetSheetIndex("Sheet 2"));
-            Assert.AreEqual(3, wb.GetSheetIndex("Sheet 3"));
-            Assert.AreEqual(4, wb.GetSheetIndex("Sheet 4"));
-            Assert.AreEqual(5, wb.GetSheetIndex("Sheet 5"));
-            Assert.AreEqual(6, wb.GetSheetIndex("Sheet 6"));
-            Assert.AreEqual(7, wb.GetSheetIndex("Sheet 7"));
-            Assert.AreEqual(8, wb.GetSheetIndex("Sheet 8"));
-            Assert.AreEqual(9, wb.GetSheetIndex("Sheet 9"));
-
-            // check active sheet
-            Assert.AreEqual(0, wb.ActiveSheetIndex);
-
-            // Change
-            wb.SetSheetOrder("Sheet 6", 0);
-            Assert.AreEqual(1, wb.ActiveSheetIndex);
-            wb.SetSheetOrder("Sheet 3", 7);
-            wb.SetSheetOrder("Sheet 1", 9);
-            // now the first sheet is at index 1
-            Assert.AreEqual(1, wb.ActiveSheetIndex);
-
-            // Check they're currently right
-            Assert.AreEqual(0, wb.GetSheetIndex("Sheet 6"));
-            Assert.AreEqual(1, wb.GetSheetIndex("Sheet 0"));
-            Assert.AreEqual(2, wb.GetSheetIndex("Sheet 2"));
-            Assert.AreEqual(3, wb.GetSheetIndex("Sheet 4"));
-            Assert.AreEqual(4, wb.GetSheetIndex("Sheet 5"));
-            Assert.AreEqual(5, wb.GetSheetIndex("Sheet 7"));
-            Assert.AreEqual(6, wb.GetSheetIndex("Sheet 3"));
-            Assert.AreEqual(7, wb.GetSheetIndex("Sheet 8"));
-            Assert.AreEqual(8, wb.GetSheetIndex("Sheet 9"));
-            Assert.AreEqual(9, wb.GetSheetIndex("Sheet 1"));
-
-            IWorkbook wbr = _testDataProvider.WriteOutAndReadBack(wb);
-            wb.Close();
-
-            Assert.AreEqual(0, wbr.GetSheetIndex("Sheet 6"));
-            Assert.AreEqual(1, wbr.GetSheetIndex("Sheet 0"));
-            Assert.AreEqual(2, wbr.GetSheetIndex("Sheet 2"));
-            Assert.AreEqual(3, wbr.GetSheetIndex("Sheet 4"));
-            Assert.AreEqual(4, wbr.GetSheetIndex("Sheet 5"));
-            Assert.AreEqual(5, wbr.GetSheetIndex("Sheet 7"));
-            Assert.AreEqual(6, wbr.GetSheetIndex("Sheet 3"));
-            Assert.AreEqual(7, wbr.GetSheetIndex("Sheet 8"));
-            Assert.AreEqual(8, wbr.GetSheetIndex("Sheet 9"));
-            Assert.AreEqual(9, wbr.GetSheetIndex("Sheet 1"));
-
-            Assert.AreEqual(1, wb.ActiveSheetIndex);
-
-            // Now Get the index by the sheet, not the name
-            for (int i = 0; i < 10; i++)
-            {
-                ISheet s = wbr.GetSheetAt(i);
-                Assert.AreEqual(i, wbr.GetSheetIndex(s));
-            }
-            wbr.Close();
         }
 
         [Test]
@@ -487,24 +487,24 @@ namespace TestCases.SS.UserModel
             sheet.CreateRow(1).CreateCell(0).SetCellValue(36.6);
             sheet.AddMergedRegion(new CellRangeAddress(0, 1, 0, 2));
             sheet.AddMergedRegion(new CellRangeAddress(2, 3, 0, 2));
-            Assert.IsTrue(sheet.IsSelected);
+            ClassicAssert.IsTrue(sheet.IsSelected);
 
             ISheet ClonedSheet = book.CloneSheet(0);
-            Assert.AreEqual("TEST (2)", ClonedSheet.SheetName);
-            Assert.AreEqual(2, ClonedSheet.PhysicalNumberOfRows);
-            Assert.AreEqual(2, ClonedSheet.NumMergedRegions);
-            Assert.IsFalse(ClonedSheet.IsSelected);
+            ClassicAssert.AreEqual("TEST (2)", ClonedSheet.SheetName);
+            ClassicAssert.AreEqual(2, ClonedSheet.PhysicalNumberOfRows);
+            ClassicAssert.AreEqual(2, ClonedSheet.NumMergedRegions);
+            ClassicAssert.IsFalse(ClonedSheet.IsSelected);
 
             //Cloned sheet is a deep copy, Adding rows or merged regions in the original does not affect the clone
             sheet.CreateRow(2).CreateCell(0).SetCellValue(1);
             sheet.AddMergedRegion(new CellRangeAddress(4, 5, 0, 2));
-            Assert.AreEqual(2, ClonedSheet.PhysicalNumberOfRows);
-            Assert.AreEqual(2, ClonedSheet.NumMergedRegions);
+            ClassicAssert.AreEqual(2, ClonedSheet.PhysicalNumberOfRows);
+            ClassicAssert.AreEqual(2, ClonedSheet.NumMergedRegions);
 
             ClonedSheet.CreateRow(2).CreateCell(0).SetCellValue(1);
             ClonedSheet.AddMergedRegion(new CellRangeAddress(6, 7, 0, 2));
-            Assert.AreEqual(3, ClonedSheet.PhysicalNumberOfRows);
-            Assert.AreEqual(3, ClonedSheet.NumMergedRegions);
+            ClassicAssert.AreEqual(3, ClonedSheet.PhysicalNumberOfRows);
+            ClassicAssert.AreEqual(3, ClonedSheet.NumMergedRegions);
             book.Close();
         }
 
@@ -513,27 +513,27 @@ namespace TestCases.SS.UserModel
         {
             IWorkbook wb1 = _testDataProvider.CreateWorkbook();
             ISheet sheet = wb1.CreateSheet();
-            Assert.AreSame(wb1, sheet.Workbook);
+            ClassicAssert.AreSame(wb1, sheet.Workbook);
 
             IRow row = sheet.CreateRow(0);
-            Assert.AreSame(sheet, row.Sheet);
+            ClassicAssert.AreSame(sheet, row.Sheet);
 
             ICell cell = row.CreateCell(1);
-            Assert.AreSame(sheet, cell.Sheet);
-            Assert.AreSame(row, cell.Row);
+            ClassicAssert.AreSame(sheet, cell.Sheet);
+            ClassicAssert.AreSame(row, cell.Row);
 
             IWorkbook wb2 = _testDataProvider.WriteOutAndReadBack(wb1);
             wb1.Close();
 
             sheet = wb2.GetSheetAt(0);
-            Assert.AreSame(wb2, sheet.Workbook);
+            ClassicAssert.AreSame(wb2, sheet.Workbook);
 
             row = sheet.GetRow(0);
-            Assert.AreSame(sheet, row.Sheet);
+            ClassicAssert.AreSame(sheet, row.Sheet);
 
             cell = row.GetCell(1);
-            Assert.AreSame(sheet, cell.Sheet);
-            Assert.AreSame(row, cell.Row);
+            ClassicAssert.AreSame(sheet, cell.Sheet);
+            ClassicAssert.AreSame(row, cell.Row);
             wb2.Close();
         }
 
@@ -553,15 +553,15 @@ namespace TestCases.SS.UserModel
             ISheet sheet1 = wb.CreateSheet();
             sheet1.RepeatingRows = (cra);
             sheet1.RepeatingColumns = (cra);
-            Assert.AreEqual(expRows, sheet1.RepeatingRows.FormatAsString());
-            Assert.AreEqual(expCols, sheet1.RepeatingColumns.FormatAsString());
+            ClassicAssert.AreEqual(expRows, sheet1.RepeatingRows.FormatAsString());
+            ClassicAssert.AreEqual(expCols, sheet1.RepeatingColumns.FormatAsString());
 
             //must handle sheets with quotas, see Bugzilla #47294
             ISheet sheet2 = wb.CreateSheet("My' Sheet");
             sheet2.RepeatingRows = (cra);
             sheet2.RepeatingColumns = (cra);
-            Assert.AreEqual(expRows, sheet2.RepeatingRows.FormatAsString());
-            Assert.AreEqual(expCols, sheet2.RepeatingColumns.FormatAsString());
+            ClassicAssert.AreEqual(expRows, sheet2.RepeatingRows.FormatAsString());
+            ClassicAssert.AreEqual(expCols, sheet2.RepeatingColumns.FormatAsString());
             wb.Close();
         }
 
@@ -611,33 +611,33 @@ namespace TestCases.SS.UserModel
 
             //Test the sheetname
             s = wb2.GetSheet("\u20ac");
-            Assert.IsNotNull(s);
+            ClassicAssert.IsNotNull(s);
 
             //Test the header
             h = s.Header;
-            Assert.AreEqual(h.Center, "\u20ac");
-            Assert.AreEqual(h.Left, "\u20ac");
-            Assert.AreEqual(h.Right, "\u20ac");
+            ClassicAssert.AreEqual(h.Center, "\u20ac");
+            ClassicAssert.AreEqual(h.Left, "\u20ac");
+            ClassicAssert.AreEqual(h.Right, "\u20ac");
 
             //Test the footer
             f = s.Footer;
-            Assert.AreEqual(f.Center, "\u20ac");
-            Assert.AreEqual(f.Left, "\u20ac");
-            Assert.AreEqual(f.Right, "\u20ac");
+            ClassicAssert.AreEqual(f.Center, "\u20ac");
+            ClassicAssert.AreEqual(f.Left, "\u20ac");
+            ClassicAssert.AreEqual(f.Right, "\u20ac");
 
             //Test the dataformat
             r = s.GetRow(0);
             c = r.GetCell(1);
             df = wb2.CreateDataFormat();
-            Assert.AreEqual(formatStr, df.GetFormat(c.CellStyle.DataFormat));
+            ClassicAssert.AreEqual(formatStr, df.GetFormat(c.CellStyle.DataFormat));
 
             //Test the cell string value
             c2 = r.GetCell(2);
-            Assert.AreEqual(c.RichStringCellValue.String, "\u20ac");
+            ClassicAssert.AreEqual(c.RichStringCellValue.String, "\u20ac");
 
             //Test the cell formula
             c3 = r.GetCell(3);
-            Assert.AreEqual(c3.CellFormula, formulaString);
+            ClassicAssert.AreEqual(c3.CellFormula, formulaString);
 
             wb2.Close();
         }
@@ -701,12 +701,12 @@ namespace TestCases.SS.UserModel
             IName sale_3 = wb1.GetNameAt(2);
             IName sale_4 = wb1.GetNameAt(3);
 
-            Assert.AreEqual("sale_2", sale_2.NameName);
-            Assert.AreEqual("'Testing 47100'!$A$1", sale_2.RefersToFormula);
-            Assert.AreEqual("sale_3", sale_3.NameName);
-            Assert.AreEqual("'Testing 47100'!$B$1", sale_3.RefersToFormula);
-            Assert.AreEqual("sale_4", sale_4.NameName);
-            Assert.AreEqual("'To be Renamed'!$A$3", sale_4.RefersToFormula);
+            ClassicAssert.AreEqual("sale_2", sale_2.NameName);
+            ClassicAssert.AreEqual("'Testing 47100'!$A$1", sale_2.RefersToFormula);
+            ClassicAssert.AreEqual("sale_3", sale_3.NameName);
+            ClassicAssert.AreEqual("'Testing 47100'!$B$1", sale_3.RefersToFormula);
+            ClassicAssert.AreEqual("sale_4", sale_4.NameName);
+            ClassicAssert.AreEqual("'To be Renamed'!$A$3", sale_4.RefersToFormula);
 
             IFormulaEvaluator Evaluator = wb1.GetCreationHelper(/*getter*/).CreateFormulaEvaluator();
 
@@ -714,32 +714,32 @@ namespace TestCases.SS.UserModel
             ICell cell1 = sh1.GetRow(1).GetCell(0);
             ICell cell2 = sh1.GetRow(2).GetCell(0);
 
-            Assert.AreEqual("SUM('Testing 47100'!A1:C1)", cell0.CellFormula);
-            Assert.AreEqual("SUM('Testing 47100'!A1:C1,'To be Renamed'!A1:A5)", cell1.CellFormula);
-            Assert.AreEqual("sale_2+sale_3+'Testing 47100'!C1", cell2.CellFormula);
+            ClassicAssert.AreEqual("SUM('Testing 47100'!A1:C1)", cell0.CellFormula);
+            ClassicAssert.AreEqual("SUM('Testing 47100'!A1:C1,'To be Renamed'!A1:A5)", cell1.CellFormula);
+            ClassicAssert.AreEqual("sale_2+sale_3+'Testing 47100'!C1", cell2.CellFormula);
 
-            Assert.AreEqual(6.0, Evaluator.Evaluate(cell0).NumberValue);
-            Assert.AreEqual(21.0, Evaluator.Evaluate(cell1).NumberValue);
-            Assert.AreEqual(6.0, Evaluator.Evaluate(cell2).NumberValue);
+            ClassicAssert.AreEqual(6.0, Evaluator.Evaluate(cell0).NumberValue);
+            ClassicAssert.AreEqual(21.0, Evaluator.Evaluate(cell1).NumberValue);
+            ClassicAssert.AreEqual(6.0, Evaluator.Evaluate(cell2).NumberValue);
 
             wb1.SetSheetName(1, "47100 - First");
             wb1.SetSheetName(2, "47100 - Second");
 
-            Assert.AreEqual("sale_2", sale_2.NameName);
-            Assert.AreEqual("'47100 - First'!$A$1", sale_2.RefersToFormula);
-            Assert.AreEqual("sale_3", sale_3.NameName);
-            Assert.AreEqual("'47100 - First'!$B$1", sale_3.RefersToFormula);
-            Assert.AreEqual("sale_4", sale_4.NameName);
-            Assert.AreEqual("'47100 - Second'!$A$3", sale_4.RefersToFormula);
+            ClassicAssert.AreEqual("sale_2", sale_2.NameName);
+            ClassicAssert.AreEqual("'47100 - First'!$A$1", sale_2.RefersToFormula);
+            ClassicAssert.AreEqual("sale_3", sale_3.NameName);
+            ClassicAssert.AreEqual("'47100 - First'!$B$1", sale_3.RefersToFormula);
+            ClassicAssert.AreEqual("sale_4", sale_4.NameName);
+            ClassicAssert.AreEqual("'47100 - Second'!$A$3", sale_4.RefersToFormula);
 
-            Assert.AreEqual("SUM('47100 - First'!A1:C1)", cell0.CellFormula);
-            Assert.AreEqual("SUM('47100 - First'!A1:C1,'47100 - Second'!A1:A5)", cell1.CellFormula);
-            Assert.AreEqual("sale_2+sale_3+'47100 - First'!C1", cell2.CellFormula);
+            ClassicAssert.AreEqual("SUM('47100 - First'!A1:C1)", cell0.CellFormula);
+            ClassicAssert.AreEqual("SUM('47100 - First'!A1:C1,'47100 - Second'!A1:A5)", cell1.CellFormula);
+            ClassicAssert.AreEqual("sale_2+sale_3+'47100 - First'!C1", cell2.CellFormula);
 
             Evaluator.ClearAllCachedResultValues();
-            Assert.AreEqual(6.0, Evaluator.Evaluate(cell0).NumberValue);
-            Assert.AreEqual(21.0, Evaluator.Evaluate(cell1).NumberValue);
-            Assert.AreEqual(6.0, Evaluator.Evaluate(cell2).NumberValue);
+            ClassicAssert.AreEqual(6.0, Evaluator.Evaluate(cell0).NumberValue);
+            ClassicAssert.AreEqual(21.0, Evaluator.Evaluate(cell1).NumberValue);
+            ClassicAssert.AreEqual(6.0, Evaluator.Evaluate(cell2).NumberValue);
 
             IWorkbook wb2 = _testDataProvider.WriteOutAndReadBack(wb1);
             wb1.Close();
@@ -754,21 +754,21 @@ namespace TestCases.SS.UserModel
             cell1 = sh1.GetRow(1).GetCell(0);
             cell2 = sh1.GetRow(2).GetCell(0);
 
-            Assert.AreEqual("sale_2", sale_2.NameName);
-            Assert.AreEqual("'47100 - First'!$A$1", sale_2.RefersToFormula);
-            Assert.AreEqual("sale_3", sale_3.NameName);
-            Assert.AreEqual("'47100 - First'!$B$1", sale_3.RefersToFormula);
-            Assert.AreEqual("sale_4", sale_4.NameName);
-            Assert.AreEqual("'47100 - Second'!$A$3", sale_4.RefersToFormula);
+            ClassicAssert.AreEqual("sale_2", sale_2.NameName);
+            ClassicAssert.AreEqual("'47100 - First'!$A$1", sale_2.RefersToFormula);
+            ClassicAssert.AreEqual("sale_3", sale_3.NameName);
+            ClassicAssert.AreEqual("'47100 - First'!$B$1", sale_3.RefersToFormula);
+            ClassicAssert.AreEqual("sale_4", sale_4.NameName);
+            ClassicAssert.AreEqual("'47100 - Second'!$A$3", sale_4.RefersToFormula);
 
-            Assert.AreEqual("SUM('47100 - First'!A1:C1)", cell0.CellFormula);
-            Assert.AreEqual("SUM('47100 - First'!A1:C1,'47100 - Second'!A1:A5)", cell1.CellFormula);
-            Assert.AreEqual("sale_2+sale_3+'47100 - First'!C1", cell2.CellFormula);
+            ClassicAssert.AreEqual("SUM('47100 - First'!A1:C1)", cell0.CellFormula);
+            ClassicAssert.AreEqual("SUM('47100 - First'!A1:C1,'47100 - Second'!A1:A5)", cell1.CellFormula);
+            ClassicAssert.AreEqual("sale_2+sale_3+'47100 - First'!C1", cell2.CellFormula);
 
             Evaluator = wb2.GetCreationHelper(/*getter*/).CreateFormulaEvaluator();
-            Assert.AreEqual(6.0, Evaluator.Evaluate(cell0).NumberValue);
-            Assert.AreEqual(21.0, Evaluator.Evaluate(cell1).NumberValue);
-            Assert.AreEqual(6.0, Evaluator.Evaluate(cell2).NumberValue);
+            ClassicAssert.AreEqual(6.0, Evaluator.Evaluate(cell0).NumberValue);
+            ClassicAssert.AreEqual(21.0, Evaluator.Evaluate(cell1).NumberValue);
+            ClassicAssert.AreEqual(6.0, Evaluator.Evaluate(cell2).NumberValue);
             wb2.Close();
         }
 
@@ -785,7 +785,7 @@ namespace TestCases.SS.UserModel
                 ICell cellA = sheet.GetRow(1).GetCell(0);
                 ICell cellB = sheet.GetRow(1).GetCell(1);
 
-                Assert.AreEqual(cellB.StringCellValue, Evaluator.Evaluate(cellA).StringValue);
+                ClassicAssert.AreEqual(cellB.StringCellValue, Evaluator.Evaluate(cellA).StringValue);
             }
 
             wb.SetSheetName(0, "Renamed by POI");
@@ -796,7 +796,7 @@ namespace TestCases.SS.UserModel
                 ICell cellA = sheet.GetRow(1).GetCell(0);
                 ICell cellB = sheet.GetRow(1).GetCell(1);
 
-                Assert.AreEqual(cellB.StringCellValue, Evaluator.Evaluate(cellA).StringValue);
+                ClassicAssert.AreEqual(cellB.StringCellValue, Evaluator.Evaluate(cellA).StringValue);
             }
             wb.Close();
         }
@@ -808,10 +808,10 @@ namespace TestCases.SS.UserModel
             {
                 sheetNames.Append(wb.GetSheetAt(i).SheetName).Append(",");
             }
-            Assert.AreEqual(sheets.Length, wb.NumberOfSheets, "Had: " + sheetNames.ToString());
+            ClassicAssert.AreEqual(sheets.Length, wb.NumberOfSheets, "Had: " + sheetNames.ToString());
             for (int i = 0; i < wb.NumberOfSheets; i++)
             {
-                Assert.AreEqual(sheets[i], wb.GetSheetAt(i).SheetName, "Had: " + sheetNames.ToString());
+                ClassicAssert.AreEqual(sheets[i], wb.GetSheetAt(i).SheetName, "Had: " + sheetNames.ToString());
             }
         }
 
@@ -851,8 +851,8 @@ namespace TestCases.SS.UserModel
             IWorkbook b = _testDataProvider.CreateWorkbook();
             try
             {
-                Assert.AreEqual(b.ActiveSheetIndex, 0);
-                Assert.AreEqual(b.FirstVisibleTab, 0);
+                ClassicAssert.AreEqual(b.ActiveSheetIndex, 0);
+                ClassicAssert.AreEqual(b.FirstVisibleTab, 0);
             }
             catch (NullReferenceException)
             {
@@ -866,14 +866,14 @@ namespace TestCases.SS.UserModel
         public void GetSpreadsheetVersion()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
-            Assert.AreEqual(_testDataProvider.GetSpreadsheetVersion(), wb.SpreadsheetVersion);
+            ClassicAssert.AreEqual(_testDataProvider.GetSpreadsheetVersion(), wb.SpreadsheetVersion);
             wb.Close();
         }
 
         protected void verifySpreadsheetVersion(SpreadsheetVersion expected)
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
-            Assert.AreEqual(expected, wb.SpreadsheetVersion);
+            ClassicAssert.AreEqual(expected, wb.SpreadsheetVersion);
             wb.Close();
         }
 
@@ -890,17 +890,17 @@ namespace TestCases.SS.UserModel
         {
             // First up, try a simple file
             IWorkbook b = _testDataProvider.CreateWorkbook();
-            Assert.AreEqual(0, b.NumberOfSheets);
+            ClassicAssert.AreEqual(0, b.NumberOfSheets);
             b.CreateSheet("Sheet One");
             b.CreateSheet("Sheet Two");
-            Assert.AreEqual(2, b.NumberOfSheets);
+            ClassicAssert.AreEqual(2, b.NumberOfSheets);
             b.CloneSheet(0);
-            Assert.AreEqual(3, b.NumberOfSheets);
+            ClassicAssert.AreEqual(3, b.NumberOfSheets);
             // Now try a problem one with drawing records in it
             IWorkbook bBack = HSSFTestDataSamples.OpenSampleWorkbook("SheetWithDrawing.xls");
-            Assert.AreEqual(1, bBack.NumberOfSheets);
+            ClassicAssert.AreEqual(1, bBack.NumberOfSheets);
             bBack.CloneSheet(0);
-            Assert.AreEqual(2, bBack.NumberOfSheets);
+            ClassicAssert.AreEqual(2, bBack.NumberOfSheets);
             bBack.Close();
             b.Close();
         }
@@ -912,18 +912,18 @@ namespace TestCases.SS.UserModel
             ISheet sheet2 = wb.CreateSheet("Sheet2");
             ISheet sheet3 = wb.CreateSheet("Sheet3");
             ISheet sheet4 = wb.CreateSheet("Sheet4");
-            Assert.AreEqual(0, wb.GetSheetIndex(sheet1));
-            Assert.AreEqual(1, wb.GetSheetIndex(sheet2));
-            Assert.AreEqual(2, wb.GetSheetIndex(sheet3));
-            Assert.AreEqual(3, wb.GetSheetIndex(sheet4));
+            ClassicAssert.AreEqual(0, wb.GetSheetIndex(sheet1));
+            ClassicAssert.AreEqual(1, wb.GetSheetIndex(sheet2));
+            ClassicAssert.AreEqual(2, wb.GetSheetIndex(sheet3));
+            ClassicAssert.AreEqual(3, wb.GetSheetIndex(sheet4));
             // remove sheets
             wb.RemoveSheetAt(0);
             wb.RemoveSheetAt(2);
             // ensure that sheets are moved up and removed sheets are not found any more
-            Assert.AreEqual(-1, wb.GetSheetIndex(sheet1));
-            Assert.AreEqual(0, wb.GetSheetIndex(sheet2));
-            Assert.AreEqual(1, wb.GetSheetIndex(sheet3));
-            Assert.AreEqual(-1, wb.GetSheetIndex(sheet4));
+            ClassicAssert.AreEqual(-1, wb.GetSheetIndex(sheet1));
+            ClassicAssert.AreEqual(0, wb.GetSheetIndex(sheet2));
+            ClassicAssert.AreEqual(1, wb.GetSheetIndex(sheet3));
+            ClassicAssert.AreEqual(-1, wb.GetSheetIndex(sheet4));
             wb.Close();
         }
         [Test]
@@ -931,7 +931,7 @@ namespace TestCases.SS.UserModel
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
             ISheet sheet1 = wb.CreateSheet("Sheet1");
-            Assert.IsNotNull(sheet1);
+            ClassicAssert.IsNotNull(sheet1);
             try
             {
                 wb.CreateSheet("Sheet1");
@@ -939,7 +939,7 @@ namespace TestCases.SS.UserModel
             }
             catch (ArgumentException e)
             {
-                Assert.IsTrue(e.Message.Contains("already contains a sheet named 'Sheet1'"), e.Message);
+                ClassicAssert.IsTrue(e.Message.Contains("already contains a sheet named 'Sheet1'"), e.Message);
             }
             wb.Close();
         }
@@ -977,16 +977,16 @@ namespace TestCases.SS.UserModel
             // The actual dimensions don't matter as much as having XSSF and SXSSF produce the same size Drawings
 
             // Check Drawing height
-            Assert.AreEqual(0, anchor.Row1);
-            Assert.AreEqual(0, anchor.Row2);
-            Assert.AreEqual(0, anchor.Dy1);
-            Assert.AreEqual(1609725, anchor.Dy2); //HSSF: 225
+            ClassicAssert.AreEqual(0, anchor.Row1);
+            ClassicAssert.AreEqual(0, anchor.Row2);
+            ClassicAssert.AreEqual(0, anchor.Dy1);
+            ClassicAssert.AreEqual(1609725, anchor.Dy2); //HSSF: 225
 
             // Check Drawing width
-            Assert.AreEqual(0, anchor.Col1);
-            Assert.AreEqual(0, anchor.Col2);
-            Assert.AreEqual(0, anchor.Dx1);
-            Assert.AreEqual(1114425, anchor.Dx2); //HSSF: 171
+            ClassicAssert.AreEqual(0, anchor.Col1);
+            ClassicAssert.AreEqual(0, anchor.Col2);
+            ClassicAssert.AreEqual(0, anchor.Dx1);
+            ClassicAssert.AreEqual(1114425, anchor.Dx2); //HSSF: 171
 
             bool WriteOut = false;
             if (WriteOut)

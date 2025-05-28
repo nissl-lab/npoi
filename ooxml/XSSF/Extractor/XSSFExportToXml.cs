@@ -78,7 +78,7 @@ namespace NPOI.XSSF.Extractor
             ExportToXML(os, "UTF-8", validate);
         }
 
-        private XmlDocument GetEmptyDocument()
+        private static XmlDocument GetEmptyDocument()
         {
             return new XmlDocument();
         }
@@ -160,7 +160,7 @@ namespace NPOI.XSSF.Extractor
                         if (cell != null)
                         {
                             XmlNode currentNode = GetNodeByXPath(xpath, doc.FirstChild, doc, false);
-                            mapCellOnNode(cell, currentNode);
+                            XSSFExportToXml.mapCellOnNode(cell, currentNode);
                         }
                     }
 
@@ -199,7 +199,7 @@ namespace NPOI.XSSF.Extractor
                                             XSSFXmlColumnPr pointer = new XSSFXmlColumnPr(table, ctTableColumn,ctTableColumn.xmlColumnPr);
                                             String localXPath = pointer.LocalXPath;
                                             XmlNode currentNode = GetNodeByXPath(localXPath,tableRootNode,doc,false);
-                                            mapCellOnNode(cell, currentNode);
+                                            XSSFExportToXml.mapCellOnNode(cell, currentNode);
                                         }
                                     }
                                 }
@@ -219,7 +219,7 @@ namespace NPOI.XSSF.Extractor
             bool isValid = true;
             if (validate)
             {
-                isValid = this.IsValid(doc);
+                isValid = IsValid(doc);
             }
 
 
@@ -248,7 +248,7 @@ namespace NPOI.XSSF.Extractor
          * @param xml the XML to validate
          * @return
          */
-        private bool IsValid(XmlDocument xml)
+        private static bool IsValid(XmlDocument xml)
         {
             //bool isValid = false;
             //try
@@ -274,7 +274,7 @@ namespace NPOI.XSSF.Extractor
         }
 
 
-        private void mapCellOnNode(XSSFCell cell, XmlNode node)
+        private static void mapCellOnNode(XSSFCell cell, XmlNode node)
         {
 
             String value = "";
@@ -293,7 +293,7 @@ namespace NPOI.XSSF.Extractor
                     {
                         if(DateUtil.IsCellDateFormatted(cell))
                         {
-                            value = GetFormattedDate(cell);
+                            value = XSSFExportToXml.GetFormattedDate(cell);
                         }
                         else if(cell.CachedFormulaResultType== CellType.Numeric)
                         {
@@ -308,7 +308,7 @@ namespace NPOI.XSSF.Extractor
                 case CellType.Numeric:
                     if(DateUtil.IsCellDateFormatted(cell))
                     {
-                        value = GetFormattedDate(cell);
+                        value = XSSFExportToXml.GetFormattedDate(cell);
                     }
                     else
                     {
@@ -318,9 +318,8 @@ namespace NPOI.XSSF.Extractor
                 default:
                     break;
             }
-            if (node is XmlElement)
+            if (node is XmlElement currentElement)
             {
-                XmlElement currentElement = (XmlElement)node;
                 currentElement.InnerText = value;
             }
             else
@@ -329,14 +328,14 @@ namespace NPOI.XSSF.Extractor
             }
         }
 
-        private String RemoveNamespace(String elementName)
+        private static String RemoveNamespace(String elementName)
         {
             return Regex.IsMatch(elementName,".*:.*") ? elementName.Split(new char[]{':'})[1] : elementName;
         }
 
-        private String GetFormattedDate(XSSFCell cell)
+        private static String GetFormattedDate(XSSFCell cell)
         {
-            DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             sdf.TimeZone= LocaleUtil.GetUserTimeZoneInfo();
             return sdf.Format(cell.DateCellValue);
         }
@@ -354,7 +353,7 @@ namespace NPOI.XSSF.Extractor
                 String axisName = RemoveNamespace(xpathTokens[i]);
 
 
-                if (!axisName.StartsWith("@"))
+                if (!axisName.StartsWith('@'))
                 {
 
                     XmlNodeList list = currentNode.ChildNodes;
@@ -383,7 +382,7 @@ namespace NPOI.XSSF.Extractor
             return currentNode;
         }
 
-        private XmlNode CreateAttribute(XmlDocument doc, XmlNode currentNode, String axisName)
+        private static XmlNode CreateAttribute(XmlDocument doc, XmlNode currentNode, String axisName)
         {
             String attributeName = axisName.Substring(1);
             XmlAttributeCollection attributesMap = currentNode.Attributes;
@@ -411,7 +410,7 @@ namespace NPOI.XSSF.Extractor
             return selectedNode;
         }
 
-        private XmlNode selectNode(String axisName, XmlNodeList list)
+        private static XmlNode selectNode(String axisName, XmlNodeList list)
         {
             XmlNode selectedNode = null;
             for (int j = 0; j < list.Count; j++)
@@ -472,8 +471,8 @@ namespace NPOI.XSSF.Extractor
                 }
                 else
                 {
-                    int leftIndex = IndexOfElementInComplexType(leftElementName, localComplexTypeRootNode);
-                    int rightIndex = IndexOfElementInComplexType(rightElementName, localComplexTypeRootNode);
+                    int leftIndex = XSSFExportToXml.IndexOfElementInComplexType(leftElementName, localComplexTypeRootNode);
+                    int rightIndex = XSSFExportToXml.IndexOfElementInComplexType(rightElementName, localComplexTypeRootNode);
                     if (leftIndex != -1 && rightIndex != -1)
                     {
                         if (leftIndex < rightIndex)
@@ -494,7 +493,7 @@ namespace NPOI.XSSF.Extractor
             return result;
         }
 
-        private int IndexOfElementInComplexType(String elementName, XmlNode complexType)
+        private static int IndexOfElementInComplexType(String elementName, XmlNode complexType)
         {
             if(complexType == null)
             {
@@ -522,7 +521,8 @@ namespace NPOI.XSSF.Extractor
             }
             return indexOf;
         }
-        private XmlNode GetNameOrRefElement(XmlNode node)
+
+        private static XmlNode GetNameOrRefElement(XmlNode node)
         {
             XmlNode returnNode = node.Attributes.GetNamedItem("name");
             if(returnNode != null)
@@ -533,7 +533,7 @@ namespace NPOI.XSSF.Extractor
             return node.Attributes.GetNamedItem("ref");
         }
 
-        private XmlNode GetComplexTypeForElement(String elementName, XmlNode xmlSchema, XmlNode localComplexTypeRootNode)
+        private static XmlNode GetComplexTypeForElement(String elementName, XmlNode xmlSchema, XmlNode localComplexTypeRootNode)
         {
             String elementNameWithoutNamespace = RemoveNamespace(elementName);
 
@@ -547,8 +547,8 @@ namespace NPOI.XSSF.Extractor
             }
             return complexTypeNode;
         }
-        private String GetComplexTypeNameFromChildren(XmlNode localComplexTypeRootNode,
-            String elementNameWithoutNamespace)
+
+        private static String GetComplexTypeNameFromChildren(XmlNode localComplexTypeRootNode, String elementNameWithoutNamespace)
         {
             if(localComplexTypeRootNode == null)
             {
@@ -579,10 +579,8 @@ namespace NPOI.XSSF.Extractor
             }
             return complexTypeName;
         }
-        private XmlNode GetComplexTypeNodeFromSchemaChildren(XmlNode xmlSchema, XmlNode complexTypeNode,
-           String complexTypeName)
+        private static XmlNode GetComplexTypeNodeFromSchemaChildren(XmlNode xmlSchema, XmlNode complexTypeNode, String complexTypeName)
         {
-
             XmlNodeList complexTypeList = xmlSchema.ChildNodes;
             for(int i = 0; i < complexTypeList.Count; i++)
             {

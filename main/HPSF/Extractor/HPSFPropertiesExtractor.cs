@@ -17,7 +17,8 @@
 namespace NPOI.HPSF.Extractor
 {
     using System;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
     using System.IO;
     using System.Collections;
 
@@ -52,7 +53,7 @@ namespace NPOI.HPSF.Extractor
         public HPSFPropertiesExtractor(NPOIFSFileSystem fs)
             : base(new HPSFPropertiesOnlyDocument(fs))
         {
-            
+
         }
         /// <summary>
         /// Gets the document summary information text.
@@ -62,26 +63,26 @@ namespace NPOI.HPSF.Extractor
         {
             get
             {
-                if (document == null)
+                if(document == null)
                 {  // event based extractor does not have a document
                     return "";
                 }
                 DocumentSummaryInformation dsi = document.DocumentSummaryInformation;
-                StringBuilder text = new StringBuilder();
+                using var text = ZString.CreateStringBuilder();
 
                 // Normal properties
                 text.Append(GetPropertiesText(dsi));
 
                 // Now custom ones
                 CustomProperties cps = dsi == null ? null : dsi.CustomProperties;
-                
-                if (cps != null)
+
+                if(cps != null)
                 {
                     IEnumerator keys = cps.NameSet().GetEnumerator();
-                    while (keys.MoveNext())
+                    while(keys.MoveNext())
                     {
                         String key = keys.Current.ToString();
-                        String val = HelperPropertySet.GetPropertyValueText(cps[key]);
+                        String val = HelperPropertySet.GetPropertyValueText(cps.Get(key));
                         text.Append(key + " = " + val + "\n");
                     }
                 }
@@ -97,7 +98,7 @@ namespace NPOI.HPSF.Extractor
         {
             get
             {
-                if (document == null)
+                if(document == null)
                 {  // event based extractor does not have a document
                     return "";
                 }
@@ -113,23 +114,23 @@ namespace NPOI.HPSF.Extractor
         /// </summary>
         /// <param name="ps">The ps.</param>
         /// <returns></returns>
-        private static String GetPropertiesText(SpecialPropertySet ps)
+        private static String GetPropertiesText(PropertySet ps)
         {
-            if (ps == null)
+            if(ps == null)
             {
                 // Not defined, oh well
                 return "";
             }
 
-            StringBuilder text = new StringBuilder();
+            using var text = ZString.CreateStringBuilder();
 
             Wellknown.PropertyIDMap idMap = ps.PropertySetIDMap;
             Property[] props = ps.Properties;
-            for (int i = 0; i < props.Length; i++)
+            for(int i = 0; i < props.Length; i++)
             {
                 String type = props[i].ID.ToString(CultureInfo.InvariantCulture);
                 Object typeObj = idMap.Get(props[i].ID);
-                if (typeObj != null)
+                if(typeObj != null)
                 {
                     type = typeObj.ToString();
                 }
@@ -140,7 +141,7 @@ namespace NPOI.HPSF.Extractor
 
             return text.ToString();
         }
-        
+
 
         /// <summary>
         /// Return the text of all the properties defined in
@@ -177,7 +178,7 @@ namespace NPOI.HPSF.Extractor
             }
             public static String GetPropertyValueText(Object val)
             {
-                if (val == null)
+                if(val == null)
                 {
                     return "(not set)";
                 }

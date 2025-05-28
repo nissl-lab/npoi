@@ -53,13 +53,13 @@ namespace NPOI.SS.Formula.Functions
             return new MyAggregator();
         }
 
-        private class MyAggregator : IAggregator
+        private sealed class MyAggregator : IAggregator
         {
             double accumulator = 0.0;
 
             public void AddValue(ValueEval value)
             {
-                accumulator += (value is NumberEval) ? ((NumberEval) value).NumberValue : 0.0;
+                accumulator += (value is NumberEval eval) ? eval.NumberValue : 0.0;
             }
 
             public ValueEval GetResult()

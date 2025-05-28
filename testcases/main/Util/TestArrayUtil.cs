@@ -3,7 +3,7 @@ using System.Text;
 
 using NPOI.Util;
 
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 
 namespace TestCases.Util
 {
@@ -86,8 +86,8 @@ namespace TestCases.Util
             byte[] b = { 1, 2, 3, 4, 0x56, 0x2A, 0xff };
             byte[] c = { 1, 0, 3, 4, 0x56, 0x2B, 0xff };
 
-            Assert.IsTrue(Arrays.Equals(a, b));
-            Assert.IsFalse(Arrays.Equals(a, c));
+            ClassicAssert.IsTrue(Arrays.Equals(a, b));
+            ClassicAssert.IsFalse(Arrays.Equals(a, c));
         }
     }
 }

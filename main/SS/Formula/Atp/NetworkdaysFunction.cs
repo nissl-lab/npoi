@@ -69,14 +69,14 @@ namespace NPOI.SS.Formula.Atp
             double[] holidays;
             try
             {
-                start = this.evaluator.EvaluateDateArg(args[0], srcCellRow, srcCellCol);
-                end = this.evaluator.EvaluateDateArg(args[1], srcCellRow, srcCellCol);
+                start = ArgumentsEvaluator.EvaluateDateArg(args[0], srcCellRow, srcCellCol);
+                end = ArgumentsEvaluator.EvaluateDateArg(args[1], srcCellRow, srcCellCol);
                 if (start > end)
                 {
                     return ErrorEval.NAME_INVALID;
                 }
                 ValueEval holidaysCell = args.Length == 3 ? args[2] : null;
-                holidays = this.evaluator.EvaluateDatesArg(holidaysCell, srcCellRow, srcCellCol);
+                holidays = ArgumentsEvaluator.EvaluateDatesArg(holidaysCell, srcCellRow, srcCellCol);
                 return new NumberEval(WorkdayCalculator.instance.CalculateWorkdays(start, end, holidays));
             }
             catch (EvaluationException)

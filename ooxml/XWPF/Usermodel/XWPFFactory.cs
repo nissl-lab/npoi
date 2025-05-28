@@ -57,7 +57,7 @@ namespace NPOI.XWPF.UserModel
         {
             if (classes == null)
             {
-                classes = Array.Empty<Type>();
+                classes = [];
             }
             ConstructorInfo constructor = cls.GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public,
                     null, classes, null);
@@ -65,7 +65,7 @@ namespace NPOI.XWPF.UserModel
                 throw new MissingMethodException();
             if (values == null)
             {
-                values = Array.Empty<object>();
+                values = [];
             }
             return constructor.Invoke(values) as POIXMLDocumentPart;
         }

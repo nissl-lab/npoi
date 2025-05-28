@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using NPOI.OpenXml4Net.Util;
 using NPOI.OpenXmlFormats.Vml;
+using Cysharp.Text;
 
 namespace NPOI.OpenXmlFormats.Wordprocessing
 {
@@ -59,13 +60,12 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public void Set(object obj)
         {
-            if (obj is CT_Group)
+            if (obj is CT_Group group)
             {
-                var group = (CT_Group)obj;
                 foreach (var item in group.Items)
                 {
                     /*XmlSerializer xmlse = new XmlSerializer(item.GetType());
-                    StringBuilder output = new StringBuilder();
+                    // StringBuilder output = new StringBuilder();
                     XmlWriterSettings settings = new XmlWriterSettings();
 
                     settings.Encoding = Encoding.UTF8;
@@ -207,17 +207,17 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.control.Write(sw, "control");
             foreach (var childnode in Items)
             {
-                if (childnode is XmlNode)
+                if (childnode is XmlNode node)
                 {
-                    sw.Write(((XmlNode)childnode).OuterXml);
+                    sw.Write(node.OuterXml);
                 }
-                else if (childnode is CT_Shape)
+                else if (childnode is CT_Shape shape)
                 {
-                    ((CT_Shape)childnode).Write(sw, "shape");
+                    shape.Write(sw, "shape");
                 }
-                else if (childnode is CT_Shapetype)
+                else if (childnode is CT_Shapetype shapetype)
                 {
-                    ((CT_Shapetype)childnode).Write(sw, "shapetype");
+                    shapetype.Write(sw, "shapetype");
                 }
             }
             sw.WriteEndW(nodeName);

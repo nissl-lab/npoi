@@ -22,7 +22,7 @@ namespace TestCases.HSSF.Record.Chart
 {
     using System;
     using NPOI.HSSF.Record.Chart;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.Record;
 
     /**
@@ -54,14 +54,14 @@ namespace TestCases.HSSF.Record.Chart
         {
 
             AxisRecord record = new AxisRecord(TestcaseRecordInputStream.Create((short)0x101d, data));
-            Assert.AreEqual(AxisRecord.AXIS_TYPE_CATEGORY_OR_X_AXIS, record.AxisType);
-            Assert.AreEqual(0, record.Reserved1);
-            Assert.AreEqual(0, record.Reserved2);
-            Assert.AreEqual(0, record.Reserved3);
-            Assert.AreEqual(0, record.Reserved4);
+            ClassicAssert.AreEqual(AxisRecord.AXIS_TYPE_CATEGORY_OR_X_AXIS, record.AxisType);
+            ClassicAssert.AreEqual(0, record.Reserved1);
+            ClassicAssert.AreEqual(0, record.Reserved2);
+            ClassicAssert.AreEqual(0, record.Reserved3);
+            ClassicAssert.AreEqual(0, record.Reserved4);
 
 
-            Assert.AreEqual(4 + 18, record.RecordSize);
+            ClassicAssert.AreEqual(4 + 18, record.RecordSize);
         }
         [Test]
         public void TestStore()
@@ -75,9 +75,9 @@ namespace TestCases.HSSF.Record.Chart
 
 
             byte[] recordBytes = record.Serialize();
-            Assert.AreEqual(recordBytes.Length - 4, data.Length);
+            ClassicAssert.AreEqual(recordBytes.Length - 4, data.Length);
             for (int i = 0; i < data.Length; i++)
-                Assert.AreEqual(data[i], recordBytes[i + 4], "At offset " + i);
+                ClassicAssert.AreEqual(data[i], recordBytes[i + 4], "At offset " + i);
         }
     }
 }

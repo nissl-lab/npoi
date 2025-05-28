@@ -60,7 +60,7 @@ namespace NPOI.SS.Formula.Functions
             }
         }
 
-        private class SingleCellValueArray : ValueArray
+        private sealed class SingleCellValueArray : ValueArray
         {
             private readonly ValueEval _value;
             public SingleCellValueArray(ValueEval value)
@@ -74,7 +74,8 @@ namespace NPOI.SS.Formula.Functions
                 return _value;
             }
         }
-        private class RefValueArray : ValueArray
+
+        private sealed class RefValueArray : ValueArray
         {
             private readonly RefEval _ref;
             private readonly int _width;
@@ -91,7 +92,8 @@ namespace NPOI.SS.Formula.Functions
                 return _ref.GetInnerValueEval(sIx);
             }
         }
-        private class AreaValueArray : ValueArray
+
+        private sealed class AreaValueArray : ValueArray
         {
             private readonly TwoDEval _ae;
             private readonly int _width;
@@ -109,9 +111,9 @@ namespace NPOI.SS.Formula.Functions
                 return _ae.GetValue(rowIx, colIx);
             }
         }
+
         protected class DoubleArrayPair
         {
-
             private readonly double[] _xArray;
             private readonly double[] _yArray;
 
@@ -155,9 +157,10 @@ namespace NPOI.SS.Formula.Functions
             }
             return new NumberEval(result);
         }
+
         /**
- * Constructs a new instance of the Accumulator used to calculated this function
- */
+         * Constructs a new instance of the Accumulator used to calculated this function
+         */
         public abstract Accumulator CreateAccumulator();
 
         private double EvaluateInternal(ValueVector x, ValueVector y, int size)
@@ -174,28 +177,26 @@ namespace NPOI.SS.Formula.Functions
             {
                 ValueEval vx = x.GetItem(i);
                 ValueEval vy = y.GetItem(i);
-                if (vx is ErrorEval)
+                if (vx is ErrorEval eval)
                 {
                     if (firstXerr == null)
                     {
-                        firstXerr = (ErrorEval)vx;
+                        firstXerr = eval;
                         continue;
                     }
                 }
-                if (vy is ErrorEval)
+                if (vy is ErrorEval errorEval)
                 {
                     if (firstYerr == null)
                     {
-                        firstYerr = (ErrorEval)vy;
+                        firstYerr = errorEval;
                         continue;
                     }
                 }
                 // only count pairs if both elements are numbers
-                if (vx is NumberEval && vy is NumberEval)
+                if (vx is NumberEval nx && vy is NumberEval ny)
                 {
                     accumlatedSome = true;
-                    NumberEval nx = (NumberEval)vx;
-                    NumberEval ny = (NumberEval)vy;
                     result += acc.Accumulate(nx.NumberValue, ny.NumberValue);
                 }
                 else
@@ -271,19 +272,20 @@ namespace NPOI.SS.Formula.Functions
             //return retval;
             throw new InvalidOperationException("not found in poi");
         }
+
         private static ValueVector CreateValueVector(ValueEval arg)
         {
-            if (arg is ErrorEval)
+            if (arg is ErrorEval eval)
             {
-                throw new EvaluationException((ErrorEval)arg);
+                throw new EvaluationException(eval);
             }
-            if (arg is TwoDEval)
+            if (arg is TwoDEval dEval)
             {
-                return new AreaValueArray((TwoDEval)arg);
+                return new AreaValueArray(dEval);
             }
-            if (arg is RefEval)
+            if (arg is RefEval refEval)
             {
-                return new RefValueArray((RefEval)arg);
+                return new RefValueArray(refEval);
             }
             return new SingleCellValueArray(arg);
         }

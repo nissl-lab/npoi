@@ -64,7 +64,8 @@ namespace NPOI.OpenXml4Net.OPC
             relationshipsByID = new SortedList<String, PackageRelationship>();
             internalRelationshipsByTargetName = new SortedList<string, PackageRelationship>();
         }
-        class DuplicateComparer : IComparer<string>
+
+        private sealed class DuplicateComparer : IComparer<string>
         {
 
             #region IComparer<string> Members

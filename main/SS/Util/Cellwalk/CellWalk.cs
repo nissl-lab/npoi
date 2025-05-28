@@ -104,16 +104,16 @@ namespace NPOI.SS.Util.CellWalk
             }
         }
 
-        private bool IsEmpty(ICell cell)
+        private static bool IsEmpty(ICell cell)
         {
-            return (cell.CellType == CellType.Blank);
+            return cell.CellType == CellType.Blank;
         }
 
         /**
          * Inner class to hold walk context.
          * @author Roman Kashitsyn
          */
-        private class SimpleCellWalkContext : ICellWalkContext
+        private sealed class SimpleCellWalkContext : ICellWalkContext
         {
             public long ordinalNumber = 0;
             public int rowNumber = 0;

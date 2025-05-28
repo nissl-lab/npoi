@@ -3,7 +3,7 @@ using NPOI.SS.Formula.Eval;
 using NPOI.SS.Formula.Functions;
 using NPOI.SS.UserModel;
 using NPOI.Util;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -51,7 +51,7 @@ namespace TestCases.SS.Formula.Functions
         {
             String formula = "WEEKNUM(" + StringUtil.Join(args, ", ") + ")";
             ValueEval result = WeekNum.instance.Evaluate(args, DEFAULT_CONTEXT);
-            Assert.AreEqual(expected, result, formula + ": " + message);
+            ClassicAssert.AreEqual(expected, result, formula + ": " + message);
         }
 
         private void assertEvaluateEquals(double expected, double dateValue)
@@ -60,7 +60,7 @@ namespace TestCases.SS.Formula.Functions
             ValueEval[] args = new ValueEval[] { new NumberEval(dateValue) };
             ValueEval result = WeekNum.instance.Evaluate(args, DEFAULT_CONTEXT);
             if (result is NumberEval) {
-                Assert.AreEqual(expected, ((NumberEval)result).NumberValue, TOLERANCE, formula);
+                ClassicAssert.AreEqual(expected, ((NumberEval)result).NumberValue, TOLERANCE, formula);
             } else
             {
                 Assert.Fail("unexpected eval result " + result);
@@ -73,7 +73,7 @@ namespace TestCases.SS.Formula.Functions
             ValueEval[] args = new ValueEval[] { new NumberEval(dateValue), new NumberEval(return_type) };
             ValueEval result = WeekNum.instance.Evaluate(args, DEFAULT_CONTEXT);
             if (result is NumberEval) {
-                Assert.AreEqual(expected, ((NumberEval)result).NumberValue, TOLERANCE, formula);
+                ClassicAssert.AreEqual(expected, ((NumberEval)result).NumberValue, TOLERANCE, formula);
             } else
             {
                 Assert.Fail("unexpected eval result " + result);

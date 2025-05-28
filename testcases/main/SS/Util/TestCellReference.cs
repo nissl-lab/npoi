@@ -16,7 +16,7 @@
 ==================================================================== */
 
 using NPOI.SS.Util;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using TestCases.HSSF.Record;
 
 using System.IO;
@@ -43,19 +43,19 @@ namespace TestCases.SS.Util
             bool absCol = false;
 
             cellReference = new CellReference(row, col);
-            Assert.AreEqual("A1", cellReference.FormatAsString());
+            ClassicAssert.AreEqual("A1", cellReference.FormatAsString());
 
             cellReference = new CellReference(row, col, absRow, absCol);
-            Assert.AreEqual("A$1", cellReference.FormatAsString());
+            ClassicAssert.AreEqual("A$1", cellReference.FormatAsString());
 
             cellReference = new CellReference(row, (short)col);
-            Assert.AreEqual("A1", cellReference.FormatAsString());
+            ClassicAssert.AreEqual("A1", cellReference.FormatAsString());
 
             cellReference = new CellReference(cellRef);
-            Assert.AreEqual("A1", cellReference.FormatAsString());
+            ClassicAssert.AreEqual("A1", cellReference.FormatAsString());
 
             cellReference = new CellReference(sheet, row, col, absRow, absCol);
-            Assert.AreEqual("Sheet1!A$1", cellReference.FormatAsString());
+            ClassicAssert.AreEqual("Sheet1!A$1", cellReference.FormatAsString());
         }
 
         [Test]
@@ -64,19 +64,19 @@ namespace TestCases.SS.Util
             CellReference cellReference;
 
             cellReference = new CellReference(null, 0, 0, false, false);
-            Assert.AreEqual("A1", cellReference.FormatAsString());
+            ClassicAssert.AreEqual("A1", cellReference.FormatAsString());
 
             //absolute references
             cellReference = new CellReference(null, 0, 0, true, false);
-            Assert.AreEqual("A$1", cellReference.FormatAsString());
+            ClassicAssert.AreEqual("A$1", cellReference.FormatAsString());
 
             //sheet name with no spaces
             cellReference = new CellReference("Sheet1", 0, 0, true, false);
-            Assert.AreEqual("Sheet1!A$1", cellReference.FormatAsString());
+            ClassicAssert.AreEqual("Sheet1!A$1", cellReference.FormatAsString());
 
             //sheet name with spaces
             cellReference = new CellReference("Sheet 1", 0, 0, true, false);
-            Assert.AreEqual("'Sheet 1'!A$1", cellReference.FormatAsString());
+            ClassicAssert.AreEqual("'Sheet 1'!A$1", cellReference.FormatAsString());
         }
 
 
@@ -88,143 +88,143 @@ namespace TestCases.SS.Util
 
             String cellRef = "A1";
             cellReference = new CellReference(cellRef);
-            Assert.AreEqual(0, cellReference.Col);
+            ClassicAssert.AreEqual(0, cellReference.Col);
             parts = cellReference.CellRefParts;
-            Assert.IsNotNull(parts);
-            Assert.AreEqual(null, parts[0]);
-            Assert.AreEqual("1", parts[1]);
-            Assert.AreEqual("A", parts[2]);
+            ClassicAssert.IsNotNull(parts);
+            ClassicAssert.AreEqual(null, parts[0]);
+            ClassicAssert.AreEqual("1", parts[1]);
+            ClassicAssert.AreEqual("A", parts[2]);
 
             cellRef = "AA1";
             cellReference = new CellReference(cellRef);
-            Assert.AreEqual(26, cellReference.Col);
+            ClassicAssert.AreEqual(26, cellReference.Col);
             parts = cellReference.CellRefParts;
-            Assert.IsNotNull(parts);
-            Assert.AreEqual(null, parts[0]);
-            Assert.AreEqual("1", parts[1]);
-            Assert.AreEqual("AA", parts[2]);
+            ClassicAssert.IsNotNull(parts);
+            ClassicAssert.AreEqual(null, parts[0]);
+            ClassicAssert.AreEqual("1", parts[1]);
+            ClassicAssert.AreEqual("AA", parts[2]);
 
             cellRef = "AA100";
             cellReference = new CellReference(cellRef);
-            Assert.AreEqual(26, cellReference.Col);
+            ClassicAssert.AreEqual(26, cellReference.Col);
             parts = cellReference.CellRefParts;
-            Assert.IsNotNull(parts);
-            Assert.AreEqual(null, parts[0]);
-            Assert.AreEqual("100", parts[1]);
-            Assert.AreEqual("AA", parts[2]);
+            ClassicAssert.IsNotNull(parts);
+            ClassicAssert.AreEqual(null, parts[0]);
+            ClassicAssert.AreEqual("100", parts[1]);
+            ClassicAssert.AreEqual("AA", parts[2]);
 
             cellRef = "AAA300";
             cellReference = new CellReference(cellRef);
-            Assert.AreEqual(702, cellReference.Col);
+            ClassicAssert.AreEqual(702, cellReference.Col);
             parts = cellReference.CellRefParts;
-            Assert.IsNotNull(parts);
-            Assert.AreEqual(null, parts[0]);
-            Assert.AreEqual("300", parts[1]);
-            Assert.AreEqual("AAA", parts[2]);
+            ClassicAssert.IsNotNull(parts);
+            ClassicAssert.AreEqual(null, parts[0]);
+            ClassicAssert.AreEqual("300", parts[1]);
+            ClassicAssert.AreEqual("AAA", parts[2]);
 
             cellRef = "ZZ100521";
             cellReference = new CellReference(cellRef);
-            Assert.AreEqual(26 * 26 + 25, cellReference.Col);
+            ClassicAssert.AreEqual(26 * 26 + 25, cellReference.Col);
             parts = cellReference.CellRefParts;
-            Assert.IsNotNull(parts);
-            Assert.AreEqual(null, parts[0]);
-            Assert.AreEqual("100521", parts[1]);
-            Assert.AreEqual("ZZ", parts[2]);
+            ClassicAssert.IsNotNull(parts);
+            ClassicAssert.AreEqual(null, parts[0]);
+            ClassicAssert.AreEqual("100521", parts[1]);
+            ClassicAssert.AreEqual("ZZ", parts[2]);
 
             cellRef = "ZYX987";
             cellReference = new CellReference(cellRef);
-            Assert.AreEqual(26 * 26 * 26 + 25 * 26 + 24 - 1, cellReference.Col);
+            ClassicAssert.AreEqual(26 * 26 * 26 + 25 * 26 + 24 - 1, cellReference.Col);
             parts = cellReference.CellRefParts;
-            Assert.IsNotNull(parts);
-            Assert.AreEqual(null, parts[0]);
-            Assert.AreEqual("987", parts[1]);
-            Assert.AreEqual("ZYX", parts[2]);
+            ClassicAssert.IsNotNull(parts);
+            ClassicAssert.AreEqual(null, parts[0]);
+            ClassicAssert.AreEqual("987", parts[1]);
+            ClassicAssert.AreEqual("ZYX", parts[2]);
 
             cellRef = "AABC10065";
             cellReference = new CellReference(cellRef);
             parts = cellReference.CellRefParts;
-            Assert.IsNotNull(parts);
-            Assert.AreEqual(null, parts[0]);
-            Assert.AreEqual("10065", parts[1]);
-            Assert.AreEqual("AABC", parts[2]);
+            ClassicAssert.IsNotNull(parts);
+            ClassicAssert.AreEqual(null, parts[0]);
+            ClassicAssert.AreEqual("10065", parts[1]);
+            ClassicAssert.AreEqual("AABC", parts[2]);
         }
         [Test]
         public void TestGetColNumFromRef()
         {
             String cellRef = "A1";
             CellReference cellReference = new CellReference(cellRef);
-            Assert.AreEqual(0, cellReference.Col);
+            ClassicAssert.AreEqual(0, cellReference.Col);
 
             cellRef = "AA1";
             cellReference = new CellReference(cellRef);
-            Assert.AreEqual(26, cellReference.Col);
+            ClassicAssert.AreEqual(26, cellReference.Col);
 
             cellRef = "AB1";
             cellReference = new CellReference(cellRef);
-            Assert.AreEqual(27, cellReference.Col);
+            ClassicAssert.AreEqual(27, cellReference.Col);
 
             cellRef = "BA1";
             cellReference = new CellReference(cellRef);
-            Assert.AreEqual(26 + 26, cellReference.Col);
+            ClassicAssert.AreEqual(26 + 26, cellReference.Col);
 
             cellRef = "CA1";
             cellReference = new CellReference(cellRef);
-            Assert.AreEqual(26 + 26 + 26, cellReference.Col);
+            ClassicAssert.AreEqual(26 + 26 + 26, cellReference.Col);
 
             cellRef = "ZA1";
             cellReference = new CellReference(cellRef);
-            Assert.AreEqual(26 * 26, cellReference.Col);
+            ClassicAssert.AreEqual(26 * 26, cellReference.Col);
 
             cellRef = "ZZ1";
             cellReference = new CellReference(cellRef);
-            Assert.AreEqual(26 * 26 + 25, cellReference.Col);
+            ClassicAssert.AreEqual(26 * 26 + 25, cellReference.Col);
 
             cellRef = "AAA1";
             cellReference = new CellReference(cellRef);
-            Assert.AreEqual(26 * 26 + 26, cellReference.Col);
+            ClassicAssert.AreEqual(26 * 26 + 26, cellReference.Col);
 
 
             cellRef = "A1100";
             cellReference = new CellReference(cellRef);
-            Assert.AreEqual(0, cellReference.Col);
+            ClassicAssert.AreEqual(0, cellReference.Col);
 
             cellRef = "BC15";
             cellReference = new CellReference(cellRef);
-            Assert.AreEqual(54, cellReference.Col);
+            ClassicAssert.AreEqual(54, cellReference.Col);
         }
         [Test]
         public void TestGetRowNumFromRef()
         {
             String cellRef = "A1";
             CellReference cellReference = new CellReference(cellRef);
-            Assert.AreEqual(0, cellReference.Row);
+            ClassicAssert.AreEqual(0, cellReference.Row);
 
             cellRef = "A12";
             cellReference = new CellReference(cellRef);
-            Assert.AreEqual(11, cellReference.Row);
+            ClassicAssert.AreEqual(11, cellReference.Row);
 
             cellRef = "AS121";
             cellReference = new CellReference(cellRef);
-            Assert.AreEqual(120, cellReference.Row);
+            ClassicAssert.AreEqual(120, cellReference.Row);
         }
         [Test]
         public void TestConvertNumToColString()
         {
             short col = 702;
             String collRef = new CellReference(0, col).FormatAsString();
-            Assert.AreEqual("AAA1", collRef);
+            ClassicAssert.AreEqual("AAA1", collRef);
 
             short col2 = 0;
             String collRef2 = new CellReference(0, col2).FormatAsString();
-            Assert.AreEqual("A1", collRef2);
+            ClassicAssert.AreEqual("A1", collRef2);
 
             short col3 = 27;
             String collRef3 = new CellReference(0, col3).FormatAsString();
-            Assert.AreEqual("AB1", collRef3);
+            ClassicAssert.AreEqual("AB1", collRef3);
 
             short col4 = 2080;
             String collRef4 = new CellReference(0, col4).FormatAsString();
-            Assert.AreEqual("CBA1", collRef4);
+            ClassicAssert.AreEqual("CBA1", collRef4);
         }
         [Test]
         public void TestBadRowNumber()
@@ -293,29 +293,29 @@ namespace TestCases.SS.Util
         public void EntireColumnReferences()
         {
             CellReference ref1 = new CellReference("HOME!$169");
-            Assert.AreEqual("HOME", ref1.SheetName);
-            Assert.AreEqual(168, ref1.Row);
-            Assert.AreEqual(-1, ref1.Col);
-            Assert.IsTrue(ref1.IsRowAbsolute, "row absolute");
-            //Assert.IsFalse("column absolute/relative is undefined", ref.IsColAbsolute);
+            ClassicAssert.AreEqual("HOME", ref1.SheetName);
+            ClassicAssert.AreEqual(168, ref1.Row);
+            ClassicAssert.AreEqual(-1, ref1.Col);
+            ClassicAssert.IsTrue(ref1.IsRowAbsolute, "row absolute");
+            //ClassicAssert.IsFalse("column absolute/relative is undefined", ref.IsColAbsolute);
         }
 
         [Test]
         public void GetSheetName()
         {
-            Assert.AreEqual(null, new CellReference("A5").SheetName);
-            Assert.AreEqual(null, new CellReference(null, 0, 0, false, false).SheetName);
+            ClassicAssert.AreEqual(null, new CellReference("A5").SheetName);
+            ClassicAssert.AreEqual(null, new CellReference(null, 0, 0, false, false).SheetName);
             // FIXME: CellReference is inconsistent
-            Assert.AreEqual("", new CellReference("", 0, 0, false, false).SheetName);
-            Assert.AreEqual("Sheet1", new CellReference("Sheet1!A5").SheetName);
-            Assert.AreEqual("Sheet 1", new CellReference("'Sheet 1'!A5").SheetName);
+            ClassicAssert.AreEqual("", new CellReference("", 0, 0, false, false).SheetName);
+            ClassicAssert.AreEqual("Sheet1", new CellReference("Sheet1!A5").SheetName);
+            ClassicAssert.AreEqual("Sheet 1", new CellReference("'Sheet 1'!A5").SheetName);
         }
 
         [Test]
         public void TestToString()
         {
             CellReference ref1 = new CellReference("'Sheet 1'!A5");
-            Assert.AreEqual(ref1.ToString(), "CellReference ['Sheet 1'!A5]");
+            ClassicAssert.AreEqual(ref1.ToString(), "CellReference ['Sheet 1'!A5]");
         }
 
         [Test]
@@ -323,32 +323,51 @@ namespace TestCases.SS.Util
         {
             CellReference ref1 = new CellReference("'Sheet 1'!A5");
             CellReference ref2 = new CellReference("Sheet 1", 4, 0, false, false);
-            Assert.AreEqual(ref1, ref2, "equals");
-            Assert.AreEqual(ref1.GetHashCode(), ref2.GetHashCode(), "hash code");
+            ClassicAssert.AreEqual(ref1, ref2, "equals");
+            ClassicAssert.AreEqual(ref1.GetHashCode(), ref2.GetHashCode(), "hash code");
 
-            Assert.IsFalse(ref1.Equals(null), "null");
-            Assert.IsFalse(ref1.Equals(new CellReference("A5")), "3D vs 2D");
-            Assert.IsFalse(ref1.Equals(0), "type");
+            ClassicAssert.IsFalse(ref1.Equals(null), "null");
+            ClassicAssert.IsFalse(ref1.Equals(new CellReference("A5")), "3D vs 2D");
+            ClassicAssert.IsFalse(ref1.Equals(0), "type");
         }
 
         [Test]
         public void IsRowWithinRange()
         {
             SpreadsheetVersion ss = SpreadsheetVersion.EXCEL2007;
-            Assert.IsFalse(CellReference.IsRowWithinRange("0", ss), "1 before first row");
-            Assert.IsTrue(CellReference.IsRowWithinRange("1", ss), "first row");
-            Assert.IsTrue(CellReference.IsRowWithinRange("1048576", ss), "last row");
-            Assert.IsFalse(CellReference.IsRowWithinRange("1048577", ss), "1 beyond last row");
+            ClassicAssert.IsFalse(CellReference.IsRowWithinRange("0", ss), "1 before first row");
+            ClassicAssert.IsTrue(CellReference.IsRowWithinRange("1", ss), "first row");
+            ClassicAssert.IsTrue(CellReference.IsRowWithinRange("1048576", ss), "last row");
+            ClassicAssert.IsFalse(CellReference.IsRowWithinRange("1048577", ss), "1 beyond last row");
+
+            ClassicAssert.IsFalse(CellReference.IsRowWithinRange(-1, ss), "1 before first row");
+            ClassicAssert.IsTrue(CellReference.IsRowWithinRange(0, ss), "first row");
+            ClassicAssert.IsTrue(CellReference.IsRowWithinRange(1048575, ss), "last row");
+            ClassicAssert.IsFalse(CellReference.IsRowWithinRange(1048576, ss), "1 beyond last row");
         }
+
+        [Test] //(expected= NumberFormatException.class)
+        public void IsRowWithinRangeNonInteger_BigNumber()
+        {
+            String rowNum = "4000000000";
+            CellReference.IsRowWithinRange(rowNum, SpreadsheetVersion.EXCEL2007);
+        }
+
+        [Test] //(expected= NumberFormatException.class)
+        public void IsRowWithinRangeNonInteger_Alpha()
+        {
+            String rowNum = "NotANumber";
+            CellReference.IsRowWithinRange(rowNum, SpreadsheetVersion.EXCEL2007);
+         }
 
         [Test]
         public void IsColWithinRange()
         {
             SpreadsheetVersion ss = SpreadsheetVersion.EXCEL2007;
-            Assert.IsTrue(CellReference.IsColumnWithinRange("", ss), "(empty)");
-            Assert.IsTrue(CellReference.IsColumnWithinRange("A", ss), "first column (A)");
-            Assert.IsTrue(CellReference.IsColumnWithinRange("XFD", ss), "last column (XFD)");
-            Assert.IsFalse(CellReference.IsColumnWithinRange("XFE", ss), "1 beyond last column (XFE)");
+            ClassicAssert.IsTrue(CellReference.IsColumnWithinRange("", ss), "(empty)");
+            ClassicAssert.IsTrue(CellReference.IsColumnWithinRange("A", ss), "first column (A)");
+            ClassicAssert.IsTrue(CellReference.IsColumnWithinRange("XFD", ss), "last column (XFD)");
+            ClassicAssert.IsFalse(CellReference.IsColumnWithinRange("XFE", ss), "1 beyond last column (XFE)");
         }
 
         [Test]
@@ -379,7 +398,7 @@ namespace TestCases.SS.Util
             }
             catch (ArgumentException e)
             {
-                Assert.IsTrue(e.Message.StartsWith("Bad sheet name quote escaping: "));
+                ClassicAssert.IsTrue(e.Message.StartsWith("Bad sheet name quote escaping: "));
             }
         }
 

@@ -24,7 +24,7 @@ using NPOI.SS.Formula.Atp;
 using NPOI.SS.Formula.Eval;
 using NPOI.SS.Formula.Functions;
 using NPOI.SS.UserModel;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 
 namespace TestCases.SS.Formula
 {
@@ -66,7 +66,7 @@ namespace TestCases.SS.Formula
         });*/
 
             cv = fe.Evaluate(cellA);
-            Assert.AreEqual(ErrorEval.NA.ErrorCode, cv.ErrorValue);
+            ClassicAssert.AreEqual(ErrorEval.NA.ErrorCode, cv.ErrorValue);
 
             HSSFCell cellB = (HSSFCell)row.CreateCell(1);
             cellB.CellFormula = ("CUBEMEMBERPROPERTY(A5)");
@@ -87,7 +87,7 @@ namespace TestCases.SS.Formula
         });*/
 
             cv = fe.Evaluate(cellB);
-            Assert.AreEqual(ErrorEval.NUM_ERROR.ErrorCode, cv.ErrorValue);
+            ClassicAssert.AreEqual(ErrorEval.NUM_ERROR.ErrorCode, cv.ErrorValue);
         }
 
         private class Function1 : NPOI.SS.Formula.Functions.Function
@@ -124,7 +124,7 @@ namespace TestCases.SS.Formula
             }
             catch (ArgumentException e)
             {
-                Assert.AreEqual("POI already implememts SUM" +
+                ClassicAssert.AreEqual("POI already implememts SUM" +
                         ". You cannot override POI's implementations of Excel functions", e.Message);
             }
             try
@@ -134,7 +134,7 @@ namespace TestCases.SS.Formula
             }
             catch (ArgumentException e)
             {
-                Assert.AreEqual("Unknown function: SUMXXX", e.Message);
+                ClassicAssert.AreEqual("Unknown function: SUMXXX", e.Message);
             }
             try
             {
@@ -143,7 +143,7 @@ namespace TestCases.SS.Formula
             }
             catch (ArgumentException e)
             {
-                Assert.AreEqual("ISODD is a function from the Excel Analysis Toolpack. " +
+                ClassicAssert.AreEqual("ISODD is a function from the Excel Analysis Toolpack. " +
                         "Use AnalysisToolpack.RegisterFunction(String name, FreeRefFunction func) instead.", e.Message);
             }
 
@@ -159,7 +159,7 @@ namespace TestCases.SS.Formula
             }
             catch (ArgumentException e)
             {
-                Assert.AreEqual("POI already implememts ISODD" +
+                ClassicAssert.AreEqual("POI already implememts ISODD" +
                         ". You cannot override POI's implementations of Excel functions", e.Message);
             }
             try
@@ -169,7 +169,7 @@ namespace TestCases.SS.Formula
             }
             catch (ArgumentException e)
             {
-                Assert.AreEqual("ISODDXXX is not a function from the Excel Analysis Toolpack.", e.Message);
+                ClassicAssert.AreEqual("ISODDXXX is not a function from the Excel Analysis Toolpack.", e.Message);
             }
             try
             {
@@ -178,7 +178,7 @@ namespace TestCases.SS.Formula
             }
             catch (ArgumentException e)
             {
-                Assert.AreEqual("SUM is a built-in Excel function. " +
+                ClassicAssert.AreEqual("SUM is a built-in Excel function. " +
                         "Use FunctoinEval.RegisterFunction(String name, Function func) instead.", e.Message);
             }
         }

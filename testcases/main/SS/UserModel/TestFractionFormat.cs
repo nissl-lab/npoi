@@ -18,7 +18,7 @@
 using System;
 using NPOI.SS.UserModel;
 using TestCases.HSSF;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -40,7 +40,7 @@ namespace TestCases.SS.UserModel
             FractionFormat f = new FractionFormat("", "##");
             string val = "321.321";
             String ret = f.Format(val);
-            Assert.AreEqual("26027/81", ret);
+            ClassicAssert.AreEqual("26027/81", ret);
         }
         [Test]
         public void TestTruthFile()
@@ -74,7 +74,7 @@ namespace TestCases.SS.UserModel
                     }
 
                     
-                    Assert.AreEqual(truth, formatted, testKey);
+                    ClassicAssert.AreEqual(truth, formatted, testKey);
                 }
                 truthLine = reader.ReadLine();
             }

@@ -22,7 +22,7 @@ using NPOI.SS.Util;
 using NPOI.XSSF;
 using NPOI.XSSF.Model;
 using NPOI.XSSF.UserModel;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 namespace TestCases.XSSF.Model
 {
 
@@ -38,15 +38,15 @@ namespace TestCases.XSSF.Model
         public void FindAuthor()
         {
             CommentsTable sheetComments = new CommentsTable();
-            Assert.AreEqual(1, sheetComments.GetNumberOfAuthors());
-            Assert.AreEqual(0, sheetComments.FindAuthor(""));
-            Assert.AreEqual("", sheetComments.GetAuthor(0));
+            ClassicAssert.AreEqual(1, sheetComments.GetNumberOfAuthors());
+            ClassicAssert.AreEqual(0, sheetComments.FindAuthor(""));
+            ClassicAssert.AreEqual("", sheetComments.GetAuthor(0));
 
-            Assert.AreEqual(1, sheetComments.FindAuthor(TEST_AUTHOR));
-            Assert.AreEqual(2, sheetComments.FindAuthor("another author"));
-            Assert.AreEqual(1, sheetComments.FindAuthor(TEST_AUTHOR));
-            Assert.AreEqual(3, sheetComments.FindAuthor("YAA"));
-            Assert.AreEqual(2, sheetComments.FindAuthor("another author"));
+            ClassicAssert.AreEqual(1, sheetComments.FindAuthor(TEST_AUTHOR));
+            ClassicAssert.AreEqual(2, sheetComments.FindAuthor("another author"));
+            ClassicAssert.AreEqual(1, sheetComments.FindAuthor(TEST_AUTHOR));
+            ClassicAssert.AreEqual(3, sheetComments.FindAuthor("YAA"));
+            ClassicAssert.AreEqual(2, sheetComments.FindAuthor("another author"));
         }
         [Test]
         public void GetCellComment()
@@ -69,9 +69,9 @@ namespace TestCases.XSSF.Model
             comment1.text = (ctrst1);
 
             // Test Finding the right comment for a cell
-            Assert.AreSame(comment0, sheetComments.GetCTComment(new CellAddress("A1")));
-            Assert.AreSame(comment1, sheetComments.GetCTComment(new CellAddress("A2")));
-            Assert.IsNull(sheetComments.GetCTComment(new CellAddress("A3")));
+            ClassicAssert.AreSame(comment0, sheetComments.GetCTComment(new CellAddress("A1")));
+            ClassicAssert.AreSame(comment1, sheetComments.GetCTComment(new CellAddress("A2")));
+            ClassicAssert.IsNull(sheetComments.GetCTComment(new CellAddress("A3")));
         }
 
         [Test]
@@ -81,29 +81,29 @@ namespace TestCases.XSSF.Model
             ISheet sheet1 = workbook.GetSheetAt(0);
             ISheet sheet2 = workbook.GetSheetAt(1);
 
-            Assert.IsTrue(((XSSFSheet)sheet1).HasComments);
-            Assert.IsFalse(((XSSFSheet)sheet2).HasComments);
+            ClassicAssert.IsTrue(((XSSFSheet)sheet1).HasComments);
+            ClassicAssert.IsFalse(((XSSFSheet)sheet2).HasComments);
 
             // Comments should be in C5 and C7
             IRow r5 = sheet1.GetRow(4);
             IRow r7 = sheet1.GetRow(6);
-            Assert.IsNotNull(r5.GetCell(2).CellComment);
-            Assert.IsNotNull(r7.GetCell(2).CellComment);
+            ClassicAssert.IsNotNull(r5.GetCell(2).CellComment);
+            ClassicAssert.IsNotNull(r7.GetCell(2).CellComment);
 
             // Check they have what we expect
             // TODO: Rich text formatting
             IComment cc5 = r5.GetCell(2).CellComment;
             IComment cc7 = r7.GetCell(2).CellComment;
 
-            Assert.AreEqual("Nick Burch", cc5.Author);
-            Assert.AreEqual("Nick Burch:\nThis is a comment", cc5.String.String);
-            Assert.AreEqual(4, cc5.Row);
-            Assert.AreEqual(2, cc5.Column);
+            ClassicAssert.AreEqual("Nick Burch", cc5.Author);
+            ClassicAssert.AreEqual("Nick Burch:\nThis is a comment", cc5.String.String);
+            ClassicAssert.AreEqual(4, cc5.Row);
+            ClassicAssert.AreEqual(2, cc5.Column);
 
-            Assert.AreEqual("Nick Burch", cc7.Author);
-            Assert.AreEqual("Nick Burch:\nComment #1\n", cc7.String.String);
-            Assert.AreEqual(6, cc7.Row);
-            Assert.AreEqual(2, cc7.Column);
+            ClassicAssert.AreEqual("Nick Burch", cc7.Author);
+            ClassicAssert.AreEqual("Nick Burch:\nComment #1\n", cc7.String.String);
+            ClassicAssert.AreEqual(6, cc7.Row);
+            ClassicAssert.AreEqual(2, cc7.Column);
         }
         [Test]
         public void WriteRead()
@@ -112,8 +112,8 @@ namespace TestCases.XSSF.Model
             XSSFSheet sheet1 = (XSSFSheet)workbook.GetSheetAt(0);
             XSSFSheet sheet2 = (XSSFSheet)workbook.GetSheetAt(1);
 
-            Assert.IsTrue(sheet1.HasComments);
-            Assert.IsFalse(sheet2.HasComments);
+            ClassicAssert.IsTrue(sheet1.HasComments);
+            ClassicAssert.IsFalse(sheet2.HasComments);
 
             // Change on comment on sheet 1, and add another into
             //  sheet 2
@@ -124,7 +124,7 @@ namespace TestCases.XSSF.Model
 
             IRow r2s2 = sheet2.CreateRow(2);
             ICell c1r2s2 = r2s2.CreateCell(1);
-            Assert.IsNull(c1r2s2.CellComment);
+            ClassicAssert.IsNull(c1r2s2.CellComment);
 
             IDrawing dg = sheet2.CreateDrawingPatriarch();
             IComment cc2 = dg.CreateCellComment(new XSSFClientAnchor());
@@ -139,19 +139,19 @@ namespace TestCases.XSSF.Model
             // Check we still have comments where we should do
             sheet1 = (XSSFSheet)workbook.GetSheetAt(0);
             sheet2 = (XSSFSheet)workbook.GetSheetAt(1);
-            Assert.IsNotNull(sheet1.GetRow(4).GetCell(2).CellComment);
-            Assert.IsNotNull(sheet1.GetRow(6).GetCell(2).CellComment);
-            Assert.IsNotNull(sheet2.GetRow(2).GetCell(1).CellComment);
+            ClassicAssert.IsNotNull(sheet1.GetRow(4).GetCell(2).CellComment);
+            ClassicAssert.IsNotNull(sheet1.GetRow(6).GetCell(2).CellComment);
+            ClassicAssert.IsNotNull(sheet2.GetRow(2).GetCell(1).CellComment);
 
             // And check they still have the contents they should do
-            Assert.AreEqual("Apache POI",
+            ClassicAssert.AreEqual("Apache POI",
                     sheet1.GetRow(4).GetCell(2).CellComment.Author);
-            Assert.AreEqual("Nick Burch",
+            ClassicAssert.AreEqual("Nick Burch",
                     sheet1.GetRow(6).GetCell(2).CellComment.Author);
-            Assert.AreEqual("Also POI",
+            ClassicAssert.AreEqual("Also POI",
                     sheet2.GetRow(2).GetCell(1).CellComment.Author);
 
-            Assert.AreEqual("Hello!",
+            ClassicAssert.AreEqual("Hello!",
                     sheet1.GetRow(4).GetCell(2).CellComment.String.String);
         }
         [Test]
@@ -161,14 +161,14 @@ namespace TestCases.XSSF.Model
             XSSFSheet sheet1 = (XSSFSheet)workbook.GetSheetAt(0);
             XSSFSheet sheet2 = (XSSFSheet)workbook.GetSheetAt(1);
 
-            Assert.IsTrue(sheet1.HasComments);
-            Assert.IsFalse(sheet2.HasComments);
+            ClassicAssert.IsTrue(sheet1.HasComments);
+            ClassicAssert.IsFalse(sheet2.HasComments);
 
-            Assert.AreEqual("Nick Burch",
+            ClassicAssert.AreEqual("Nick Burch",
                     sheet1.GetRow(4).GetCell(2).CellComment.Author);
-            Assert.AreEqual("Nick Burch",
+            ClassicAssert.AreEqual("Nick Burch",
                     sheet1.GetRow(6).GetCell(2).CellComment.Author);
-            Assert.AreEqual("Torchbox",
+            ClassicAssert.AreEqual("Torchbox",
                     sheet1.GetRow(12).GetCell(2).CellComment.Author);
 
             // Save, and re-load the file
@@ -176,16 +176,16 @@ namespace TestCases.XSSF.Model
 
             // Check we still have comments where we should do
             sheet1 = (XSSFSheet)workbook.GetSheetAt(0);
-            Assert.IsNotNull(sheet1.GetRow(4).GetCell(2).CellComment);
-            Assert.IsNotNull(sheet1.GetRow(6).GetCell(2).CellComment);
-            Assert.IsNotNull(sheet1.GetRow(12).GetCell(2).CellComment);
+            ClassicAssert.IsNotNull(sheet1.GetRow(4).GetCell(2).CellComment);
+            ClassicAssert.IsNotNull(sheet1.GetRow(6).GetCell(2).CellComment);
+            ClassicAssert.IsNotNull(sheet1.GetRow(12).GetCell(2).CellComment);
 
             // And check they still have the contents they should do
-            Assert.AreEqual("Nick Burch",
+            ClassicAssert.AreEqual("Nick Burch",
                     sheet1.GetRow(4).GetCell(2).CellComment.Author);
-            Assert.AreEqual("Nick Burch",
+            ClassicAssert.AreEqual("Nick Burch",
                     sheet1.GetRow(6).GetCell(2).CellComment.Author);
-            Assert.AreEqual("Torchbox",
+            ClassicAssert.AreEqual("Torchbox",
                     sheet1.GetRow(12).GetCell(2).CellComment.Author);
 
             // Todo - check text too, once bug fixed
@@ -202,28 +202,28 @@ namespace TestCases.XSSF.Model
             CT_Comment a2 = sheetComments.NewComment(addrA2);
             CT_Comment a3 = sheetComments.NewComment(addrA3);
 
-            Assert.AreSame(a1, sheetComments.GetCTComment(addrA1));
-            Assert.AreSame(a2, sheetComments.GetCTComment(addrA2));
-            Assert.AreSame(a3, sheetComments.GetCTComment(addrA3));
-            Assert.AreEqual(3, sheetComments.GetNumberOfComments());
+            ClassicAssert.AreSame(a1, sheetComments.GetCTComment(addrA1));
+            ClassicAssert.AreSame(a2, sheetComments.GetCTComment(addrA2));
+            ClassicAssert.AreSame(a3, sheetComments.GetCTComment(addrA3));
+            ClassicAssert.AreEqual(3, sheetComments.GetNumberOfComments());
 
-            Assert.IsTrue(sheetComments.RemoveComment(addrA1));
-            Assert.AreEqual(2, sheetComments.GetNumberOfComments());
-            Assert.IsNull(sheetComments.GetCTComment(addrA1));
-            Assert.AreSame(a2, sheetComments.GetCTComment(addrA2));
-            Assert.AreSame(a3, sheetComments.GetCTComment(addrA3));
+            ClassicAssert.IsTrue(sheetComments.RemoveComment(addrA1));
+            ClassicAssert.AreEqual(2, sheetComments.GetNumberOfComments());
+            ClassicAssert.IsNull(sheetComments.GetCTComment(addrA1));
+            ClassicAssert.AreSame(a2, sheetComments.GetCTComment(addrA2));
+            ClassicAssert.AreSame(a3, sheetComments.GetCTComment(addrA3));
 
-            Assert.IsTrue(sheetComments.RemoveComment(addrA2));
-            Assert.AreEqual(1, sheetComments.GetNumberOfComments());
-            Assert.IsNull(sheetComments.GetCTComment(addrA1));
-            Assert.IsNull(sheetComments.GetCTComment(addrA2));
-            Assert.AreSame(a3, sheetComments.GetCTComment(addrA3));
+            ClassicAssert.IsTrue(sheetComments.RemoveComment(addrA2));
+            ClassicAssert.AreEqual(1, sheetComments.GetNumberOfComments());
+            ClassicAssert.IsNull(sheetComments.GetCTComment(addrA1));
+            ClassicAssert.IsNull(sheetComments.GetCTComment(addrA2));
+            ClassicAssert.AreSame(a3, sheetComments.GetCTComment(addrA3));
 
-            Assert.IsTrue(sheetComments.RemoveComment(addrA3));
-            Assert.AreEqual(0, sheetComments.GetNumberOfComments());
-            Assert.IsNull(sheetComments.GetCTComment(addrA1));
-            Assert.IsNull(sheetComments.GetCTComment(addrA2));
-            Assert.IsNull(sheetComments.GetCTComment(addrA3));
+            ClassicAssert.IsTrue(sheetComments.RemoveComment(addrA3));
+            ClassicAssert.AreEqual(0, sheetComments.GetNumberOfComments());
+            ClassicAssert.IsNull(sheetComments.GetCTComment(addrA1));
+            ClassicAssert.IsNull(sheetComments.GetCTComment(addrA2));
+            ClassicAssert.IsNull(sheetComments.GetCTComment(addrA3));
         }
         [Test]
         public void Bug54920()
@@ -243,8 +243,8 @@ namespace TestCases.XSSF.Model
 
             // find comment in A1 before we set the comment in B2
             IComment commentA1 = A1.CellComment;
-            Assert.IsNotNull(commentA1, "Should still find the previous comment in A1, but had null");
-            Assert.AreEqual("for A1", commentA1.String.String, "should find correct comment in A1, but had null: " + commentA1);
+            ClassicAssert.IsNotNull(commentA1, "Should still find the previous comment in A1, but had null");
+            ClassicAssert.AreEqual("for A1", commentA1.String.String, "should find correct comment in A1, but had null: " + commentA1);
 
             // place comment in B2, according to Bug 54920 this removes the comment in A1!
             ICell B2 = GetCell(sheet, 1, 1);
@@ -252,12 +252,12 @@ namespace TestCases.XSSF.Model
 
             // find comment in A1
             IComment commentB2 = B2.CellComment;
-            Assert.AreEqual("for B2", commentB2.String.String, "should find correct comment in B2, but had null: " + commentB2);
+            ClassicAssert.AreEqual("for B2", commentB2.String.String, "should find correct comment in B2, but had null: " + commentB2);
 
             // find comment in A1
             commentA1 = A1.CellComment;
-            Assert.IsNotNull(commentA1, "Should still find the previous comment in A1, but had null");
-            Assert.AreEqual("for A1", commentA1.String.String, "should find correct comment in A1, but had null: " + commentA1);
+            ClassicAssert.IsNotNull(commentA1, "Should still find the previous comment in A1, but had null");
+            ClassicAssert.AreEqual("for A1", commentA1.String.String, "should find correct comment in A1, but had null: " + commentA1);
         }
 
         // Set the comment on a sheet

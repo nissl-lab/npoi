@@ -19,7 +19,7 @@ namespace TestCases.SS.Formula.Functions
 {
 
     using NPOI.SS.Formula.Eval;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using System;
     using NPOI.SS.Formula.Functions;
 
@@ -41,7 +41,7 @@ namespace TestCases.SS.Formula.Functions
         {
             ValueEval[] args = { arg, };
             ValueEval result = new T().Evaluate(args, -1, (short)-1);
-            Assert.IsNotNull(result, "result may never be null");
+            ClassicAssert.IsNotNull(result, "result may never be null");
             return result;
         }
         /**
@@ -59,7 +59,7 @@ namespace TestCases.SS.Formula.Functions
             ValueEval arg = new StringEval(text);
             ValueEval eval = invokeT(arg);
             StringEval se = (StringEval)eval;
-            Assert.AreEqual(text, se.StringValue);
+            ClassicAssert.AreEqual(text, se.StringValue);
         }
         [Test]
         public void TestTextValues()
@@ -76,7 +76,7 @@ namespace TestCases.SS.Formula.Functions
         private static void ConfirmError(ValueEval arg)
         {
             ValueEval eval = invokeT(arg);
-            Assert.IsTrue(arg == eval);
+            ClassicAssert.IsTrue(arg == eval);
         }
         [Test]
         public void TestErrorValues()
@@ -89,8 +89,8 @@ namespace TestCases.SS.Formula.Functions
 
         private static void ConfirmString(ValueEval eval, String expected)
         {
-            Assert.IsTrue(eval is StringEval);
-            Assert.AreEqual(expected, ((StringEval)eval).StringValue);
+            ClassicAssert.IsTrue(eval is StringEval);
+            ClassicAssert.AreEqual(expected, ((StringEval)eval).StringValue);
         }
 
         private static void ConfirmOther(ValueEval arg)
@@ -121,7 +121,7 @@ namespace TestCases.SS.Formula.Functions
             ConfirmString(eval, "");
 
             eval = invokeTWithReference(ErrorEval.NAME_INVALID);
-            Assert.IsTrue(eval == ErrorEval.NAME_INVALID);
+            ClassicAssert.IsTrue(eval == ErrorEval.NAME_INVALID);
         }
         [Test]
         public void TestAreaArg()

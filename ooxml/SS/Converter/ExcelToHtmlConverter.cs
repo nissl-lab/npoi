@@ -19,7 +19,8 @@ namespace NPOI.SS.Converter
 {
     using System;
     using System.Collections.Generic;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
     using System.Xml;
     using NPOI.SS.Util;
     using NPOI.SS.UserModel;
@@ -115,11 +116,56 @@ namespace NPOI.SS.Converter
         }
         public static XmlDocument Process(string excelFile)
         {
-            IWorkbook workbook = WorkbookFactory.Create(excelFile, null);
+            HSSFWorkbook workbook = (HSSFWorkbook)WorkbookFactory.Create(excelFile, null);
+            //TODO: HSSFWorkbook workbook = ExcelToHtmlUtils.loadXls(xlsFile);
+            try
+            {
+                return ExcelToHtmlConverter.Process(workbook);
+            }
+            finally
+            {
+                workbook.Close();
+            }
+        }
+
+        /**
+         * Converts Excel file (97-2007) into HTML file.
+         *
+         * @param xlsFile
+         *            workbook stream to process
+         * @return DOM representation of result HTML
+         * @throws IOException
+         * @throws ParserConfigurationException
+         */
+        public static XmlDocument Process(InputStream xlsStream)
+        {
+            HSSFWorkbook workbook = new HSSFWorkbook(xlsStream);
+            try
+            {
+                return ExcelToHtmlConverter.Process(workbook);
+            }
+            finally
+            {
+                workbook.Close();
+            }
+        }
+
+        /**
+         * Converts Excel file (97-2007) into HTML file.
+         *
+         * @param xlsFile
+         *            workbook instance to process
+         * @return DOM representation of result HTML
+         * @throws IOException
+         * @throws ParserConfigurationException
+         */
+        public static XmlDocument Process(HSSFWorkbook workbook)
+        {
             ExcelToHtmlConverter excelToHtmlConverter = new ExcelToHtmlConverter();
             excelToHtmlConverter.ProcessWorkbook(workbook);
             return excelToHtmlConverter.Document;
         }
+
         public XmlDocument Document
         {
             get
@@ -226,9 +272,9 @@ namespace NPOI.SS.Converter
 
         protected void ProcessDocumentInformation(IWorkbook workbook)
         {
-            if (workbook is NPOI.HSSF.UserModel.HSSFWorkbook)
+            if (workbook is NPOI.HSSF.UserModel.HSSFWorkbook hssfWorkbook)
             {
-                SummaryInformation summaryInformation = ((HSSFWorkbook)workbook).SummaryInformation;
+                SummaryInformation summaryInformation = hssfWorkbook.SummaryInformation;
                 if (summaryInformation != null)
                 {
                     if (!string.IsNullOrEmpty(summaryInformation.Title))
@@ -244,9 +290,9 @@ namespace NPOI.SS.Converter
                         htmlDocumentFacade.AddDescription(summaryInformation.Comments);
                 }
             }
-            else if(workbook is NPOI.XSSF.UserModel.XSSFWorkbook)
+            else if(workbook is NPOI.XSSF.UserModel.XSSFWorkbook xssfWorkbook)
             {
-                POIXMLProperties props=((NPOI.XSSF.UserModel.XSSFWorkbook)workbook).GetProperties();
+                POIXMLProperties props=xssfWorkbook.GetProperties();
                 if (!string.IsNullOrEmpty(props.CoreProperties.Title))
                 {
                     htmlDocumentFacade.Title = props.CoreProperties.Title;
@@ -358,10 +404,12 @@ namespace NPOI.SS.Converter
 
             return maxRenderedColumn + 1;
         }
-        private string GetRowName(IRow row)
+
+        private static string GetRowName(IRow row)
         {
             return (row.RowNum + 1).ToString();
         }
+
         protected void ProcessRowNumber(IRow row, XmlElement tableRowNumberCellElement)
         {
             tableRowNumberCellElement.SetAttribute("class", "rownumber");
@@ -575,9 +623,9 @@ namespace NPOI.SS.Converter
                 }
             }
 
-            if (OutputLeadingSpacesAsNonBreaking && value.StartsWith(" "))
+            if (OutputLeadingSpacesAsNonBreaking && value.StartsWith(' '))
             {
-                StringBuilder builder = new StringBuilder();
+                using var builder = ZString.CreateStringBuilder();
                 for (int c = 0; c < value.Length; c++)
                 {
                     if (value[c] != ' ')
@@ -645,9 +693,9 @@ namespace NPOI.SS.Converter
         {
             StringBuilder style = new StringBuilder();
 
-            if (workbook is HSSFWorkbook)
+            if (workbook is HSSFWorkbook hssfWorkbook)
             {
-                HSSFPalette palette = ((HSSFWorkbook)workbook).GetCustomPalette();
+                HSSFPalette palette = hssfWorkbook.GetCustomPalette();
                 style.Append("white-space: pre-wrap; ");
                 ExcelToHtmlUtils.AppendAlign(style, cellStyle.Alignment);
 
@@ -722,25 +770,24 @@ namespace NPOI.SS.Converter
             BuildStyle_Border(workbook, style, "left", cellStyle.BorderLeft, cellStyle.LeftBorderColor);
 
             IFont font = cellStyle.GetFont(workbook);
-            BuildStyle_Font(workbook, style, font);
+            ExcelToHtmlConverter.BuildStyle_Font(workbook, style, font);
 
             return style.ToString();
         }
 
-        private void BuildStyle_Border(IWorkbook workbook, StringBuilder style,
-                String type, BorderStyle xlsBorder, short borderColor)
+        private static void BuildStyle_Border(IWorkbook workbook, StringBuilder style, String type, BorderStyle xlsBorder, short borderColor)
         {
             if (xlsBorder == BorderStyle.None)
                 return;
 
-            StringBuilder borderStyle = new StringBuilder();
+            using var borderStyle = ZString.CreateStringBuilder();
             borderStyle.Append(ExcelToHtmlUtils.GetBorderWidth(xlsBorder));
             borderStyle.Append(' ');
             borderStyle.Append(ExcelToHtmlUtils.GetBorderStyle(xlsBorder));
 
-            if (workbook is HSSFWorkbook)
+            if (workbook is HSSFWorkbook hssfWorkbook)
             {
-                var customPalette = ((HSSFWorkbook) workbook).GetCustomPalette();
+                var customPalette = hssfWorkbook.GetCustomPalette();
                 HSSFColor color = null;
                 if (customPalette != null)
                     color = customPalette.GetColor(borderColor);
@@ -750,7 +797,7 @@ namespace NPOI.SS.Converter
                     borderStyle.Append(ExcelToHtmlUtils.GetColor(color));
                 }
             }
-            else 
+            else
             {
                 IndexedColors clr = IndexedColors.TryValueOf(borderColor);
                 if (clr != null)
@@ -778,8 +825,7 @@ namespace NPOI.SS.Converter
             style.AppendFormat("border-{0}: {1}; ",type, borderStyle);
         }
 
-        void BuildStyle_Font(IWorkbook workbook, StringBuilder style,
-                IFont font)
+        private static void BuildStyle_Font(IWorkbook workbook, StringBuilder style, IFont font)
         {
             switch (font.Boldweight)
             {
@@ -792,9 +838,9 @@ namespace NPOI.SS.Converter
                     break;
             }
 
-            if (workbook is HSSFWorkbook)
+            if (workbook is HSSFWorkbook hssfWorkbook)
             {
-                var customPalette = ((HSSFWorkbook) workbook).GetCustomPalette();
+                var customPalette = hssfWorkbook.GetCustomPalette();
                 HSSFColor fontColor=null;
                 if(customPalette!=null)
                     fontColor = customPalette.GetColor(font.Color);

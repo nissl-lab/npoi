@@ -45,7 +45,7 @@ namespace NPOI.SS.Formula.Eval
          * Some function IDs that require special treatment
          */
 
-        private class FunctionID
+        private sealed class FunctionID
         {
             /** 1 */
             public const int IF = FunctionMetadataRegistry.FUNCTION_INDEX_IF;
@@ -137,14 +137,14 @@ namespace NPOI.SS.Formula.Eval
             retval[37] = new Or(); // OR
             retval[38] = new Not(); // NOT
             retval[39] = NumericFunction.MOD; // MOD
-            retval[40] = new NotImplementedFunction("DCOUNT"); // DCOUNT
-            retval[41] = new NotImplementedFunction("DSUM"); // DSUM
-            retval[42] = new NotImplementedFunction("DAVERAGE"); // DAVERAGE
+            retval[40] = new DStarRunner(DStarRunner.DStarAlgorithmEnum.DCOUNT); // DCOUNT
+            retval[41] = new DStarRunner(DStarRunner.DStarAlgorithmEnum.DSUM); // DSUM
+            retval[42] = new DStarRunner(DStarRunner.DStarAlgorithmEnum.DAVERAGE); // DAVERAGE
             retval[43] = new DStarRunner(DStarRunner.DStarAlgorithmEnum.DMIN); // DMIN
-            retval[44] = new NotImplementedFunction("DMAX"); // DMAX
-            retval[45] = new NotImplementedFunction("DSTDEV"); // DSTDEV
+            retval[44] = new DStarRunner(DStarRunner.DStarAlgorithmEnum.DMAX);// DMAX
+            retval[45] = new DStarRunner(DStarRunner.DStarAlgorithmEnum.DSTDEV); // DSTDEV
             retval[46] = AggregateFunction.VAR; // VAR
-            retval[47] = new NotImplementedFunction("DVAR"); // DVAR
+            retval[47] = new DStarRunner(DStarRunner.DStarAlgorithmEnum.DVAR);
             retval[48] = TextFunction.TEXT; // TEXT
             retval[49] = new NotImplementedFunction("LINEST"); // LINEST
             retval[50] = new NotImplementedFunction("TREND"); // TREND
@@ -281,17 +281,17 @@ namespace NPOI.SS.Formula.Eval
             retval[186] = new NotImplementedFunction("GetWORKSPACE"); // GetWORKSPACE
             retval[187] = new NotImplementedFunction("GetWINDOW"); // GetWINDOW
             retval[188] = new NotImplementedFunction("GetDOCUMENT"); // GetDOCUMENT
-            retval[189] = new NotImplementedFunction("DPRODUCT"); // DPRODUCT
+            retval[189] = new DStarRunner(DStarRunner.DStarAlgorithmEnum.DPRODUCT);
             retval[190] = LogicalFunction.ISNONTEXT; // IsNONTEXT
             retval[191] = new NotImplementedFunction("GetNOTE"); // GetNOTE
             retval[192] = new NotImplementedFunction("NOTE"); // NOTE
-            retval[193] = new NotImplementedFunction("STDEVP"); // STDEVP
+            retval[193] = AggregateFunction.STDEVP;
             retval[194] = AggregateFunction.VARP; // VARP
-            retval[195] = new NotImplementedFunction("DSTDEVP"); // DSTDEVP
-            retval[196] = new NotImplementedFunction("DVARP"); // DVARP
+            retval[195] = new DStarRunner(DStarRunner.DStarAlgorithmEnum.DSTDEVP);
+            retval[196] = new DStarRunner(DStarRunner.DStarAlgorithmEnum.DVARP);
             retval[197] = NumericFunction.TRUNC; // TRUNC
             retval[198] = LogicalFunction.ISLOGICAL; // IsLOGICAL
-            retval[199] = new NotImplementedFunction("DCOUNTA"); // DCOUNTA
+            retval[199] = new DStarRunner(DStarRunner.DStarAlgorithmEnum.DCOUNTA);
             retval[200] = new NotImplementedFunction("DELETEBAR"); // DELETEBAR
             retval[201] = new NotImplementedFunction("UNREGISTER"); // UNREGISTER
             retval[204] = NumericFunction.DOLLAR; // USDOLLAR
@@ -504,7 +504,7 @@ namespace NPOI.SS.Formula.Eval
             {
                 Function func = functions[i];
                 FunctionMetadata metaData = FunctionMetadataRegistry.GetFunctionByIndex(i);
-                if (func != null && !(func is NotImplementedFunction))
+                if (func != null && func is not NotImplementedFunction)
                 {
                     lst.Add(metaData.Name);
                 }

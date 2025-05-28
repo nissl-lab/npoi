@@ -27,7 +27,7 @@ namespace NPOI.HSSF.Record
     using System.Collections.Generic;
     using System.IO;
 
-    internal class SerializationListener : EscherSerializationListener
+    internal sealed class SerializationListener : EscherSerializationListener
     {
         readonly IList<int> spEndingOffsets;
         readonly IList<EscherRecord> records;
@@ -58,7 +58,8 @@ namespace NPOI.HSSF.Record
 
         #endregion
     }
-    internal class RecordSizeListener : EscherSerializationListener
+
+    internal sealed class RecordSizeListener : EscherSerializationListener
     {
         readonly IList<int> spEndingOffsets;
         EscherRecord record;
@@ -431,8 +432,8 @@ namespace NPOI.HSSF.Record
         {
             // Keep track of any shape records Created so we can match them back to the object id's.
             // Textbox objects are also treated as shape objects.
-            List<EscherRecord> shapeRecords = new List<EscherRecord>();
-            IEscherRecordFactory recordFactory = new CustomEscherRecordFactory(shapeRecords);
+            List<EscherRecord> shapeRecords = [];
+            CustomEscherRecordFactory recordFactory = new(shapeRecords);
 
             // Create one big buffer
             using (MemoryStream stream = RecyclableMemory.GetStream())
@@ -604,7 +605,7 @@ namespace NPOI.HSSF.Record
          * @param i - number of shape, saved into data array
          * @return offset of data array after serialization
          */
-        private int WriteDataIntoDrawingRecord(byte[] drawingData, int writtenEscherBytes, int pos, byte[] data, int i)
+        private static int WriteDataIntoDrawingRecord(byte[] drawingData, int writtenEscherBytes, int pos, byte[] data, int i)
         {
             int temp = 0;
             //First record in drawing layer MUST be DrawingRecord
@@ -648,7 +649,7 @@ namespace NPOI.HSSF.Record
          * @param records List of escher records
          * @return the number of bytes
          */
-        private int GetEscherRecordSize(List<EscherRecord> records)
+        private static int GetEscherRecordSize(List<EscherRecord> records)
         {
             int size = 0;
             foreach (EscherRecord record in records)
@@ -665,9 +666,9 @@ namespace NPOI.HSSF.Record
         private static short GetSid(List<RecordBase> records, int loc)
         {
             RecordBase record = records[(loc)];
-            if (record is Record)
+            if (record is Record record1)
             {
-                return ((Record)record).Sid;
+                return record1.Sid;
             }
             else
             {
@@ -803,7 +804,7 @@ namespace NPOI.HSSF.Record
 
         
 
-        internal class CustomEscherRecordFactory : DefaultEscherRecordFactory
+        internal sealed class CustomEscherRecordFactory : DefaultEscherRecordFactory
         {
             readonly List<EscherRecord> shapeRecords;
             public CustomEscherRecordFactory(List<EscherRecord> shapeRecords)
@@ -928,7 +929,7 @@ namespace NPOI.HSSF.Record
         //                    if (tailRec.Count>=i && tailRec[i-1] is NoteRecord)
         //                    {
         //                        NoteRecord noterec=(NoteRecord)tailRec[i - 1];
-                                
+
         //                        // comment
         //                        box =
         //                            new HSSFComment(null, anchor1);
@@ -937,14 +938,14 @@ namespace NPOI.HSSF.Record
         //                        comment.Row = noterec.Row;
         //                        comment.Column = noterec.Column;
         //                        comment.Visible = (noterec.Flags == NoteRecord.NOTE_VISIBLE);
-        //                        comment.String = textrec.Str;                                
+        //                        comment.String = textrec.Str;
         //                    }
         //                    else
         //                    {
         //                        // TextBox
         //                        box =
         //                            new HSSFTextbox(null, anchor1);
-        //                        ((HSSFTextbox)box).String = textrec.Str;  
+        //                        ((HSSFTextbox)box).String = textrec.Str;
         //                    }
         //                    patriarch.AddShape(box);
         //                    ConvertRecordsToUserModel(shapeContainer, box);
@@ -996,7 +997,7 @@ namespace NPOI.HSSF.Record
         //    log.Log(POILogger.WARN, "Not Processing objects into Patriarch!");
         //}
 
-        private EscherRecord GetEscherChild(EscherContainerRecord owner, int recordId)
+        private static EscherRecord GetEscherChild(EscherContainerRecord owner, int recordId)
         {
             for (IEnumerator iterator = owner.ChildRecords.GetEnumerator(); iterator.MoveNext(); )
             {
@@ -1263,10 +1264,7 @@ namespace NPOI.HSSF.Record
         /// <param name="objRecord">Obj or TextObj record</param>
         public void AssociateShapeToObjRecord(EscherRecord r, Record objRecord)
         {
-            if(!shapeToObj.ContainsKey(r))
-                shapeToObj.Add(r, objRecord);
-            else
-                shapeToObj[r]= objRecord;
+            shapeToObj[r] = objRecord;
         }
         /// <summary>
         /// Remove echerRecord and associated to it Obj or TextObj record

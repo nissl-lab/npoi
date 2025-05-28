@@ -20,7 +20,7 @@ using System.IO;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.Util;
 using NPOI.SS.UserModel;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 namespace TestCases.HSSF.Record
 {
     /**

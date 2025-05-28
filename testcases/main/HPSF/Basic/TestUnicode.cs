@@ -20,7 +20,7 @@ namespace TestCases.HPSF.Basic
 {
     using System;
     using System.IO;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HPSF;
     using NPOI.Util;
 
@@ -75,18 +75,18 @@ namespace TestCases.HPSF.Basic
                 byte[] b = poiFile.GetBytes();
                 PropertySet ps =
                     PropertySetFactory.Create(new ByteArrayInputStream(b));
-                Assert.IsTrue(ps.IsDocumentSummaryInformation, "IsDocumentSummaryInformation");
-                Assert.AreEqual(ps.SectionCount, 2);
+                ClassicAssert.IsTrue(ps.IsDocumentSummaryInformation, "IsDocumentSummaryInformation");
+                ClassicAssert.AreEqual(ps.SectionCount, 2);
                 Section s = (Section)ps.Sections[1];
-                Assert.AreEqual(s.GetProperty(1),
+                ClassicAssert.AreEqual(s.GetProperty(1),
                                     CodePageUtil.CP_UTF16);
-                Assert.AreEqual(s.GetProperty(2),
+                ClassicAssert.AreEqual(s.GetProperty(2),
                                     -96070278);
-                Assert.AreEqual(s.GetProperty(3),
+                ClassicAssert.AreEqual(s.GetProperty(3),
                                     "MCon_Info zu Office bei Schreiner");
-                Assert.AreEqual(s.GetProperty(4),
+                ClassicAssert.AreEqual(s.GetProperty(4),
                                     "petrovitsch@schreiner-online.de");
-                Assert.AreEqual(s.GetProperty(5),
+                ClassicAssert.AreEqual(s.GetProperty(5),
                                     "Petrovitsch, Wilhelm");
             }
         }

@@ -1,7 +1,7 @@
 ﻿using NPOI.HSSF.UserModel;
 using NPOI.SS.Formula.Eval;
 using NPOI.SS.UserModel;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using System;
 
 namespace TestCases.SS.Formula.Functions
@@ -42,8 +42,8 @@ namespace TestCases.SS.Formula.Functions
             cell.SetCellFormula(formulaText);
             fe.NotifyUpdateCell(cell);
             CellValue result = fe.Evaluate(cell);
-            Assert.AreEqual(CellType.Numeric,result.CellType);
-            Assert.AreEqual(expectedResult, result.NumberValue, 0.0000001);
+            ClassicAssert.AreEqual(CellType.Numeric,result.CellType);
+            ClassicAssert.AreEqual(expectedResult, result.NumberValue, 0.0000001);
         }
 
         private static void confirmNumError(HSSFFormulaEvaluator fe, ICell cell, String formulaText)
@@ -51,7 +51,7 @@ namespace TestCases.SS.Formula.Functions
             cell.SetCellFormula(formulaText);
             fe.NotifyUpdateCell(cell);
             CellValue result = fe.Evaluate(cell);
-            Assert.AreEqual(CellType.Error, result.CellType);
+            ClassicAssert.AreEqual(CellType.Error, result.CellType);
         }
     }
 }

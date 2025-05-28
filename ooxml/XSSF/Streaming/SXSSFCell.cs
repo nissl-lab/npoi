@@ -488,9 +488,9 @@ namespace NPOI.XSSF.Streaming
                 }
 
                 if (_value.GetType() == CellType.Formula)
-                    if (_value is NumericFormulaValue)
+                    if (_value is NumericFormulaValue formulaValue)
                     {
-                        ((NumericFormulaValue)_value).PreEvaluatedValue = Double.Parse(value);
+                        formulaValue.PreEvaluatedValue = Double.Parse(value);
                     }
                     else
                     {
@@ -595,7 +595,7 @@ namespace NPOI.XSSF.Streaming
                 case CellType.Numeric:
                     if (DateUtil.IsCellDateFormatted(this))
                     {
-                        FormatBase sdf = new SimpleDateFormat("dd-MMM-yyyy");
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
                         //sdf.setTimeZone(LocaleUtil.getUserTimeZone());
                         return sdf.Format(DateCellValue);
                     }
@@ -820,15 +820,17 @@ namespace NPOI.XSSF.Streaming
             }
 
             // if we had a Formula before, we should copy over the _value of the formula
-            if (prevValue is FormulaValue)
+            if (prevValue is FormulaValue value)
             {
-                ((FormulaValue)_value).Value = ((FormulaValue)prevValue).Value;
+                ((FormulaValue)_value).Value = value.Value;
             }
         }
-        private CellType ComputeTypeFromFormula(String formula)
+
+        private static CellType ComputeTypeFromFormula(String formula)
         {
             return CellType.Numeric;
         }
+
         //COPIED FROM https://svn.apache.org/repos/asf/poi/trunk/src/ooxml/java/org/apache/poi/xssf/usermodel/XSSFCell.java since the functions are declared private there
         /**
          * Used to help format error messages

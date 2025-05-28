@@ -24,7 +24,7 @@ namespace TestCases.POIFS.Crypt
     using NPOI.POIFS.FileSystem;
     using NPOI.Util;
     using NPOI.XSSF;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using Org.BouncyCastle.Security;
     using System;
     using System.Collections;
@@ -47,7 +47,7 @@ namespace TestCases.POIFS.Crypt
             EncryptionInfo ei = new EncryptionInfo(poifs);
             Decryptor dec = ei.Decryptor;
             bool passOk = dec.VerifyPassword("tika");
-            Assert.IsTrue(passOk);
+            ClassicAssert.IsTrue(passOk);
 
             // generate session key
             SecureRandom sr = new SecureRandom();
@@ -70,11 +70,11 @@ namespace TestCases.POIFS.Crypt
             //XSSFEventBasedExcelExtractor extractor = new XSSFEventBasedExcelExtractor(opc);
             //extractor.IncludeSheetNames = (/*setter*/false);
             //String txt = extractor.Text;
-            //Assert.AreEqual(expected, txt.Trim());
+            //ClassicAssert.AreEqual(expected, txt.Trim());
 
             //XSSFWorkbook wb = new XSSFWorkbook(opc);
             //txt = wb.GetSheetAt(0).GetRow(0).GetCell(0).StringCellValue;
-            //Assert.AreEqual(expected, txt);
+            //ClassicAssert.AreEqual(expected, txt);
 
             //extractor.Close();
 

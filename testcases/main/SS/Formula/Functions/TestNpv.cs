@@ -19,7 +19,7 @@ namespace TestCases.SS.Formula.Functions
 {
     using System;
     using System.Text;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
     using TestCases.HSSF;
@@ -56,7 +56,7 @@ namespace TestCases.SS.Formula.Functions
             fe.ClearAllCachedResultValues();
             fe.EvaluateFormulaCell(cell);
             double res = cell.NumericCellValue;
-            Assert.AreEqual(1922.06d, Math.Round(res * 100d) / 100d);
+            ClassicAssert.AreEqual(1922.06d, Math.Round(res * 100d) / 100d);
 
             // Range
             cell.CellFormula = ("NPV(A2, A4:A8)+A3");
@@ -64,7 +64,7 @@ namespace TestCases.SS.Formula.Functions
             fe.ClearAllCachedResultValues();
             fe.EvaluateFormulaCell(cell);
             res = cell.NumericCellValue;
-            Assert.AreEqual(1922.06d, Math.Round(res * 100d) / 100d);
+            ClassicAssert.AreEqual(1922.06d, Math.Round(res * 100d) / 100d);
         }
 
         /**
@@ -109,7 +109,7 @@ namespace TestCases.SS.Formula.Functions
         {
             double actualValue = cv.NumberValue;
             double expectedValue = cell.NumericCellValue; // cached formula result calculated by Excel
-            Assert.AreEqual(expectedValue, actualValue, 1E-4); // should agree within 0.01%
+            ClassicAssert.AreEqual(expectedValue, actualValue, 1E-4); // should agree within 0.01%
         }
     }
 

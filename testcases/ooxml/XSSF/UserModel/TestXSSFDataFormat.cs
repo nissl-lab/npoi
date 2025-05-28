@@ -1,3 +1,4 @@
+
 /* ====================================================================
    Licensed to the Apache Software Foundation (ASF) under one or more
    contributor license agreements.  See the NOTICE file distributed with
@@ -16,10 +17,12 @@
 ==================================================================== */
 
 using TestCases.SS.UserModel;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using NPOI.SS.UserModel;
 using NPOI.XSSF;
 using NPOI.XSSF.UserModel;
+using NPOI.SS.Util;
+using NPOI.SS.Formula;
 
 namespace TestCases.XSSF.UserModel
 {
@@ -50,7 +53,7 @@ namespace TestCases.XSSF.UserModel
             // As of 2015-12-27, there is no way to override a built-in number format with POI XSSFWorkbook
             // 49928.xlsx has been saved with a poundFmt that overrides the default value (dollar)
             short poundFmtIdx = wb.GetSheetAt(0).GetRow(0).GetCell(0).CellStyle.DataFormat;
-            Assert.AreEqual(poundFmtIdx, dataFormat.GetFormat(poundFmt));
+            ClassicAssert.AreEqual(poundFmtIdx, dataFormat.GetFormat(poundFmt));
 
             // now create a custom format with Pound (\u00a3)
 
@@ -58,8 +61,8 @@ namespace TestCases.XSSF.UserModel
             AssertNotBuiltInFormat(customFmt);
             short customFmtIdx = dataFormat.GetFormat(customFmt);
 
-            Assert.IsTrue(customFmtIdx >= BuiltinFormats.FIRST_USER_DEFINED_FORMAT_INDEX);
-            Assert.AreEqual(customFmt, dataFormat.GetFormat(customFmtIdx));
+            ClassicAssert.IsTrue(customFmtIdx >= BuiltinFormats.FIRST_USER_DEFINED_FORMAT_INDEX);
+            ClassicAssert.AreEqual(customFmt, dataFormat.GetFormat(customFmtIdx));
 
             wb.Close();
         }
@@ -96,16 +99,51 @@ namespace TestCases.XSSF.UserModel
 
             XSSFWorkbook wb2 = XSSFTestDataSamples.WriteOutCloseAndReadBack(wb1);
             cell = wb2.GetSheet("bug58778").GetRow(0).GetCell(0);
-            Assert.AreEqual(5.25, cell.NumericCellValue, 0);
+            ClassicAssert.AreEqual(5.25, cell.NumericCellValue, 0);
 
             style = cell.CellStyle;
-            Assert.AreEqual(poundFmt, style.GetDataFormatString());
-            Assert.AreEqual(poundFmtIdx, style.DataFormat);
+            ClassicAssert.AreEqual(poundFmt, style.GetDataFormatString());
+            ClassicAssert.AreEqual(poundFmtIdx, style.DataFormat);
 
             // manually check the file to make sure the cell is rendered as "<poundsymbol>5"
             // Verified with LibreOffice 4.2.8.2 on 2015-12-28
             wb2.Close();
             wb1.Close();
+        }
+
+        [Test]
+        public void TestConditionalFormattingEvaluation()
+        {
+
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("61060-conditional-number-formatting.xlsx");
+
+            DataFormatter formatter = new DataFormatter();
+            IFormulaEvaluator evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
+            ConditionalFormattingEvaluator cfEvaluator = new ConditionalFormattingEvaluator(wb, (IWorkbookEvaluatorProvider)evaluator);
+
+            CellReference ref1 = new CellReference("A1");
+            ICell cell = wb.GetSheetAt(0).GetRow(ref1.Row).GetCell(ref1.Col);
+            ClassicAssert.AreEqual("0.10", formatter.FormatCellValue(cell, evaluator, cfEvaluator));
+            // verify cell format without the conditional rule applied
+            ClassicAssert.AreEqual("0.1", formatter.FormatCellValue(cell, evaluator));
+
+            ref1 = new CellReference("A3");
+            cell = wb.GetSheetAt(0).GetRow(ref1.Row).GetCell(ref1.Col);
+            ClassicAssert.AreEqual("-2.00E+03", formatter.FormatCellValue(cell, evaluator, cfEvaluator));
+            // verify cell format without the conditional rule applied
+            ClassicAssert.AreEqual("-2000", formatter.FormatCellValue(cell, evaluator));
+
+            ref1 = new CellReference("A4");
+            cell = wb.GetSheetAt(0).GetRow(ref1.Row).GetCell(ref1.Col);
+            ClassicAssert.AreEqual("100", formatter.FormatCellValue(cell, evaluator, cfEvaluator));
+
+            ref1 = new CellReference("A5");
+            cell = wb.GetSheetAt(0).GetRow(ref1.Row).GetCell(ref1.Col);
+            ClassicAssert.AreEqual("$1,000", formatter.FormatCellValue(cell, evaluator, cfEvaluator));
+            // verify cell format without the conditional rule applied
+            ClassicAssert.AreEqual("1000", formatter.FormatCellValue(cell, evaluator));
+
+            wb.Close();
         }
 
     }

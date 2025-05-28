@@ -22,6 +22,7 @@
     <PackageReference Include="SharpZipLib" />
     <PackageReference Include="SixLabors.Fonts" />
     <PackageReference Include="SixLabors.ImageSharp" />
+    <PackageReference Include="ZString" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net472' ">

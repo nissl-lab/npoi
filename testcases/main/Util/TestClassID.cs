@@ -34,6 +34,8 @@ namespace TestCases.Util
     using NUnit.Framework;
     using System.IO;
     using NPOI.Util;
+    using NPOI.HPSF;
+    using NUnit.Framework.Legacy;
 
     /**
      * Tests ClassID structure.
@@ -74,10 +76,10 @@ namespace TestCases.Util
                           0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x11 }
                 , 0
             );
-            Assert.AreEqual(clsidTest1, clsidTest1);
-            Assert.AreEqual(clsidTest1, clsidTest2);
-            Assert.IsFalse(clsidTest1.Equals(clsidTest3));
-            Assert.IsFalse(clsidTest1.Equals(null));
+            ClassicAssert.AreEqual(clsidTest1, clsidTest1);
+            ClassicAssert.AreEqual(clsidTest1, clsidTest2);
+            ClassicAssert.IsFalse(clsidTest1.Equals(clsidTest3));
+            ClassicAssert.IsFalse(clsidTest1.Equals(null));
         }
         /**
          * Try to Write to a buffer that is too small. This should
@@ -100,7 +102,7 @@ namespace TestCases.Util
             {
                 bExceptionOccurred = true;
             }
-            Assert.IsTrue(bExceptionOccurred);
+            ClassicAssert.IsTrue(bExceptionOccurred);
 
             bExceptionOccurred = false;
             try
@@ -111,7 +113,7 @@ namespace TestCases.Util
             {
                 bExceptionOccurred = true;
             }
-            Assert.IsTrue(bExceptionOccurred);
+            ClassicAssert.IsTrue(bExceptionOccurred);
 
             // These should work without throwing an Exception
             bExceptionOccurred = false;
@@ -124,7 +126,7 @@ namespace TestCases.Util
             {
                 bExceptionOccurred = true;
             }
-            Assert.IsFalse(bExceptionOccurred);
+            ClassicAssert.IsFalse(bExceptionOccurred);
         }
         /**
          * Tests the {@link PropertySet} methods. The Test file has two
@@ -139,7 +141,7 @@ namespace TestCases.Util
                           0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x10}
                 , 0
             );
-            Assert.AreEqual(clsidTest.ToString().ToUpper(),
+            ClassicAssert.AreEqual(clsidTest.ToString().ToUpper(),
                                 "{04030201-0605-0807-090A-0B0C0D0E0F10}"
             );
         }

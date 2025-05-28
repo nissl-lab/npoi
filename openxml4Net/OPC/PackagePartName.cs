@@ -132,7 +132,7 @@ namespace NPOI.OpenXml4Net.OPC
          * @return <code>true</code> if this part name respect the relationship
          *         part naming convention else <code>false</code>.
          */
-        private bool IsRelationshipPartURI(Uri partUri)
+        private static bool IsRelationshipPartURI(Uri partUri)
         {
             if (partUri == null)
                 throw new ArgumentException("partUri");
@@ -254,7 +254,7 @@ namespace NPOI.OpenXml4Net.OPC
                                     + partUri.OriginalString);
                 }
 
-                if (seg.EndsWith("."))
+                if (seg.EndsWith('.'))
                 {
                     throw new InvalidFormatException(
                             "A segment shall not end with a dot ('.') character [M1.9]: "
@@ -475,7 +475,7 @@ namespace NPOI.OpenXml4Net.OPC
                 String fragment = this.partNameURI.OriginalString;
                 if (fragment.Length > 0)
                 {
-                    int i = fragment.LastIndexOf(".", StringComparison.Ordinal);
+                    int i = fragment.LastIndexOf('.');
                     if (i > -1)
                         return fragment.Substring(i + 1);
                 }
@@ -505,12 +505,12 @@ namespace NPOI.OpenXml4Net.OPC
 
         public override bool Equals(Object other)
         {
-            if (other is PackagePartName)
+            if (other is PackagePartName name)
             {
                 // String.equals() is compatible with our compareTo(), but cheaper
                 return this.partNameURI.OriginalString.ToLower().Equals
                 (
-                    ((PackagePartName)other).partNameURI.OriginalString.ToLower()
+                    name.partNameURI.OriginalString.ToLower()
                 );
             }
             else

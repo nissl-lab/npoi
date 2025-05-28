@@ -22,7 +22,7 @@ namespace TestCases.HSSF.UserModel
     using NPOI.HSSF.UserModel;
     using NPOI.POIFS.FileSystem;
     using TestCases.HSSF;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     /**
      * Tests for how HSSFWorkbook behaves with XLS files
@@ -50,7 +50,7 @@ namespace TestCases.HSSF.UserModel
             fs.Root.GetEntry("WORKBOOK");
             // And a summary
             fs.Root.GetEntry("\x0005SummaryInformation");
-            Assert.IsTrue(true);
+            ClassicAssert.IsTrue(true);
 
             // But not a Workbook one
             try
@@ -78,7 +78,7 @@ namespace TestCases.HSSF.UserModel
 
             // Ensure that we have a BOOK entry
             fs.Root.GetEntry("BOOK");
-            Assert.IsTrue(true);
+            ClassicAssert.IsTrue(true);
 
             // But not a Workbook one
             try

@@ -18,7 +18,7 @@
 namespace TestCases.HSSF.Record
 {
     using System;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.Record;
     using NPOI.Util;
 
@@ -35,7 +35,7 @@ namespace TestCases.HSSF.Record
                     "11 00 09 00 01 38 5E C4 89 5F 00 53 00 68 00 65 00 65 00 74 00 31 00");
             RecordInputStream in1 = TestcaseRecordInputStream.Create(StyleRecord.sid, data);
             StyleRecord sr = new StyleRecord(in1);
-            Assert.AreEqual("\u5E38\u89C4_Sheet1", sr.Name); // "<Conventional>_Sheet1"
+            ClassicAssert.AreEqual("\u5E38\u89C4_Sheet1", sr.Name); // "<Conventional>_Sheet1"
             byte[] ser;
             try
             {

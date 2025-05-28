@@ -15,7 +15,7 @@
    limitations under the License.
 ==================================================================== */
 
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using NPOI.SS.UserModel;
 using NPOI.SS.UserModel.Charts;
 using NPOI.XSSF.UserModel;
@@ -59,31 +59,31 @@ namespace TestCases.XSSF.UserModel.Charts
             LayoutTarget nonDefaultTarget = LayoutTarget.Outer;
 
             layout.SetWidthRatio(newRatio);
-            Assert.IsTrue(layout.GetWidthRatio() == newRatio);
+            ClassicAssert.IsTrue(layout.GetWidthRatio() == newRatio);
 
             layout.SetHeightRatio(newRatio);
-            Assert.IsTrue(layout.GetHeightRatio() == newRatio);
+            ClassicAssert.IsTrue(layout.GetHeightRatio() == newRatio);
 
             layout.SetX(newCoordinate);
-            Assert.IsTrue(layout.GetX() == newCoordinate);
+            ClassicAssert.IsTrue(layout.GetX() == newCoordinate);
 
             layout.SetY(newCoordinate);
-            Assert.IsTrue(layout.GetY() == newCoordinate);
+            ClassicAssert.IsTrue(layout.GetY() == newCoordinate);
 
             layout.SetXMode(nonDefaultMode);
-            Assert.IsTrue(layout.GetXMode() == nonDefaultMode);
+            ClassicAssert.IsTrue(layout.GetXMode() == nonDefaultMode);
 
             layout.SetYMode(nonDefaultMode);
-            Assert.IsTrue(layout.GetYMode() == nonDefaultMode);
+            ClassicAssert.IsTrue(layout.GetYMode() == nonDefaultMode);
 
             layout.SetWidthMode(nonDefaultMode);
-            Assert.IsTrue(layout.GetWidthMode() == nonDefaultMode);
+            ClassicAssert.IsTrue(layout.GetWidthMode() == nonDefaultMode);
 
             layout.SetHeightMode(nonDefaultMode);
-            Assert.IsTrue(layout.GetHeightMode() == nonDefaultMode);
+            ClassicAssert.IsTrue(layout.GetHeightMode() == nonDefaultMode);
 
             layout.SetTarget(nonDefaultTarget);
-            Assert.IsTrue(layout.GetTarget() == nonDefaultTarget);
+            ClassicAssert.IsTrue(layout.GetTarget() == nonDefaultTarget);
         }
 
         /*
@@ -93,19 +93,19 @@ namespace TestCases.XSSF.UserModel.Charts
         [Test]
         public void TestDefaultValues()
         {
-            Assert.IsNotNull(layout.GetTarget());
-            Assert.IsNotNull(layout.GetXMode());
-            Assert.IsNotNull(layout.GetYMode());
-            Assert.IsNotNull(layout.GetHeightMode());
-            Assert.IsNotNull(layout.GetWidthMode());
+            ClassicAssert.IsNotNull(layout.GetTarget());
+            ClassicAssert.IsNotNull(layout.GetXMode());
+            ClassicAssert.IsNotNull(layout.GetYMode());
+            ClassicAssert.IsNotNull(layout.GetHeightMode());
+            ClassicAssert.IsNotNull(layout.GetWidthMode());
             /*
              * According to interface, 0.0 should be returned for
              * unInitialized double properties.
              */
-            Assert.IsTrue(layout.GetX() == 0.0);
-            Assert.IsTrue(layout.GetY() == 0.0);
-            Assert.IsTrue(layout.GetWidthRatio() == 0.0);
-            Assert.IsTrue(layout.GetHeightRatio() == 0.0);
+            ClassicAssert.IsTrue(layout.GetX() == 0.0);
+            ClassicAssert.IsTrue(layout.GetY() == 0.0);
+            ClassicAssert.IsTrue(layout.GetWidthRatio() == 0.0);
+            ClassicAssert.IsTrue(layout.GetHeightRatio() == 0.0);
         }
     }
 }

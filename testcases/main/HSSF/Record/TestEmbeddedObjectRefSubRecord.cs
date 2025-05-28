@@ -18,7 +18,7 @@ namespace TestCases.HSSF.Record
 {
     using System;
     using NPOI.HSSF.Record;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.Util;
     using System.IO;
 
@@ -52,11 +52,11 @@ namespace TestCases.HSSF.Record
             EmbeddedObjectRefSubRecord record2 = new EmbeddedObjectRefSubRecord(in2, src.Length - 4);
 
             ConfirmData(src, ser);
-            Assert.AreEqual(record1.OLEClassName, record2.OLEClassName);
+            ClassicAssert.AreEqual(record1.OLEClassName, record2.OLEClassName);
 
             byte[] ser2 = record1.Serialize();
 
-            Assert.IsTrue(Arrays.Equals(ser, ser2));
+            ClassicAssert.IsTrue(Arrays.Equals(ser, ser2));
         }
         /**
          * @param expectedData does not include sid & size
@@ -64,7 +64,7 @@ namespace TestCases.HSSF.Record
          */
         private static void ConfirmData(byte[] expectedData, byte[] actualFullRecordData)
         {
-            Assert.AreEqual(expectedData.Length, actualFullRecordData.Length - 4);
+            ClassicAssert.AreEqual(expectedData.Length, actualFullRecordData.Length - 4);
             for (int i = 0; i < expectedData.Length; i++)
             {
                 if (expectedData[i] != actualFullRecordData[i + 4])
@@ -83,11 +83,11 @@ namespace TestCases.HSSF.Record
             in2.NextRecord();
             EmbeddedObjectRefSubRecord record2 = new EmbeddedObjectRefSubRecord(in2, ser.Length - 4);
 
-            Assert.AreEqual(record1.OLEClassName, record2.OLEClassName);
-            Assert.AreEqual(record1.StreamId, record2.StreamId);
+            ClassicAssert.AreEqual(record1.OLEClassName, record2.OLEClassName);
+            ClassicAssert.AreEqual(record1.StreamId, record2.StreamId);
 
             byte[] ser2 = record1.Serialize();
-            Assert.IsTrue(Arrays.Equals(ser, ser2));
+            ClassicAssert.IsTrue(Arrays.Equals(ser, ser2));
 
         }
 

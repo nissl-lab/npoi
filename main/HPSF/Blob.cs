@@ -2,7 +2,7 @@
 
 namespace NPOI.HPSF
 {
-    internal class Blob
+    internal sealed class Blob
     {
         private readonly byte[] _value;
 
@@ -12,7 +12,7 @@ namespace NPOI.HPSF
 
             if (size == 0)
             {
-                _value = System.Array.Empty<byte>();
+                _value = [];
                 return;
             }
 

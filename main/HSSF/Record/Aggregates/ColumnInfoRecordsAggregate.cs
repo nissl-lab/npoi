@@ -31,7 +31,7 @@ namespace NPOI.HSSF.Record.Aggregates
     /// </summary>
     public class ColumnInfoRecordsAggregate : RecordAggregate, ICloneable
     {
-        private class CIRComparator : IComparer<ColumnInfoRecord>
+        private sealed class CIRComparator : IComparer<ColumnInfoRecord>
         {
             public static IComparer<ColumnInfoRecord> instance = new CIRComparator();
             private CIRComparator()
@@ -615,7 +615,8 @@ namespace NPOI.HSSF.Record.Aggregates
                 // know both on each side are different
             }
         }
-        private ColumnInfoRecord CopyColInfo(ColumnInfoRecord ci)
+
+        private static ColumnInfoRecord CopyColInfo(ColumnInfoRecord ci)
         {
             return (ColumnInfoRecord)ci.Clone();
         }
@@ -623,7 +624,7 @@ namespace NPOI.HSSF.Record.Aggregates
         /**
          * Sets all non null fields into the <c>ci</c> parameter.
          */
-        private void SetColumnInfoFields(ColumnInfoRecord ci, short xfStyle, short width, int level, bool hidden, bool collapsed)
+        private static void SetColumnInfoFields(ColumnInfoRecord ci, short xfStyle, short width, int level, bool hidden, bool collapsed)
         {
             ci.XFIndex = (xfStyle);
             ci.ColumnWidth = (width);

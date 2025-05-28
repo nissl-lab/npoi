@@ -204,13 +204,13 @@ namespace NPOI.XSSF.Extractor
                     if (includeHeadersFooters)
                     {
                         text.Append(
-                                ExtractHeaderFooter(sheet.FirstHeader)
+                                XSSFExcelExtractor.ExtractHeaderFooter(sheet.FirstHeader)
                         );
                         text.Append(
-                                ExtractHeaderFooter(sheet.OddHeader)
+                                XSSFExcelExtractor.ExtractHeaderFooter(sheet.OddHeader)
                         );
                         text.Append(
-                                ExtractHeaderFooter(sheet.EvenHeader)
+                                XSSFExcelExtractor.ExtractHeaderFooter(sheet.EvenHeader)
                         );
                     }
 
@@ -286,9 +286,9 @@ namespace NPOI.XSSF.Extractor
                         {
                             foreach (XSSFShape shape in drawing.GetShapes())
                             {
-                                if (shape is XSSFSimpleShape)
+                                if (shape is XSSFSimpleShape simpleShape)
                                 {
-                                    String boxText = ((XSSFSimpleShape)shape).Text;
+                                    String boxText = simpleShape.Text;
                                     if (boxText.Length > 0)
                                     {
                                         text.Append(boxText);
@@ -303,13 +303,13 @@ namespace NPOI.XSSF.Extractor
                     if (includeHeadersFooters)
                     {
                         text.Append(
-                                ExtractHeaderFooter(sheet.FirstFooter)
+                                XSSFExcelExtractor.ExtractHeaderFooter(sheet.FirstFooter)
                         );
                         text.Append(
-                                ExtractHeaderFooter(sheet.OddFooter)
+                                XSSFExcelExtractor.ExtractHeaderFooter(sheet.OddFooter)
                         );
                         text.Append(
-                                ExtractHeaderFooter(sheet.EvenFooter)
+                                XSSFExcelExtractor.ExtractHeaderFooter(sheet.EvenFooter)
                         );
                     }
                 }
@@ -317,10 +317,12 @@ namespace NPOI.XSSF.Extractor
                 return text.ToString();
             }
         }
-        private void HandleStringCell(StringBuilder text, ICell cell)
+
+        private static void HandleStringCell(StringBuilder text, ICell cell)
         {
             text.Append(cell.RichStringCellValue.String);
         }
+
         private void HandleNonStringCell(StringBuilder text, ICell cell, DataFormatter formatter)
         {
             CellType type = cell.CellType;
@@ -356,7 +358,8 @@ namespace NPOI.XSSF.Extractor
                 text.Append(contents);
             }
         }
-        private string ExtractHeaderFooter(IHeaderFooter hf)
+
+        private static string ExtractHeaderFooter(IHeaderFooter hf)
         {
             return NPOI.HSSF.Extractor.ExcelExtractor.ExtractHeaderFooter(hf);
         }

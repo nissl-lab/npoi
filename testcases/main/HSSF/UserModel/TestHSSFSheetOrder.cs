@@ -23,7 +23,7 @@ namespace TestCases.HSSF.UserModel
     using System.IO;
     using NPOI.HSSF.Model;
     using NPOI.HSSF.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     /**
      * Tests HSSFWorkbook method setSheetOrder()
      *
@@ -53,16 +53,16 @@ namespace TestCases.HSSF.UserModel
             }
 
             // Check the initial order
-            Assert.AreEqual(0, wb.GetSheetIndex("Sheet 0"));
-            Assert.AreEqual(1, wb.GetSheetIndex("Sheet 1"));
-            Assert.AreEqual(2, wb.GetSheetIndex("Sheet 2"));
-            Assert.AreEqual(3, wb.GetSheetIndex("Sheet 3"));
-            Assert.AreEqual(4, wb.GetSheetIndex("Sheet 4"));
-            Assert.AreEqual(5, wb.GetSheetIndex("Sheet 5"));
-            Assert.AreEqual(6, wb.GetSheetIndex("Sheet 6"));
-            Assert.AreEqual(7, wb.GetSheetIndex("Sheet 7"));
-            Assert.AreEqual(8, wb.GetSheetIndex("Sheet 8"));
-            Assert.AreEqual(9, wb.GetSheetIndex("Sheet 9"));
+            ClassicAssert.AreEqual(0, wb.GetSheetIndex("Sheet 0"));
+            ClassicAssert.AreEqual(1, wb.GetSheetIndex("Sheet 1"));
+            ClassicAssert.AreEqual(2, wb.GetSheetIndex("Sheet 2"));
+            ClassicAssert.AreEqual(3, wb.GetSheetIndex("Sheet 3"));
+            ClassicAssert.AreEqual(4, wb.GetSheetIndex("Sheet 4"));
+            ClassicAssert.AreEqual(5, wb.GetSheetIndex("Sheet 5"));
+            ClassicAssert.AreEqual(6, wb.GetSheetIndex("Sheet 6"));
+            ClassicAssert.AreEqual(7, wb.GetSheetIndex("Sheet 7"));
+            ClassicAssert.AreEqual(8, wb.GetSheetIndex("Sheet 8"));
+            ClassicAssert.AreEqual(9, wb.GetSheetIndex("Sheet 9"));
 
             // Change
             wb.Workbook.SetSheetOrder("Sheet 6", 0);
@@ -70,16 +70,16 @@ namespace TestCases.HSSF.UserModel
             wb.Workbook.SetSheetOrder("Sheet 1", 9);
 
             // Check they're currently right
-            Assert.AreEqual(0, wb.GetSheetIndex("Sheet 6"));
-            Assert.AreEqual(1, wb.GetSheetIndex("Sheet 0"));
-            Assert.AreEqual(2, wb.GetSheetIndex("Sheet 2"));
-            Assert.AreEqual(3, wb.GetSheetIndex("Sheet 4"));
-            Assert.AreEqual(4, wb.GetSheetIndex("Sheet 5"));
-            Assert.AreEqual(5, wb.GetSheetIndex("Sheet 7"));
-            Assert.AreEqual(6, wb.GetSheetIndex("Sheet 3"));
-            Assert.AreEqual(7, wb.GetSheetIndex("Sheet 8"));
-            Assert.AreEqual(8, wb.GetSheetIndex("Sheet 9"));
-            Assert.AreEqual(9, wb.GetSheetIndex("Sheet 1"));
+            ClassicAssert.AreEqual(0, wb.GetSheetIndex("Sheet 6"));
+            ClassicAssert.AreEqual(1, wb.GetSheetIndex("Sheet 0"));
+            ClassicAssert.AreEqual(2, wb.GetSheetIndex("Sheet 2"));
+            ClassicAssert.AreEqual(3, wb.GetSheetIndex("Sheet 4"));
+            ClassicAssert.AreEqual(4, wb.GetSheetIndex("Sheet 5"));
+            ClassicAssert.AreEqual(5, wb.GetSheetIndex("Sheet 7"));
+            ClassicAssert.AreEqual(6, wb.GetSheetIndex("Sheet 3"));
+            ClassicAssert.AreEqual(7, wb.GetSheetIndex("Sheet 8"));
+            ClassicAssert.AreEqual(8, wb.GetSheetIndex("Sheet 9"));
+            ClassicAssert.AreEqual(9, wb.GetSheetIndex("Sheet 1"));
 
             // Read it in and see if it is correct.
             MemoryStream baos = new MemoryStream();
@@ -87,22 +87,22 @@ namespace TestCases.HSSF.UserModel
             MemoryStream bais = new MemoryStream(baos.ToArray());
             HSSFWorkbook wbr = new HSSFWorkbook(bais);
 
-            Assert.AreEqual(0, wbr.GetSheetIndex("Sheet 6"));
-            Assert.AreEqual(1, wbr.GetSheetIndex("Sheet 0"));
-            Assert.AreEqual(2, wbr.GetSheetIndex("Sheet 2"));
-            Assert.AreEqual(3, wbr.GetSheetIndex("Sheet 4"));
-            Assert.AreEqual(4, wbr.GetSheetIndex("Sheet 5"));
-            Assert.AreEqual(5, wbr.GetSheetIndex("Sheet 7"));
-            Assert.AreEqual(6, wbr.GetSheetIndex("Sheet 3"));
-            Assert.AreEqual(7, wbr.GetSheetIndex("Sheet 8"));
-            Assert.AreEqual(8, wbr.GetSheetIndex("Sheet 9"));
-            Assert.AreEqual(9, wbr.GetSheetIndex("Sheet 1"));
+            ClassicAssert.AreEqual(0, wbr.GetSheetIndex("Sheet 6"));
+            ClassicAssert.AreEqual(1, wbr.GetSheetIndex("Sheet 0"));
+            ClassicAssert.AreEqual(2, wbr.GetSheetIndex("Sheet 2"));
+            ClassicAssert.AreEqual(3, wbr.GetSheetIndex("Sheet 4"));
+            ClassicAssert.AreEqual(4, wbr.GetSheetIndex("Sheet 5"));
+            ClassicAssert.AreEqual(5, wbr.GetSheetIndex("Sheet 7"));
+            ClassicAssert.AreEqual(6, wbr.GetSheetIndex("Sheet 3"));
+            ClassicAssert.AreEqual(7, wbr.GetSheetIndex("Sheet 8"));
+            ClassicAssert.AreEqual(8, wbr.GetSheetIndex("Sheet 9"));
+            ClassicAssert.AreEqual(9, wbr.GetSheetIndex("Sheet 1"));
 
             // Now get the index by the sheet, not the name
             for (int i = 0; i < 10; i++)
             {
                 NPOI.SS.UserModel.ISheet s = wbr.GetSheetAt(i);
-                Assert.AreEqual(i, wbr.GetSheetIndex(s));
+                ClassicAssert.AreEqual(i, wbr.GetSheetIndex(s));
             }
         }
     }

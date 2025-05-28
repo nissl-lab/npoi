@@ -18,7 +18,7 @@
 namespace TestCases.HSSF.Record
 {
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.Model;
     using NPOI.HSSF.Record.Common;
     using NPOI.HSSF.UserModel;
@@ -40,7 +40,7 @@ namespace TestCases.HSSF.Record
                    HSSFTestDataSamples.OpenSampleWorkbook("46136-WithWarnings.xls");
             InternalWorkbook wb = HSSFTestHelper.GetWorkbookForTest(hssf);
 
-            Assert.AreEqual(1, hssf.NumberOfSheets);
+            ClassicAssert.AreEqual(1, hssf.NumberOfSheets);
 
             int countFR = 0;
             int countFRH = 0;
@@ -66,8 +66,8 @@ namespace TestCases.HSSF.Record
                 }
             }
 
-            Assert.AreEqual(0, countFR);
-            Assert.AreEqual(0, countFRH);
+            ClassicAssert.AreEqual(0, countFR);
+            ClassicAssert.AreEqual(0, countFRH);
 
             // Now check on the sheet
             HSSFSheet s = (HSSFSheet)hssf.GetSheetAt(0);
@@ -97,8 +97,8 @@ namespace TestCases.HSSF.Record
                 }
             }
 
-            Assert.AreEqual(0, countFR);
-            Assert.AreEqual(0, countFRH);
+            ClassicAssert.AreEqual(0, countFR);
+            ClassicAssert.AreEqual(0, countFRH);
         }
 
         public void TestReadFeatRecord()
@@ -110,7 +110,7 @@ namespace TestCases.HSSF.Record
             FeatRecord fr = null;
             FeatHdrRecord fhr = null;
 
-            Assert.AreEqual(1, hssf.NumberOfSheets);
+            ClassicAssert.AreEqual(1, hssf.NumberOfSheets);
 
             // First check it isn't on the Workbook
             int countFR = 0;
@@ -136,8 +136,8 @@ namespace TestCases.HSSF.Record
                 }
             }
 
-            Assert.AreEqual(0, countFR);
-            Assert.AreEqual(0, countFRH);
+            ClassicAssert.AreEqual(0, countFR);
+            ClassicAssert.AreEqual(0, countFRH);
 
             // Now find it on our sheet
             HSSFSheet s = (HSSFSheet)hssf.GetSheetAt(0);
@@ -169,40 +169,40 @@ namespace TestCases.HSSF.Record
                 }
             }
 
-            Assert.AreEqual(1, countFR);
-            Assert.AreEqual(1, countFRH);
-            Assert.IsNotNull(fr);
-            Assert.IsNotNull(fhr);
+            ClassicAssert.AreEqual(1, countFR);
+            ClassicAssert.AreEqual(1, countFRH);
+            ClassicAssert.IsNotNull(fr);
+            ClassicAssert.IsNotNull(fhr);
 
             // Now check the contents are as expected
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                     FeatHdrRecord.SHAREDFEATURES_ISFFEC2,
                     fr.Isf_sharedFeatureType
             );
 
             // Applies to one cell only
-            Assert.AreEqual(1, fr.CellRefs.Length);
-            Assert.AreEqual(0, fr.CellRefs[0].FirstRow);
-            Assert.AreEqual(0, fr.CellRefs[0].LastRow);
-            Assert.AreEqual(0, fr.CellRefs[0].FirstColumn);
-            Assert.AreEqual(0, fr.CellRefs[0].LastColumn);
+            ClassicAssert.AreEqual(1, fr.CellRefs.Length);
+            ClassicAssert.AreEqual(0, fr.CellRefs[0].FirstRow);
+            ClassicAssert.AreEqual(0, fr.CellRefs[0].LastRow);
+            ClassicAssert.AreEqual(0, fr.CellRefs[0].FirstColumn);
+            ClassicAssert.AreEqual(0, fr.CellRefs[0].LastColumn);
 
             // More Checking of shared features stuff
-            Assert.AreEqual(4, fr.CbFeatData);
-            Assert.AreEqual(4, fr.SharedFeature.DataSize);
-            Assert.AreEqual(typeof(FeatFormulaErr2), fr.SharedFeature.GetType());
+            ClassicAssert.AreEqual(4, fr.CbFeatData);
+            ClassicAssert.AreEqual(4, fr.SharedFeature.DataSize);
+            ClassicAssert.AreEqual(typeof(FeatFormulaErr2), fr.SharedFeature.GetType());
 
             FeatFormulaErr2 fferr2 = (FeatFormulaErr2)fr.SharedFeature;
-            Assert.AreEqual(0x04, fferr2.RawErrorCheckValue);
+            ClassicAssert.AreEqual(0x04, fferr2.RawErrorCheckValue);
 
-            Assert.IsFalse(fferr2.CheckCalculationErrors);
-            Assert.IsFalse(fferr2.CheckDateTimeFormats);
-            Assert.IsFalse(fferr2.CheckEmptyCellRef);
-            Assert.IsFalse(fferr2.CheckInconsistentFormulas);
-            Assert.IsFalse(fferr2.CheckInconsistentRanges);
-            Assert.IsTrue(fferr2.CheckNumbersAsText);
-            Assert.IsFalse(fferr2.CheckUnprotectedFormulas);
-            Assert.IsFalse(fferr2.PerformDataValidation);
+            ClassicAssert.IsFalse(fferr2.CheckCalculationErrors);
+            ClassicAssert.IsFalse(fferr2.CheckDateTimeFormats);
+            ClassicAssert.IsFalse(fferr2.CheckEmptyCellRef);
+            ClassicAssert.IsFalse(fferr2.CheckInconsistentFormulas);
+            ClassicAssert.IsFalse(fferr2.CheckInconsistentRanges);
+            ClassicAssert.IsTrue(fferr2.CheckNumbersAsText);
+            ClassicAssert.IsFalse(fferr2.CheckUnprotectedFormulas);
+            ClassicAssert.IsFalse(fferr2.PerformDataValidation);
         }
 
         /**

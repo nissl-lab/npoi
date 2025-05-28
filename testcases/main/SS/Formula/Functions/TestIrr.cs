@@ -19,7 +19,7 @@ namespace TestCases.SS.Formula.Functions
 {
     using System;
     using System.Text;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
     using TestCases.HSSF;
@@ -40,28 +40,28 @@ namespace TestCases.SS.Formula.Functions
             double[] incomes = { -4000d, 1200d, 1410d, 1875d, 1050d };
             double irr = Irr.irr(incomes);
             double irrRounded = Math.Round(irr * 1000d) / 1000d;
-            Assert.AreEqual(0.143d, irrRounded, "irr");
+            ClassicAssert.AreEqual(0.143d, irrRounded, "irr");
 
             // http://www.techonthenet.com/excel/formulas/irr.php
             incomes = new double[] { -7500d, 3000d, 5000d, 1200d, 4000d };
             irr = Irr.irr(incomes);
             irrRounded = Math.Round(irr * 100d) / 100d;
-            Assert.AreEqual(0.28d, irrRounded, "irr");
+            ClassicAssert.AreEqual(0.28d, irrRounded, "irr");
 
             incomes = new double[] { -10000d, 3400d, 6500d, 1000d };
             irr = Irr.irr(incomes);
             irrRounded = Math.Round(irr * 100d) / 100d;
-            Assert.AreEqual(0.05, irrRounded, "irr");
+            ClassicAssert.AreEqual(0.05, irrRounded, "irr");
 
             incomes = new double[] { 100d, -10d, -110d };
             irr = Irr.irr(incomes);
             irrRounded = Math.Round(irr * 100d) / 100d;
-            Assert.AreEqual(0.1, irrRounded, "irr");
+            ClassicAssert.AreEqual(0.1, irrRounded, "irr");
 
             incomes = new double[] { -70000d, 12000, 15000 };
             irr = Irr.irr(incomes, -0.1);
             irrRounded = Math.Round(irr * 100d) / 100d;
-            Assert.AreEqual(-0.44, irrRounded, "irr");
+            ClassicAssert.AreEqual(-0.44, irrRounded, "irr");
         }
         [Test]
         public void TestEvaluateInSheet()
@@ -83,7 +83,7 @@ namespace TestCases.SS.Formula.Functions
             fe.ClearAllCachedResultValues();
             fe.EvaluateFormulaCell(cell);
             double res = cell.NumericCellValue;
-            Assert.AreEqual(0.143d, Math.Round(res * 1000d) / 1000d);
+            ClassicAssert.AreEqual(0.143d, Math.Round(res * 1000d) / 1000d);
         }
         [Test]
         public void TestIrrFromSpreadsheet()
@@ -116,7 +116,7 @@ namespace TestCases.SS.Formula.Functions
                 try
                 {
                     CellValue cv = fe.Evaluate(cellC);
-                    Assert.AreEqual(0, cv.NumberValue, 0.0001);  // should agree within 0.01%
+                    ClassicAssert.AreEqual(0, cv.NumberValue, 0.0001);  // should agree within 0.01%
                 }
                 catch (Exception e)
                 {
@@ -138,8 +138,8 @@ namespace TestCases.SS.Formula.Functions
         {
             double actualValue = cv.NumberValue;
             double expectedValue = cell.NumericCellValue; // cached formula result calculated by Excel
-            Assert.AreEqual(CellType.Numeric, cv.CellType, "Invalid formula result: " + cv.ToString());
-            Assert.AreEqual(expectedValue, actualValue, 1E-4); // should agree within 0.01%
+            ClassicAssert.AreEqual(CellType.Numeric, cv.CellType, "Invalid formula result: " + cv.ToString());
+            ClassicAssert.AreEqual(expectedValue, actualValue, 1E-4); // should agree within 0.01%
         }
     }
 

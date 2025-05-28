@@ -58,7 +58,7 @@ namespace NPOI.HPSF
 
             if (length == 0)
             {
-                _value = System.Array.Empty<byte>();
+                _value = [];
                 return;
             }
 
@@ -70,7 +70,7 @@ namespace NPOI.HPSF
          *  given the amount of data available still to read,
          *  and the requirement that the string be NULL-terminated
          */
-        bool validLength(int length, byte[] data, int offset)
+        private static bool validLength(int length, byte[] data, int offset)
         {
             if (length == 0)
             {

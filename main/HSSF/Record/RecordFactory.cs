@@ -58,7 +58,8 @@ namespace NPOI.HSSF.Record
 
             Type GetRecordClass();
         }
-        private class ReflectionConstructorRecordCreator : I_RecordCreator
+
+        private sealed class ReflectionConstructorRecordCreator : I_RecordCreator
         {
 
             private readonly ConstructorInfo _c;
@@ -87,7 +88,7 @@ namespace NPOI.HSSF.Record
          * A "create" method is used instead of the usual constructor if the created record might
          * be of a different class to the declaring class.
          */
-        private class ReflectionMethodRecordCreator : I_RecordCreator
+        private sealed class ReflectionMethodRecordCreator : I_RecordCreator
         {
 
             private readonly MethodInfo _m;
@@ -486,13 +487,13 @@ namespace NPOI.HSSF.Record
                 // Not needed by POI.  Regenerated from scratch by POI when spreadsheet is written
                 return new Record[] { null, };
             }
-            if (record is RKRecord)
+            if (record is RKRecord rkRecord)
             {
-                return new Record[] { ConvertToNumberRecord((RKRecord)record), };
+                return new Record[] { ConvertToNumberRecord(rkRecord), };
             }
-            if (record is MulRKRecord)
+            if (record is MulRKRecord mulRkRecord)
             {
-                return ConvertRKRecords((MulRKRecord)record);
+                return ConvertRKRecords(mulRkRecord);
             }
             return new Record[] { record, };
         }
@@ -613,9 +614,9 @@ namespace NPOI.HSSF.Record
                     throw new RecordFormatException(
                         "Unable to determine record types", ArgumentException);
                 }
-                if (result.ContainsKey(sid))
+                if (result.TryGetValue(sid, out I_RecordCreator value))
                 {
-                    Type prevClass = result[sid].GetRecordClass();
+                    Type prevClass = value.GetRecordClass();
                     throw new RuntimeException("duplicate record sid 0x" + sid.ToString("X", CultureInfo.CurrentCulture)
                             + " for classes (" + recClass.Name + ") and (" + prevClass.Name + ")");
                 }

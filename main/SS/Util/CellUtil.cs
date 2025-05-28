@@ -58,42 +58,36 @@ namespace NPOI.SS.Util
         public const string VERTICAL_ALIGNMENT = "verticalAlignment";
         public const string WRAP_TEXT = "wrapText";
 
-        private static ISet<String> shortValues = new HashSet<string>(new string[]{
-                    BOTTOM_BORDER_COLOR,
-                    LEFT_BORDER_COLOR,
-                    RIGHT_BORDER_COLOR,
-                    TOP_BORDER_COLOR,
-                    FILL_FOREGROUND_COLOR,
-                    FILL_BACKGROUND_COLOR,
-                    INDENTION,
-                    DATA_FORMAT,
-                    ROTATION
-            });
-        private static ISet<String> intValues = new HashSet<string>(new string[]{
-                        FONT
-        });
-        private static ISet<String> booleanValues = new HashSet<string>(new string[]{
-                        LOCKED,
-                        HIDDEN,
-                        WRAP_TEXT
-        });
-        private static ISet<String> borderTypeValues = new HashSet<string>(new string[]{
-                        BORDER_BOTTOM,
-                        BORDER_LEFT,
-                        BORDER_RIGHT,
-                        BORDER_TOP
-        });
+        private static readonly HashSet<string> shortValues =
+        [
+            BOTTOM_BORDER_COLOR,
+            LEFT_BORDER_COLOR,
+            RIGHT_BORDER_COLOR,
+            TOP_BORDER_COLOR,
+            FILL_FOREGROUND_COLOR,
+            FILL_BACKGROUND_COLOR,
+            INDENTION,
+            DATA_FORMAT,
+            ROTATION
+        ];
 
+        private static readonly HashSet<string> intValues = [FONT];
 
-        private static UnicodeMapping[] unicodeMappings;
+        private static readonly HashSet<string> booleanValues = [LOCKED, HIDDEN, WRAP_TEXT];
 
-        private class UnicodeMapping
+        private static readonly HashSet<string> borderTypeValues =
+        [
+            BORDER_BOTTOM, BORDER_LEFT, BORDER_RIGHT, BORDER_TOP
+        ];
+
+        private static readonly UnicodeMapping[] unicodeMappings;
+
+        private sealed class UnicodeMapping
         {
+            public readonly string entityName;
+            public readonly string resolvedValue;
 
-            public String entityName;
-            public String resolvedValue;
-
-            public UnicodeMapping(String pEntityName, String pResolvedValue)
+            public UnicodeMapping(string pEntityName, string pResolvedValue)
             {
                 entityName = "&" + pEntityName + ";";
                 resolvedValue = pResolvedValue;
@@ -669,9 +663,9 @@ namespace NPOI.SS.Util
         {
             Object value = properties[name];
             BorderStyle border;
-            if (value is BorderStyle)
+            if (value is BorderStyle style)
             {
-                border = (BorderStyle)value;
+                border = style;
             }
             // @deprecated 3.15 beta 2. getBorderStyle will only work on BorderStyle enums instead of codes in the future.
             else if (value is short || value is int)
@@ -707,19 +701,18 @@ namespace NPOI.SS.Util
         {
             Object value = properties[name];
             FillPattern pattern;
-            if (value is FillPattern)
+            if (value is FillPattern fillPattern)
             {
-                pattern = (FillPattern)value;
+                pattern = fillPattern;
             }
             // @deprecated 3.15 beta 2. getFillPattern will only work on FillPattern enums instead of codes in the future.
-            else if (value is short)
+            else if (value is short code)
             {
                 //if (log.check(POILogger.WARN))
                 //{
                 //    log.log(POILogger.WARN, "Deprecation warning: CellUtil properties map uses Short values for "
                 //            + name + ". Should use FillPattern enums instead.");
                 //}
-                short code = (short)value;
                 pattern = (FillPattern)code;
             }
             else if (value == null)
@@ -745,19 +738,18 @@ namespace NPOI.SS.Util
         {
             Object value = properties[name];
             HorizontalAlignment align;
-            if (value is HorizontalAlignment)
+            if (value is HorizontalAlignment alignment)
             {
-                align = (HorizontalAlignment)value;
+                align = alignment;
             }
             // @deprecated 3.15 beta 2. getHorizontalAlignment will only work on HorizontalAlignment enums instead of codes in the future.
-            else if (value is short)
+            else if (value is short code)
             {
                 //if (log.check(POILogger.WARN))
                 //{
                 //    log.log(POILogger.WARN, "Deprecation warning: CellUtil properties map used a Short value for "
                 //            + name + ". Should use HorizontalAlignment enums instead.");
                 //}
-                short code = (short)value;
                 align = (HorizontalAlignment)code;
             }
             else if (value == null)
@@ -783,19 +775,18 @@ namespace NPOI.SS.Util
         {
             Object value = properties[name];
             VerticalAlignment align;
-            if (value is VerticalAlignment)
+            if (value is VerticalAlignment alignment)
             {
-                align = (VerticalAlignment)value;
+                align = alignment;
             }
             // @deprecated 3.15 beta 2. getVerticalAlignment will only work on VerticalAlignment enums instead of codes in the future.
-            else if (value is short)
+            else if (value is short code)
             {
                 //if (log.check(POILogger.WARN))
                 //{
                 //    log.log(POILogger.WARN, "Deprecation warning: CellUtil properties map used a Short value for "
                 //            + name + ". Should use VerticalAlignment enums instead.");
                 //}
-                short code = (short)value;
                 align = (VerticalAlignment)code;
             }
             else if (value == null)

@@ -19,7 +19,7 @@ namespace TestCases.HSSF.Record
 {
 
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     using TestCases.HSSF;
     using NPOI.HSSF.UserModel;

@@ -16,7 +16,7 @@
 ==================================================================== */
 
 using NPOI.OpenXmlFormats.Spreadsheet;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using NPOI.XSSF.Model;
 using NPOI.XSSF.UserModel.Helpers;
 using NPOI.XSSF.UserModel;
@@ -52,19 +52,19 @@ namespace TestCases.XSSF.UserModel.Helpers
             col4.max = (16384);
 
             // Test cleaning cols
-            Assert.AreEqual(2, worksheet.sizeOfColsArray());
+            ClassicAssert.AreEqual(2, worksheet.sizeOfColsArray());
             int count = countColumns(worksheet);
-            Assert.AreEqual(16375, count);
+            ClassicAssert.AreEqual(16375, count);
             // Clean columns and Test a clean worksheet
             ColumnHelper helper = new ColumnHelper(worksheet);
-            Assert.AreEqual(1, worksheet.sizeOfColsArray());
+            ClassicAssert.AreEqual(1, worksheet.sizeOfColsArray());
             count = countColumns(worksheet);
-            Assert.AreEqual(16375, count);
+            ClassicAssert.AreEqual(16375, count);
             // Remember - POI column 0 == OOXML column 1
-            Assert.AreEqual(88.0, helper.GetColumn(0, false).width, 0.0);
-            Assert.IsTrue(helper.GetColumn(0, false).hidden);
-            Assert.AreEqual(0.0, helper.GetColumn(1, false).width, 0.0);
-            Assert.IsFalse(helper.GetColumn(1, false).hidden);
+            ClassicAssert.AreEqual(88.0, helper.GetColumn(0, false).width, 0.0);
+            ClassicAssert.IsTrue(helper.GetColumn(0, false).hidden);
+            ClassicAssert.AreEqual(0.0, helper.GetColumn(1, false).width, 0.0);
+            ClassicAssert.IsFalse(helper.GetColumn(1, false).hidden);
         }
         [Test]
         public void TestSortColumns()
@@ -81,15 +81,15 @@ namespace TestCases.XSSF.UserModel.Helpers
             CT_Col col3 = cols1.AddNewCol();
             col3.min = (13);
             col3.max = (16750);
-            Assert.AreEqual(3, cols1.sizeOfColArray());
+            ClassicAssert.AreEqual(3, cols1.sizeOfColArray());
             CT_Col col4 = cols1.AddNewCol();
             col4.min = (8);
             col4.max = (11);
-            Assert.AreEqual(4, cols1.sizeOfColArray());
+            ClassicAssert.AreEqual(4, cols1.sizeOfColArray());
             CT_Col col5 = cols1.AddNewCol();
             col5.min = (4);
             col5.max = (5);
-            Assert.AreEqual(5, cols1.sizeOfColArray());
+            ClassicAssert.AreEqual(5, cols1.sizeOfColArray());
             CT_Col col6 = cols1.AddNewCol();
             col6.min = (8);
             col6.max = (9);
@@ -104,13 +104,13 @@ namespace TestCases.XSSF.UserModel.Helpers
             CT_Col col9 = cols1.AddNewCol();
             col9.min = (20);
             col9.max = (30);
-            Assert.AreEqual(9, cols1.sizeOfColArray());
-            Assert.AreEqual(20u, cols1.GetColArray(8).min);
-            Assert.AreEqual(30u, cols1.GetColArray(8).max);
+            ClassicAssert.AreEqual(9, cols1.sizeOfColArray());
+            ClassicAssert.AreEqual(20u, cols1.GetColArray(8).min);
+            ClassicAssert.AreEqual(30u, cols1.GetColArray(8).max);
             ColumnHelper.SortColumns(cols1);
-            Assert.AreEqual(9, cols1.sizeOfColArray());
-            Assert.AreEqual(25u, cols1.GetColArray(8).min);
-            Assert.AreEqual(27u, cols1.GetColArray(8).max);
+            ClassicAssert.AreEqual(9, cols1.sizeOfColArray());
+            ClassicAssert.AreEqual(25u, cols1.GetColArray(8).min);
+            ClassicAssert.AreEqual(27u, cols1.GetColArray(8).max);
         }
         [Test]
         public void TestCloneCol()
@@ -125,10 +125,10 @@ namespace TestCases.XSSF.UserModel.Helpers
             col.hidden = (true);
             col.width = (13.4);
             CT_Col newCol = helper.CloneCol(cols, col);
-            Assert.AreEqual(2u, newCol.min);
-            Assert.AreEqual(8u, newCol.max);
-            Assert.IsTrue(newCol.hidden);
-            Assert.AreEqual(13.4, newCol.width, 0.0);
+            ClassicAssert.AreEqual(2u, newCol.min);
+            ClassicAssert.AreEqual(8u, newCol.max);
+            ClassicAssert.IsTrue(newCol.hidden);
+            ClassicAssert.AreEqual(13.4, newCol.width, 0.0);
         }
         [Test]
         public void TestAddCleanColIntoCols()
@@ -148,46 +148,46 @@ namespace TestCases.XSSF.UserModel.Helpers
             CT_Col col3 = cols1.AddNewCol();
             col3.min = (13);
             col3.max = (16750);
-            Assert.AreEqual(3, cols1.sizeOfColArray());
+            ClassicAssert.AreEqual(3, cols1.sizeOfColArray());
             CT_Col col4 = cols1.AddNewCol();
             col4.min = (8);
             col4.max = (9);
-            Assert.AreEqual(4, cols1.sizeOfColArray());
+            ClassicAssert.AreEqual(4, cols1.sizeOfColArray());
 
             // No overlap
             helper.AddCleanColIntoCols(cols1, createCol(4, 5));
-            Assert.AreEqual(5, cols1.sizeOfColArray());
+            ClassicAssert.AreEqual(5, cols1.sizeOfColArray());
 
             // Overlaps with 8 - 9 (overlap and after replacements required)
             CT_Col col6 = createCol(8, 11);
             col6.hidden = (true);
             helper.AddCleanColIntoCols(cols1, col6);
-            Assert.AreEqual(6, cols1.sizeOfColArray());
+            ClassicAssert.AreEqual(6, cols1.sizeOfColArray());
 
             // Overlaps with 8 - 9 (before and overlap replacements required)
             CT_Col col7 = createCol(6, 8);
             col7.width = (17.0);
             helper.AddCleanColIntoCols(cols1, col7);
-            Assert.AreEqual(8, cols1.sizeOfColArray());
+            ClassicAssert.AreEqual(8, cols1.sizeOfColArray());
 
             // Overlaps with 13 - 16750 (before, overlap and after replacements required)
             helper.AddCleanColIntoCols(cols1, createCol(20, 30));
-            Assert.AreEqual(10, cols1.sizeOfColArray());
+            ClassicAssert.AreEqual(10, cols1.sizeOfColArray());
 
             // Overlaps with 20 - 30 (before, overlap and after replacements required)
             helper.AddCleanColIntoCols(cols1, createCol(25, 27));
 
             // TODO - assert something interesting
-            Assert.AreEqual(12, cols1.col.Count);
-            Assert.AreEqual(1u, cols1.GetColArray(0).min);
-            Assert.AreEqual(16750u, cols1.GetColArray(11).max);
+            ClassicAssert.AreEqual(12, cols1.col.Count);
+            ClassicAssert.AreEqual(1u, cols1.GetColArray(0).min);
+            ClassicAssert.AreEqual(16750u, cols1.GetColArray(11).max);
         }
 
         [Test]
         public void TestAddCleanColIntoColsExactOverlap()
         {
             CT_Cols cols = createHiddenAndBestFitColsWithHelper(1, 1, 1, 1);
-            Assert.AreEqual(1, cols.sizeOfColArray());
+            ClassicAssert.AreEqual(1, cols.sizeOfColArray());
             assertMinMaxHiddenBestFit(cols, 0, 1, 1, true, true);
         }
 
@@ -195,7 +195,7 @@ namespace TestCases.XSSF.UserModel.Helpers
         public void TestAddCleanColIntoColsOverlapsOverhangingBothSides()
         {
             CT_Cols cols = createHiddenAndBestFitColsWithHelper(2, 2, 1, 3);
-            Assert.AreEqual(3, cols.sizeOfColArray());
+            ClassicAssert.AreEqual(3, cols.sizeOfColArray());
             assertMinMaxHiddenBestFit(cols, 0, 1, 1, false, true);
             assertMinMaxHiddenBestFit(cols, 1, 2, 2, true, true);
             assertMinMaxHiddenBestFit(cols, 2, 3, 3, false, true);
@@ -204,7 +204,7 @@ namespace TestCases.XSSF.UserModel.Helpers
         public void TestAddCleanColIntoColsOverlapsCompletelyNested()
         {
             CT_Cols cols = createHiddenAndBestFitColsWithHelper(1, 3, 2, 2);
-            Assert.AreEqual(3, cols.sizeOfColArray());
+            ClassicAssert.AreEqual(3, cols.sizeOfColArray());
             assertMinMaxHiddenBestFit(cols, 0, 1, 1, true, false);
             assertMinMaxHiddenBestFit(cols, 1, 2, 2, true, true);
             assertMinMaxHiddenBestFit(cols, 2, 3, 3, true, false);
@@ -214,7 +214,7 @@ namespace TestCases.XSSF.UserModel.Helpers
         public void TestAddCleanColIntoColsNewOverlapsOverhangingLeftNotRightExactRight()
         {
             CT_Cols cols = createHiddenAndBestFitColsWithHelper(2, 3, 1, 3);
-            Assert.AreEqual(2, cols.sizeOfColArray());
+            ClassicAssert.AreEqual(2, cols.sizeOfColArray());
             assertMinMaxHiddenBestFit(cols, 0, 1, 1, false, true);
             assertMinMaxHiddenBestFit(cols, 1, 2, 3, true, true);
         }
@@ -223,7 +223,7 @@ namespace TestCases.XSSF.UserModel.Helpers
         public void TestAddCleanColIntoColsNewOverlapsOverhangingRightNotLeftExactLeft()
         {
             CT_Cols cols = createHiddenAndBestFitColsWithHelper(1, 2, 1, 3);
-            Assert.AreEqual(2, cols.sizeOfColArray());
+            ClassicAssert.AreEqual(2, cols.sizeOfColArray());
             assertMinMaxHiddenBestFit(cols, 0, 1, 2, true, true);
             assertMinMaxHiddenBestFit(cols, 1, 3, 3, false, true);
         }
@@ -232,7 +232,7 @@ namespace TestCases.XSSF.UserModel.Helpers
         public void TestAddCleanColIntoColsNewOverlapsOverhangingLeftNotRight()
         {
             CT_Cols cols = createHiddenAndBestFitColsWithHelper(2, 3, 1, 2);
-            Assert.AreEqual(3, cols.sizeOfColArray());
+            ClassicAssert.AreEqual(3, cols.sizeOfColArray());
             assertMinMaxHiddenBestFit(cols, 0, 1, 1, false, true);
             assertMinMaxHiddenBestFit(cols, 1, 2, 2, true, true);
             assertMinMaxHiddenBestFit(cols, 2, 3, 3, true, false);
@@ -242,7 +242,7 @@ namespace TestCases.XSSF.UserModel.Helpers
         public void TestAddCleanColIntoColsNewOverlapsOverhangingRightNotLeft()
         {
             CT_Cols cols = createHiddenAndBestFitColsWithHelper(1, 2, 2, 3);
-            Assert.AreEqual(3, cols.sizeOfColArray());
+            ClassicAssert.AreEqual(3, cols.sizeOfColArray());
             assertMinMaxHiddenBestFit(cols, 0, 1, 1, true, false);
             assertMinMaxHiddenBestFit(cols, 1, 2, 2, true, true);
             assertMinMaxHiddenBestFit(cols, 2, 3, 3, false, true);
@@ -267,10 +267,10 @@ namespace TestCases.XSSF.UserModel.Helpers
         private void assertMinMaxHiddenBestFit(CT_Cols cols, int index, int min, int max, bool hidden, bool bestFit)
         {
             CT_Col col = cols.GetColArray(index);
-            Assert.AreEqual(min, col.min);
-            Assert.AreEqual(max, col.max);
-            Assert.AreEqual(hidden, col.hidden);
-            Assert.AreEqual(bestFit, col.bestFit);
+            ClassicAssert.AreEqual(min, col.min);
+            ClassicAssert.AreEqual(max, col.max);
+            ClassicAssert.AreEqual(hidden, col.hidden);
+            ClassicAssert.AreEqual(bestFit, col.bestFit);
         }
         private CT_Col createCol(int min, int max)
         {
@@ -301,14 +301,14 @@ namespace TestCases.XSSF.UserModel.Helpers
 
             // Remember - POI column 0 == OOXML column 1
             ColumnHelper helper = new ColumnHelper(worksheet);
-            Assert.IsNotNull(helper.GetColumn(0, false));
-            Assert.IsNotNull(helper.GetColumn(1, false));
-            Assert.AreEqual(88.0, helper.GetColumn(0, false).width, 0.0);
-            Assert.AreEqual(0.0, helper.GetColumn(1, false).width, 0.0);
-            Assert.IsTrue(helper.GetColumn(0, false).hidden);
-            Assert.IsFalse(helper.GetColumn(1, false).hidden);
-            Assert.IsNull(helper.GetColumn(99, false));
-            Assert.IsNotNull(helper.GetColumn(5, false));
+            ClassicAssert.IsNotNull(helper.GetColumn(0, false));
+            ClassicAssert.IsNotNull(helper.GetColumn(1, false));
+            ClassicAssert.AreEqual(88.0, helper.GetColumn(0, false).width, 0.0);
+            ClassicAssert.AreEqual(0.0, helper.GetColumn(1, false).width, 0.0);
+            ClassicAssert.IsTrue(helper.GetColumn(0, false).hidden);
+            ClassicAssert.IsFalse(helper.GetColumn(1, false).hidden);
+            ClassicAssert.IsNull(helper.GetColumn(99, false));
+            ClassicAssert.IsNotNull(helper.GetColumn(5, false));
         }
         [Test]
         public void TestSetColumnAttributes()
@@ -317,12 +317,12 @@ namespace TestCases.XSSF.UserModel.Helpers
             col.width = (12);
             col.hidden = (true);
             CT_Col newCol = new CT_Col();
-            Assert.AreEqual(0.0, newCol.width, 0.0);
-            Assert.IsFalse(newCol.hidden);
+            ClassicAssert.AreEqual(0.0, newCol.width, 0.0);
+            ClassicAssert.IsFalse(newCol.hidden);
             ColumnHelper helper = new ColumnHelper(new CT_Worksheet());
             helper.SetColumnAttributes(col, newCol);
-            Assert.AreEqual(12.0, newCol.width, 0.0);
-            Assert.IsTrue(newCol.hidden);
+            ClassicAssert.AreEqual(12.0, newCol.width, 0.0);
+            ClassicAssert.IsTrue(newCol.hidden);
         }
         [Test]
         public void TestGetOrCreateColumn()
@@ -333,18 +333,18 @@ namespace TestCases.XSSF.UserModel.Helpers
 
             // Check POI 0 based, OOXML 1 based
             CT_Col col = columnHelper.GetOrCreateColumn1Based(3, false);
-            Assert.IsNotNull(col);
-            Assert.IsNull(columnHelper.GetColumn(1, false));
-            Assert.IsNotNull(columnHelper.GetColumn(2, false));
-            Assert.IsNotNull(columnHelper.GetColumn1Based(3, false));
-            Assert.IsNull(columnHelper.GetColumn(3, false));
+            ClassicAssert.IsNotNull(col);
+            ClassicAssert.IsNull(columnHelper.GetColumn(1, false));
+            ClassicAssert.IsNotNull(columnHelper.GetColumn(2, false));
+            ClassicAssert.IsNotNull(columnHelper.GetColumn1Based(3, false));
+            ClassicAssert.IsNull(columnHelper.GetColumn(3, false));
 
             CT_Col col2 = columnHelper.GetOrCreateColumn1Based(30, false);
-            Assert.IsNotNull(col2);
-            Assert.IsNull(columnHelper.GetColumn(28, false));
-            Assert.IsNotNull(columnHelper.GetColumn(29, false));
-            Assert.IsNotNull(columnHelper.GetColumn1Based(30, false));
-            Assert.IsNull(columnHelper.GetColumn(30, false));
+            ClassicAssert.IsNotNull(col2);
+            ClassicAssert.IsNull(columnHelper.GetColumn(28, false));
+            ClassicAssert.IsNotNull(columnHelper.GetColumn(29, false));
+            ClassicAssert.IsNotNull(columnHelper.GetColumn1Based(30, false));
+            ClassicAssert.IsNull(columnHelper.GetColumn(30, false));
         }
         [Test]
         public void TestGetSetColDefaultStyle()
@@ -357,11 +357,11 @@ namespace TestCases.XSSF.UserModel.Helpers
             // POI column 3, OOXML column 4
             CT_Col col = columnHelper.GetOrCreateColumn1Based(4, false);
 
-            Assert.IsNotNull(col);
-            Assert.IsNotNull(columnHelper.GetColumn(3, false));
+            ClassicAssert.IsNotNull(col);
+            ClassicAssert.IsNotNull(columnHelper.GetColumn(3, false));
             columnHelper.SetColDefaultStyle(3, 2);
-            Assert.AreEqual(2, columnHelper.GetColDefaultStyle(3));
-            Assert.AreEqual(-1, columnHelper.GetColDefaultStyle(4));
+            ClassicAssert.AreEqual(2, columnHelper.GetColDefaultStyle(3));
+            ClassicAssert.AreEqual(-1, columnHelper.GetColDefaultStyle(4));
             StylesTable stylesTable = workbook.GetStylesSource();
             CT_Xf cellXf = new CT_Xf();
             cellXf.fontId = (0);
@@ -374,11 +374,11 @@ namespace TestCases.XSSF.UserModel.Helpers
             col_2.min = (10);
             col_2.max = (12);
             col_2.style = (1);
-            Assert.AreEqual(1, columnHelper.GetColDefaultStyle(11));
+            ClassicAssert.AreEqual(1, columnHelper.GetColDefaultStyle(11));
             XSSFCellStyle cellStyle = new XSSFCellStyle(0, 0, stylesTable, null);
             columnHelper.SetColDefaultStyle(11, cellStyle);
-            Assert.AreEqual(0u, col_2.style);
-            Assert.AreEqual(1, columnHelper.GetColDefaultStyle(10));
+            ClassicAssert.AreEqual(0u, col_2.style);
+            ClassicAssert.AreEqual(1, columnHelper.GetColDefaultStyle(10));
         }
 
         private static int countColumns(CT_Worksheet worksheet)

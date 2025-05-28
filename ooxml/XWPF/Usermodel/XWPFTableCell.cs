@@ -19,7 +19,8 @@ namespace NPOI.XWPF.UserModel
     using System;
     using NPOI.OpenXmlFormats.Wordprocessing;
     using System.Collections.Generic;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
     using System.Xml;
     /**
      * Represents a Cell within a {@link XWPFTable}. The
@@ -73,26 +74,26 @@ namespace NPOI.XWPF.UserModel
             tables = new List<XWPFTable>();
             foreach (object o in ctTc.Items)
             {
-                if (o is CT_P)
+                if (o is CT_P ctP)
                 {
-                    XWPFParagraph p = new XWPFParagraph((CT_P)o, this);
+                    XWPFParagraph p = new XWPFParagraph(ctP, this);
                     paragraphs.Add(p);
                     bodyElements.Add(p);
                 }
-                if (o is CT_Tbl)
+                if (o is CT_Tbl tbl)
                 {
-                    XWPFTable t = new XWPFTable((CT_Tbl)o, this);
+                    XWPFTable t = new XWPFTable(tbl, this);
                     tables.Add(t);
                     bodyElements.Add(t);
                 }
-                if (o is CT_SdtBlock)
+                if (o is CT_SdtBlock block)
                 {
-                    XWPFSDT c = new XWPFSDT((CT_SdtBlock)o, this);
+                    XWPFSDT c = new XWPFSDT(block, this);
                     bodyElements.Add(c);
                 }
-                if (o is CT_SdtRun)
+                if (o is CT_SdtRun run)
                 {
-                    XWPFSDT c = new XWPFSDT((CT_SdtRun)o, this);
+                    XWPFSDT c = new XWPFSDT(run, this);
                     bodyElements.Add(c);
                 }
             }
@@ -522,7 +523,7 @@ namespace NPOI.XWPF.UserModel
 
         public String GetText()
         {
-            StringBuilder text = new StringBuilder();
+            using var text = ZString.CreateStringBuilder();
             foreach (XWPFParagraph p in paragraphs)
             {
                 text.Append(p.Text);
@@ -546,19 +547,18 @@ namespace NPOI.XWPF.UserModel
             return text.ToString();
         }
 
-        private void AppendBodyElementText(StringBuilder text, IBodyElement e, bool isLast)
+        private static void AppendBodyElementText(StringBuilder text, IBodyElement e, bool isLast)
         {
-            if (e is XWPFParagraph)
+            if (e is XWPFParagraph paragraph)
             {
-                text.Append(((XWPFParagraph)e).Text);
+                text.Append(paragraph.Text);
                 if (isLast == false)
                 {
                     text.Append('\t');
                 }
             }
-            else if (e is XWPFTable)
+            else if (e is XWPFTable eTable)
             {
-                XWPFTable eTable = (XWPFTable)e;
                 foreach (XWPFTableRow row in eTable.Rows)
                 {
                     foreach (XWPFTableCell cell in row.GetTableCells())
@@ -577,9 +577,9 @@ namespace NPOI.XWPF.UserModel
                     text.Append('\n');
                 }
             }
-            else if (e is XWPFSDT)
+            else if (e is XWPFSDT xwpfsdt)
             {
-                text.Append(((XWPFSDT)e).Content.Text);
+                text.Append(xwpfsdt.Content.Text);
                 if (isLast == false)
                 {
                     text.Append('\t');
@@ -591,15 +591,14 @@ namespace NPOI.XWPF.UserModel
          */
         public XWPFTableCell GetTableCell(CT_Tc cell)
         {
-            if (!(cell.Parent is CT_Row))
+            if (cell.Parent is not CT_Row row)
                 return null;
-            CT_Row row = (CT_Row)cell.Parent;
 
-            if (!(row.Parent is CT_Tbl))
+            if (row.Parent is not CT_Tbl tbl)
             {
                 return null;
             }
-            CT_Tbl tbl = (CT_Tbl)row.Parent;
+
             XWPFTable table = GetTable(tbl);
             if (table == null)
             {

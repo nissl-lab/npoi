@@ -54,9 +54,9 @@ namespace NPOI.POIFS.Dev
                                       String indentString)
         {
             List<String> objects = new List<String>();
-            if (viewable is DictionaryEntry)
+            if (viewable is DictionaryEntry entry)
             {
-                ProcessViewable(((DictionaryEntry)viewable).Value, drilldown, indentLevel, indentString, objects);
+                ProcessViewable(entry.Value, drilldown, indentLevel, indentString, objects);
             }
             else if (viewable is POIFSViewable)
             {

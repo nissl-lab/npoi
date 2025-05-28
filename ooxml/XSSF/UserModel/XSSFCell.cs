@@ -660,7 +660,8 @@ namespace NPOI.XSSF.UserModel
             //un-register the single-cell array formula from the parent sheet through public interface
             Row.Sheet.RemoveArrayFormula(this);
         }
-        private ICell SetFormula(String formula, FormulaType formulaType)
+
+        private XSSFCell SetFormula(String formula, FormulaType formulaType)
         {
             XSSFWorkbook wb = (XSSFWorkbook)_row.Sheet.Workbook;
             if (formula == null)
@@ -1090,7 +1091,7 @@ namespace NPOI.XSSF.UserModel
                 case CellType.Numeric:
                     if (DateUtil.IsCellDateFormatted(this))
                     {
-                        FormatBase sdf = new SimpleDateFormat("dd-MMM-yyyy");
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
                         return sdf.Format(DateCellValue, CultureInfo.CurrentCulture);
                     }
                     return NumericCellValue.ToString();
@@ -1140,7 +1141,7 @@ namespace NPOI.XSSF.UserModel
         /**
          * Used to help format error messages
          */
-        private static Exception TypeMismatch(CellType expectedTypeCode, CellType actualTypeCode, bool isFormulaCell)
+        private static InvalidOperationException TypeMismatch(CellType expectedTypeCode, CellType actualTypeCode, bool isFormulaCell)
         {
             String msg = "Cannot get a "
                 + GetCellTypeName(expectedTypeCode) + " value from a "

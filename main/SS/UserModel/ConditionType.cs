@@ -63,9 +63,8 @@ namespace NPOI.SS.UserModel
 
         public override bool Equals(object obj)
         {
-            if (obj == null || !(obj is ConditionType))
+            if (obj == null || obj is not ConditionType other)
                 return false;
-            ConditionType other =  obj as ConditionType;
             return this.Id == other.Id && this.Type == other.Type;
         }
 

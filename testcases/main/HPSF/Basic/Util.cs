@@ -22,7 +22,7 @@ namespace TestCases.HPSF.Basic
     using System;
     using System.IO;
     using System.Collections;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HPSF;
     using NPOI.POIFS.EventFileSystem;
     using NPOI.Util;
@@ -230,7 +230,7 @@ namespace TestCases.HPSF.Basic
                     POIFile f = new POIFile();
                     f.SetName(e.Name);
                     f.SetPath(e.Path);
-                    Stream in1 = e.Stream;
+                    InputStream in1 = e.Stream;
                     if (PropertySet.IsPropertySetStream(in1))
                     {
                         using (MemoryStream out1 = new MemoryStream())

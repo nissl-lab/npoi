@@ -102,7 +102,7 @@ namespace NPOI.SS.Formula.Functions
                 bool isRangeLookup = LookupUtils.ResolveRangeLookupArg(range_lookup, srcRowIndex, srcColumnIndex);
                 int rowIndex = LookupUtils.lookupFirstIndexOfValue(lookupValue, LookupUtils.CreateColumnVector(tableArray, 0), isRangeLookup);
                 int colIndex = LookupUtils.ResolveRowOrColIndexArg(col_index, srcRowIndex, srcColumnIndex);
-                ValueVector resultCol = CreateResultColumnVector(tableArray, colIndex);
+                LookupUtils.ColumnVector resultCol = CreateResultColumnVector(tableArray, colIndex);
                 return resultCol.GetItem(rowIndex);
             }
             catch (EvaluationException e)
@@ -117,7 +117,7 @@ namespace NPOI.SS.Formula.Functions
          * 
          * @(#VALUE!) if colIndex Is negative, (#REF!) if colIndex Is too high
          */
-        private ValueVector CreateResultColumnVector(TwoDEval tableArray, int colIndex)
+        private static LookupUtils.ColumnVector CreateResultColumnVector(TwoDEval tableArray, int colIndex)
         {
             if (colIndex >= tableArray.Width)
             {

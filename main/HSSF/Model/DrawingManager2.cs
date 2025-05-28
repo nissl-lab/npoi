@@ -15,11 +15,12 @@
    limitations Under the License.
 ==================================================================== */
 
+using System.Collections.Generic;
+
+using NPOI.DDF;
+
 namespace NPOI.HSSF.Model
 {
-    using NPOI.DDF;
-    using System.Collections;
-
     /// <summary>
     /// Provides utilities to manage drawing Groups.
     /// </summary>
@@ -28,8 +29,8 @@ namespace NPOI.HSSF.Model
     /// </remarks>
     public class DrawingManager2
     {
-        EscherDggRecord dgg;
-        IList drawingGroups = new ArrayList();
+        private readonly EscherDggRecord dgg;
+        private readonly List<EscherDgRecord> drawingGroups = [];
 
 
         public DrawingManager2(EscherDggRecord dgg)

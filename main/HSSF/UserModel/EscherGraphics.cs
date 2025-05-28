@@ -256,7 +256,7 @@ namespace NPOI.HSSF.UserModel
             shape.IsNoFill = (true);
         }
 
-        private int[] AddToAll(int[] values, int amount)
+        private static int[] AddToAll(int[] values, int amount)
         {
             int[] result = new int[values.Length];
             for (int i = 0; i < values.Length; i++)
@@ -264,8 +264,7 @@ namespace NPOI.HSSF.UserModel
             return result;
         }
 
-        public void DrawPolyline(int[] xPoints, int[] yPoints,
-                          int nPoints)
+        public void DrawPolyline(int[] xPoints, int[] yPoints, int nPoints)
         {
             if (Logger.Check(POILogger.WARN))
                 Logger.Log(POILogger.WARN, "DrawPolyline not supported");
@@ -278,7 +277,7 @@ namespace NPOI.HSSF.UserModel
         }
 
         public void DrawRoundRect(int x, int y, int width, int height,
-                           int arcWidth, int arcHeight)
+            int arcWidth, int arcHeight)
         {
             if (Logger.Check(POILogger.WARN))
                 Logger.Log(POILogger.WARN, "DrawRoundRect not supported");
@@ -397,7 +396,7 @@ namespace NPOI.HSSF.UserModel
             shape.SetFillColor(foreground.R, foreground.G, foreground.B);
         }
 
-        private int FindBiggest(int[] values)
+        private static int FindBiggest(int[] values)
         {
             int result = Int32.MinValue;
             for (int i = 0; i < values.Length; i++)
@@ -408,7 +407,7 @@ namespace NPOI.HSSF.UserModel
             return result;
         }
 
-        private int FindSmallest(int[] values)
+        private static int FindSmallest(int[] values)
         {
             int result = Int32.MaxValue;
             for (int i = 0; i < values.Length; i++)

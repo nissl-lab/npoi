@@ -347,9 +347,8 @@ namespace NPOI.XSSF.UserModel
         {
             if (o == this) return true;
 
-            if (!(o is XSSFName)) return false;
+            if (o is not XSSFName cf) return false;
 
-            XSSFName cf = (XSSFName)o;
             return _ctName.name == cf.GetCTName().name && _ctName.localSheetId == cf.GetCTName().localSheetId && _ctName.Value==cf.RefersToFormula ;
         }
 
@@ -400,7 +399,7 @@ namespace NPOI.XSSF.UserModel
             // is first character valid?
             char c = name[0];
             string allowedSymbols = "_\\";
-            bool characterIsValid = (char.IsLetter(c) || allowedSymbols.IndexOf(c) != -1);
+            bool characterIsValid = (char.IsLetter(c) || allowedSymbols.Contains(c));
             if (!characterIsValid)
             {
                 throw new ArgumentException("Invalid name: '" + name + "': first character must be underscore or a letter");
@@ -410,7 +409,7 @@ namespace NPOI.XSSF.UserModel
             allowedSymbols = "_.\\"; //backslashes needed for unicode escape
             foreach (char ch in name.ToCharArray())
             {
-                characterIsValid = (char.IsLetterOrDigit(ch) || allowedSymbols.IndexOf(ch) != -1);
+                characterIsValid = (char.IsLetterOrDigit(ch) || allowedSymbols.Contains(ch));
                 if (!characterIsValid)
                 {
                     throw new ArgumentException("Invalid name: '" + name + "': name must be letter, digit, period, or underscore");
@@ -423,9 +422,16 @@ namespace NPOI.XSSF.UserModel
             {
                 string col = Regex.Replace(name, "\\d", "");
                 string row = Regex.Replace(name, "[A-Za-z]", "");
-                if (CellReference.CellReferenceIsWithinRange(col, row, SpreadsheetVersion.EXCEL97))
+                try
                 {
-                    throw new ArgumentException("Invalid name: '" + name + "': cannot be $A$1-style cell reference");
+                    if (CellReference.CellReferenceIsWithinRange(col, row, SpreadsheetVersion.EXCEL2007))
+                    {
+                        throw new ArgumentException("Invalid name: '" + name + "': cannot be $A$1-style cell reference");
+                    }
+                }
+                catch (FormatException) {
+                    // row was not parseable as an Integer, such as a BigInt
+                    // therefore name passes the not-a-cell-reference criteria
                 }
             }
 

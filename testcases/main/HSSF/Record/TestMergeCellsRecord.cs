@@ -22,7 +22,7 @@ namespace TestCases.HSSF.Record
     using System;
     using NPOI.HSSF.Record;
     using NPOI.SS.Util;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.Record.Aggregates;
     using System.Collections;
     using NPOI.HSSF.Model;
@@ -47,22 +47,22 @@ namespace TestCases.HSSF.Record
             MergeCellsRecord merge = new MergeCellsRecord(cras, 0, cras.Length);
             MergeCellsRecord clone = (MergeCellsRecord)merge.Clone();
 
-            Assert.AreNotSame(merge, clone, "Merged and cloned objects are the same");
+            ClassicAssert.AreNotSame(merge, clone, "Merged and cloned objects are the same");
 
             CellRangeAddress mergeRegion = merge.GetAreaAt(0);
             CellRangeAddress cloneRegion = clone.GetAreaAt(0);
-            Assert.AreNotSame(mergeRegion, cloneRegion,
+            ClassicAssert.AreNotSame(mergeRegion, cloneRegion,
                 "Should not point to same objects when cloning");
-            Assert.AreEqual(mergeRegion.FirstRow, cloneRegion.FirstRow,
+            ClassicAssert.AreEqual(mergeRegion.FirstRow, cloneRegion.FirstRow,
                 "New Clone Row From doesnt match");
-            Assert.AreEqual(mergeRegion.LastRow, cloneRegion.LastRow,
+            ClassicAssert.AreEqual(mergeRegion.LastRow, cloneRegion.LastRow,
                 "New Clone Row To doesnt match");
-            Assert.AreEqual(mergeRegion.FirstColumn, cloneRegion.FirstColumn,
+            ClassicAssert.AreEqual(mergeRegion.FirstColumn, cloneRegion.FirstColumn,
                 "New Clone Col From doesnt match");
-            Assert.AreEqual(mergeRegion.LastColumn, cloneRegion.LastColumn,
+            ClassicAssert.AreEqual(mergeRegion.LastColumn, cloneRegion.LastColumn,
                 "New Clone Col To doesnt match");
 
-            Assert.IsFalse(merge.GetAreaAt(0) == clone.GetAreaAt(0));
+            ClassicAssert.IsFalse(merge.GetAreaAt(0) == clone.GetAreaAt(0));
         }
         [Test]
         public void testMCTable_bug46009()

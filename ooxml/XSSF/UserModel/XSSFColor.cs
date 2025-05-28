@@ -385,7 +385,7 @@ namespace NPOI.XSSF.UserModel
             // FIXME: this method would be more useful if it could convert any Color to an XSSFColor
             // Currently the only benefit of this method is to throw an IllegalArgumentException
             // instead of a ClassCastException.
-            if (color != null && !(color is XSSFColor)) {
+            if (color != null && color is not XSSFColor) {
                 throw new ArgumentException("Only XSSFColor objects are supported");
             }
             return (XSSFColor)color;
@@ -450,10 +450,8 @@ namespace NPOI.XSSF.UserModel
 
         public override bool Equals(Object o)
         {
-            if (o == null || !(o is XSSFColor))
+            if (o == null || o is not XSSFColor other)
                 return false;
-
-            XSSFColor other = (XSSFColor)o;
 
             // Compare each field in ctColor.
             // Cannot compare ctColor's XML string representation because equivalent

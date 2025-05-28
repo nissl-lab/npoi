@@ -19,7 +19,7 @@ using NPOI.Util;
 using NPOI.OpenXml4Net.OPC;
 using System.IO;
 using TestCases.OpenXml4Net;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using NPOI.SS.Util;
 using System;
 using NPOI.OpenXmlFormats;
@@ -70,28 +70,28 @@ namespace TestCases.OpenXml4Net.OPC
 
             //test various date formats
             props.SetCreatedProperty("2007-05-12T08:00:00Z");
-            Assert.AreEqual(dateToInsert, props.GetCreatedProperty().Value);
+            ClassicAssert.AreEqual(dateToInsert, props.GetCreatedProperty().Value);
 
             props.SetCreatedProperty("2007-05-12T08:00:00"); //no Z, assume Z
-            Assert.AreEqual(dateToInsert, props.GetCreatedProperty().Value);
+            ClassicAssert.AreEqual(dateToInsert, props.GetCreatedProperty().Value);
 
             props.SetCreatedProperty("2007-05-12T08:00:00.123Z");//millis
-            Assert.AreEqual(msdf.Parse("2007-05-12T08:00:00.123Z"), props.GetCreatedProperty().Value);
+            ClassicAssert.AreEqual(msdf.Parse("2007-05-12T08:00:00.123Z"), props.GetCreatedProperty().Value);
 
             props.SetCreatedProperty("2007-05-12T10:00:00+0200");
-            Assert.AreEqual(dateToInsert, props.GetCreatedProperty().Value);
+            ClassicAssert.AreEqual(dateToInsert, props.GetCreatedProperty().Value);
 
             props.SetCreatedProperty("2007-05-12T10:00:00+02:00");//colon in tz
-            Assert.AreEqual(dateToInsert, props.GetCreatedProperty().Value);
+            ClassicAssert.AreEqual(dateToInsert, props.GetCreatedProperty().Value);
 
             props.SetCreatedProperty("2007-05-12T06:00:00-0200");
-            Assert.AreEqual(dateToInsert, props.GetCreatedProperty().Value);
+            ClassicAssert.AreEqual(dateToInsert, props.GetCreatedProperty().Value);
 
             props.SetCreatedProperty("2015-07-27");
-            Assert.AreEqual(msdf.Parse("2015-07-27T00:00:00.000Z"), props.GetCreatedProperty().Value);
+            ClassicAssert.AreEqual(msdf.Parse("2015-07-27T00:00:00.000Z"), props.GetCreatedProperty().Value);
 
             props.SetCreatedProperty("2007-05-12T10:00:00.123+0200");
-            Assert.AreEqual(msdf.Parse("2007-05-12T08:00:00.123Z"), props.GetCreatedProperty().Value);
+            ClassicAssert.AreEqual(msdf.Parse("2007-05-12T08:00:00.123Z"), props.GetCreatedProperty().Value);
 
             props.SetCategoryProperty("MyCategory");
 
@@ -134,24 +134,24 @@ namespace TestCases.OpenXml4Net.OPC
 
             // Gets the core properties
             PackageProperties props = p.GetPackageProperties();
-            Assert.AreEqual("MyCategory", props.GetCategoryProperty());
-            Assert.AreEqual("MyContentStatus", props.GetContentStatusProperty()
+            ClassicAssert.AreEqual("MyCategory", props.GetCategoryProperty());
+            ClassicAssert.AreEqual("MyContentStatus", props.GetContentStatusProperty()
                     );
-            Assert.AreEqual("MyContentType", props.GetContentTypeProperty());
-            Assert.AreEqual(expectedDate, props.GetCreatedProperty());
-            Assert.AreEqual("MyCreator", props.GetCreatorProperty());
-            Assert.AreEqual("MyDescription", props.GetDescriptionProperty());
-            Assert.AreEqual("MyIdentifier", props.GetIdentifierProperty());
-            Assert.AreEqual("MyKeywords", props.GetKeywordsProperty());
-            Assert.AreEqual("MyLanguage", props.GetLanguageProperty());
-            Assert.AreEqual("Julien Chable", props.GetLastModifiedByProperty()
+            ClassicAssert.AreEqual("MyContentType", props.GetContentTypeProperty());
+            ClassicAssert.AreEqual(expectedDate, props.GetCreatedProperty());
+            ClassicAssert.AreEqual("MyCreator", props.GetCreatorProperty());
+            ClassicAssert.AreEqual("MyDescription", props.GetDescriptionProperty());
+            ClassicAssert.AreEqual("MyIdentifier", props.GetIdentifierProperty());
+            ClassicAssert.AreEqual("MyKeywords", props.GetKeywordsProperty());
+            ClassicAssert.AreEqual("MyLanguage", props.GetLanguageProperty());
+            ClassicAssert.AreEqual("Julien Chable", props.GetLastModifiedByProperty()
                     );
-            Assert.AreEqual(expectedDate, props.GetLastPrintedProperty());
-            Assert.AreEqual(expectedDate, props.GetModifiedProperty());
-            Assert.AreEqual("2", props.GetRevisionProperty());
-            Assert.AreEqual("MySubject", props.GetSubjectProperty());
-            Assert.AreEqual("MyTitle", props.GetTitleProperty());
-            Assert.AreEqual("2", props.GetVersionProperty());
+            ClassicAssert.AreEqual(expectedDate, props.GetLastPrintedProperty());
+            ClassicAssert.AreEqual(expectedDate, props.GetModifiedProperty());
+            ClassicAssert.AreEqual("2", props.GetRevisionProperty());
+            ClassicAssert.AreEqual("MySubject", props.GetSubjectProperty());
+            ClassicAssert.AreEqual("MyTitle", props.GetTitleProperty());
+            ClassicAssert.AreEqual("2", props.GetVersionProperty());
         }
         [Test]
         public void TestCoreProperties_bug51374()
@@ -164,49 +164,49 @@ namespace TestCases.OpenXml4Net.OPC
             PackagePropertiesPart props = (PackagePropertiesPart)pkg.GetPackageProperties();
 
             // Created
-            Assert.AreEqual("", props.GetCreatedPropertyString());
-            Assert.IsNull(props.GetCreatedProperty());
+            ClassicAssert.AreEqual("", props.GetCreatedPropertyString());
+            ClassicAssert.IsNull(props.GetCreatedProperty());
             props.SetCreatedProperty((String)null);
-            Assert.AreEqual("", props.GetCreatedPropertyString());
-            Assert.IsNull(props.GetCreatedProperty());
+            ClassicAssert.AreEqual("", props.GetCreatedPropertyString());
+            ClassicAssert.IsNull(props.GetCreatedProperty());
             props.SetCreatedProperty(new Nullable<DateTime>());
-            Assert.AreEqual("", props.GetCreatedPropertyString());
-            Assert.IsNull(props.GetCreatedProperty());
+            ClassicAssert.AreEqual("", props.GetCreatedPropertyString());
+            ClassicAssert.IsNull(props.GetCreatedProperty());
             props.SetCreatedProperty(new Nullable<DateTime>(date));
-            Assert.AreEqual(strDate, props.GetCreatedPropertyString());
-            Assert.AreEqual(date, props.GetCreatedProperty());
+            ClassicAssert.AreEqual(strDate, props.GetCreatedPropertyString());
+            ClassicAssert.AreEqual(date, props.GetCreatedProperty());
             props.SetCreatedProperty(strDate);
-            Assert.AreEqual(strDate, props.GetCreatedPropertyString());
-            Assert.AreEqual(date, props.GetCreatedProperty());
+            ClassicAssert.AreEqual(strDate, props.GetCreatedPropertyString());
+            ClassicAssert.AreEqual(date, props.GetCreatedProperty());
 
             // lastPrinted
-            Assert.AreEqual("", props.GetLastPrintedPropertyString());
-            Assert.IsNull(props.GetLastPrintedProperty());
+            ClassicAssert.AreEqual("", props.GetLastPrintedPropertyString());
+            ClassicAssert.IsNull(props.GetLastPrintedProperty());
             props.SetLastPrintedProperty((String)null);
-            Assert.AreEqual("", props.GetLastPrintedPropertyString());
-            Assert.IsNull(props.GetLastPrintedProperty());
+            ClassicAssert.AreEqual("", props.GetLastPrintedPropertyString());
+            ClassicAssert.IsNull(props.GetLastPrintedProperty());
             props.SetLastPrintedProperty(new Nullable<DateTime>());
-            Assert.AreEqual("", props.GetLastPrintedPropertyString());
-            Assert.IsNull(props.GetLastPrintedProperty());
+            ClassicAssert.AreEqual("", props.GetLastPrintedPropertyString());
+            ClassicAssert.IsNull(props.GetLastPrintedProperty());
             props.SetLastPrintedProperty(new Nullable<DateTime>(date));
-            Assert.AreEqual(strDate, props.GetLastPrintedPropertyString());
-            Assert.AreEqual(date, props.GetLastPrintedProperty());
+            ClassicAssert.AreEqual(strDate, props.GetLastPrintedPropertyString());
+            ClassicAssert.AreEqual(date, props.GetLastPrintedProperty());
             props.SetLastPrintedProperty(strDate);
-            Assert.AreEqual(strDate, props.GetLastPrintedPropertyString());
-            Assert.AreEqual(date, props.GetLastPrintedProperty());
+            ClassicAssert.AreEqual(strDate, props.GetLastPrintedPropertyString());
+            ClassicAssert.AreEqual(date, props.GetLastPrintedProperty());
 
             // modified
-            Assert.IsNull(props.GetModifiedProperty());
+            ClassicAssert.IsNull(props.GetModifiedProperty());
             props.SetModifiedProperty((String)null);
-            Assert.IsNull(props.GetModifiedProperty());
+            ClassicAssert.IsNull(props.GetModifiedProperty());
             props.SetModifiedProperty(new Nullable<DateTime>());
-            Assert.IsNull(props.GetModifiedProperty());
+            ClassicAssert.IsNull(props.GetModifiedProperty());
             props.SetModifiedProperty(new Nullable<DateTime>(date));
-            Assert.AreEqual(strDate, props.GetModifiedPropertyString());
-            Assert.AreEqual(date, props.GetModifiedProperty());
+            ClassicAssert.AreEqual(strDate, props.GetModifiedPropertyString());
+            ClassicAssert.AreEqual(date, props.GetModifiedProperty());
             props.SetModifiedProperty(strDate);
-            Assert.AreEqual(strDate, props.GetModifiedPropertyString());
-            Assert.AreEqual(date, props.GetModifiedProperty());
+            ClassicAssert.AreEqual(strDate, props.GetModifiedPropertyString());
+            ClassicAssert.AreEqual(date, props.GetModifiedProperty());
 
             pkg.Close();
         }
@@ -216,7 +216,7 @@ namespace TestCases.OpenXml4Net.OPC
             // Open the namespace
             OPCPackage pkg1 = OPCPackage.Open(OpenXml4NetTestDataSamples.OpenSampleStream("51444.xlsx"));
             PackageProperties props1 = pkg1.GetPackageProperties();
-            Assert.AreEqual(null, props1.GetTitleProperty());
+            ClassicAssert.AreEqual(null, props1.GetTitleProperty());
             props1.SetTitleProperty("Bug 51444 fixed");
             MemoryStream out1 = new MemoryStream();
             pkg1.Save(out1);
@@ -246,15 +246,15 @@ namespace TestCases.OpenXml4Net.OPC
                 if (pr.RelationshipType.Equals(PackageRelationshipTypes.EXTENDED_PROPERTIES))
                     foundExtPropRel = true;
             }
-            Assert.IsTrue(foundDocRel, "Core/Doc Relationship not found in " + p.Relationships);
-            Assert.IsTrue(foundCorePropRel, "Core Props Relationship not found in " + p.Relationships);
-            Assert.IsTrue(foundExtPropRel, "Ext Props Relationship not found in " + p.Relationships);
+            ClassicAssert.IsTrue(foundDocRel, "Core/Doc Relationship not found in " + p.Relationships);
+            ClassicAssert.IsTrue(foundCorePropRel, "Core Props Relationship not found in " + p.Relationships);
+            ClassicAssert.IsTrue(foundExtPropRel, "Ext Props Relationship not found in " + p.Relationships);
 
             // Get the Core Properties
             PackagePropertiesPart props = (PackagePropertiesPart)p.GetPackageProperties();
 
             // Check
-            Assert.AreEqual("Stefan Kopf", props.GetCreatorProperty());
+            ClassicAssert.AreEqual("Stefan Kopf", props.GetCreatorProperty());
 
             p.Close();
         }
@@ -266,12 +266,12 @@ namespace TestCases.OpenXml4Net.OPC
             OPCPackage pkg = OPCPackage.Open(inp, PackageAccess.READ);
             XSSFWorkbook wb = new XSSFWorkbook(pkg);
 
-            Assert.IsNotNull(wb.GetProperties());
-            Assert.IsNotNull(wb.GetProperties().CustomProperties);
+            ClassicAssert.IsNotNull(wb.GetProperties());
+            ClassicAssert.IsNotNull(wb.GetProperties().CustomProperties);
 
             foreach (CT_Property prop in wb.GetProperties().CustomProperties.GetUnderlyingProperties().GetPropertyList())
             {
-                Assert.IsNotNull(prop);
+                ClassicAssert.IsNotNull(prop);
             }
 
             wb.Close();
@@ -292,20 +292,20 @@ namespace TestCases.OpenXml4Net.OPC
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.fff'Z'"); //use fff for millisecond.
             df.TimeZone = TimeZoneInfo.Utc;
             // Check text properties first
-            Assert.AreEqual("Lorem Ipsum", props.GetTitleProperty());
-            Assert.AreEqual("Apache POI", props.GetCreatorProperty());
+            ClassicAssert.AreEqual("Lorem Ipsum", props.GetTitleProperty());
+            ClassicAssert.AreEqual("Apache POI", props.GetCreatorProperty());
             
             // Created at has a +3 timezone and milliseconds
             //   2006-10-13T18:06:00.123+03:00
             // = 2006-10-13T15:06:00.123+00:00
-            Assert.AreEqual("2006-10-13T15:06:00Z", props.GetCreatedPropertyString());
-            Assert.AreEqual("2006-10-13T15:06:00.123Z", df.Format(props.GetCreatedProperty()));
+            ClassicAssert.AreEqual("2006-10-13T15:06:00Z", props.GetCreatedPropertyString());
+            ClassicAssert.AreEqual("2006-10-13T15:06:00.123Z", df.Format(props.GetCreatedProperty()));
 
             // Modified at has a -13 timezone but no milliseconds
             //   2007-06-20T07:59:00-13:00
             // = 2007-06-20T20:59:00-13:00
-            Assert.AreEqual("2007-06-20T20:59:00Z", props.GetModifiedPropertyString());
-            Assert.AreEqual("2007-06-20T20:59:00.000Z", df.Format(props.GetModifiedProperty()));
+            ClassicAssert.AreEqual("2007-06-20T20:59:00Z", props.GetModifiedPropertyString());
+            ClassicAssert.AreEqual("2007-06-20T20:59:00.000Z", df.Format(props.GetModifiedProperty()));
 
 
             // Ensure we can change them with other timezones and still read back OK
@@ -317,17 +317,17 @@ namespace TestCases.OpenXml4Net.OPC
             pkg = OPCPackage.Open(new ByteArrayInputStream(baos.ToByteArray()));
 
             // Check text properties first - should be unchanged
-            Assert.AreEqual("Lorem Ipsum", props.GetTitleProperty());
-            Assert.AreEqual("Apache POI", props.GetCreatorProperty());
+            ClassicAssert.AreEqual("Lorem Ipsum", props.GetTitleProperty());
+            ClassicAssert.AreEqual("Apache POI", props.GetCreatorProperty());
 
             // Check the updated times
             //   2007-06-20T20:57:00+13:00
             // = 2007-06-20T07:57:00Z
-            Assert.AreEqual("2007-06-20T07:57:00.000Z", df.Format(props.GetCreatedProperty().Value));
+            ClassicAssert.AreEqual("2007-06-20T07:57:00.000Z", df.Format(props.GetCreatedProperty().Value));
 
             //   2007-06-20T20:59:00.123-13:00
             // = 2007-06-21T09:59:00.123Z
-            Assert.AreEqual("2007-06-21T09:59:00.123Z", df.Format(props.GetModifiedProperty().Value));
+            ClassicAssert.AreEqual("2007-06-21T09:59:00.123Z", df.Format(props.GetModifiedProperty().Value));
         }
 
 

@@ -19,7 +19,7 @@ namespace TestCases.HPSF.Basic
 {
     using System;
     using System.IO;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HPSF;
     using NPOI.Util;
 
@@ -67,7 +67,7 @@ namespace TestCases.HPSF.Basic
         {
             String[] expected = POI_FILES;
             for (int i = 0; i < expected.Length; i++)
-                Assert.AreEqual(poiFiles[i].GetName(), expected[i]);
+                ClassicAssert.AreEqual(poiFiles[i].GetName(), expected[i]);
         }
 
         /**
@@ -95,7 +95,7 @@ namespace TestCases.HPSF.Basic
             };
             for (int i = 0; i < expected.Length; i++)
             {
-                Stream in1 = new ByteArrayInputStream(poiFiles[i].GetBytes());
+                InputStream in1 = new ByteArrayInputStream(poiFiles[i].GetBytes());
                 Object o;
                 try
                 {
@@ -110,7 +110,7 @@ namespace TestCases.HPSF.Basic
                     o = ex;
                 }
                 in1.Close();
-                Assert.AreEqual(o.GetType(), expected[i]);
+                ClassicAssert.AreEqual(o.GetType(), expected[i]);
             }
         }
 
@@ -131,23 +131,23 @@ namespace TestCases.HPSF.Basic
             PropertySet ps =
                 PropertySetFactory.Create(new ByteArrayInputStream(b));
             SummaryInformation s = (SummaryInformation)ps;
-            Assert.IsNull(s.Title);
-            Assert.IsNull(s.Subject);
-            Assert.IsNotNull(s.Author);
-            Assert.IsNull(s.Keywords);
-            Assert.IsNull(s.Comments);
-            Assert.IsNotNull(s.Template);
-            Assert.IsNotNull(s.LastAuthor);
-            Assert.IsNotNull(s.RevNumber);
-            Assert.AreEqual(s.EditTime, 0);
-            Assert.IsNull(s.LastPrinted);
-            Assert.IsNull(s.CreateDateTime);
-            Assert.IsNull(s.LastSaveDateTime);
-            Assert.AreEqual(s.PageCount, 0);
-            Assert.AreEqual(s.WordCount, 0);
-            Assert.AreEqual(s.CharCount, 0);
-            Assert.IsNull(s.Thumbnail);
-            Assert.IsNull(s.ApplicationName);
+            ClassicAssert.IsNull(s.Title);
+            ClassicAssert.IsNull(s.Subject);
+            ClassicAssert.IsNotNull(s.Author);
+            ClassicAssert.IsNull(s.Keywords);
+            ClassicAssert.IsNull(s.Comments);
+            ClassicAssert.IsNotNull(s.Template);
+            ClassicAssert.IsNotNull(s.LastAuthor);
+            ClassicAssert.IsNotNull(s.RevNumber);
+            ClassicAssert.AreEqual(s.EditTime, 0);
+            ClassicAssert.IsNull(s.LastPrinted);
+            ClassicAssert.IsNull(s.CreateDateTime);
+            ClassicAssert.IsNull(s.LastSaveDateTime);
+            ClassicAssert.AreEqual(s.PageCount, 0);
+            ClassicAssert.AreEqual(s.WordCount, 0);
+            ClassicAssert.AreEqual(s.CharCount, 0);
+            ClassicAssert.IsNull(s.Thumbnail);
+            ClassicAssert.IsNull(s.ApplicationName);
         }
 
     }

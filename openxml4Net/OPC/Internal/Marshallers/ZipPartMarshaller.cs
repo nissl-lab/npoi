@@ -26,7 +26,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
          */
         public bool Marshall(PackagePart part, Stream os)
         {
-            if (!(os is ZipOutputStream))
+            if (os is not ZipOutputStream zos)
             {
                 logger.Log(POILogger.ERROR,"Unexpected class " + os.GetType().Name);
                 throw new OpenXml4NetException("ZipOutputStream expected !");
@@ -41,7 +41,6 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
                 return true;
             }
 
-            ZipOutputStream zos = (ZipOutputStream)os;
             string name = ZipHelper
                     .GetZipItemNameFromOPCName(part.PartName.URI
                             .OriginalString);

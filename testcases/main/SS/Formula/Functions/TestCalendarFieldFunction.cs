@@ -20,7 +20,7 @@ namespace TestCases.SS.Formula.Functions
 
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using System;
 
     /**
@@ -113,7 +113,7 @@ namespace TestCases.SS.Formula.Functions
                 throw new AssertionException("Wrong result type: " + cv.FormatAsString());
             }
             double actualValue = cv.NumberValue;
-            Assert.AreEqual(expectedResult, actualValue, 0);
+            ClassicAssert.AreEqual(expectedResult, actualValue, 0);
         }
     }
 

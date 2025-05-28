@@ -332,7 +332,7 @@ namespace NPOI.POIFS.FileSystem
          * @param stream the stream to be closed
          * @param success <code>false</code> if an exception is currently being thrown in the calling method
          */
-        private void CloseInputStream(Stream stream, bool success)
+        private static void CloseInputStream(Stream stream, bool success)
         {
             try
             {
@@ -367,8 +367,7 @@ namespace NPOI.POIFS.FileSystem
             LongField signature = new LongField(HeaderBlockConstants._signature_offset, header);
 
             // Wind back those 8 bytes
-            if (inp is PushbackInputStream) {
-                PushbackInputStream pin = (PushbackInputStream)inp;
+            if (inp is PushbackInputStream pin) {
                 pin.Unread(header, 0, bytesRead);
             } else {
                 inp.Position = 0;
@@ -790,8 +789,8 @@ namespace NPOI.POIFS.FileSystem
          */
         public bool IsInPlaceWriteable()
         {
-            if (_data is FileBackedDataSource) {
-                if (((FileBackedDataSource)_data).IsWriteable)
+            if (_data is FileBackedDataSource source) {
+                if (source.IsWriteable)
                 {
                     return true;
                 }
@@ -954,7 +953,7 @@ namespace NPOI.POIFS.FileSystem
                 return rval;
 
             }
-            return Array.Empty<Object>();
+            return [];
         }
 
         /**

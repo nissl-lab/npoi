@@ -19,7 +19,8 @@ namespace NPOI.XWPF.UserModel
     using System;
     using NPOI.OpenXmlFormats.Wordprocessing;
     using System.Collections.Generic;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
     using System.Xml;
     using System.IO;
     using NPOI.Util;
@@ -88,7 +89,7 @@ namespace NPOI.XWPF.UserModel
             }
 
             //// Look for any text in any of our pictures or Drawings
-            StringBuilder text = new StringBuilder();
+            using var text = ZString.CreateStringBuilder();
             List<object> pictTextObjs = new List<object>();
             foreach (CT_Picture pic in r.GetPictList())
                 pictTextObjs.Add(pic);
@@ -135,7 +136,8 @@ namespace NPOI.XWPF.UserModel
             : this(r, (IRunBody)p)
         {
         }
-        private List<NPOI.OpenXmlFormats.Dml.Picture.CT_Picture> GetCTPictures(object o)
+
+        private static List<NPOI.OpenXmlFormats.Dml.Picture.CT_Picture> GetCTPictures(object o)
         {
             List<NPOI.OpenXmlFormats.Dml.Picture.CT_Picture> pictures = new List<NPOI.OpenXmlFormats.Dml.Picture.CT_Picture>();
             //XmlObject[] picts = o.SelectPath("declare namespace pic='"+CT_Picture.type.Name.NamespaceURI+"' .//pic:pic");
@@ -155,9 +157,8 @@ namespace NPOI.XWPF.UserModel
             //    pictures.Add((NPOI.OpenXmlFormats.Dml.CT_Picture)pict);
             //}
             //}
-            if (o is CT_Drawing)
+            if (o is CT_Drawing drawing)
             {
-                CT_Drawing drawing = o as CT_Drawing;
                 if (drawing.inline != null)
                 {
                     foreach (CT_Inline inline in drawing.inline)
@@ -166,14 +167,14 @@ namespace NPOI.XWPF.UserModel
                     }
                 }
             }
-            else if (o is CT_GraphicalObjectData)
+            else if (o is CT_GraphicalObjectData data)
             {
-                GetPictures(o as CT_GraphicalObjectData, pictures);
+                GetPictures(data, pictures);
             }
             return pictures;
         }
 
-        private void GetPictures(CT_GraphicalObjectData god, List<NPOI.OpenXmlFormats.Dml.Picture.CT_Picture> pictures)
+        private static void GetPictures(CT_GraphicalObjectData god, List<NPOI.OpenXmlFormats.Dml.Picture.CT_Picture> pictures)
         {
             XmlSerializer xmlse = new XmlSerializer(typeof(NPOI.OpenXmlFormats.Dml.Picture.CT_Picture));
             foreach (string el in god.Any)
@@ -217,8 +218,8 @@ namespace NPOI.XWPF.UserModel
         {
             get
             {
-                if (parent is XWPFParagraph)
-                    return (XWPFParagraph)parent;
+                if (parent is XWPFParagraph paragraph)
+                    return paragraph;
                 return null;
             }
         }
@@ -242,7 +243,7 @@ namespace NPOI.XWPF.UserModel
         /**
          * For isBold, isItalic etc
          */
-        private bool IsCTOnOff(CT_OnOff onoff)
+        private static bool IsCTOnOff(CT_OnOff onoff)
         {
             if (!onoff.IsSetVal())
                 return true;
@@ -475,17 +476,16 @@ namespace NPOI.XWPF.UserModel
                 for (int i = 0; i < run.Items.Count; i++)
                 {
                     object o = run.Items[i];
-                    if (o is CT_Text)
+                    if (o is CT_Text ctText)
                     {
                         if (!(run.ItemsElementName[i] == RunItemsChoiceType.instrText))
                         {
-                            text.Append(((CT_Text)o).Value);
+                            text.Append(ctText.Value);
                         }
                     }
                     // Complex type evaluation (currently only for extraction of check boxes)
-                    if (o is CT_FldChar)
+                    if (o is CT_FldChar ctfldChar)
                     {
-                        CT_FldChar ctfldChar = ((CT_FldChar)o);
                         if (ctfldChar.fldCharType == ST_FldCharType.begin)
                         {
                             if (ctfldChar.ffData != null)
@@ -533,9 +533,8 @@ namespace NPOI.XWPF.UserModel
                         }
                     }
 
-                    if (o is CT_FtnEdnRef)
+                    if (o is CT_FtnEdnRef ftn)
                     {
-                        CT_FtnEdnRef ftn = (CT_FtnEdnRef)o;
                         String footnoteRef = ftn.DomNode.LocalName.Equals("footnoteReference") ?
                             "[footnoteRef:" + ftn.id + "]" : "[endnoteRef:" + ftn.id + "]";
                         text.Append(footnoteRef);
@@ -1072,15 +1071,13 @@ namespace NPOI.XWPF.UserModel
             // Work out what to add the picture to, then add both the
             //  picture and the relationship for it
             // TODO Should we have an interface for this sort of thing?
-            if (parent.Part is XWPFHeaderFooter)
+            if (parent.Part is XWPFHeaderFooter headerFooter)
             {
-                XWPFHeaderFooter headerFooter = (XWPFHeaderFooter)parent.Part;
                 relationId = headerFooter.AddPictureData(pictureData, pictureType);
                 picData = (XWPFPictureData)headerFooter.GetRelationById(relationId);
             }
-            else if (parent.Part is XWPFComments)
+            else if (parent.Part is XWPFComments comments)
             {
-                XWPFComments comments = (XWPFComments)parent.Part;
                 relationId = comments.AddPictureData(pictureData, pictureType);
                 picData = (XWPFPictureData)comments.GetRelationById(relationId);
             }
@@ -1279,7 +1276,7 @@ namespace NPOI.XWPF.UserModel
         static void preserveSpaces(CT_Text xs)
         {
             String text = xs.Value;
-            if (text != null && text.Length>=1 && (text.StartsWith(" ") || text.EndsWith(" ")||text.StartsWith("\t")||text.EndsWith("\t")))
+            if (text != null && text.Length>=1 && (text.StartsWith(' ') || text.EndsWith(' ')||text.StartsWith('\t')||text.EndsWith('\t')))
             {
                 //    XmlCursor c = xs.NewCursor();
                 //    c.ToNextToken();

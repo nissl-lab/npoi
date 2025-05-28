@@ -26,7 +26,7 @@ namespace NPOI.HSSF.Record
     public class DrawingRecord : StandardRecord, ICloneable
     {
         public const short sid = 0xEC;
-        private static byte[] EMPTY_BYTE_ARRAY = { };
+        private static byte[] EMPTY_BYTE_ARRAY = [];
         private byte[] recordData;
         private byte[] contd;
 

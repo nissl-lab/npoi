@@ -19,7 +19,8 @@
 namespace NPOI.DDF
 {
     using System;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
     using System.Collections;
     using NPOI.Util;
     using System.Collections.Generic;
@@ -210,13 +211,12 @@ namespace NPOI.DDF
         {
             get
             {
-                IList<EscherContainerRecord> containers = new List<EscherContainerRecord>();
-                for (IEnumerator iterator = ChildRecords.GetEnumerator(); iterator.MoveNext(); )
+                List<EscherContainerRecord> containers = [];
+                foreach (EscherRecord r in ChildRecords)
                 {
-                    EscherRecord r = (EscherRecord)iterator.Current;
-                    if (r is EscherContainerRecord)
+                    if (r is EscherContainerRecord record)
                     {
-                        containers.Add((EscherContainerRecord)r);
+                        containers.Add(record);
                     }
                 }
                 return containers;
@@ -289,16 +289,16 @@ namespace NPOI.DDF
             }
         }
         /// <summary>
-        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+        /// Returns a <see cref="System.String"/> that represents the current <see cref="System.Object"/>.
         /// </summary>
         /// <returns>
-        /// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+        /// A <see cref="System.String"/> that represents the current <see cref="System.Object"/>.
         /// </returns>
         public override string ToString()
         {
             String nl = Environment.NewLine;
 
-            StringBuilder children = new StringBuilder();
+            using var children = ZString.CreateStringBuilder();
             if (ChildRecords.Count > 0)
             {
                 children.Append("  children: " + nl);
@@ -343,9 +343,8 @@ namespace NPOI.DDF
         {
             StringBuilder builder = new StringBuilder();
             builder.Append(tab).Append(FormatXmlRecordHeader(RecordName, HexDump.ToHex(RecordId), HexDump.ToHex(Version), HexDump.ToHex(Instance)));
-            for (IEnumerator<EscherRecord> iterator = _childRecords.GetEnumerator(); iterator.MoveNext(); )
+            foreach (var record in _childRecords)
             {
-                EscherRecord record = iterator.Current;
                 builder.Append(record.ToXml(tab + "\t"));
             }
             builder.Append(tab).Append("</").Append(RecordName).Append(">\n");
@@ -379,10 +378,9 @@ namespace NPOI.DDF
             {
                 Object er = it.Current;
                 EscherRecord r = (EscherRecord)er;
-                if (r is EscherContainerRecord)
+                if (r is EscherContainerRecord record)
                 {
-                    EscherContainerRecord c = (EscherContainerRecord)r;
-                    c.GetRecordsById(recordId, ref out1);
+                    record.GetRecordsById(recordId, ref out1);
                 }
                 else if (r.RecordId == recordId)
                 {

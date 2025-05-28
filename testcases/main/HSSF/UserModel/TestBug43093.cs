@@ -19,7 +19,7 @@ namespace TestCases.HSSF.UserModel
 {
     using System;
     using NPOI.HSSF.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.SS.UserModel;
     /**
      * 
@@ -63,7 +63,7 @@ namespace TestCases.HSSF.UserModel
             double d = eva.Evaluate(s2E4).NumberValue;
 
             // internalEvaluate(...) Area3DEval.: 311+312+321+322 expected
-            Assert.AreEqual(d, (311 + 312 + 321 + 322), 0.0000001);
+            ClassicAssert.AreEqual(d, (311 + 312 + 321 + 322), 0.0000001);
             // System.out.println("Area3DEval ok.: 311+312+321+322=" + d);
         }
     }

@@ -18,9 +18,8 @@
 namespace NPOI.HSSF.Extractor
 {
     using System;
+    using System.Collections.Generic;
     using System.Text;
-    using System.IO;
-    using System.Collections;
 
     using NPOI.HSSF.UserModel;
     using NPOI.HSSF.Record;
@@ -126,7 +125,7 @@ namespace NPOI.HSSF.Extractor
                 TextListener tl = TriggerExtraction();
 
                 text = tl.text.ToString();
-                if (!text.EndsWith("\n", StringComparison.Ordinal))
+                if (!text.EndsWith('\n'))
                 {
                     text = text + "\n";
                 }
@@ -155,12 +154,12 @@ namespace NPOI.HSSF.Extractor
             return tl;
         }
 
-        private class TextListener : IHSSFListener
+        private sealed class TextListener : IHSSFListener
         {
             public FormatTrackingHSSFListener ft;
             private SSTRecord sstRecord;
 
-            private IList sheetNames = new ArrayList();
+            private List<string> sheetNames = [];
             public StringBuilder text = new StringBuilder();
             private int sheetNum = -1;
             private int rowNum;

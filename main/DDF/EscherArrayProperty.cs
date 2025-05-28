@@ -19,7 +19,8 @@
 namespace NPOI.DDF
 {
     using System;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
     using System.Collections.Generic;
     using NPOI.Util;
 
@@ -146,7 +147,7 @@ namespace NPOI.DDF
         {
             String nl = Environment.NewLine;
 
-            StringBuilder results = new StringBuilder();
+            using var results = ZString.CreateStringBuilder();
             results.Append("    {EscherArrayProperty:" + nl);
             results.Append("     Num Elements: " + NumberOfElementsInArray + nl);
             results.Append("     Num Elements In Memory: " + NumberOfElementsInMemory + nl);
@@ -259,7 +260,7 @@ namespace NPOI.DDF
             return this.GetEnumerator();
         }
 
-        private class EscherArrayEnumerator : IEnumerator<byte[]>
+        private sealed class EscherArrayEnumerator : IEnumerator<byte[]>
         {
             EscherArrayProperty dataHolder;
             public EscherArrayEnumerator(EscherArrayProperty eap)

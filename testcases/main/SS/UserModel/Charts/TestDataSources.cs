@@ -20,7 +20,7 @@ using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.SS.UserModel.Charts;
 using NPOI.SS.Util;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 
 namespace TestCases.SS.UserModel.Charts
 {
@@ -54,8 +54,8 @@ namespace TestCases.SS.UserModel.Charts
         {
             Double[] doubles = new Double[] {1.0, 2.0, 3.0, 4.0, 5.0};
             IChartDataSource<Double> doubleDataSource = DataSources.FromArray(doubles);
-            Assert.IsTrue(doubleDataSource.IsNumeric);
-            Assert.IsFalse(doubleDataSource.IsReference);
+            ClassicAssert.IsTrue(doubleDataSource.IsNumeric);
+            ClassicAssert.IsFalse(doubleDataSource.IsReference);
             AssertDataSourceIsEqualToArray(doubleDataSource, doubles);
         }
         [Test]
@@ -63,8 +63,8 @@ namespace TestCases.SS.UserModel.Charts
         {
             String[] strings = new String[] {"one", "two", "three", "four", "five"};
             IChartDataSource<String> stringDataSource = DataSources.FromArray(strings);
-            Assert.IsFalse(stringDataSource.IsNumeric);
-            Assert.IsFalse(stringDataSource.IsReference);
+            ClassicAssert.IsFalse(stringDataSource.IsNumeric);
+            ClassicAssert.IsFalse(stringDataSource.IsReference);
             AssertDataSourceIsEqualToArray(stringDataSource, strings);
         }
         [Test]
@@ -74,12 +74,12 @@ namespace TestCases.SS.UserModel.Charts
             ISheet sheet = new SheetBuilder(wb, numericCells).Build();
             CellRangeAddress numCellRange = CellRangeAddress.ValueOf("A2:E2");
             IChartDataSource<double> numDataSource = DataSources.FromNumericCellRange(sheet, numCellRange);
-            Assert.IsTrue(numDataSource.IsReference);
-            Assert.IsTrue(numDataSource.IsNumeric);
-            Assert.AreEqual(numericCells[0].Length, numDataSource.PointCount);
+            ClassicAssert.IsTrue(numDataSource.IsReference);
+            ClassicAssert.IsTrue(numDataSource.IsNumeric);
+            ClassicAssert.AreEqual(numericCells[0].Length, numDataSource.PointCount);
             for (int i = 0; i < numericCells[0].Length; ++i)
             {
-                Assert.AreEqual(((double) numericCells[0][i])*2,
+                ClassicAssert.AreEqual(((double) numericCells[0][i])*2,
                                 numDataSource.GetPointAt(i), 0.00001);
             }
         }
@@ -90,12 +90,12 @@ namespace TestCases.SS.UserModel.Charts
             ISheet sheet = new SheetBuilder(wb, stringCells).Build();
             CellRangeAddress numCellRange = CellRangeAddress.ValueOf("A2:E2");
             IChartDataSource<String> numDataSource = DataSources.FromStringCellRange(sheet, numCellRange);
-            Assert.IsTrue(numDataSource.IsReference);
-            Assert.IsFalse(numDataSource.IsNumeric);
-            Assert.AreEqual(numericCells[0].Length, numDataSource.PointCount);
+            ClassicAssert.IsTrue(numDataSource.IsReference);
+            ClassicAssert.IsFalse(numDataSource.IsNumeric);
+            ClassicAssert.AreEqual(numericCells[0].Length, numDataSource.PointCount);
             for (int i = 0; i < stringCells[1].Length; ++i)
             {
-                Assert.AreEqual(stringCells[1][i], numDataSource.GetPointAt(i));
+                ClassicAssert.AreEqual(stringCells[1][i], numDataSource.GetPointAt(i));
             }
         }
         [Test]
@@ -110,14 +110,14 @@ namespace TestCases.SS.UserModel.Charts
             {
                 if (i%2 == 0)
                 {
-                    Assert.IsNull(strDataSource.GetPointAt(i));
-                    Assert.AreEqual(((double) mixedCells[0][i]),
+                    ClassicAssert.IsNull(strDataSource.GetPointAt(i));
+                    ClassicAssert.AreEqual(((double) mixedCells[0][i]),
                                     numDataSource.GetPointAt(i), 0.00001);
                 }
                 else
                 {
-                    Assert.IsNaN(numDataSource.GetPointAt(i));
-                    Assert.AreEqual(mixedCells[0][i], strDataSource.GetPointAt(i));
+                    ClassicAssert.IsNaN(numDataSource.GetPointAt(i));
+                    ClassicAssert.AreEqual(mixedCells[0][i], strDataSource.GetPointAt(i));
                 }
             }
         }
@@ -137,7 +137,7 @@ namespace TestCases.SS.UserModel.Charts
             {
                 exception = e;
             }
-            Assert.IsNotNull(exception);
+            ClassicAssert.IsNotNull(exception);
 
             exception = null;
             try
@@ -148,15 +148,15 @@ namespace TestCases.SS.UserModel.Charts
             {
                 exception = e;
             }
-            Assert.IsNotNull(exception);
+            ClassicAssert.IsNotNull(exception);
         }
 
         private void AssertDataSourceIsEqualToArray<T>(IChartDataSource<T> ds, T[] array)
         {
-            Assert.AreEqual(ds.PointCount, array.Length);
+            ClassicAssert.AreEqual(ds.PointCount, array.Length);
             for (int i = 0; i < array.Length; ++i)
             {
-                Assert.AreEqual(ds.GetPointAt(i), array[i]);
+                ClassicAssert.AreEqual(ds.GetPointAt(i), array[i]);
             }
         }
     }

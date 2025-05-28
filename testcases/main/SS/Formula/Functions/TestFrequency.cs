@@ -21,14 +21,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace NPOI.SS.Formula.Functions
+namespace TestCases.SS.Formula.Functions
 {
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
     using NPOI.Util;
-    using NPOI.Util.ArrayExtensions;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using static NPOI.SS.Formula.Functions.Frequency;
 
     /// <summary>
@@ -45,20 +44,20 @@ namespace NPOI.SS.Formula.Functions
         public void TestHistogram()
         {
 
-            Assert.IsTrue(Arrays.Equals(new int[] { 3, 2, 2, 0, 1, 1 },
+            ClassicAssert.IsTrue(Arrays.Equals(new int[] { 3, 2, 2, 0, 1, 1 },
                     Histogram(
                             new double[] { 11, 12, 13, 21, 29, 36, 40, 58, 69 },
                             new double[] { 20, 30, 40, 50, 60 })
             ));
 
-            Assert.IsTrue(Arrays.Equals(new int[] { 1, 1, 1, 1, 1, 0 },
+            ClassicAssert.IsTrue(Arrays.Equals(new int[] { 1, 1, 1, 1, 1, 0 },
                     Histogram(
                             new double[] { 20, 30, 40, 50, 60 },
                             new double[] { 20, 30, 40, 50, 60 })
 
             ));
 
-            Assert.IsTrue(Arrays.Equals(new int[] { 2, 3 },
+            ClassicAssert.IsTrue(Arrays.Equals(new int[] { 2, 3 },
                     Histogram(
                             new double[] { 20, 30, 40, 50, 60 },
                             new double[] { 30 })
@@ -94,13 +93,13 @@ namespace NPOI.SS.Formula.Functions
             ICell c3 = fmlaRow.CreateCell(2);
             c3.SetCellFormula("SUM(FREQUENCY(A1:O1,A2:C2))"); // sum of the frequency bins should add up to the number of data values
 
-            Assert.AreEqual(5, (int) evaluator.Evaluate(arrayFmla.FlattenedCells[0]).NumberValue);
-            Assert.AreEqual(4, (int) evaluator.Evaluate(arrayFmla.FlattenedCells[1]).NumberValue);
-            Assert.AreEqual(5, (int) evaluator.Evaluate(arrayFmla.FlattenedCells[2]).NumberValue);
-            Assert.AreEqual(1, (int) evaluator.Evaluate(arrayFmla.FlattenedCells[3]).NumberValue);
+            ClassicAssert.AreEqual(5, (int) evaluator.Evaluate(arrayFmla.FlattenedCells[0]).NumberValue);
+            ClassicAssert.AreEqual(4, (int) evaluator.Evaluate(arrayFmla.FlattenedCells[1]).NumberValue);
+            ClassicAssert.AreEqual(5, (int) evaluator.Evaluate(arrayFmla.FlattenedCells[2]).NumberValue);
+            ClassicAssert.AreEqual(1, (int) evaluator.Evaluate(arrayFmla.FlattenedCells[3]).NumberValue);
 
-            Assert.AreEqual(4, (int) evaluator.Evaluate(b3).NumberValue);
-            Assert.AreEqual(15, (int) evaluator.Evaluate(c3).NumberValue);
+            ClassicAssert.AreEqual(4, (int) evaluator.Evaluate(b3).NumberValue);
+            ClassicAssert.AreEqual(15, (int) evaluator.Evaluate(c3).NumberValue);
 
         }
     }

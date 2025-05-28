@@ -21,7 +21,7 @@ using System.Text;
 using System.IO;
 using NPOI.HSSF.Record;
 using NPOI.Util;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using NPOI.DDF;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
@@ -59,27 +59,27 @@ namespace TestCases.HSSF.Model
         public void TestDetectContainer()
         {
             Random rnd = new Random();
-            Assert.AreEqual(true, DefaultEscherRecordFactory.IsContainer((short)0x0, EscherContainerRecord.DG_CONTAINER));
-            Assert.AreEqual(true, DefaultEscherRecordFactory.IsContainer((short)0x0, EscherContainerRecord.SOLVER_CONTAINER));
-            Assert.AreEqual(true, DefaultEscherRecordFactory.IsContainer((short)0x0, EscherContainerRecord.SP_CONTAINER));
-            Assert.AreEqual(true, DefaultEscherRecordFactory.IsContainer((short)0x0, EscherContainerRecord.DGG_CONTAINER));
-            Assert.AreEqual(true, DefaultEscherRecordFactory.IsContainer((short)0x0, EscherContainerRecord.BSTORE_CONTAINER));
-            Assert.AreEqual(true, DefaultEscherRecordFactory.IsContainer((short)0x0, EscherContainerRecord.SPGR_CONTAINER));
+            ClassicAssert.AreEqual(true, DefaultEscherRecordFactory.IsContainer((short)0x0, EscherContainerRecord.DG_CONTAINER));
+            ClassicAssert.AreEqual(true, DefaultEscherRecordFactory.IsContainer((short)0x0, EscherContainerRecord.SOLVER_CONTAINER));
+            ClassicAssert.AreEqual(true, DefaultEscherRecordFactory.IsContainer((short)0x0, EscherContainerRecord.SP_CONTAINER));
+            ClassicAssert.AreEqual(true, DefaultEscherRecordFactory.IsContainer((short)0x0, EscherContainerRecord.DGG_CONTAINER));
+            ClassicAssert.AreEqual(true, DefaultEscherRecordFactory.IsContainer((short)0x0, EscherContainerRecord.BSTORE_CONTAINER));
+            ClassicAssert.AreEqual(true, DefaultEscherRecordFactory.IsContainer((short)0x0, EscherContainerRecord.SPGR_CONTAINER));
 
             for (short i = EscherContainerRecord.DGG_CONTAINER; i <= EscherContainerRecord.SOLVER_CONTAINER; i++)
             {
-                Assert.AreEqual(true, DefaultEscherRecordFactory.IsContainer((short)rnd.Next(short.MaxValue), i));
+                ClassicAssert.AreEqual(true, DefaultEscherRecordFactory.IsContainer((short)rnd.Next(short.MaxValue), i));
             }
 
-            Assert.AreEqual(false, DefaultEscherRecordFactory.IsContainer((short)0x0, EscherContainerRecord.DGG_CONTAINER - 1));
-            Assert.AreEqual(false, DefaultEscherRecordFactory.IsContainer((short)0x0, EscherContainerRecord.SOLVER_CONTAINER + 1));
+            ClassicAssert.AreEqual(false, DefaultEscherRecordFactory.IsContainer((short)0x0, EscherContainerRecord.DGG_CONTAINER - 1));
+            ClassicAssert.AreEqual(false, DefaultEscherRecordFactory.IsContainer((short)0x0, EscherContainerRecord.SOLVER_CONTAINER + 1));
 
-            Assert.AreEqual(true, DefaultEscherRecordFactory.IsContainer((short)0x000F, EscherContainerRecord.DGG_CONTAINER - 1));
-            Assert.AreEqual(true, DefaultEscherRecordFactory.IsContainer(unchecked((short)0xFFFF), EscherContainerRecord.DGG_CONTAINER - 1));
-            Assert.AreEqual(false, DefaultEscherRecordFactory.IsContainer((short)0x000C, EscherContainerRecord.DGG_CONTAINER - 1));
-            Assert.AreEqual(false, DefaultEscherRecordFactory.IsContainer(unchecked((short)0xCCCC), EscherContainerRecord.DGG_CONTAINER - 1));
-            Assert.AreEqual(false, DefaultEscherRecordFactory.IsContainer((short)0x000F, EscherTextboxRecord.RECORD_ID));
-            Assert.AreEqual(false, DefaultEscherRecordFactory.IsContainer(unchecked((short)0xCCCC), EscherTextboxRecord.RECORD_ID));
+            ClassicAssert.AreEqual(true, DefaultEscherRecordFactory.IsContainer((short)0x000F, EscherContainerRecord.DGG_CONTAINER - 1));
+            ClassicAssert.AreEqual(true, DefaultEscherRecordFactory.IsContainer(unchecked((short)0xFFFF), EscherContainerRecord.DGG_CONTAINER - 1));
+            ClassicAssert.AreEqual(false, DefaultEscherRecordFactory.IsContainer((short)0x000C, EscherContainerRecord.DGG_CONTAINER - 1));
+            ClassicAssert.AreEqual(false, DefaultEscherRecordFactory.IsContainer(unchecked((short)0xCCCC), EscherContainerRecord.DGG_CONTAINER - 1));
+            ClassicAssert.AreEqual(false, DefaultEscherRecordFactory.IsContainer((short)0x000F, EscherTextboxRecord.RECORD_ID));
+            ClassicAssert.AreEqual(false, DefaultEscherRecordFactory.IsContainer(unchecked((short)0xCCCC), EscherTextboxRecord.RECORD_ID));
         }
         [Test]
         public void TestDgContainerMustBeRootOfHSSFSheetEscherRecords()
@@ -93,13 +93,13 @@ namespace TestCases.HSSF.Model
             byte[] dgBytes = toByteArray(dgRecords);
             IDrawing d = sh.DrawingPatriarch;
             EscherAggregate agg = (EscherAggregate)ish.FindFirstRecordBySid(EscherAggregate.sid);
-            Assert.AreEqual(true, agg.EscherRecords[0] is EscherContainerRecord);
-            Assert.AreEqual(EscherContainerRecord.DG_CONTAINER, agg.EscherRecords[0].RecordId);
-            Assert.AreEqual((short)0x0, agg.EscherRecords[0].Options);
+            ClassicAssert.AreEqual(true, agg.EscherRecords[0] is EscherContainerRecord);
+            ClassicAssert.AreEqual(EscherContainerRecord.DG_CONTAINER, agg.EscherRecords[0].RecordId);
+            ClassicAssert.AreEqual((short)0x0, agg.EscherRecords[0].Options);
             agg = (EscherAggregate)ish.FindFirstRecordBySid(EscherAggregate.sid);
             byte[] dgBytesAfterSave = agg.Serialize();
-            Assert.AreEqual(dgBytes.Length, dgBytesAfterSave.Length, "different size of drawing data before and after save");
-            Assert.IsTrue(Arrays.Equals(dgBytes, dgBytesAfterSave), "drawing data before and after save is different");
+            ClassicAssert.AreEqual(dgBytes.Length, dgBytesAfterSave.Length, "different size of drawing data before and after save");
+            ClassicAssert.IsTrue(Arrays.Equals(dgBytes, dgBytesAfterSave), "drawing data before and after save is different");
         }
     }
 }

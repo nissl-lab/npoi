@@ -129,9 +129,8 @@ namespace NPOI.HSSF.Model
             {
                 return true; // oo COLINFO
             }
-            if (rb is Record)
+            if (rb is Record record)
             {
-                Record record = (Record)rb;
                 switch (record.Sid)
                 {
                     case DefaultColWidthRecord.sid:
@@ -158,9 +157,8 @@ namespace NPOI.HSSF.Model
         }
         private static bool IsPageBreakPriorRecord(RecordBase rb)
         {
-            if (rb is Record)
+            if (rb is Record record)
             {
-                Record record = (Record)rb;
                 switch (record.Sid)
                 {
                     case BOFRecord.sid:
@@ -231,13 +229,13 @@ namespace NPOI.HSSF.Model
             for (int i = records.Count - 2; i >= 0; i--)
             { // -2 to skip EOF record
                 Object rb = records[i];
-                if (!(rb is Record))
+                if (rb is not Record rec)
                 {
                     // DataValidityTable, ConditionalFormattingTable, 
                     // even PageSettingsBlock (which doesn't normally appear after 'View Settings')
                     continue;
                 }
-                Record rec = (Record)rb;
+
                 switch (rec.Sid)
                 {
                     // 'View Settings' (4 records) 
@@ -277,7 +275,7 @@ namespace NPOI.HSSF.Model
         private static int FindDataValidationTableInsertPos(List<RecordBase> records)
         {
             int i = records.Count - 1;
-            if (!(records[i] is EOFRecord))
+            if (records[i] is not EOFRecord)
             {
                 throw new InvalidOperationException("Last sheet record should be EOFRecord");
             }
@@ -381,9 +379,8 @@ namespace NPOI.HSSF.Model
 
         private static bool IsGutsPriorRecord(RecordBase rb)
         {
-            if (rb is Record)
+            if (rb is Record record)
             {
-                Record record = (Record)rb;
                 switch (record.Sid)
                 {
                     case BOFRecord.sid:

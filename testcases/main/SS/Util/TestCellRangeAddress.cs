@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==================================================================== */
 using NPOI.SS.Util;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using TestCases.HSSF.Record;
 using NPOI.Util;
 using System.IO;
@@ -43,24 +43,24 @@ namespace TestCases.SS.Util
             CellRangeAddress cref = new CellRangeAddress(
                  TestcaseRecordInputStream.Create(0x000, data)
            );
-            Assert.AreEqual(2, cref.FirstRow);
-            Assert.AreEqual(4, cref.LastRow);
-            Assert.AreEqual(0, cref.FirstColumn);
-            Assert.AreEqual(3, cref.LastColumn);
+            ClassicAssert.AreEqual(2, cref.FirstRow);
+            ClassicAssert.AreEqual(4, cref.LastRow);
+            ClassicAssert.AreEqual(0, cref.FirstColumn);
+            ClassicAssert.AreEqual(3, cref.LastColumn);
 
-            Assert.AreEqual(8, CellRangeAddress.ENCODED_SIZE);
+            ClassicAssert.AreEqual(8, CellRangeAddress.ENCODED_SIZE);
         }
         [Test]
         public void TestLoadInvalid()
         {
             try
             {
-                Assert.IsNotNull(new CellRangeAddress(
+                ClassicAssert.IsNotNull(new CellRangeAddress(
                     TestcaseRecordInputStream.Create(0x000, new byte[] { (byte)0x02 })));
             }
             catch (RuntimeException e)
             {
-                Assert.IsTrue(e.Message.Contains("Ran out of data"), "Had: " + e);
+                ClassicAssert.IsTrue(e.Message.Contains("Ran out of data"), "Had: " + e);
             }
         }
         [Test]
@@ -77,10 +77,10 @@ namespace TestCases.SS.Util
                 // With nothing set
                 cref.Serialize(output);
                 recordBytes = baos.ToArray();
-                Assert.AreEqual(recordBytes.Length, data.Length);
+                ClassicAssert.AreEqual(recordBytes.Length, data.Length);
                 for (int i = 0; i < data.Length; i++)
                 {
-                    Assert.AreEqual(0, recordBytes[i], "At offset " + i);
+                    ClassicAssert.AreEqual(0, recordBytes[i], "At offset " + i);
                 }
 
                 // Now set the flags
@@ -95,10 +95,10 @@ namespace TestCases.SS.Util
                 cref.Serialize(output);
                 recordBytes = baos.ToArray();
 
-                Assert.AreEqual(recordBytes.Length, data.Length);
+                ClassicAssert.AreEqual(recordBytes.Length, data.Length);
                 for (int i = 0; i < data.Length; i++)
                 {
-                    Assert.AreEqual(data[i], recordBytes[i], "At offset " + i);
+                    ClassicAssert.AreEqual(data[i], recordBytes[i], "At offset " + i);
                 }
             }
             finally
@@ -114,7 +114,7 @@ namespace TestCases.SS.Util
             // for some combinations we expected exceptions
             try
             {
-                Assert.IsNotNull(new CellRangeAddress(1, 0, 0, 0));
+                ClassicAssert.IsNotNull(new CellRangeAddress(1, 0, 0, 0));
                 Assert.Fail("Expect to catch an exception");
             }
             catch (ArgumentException)
@@ -123,7 +123,7 @@ namespace TestCases.SS.Util
             }
             try
             {
-                Assert.IsNotNull(new CellRangeAddress(0, 0, 1, 0));
+                ClassicAssert.IsNotNull(new CellRangeAddress(0, 0, 1, 0));
                 Assert.Fail("Expect to catch an exception");
             }
             catch (ArgumentException)
@@ -137,13 +137,13 @@ namespace TestCases.SS.Util
         {
             CellRangeAddress ref1 = new CellRangeAddress(1, 2, 3, 4);
             CellRangeAddress copy = ref1.Copy();
-            Assert.AreEqual(ref1.ToString(), copy.ToString());
+            ClassicAssert.AreEqual(ref1.ToString(), copy.ToString());
         }
 
         [Test]
         public void TestGetEncodedSize()
         {
-            Assert.AreEqual(2 * CellRangeAddress.ENCODED_SIZE, CellRangeAddress.GetEncodedSize(2));
+            ClassicAssert.AreEqual(2 * CellRangeAddress.ENCODED_SIZE, CellRangeAddress.GetEncodedSize(2));
         }
 
         [Test]
@@ -151,99 +151,99 @@ namespace TestCases.SS.Util
         {
             CellRangeAddress ref1 = new CellRangeAddress(1, 2, 3, 4);
 
-            Assert.AreEqual("D2:E3", ref1.FormatAsString());
-            Assert.AreEqual("D2:E3", CellRangeAddress.ValueOf(ref1.FormatAsString()).FormatAsString());
+            ClassicAssert.AreEqual("D2:E3", ref1.FormatAsString());
+            ClassicAssert.AreEqual("D2:E3", CellRangeAddress.ValueOf(ref1.FormatAsString()).FormatAsString());
 
-            Assert.AreEqual("sheet1!$D$2:$E$3", ref1.FormatAsString("sheet1", true));
-            Assert.AreEqual("sheet1!$D$2:$E$3", CellRangeAddress.ValueOf(ref1.FormatAsString()).FormatAsString("sheet1", true));
-            Assert.AreEqual("sheet1!$D$2:$E$3", CellRangeAddress.ValueOf(ref1.FormatAsString("sheet1", true)).FormatAsString("sheet1", true));
+            ClassicAssert.AreEqual("sheet1!$D$2:$E$3", ref1.FormatAsString("sheet1", true));
+            ClassicAssert.AreEqual("sheet1!$D$2:$E$3", CellRangeAddress.ValueOf(ref1.FormatAsString()).FormatAsString("sheet1", true));
+            ClassicAssert.AreEqual("sheet1!$D$2:$E$3", CellRangeAddress.ValueOf(ref1.FormatAsString("sheet1", true)).FormatAsString("sheet1", true));
 
-            Assert.AreEqual("sheet1!D2:E3", ref1.FormatAsString("sheet1", false));
-            Assert.AreEqual("sheet1!D2:E3", CellRangeAddress.ValueOf(ref1.FormatAsString()).FormatAsString("sheet1", false));
-            Assert.AreEqual("sheet1!D2:E3", CellRangeAddress.ValueOf(ref1.FormatAsString("sheet1", false)).FormatAsString("sheet1", false));
+            ClassicAssert.AreEqual("sheet1!D2:E3", ref1.FormatAsString("sheet1", false));
+            ClassicAssert.AreEqual("sheet1!D2:E3", CellRangeAddress.ValueOf(ref1.FormatAsString()).FormatAsString("sheet1", false));
+            ClassicAssert.AreEqual("sheet1!D2:E3", CellRangeAddress.ValueOf(ref1.FormatAsString("sheet1", false)).FormatAsString("sheet1", false));
 
-            Assert.AreEqual("D2:E3", ref1.FormatAsString(null, false));
-            Assert.AreEqual("D2:E3", CellRangeAddress.ValueOf(ref1.FormatAsString()).FormatAsString(null, false));
-            Assert.AreEqual("D2:E3", CellRangeAddress.ValueOf(ref1.FormatAsString(null, false)).FormatAsString(null, false));
+            ClassicAssert.AreEqual("D2:E3", ref1.FormatAsString(null, false));
+            ClassicAssert.AreEqual("D2:E3", CellRangeAddress.ValueOf(ref1.FormatAsString()).FormatAsString(null, false));
+            ClassicAssert.AreEqual("D2:E3", CellRangeAddress.ValueOf(ref1.FormatAsString(null, false)).FormatAsString(null, false));
 
-            Assert.AreEqual("$D$2:$E$3", ref1.FormatAsString(null, true));
-            Assert.AreEqual("$D$2:$E$3", CellRangeAddress.ValueOf(ref1.FormatAsString()).FormatAsString(null, true));
-            Assert.AreEqual("$D$2:$E$3", CellRangeAddress.ValueOf(ref1.FormatAsString(null, true)).FormatAsString(null, true));
+            ClassicAssert.AreEqual("$D$2:$E$3", ref1.FormatAsString(null, true));
+            ClassicAssert.AreEqual("$D$2:$E$3", CellRangeAddress.ValueOf(ref1.FormatAsString()).FormatAsString(null, true));
+            ClassicAssert.AreEqual("$D$2:$E$3", CellRangeAddress.ValueOf(ref1.FormatAsString(null, true)).FormatAsString(null, true));
 
             ref1 = new CellRangeAddress(-1, -1, 3, 4);
-            Assert.AreEqual("D:E", ref1.FormatAsString());
-            Assert.AreEqual("sheet1!$D:$E", CellRangeAddress.ValueOf(ref1.FormatAsString()).FormatAsString("sheet1", true));
-            Assert.AreEqual("sheet1!$D:$E", CellRangeAddress.ValueOf(ref1.FormatAsString("sheet1", true)).FormatAsString("sheet1", true));
-            Assert.AreEqual("$D:$E", CellRangeAddress.ValueOf(ref1.FormatAsString()).FormatAsString(null, true));
-            Assert.AreEqual("$D:$E", CellRangeAddress.ValueOf(ref1.FormatAsString(null, true)).FormatAsString(null, true));
-            Assert.AreEqual("sheet1!D:E", CellRangeAddress.ValueOf(ref1.FormatAsString()).FormatAsString("sheet1", false));
-            Assert.AreEqual("sheet1!D:E", CellRangeAddress.ValueOf(ref1.FormatAsString("sheet1", false)).FormatAsString("sheet1", false));
+            ClassicAssert.AreEqual("D:E", ref1.FormatAsString());
+            ClassicAssert.AreEqual("sheet1!$D:$E", CellRangeAddress.ValueOf(ref1.FormatAsString()).FormatAsString("sheet1", true));
+            ClassicAssert.AreEqual("sheet1!$D:$E", CellRangeAddress.ValueOf(ref1.FormatAsString("sheet1", true)).FormatAsString("sheet1", true));
+            ClassicAssert.AreEqual("$D:$E", CellRangeAddress.ValueOf(ref1.FormatAsString()).FormatAsString(null, true));
+            ClassicAssert.AreEqual("$D:$E", CellRangeAddress.ValueOf(ref1.FormatAsString(null, true)).FormatAsString(null, true));
+            ClassicAssert.AreEqual("sheet1!D:E", CellRangeAddress.ValueOf(ref1.FormatAsString()).FormatAsString("sheet1", false));
+            ClassicAssert.AreEqual("sheet1!D:E", CellRangeAddress.ValueOf(ref1.FormatAsString("sheet1", false)).FormatAsString("sheet1", false));
 
             ref1 = new CellRangeAddress(1, 2, -1, -1);
-            Assert.AreEqual("2:3", ref1.FormatAsString());
-            Assert.AreEqual("sheet1!$2:$3", CellRangeAddress.ValueOf(ref1.FormatAsString()).FormatAsString("sheet1", true));
-            Assert.AreEqual("sheet1!$2:$3", CellRangeAddress.ValueOf(ref1.FormatAsString("sheet1", true)).FormatAsString("sheet1", true));
-            Assert.AreEqual("$2:$3", CellRangeAddress.ValueOf(ref1.FormatAsString()).FormatAsString(null, true));
-            Assert.AreEqual("$2:$3", CellRangeAddress.ValueOf(ref1.FormatAsString(null, true)).FormatAsString(null, true));
-            Assert.AreEqual("sheet1!2:3", CellRangeAddress.ValueOf(ref1.FormatAsString()).FormatAsString("sheet1", false));
-            Assert.AreEqual("sheet1!2:3", CellRangeAddress.ValueOf(ref1.FormatAsString("sheet1", false)).FormatAsString("sheet1", false));
+            ClassicAssert.AreEqual("2:3", ref1.FormatAsString());
+            ClassicAssert.AreEqual("sheet1!$2:$3", CellRangeAddress.ValueOf(ref1.FormatAsString()).FormatAsString("sheet1", true));
+            ClassicAssert.AreEqual("sheet1!$2:$3", CellRangeAddress.ValueOf(ref1.FormatAsString("sheet1", true)).FormatAsString("sheet1", true));
+            ClassicAssert.AreEqual("$2:$3", CellRangeAddress.ValueOf(ref1.FormatAsString()).FormatAsString(null, true));
+            ClassicAssert.AreEqual("$2:$3", CellRangeAddress.ValueOf(ref1.FormatAsString(null, true)).FormatAsString(null, true));
+            ClassicAssert.AreEqual("sheet1!2:3", CellRangeAddress.ValueOf(ref1.FormatAsString()).FormatAsString("sheet1", false));
+            ClassicAssert.AreEqual("sheet1!2:3", CellRangeAddress.ValueOf(ref1.FormatAsString("sheet1", false)).FormatAsString("sheet1", false));
 
             ref1 = new CellRangeAddress(1, 1, 2, 2);
-            Assert.AreEqual("C2", ref1.FormatAsString());
-            Assert.AreEqual("sheet1!$C$2", CellRangeAddress.ValueOf(ref1.FormatAsString()).FormatAsString("sheet1", true));
-            Assert.AreEqual("sheet1!$C$2", CellRangeAddress.ValueOf(ref1.FormatAsString("sheet1", true)).FormatAsString("sheet1", true));
-            Assert.AreEqual("$C$2", CellRangeAddress.ValueOf(ref1.FormatAsString()).FormatAsString(null, true));
-            Assert.AreEqual("$C$2", CellRangeAddress.ValueOf(ref1.FormatAsString(null, true)).FormatAsString(null, true));
-            Assert.AreEqual("sheet1!C2", CellRangeAddress.ValueOf(ref1.FormatAsString()).FormatAsString("sheet1", false));
-            Assert.AreEqual("sheet1!C2", CellRangeAddress.ValueOf(ref1.FormatAsString("sheet1", false)).FormatAsString("sheet1", false));
+            ClassicAssert.AreEqual("C2", ref1.FormatAsString());
+            ClassicAssert.AreEqual("sheet1!$C$2", CellRangeAddress.ValueOf(ref1.FormatAsString()).FormatAsString("sheet1", true));
+            ClassicAssert.AreEqual("sheet1!$C$2", CellRangeAddress.ValueOf(ref1.FormatAsString("sheet1", true)).FormatAsString("sheet1", true));
+            ClassicAssert.AreEqual("$C$2", CellRangeAddress.ValueOf(ref1.FormatAsString()).FormatAsString(null, true));
+            ClassicAssert.AreEqual("$C$2", CellRangeAddress.ValueOf(ref1.FormatAsString(null, true)).FormatAsString(null, true));
+            ClassicAssert.AreEqual("sheet1!C2", CellRangeAddress.ValueOf(ref1.FormatAsString()).FormatAsString("sheet1", false));
+            ClassicAssert.AreEqual("sheet1!C2", CellRangeAddress.ValueOf(ref1.FormatAsString("sheet1", false)).FormatAsString("sheet1", false));
 
             // is this a valid Address?
             ref1 = new CellRangeAddress(-1, -1, -1, -1);
-            Assert.AreEqual(":", ref1.FormatAsString());
+            ClassicAssert.AreEqual(":", ref1.FormatAsString());
         }
         [Test]
         public void TestEquals()
         {
             CellRangeAddress ref1 = new CellRangeAddress(1, 2, 3, 4);
             CellRangeAddress ref2 = new CellRangeAddress(1, 2, 3, 4);
-            Assert.AreEqual(ref1, ref2);
+            ClassicAssert.AreEqual(ref1, ref2);
 
             // Invert first/last row, but refer to same area
             ref2.FirstRow = (2);
             ref2.LastRow = (1);
-            Assert.AreEqual(ref1, ref2);
+            ClassicAssert.AreEqual(ref1, ref2);
 
             // Invert first/last column, but refer to same area
             ref2.FirstColumn = (4);
             ref2.LastColumn = (3);
-            Assert.AreEqual(ref1, ref2);
+            ClassicAssert.AreEqual(ref1, ref2);
 
             // Refer to a different area
-            Assert.AreNotEqual(ref1, new CellRangeAddress(3, 4, 1, 2));
+            ClassicAssert.AreNotEqual(ref1, new CellRangeAddress(3, 4, 1, 2));
         }
         [Test]
         public void TestGetMinMaxRow()
         {
             CellRangeAddress ref1 = new CellRangeAddress(1, 2, 3, 4);
-            Assert.AreEqual(1, ref1.MinRow);
-            Assert.AreEqual(2, ref1.MaxRow);
+            ClassicAssert.AreEqual(1, ref1.MinRow);
+            ClassicAssert.AreEqual(2, ref1.MaxRow);
 
             ref1.FirstRow = (10);
             //now ref is CellRangeAddress(10, 2, 3, 4)
-            Assert.AreEqual(2, ref1.MinRow);
-            Assert.AreEqual(10, ref1.MaxRow);
+            ClassicAssert.AreEqual(2, ref1.MinRow);
+            ClassicAssert.AreEqual(10, ref1.MaxRow);
         }
         [Test]
         public void TestGetMinMaxColumn()
         {
             CellRangeAddress ref1 = new CellRangeAddress(1, 2, 3, 4);
-            Assert.AreEqual(3, ref1.MinColumn);
-            Assert.AreEqual(4, ref1.MaxColumn);
+            ClassicAssert.AreEqual(3, ref1.MinColumn);
+            ClassicAssert.AreEqual(4, ref1.MaxColumn);
 
             ref1.FirstColumn = (10);
             //now ref is CellRangeAddress(1, 2, 10, 4)
-            Assert.AreEqual(4, ref1.MinColumn);
-            Assert.AreEqual(10, ref1.MaxColumn);
+            ClassicAssert.AreEqual(4, ref1.MinColumn);
+            ClassicAssert.AreEqual(10, ref1.MaxColumn);
         }
 
         [Test]
@@ -273,11 +273,11 @@ namespace TestCases.SS.Util
         {
             CellRangeAddress region = new CellRangeAddress(10, 12, 3, 5);
 
-            Assert.IsFalse(region.ContainsRow(9));
-            Assert.IsTrue(region.ContainsRow(10));
-            Assert.IsTrue(region.ContainsRow(11));
-            Assert.IsTrue(region.ContainsRow(12));
-            Assert.IsFalse(region.ContainsRow(13));
+            ClassicAssert.IsFalse(region.ContainsRow(9));
+            ClassicAssert.IsTrue(region.ContainsRow(10));
+            ClassicAssert.IsTrue(region.ContainsRow(11));
+            ClassicAssert.IsTrue(region.ContainsRow(12));
+            ClassicAssert.IsFalse(region.ContainsRow(13));
         }
 
         [Test]
@@ -285,11 +285,11 @@ namespace TestCases.SS.Util
         {
             CellRangeAddress region = new CellRangeAddress(10, 12, 3, 5);
 
-            Assert.IsFalse(region.ContainsColumn(2));
-            Assert.IsTrue(region.ContainsColumn(3));
-            Assert.IsTrue(region.ContainsColumn(4));
-            Assert.IsTrue(region.ContainsColumn(5));
-            Assert.IsFalse(region.ContainsColumn(6));
+            ClassicAssert.IsFalse(region.ContainsColumn(2));
+            ClassicAssert.IsTrue(region.ContainsColumn(3));
+            ClassicAssert.IsTrue(region.ContainsColumn(4));
+            ClassicAssert.IsTrue(region.ContainsColumn(5));
+            ClassicAssert.IsFalse(region.ContainsColumn(6));
         }
 
 

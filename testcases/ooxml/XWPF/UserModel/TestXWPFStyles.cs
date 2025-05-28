@@ -18,7 +18,7 @@
 namespace TestCases.XWPF.UserModel
 {
     using System;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using System.Collections.Generic;
     using NPOI.OpenXmlFormats.Wordprocessing;
     using TestCases.XWPF;
@@ -47,11 +47,11 @@ namespace TestCases.XWPF.UserModel
 
             List<XWPFStyle> usedStyleList = styles.GetUsedStyleList(style);
             
-            //Assert.AreEqual(usedStyleList, testUsedStyleList);
-            Assert.AreEqual(usedStyleList.Count, testUsedStyleList.Count);
+            //ClassicAssert.AreEqual(usedStyleList, testUsedStyleList);
+            ClassicAssert.AreEqual(usedStyleList.Count, testUsedStyleList.Count);
             for (int i = 0; i < usedStyleList.Count; i++)
             {
-                Assert.AreEqual(usedStyleList[i], testUsedStyleList[i]);
+                ClassicAssert.AreEqual(usedStyleList[i], testUsedStyleList[i]);
             }
         }
 
@@ -68,12 +68,12 @@ namespace TestCases.XWPF.UserModel
             XWPFStyle s = new XWPFStyle(ctStyle);
             styles.AddStyle(s);
 
-            Assert.IsTrue(styles.StyleExist(strStyleId));
+            ClassicAssert.IsTrue(styles.StyleExist(strStyleId));
 
             XWPFDocument docIn = XWPFTestDataSamples.WriteOutAndReadBack(docOut);
 
             styles = docIn.GetStyles();
-            Assert.IsTrue(styles.StyleExist(strStyleId));
+            ClassicAssert.IsTrue(styles.StyleExist(strStyleId));
         }
 
         /**
@@ -85,11 +85,11 @@ namespace TestCases.XWPF.UserModel
         {
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("52449.docx");
             XWPFStyles styles = doc.GetStyles();
-            Assert.IsNotNull(styles);
+            ClassicAssert.IsNotNull(styles);
 
             XWPFDocument docIn = XWPFTestDataSamples.WriteOutAndReadBack(doc);
             styles = docIn.GetStyles();
-            Assert.IsNotNull(styles);
+            ClassicAssert.IsNotNull(styles);
         }
 
 
@@ -116,7 +116,7 @@ namespace TestCases.XWPF.UserModel
             XWPFStyle style = new XWPFStyle(ctStyle);
 
             style.StyleType = ST_StyleType.paragraph;
-            Assert.AreEqual(ST_StyleType.paragraph, style.StyleType);
+            ClassicAssert.AreEqual(ST_StyleType.paragraph, style.StyleType);
         }
         [Test]
         public void TestLatentStyles()
@@ -125,8 +125,8 @@ namespace TestCases.XWPF.UserModel
             CT_LsdException ex = latentStyles.AddNewLsdException();
             ex.name=("ex1");
             XWPFLatentStyles ls = new XWPFLatentStyles(latentStyles);
-            Assert.AreEqual(true, ls.IsLatentStyle("ex1"));
-            Assert.AreEqual(false, ls.IsLatentStyle("notex1"));
+            ClassicAssert.AreEqual(true, ls.IsLatentStyle("ex1"));
+            ClassicAssert.AreEqual(false, ls.IsLatentStyle("notex1"));
         }
 
         [Test]
@@ -142,12 +142,12 @@ namespace TestCases.XWPF.UserModel
             ctStyle.styleId = (/*setter*/strStyleId);
             styles.SetStyles(ctStyles);
 
-            Assert.IsTrue(styles.StyleExist(strStyleId));
+            ClassicAssert.IsTrue(styles.StyleExist(strStyleId));
 
             XWPFDocument docIn = XWPFTestDataSamples.WriteOutAndReadBack(docOut);
 
             styles = docIn.GetStyles();
-            Assert.IsTrue(styles.StyleExist(strStyleId));
+            ClassicAssert.IsTrue(styles.StyleExist(strStyleId));
         }
 
         [Test]
@@ -155,24 +155,24 @@ namespace TestCases.XWPF.UserModel
         {
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("SampleDoc.docx");
             XWPFStyles styles = doc.GetStyles();
-            Assert.IsNotNull(styles);
+            ClassicAssert.IsNotNull(styles);
 
             // Has 3 paragraphs on page one, a break, and 3 on page 2
-            Assert.AreEqual(7, doc.Paragraphs.Count);
+            ClassicAssert.AreEqual(7, doc.Paragraphs.Count);
 
             // Check the first three have no run styles, just default paragraph style
             for (int i = 0; i < 3; i++)
             {
                 XWPFParagraph p = doc.Paragraphs[(i)];
-                Assert.AreEqual(null, p.Style);
-                Assert.AreEqual(null, p.StyleID);
-                Assert.AreEqual(1, p.Runs.Count);
+                ClassicAssert.AreEqual(null, p.Style);
+                ClassicAssert.AreEqual(null, p.StyleID);
+                ClassicAssert.AreEqual(1, p.Runs.Count);
 
                 XWPFRun r = p.Runs[(0)];
-                Assert.AreEqual(null, r.GetColor());
-                Assert.AreEqual(null, r.FontFamily);
-                Assert.AreEqual(null, r.FontName);
-                Assert.AreEqual(-1, r.FontSize);
+                ClassicAssert.AreEqual(null, r.GetColor());
+                ClassicAssert.AreEqual(null, r.FontFamily);
+                ClassicAssert.AreEqual(null, r.FontName);
+                ClassicAssert.AreEqual(-1, r.FontSize);
             }
 
             // On page two, has explicit styles, but on Runs not on
@@ -180,34 +180,34 @@ namespace TestCases.XWPF.UserModel
             for (int i = 4; i < 7; i++)
             {
                 XWPFParagraph p = doc.Paragraphs[(i)];
-                Assert.AreEqual(null, p.Style);
-                Assert.AreEqual(null, p.StyleID);
-                Assert.AreEqual(1, p.Runs.Count);
+                ClassicAssert.AreEqual(null, p.Style);
+                ClassicAssert.AreEqual(null, p.StyleID);
+                ClassicAssert.AreEqual(1, p.Runs.Count);
 
                 XWPFRun r = p.Runs[(0)];
-                Assert.AreEqual("Arial Black", r.FontFamily);
-                Assert.AreEqual("Arial Black", r.FontName);
-                Assert.AreEqual(16, r.FontSize);
-                Assert.AreEqual("548DD4", r.GetColor());
+                ClassicAssert.AreEqual("Arial Black", r.FontFamily);
+                ClassicAssert.AreEqual("Arial Black", r.FontName);
+                ClassicAssert.AreEqual(16, r.FontSize);
+                ClassicAssert.AreEqual("548DD4", r.GetColor());
             }
 
             // Check the document styles
             // Should have a style defined for each type
-            Assert.AreEqual(4, styles.NumberOfStyles);
-            Assert.IsNotNull(styles.GetStyle("Normal"));
-            Assert.IsNotNull(styles.GetStyle("DefaultParagraphFont"));
-            Assert.IsNotNull(styles.GetStyle("TableNormal"));
-            Assert.IsNotNull(styles.GetStyle("NoList"));
+            ClassicAssert.AreEqual(4, styles.NumberOfStyles);
+            ClassicAssert.IsNotNull(styles.GetStyle("Normal"));
+            ClassicAssert.IsNotNull(styles.GetStyle("DefaultParagraphFont"));
+            ClassicAssert.IsNotNull(styles.GetStyle("TableNormal"));
+            ClassicAssert.IsNotNull(styles.GetStyle("NoList"));
 
             // We can't do much yet with latent styles
-            Assert.AreEqual(137, styles.LatentStyles.NumberOfStyles);
+            ClassicAssert.AreEqual(137, styles.LatentStyles.NumberOfStyles);
 
             // Check the default styles
-            Assert.IsNotNull(styles.DefaultRunStyle);
-            Assert.IsNotNull(styles.DefaultParagraphStyle);
+            ClassicAssert.IsNotNull(styles.DefaultRunStyle);
+            ClassicAssert.IsNotNull(styles.DefaultParagraphStyle);
 
-            Assert.AreEqual(11, styles.DefaultRunStyle.FontSize);
-            Assert.AreEqual(200, styles.DefaultParagraphStyle.SpacingAfter);
+            ClassicAssert.AreEqual(11, styles.DefaultRunStyle.FontSize);
+            ClassicAssert.AreEqual(200, styles.DefaultParagraphStyle.SpacingAfter);
         }
 
         // Bug 60329: style with missing StyleID throws NPE
@@ -220,14 +220,14 @@ namespace TestCases.XWPF.UserModel
             // is missing a StyleId
             try
             {
-                Assert.IsNotNull(styles.GetStyle("NoList"));
-                Assert.IsNull(styles.GetStyle("EmptyCellLayoutStyle"));
-                Assert.IsNotNull(styles.GetStyle("BalloonText"));
+                ClassicAssert.IsNotNull(styles.GetStyle("NoList"));
+                ClassicAssert.IsNull(styles.GetStyle("EmptyCellLayoutStyle"));
+                ClassicAssert.IsNotNull(styles.GetStyle("BalloonText"));
 
                 // Bug 64600: styleExist throws NPE
-                Assert.IsTrue(styles.StyleExist("NoList"));
-                Assert.IsFalse(styles.StyleExist("EmptyCellLayoutStyle"));
-                Assert.IsTrue(styles.StyleExist("BalloonText"));
+                ClassicAssert.IsTrue(styles.StyleExist("NoList"));
+                ClassicAssert.IsFalse(styles.StyleExist("EmptyCellLayoutStyle"));
+                ClassicAssert.IsTrue(styles.StyleExist("BalloonText"));
             }
             catch (NullReferenceException e)
             {

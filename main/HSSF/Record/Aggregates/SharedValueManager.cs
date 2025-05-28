@@ -34,7 +34,7 @@ namespace NPOI.HSSF.Record.Aggregates
     public class SharedValueManager
     {
 
-        private class SharedFormulaGroup
+        private sealed class SharedFormulaGroup
         {
             private readonly SharedFormulaRecord _sfr;
             private readonly FormulaRecordAggregate[] _frAggs;
@@ -118,7 +118,7 @@ namespace NPOI.HSSF.Record.Aggregates
         }
 
         public static readonly SharedValueManager EMPTY = new SharedValueManager(
-                Array.Empty<SharedFormulaRecord>(), Array.Empty<CellReference>(), new List<ArrayRecord>(), new List<TableRecord>());
+                [], [], new List<ArrayRecord>(), new List<TableRecord>());
         private List<ArrayRecord> _arrayRecords;
         private List<TableRecord> _tableRecords;
         private Dictionary<SharedFormulaRecord, SharedFormulaGroup> _groupsBySharedFormulaRecord;
@@ -149,7 +149,7 @@ namespace NPOI.HSSF.Record.Aggregates
         {
             // Note - must create distinct instances because they are assumed to be mutable.
             return new SharedValueManager(
-                Array.Empty<SharedFormulaRecord>(), Array.Empty<CellReference>(), new List<ArrayRecord>(), new List<TableRecord>());
+                [], [], new List<ArrayRecord>(), new List<TableRecord>());
         }
         /**
          * @param firstCells
@@ -193,10 +193,10 @@ namespace NPOI.HSSF.Record.Aggregates
                 _groupsCache = new Dictionary<int, SharedFormulaGroup>(_groupsBySharedFormulaRecord.Count);
                 foreach (SharedFormulaGroup group in _groupsBySharedFormulaRecord.Values)
                 {
-                    _groupsCache.Add(GetKeyForCache(group.FirstCell), group);
+                    _groupsCache.Add(SharedValueManager.GetKeyForCache(group.FirstCell), group);
                 }
             }
-            int key=GetKeyForCache(cellRef);
+            int key=SharedValueManager.GetKeyForCache(cellRef);
             SharedFormulaGroup sfg = null;
             if (_groupsCache.TryGetValue(key, out SharedFormulaGroup value))
             {
@@ -206,7 +206,7 @@ namespace NPOI.HSSF.Record.Aggregates
             return sfg;
         }
 
-        private int GetKeyForCache(CellReference cellRef)
+        private static int GetKeyForCache(CellReference cellRef)
         {
             // The HSSF has a max of 2^16 rows and 2^8 cols
             return ((cellRef.Col + 1) << 16 | cellRef.Row);
@@ -245,7 +245,8 @@ namespace NPOI.HSSF.Record.Aggregates
 
         [NonSerialized]
         private SharedFormulaGroupComparator SVGComparator = new SharedFormulaGroupComparator();
-        private class SharedFormulaGroupComparator : Comparer<SharedFormulaGroup>
+
+        private sealed class SharedFormulaGroupComparator : Comparer<SharedFormulaGroup>
         {
             public override int Compare(SharedFormulaGroup a, SharedFormulaGroup b)
             {

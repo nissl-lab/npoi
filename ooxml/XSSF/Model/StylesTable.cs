@@ -150,6 +150,13 @@ namespace NPOI.XSSF.Model
                 border.SetThemesTable(theme);
             }
         }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="name">of the table style</param>
+        /// <return>defined style, either explicit or built-in, or null if not found</return>
+        ///
+        /// @since 3.17 beta 1
         public ITableStyle GetTableStyle(String name)
         {
             if (name == null) return null;
@@ -163,6 +170,13 @@ namespace NPOI.XSSF.Model
                 return GetExplicitTableStyle(name);
             }
         }
+        /// <summary>
+        /// NOTE: this only returns explicitly defined styles
+        /// </summary>
+        /// <param name="name">of the table style</param>
+        /// <return>defined style, or null if not explicitly defined</return>
+        ///
+        /// @since 3.17 beta 1
         public ITableStyle GetExplicitTableStyle(String name)
         {
             return tableStyles[name];
@@ -872,6 +886,7 @@ namespace NPOI.XSSF.Model
             this.dxfs.Add(dxf);
             return this.dxfs.Count;
         }
+
         /**
          * Create a cell style in this style table.
          * Note - End users probably want to call {@link XSSFWorkbook#createCellStyle()}

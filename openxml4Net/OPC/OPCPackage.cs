@@ -540,7 +540,7 @@ namespace NPOI.OpenXml4Net.OPC
             catch (InvalidFormatException)
             {
                 String partName = "/docProps/thumbnail" +
-                         filename.Substring(filename.LastIndexOf(".") + 1);
+                         filename.Substring(filename.LastIndexOf('.') + 1);
                 try
                 {
                     thumbnailPartName = PackagingUriHelper.CreatePartName(partName);
@@ -847,11 +847,11 @@ namespace NPOI.OpenXml4Net.OPC
 
                             // Core properties case-- use first CoreProperties part we come across
                             // and ignore any subsequent ones
-                            if (unmarshallPart is PackagePropertiesPart &&
+                            if (unmarshallPart is PackagePropertiesPart propertiesPart &&
                                     hasCorePropertiesPart &&
                                     needCorePropertiesPart)
                             {
-                                this.packageProperties = (PackagePropertiesPart)unmarshallPart;
+                                this.packageProperties = propertiesPart;
                                 needCorePropertiesPart = false;
                             }
                         }

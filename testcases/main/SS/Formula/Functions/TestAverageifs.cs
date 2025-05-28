@@ -21,7 +21,7 @@ namespace TestCases.SS.Formula.Functions {
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.Formula.Functions;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     /**
      * Test cases for AVERAGEIFS()
@@ -45,7 +45,7 @@ namespace TestCases.SS.Formula.Functions {
                 throw new AssertionException("Expected numeric result");
             }
             NumericValueEval nve = (NumericValueEval)actualEval;
-            Assert.AreEqual(expected, nve.NumberValue, 0);
+            ClassicAssert.AreEqual(expected, nve.NumberValue, 0);
         }
 
         private static void Confirm(double expectedResult, ValueEval[] args)
@@ -106,7 +106,7 @@ namespace TestCases.SS.Formula.Functions {
                 EvalFactory.CreateAreaEval("C2:C5", c2c5),
                 new StringEval(">95"),
             };
-            Assert.AreEqual(ErrorEval.VALUE_INVALID, InvokeAverageifs(args, EC));
+            ClassicAssert.AreEqual(ErrorEval.VALUE_INVALID, InvokeAverageifs(args, EC));
 
             // "=AVERAGEIFS(D2:D5, D2:D5, "<>Incomplete", D2:D5, ">80")"
             args = new ValueEval[]

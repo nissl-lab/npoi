@@ -84,7 +84,7 @@ namespace NPOI.HPSF.Wellknown
 
         /** ID of the property that denotes the DateTime and time the document was
          * Created. */
-        public const int PID_Create_DTM = 12;
+        public const int PID_CREATE_DTM = 12;
 
         /** ID of the property that denotes the DateTime and time the document was
          * saved */
@@ -323,9 +323,9 @@ namespace NPOI.HPSF.Wellknown
         /// <param name="initialCapacity">initialCapacity The initial capacity as defined for
         /// {@link HashMap}</param>
         /// <param name="loadFactor">The load factor as defined for {@link HashMap}</param>
-        public PropertyIDMap(int initialCapacity, float loadFactor):base(initialCapacity, loadFactor)
+        public PropertyIDMap(int initialCapacity, float loadFactor) : base(initialCapacity, loadFactor)
         {
-            
+
         }
 
 
@@ -334,9 +334,9 @@ namespace NPOI.HPSF.Wellknown
         /// Initializes a new instance of the <see cref="PropertyIDMap"/> class.
         /// </summary>
         /// <param name="map">The instance To be Created is backed by this map.</param>
-        public PropertyIDMap(IDictionary map):base(map)
+        public PropertyIDMap(IDictionary map) : base(map)
         {
-            
+
         }
 
 
@@ -377,7 +377,7 @@ namespace NPOI.HPSF.Wellknown
         {
             get
             {
-                if (summaryInformationProperties == null)
+                if(summaryInformationProperties == null)
                 {
                     PropertyIDMap m = new PropertyIDMap(18, (float)1.0);
                     m.Put(PID_TITLE, "PID_TITLE");
@@ -390,7 +390,7 @@ namespace NPOI.HPSF.Wellknown
                     m.Put(PID_REVNUMBER, "PID_REVNUMBER");
                     m.Put(PID_EDITTIME, "PID_EDITTIME");
                     m.Put(PID_LASTPRINTED, "PID_LASTPRINTED");
-                    m.Put(PID_Create_DTM, "PID_Create_DTM");
+                    m.Put(PID_CREATE_DTM, "PID_CREATE_DTM");
                     m.Put(PID_LASTSAVE_DTM, "PID_LASTSAVE_DTM");
                     m.Put(PID_PAGECOUNT, "PID_PAGECOUNT");
                     m.Put(PID_WORDCOUNT, "PID_WORDCOUNT");
@@ -416,7 +416,7 @@ namespace NPOI.HPSF.Wellknown
         {
             get
             {
-                if (documentSummaryInformationProperties == null)
+                if(documentSummaryInformationProperties == null)
                 {
                     PropertyIDMap m = new PropertyIDMap(17, (float)1.0);
                     m.Put(PID_DICTIONARY, "PID_DICTIONARY");

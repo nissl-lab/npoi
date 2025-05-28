@@ -30,7 +30,7 @@ using System.Text;
 using System.Collections;
 using System.IO;
 
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 
 using NPOI.POIFS.Common;
 using NPOI.POIFS.Storage;
@@ -122,10 +122,10 @@ namespace TestCases.POIFS.Properties
             _property.WriteData(stream);
             byte[] output = stream.ToArray();
 
-            Assert.AreEqual(_testblock.Length, output.Length);
+            ClassicAssert.AreEqual(_testblock.Length, output.Length);
             for (int j = 0; j < _testblock.Length; j++)
             {
-                Assert.AreEqual(_testblock[j],
+                ClassicAssert.AreEqual(_testblock[j],
                              output[j], "mismatch at offset " + j);
             }
         }
@@ -140,7 +140,7 @@ namespace TestCases.POIFS.Properties
             {
                 CreateBasicRootProperty();
                 _property.Size = j;
-                Assert.AreEqual(j * 64,
+                ClassicAssert.AreEqual(j * 64,
                              _property.Size, "trying block count of " + j);
             }
         }
@@ -175,16 +175,16 @@ namespace TestCases.POIFS.Properties
             property.WriteData(stream);
             byte[] output = stream.ToArray();
 
-            Assert.AreEqual(128, output.Length);
+            ClassicAssert.AreEqual(128, output.Length);
             for (int j = 0; j < 128; j++)
             {
-                Assert.AreEqual(expected[j],
+                ClassicAssert.AreEqual(expected[j],
                              output[j], "mismatch at offset " + j);
             }
-            Assert.AreEqual(index, property.Index);
-            Assert.AreEqual(name, property.Name);
-            Assert.IsTrue(!property.Children.MoveNext());
-            Assert.AreEqual(property.StorageClsid.ToString(), sClsId);
+            ClassicAssert.AreEqual(index, property.Index);
+            ClassicAssert.AreEqual(name, property.Name);
+            ClassicAssert.IsTrue(!property.Children.MoveNext());
+            ClassicAssert.AreEqual(property.StorageClsid.ToString(), sClsId);
         }
 
     }

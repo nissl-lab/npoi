@@ -37,7 +37,7 @@ namespace NPOI.HSSF.Record
  * Excel encodes the same 8 bytes that would be field_4_value with various NaN
  * values that are decoded/encoded by this class. 
  */
-    internal class SpecialCachedValue
+    internal sealed class SpecialCachedValue
     {
         /** deliberately chosen by Excel in order to encode other values within Double NaNs */
         private const long BIT_MARKER = unchecked((long)0xFFFF000000000000L);
@@ -431,14 +431,13 @@ namespace NPOI.HSSF.Record
 
         public override bool Equals(Object obj)
         {
-            if (!(obj is CellValueRecordInterface))
+            if (obj is not CellValueRecordInterface loc)
             {
                 return false;
             }
-            CellValueRecordInterface loc = (CellValueRecordInterface)obj;
 
             if ((this.Row == loc.Row)
-                    && (this.Column == loc.Column))
+                && (this.Column == loc.Column))
             {
                 return true;
             }

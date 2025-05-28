@@ -25,7 +25,7 @@ namespace TestCases.SS.Formula.Functions
     using NPOI.SS.UserModel;
     using NPOI.Util;
     using NPOI.XSSF.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     [TestFixture]
     public class TestProper
@@ -98,7 +98,7 @@ namespace TestCases.SS.Formula.Functions
                 Assert.Fail("Wrong result type: " + cv.FormatAsString());
             }
             String actualValue = cv.StringValue;
-            Assert.AreEqual(expectedResult, actualValue);
+            ClassicAssert.AreEqual(expectedResult, actualValue);
         }
 
         [Test]
@@ -130,7 +130,7 @@ namespace TestCases.SS.Formula.Functions
             for (int i = 0; i < 300000; i++)
             {
                 ValueEval ret = TextFunction.PROPER.Evaluate(new ValueEval[] { strArg }, 0, 0);
-                Assert.AreEqual("Some Longer Text That Needs A Number Of Replacements To Check For Runtime Of Different Implementations", ((StringEval)ret).StringValue);
+                ClassicAssert.AreEqual("Some Longer Text That Needs A Number Of Replacements To Check For Runtime Of Different Implementations", ((StringEval)ret).StringValue);
             }
             // Took aprox. 600ms on a decent Laptop in July 2016
             Console.WriteLine("Took: " + (TimeUtil.CurrentMillis() - start) + "ms");
@@ -139,7 +139,7 @@ namespace TestCases.SS.Formula.Functions
         {
             ValueEval strArg = new StringEval(input);
             ValueEval ret = TextFunction.PROPER.Evaluate(new ValueEval[] { strArg }, 0, 0);
-            Assert.AreEqual(expected, ((StringEval)ret).StringValue);
+            ClassicAssert.AreEqual(expected, ((StringEval)ret).StringValue);
         }
 
     }

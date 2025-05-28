@@ -20,7 +20,7 @@ using NPOI;
 using NPOI.OpenXml4Net.OPC;
 using NPOI.POIFS.FileSystem;
 using NPOI.Util;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using System.IO;
 using TestCases.HSSF;
 
@@ -48,21 +48,21 @@ namespace TestCases.OOXML
             in1 = new PushbackStream(
                     HSSFTestDataSamples.OpenSampleFileStream("SampleSS.xlsx")
             );
-            Assert.IsTrue(DocumentFactoryHelper.HasOOXMLHeader(in1));
+            ClassicAssert.IsTrue(DocumentFactoryHelper.HasOOXMLHeader(in1));
             in1.Close();
 
             // xls file isn't
             in1 = new PushbackStream(
                     HSSFTestDataSamples.OpenSampleFileStream("SampleSS.xls")
             );
-            Assert.IsFalse(DocumentFactoryHelper.HasOOXMLHeader(in1));
+            ClassicAssert.IsFalse(DocumentFactoryHelper.HasOOXMLHeader(in1));
             in1.Close();
 
             // text file isn't
             in1 = new PushbackStream(
                     HSSFTestDataSamples.OpenSampleFileStream("SampleSS.txt")
             );
-            Assert.IsFalse(DocumentFactoryHelper.HasOOXMLHeader(in1));
+            ClassicAssert.IsFalse(DocumentFactoryHelper.HasOOXMLHeader(in1));
             in1.Close();
         }
         [Test]
@@ -74,15 +74,15 @@ namespace TestCases.OOXML
 
             // detect header
             InputStream in1 = new PushbackInputStream(testInput, 10);
-            Assert.IsFalse(DocumentFactoryHelper.HasOOXMLHeader(in1));
+            ClassicAssert.IsFalse(DocumentFactoryHelper.HasOOXMLHeader(in1));
             //noinspection deprecation
-            Assert.IsFalse(POIXMLDocument.HasOOXMLHeader(in1));
+            ClassicAssert.IsFalse(POIXMLDocument.HasOOXMLHeader(in1));
 
             // check if InputStream is still intact
             byte[] test = new byte[3];
-            Assert.AreEqual(3, in1.Read(test));
-            Assert.IsTrue(Arrays.Equals(testData, test));
-            Assert.AreEqual(-1, in1.Read());
+            ClassicAssert.AreEqual(3, in1.Read(test));
+            ClassicAssert.IsTrue(Arrays.Equals(testData, test));
+            ClassicAssert.AreEqual(-1, in1.Read());
         }
     }
 }

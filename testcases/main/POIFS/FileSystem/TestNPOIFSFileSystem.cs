@@ -19,15 +19,13 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using NPOI.POIFS.Storage;
 using NPOI.POIFS.Properties;
 using NPOI.POIFS.FileSystem;
 using NPOI.POIFS.Common;
 using NPOI.HPSF;
-using NPOI.POIFS.NIO;
 using NPOI.Util;
-using NPOI.POIFS.EventFileSystem;
 using NUnit.Framework.Constraints;
 using Property = NPOI.POIFS.Properties.Property;
 
@@ -76,14 +74,14 @@ namespace TestCases.POIFS.FileSystem
                     foundXBAT++;
                 }
             }
-            Assert.AreEqual(expectedBAT, foundBAT, "Wrong number of BATs");
-            Assert.AreEqual(expectedXBAT, foundXBAT, "Wrong number of XBATs with " + expectedBAT + " BATs");
+            ClassicAssert.AreEqual(expectedBAT, foundBAT, "Wrong number of BATs");
+            ClassicAssert.AreEqual(expectedXBAT, foundXBAT, "Wrong number of XBATs with " + expectedBAT + " BATs");
         }
         protected void assertContentsMatches(byte[] expected, DocumentEntry doc)
         {
             NDocumentInputStream inp = new NDocumentInputStream(doc);
             byte[] contents = new byte[doc.Size];
-            Assert.AreEqual(doc.Size, inp.Read(contents));
+            ClassicAssert.AreEqual(doc.Size, inp.Read(contents));
             inp.Close();
 
             if (expected != null)
@@ -133,7 +131,7 @@ namespace TestCases.POIFS.FileSystem
 
             foreach (NPOIFSFileSystem fs in new NPOIFSFileSystem[] { fsA, fsB })
             {
-                Assert.AreEqual(512, fs.GetBigBlockSize());
+                ClassicAssert.AreEqual(512, fs.GetBigBlockSize());
             }
 
             fsA.Close();
@@ -144,7 +142,7 @@ namespace TestCases.POIFS.FileSystem
 
             foreach (NPOIFSFileSystem fs in new NPOIFSFileSystem[] { fsA, fsB })
             {
-                Assert.AreEqual(4096, fs.GetBigBlockSize());
+                ClassicAssert.AreEqual(4096, fs.GetBigBlockSize());
             }
             fsA.Close();
             fsB.Close();
@@ -173,40 +171,40 @@ namespace TestCases.POIFS.FileSystem
 
                 }
 
-                Assert.AreEqual(98, fs.GetNextBlock(97));
-                Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(98));
+                ClassicAssert.AreEqual(98, fs.GetNextBlock(97));
+                ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(98));
 
                 NPropertyTable props = fs.PropertyTable;
-                Assert.AreEqual(90, props.StartBlock);
-                Assert.AreEqual(7, props.CountBlocks);
+                ClassicAssert.AreEqual(90, props.StartBlock);
+                ClassicAssert.AreEqual(7, props.CountBlocks);
 
                 RootProperty root = props.Root;
-                Assert.AreEqual("Root Entry", root.Name);
-                Assert.AreEqual(11564, root.Size);
-                Assert.AreEqual(0, root.StartBlock);
+                ClassicAssert.AreEqual("Root Entry", root.Name);
+                ClassicAssert.AreEqual(11564, root.Size);
+                ClassicAssert.AreEqual(0, root.StartBlock);
 
                 NPOI.POIFS.Properties.Property prop;
                 IEnumerator<NPOI.POIFS.Properties.Property> pi = root.Children;
                 //prop = pi.Current;
                 pi.MoveNext();
                 prop = pi.Current;
-                Assert.AreEqual("Thumbnail", prop.Name);
+                ClassicAssert.AreEqual("Thumbnail", prop.Name);
 
                 pi.MoveNext();
                 prop = pi.Current;
-                Assert.AreEqual("\x0005DocumentSummaryInformation", prop.Name);
+                ClassicAssert.AreEqual("\x0005DocumentSummaryInformation", prop.Name);
 
                 pi.MoveNext();
                 prop = pi.Current;
-                Assert.AreEqual("\x0005SummaryInformation", prop.Name);
+                ClassicAssert.AreEqual("\x0005SummaryInformation", prop.Name);
 
                 pi.MoveNext();
                 prop = pi.Current;
-                Assert.AreEqual("Image", prop.Name);
+                ClassicAssert.AreEqual("Image", prop.Name);
 
                 pi.MoveNext();
                 prop = pi.Current;
-                Assert.AreEqual(false, pi.MoveNext());
+                ClassicAssert.AreEqual(false, pi.MoveNext());
 
                 NPOIFSMiniStore miniStore = fs.GetMiniStore();
                 miniStore.GetBATBlockAndIndex(0);
@@ -223,9 +221,9 @@ namespace TestCases.POIFS.FileSystem
                 }
 
                 for (int i = 0; i < 50; i++)
-                    Assert.AreEqual(i + 1, miniStore.GetNextBlock(i));
+                    ClassicAssert.AreEqual(i + 1, miniStore.GetNextBlock(i));
 
-                Assert.AreEqual(POIFSConstants.END_OF_CHAIN, miniStore.GetNextBlock(50));
+                ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, miniStore.GetNextBlock(50));
 
                 fs.Close();
             }
@@ -246,42 +244,42 @@ namespace TestCases.POIFS.FileSystem
                 {
                 }
 
-                Assert.AreEqual(1, fs.GetNextBlock(0));
-                Assert.AreEqual(2, fs.GetNextBlock(1));
-                Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(2));
+                ClassicAssert.AreEqual(1, fs.GetNextBlock(0));
+                ClassicAssert.AreEqual(2, fs.GetNextBlock(1));
+                ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(2));
 
                 NPropertyTable props = fs.PropertyTable;
-                Assert.AreEqual(12, props.StartBlock);
-                Assert.AreEqual(1, props.CountBlocks);
+                ClassicAssert.AreEqual(12, props.StartBlock);
+                ClassicAssert.AreEqual(1, props.CountBlocks);
 
                 RootProperty root = props.Root;
-                Assert.AreEqual("Root Entry", root.Name);
-                Assert.AreEqual(11564, root.Size);
-                Assert.AreEqual(0, root.StartBlock);
+                ClassicAssert.AreEqual("Root Entry", root.Name);
+                ClassicAssert.AreEqual(11564, root.Size);
+                ClassicAssert.AreEqual(0, root.StartBlock);
 
                 NPOI.POIFS.Properties.Property prop;
                 IEnumerator<NPOI.POIFS.Properties.Property> pi = root.Children;
 
                 pi.MoveNext();
                 prop = pi.Current;
-                Assert.AreEqual("Thumbnail", prop.Name);
+                ClassicAssert.AreEqual("Thumbnail", prop.Name);
 
                 pi.MoveNext();
                 prop = pi.Current;
-                Assert.AreEqual("\x0005DocumentSummaryInformation", prop.Name);
+                ClassicAssert.AreEqual("\x0005DocumentSummaryInformation", prop.Name);
 
                 pi.MoveNext();
                 prop = pi.Current;
-                Assert.AreEqual("\x0005SummaryInformation", prop.Name);
+                ClassicAssert.AreEqual("\x0005SummaryInformation", prop.Name);
 
                 pi.MoveNext();
                 prop = pi.Current;
-                Assert.AreEqual("Image", prop.Name);
+                ClassicAssert.AreEqual("Image", prop.Name);
 
                 pi.MoveNext();
                 prop = pi.Current;
-                Assert.AreEqual("Tags", prop.Name);
-                Assert.AreEqual(false, pi.MoveNext());
+                ClassicAssert.AreEqual("Tags", prop.Name);
+                ClassicAssert.AreEqual(false, pi.MoveNext());
 
                 NPOIFSMiniStore miniStore = fs.GetMiniStore();
                 miniStore.GetBATBlockAndIndex(0);
@@ -299,9 +297,9 @@ namespace TestCases.POIFS.FileSystem
                 }
 
                 for (int i = 0; i < 50; i++)
-                    Assert.AreEqual(i + 1, miniStore.GetNextBlock(i));
+                    ClassicAssert.AreEqual(i + 1, miniStore.GetNextBlock(i));
 
-                Assert.AreEqual(POIFSConstants.END_OF_CHAIN, miniStore.GetNextBlock(50));
+                ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, miniStore.GetNextBlock(50));
                 fs.Close();
             }
         }
@@ -315,30 +313,30 @@ namespace TestCases.POIFS.FileSystem
             foreach (NPOIFSFileSystem fs in new NPOIFSFileSystem[] { fsA, fsB })
             {
                 for (int i = 0; i < 21; i++)
-                    Assert.AreEqual(i + 1, fs.GetNextBlock(i));
+                    ClassicAssert.AreEqual(i + 1, fs.GetNextBlock(i));
 
                 // 21 jumps to 89, then ends
-                Assert.AreEqual(89, fs.GetNextBlock(21));
-                Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(89));
+                ClassicAssert.AreEqual(89, fs.GetNextBlock(21));
+                ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(89));
 
                 for (int i = 22; i < 88; i++)
-                    Assert.AreEqual(i + 1, fs.GetNextBlock(i));
-                Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(88));
+                    ClassicAssert.AreEqual(i + 1, fs.GetNextBlock(i));
+                ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(88));
 
                 for (int i = 90; i < 96; i++)
                 {
-                    Assert.AreEqual(i + 1, fs.GetNextBlock(i));
+                    ClassicAssert.AreEqual(i + 1, fs.GetNextBlock(i));
                 }
-                Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(96));
+                ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(96));
 
-                Assert.AreEqual(98, fs.GetNextBlock(97));
-                Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(98));
+                ClassicAssert.AreEqual(98, fs.GetNextBlock(97));
+                ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(98));
 
-                Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(99));
+                ClassicAssert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(99));
 
                 //Leon i = 100
                 for (int i = 100; i < fs.GetBigBlockSizeDetails().GetBATEntriesPerBlock(); i++)
-                    Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(i));
+                    ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(i));
 
                 fs.Close();
             }
@@ -348,14 +346,14 @@ namespace TestCases.POIFS.FileSystem
 
             foreach (NPOIFSFileSystem fs in new NPOIFSFileSystem[] { fsA, fsB })
             {
-                Assert.AreEqual(1, fs.GetNextBlock(0));
-                Assert.AreEqual(2, fs.GetNextBlock(1));
-                Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(2));
+                ClassicAssert.AreEqual(1, fs.GetNextBlock(0));
+                ClassicAssert.AreEqual(2, fs.GetNextBlock(1));
+                ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(2));
 
                 for (int i = 4; i < 11; i++)
-                    Assert.AreEqual(i + 1, fs.GetNextBlock(i));
+                    ClassicAssert.AreEqual(i + 1, fs.GetNextBlock(i));
 
-                Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(11));
+                ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(11));
                 fs.Close();
             }
 
@@ -372,26 +370,26 @@ namespace TestCases.POIFS.FileSystem
                 ByteBuffer b;
 
                 b = fs.GetBlockAt(0);
-                Assert.AreEqual((byte)0x9e, b.Read());
-                Assert.AreEqual((byte)0x75, b.Read());
-                Assert.AreEqual((byte)0x97, b.Read());
-                Assert.AreEqual((byte)0xf6, b.Read());
+                ClassicAssert.AreEqual((byte)0x9e, b.Read());
+                ClassicAssert.AreEqual((byte)0x75, b.Read());
+                ClassicAssert.AreEqual((byte)0x97, b.Read());
+                ClassicAssert.AreEqual((byte)0xf6, b.Read());
 
                 b = fs.GetBlockAt(1);
-                Assert.AreEqual((byte)0x86, b.Read());
-                Assert.AreEqual((byte)0x09, b.Read());
-                Assert.AreEqual((byte)0x22, b.Read());
-                Assert.AreEqual((byte)0xfb, b.Read());
+                ClassicAssert.AreEqual((byte)0x86, b.Read());
+                ClassicAssert.AreEqual((byte)0x09, b.Read());
+                ClassicAssert.AreEqual((byte)0x22, b.Read());
+                ClassicAssert.AreEqual((byte)0xfb, b.Read());
 
                 b = fs.GetBlockAt(99);
-                Assert.AreEqual((byte)0x01, b.Read());
-                Assert.AreEqual((byte)0x00, b.Read());
-                Assert.AreEqual((byte)0x00, b.Read());
-                Assert.AreEqual((byte)0x00, b.Read());
-                Assert.AreEqual((byte)0x02, b.Read());
-                Assert.AreEqual((byte)0x00, b.Read());
-                Assert.AreEqual((byte)0x00, b.Read());
-                Assert.AreEqual((byte)0x00, b.Read());
+                ClassicAssert.AreEqual((byte)0x01, b.Read());
+                ClassicAssert.AreEqual((byte)0x00, b.Read());
+                ClassicAssert.AreEqual((byte)0x00, b.Read());
+                ClassicAssert.AreEqual((byte)0x00, b.Read());
+                ClassicAssert.AreEqual((byte)0x02, b.Read());
+                ClassicAssert.AreEqual((byte)0x00, b.Read());
+                ClassicAssert.AreEqual((byte)0x00, b.Read());
+                ClassicAssert.AreEqual((byte)0x00, b.Read());
                 fs.Close();
             }
 
@@ -404,26 +402,26 @@ namespace TestCases.POIFS.FileSystem
                 ByteBuffer b;
 
                 b = fs.GetBlockAt(0);
-                Assert.AreEqual((byte)0x9e, b.Read());
-                Assert.AreEqual((byte)0x75, b.Read());
-                Assert.AreEqual((byte)0x97, b.Read());
-                Assert.AreEqual((byte)0xf6, b.Read());
+                ClassicAssert.AreEqual((byte)0x9e, b.Read());
+                ClassicAssert.AreEqual((byte)0x75, b.Read());
+                ClassicAssert.AreEqual((byte)0x97, b.Read());
+                ClassicAssert.AreEqual((byte)0xf6, b.Read());
 
                 b = fs.GetBlockAt(1);
-                Assert.AreEqual((byte)0x00, b.Read());
-                Assert.AreEqual((byte)0x00, b.Read());
-                Assert.AreEqual((byte)0x03, b.Read());
-                Assert.AreEqual((byte)0x00, b.Read());
+                ClassicAssert.AreEqual((byte)0x00, b.Read());
+                ClassicAssert.AreEqual((byte)0x00, b.Read());
+                ClassicAssert.AreEqual((byte)0x03, b.Read());
+                ClassicAssert.AreEqual((byte)0x00, b.Read());
 
                 b = fs.GetBlockAt(14);
-                Assert.AreEqual((byte)0x01, b.Read());
-                Assert.AreEqual((byte)0x00, b.Read());
-                Assert.AreEqual((byte)0x00, b.Read());
-                Assert.AreEqual((byte)0x00, b.Read());
-                Assert.AreEqual((byte)0x02, b.Read());
-                Assert.AreEqual((byte)0x00, b.Read());
-                Assert.AreEqual((byte)0x00, b.Read());
-                Assert.AreEqual((byte)0x00, b.Read());
+                ClassicAssert.AreEqual((byte)0x01, b.Read());
+                ClassicAssert.AreEqual((byte)0x00, b.Read());
+                ClassicAssert.AreEqual((byte)0x00, b.Read());
+                ClassicAssert.AreEqual((byte)0x00, b.Read());
+                ClassicAssert.AreEqual((byte)0x02, b.Read());
+                ClassicAssert.AreEqual((byte)0x00, b.Read());
+                ClassicAssert.AreEqual((byte)0x00, b.Read());
+                ClassicAssert.AreEqual((byte)0x00, b.Read());
 
                 fs.Close();
             }
@@ -434,19 +432,19 @@ namespace TestCases.POIFS.FileSystem
         {
             NPOIFSFileSystem fs = new NPOIFSFileSystem(_inst.GetFile("BlockSize512.zvi"));
 
-            Assert.AreEqual(true, fs.GetBATBlockAndIndex(0).Block.HasFreeSectors);
+            ClassicAssert.AreEqual(true, fs.GetBATBlockAndIndex(0).Block.HasFreeSectors);
 
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(100));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(101));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(102));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(103));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(100));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(101));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(102));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(103));
 
-            Assert.AreEqual(100, fs.GetFreeBlock());
+            ClassicAssert.AreEqual(100, fs.GetFreeBlock());
 
-            Assert.AreEqual(100, fs.GetFreeBlock());
+            ClassicAssert.AreEqual(100, fs.GetFreeBlock());
 
             fs.SetNextBlock(100, POIFSConstants.END_OF_CHAIN);
-            Assert.AreEqual(101, fs.GetFreeBlock());
+            ClassicAssert.AreEqual(101, fs.GetFreeBlock());
 
             fs.Close();
         }
@@ -457,21 +455,21 @@ namespace TestCases.POIFS.FileSystem
             NPOIFSFileSystem fs = new NPOIFSFileSystem(_inst.OpenResourceAsStream("BlockSize512.zvi"));
             int free;
 
-            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(99));
+            ClassicAssert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(99));
             assertBATCount(fs, 1, 0);
             for (int i = 100; i < 128; i++)
-                Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(i));
+                ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(i));
 
-            Assert.AreEqual(true, fs.GetBATBlockAndIndex(0).Block.HasFreeSectors);
+            ClassicAssert.AreEqual(true, fs.GetBATBlockAndIndex(0).Block.HasFreeSectors);
 
             for (int i = 100; i < 128; i++)
                 fs.SetNextBlock(i, POIFSConstants.END_OF_CHAIN);
 
-            Assert.AreEqual(false, fs.GetBATBlockAndIndex(0).Block.HasFreeSectors);
+            ClassicAssert.AreEqual(false, fs.GetBATBlockAndIndex(0).Block.HasFreeSectors);
 
             try
             {
-                Assert.AreEqual(false, fs.GetBATBlockAndIndex(128).Block.HasFreeSectors);
+                ClassicAssert.AreEqual(false, fs.GetBATBlockAndIndex(128).Block.HasFreeSectors);
                 Assert.Fail("Should only be one BAT");
             }
             //catch (IndexOutOfRangeException)
@@ -482,12 +480,12 @@ namespace TestCases.POIFS.FileSystem
 
             // Now ask for a free one, will need to extend the file
 
-            Assert.AreEqual(129, fs.GetFreeBlock());
+            ClassicAssert.AreEqual(129, fs.GetFreeBlock());
 
-            Assert.AreEqual(false, fs.GetBATBlockAndIndex(0).Block.HasFreeSectors);
-            Assert.AreEqual(true, fs.GetBATBlockAndIndex(128).Block.HasFreeSectors);
-            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(128));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(129));
+            ClassicAssert.AreEqual(false, fs.GetBATBlockAndIndex(0).Block.HasFreeSectors);
+            ClassicAssert.AreEqual(true, fs.GetBATBlockAndIndex(128).Block.HasFreeSectors);
+            ClassicAssert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(128));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(129));
 
             // We now have 2 BATs, but no XBATs
             assertBATCount(fs, 2, 0);
@@ -504,10 +502,10 @@ namespace TestCases.POIFS.FileSystem
                 }
             }
 
-            Assert.AreEqual(false, fs.GetBATBlockAndIndex(109 * 128 - 1).Block.HasFreeSectors);
+            ClassicAssert.AreEqual(false, fs.GetBATBlockAndIndex(109 * 128 - 1).Block.HasFreeSectors);
             try
             {
-                Assert.AreEqual(false, fs.GetBATBlockAndIndex(109 * 128).Block.HasFreeSectors);
+                ClassicAssert.AreEqual(false, fs.GetBATBlockAndIndex(109 * 128).Block.HasFreeSectors);
                 Assert.Fail("Should only be 109 BATs");
             }
             // catch (IndexOutOfRangeException)
@@ -521,15 +519,18 @@ namespace TestCases.POIFS.FileSystem
 
             // Ask for it to be written out, and check the header
             HeaderBlock header = WriteOutAndReadHeader(fs);
-            Assert.AreEqual(109, header.BATCount);
-            Assert.AreEqual(0, header.XBATCount);
+            ClassicAssert.AreEqual(109, header.BATCount);
+            ClassicAssert.AreEqual(0, header.XBATCount);
 
+            // Ask for another, will get our first XBAT
             free = fs.GetFreeBlock();
-            Assert.AreEqual(false, fs.GetBATBlockAndIndex(109 * 128 - 1).Block.HasFreeSectors);
-            Assert.AreEqual(true, fs.GetBATBlockAndIndex(110 * 128 - 1).Block.HasFreeSectors);
+            ClassicAssert.IsTrue(free > 0, "Had: " + free);
+
+            ClassicAssert.AreEqual(false, fs.GetBATBlockAndIndex(109 * 128 - 1).Block.HasFreeSectors);
+            ClassicAssert.AreEqual(true, fs.GetBATBlockAndIndex(110 * 128 - 1).Block.HasFreeSectors);
             try
             {
-                Assert.AreEqual(false, fs.GetBATBlockAndIndex(110 * 128).Block.HasFreeSectors);
+                ClassicAssert.AreEqual(false, fs.GetBATBlockAndIndex(110 * 128).Block.HasFreeSectors);
                 Assert.Fail("Should only be 110 BATs");
             }
             //catch (IndexOutOfRangeException)
@@ -540,8 +541,8 @@ namespace TestCases.POIFS.FileSystem
             assertBATCount(fs, 110, 1);
 
             header = WriteOutAndReadHeader(fs);
-            Assert.AreEqual(110, header.BATCount);
-            Assert.AreEqual(1, header.XBATCount);
+            ClassicAssert.AreEqual(110, header.BATCount);
+            ClassicAssert.AreEqual(1, header.XBATCount);
 
             for (int i = 109; i < 109 + 127; i++)
             {
@@ -557,10 +558,10 @@ namespace TestCases.POIFS.FileSystem
             }
 
             // Should now have 109+127 = 236 BATs
-            Assert.AreEqual(false, fs.GetBATBlockAndIndex(236 * 128 - 1).Block.HasFreeSectors);
+            ClassicAssert.AreEqual(false, fs.GetBATBlockAndIndex(236 * 128 - 1).Block.HasFreeSectors);
             try
             {
-                Assert.AreEqual(false, fs.GetBATBlockAndIndex(236 * 128).Block.HasFreeSectors);
+                ClassicAssert.AreEqual(false, fs.GetBATBlockAndIndex(236 * 128).Block.HasFreeSectors);
                 Assert.Fail("Should only be 236 BATs");
             }
             catch (ArgumentOutOfRangeException)
@@ -570,11 +571,13 @@ namespace TestCases.POIFS.FileSystem
 
             // Ask for another, will get our 2nd XBAT
             free = fs.GetFreeBlock();
-            Assert.AreEqual(false, fs.GetBATBlockAndIndex(236 * 128 - 1).Block.HasFreeSectors);
-            Assert.AreEqual(true, fs.GetBATBlockAndIndex(237 * 128 - 1).Block.HasFreeSectors);
+            ClassicAssert.IsTrue(free > 0, "Had: " + free);
+
+            ClassicAssert.AreEqual(false, fs.GetBATBlockAndIndex(236 * 128 - 1).Block.HasFreeSectors);
+            ClassicAssert.AreEqual(true, fs.GetBATBlockAndIndex(237 * 128 - 1).Block.HasFreeSectors);
             try
             {
-                Assert.AreEqual(false, fs.GetBATBlockAndIndex(237 * 128).Block.HasFreeSectors);
+                ClassicAssert.AreEqual(false, fs.GetBATBlockAndIndex(237 * 128).Block.HasFreeSectors);
                 Assert.Fail("Should only be 237 BATs");
             }
             // catch (IndexOutOfRangeException) { }
@@ -587,7 +590,7 @@ namespace TestCases.POIFS.FileSystem
 
             // Check the header
             header = WriteOutAndReadHeader(fs);
-
+            ClassicAssert.IsNotNull(header);
 
             // Now, write it out, and read it back in again fully
             fs = WriteOutAndReadBack(fs);
@@ -596,11 +599,11 @@ namespace TestCases.POIFS.FileSystem
             // Check that it is seen correctly
             assertBATCount(fs, 237, 2);
 
-            Assert.AreEqual(false, fs.GetBATBlockAndIndex(236 * 128 - 1).Block.HasFreeSectors);
-            Assert.AreEqual(true, fs.GetBATBlockAndIndex(237 * 128 - 1).Block.HasFreeSectors);
+            ClassicAssert.AreEqual(false, fs.GetBATBlockAndIndex(236 * 128 - 1).Block.HasFreeSectors);
+            ClassicAssert.AreEqual(true, fs.GetBATBlockAndIndex(237 * 128 - 1).Block.HasFreeSectors);
             try
             {
-                Assert.AreEqual(false, fs.GetBATBlockAndIndex(237 * 128).Block.HasFreeSectors);
+                ClassicAssert.AreEqual(false, fs.GetBATBlockAndIndex(237 * 128).Block.HasFreeSectors);
                 Assert.Fail("Should only be 237 BATs");
             }
             catch (ArgumentOutOfRangeException) { }
@@ -618,7 +621,7 @@ namespace TestCases.POIFS.FileSystem
             foreach (NPOIFSFileSystem fs in get512and4kFileAndInput())
             {
                 DirectoryEntry root = fs.Root;
-                Assert.AreEqual(5, root.EntryCount);
+                ClassicAssert.AreEqual(5, root.EntryCount);
 
                 // Check by the names
                 Entry thumbnail = root.GetEntry("Thumbnail");
@@ -627,28 +630,28 @@ namespace TestCases.POIFS.FileSystem
                 Entry image = root.GetEntry("Image");
                 Entry tags = root.GetEntry("Tags");
 
-                Assert.AreEqual(false, thumbnail.IsDirectoryEntry);
-                Assert.AreEqual(false, dsi.IsDirectoryEntry);
-                Assert.AreEqual(false, si.IsDirectoryEntry);
-                Assert.AreEqual(true, image.IsDirectoryEntry);
-                Assert.AreEqual(false, tags.IsDirectoryEntry);
+                ClassicAssert.AreEqual(false, thumbnail.IsDirectoryEntry);
+                ClassicAssert.AreEqual(false, dsi.IsDirectoryEntry);
+                ClassicAssert.AreEqual(false, si.IsDirectoryEntry);
+                ClassicAssert.AreEqual(true, image.IsDirectoryEntry);
+                ClassicAssert.AreEqual(false, tags.IsDirectoryEntry);
 
                 // Check via the iterator
                 IEnumerator<Entry> it = root.Entries;
                 it.MoveNext();
-                Assert.AreEqual(thumbnail.Name, it.Current.Name);
+                ClassicAssert.AreEqual(thumbnail.Name, it.Current.Name);
                 it.MoveNext();
-                Assert.AreEqual(dsi.Name, it.Current.Name);
+                ClassicAssert.AreEqual(dsi.Name, it.Current.Name);
                 it.MoveNext();
-                Assert.AreEqual(si.Name, it.Current.Name);
+                ClassicAssert.AreEqual(si.Name, it.Current.Name);
                 it.MoveNext();
-                Assert.AreEqual(image.Name, it.Current.Name);
+                ClassicAssert.AreEqual(image.Name, it.Current.Name);
                 it.MoveNext();
-                Assert.AreEqual(tags.Name, it.Current.Name);
+                ClassicAssert.AreEqual(tags.Name, it.Current.Name);
 
                 // Look inside another
                 DirectoryEntry imageD = (DirectoryEntry)image;
-                Assert.AreEqual(7, imageD.EntryCount);
+                ClassicAssert.AreEqual(7, imageD.EntryCount);
 
                 fs.Close();
             }
@@ -662,7 +665,7 @@ namespace TestCases.POIFS.FileSystem
                 DirectoryEntry root = fs.Root;
                 Entry si = root.GetEntry("\x0005SummaryInformation");
 
-                Assert.AreEqual(true, si.IsDocumentEntry);
+                ClassicAssert.AreEqual(true, si.IsDocumentEntry);
                 DocumentNode doc = (DocumentNode)si;
 
                 // Check we can read it
@@ -676,24 +679,24 @@ namespace TestCases.POIFS.FileSystem
                 SummaryInformation inf = (SummaryInformation)ps;
 
                 // Check some bits in it
-                Assert.AreEqual(null, inf.ApplicationName);
-                Assert.AreEqual(null, inf.Author);
-                Assert.AreEqual(null, inf.Subject);
-                Assert.AreEqual(131333, inf.OSVersion);
+                ClassicAssert.AreEqual(null, inf.ApplicationName);
+                ClassicAssert.AreEqual(null, inf.Author);
+                ClassicAssert.AreEqual(null, inf.Subject);
+                ClassicAssert.AreEqual(131333, inf.OSVersion);
 
                 // Finish
                 inp.Close();
 
                 // Try the other summary information
                 si = root.GetEntry("\u0005DocumentSummaryInformation");
-                Assert.AreEqual(true, si.IsDocumentEntry);
+                ClassicAssert.AreEqual(true, si.IsDocumentEntry);
                 doc = (DocumentNode)si;
                 assertContentsMatches(null, doc);
 
                 inp = new NDocumentInputStream(doc);
                 ps = PropertySetFactory.Create(inp);
                 DocumentSummaryInformation dinf = (DocumentSummaryInformation)ps;
-                Assert.AreEqual(131333, dinf.OSVersion);
+                ClassicAssert.AreEqual(131333, dinf.OSVersion);
 
                 fs.Close();
             }
@@ -715,7 +718,7 @@ namespace TestCases.POIFS.FileSystem
                 NPOIFSFileSystem fs = testFS[i];
                 // Check we can find the entries we expect
                 root = fs.Root;
-                Assert.AreEqual(5, root.EntryCount);
+                ClassicAssert.AreEqual(5, root.EntryCount);
                 
                 Assert.That(root.EntryNames, new ContainsConstraint("Thumbnail"));
                 Assert.That(root.EntryNames, new ContainsConstraint("Image"));
@@ -729,7 +732,7 @@ namespace TestCases.POIFS.FileSystem
 
                 // Check they're still there
                 root = fs.Root;
-                Assert.AreEqual(5, root.EntryCount);
+                ClassicAssert.AreEqual(5, root.EntryCount);
                 Assert.That(root.EntryNames, new ContainsConstraint("Thumbnail"));
                 Assert.That(root.EntryNames, new ContainsConstraint("Image"));
                 Assert.That(root.EntryNames, new ContainsConstraint("Tags"));
@@ -740,11 +743,11 @@ namespace TestCases.POIFS.FileSystem
                 // Check the contents of them - parse the summary block and check
                 sinf = (SummaryInformation)PropertySetFactory.Create(new NDocumentInputStream(
                         (DocumentEntry)root.GetEntry(SummaryInformation.DEFAULT_STREAM_NAME)));
-                Assert.AreEqual(131333, sinf.OSVersion);
+                ClassicAssert.AreEqual(131333, sinf.OSVersion);
 
                 dinf = (DocumentSummaryInformation)PropertySetFactory.Create(new NDocumentInputStream(
                         (DocumentEntry)root.GetEntry(DocumentSummaryInformation.DEFAULT_STREAM_NAME)));
-                Assert.AreEqual(131333, dinf.OSVersion);
+                ClassicAssert.AreEqual(131333, dinf.OSVersion);
 
 
                 // Add a test mini stream
@@ -759,7 +762,7 @@ namespace TestCases.POIFS.FileSystem
                 fs = WriteOutAndReadBack(fs);
                 root = fs.Root;
                 testDir = (DirectoryEntry)root.GetEntry("Testing 123");
-                Assert.AreEqual(6, root.EntryCount);
+                ClassicAssert.AreEqual(6, root.EntryCount);
                 Assert.That(root.EntryNames, new ContainsConstraint("Thumbnail"));
                 Assert.That(root.EntryNames, new ContainsConstraint("Image"));
                 Assert.That(root.EntryNames, new ContainsConstraint("Tags"));
@@ -771,11 +774,11 @@ namespace TestCases.POIFS.FileSystem
                 // Check old and new are there
                 sinf = (SummaryInformation)PropertySetFactory.Create(new NDocumentInputStream(
                         (DocumentEntry)root.GetEntry(SummaryInformation.DEFAULT_STREAM_NAME)));
-                Assert.AreEqual(131333, sinf.OSVersion);
+                ClassicAssert.AreEqual(131333, sinf.OSVersion);
 
                 dinf = (DocumentSummaryInformation)PropertySetFactory.Create(new NDocumentInputStream(
                         (DocumentEntry)root.GetEntry(DocumentSummaryInformation.DEFAULT_STREAM_NAME)));
-                Assert.AreEqual(131333, dinf.OSVersion);
+                ClassicAssert.AreEqual(131333, dinf.OSVersion);
 
                 assertContentsMatches(mini, (DocumentEntry)testDir.GetEntry("Mini"));
 
@@ -785,7 +788,7 @@ namespace TestCases.POIFS.FileSystem
 
                 root = fs.Root;
                 testDir = (DirectoryEntry)root.GetEntry("Testing 123");
-                Assert.AreEqual(6, root.EntryCount);
+                ClassicAssert.AreEqual(6, root.EntryCount);
                 Assert.That(root.EntryNames, new ContainsConstraint("Thumbnail"));
                 Assert.That(root.EntryNames, new ContainsConstraint("Image"));
                 Assert.That(root.EntryNames, new ContainsConstraint("Tags"));
@@ -795,11 +798,11 @@ namespace TestCases.POIFS.FileSystem
 
                 sinf = (SummaryInformation)PropertySetFactory.Create(new NDocumentInputStream(
                         (DocumentEntry)root.GetEntry(SummaryInformation.DEFAULT_STREAM_NAME)));
-                Assert.AreEqual(131333, sinf.OSVersion);
+                ClassicAssert.AreEqual(131333, sinf.OSVersion);
 
                 dinf = (DocumentSummaryInformation)PropertySetFactory.Create(new NDocumentInputStream(
                         (DocumentEntry)root.GetEntry(DocumentSummaryInformation.DEFAULT_STREAM_NAME)));
-                Assert.AreEqual(131333, dinf.OSVersion);
+                ClassicAssert.AreEqual(131333, dinf.OSVersion);
                 assertContentsMatches(mini, (DocumentEntry)testDir.GetEntry("Mini"));
 
                 byte[] main4096 = new byte[4096];
@@ -816,7 +819,7 @@ namespace TestCases.POIFS.FileSystem
                 // Check it's all there
                 root = fs.Root;
                 testDir = (DirectoryEntry)root.GetEntry("Testing 123");
-                Assert.AreEqual(5, root.EntryCount);
+                ClassicAssert.AreEqual(5, root.EntryCount);
                 Assert.That(root.EntryNames, new ContainsConstraint("Thumbnail"));
                 Assert.That(root.EntryNames, new ContainsConstraint("Image"));
                 Assert.That(root.EntryNames, new ContainsConstraint("Testing 123"));
@@ -827,11 +830,11 @@ namespace TestCases.POIFS.FileSystem
                 // Check old and new are there
                 sinf = (SummaryInformation)PropertySetFactory.Create(new NDocumentInputStream(
                         (DocumentEntry)root.GetEntry(SummaryInformation.DEFAULT_STREAM_NAME)));
-                Assert.AreEqual(131333, sinf.OSVersion);
+                ClassicAssert.AreEqual(131333, sinf.OSVersion);
 
                 dinf = (DocumentSummaryInformation)PropertySetFactory.Create(new NDocumentInputStream(
                         (DocumentEntry)root.GetEntry(DocumentSummaryInformation.DEFAULT_STREAM_NAME)));
-                Assert.AreEqual(131333, dinf.OSVersion);
+                ClassicAssert.AreEqual(131333, dinf.OSVersion);
 
                 assertContentsMatches(mini, (DocumentEntry)testDir.GetEntry("Mini"));
                 assertContentsMatches(main4096, (DocumentEntry)testDir.GetEntry("Normal4096"));
@@ -849,14 +852,14 @@ namespace TestCases.POIFS.FileSystem
                 root = fs.Root;
                 testDir = (DirectoryEntry)root.GetEntry("Testing 123");
 
-                Assert.AreEqual(5, root.EntryCount);
+                ClassicAssert.AreEqual(5, root.EntryCount);
                 Assert.That(root.EntryNames, new ContainsConstraint("Thumbnail"));
                 Assert.That(root.EntryNames, new ContainsConstraint("Image"));
                 Assert.That(root.EntryNames, new ContainsConstraint("Testing 123"));
                 Assert.That(root.EntryNames, new ContainsConstraint("\u0005DocumentSummaryInformation"));
                 Assert.That(root.EntryNames, new ContainsConstraint("\u0005SummaryInformation"));
 
-                Assert.AreEqual(4, testDir.EntryCount);
+                ClassicAssert.AreEqual(4, testDir.EntryCount);
                 Assert.That(testDir.EntryNames, new ContainsConstraint("Mini"));
                 Assert.That(testDir.EntryNames, new ContainsConstraint("Normal4096"));
                 Assert.That(testDir.EntryNames, new ContainsConstraint("Testing 789"));
@@ -874,14 +877,14 @@ namespace TestCases.POIFS.FileSystem
                 root = fs.Root;
                 testDir = (DirectoryEntry)root.GetEntry("Testing 123");
 
-                Assert.AreEqual(5, root.EntryCount);
+                ClassicAssert.AreEqual(5, root.EntryCount);
                 Assert.That(root.EntryNames, new ContainsConstraint("Thumbnail"));
                 Assert.That(root.EntryNames, new ContainsConstraint("Image"));
                 Assert.That(root.EntryNames, new ContainsConstraint("Testing 123"));
                 Assert.That(root.EntryNames, new ContainsConstraint("\u0005DocumentSummaryInformation"));
                 Assert.That(root.EntryNames, new ContainsConstraint("\u0005SummaryInformation"));
 
-                Assert.AreEqual(5, testDir.EntryCount);
+                ClassicAssert.AreEqual(5, testDir.EntryCount);
                 Assert.That(testDir.EntryNames, new ContainsConstraint("Mini"));
                 Assert.That(testDir.EntryNames, new ContainsConstraint("Mini2"));
                 Assert.That(testDir.EntryNames, new ContainsConstraint("Normal4096"));
@@ -906,14 +909,14 @@ namespace TestCases.POIFS.FileSystem
                 root = fs.Root;
                 testDir = (DirectoryEntry)root.GetEntry("Testing 123");
 
-                Assert.AreEqual(5, root.EntryCount);
+                ClassicAssert.AreEqual(5, root.EntryCount);
                 Assert.That(root.EntryNames, new ContainsConstraint("Thumbnail"));
                 Assert.That(root.EntryNames, new ContainsConstraint("Image"));
                 Assert.That(root.EntryNames, new ContainsConstraint("Testing 123"));
                 Assert.That(root.EntryNames, new ContainsConstraint("\u0005DocumentSummaryInformation"));
                 Assert.That(root.EntryNames, new ContainsConstraint("\u0005SummaryInformation"));
 
-                Assert.AreEqual(5, testDir.EntryCount);
+                ClassicAssert.AreEqual(5, testDir.EntryCount);
                 Assert.That(testDir.EntryNames, new ContainsConstraint("Mini2"));
                 Assert.That(testDir.EntryNames, new ContainsConstraint("Mini3"));
                 Assert.That(testDir.EntryNames, new ContainsConstraint("Normal4096"));
@@ -941,14 +944,14 @@ namespace TestCases.POIFS.FileSystem
                 root = fs.Root;
                 testDir = (DirectoryEntry)root.GetEntry("Testing 123");
 
-                Assert.AreEqual(5, root.EntryCount);
+                ClassicAssert.AreEqual(5, root.EntryCount);
                 Assert.That(root.EntryNames, new ContainsConstraint("Thumbnail"));
                 Assert.That(root.EntryNames, new ContainsConstraint("Image"));
                 Assert.That(root.EntryNames, new ContainsConstraint("Testing 123"));
                 Assert.That(root.EntryNames, new ContainsConstraint("\u0005DocumentSummaryInformation"));
                 Assert.That(root.EntryNames, new ContainsConstraint("\u0005SummaryInformation"));
 
-                Assert.AreEqual(5, testDir.EntryCount);
+                ClassicAssert.AreEqual(5, testDir.EntryCount);
                 Assert.That(testDir.EntryNames, new ContainsConstraint("Mini2"));
                 Assert.That(testDir.EntryNames, new ContainsConstraint("Mini3"));
                 Assert.That(testDir.EntryNames, new ContainsConstraint("Normal4096"));
@@ -978,38 +981,38 @@ namespace TestCases.POIFS.FileSystem
             DocumentEntry normDoc;
 
             // Initially has Properties + BAT but not SBAT
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(0));
-            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(1));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(2));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(0));
+            ClassicAssert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(1));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(2));
 
             // Check that the SBAT is empty
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.Root.Property.StartBlock);
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.Root.Property.StartBlock);
 
             // Check that properties table was given block 0
-            Assert.AreEqual(0, fs.PropertyTable.StartBlock);
+            ClassicAssert.AreEqual(0, fs.PropertyTable.StartBlock);
 
             // Write and read it
             fs = WriteOutAndReadBack(fs);
 
             // No change, SBAT remains empty 
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(0));
-            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(1));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(2));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(3));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.Root.Property.StartBlock);
-            Assert.AreEqual(0, fs.PropertyTable.StartBlock);
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(0));
+            ClassicAssert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(1));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(2));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(3));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.Root.Property.StartBlock);
+            ClassicAssert.AreEqual(0, fs.PropertyTable.StartBlock);
 
             // Check the same but with saving to a file
             fs = new NPOIFSFileSystem();
             fs = WriteOutFileAndReadBack(fs);
 
             // Same, no change, SBAT remains empty 
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(0));
-            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(1));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(2));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(3));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.Root.Property.StartBlock);
-            Assert.AreEqual(0, fs.PropertyTable.StartBlock);
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(0));
+            ClassicAssert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(1));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(2));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(3));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.Root.Property.StartBlock);
+            ClassicAssert.AreEqual(0, fs.PropertyTable.StartBlock);
 
 
             // Put everything within a new directory
@@ -1021,20 +1024,20 @@ namespace TestCases.POIFS.FileSystem
             main4096[4095] = unchecked((byte)-11);
             testDir.CreateDocument("Normal4096", new MemoryStream(main4096));
 
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(0));
-            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(1));
-            Assert.AreEqual(3, fs.GetNextBlock(2));
-            Assert.AreEqual(4, fs.GetNextBlock(3));
-            Assert.AreEqual(5, fs.GetNextBlock(4));
-            Assert.AreEqual(6, fs.GetNextBlock(5));
-            Assert.AreEqual(7, fs.GetNextBlock(6));
-            Assert.AreEqual(8, fs.GetNextBlock(7));
-            Assert.AreEqual(9, fs.GetNextBlock(8));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(9));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(10));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(11));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(0));
+            ClassicAssert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(1));
+            ClassicAssert.AreEqual(3, fs.GetNextBlock(2));
+            ClassicAssert.AreEqual(4, fs.GetNextBlock(3));
+            ClassicAssert.AreEqual(5, fs.GetNextBlock(4));
+            ClassicAssert.AreEqual(6, fs.GetNextBlock(5));
+            ClassicAssert.AreEqual(7, fs.GetNextBlock(6));
+            ClassicAssert.AreEqual(8, fs.GetNextBlock(7));
+            ClassicAssert.AreEqual(9, fs.GetNextBlock(8));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(9));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(10));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(11));
             // SBAT still unused
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.Root.Property.StartBlock);
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.Root.Property.StartBlock);
 
 
             // Add a bigger Normal Stream
@@ -1043,32 +1046,32 @@ namespace TestCases.POIFS.FileSystem
             main5124[5123] = unchecked((byte)-33);
             testDir.CreateDocument("Normal5124", new MemoryStream(main5124));
 
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(0));
-            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(1));
-            Assert.AreEqual(3, fs.GetNextBlock(2));
-            Assert.AreEqual(4, fs.GetNextBlock(3));
-            Assert.AreEqual(5, fs.GetNextBlock(4));
-            Assert.AreEqual(6, fs.GetNextBlock(5));
-            Assert.AreEqual(7, fs.GetNextBlock(6));
-            Assert.AreEqual(8, fs.GetNextBlock(7));
-            Assert.AreEqual(9, fs.GetNextBlock(8));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(9));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(0));
+            ClassicAssert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(1));
+            ClassicAssert.AreEqual(3, fs.GetNextBlock(2));
+            ClassicAssert.AreEqual(4, fs.GetNextBlock(3));
+            ClassicAssert.AreEqual(5, fs.GetNextBlock(4));
+            ClassicAssert.AreEqual(6, fs.GetNextBlock(5));
+            ClassicAssert.AreEqual(7, fs.GetNextBlock(6));
+            ClassicAssert.AreEqual(8, fs.GetNextBlock(7));
+            ClassicAssert.AreEqual(9, fs.GetNextBlock(8));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(9));
 
-            Assert.AreEqual(11, fs.GetNextBlock(10));
-            Assert.AreEqual(12, fs.GetNextBlock(11));
-            Assert.AreEqual(13, fs.GetNextBlock(12));
-            Assert.AreEqual(14, fs.GetNextBlock(13));
-            Assert.AreEqual(15, fs.GetNextBlock(14));
-            Assert.AreEqual(16, fs.GetNextBlock(15));
-            Assert.AreEqual(17, fs.GetNextBlock(16));
-            Assert.AreEqual(18, fs.GetNextBlock(17));
-            Assert.AreEqual(19, fs.GetNextBlock(18));
-            Assert.AreEqual(20, fs.GetNextBlock(19));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(20));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(21));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(22));
+            ClassicAssert.AreEqual(11, fs.GetNextBlock(10));
+            ClassicAssert.AreEqual(12, fs.GetNextBlock(11));
+            ClassicAssert.AreEqual(13, fs.GetNextBlock(12));
+            ClassicAssert.AreEqual(14, fs.GetNextBlock(13));
+            ClassicAssert.AreEqual(15, fs.GetNextBlock(14));
+            ClassicAssert.AreEqual(16, fs.GetNextBlock(15));
+            ClassicAssert.AreEqual(17, fs.GetNextBlock(16));
+            ClassicAssert.AreEqual(18, fs.GetNextBlock(17));
+            ClassicAssert.AreEqual(19, fs.GetNextBlock(18));
+            ClassicAssert.AreEqual(20, fs.GetNextBlock(19));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(20));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(21));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(22));
 
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.Root.Property.StartBlock);
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.Root.Property.StartBlock);
 
 
             // Now Add a mini stream
@@ -1076,85 +1079,85 @@ namespace TestCases.POIFS.FileSystem
             testDir.CreateDocument("Mini", new MemoryStream(mini));
 
             // Mini stream will Get one block for fat + one block for data
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(0));
-            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(1));
-            Assert.AreEqual(3, fs.GetNextBlock(2));
-            Assert.AreEqual(4, fs.GetNextBlock(3));
-            Assert.AreEqual(5, fs.GetNextBlock(4));
-            Assert.AreEqual(6, fs.GetNextBlock(5));
-            Assert.AreEqual(7, fs.GetNextBlock(6));
-            Assert.AreEqual(8, fs.GetNextBlock(7));
-            Assert.AreEqual(9, fs.GetNextBlock(8));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(9));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(0));
+            ClassicAssert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(1));
+            ClassicAssert.AreEqual(3, fs.GetNextBlock(2));
+            ClassicAssert.AreEqual(4, fs.GetNextBlock(3));
+            ClassicAssert.AreEqual(5, fs.GetNextBlock(4));
+            ClassicAssert.AreEqual(6, fs.GetNextBlock(5));
+            ClassicAssert.AreEqual(7, fs.GetNextBlock(6));
+            ClassicAssert.AreEqual(8, fs.GetNextBlock(7));
+            ClassicAssert.AreEqual(9, fs.GetNextBlock(8));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(9));
 
-            Assert.AreEqual(11, fs.GetNextBlock(10));
-            Assert.AreEqual(12, fs.GetNextBlock(11));
-            Assert.AreEqual(13, fs.GetNextBlock(12));
-            Assert.AreEqual(14, fs.GetNextBlock(13));
-            Assert.AreEqual(15, fs.GetNextBlock(14));
-            Assert.AreEqual(16, fs.GetNextBlock(15));
-            Assert.AreEqual(17, fs.GetNextBlock(16));
-            Assert.AreEqual(18, fs.GetNextBlock(17));
-            Assert.AreEqual(19, fs.GetNextBlock(18));
-            Assert.AreEqual(20, fs.GetNextBlock(19));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(20));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(21));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(22));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(23));
+            ClassicAssert.AreEqual(11, fs.GetNextBlock(10));
+            ClassicAssert.AreEqual(12, fs.GetNextBlock(11));
+            ClassicAssert.AreEqual(13, fs.GetNextBlock(12));
+            ClassicAssert.AreEqual(14, fs.GetNextBlock(13));
+            ClassicAssert.AreEqual(15, fs.GetNextBlock(14));
+            ClassicAssert.AreEqual(16, fs.GetNextBlock(15));
+            ClassicAssert.AreEqual(17, fs.GetNextBlock(16));
+            ClassicAssert.AreEqual(18, fs.GetNextBlock(17));
+            ClassicAssert.AreEqual(19, fs.GetNextBlock(18));
+            ClassicAssert.AreEqual(20, fs.GetNextBlock(19));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(20));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(21));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(22));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(23));
 
             // Check the mini stream location was set
             // (21 is mini fat, 22 is first mini stream block)
-            Assert.AreEqual(22, fs.Root.Property.StartBlock);
+            ClassicAssert.AreEqual(22, fs.Root.Property.StartBlock);
 
             // Write and read back
             fs = WriteOutAndReadBack(fs);
             HeaderBlock header = WriteOutAndReadHeader(fs);
 
             // Check the header has the right points in it
-            Assert.AreEqual(1, header.BATCount);
-            Assert.AreEqual(1, header.BATArray[0]);
-            Assert.AreEqual(0, header.PropertyStart);
-            Assert.AreEqual(1, header.SBATCount);
-            Assert.AreEqual(21, header.SBATStart);
-            Assert.AreEqual(22, fs.PropertyTable.Root.StartBlock);
+            ClassicAssert.AreEqual(1, header.BATCount);
+            ClassicAssert.AreEqual(1, header.BATArray[0]);
+            ClassicAssert.AreEqual(0, header.PropertyStart);
+            ClassicAssert.AreEqual(1, header.SBATCount);
+            ClassicAssert.AreEqual(21, header.SBATStart);
+            ClassicAssert.AreEqual(22, fs.PropertyTable.Root.StartBlock);
 
             // Block use should be almost the same, except the properties
             //  stream will have grown out to cover 2 blocks
             // Check the block use is all unChanged
             // Check it's all unChanged
-            Assert.AreEqual(23, fs.GetNextBlock(0));// Properties now extends over 2 blocks
-            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(1));
+            ClassicAssert.AreEqual(23, fs.GetNextBlock(0));// Properties now extends over 2 blocks
+            ClassicAssert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(1));
 
-            Assert.AreEqual(3, fs.GetNextBlock(2));
-            Assert.AreEqual(4, fs.GetNextBlock(3));
-            Assert.AreEqual(5, fs.GetNextBlock(4));
-            Assert.AreEqual(6, fs.GetNextBlock(5));
-            Assert.AreEqual(7, fs.GetNextBlock(6));
-            Assert.AreEqual(8, fs.GetNextBlock(7));
-            Assert.AreEqual(9, fs.GetNextBlock(8));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(9));// End of normal4096
+            ClassicAssert.AreEqual(3, fs.GetNextBlock(2));
+            ClassicAssert.AreEqual(4, fs.GetNextBlock(3));
+            ClassicAssert.AreEqual(5, fs.GetNextBlock(4));
+            ClassicAssert.AreEqual(6, fs.GetNextBlock(5));
+            ClassicAssert.AreEqual(7, fs.GetNextBlock(6));
+            ClassicAssert.AreEqual(8, fs.GetNextBlock(7));
+            ClassicAssert.AreEqual(9, fs.GetNextBlock(8));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(9));// End of normal4096
 
-            Assert.AreEqual(11, fs.GetNextBlock(10));
-            Assert.AreEqual(12, fs.GetNextBlock(11));
-            Assert.AreEqual(13, fs.GetNextBlock(12));
-            Assert.AreEqual(14, fs.GetNextBlock(13));
-            Assert.AreEqual(15, fs.GetNextBlock(14));
-            Assert.AreEqual(16, fs.GetNextBlock(15));
-            Assert.AreEqual(17, fs.GetNextBlock(16));
-            Assert.AreEqual(18, fs.GetNextBlock(17));
-            Assert.AreEqual(19, fs.GetNextBlock(18));
-            Assert.AreEqual(20, fs.GetNextBlock(19));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(20)); // End of normal5124 
+            ClassicAssert.AreEqual(11, fs.GetNextBlock(10));
+            ClassicAssert.AreEqual(12, fs.GetNextBlock(11));
+            ClassicAssert.AreEqual(13, fs.GetNextBlock(12));
+            ClassicAssert.AreEqual(14, fs.GetNextBlock(13));
+            ClassicAssert.AreEqual(15, fs.GetNextBlock(14));
+            ClassicAssert.AreEqual(16, fs.GetNextBlock(15));
+            ClassicAssert.AreEqual(17, fs.GetNextBlock(16));
+            ClassicAssert.AreEqual(18, fs.GetNextBlock(17));
+            ClassicAssert.AreEqual(19, fs.GetNextBlock(18));
+            ClassicAssert.AreEqual(20, fs.GetNextBlock(19));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(20)); // End of normal5124 
 
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(21)); // Mini Stream FAT
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(22)); // Mini Stream data
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(23)); // Properties #2
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(24));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(21)); // Mini Stream FAT
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(22)); // Mini Stream data
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(23)); // Properties #2
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(24));
 
             // Check some data
-            Assert.AreEqual(1, fs.Root.EntryCount);
+            ClassicAssert.AreEqual(1, fs.Root.EntryCount);
             testDir = (DirectoryEntry)fs.Root.GetEntry("Test Directory");
-            Assert.AreEqual(3, testDir.EntryCount);
+            ClassicAssert.AreEqual(3, testDir.EntryCount);
 
             miniDoc = (DocumentEntry)testDir.GetEntry("Mini");
             assertContentsMatches(mini, miniDoc);
@@ -1173,35 +1176,35 @@ namespace TestCases.POIFS.FileSystem
             // Check - will have un-used sectors now
             fs = WriteOutAndReadBack(fs);
 
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(0));// Props back in 1 block
-            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(1));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(0));// Props back in 1 block
+            ClassicAssert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(1));
 
-            Assert.AreEqual(3, fs.GetNextBlock(2)); 
-            Assert.AreEqual(4, fs.GetNextBlock(3));
-            Assert.AreEqual(5, fs.GetNextBlock(4));
-            Assert.AreEqual(6, fs.GetNextBlock(5));
-            Assert.AreEqual(7, fs.GetNextBlock(6));
-            Assert.AreEqual(8, fs.GetNextBlock(7));
-            Assert.AreEqual(9, fs.GetNextBlock(8));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(9));  // End of normal4096
+            ClassicAssert.AreEqual(3, fs.GetNextBlock(2)); 
+            ClassicAssert.AreEqual(4, fs.GetNextBlock(3));
+            ClassicAssert.AreEqual(5, fs.GetNextBlock(4));
+            ClassicAssert.AreEqual(6, fs.GetNextBlock(5));
+            ClassicAssert.AreEqual(7, fs.GetNextBlock(6));
+            ClassicAssert.AreEqual(8, fs.GetNextBlock(7));
+            ClassicAssert.AreEqual(9, fs.GetNextBlock(8));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(9));  // End of normal4096
 
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(10));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(11));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(12));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(13));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(14));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(15));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(16));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(17));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(18));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(19));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(20));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(10));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(11));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(12));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(13));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(14));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(15));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(16));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(17));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(18));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(19));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(20));
 
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(21)); // Mini Stream FAT
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(22)); // Mini Stream data
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(23)); // Properties gone
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(24));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(25));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(21)); // Mini Stream FAT
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(22)); // Mini Stream data
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(23)); // Properties gone
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(24));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(25));
       
 
             // All done
@@ -1217,19 +1220,19 @@ namespace TestCases.POIFS.FileSystem
             HeaderBlock hdr;
 
             // Initially has Properties + BAT but nothing else
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(0));
-            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(1));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(2));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(0));
+            ClassicAssert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(1));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(2));
 
             hdr = WriteOutAndReadHeader(fs);
             // No mini stream, and no xbats
             // Will have fat then properties stream
-            Assert.AreEqual(1, hdr.BATCount);
-            Assert.AreEqual(1, hdr.BATArray[0]);
-            Assert.AreEqual(0, hdr.PropertyStart);
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, hdr.SBATStart);
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, hdr.XBATIndex);
-            Assert.AreEqual(POIFSConstants.SMALLER_BIG_BLOCK_SIZE * 3, fs.Size);
+            ClassicAssert.AreEqual(1, hdr.BATCount);
+            ClassicAssert.AreEqual(1, hdr.BATArray[0]);
+            ClassicAssert.AreEqual(0, hdr.PropertyStart);
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, hdr.SBATStart);
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, hdr.XBATIndex);
+            ClassicAssert.AreEqual(POIFSConstants.SMALLER_BIG_BLOCK_SIZE * 3, fs.Size);
 
 
             // Get a clean filesystem to start with
@@ -1252,20 +1255,20 @@ namespace TestCases.POIFS.FileSystem
 
 
             // Check the mini stream was Added, then the main stream
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(0));
-            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(1));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(2)); // Mini Fat
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(3)); // Mini Stream
-            Assert.AreEqual(5, fs.GetNextBlock(4)); // Main Stream
-            Assert.AreEqual(6, fs.GetNextBlock(5));
-            Assert.AreEqual(7, fs.GetNextBlock(6));
-            Assert.AreEqual(8, fs.GetNextBlock(7));
-            Assert.AreEqual(9, fs.GetNextBlock(8));
-            Assert.AreEqual(10, fs.GetNextBlock(9));
-            Assert.AreEqual(11, fs.GetNextBlock(10));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(11));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(12));
-            Assert.AreEqual(POIFSConstants.SMALLER_BIG_BLOCK_SIZE * 13, fs.Size);
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(0));
+            ClassicAssert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(1));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(2)); // Mini Fat
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(3)); // Mini Stream
+            ClassicAssert.AreEqual(5, fs.GetNextBlock(4)); // Main Stream
+            ClassicAssert.AreEqual(6, fs.GetNextBlock(5));
+            ClassicAssert.AreEqual(7, fs.GetNextBlock(6));
+            ClassicAssert.AreEqual(8, fs.GetNextBlock(7));
+            ClassicAssert.AreEqual(9, fs.GetNextBlock(8));
+            ClassicAssert.AreEqual(10, fs.GetNextBlock(9));
+            ClassicAssert.AreEqual(11, fs.GetNextBlock(10));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(11));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(12));
+            ClassicAssert.AreEqual(POIFSConstants.SMALLER_BIG_BLOCK_SIZE * 13, fs.Size);
 
             // Check that we can read the right data pre-write
             miniDoc = (DocumentEntry)testDir.GetEntry("Mini");
@@ -1280,39 +1283,39 @@ namespace TestCases.POIFS.FileSystem
 
             // Check the header details - will have the sbat near the start,
             //  then the properties at the end
-            Assert.AreEqual(1, hdr.BATCount);
-            Assert.AreEqual(1, hdr.BATArray[0]);
-            Assert.AreEqual(2, hdr.SBATStart);
-            Assert.AreEqual(0, hdr.PropertyStart);
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, hdr.XBATIndex);
+            ClassicAssert.AreEqual(1, hdr.BATCount);
+            ClassicAssert.AreEqual(1, hdr.BATArray[0]);
+            ClassicAssert.AreEqual(2, hdr.SBATStart);
+            ClassicAssert.AreEqual(0, hdr.PropertyStart);
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, hdr.XBATIndex);
 
             // Check the block allocation is unChanged, other than
             //  the properties stream going in at the end
-            Assert.AreEqual(12, fs.GetNextBlock(0));
-            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(1)); // Properties
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(2));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(3));
-            Assert.AreEqual(5, fs.GetNextBlock(4));
-            Assert.AreEqual(6, fs.GetNextBlock(5));
-            Assert.AreEqual(7, fs.GetNextBlock(6));
-            Assert.AreEqual(8, fs.GetNextBlock(7));
-            Assert.AreEqual(9, fs.GetNextBlock(8));
-            Assert.AreEqual(10, fs.GetNextBlock(9));
-            Assert.AreEqual(11, fs.GetNextBlock(10));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(11));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(12));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(13));
-            Assert.AreEqual(POIFSConstants.SMALLER_BIG_BLOCK_SIZE * 14, fs.Size);
+            ClassicAssert.AreEqual(12, fs.GetNextBlock(0));
+            ClassicAssert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(1)); // Properties
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(2));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(3));
+            ClassicAssert.AreEqual(5, fs.GetNextBlock(4));
+            ClassicAssert.AreEqual(6, fs.GetNextBlock(5));
+            ClassicAssert.AreEqual(7, fs.GetNextBlock(6));
+            ClassicAssert.AreEqual(8, fs.GetNextBlock(7));
+            ClassicAssert.AreEqual(9, fs.GetNextBlock(8));
+            ClassicAssert.AreEqual(10, fs.GetNextBlock(9));
+            ClassicAssert.AreEqual(11, fs.GetNextBlock(10));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(11));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(12));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(13));
+            ClassicAssert.AreEqual(POIFSConstants.SMALLER_BIG_BLOCK_SIZE * 14, fs.Size);
        
             // Check the data
             DirectoryEntry fsRoot = fs.Root;
-            Assert.AreEqual(1, fsRoot.EntryCount);
+            ClassicAssert.AreEqual(1, fsRoot.EntryCount);
 
             parentDir = (DirectoryEntry)fsRoot.GetEntry("Parent Directory");
-            Assert.AreEqual(1, parentDir.EntryCount);
+            ClassicAssert.AreEqual(1, parentDir.EntryCount);
 
             testDir = (DirectoryEntry)parentDir.GetEntry("Test Directory");
-            Assert.AreEqual(2, testDir.EntryCount);
+            ClassicAssert.AreEqual(2, testDir.EntryCount);
 
             miniDoc = (DocumentEntry)testDir.GetEntry("Mini");
             assertContentsMatches(mini, miniDoc);
@@ -1336,13 +1339,13 @@ namespace TestCases.POIFS.FileSystem
             fs = WriteOutAndReadBack(fs);
 
             fsRoot = fs.Root;
-            Assert.AreEqual(1, fsRoot.EntryCount);
+            ClassicAssert.AreEqual(1, fsRoot.EntryCount);
 
             parentDir = (DirectoryEntry)fsRoot.GetEntry("Parent Directory");
-            Assert.AreEqual(1, parentDir.EntryCount);
+            ClassicAssert.AreEqual(1, parentDir.EntryCount);
 
             testDir = (DirectoryEntry)parentDir.GetEntry("Test Directory");
-            Assert.AreEqual(4, testDir.EntryCount);
+            ClassicAssert.AreEqual(4, testDir.EntryCount);
 
             miniDoc = (DocumentEntry)testDir.GetEntry("Mini");
             assertContentsMatches(mini, miniDoc);
@@ -1361,28 +1364,28 @@ namespace TestCases.POIFS.FileSystem
         {
             NPOIFSFileSystem fs = new NPOIFSFileSystem(_inst.GetFile("only-zero-byte-streams.ole2"));
             DirectoryNode testDir = fs.Root;
-            Assert.AreEqual(3, testDir.EntryCount);
+            ClassicAssert.AreEqual(3, testDir.EntryCount);
             DocumentEntry entry;
 
             entry = (DocumentEntry)testDir.GetEntry("test-zero-1");
-            Assert.IsNotNull(entry);
-            Assert.AreEqual(0, entry.Size);
+            ClassicAssert.IsNotNull(entry);
+            ClassicAssert.AreEqual(0, entry.Size);
 
             entry = (DocumentEntry)testDir.GetEntry("test-zero-2");
-            Assert.IsNotNull(entry);
-            Assert.AreEqual(0, entry.Size);
+            ClassicAssert.IsNotNull(entry);
+            ClassicAssert.AreEqual(0, entry.Size);
 
             entry = (DocumentEntry)testDir.GetEntry("test-zero-3");
-            Assert.IsNotNull(entry);
-            Assert.AreEqual(0, entry.Size);
+            ClassicAssert.IsNotNull(entry);
+            ClassicAssert.AreEqual(0, entry.Size);
 
             // Check properties, all have zero length, no blocks
             NPropertyTable props = fs.PropertyTable;
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, props.Root.StartBlock);
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, props.Root.StartBlock);
             foreach (NPOI.POIFS.Properties.Property prop in props.Root)
             {
-                Assert.AreEqual("test-zero-", prop.Name.Substring(0, 10));
-                Assert.AreEqual(POIFSConstants.END_OF_CHAIN, prop.StartBlock);
+                ClassicAssert.AreEqual("test-zero-", prop.Name.Substring(0, 10));
+                ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, prop.StartBlock);
             }
 
             // All done
@@ -1442,33 +1445,33 @@ namespace TestCases.POIFS.FileSystem
 
             propsIt.MoveNext();
             Property prop = propsIt.Current;
-            Assert.AreEqual("Mini2", prop.Name);
-            Assert.AreEqual(0, prop.StartBlock);
-            Assert.AreEqual(7, prop.Size);
+            ClassicAssert.AreEqual("Mini2", prop.Name);
+            ClassicAssert.AreEqual(0, prop.StartBlock);
+            ClassicAssert.AreEqual(7, prop.Size);
 
             propsIt.MoveNext();
             prop = propsIt.Current;
-            Assert.AreEqual("Normal4106", prop.Name);
-            Assert.AreEqual(4, prop.StartBlock); // BAT, Props, SBAT, MIni
-            Assert.AreEqual(4106, prop.Size);
+            ClassicAssert.AreEqual("Normal4106", prop.Name);
+            ClassicAssert.AreEqual(4, prop.StartBlock); // BAT, Props, SBAT, MIni
+            ClassicAssert.AreEqual(4106, prop.Size);
 
             propsIt.MoveNext();
             prop = propsIt.Current;
-            Assert.AreEqual("empty-1", prop.Name);
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, prop.StartBlock);
-            Assert.AreEqual(0, prop.Size);
+            ClassicAssert.AreEqual("empty-1", prop.Name);
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, prop.StartBlock);
+            ClassicAssert.AreEqual(0, prop.Size);
 
             propsIt.MoveNext();
             prop = propsIt.Current;
-            Assert.AreEqual("empty-2", prop.Name);
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, prop.StartBlock);
-            Assert.AreEqual(0, prop.Size);
+            ClassicAssert.AreEqual("empty-2", prop.Name);
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, prop.StartBlock);
+            ClassicAssert.AreEqual(0, prop.Size);
 
             propsIt.MoveNext();
             prop = propsIt.Current;
-            Assert.AreEqual("empty-3", prop.Name);
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, prop.StartBlock);
-            Assert.AreEqual(0, prop.Size);
+            ClassicAssert.AreEqual("empty-3", prop.Name);
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, prop.StartBlock);
+            ClassicAssert.AreEqual(0, prop.Size);
 
             // Save and re-check
             fs = WriteOutAndReadBack(fs);
@@ -1490,8 +1493,8 @@ namespace TestCases.POIFS.FileSystem
             assertContentsMatches(empty, emptyDoc);
 
             // Check that a mini-stream was assigned, with one block used
-            Assert.AreEqual(3, testDir.Property.StartBlock);
-            Assert.AreEqual(64, testDir.Property.Size);
+            ClassicAssert.AreEqual(3, testDir.Property.StartBlock);
+            ClassicAssert.AreEqual(64, testDir.Property.Size);
             // All done
             fs.Close();
         }
@@ -1537,20 +1540,20 @@ namespace TestCases.POIFS.FileSystem
             //  DocumentSummaryInformation <(0x05)DocumentSummaryInformation>
             //  Workbook
             //  CompObj <(0x01)CompObj>
-            Assert.AreEqual(5, _countChildren(src.PropertyTable.Root));
-            Assert.AreEqual(5, src.Root.EntryCount);
+            ClassicAssert.AreEqual(5, _countChildren(src.PropertyTable.Root));
+            ClassicAssert.AreEqual(5, src.Root.EntryCount);
 
             // Grab the VBA project root
             DirectoryEntry vbaProj = (DirectoryEntry)src.Root.GetEntry("_VBA_PROJECT_CUR");
-            Assert.AreEqual(3, vbaProj.EntryCount);
+            ClassicAssert.AreEqual(3, vbaProj.EntryCount);
             // Can't delete yet, has stuff
-            Assert.AreEqual(false, vbaProj.Delete());
+            ClassicAssert.AreEqual(false, vbaProj.Delete());
             // Recursively delete
             _recursiveDeletee(vbaProj);
 
             // Entries gone
-            Assert.AreEqual(4, _countChildren(src.PropertyTable.Root));
-            Assert.AreEqual(4, src.Root.EntryCount);
+            ClassicAssert.AreEqual(4, _countChildren(src.PropertyTable.Root));
+            ClassicAssert.AreEqual(4, src.Root.EntryCount);
 
             // Done
             src.Close();
@@ -1559,7 +1562,7 @@ namespace TestCases.POIFS.FileSystem
         {
             if (entry.IsDocumentEntry)
             {
-                Assert.AreEqual(true, entry.Delete());
+                ClassicAssert.AreEqual(true, entry.Delete());
                 return;
             }
 
@@ -1570,7 +1573,7 @@ namespace TestCases.POIFS.FileSystem
                 Entry ce = dir.GetEntry(name);
                 _recursiveDeletee(ce);
             }
-            Assert.AreEqual(true, dir.Delete());
+            ClassicAssert.AreEqual(true, dir.Delete());
         }
 
         private int _countChildren(DirectoryProperty p)
@@ -1578,6 +1581,306 @@ namespace TestCases.POIFS.FileSystem
             int count = 0;
             foreach (Property cp in p) { count++; }
             return count;
+        }
+
+        /// <summary>
+        /// <para>
+        /// To ensure we can create a file >2gb in size, as well as to
+        /// extend existing files past the 2gb boundary.
+        /// </para>
+        /// <para>
+        /// Note that to run this test, you will require 2.5+gb of free
+        /// space on your TMP/TEMP partition/disk
+        /// </para>
+        /// <para>
+        /// Note that to run this test, you need to be able to mmap 2.5+gb
+        /// files, which may need bigger kernel.shmmax and vm.max_map_count
+        /// Settings on Linux.
+        /// </para>
+        /// <para>
+        /// TODO Fix this to work...
+        /// </para>
+        /// </summary>
+        [Test]
+        [Ignore("Work in progress test for #60670")]
+        public void CreationAndExtensionPast2GB()
+        {
+        
+            FileInfo big = TempFile.CreateTempFile("poi-test-", ".ole2");
+            //Assume.AssumeTrue("2.5gb of free space is required on your tmp/temp " +
+            //                  "partition/disk to run large file tests",
+            //                  big.GetFreeSpace() > 2.5 * 1024 * 1024 * 1024);
+            Console.WriteLine("Slow, memory heavy test in progress....");
+        
+            int s100mb = 100 * 1024 * 1024;
+            int s512mb = 512 * 1024 * 1024;
+            long s2gb = 2L * 1024 * 1024 * 1024;
+            DocumentEntry entry;
+            NPOIFSFileSystem fs;
+        
+            // Create a just-sub 2gb file
+            fs = POIFSFileSystem.Create(big);
+            for (int i = 0; i < 19; i++)
+            {
+                fs.CreateDocument(new DummyDataInputStream(s100mb), "Entry" + i);
+            }
+            fs.WriteFileSystem();
+            fs.Close();
+        
+            // Extend it past the 2gb mark
+            fs = new NPOIFSFileSystem(big, false);
+            for (int i = 0; i < 19; i++)
+            {
+                entry = (DocumentEntry)fs.Root.GetEntry("Entry" + i);
+                ClassicAssert.IsNotNull(entry);
+                ClassicAssert.AreEqual(s100mb, entry.Size);
+            }
+        
+            fs.CreateDocument(new DummyDataInputStream(s512mb), "Bigger");
+            fs.WriteFileSystem();
+            fs.Close();
+        
+            // Check it still works
+            fs = new NPOIFSFileSystem(big, false);
+            for (int i = 0; i < 19; i++)
+            {
+                entry = (DocumentEntry)fs.Root.GetEntry("Entry" + i);
+                ClassicAssert.IsNotNull(entry);
+                ClassicAssert.AreEqual(s100mb, entry.Size);
+            }
+            entry = (DocumentEntry)fs.Root.GetEntry("Bigger");
+            ClassicAssert.IsNotNull(entry);
+            ClassicAssert.AreEqual(s512mb, entry.Size);
+        
+            // Tidy
+            fs.Close();
+            big.Delete();
+            ClassicAssert.IsTrue(!File.Exists(big.FullName));
+        
+        
+            // Create a >2gb file
+            fs = POIFSFileSystem.Create(big);
+            for (int i = 0; i < 4; i++)
+            {
+                fs.CreateDocument(new DummyDataInputStream(s512mb), "Entry" + i);
+            }
+            fs.WriteFileSystem();
+            fs.Close();
+        
+            // Read it
+            fs = new NPOIFSFileSystem(big, false);
+            for (int i = 0; i < 4; i++)
+            {
+                entry = (DocumentEntry)fs.Root.GetEntry("Entry" + i);
+                ClassicAssert.IsNotNull(entry);
+                ClassicAssert.AreEqual(s512mb, entry.Size);
+            }
+        
+            // Extend it
+            fs.CreateDocument(new DummyDataInputStream(s512mb), "Entry4");
+            fs.WriteFileSystem();
+            fs.Close();
+        
+            // Check it worked
+            fs = new NPOIFSFileSystem(big, false);
+            for (int i = 0; i < 5; i++)
+            {
+                entry = (DocumentEntry)fs.Root.GetEntry("Entry" + i);
+                ClassicAssert.IsNotNull(entry);
+                ClassicAssert.AreEqual(s512mb, entry.Size);
+            }
+        
+            // Tidy
+            fs.Close();
+            big.Delete();
+            ClassicAssert.IsTrue(!File.Exists(big.FullName));
+        
+            // Create a file with a 2gb entry
+            fs = POIFSFileSystem.Create(big);
+            fs.CreateDocument(new DummyDataInputStream(s100mb), "Small");
+            // TODO Check we Get a helpful error about the max size
+            fs.CreateDocument(new DummyDataInputStream(s2gb), "Big");
+        }
+        
+        protected class DummyDataInputStream : InputStream
+        {
+            protected long maxSize;
+            protected long size;
+            public DummyDataInputStream(long maxSize)
+            {
+                this.maxSize = maxSize;
+                this.size = 0;
+            }
+        
+            public override bool CanRead => throw new NotImplementedException();
+        
+            public override bool CanSeek => throw new NotImplementedException();
+        
+            public override long Length => throw new NotImplementedException();
+        
+            public override long Position { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        
+            public override void Flush()
+            {
+                throw new NotImplementedException();
+            }
+        
+            public override int Read()
+            {
+        
+                if (size >= maxSize) return -1;
+                size++;
+                return (int)(size % 128);
+            }
+        
+            public override int Read(byte[] b)
+            {
+        
+                return Read(b, 0, b.Length);
+            }
+            public override int Read(byte[] b, int offset, int len)
+            {
+        
+                if (size >= maxSize) return -1;
+                int sz = (int)Math.Min(len, maxSize - size);
+                for (int i = 0; i < sz; i++)
+                {
+                    b[i + offset] = (byte)((size + i) % 128);
+                }
+                size += sz;
+                return sz;
+            }
+        
+            public override long Seek(long offset, SeekOrigin origin)
+            {
+                throw new NotImplementedException();
+            }
+        
+            public override void SetLength(long value)
+            {
+                throw new NotImplementedException();
+            }
+        }
+        
+        [Ignore("Takes a long time to run")]
+        [Test]
+        public void testPerformance()
+        {
+        
+            int iterations = 200;//1_000;
+        
+            Console.WriteLine("OPOI:");
+            long start = DateTime.Now.Ticks;
+        
+            for (int i = 0; i < iterations; i++)
+            {
+                Stream inputStream = POIDataSamples.GetHSMFInstance().OpenResourceAsStream("lots-of-recipients.msg");
+                try
+                {
+                    OPOIFSFileSystem srcFileSystem = new OPOIFSFileSystem(inputStream);
+                    OPOIFSFileSystem destFileSystem = new OPOIFSFileSystem();
+        
+                    copyAllEntries(srcFileSystem.Root, destFileSystem.Root);
+        
+                    FileInfo file = TempFile.CreateTempFile("opoi", ".dat");
+                    Stream outputStream = new FileStream(file.FullName, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                    try
+                    {
+                        destFileSystem.WriteFileSystem(outputStream);
+                    }
+                    finally
+                    {
+                        outputStream.Close();
+                    }
+                    file.Delete();
+                    ClassicAssert.IsTrue(!File.Exists(file.FullName));
+                    if (i % 10 == 0) Console.Write(".");
+                    if (i % 800 == 0 && i > 0) Console.WriteLine();
+                }
+                finally
+                {
+                    inputStream.Close();
+                }
+            }
+        
+            Console.WriteLine();
+            Console.WriteLine("OPOI took: " + (DateTime.Now.Ticks - start));
+        
+        
+            Console.WriteLine();
+            Console.WriteLine("NPOI:");
+            start = DateTime.Now.Ticks;
+        
+            for (int i = 0; i < iterations; i++)
+            {
+        
+                Stream inputStream = POIDataSamples.GetHSMFInstance().OpenResourceAsStream("lots-of-recipients.msg");
+                try
+                {
+                    NPOIFSFileSystem srcFileSystem = new NPOIFSFileSystem(inputStream);
+                    NPOIFSFileSystem destFileSystem = new NPOIFSFileSystem();
+        
+                    copyAllEntries(srcFileSystem.Root, destFileSystem.Root);
+        
+                    FileInfo file = TempFile.CreateTempFile("npoi", ".dat");
+                    Stream outputStream = new FileStream(file.FullName, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                    try
+                    {
+                        destFileSystem.WriteFileSystem(outputStream);
+                    }
+                    finally
+                    {
+                        outputStream.Close();
+                    }
+        
+                    file.Delete();
+                    ClassicAssert.IsTrue(!File.Exists(file.FullName));
+                    if (i % 10 == 0) Console.Write(".");
+                    if (i % 800 == 0 && i > 0) Console.WriteLine();
+                }
+                finally
+                {
+                    inputStream.Close();
+                }
+            }
+        
+            Console.WriteLine();
+            Console.WriteLine("NPOI took: " + (DateTime.Now.Ticks - start));
+        
+            Console.WriteLine();
+            Console.WriteLine();
+        }
+        
+        private static void copyAllEntries(DirectoryEntry srcDirectory, DirectoryEntry destDirectory)
+        {
+        
+            IEnumerator<Entry> iterator = srcDirectory.Entries;
+        
+            while (iterator.MoveNext())
+            {
+                Entry entry = iterator.Current;
+        
+                if (entry.IsDirectoryEntry)
+                {
+                    DirectoryEntry childDest = destDirectory.CreateDirectory(entry.Name);
+                    copyAllEntries((DirectoryEntry)entry, childDest);
+        
+                }
+                else
+                {
+                    DocumentEntry srcEntry = (DocumentEntry)entry;
+        
+                    InputStream inputStream = new DocumentInputStream(srcEntry);
+                    try
+                    {
+                        destDirectory.CreateDocument(entry.Name, inputStream);
+                    }
+                    finally
+                    {
+                        inputStream.Close();
+                    }
+                }
+            }
         }
     }
 }

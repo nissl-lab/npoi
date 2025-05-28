@@ -26,7 +26,7 @@ namespace TestCases.HSSF.Record.Aggregates
     using System;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.Aggregates;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.Util;
     using NPOI.SS.Formula.PTG;
     using NPOI.HSSF.Model;
@@ -48,7 +48,7 @@ namespace TestCases.HSSF.Record.Aggregates
             StringRecord s = new StringRecord();
             s.String = ("abc");
             FormulaRecordAggregate fagg = new FormulaRecordAggregate(f, s, SharedValueManager.CreateEmpty());
-            Assert.AreEqual("abc", fagg.StringValue);
+            ClassicAssert.AreEqual("abc", fagg.StringValue);
         }
         /**
  * Sometimes a {@link StringRecord} appears after a {@link FormulaRecord} even though the
@@ -83,8 +83,8 @@ namespace TestCases.HSSF.Record.Aggregates
             TestCases.HSSF.UserModel.RecordInspector.RecordCollector rc = new TestCases.HSSF.UserModel.RecordInspector.RecordCollector();
             fra.VisitContainedRecords(rc);
             Record[] vraRecs = rc.Records;
-            Assert.AreEqual(1, vraRecs.Length);
-            Assert.AreEqual(fr, vraRecs[0]);
+            ClassicAssert.AreEqual(1, vraRecs.Length);
+            ClassicAssert.AreEqual(fr, vraRecs[0]);
         }
         [Test]
         public void TestArrayFormulas()
@@ -104,14 +104,14 @@ namespace TestCases.HSSF.Record.Aggregates
             Ptg[] ptgs = HSSFFormulaParser.Parse(formula, null, FormulaType.Array, 0);
             agg.SetArrayFormula(new CellRangeAddress(rownum, rownum, colnum, colnum), ptgs);
 
-            Assert.IsTrue(agg.IsPartOfArrayFormula);
-            Assert.AreEqual("E5", agg.GetArrayFormulaRange().FormatAsString());
+            ClassicAssert.IsTrue(agg.IsPartOfArrayFormula);
+            ClassicAssert.AreEqual("E5", agg.GetArrayFormulaRange().FormatAsString());
             Ptg[] ptg = agg.FormulaTokens;
             String fmlaSer = FormulaRenderer.ToFormulaString(null, ptg);
-            Assert.AreEqual(formula, fmlaSer);
+            ClassicAssert.AreEqual(formula, fmlaSer);
 
             agg.RemoveArrayFormula(rownum, colnum);
-            Assert.IsFalse(agg.IsPartOfArrayFormula);
+            ClassicAssert.IsFalse(agg.IsPartOfArrayFormula);
         }
     }
 }

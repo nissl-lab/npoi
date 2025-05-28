@@ -18,7 +18,7 @@
  */
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using System.Collections.Generic;
 using System.IO;
 
@@ -105,7 +105,7 @@ namespace TestCases.SS.Formula.Functions
                         break;
                     }
 
-                    Assert.AreEqual(val, kv.Value, Tolerance, kv.Key);
+                    ClassicAssert.AreEqual(val, kv.Value, Tolerance, kv.Key);
                 }
             });
         }

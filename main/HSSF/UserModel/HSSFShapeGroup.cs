@@ -387,7 +387,7 @@ namespace NPOI.HSSF.UserModel
             throw new NotImplementedException("Use method cloneShape(HSSFPatriarch patriarch)");
         }
 
-        internal HSSFShape CloneShape(HSSFPatriarch patriarch)
+        internal HSSFShapeGroup CloneShape(HSSFPatriarch patriarch)
         {
             EscherContainerRecord spgrContainer = new EscherContainerRecord();
             spgrContainer.RecordId = (EscherContainerRecord.SPGR_CONTAINER);
@@ -410,9 +410,9 @@ namespace NPOI.HSSF.UserModel
             foreach (HSSFShape shape in Children)
             {
                 HSSFShape newShape;
-                if (shape is HSSFShapeGroup)
+                if (shape is HSSFShapeGroup shapeGroup)
                 {
-                    newShape = ((HSSFShapeGroup)shape).CloneShape(patriarch);
+                    newShape = shapeGroup.CloneShape(patriarch);
                 }
                 else
                 {

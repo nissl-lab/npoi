@@ -28,7 +28,7 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using NPOI.POIFS.Storage;
 using NPOI.Util;
 using NPOI.POIFS.FileSystem;
@@ -70,12 +70,12 @@ namespace TestCases.POIFS.Storage
             BlockWritable[] blocks =
                 PropertyBlock.CreatePropertyBlockArray(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS, properties);
 
-            Assert.AreEqual(0, blocks.Length);
+            ClassicAssert.AreEqual(0, blocks.Length);
 
             // Test with 1 property
             properties.Add(new LocalProperty("Root Entry"));
             blocks = PropertyBlock.CreatePropertyBlockArray(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS, properties);
-            Assert.AreEqual(1, blocks.Length);
+            ClassicAssert.AreEqual(1, blocks.Length);
             byte[] testblock = new byte[512];
 
             for (int j = 0; j < 4; j++)
@@ -99,7 +99,7 @@ namespace TestCases.POIFS.Storage
             properties.Add(new LocalProperty("workbook"));
             properties.Add(new LocalProperty("summary"));
             blocks = PropertyBlock.CreatePropertyBlockArray(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS, properties);
-            Assert.AreEqual(1, blocks.Length);
+            ClassicAssert.AreEqual(1, blocks.Length);
             testblock[0x0080] = (byte)'w';
             testblock[0x0082] = (byte)'o';
             testblock[0x0084] = (byte)'r';
@@ -122,7 +122,7 @@ namespace TestCases.POIFS.Storage
             // Test with 4 properties
             properties.Add(new LocalProperty("wintery"));
             blocks = PropertyBlock.CreatePropertyBlockArray(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS, properties);
-            Assert.AreEqual(1, blocks.Length);
+            ClassicAssert.AreEqual(1, blocks.Length);
             testblock[0x0180] = (byte)'w';
             testblock[0x0182] = (byte)'i';
             testblock[0x0184] = (byte)'n';
@@ -136,7 +136,7 @@ namespace TestCases.POIFS.Storage
             // Test with 5 properties
             properties.Add(new LocalProperty("foo"));
             blocks = PropertyBlock.CreatePropertyBlockArray(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS, properties);
-            Assert.AreEqual(2, blocks.Length);
+            ClassicAssert.AreEqual(2, blocks.Length);
             testblock = new byte[1024];
             for (int j = 0; j < 8; j++)
             {
@@ -222,10 +222,10 @@ namespace TestCases.POIFS.Storage
             }
             byte[] output = stream.ToArray();
 
-            Assert.AreEqual(testblock.Length, output.Length);
+            ClassicAssert.AreEqual(testblock.Length, output.Length);
             for (int j = 0; j < testblock.Length; j++)
             {
-                Assert.AreEqual(testblock[j],
+                ClassicAssert.AreEqual(testblock[j],
                              output[j], "mismatch at offset " + j);
             }
         }

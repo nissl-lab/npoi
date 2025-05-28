@@ -33,15 +33,14 @@ namespace NPOI.SS.Format
         private bool amPmUpper;
         private bool ShowM;
         private bool ShowAmPm;
-        private readonly FormatBase dateFmt;
+        private readonly SimpleDateFormat dateFmt;
         private String sFmt;
         private int millisecondPartLength = 0;
 
         private static readonly TimeSpan EXCEL_EPOCH_TIME;
         private static readonly DateTime EXCEL_EPOCH_DATE;
 
-        private static readonly CellFormatter SIMPLE_DATE = new CellDateFormatter(
-                "mm/d/y");
+        private static readonly CellDateFormatter SIMPLE_DATE = new CellDateFormatter("mm/d/y");
 
         static CellDateFormatter()
         {
@@ -50,7 +49,7 @@ namespace NPOI.SS.Format
             EXCEL_EPOCH_TIME = c.TimeOfDay;
         }
 
-        private class DatePartHandler : CellFormatPart.IPartHandler
+        private sealed class DatePartHandler : CellFormatPart.IPartHandler
         {
             private readonly CellDateFormatter _formatter;
             private int mStart = -1;

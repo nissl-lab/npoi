@@ -332,12 +332,13 @@ namespace NPOI.SS.Formula.Functions
      */
     public abstract class AggregateFunction : MultiOperandNumericFunction
     {
-        internal static Function SubtotalInstance(Function func, bool countHiddenRows)
+        internal static SubtotalInstance SubtotalInstance(Function func, bool countHiddenRows)
         {
             AggregateFunction arg = (AggregateFunction)func;
             return new SubtotalInstance(arg, countHiddenRows);
         }
-        internal class ValueCollector : MultiOperandNumericFunction
+
+        internal sealed class ValueCollector : MultiOperandNumericFunction
         {
             private static readonly ValueCollector instance = new ValueCollector();
             public ValueCollector() :

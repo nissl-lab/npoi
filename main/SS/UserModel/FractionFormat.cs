@@ -18,7 +18,8 @@
 using NPOI.SS.Util;
 using System.Text.RegularExpressions;
 using System;
-using System.Text;
+using System.Text; 
+using Cysharp.Text;
 using System.Globalization;
 using NPOI.SS.Format;
 namespace NPOI.SS.UserModel
@@ -134,8 +135,9 @@ namespace NPOI.SS.UserModel
             if (wholePart + (int)decPart == wholePart + decPart)
             {
 
-                StringBuilder sb = new StringBuilder();
-                if (isNeg)
+                using var sb = ZString.CreateStringBuilder();
+
+                if(isNeg)
                 {
                     sb.Append("-");
                 }
@@ -163,8 +165,9 @@ namespace NPOI.SS.UserModel
 
             StringBuilder sb1 = new StringBuilder();
 
+
             //now format the results
-            if (isNeg)
+            if(isNeg)
             {
                 sb1.Append("-");
             }
@@ -213,7 +216,7 @@ namespace NPOI.SS.UserModel
             throw new NotImplementedException("Reverse parsing not supported");
         }
        
-        private class SimpleFractionException : Exception
+        private sealed class SimpleFractionException : Exception
         {
             public SimpleFractionException(String message) :
                 base(message)

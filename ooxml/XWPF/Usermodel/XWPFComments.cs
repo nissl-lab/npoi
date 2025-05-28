@@ -41,7 +41,7 @@ namespace NPOI.XWPF.UserModel
         public XWPFComments(POIXMLDocumentPart parent, PackagePart part)
             : base(parent, part)
         {
-            if (!(GetParent() is XWPFDocument))
+            if (GetParent() is not XWPFDocument)
             {
                 throw new RuntimeException("Parent is not a XWPFDocuemnt: " + GetParent());
             }
@@ -86,9 +86,8 @@ namespace NPOI.XWPF.UserModel
 
             foreach (POIXMLDocumentPart poixmlDocumentPart in GetRelations())
             {
-                if (poixmlDocumentPart is XWPFPictureData)
+                if (poixmlDocumentPart is XWPFPictureData xwpfPicData)
                 {
-                    XWPFPictureData xwpfPicData = (XWPFPictureData)poixmlDocumentPart;
                     pictures.Add(xwpfPicData);
                     document.RegisterPackagePictureData(xwpfPicData);
                 }

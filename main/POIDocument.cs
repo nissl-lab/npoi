@@ -157,9 +157,9 @@ namespace NPOI
 
             // DocumentSummaryInformation
             ps = GetPropertySet(DocumentSummaryInformation.DEFAULT_STREAM_NAME);
-            if (ps != null && ps is DocumentSummaryInformation)
+            if (ps != null && ps is DocumentSummaryInformation information)
             {
-                dsInf = (DocumentSummaryInformation)ps;
+                dsInf = information;
             }
             else if (ps != null)
             {
@@ -171,9 +171,9 @@ namespace NPOI
             }
             // SummaryInformation
             ps = GetPropertySet(SummaryInformation.DEFAULT_STREAM_NAME);
-            if (ps is SummaryInformation)
+            if (ps is SummaryInformation summaryInformation)
             {
-                sInf = (SummaryInformation)ps;
+                sInf = summaryInformation;
             }
             else if (ps != null)
             {

@@ -25,7 +25,7 @@ namespace NPOI.SS.Formula.Atp
             return _evaluate(args, srcRowIndex, srcColumnIndex);
         }
 
-        private ValueEval _evaluate(ValueEval[] args, int srcRowIndex, int srcColumnIndex)
+        private static ValueEval _evaluate(ValueEval[] args, int srcRowIndex, int srcColumnIndex)
         {
             if (args.Length < 2)
             {
@@ -70,7 +70,7 @@ namespace NPOI.SS.Formula.Atp
             return evaluate(srcRowIndex, srcColumnIndex, args[0], args[1], matchMode, searchMode);
         }
 
-        private ValueEval evaluate(int srcRowIndex, int srcColumnIndex, ValueEval lookupEval, ValueEval indexEval,
+        private static ValueEval evaluate(int srcRowIndex, int srcColumnIndex, ValueEval lookupEval, ValueEval indexEval,
                                    LookupUtils.MatchMode matchMode, LookupUtils.SearchMode searchMode)
         {
             try

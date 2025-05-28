@@ -191,7 +191,7 @@ namespace NPOI.SS.Util
 
         public DecimalFormat(string pattern)
         {
-            if (pattern.IndexOf("'", StringComparison.Ordinal) != -1)
+            if (pattern.Contains('\''))
                 throw new ArgumentException("invalid pattern");
             this._pattern = pattern;
         }
@@ -220,7 +220,7 @@ namespace NPOI.SS.Util
                 culture.NumberFormat = _formatInfo;
             }
                 
-            if (_pattern.IndexOf("'", StringComparison.Ordinal) != -1)
+            if (_pattern.Contains('\''))
             {
                 return Convert.ToDouble(obj, CultureInfo.InvariantCulture).ToString(culture);
             }

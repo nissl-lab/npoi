@@ -24,7 +24,8 @@ namespace TestCases.HSSF.UserModel
     using NPOI.SS.UserModel;
 
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
+    using SixLabors.Fonts;
     using SixLabors.ImageSharp;
     using SixLabors.ImageSharp.PixelFormats;
 
@@ -54,7 +55,7 @@ namespace TestCases.HSSF.UserModel
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
             workbook = new HSSFWorkbook();
 
-            NPOI.SS.UserModel.ISheet sheet = workbook.CreateSheet("Test");
+            ISheet sheet = workbook.CreateSheet("Test");
             patriarch = (HSSFPatriarch)sheet.CreateDrawingPatriarch();
             escherGroupA = patriarch.CreateGroup(new HSSFClientAnchor(0, 0, 1022, 255, (short)0, 0, (short)0, 0));
             escherGroupB = patriarch.CreateGroup(new HSSFClientAnchor(20, 30, 500, 200, (short)0, 0, (short)0, 0));
@@ -63,46 +64,51 @@ namespace TestCases.HSSF.UserModel
 
         }
 
-        /* TODO-Fonts:
         [Test]
         public void TestGetFont()
         {
-            System.Drawing.Font f = graphics.Font;
-            if (f.ToString().IndexOf("dialog") == -1 && f.ToString().IndexOf("Dialog") == -1)
+            Font f = graphics.Font;
+            if (!f.ToString().Contains("dialog") && !f.ToString().Contains("Dialog"))
             {
-                //Assert.AreEqual("java.awt.Font[family=Arial,name=Arial,style=plain,size=10]", f.ToString());
-                Assert.AreEqual("[Font: Name=Arial, Size=10, Units=3, GdiCharSet=1, GdiVerticalFont=False]", f.ToString());
+                //ClassicAssert.AreEqual("java.awt.Font[family=Arial,name=Arial,style=plain,size=10]", f.ToString());
+                //ClassicAssert.AreEqual("[Font: Name=Arial, Size=10, Units=3, GdiCharSet=1, GdiVerticalFont=False]", f.ToString());
+                ClassicAssert.AreEqual("Arial", f.Family.Name);
+                ClassicAssert.AreEqual("Arial", f.Name);
+                ClassicAssert.AreEqual(10, f.Size);
+                ClassicAssert.AreEqual(FontStyle.Regular, f.FontMetrics.Description.Style);
             }
         }
-        */
 
-        //[Test]
-        //public void TestGetFontMetrics()
-        //{
-        //    Font f = graphics.Font;
-        //    if (f.ToString().IndexOf("dialog") != -1 || f.ToString().IndexOf("Dialog") != -1)
-        //        return;
+        [Test]
+        public void TestGetFontMetrics()
+        {
+            Font f = graphics.Font;
+            if (f.ToString().Contains("dialog") || f.ToString().Contains("Dialog"))
+                return;
 
-        //    Assert.AreEqual(7, TextRenderer.MeasureText("X", f).Width);
-        //    Assert.AreEqual("Arial", f.FontFamily.Name);
-        //    Assert.AreEqual(10, f.Size);
-        //    //Assert.AreEqual("java.awt.Font[family=Arial,name=Arial,style=plain,size=10]", fontMetrics.GetFont().ToString());
-        //}
+            ClassicAssert.AreEqual(7, TextMeasurer.MeasureSize("X", new TextOptions(f)).Width);
+            ClassicAssert.AreEqual("Arial", f.Family.Name);
+            ClassicAssert.AreEqual(10, f.Size);
+            ClassicAssert.AreEqual(FontStyle.Regular, f.FontMetrics.Description.Style);
+            //ClassicAssert.AreEqual("java.awt.Font[family=Arial,name=Arial,style=plain,size=10]", fontMetrics.GetFont().ToString());
+        }
 
-        /* TODO-Fonts:
         [Test]
         public void TestSetFont()
         {
-            System.Drawing.Font f = new System.Drawing.Font("Helvetica", 12,FontStyle.Regular);
+            FontCollection fonts = new FontCollection();
+            var fi = POIDataSamples.GetSpreadSheetInstance().GetFileInfo("Helvetica.ttf");
+            SixLabors.Fonts.FontFamily font1 = fonts.Add(fi.FullName);
+            Font f = new Font(font1, 12, FontStyle.Regular);
             graphics.SetFont(f);
-            Assert.AreEqual(f, graphics.Font);
+            ClassicAssert.AreEqual(f, graphics.Font);
         }
-*/
+
         [Test]
         public void TestSetColor()
         {
             graphics.SetColor(Color.Red);
-            Assert.AreEqual(Color.Red, graphics.Color);
+            ClassicAssert.AreEqual(Color.Red, graphics.Color);
         }
 
         [Test]
@@ -110,11 +116,11 @@ namespace TestCases.HSSF.UserModel
         {
             graphics.FillRect(10, 10, 20, 20);
             HSSFSimpleShape s = (HSSFSimpleShape)escherGroupA.Children[0];
-            Assert.AreEqual(HSSFSimpleShape.OBJECT_TYPE_RECTANGLE, s.ShapeType);
-            Assert.AreEqual(10, s.Anchor.Dx1);
-            Assert.AreEqual(10, s.Anchor.Dy1);
-            Assert.AreEqual(30, s.Anchor.Dy2);
-            Assert.AreEqual(30, s.Anchor.Dx2);
+            ClassicAssert.AreEqual(HSSFSimpleShape.OBJECT_TYPE_RECTANGLE, s.ShapeType);
+            ClassicAssert.AreEqual(10, s.Anchor.Dx1);
+            ClassicAssert.AreEqual(10, s.Anchor.Dy1);
+            ClassicAssert.AreEqual(30, s.Anchor.Dy2);
+            ClassicAssert.AreEqual(30, s.Anchor.Dx2);
         }
 
         [Test]
@@ -122,7 +128,7 @@ namespace TestCases.HSSF.UserModel
         {
             graphics.DrawString("This is a Test", 10, 10);
             HSSFTextbox t = (HSSFTextbox)escherGroupA.Children[0];
-            Assert.AreEqual("This is a Test", t.String.String);
+            ClassicAssert.AreEqual("This is a Test", t.String.String);
         }
 
         [Test]
@@ -141,37 +147,37 @@ namespace TestCases.HSSF.UserModel
 
             patriarch = (HSSFPatriarch)s.DrawingPatriarch;
 
-            Assert.IsNotNull(patriarch);
-            Assert.AreEqual(10, patriarch.X1);
-            Assert.AreEqual(20, patriarch.Y1);
-            Assert.AreEqual(30, patriarch.X2);
-            Assert.AreEqual(40, patriarch.Y2);
+            ClassicAssert.IsNotNull(patriarch);
+            ClassicAssert.AreEqual(10, patriarch.X1);
+            ClassicAssert.AreEqual(20, patriarch.Y1);
+            ClassicAssert.AreEqual(30, patriarch.X2);
+            ClassicAssert.AreEqual(40, patriarch.Y2);
 
             // Check the two groups too
-            Assert.AreEqual(2, patriarch.CountOfAllChildren);
-            Assert.IsTrue(patriarch.Children[0] is HSSFShapeGroup);
-            Assert.IsTrue(patriarch.Children[1] is HSSFShapeGroup);
+            ClassicAssert.AreEqual(2, patriarch.CountOfAllChildren);
+            ClassicAssert.IsTrue(patriarch.Children[0] is HSSFShapeGroup);
+            ClassicAssert.IsTrue(patriarch.Children[1] is HSSFShapeGroup);
 
             s1 = (HSSFShapeGroup)patriarch.Children[0];
             s2 = (HSSFShapeGroup)patriarch.Children[1];
 
-            Assert.AreEqual(0, s1.X1);
-            Assert.AreEqual(0, s1.Y1);
-            Assert.AreEqual(1023, s1.X2);
-            Assert.AreEqual(255, s1.Y2);
-            Assert.AreEqual(0, s2.X1);
-            Assert.AreEqual(0, s2.Y1);
-            Assert.AreEqual(1023, s2.X2);
-            Assert.AreEqual(255, s2.Y2);
+            ClassicAssert.AreEqual(0, s1.X1);
+            ClassicAssert.AreEqual(0, s1.Y1);
+            ClassicAssert.AreEqual(1023, s1.X2);
+            ClassicAssert.AreEqual(255, s1.Y2);
+            ClassicAssert.AreEqual(0, s2.X1);
+            ClassicAssert.AreEqual(0, s2.Y1);
+            ClassicAssert.AreEqual(1023, s2.X2);
+            ClassicAssert.AreEqual(255, s2.Y2);
 
-            Assert.AreEqual(0, s1.Anchor.Dx1);
-            Assert.AreEqual(0, s1.Anchor.Dy1);
-            Assert.AreEqual(1022, s1.Anchor.Dx2);
-            Assert.AreEqual(255, s1.Anchor.Dy2);
-            Assert.AreEqual(20, s2.Anchor.Dx1);
-            Assert.AreEqual(30, s2.Anchor.Dy1);
-            Assert.AreEqual(500, s2.Anchor.Dx2);
-            Assert.AreEqual(200, s2.Anchor.Dy2);
+            ClassicAssert.AreEqual(0, s1.Anchor.Dx1);
+            ClassicAssert.AreEqual(0, s1.Anchor.Dy1);
+            ClassicAssert.AreEqual(1022, s1.Anchor.Dx2);
+            ClassicAssert.AreEqual(255, s1.Anchor.Dy2);
+            ClassicAssert.AreEqual(20, s2.Anchor.Dx1);
+            ClassicAssert.AreEqual(30, s2.Anchor.Dy1);
+            ClassicAssert.AreEqual(500, s2.Anchor.Dx2);
+            ClassicAssert.AreEqual(200, s2.Anchor.Dy2);
 
 
             // Write and re-load once more, to Check that's ok
@@ -181,37 +187,37 @@ namespace TestCases.HSSF.UserModel
             s = (HSSFSheet)workbook.GetSheetAt(0);
             patriarch = (HSSFPatriarch)s.DrawingPatriarch;
 
-            Assert.IsNotNull(patriarch);
-            Assert.AreEqual(10, patriarch.X1);
-            Assert.AreEqual(20, patriarch.Y1);
-            Assert.AreEqual(30, patriarch.X2);
-            Assert.AreEqual(40, patriarch.Y2);
+            ClassicAssert.IsNotNull(patriarch);
+            ClassicAssert.AreEqual(10, patriarch.X1);
+            ClassicAssert.AreEqual(20, patriarch.Y1);
+            ClassicAssert.AreEqual(30, patriarch.X2);
+            ClassicAssert.AreEqual(40, patriarch.Y2);
 
             // Check the two groups too
-            Assert.AreEqual(2, patriarch.CountOfAllChildren);
-            Assert.IsTrue(patriarch.Children[0] is HSSFShapeGroup);
-            Assert.IsTrue(patriarch.Children[1] is HSSFShapeGroup);
+            ClassicAssert.AreEqual(2, patriarch.CountOfAllChildren);
+            ClassicAssert.IsTrue(patriarch.Children[0] is HSSFShapeGroup);
+            ClassicAssert.IsTrue(patriarch.Children[1] is HSSFShapeGroup);
 
             s1 = (HSSFShapeGroup)patriarch.Children[0];
             s2 = (HSSFShapeGroup)patriarch.Children[1];
 
-            Assert.AreEqual(0, s1.X1);
-            Assert.AreEqual(0, s1.Y1);
-            Assert.AreEqual(1023, s1.X2);
-            Assert.AreEqual(255, s1.Y2);
-            Assert.AreEqual(0, s2.X1);
-            Assert.AreEqual(0, s2.Y1);
-            Assert.AreEqual(1023, s2.X2);
-            Assert.AreEqual(255, s2.Y2);
+            ClassicAssert.AreEqual(0, s1.X1);
+            ClassicAssert.AreEqual(0, s1.Y1);
+            ClassicAssert.AreEqual(1023, s1.X2);
+            ClassicAssert.AreEqual(255, s1.Y2);
+            ClassicAssert.AreEqual(0, s2.X1);
+            ClassicAssert.AreEqual(0, s2.Y1);
+            ClassicAssert.AreEqual(1023, s2.X2);
+            ClassicAssert.AreEqual(255, s2.Y2);
 
-            Assert.AreEqual(0, s1.Anchor.Dx1);
-            Assert.AreEqual(0, s1.Anchor.Dy1);
-            Assert.AreEqual(1022, s1.Anchor.Dx2);
-            Assert.AreEqual(255, s1.Anchor.Dy2);
-            Assert.AreEqual(20, s2.Anchor.Dx1);
-            Assert.AreEqual(30, s2.Anchor.Dy1);
-            Assert.AreEqual(500, s2.Anchor.Dx2);
-            Assert.AreEqual(200, s2.Anchor.Dy2);
+            ClassicAssert.AreEqual(0, s1.Anchor.Dx1);
+            ClassicAssert.AreEqual(0, s1.Anchor.Dy1);
+            ClassicAssert.AreEqual(1022, s1.Anchor.Dx2);
+            ClassicAssert.AreEqual(255, s1.Anchor.Dy2);
+            ClassicAssert.AreEqual(20, s2.Anchor.Dx1);
+            ClassicAssert.AreEqual(30, s2.Anchor.Dy1);
+            ClassicAssert.AreEqual(500, s2.Anchor.Dx2);
+            ClassicAssert.AreEqual(200, s2.Anchor.Dy2);
 
             // Change the positions of the first groups,
             //  but not of their anchors
@@ -223,38 +229,38 @@ namespace TestCases.HSSF.UserModel
             s =(HSSFSheet)workbook.GetSheetAt(0);
             patriarch = (HSSFPatriarch)s.DrawingPatriarch;
 
-            Assert.IsNotNull(patriarch);
-            Assert.AreEqual(10, patriarch.X1);
-            Assert.AreEqual(20, patriarch.Y1);
-            Assert.AreEqual(30, patriarch.X2);
-            Assert.AreEqual(40, patriarch.Y2);
+            ClassicAssert.IsNotNull(patriarch);
+            ClassicAssert.AreEqual(10, patriarch.X1);
+            ClassicAssert.AreEqual(20, patriarch.Y1);
+            ClassicAssert.AreEqual(30, patriarch.X2);
+            ClassicAssert.AreEqual(40, patriarch.Y2);
 
             // Check the two groups too
-            Assert.AreEqual(2, patriarch.CountOfAllChildren);
-            Assert.AreEqual(2, patriarch.Children.Count);
-            Assert.IsTrue(patriarch.Children[0] is HSSFShapeGroup);
-            Assert.IsTrue(patriarch.Children[1] is HSSFShapeGroup);
+            ClassicAssert.AreEqual(2, patriarch.CountOfAllChildren);
+            ClassicAssert.AreEqual(2, patriarch.Children.Count);
+            ClassicAssert.IsTrue(patriarch.Children[0] is HSSFShapeGroup);
+            ClassicAssert.IsTrue(patriarch.Children[1] is HSSFShapeGroup);
 
             s1 = (HSSFShapeGroup)patriarch.Children[0];
             s2 = (HSSFShapeGroup)patriarch.Children[1];
 
-            Assert.AreEqual(2, s1.X1);
-            Assert.AreEqual(3, s1.Y1);
-            Assert.AreEqual(1021, s1.X2);
-            Assert.AreEqual(242, s1.Y2);
-            Assert.AreEqual(0, s2.X1);
-            Assert.AreEqual(0, s2.Y1);
-            Assert.AreEqual(1023, s2.X2);
-            Assert.AreEqual(255, s2.Y2);
+            ClassicAssert.AreEqual(2, s1.X1);
+            ClassicAssert.AreEqual(3, s1.Y1);
+            ClassicAssert.AreEqual(1021, s1.X2);
+            ClassicAssert.AreEqual(242, s1.Y2);
+            ClassicAssert.AreEqual(0, s2.X1);
+            ClassicAssert.AreEqual(0, s2.Y1);
+            ClassicAssert.AreEqual(1023, s2.X2);
+            ClassicAssert.AreEqual(255, s2.Y2);
 
-            Assert.AreEqual(0, s1.Anchor.Dx1);
-            Assert.AreEqual(0, s1.Anchor.Dy1);
-            Assert.AreEqual(1022, s1.Anchor.Dx2);
-            Assert.AreEqual(255, s1.Anchor.Dy2);
-            Assert.AreEqual(20, s2.Anchor.Dx1);
-            Assert.AreEqual(30, s2.Anchor.Dy1);
-            Assert.AreEqual(500, s2.Anchor.Dx2);
-            Assert.AreEqual(200, s2.Anchor.Dy2);
+            ClassicAssert.AreEqual(0, s1.Anchor.Dx1);
+            ClassicAssert.AreEqual(0, s1.Anchor.Dy1);
+            ClassicAssert.AreEqual(1022, s1.Anchor.Dx2);
+            ClassicAssert.AreEqual(255, s1.Anchor.Dy2);
+            ClassicAssert.AreEqual(20, s2.Anchor.Dx1);
+            ClassicAssert.AreEqual(30, s2.Anchor.Dy1);
+            ClassicAssert.AreEqual(500, s2.Anchor.Dx2);
+            ClassicAssert.AreEqual(200, s2.Anchor.Dy2);
 
 
             // Now Add some text to one group, and some more
@@ -266,7 +272,7 @@ namespace TestCases.HSSF.UserModel
                 s2.CreateTextbox(new HSSFChildAnchor(41, 42, 43, 44)) as HSSFTextbox;
             tbox2.String = (new HSSFRichTextString("This is text box 2"));
 
-            Assert.AreEqual(3, patriarch.Children.Count);
+            ClassicAssert.AreEqual(3, patriarch.Children.Count);
 
 
             baos = new MemoryStream();
@@ -276,22 +282,22 @@ namespace TestCases.HSSF.UserModel
 
             patriarch = (HSSFPatriarch)s.DrawingPatriarch;
 
-            Assert.IsNotNull(patriarch);
-            Assert.AreEqual(10, patriarch.X1);
-            Assert.AreEqual(20, patriarch.Y1);
-            Assert.AreEqual(30, patriarch.X2);
-            Assert.AreEqual(40, patriarch.Y2);
+            ClassicAssert.IsNotNull(patriarch);
+            ClassicAssert.AreEqual(10, patriarch.X1);
+            ClassicAssert.AreEqual(20, patriarch.Y1);
+            ClassicAssert.AreEqual(30, patriarch.X2);
+            ClassicAssert.AreEqual(40, patriarch.Y2);
 
             // Check the two groups and the text
             // Result of patriarch.countOfAllChildren() makes no sense: 
             // Returns 4 for 2 empty groups + 1 TextBox.
-            //Assert.AreEqual(3, patriarch.CountOfAllChildren);
-            Assert.AreEqual(3, patriarch.Children.Count);
+            //ClassicAssert.AreEqual(3, patriarch.CountOfAllChildren);
+            ClassicAssert.AreEqual(3, patriarch.Children.Count);
 
             // Should be two groups and a text
-            Assert.IsTrue(patriarch.Children[0] is HSSFShapeGroup);
-            Assert.IsTrue(patriarch.Children[1] is HSSFShapeGroup);
-            Assert.IsTrue(patriarch.Children[2] is HSSFTextbox);
+            ClassicAssert.IsTrue(patriarch.Children[0] is HSSFShapeGroup);
+            ClassicAssert.IsTrue(patriarch.Children[1] is HSSFShapeGroup);
+            ClassicAssert.IsTrue(patriarch.Children[2] is HSSFTextbox);
     
 
             s1 = (HSSFShapeGroup)patriarch.Children[0];
@@ -299,26 +305,26 @@ namespace TestCases.HSSF.UserModel
 
             s2 = (HSSFShapeGroup)patriarch.Children[1];
 
-            Assert.AreEqual(2, s1.X1);
-            Assert.AreEqual(3, s1.Y1);
-            Assert.AreEqual(1021, s1.X2);
-            Assert.AreEqual(242, s1.Y2);
-            Assert.AreEqual(0, s2.X1);
-            Assert.AreEqual(0, s2.Y1);
-            Assert.AreEqual(1023, s2.X2);
-            Assert.AreEqual(255, s2.Y2);
+            ClassicAssert.AreEqual(2, s1.X1);
+            ClassicAssert.AreEqual(3, s1.Y1);
+            ClassicAssert.AreEqual(1021, s1.X2);
+            ClassicAssert.AreEqual(242, s1.Y2);
+            ClassicAssert.AreEqual(0, s2.X1);
+            ClassicAssert.AreEqual(0, s2.Y1);
+            ClassicAssert.AreEqual(1023, s2.X2);
+            ClassicAssert.AreEqual(255, s2.Y2);
 
-            Assert.AreEqual(0, s1.Anchor.Dx1);
-            Assert.AreEqual(0, s1.Anchor.Dy1);
-            Assert.AreEqual(1022, s1.Anchor.Dx2);
-            Assert.AreEqual(255, s1.Anchor.Dy2);
-            Assert.AreEqual(20, s2.Anchor.Dx1);
-            Assert.AreEqual(30, s2.Anchor.Dy1);
-            Assert.AreEqual(500, s2.Anchor.Dx2);
-            Assert.AreEqual(200, s2.Anchor.Dy2);
+            ClassicAssert.AreEqual(0, s1.Anchor.Dx1);
+            ClassicAssert.AreEqual(0, s1.Anchor.Dy1);
+            ClassicAssert.AreEqual(1022, s1.Anchor.Dx2);
+            ClassicAssert.AreEqual(255, s1.Anchor.Dy2);
+            ClassicAssert.AreEqual(20, s2.Anchor.Dx1);
+            ClassicAssert.AreEqual(30, s2.Anchor.Dy1);
+            ClassicAssert.AreEqual(500, s2.Anchor.Dx2);
+            ClassicAssert.AreEqual(200, s2.Anchor.Dy2);
 
             // Not working just yet
-            //Assert.AreEqual("I am text box 1", tbox1.String.String);
+            //ClassicAssert.AreEqual("I am text box 1", tbox1.String.String);
         }
     }
 }

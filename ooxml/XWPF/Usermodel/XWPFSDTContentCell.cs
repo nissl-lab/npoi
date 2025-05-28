@@ -19,7 +19,8 @@ namespace NPOI.XWPF.UserModel
     using System;
     using System.Collections;
     using NPOI.OpenXmlFormats.Wordprocessing;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
     using System.IO;
     using System.Xml;
 
@@ -51,8 +52,9 @@ namespace NPOI.XWPF.UserModel
                 return;
             }
 
-            StringBuilder sb = new StringBuilder();
-            
+            using var sb = ZString.CreateStringBuilder();
+
+
 
             //keep track of the following,
             //and add "\n" only before the start of a body
@@ -146,7 +148,8 @@ namespace NPOI.XWPF.UserModel
             //}
             text = sb.ToString();
         }
-        private bool IsStartToken(XmlReader cursor, String string1)
+
+        private static bool IsStartToken(XmlReader cursor, String string1)
         {
             if (!cursor.IsStartElement())
             {

@@ -1,5 +1,5 @@
 ﻿using NPOI.Util;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using System.IO;
 using System.Threading;
 
@@ -17,7 +17,7 @@ namespace TestCases.Util
             FileInfo fileInfo = null;
             Assert.DoesNotThrow(() => fileInfo = TempFile.CreateTempFile("test", ".xls"));
 
-            Assert.IsTrue(fileInfo!=null && fileInfo.Exists);
+            ClassicAssert.IsTrue(fileInfo!=null && fileInfo.Exists);
 
             string tempDirPath = Path.GetDirectoryName(fileInfo.FullName);
 
@@ -33,17 +33,17 @@ namespace TestCases.Util
                 }
             }
 
-            Assert.IsFalse(Directory.Exists(tempDirPath));
+            ClassicAssert.IsFalse(Directory.Exists(tempDirPath));
 
             if(fileInfo!=null)
             {
                 fileInfo.Refresh();
-                Assert.IsFalse(fileInfo.Exists);
+                ClassicAssert.IsFalse(fileInfo.Exists);
             }
 
             FileInfo file = null;
             Assert.DoesNotThrow(() => file = TempFile.CreateTempFile("test2", ".xls"));
-            Assert.IsTrue(Directory.Exists(tempDirPath));
+            ClassicAssert.IsTrue(Directory.Exists(tempDirPath));
 
             if(file !=null && file.Exists)
                 file.Delete();
@@ -55,7 +55,7 @@ namespace TestCases.Util
             string path = "";
             Assert.DoesNotThrow(() => path = TempFile.GetTempFilePath("test", ".xls"));
 
-            Assert.IsTrue(!string.IsNullOrWhiteSpace(path));
+            ClassicAssert.IsTrue(!string.IsNullOrWhiteSpace(path));
 
             string tempDirPath = Path.GetDirectoryName(path);
 
@@ -71,10 +71,10 @@ namespace TestCases.Util
                 }
             }
 
-            Assert.IsFalse(Directory.Exists(tempDirPath));
+            ClassicAssert.IsFalse(Directory.Exists(tempDirPath));
 
             Assert.DoesNotThrow(() => TempFile.GetTempFilePath("test", ".xls"));
-            Assert.IsTrue(Directory.Exists(tempDirPath));
+            ClassicAssert.IsTrue(Directory.Exists(tempDirPath));
         }
     }
 }

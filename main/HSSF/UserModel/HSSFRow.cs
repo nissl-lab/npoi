@@ -167,7 +167,7 @@ namespace NPOI.HSSF.UserModel
                 throw new Exception("Negative cell indexes not allowed");
             }
             //if (column >= cells.Count || cell != cells[column])
-            if(!cells.ContainsKey(column)|| cell!=cells[column])
+            if(!cells.TryGetValue(column, out ICell value) || cell != value)
             {
                 throw new Exception("Specified cell is not from this row");
             }
@@ -400,12 +400,8 @@ namespace NPOI.HSSF.UserModel
             //    cells = new HSSFCell[newSize];
             //    Array.Copy(oldCells, 0, cells, 0, oldCells.Length);
             //}
-            if (cells.ContainsKey(column))
-            {
-                cells.Remove(column);
-            }
-            cells.Add(column, cell);
-            
+            cells[column] = cell;
+
             // fix up firstCol and lastCol indexes
             if (row.IsEmpty|| column < row.FirstCol)
             {
@@ -741,7 +737,7 @@ namespace NPOI.HSSF.UserModel
         /// Greater than zero
         /// This instance is greater than <paramref name="other"/>.
         /// </returns>
-        /// <exception cref="T:System.ArgumentException">
+        /// <exception cref="System.ArgumentException">
         /// 	<paramref name="other"/> is not the same type as this instance.
         /// </exception>
         public int CompareTo(HSSFRow other)
@@ -755,22 +751,21 @@ namespace NPOI.HSSF.UserModel
         }
 
         /// <summary>
-        /// Determines whether the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>.
+        /// Determines whether the specified <see cref="System.Object"/> is equal to the current <see cref="System.Object"/>.
         /// </summary>
-        /// <param name="obj">The <see cref="T:System.Object"/> to compare with the current <see cref="T:System.Object"/>.</param>
+        /// <param name="obj">The <see cref="System.Object"/> to compare with the current <see cref="System.Object"/>.</param>
         /// <returns>
-        /// true if the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>; otherwise, false.
+        /// true if the specified <see cref="System.Object"/> is equal to the current <see cref="System.Object"/>; otherwise, false.
         /// </returns>
-        /// <exception cref="T:System.NullReferenceException">
+        /// <exception cref="System.NullReferenceException">
         /// The <paramref name="obj"/> parameter is null.
         /// </exception>
         public override bool Equals(Object obj)
         {
-            if (!(obj is HSSFRow))
+            if (obj is not HSSFRow other)
             {
                 return false;
             }
-            HSSFRow other = (HSSFRow)obj;
 
             return (this.RowNum == other.RowNum) &&
                    (this.Sheet == other.Sheet);

@@ -26,7 +26,7 @@ namespace TestCases.HSSF.UserModel
     using NPOI.HSSF.Record.Aggregates;
     using NPOI.HSSF.UserModel;
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     /**
      * Designed to Check wither the records written actually make sense.
@@ -215,8 +215,8 @@ namespace TestCases.HSSF.UserModel
         private void CheckWorkbookRecords(InternalWorkbook workbook)
         {
             IList records = workbook.Records;
-            Assert.IsTrue(records[0] is BOFRecord);
-            Assert.IsTrue(records[records.Count - 1] is EOFRecord);
+            ClassicAssert.IsTrue(records[0] is BOFRecord);
+            ClassicAssert.IsTrue(records[records.Count - 1] is EOFRecord);
 
             CheckRecordOrder(records, workbookRecords);
             //        CheckRecordstogether(records, workbookRecords);
@@ -225,8 +225,8 @@ namespace TestCases.HSSF.UserModel
         private void CheckSheetRecords(InternalSheet sheet)
         {
             IList records = sheet.Records;
-            Assert.IsTrue(records[0] is BOFRecord);
-            Assert.IsTrue(records[records.Count - 1] is EOFRecord);
+            ClassicAssert.IsTrue(records[0] is BOFRecord);
+            ClassicAssert.IsTrue(records[records.Count - 1] is EOFRecord);
 
             CheckRecordOrder(records, sheetRecords);
             //        CheckRecordstogether(records, sheetRecords);

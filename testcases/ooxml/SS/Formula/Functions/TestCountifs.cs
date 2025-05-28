@@ -23,7 +23,7 @@ namespace TestCases.SS.Formula.Functions
     using NPOI.SS.Util;
     using NPOI.Util;
     using NPOI.XSSF;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using TestCases.HSSF;
 
     [TestFixture]
@@ -63,7 +63,7 @@ namespace TestCases.SS.Formula.Functions
             cellA1.SetCellFormula("COUNTIFS(B1:C1,1, D1:E1,2)");
             IFormulaEvaluator Evaluator = workbook.GetCreationHelper().CreateFormulaEvaluator();
             CellValue Evaluate = Evaluator.Evaluate(cellA1);
-            Assert.AreEqual(1.0d, Evaluate.NumberValue, 0.000000000000001);
+            ClassicAssert.AreEqual(1.0d, Evaluate.NumberValue, 0.000000000000001);
         }
 
         // issue#825
@@ -97,7 +97,7 @@ namespace TestCases.SS.Formula.Functions
             cellA1.SetCellFormula("COUNTIFS(B1:B3,2, C1:C3,2)");
             IFormulaEvaluator Evaluator = workbook.GetCreationHelper().CreateFormulaEvaluator();
             CellValue Evaluate = Evaluator.Evaluate(cellA1);
-            Assert.AreEqual(1.0d, Evaluate.NumberValue);
+            ClassicAssert.AreEqual(1.0d, Evaluate.NumberValue);
         }
 
         [Test]
@@ -110,15 +110,15 @@ namespace TestCases.SS.Formula.Functions
             cellA1.CellFormula = (/*setter*/"COUNTIFS()");
             IFormulaEvaluator Evaluator = workbook.GetCreationHelper().CreateFormulaEvaluator();
             CellValue Evaluate = Evaluator.Evaluate(cellA1);
-            Assert.AreEqual(15, Evaluate.ErrorValue);
+            ClassicAssert.AreEqual(15, Evaluate.ErrorValue);
             cellA1.CellFormula = (/*setter*/"COUNTIFS(A1:C1)");
             Evaluator = workbook.GetCreationHelper().CreateFormulaEvaluator();
             Evaluate = Evaluator.Evaluate(cellA1);
-            Assert.AreEqual(15, Evaluate.ErrorValue);
+            ClassicAssert.AreEqual(15, Evaluate.ErrorValue);
             cellA1.SetCellFormula("COUNTIFS(A1:C1,2,2)");
             Evaluator = workbook.GetCreationHelper().CreateFormulaEvaluator();
             Evaluate = Evaluator.Evaluate(cellA1);
-            Assert.AreEqual(15, Evaluate.ErrorValue);
+            ClassicAssert.AreEqual(15, Evaluate.ErrorValue);
         }
 
         [Test]
@@ -127,9 +127,9 @@ namespace TestCases.SS.Formula.Functions
             workbook = XSSFTestDataSamples.OpenSampleWorkbook("56822-Countifs.xlsx");
             IFormulaEvaluator evaluator = workbook.GetCreationHelper().CreateFormulaEvaluator();
             ICell cell = SheetUtil.GetCell(workbook.GetSheetAt(0), 0, 3);
-            Assert.IsNotNull(cell, "Test workbook missing cell D1");
+            ClassicAssert.IsNotNull(cell, "Test workbook missing cell D1");
             CellValue evaluate = evaluator.Evaluate(cell);
-            Assert.AreEqual(2.0d, evaluate.NumberValue, 0.00000000000001);
+            ClassicAssert.AreEqual(2.0d, evaluate.NumberValue, 0.00000000000001);
         }
     }
 

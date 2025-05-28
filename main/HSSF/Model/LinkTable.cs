@@ -88,7 +88,7 @@ namespace NPOI.HSSF.Model
             return ExternSheetRecord.Combine(esrs);
         }
 
-        private class CRNBlock
+        private sealed class CRNBlock
         {
 
             private readonly CRNCountRecord _countRecord;
@@ -111,7 +111,7 @@ namespace NPOI.HSSF.Model
             }
         }
 
-        private class ExternalBookBlock
+        private sealed class ExternalBookBlock
         {
             private readonly SupBookRecord _externalBookRecord;
             internal ExternalNameRecord[] _externalNameRecords;
@@ -124,8 +124,8 @@ namespace NPOI.HSSF.Model
             public ExternalBookBlock()
             {
                 _externalBookRecord = SupBookRecord.CreateAddInFunctions();
-                _externalNameRecords = Array.Empty<ExternalNameRecord>();
-                _crnBlocks = Array.Empty<CRNBlock>();
+                _externalNameRecords = [];
+                _crnBlocks = [];
             }
             public ExternalBookBlock(RecordStream rs)
             {
@@ -152,7 +152,7 @@ namespace NPOI.HSSF.Model
             public ExternalBookBlock(String url, String[] sheetNames)
             {
                 _externalBookRecord = SupBookRecord.CreateExternalReferences(url, sheetNames);
-                _crnBlocks = Array.Empty<CRNBlock>();
+                _crnBlocks = [];
             }
 
             /**
@@ -163,8 +163,8 @@ namespace NPOI.HSSF.Model
             public ExternalBookBlock(int numberOfSheets)
             {
                 _externalBookRecord = SupBookRecord.CreateInternalReferences((short)numberOfSheets);
-                _externalNameRecords = Array.Empty<ExternalNameRecord>();
-                _crnBlocks = Array.Empty<CRNBlock>();
+                _externalNameRecords = [];
+                _crnBlocks = [];
             }
 
             public int NumberOfNames
@@ -321,12 +321,8 @@ namespace NPOI.HSSF.Model
 
         public NameRecord GetSpecificBuiltinRecord(byte builtInCode, int sheetNumber)
         {
-
-            IEnumerator<NameRecord> iterator = _definedNames.GetEnumerator();
-            while (iterator.MoveNext())
+            foreach (var record in _definedNames)
             {
-                NameRecord record = iterator.Current;
-
                 //print areas are one based
                 if (record.BuiltInName == builtInCode && record.SheetNumber == sheetNumber)
                 {
@@ -498,9 +494,9 @@ namespace NPOI.HSSF.Model
             for (IEnumerator iterator = _workbookRecordList.GetEnumerator(); iterator.MoveNext(); supLinkIndex++)
             {
                 Record record = (Record)iterator.Current;
-                if (record is SupBookRecord)
+                if (record is SupBookRecord bookRecord)
                 {
-                    if (((SupBookRecord)record).IsAddInFunctions) break;
+                    if (bookRecord.IsAddInFunctions) break;
                 }
             }
             int numberOfNames = extBlock.NumberOfNames;

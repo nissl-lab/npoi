@@ -55,16 +55,16 @@ namespace NPOI.POIFS.FileSystem
          */
         public NDocumentOutputStream(DocumentEntry document)
         {
-            if (!(document is DocumentNode))
+            if (document is not DocumentNode node)
             {
                 throw new IOException("Cannot open internal document storage, " + document + " not a Document Node");
             }
             _document_size = 0;
             _closed = false;
 
-            _property = (DocumentProperty)((DocumentNode)document).Property;
+            _property = (DocumentProperty)node.Property;
 
-            _document = new NPOIFSDocument((DocumentNode)document);
+            _document = new NPOIFSDocument(node);
             _document.Free();
         }
 
@@ -76,7 +76,7 @@ namespace NPOI.POIFS.FileSystem
          */
         public NDocumentOutputStream(DirectoryEntry parent, String name)
         {
-            if (!(parent is DirectoryNode))
+            if (parent is not DirectoryNode)
             {
                 throw new IOException("Cannot open internal directory storage, " + parent + " not a Directory Node");
             }
@@ -84,7 +84,7 @@ namespace NPOI.POIFS.FileSystem
             _closed = false;
 
             // Have an empty one Created for now
-            DocumentEntry doc = parent.CreateDocument(name, new MemoryStream(Array.Empty<byte>()));
+            DocumentEntry doc = parent.CreateDocument(name, new MemoryStream([]));
             _property = (DocumentProperty)((DocumentNode)doc).Property;
             _document = new NPOIFSDocument((DocumentNode)doc);
         }

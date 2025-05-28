@@ -28,7 +28,7 @@ namespace TestCases.SS.Format
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     [TestFixture]
     public class TestCellFormat
@@ -58,7 +58,7 @@ namespace TestCases.SS.Format
             Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
             CellFormat fmt = CellFormat.GetInstance("0.00");
             CellFormatResult result = fmt.Apply(12.345);
-            Assert.AreEqual("12.35", result.Text);
+            ClassicAssert.AreEqual("12.35", result.Text);
         }
 
         [Test]
@@ -67,7 +67,7 @@ namespace TestCases.SS.Format
             Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
             CellFormat fmt = CellFormat.GetInstance("0.00");
             CellFormatResult result = fmt.Apply(-12.345);
-            Assert.AreEqual("-12.35", result.Text);
+            ClassicAssert.AreEqual("-12.35", result.Text);
         }
 
         [Test]
@@ -76,7 +76,7 @@ namespace TestCases.SS.Format
             Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
             CellFormat fmt = CellFormat.GetInstance("0.00");
             CellFormatResult result = fmt.Apply(0.0);
-            Assert.AreEqual("0.00", result.Text);
+            ClassicAssert.AreEqual("0.00", result.Text);
         }
 
         [Test]
@@ -85,7 +85,7 @@ namespace TestCases.SS.Format
             Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
             CellFormat fmt = CellFormat.GetInstance("0.00;-0.00");
             CellFormatResult result = fmt.Apply(12.345);
-            Assert.AreEqual("12.35", result.Text);
+            ClassicAssert.AreEqual("12.35", result.Text);
         }
 
         [Test]
@@ -94,7 +94,7 @@ namespace TestCases.SS.Format
             Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
             CellFormat fmt = CellFormat.GetInstance("0.00;-0.00");
             CellFormatResult result = fmt.Apply(-12.345);
-            Assert.AreEqual("-12.35", result.Text);
+            ClassicAssert.AreEqual("-12.35", result.Text);
         }
 
         [Test]
@@ -103,7 +103,7 @@ namespace TestCases.SS.Format
             Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
             CellFormat fmt = CellFormat.GetInstance("0.00;(0.00)");
             CellFormatResult result = fmt.Apply(-12.345);
-            Assert.AreEqual("(12.35)", result.Text);
+            ClassicAssert.AreEqual("(12.35)", result.Text);
         }
 
         [Test]
@@ -112,7 +112,7 @@ namespace TestCases.SS.Format
             Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
             CellFormat fmt = CellFormat.GetInstance("0.00;-0.00");
             CellFormatResult result = fmt.Apply(0.0);
-            Assert.AreEqual("0.00", result.Text);
+            ClassicAssert.AreEqual("0.00", result.Text);
         }
 
         [Test]
@@ -121,10 +121,10 @@ namespace TestCases.SS.Format
             Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
             CellFormat fmt = CellFormat.GetInstance("0.00;-0.00;-");
 
-            Assert.AreEqual("12.35", fmt.Apply(12.345).Text);
-            Assert.AreEqual("-12.35", fmt.Apply(-12.345).Text);
-            Assert.AreEqual("-", fmt.Apply(0.0).Text);
-            Assert.AreEqual("abc", fmt.Apply("abc").Text);
+            ClassicAssert.AreEqual("12.35", fmt.Apply(12.345).Text);
+            ClassicAssert.AreEqual("-12.35", fmt.Apply(-12.345).Text);
+            ClassicAssert.AreEqual("-", fmt.Apply(0.0).Text);
+            ClassicAssert.AreEqual("abc", fmt.Apply("abc").Text);
         }
 
         [Test]
@@ -133,10 +133,10 @@ namespace TestCases.SS.Format
             Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
             CellFormat fmt = CellFormat.GetInstance("0.00;-0.00;-; @ ");
 
-            Assert.AreEqual("12.35", fmt.Apply(12.345).Text);
-            Assert.AreEqual("-12.35", fmt.Apply(-12.345).Text);
-            Assert.AreEqual("-", fmt.Apply(0.0).Text);
-            Assert.AreEqual(" abc ", fmt.Apply("abc").Text);
+            ClassicAssert.AreEqual("12.35", fmt.Apply(12.345).Text);
+            ClassicAssert.AreEqual("-12.35", fmt.Apply(-12.345).Text);
+            ClassicAssert.AreEqual("-", fmt.Apply(0.0).Text);
+            ClassicAssert.AreEqual(" abc ", fmt.Apply("abc").Text);
         }
 
         [Test]
@@ -158,26 +158,26 @@ namespace TestCases.SS.Format
 
             // case Cell.CELL_TYPE_BLANK
             CellFormatResult result0 = cf.Apply(cell0);
-            Assert.AreEqual(string.Empty, result0.Text);
+            ClassicAssert.AreEqual(string.Empty, result0.Text);
 
             // case Cell.CELL_TYPE_BOOLEAN
             cell1.SetCellValue(true);
             CellFormatResult result1 = cf.Apply(cell1);
-            Assert.AreEqual("TRUE", result1.Text);
+            ClassicAssert.AreEqual("TRUE", result1.Text);
 
             // case Cell.CELL_TYPE_NUMERIC
             cell2.SetCellValue(1.23);
             CellFormatResult result2 = cf.Apply(cell2);
-            Assert.AreEqual("1.23", result2.Text);
+            ClassicAssert.AreEqual("1.23", result2.Text);
 
             cell3.SetCellValue(123.0);
             CellFormatResult result3 = cf.Apply(cell3);
-            Assert.AreEqual("123", result3.Text);
+            ClassicAssert.AreEqual("123", result3.Text);
 
             // case Cell.CELL_TYPE_STRING
             cell4.SetCellValue("abc");
             CellFormatResult result4 = cf.Apply(cell4);
-            Assert.AreEqual("abc", result4.Text);
+            ClassicAssert.AreEqual("abc", result4.Text);
 
             wb.Close();
         }
@@ -201,26 +201,26 @@ namespace TestCases.SS.Format
 
             // case Cell.CELL_TYPE_BLANK
             CellFormatResult result0 = cf.Apply(cell0);
-            Assert.AreEqual(string.Empty, result0.Text);
+            ClassicAssert.AreEqual(string.Empty, result0.Text);
 
             // case Cell.CELL_TYPE_BOOLEAN
             cell1.SetCellValue(true);
             CellFormatResult result1 = cf.Apply(cell1);
-            Assert.AreEqual("TRUE", result1.Text);
+            ClassicAssert.AreEqual("TRUE", result1.Text);
 
             // case Cell.CELL_TYPE_NUMERIC
             cell2.SetCellValue(1.23);
             CellFormatResult result2 = cf.Apply(cell2);
-            Assert.AreEqual("1.23", result2.Text);
+            ClassicAssert.AreEqual("1.23", result2.Text);
 
             cell3.SetCellValue(123.0);
             CellFormatResult result3 = cf.Apply(cell3);
-            Assert.AreEqual("123", result3.Text);
+            ClassicAssert.AreEqual("123", result3.Text);
 
             // case Cell.CELL_TYPE_STRING
             cell4.SetCellValue("abc");
             CellFormatResult result4 = cf.Apply(cell4);
-            Assert.AreEqual("abc", result4.Text);
+            ClassicAssert.AreEqual("abc", result4.Text);
 
             wb.Close();
         }
@@ -241,11 +241,11 @@ namespace TestCases.SS.Format
 
             cell0.SetCellValue(10);
             CellFormatResult result0 = cf.Apply(cell0);
-            Assert.AreEqual("10/01/1900", result0.Text);
+            ClassicAssert.AreEqual("10/01/1900", result0.Text);
 
             cell1.SetCellValue(-1);
             CellFormatResult result1 = cf.Apply(cell1);
-            Assert.AreEqual(_255_POUND_SIGNS, result1.Text);
+            ClassicAssert.AreEqual(_255_POUND_SIGNS, result1.Text);
 
             wb.Close();
         }
@@ -263,7 +263,7 @@ namespace TestCases.SS.Format
 
             cell.SetCellValue(DateUtil.ConvertTime("03:04:05"));
             CellFormatResult result = cf.Apply(cell);
-            Assert.AreEqual("03:04", result.Text);
+            ClassicAssert.AreEqual("03:04", result.Text);
 
             wb.Close();
         }
@@ -284,11 +284,11 @@ namespace TestCases.SS.Format
 
             cell0.SetCellValue(10);
             CellFormatResult result0 = cf.Apply(cell0);
-            Assert.AreEqual("10/01/1900", result0.Text);
+            ClassicAssert.AreEqual("10/01/1900", result0.Text);
 
             cell1.SetCellValue(-1);
             CellFormatResult result1 = cf.Apply(cell1);
-            Assert.AreEqual("(1)", result1.Text);
+            ClassicAssert.AreEqual("(1)", result1.Text);
 
             wb.Close();
         }
@@ -307,19 +307,19 @@ namespace TestCases.SS.Format
             CellFormat cf = CellFormat.GetInstance("[>=100]0.00");
 
             cell.SetCellValue(100);
-            Assert.AreEqual("100.00", cf.Apply(cell).Text);
+            ClassicAssert.AreEqual("100.00", cf.Apply(cell).Text);
 
             cell.SetCellValue(10);
-            Assert.AreEqual("10", cf.Apply(cell).Text);
+            ClassicAssert.AreEqual("10", cf.Apply(cell).Text);
 
             cell.SetCellValue(0.123456789012345);
-            Assert.AreEqual("0.123456789", cf.Apply(cell).Text);
+            ClassicAssert.AreEqual("0.123456789", cf.Apply(cell).Text);
 
             cell.SetCellValue(0);
-            Assert.AreEqual("0", cf.Apply(cell).Text);
+            ClassicAssert.AreEqual("0", cf.Apply(cell).Text);
 
             cell.SetCellValue("abc");
-            Assert.AreEqual("abc", cf.Apply(cell).Text);
+            ClassicAssert.AreEqual("abc", cf.Apply(cell).Text);
 
             wb.Close();
         }
@@ -338,25 +338,25 @@ namespace TestCases.SS.Format
             CellFormat cf = CellFormat.GetInstance("[>=100]0.00;0.000");
 
             cell.SetCellValue(100);
-            Assert.AreEqual("100.00", cf.Apply(cell).Text);
+            ClassicAssert.AreEqual("100.00", cf.Apply(cell).Text);
 
             cell.SetCellValue(10);
-            Assert.AreEqual("10.000", cf.Apply(cell).Text);
+            ClassicAssert.AreEqual("10.000", cf.Apply(cell).Text);
 
             cell.SetCellValue(0.123456789012345);
-            Assert.AreEqual("0.123", cf.Apply(cell).Text);
+            ClassicAssert.AreEqual("0.123", cf.Apply(cell).Text);
 
             cell.SetCellValue(0);
-            Assert.AreEqual("0.000", cf.Apply(cell).Text);
+            ClassicAssert.AreEqual("0.000", cf.Apply(cell).Text);
 
             cell.SetCellValue(-10);
-            Assert.AreEqual("-10.000", cf.Apply(cell).Text);
+            ClassicAssert.AreEqual("-10.000", cf.Apply(cell).Text);
 
             cell.SetCellValue("abc");
-            Assert.AreEqual("abc", cf.Apply(cell).Text);
+            ClassicAssert.AreEqual("abc", cf.Apply(cell).Text);
 
             cell.SetCellValue("TRUE");
-            Assert.AreEqual("TRUE", cf.Apply(cell).Text);
+            ClassicAssert.AreEqual("TRUE", cf.Apply(cell).Text);
 
             wb.Close();
         }
@@ -375,22 +375,22 @@ namespace TestCases.SS.Format
             CellFormat cf = CellFormat.GetInstance("[>=100]0.00;[>=10]0.000");
 
             cell.SetCellValue(100);
-            Assert.AreEqual("100.00", cf.Apply(cell).Text);
+            ClassicAssert.AreEqual("100.00", cf.Apply(cell).Text);
 
             cell.SetCellValue(10);
-            Assert.AreEqual("10.000", cf.Apply(cell).Text);
+            ClassicAssert.AreEqual("10.000", cf.Apply(cell).Text);
 
             cell.SetCellValue(0);
-            Assert.AreEqual(_255_POUND_SIGNS, cf.Apply(cell).Text);
+            ClassicAssert.AreEqual(_255_POUND_SIGNS, cf.Apply(cell).Text);
 
             cell.SetCellValue(-0.123456789012345);
-            Assert.AreEqual(_255_POUND_SIGNS, cf.Apply(cell).Text);
+            ClassicAssert.AreEqual(_255_POUND_SIGNS, cf.Apply(cell).Text);
 
             cell.SetCellValue(-10);
-            Assert.AreEqual(_255_POUND_SIGNS, cf.Apply(cell).Text);
+            ClassicAssert.AreEqual(_255_POUND_SIGNS, cf.Apply(cell).Text);
 
             cell.SetCellValue("abc");
-            Assert.AreEqual("abc", cf.Apply(cell).Text);
+            ClassicAssert.AreEqual("abc", cf.Apply(cell).Text);
 
             wb.Close();
         }
@@ -409,24 +409,24 @@ namespace TestCases.SS.Format
             CellFormat cf = CellFormat.GetInstance("[>=100]0.00;0.000;0.0000");
 
             cell.SetCellValue(100);
-            Assert.AreEqual("100.00", cf.Apply(cell).Text);
+            ClassicAssert.AreEqual("100.00", cf.Apply(cell).Text);
 
             cell.SetCellValue(10);
-            Assert.AreEqual("10.0000", cf.Apply(cell).Text);
+            ClassicAssert.AreEqual("10.0000", cf.Apply(cell).Text);
 
             cell.SetCellValue(0.123456789012345);
-            Assert.AreEqual("0.1235", cf.Apply(cell).Text);
+            ClassicAssert.AreEqual("0.1235", cf.Apply(cell).Text);
 
             cell.SetCellValue(0);
-            Assert.AreEqual("0.0000", cf.Apply(cell).Text);
+            ClassicAssert.AreEqual("0.0000", cf.Apply(cell).Text);
 
             // Second format part ('0.000') is used for negative numbers
             // so result does not have a minus sign
             cell.SetCellValue(-10);
-            Assert.AreEqual("10.000", cf.Apply(cell).Text);
+            ClassicAssert.AreEqual("10.000", cf.Apply(cell).Text);
 
             cell.SetCellValue("abc");
-            Assert.AreEqual("abc", cf.Apply(cell).Text);
+            ClassicAssert.AreEqual("abc", cf.Apply(cell).Text);
 
             wb.Close();
         }
@@ -445,19 +445,19 @@ namespace TestCases.SS.Format
             CellFormat cf = CellFormat.GetInstance("[>=100]0.00;[>=10]0.000;0.0000");
 
             cell.SetCellValue(100);
-            Assert.AreEqual("100.00", cf.Apply(cell).Text);
+            ClassicAssert.AreEqual("100.00", cf.Apply(cell).Text);
 
             cell.SetCellValue(10);
-            Assert.AreEqual("10.000", cf.Apply(cell).Text);
+            ClassicAssert.AreEqual("10.000", cf.Apply(cell).Text);
 
             cell.SetCellValue(0);
-            Assert.AreEqual("0.0000", cf.Apply(cell).Text);
+            ClassicAssert.AreEqual("0.0000", cf.Apply(cell).Text);
 
             cell.SetCellValue(-10);
-            Assert.AreEqual("-10.0000", cf.Apply(cell).Text);
+            ClassicAssert.AreEqual("-10.0000", cf.Apply(cell).Text);
 
             cell.SetCellValue("abc");
-            Assert.AreEqual("abc", cf.Apply(cell).Text);
+            ClassicAssert.AreEqual("abc", cf.Apply(cell).Text);
 
             wb.Close();
         }
@@ -476,19 +476,19 @@ namespace TestCases.SS.Format
             CellFormat cf = CellFormat.GetInstance("[>=100]0.00;[>=10]dd/mm/yyyy;0.0");
 
             cell.SetCellValue(100);
-            Assert.AreEqual("100.00", cf.Apply(cell).Text);
+            ClassicAssert.AreEqual("100.00", cf.Apply(cell).Text);
 
             cell.SetCellValue(10);
-            Assert.AreEqual("10/01/1900", cf.Apply(cell).Text);
+            ClassicAssert.AreEqual("10/01/1900", cf.Apply(cell).Text);
 
             cell.SetCellValue(0);
-            Assert.AreEqual("0.0", cf.Apply(cell).Text);
+            ClassicAssert.AreEqual("0.0", cf.Apply(cell).Text);
 
             cell.SetCellValue(-10);
-            Assert.AreEqual("-10.0", cf.Apply(cell).Text);
+            ClassicAssert.AreEqual("-10.0", cf.Apply(cell).Text);
 
             cell.SetCellValue("abc");
-            Assert.AreEqual("abc", cf.Apply(cell).Text);
+            ClassicAssert.AreEqual("abc", cf.Apply(cell).Text);
 
             wb.Close();
         }
@@ -507,19 +507,19 @@ namespace TestCases.SS.Format
             CellFormat cf = CellFormat.GetInstance("[>=100]0.00;General");
 
             cell.SetCellValue(100);
-            Assert.AreEqual("100.00", cf.Apply(cell).Text);
+            ClassicAssert.AreEqual("100.00", cf.Apply(cell).Text);
 
             cell.SetCellValue(10);
-            Assert.AreEqual("10", cf.Apply(cell).Text);
+            ClassicAssert.AreEqual("10", cf.Apply(cell).Text);
 
             cell.SetCellValue(0);
-            Assert.AreEqual("0", cf.Apply(cell).Text);
+            ClassicAssert.AreEqual("0", cf.Apply(cell).Text);
 
             cell.SetCellValue(-10);
-            Assert.AreEqual("-10", cf.Apply(cell).Text);
+            ClassicAssert.AreEqual("-10", cf.Apply(cell).Text);
 
             cell.SetCellValue("abc");
-            Assert.AreEqual("abc", cf.Apply(cell).Text);
+            ClassicAssert.AreEqual("abc", cf.Apply(cell).Text);
 
             wb.Close();
         }
@@ -538,19 +538,19 @@ namespace TestCases.SS.Format
             CellFormat cf = CellFormat.GetInstance("[>=100]0.00;[>=10]0.000;General");
 
             cell.SetCellValue(100);
-            Assert.AreEqual("100.00", cf.Apply(cell).Text);
+            ClassicAssert.AreEqual("100.00", cf.Apply(cell).Text);
 
             cell.SetCellValue(10);
-            Assert.AreEqual("10.000", cf.Apply(cell).Text);
+            ClassicAssert.AreEqual("10.000", cf.Apply(cell).Text);
 
             cell.SetCellValue(0);
-            Assert.AreEqual("0", cf.Apply(cell).Text);
+            ClassicAssert.AreEqual("0", cf.Apply(cell).Text);
 
             cell.SetCellValue(-10);
-            Assert.AreEqual("-10", cf.Apply(cell).Text);
+            ClassicAssert.AreEqual("-10", cf.Apply(cell).Text);
 
             cell.SetCellValue("abc");
-            Assert.AreEqual("abc", cf.Apply(cell).Text);
+            ClassicAssert.AreEqual("abc", cf.Apply(cell).Text);
 
             wb.Close();
         }
@@ -569,24 +569,24 @@ namespace TestCases.SS.Format
             CellFormat cf = CellFormat.GetInstance("[>=100]0.00;0.000;0.0000;~~@~~");
 
             cell.SetCellValue(100);
-            Assert.AreEqual("100.00", cf.Apply(cell).Text);
+            ClassicAssert.AreEqual("100.00", cf.Apply(cell).Text);
 
             cell.SetCellValue(10);
-            Assert.AreEqual("10.0000", cf.Apply(cell).Text);
+            ClassicAssert.AreEqual("10.0000", cf.Apply(cell).Text);
 
             cell.SetCellValue(0.123456789012345);
-            Assert.AreEqual("0.1235", cf.Apply(cell).Text);
+            ClassicAssert.AreEqual("0.1235", cf.Apply(cell).Text);
 
             cell.SetCellValue(0);
-            Assert.AreEqual("0.0000", cf.Apply(cell).Text);
+            ClassicAssert.AreEqual("0.0000", cf.Apply(cell).Text);
 
             // Second format part ('0.000') is used for negative numbers
             // so result does not have a minus sign
             cell.SetCellValue(-10);
-            Assert.AreEqual("10.000", cf.Apply(cell).Text);
+            ClassicAssert.AreEqual("10.000", cf.Apply(cell).Text);
 
             cell.SetCellValue("abc");
-            Assert.AreEqual("~~abc~~", cf.Apply(cell).Text);
+            ClassicAssert.AreEqual("~~abc~~", cf.Apply(cell).Text);
 
             wb.Close();
         }
@@ -605,25 +605,25 @@ namespace TestCases.SS.Format
             CellFormat cf = CellFormat.GetInstance("0.00;[>=100]0.000;0.0000;~~@~~");
 
             cell.SetCellValue(100);
-            Assert.AreEqual("100.00", cf.Apply(cell).Text);
+            ClassicAssert.AreEqual("100.00", cf.Apply(cell).Text);
 
             cell.SetCellValue(10);
-            Assert.AreEqual("10.00", cf.Apply(cell).Text);
+            ClassicAssert.AreEqual("10.00", cf.Apply(cell).Text);
 
             cell.SetCellValue(0.123456789012345);
-            Assert.AreEqual("0.12", cf.Apply(cell).Text);
+            ClassicAssert.AreEqual("0.12", cf.Apply(cell).Text);
 
             cell.SetCellValue(0);
-            Assert.AreEqual("0.0000", cf.Apply(cell).Text);
+            ClassicAssert.AreEqual("0.0000", cf.Apply(cell).Text);
 
             cell.SetCellValue(-10);
-            Assert.AreEqual("-10.0000", cf.Apply(cell).Text);
+            ClassicAssert.AreEqual("-10.0000", cf.Apply(cell).Text);
 
             cell.SetCellValue("abc");
-            Assert.AreEqual("~~abc~~", cf.Apply(cell).Text);
+            ClassicAssert.AreEqual("~~abc~~", cf.Apply(cell).Text);
 
             cell.SetCellValue(true);
-            Assert.AreEqual("~~TRUE~~", cf.Apply(cell).Text);
+            ClassicAssert.AreEqual("~~TRUE~~", cf.Apply(cell).Text);
 
             wb.Close();
         }
@@ -642,22 +642,22 @@ namespace TestCases.SS.Format
             CellFormat cf = CellFormat.GetInstance("[>=100]0.00;[>=10]0.000;0.0000;~~@~~");
 
             cell.SetCellValue(100);
-            Assert.AreEqual("100.00", cf.Apply(cell).Text);
+            ClassicAssert.AreEqual("100.00", cf.Apply(cell).Text);
 
             cell.SetCellValue(10);
-            Assert.AreEqual("10.000", cf.Apply(cell).Text);
+            ClassicAssert.AreEqual("10.000", cf.Apply(cell).Text);
 
             cell.SetCellValue(0);
-            Assert.AreEqual("0.0000", cf.Apply(cell).Text);
+            ClassicAssert.AreEqual("0.0000", cf.Apply(cell).Text);
 
             cell.SetCellValue(-10);
-            Assert.AreEqual("-10.0000", cf.Apply(cell).Text);
+            ClassicAssert.AreEqual("-10.0000", cf.Apply(cell).Text);
 
             cell.SetCellValue("abc");
-            Assert.AreEqual("~~abc~~", cf.Apply(cell).Text);
+            ClassicAssert.AreEqual("~~abc~~", cf.Apply(cell).Text);
 
             cell.SetCellValue(true);
-            Assert.AreEqual("~~TRUE~~", cf.Apply(cell).Text);
+            ClassicAssert.AreEqual("~~TRUE~~", cf.Apply(cell).Text);
 
             wb.Close();
         }
@@ -672,23 +672,23 @@ namespace TestCases.SS.Format
 
             CellFormat cf1 = CellFormat.GetInstance("0.000");
 
-            Assert.AreEqual("1.235", cf1.Apply(1.2345).Text);
-            Assert.AreEqual("-1.235", cf1.Apply(-1.2345).Text);
+            ClassicAssert.AreEqual("1.235", cf1.Apply(1.2345).Text);
+            ClassicAssert.AreEqual("-1.235", cf1.Apply(-1.2345).Text);
 
             CellFormat cf2 = CellFormat.GetInstance("0.000;(0.000)");
 
-            Assert.AreEqual("1.235", cf2.Apply(1.2345).Text);
-            Assert.AreEqual("(1.235)", cf2.Apply(-1.2345).Text);
+            ClassicAssert.AreEqual("1.235", cf2.Apply(1.2345).Text);
+            ClassicAssert.AreEqual("(1.235)", cf2.Apply(-1.2345).Text);
 
             CellFormat cf3 = CellFormat.GetInstance("[>1]0.000;0.0000");
 
-            Assert.AreEqual("1.235", cf3.Apply(1.2345).Text);
-            Assert.AreEqual("-1.2345", cf3.Apply(-1.2345).Text);
+            ClassicAssert.AreEqual("1.235", cf3.Apply(1.2345).Text);
+            ClassicAssert.AreEqual("-1.2345", cf3.Apply(-1.2345).Text);
 
             CellFormat cf4 = CellFormat.GetInstance("0.000;[>1]0.0000");
 
-            Assert.AreEqual("1.235", cf4.Apply(1.2345).Text);
-            Assert.AreEqual(_255_POUND_SIGNS, cf4.Apply(-1.2345).Text);
+            ClassicAssert.AreEqual("1.235", cf4.Apply(1.2345).Text);
+            ClassicAssert.AreEqual(_255_POUND_SIGNS, cf4.Apply(-1.2345).Text);
         }
 
         /*
@@ -700,7 +700,7 @@ namespace TestCases.SS.Format
             Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
             CellFormat cf1 = CellFormat.GetInstance("m/d/yyyy");
             DateTime date1 = new SimpleDateFormat("M/d/y").Parse("01/11/2012");
-            Assert.AreEqual("1/11/2012", cf1.Apply(date1).Text);
+            ClassicAssert.AreEqual("1/11/2012", cf1.Apply(date1).Text);
         }
 
         [Test]
@@ -717,13 +717,13 @@ namespace TestCases.SS.Format
             CellFormat cf = CellFormat.GetInstance("[<1]hh:mm:ss AM/PM;[>=1]dd/mm/yyyy hh:mm:ss AM/PM;General");
 
             cell.SetCellValue(0.5);
-            Assert.AreEqual("12:00:00 PM", cf.Apply(cell).Text);
+            ClassicAssert.AreEqual("12:00:00 PM", cf.Apply(cell).Text);
 
             cell.SetCellValue(1.5);
-            Assert.AreEqual("01/01/1900 12:00:00 PM", cf.Apply(cell).Text);
+            ClassicAssert.AreEqual("01/01/1900 12:00:00 PM", cf.Apply(cell).Text);
 
             cell.SetCellValue(-1);
-            Assert.AreEqual(_255_POUND_SIGNS, cf.Apply(cell).Text);
+            ClassicAssert.AreEqual(_255_POUND_SIGNS, cf.Apply(cell).Text);
 
             wb.Close();
         }
@@ -736,7 +736,7 @@ namespace TestCases.SS.Format
         {
             CellFormat cf = CellFormat.GetInstance("0.00");
 
-            Assert.AreEqual("abc", cf.Apply("abc").Text);
+            ClassicAssert.AreEqual("abc", cf.Apply("abc").Text);
         }
 
         /*
@@ -749,9 +749,9 @@ namespace TestCases.SS.Format
             CellFormat cf2 = CellFormat.GetInstance("General");
             CellFormat cf3 = CellFormat.GetInstance("@");
 
-            Assert.AreEqual("TRUE", cf1.Apply(true).Text);
-            Assert.AreEqual("FALSE", cf2.Apply(false).Text);
-            Assert.AreEqual("TRUE", cf3.Apply(true).Text);
+            ClassicAssert.AreEqual("TRUE", cf1.Apply(true).Text);
+            ClassicAssert.AreEqual("FALSE", cf2.Apply(false).Text);
+            ClassicAssert.AreEqual("TRUE", cf3.Apply(true).Text);
         }
         [Test]
         public void TestSimpleFractionFormat()
@@ -767,7 +767,7 @@ namespace TestCases.SS.Format
                 ICell cell = row.CreateCell(0);
                 cell.SetCellValue(123456.6);
                 //System.out.println(cf1.apply(cell).text);
-                Assert.AreEqual("123456 3/5", cf1.Apply(cell).Text);
+                ClassicAssert.AreEqual("123456 3/5", cf1.Apply(cell).Text);
             }
             finally
             {
@@ -798,35 +798,35 @@ namespace TestCases.SS.Format
 
             // For +ve numbers, should be Space + currency symbol + spaces + whole number with commas + space
             // (Except French, which is mostly reversed...)
-            Assert.AreEqual(" $   12 ", cfDft.Apply((12.33)).Text);
-            Assert.AreEqual(" $   12 ", cfDft.Apply((12.33)).Text);
-            Assert.AreEqual(" $   12 ", cfUS.Apply((12.33)).Text);
-            Assert.AreEqual(" " + pound + "   12 ", cfUK.Apply((12.33)).Text);
-            Assert.AreEqual(" 12   " + euro + " ", cfFR.Apply((12.33)).Text);
+            ClassicAssert.AreEqual(" $   12 ", cfDft.Apply((12.33)).Text);
+            ClassicAssert.AreEqual(" $   12 ", cfDft.Apply((12.33)).Text);
+            ClassicAssert.AreEqual(" $   12 ", cfUS.Apply((12.33)).Text);
+            ClassicAssert.AreEqual(" " + pound + "   12 ", cfUK.Apply((12.33)).Text);
+            ClassicAssert.AreEqual(" 12   " + euro + " ", cfFR.Apply((12.33)).Text);
 
-            Assert.AreEqual(" $   16,789 ", cfDft.Apply((16789.2)).Text);
-            Assert.AreEqual(" $   16,789 ", cfUS.Apply((16789.2)).Text);
-            Assert.AreEqual(" " + pound + "   16,789 ", cfUK.Apply((16789.2)).Text);
-            Assert.AreEqual(" 16,789   " + euro + " ", cfFR.Apply((16789.2)).Text);
+            ClassicAssert.AreEqual(" $   16,789 ", cfDft.Apply((16789.2)).Text);
+            ClassicAssert.AreEqual(" $   16,789 ", cfUS.Apply((16789.2)).Text);
+            ClassicAssert.AreEqual(" " + pound + "   16,789 ", cfUK.Apply((16789.2)).Text);
+            ClassicAssert.AreEqual(" 16,789   " + euro + " ", cfFR.Apply((16789.2)).Text);
 
             // For -ve numbers, gets a bit more complicated...
-            Assert.AreEqual("-$   12 ", cfDft.Apply((-12.33)).Text);
-            Assert.AreEqual(" $   -12 ", cfUS.Apply((-12.33)).Text);
-            Assert.AreEqual("-" + pound + "   12 ", cfUK.Apply((-12.33)).Text);
-            Assert.AreEqual("-12   " + euro + " ", cfFR.Apply((-12.33)).Text);
+            ClassicAssert.AreEqual("-$   12 ", cfDft.Apply((-12.33)).Text);
+            ClassicAssert.AreEqual(" $   -12 ", cfUS.Apply((-12.33)).Text);
+            ClassicAssert.AreEqual("-" + pound + "   12 ", cfUK.Apply((-12.33)).Text);
+            ClassicAssert.AreEqual("-12   " + euro + " ", cfFR.Apply((-12.33)).Text);
 
-            Assert.AreEqual("-$   16,789 ", cfDft.Apply((-16789.2)).Text);
-            Assert.AreEqual(" $   -16,789 ", cfUS.Apply((-16789.2)).Text);
-            Assert.AreEqual("-" + pound + "   16,789 ", cfUK.Apply((-16789.2)).Text);
-            Assert.AreEqual("-16,789   " + euro + " ", cfFR.Apply((-16789.2)).Text);
+            ClassicAssert.AreEqual("-$   16,789 ", cfDft.Apply((-16789.2)).Text);
+            ClassicAssert.AreEqual(" $   -16,789 ", cfUS.Apply((-16789.2)).Text);
+            ClassicAssert.AreEqual("-" + pound + "   16,789 ", cfUK.Apply((-16789.2)).Text);
+            ClassicAssert.AreEqual("-16,789   " + euro + " ", cfFR.Apply((-16789.2)).Text);
 
             // For zero, should be Space + currency symbol + spaces + Minus + spaces
-            Assert.AreEqual(" $   - ", cfDft.Apply((0)).Text);
+            ClassicAssert.AreEqual(" $   - ", cfDft.Apply((0)).Text);
             // TODO Fix the exception this incorrectly triggers
-            //Assert.AreEqual(" $   - ",  cfUS.Apply((0)).Text);
+            //ClassicAssert.AreEqual(" $   - ",  cfUS.Apply((0)).Text);
             // TODO Fix these to not have an incorrect bonus 0 on the end 
-            //Assert.AreEqual(" "+pound+"   -  ", cfUK.Apply((0)).Text);
-            //Assert.AreEqual(" -    "+euro+"  ", cfFR.Apply((0)).Text);
+            //ClassicAssert.AreEqual(" "+pound+"   -  ", cfUK.Apply((0)).Text);
+            //ClassicAssert.AreEqual(" -    "+euro+"  ", cfFR.Apply((0)).Text);
         }
 
         [Test]
@@ -835,21 +835,21 @@ namespace TestCases.SS.Format
             Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
             // verify a rather complex format found e.g. in http://wahl.land-oberoesterreich.gv.at/Downloads/bp10.xls
             CellFormatPart posPart = new CellFormatPart("[$-F400]h:mm:ss\\ AM/PM");
-            Assert.IsNotNull(posPart);
+            ClassicAssert.IsNotNull(posPart);
             DateTime baseTime = new DateTime(1970, 1, 1, 0, 0, 0);
             double exceldata = DateUtil.GetExcelDate(baseTime.AddMilliseconds(12345));
             //format part 'h', means hour, using a 12-hour clock from 1 to 12.(in excel and .net framework)
             //so the excepted value should be 12:00:12 AM
-            Assert.AreEqual("12:00:12 AM", posPart.Apply(baseTime.AddMilliseconds(12345)).Text);
+            ClassicAssert.AreEqual("12:00:12 AM", posPart.Apply(baseTime.AddMilliseconds(12345)).Text);
 
             CellFormatPart negPart = new CellFormatPart("[$-F40]h:mm:ss\\ AM/PM");
-            Assert.IsNotNull(negPart);
-            Assert.AreEqual("12:00:12 AM", posPart.Apply(baseTime.AddMilliseconds(12345)).Text);
-            //Assert.IsNotNull(new CellFormatPart("_-* \"\"??_-;_-@_-"));
+            ClassicAssert.IsNotNull(negPart);
+            ClassicAssert.AreEqual("12:00:12 AM", posPart.Apply(baseTime.AddMilliseconds(12345)).Text);
+            //ClassicAssert.IsNotNull(new CellFormatPart("_-* \"\"??_-;_-@_-"));
 
             CellFormat instance = CellFormat.GetInstance("[$-F400]h:mm:ss\\ AM/PM;[$-F40]h:mm:ss\\ AM/PM;_-* \"\"??_-;_-@_-");
-            Assert.IsNotNull(instance);
-            Assert.AreEqual("12:00:12 AM", instance.Apply(baseTime.AddMilliseconds(12345)).Text);
+            ClassicAssert.IsNotNull(instance);
+            ClassicAssert.AreEqual("12:00:12 AM", instance.Apply(baseTime.AddMilliseconds(12345)).Text);
         }
 
         [Test]
@@ -858,18 +858,18 @@ namespace TestCases.SS.Format
             Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
             // verify a rather complex format found e.g. in http://wahl.land-oberoesterreich.gv.at/Downloads/bp10.xls
             CellFormatPart posPart = new CellFormatPart("dd/mm/yyyy");
-            Assert.IsNotNull(posPart);
+            ClassicAssert.IsNotNull(posPart);
             DateTime baseTime = new DateTime(1970, 1, 1);
-            Assert.AreEqual("01/01/1970", posPart.Apply(baseTime.AddMilliseconds(12345)).Text);
+            ClassicAssert.AreEqual("01/01/1970", posPart.Apply(baseTime.AddMilliseconds(12345)).Text);
 
             CellFormatPart negPart = new CellFormatPart("dd/mm/yyyy");
-            Assert.IsNotNull(negPart);
-            Assert.AreEqual("01/01/1970", posPart.Apply(baseTime.AddMilliseconds(12345)).Text);
-            //Assert.IsNotNull(new CellFormatPart("_-* \"\"??_-;_-@_-"));
+            ClassicAssert.IsNotNull(negPart);
+            ClassicAssert.AreEqual("01/01/1970", posPart.Apply(baseTime.AddMilliseconds(12345)).Text);
+            //ClassicAssert.IsNotNull(new CellFormatPart("_-* \"\"??_-;_-@_-"));
 
             CellFormat instance = CellFormat.GetInstance("dd/mm/yyyy;dd/mm/yyyy;_-* \"\"??_-;_-@_-");
-            Assert.IsNotNull(instance);
-            Assert.AreEqual("01/01/1970", instance.Apply(baseTime.AddMilliseconds(12345)).Text);
+            ClassicAssert.IsNotNull(instance);
+            ClassicAssert.AreEqual("01/01/1970", instance.Apply(baseTime.AddMilliseconds(12345)).Text);
         }
     }
 }

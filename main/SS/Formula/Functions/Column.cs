@@ -32,13 +32,13 @@ namespace NPOI.SS.Formula.Functions
         {
             int rnum;
 
-            if (arg0 is AreaEval)
+            if (arg0 is AreaEval eval)
             {
-                rnum = ((AreaEval)arg0).FirstColumn;
+                rnum = eval.FirstColumn;
             }
-            else if (arg0 is RefEval)
+            else if (arg0 is RefEval refEval)
             {
-                rnum = ((RefEval)arg0).Column;
+                rnum = refEval.Column;
             }
             else
             {

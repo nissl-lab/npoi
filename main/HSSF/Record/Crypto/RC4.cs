@@ -18,7 +18,8 @@
 namespace NPOI.HSSF.Record.Crypto
 {
     using System;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
     using NPOI.Util;
 
     /**
@@ -28,7 +29,7 @@ namespace NPOI.HSSF.Record.Crypto
      *
      * @author Josh Micich
      */
-    internal class RC4
+    internal sealed class RC4
     {
 
         private int _i, _j;
@@ -86,11 +87,14 @@ namespace NPOI.HSSF.Record.Crypto
         }
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder();
+            using var sb = ZString.CreateStringBuilder();
 
-            sb.Append(GetType().Name).Append(" [");
-            sb.Append("i=").Append(_i);
-            sb.Append(" j=").Append(_j);
+            sb.Append(GetType().Name);
+            sb.Append(" [");
+            sb.Append("i=");
+            sb.Append(_i);
+            sb.Append(" j=");
+            sb.Append(_j);
             sb.Append("]");
             sb.Append("\n");
             sb.Append(HexDump.Dump(_s, 0, 0));

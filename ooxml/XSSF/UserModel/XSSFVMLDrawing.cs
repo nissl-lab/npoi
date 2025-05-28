@@ -193,21 +193,21 @@ namespace NPOI.XSSF.UserModel
                 for (int i = 0; i < _items.Count; i++)
                 {
                     object xc = _items[i];
-                    if (xc is XmlNode)
+                    if (xc is XmlNode node)
                     {
-                        sw.Write(((XmlNode)xc).OuterXml.Replace(" xmlns:v=\"urn:schemas-microsoft-com:vml\"", "").Replace(" xmlns:x=\"urn:schemas-microsoft-com:office:excel\"", "").Replace(" xmlns:o=\"urn:schemas-microsoft-com:office:office\"", "").Replace("&#xD;&#xA;", ""));
+                        sw.Write(node.OuterXml.Replace(" xmlns:v=\"urn:schemas-microsoft-com:vml\"", "").Replace(" xmlns:x=\"urn:schemas-microsoft-com:office:excel\"", "").Replace(" xmlns:o=\"urn:schemas-microsoft-com:office:office\"", "").Replace("&#xD;&#xA;", ""));
                     }
-                    else if (xc is CT_Shapetype)
+                    else if (xc is CT_Shapetype shapetype)
                     {
-                        ((CT_Shapetype)xc).Write(sw, "shapetype");
+                        shapetype.Write(sw, "shapetype");
                     }
-                    else if (xc is CT_ShapeLayout)
+                    else if (xc is CT_ShapeLayout layout)
                     {
-                        ((CT_ShapeLayout)xc).Write(sw, "shapelayout");               
+                        layout.Write(sw, "shapelayout");               
                     }
-                    else if (xc is CT_Shape)
+                    else if (xc is CT_Shape shape)
                     {
-                        ((CT_Shape)xc).Write(sw, "shape");
+                        shape.Write(sw, "shape");
                     }
                     else
                     {
@@ -292,9 +292,8 @@ namespace NPOI.XSSF.UserModel
         {
             foreach (object itm in _items)
             {
-                if (itm is CT_Shape)
+                if (itm is CT_Shape sh)
                 {
-                    CT_Shape sh = (CT_Shape)itm;
                     if (sh.sizeOfClientDataArray() > 0)
                     {
                         CT_ClientData cldata = sh.GetClientDataArray(0);

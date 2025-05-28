@@ -15,12 +15,14 @@
    limitations under the License.
 ==================================================================== */
 
+using System;
+
+using NPOI.SS.Formula.PTG;
+
+using Cysharp.Text;
+
 namespace NPOI.SS.Formula
 {
-
-    using NPOI.SS.Formula.PTG;
-    using System;
-    using System.Text;
     /**
      * @author Josh Micich
      */
@@ -210,7 +212,7 @@ namespace NPOI.SS.Formula
         }
         public override string ToString()
         {
-            StringBuilder sb = new StringBuilder();
+            using var sb = ZString.CreateStringBuilder();
 
             sb.Append(GetType().Name);
             sb.Append(" [");
@@ -539,7 +541,7 @@ namespace NPOI.SS.Formula
             return null;
         }
 
-        private Ptg AdjustPtgDueToSheetMove(Ptg ptg)
+        private Ref3DPtg AdjustPtgDueToSheetMove(Ptg ptg)
         {
             if (ptg is Ref3DPtg refPtg)
             {

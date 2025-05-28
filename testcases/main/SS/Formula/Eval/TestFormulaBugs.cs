@@ -20,7 +20,7 @@ namespace TestCases.SS.Formula.Eval
 
     using System;
     using System.IO;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
     using TestCases.HSSF;
@@ -51,15 +51,15 @@ namespace TestCases.SS.Formula.Eval
             ICell cell = row.GetCell(0);
 
             // this defInitely would have failed due to 27349
-            Assert.AreEqual("VLOOKUP(1,'DATA TABLE'!$A$8:'DATA TABLE'!$B$10,2)", cell
+            ClassicAssert.AreEqual("VLOOKUP(1,'DATA TABLE'!$A$8:'DATA TABLE'!$B$10,2)", cell
                     .CellFormula);
 
             // We might as well Evaluate the formula
             IFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
             CellValue cv = fe.Evaluate(cell);
 
-            Assert.AreEqual(CellType.Numeric, cv.CellType);
-            Assert.AreEqual(3.0, cv.NumberValue, 0.0);
+            ClassicAssert.AreEqual(CellType.Numeric, cv.CellType);
+            ClassicAssert.AreEqual(3.0, cv.NumberValue, 0.0);
         }
 
         /**
@@ -109,12 +109,12 @@ namespace TestCases.SS.Formula.Eval
             IFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
             CellValue cv;
             cv = fe.Evaluate(cell);
-            Assert.AreEqual(CellType.Numeric, cv.CellType);
-            Assert.AreEqual(1.0, cv.NumberValue, 0.0);
+            ClassicAssert.AreEqual(CellType.Numeric, cv.CellType);
+            ClassicAssert.AreEqual(1.0, cv.NumberValue, 0.0);
 
             cv = fe.Evaluate(row.GetCell(1));
-            Assert.AreEqual(CellType.Boolean, cv.CellType);
-            Assert.AreEqual(true, cv.BooleanValue);
+            ClassicAssert.AreEqual(CellType.Boolean, cv.CellType);
+            ClassicAssert.AreEqual(true, cv.BooleanValue);
         }
 
         /**
@@ -146,7 +146,7 @@ namespace TestCases.SS.Formula.Eval
                 throw new AssertionException("Identified bug 42448");
             }
 
-            Assert.AreEqual("SUMPRODUCT(A!C7:A!C67,B8:B68)/B69", cell.CellFormula);
+            ClassicAssert.AreEqual("SUMPRODUCT(A!C7:A!C67,B8:B68)/B69", cell.CellFormula);
 
             // might as well Evaluate the sucker...
 
@@ -165,8 +165,8 @@ namespace TestCases.SS.Formula.Eval
             IFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
             CellValue cv = fe.Evaluate(cell);
 
-            Assert.AreEqual(CellType.Numeric, cv.CellType);
-            Assert.AreEqual(expectedResult, cv.NumberValue, 0.0);
+            ClassicAssert.AreEqual(CellType.Numeric, cv.CellType);
+            ClassicAssert.AreEqual(expectedResult, cv.NumberValue, 0.0);
         }
 
         private static void AddCell(ISheet sheet, int rowIx, int colIx,
@@ -202,7 +202,7 @@ namespace TestCases.SS.Formula.Eval
             IFormulaEvaluator evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
             CellValue value = evaluator.Evaluate(cell);
 
-            Assert.AreEqual(expectedValue, value.NumberValue, 0.0001);
+            ClassicAssert.AreEqual(expectedValue, value.NumberValue, 0.0001);
         }
     }
 }

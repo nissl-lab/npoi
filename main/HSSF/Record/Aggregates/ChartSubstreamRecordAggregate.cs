@@ -68,7 +68,7 @@ namespace NPOI.HSSF.Record.Aggregates
             }
             _recs = temp;
             Record eof = rs.GetNext(); // no need to save EOF in field
-            if (!(eof is EOFRecord))
+            if (eof is not EOFRecord)
             {
                 throw new InvalidOperationException("Bad chart EOF");
             }
@@ -84,9 +84,9 @@ namespace NPOI.HSSF.Record.Aggregates
             for (int i = 0; i < _recs.Count; i++)
             {
                 RecordBase rb = _recs[i];
-                if (rb is RecordAggregate)
+                if (rb is RecordAggregate aggregate)
                 {
-                    ((RecordAggregate)rb).VisitContainedRecords(rv);
+                    aggregate.VisitContainedRecords(rv);
                 }
                 else
                 {

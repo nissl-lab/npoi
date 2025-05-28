@@ -274,7 +274,8 @@ namespace NPOI.HSSF.UserModel
                 SetPropertyValue(prop);
             }
         }
-        private String Trim(string value)
+
+        private static String Trim(string value)
         {
             int end = value.Length;
             int st = 0;
@@ -320,7 +321,7 @@ namespace NPOI.HSSF.UserModel
             get
             {
                 HSSFAnchor a = Anchor as HSSFAnchor;
-                return (a is HSSFClientAnchor) ? (HSSFClientAnchor) a : null;
+                return (a is HSSFClientAnchor clientAnchor) ? clientAnchor : null;
             }
         }
 

@@ -47,7 +47,7 @@ namespace NPOI.POIFS.Crypt.Agile
 
         protected internal AgileEncryptionVerifier(EncryptionDocument ed)
         {
-            IEnumerator<CT_KeyEncryptor> encList = ed.GetEncryption().keyEncryptors.keyEncryptor.GetEnumerator();
+            List<CT_KeyEncryptor>.Enumerator encList = ed.GetEncryption().keyEncryptors.keyEncryptor.GetEnumerator();
             CT_PasswordKeyEncryptor keyData;
             try
             {
@@ -170,7 +170,7 @@ namespace NPOI.POIFS.Crypt.Agile
         }
     }
 
-    internal class CertificateFactory
+    internal sealed class CertificateFactory
     {
         internal static CertificateFactory GetInstance(string v)
         {

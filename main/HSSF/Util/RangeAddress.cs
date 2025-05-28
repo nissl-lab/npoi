@@ -180,8 +180,7 @@ namespace NPOI.HSSF.Util
                     {
                         return 0;
                     }
-                    else
-                        return toX - fromX + 1;
+                    return toX - fromX + 1;
                 }
                 return 0;
             }
@@ -199,8 +198,7 @@ namespace NPOI.HSSF.Util
                     {
                         return 0;
                     }
-                    else
-                        return toY - fromY + 1;
+                    return toY - fromY + 1;
                 }
                 return 0;
             }
@@ -268,7 +266,7 @@ namespace NPOI.HSSF.Util
 
         }
 
-        private String[] ParseURL(String _url)
+        private static String[] ParseURL(String _url)
         {
             String[] result = new String[3];
             int index = _url.IndexOf(':');
@@ -391,7 +389,7 @@ namespace NPOI.HSSF.Util
             return result;
         }
 
-        private String Filter(String _range)
+        private static String Filter(String _range)
         {
             String res = "";
             for (int i = 0; i < _range.Length; i++)
@@ -405,7 +403,7 @@ namespace NPOI.HSSF.Util
             return res;
         }
 
-        private int GetFirstDigitPosition(String _value)
+        private static int GetFirstDigitPosition(String _value)
         {
             int result = WRONG_POS;
             if (_value != null && _value.Trim().Length == 0)
@@ -434,7 +432,7 @@ namespace NPOI.HSSF.Util
                 for (int i = _s.Length - 1; i >= 0; i--)
                 {
                     char ch = _s[i];
-                    int val = (int)(Char.GetNumericValue(ch) - Char.GetNumericValue('A') + 1);
+                    int val = (ch - 'A') + 1;
                     sum = sum + val * multiplier;
                     multiplier = multiplier * 26;
                 }
@@ -459,8 +457,7 @@ namespace NPOI.HSSF.Util
             return s;
         }
 
-        public String ReplaceString(String _source, String _oldPattern,
-        String _newPattern)
+        public String ReplaceString(String _source, String _oldPattern, String _newPattern)
         {
             StringBuilder res = new StringBuilder(_source);
             res = res.Replace(_oldPattern, _newPattern);

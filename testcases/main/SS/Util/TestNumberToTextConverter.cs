@@ -21,7 +21,7 @@ namespace TestCases.SS.Util
 
     using NPOI.SS.Util;
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     /**
      * Tests for {@link NumberToTextConverter}
@@ -127,12 +127,12 @@ namespace TestCases.SS.Util
         private void ConfirmNaN(long l, String excelRep)
         {
             double d = BitConverter.Int64BitsToDouble(l);
-            Assert.AreEqual("NaN", d.ToString());
-            //to make this assert work, please set the CurrentCulture above, too.  Assert.AreEqual("非数字", d.ToString());
+            ClassicAssert.AreEqual("NaN", d.ToString());
+            //to make this assert work, please set the CurrentCulture above, too.  ClassicAssert.AreEqual("非数字", d.ToString());
 
             String strExcel = NumberToTextConverter.RawDoubleBitsToText(l);
 
-            Assert.AreEqual(excelRep, strExcel);
+            ClassicAssert.AreEqual(excelRep, strExcel);
         }
 
         [Test]
@@ -148,7 +148,7 @@ namespace TestCases.SS.Util
                 // "0.060000000000000005"
                 throw new Exception("Should not use default JDK IEEE double rendering");
             }
-            Assert.AreEqual("0.06", actualText);
+            ClassicAssert.AreEqual("0.06", actualText);
         }
     }
 }

@@ -200,9 +200,9 @@ namespace NPOI.POIFS.Macros
                 // Check children
                 foreach (Entry child in dir)
                 {
-                    if (child is DirectoryNode)
+                    if (child is DirectoryNode node)
                     {
-                        FindMacros((DirectoryNode)child, modules);
+                        FindMacros(node, modules);
                     }
                 }
             }
@@ -218,7 +218,7 @@ namespace NPOI.POIFS.Macros
          * @throws IOException
          */
 
-        private static String ReadString(InputStream stream, int length, Encoding charset)
+        private static String ReadString(RLEDecompressingInputStream stream, int length, Encoding charset)
         {
             byte[] buffer = new byte[length];
             int count = stream.Read(buffer);
@@ -254,9 +254,8 @@ namespace NPOI.POIFS.Macros
             else
             {
                 // Decompress a previously found module and store the decompressed result into module.buf
-                InputStream stream = new RLEDecompressingInputStream(
-                        new MemoryStream(module.buf, moduleOffset, module.buf.Length - moduleOffset)
-                );
+                using MemoryStream memoryStream = new(module.buf, moduleOffset, module.buf.Length - moduleOffset);
+                using RLEDecompressingInputStream stream = new(memoryStream);
                 module.Read(stream);
                 stream.Close();
             }
@@ -287,7 +286,7 @@ namespace NPOI.POIFS.Macros
                 {
                     throw new IOException("tried to skip " + module.offset + " bytes, but actually skipped " + skippedBytes + " bytes");
                 }
-                InputStream stream = new RLEDecompressingInputStream(dis);
+                using RLEDecompressingInputStream stream = new(dis);
                 module.Read(stream);
                 stream.Close();
             }
@@ -299,7 +298,7 @@ namespace NPOI.POIFS.Macros
           * @throws IOException
           */
 
-        private static void TrySkip(InputStream in1, long n)
+        private static void TrySkip(RLEDecompressingInputStream in1, long n)
         {
             long skippedBytes = in1.Skip(n);
             if (skippedBytes != n)
@@ -347,10 +346,9 @@ namespace NPOI.POIFS.Macros
         {
             foreach (Entry entry in macroDir)
             {
-                if (!(entry is DocumentNode)) { continue; }
+                if (entry is not DocumentNode document) { continue; }
 
                 String name = entry.Name;
-                DocumentNode document = (DocumentNode)entry;
                 DocumentInputStream dis = new DocumentInputStream(document);
                 try
                 {
@@ -431,7 +429,7 @@ namespace NPOI.POIFS.Macros
             }
         }
 
-        private string ReadUnicodeString(RLEDecompressingInputStream in1, int unicodeNameRecordLength)
+        private static string ReadUnicodeString(RLEDecompressingInputStream in1, int unicodeNameRecordLength)
         {
             byte[] buffer = new byte[unicodeNameRecordLength];
             IOUtils.ReadFully(in1, buffer);

@@ -23,7 +23,8 @@ namespace NPOI.XSSF.UserModel
     using NPOI.SS.UserModel;
     using NPOI.OpenXmlFormats.Dml.Spreadsheet;
     using NPOI.OpenXmlFormats.Dml;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
     using NPOI.OpenXmlFormats.Spreadsheet;
     using NPOI.Util;
 
@@ -316,9 +317,9 @@ namespace NPOI.XSSF.UserModel
          * @param value the value of the bullet
          * @return appropriate prefix for an auto-numbering bullet
          */
-        private String GetBulletPrefix(ListAutoNumber scheme, int value)
+        private static String GetBulletPrefix(ListAutoNumber scheme, int value)
         {
-            StringBuilder out1 = new StringBuilder();
+            using var out1 = ZString.CreateStringBuilder();
 
             switch (scheme)
             {
@@ -386,7 +387,7 @@ namespace NPOI.XSSF.UserModel
         /**
          * Convert an integer to its alpha equivalent e.g. 1 = A, 2 = B, 27 = AA etc
          */
-        private String valueToAlpha(int value)
+        private static String valueToAlpha(int value)
         {
             String alpha = "";
             int modulo;
@@ -405,9 +406,9 @@ namespace NPOI.XSSF.UserModel
         /**
          * Convert an integer to its roman equivalent e.g. 1 = I, 9 = IX etc
          */
-        private String valueToRoman(int value)
+        private static String valueToRoman(int value)
         {
-            StringBuilder out1 = new StringBuilder();
+            using var out1 = ZString.CreateStringBuilder();
             for (int i = 0; value > 0 && i < _romanChars.Length; i++)
             {
                 while (_romanAlphaValues[i] <= value)

@@ -122,10 +122,8 @@ namespace NPOI.XSSF.UserModel
          */
         public void CloneStyleFrom(ICellStyle source)
         {
-            if (source is XSSFCellStyle)
+            if (source is XSSFCellStyle src)
             {
-                XSSFCellStyle src = (XSSFCellStyle)source;
-
                 // Is it on our Workbook?
                 if (src._stylesSource == _stylesSource)
                 {
@@ -1351,9 +1349,8 @@ namespace NPOI.XSSF.UserModel
          */
         public override bool Equals(Object o)
         {
-            if (o == null || !(o is XSSFCellStyle)) return false;
+            if (o == null || o is not XSSFCellStyle cf) return false;
 
-            XSSFCellStyle cf = (XSSFCellStyle)o;
             return _cellXf.ToString().Equals(cf.GetCoreXf().ToString());
         }
 

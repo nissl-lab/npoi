@@ -31,7 +31,7 @@ namespace NPOI.HSSF.Model
     class ParseNode
     {
 
-        public static ParseNode[] EMPTY_ARRAY = { };
+        public static ParseNode[] EMPTY_ARRAY = [];
         private readonly Ptg _token;
         private readonly ParseNode[] _children;
         private readonly bool _isIf;
@@ -151,9 +151,8 @@ namespace NPOI.HSSF.Model
 
         private static bool IsIf(Ptg token)
         {
-            if (token is FuncVarPtg)
+            if (token is FuncVarPtg func)
             {
-                FuncVarPtg func = (FuncVarPtg)token;
                 if (FunctionMetadataRegistry.FUNCTION_NAME_IF.Equals(func.Name))
                 {
                     return true;
@@ -175,7 +174,7 @@ namespace NPOI.HSSF.Model
             get { return _children; }
         }
 
-        private class TokenCollector
+        private sealed class TokenCollector
         {
 
             private readonly Ptg[] _ptgs;

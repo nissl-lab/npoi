@@ -17,7 +17,7 @@
 
 using TestCases.SS.UserModel;
 using System;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using NPOI.SS.UserModel;
 using NPOI.OpenXml4Net.OPC;
 using NPOI.HSSF.UserModel;
@@ -49,12 +49,12 @@ namespace TestCases.XSSF.UserModel
         public void TestLoadExisting()
         {
             XSSFWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook("WithMoreVariousData.xlsx");
-            Assert.AreEqual(3, workbook.NumberOfSheets);
+            ClassicAssert.AreEqual(3, workbook.NumberOfSheets);
 
             XSSFSheet sheet = (XSSFSheet)workbook.GetSheetAt(0);
 
             // Check the hyperlinks
-            Assert.AreEqual(4, sheet.NumHyperlinks);
+            ClassicAssert.AreEqual(4, sheet.NumHyperlinks);
             doTestHyperlinkContents(sheet);
         }
         [Test]
@@ -85,30 +85,30 @@ namespace TestCases.XSSF.UserModel
             workbook = XSSFTestDataSamples.WriteOutAndReadBack(workbook) as XSSFWorkbook;
             sheet = workbook.GetSheetAt(0) as XSSFSheet;
             PackageRelationshipCollection rels = sheet.GetPackagePart().Relationships;
-            Assert.AreEqual(urls.Length, rels.Size);
+            ClassicAssert.AreEqual(urls.Length, rels.Size);
             for (int i = 0; i < rels.Size; i++)
             {
                 PackageRelationship rel = rels.GetRelationship(i);
                 if (rel.TargetUri.IsAbsoluteUri&&rel.TargetUri.IsFile)
-                    Assert.AreEqual(urls[i].Replace("file:///","").Replace("/","\\"),rel.TargetUri.LocalPath);
+                    ClassicAssert.AreEqual(urls[i].Replace("file:///","").Replace("/","\\"),rel.TargetUri.LocalPath);
                 else
                     // there should be a relationship for each URL
-                    Assert.AreEqual(urls[i], rel.TargetUri.ToString());
+                    ClassicAssert.AreEqual(urls[i], rel.TargetUri.ToString());
             }
 
             // Bugzilla 53041: Hyperlink relations are duplicated when saving XSSF file
             workbook = XSSFTestDataSamples.WriteOutAndReadBack(workbook) as XSSFWorkbook;
             sheet = workbook.GetSheetAt(0) as XSSFSheet;
             rels = sheet.GetPackagePart().Relationships;
-            Assert.AreEqual(urls.Length, rels.Size);
+            ClassicAssert.AreEqual(urls.Length, rels.Size);
             for (int i = 0; i < rels.Size; i++)
             {
                 PackageRelationship rel = rels.GetRelationship(i);
                 if (rel.TargetUri.IsAbsoluteUri && rel.TargetUri.IsFile)
-                    Assert.AreEqual(urls[i].Replace("file:///", "").Replace("/", "\\"), rel.TargetUri.LocalPath);
+                    ClassicAssert.AreEqual(urls[i].Replace("file:///", "").Replace("/", "\\"), rel.TargetUri.LocalPath);
                 else
                     // there should be a relationship for each URL
-                    Assert.AreEqual(urls[i], rel.TargetUri.ToString());
+                    ClassicAssert.AreEqual(urls[i], rel.TargetUri.ToString());
             }
         }
         [Ignore("the Urls are valid")]
@@ -140,11 +140,11 @@ namespace TestCases.XSSF.UserModel
         {
             XSSFWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook("WithMoreVariousData.xlsx");
             ICreationHelper CreateHelper = workbook.GetCreationHelper();
-            Assert.AreEqual(3, workbook.NumberOfSheets);
+            ClassicAssert.AreEqual(3, workbook.NumberOfSheets);
             XSSFSheet sheet = (XSSFSheet)workbook.GetSheetAt(0);
 
             // Check hyperlinks
-            Assert.AreEqual(4, sheet.NumHyperlinks);
+            ClassicAssert.AreEqual(4, sheet.NumHyperlinks);
             doTestHyperlinkContents(sheet);
 
 
@@ -152,16 +152,16 @@ namespace TestCases.XSSF.UserModel
 
             // Load up again, check all links still there
             XSSFWorkbook wb2 = (XSSFWorkbook)XSSFTestDataSamples.WriteOutAndReadBack(workbook);
-            Assert.AreEqual(3, wb2.NumberOfSheets);
-            Assert.IsNotNull(wb2.GetSheetAt(0));
-            Assert.IsNotNull(wb2.GetSheetAt(1));
-            Assert.IsNotNull(wb2.GetSheetAt(2));
+            ClassicAssert.AreEqual(3, wb2.NumberOfSheets);
+            ClassicAssert.IsNotNull(wb2.GetSheetAt(0));
+            ClassicAssert.IsNotNull(wb2.GetSheetAt(1));
+            ClassicAssert.IsNotNull(wb2.GetSheetAt(2));
 
             sheet = (XSSFSheet)wb2.GetSheetAt(0);
 
 
             // Check hyperlinks again
-            Assert.AreEqual(4, sheet.NumHyperlinks);
+            ClassicAssert.AreEqual(4, sheet.NumHyperlinks);
             doTestHyperlinkContents(sheet);
 
 
@@ -174,35 +174,35 @@ namespace TestCases.XSSF.UserModel
             hyperlink.Label = "POI SS Link";
             r17c.Hyperlink=(hyperlink);
 
-            Assert.AreEqual(5, sheet.NumHyperlinks);
+            ClassicAssert.AreEqual(5, sheet.NumHyperlinks);
             doTestHyperlinkContents(sheet);
 
-            Assert.AreEqual(HyperlinkType.Url,
+            ClassicAssert.AreEqual(HyperlinkType.Url,
                     sheet.GetRow(17).GetCell(2).Hyperlink.Type);
-            Assert.AreEqual("POI SS Link",
+            ClassicAssert.AreEqual("POI SS Link",
                     sheet.GetRow(17).GetCell(2).Hyperlink.Label);
-            Assert.AreEqual("http://poi.apache.org/spreadsheet/",
+            ClassicAssert.AreEqual("http://poi.apache.org/spreadsheet/",
                     sheet.GetRow(17).GetCell(2).Hyperlink.Address);
 
 
             // Save and re-load once more
 
             XSSFWorkbook wb3 = (XSSFWorkbook)XSSFTestDataSamples.WriteOutAndReadBack(wb2);
-            Assert.AreEqual(3, wb3.NumberOfSheets);
-            Assert.IsNotNull(wb3.GetSheetAt(0));
-            Assert.IsNotNull(wb3.GetSheetAt(1));
-            Assert.IsNotNull(wb3.GetSheetAt(2));
+            ClassicAssert.AreEqual(3, wb3.NumberOfSheets);
+            ClassicAssert.IsNotNull(wb3.GetSheetAt(0));
+            ClassicAssert.IsNotNull(wb3.GetSheetAt(1));
+            ClassicAssert.IsNotNull(wb3.GetSheetAt(2));
 
             sheet = (XSSFSheet)wb3.GetSheetAt(0);
 
-            Assert.AreEqual(5, sheet.NumHyperlinks);
+            ClassicAssert.AreEqual(5, sheet.NumHyperlinks);
             doTestHyperlinkContents(sheet);
 
-            Assert.AreEqual(HyperlinkType.Url,
+            ClassicAssert.AreEqual(HyperlinkType.Url,
                     sheet.GetRow(17).GetCell(2).Hyperlink.Type);
-            Assert.AreEqual("POI SS Link",
+            ClassicAssert.AreEqual("POI SS Link",
                     sheet.GetRow(17).GetCell(2).Hyperlink.Label);
-            Assert.AreEqual("http://poi.apache.org/spreadsheet/",
+            ClassicAssert.AreEqual("http://poi.apache.org/spreadsheet/",
                     sheet.GetRow(17).GetCell(2).Hyperlink.Address);
         }
 
@@ -211,41 +211,41 @@ namespace TestCases.XSSF.UserModel
          */
         private static void doTestHyperlinkContents(XSSFSheet sheet)
         {
-            Assert.IsNotNull(sheet.GetRow(3).GetCell(2).Hyperlink);
-            Assert.IsNotNull(sheet.GetRow(14).GetCell(2).Hyperlink);
-            Assert.IsNotNull(sheet.GetRow(15).GetCell(2).Hyperlink);
-            Assert.IsNotNull(sheet.GetRow(16).GetCell(2).Hyperlink);
+            ClassicAssert.IsNotNull(sheet.GetRow(3).GetCell(2).Hyperlink);
+            ClassicAssert.IsNotNull(sheet.GetRow(14).GetCell(2).Hyperlink);
+            ClassicAssert.IsNotNull(sheet.GetRow(15).GetCell(2).Hyperlink);
+            ClassicAssert.IsNotNull(sheet.GetRow(16).GetCell(2).Hyperlink);
 
             // First is a link to poi
-            Assert.AreEqual(HyperlinkType.Url,
+            ClassicAssert.AreEqual(HyperlinkType.Url,
                     sheet.GetRow(3).GetCell(2).Hyperlink.Type);
-            Assert.AreEqual(null,
+            ClassicAssert.AreEqual(null,
                     sheet.GetRow(3).GetCell(2).Hyperlink.Label);
-            Assert.AreEqual("http://poi.apache.org/",
+            ClassicAssert.AreEqual("http://poi.apache.org/",
                     sheet.GetRow(3).GetCell(2).Hyperlink.Address);
 
             // Next is an internal doc link
-            Assert.AreEqual(HyperlinkType.Document,
+            ClassicAssert.AreEqual(HyperlinkType.Document,
                     sheet.GetRow(14).GetCell(2).Hyperlink.Type);
-            Assert.AreEqual("Internal hyperlink to A2",
+            ClassicAssert.AreEqual("Internal hyperlink to A2",
                     sheet.GetRow(14).GetCell(2).Hyperlink.Label);
-            Assert.AreEqual("Sheet1!A2",
+            ClassicAssert.AreEqual("Sheet1!A2",
                     sheet.GetRow(14).GetCell(2).Hyperlink.Address);
 
             // Next is a file
-            Assert.AreEqual(HyperlinkType.File,
+            ClassicAssert.AreEqual(HyperlinkType.File,
                     sheet.GetRow(15).GetCell(2).Hyperlink.Type);
-            Assert.AreEqual(null,
+            ClassicAssert.AreEqual(null,
                     sheet.GetRow(15).GetCell(2).Hyperlink.Label);
-            Assert.AreEqual("WithVariousData.xlsx",
+            ClassicAssert.AreEqual("WithVariousData.xlsx",
                     sheet.GetRow(15).GetCell(2).Hyperlink.Address);
 
             // Last is a mailto
-            Assert.AreEqual(HyperlinkType.Email,
+            ClassicAssert.AreEqual(HyperlinkType.Email,
                     sheet.GetRow(16).GetCell(2).Hyperlink.Type);
-            Assert.AreEqual(null,
+            ClassicAssert.AreEqual(null,
                     sheet.GetRow(16).GetCell(2).Hyperlink.Label);
-            Assert.AreEqual("mailto:dev@poi.apache.org?subject=XSSF%20Hyperlinks",
+            ClassicAssert.AreEqual("mailto:dev@poi.apache.org?subject=XSSF%20Hyperlinks",
                     sheet.GetRow(16).GetCell(2).Hyperlink.Address);
         }
         [Test]
@@ -257,27 +257,27 @@ namespace TestCases.XSSF.UserModel
             XSSFWorkbook wb2 = XSSFTestDataSamples.WriteOutAndReadBack(wb1) as XSSFWorkbook;
             XSSFSheet sh2 = wb2.GetSheetAt(0) as XSSFSheet;
 
-            Assert.AreEqual(sh1.NumberOfComments, sh2.NumberOfComments);
+            ClassicAssert.AreEqual(sh1.NumberOfComments, sh2.NumberOfComments);
             XSSFHyperlink l1 = sh1.GetHyperlink(0, 1) as XSSFHyperlink;
-            Assert.AreEqual(HyperlinkType.Document, l1.Type);
-            Assert.AreEqual("B1", l1.CellRef);
-            Assert.AreEqual("Sort on Titel", l1.Tooltip);
+            ClassicAssert.AreEqual(HyperlinkType.Document, l1.Type);
+            ClassicAssert.AreEqual("B1", l1.CellRef);
+            ClassicAssert.AreEqual("Sort on Titel", l1.Tooltip);
 
             XSSFHyperlink l2 = sh2.GetHyperlink(0, 1) as XSSFHyperlink;
-            Assert.AreEqual(l1.Tooltip, l2.Tooltip);
-            Assert.AreEqual(HyperlinkType.Document, l2.Type);
-            Assert.AreEqual("B1", l2.CellRef);
+            ClassicAssert.AreEqual(l1.Tooltip, l2.Tooltip);
+            ClassicAssert.AreEqual(HyperlinkType.Document, l2.Type);
+            ClassicAssert.AreEqual("B1", l2.CellRef);
         }
         [Test]
         public void Test53734()
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("53734.xlsx");
             XSSFHyperlink link = wb.GetSheetAt(0).GetRow(0).GetCell(0).Hyperlink as XSSFHyperlink;
-            Assert.AreEqual("javascript:///", link.Address);
+            ClassicAssert.AreEqual("javascript:///", link.Address);
 
             wb = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
             link = wb.GetSheetAt(0).GetRow(0).GetCell(0).Hyperlink as XSSFHyperlink;
-            Assert.AreEqual("javascript:///", link.Address);
+            ClassicAssert.AreEqual("javascript:///", link.Address);
         }
         [Test]
         [Ignore("since limitation in .NET Uri class, it's impossible to accept uri like mailto:nobody@nowhere.uk%C2%A0")]
@@ -287,11 +287,11 @@ namespace TestCases.XSSF.UserModel
             //%C2%A0 is called non-breaking space, see https://en.wikipedia.org/wiki/Non-breaking_space
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("53282.xlsx");
             XSSFHyperlink link = wb.GetSheetAt(0).GetRow(0).GetCell(14).Hyperlink as XSSFHyperlink;
-            Assert.AreEqual("mailto:nobody@nowhere.uk%C2%A0", link.Address);
+            ClassicAssert.AreEqual("mailto:nobody@nowhere.uk%C2%A0", link.Address);
 
             wb = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
             link = wb.GetSheetAt(0).GetRow(0).GetCell(14).Hyperlink as XSSFHyperlink;
-            Assert.AreEqual("mailto:nobody@nowhere.uk%C2%A0", link.Address);
+            ClassicAssert.AreEqual("mailto:nobody@nowhere.uk%C2%A0", link.Address);
         }
 
         public override IHyperlink CopyHyperlink(IHyperlink link)
@@ -311,10 +311,10 @@ namespace TestCases.XSSF.UserModel
             hlink.Label = ("label");
             XSSFHyperlink xlink = new XSSFHyperlink(hlink);
 
-            Assert.AreEqual("http://poi.apache.org/", xlink.Address);
-            Assert.AreEqual(new CellReference(2, 3), new CellReference(xlink.CellRef));
+            ClassicAssert.AreEqual("http://poi.apache.org/", xlink.Address);
+            ClassicAssert.AreEqual(new CellReference(2, 3), new CellReference(xlink.CellRef));
             // Are HSSFHyperlink.label and XSSFHyperlink.tooltip the same? If so, perhaps one of these needs renamed for a consistent Hyperlink interface
-            // Assert.AreEqual("label", xlink.Tooltip);
+            // ClassicAssert.AreEqual("label", xlink.Tooltip);
         }
 
 
@@ -332,24 +332,24 @@ namespace TestCases.XSSF.UserModel
             CellAddress A7 = new CellAddress("A7");
 
             XSSFHyperlink link = sh.GetHyperlink(A2) as XSSFHyperlink;
-            Assert.AreEqual("A2", link.CellRef, "address");
-            Assert.AreEqual(HyperlinkType.Url, link.Type, "link type");
-            Assert.AreEqual("http://twitter.com/#!/apacheorg", link.Address, "link target");
+            ClassicAssert.AreEqual("A2", link.CellRef, "address");
+            ClassicAssert.AreEqual(HyperlinkType.Url, link.Type, "link type");
+            ClassicAssert.AreEqual("http://twitter.com/#!/apacheorg", link.Address, "link target");
 
             link = sh.GetHyperlink(A3) as XSSFHyperlink;
-            Assert.AreEqual("A3", link.CellRef, "address");
-            Assert.AreEqual(HyperlinkType.Url, link.Type, "link type");
-            Assert.AreEqual("http://www.bailii.org/databases.html#ie", link.Address, "link target");
+            ClassicAssert.AreEqual("A3", link.CellRef, "address");
+            ClassicAssert.AreEqual(HyperlinkType.Url, link.Type, "link type");
+            ClassicAssert.AreEqual("http://www.bailii.org/databases.html#ie", link.Address, "link target");
 
             link = sh.GetHyperlink(A4) as XSSFHyperlink;
-            Assert.AreEqual("A4", link.CellRef, "address");
-            Assert.AreEqual(HyperlinkType.Url, link.Type, "link type");
-            Assert.AreEqual("https://en.wikipedia.org/wiki/Apache_POI#See_also", link.Address, "link target");
+            ClassicAssert.AreEqual("A4", link.CellRef, "address");
+            ClassicAssert.AreEqual(HyperlinkType.Url, link.Type, "link type");
+            ClassicAssert.AreEqual("https://en.wikipedia.org/wiki/Apache_POI#See_also", link.Address, "link target");
 
             link = sh.GetHyperlink(A7) as XSSFHyperlink;
-            Assert.AreEqual("A7", link.CellRef, "address");
-            Assert.AreEqual(HyperlinkType.Document, link.Type, "link type");
-            Assert.AreEqual("Sheet1", link.Address, "link target");
+            ClassicAssert.AreEqual("A7", link.CellRef, "address");
+            ClassicAssert.AreEqual(HyperlinkType.Document, link.Type, "link type");
+            ClassicAssert.AreEqual("Sheet1", link.Address, "link target");
 
             wb.Close();
         }

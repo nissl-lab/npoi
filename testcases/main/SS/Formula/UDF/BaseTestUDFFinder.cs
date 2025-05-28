@@ -22,7 +22,7 @@ namespace TestCases.SS.Formula.UDF
     using NPOI.SS.Formula.Functions;
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.Formula;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.SS.Formula.UDF;
 
     [TestFixture]
@@ -35,7 +35,7 @@ namespace TestCases.SS.Formula.UDF
         protected void ConfirmFindFunction(String name)
         {
             FreeRefFunction func = _instance.FindFunction(name);
-            Assert.IsNotNull(func);
+            ClassicAssert.IsNotNull(func);
         }
         public class NotImplementedFreeRefFunction : FreeRefFunction
         {

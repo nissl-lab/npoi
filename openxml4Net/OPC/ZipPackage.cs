@@ -318,7 +318,7 @@ namespace NPOI.OpenXml4Net.OPC
          * Builds a PackagePartName for the given ZipEntry,
          *  or null if it's the content types / invalid part
          */
-        private PackagePartName BuildPartName(ZipEntry entry)
+        private static PackagePartName BuildPartName(ZipEntry entry)
         {
             try
             {
@@ -460,7 +460,7 @@ namespace NPOI.OpenXml4Net.OPC
          *
          * @return A unique identifier use to be use as a temp file name.
          */
-        private String GenerateTempFileName(string directory)
+        private static String GenerateTempFileName(string directory)
         {
             FileInfo tmpFilename = null ;
             string path = null;
@@ -528,10 +528,10 @@ namespace NPOI.OpenXml4Net.OPC
 
             try
             {
-                if (!(outputStream is ZipOutputStream))
+                if (outputStream is not ZipOutputStream stream)
                     zos = new ZipOutputStream(outputStream);
                 else
-                    zos = (ZipOutputStream)outputStream;
+                    zos = stream;
 
                 zos.UseZip64 = UseZip64.Off;
                 // If the core properties part does not exist in the part list,

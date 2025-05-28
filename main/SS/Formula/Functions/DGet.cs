@@ -33,14 +33,25 @@ namespace NPOI.SS.Formula.Functions
 
         public bool ProcessMatch(ValueEval eval)
         {
-            if (result == null) // First match, just Set the value.
+            if(result == null) // First match, just Set the value.
             {
                 result = eval;
             }
             else // There was a previous match, since there is only exactly one allowed, bail out1.
             {
-                result = ErrorEval.NUM_ERROR;
-                return false;
+                if(result is BlankEval)
+                {
+                    result = eval;
+                }
+                else
+                {
+                    // We have a previous filled result.
+                    if(eval is not BlankEval)
+                    {
+                        result = ErrorEval.NUM_ERROR;
+                        return false;
+                    }
+                }
             }
 
             return true;
@@ -50,17 +61,18 @@ namespace NPOI.SS.Formula.Functions
         {
             get
             {
-                if (result == null)
+                if(result == null)
                 {
                     return ErrorEval.VALUE_INVALID;
                 }
-                if (result is BlankEval) {
+                if(result is BlankEval)
+                {
                     return ErrorEval.VALUE_INVALID;
                 }
                 else
                     try
                     {
-                        if (OperandResolver.CoerceValueToString(OperandResolver.GetSingleValue(result, 0, 0)).Equals(""))
+                        if(OperandResolver.CoerceValueToString(OperandResolver.GetSingleValue(result, 0, 0)).Equals(""))
                         {
                             return ErrorEval.VALUE_INVALID;
                         }
@@ -69,12 +81,14 @@ namespace NPOI.SS.Formula.Functions
                             return result;
                         }
                     }
-                    catch (EvaluationException e)
+                    catch(EvaluationException e)
                     {
                         return e.GetErrorEval();
                     }
             }
         }
+
+        public bool AllowEmptyMatchField { get; } = false;
     }
 }
 

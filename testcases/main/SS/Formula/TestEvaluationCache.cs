@@ -22,7 +22,7 @@ namespace TestCases.SS.Formula
     using System.Collections.Generic;
     using System.IO;
     using System.Text;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.Model;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Formula;
@@ -651,12 +651,12 @@ namespace TestCases.SS.Formula
 
             CellValue cv;
             cv = fe.Evaluate(cellA1);
-            Assert.AreEqual(3.7, cv.NumberValue, 0.0);
+            ClassicAssert.AreEqual(3.7, cv.NumberValue, 0.0);
 
             cellB1.SetCellType(CellType.Blank);
             fe.NotifyUpdateCell(cellB1);
             cv = fe.Evaluate(cellA1); // B1 was used to Evaluate A1
-            Assert.AreEqual(2.2, cv.NumberValue, 0.0);
+            ClassicAssert.AreEqual(2.2, cv.NumberValue, 0.0);
 
             cellB1.SetCellValue(0.4);  // changing B1, so A1 cached result should be Cleared
             fe.NotifyUpdateCell(cellB1);
@@ -666,7 +666,7 @@ namespace TestCases.SS.Formula
                 // looks like left-over cached result from before change to B1
                 throw new AssertionException("Identified bug 46053");
             }
-            Assert.AreEqual(2.6, cv.NumberValue, 0.0);
+            ClassicAssert.AreEqual(2.6, cv.NumberValue, 0.0);
         }
 
         /**
@@ -707,8 +707,8 @@ namespace TestCases.SS.Formula
         private static void ConfirmEvaluate(MySheet ms, String cellRefText, double expectedValue)
         {
             ValueEval v = ms.EvaluateCell(cellRefText);
-            Assert.AreEqual(typeof(NumberEval), v.GetType());
-            Assert.AreEqual(expectedValue, ((NumberEval)v).NumberValue, 0.0);
+            ClassicAssert.AreEqual(typeof(NumberEval), v.GetType());
+            ClassicAssert.AreEqual(expectedValue, ((NumberEval)v).NumberValue, 0.0);
         }
 
         private static void ConfirmLog(MySheet ms, String[] expectedLog)
@@ -844,7 +844,7 @@ namespace TestCases.SS.Formula
             //calculate
             IFormulaEvaluator Evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
             Evaluator.EvaluateFormulaCell(summaryCell);
-            Assert.AreEqual(8394753.0, summaryCell.NumericCellValue);
+            ClassicAssert.AreEqual(8394753.0, summaryCell.NumericCellValue);
         }
 
     }

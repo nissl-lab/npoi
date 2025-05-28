@@ -233,7 +233,7 @@ namespace NPOI.SS.Formula.Atp
             foreach (KeyValuePair<String, FreeRefFunction> me in AnalysisToolPak._functionsByName)
             {
                 FreeRefFunction func = me.Value;
-                if (func != null && !(func is NotImplemented))
+                if (func != null && func is not NotImplemented)
                 {
                     lst.Add(me.Key);
                 }
@@ -287,15 +287,12 @@ namespace NPOI.SS.Formula.Atp
                 }
             }
             FreeRefFunction f = inst.FindFunction(name);
-            if (f != null && !(f is NotImplemented))
+            if (f != null && f is not NotImplemented)
             {
                 throw new ArgumentException("POI already implememts " + name +
                         ". You cannot override POI's implementations of Excel functions");
             }
-            if (_functionsByName.ContainsKey(name))
-                _functionsByName[name] = func;
-            else
-                _functionsByName.Add(name, func);
+            _functionsByName[name] = func;
         }
     }
 }

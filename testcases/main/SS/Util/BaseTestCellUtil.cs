@@ -19,7 +19,7 @@ namespace TestCases.SS.Util
 {
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using System;
     using System.Collections.Generic;
     using TestCases.SS;
@@ -50,13 +50,13 @@ namespace TestCases.SS.Util
             int styCnt1 = wb.NumCellStyles;
             CellUtil.SetCellStyleProperty(c, CellUtil.BORDER_BOTTOM, BorderStyle.Thin);
             int styCnt2 = wb.NumCellStyles;
-            Assert.AreEqual(styCnt1 + 1, styCnt2);
+            ClassicAssert.AreEqual(styCnt1 + 1, styCnt2);
 
             // Add same border to another cell, should not create another style
             c = r.CreateCell(1);
             CellUtil.SetCellStyleProperty(c, CellUtil.BORDER_BOTTOM, BorderStyle.Thin);
             int styCnt3 = wb.NumCellStyles;
-            Assert.AreEqual(styCnt2, styCnt3);
+            ClassicAssert.AreEqual(styCnt2, styCnt3);
 
             wb.Close();
         }
@@ -83,11 +83,11 @@ namespace TestCases.SS.Util
             ICell c = r.CreateCell(0);
             // A valid BorderStyle constant, as a Short
             CellUtil.SetCellStyleProperty(c, CellUtil.BORDER_BOTTOM, (short)BorderStyle.DashDot);
-            Assert.AreEqual(BorderStyle.DashDot, c.CellStyle.BorderBottom);
+            ClassicAssert.AreEqual(BorderStyle.DashDot, c.CellStyle.BorderBottom);
 
             // A valid BorderStyle constant, as an Enum
             CellUtil.SetCellStyleProperty(c, CellUtil.BORDER_TOP, BorderStyle.MediumDashDot);
-            Assert.AreEqual(BorderStyle.MediumDashDot, c.CellStyle.BorderTop);
+            ClassicAssert.AreEqual(BorderStyle.MediumDashDot, c.CellStyle.BorderTop);
 
             wb.Close();
         }
@@ -112,13 +112,13 @@ namespace TestCases.SS.Util
             props.Add(CellUtil.VERTICAL_ALIGNMENT, VerticalAlignment.Center); // and with an enum
             CellUtil.SetCellStyleProperties(c, props);
             int styCnt2 = wb.NumCellStyles;
-            Assert.AreEqual(styCnt1 + 1, styCnt2, "Only one additional style should have been created");
+            ClassicAssert.AreEqual(styCnt1 + 1, styCnt2, "Only one additional style should have been created");
 
             // Add same border another to same cell, should not create another style
             c = r.CreateCell(1);
             CellUtil.SetCellStyleProperties(c, props);
             int styCnt3 = wb.NumCellStyles;
-            Assert.AreEqual(styCnt3, styCnt2, "No additional styles should have been created");
+            ClassicAssert.AreEqual(styCnt3, styCnt2, "No additional styles should have been created");
 
             wb.Close();
         }
@@ -132,11 +132,11 @@ namespace TestCases.SS.Util
 
             // Get row that already exists
             IRow r1 = CellUtil.GetRow(0, sh);
-            Assert.IsNotNull(r1);
-            Assert.AreSame(row1, r1, "An existing row should not be reCreated");
+            ClassicAssert.IsNotNull(r1);
+            ClassicAssert.AreSame(row1, r1, "An existing row should not be reCreated");
 
             // Get row that does not exist yet
-            Assert.IsNotNull(CellUtil.GetRow(1, sh));
+            ClassicAssert.IsNotNull(CellUtil.GetRow(1, sh));
 
             wb.Close();
         }
@@ -151,11 +151,11 @@ namespace TestCases.SS.Util
 
             // Get cell that already exists
             ICell a1 = CellUtil.GetCell(row, 0);
-            Assert.IsNotNull(a1);
-            Assert.AreSame(A1, a1, "An existing cell should not be reCreated");
+            ClassicAssert.IsNotNull(a1);
+            ClassicAssert.AreSame(A1, a1, "An existing cell should not be reCreated");
 
             // Get cell that does not exist yet
-            Assert.IsNotNull(CellUtil.GetCell(row, 1));
+            ClassicAssert.IsNotNull(CellUtil.GetCell(row, 1));
 
             wb.Close();
         }
@@ -173,25 +173,25 @@ namespace TestCases.SS.Util
             // calling CreateCell on a non-existing cell should create a cell and Set the cell value and style.
             ICell F1 = CellUtil.CreateCell(row, 5, "Cell Value", style);
 
-            Assert.AreSame(row.GetCell(5), F1);
-            Assert.AreEqual("Cell Value", F1.StringCellValue);
-            Assert.AreEqual(style, F1.CellStyle);
+            ClassicAssert.AreSame(row.GetCell(5), F1);
+            ClassicAssert.AreEqual("Cell Value", F1.StringCellValue);
+            ClassicAssert.AreEqual(style, F1.CellStyle);
             // should be Assert.AreSame, but a new HSSFCellStyle is returned for each GetCellStyle() call.
             // HSSFCellStyle wraps an underlying style record, and the underlying
             // style record is the same between multiple GetCellStyle() calls.
 
             // calling CreateCell on an existing cell should return the existing cell and modify the cell value and style.
             ICell f1 = CellUtil.CreateCell(row, 5, "Overwritten cell value", null);
-            Assert.AreSame(row.GetCell(5), f1);
-            Assert.AreSame(F1, f1);
-            Assert.AreEqual("Overwritten cell value", f1.StringCellValue);
-            Assert.AreEqual("Overwritten cell value", F1.StringCellValue);
-            Assert.AreEqual(style, f1.CellStyle, "cell style should be unChanged with CreateCell(..., null)");
-            Assert.AreEqual(style, F1.CellStyle, "cell style should be unChanged with CreateCell(..., null)");
+            ClassicAssert.AreSame(row.GetCell(5), f1);
+            ClassicAssert.AreSame(F1, f1);
+            ClassicAssert.AreEqual("Overwritten cell value", f1.StringCellValue);
+            ClassicAssert.AreEqual("Overwritten cell value", F1.StringCellValue);
+            ClassicAssert.AreEqual(style, f1.CellStyle, "cell style should be unChanged with CreateCell(..., null)");
+            ClassicAssert.AreEqual(style, F1.CellStyle, "cell style should be unChanged with CreateCell(..., null)");
 
             // test CreateCell(row, column, value) (no CellStyle)
             f1 = CellUtil.CreateCell(row, 5, "Overwritten cell with default style");
-            Assert.AreSame(F1, f1);
+            ClassicAssert.AreSame(F1, f1);
 
             wb.Close();
 
@@ -206,19 +206,19 @@ namespace TestCases.SS.Util
             ICell A1 = row.CreateCell(0);
             ICell B1 = row.CreateCell(1);
             // Assumptions
-            Assert.AreEqual(A1.CellStyle, B1.CellStyle);
+            ClassicAssert.AreEqual(A1.CellStyle, B1.CellStyle);
             // should be assertSame, but a new HSSFCellStyle is returned for each getCellStyle() call. 
             // HSSFCellStyle wraps an underlying style record, and the underlying
             // style record is the same between multiple getCellStyle() calls.
-            Assert.AreEqual(HorizontalAlignment.General, A1.CellStyle.Alignment);
-            Assert.AreEqual(HorizontalAlignment.General, B1.CellStyle.Alignment);
+            ClassicAssert.AreEqual(HorizontalAlignment.General, A1.CellStyle.Alignment);
+            ClassicAssert.AreEqual(HorizontalAlignment.General, B1.CellStyle.Alignment);
             // get/set alignment modifies the cell's style
             CellUtil.SetAlignment(A1, HorizontalAlignment.Right);
-            Assert.AreEqual(HorizontalAlignment.Right, A1.CellStyle.Alignment);
+            ClassicAssert.AreEqual(HorizontalAlignment.Right, A1.CellStyle.Alignment);
             // get/set alignment doesn't affect the style of cells with
             // the same style prior to modifying the style
-            Assert.AreNotEqual(A1.CellStyle, B1.CellStyle);
-            Assert.AreEqual(HorizontalAlignment.General, B1.CellStyle.Alignment);
+            ClassicAssert.AreNotEqual(A1.CellStyle, B1.CellStyle);
+            ClassicAssert.AreEqual(HorizontalAlignment.General, B1.CellStyle.Alignment);
             wb.Close();
         }
 
@@ -231,19 +231,19 @@ namespace TestCases.SS.Util
             ICell A1 = row.CreateCell(0);
             ICell B1 = row.CreateCell(1);
             // Assumptions
-            Assert.AreEqual(A1.CellStyle, B1.CellStyle);
+            ClassicAssert.AreEqual(A1.CellStyle, B1.CellStyle);
             // should be assertSame, but a new HSSFCellStyle is returned for each getCellStyle() call. 
             // HSSFCellStyle wraps an underlying style record, and the underlying
             // style record is the same between multiple getCellStyle() calls.
-            Assert.AreEqual(VerticalAlignment.Bottom, A1.CellStyle.VerticalAlignment);
-            Assert.AreEqual(VerticalAlignment.Bottom, B1.CellStyle.VerticalAlignment);
+            ClassicAssert.AreEqual(VerticalAlignment.Bottom, A1.CellStyle.VerticalAlignment);
+            ClassicAssert.AreEqual(VerticalAlignment.Bottom, B1.CellStyle.VerticalAlignment);
             // get/set alignment modifies the cell's style
             CellUtil.SetVerticalAlignment(A1, VerticalAlignment.Top);
-            Assert.AreEqual(VerticalAlignment.Top, A1.CellStyle.VerticalAlignment);
+            ClassicAssert.AreEqual(VerticalAlignment.Top, A1.CellStyle.VerticalAlignment);
             // get/set alignment doesn't affect the style of cells with
             // the same style prior to modifying the style
-            Assert.AreNotEqual(A1.CellStyle, B1.CellStyle);
-            Assert.AreEqual(VerticalAlignment.Bottom, B1.CellStyle.VerticalAlignment);
+            ClassicAssert.AreNotEqual(A1.CellStyle, B1.CellStyle);
+            ClassicAssert.AreEqual(VerticalAlignment.Bottom, B1.CellStyle.VerticalAlignment);
             wb.Close();
         }
 
@@ -262,22 +262,22 @@ namespace TestCases.SS.Util
             short customFontIndex = font.Index;
 
             // Assumptions
-            Assert.AreNotEqual(defaultFontIndex, customFontIndex);
-            Assert.AreEqual(A1.CellStyle, B1.CellStyle);
+            ClassicAssert.AreNotEqual(defaultFontIndex, customFontIndex);
+            ClassicAssert.AreEqual(A1.CellStyle, B1.CellStyle);
             // should be Assert.AreSame, but a new HSSFCellStyle is returned for each GetCellStyle() call. 
             // HSSFCellStyle wraps an underlying style record, and the underlying
             // style record is the same between multiple GetCellStyle() calls.
-            Assert.AreEqual(defaultFontIndex, A1.CellStyle.FontIndex);
-            Assert.AreEqual(defaultFontIndex, B1.CellStyle.FontIndex);
+            ClassicAssert.AreEqual(defaultFontIndex, A1.CellStyle.FontIndex);
+            ClassicAssert.AreEqual(defaultFontIndex, B1.CellStyle.FontIndex);
 
             // Get/set alignment modifies the cell's style
             CellUtil.SetFont(A1, font);
-            Assert.AreEqual(customFontIndex, A1.CellStyle.FontIndex);
+            ClassicAssert.AreEqual(customFontIndex, A1.CellStyle.FontIndex);
 
             // Get/set alignment doesn't affect the style of cells with
             // the same style prior to modifying the style
-            Assert.AreNotEqual(A1.CellStyle, B1.CellStyle);
-            Assert.AreEqual(defaultFontIndex, B1.CellStyle.FontIndex);
+            ClassicAssert.AreNotEqual(A1.CellStyle, B1.CellStyle);
+            ClassicAssert.AreEqual(defaultFontIndex, B1.CellStyle.FontIndex);
 
             wb.Close();
         }
@@ -339,9 +339,9 @@ namespace TestCases.SS.Util
             CellUtil.SetCellStyleProperties(A1, properties);
             ICellStyle style = A1.CellStyle;
             // FIXME: Use FillPattern.BRICKS enum
-            Assert.AreEqual(FillPattern.Bricks, style.FillPattern, "fill pattern");
-            Assert.AreEqual(IndexedColors.Blue, IndexedColors.FromInt(style.FillForegroundColor), "fill foreground color");
-            Assert.AreEqual(IndexedColors.Red, IndexedColors.FromInt(style.FillBackgroundColor), "fill background color");
+            ClassicAssert.AreEqual(FillPattern.Bricks, style.FillPattern, "fill pattern");
+            ClassicAssert.AreEqual(IndexedColors.Blue, IndexedColors.FromInt(style.FillForegroundColor), "fill foreground color");
+            ClassicAssert.AreEqual(IndexedColors.Red, IndexedColors.FromInt(style.FillBackgroundColor), "fill background color");
         }
         /**
  * bug 63268
@@ -359,7 +359,7 @@ namespace TestCases.SS.Util
 
             CellUtil.SetFont(c, f);
             int num2 = wb1.NumCellStyles;
-            Assert.AreEqual(num1, num2);
+            ClassicAssert.AreEqual(num1, num2);
             wb1.Close();
         }
 }

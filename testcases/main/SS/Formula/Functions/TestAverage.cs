@@ -16,7 +16,7 @@
 ==================================================================== */
 
 using NPOI.SS.Formula.Eval;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using NPOI.SS.Formula.Functions;
 namespace TestCases.SS.Formula.Functions
 {
@@ -38,15 +38,15 @@ namespace TestCases.SS.Formula.Functions
         private void ConfirmAverage(ValueEval[] args, double expected)
         {
             ValueEval result = InvokeAverage(args);
-            Assert.AreEqual(typeof(NumberEval), result.GetType());
-            Assert.AreEqual(expected, ((NumberEval)result).NumberValue, 0);
+            ClassicAssert.AreEqual(typeof(NumberEval), result.GetType());
+            ClassicAssert.AreEqual(expected, ((NumberEval)result).NumberValue, 0);
         }
 
         private void ConfirmAverage(ValueEval[] args, ErrorEval expectedError)
         {
             ValueEval result = InvokeAverage(args);
-            Assert.AreEqual(typeof(ErrorEval), result.GetType());
-            Assert.AreEqual(expectedError.ErrorCode, ((ErrorEval)result).ErrorCode);
+            ClassicAssert.AreEqual(typeof(ErrorEval), result.GetType());
+            ClassicAssert.AreEqual(expectedError.ErrorCode, ((ErrorEval)result).ErrorCode);
         }
         [Test]
         public void TestBasic()

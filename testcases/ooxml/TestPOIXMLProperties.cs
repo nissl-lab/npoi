@@ -24,7 +24,7 @@ namespace TestCases
     using NPOI.XSSF;
     using NPOI.XSSF.UserModel;
     using NPOI.XWPF.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using System;
     using TestCases.XWPF;
 
@@ -44,11 +44,11 @@ namespace TestCases
         {
             sampleDoc = XWPFTestDataSamples.OpenSampleDocument("documentProperties.docx");
             sampleNoThumb = XWPFTestDataSamples.OpenSampleDocument("SampleDoc.docx");
-            Assert.IsNotNull(sampleDoc);
-            Assert.IsNotNull(sampleNoThumb);
+            ClassicAssert.IsNotNull(sampleDoc);
+            ClassicAssert.IsNotNull(sampleNoThumb);
             _props = sampleDoc.GetProperties();
             _coreProperties = _props.CoreProperties;
-            Assert.IsNotNull(_props);
+            ClassicAssert.IsNotNull(_props);
         }
 
 
@@ -64,7 +64,7 @@ namespace TestCases
         {
             XSSFWorkbook workbook = new XSSFWorkbook();
             POIXMLProperties props = workbook.GetProperties();
-            Assert.IsNotNull(props);
+            ClassicAssert.IsNotNull(props);
 
             ExtendedProperties properties =
                     props.ExtendedProperties;
@@ -82,23 +82,23 @@ namespace TestCases
             XSSFWorkbook newWorkbook =
                     (XSSFWorkbook)XSSFTestDataSamples.WriteOutAndReadBack(workbook);
             workbook.Close();
-            Assert.IsTrue(workbook != newWorkbook);
+            ClassicAssert.IsTrue(workbook != newWorkbook);
 
 
             POIXMLProperties newProps = newWorkbook.GetProperties();
-            Assert.IsNotNull(newProps);
+            ClassicAssert.IsNotNull(newProps);
             ExtendedProperties newProperties =
                     newProps.ExtendedProperties;
 
-            Assert.AreEqual(application, newProperties.Application);
-            Assert.AreEqual(appVersion, newProperties.AppVersion);
+            ClassicAssert.AreEqual(application, newProperties.Application);
+            ClassicAssert.AreEqual(appVersion, newProperties.AppVersion);
         
 
             CT_ExtendedProperties
                     newCtProps = newProperties.GetUnderlyingProperties();
 
-            Assert.AreEqual(application, newCtProps.Application);
-            Assert.AreEqual(appVersion, newCtProps.AppVersion);
+            ClassicAssert.AreEqual(application, newCtProps.Application);
+            ClassicAssert.AreEqual(appVersion, newCtProps.AppVersion);
 
             newWorkbook.Close();
         }
@@ -124,7 +124,7 @@ namespace TestCases
             }
             catch (ArgumentException e)
             {
-                Assert.AreEqual("A property with this name already exists in the custom properties", e.Message);
+                ClassicAssert.AreEqual("A property with this name already exists in the custom properties", e.Message);
             }
             customProps.AddProperty("test-4", true);
 
@@ -133,42 +133,42 @@ namespace TestCases
 
             CT_CustomProperties ctProps =
                     wb2.GetProperties().CustomProperties.GetUnderlyingProperties();
-            Assert.AreEqual(6, ctProps.sizeOfPropertyArray());
+            ClassicAssert.AreEqual(6, ctProps.sizeOfPropertyArray());
             CT_Property p;
 
             p = ctProps.GetPropertyArray(0);
-            Assert.AreEqual("{D5CDD505-2E9C-101B-9397-08002B2CF9AE}", p.fmtid);
-            Assert.AreEqual("test-1", p.name);
-            Assert.AreEqual("string val", p.Item.ToString());
-            Assert.AreEqual(2, p.pid);
+            ClassicAssert.AreEqual("{D5CDD505-2E9C-101B-9397-08002B2CF9AE}", p.fmtid);
+            ClassicAssert.AreEqual("test-1", p.name);
+            ClassicAssert.AreEqual("string val", p.Item.ToString());
+            ClassicAssert.AreEqual(2, p.pid);
 
             p = ctProps.GetPropertyArray(1);
-            Assert.AreEqual("{D5CDD505-2E9C-101B-9397-08002B2CF9AE}", p.fmtid);
-            Assert.AreEqual("test-2", p.name);
-            Assert.AreEqual(1974, p.Item);
-            Assert.AreEqual(3, p.pid);
+            ClassicAssert.AreEqual("{D5CDD505-2E9C-101B-9397-08002B2CF9AE}", p.fmtid);
+            ClassicAssert.AreEqual("test-2", p.name);
+            ClassicAssert.AreEqual(1974, p.Item);
+            ClassicAssert.AreEqual(3, p.pid);
 
             p = ctProps.GetPropertyArray(2);
-            Assert.AreEqual("{D5CDD505-2E9C-101B-9397-08002B2CF9AE}", p.fmtid);
-            Assert.AreEqual("test-3", p.name);
-            Assert.AreEqual(36.6, p.Item);
-            Assert.AreEqual(4, p.pid);
+            ClassicAssert.AreEqual("{D5CDD505-2E9C-101B-9397-08002B2CF9AE}", p.fmtid);
+            ClassicAssert.AreEqual("test-3", p.name);
+            ClassicAssert.AreEqual(36.6, p.Item);
+            ClassicAssert.AreEqual(4, p.pid);
 
             p = ctProps.GetPropertyArray(3);
-            Assert.AreEqual("{D5CDD505-2E9C-101B-9397-08002B2CF9AE}", p.fmtid);
-            Assert.AreEqual("test-4", p.name);
-            Assert.AreEqual(true, p.Item);
-            Assert.AreEqual(5, p.pid);
+            ClassicAssert.AreEqual("{D5CDD505-2E9C-101B-9397-08002B2CF9AE}", p.fmtid);
+            ClassicAssert.AreEqual("test-4", p.name);
+            ClassicAssert.AreEqual(true, p.Item);
+            ClassicAssert.AreEqual(5, p.pid);
 
             p = ctProps.GetPropertyArray(4);
-            Assert.AreEqual("Generator", p.name);
-            Assert.AreEqual("NPOI", p.Item);
-            Assert.AreEqual(6, p.pid);
+            ClassicAssert.AreEqual("Generator", p.name);
+            ClassicAssert.AreEqual("NPOI", p.Item);
+            ClassicAssert.AreEqual(6, p.pid);
 
             //p = ctProps.GetPropertyArray(5);
-            //Assert.AreEqual("Generator Version", p.name);
-            //Assert.AreEqual("2.0.9", p.Item);
-            //Assert.AreEqual(7, p.pid);
+            //ClassicAssert.AreEqual("Generator Version", p.name);
+            //ClassicAssert.AreEqual("2.0.9", p.Item);
+            //ClassicAssert.AreEqual(7, p.pid);
 
             wb2.Close();
         }
@@ -176,19 +176,19 @@ namespace TestCases
         public void TestDocumentProperties()
         {
             String category = _coreProperties.Category;
-            Assert.AreEqual("test", category);
+            ClassicAssert.AreEqual("test", category);
             String contentStatus = "Draft";
             _coreProperties.ContentStatus = contentStatus;
-            Assert.AreEqual("Draft", contentStatus);
+            ClassicAssert.AreEqual("Draft", contentStatus);
             DateTime? Created = _coreProperties.Created;
             // the original file Contains a following value: 2009-07-20T13:12:00Z
-            Assert.IsTrue(DateTimeEqualToUTCString(Created, "2009-07-20T13:12:00Z"));
+            ClassicAssert.IsTrue(DateTimeEqualToUTCString(Created, "2009-07-20T13:12:00Z"));
             String creator = _coreProperties.Creator;
-            Assert.AreEqual("Paolo Mottadelli", creator);
+            ClassicAssert.AreEqual("Paolo Mottadelli", creator);
             String subject = _coreProperties.Subject;
-            Assert.AreEqual("Greetings", subject);
+            ClassicAssert.AreEqual("Greetings", subject);
             String title = _coreProperties.Title;
-            Assert.AreEqual("Hello World", title);
+            ClassicAssert.AreEqual("Hello World", title);
         }
 
         public void TestTransitiveSetters()
@@ -198,13 +198,13 @@ namespace TestCases
 
             DateTime dateCreated = new DateTime(2010, 6, 15, 10, 0, 0);
             cp.Created = new DateTime(2010, 6, 15, 10, 0, 0);
-            Assert.AreEqual(dateCreated.ToString(), cp.Created.ToString());
+            ClassicAssert.AreEqual(dateCreated.ToString(), cp.Created.ToString());
 
             XWPFDocument doc2 = XWPFTestDataSamples.WriteOutAndReadBack(doc);
             doc.Close();
             cp = doc2.GetProperties().CoreProperties;
             DateTime? dt3 = cp.Created;
-            Assert.AreEqual(dateCreated.ToString(), dt3.ToString());
+            ClassicAssert.AreEqual(dateCreated.ToString(), dt3.ToString());
 
             doc2.Close();
         }
@@ -212,20 +212,20 @@ namespace TestCases
         public void TestGetSetRevision()
         {
             String revision = _coreProperties.Revision;
-            Assert.IsTrue(Int32.Parse(revision) > 1, "Revision number is 1");
+            ClassicAssert.IsTrue(Int32.Parse(revision) > 1, "Revision number is 1");
             _coreProperties.Revision = "20";
-            Assert.AreEqual("20", _coreProperties.Revision);
+            ClassicAssert.AreEqual("20", _coreProperties.Revision);
             _coreProperties.Revision = "20xx";
-            Assert.AreEqual("20", _coreProperties.Revision);
+            ClassicAssert.AreEqual("20", _coreProperties.Revision);
         }
 
         [Test]
         public void TestLastModifiedByProperty()
         {
             String lastModifiedBy = _coreProperties.LastModifiedByUser;
-            Assert.AreEqual("Paolo Mottadelli", lastModifiedBy);
+            ClassicAssert.AreEqual("Paolo Mottadelli", lastModifiedBy);
             _coreProperties.LastModifiedByUser = "Test User";
-            Assert.AreEqual("Test User", _coreProperties.LastModifiedByUser);
+            ClassicAssert.AreEqual("Test User", _coreProperties.LastModifiedByUser);
         }
 
 
@@ -241,32 +241,32 @@ namespace TestCases
         {
             POIXMLProperties noThumbProps = sampleNoThumb.GetProperties();
 
-            Assert.IsNotNull(_props.ThumbnailPart);
-            Assert.IsNull(noThumbProps.ThumbnailPart);
+            ClassicAssert.IsNotNull(_props.ThumbnailPart);
+            ClassicAssert.IsNull(noThumbProps.ThumbnailPart);
 
-            Assert.IsNotNull(_props.ThumbnailFilename);
-            Assert.IsNull(noThumbProps.ThumbnailFilename);
+            ClassicAssert.IsNotNull(_props.ThumbnailFilename);
+            ClassicAssert.IsNull(noThumbProps.ThumbnailFilename);
 
-            Assert.IsNotNull(_props.ThumbnailImage);
-            Assert.IsNull(noThumbProps.ThumbnailImage);
+            ClassicAssert.IsNotNull(_props.ThumbnailImage);
+            ClassicAssert.IsNull(noThumbProps.ThumbnailImage);
 
-            Assert.AreEqual("thumbnail.jpeg", _props.ThumbnailFilename);
+            ClassicAssert.AreEqual("thumbnail.jpeg", _props.ThumbnailFilename);
 
 
             // Adding / changing
             noThumbProps.SetThumbnail("Testing.png", new ByteArrayInputStream(new byte[1]));
-            Assert.IsNotNull(noThumbProps.ThumbnailPart);
-            Assert.AreEqual("Testing.png", noThumbProps.ThumbnailFilename);
-            Assert.IsNotNull(noThumbProps.ThumbnailImage);
-            //Assert.AreEqual(1, noThumbProps.ThumbnailImage.Available());
-            Assert.AreEqual(1, noThumbProps.ThumbnailImage.Length - noThumbProps.ThumbnailImage.Position);
+            ClassicAssert.IsNotNull(noThumbProps.ThumbnailPart);
+            ClassicAssert.AreEqual("Testing.png", noThumbProps.ThumbnailFilename);
+            ClassicAssert.IsNotNull(noThumbProps.ThumbnailImage);
+            //ClassicAssert.AreEqual(1, noThumbProps.ThumbnailImage.Available());
+            ClassicAssert.AreEqual(1, noThumbProps.ThumbnailImage.Length - noThumbProps.ThumbnailImage.Position);
 
             noThumbProps.SetThumbnail("Testing2.png", new ByteArrayInputStream(new byte[2]));
-            Assert.IsNotNull(noThumbProps.ThumbnailPart);
-            Assert.AreEqual("Testing.png", noThumbProps.ThumbnailFilename);
-            Assert.IsNotNull(noThumbProps.ThumbnailImage);
-            //Assert.AreEqual(2, noThumbProps.ThumbnailImage.Available());
-            Assert.AreEqual(2, noThumbProps.ThumbnailImage.Length - noThumbProps.ThumbnailImage.Position);
+            ClassicAssert.IsNotNull(noThumbProps.ThumbnailPart);
+            ClassicAssert.AreEqual("Testing.png", noThumbProps.ThumbnailFilename);
+            ClassicAssert.IsNotNull(noThumbProps.ThumbnailImage);
+            //ClassicAssert.AreEqual(2, noThumbProps.ThumbnailImage.Available());
+            ClassicAssert.AreEqual(2, noThumbProps.ThumbnailImage.Length - noThumbProps.ThumbnailImage.Position);
         }
 
 

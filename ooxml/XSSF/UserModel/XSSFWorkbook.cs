@@ -25,7 +25,8 @@ using System;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using System.Xml;
 using NPOI.OpenXml4Net.OPC;
-using System.Text;
+using System.Text; 
+using Cysharp.Text;
 using NPOI.SS.Util;
 using NPOI.SS.Formula;
 using NPOI.XSSF.UserModel.Helpers;
@@ -335,18 +336,18 @@ namespace NPOI.XSSF.UserModel
                 foreach (RelationPart rp in RelationParts)
                 {
                     POIXMLDocumentPart p = rp.DocumentPart;
-                    if (p is SharedStringsTable) sharedStringSource = (SharedStringsTable)p;
-                    else if (p is StylesTable) stylesSource = (StylesTable)p;
-                    else if (p is ThemesTable) theme = (ThemesTable)p;
-                    else if (p is CalculationChain) calcChain = (CalculationChain)p;
-                    else if (p is MapInfo) mapInfo = (MapInfo)p;
-                    else if (p is XSSFSheet)
+                    if (p is SharedStringsTable table) sharedStringSource = table;
+                    else if (p is StylesTable stylesTable) stylesSource = stylesTable;
+                    else if (p is ThemesTable themesTable) theme = themesTable;
+                    else if (p is CalculationChain chain) calcChain = chain;
+                    else if (p is MapInfo info) mapInfo = info;
+                    else if (p is XSSFSheet sheet)
                     {
-                        shIdMap[rp.Relationship.Id] = (XSSFSheet)p;
+                        shIdMap[rp.Relationship.Id] = sheet;
                     }
-                    else if (p is ExternalLinksTable)
+                    else if (p is ExternalLinksTable linksTable)
                     {
-                        elIdMap[rp.Relationship.Id] = (ExternalLinksTable)p;
+                        elIdMap[rp.Relationship.Id] = linksTable;
                     }
                 }
 
@@ -610,9 +611,9 @@ namespace NPOI.XSSF.UserModel
             {
                 POIXMLDocumentPart r = rp.DocumentPart;
                 // do not copy the drawing relationship, it will be re-created
-                if (r is XSSFDrawing)
+                if (r is XSSFDrawing drawing)
                 {
-                    dg = (XSSFDrawing)r;
+                    dg = drawing;
                     continue;
                 }
 
@@ -728,7 +729,7 @@ namespace NPOI.XSSF.UserModel
             int uniqueIndex = 2;
             String baseName = srcName;
             int bracketPos = srcName.LastIndexOf('(');
-            if (bracketPos > 0 && srcName.EndsWith(")"))
+            if (bracketPos > 0 && srcName.EndsWith(')'))
             {
                 String suffix = srcName.Substring(bracketPos + 1, srcName.Length - ")".Length - bracketPos - 1);
                 try
@@ -802,10 +803,14 @@ namespace NPOI.XSSF.UserModel
 
         private void PutValuesMapping(string key, XSSFName name)
         {
-            if (namedRangesByName.ContainsKey(key))
-                namedRangesByName[key].Add(name);
+            if(namedRangesByName.TryGetValue(key, out List<XSSFName> value))
+            {
+                value.Add(name);
+            }
             else
-                namedRangesByName.Add(key, new List<XSSFName>() { name });
+            {
+                namedRangesByName.Add(key, [name]);
+            }
         }
 
         private XSSFName CreateAndStoreName(CT_DefinedName ctName)
@@ -1557,7 +1562,7 @@ namespace NPOI.XSSF.UserModel
                 }
             }
 
-            StringBuilder rng = new StringBuilder();
+            using var rng = ZString.CreateStringBuilder();
             rng.Append(c);
             if (rng.Length > 0 && r.Length > 0) rng.Append(',');
             rng.Append(r);
@@ -1826,7 +1831,7 @@ namespace NPOI.XSSF.UserModel
         public void Write(Stream stream, bool leaveOpen = false)
         {
             bool? originalValue = null;
-            if (Package is ZipPackage)
+            if (Package is ZipPackage package)
             {
                 //By default ZipPackage closes the stream if it wasn't constructed from a stream.
                 originalValue = ((ZipPackage)Package).IsExternalStream;
@@ -2273,9 +2278,8 @@ namespace NPOI.XSSF.UserModel
 
             foreach (var poixmlDocumentPart in GetRelations())
             {
-                if (poixmlDocumentPart is XSSFPivotCacheDefinition)
+                if (poixmlDocumentPart is XSSFPivotCacheDefinition pivotCacheDefinition)
                 {
-                    var pivotCacheDefinition = (XSSFPivotCacheDefinition)poixmlDocumentPart;
                     RemoveRelation(pivotCacheDefinition);
                 }
             }
@@ -2307,7 +2311,7 @@ namespace NPOI.XSSF.UserModel
          * @return wrapped instance of UDFFinder that allows seeking functions both by index and name
          */
         /*package*/
-        internal UDFFinder GetUDFFinder()
+        internal IndexedUDFFinder GetUDFFinder()
         {
             return _udfFinder;
         }
@@ -2463,7 +2467,7 @@ namespace NPOI.XSSF.UserModel
             int imageNumber = 1;
             List<XSSFPictureData> allPics = (List<XSSFPictureData>)GetAllPictures();
 
-            if (allPics.Any())
+            if (allPics.Count > 0)
             {
                 List<int> sortedIndexs = new List<int> { 0 };
 

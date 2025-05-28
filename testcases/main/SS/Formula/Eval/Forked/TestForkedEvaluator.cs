@@ -22,7 +22,7 @@ namespace TestCases.SS.Formula.Eval.Forked
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.Formula.Eval.Forked;
     using NPOI.SS.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using System;
 
     /**
@@ -84,10 +84,10 @@ namespace TestCases.SS.Formula.Eval.Forked
             fe2.UpdateCell("Inputs", 0, 0, new NumberEval(1.2));
             fe2.UpdateCell("Inputs", 0, 1, new NumberEval(2.0));
 
-            Assert.AreEqual(18.9, ((NumberEval)fe1.Evaluate("Calculations", 0, 0)).NumberValue, 0.0);
-            Assert.AreEqual(4.0, ((NumberEval)fe2.Evaluate("Calculations", 0, 0)).NumberValue, 0.0);
+            ClassicAssert.AreEqual(18.9, ((NumberEval)fe1.Evaluate("Calculations", 0, 0)).NumberValue, 0.0);
+            ClassicAssert.AreEqual(4.0, ((NumberEval)fe2.Evaluate("Calculations", 0, 0)).NumberValue, 0.0);
             fe1.UpdateCell("Inputs", 0, 0, new NumberEval(3.0));
-            Assert.AreEqual(13.9, ((NumberEval)fe1.Evaluate("Calculations", 0, 0)).NumberValue, 0.0);
+            ClassicAssert.AreEqual(13.9, ((NumberEval)fe1.Evaluate("Calculations", 0, 0)).NumberValue, 0.0);
 
             wb.Close();
         }

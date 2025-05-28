@@ -16,10 +16,10 @@
    limitations Under the License.
 ==================================================================== */
 
+using NPOI.SS.Formula.Eval;
+
 namespace NPOI.SS.Formula.Functions
 {
-    using NPOI.SS.Formula.Eval;
-    using NPOI.SS.Formula.Functions;
     /**
      * Implementation of the HLOOKUP() function.<p/>
      * 
@@ -61,7 +61,7 @@ namespace NPOI.SS.Formula.Functions
                 bool IsRangeLookup = LookupUtils.ResolveRangeLookupArg(arg3, srcCellRow, srcCellCol);
                 int colIndex = LookupUtils.lookupFirstIndexOfValue(lookupValue, LookupUtils.CreateRowVector(tableArray, 0), IsRangeLookup);
                 int rowIndex = LookupUtils.ResolveRowOrColIndexArg(args[2], srcCellRow, srcCellCol);
-                ValueVector resultCol = CreateResultColumnVector(tableArray, rowIndex);
+                LookupUtils.RowVector resultCol = CreateResultColumnVector(tableArray, rowIndex);
                 return resultCol.GetItem(colIndex);
             }
             catch (EvaluationException e)
@@ -76,7 +76,7 @@ namespace NPOI.SS.Formula.Functions
          * 
          * @(#VALUE!) if colIndex Is negative, (#REF!) if colIndex Is too high
          */
-        private ValueVector CreateResultColumnVector(AreaEval tableArray, int rowIndex)
+        private static LookupUtils.RowVector CreateResultColumnVector(AreaEval tableArray, int rowIndex)
         {
             if (rowIndex >= tableArray.Height)
             {

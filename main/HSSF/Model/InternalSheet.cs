@@ -20,7 +20,7 @@ namespace NPOI.HSSF.Model
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using System.Text;
+
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.Aggregates;
     using NPOI.SS.Formula;
@@ -136,9 +136,9 @@ namespace NPOI.HSSF.Model
             for (int i = 0; i < this.records.Count; i++)
             {
                 RecordBase rb = (RecordBase)this.records[i];
-                if (rb is RecordAggregate)
+                if (rb is RecordAggregate aggregate)
                 {
-                    ((RecordAggregate)rb).VisitContainedRecords(new RecordCloner(clonedRecords));
+                    aggregate.VisitContainedRecords(new RecordCloner(clonedRecords));
                     continue;
                 }
 
@@ -177,7 +177,7 @@ namespace NPOI.HSSF.Model
             return new InternalSheet(rs);
         }
 
-        private class RecordCloner : RecordVisitor
+        private sealed class RecordCloner : RecordVisitor
         {
             private readonly IList<Record> _destList;
 
@@ -450,7 +450,7 @@ namespace NPOI.HSSF.Model
             //    log.Log(POILogger.DEBUG, "sheet createSheet (existing file) exited");
 
         }
-        private class RecordVisitor1:RecordVisitor
+        private sealed class RecordVisitor1:RecordVisitor
         {
             readonly List<RecordBase> _records;
             public RecordVisitor1(List<RecordBase> recs)
@@ -461,9 +461,12 @@ namespace NPOI.HSSF.Model
                 _records.Add(r);
             }
         }
-        private static void SpillAggregate(RecordAggregate ra, List<RecordBase> recs) {
+
+        private static void SpillAggregate(ChartSubstreamRecordAggregate ra, List<RecordBase> recs)
+        {
             ra.VisitContainedRecords(new RecordVisitor1(recs));
         }
+
         /// <summary>
         /// Creates a sheet with all the usual records minus values and the "index"
         /// record (not required).  Sets the location pointer to where the first value
@@ -1648,11 +1651,11 @@ namespace NPOI.HSSF.Model
             for (int i = 0; i < max; i++)
             {
                 Object rb = records[i];
-                if (!(rb is Record))
+                if (rb is not Record record)
                 {
                     continue;
                 }
-                Record record = (Record)rb;
+
                 if (record.Sid == sid)
                 {
                     return i;
@@ -2079,14 +2082,16 @@ namespace NPOI.HSSF.Model
          */
         public void ShiftBreaks(PageBreakRecord breaks, short start, short stop, int count)
         {
-
             if (rowBreaks == null)
+            {
                 return;
-            IEnumerator iterator = breaks.GetBreaksEnumerator();
-            IList ShiftedBreak = new ArrayList();
+            }
+
+            IEnumerator<PageBreakRecord.Break> iterator = breaks.GetBreaksEnumerator();
+            List<PageBreakRecord.Break> ShiftedBreak = [];
             while (iterator.MoveNext())
             {
-                PageBreakRecord.Break breakItem = (PageBreakRecord.Break)iterator.Current;
+                PageBreakRecord.Break breakItem = iterator.Current;
                 int breakLocation = breakItem.main;
                 bool inStart = (breakLocation >= start);
                 bool inEnd = (breakLocation <= stop);
@@ -2097,7 +2102,7 @@ namespace NPOI.HSSF.Model
             iterator = ShiftedBreak.GetEnumerator();
             while (iterator.MoveNext())
             {
-                PageBreakRecord.Break breakItem = (PageBreakRecord.Break)iterator.Current;
+                PageBreakRecord.Break breakItem = iterator.Current;
                 breaks.RemoveBreak(breakItem.main);
                 breaks.AddBreak(breakItem.main + count, breakItem.subFrom, breakItem.subTo);
             }
@@ -2182,17 +2187,16 @@ namespace NPOI.HSSF.Model
             for (int k = 0; k < records.Count; k++)
             {
                 RecordBase record = records[k];
-                if (record is RecordAggregate)
+                if (record is RecordAggregate agg)
                 {
-                    RecordAggregate agg = (RecordAggregate)record;
                     agg.VisitContainedRecords(ptv);
                     sheetOffset += agg.RecordSize;
                 }
                 else
                 {
-                    if (record is DefaultColWidthRecord)
+                    if (record is DefaultColWidthRecord widthRecord)
                     {
-                        ((DefaultColWidthRecord)record).offsetForFilePointer = sheetOffset;
+                        widthRecord.offsetForFilePointer = sheetOffset;
                     }
                     ptv.VisitRecord((Record)record);
                     sheetOffset += record.RecordSize;
@@ -2316,9 +2320,9 @@ namespace NPOI.HSSF.Model
             for (int i = records.Count - 1; i >= 0; i--)
             {
                 RecordBase rec = records[i];
-                if (rec is NoteRecord)
+                if (rec is NoteRecord record)
                 {
-                    temp.Add((NoteRecord)rec);
+                    temp.Add(record);
                 }
             }
             if (temp.Count < 1)

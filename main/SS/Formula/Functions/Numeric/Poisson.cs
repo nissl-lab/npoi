@@ -14,7 +14,7 @@
          * @param mean The mean.
          * @return If a default value should be returned.
          */
-        private bool IsDefaultResult(double x, double mean)
+        private static bool IsDefaultResult(double x, double mean)
         {
 
             if (x == 0 && mean == 0)
@@ -24,7 +24,7 @@
             return false;
         }
 
-        private bool CheckArgument(double aDouble)
+        private static bool CheckArgument(double aDouble)
         {
 
             NumericFunction.CheckValue(aDouble);
@@ -92,8 +92,8 @@
                     return new NumberEval(DEFAULT_RETURN_RESULT);
                 }
                 // check the arguments : as per excel function def
-                CheckArgument(x);
-                CheckArgument(mean);
+                Poisson.CheckArgument(x);
+                Poisson.CheckArgument(mean);
 
                 // truncate x : as per excel function def
                 if (cumulative)

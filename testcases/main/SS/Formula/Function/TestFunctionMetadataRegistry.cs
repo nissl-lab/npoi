@@ -16,7 +16,7 @@
 ==================================================================== */
 
 using System;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using NPOI.SS.Formula.Function;
 namespace TestCases.SS.Formula.Function
 {
@@ -39,12 +39,12 @@ namespace TestCases.SS.Formula.Function
         {
             FunctionMetadata fm;
             fm = FunctionMetadataRegistry.GetFunctionByIndex(index);
-            Assert.IsNotNull(fm);
-            Assert.AreEqual(funcName, fm.Name);
+            ClassicAssert.IsNotNull(fm);
+            ClassicAssert.AreEqual(funcName, fm.Name);
 
             fm = FunctionMetadataRegistry.GetFunctionByName(funcName);
-            Assert.IsNotNull(fm);
-            Assert.AreEqual(index, fm.Index);
+            ClassicAssert.IsNotNull(fm);
+            ClassicAssert.AreEqual(index, fm.Index);
         }
     }
 

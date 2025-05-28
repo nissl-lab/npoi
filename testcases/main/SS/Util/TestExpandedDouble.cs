@@ -16,7 +16,7 @@
 ==================================================================== */
 
 using NPOI.SS.Util;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using System;
 using System.Text;
 using NPOI.Util;
@@ -41,10 +41,10 @@ namespace TestCases.SS.Util
             {
                 throw new AssertionException("identified bug - sign bit not masked out of exponent");
             }
-            Assert.AreEqual(2, hd.GetBinaryExponent());
+            ClassicAssert.AreEqual(2, hd.GetBinaryExponent());
             BigInteger frac = hd.GetSignificand();
-            Assert.AreEqual(64, frac.BitLength());
-            Assert.AreEqual(1, frac.BitCount());
+            ClassicAssert.AreEqual(64, frac.BitLength());
+            ClassicAssert.AreEqual(1, frac.BitCount());
         }
         [Test]
         public void TestSubnormal()
@@ -55,10 +55,10 @@ namespace TestCases.SS.Util
             {
                 throw new AssertionException("identified bug - subnormal numbers not decoded properly");
             }
-            Assert.AreEqual(-1086, hd.GetBinaryExponent());
+            ClassicAssert.AreEqual(-1086, hd.GetBinaryExponent());
             BigInteger frac = hd.GetSignificand();
-            Assert.AreEqual(64, frac.BitLength());
-            Assert.AreEqual(1, frac.BitCount());
+            ClassicAssert.AreEqual(64, frac.BitLength());
+            ClassicAssert.AreEqual(1, frac.BitCount());
         }
 
         /**

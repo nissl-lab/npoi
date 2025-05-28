@@ -24,9 +24,10 @@ namespace TestCases.DDF
     using System.Collections.Generic;
     using System.IO;
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.DDF;
     using NPOI.Util;
+
     [TestFixture]
     public class TestEscherDggRecord
     {
@@ -37,8 +38,8 @@ namespace TestCases.DDF
 
             byte[] data = new byte[32];
             int bytesWritten = r.Serialize(0, data);
-            Assert.AreEqual(32, bytesWritten);
-            Assert.AreEqual("[00, 00, " +
+            ClassicAssert.AreEqual(32, bytesWritten);
+            ClassicAssert.AreEqual("[00, 00, " +
                     "06, F0, " +
                     "18, 00, 00, 00, " +
                     "02, 04, 00, 00, " +
@@ -63,14 +64,14 @@ namespace TestCases.DDF
             EscherDggRecord r = new EscherDggRecord();
             int bytesWritten = r.FillFields(data, new DefaultEscherRecordFactory());
 
-            Assert.AreEqual(32, bytesWritten);
-            Assert.AreEqual(0x402, r.ShapeIdMax);
-            Assert.AreEqual(0x02, r.NumIdClusters);
-            Assert.AreEqual(0x02, r.NumShapesSaved);
-            Assert.AreEqual(0x01, r.DrawingsSaved);
-            Assert.AreEqual(1, r.FileIdClusters.Length);
-            Assert.AreEqual(0x01, r.FileIdClusters[0].DrawingGroupId);
-            Assert.AreEqual(0x02, r.FileIdClusters[0].NumShapeIdsUsed);
+            ClassicAssert.AreEqual(32, bytesWritten);
+            ClassicAssert.AreEqual(0x402, r.ShapeIdMax);
+            ClassicAssert.AreEqual(0x02, r.NumIdClusters);
+            ClassicAssert.AreEqual(0x02, r.NumShapesSaved);
+            ClassicAssert.AreEqual(0x01, r.DrawingsSaved);
+            ClassicAssert.AreEqual(1, r.FileIdClusters.Length);
+            ClassicAssert.AreEqual(0x01, r.FileIdClusters[0].DrawingGroupId);
+            ClassicAssert.AreEqual(0x02, r.FileIdClusters[0].NumShapeIdsUsed);
         }
         [Test]
         public void TestToString()
@@ -87,7 +88,7 @@ namespace TestCases.DDF
                     "  DrawingsSaved: 1" + nl +
                     "  DrawingGroupId1: 1" + nl +
                     "  NumShapeIdsUsed1: 2" + nl;
-            Assert.AreEqual(expected, CreateRecord().ToString());
+            ClassicAssert.AreEqual(expected, CreateRecord().ToString());
         }
 
         private EscherDggRecord CreateRecord()
@@ -108,7 +109,7 @@ namespace TestCases.DDF
         {
             EscherDggRecord r = new EscherDggRecord();
             r.FileIdClusters=new EscherDggRecord.FileIdCluster[] { new EscherDggRecord.FileIdCluster(0, 0) };
-            Assert.AreEqual(32, r.RecordSize);
+            ClassicAssert.AreEqual(32, r.RecordSize);
 
         }
 

@@ -23,7 +23,7 @@ namespace TestCases.HPSF.Basic
     using System.IO;
     using System.Text;
     using System.Collections;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HPSF;
     using NPOI.Util;
     using System.Collections.Generic;
@@ -69,7 +69,7 @@ namespace TestCases.HPSF.Basic
 
                     for (int j = 0; j < psf1.Length; j++)
                     {
-                        Stream in1 =
+                        InputStream in1 =
                             new ByteArrayInputStream(psf1[j].GetBytes());
                         try
                         {

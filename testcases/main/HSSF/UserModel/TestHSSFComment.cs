@@ -18,7 +18,7 @@ namespace TestCases.HSSF.UserModel
 {
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using TestCases.HSSF;
     using TestCases.SS.UserModel;
     using System;
@@ -46,7 +46,7 @@ namespace TestCases.HSSF.UserModel
         public void DefaultShapeType()
         {
             HSSFComment comment = new HSSFComment((HSSFShape)null, new HSSFClientAnchor());
-            Assert.AreEqual(HSSFSimpleShape.OBJECT_TYPE_COMMENT, comment.ShapeType);
+            ClassicAssert.AreEqual(HSSFSimpleShape.OBJECT_TYPE_COMMENT, comment.ShapeType);
         }
         /**
          *  HSSFCell#findCellComment should NOT rely on the order of records
@@ -62,27 +62,27 @@ namespace TestCases.HSSF.UserModel
 
             cell = sheet.GetRow(0).GetCell(0);
             comment = cell.CellComment;
-            Assert.AreEqual("a1", comment.String.String);
+            ClassicAssert.AreEqual("a1", comment.String.String);
 
             cell = sheet.GetRow(1).GetCell(0);
             comment = cell.CellComment;
-            Assert.AreEqual("a2", comment.String.String);
+            ClassicAssert.AreEqual("a2", comment.String.String);
 
             cell = sheet.GetRow(2).GetCell(0);
             comment = cell.CellComment;
-            Assert.AreEqual("a3", comment.String.String);
+            ClassicAssert.AreEqual("a3", comment.String.String);
 
             cell = sheet.GetRow(2).GetCell(2);
             comment = cell.CellComment;
-            Assert.AreEqual("c3", comment.String.String);
+            ClassicAssert.AreEqual("c3", comment.String.String);
 
             cell = sheet.GetRow(4).GetCell(1);
             comment = cell.CellComment;
-            Assert.AreEqual("b5", comment.String.String);
+            ClassicAssert.AreEqual("b5", comment.String.String);
 
             cell = sheet.GetRow(5).GetCell(2);
             comment = cell.CellComment;
-            Assert.AreEqual("c6", comment.String.String);
+            ClassicAssert.AreEqual("c6", comment.String.String);
 
             wb.Close();
         }
@@ -150,7 +150,7 @@ namespace TestCases.HSSF.UserModel
                     {
                         IComment commentObj = insertComment(drawing, cell, comment + cellNum);
 
-                        Assert.AreEqual(count, ((HSSFComment)commentObj).NoteRecord.ShapeId);
+                        ClassicAssert.AreEqual(count, ((HSSFComment)commentObj).NoteRecord.ShapeId);
                     }
                     catch (ArgumentException e)
                     {
@@ -173,11 +173,11 @@ namespace TestCases.HSSF.UserModel
         {
             for (int i = 0; i < noOfRows; i++)
             {
-                Assert.IsNotNull(sheet.GetRow(i));
-                Assert.IsNotNull(sheet.GetRow(i).GetCell(0));
-                Assert.IsNotNull(sheet.GetRow(i).GetCell(0).CellComment, "Did not Get a Cell Comment for row " + i);
-                Assert.IsNotNull(sheet.GetRow(i).GetCell(0).CellComment.String);
-                Assert.AreEqual(comment + i, sheet.GetRow(i).GetCell(0).CellComment.String.String);
+                ClassicAssert.IsNotNull(sheet.GetRow(i));
+                ClassicAssert.IsNotNull(sheet.GetRow(i).GetCell(0));
+                ClassicAssert.IsNotNull(sheet.GetRow(i).GetCell(0).CellComment, "Did not Get a Cell Comment for row " + i);
+                ClassicAssert.IsNotNull(sheet.GetRow(i).GetCell(0).CellComment.String);
+                ClassicAssert.AreEqual(comment + i, sheet.GetRow(i).GetCell(0).CellComment.String.String);
             }
         }
 
@@ -216,39 +216,39 @@ namespace TestCases.HSSF.UserModel
             HSSFCell cell = row.CreateCell(0) as HSSFCell;
             cell.CellComment = (comment);
 
-            Assert.AreEqual(comment.GetEscherContainer().ChildRecords.Count, 5);
+            ClassicAssert.AreEqual(comment.GetEscherContainer().ChildRecords.Count, 5);
 
             //sp record
             byte[] expected = Decompress("H4sIAAAAAAAAAFvEw/WBg4GBgZEFSHAxMAAA9gX7nhAAAAA=");
             byte[] actual = comment.GetEscherContainer().GetChild(0).Serialize();
 
-            Assert.AreEqual(expected.Length, actual.Length);
-            Assert.IsTrue(Arrays.Equals(expected, actual));
+            ClassicAssert.AreEqual(expected.Length, actual.Length);
+            ClassicAssert.IsTrue(Arrays.Equals(expected, actual));
 
             expected = Decompress("H4sIAAAAAAAAAGNgEPggxIANAABK4+laGgAAAA==");
             actual = comment.GetEscherContainer().GetChild(2).Serialize();
 
-            Assert.AreEqual(expected.Length, actual.Length);
-            Assert.IsTrue(Arrays.Equals(expected, actual));
+            ClassicAssert.AreEqual(expected.Length, actual.Length);
+            ClassicAssert.IsTrue(Arrays.Equals(expected, actual));
 
             expected = Decompress("H4sIAAAAAAAAAGNgEPzAAAQACl6c5QgAAAA=");
             actual = comment.GetEscherContainer().GetChild(3).Serialize();
 
-            Assert.AreEqual(expected.Length, actual.Length);
-            Assert.IsTrue(Arrays.Equals(expected, actual));
+            ClassicAssert.AreEqual(expected.Length, actual.Length);
+            ClassicAssert.IsTrue(Arrays.Equals(expected, actual));
 
             expected = Decompress("H4sIAAAAAAAAAGNg4P3AAAQA6pyIkQgAAAA=");
             actual = comment.GetEscherContainer().GetChild(4).Serialize();
 
-            Assert.AreEqual(expected.Length, actual.Length);
-            Assert.IsTrue(Arrays.Equals(expected, actual));
+            ClassicAssert.AreEqual(expected.Length, actual.Length);
+            ClassicAssert.IsTrue(Arrays.Equals(expected, actual));
 
             ObjRecord obj = comment.GetObjRecord();
 
             expected = Decompress("H4sIAAAAAAAAAItlMGEQZRBikGRgZBF0YEACvAxiDLgBAJZsuoU4AAAA");
             actual = obj.Serialize();
 
-            Assert.AreEqual(expected.Length, actual.Length);
+            ClassicAssert.AreEqual(expected.Length, actual.Length);
             //assertArrayEquals(expected, actual);
 
             TextObjectRecord tor = comment.GetTextObjectRecord();
@@ -256,16 +256,16 @@ namespace TestCases.HSSF.UserModel
             expected = Decompress("H4sIAAAAAAAAANvGKMQgxMSABgBGi8T+FgAAAA==");
             actual = tor.Serialize();
 
-            Assert.AreEqual(expected.Length, actual.Length);
-            Assert.IsTrue(Arrays.Equals(expected, actual));
+            ClassicAssert.AreEqual(expected.Length, actual.Length);
+            ClassicAssert.IsTrue(Arrays.Equals(expected, actual));
 
             NoteRecord note = comment.NoteRecord;
 
             expected = Decompress("H4sIAAAAAAAAAJNh4GGAAEYWEAkAS0KXuRAAAAA=");
             actual = note.Serialize();
 
-            Assert.AreEqual(expected.Length, actual.Length);
-            Assert.IsTrue(Arrays.Equals(expected, actual));
+            ClassicAssert.AreEqual(expected.Length, actual.Length);
+            ClassicAssert.IsTrue(Arrays.Equals(expected, actual));
 
             wb.Close();
         }
@@ -284,33 +284,33 @@ namespace TestCases.HSSF.UserModel
             comment.Row = (5);
             comment.String = new HSSFRichTextString("comment2");
             comment.SetBackgroundImage(idx);
-            Assert.AreEqual(comment.GetBackgroundImageId(), idx);
+            ClassicAssert.AreEqual(comment.GetBackgroundImageId(), idx);
 
-            Assert.AreEqual(patriarch.Children.Count, 2);
+            ClassicAssert.AreEqual(patriarch.Children.Count, 2);
 
             HSSFWorkbook wbBack = HSSFTestDataSamples.WriteOutAndReadBack(wb);
             sh = wbBack.GetSheetAt(0) as HSSFSheet;
             patriarch = sh.DrawingPatriarch as HSSFPatriarch;
 
             comment = (HSSFComment)patriarch.Children[(1)];
-            Assert.AreEqual(comment.GetBackgroundImageId(), idx);
+            ClassicAssert.AreEqual(comment.GetBackgroundImageId(), idx);
             comment.ResetBackgroundImage();
-            Assert.AreEqual(comment.GetBackgroundImageId(), 0);
+            ClassicAssert.AreEqual(comment.GetBackgroundImageId(), 0);
 
-            Assert.AreEqual(patriarch.Children.Count, 2);
+            ClassicAssert.AreEqual(patriarch.Children.Count, 2);
             comment = patriarch.CreateCellComment(new HSSFClientAnchor()) as HSSFComment;
             comment.String = new HSSFRichTextString("comment3");
 
-            Assert.AreEqual(patriarch.Children.Count, 3);
+            ClassicAssert.AreEqual(patriarch.Children.Count, 3);
             HSSFWorkbook wbBack2 = HSSFTestDataSamples.WriteOutAndReadBack(wbBack);
             sh = wbBack2.GetSheetAt(0) as HSSFSheet;
             patriarch = sh.DrawingPatriarch as HSSFPatriarch;
             comment = (HSSFComment)patriarch.Children[1];
-            Assert.AreEqual(comment.GetBackgroundImageId(), 0);
-            Assert.AreEqual(patriarch.Children.Count, 3);
-            Assert.AreEqual(((HSSFComment)patriarch.Children[0]).String.String, "comment1");
-            Assert.AreEqual(((HSSFComment)patriarch.Children[1]).String.String, "comment2");
-            Assert.AreEqual(((HSSFComment)patriarch.Children[2]).String.String, "comment3");
+            ClassicAssert.AreEqual(comment.GetBackgroundImageId(), 0);
+            ClassicAssert.AreEqual(patriarch.Children.Count, 3);
+            ClassicAssert.AreEqual(((HSSFComment)patriarch.Children[0]).String.String, "comment1");
+            ClassicAssert.AreEqual(((HSSFComment)patriarch.Children[1]).String.String, "comment2");
+            ClassicAssert.AreEqual(((HSSFComment)patriarch.Children[2]).String.String, "comment3");
 
             wb.Close();
             wbBack.Close();
@@ -325,19 +325,19 @@ namespace TestCases.HSSF.UserModel
 
             HSSFComment comment = patriarch.CreateCellComment(new HSSFClientAnchor()) as HSSFComment;
             comment.String = new HSSFRichTextString("comment1");
-            Assert.AreEqual(comment.String.String, "comment1");
+            ClassicAssert.AreEqual(comment.String.String, "comment1");
 
             comment.Author = ("poi");
-            Assert.AreEqual(comment.Author, "poi");
+            ClassicAssert.AreEqual(comment.Author, "poi");
 
             comment.Column = (3);
-            Assert.AreEqual(comment.Column, 3);
+            ClassicAssert.AreEqual(comment.Column, 3);
 
             comment.Row = (4);
-            Assert.AreEqual(comment.Row, 4);
+            ClassicAssert.AreEqual(comment.Row, 4);
 
             comment.Visible = (false);
-            Assert.AreEqual(comment.Visible, false);
+            ClassicAssert.AreEqual(comment.Visible, false);
 
             HSSFWorkbook wbBack = HSSFTestDataSamples.WriteOutAndReadBack(wb);
             sh = wbBack.GetSheetAt(0) as HSSFSheet;
@@ -345,11 +345,11 @@ namespace TestCases.HSSF.UserModel
 
             comment = (HSSFComment)patriarch.Children[0];
 
-            Assert.AreEqual(comment.String.String, "comment1");
-            Assert.AreEqual("poi", comment.Author);
-            Assert.AreEqual(comment.Column, 3);
-            Assert.AreEqual(comment.Row, 4);
-            Assert.AreEqual(comment.Visible, false);
+            ClassicAssert.AreEqual(comment.String.String, "comment1");
+            ClassicAssert.AreEqual("poi", comment.Author);
+            ClassicAssert.AreEqual(comment.Column, 3);
+            ClassicAssert.AreEqual(comment.Row, 4);
+            ClassicAssert.AreEqual(comment.Visible, false);
 
             comment.String = new HSSFRichTextString("comment12");
             comment.Author = ("poi2");
@@ -362,11 +362,11 @@ namespace TestCases.HSSF.UserModel
             patriarch = sh.DrawingPatriarch as HSSFPatriarch;
             comment = (HSSFComment)patriarch.Children[0];
 
-            Assert.AreEqual(comment.String.String, "comment12");
-            Assert.AreEqual("poi2", comment.Author);
-            Assert.AreEqual(comment.Column, 32);
-            Assert.AreEqual(comment.Row, 42);
-            Assert.AreEqual(comment.Visible, true);
+            ClassicAssert.AreEqual(comment.String.String, "comment12");
+            ClassicAssert.AreEqual("poi2", comment.Author);
+            ClassicAssert.AreEqual(comment.Column, 32);
+            ClassicAssert.AreEqual(comment.Row, 42);
+            ClassicAssert.AreEqual(comment.Visible, true);
 
             wb.Close();
             wbBack.Close();
@@ -378,12 +378,12 @@ namespace TestCases.HSSF.UserModel
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("drawings.xls");
             HSSFSheet sheet = wb.GetSheet("comments") as HSSFSheet;
             HSSFPatriarch Drawing = sheet.DrawingPatriarch as HSSFPatriarch;
-            Assert.AreEqual(1, Drawing.Children.Count);
+            ClassicAssert.AreEqual(1, Drawing.Children.Count);
             HSSFComment comment = (HSSFComment)Drawing.Children[(0)];
-            Assert.AreEqual(comment.Author, "evgeniy");
-            Assert.AreEqual(comment.String.String, "evgeniy:\npoi test");
-            Assert.AreEqual(comment.Column, 1);
-            Assert.AreEqual(comment.Row, 2);
+            ClassicAssert.AreEqual(comment.Author, "evgeniy");
+            ClassicAssert.AreEqual(comment.String.String, "evgeniy:\npoi test");
+            ClassicAssert.AreEqual(comment.Column, 1);
+            ClassicAssert.AreEqual(comment.Row, 2);
 
             wb.Close();
         }
@@ -399,14 +399,14 @@ namespace TestCases.HSSF.UserModel
             HSSFCell cell = row.CreateCell(4) as HSSFCell;
             cell.CellComment = (comment);
 
-            Assert.IsNotNull(sh.FindCellComment(5, 4));
-            Assert.IsNull(sh.FindCellComment(5, 5));
+            ClassicAssert.IsNotNull(sh.FindCellComment(5, 4));
+            ClassicAssert.IsNull(sh.FindCellComment(5, 5));
 
             HSSFWorkbook wbBack = HSSFTestDataSamples.WriteOutAndReadBack(wb);
             sh = wbBack.GetSheetAt(0) as HSSFSheet;
 
-            Assert.IsNotNull(sh.FindCellComment(5, 4));
-            Assert.IsNull(sh.FindCellComment(5, 5));
+            ClassicAssert.IsNotNull(sh.FindCellComment(5, 4));
+            ClassicAssert.IsNull(sh.FindCellComment(5, 5));
 
             wb.Close();
             wbBack.Close();
@@ -419,15 +419,15 @@ namespace TestCases.HSSF.UserModel
             HSSFPatriarch patriarch = sh.CreateDrawingPatriarch() as HSSFPatriarch;
 
             EscherAggregate agg = HSSFTestHelper.GetEscherAggregate(patriarch);
-            Assert.AreEqual(agg.TailRecords.Count, 0);
+            ClassicAssert.AreEqual(agg.TailRecords.Count, 0);
 
             HSSFComment comment = patriarch.CreateCellComment(new HSSFClientAnchor()) as HSSFComment;
-            Assert.AreEqual(agg.TailRecords.Count, 1);
+            ClassicAssert.AreEqual(agg.TailRecords.Count, 1);
 
             HSSFSimpleShape shape = patriarch.CreateSimpleShape(new HSSFClientAnchor());
-            Assert.IsNotNull(shape);
+            ClassicAssert.IsNotNull(shape);
 
-            Assert.AreEqual(comment.GetOptRecord().EscherProperties.Count, 10);
+            ClassicAssert.AreEqual(comment.GetOptRecord().EscherProperties.Count, 10);
             wb.Close();
         }
         [Test]
@@ -441,14 +441,14 @@ namespace TestCases.HSSF.UserModel
 
             comment.ShapeId = 2024;
 
-            Assert.AreEqual(comment.ShapeId, 2024);
+            ClassicAssert.AreEqual(comment.ShapeId, 2024);
 
             CommonObjectDataSubRecord cod = (CommonObjectDataSubRecord)comment.GetObjRecord().SubRecords[0];
-            Assert.AreEqual(2024, cod.ObjectId);
+            ClassicAssert.AreEqual(2024, cod.ObjectId);
             EscherSpRecord spRecord = (EscherSpRecord)comment.GetEscherContainer().GetChild(0);
-            Assert.AreEqual(2024, spRecord.ShapeId);
-            Assert.AreEqual(2024, comment.ShapeId);
-            Assert.AreEqual(2024, comment.NoteRecord.ShapeId);
+            ClassicAssert.AreEqual(2024, spRecord.ShapeId);
+            ClassicAssert.AreEqual(2024, comment.ShapeId);
+            ClassicAssert.AreEqual(2024, comment.NoteRecord.ShapeId);
 
             wb.Close();
         }

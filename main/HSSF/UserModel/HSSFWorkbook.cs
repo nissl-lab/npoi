@@ -23,10 +23,10 @@ namespace NPOI.HSSF.UserModel
     using System.Collections.Generic;
     using System.Globalization;
     using System.IO;
-    using System.Reflection;
     using System.Security.Cryptography;
     using System.Text;
     using NPOI.DDF;
+    using NPOI.HPSF;
     using NPOI.HSSF.Model;
     using NPOI.HSSF.Record;
     using NPOI.POIFS.Crypt;
@@ -121,7 +121,7 @@ namespace NPOI.HSSF.UserModel
         /// <summary>
         /// Totals the sizes of all sheet records and eventually serializes them
         /// </summary>
-        private class SheetRecordCollector : NPOI.HSSF.Record.Aggregates.RecordVisitor,IDisposable
+        private sealed class SheetRecordCollector : NPOI.HSSF.Record.Aggregates.RecordVisitor,IDisposable
         {
 
             private readonly ArrayList _list;
@@ -414,7 +414,7 @@ namespace NPOI.HSSF.UserModel
                     records.RemoveAt(k);
                     LabelSSTRecord newrec = new LabelSSTRecord();
                     int stringid =
-                        workbook.AddSSTString(new UnicodeString(oldrec.Value));
+                        workbook.AddSSTString(new HSSF.Record.UnicodeString(oldrec.Value));
 
                     newrec.Row = (oldrec.Row);
                     newrec.Column = (oldrec.Column);
@@ -614,7 +614,7 @@ namespace NPOI.HSSF.UserModel
                 ValidateSheetIndex(index);
             }
             // ignore duplicates
-            ISet<int> set = new HashSet<int>(indexes);
+            HashSet<int> set = new(indexes);
             int nSheets = _sheets.Count;
             for (int i = 0; i < nSheets; i++)
             {
@@ -896,7 +896,7 @@ namespace NPOI.HSSF.UserModel
             int uniqueIndex = 2;
             String baseName = srcName;
             int bracketPos = srcName.LastIndexOf('(');
-            if (bracketPos > 0 && srcName.EndsWith(")", StringComparison.Ordinal))
+            if (bracketPos > 0 && srcName.EndsWith(')'))
             {
                 String suffix = srcName.Substring(bracketPos + 1, srcName.Length - bracketPos - 2);
                 try
@@ -1139,7 +1139,7 @@ namespace NPOI.HSSF.UserModel
             }
         }
 
-        private bool IsRowColHeaderRecord(NameRecord r)
+        private static bool IsRowColHeaderRecord(NameRecord r)
         {
             return r.OptionFlag == 0x20 && ("" + ((char)7)).Equals(r.NameText);
         }
@@ -1689,7 +1689,7 @@ namespace NPOI.HSSF.UserModel
             if (name == null)
                 name = workbook.CreateBuiltInName(NameRecord.BUILTIN_PRINT_AREA, sheetIndex + 1);
             //Adding one here because 0 indicates a global named region; doesnt make sense for print areas
-            String[] parts = reference.Split(new char[]{','});
+            String[] parts = reference.Split(',');
             StringBuilder sb = new StringBuilder(32);
             for (int i = 0; i < parts.Length; i++)
             {
@@ -1943,7 +1943,7 @@ namespace NPOI.HSSF.UserModel
                     // see also http://de.wikipedia.org/wiki/Windows_Metafile#Hinweise_zur_WMF-Spezifikation
                     if (LittleEndian.GetInt(pictureData) == unchecked((int)0x9AC6CDD7)) {
                         byte[] picDataNoHeader = new byte[pictureData.Length-22];
-                        Array.Copy(pictureData, 22, picDataNoHeader, 0, pictureData.Length-22);
+                        System.Array.Copy(pictureData, 22, picDataNoHeader, 0, pictureData.Length-22);
                         pictureData = picDataNoHeader;
                     }
                     EscherMetafileBlip blipRecordMeta = new EscherMetafileBlip();
@@ -2027,10 +2027,10 @@ namespace NPOI.HSSF.UserModel
             List<HSSFPictureData> pictures = new List<HSSFPictureData>();
             foreach (Record r in workbook.Records)
             {
-                if (r is AbstractEscherHolderRecord) {
-                    ((AbstractEscherHolderRecord)r).Decode();
-                    IList escherRecords = ((AbstractEscherHolderRecord)r).EscherRecords;
-                    SearchForPictures(escherRecords, pictures);
+                if (r is AbstractEscherHolderRecord record) {
+                    record.Decode();
+                    IList escherRecords = record.EscherRecords;
+                    HSSFWorkbook.SearchForPictures(escherRecords, pictures);
                 }
             }
             return pictures;
@@ -2050,19 +2050,17 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="escherRecords">the escher records.</param>
         /// <param name="pictures">the list to populate with the pictures.</param>
-        private void SearchForPictures(IList escherRecords, List<HSSFPictureData> pictures)
+        private static void SearchForPictures(IList escherRecords, List<HSSFPictureData> pictures)
         {
             IEnumerator recordIter = escherRecords.GetEnumerator();
             while (recordIter.MoveNext())
             {
                 Object obj = recordIter.Current;
-                if (obj is EscherRecord)
+                if (obj is EscherRecord escherRecord)
                 {
-                    EscherRecord escherRecord = (EscherRecord)obj;
-
-                    if (escherRecord is EscherBSERecord)
+                    if (escherRecord is EscherBSERecord record)
                     {
-                        EscherBlipRecord blip = ((EscherBSERecord)escherRecord).BlipRecord;
+                        EscherBlipRecord blip = record.BlipRecord;
                         if (blip != null)
                         {
                             // TODO: Some kind of structure.
@@ -2071,7 +2069,7 @@ namespace NPOI.HSSF.UserModel
                     }
 
                     // Recursive call.
-                    SearchForPictures(escherRecord.ChildRecords, pictures);
+                    HSSFWorkbook.SearchForPictures(escherRecord.ChildRecords, pictures);
                 }
             }
         }
@@ -2197,7 +2195,7 @@ namespace NPOI.HSSF.UserModel
             List<HSSFObjectData> objects = new List<HSSFObjectData>();
             foreach (HSSFSheet sheet in _sheets)
             {
-                GetAllEmbeddedObjects(sheet, objects);
+                HSSFWorkbook.GetAllEmbeddedObjects(sheet, objects);
             }
             return objects;
         }
@@ -2207,14 +2205,14 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="sheet">the list of records to search.</param>
         /// <param name="objects">the list of embedded objects to populate.</param>
-        private void GetAllEmbeddedObjects(HSSFSheet sheet, List<HSSFObjectData> objects)
+        private static void GetAllEmbeddedObjects(HSSFSheet sheet, List<HSSFObjectData> objects)
         {
             HSSFPatriarch patriarch = sheet.DrawingPatriarch as HSSFPatriarch;
             if (null == patriarch)
             {
                 return;
             }
-            GetAllEmbeddedObjects(patriarch, objects);
+            HSSFWorkbook.GetAllEmbeddedObjects(patriarch, objects);
         }
 
         /// <summary>
@@ -2222,13 +2220,13 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="parent">the parent.</param>
         /// <param name="objects">the list of embedded objects to populate.</param>
-        private void GetAllEmbeddedObjects(HSSFShapeContainer parent, List<HSSFObjectData> objects)
+        private static void GetAllEmbeddedObjects(HSSFShapeContainer parent, List<HSSFObjectData> objects)
         {
             foreach (HSSFShape shape in parent.Children) {
-                if (shape is HSSFObjectData) {
-                    objects.Add((HSSFObjectData) shape);
-                } else if (shape is HSSFShapeContainer) {
-                    GetAllEmbeddedObjects((HSSFShapeContainer) shape, objects);
+                if (shape is HSSFObjectData data) {
+                    objects.Add(data);
+                } else if (shape is HSSFShapeContainer container) {
+                    HSSFWorkbook.GetAllEmbeddedObjects(container, objects);
                 }
             }
         }

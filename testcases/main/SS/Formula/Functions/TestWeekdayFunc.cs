@@ -22,7 +22,7 @@ namespace TestCases.SS.Formula.Functions
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.Formula.Functions;
     using NPOI.Util;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     [TestFixture]
     public class TestWeekdayFunc
@@ -34,14 +34,14 @@ namespace TestCases.SS.Formula.Functions
             String formula = "WEEKDAY(" + serial_number + ")";
             ValueEval[] args = new ValueEval[] { new NumberEval(serial_number) };
             NumberEval result = (NumberEval)WeekdayFunc.instance.Evaluate(args, 0, 0);
-            Assert.AreEqual(expected, result.NumberValue, TOLERANCE, formula);
+            ClassicAssert.AreEqual(expected, result.NumberValue, TOLERANCE, formula);
         }
         private void assertEvaluateEquals(double expected, double serial_number, double return_type)
         {
             String formula = "WEEKDAY(" + serial_number + ", " + return_type + ")";
             ValueEval[] args = new ValueEval[] { new NumberEval(serial_number), new NumberEval(return_type) };
             NumberEval result = (NumberEval)WeekdayFunc.instance.Evaluate(args, 0, 0);
-            Assert.AreEqual(expected, result.NumberValue, TOLERANCE, formula);
+            ClassicAssert.AreEqual(expected, result.NumberValue, TOLERANCE, formula);
         }
         [Test]
         public void TestEvaluate()
@@ -75,7 +75,7 @@ namespace TestCases.SS.Formula.Functions
         {
             String formula = "WEEKDAY(" + StringUtil.Join(args, ", ") + ")";
             ValueEval result = WeekdayFunc.instance.Evaluate(args, 0, 0);
-            Assert.AreEqual(expected, result, formula + ": " + message);
+            ClassicAssert.AreEqual(expected, result, formula + ": " + message);
         }
         [Test]
         public void TestEvaluateInvalid()

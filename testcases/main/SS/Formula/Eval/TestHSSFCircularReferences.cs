@@ -20,7 +20,7 @@ namespace TestCases.SS.Formula.Eval
     using System;
 
     using NPOI.HSSF;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using TestCases.HSSF;
     using NPOI.SS.Formula.Eval;
 

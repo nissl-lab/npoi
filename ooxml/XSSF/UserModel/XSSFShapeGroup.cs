@@ -285,14 +285,15 @@ namespace NPOI.XSSF.UserModel
 
             if(parent == null) { // top level group
                 var ac = new XSSFClientAnchor(Sheet, (int)min.x, (int)min.y, (int)max.x, (int)max.y);
-                if(cellanchor is CT_TwoCellAnchor) {
+                if(cellanchor is CT_TwoCellAnchor cellAnchor) {
                     ((CT_TwoCellAnchor) cellanchor).from = ac.From;
                     ((CT_TwoCellAnchor) cellanchor).to= ac.To;
                 }
             }
         }
 
-        private void AutoFit(CT_GroupShape CtGroup, Coords Min, Coords Max) {
+        private static void AutoFit(CT_GroupShape CtGroup, Coords Min, Coords Max)
+        {
             foreach(var cxn in CtGroup.Connectors) {
                 var cd = new Coords(cxn.spPr.xfrm.off.x, cxn.spPr.xfrm.off.y);
                 Min.Min(cd);

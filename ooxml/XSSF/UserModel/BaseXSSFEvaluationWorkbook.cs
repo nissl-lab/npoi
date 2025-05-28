@@ -48,10 +48,11 @@ namespace NPOI.XSSF.UserModel
             _uBook = book;
         }
 
-        private int ConvertFromExternalSheetIndex(int externSheetIndex)
+        private static int ConvertFromExternalSheetIndex(int externSheetIndex)
         {
             return externSheetIndex;
         }
+
         /**
          * XSSF doesn't use external sheet indexes, so when asked treat
          * it just as a local index
@@ -60,13 +61,14 @@ namespace NPOI.XSSF.UserModel
         {
             return externSheetIndex;
         }
+
         /**
          * @return  the external sheet index of the sheet with the given internal
          * index. Used by some of the more obscure formula and named range things.
          * Fairly easy on XSSF (we think...) since the internal and external
          * indices are the same
          */
-        private int ConvertToExternalSheetIndex(int sheetIndex)
+        private static int ConvertToExternalSheetIndex(int sheetIndex)
         {
             return sheetIndex;
         }
@@ -80,7 +82,7 @@ namespace NPOI.XSSF.UserModel
         private int ResolveBookIndex(String bookName)
         {
             // Strip the [] wrapper, if still present
-            if (bookName.StartsWith("[") && bookName.EndsWith("]"))
+            if (bookName.StartsWith('[') && bookName.EndsWith(']'))
             {
                 bookName = bookName.Substring(1, bookName.Length - 2);
             }
@@ -98,7 +100,7 @@ namespace NPOI.XSSF.UserModel
             if (index != -1) return index;
 
             // Is it an absolute file reference?
-            if (bookName.StartsWith("'file:///") && bookName.EndsWith("'"))
+            if (bookName.StartsWith("'file:///") && bookName.EndsWith('\''))
             {
                 String relBookName = bookName.Substring(bookName.LastIndexOf('/') + 1);
                 relBookName = relBookName.Substring(0, relBookName.Length - 1); // Trailing '
@@ -118,8 +120,9 @@ namespace NPOI.XSSF.UserModel
             // Not properly referenced
             throw new Exception("Book not linked for filename " + bookName);
         }
+
         /* case-sensitive */
-        private int FindExternalLinkIndex(String bookName, List<ExternalLinksTable> tables)
+        private static int FindExternalLinkIndex(String bookName, List<ExternalLinksTable> tables)
         {
             int i = 0;
             foreach (ExternalLinksTable table in tables)
@@ -132,7 +135,8 @@ namespace NPOI.XSSF.UserModel
             }
             return -1;
         }
-        private class FakeExternalLinksTable : ExternalLinksTable
+
+        private sealed class FakeExternalLinksTable : ExternalLinksTable
         {
             private readonly String fileName;
             internal FakeExternalLinksTable(string fileName)
@@ -426,7 +430,7 @@ namespace NPOI.XSSF.UserModel
             return _uBook.GetUDFFinder();
         }
 
-        private class Name : IEvaluationName
+        private sealed class Name : IEvaluationName
         {
 
             private readonly XSSFName _nameRecord;

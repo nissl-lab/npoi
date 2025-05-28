@@ -413,6 +413,10 @@ namespace NPOI.XSSF.Streaming
          * <p>
          *     Please note the the "compress" option may cause performance penalty.
          * </p>
+         * <p>
+         *     Setting this option only affects compression for subsequent <code>createSheet()</code> 
+         *     calls.
+         * </p>
          * @param compress whether to compress temp files
          */
         public bool CompressTempFiles
@@ -1002,7 +1006,7 @@ namespace NPOI.XSSF.Streaming
 
         //TODO: missing method isDate1904, isHidden, setHidden
 
-        private class SheetEnumerator<T> : IEnumerator<T> where T : class, ISheet
+        private sealed class SheetEnumerator<T> : IEnumerator<T> where T : class, ISheet
         {
             private XSSFWorkbook _wb;
             private readonly SXSSFWorkbook _xwb;

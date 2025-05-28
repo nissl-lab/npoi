@@ -22,7 +22,8 @@ namespace NPOI.SS.Format
     using System.Collections.Generic;
     using System.Collections;
     using System.Text.RegularExpressions;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
     using SixLabors.ImageSharp;
     using NPOI.Util;
 
@@ -51,7 +52,7 @@ namespace NPOI.SS.Format
         private static readonly Dictionary<String, Color> NAMED_COLORS;
         public static IEqualityComparer<String> CASE_INSENSITIVE_ORDER
                                              = new CaseInsensitiveComparator();
-        private class CaseInsensitiveComparator : IEqualityComparer<String>
+        private sealed class CaseInsensitiveComparator : IEqualityComparer<String>
         {
             // use serialVersionUID from JDK 1.2.2 for interoperability
             //private const long serialVersionUID = 8575799808933029326L;
@@ -77,32 +78,22 @@ namespace NPOI.SS.Format
             NAMED_COLORS = new Dictionary<String, Color>(CASE_INSENSITIVE_ORDER);
 
             var colors = HSSFColor.GetIndexHash();
-            foreach (object v in colors.Values)
+            foreach (HSSFColor hc in colors.Values)
             {
-                HSSFColor hc = (HSSFColor)v;
                 Type type = hc.GetType();
                 String name = type.Name;
                 if (name.Equals(name.ToUpper()))
                 {
                     byte[] rgb = hc.RGB;
                     Color c = Color.FromRgb(rgb[0], rgb[1], rgb[2]);
-                    if (!NAMED_COLORS.ContainsKey(name))
-                    {
-                        NAMED_COLORS.Add(name, c);
-                    }
+                    NAMED_COLORS.TryAdd(name, c);
                     if (name.IndexOf('_') > 0)
                     {
-                        if (!NAMED_COLORS.ContainsKey(name.Replace('_', ' ')))
-                        {
-                            NAMED_COLORS.Add(name.Replace('_', ' '), c);
-                        }
+                        NAMED_COLORS.TryAdd(name.Replace('_', ' '), c);
                     }
-                    if (name.IndexOf("_PERCENT") > 0)
+                    if (name.IndexOf("_PERCENT", StringComparison.Ordinal) > 0)
                     {
-                        if (!NAMED_COLORS.ContainsKey(name.Replace("_PERCENT", "%").Replace('_', ' ')))
-                        {
-                            NAMED_COLORS.Add(name.Replace("_PERCENT", "%").Replace('_', ' '), c);
-                        }
+                        NAMED_COLORS.TryAdd(name.Replace("_PERCENT", "%").Replace('_', ' '), c);
                     }
                 }
             }
@@ -300,7 +291,7 @@ namespace NPOI.SS.Format
          *
          * @return The condition specification or <tt>null</tt>.
          */
-        private CellFormatCondition GetCondition(Match m)
+        private static CellFormatCondition GetCondition(Match m)
         {
             String mdesc = m.Groups[(CONDITION_OPERATOR_GROUP)].Value;
             if (mdesc == null || mdesc.Length == 0)
@@ -308,6 +299,7 @@ namespace NPOI.SS.Format
             return CellFormatCondition.GetInstance(m.Groups[(
                     CONDITION_OPERATOR_GROUP)].Value, m.Groups[(CONDITION_VALUE_GROUP)].Value);
         }
+
         /**
          * Returns the CellFormatType object implied by the format specification for
          * the format part.
@@ -316,11 +308,12 @@ namespace NPOI.SS.Format
          *
          * @return The CellFormatType.
          */
-        private CellFormatType GetCellFormatType(Match matcher)
+        private static CellFormatType GetCellFormatType(Match matcher)
         {
             String fdesc = matcher.Groups[SPECIFICATION_GROUP].Value;
             return formatType(fdesc);
         }
+
         /**
          * Returns the formatter object implied by the format specification for the
          * format part.
@@ -361,7 +354,7 @@ namespace NPOI.SS.Format
          *
          * @return The type of format.
          */
-        private CellFormatType formatType(String fdesc)
+        private static CellFormatType formatType(String fdesc)
         {
             fdesc = fdesc.Trim();
             if (fdesc.Equals("") || fdesc.Equals("General", StringComparison.InvariantCultureIgnoreCase))
@@ -446,8 +439,9 @@ namespace NPOI.SS.Format
          */
         static String QuoteSpecial(String repl, CellFormatType type)
         {
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < repl.Length; i++)
+            using var sb = ZString.CreateStringBuilder();
+
+            for(int i = 0; i < repl.Length; i++)
             {
                 char ch = repl[i];
                 if (ch == '\'' && type.IsSpecial('\''))
@@ -610,10 +604,11 @@ namespace NPOI.SS.Format
         }
         public static String QuoteReplacement(String s)
         {
-            if ((s.IndexOf('\\') == -1) && (s.IndexOf('$') == -1))
+            if (!s.Contains('\\') && !s.Contains('$'))
                 return s;
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < s.Length; i++)
+            using var sb = ZString.CreateStringBuilder();
+
+            for(int i = 0; i < s.Length; i++)
             {
                 char c = s[(i)];
                 if (c == '\\' || c == '$')

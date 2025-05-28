@@ -19,7 +19,7 @@ namespace TestCases.SS.Formula.Functions
 {
     using System;
     using NPOI.SS.Formula.Eval;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.SS.Formula.Functions;
 
     /**
@@ -67,8 +67,8 @@ namespace TestCases.SS.Formula.Functions
         public void TestLeftRightNegativeOperand()
         {
 
-            Assert.AreEqual(ErrorEval.VALUE_INVALID, invokeRight(ANY_STRING_VALUE, NEGATIVE_OPERAND));
-            Assert.AreEqual(ErrorEval.VALUE_INVALID, invokeLeft(ANY_STRING_VALUE, NEGATIVE_OPERAND));
+            ClassicAssert.AreEqual(ErrorEval.VALUE_INVALID, invokeRight(ANY_STRING_VALUE, NEGATIVE_OPERAND));
+            ClassicAssert.AreEqual(ErrorEval.VALUE_INVALID, invokeLeft(ANY_STRING_VALUE, NEGATIVE_OPERAND));
 
         }
 

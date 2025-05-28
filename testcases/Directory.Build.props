@@ -7,4 +7,12 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
+  <PropertyGroup Label="Code Analysis">
+    <NoWarn>$(NoWarn);CS0612</NoWarn> <!-- XXX is obsolete -->
+    <NoWarn>$(NoWarn);CS0618</NoWarn> <!-- XXX is obsolete: deprecated POI XYZ -->
+    <NoWarn>$(NoWarn);CS0162</NoWarn> <!-- Unreachable code detected -->
+    <NoWarn>$(NoWarn);CA2200</NoWarn> <!-- Re-throwing caught exception changes stack information -->
+    <NoWarn>$(NoWarn);SYSLIB0014</NoWarn> <!-- obsolete -->
+  </PropertyGroup>
+
 </Project>
