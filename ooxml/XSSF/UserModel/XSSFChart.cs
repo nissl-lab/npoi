@@ -383,6 +383,7 @@ namespace NPOI.XSSF.UserModel
         private void ParseAxis()
         {
             ParseCategoryAxis();
+            ParseDateAxis();
             ParseValueAxis();
         }
         private void ParseCategoryAxis()
@@ -394,6 +395,17 @@ namespace NPOI.XSSF.UserModel
                 axis.Add(new XSSFCategoryAxis(this, catAx));
             }
         }
+
+        private void ParseDateAxis()
+        {
+            if (chart.plotArea.dateAx == null)
+                return;
+            foreach (CT_DateAx dateAx in chart.plotArea.dateAx)
+            {
+                axis.Add(new XSSFDateAxis(this, dateAx));
+            }
+        }
+
         private void ParseValueAxis()
         {
             if (chart.plotArea.valAx == null)

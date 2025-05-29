@@ -106,6 +106,13 @@ namespace NPOI.SS.UserModel.Charts
          * @return minor tick mark.
          */
         AxisTickMark MinorTickMark { get; set; }
+
+
+        /// <summary>
+        /// Use this to check before retrieving a number format, as calling {@link #getNumberFormat()} may create a default one if none exists.
+        /// </summary>
+        /// <returns>return true if a number format element is defined, false if not</returns>
+        bool HasNumberFormat();
     }
 
 

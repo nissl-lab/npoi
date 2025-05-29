@@ -471,7 +471,8 @@ namespace NPOI.XSSF.Streaming
                         zos.PutNextEntry(new ZipEntry(ze.Name));
                         var inputStream = zip.GetInputStream(ze);
                         XSSFSheet xSheet = GetSheetFromZipEntryName(ze.Name);
-                        if (xSheet != null)
+                        // See bug 56557, we should not inject data into the special ChartSheets
+                        if (xSheet != null && !(xSheet is XSSFChartSheet))
                         {
                             SXSSFSheet sxSheet = GetSXSSFSheet(xSheet);
                             var xis = sxSheet.GetWorksheetXMLInputStream();

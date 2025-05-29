@@ -1,4 +1,21 @@
-﻿using NPOI.OpenXmlFormats.Dml.Chart;
+﻿/* ====================================================================
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+==================================================================== */
+
+using NPOI.OpenXmlFormats.Dml.Chart;
 using NPOI.SS.UserModel.Charts;
 using System;
 using System.Collections.Generic;
@@ -14,7 +31,7 @@ namespace NPOI.XSSF.UserModel.Charts
             : base(chart)
         {
 
-            createAxis(id, pos);
+            CreateAxis(id, pos);
         }
 
         public XSSFDateAxis(XSSFChart chart, CT_DateAx ctDateAx)
@@ -84,7 +101,7 @@ namespace NPOI.XSSF.UserModel.Charts
             return ctDateAx.minorTickMark;
         }
 
-        protected CT_ChartLines GetMajorGridLines()
+        public override CT_ChartLines GetMajorGridLines()
         {
             return ctDateAx.majorGridlines;
         }
@@ -94,14 +111,10 @@ namespace NPOI.XSSF.UserModel.Charts
             ctDateAx.crossAx.val = (uint)axis.Id;
         }
 
-        public CT_TimeUnit GetBaseTimeUnit()
+        public CT_TimeUnit BaseTimeUnit
         {
-            return ctDateAx.baseTimeUnit;
-        }
-
-        public void SetBaseTimeUnit(CT_TimeUnit unit)
-        {
-            ctDateAx.baseTimeUnit = unit;
+            get { return ctDateAx.baseTimeUnit; }
+            set { ctDateAx.baseTimeUnit = value;}
         }
 
         public void SetAuto(CT_Boolean au)
@@ -109,7 +122,7 @@ namespace NPOI.XSSF.UserModel.Charts
             ctDateAx.auto = au;
         }
 
-        private void createAxis(long id, AxisPosition pos)
+        private void CreateAxis(long id, AxisPosition pos)
         {
             ctDateAx = chart.GetCTChart().plotArea.AddNewDateAx();
             ctDateAx.AddNewAxId().val = (uint)id;
@@ -129,6 +142,11 @@ namespace NPOI.XSSF.UserModel.Charts
             this.IsVisible = true;
             this.MajorTickMark = (AxisTickMark.Cross);
             this.MinorTickMark = (AxisTickMark.None);
+        }
+
+        public override bool HasNumberFormat()
+        {
+            return ctDateAx.IsSetNumFmt();
         }
     }
 }
