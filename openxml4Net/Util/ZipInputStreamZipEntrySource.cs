@@ -30,6 +30,8 @@ namespace NPOI.OpenXml4Net.Util
             zipEntries = new List<FakeZipEntry>();
 
             bool going = true;
+            if(inp.Position != 0)
+                inp.Position = 0;
             while (going)
             {
                 ZipEntry zipEntry = inp.GetNextEntry();

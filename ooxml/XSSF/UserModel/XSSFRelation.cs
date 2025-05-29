@@ -376,10 +376,7 @@ namespace NPOI.XSSF.UserModel
         /// <param name="relation">Relation to remove</param>
         public static void RemoveRelation(XSSFRelation relation)
         {
-            if (_table.ContainsKey(relation.Relation))
-            {
-                _table.Remove(relation.Relation);
-            }
+            _table.Remove(relation.Relation);
         }
 
         /// <summary>

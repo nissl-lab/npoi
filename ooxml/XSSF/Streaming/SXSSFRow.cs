@@ -26,7 +26,7 @@ namespace NPOI.XSSF.Streaming
     public class SXSSFRow : IRow, IComparable<SXSSFRow>
     {
         private readonly SXSSFSheet _sheet; // parent sheet
-        private readonly IDictionary<int, SXSSFCell> _cells = new Dictionary<int, SXSSFCell>();
+        private readonly Dictionary<int, SXSSFCell> _cells = new Dictionary<int, SXSSFCell>();
         private short _style = -1; // index of cell style in style table
         private bool _zHeight; // row zero-height (this is somehow different than being hidden)
         private float _height = -1;

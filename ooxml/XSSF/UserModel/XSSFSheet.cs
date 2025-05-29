@@ -34,11 +34,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text; 
+using System.Text;
 using Cysharp.Text;
 using System.Xml;
 using CT_Shape = NPOI.OpenXmlFormats.Vml.CT_Shape;
 using ST_EditAs = NPOI.OpenXmlFormats.Dml.Spreadsheet.ST_EditAs;
+using System.Xml.Linq;
+using System.Diagnostics;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -3742,7 +3744,7 @@ namespace NPOI.XSSF.UserModel
                 false);
             XSSFTable table = rp.DocumentPart as XSSFTable;
             tbl.id = rp.Relationship.Id;
-
+            table.GetCTTable().id = (uint)tableNumber;
             tables[tbl.id] = table;
 
             return table;
@@ -4254,6 +4256,95 @@ namespace NPOI.XSSF.UserModel
             }
 
             CopySheetImages(dest as XSSFWorkbook, newSheet);
+
+            CopyCharts(newSheet);
+        }
+
+
+        private void CopyCharts(XSSFSheet newSheet)
+        {
+            XSSFDrawing sheetDrawing = GetDrawingPatriarch();
+            if(sheetDrawing == null)
+                return;
+            var anchors = sheetDrawing.GetCTDrawing().CellAnchors.Where(x=>x is CT_TwoCellAnchor).Cast<CT_TwoCellAnchor>();
+            var chartAnchors = anchors.Where(x => x.graphicFrame?.graphic?.graphicData?.uri == XSSFRelation.NS_CHART);
+            var newSheetDrawing = newSheet.CreateDrawingPatriarch();
+
+            var sourceCharts = sheetDrawing.GetCharts();
+
+            foreach(var cellAnchor in chartAnchors)
+            {
+                XSSFClientAnchor newAnchor = new XSSFClientAnchor(
+                            (int) cellAnchor.from.colOff,
+                            (int) cellAnchor.from.rowOff,
+                            (int) cellAnchor.to.colOff,
+                            (int) cellAnchor.to.rowOff,
+                            cellAnchor.from.col,
+                            cellAnchor.from.row,
+                            cellAnchor.to.col,
+                            cellAnchor.to.row);
+
+                if(cellAnchor.editAsSpecified)
+                {
+                    switch(cellAnchor.editAs)
+                    {
+                        case ST_EditAs.twoCell:
+                            newAnchor.AnchorType = AnchorType.MoveAndResize;
+                            break;
+                        case ST_EditAs.oneCell:
+                            newAnchor.AnchorType = AnchorType.MoveDontResize;
+                            break;
+                        case ST_EditAs.absolute:
+                        case ST_EditAs.NONE:
+                        default:
+                            newAnchor.AnchorType = AnchorType.DontMoveAndResize;
+                            break;
+                    }
+                }
+                var data = cellAnchor.graphicFrame.graphic.graphicData.Any?.FirstOrDefault() ?? null;
+                if(string.IsNullOrEmpty(data))
+                    continue;
+                string id = null;
+                try
+                {
+                    var elem = XElement.Parse(data);
+                    id = elem.Attributes().FirstOrDefault(x => x.Name.LocalName == "id").Value;
+                }
+                catch
+                {
+                    Debug.WriteLine("Warning: Can't get id for chart.");
+                    continue;
+                }
+                
+                var newXSSFChart = newSheetDrawing.CreateChart(newAnchor) as XSSFChart;
+                var linkedChart = sourceCharts.FirstOrDefault(x=>x.GetPackageRelationship().Id == id);
+                if(linkedChart == null)
+                    continue;
+                var newXSSFChartAxis = newXSSFChart.GetAxis();
+                foreach(var axis in linkedChart.GetAxis())
+                {
+                    newXSSFChartAxis.Add(axis);   
+                }
+
+                var linkedCTChart = linkedChart.GetCTChart();
+                var newCTChart = newXSSFChart.GetCTChart();
+                
+                newCTChart.plotArea =  linkedCTChart.plotArea;
+                newCTChart.extLst =  linkedCTChart.extLst;
+                newCTChart.title =  linkedCTChart.title;
+                newCTChart.legend =  linkedCTChart.legend;
+                newCTChart.autoTitleDeleted =  linkedCTChart.autoTitleDeleted;
+                newCTChart.view3D =  linkedCTChart.view3D;
+                newCTChart.backWall =  linkedCTChart.backWall;
+                newCTChart.sideWall =  linkedCTChart.sideWall;
+                newCTChart.dispBlanksAs =  linkedCTChart.dispBlanksAs;
+                newCTChart.plotVisOnly =  linkedCTChart.plotVisOnly;
+                newCTChart.floor =  linkedCTChart.floor;
+                newCTChart.pivotFmts =  linkedCTChart.pivotFmts;
+                newCTChart.showDLblsOverMax =  linkedCTChart.showDLblsOverMax;
+
+                
+            }
         }
 
         public XSSFWorkbook GetWorkbook()
@@ -6441,7 +6532,7 @@ namespace NPOI.XSSF.UserModel
                     }
                 }
 
-                lblforbreak:
+lblforbreak:
                 int EMUwidth = Units.PixelToEMU((int) Math.Round(width_px, 1));
                 if(x >= EMUwidth)
                 {
