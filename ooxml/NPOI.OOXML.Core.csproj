@@ -25,9 +25,8 @@
     <EmbeddedResource Include="Resources\presetTableStyles.xml" />
   </ItemGroup>
 
-  <ItemGroup Condition="!$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net8.0'))">
+  <ItemGroup>
     <PackageReference Include="System.Security.Cryptography.Xml" />
-    <PackageReference Include="System.Security.Cryptography.Pkcs" />
   </ItemGroup>
 
   <ItemGroup>
