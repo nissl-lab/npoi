@@ -150,7 +150,7 @@ namespace TestCases.XSSF.UserModel
                     name.NameName = ref1;
                     Assert.Fail("cell addresses are not allowed: " + ref1);
                 }
-                catch (ArgumentException e)
+                catch (ArgumentException)
                 {
                     // expected
                 }
