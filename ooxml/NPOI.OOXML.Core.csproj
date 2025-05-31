@@ -27,7 +27,6 @@
 
   <ItemGroup>
     <PackageReference Include="System.Security.Cryptography.Xml" />
-    <PackageReference Include="System.Security.Cryptography.Pkcs" Condition="!$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net8.0'))" />
   </ItemGroup>
 
   <ItemGroup>
