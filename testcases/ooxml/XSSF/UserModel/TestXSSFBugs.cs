@@ -3165,42 +3165,39 @@ namespace TestCases.XSSF.UserModel
             wb.Close();
         }
 
-        private void CreateXls()
+        /**
+         * helper function for {@link #test58043()}
+         * Side-effects: closes the provided workbook!
+         *
+         * @param workbook the workbook to save for manual checking
+         * @param outputFile the output file location to save the workbook to
+         */
+        private void saveRotatedTextExample(IWorkbook workbook, FileInfo outputFile)
         {
-            IWorkbook workbook = new HSSFWorkbook();
-            FileStream fileOut = new FileStream("/tmp/rotated.xls", FileMode.Create, FileAccess.ReadWrite);
-            ISheet sheet1 = workbook.CreateSheet();
-            IRow row1 = sheet1.CreateRow((short)0);
-            ICell cell1 = row1.CreateCell(0);
-            cell1.SetCellValue("Successful rotated text.");
+            ISheet sheet = workbook.CreateSheet();
+            IRow row = sheet.CreateRow((short)0);
+
+            ICell cell = row.CreateCell(0);
+
+            cell.SetCellValue("Unsuccessful rotated text.");
+
             ICellStyle style = workbook.CreateCellStyle();
-            style.Rotation = ((short)-90);
-            cell1.CellStyle = (style);
-            workbook.Write(fileOut, false);
-            fileOut.Close();
+            style.Rotation = (short)-90;
+
+            cell.CellStyle = style;
+
+            Stream fos = new FileStream(outputFile.FullName, FileMode.Create, FileAccess.ReadWrite);
+            workbook.Write(fos);
+            fos.Close();
             workbook.Close();
         }
-        private void CreateXlsx()
-        {
-            IWorkbook workbook = new XSSFWorkbook();
-            FileStream fileOut = new FileStream("/tmp/rotated.xlsx", FileMode.Create, FileAccess.ReadWrite);
-            ISheet sheet1 = workbook.CreateSheet();
-            IRow row1 = sheet1.CreateRow((short)0);
-            ICell cell1 = row1.CreateCell(0);
-            cell1.SetCellValue("Unsuccessful rotated text.");
-            ICellStyle style = workbook.CreateCellStyle();
-            style.Rotation = ((short)-90);
-            cell1.CellStyle = (style);
-            workbook.Write(fileOut, false);
-            fileOut.Close();
-            workbook.Close();
-        }
+
         [Ignore("Creates files for checking results manually, actual values are tested in Test*CellStyle")]
         [Test]
         public void Test58043()
         {
-            CreateXls();
-            CreateXlsx();
+            saveRotatedTextExample(new HSSFWorkbook(), TempFile.CreateTempFile("rotated", ".xls"));
+            saveRotatedTextExample(new XSSFWorkbook(), TempFile.CreateTempFile("rotated", ".xlsx"));
         }
         [Test]
         public void Test59132()
