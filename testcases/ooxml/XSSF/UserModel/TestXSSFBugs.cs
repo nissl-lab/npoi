@@ -30,7 +30,8 @@ using NPOI.XSSF.Model;
 using NPOI.XSSF.Streaming;
 using NPOI.XSSF.UserModel;
 using NPOI.XSSF.UserModel.Extensions;
-using NUnit.Framework;using NUnit.Framework.Legacy;
+using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using NUnit.Framework.Constraints;
 using SixLabors.ImageSharp;
 using System;
@@ -41,6 +42,7 @@ using System.Text;
 using TestCases;
 using TestCases.HSSF;
 using TestCases.SS.UserModel;
+using TestCases.Util;
 namespace TestCases.XSSF.UserModel
 {
 
@@ -3443,13 +3445,7 @@ namespace TestCases.XSSF.UserModel
 
             // we currently only populate the dimension during writing out
             // to avoid having to iterate all rows/cells in each add/remove of a row or cell
-            //OutputStream str = new FileOutputStream("/tmp/53611.xlsx");
-            var str = new ByteArrayOutputStream();
-            try {
-                wb.Write(str);
-            } finally {
-                str.Close();
-            }
+            IOUtils.Write(wb, new NullOutputStream());
 
             ClassicAssert.AreEqual("B2:I5", ((XSSFSheet)sheet).GetCTWorksheet().dimension.@ref);
 
