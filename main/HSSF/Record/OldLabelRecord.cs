@@ -15,6 +15,8 @@
    limitations under the License.
 ==================================================================== */
 
+using System.Diagnostics;
+
 namespace NPOI.HSSF.Record
 {
     using System;
@@ -54,7 +56,8 @@ namespace NPOI.HSSF.Record
 
             // Can only decode properly later when you know the codepage
             field_5_bytes = new byte[field_4_string_len];
-            in1.Read(field_5_bytes, 0, field_4_string_len);
+            int read = in1.Read(field_5_bytes, 0, field_4_string_len);
+            Debug.Assert(read == field_4_string_len, "Didn't read the right number of bytes");;
 
             if (in1.Remaining > 0)
             {
