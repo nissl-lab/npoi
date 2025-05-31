@@ -100,7 +100,7 @@ namespace NPOI.SS.Formula.Functions
                 ValueEval lookupValue = OperandResolver.GetSingleValue(lookup_value, srcRowIndex, srcColumnIndex);
                 TwoDEval tableArray = LookupUtils.ResolveTableArrayArg(table_array);
                 bool isRangeLookup = LookupUtils.ResolveRangeLookupArg(range_lookup, srcRowIndex, srcColumnIndex);
-                int rowIndex = LookupUtils.lookupFirstIndexOfValue(lookupValue, LookupUtils.CreateColumnVector(tableArray, 0), isRangeLookup);
+                int rowIndex = LookupUtils.LookupFirstIndexOfValue(lookupValue, LookupUtils.CreateColumnVector(tableArray, 0), isRangeLookup);
                 int colIndex = LookupUtils.ResolveRowOrColIndexArg(col_index, srcRowIndex, srcColumnIndex);
                 LookupUtils.ColumnVector resultCol = CreateResultColumnVector(tableArray, colIndex);
                 return resultCol.GetItem(rowIndex);
