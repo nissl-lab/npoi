@@ -1487,6 +1487,18 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
+        public ReadingOrder ReadingOrder
+        {
+            get
+            {
+                return (ReadingOrder) GetCTCellAlignment().readingOrder;
+            }
+            set
+            {
+                GetCTCellAlignment().readingOrder= (long) value;
+            }
+        }
+
         #endregion
     }
 
