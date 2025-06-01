@@ -23,7 +23,6 @@
     <PackageVersion Include="SixLabors.ImageSharp" Version="2.1.10" />
     <PackageVersion Include="System.Configuration.ConfigurationManager" Version="8.0.1" />
     <PackageVersion Include="System.Formats.Asn1" Version="8.0.1" />
-    <PackageVersion Include="System.Security.Cryptography.Pkcs" Version="8.0.1" />
     <PackageVersion Include="System.Security.Cryptography.Xml" Version="8.0.2" />
     <PackageVersion Include="ZString" Version="2.6.0" />
   </ItemGroup>
