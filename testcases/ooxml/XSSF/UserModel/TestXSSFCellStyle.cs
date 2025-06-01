@@ -673,7 +673,7 @@ namespace TestCases.XSSF.UserModel
         public void TestGetFillPattern()
         {
             //???
-            //assertEquals(STPatternType.INT_DARK_GRAY-1, cellStyle.getFillPattern());
+            //ClassicAssert.AreEqual(STPatternType.INT_DARK_GRAY-1, cellStyle.getFillPattern());
 
             ClassicAssert.AreEqual((int)ST_PatternType.darkGray, (int)cellStyle.FillPattern);
 
@@ -765,6 +765,20 @@ namespace TestCases.XSSF.UserModel
             cellStyle.Alignment = (HorizontalAlignment.Center);
             ClassicAssert.AreEqual(HorizontalAlignment.Center, cellStyle.Alignment);
             ClassicAssert.AreEqual(ST_HorizontalAlignment.center, cellStyle.GetCellAlignment().GetCTCellAlignment().horizontal);
+        }
+        [Test]
+        public void TestGetSetReadingOrder()
+        {
+            ClassicAssert.AreEqual(ReadingOrder.CONTEXT, cellStyle.ReadingOrder);
+
+            cellStyle.ReadingOrder = ReadingOrder.LEFT_TO_RIGHT;
+            ClassicAssert.AreEqual(ReadingOrder.LEFT_TO_RIGHT, cellStyle.ReadingOrder);
+
+            cellStyle.ReadingOrder=ReadingOrder.RIGHT_TO_LEFT;
+            ClassicAssert.AreEqual(ReadingOrder.RIGHT_TO_LEFT, cellStyle.ReadingOrder);
+
+            cellStyle.ReadingOrder = ReadingOrder.CONTEXT;
+            ClassicAssert.AreEqual(ReadingOrder.CONTEXT, cellStyle.ReadingOrder);
         }
         [Test]
         public void TestGetSetVerticalAlignment()
