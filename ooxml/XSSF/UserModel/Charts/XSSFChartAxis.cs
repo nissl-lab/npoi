@@ -45,11 +45,11 @@ namespace NPOI.XSSF.UserModel.Charts
         {
             get
             {
-                return toAxisPosition(GetCTAxPos());
+                return ToAxisPosition(GetCTAxPos());
             }
             set
             {
-                GetCTAxPos().val = fromAxisPosition(value);
+                GetCTAxPos().val = FromAxisPosition(value);
             }
         }
 
@@ -180,12 +180,12 @@ namespace NPOI.XSSF.UserModel.Charts
         {
             get
             {
-                return toAxisOrientation(GetCTScaling().orientation);
+                return ToAxisOrientation(GetCTScaling().orientation);
             }
             set
             {
                 CT_Scaling scaling = GetCTScaling();
-                ST_Orientation stOrientation = fromAxisOrientation(value);
+                ST_Orientation stOrientation = FromAxisOrientation(value);
                 if (scaling.IsSetOrientation())
                 {
                     scaling.orientation.val = stOrientation;
@@ -201,11 +201,11 @@ namespace NPOI.XSSF.UserModel.Charts
         {
             get
             {
-                return toAxisCrosses(GetCTCrosses());
+                return ToAxisCrosses(GetCTCrosses());
             }
             set
             {
-                GetCTCrosses().val = fromAxisCrosses(value);
+                GetCTCrosses().val = FromAxisCrosses(value);
             }
         }
         public bool IsVisible
@@ -220,27 +220,27 @@ namespace NPOI.XSSF.UserModel.Charts
             }
         }
 
-        public AxisTickMark MajorTickMark
+        public virtual AxisTickMark MajorTickMark
         {
             get
             {
-                return toAxisTickMark(GetMajorCTTickMark());
+                return ToAxisTickMark(GetMajorCTTickMark());
             }
             set
             {
-                GetMajorCTTickMark().val = fromAxisTickMark(value);
+                GetMajorCTTickMark().val = FromAxisTickMark(value);
             }
         }
 
-        public AxisTickMark MinorTickMark
+        public virtual AxisTickMark MinorTickMark
         {
             get
             {
-                return toAxisTickMark(GetMinorCTTickMark());
+                return ToAxisTickMark(GetMinorCTTickMark());
             }
             set
             {
-                GetMinorCTTickMark().val = fromAxisTickMark(value);
+                GetMinorCTTickMark().val = FromAxisTickMark(value);
             }
         }
 
@@ -251,8 +251,11 @@ namespace NPOI.XSSF.UserModel.Charts
         protected abstract CT_Boolean GetDelete();
         protected abstract CT_TickMark GetMajorCTTickMark();
         protected abstract CT_TickMark GetMinorCTTickMark();
+        public abstract CT_ChartLines GetMajorGridLines();
 
-        private static ST_Orientation fromAxisOrientation(AxisOrientation orientation)
+        public abstract bool HasNumberFormat();
+
+        private static ST_Orientation FromAxisOrientation(AxisOrientation orientation)
         {
             switch (orientation)
             {
@@ -263,7 +266,7 @@ namespace NPOI.XSSF.UserModel.Charts
             }
         }
 
-        private static AxisOrientation toAxisOrientation(CT_Orientation ctOrientation)
+        private static AxisOrientation ToAxisOrientation(CT_Orientation ctOrientation)
         {
             switch (ctOrientation.val)
             {
@@ -274,7 +277,7 @@ namespace NPOI.XSSF.UserModel.Charts
             }
         }
 
-        private static ST_Crosses fromAxisCrosses(AxisCrosses crosses)
+        private static ST_Crosses FromAxisCrosses(AxisCrosses crosses)
         {
             switch (crosses)
             {
@@ -286,7 +289,7 @@ namespace NPOI.XSSF.UserModel.Charts
             }
         }
 
-        private static AxisCrosses toAxisCrosses(CT_Crosses ctCrosses)
+        private static AxisCrosses ToAxisCrosses(CT_Crosses ctCrosses)
         {
             switch (ctCrosses.val)
             {
@@ -298,7 +301,7 @@ namespace NPOI.XSSF.UserModel.Charts
             }
         }
 
-        private static ST_AxPos fromAxisPosition(AxisPosition position)
+        private static ST_AxPos FromAxisPosition(AxisPosition position)
         {
             switch (position)
             {
@@ -311,7 +314,7 @@ namespace NPOI.XSSF.UserModel.Charts
             }
         }
 
-        private static AxisPosition toAxisPosition(CT_AxPos ctAxPos)
+        private static AxisPosition ToAxisPosition(CT_AxPos ctAxPos)
         {
             switch (ctAxPos.val)
             {
@@ -322,7 +325,7 @@ namespace NPOI.XSSF.UserModel.Charts
                 default: return AxisPosition.Bottom;
             }
         }
-        private static ST_TickMark fromAxisTickMark(AxisTickMark tickMark)
+        private static ST_TickMark FromAxisTickMark(AxisTickMark tickMark)
         {
             switch (tickMark)
             {
@@ -335,7 +338,7 @@ namespace NPOI.XSSF.UserModel.Charts
             }
         }
 
-        private static AxisTickMark toAxisTickMark(CT_TickMark ctTickMark)
+        private static AxisTickMark ToAxisTickMark(CT_TickMark ctTickMark)
         {
             switch (ctTickMark.val)
             {
