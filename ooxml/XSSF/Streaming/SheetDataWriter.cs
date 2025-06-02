@@ -49,7 +49,7 @@ namespace NPOI.XSSF.Streaming
         {
             TemporaryFileInfo = CreateTempFile();
             OutputStream = CreateWriter(TemporaryFileInfo);
-            _outputWriter = new StreamWriter(OutputStream, Encoding.UTF8);
+            _outputWriter = new StreamWriter(OutputStream);
         }
         public SheetDataWriter(SharedStringsTable sharedStringsTable) : this()
         {
