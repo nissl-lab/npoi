@@ -87,11 +87,7 @@ namespace NPOI.SS.Formula.Functions
                     }
                     continue;
                 }
-                //else if (arg is ValueEval)
-                //{
-                //    ValueEval ve = (ValueEval)arg;
-                //    tempVe = OperandResolver.CoerceValueToBoolean(ve, false);
-                //}
+
                 if (arg == MissingArgEval.instance)
                 {
                     tempVe = false; // missing parameters are treated as FALSE
@@ -132,6 +128,73 @@ namespace NPOI.SS.Formula.Functions
                 return e.GetErrorEval();
             }
             return BoolEval.ValueOf(boolResult);
+        }
+        
+        public static Function FALSE = new FALSEFunction();
+
+        public static Function TRUE = new TRUEFunction();
+
+        public static Function NOT = new NOTFunction();
+
+        public ValueEval EvaluateArray(ValueEval[] args, int srcRowIndex, int srcColumnIndex) 
+        {
+            return Evaluate(args, srcRowIndex, srcColumnIndex);
+        }
+        public class FALSEFunction : Function
+        {
+            public ValueEval Evaluate(ValueEval[] args, int srcRowIndex, int srcColumnIndex)
+            {
+                return EvaluateFalse(args, srcRowIndex, srcColumnIndex);
+            }
+        }
+
+        public class TRUEFunction : Function
+        {
+            public ValueEval Evaluate(ValueEval[] args, int srcRowIndex, int srcColumnIndex)
+            {
+                return EvaluateTrue(args, srcRowIndex, srcColumnIndex);
+            }
+        }
+
+        public class NOTFunction : Function
+        {
+            public ValueEval Evaluate(ValueEval[] args, int srcRowIndex, int srcColumnIndex)
+            {
+                return EvaluateNot(args, srcRowIndex, srcColumnIndex);
+            }
+        }
+
+
+        private static ValueEval EvaluateFalse(ValueEval[] args, int srcRowIndex, int srcColumnIndex)
+        {
+            return args.Length != 0 ? ErrorEval.VALUE_INVALID : BoolEval.FALSE;
+        }
+
+        private static ValueEval EvaluateTrue(ValueEval[] args, int srcRowIndex, int srcColumnIndex)
+        {
+            return args.Length != 0 ? ErrorEval.VALUE_INVALID : BoolEval.TRUE;
+        }
+
+        private static ValueEval EvaluateNot(ValueEval[] args, int srcRowIndex, int srcColumnIndex)
+        {
+            if (args.Length != 1)
+            {
+                return ErrorEval.VALUE_INVALID;
+            }
+            
+            Func<ValueEval, ValueEval> notInner = (va) => {
+                try
+                {
+                    ValueEval ve = OperandResolver.GetSingleValue(va, srcRowIndex, srcColumnIndex);
+                    bool? b = OperandResolver.CoerceValueToBoolean(ve, false);
+                    bool boolArgVal = b.HasValue && b.Value;
+                    return BoolEval.ValueOf(!boolArgVal);
+                } catch (EvaluationException e) {
+                    return e.GetErrorEval();
+                }
+            };
+
+            return ArrayFunction._evaluateOneArrayArg(args[0], srcRowIndex, srcColumnIndex, notInner);
         }
     }
 }
