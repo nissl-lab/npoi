@@ -1281,7 +1281,7 @@ namespace NPOI.OpenXmlFormats.Dml.WordProcessing
             XmlHelper.WriteAttribute(sw, "wp14:editId", this.editIdField);
             sw.Write(">");
             if (this.simplePos != null)
-                this.simplePos.Write(sw, "simplePos");
+                this.simplePos.Write(sw, "wp:simplePos");
             if (this.positionH != null)
                 this.positionH.Write(sw, "positionH");
             if (this.positionV != null)

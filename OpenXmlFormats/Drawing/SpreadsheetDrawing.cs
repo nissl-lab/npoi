@@ -1708,7 +1708,7 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
         {
             sw.Write("<xdr:absCellAnchor>");
             if (this.pos!=null)
-                this.pos.Write(sw, "pos");
+                this.pos.Write(sw, "p:pos");
             if (this.sp != null)
                 sp.Write(sw, "sp");
             else if (this.connector != null)
