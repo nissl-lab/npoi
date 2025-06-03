@@ -27,6 +27,7 @@
 
 namespace NPOI.Util
 {
+    using NPOI.SS.UserModel;
     using System;
     using System.IO;
     using System.Runtime.Serialization;
@@ -222,6 +223,135 @@ namespace NPOI.Util
                 {
                     return total;
                 }
+            }
+        }
+
+        /// <summary>
+        /// <para>
+        /// Write a POI Document (<see cref="NPOI.SS.UserModel.Workbook}, {@link NPOI.sl.UserModel.SlideShow" />, etc) to an output stream and close the output stream.
+        /// This will attempt to close the output stream at the end even if there was a problem writing the document to the stream.
+        /// </para>
+        /// <para>
+        /// If you are using Java 7 or higher, you may prefer to use a try-with-resources statement instead.
+        /// This function exists for Java 6 code.
+        /// </para>
+        /// </summary>
+        /// <param name="doc"> a writeable document to write to the output stream</param>
+        /// <param name="out"> the output stream that the document is written to</param>
+        /// <exception cref="IOException">IOException</exception>
+        public static void Write(POIDocument doc, OutputStream out1)
+        {
+
+            try
+            {
+                doc.Write(out1);
+            }
+            finally
+            {
+                CloseQuietly(out1);
+            }
+        }
+
+        public static void Write(IWorkbook doc, OutputStream out1)
+        {
+            try
+            {
+                doc.Write(out1);
+            }
+            finally
+            {
+                CloseQuietly(out1);
+            }
+        }
+
+        /// <summary>
+        /// <para>
+        /// Write a POI Document (<see cref="IWorkbook" />, etc) to an output stream and close the output stream.
+        /// This will attempt to close the output stream at the end even if there was a problem writing the document to the stream.
+        /// This will also attempt to close the document, even if an error occurred while writing the document or closing the output stream.
+        /// </para>
+        /// <para>
+        /// If you are using Java 7 or higher, you may prefer to use a try-with-resources statement instead.
+        /// This function exists for Java 6 code.
+        /// </para>
+        /// </summary>
+        /// <param name="doc"> a writeable and closeable document to write to the output stream, then close</param>
+        /// <param name="out"> the output stream that the document is written to</param>
+        /// <exception cref="IOException">IOException</exception>
+        public static void WriteAndClose(POIDocument doc, OutputStream out1)
+        {
+
+            try
+            {
+                Write(doc, out1);
+            }
+            finally
+            {
+                CloseQuietly(doc);
+            }
+        }
+
+        /// <summary>
+        /// <para>
+        /// Like <see cref="WriteAndClose(POIDocument, OutputStream)" />, but for writing to a File instead of an OutputStream.
+        /// This will attempt to close the document, even if an error occurred while writing the document.
+        /// </para>
+        /// <para>
+        /// If you are using Java 7 or higher, you may prefer to use a try-with-resources statement instead.
+        /// This function exists for Java 6 code.
+        /// </para>
+        /// </summary>
+        /// <param name="doc"> a writeable and closeable document to write to the output file, then close</param>
+        /// <param name="out"> the output file that the document is written to</param>
+        /// <exception cref="IOException">IOException</exception>
+        public static void WriteAndClose(POIDocument doc, FileInfo out1)
+        {
+
+            try
+            {
+                doc.Write(out1);
+            }
+            finally
+            {
+                CloseQuietly(doc);
+            }
+        }
+
+        /// <summary>
+        /// <para>
+        /// Like <see cref="write(POIDocument, File)" />, but for writing a POI Document in place (to the same file that it was opened from).
+        /// This will attempt to close the document, even if an error occurred while writing the document.
+        /// </para>
+        /// <para>
+        /// If you are using Java 7 or higher, you may prefer to use a try-with-resources statement instead.
+        /// This function exists for Java 6 code.
+        /// </para>
+        /// </summary>
+        /// <param name="doc"> a writeable document to write in-place</param>
+        /// <exception cref="IOException">IOException</exception>
+        public static void WriteAndClose(POIDocument doc)
+        {
+
+            try
+            {
+                doc.Write();
+            }
+            finally
+            {
+                CloseQuietly(doc);
+            }
+        }
+
+        public static void WriteAndClose(IWorkbook doc, OutputStream out1)
+        {
+
+            try
+            {
+                doc.Write(out1);
+            }
+            finally
+            {
+                CloseQuietly(doc);
             }
         }
 

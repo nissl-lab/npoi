@@ -166,7 +166,19 @@ namespace NPOI.XSSF
          */
         public static FileInfo WriteOut<R>(R wb, String testName) where R : IWorkbook
         {
-            String testOutputDir = TestContext.Parameters[TEST_OUTPUT_DIR];
+            FileInfo file = GetOutputFile(testName);
+            WriteOut(wb, file);
+            return file;
+        }
+
+        // Anticipates the location of where a workbook will be written to
+        // Note that if TEST_OUTPUT_DIR is not set, this will create temporary files
+        // with unique names. Subsequent calls with the same argument may return a different file.
+        // Gets a test data sample file, deleting the file if it exists.
+        // This is used in preparation for writing a workbook out to the returned output file.
+        private static FileInfo GetOutputFile(String testName)
+        {
+            String testOutputDir = Environment.GetEnvironmentVariable(TEST_OUTPUT_DIR);
             FileInfo file;
             if (testOutputDir != null)
             {
@@ -180,6 +192,12 @@ namespace NPOI.XSSF
             {
                 file.Delete();
             }
+            return file;
+        }
+        private static void WriteOut<R>(R wb, FileInfo file) where R : IWorkbook
+        {
+
+            //IOUtils.Write(wb,  new FileOutputStream(file.FullName, FileMode.OpenOrCreate, FileAccess.ReadWrite));
             FileStream out1 = file.Create();
             try
             {
@@ -189,9 +207,7 @@ namespace NPOI.XSSF
             {
                 out1.Close();
             }
-            return file;
         }
-
         /**
          * Write out workbook <code>wb</code> to a memory buffer
          *
