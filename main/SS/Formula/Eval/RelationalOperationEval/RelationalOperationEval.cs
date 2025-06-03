@@ -35,7 +35,7 @@ namespace NPOI.SS.Formula.Eval
      * @author Amol S. Deshmukh &lt; amolweb at ya hoo Dot com &gt;
      *
      */
-    public abstract class RelationalOperationEval : Fixed2ArgFunction, ArrayFunction
+    public abstract class RelationalOperationEval : Fixed2ArgFunction, IArrayFunction
     {
         private static int DoCompare(ValueEval va, ValueEval vb)
         {

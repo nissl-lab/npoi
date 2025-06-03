@@ -41,7 +41,8 @@ namespace NPOI.SS.Formula
             int nOutGoingArgs = nIncomingArgs - 1;
             ValueEval[] outGoingArgs = new ValueEval[nOutGoingArgs];
             Array.Copy(args, 1, outGoingArgs, 0, nOutGoingArgs);
-            if (targetFunc is ArrayFunction func) {
+            if (targetFunc is IArrayFunction) {
+                IArrayFunction func = (IArrayFunction)targetFunc;
                 ValueEval eval = OperationEvaluatorFactory.EvaluateArrayFunction(func, outGoingArgs, ec);
                 if (eval != null)
                 {
