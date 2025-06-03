@@ -200,6 +200,7 @@ namespace NPOI.SS.UserModel
 
 
             mappingIndex = new Dictionary<int, IndexedColors>();
+            mappingIndex.Add(0, IndexedColors.White);   //to fix #621
             mappingIndex.Add(8, IndexedColors.Black);
             mappingIndex.Add(9, IndexedColors.White);
             mappingIndex.Add(10, IndexedColors.Red);
