@@ -7333,7 +7333,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
             return ctObj;
         }
-
+        
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.Write(string.Format("<{0}", nodeName));
@@ -7352,9 +7352,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "sqref", this.sqref);
             sw.Write(">");
             if (this.formula1 != null)
-                sw.Write(string.Format("<formula1><![CDATA[{0}]]></formula1>", this.formula1));
+                sw.Write(string.Format("<formula1><![CDATA[{0}]]></formula1>", XmlHelper.EncodeCDATAContent(this.formula1)));
             if (this.formula2 != null)
-                sw.Write(string.Format("<formula2><![CDATA[{0}]]></formula2>", this.formula2));
+                sw.Write(string.Format("<formula2><![CDATA[{0}]]></formula2>", XmlHelper.EncodeCDATAContent(this.formula2)));
 
             sw.Write(string.Format("</{0}>", nodeName));
         }
