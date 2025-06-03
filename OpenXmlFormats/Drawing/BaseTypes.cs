@@ -2201,7 +2201,7 @@ namespace NPOI.OpenXmlFormats.Dml
             XmlHelper.WriteAttribute(sw, "flipV", this.flipV,false);
             sw.Write(">");
             if (this.off != null)
-                this.off.Write(sw, "off");
+                this.off.Write(sw, "a:off");
             if (this.ext != null)
                 this.ext.Write(sw, "a:ext");
             sw.Write(string.Format("</{0}>", nodeName));
