@@ -859,5 +859,27 @@ namespace TestCases.SS.UserModel
             ClassicAssert.AreEqual("08:51", dfUS.FormatRawCellContents(42605.368761574071, -1, "hh:mm"));
             ClassicAssert.AreEqual("51:01", dfUS.FormatRawCellContents(42605.368761574071, -1, "mm:ss"));
         }
+
+        /**
+         * bug 60422 : DataFormatter has issues with a specific NumberFormat in Germany default locale
+         * Currently, this test only passes if you set LocaleUtil.setUserLocale(Locale.ROOT) or Locale.US.
+         */
+        [Test]
+        public void TestBug60422()
+        {
+            //LocaleUtil.setUserLocale(Locale.ROOT);
+            try
+            {
+                char euro = '\u20AC';
+                DataFormatter df = new DataFormatter(CultureInfo.GetCultureInfo("de-DE"));
+                String formatString = String.Format("_-* #,##0.00\\ \"{0}\"_-;\\-* #,##0.00\\ \"{1}\"_-;_-* \"-\"??\\ \"{2}\"_-;_-@_-",
+                        euro, euro, euro);
+                ClassicAssert.AreEqual("4.33 " + euro, df.FormatRawCellContents(4.33, 178, formatString));
+            }
+            finally
+            {
+                //LocaleUtil.resetUserLocale();
+            }
+        }
     }
 }
