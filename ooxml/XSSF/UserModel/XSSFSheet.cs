@@ -2222,7 +2222,7 @@ namespace NPOI.XSSF.UserModel
             double width = (col == null)
                 ? DefaultColumnWidth
                 : col.Width;
-            return Math.Round(width * 256, 2);
+            return (int)Math.Round(width * 256, 2);
         }
 
         /// <summary>
@@ -2235,7 +2235,7 @@ namespace NPOI.XSSF.UserModel
         public double GetColumnWidthInPixels(int columnIndex)
         {
             double widthIn256 = GetColumnWidth(columnIndex);
-            return widthIn256 / 256.0 * XSSFWorkbook.DEFAULT_CHARACTER_WIDTH;
+            return widthIn256 / 256.0 * Units.DEFAULT_CHARACTER_WIDTH;
         }
 
         /// <summary>
