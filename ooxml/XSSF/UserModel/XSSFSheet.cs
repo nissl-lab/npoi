@@ -2222,7 +2222,7 @@ namespace NPOI.XSSF.UserModel
             double width = (col == null)
                 ? DefaultColumnWidth
                 : col.Width;
-            return (int)Math.Round(width * 256, 2);
+            return Math.Round(width * 256, 2);
         }
 
         /// <summary>
