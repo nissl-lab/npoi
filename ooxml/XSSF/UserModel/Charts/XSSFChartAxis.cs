@@ -252,7 +252,7 @@ namespace NPOI.XSSF.UserModel.Charts
         protected abstract CT_TickMark GetMajorCTTickMark();
         protected abstract CT_TickMark GetMinorCTTickMark();
         public abstract CT_ChartLines GetMajorGridLines();
-
+        public abstract CT_ShapeProperties Line { get; }
         public abstract bool HasNumberFormat();
 
         private static ST_Orientation FromAxisOrientation(AxisOrientation orientation)
