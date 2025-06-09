@@ -1235,7 +1235,7 @@ namespace TestCases.XSSF.UserModel
          * Default Column style
          */
         [Test]
-        public void Test51037()
+        public void Bug51037()
         {
             XSSFWorkbook wb = new XSSFWorkbook();
             XSSFSheet s = wb.CreateSheet() as XSSFSheet;
@@ -1297,7 +1297,7 @@ namespace TestCases.XSSF.UserModel
 
 
             // Save, re-load and re-check 
-            wb = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
+            wb = XSSFTestDataSamples.WriteOutAndReadBack(wb);
             s = wb.GetSheetAt(0) as XSSFSheet;
             defaultStyle = wb.GetCellStyleAt(defaultStyle.Index);
             blueStyle = wb.GetCellStyleAt(blueStyle.Index);

@@ -143,11 +143,11 @@ namespace TestCases.HSSF.UserModel
             cs.BorderRight = (BorderStyle.Thin);
             cs.BorderTop = (BorderStyle.Thin);
             cs.FillForegroundColor = ((short)0xA);
-            cs.FillPattern = FillPattern.SolidForeground;
+            cs.FillPattern = FillPattern.Bricks;
             fnt.Color = ((short)0xf);
             fnt.IsItalic = (true);
             cs2.FillForegroundColor = ((short)0x0);
-            cs2.FillPattern = FillPattern.SolidForeground;
+            cs2.FillPattern = FillPattern.Bricks;
             cs2.SetFont(fnt);
             for (short rownum = (short)0; rownum < 100; rownum++)
             {
@@ -184,7 +184,7 @@ namespace TestCases.HSSF.UserModel
                 ClassicAssert.AreEqual(cs.BorderRight, BorderStyle.Thin, "Right Border Style for row: ");
                 ClassicAssert.AreEqual(cs.BorderTop, BorderStyle.Thin, "Top Border Style for row: ");
                 ClassicAssert.AreEqual(0xA, cs.FillForegroundColor, "FillForegroundColor for row: ");
-                ClassicAssert.AreEqual((short)0x1, (short)cs.FillPattern, "FillPattern for row: ");
+                ClassicAssert.AreEqual(FillPattern.Bricks, cs.FillPattern, "FillPattern for row: ");
 
                 rownum++;
                 if (rownum >= 100)
@@ -194,7 +194,7 @@ namespace TestCases.HSSF.UserModel
                 ClassicAssert.IsNotNull(r, "Row is not null");
                 cs2 = r.RowStyle;
                 ClassicAssert.AreEqual(cs2.FillForegroundColor, (short)0x0, "FillForegroundColor for row: ");
-                ClassicAssert.AreEqual((short)cs2.FillPattern, (short)0x1, "FillPattern for row: ");
+                ClassicAssert.AreEqual(cs2.FillPattern, FillPattern.Bricks, "FillPattern for row: ");
             }
         }
     }

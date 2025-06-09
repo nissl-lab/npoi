@@ -3762,19 +3762,6 @@ namespace NPOI.XSSF.UserModel
             return tableList;
         }
 
-        /// <summary>
-        /// Set background color of the sheet tab
-        /// </summary>
-        /// <param name="colorIndex">the indexed color to set, must be a
-        /// constant from <see cref="IndexedColors"/></param>
-        [Obsolete("deprecated 3.15-beta2. Removed in 3.17. Use {@link #setTabColor(XSSFColor)}.")]
-        public void SetTabColor(int colorIndex)
-        {
-            IndexedColors indexedColor = IndexedColors.FromInt(colorIndex);
-            XSSFColor color = new XSSFColor(indexedColor, (Workbook as XSSFWorkbook).GetStylesSource().IndexedColors);
-            TabColor = color;
-        }
-
         #region ISheet Members
 
         public IDrawing DrawingPatriarch
@@ -4975,8 +4962,6 @@ namespace NPOI.XSSF.UserModel
             return outlineLevel;
         }
 
-        //YK: GetXYZArray() array accessors are deprecated in xmlbeans with JDK 1.5 support
-        [Obsolete]
         private short GetMaxOutlineLevelCols()
         {
             CT_Cols ctCols = worksheet.GetColsArray(0);

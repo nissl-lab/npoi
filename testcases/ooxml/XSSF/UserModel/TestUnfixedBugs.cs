@@ -234,7 +234,7 @@ namespace TestCases.XSSF.UserModel
                 sheet.AddMergedRegion(range4);
 
                 // set border
-                RegionUtil.SetBorderBottom((int)BorderStyle.Thin, range1, sheet);
+                RegionUtil.SetBorderBottom(BorderStyle.Thin, range1, sheet);
 
                 row2.GetCell(0).CellStyle.BorderBottom = BorderStyle.Thin;
                 row2.GetCell(1).CellStyle.BorderBottom = BorderStyle.Thin;
@@ -242,7 +242,7 @@ namespace TestCases.XSSF.UserModel
                 CellUtil.SetCellStyleProperty(cell0, CellUtil.BORDER_BOTTOM, BorderStyle.Thin);
                 ICell cell1 = CellUtil.GetCell(row3, 1);
                 CellUtil.SetCellStyleProperty(cell1, CellUtil.BORDER_BOTTOM, BorderStyle.Thin);
-                RegionUtil.SetBorderBottom((int)BorderStyle.Thin, range4, sheet);
+                RegionUtil.SetBorderBottom(BorderStyle.Thin, range4, sheet);
 
                 // write to file
                 Stream stream = new FileStream("55752.xlsx", FileMode.Create, FileAccess.ReadWrite);
