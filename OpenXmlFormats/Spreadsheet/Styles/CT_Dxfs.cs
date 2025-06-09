@@ -12,7 +12,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
     public class CT_Dxfs
     {
-
+        private Dictionary<int, string> dictAlternateContent = [];
         private List<CT_Dxf> dxfField;
 
         private uint countField;
@@ -23,12 +23,38 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             if (node == null)
                 return null;
             CT_Dxfs ctObj = new CT_Dxfs();
+            ctObj.InnerXml = node.InnerXml;
             ctObj.count = XmlHelper.ReadUInt(node.Attributes["count"]);
             ctObj.dxfField = new List<CT_Dxf>();
+            int index = 0;
             foreach (XmlNode childNode in node.ChildNodes)
             {
                 if (childNode.LocalName == "dxf")
                     ctObj.dxf.Add(CT_Dxf.Parse(childNode, namespaceManager));
+                else if(childNode.LocalName == "AlternateContent")
+                {
+                    //styleSheet:dxfs maybe have schema like this
+                    //mc:AlternateContent
+                    //    mc:Choice
+                    //        x:dxf
+                    //    mc:Fallback
+                    //        x:dxf
+                    foreach (XmlNode acChildNode in childNode.ChildNodes)
+                    {
+                        if (acChildNode.LocalName == "Fallback")
+                        {
+                            foreach(XmlNode fbChild in acChildNode.ChildNodes)
+                            {
+                                if(fbChild.LocalName == "dxf")
+                                {
+                                    ctObj.dxf.Add(CT_Dxf.Parse(fbChild, namespaceManager));
+                                }
+                            }
+                        }
+                    }
+                    ctObj.dictAlternateContent.Add(index, childNode.OuterXml);
+                }
+                index ++;
             }
             return ctObj;
         }
@@ -43,10 +69,17 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             if (this.dxf.Count > 0)
             {
                 sw.Write(">");
-                foreach (CT_Dxf x in this.dxf)
+                for(int i=0; i<this.dxf.Count;i++)
                 {
-                    x.Write(sw, "dxf");
+                    if(dictAlternateContent.TryGetValue(i, out string value))
+                        sw.Write(value);
+                    else
+                        dxf[i].Write(sw, "dxf");
                 }
+                //foreach(CT_Dxf x in this.dxf)
+                //{
+                //    x.Write(sw, "dxf");
+                //}
                 sw.Write(string.Format("</{0}>", nodeName));
             }
             else
@@ -59,6 +92,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         public CT_Dxfs()
         {
         }
+
+        public string InnerXml { get; set;}
+
         [XmlElement]
         public List<CT_Dxf> dxf
         {

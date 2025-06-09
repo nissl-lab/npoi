@@ -49,7 +49,7 @@ namespace NPOI.XSSF.UserModel.Charts
             }
         }
 
-        public CT_ShapeProperties Line
+        public override CT_ShapeProperties Line
         {
             get
             {

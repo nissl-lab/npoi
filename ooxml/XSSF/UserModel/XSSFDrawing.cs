@@ -592,20 +592,33 @@ namespace NPOI.XSSF.UserModel
             return lst;
         }
  
-        private static XSSFAnchor GetAnchorFromIEGAnchor(IEG_Anchor ctAnchor)
+        private XSSFAnchor GetAnchorFromIEGAnchor(IEG_Anchor ctAnchor)
         {
-            CT_Marker ctFrom=null, ctTo=null;
+            XSSFAnchor anchor = null;
             if (ctAnchor is CT_TwoCellAnchor cellAnchor)
             {
-                ctFrom = cellAnchor.from;
-                ctTo = cellAnchor.to;
+                CT_TwoCellAnchor ct = (CT_TwoCellAnchor)ctAnchor;
+                anchor = new XSSFClientAnchor(ct.from, ct.to);
             }
             else if (ctAnchor is CT_OneCellAnchor oneCellAnchor)
             {
-                ctFrom = oneCellAnchor.from;
+                CT_OneCellAnchor ct = (CT_OneCellAnchor)ctAnchor;
+                anchor = new XSSFClientAnchor(Sheet, ct.from, ct.ext);
             }
-            XSSFAnchor anchor = new XSSFClientAnchor(ctFrom, ctTo);
+            else if (ctAnchor is CT_AbsoluteCellAnchor)
+            {
+                CT_AbsoluteCellAnchor ct = (CT_AbsoluteCellAnchor)ctAnchor;
+                anchor = new XSSFClientAnchor(Sheet, ct.pos, ct.ext);
+            }
             return anchor;
+        }
+        public XSSFSheet Sheet
+        {
+            get
+            {
+                return (XSSFSheet)GetParent();
+            }
+            
         }
 
         private static XSSFAnchor GetAnchorFromParent(XmlNode obj)

@@ -53,6 +53,15 @@ namespace NPOI.XSSF.UserModel.Charts
             }
         }
 
+        public override CT_ShapeProperties Line
+        {
+            get
+            {
+                return ctValAx.spPr;
+            }
+        
+        }
+
         public void SetCrossBetween(AxisCrossBetween crossBetween)
         {
             ctValAx.crossBetween.val= FromCrossBetween(crossBetween);

@@ -15,11 +15,13 @@ namespace NPOI.OpenXmlFormats.Dml
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
     public class CT_GraphicalObjectData
     {
+        public XmlNode DomNode { get; set; }
         public static CT_GraphicalObjectData Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
                 return null;
             CT_GraphicalObjectData ctObj = new CT_GraphicalObjectData();
+            ctObj.DomNode = node;
             ctObj.uri = XmlHelper.ReadString(node.Attributes["uri"]);
             ctObj.Any = new List<string>();
             foreach (XmlNode childNode in node.ChildNodes)
