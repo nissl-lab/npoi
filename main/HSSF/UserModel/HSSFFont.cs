@@ -31,6 +31,16 @@ namespace NPOI.HSSF.UserModel
     /// </summary>
     public class HSSFFont:NPOI.SS.UserModel.IFont
     {
+        /**
+         * Normal boldness (not bold)
+         */
+        private static short BOLDWEIGHT_NORMAL = 0x190;
+
+        /**
+         * Bold boldness (bold)
+         */
+        private static short BOLDWEIGHT_BOLD = 0x2bc;
+
         public const String FONT_ARIAL = "Arial";
 
         private FontRecord font;
@@ -137,16 +147,6 @@ namespace NPOI.HSSF.UserModel
             return pallette.GetColor(Color);
         }
 
-        /// <summary>
-        /// Gets or sets the boldness to use
-        /// </summary>
-        /// <value>The boldweight.</value>
-        [Obsolete("deprecated POI 3.15 beta 2. Use IsBold instead.")]
-        public short Boldweight
-        {
-            get { return font.BoldWeight; }
-            set { font.BoldWeight = value; }
-        }
         /**
          * get or set if the font bold style
          */
@@ -154,14 +154,14 @@ namespace NPOI.HSSF.UserModel
         {
             get
             {
-                return font.BoldWeight == (short)FontBoldWeight.Bold;
+                return font.BoldWeight == BOLDWEIGHT_BOLD;
             }
             set
             {
                 if (value)
-                    font.BoldWeight = (short)FontBoldWeight.Bold;
+                    font.BoldWeight = BOLDWEIGHT_BOLD;
                 else
-                    font.BoldWeight = (short)FontBoldWeight.Normal;
+                    font.BoldWeight = BOLDWEIGHT_NORMAL;
             }
         }
 
@@ -260,7 +260,6 @@ namespace NPOI.HSSF.UserModel
             FontName = src.FontName;
             FontHeight = src.FontHeight;
             IsBold = src.IsBold;
-            Boldweight = src.Boldweight;
             IsItalic = src.IsItalic;
             IsStrikeout = src.IsStrikeout;
             Color = src.Color;

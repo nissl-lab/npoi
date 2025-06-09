@@ -1266,7 +1266,7 @@ namespace TestCases.HSSF.UserModel
             //  yet to Add
             ClassicAssert.IsNull(
                 wb.FindFont(
-                    true, (short)123, (short)22,
+                    false, (short)123, (short)22,
                     "Thingy", false, true, FontSuperScript.Sub, FontUnderlineType.Double
                 )
             );
@@ -1277,7 +1277,7 @@ namespace TestCases.HSSF.UserModel
             ClassicAssert.AreEqual(5, nf.Index);
             ClassicAssert.AreEqual(nf, wb.GetFontAt((short)5));
 
-            nf.IsBold = true;
+            nf.IsBold = false;
             nf.Color = ((short)123);
             nf.FontHeight = ((short)22);
             nf.FontName = ("Thingy");
@@ -1292,20 +1292,20 @@ namespace TestCases.HSSF.UserModel
             // Find it now
             ClassicAssert.IsNotNull(
                 wb.FindFont(
-                    true, (short)123, (short)22,
+                    false, (short)123, (short)22,
                     "Thingy", false, true, FontSuperScript.Sub, FontUnderlineType.Double
                 )
             );
             ClassicAssert.AreEqual(
                 5,
                 wb.FindFont(
-                       true, (short)123, (short)22,
+                       false, (short)123, (short)22,
                        "Thingy", false, true, FontSuperScript.Sub, FontUnderlineType.Double
                    ).Index
             );
             ClassicAssert.AreEqual(nf,
                    wb.FindFont(
-                       true, (short)123, (short)22,
+                       false, (short)123, (short)22,
                        "Thingy", false, true, FontSuperScript.Sub, FontUnderlineType.Double
                    )
             );

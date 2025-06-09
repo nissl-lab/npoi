@@ -77,12 +77,14 @@ namespace TestCases.HSSF.UserModel
                 r.RowStyle = (cs);
                 r.CreateCell(0);
             }
-            wb = HSSFTestDataSamples.WriteOutAndReadBack(wb);
+            HSSFWorkbook wb2 = HSSFTestDataSamples.WriteOutAndReadBack(wb);
+            IOUtils.CloseQuietly(wb);
 
             SanityChecker sanityChecker = new SanityChecker();
-            sanityChecker.CheckHSSFWorkbook(wb);
+            sanityChecker.CheckHSSFWorkbook(wb2);
             ClassicAssert.AreEqual(99, s.LastRowNum, "LAST ROW == 99");
             ClassicAssert.AreEqual(0, s.FirstRowNum, "FIRST ROW == 0");
+            IOUtils.CloseQuietly(wb2);
         }
 
         /**
@@ -108,14 +110,15 @@ namespace TestCases.HSSF.UserModel
             row.RowStyle = (cs);
             row.CreateCell(0);
 
-            wb = HSSFTestDataSamples.WriteOutAndReadBack(wb);
+            HSSFWorkbook wb2 = HSSFTestDataSamples.WriteOutAndReadBack(wb);
+            IOUtils.CloseQuietly(wb);
 
             SanityChecker sanityChecker = new SanityChecker();
-            sanityChecker.CheckHSSFWorkbook(wb);
+            sanityChecker.CheckHSSFWorkbook(wb2);
 
             ClassicAssert.AreEqual(1, s.LastRowNum, "LAST ROW ");
             ClassicAssert.AreEqual(0, s.FirstRowNum, "FIRST ROW ");
-
+            IOUtils.CloseQuietly(wb2);
         }
 
         /**
@@ -163,14 +166,14 @@ namespace TestCases.HSSF.UserModel
                 r.RowStyle = (cs2);
                 r.CreateCell(0);
             }
-            wb = HSSFTestDataSamples.WriteOutAndReadBack(wb);
-
+            HSSFWorkbook wb2 = HSSFTestDataSamples.WriteOutAndReadBack(wb);
+            IOUtils.CloseQuietly(wb);
             SanityChecker sanityChecker = new SanityChecker();
-            sanityChecker.CheckHSSFWorkbook(wb);
+            sanityChecker.CheckHSSFWorkbook(wb2);
             ClassicAssert.AreEqual(99, s.LastRowNum, "LAST ROW == 99");
             ClassicAssert.AreEqual(0, s.FirstRowNum, "FIRST ROW == 0");
 
-            s = wb.GetSheetAt(0);
+            s = wb2.GetSheetAt(0);
             ClassicAssert.IsNotNull(s, "Sheet is not null");
 
             for (short rownum = (short)0; rownum < 100; rownum++)
@@ -196,6 +199,7 @@ namespace TestCases.HSSF.UserModel
                 ClassicAssert.AreEqual(cs2.FillForegroundColor, (short)0x0, "FillForegroundColor for row: ");
                 ClassicAssert.AreEqual(cs2.FillPattern, FillPattern.Bricks, "FillPattern for row: ");
             }
+            IOUtils.CloseQuietly(wb2);
         }
     }
 }

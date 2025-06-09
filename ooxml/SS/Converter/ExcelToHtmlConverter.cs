@@ -827,15 +827,9 @@ using Cysharp.Text;
 
         private static void BuildStyle_Font(IWorkbook workbook, StringBuilder style, IFont font)
         {
-            switch (font.Boldweight)
+            if (font.IsBold)
             {
-                case (short)FontBoldWeight.Bold:
-                    style.Append("font-weight: bold; ");
-                    break;
-                case (short)FontBoldWeight.Normal:
-                    // by default, not not increase HTML size
-                    // style.Append( "font-weight: normal; " );
-                    break;
+                style.Append("font-weight: bold; ");
             }
 
             if (workbook is HSSFWorkbook hssfWorkbook)
