@@ -70,7 +70,7 @@ namespace TestCases.XSSF.UserModel
             ICell cell12 = row1.CreateCell(3);
             cell12.SetCellValue(12.12);
 
-            AreaReference source = new AreaReference("A1:C2", SpreadsheetVersion.EXCEL2007);
+            AreaReference source = wb.GetCreationHelper().CreateAreaReference("A1:C2");
             pivotTable = sheet.CreatePivotTable(source, new CellReference("H5"));
 
             XSSFSheet offsetSheet = wb.CreateSheet() as XSSFSheet;
@@ -109,7 +109,8 @@ namespace TestCases.XSSF.UserModel
             ICell tableCell_4_3 = tableRow_4.CreateCell(4);
             tableCell_4_3.SetCellValue(100);
 
-            AreaReference offsetSource = new AreaReference(new CellReference("C2"), new CellReference("E4"));
+            AreaReference offsetSource = wb.GetCreationHelper().CreateAreaReference(
+                new CellReference("C2"), new CellReference("E4"));
             offsetPivotTable = offsetSheet.CreatePivotTable(offsetSource, new CellReference("C6"));
         }
     }

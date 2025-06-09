@@ -1476,7 +1476,7 @@ namespace TestCases.XSSF.UserModel
          * Sheet names with a , in them
          */
         [Test]
-        public void Test51963()
+        public void Bug51963()
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("51963.xlsx");
             ISheet sheet = wb.GetSheetAt(0);
@@ -1485,7 +1485,7 @@ namespace TestCases.XSSF.UserModel
             XSSFName name = wb.GetName("Intekon.ProdCodes") as XSSFName;
             ClassicAssert.AreEqual("'Abc,1'!$A$1:$A$2", name.RefersToFormula);
 
-            AreaReference ref1 = new AreaReference(name.RefersToFormula, NPOI.SS.SpreadsheetVersion.EXCEL2007);
+            AreaReference ref1 = wb.GetCreationHelper().CreateAreaReference(name.RefersToFormula);
             ClassicAssert.AreEqual(0, ref1.FirstCell.Row);
             ClassicAssert.AreEqual(0, ref1.FirstCell.Col);
             ClassicAssert.AreEqual(1, ref1.LastCell.Row);
