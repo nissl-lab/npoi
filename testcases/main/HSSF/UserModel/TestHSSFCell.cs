@@ -246,6 +246,7 @@ namespace TestCases.HSSF.UserModel
             ClassicAssert.AreEqual(0, ((HSSFSheet)wb.GetSheetAt(0)).Sheet.ActiveCellCol);
 
             cell.SetAsActiveCell();
+            cell.SetCellValue("this should be active");
 
             ClassicAssert.AreEqual(1, ((HSSFSheet)wb.GetSheetAt(0)).Sheet.ActiveCellRow);
             ClassicAssert.AreEqual(3, ((HSSFSheet)wb.GetSheetAt(0)).Sheet.ActiveCellCol);

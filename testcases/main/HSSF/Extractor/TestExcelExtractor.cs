@@ -378,5 +378,14 @@ using NPOI.HSSF.Record.Crypto;
             ClassicAssert.IsNotNull(extractor.Text);
             extractor.Close();
         }
+
+        [Test]
+        public void Test61045()
+        {
+            //bug 61045. File is govdocs1 626534
+            ExcelExtractor extractor = CreateExtractor("61045_govdocs1_626534.xls");
+            String txt = extractor.Text;
+            POITestCase.AssertContains(txt, "NONBUSINESS");
+        }
     }
 }
