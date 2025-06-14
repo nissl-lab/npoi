@@ -14,6 +14,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
+
 using System;
 using System.Globalization;
 using System.IO;
@@ -26,7 +27,7 @@ using NPOI.XSSF.UserModel;
 
 namespace NPOI.XSSF.Streaming
 {
-    public class SheetDataWriter
+    public class SheetDataWriter : ICloseable
     {
         private static readonly POILogger logger = POILogFactory.GetLogger(typeof(SheetDataWriter));
 
@@ -421,7 +422,7 @@ namespace NPOI.XSSF.Streaming
         }
 
         //Taken from jdk1.3/src/javax/swing/text/html/HTMLWriter.java
-        protected void OutputQuotedString(string s)
+        protected internal void OutputQuotedString(string s)
         {
             if (string.IsNullOrEmpty(s))
             {
@@ -505,13 +506,23 @@ namespace NPOI.XSSF.Streaming
                     default:
                         // YK: XmlBeans silently replaces all ISO control characters ( < 32) with question marks.
                         // the same rule applies to unicode surrogates and "not a character" symbols.
-                        if (c < ' ' || Char.IsLowSurrogate(c) || Char.IsHighSurrogate(c) || '\uFFFE' <= c)
+                        if (ReplaceWithQuestionMark(c))
                         {
                             if (counter > last)
                             {
                                 WriteAsBytes(GetSubArray(chars, last, counter - last));
                             }
                             WriteAsBytes("?");
+                            last = counter + 1;
+                        }
+                        else if (Char.IsLowSurrogate(c) || Char.IsHighSurrogate(c))
+                        {
+                            if (counter > last)
+                            {
+                                WriteAsBytes(GetSubArray(chars, last, counter - last));
+                            }
+                            WriteAsBytes(c);
+                            //_outputWriter.Write(c);
                             last = counter + 1;
                         }
                         else if (c > 127)
@@ -540,7 +551,10 @@ namespace NPOI.XSSF.Streaming
         {
             return new ArraySegment<char>(oldArray, skip, take);
         }
-
+        public static bool ReplaceWithQuestionMark(char c)
+        {
+            return c < ' ' || ('\uFFFE' <= c && c <= '\uFFFF');
+        }
         /**
          * Deletes the temporary file that backed this sheet on disk.
          * @return true if the file was deleted, false if it wasn't.
