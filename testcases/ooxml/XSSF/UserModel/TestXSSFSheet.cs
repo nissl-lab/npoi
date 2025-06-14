@@ -2296,10 +2296,12 @@ namespace TestCases.XSSF.UserModel
 
             ClassicAssert.IsNotNull(wb);
             ClassicAssert.IsNotNull(sheet);
-            XSSFPivotTable pivotTable = sheet.CreatePivotTable(new AreaReference("A1:B2", SpreadsheetVersion.EXCEL2007), new CellReference("H5"));
+            XSSFPivotTable pivotTable = sheet.CreatePivotTable(wb.GetCreationHelper().CreateAreaReference("A1:B2"),
+                new CellReference("H5"));
             ClassicAssert.IsNotNull(pivotTable);
             ClassicAssert.IsTrue(wb.PivotTables.Count > 0);
-            XSSFPivotTable pivotTable2 = sheet.CreatePivotTable(new AreaReference("A1:B2", SpreadsheetVersion.EXCEL2007), new CellReference("L5"), sheet);
+            XSSFPivotTable pivotTable2 = sheet.CreatePivotTable(wb.GetCreationHelper().CreateAreaReference("A1:B2"),
+                new CellReference("L5"), sheet);
             ClassicAssert.IsNotNull(pivotTable2);
             ClassicAssert.IsTrue(wb.PivotTables.Count > 1);
 
@@ -2314,12 +2316,14 @@ namespace TestCases.XSSF.UserModel
 
             ClassicAssert.IsNotNull(wb);
             ClassicAssert.IsNotNull(sheet);
-            XSSFPivotTable pivotTable = sheet.CreatePivotTable(new AreaReference("A1:B2", SpreadsheetVersion.EXCEL2007), new CellReference("H5"));
+            XSSFPivotTable pivotTable = sheet.CreatePivotTable(wb.GetCreationHelper().CreateAreaReference("A1:B2"),
+                new CellReference("H5"));
             ClassicAssert.IsNotNull(pivotTable);
             ClassicAssert.IsTrue(wb.PivotTables.Count > 0);
             ClassicAssert.IsNotNull(wb);
             XSSFSheet sheet2 = wb.CreateSheet() as XSSFSheet;
-            XSSFPivotTable pivotTable2 = sheet2.CreatePivotTable(new AreaReference("A1:B2", SpreadsheetVersion.EXCEL2007), new CellReference("H5"), sheet);
+            XSSFPivotTable pivotTable2 = sheet2.CreatePivotTable(wb.GetCreationHelper().CreateAreaReference("A1:B2"),
+                new CellReference("H5"), sheet);
             ClassicAssert.IsNotNull(pivotTable2);
             ClassicAssert.IsTrue(wb.PivotTables.Count > 1);
 
@@ -2334,7 +2338,8 @@ namespace TestCases.XSSF.UserModel
 
             ClassicAssert.IsNotNull(wb);
             ClassicAssert.IsNotNull(sheet);
-            XSSFPivotTable pivotTable = sheet.CreatePivotTable(new AreaReference("A1:B2", SpreadsheetVersion.EXCEL2007), new CellReference("H5"));
+            XSSFPivotTable pivotTable = sheet.CreatePivotTable(wb.GetCreationHelper().CreateAreaReference("A1:B2"),
+                new CellReference("H5"));
             ClassicAssert.IsNotNull(pivotTable);
             ClassicAssert.IsTrue(wb.PivotTables.Count > 0);
 
@@ -2349,7 +2354,7 @@ namespace TestCases.XSSF.UserModel
             XSSFSheet sheet2 = wb.CreateSheet() as XSSFSheet;
 
             XSSFPivotTable pivotTable = sheet2.CreatePivotTable
-                    (new AreaReference("A1:B2", SpreadsheetVersion.EXCEL2007), new CellReference("H5"), sheet1);
+                    (wb.GetCreationHelper().CreateAreaReference("A1:B2"), new CellReference("H5"), sheet1);
             ClassicAssert.AreEqual(0, pivotTable.GetRowLabelColumns().Count);
 
             ClassicAssert.AreEqual(1, wb.PivotTables.Count);
@@ -2367,7 +2372,7 @@ namespace TestCases.XSSF.UserModel
             XSSFSheet sheet2 = wb.CreateSheet("TEST") as XSSFSheet;
 
             XSSFPivotTable pivotTable = sheet2.CreatePivotTable(
-                new AreaReference(sheet.SheetName + "!A$1:B$2", SpreadsheetVersion.EXCEL2007),
+                wb.GetCreationHelper().CreateAreaReference(sheet.SheetName + "!A$1:B$2"),
                 new CellReference("H5"));
             ClassicAssert.AreEqual(0, pivotTable.GetRowLabelColumns().Count);
 
@@ -2384,7 +2389,7 @@ namespace TestCases.XSSF.UserModel
             Assert.Throws<ArgumentException>(() =>
             {
                 sheet2.CreatePivotTable(
-                    new AreaReference(sheet.SheetName + "!A$1:B$2", SpreadsheetVersion.EXCEL2007),
+                    wb.GetCreationHelper().CreateAreaReference(sheet.SheetName + "!A$1:B$2"),
                     new CellReference("H5"),
                     sheet2);
             });

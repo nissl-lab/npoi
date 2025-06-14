@@ -331,22 +331,22 @@ namespace TestCases.SS.Util
             IWorkbook wb1 = _testDataProvider.CreateWorkbook();
             ICell A1 = wb1.CreateSheet().CreateRow(0).CreateCell(0);
             Dictionary<String, Object> properties = new Dictionary<String, Object>();
-            // FIXME: Use FillPattern.BRICKS enum
+
             properties.Add(CellUtil.FILL_PATTERN, FillPattern.Bricks);
             properties.Add(CellUtil.FILL_FOREGROUND_COLOR, IndexedColors.Blue.Index);
             properties.Add(CellUtil.FILL_BACKGROUND_COLOR, IndexedColors.Red.Index);
 
             CellUtil.SetCellStyleProperties(A1, properties);
             ICellStyle style = A1.CellStyle;
-            // FIXME: Use FillPattern.BRICKS enum
+
             ClassicAssert.AreEqual(FillPattern.Bricks, style.FillPattern, "fill pattern");
             ClassicAssert.AreEqual(IndexedColors.Blue, IndexedColors.FromInt(style.FillForegroundColor), "fill foreground color");
             ClassicAssert.AreEqual(IndexedColors.Red, IndexedColors.FromInt(style.FillBackgroundColor), "fill background color");
         }
         /**
- * bug 63268
- * @since POI 4.1.0
- */
+         * bug 63268
+         * @since POI 4.1.0
+         */
         [Test]
         public void SetFontShouldNotCreateDuplicateStyle()
         {

@@ -718,12 +718,6 @@ namespace NPOI.XSSF.Streaming
             return XssfWorkbook.CreateFont();
         }
 
-        [Obsolete("deprecated in poi 3.16")]
-        public IFont FindFont(short boldWeight, short color, short fontHeight, string name, bool italic, bool strikeout, FontSuperScript typeOffset, FontUnderlineType underline)
-        {
-            return XssfWorkbook.FindFont(boldWeight, color, fontHeight, name, italic, strikeout, typeOffset, underline);
-        }
-
         /**
          * Finds a font that matches the one with the supplied attributes
          *

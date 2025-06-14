@@ -20,7 +20,9 @@ namespace TestCases.SS.Formula.Eval
 
     using System;
     using NUnit.Framework;using NUnit.Framework.Legacy;
+    using System.Collections.Generic;
     using NPOI.HSSF.UserModel;
+    using NPOI.SS;
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.Formula.PTG;
@@ -41,35 +43,36 @@ namespace TestCases.SS.Formula.Eval
         public void TestPermutations()
         {
 
-            Confirm("B3", "D7", 2, 6, 1, 3);
-            Confirm("B1", "B1", 0, 0, 1, 1);
+            Confirm("B3", "D7", "B3:D7");
+            Confirm("B1", "B1", "B1:B1");
 
-            Confirm("B7", "D3", 2, 6, 1, 3);
-            Confirm("D3", "B7", 2, 6, 1, 3);
-            Confirm("D7", "B3", 2, 6, 1, 3);
+            Confirm("B7", "D3", "B3:D7");
+            Confirm("D3", "B7", "B3:D7");
+            Confirm("D7", "B3", "B3:D7");
         }
 
         private static void Confirm(
             String refA,
             String refB,
-            int firstRow,
-            int lastRow,
-            int firstColumn,
-            int lastColumn)
+            String expectedAreaRef)
         {
             ValueEval[] args =
             {
                 CreateRefEval(refA),
                 CreateRefEval(refB),
             };
-
-            ValueEval result = EvalInstances.Range.Evaluate(args, 0, (short)0);
-            ClassicAssert.IsTrue(result is AreaEval);
-            AreaEval ae = (AreaEval)result;
-            ClassicAssert.AreEqual(firstRow, ae.FirstRow);
-            ClassicAssert.AreEqual(lastRow, ae.LastRow);
-            ClassicAssert.AreEqual(firstColumn, ae.FirstColumn);
-            ClassicAssert.AreEqual(lastColumn, ae.LastColumn);
+            List<SpreadsheetVersion> versions = Arrays.AsList(new SpreadsheetVersion[] { SpreadsheetVersion.EXCEL97, SpreadsheetVersion.EXCEL2007 });
+            foreach (SpreadsheetVersion version in versions)
+            {
+                AreaReference ar = new AreaReference(expectedAreaRef, version);
+                ValueEval result = EvalInstances.Range.Evaluate(args, 0, (short)0);
+                ClassicAssert.IsTrue(result is AreaEval);
+                AreaEval ae = (AreaEval)result;
+                ClassicAssert.AreEqual(ar.FirstCell.Row, ae.FirstRow);
+                ClassicAssert.AreEqual(ar.LastCell.Row, ae.LastRow);
+                ClassicAssert.AreEqual(ar.FirstCell.Col, ae.FirstColumn);
+                ClassicAssert.AreEqual(ar.LastCell.Col, ae.LastColumn);
+            }
         }
 
         private static ValueEval CreateRefEval(String refStr)
