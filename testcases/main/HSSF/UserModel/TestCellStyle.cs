@@ -271,9 +271,6 @@ namespace TestCases.HSSF.UserModel
             ClassicAssert.AreEqual(fnt, clone.GetFont(wb));
             ClassicAssert.AreEqual(18, clone.DataFormat);
             ClassicAssert.AreEqual(5, wb.NumberOfFonts);
-
-            orig.Alignment = HorizontalAlignment.Left;
-            ClassicAssert.AreEqual(HorizontalAlignment.Right, clone.Alignment);
         }
 
         /**

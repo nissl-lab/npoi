@@ -412,11 +412,6 @@ namespace NPOI.XSSF.UserModel
             get { throw new System.NotImplementedException(); }
         }
 
-        void ISheet.SetZoom(int numerator, int denominator)
-        {
-            throw new System.NotImplementedException();
-        }
-
         short ISheet.TopRow
         {
             get
@@ -610,11 +605,6 @@ namespace NPOI.XSSF.UserModel
         }
 
         void ISheet.AutoSizeColumn(int column, bool useMergedCells)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        IComment ISheet.GetCellComment(int row, int column)
         {
             throw new System.NotImplementedException();
         }
