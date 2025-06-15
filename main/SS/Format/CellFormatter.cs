@@ -19,6 +19,7 @@ namespace NPOI.SS.Format
     using System;
     using System.Text;
     using System.Globalization;
+    using NPOI.Util;
 
 
 
@@ -32,7 +33,7 @@ namespace NPOI.SS.Format
     {
         /** The original specified format. */
         protected String format;
-
+        protected CultureInfo locale;
         /**
          * This is the locale used to Get a consistent format result from which to
          * work.
@@ -45,7 +46,19 @@ namespace NPOI.SS.Format
          * @param format The format.
          */
         public CellFormatter(String format)
+            : this(LocaleUtil.GetUserLocale(), format)
         {
+        }
+
+        /**
+         * Creates a new formatter object, storing the format in {@link #format}.
+         *
+         * @param locale The locale.
+         * @param format The format.
+         */
+        public CellFormatter(CultureInfo locale, String format)
+        {
+            this.locale = locale;
             this.format = format;
         }
 

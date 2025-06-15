@@ -178,7 +178,7 @@ namespace NPOI.SS.UserModel
 
         /** A default FormatBase to use when a number pattern cannot be Parsed. */
         private FormatBase defaultNumFormat;
-        private CultureInfo currentCulture;
+        private CultureInfo locale;
         
         /*
          * A map to cache formats.
@@ -247,7 +247,7 @@ namespace NPOI.SS.UserModel
         public DataFormatter(CultureInfo culture, bool localeIsAdapting, bool emulateCSV)
         {
             this.localeIsAdapting = true;
-            this.currentCulture = culture;
+            this.locale = culture;
             //localeChangedObservable.addObserver(this);
             // localeIsAdapting must be true prior to this first checkForLocaleChange call.
             //localeChangedObservable.checkForLocaleChange(culture);
@@ -297,12 +297,6 @@ namespace NPOI.SS.UserModel
          * @param cell The cell to retrieve a FormatBase for
          * @return A FormatBase for the FormatBase String
          */
-        private FormatBase GetFormat(ICell cell)
-        {
-
-            return GetFormat(cell, null);
-        }
-
         private FormatBase GetFormat(ICell cell, ConditionalFormattingEvaluator cfEvaluator)
         {
             if (cell == null) return null;
@@ -346,7 +340,7 @@ namespace NPOI.SS.UserModel
                 try
                 {
                     // Ask CellFormat to get a formatter for it
-                    CellFormat cfmt = CellFormat.GetInstance(formatStr);
+                    CellFormat cfmt = CellFormat.GetInstance(locale, formatStr);
                     // CellFormat requires callers to identify date vs not, so do so
                     object cellValueO = (cellValue);
                     if (DateUtil.IsADateFormat(formatIndex, formatStr) &&
@@ -714,7 +708,7 @@ namespace NPOI.SS.UserModel
             try
             {
                 //return new SimpleDateFormat(formatStr);
-                return new ExcelStyleDateFormatter(formatStr);
+                return new ExcelStyleDateFormatter(formatStr, dateSymbols);
             }
             catch (ArgumentException)
             {
@@ -838,7 +832,7 @@ namespace NPOI.SS.UserModel
                 // correct grouping for non-US locales.
                 if (grouping != ',')
                 {
-                    symbols = currentCulture.NumberFormat.Clone() as NumberFormatInfo;
+                    symbols = locale.NumberFormat.Clone() as NumberFormatInfo;
                     symbols.NumberGroupSeparator = grouping.ToString();
                     string oldPart = agm.Groups[1].Value;
                     string newPart = oldPart.Replace(grouping, ',');
@@ -930,7 +924,7 @@ namespace NPOI.SS.UserModel
             double d = cell.NumericCellValue;
             if (numberFormat == null)
             {
-                return d.ToString(currentCulture);
+                return d.ToString(locale);
             }
             //return numberFormat.Format(d, currentCulture);
             string formatted = numberFormat.Format(d);
@@ -997,7 +991,7 @@ namespace NPOI.SS.UserModel
             FormatBase numberFormat = GetFormat(value, formatIndex, formatString);
             if (numberFormat == null)
             {
-                return value.ToString(currentCulture);
+                return value.ToString(locale);
             }
             // When formatting 'value', double to text to BigDecimal produces more
             // accurate results than double to Double in JDK8 (as compared to
@@ -1206,13 +1200,13 @@ namespace NPOI.SS.UserModel
         public void Update(IObservable<object> observable, object localeObj)
         {
             if (localeObj is not CultureInfo newLocale) return;
-            if (newLocale.Equals(currentCulture)) return;
+            if (newLocale.Equals(locale)) return;
 
-            currentCulture = newLocale;
+            locale = newLocale;
 
             //dateSymbols = DateFormatSymbols.getInstance(currentCulture);
             //decimalSymbols = DecimalFormatSymbols.getInstance(currentCulture);
-            generalNumberFormat = new ExcelGeneralNumberFormat(currentCulture);
+            generalNumberFormat = new ExcelGeneralNumberFormat(locale);
 
             // init built-in formats
 

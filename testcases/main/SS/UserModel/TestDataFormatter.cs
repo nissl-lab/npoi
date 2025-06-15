@@ -868,18 +868,15 @@ namespace TestCases.SS.UserModel
         public void TestBug60422()
         {
             //LocaleUtil.setUserLocale(Locale.ROOT);
-            try
-            {
-                char euro = '\u20AC';
-                DataFormatter df = new DataFormatter(CultureInfo.GetCultureInfo("de-DE"));
-                String formatString = String.Format("_-* #,##0.00\\ \"{0}\"_-;\\-* #,##0.00\\ \"{1}\"_-;_-* \"-\"??\\ \"{2}\"_-;_-@_-",
-                        euro, euro, euro);
-                ClassicAssert.AreEqual("4.33 " + euro, df.FormatRawCellContents(4.33, 178, formatString));
-            }
-            finally
-            {
-                //LocaleUtil.resetUserLocale();
-            }
+
+            char euro = '\u20AC';
+            DataFormatter df = new DataFormatter(CultureInfo.GetCultureInfo("de-DE"));
+            String formatString = String.Format("_-* #,##0.00\\ \"{0}\"_-;\\-* #,##0.00\\ \"{1}\"_-;_-* \"-\"??\\ \"{2}\"_-;_-@_-",
+                    euro, euro, euro);
+
+            ClassicAssert.AreEqual("4,33 " + euro, df.FormatRawCellContents(4.33, 178, formatString));
+            ClassicAssert.AreEqual("1.234,33 " + euro, df.FormatRawCellContents(1234.33, 178, formatString));
+
         }
     }
 }
