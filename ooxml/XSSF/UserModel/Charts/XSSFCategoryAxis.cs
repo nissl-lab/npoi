@@ -34,6 +34,13 @@ namespace NPOI.XSSF.UserModel.Charts
             }
         }
 
+        public override CT_ShapeProperties Line
+        {
+            get
+            {
+                return ctCatAx.spPr;
+            }
+        }
         protected override CT_AxPos GetCTAxPos()
         {
             return ctCatAx.axPos;

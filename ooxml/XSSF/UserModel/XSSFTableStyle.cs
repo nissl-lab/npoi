@@ -27,8 +27,7 @@ namespace NPOI.OOXML.XSSF.UserModel
                 if (element.dxfIdSpecified)
                 {
                     int idx = (int)element.dxfId;
-                    CT_Dxf dxf;
-                    dxf = dxfList[idx];
+                    CT_Dxf dxf = dxfList[idx];
                     int stripeSize = 0;
                     if (element.size!=0) stripeSize = (int)element.size;
                     if (dxf != null) dstyle = new XSSFDxfStyleProvider(dxf, stripeSize, colorMap);

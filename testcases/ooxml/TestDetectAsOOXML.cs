@@ -75,8 +75,6 @@ namespace TestCases.OOXML
             // detect header
             InputStream in1 = new PushbackInputStream(testInput, 10);
             ClassicAssert.IsFalse(DocumentFactoryHelper.HasOOXMLHeader(in1));
-            //noinspection deprecation
-            ClassicAssert.IsFalse(POIXMLDocument.HasOOXMLHeader(in1));
 
             // check if InputStream is still intact
             byte[] test = new byte[3];

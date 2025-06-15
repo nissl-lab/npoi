@@ -249,6 +249,7 @@ namespace NPOI
             XmlNamespaceManager ns = new XmlNamespaceManager(nt);
             ns.AddNamespace(string.Empty, PackageNamespaces.SCHEMA_MAIN);
             ns.AddNamespace("d", PackageNamespaces.SCHEMA_MAIN);
+            ns.AddNamespace("x", PackageNamespaces.SCHEMA_MAIN);
             ns.AddNamespace("a", PackageNamespaces.SCHEMA_DRAWING);
             ns.AddNamespace("xdr", PackageNamespaces.SCHEMA_SHEETDRAWINGS);
             ns.AddNamespace("r", PackageNamespaces.SCHEMA_RELATIONSHIPS);
