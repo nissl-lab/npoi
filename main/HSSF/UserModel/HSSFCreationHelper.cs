@@ -19,6 +19,7 @@ namespace NPOI.HSSF.UserModel
 {
     using System;
     using NPOI.SS.UserModel;
+    using NPOI.SS.Util;
 
     public class HSSFCreationHelper : ICreationHelper
     {
@@ -72,6 +73,16 @@ namespace NPOI.HSSF.UserModel
         public ExtendedColor CreateExtendedColor()
         {
             return new HSSFExtendedColor(new NPOI.HSSF.Record.Common.ExtendedColor());
+        }
+
+        public AreaReference CreateAreaReference(String reference)
+        {
+            return new AreaReference(reference, workbook.SpreadsheetVersion);
+        }
+        
+        public AreaReference CreateAreaReference(CellReference topLeft, CellReference bottomRight)
+        {
+            return new AreaReference(topLeft, bottomRight, workbook.SpreadsheetVersion);
         }
     }
 }
