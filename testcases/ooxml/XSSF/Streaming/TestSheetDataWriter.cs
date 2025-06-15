@@ -23,9 +23,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace NPOI.XSSF.Streaming
+namespace TestCases.XSSF.Streaming
 {
     using NPOI.Util;
+    using NPOI.XSSF.Streaming;
     using NUnit.Framework;using NUnit.Framework.Legacy;
 
     [TestFixture]

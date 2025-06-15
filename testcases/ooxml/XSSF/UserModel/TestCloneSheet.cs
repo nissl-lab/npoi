@@ -1,7 +1,9 @@
-﻿using NUnit.Framework;using NUnit.Framework.Legacy;
+﻿using NPOI.XSSF;
+using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using System.IO;
 
-namespace NPOI.XSSF.UserModel
+namespace TestCases.XSSF.UserModel
 {
     [TestFixture]
     public class TestCloneSheet

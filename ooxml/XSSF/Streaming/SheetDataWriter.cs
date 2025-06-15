@@ -262,7 +262,7 @@ namespace NPOI.XSSF.Streaming
         {
             WriteAsBytes("</row>\n");
         }
-
+        //TODO: Fix test case TestCases.XSSF.UserModel.TestEncodingBelowAscii
         public void WriteCell(int columnIndex, ICell cell)
         {
             if (cell == null)
@@ -521,8 +521,8 @@ namespace NPOI.XSSF.Streaming
                             {
                                 WriteAsBytes(GetSubArray(chars, last, counter - last));
                             }
-                            WriteAsBytes(c);
-                            //_outputWriter.Write(c);
+                            //WriteAsBytes(c);
+                            _outputWriter.Write(c);
                             last = counter + 1;
                         }
                         else if (c > 127)
