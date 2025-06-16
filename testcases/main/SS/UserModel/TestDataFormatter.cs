@@ -763,7 +763,7 @@ namespace TestCases.SS.UserModel
         }
 
         [Test]
-        public void testLargeNumbersAndENotation()
+        public void TestLargeNumbersAndENotation()
         {
             assertFormatsTo("1E+86", 99999999999999999999999999999999999999999999999999999999999999999999999999999999999999d);
             assertFormatsTo("1E-84", 0.000000000000000000000000000000000000000000000000000000000000000000000000000000000001d);
@@ -833,6 +833,36 @@ namespace TestCases.SS.UserModel
             wb.Close();
         }
 
+        [Test]
+        public void TestFormatWithTrailingDotsUS() {
+            DataFormatter dfUS = new DataFormatter(CultureInfo.GetCultureInfo("en-US"));
+            ClassicAssert.AreEqual("1,000,000", dfUS.FormatRawCellContents(1000000, -1, "#,##0"));
+            ClassicAssert.AreEqual("1,000", dfUS.FormatRawCellContents(1000000, -1, "#,##0,"));
+            ClassicAssert.AreEqual("1", dfUS.FormatRawCellContents(1000000, -1, "#,##0,,"));
+            ClassicAssert.AreEqual("1,000,000.0", dfUS.FormatRawCellContents(1000000, -1, "#,##0.0"));
+            ClassicAssert.AreEqual("1,000.0", dfUS.FormatRawCellContents(1000000, -1, "#,##0.0,"));
+            ClassicAssert.AreEqual("1.0", dfUS.FormatRawCellContents(1000000, -1, "#,##0.0,,"));
+            ClassicAssert.AreEqual("1,000,000.00", dfUS.FormatRawCellContents(1000000, -1, "#,##0.00"));
+            ClassicAssert.AreEqual("1,000.00", dfUS.FormatRawCellContents(1000000, -1, "#,##0.00,"));
+            ClassicAssert.AreEqual("1.00", dfUS.FormatRawCellContents(1000000, -1, "#,##0.00,,"));
+            ClassicAssert.AreEqual("1,000,000", dfUS.FormatRawCellContents(1e24, -1, "#,##0,,,,,,"));
+        }
+
+        [Test]
+        public void TestFormatWithTrailingDotsOtherLocale() {
+            DataFormatter dfIT = new DataFormatter(CultureInfo.GetCultureInfo("it-IT"));
+            ClassicAssert.AreEqual("1.000.000", dfIT.FormatRawCellContents(1000000, -1, "#,##0"));
+            ClassicAssert.AreEqual("1.000", dfIT.FormatRawCellContents(1000000, -1, "#,##0,"));
+            ClassicAssert.AreEqual("1", dfIT.FormatRawCellContents(1000000, -1, "#,##0,,"));
+            ClassicAssert.AreEqual("1.000.000,0", dfIT.FormatRawCellContents(1000000, -1, "#,##0.0"));
+            ClassicAssert.AreEqual("1.000,0", dfIT.FormatRawCellContents(1000000, -1, "#,##0.0,"));
+            ClassicAssert.AreEqual("1,0", dfIT.FormatRawCellContents(1000000, -1, "#,##0.0,,"));
+            ClassicAssert.AreEqual("1.000.000,00", dfIT.FormatRawCellContents(1000000, -1, "#,##0.00"));
+            ClassicAssert.AreEqual("1.000,00", dfIT.FormatRawCellContents(1000000, -1, "#,##0.00,"));
+            ClassicAssert.AreEqual("1,00", dfIT.FormatRawCellContents(1000000, -1, "#,##0.00,,"));
+            ClassicAssert.AreEqual("1.000.000", dfIT.FormatRawCellContents(1e24, -1, "#,##0,,,,,,"));
+        }
+
         /**
          * bug 60031: DataFormatter parses months incorrectly when put at the end of date segment
          */
@@ -868,18 +898,15 @@ namespace TestCases.SS.UserModel
         public void TestBug60422()
         {
             //LocaleUtil.setUserLocale(Locale.ROOT);
-            try
-            {
-                char euro = '\u20AC';
-                DataFormatter df = new DataFormatter(CultureInfo.GetCultureInfo("de-DE"));
-                String formatString = String.Format("_-* #,##0.00\\ \"{0}\"_-;\\-* #,##0.00\\ \"{1}\"_-;_-* \"-\"??\\ \"{2}\"_-;_-@_-",
-                        euro, euro, euro);
-                ClassicAssert.AreEqual("4.33 " + euro, df.FormatRawCellContents(4.33, 178, formatString));
-            }
-            finally
-            {
-                //LocaleUtil.resetUserLocale();
-            }
+
+            char euro = '\u20AC';
+            DataFormatter df = new DataFormatter(CultureInfo.GetCultureInfo("de-DE"));
+            String formatString = String.Format("_-* #,##0.00\\ \"{0}\"_-;\\-* #,##0.00\\ \"{1}\"_-;_-* \"-\"??\\ \"{2}\"_-;_-@_-",
+                    euro, euro, euro);
+
+            ClassicAssert.AreEqual("4,33 " + euro, df.FormatRawCellContents(4.33, 178, formatString));
+            ClassicAssert.AreEqual("1.234,33 " + euro, df.FormatRawCellContents(1234.33, 178, formatString));
+
         }
     }
 }

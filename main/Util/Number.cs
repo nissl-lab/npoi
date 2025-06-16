@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ExtendedNumerics;
+using System;
 using System.Collections;
 
 namespace NPOI.Util
@@ -27,6 +28,7 @@ namespace NPOI.Util
         private static Type IntPtrType = typeof(IntPtr);
         private static Type UIntPtrType = typeof(UIntPtr);
         private static Type DecimalType = typeof(decimal);
+        private static Type BigDecimalType = typeof(BigDecimal);
         public static bool IsNumber(object value)
         {
             if (value == null)
@@ -35,7 +37,8 @@ namespace NPOI.Util
             }
 
             Type objType = value.GetType();
-            if (objType.IsPrimitive || objType == DecimalType)
+            if (objType.IsPrimitive || objType == DecimalType
+                || objType == BigDecimalType)
             {
                 return (objType != BoolType &&
                         objType != CharType &&

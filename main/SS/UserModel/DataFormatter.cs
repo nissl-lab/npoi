@@ -15,18 +15,17 @@
    limitations under the License.
 ==================================================================== */
 
+using Cysharp.Text;
+using ExtendedNumerics;
+using NPOI.SS.Format;
+using NPOI.SS.Formula;
+using NPOI.SS.Util;
+using NPOI.Util;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
-
-using NPOI.SS.Util;
-using NPOI.SS.Format;
-using NPOI.SS.Formula;
-using NPOI.Util;
-
-using Cysharp.Text;
 
 namespace NPOI.SS.UserModel
 {
@@ -178,7 +177,7 @@ namespace NPOI.SS.UserModel
 
         /** A default FormatBase to use when a number pattern cannot be Parsed. */
         private FormatBase defaultNumFormat;
-        private CultureInfo currentCulture;
+        private CultureInfo locale;
         
         /*
          * A map to cache formats.
@@ -247,7 +246,7 @@ namespace NPOI.SS.UserModel
         public DataFormatter(CultureInfo culture, bool localeIsAdapting, bool emulateCSV)
         {
             this.localeIsAdapting = true;
-            this.currentCulture = culture;
+            this.locale = culture;
             //localeChangedObservable.addObserver(this);
             // localeIsAdapting must be true prior to this first checkForLocaleChange call.
             //localeChangedObservable.checkForLocaleChange(culture);
@@ -297,12 +296,6 @@ namespace NPOI.SS.UserModel
          * @param cell The cell to retrieve a FormatBase for
          * @return A FormatBase for the FormatBase String
          */
-        private FormatBase GetFormat(ICell cell)
-        {
-
-            return GetFormat(cell, null);
-        }
-
         private FormatBase GetFormat(ICell cell, ConditionalFormattingEvaluator cfEvaluator)
         {
             if (cell == null) return null;
@@ -346,7 +339,7 @@ namespace NPOI.SS.UserModel
                 try
                 {
                     // Ask CellFormat to get a formatter for it
-                    CellFormat cfmt = CellFormat.GetInstance(formatStr);
+                    CellFormat cfmt = CellFormat.GetInstance(locale, formatStr);
                     // CellFormat requires callers to identify date vs not, so do so
                     object cellValueO = (cellValue);
                     if (DateUtil.IsADateFormat(formatIndex, formatStr) &&
@@ -714,7 +707,7 @@ namespace NPOI.SS.UserModel
             try
             {
                 //return new SimpleDateFormat(formatStr);
-                return new ExcelStyleDateFormatter(formatStr);
+                return new ExcelStyleDateFormatter(formatStr, dateSymbols);
             }
             catch (ArgumentException)
             {
@@ -822,6 +815,81 @@ namespace NPOI.SS.UserModel
 
             return sb.ToString();
         }
+
+        private class InternalDecimalFormatWithScale : FormatBase
+        {
+
+            private static Regex endsWithCommas = new Regex("(,+)$", RegexOptions.Compiled);
+            private BigDecimal? divider;
+            private static BigDecimal ONE_THOUSAND = new BigDecimal(1000);
+            private DecimalFormat df;
+            private static string TrimTrailingCommas(string s)
+            {
+                return Regex.Replace(s, ",+$", "");
+            }
+
+            public InternalDecimalFormatWithScale(string pattern, NumberFormatInfo symbols)
+            {
+                df = new DecimalFormat(TrimTrailingCommas(pattern), symbols);
+                //SetExcelStyleRoundingMode(df);
+                Match endsWithCommasMatcher = endsWithCommas.Match(pattern);
+                if(endsWithCommasMatcher.Success)
+                {
+                    string commas = endsWithCommasMatcher.Groups[1].Value;
+                    BigDecimal temp = BigDecimal.One;
+                    for(int i = 0; i < commas.Length; ++i)
+                    {
+                        temp = BigDecimal.Multiply(temp, ONE_THOUSAND);
+                    }
+                    divider = temp;
+                }
+                else
+                {
+                    divider = null;
+                }
+            }
+
+            private object ScaleInput(object obj)
+            {
+                if(divider != null)
+                {
+                    if(obj is BigDecimal)
+                    {
+                        obj = BigDecimal.Divide((BigDecimal) obj, divider.Value);
+                    }
+                    else if(obj is double)
+                    {
+                        obj = (double) obj / ((double?) divider);
+                    }
+                    else if(obj is Int32 || obj is Int64 || obj is decimal)
+                    {
+                        obj = (BigDecimal) obj / divider;
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException();
+                    }
+                }
+                return obj;
+            }
+
+            public override string Format(object obj)
+            {
+                obj = ScaleInput(obj);
+                return df.Format(obj, CultureInfo.CurrentCulture);
+            }
+
+            public override StringBuilder Format(object obj, StringBuilder toAppendTo, CultureInfo culture)
+            {
+                obj = ScaleInput(obj);
+                return df.Format(obj, toAppendTo, culture);
+            }
+            public override object ParseObject(string source, int pos)
+            {
+                throw new InvalidOperationException();
+            }
+        }
+
         private FormatBase CreateNumberFormat(string formatStr, double cellValue)
         {
             string format = cleanFormatForNumber(formatStr);
@@ -838,7 +906,7 @@ namespace NPOI.SS.UserModel
                 // correct grouping for non-US locales.
                 if (grouping != ',')
                 {
-                    symbols = currentCulture.NumberFormat.Clone() as NumberFormatInfo;
+                    symbols = locale.NumberFormat.Clone() as NumberFormatInfo;
                     symbols.NumberGroupSeparator = grouping.ToString();
                     string oldPart = agm.Groups[1].Value;
                     string newPart = oldPart.Replace(grouping, ',');
@@ -850,7 +918,7 @@ namespace NPOI.SS.UserModel
             {
                 //DecimalFormat df = new DecimalFormat(format, symbols);
                 //setExcelStyleRoundingMode(df);
-                return new DecimalFormat(format, symbols);
+                return new InternalDecimalFormatWithScale(format, symbols);
             }
             catch (ArgumentException)
             {
@@ -930,7 +998,7 @@ namespace NPOI.SS.UserModel
             double d = cell.NumericCellValue;
             if (numberFormat == null)
             {
-                return d.ToString(currentCulture);
+                return d.ToString(locale);
             }
             //return numberFormat.Format(d, currentCulture);
             string formatted = numberFormat.Format(d);
@@ -997,7 +1065,7 @@ namespace NPOI.SS.UserModel
             FormatBase numberFormat = GetFormat(value, formatIndex, formatString);
             if (numberFormat == null)
             {
-                return value.ToString(currentCulture);
+                return value.ToString(locale);
             }
             // When formatting 'value', double to text to BigDecimal produces more
             // accurate results than double to Double in JDK8 (as compared to
@@ -1012,7 +1080,7 @@ namespace NPOI.SS.UserModel
             }
             else
             {
-                result = numberFormat.Format(decimal.Parse(textValue));
+                result = numberFormat.Format(BigDecimal.Parse(textValue));
             }
             // Complete scientific notation by adding the missing +.
             if (result.Contains('E') && !result.Contains("E-"))
@@ -1206,13 +1274,13 @@ namespace NPOI.SS.UserModel
         public void Update(IObservable<object> observable, object localeObj)
         {
             if (localeObj is not CultureInfo newLocale) return;
-            if (newLocale.Equals(currentCulture)) return;
+            if (newLocale.Equals(locale)) return;
 
-            currentCulture = newLocale;
+            locale = newLocale;
 
             //dateSymbols = DateFormatSymbols.getInstance(currentCulture);
             //decimalSymbols = DecimalFormatSymbols.getInstance(currentCulture);
-            generalNumberFormat = new ExcelGeneralNumberFormat(currentCulture);
+            generalNumberFormat = new ExcelGeneralNumberFormat(locale);
 
             // init built-in formats
 

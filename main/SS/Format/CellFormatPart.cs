@@ -22,8 +22,8 @@ namespace NPOI.SS.Format
     using System.Collections.Generic;
     using System.Collections;
     using System.Text.RegularExpressions;
-    using System.Text; 
-using Cysharp.Text;
+    using System.Text;using Cysharp.Text;
+    using System.Globalization;
     using SixLabors.ImageSharp;
     using NPOI.Util;
 
@@ -196,6 +196,16 @@ using Cysharp.Text;
          * @param desc The string to Parse.
          */
         public CellFormatPart(String desc)
+            : this(LocaleUtil.GetUserLocale(), desc)
+        {
+        }
+        /**
+         * Create an object to represent a format part.
+         *
+         * @param locale The locale to use.
+         * @param desc The string to parse.
+         */
+        public CellFormatPart(CultureInfo locale, String desc)
         {
             Match m = FORMAT_PAT.Match(desc);
             if (!m.Success)
@@ -205,7 +215,7 @@ using Cysharp.Text;
             color = GetColor(m);
             condition = GetCondition(m);
             type = GetCellFormatType(m);
-            format = GetFormatter(m);
+            format = GetFormatter(locale, m);
         }
 
         /**
@@ -322,7 +332,7 @@ using Cysharp.Text;
          *
          * @return The formatter.
          */
-        private CellFormatter GetFormatter(Match matcher)
+        private CellFormatter GetFormatter(CultureInfo locale, Match matcher)
         {
             String fdesc = matcher.Groups[(SPECIFICATION_GROUP)].Value;
             // For now, we don't support localised currencies, so simplify if there
@@ -344,7 +354,7 @@ using Cysharp.Text;
             }
 
             // Build a formatter for this simplified string
-            return type.Formatter(fdesc);
+            return type.Formatter(locale, fdesc);
         }
 
         /**

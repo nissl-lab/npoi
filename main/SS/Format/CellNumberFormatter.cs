@@ -18,9 +18,10 @@
 using System;
 using System.Text;
 using System.Collections.Generic;
-
 using NPOI.SS.Util;
 using System.Collections;
+using System.Globalization;
+using NPOI.Util;
 
 namespace NPOI.SS.Format
 {
@@ -40,7 +41,7 @@ namespace NPOI.SS.Format
         private Special numerator;
         private Special afterInteger;
         private Special afterFractional;
-        private bool integerCommas;
+        private bool showGroupingSeparator;
         private List<Special> specials = new List<Special>();
         private List<Special> integerSpecials = new List<Special>();
         private List<Special> fractionalSpecials = new List<Special>();
@@ -55,10 +56,9 @@ namespace NPOI.SS.Format
         private DecimalFormat decimalFmt;
         private static List<Special> EmptySpecialList = new List<Special>();
 
-        private static readonly SimpleNumberCellFormatter SIMPLE_NUMBER = new SimpleNumberCellFormatter("General");
-        private static readonly CellNumberFormatter SIMPLE_INT = new CellNumberFormatter("#");
-        private static readonly CellNumberFormatter SIMPLE_FLOAT = new CellNumberFormatter("#.#");
+        
 
+        private readonly GeneralNumberFormatter SIMPLE_NUMBER;
         /// <summary>
         /// The CellNumberFormatter.simpleValue() method uses the SIMPLE_NUMBER
         /// CellFormatter defined here. The CellFormat.GENERAL_FORMAT CellFormat
@@ -70,8 +70,8 @@ namespace NPOI.SS.Format
         /// </summary>
         private sealed class GeneralNumberFormatter : CellFormatter
         {
-            private GeneralNumberFormatter()
-                    : base("General")
+            public GeneralNumberFormatter(CultureInfo locale)
+                    : base(locale, "General")
             {
 
             }
@@ -89,7 +89,8 @@ namespace NPOI.SS.Format
                 {
                     double num;
                     double.TryParse(value.ToString(), out num);
-                    cf = (num % 1.0 == 0) ? SIMPLE_INT : SIMPLE_FLOAT;
+                    cf = (num % 1.0 == 0) ? new CellNumberFormatter(locale, "#") :
+                    new CellNumberFormatter(locale, "#.#");
                 }
                 else
                 {
@@ -103,40 +104,6 @@ namespace NPOI.SS.Format
                 FormatValue(toAppendTo, value);
             }
         }
-
-        private sealed class SimpleNumberCellFormatter : CellFormatter
-        {
-            public SimpleNumberCellFormatter(string format)
-                : base(format)
-            {
-
-            }
-            public override void FormatValue(StringBuilder toAppendTo, Object value)
-            {
-                if (value == null)
-                    return;
-                //if (value is Number) {
-                if (NPOI.Util.Number.IsNumber(value))
-                {
-                    double num;
-                    double.TryParse(value.ToString(), out num);
-                    if (num % 1.0 == 0)
-                        SIMPLE_INT.FormatValue(toAppendTo, value);
-                    else
-                        SIMPLE_FLOAT.FormatValue(toAppendTo, value);
-                }
-                else
-                {
-                    CellTextFormatter.SIMPLE_TEXT.FormatValue(toAppendTo, value);
-                }
-            }
-            public override void SimpleValue(StringBuilder toAppendTo, Object value)
-            {
-                FormatValue(toAppendTo, value);
-            }
-        }
-
-
 
         /**
          * This class is used to mark where the special characters in the format
@@ -166,8 +133,19 @@ namespace NPOI.SS.Format
          * @param format The format to Parse.
          */
         public CellNumberFormatter(String format)
-            : base(format)
+            : this(LocaleUtil.GetUserLocale(), format)
         {
+        }
+        /**
+         * Creates a new cell number formatter.
+         *
+         * @param locale The locale to use.
+         * @param format The format to parse.
+         */
+        public CellNumberFormatter(CultureInfo locale, String format)
+            : base(locale, format)
+        {
+            this.SIMPLE_NUMBER = new GeneralNumberFormatter(locale);
             CellNumberPartHandler ph = new CellNumberPartHandler();
             StringBuilder descBuf = CellFormatPart.ParseFormat(format, CellFormatType.NUMBER, ph);
 
@@ -240,7 +218,7 @@ namespace NPOI.SS.Format
             }
 
             double[] scaleByRef = { ph.Scale };
-            integerCommas = interpretIntegerCommas(descBuf, specials, decimalPoint, integerEnd(), fractionalEnd(), scaleByRef);
+            showGroupingSeparator = interpretIntegerCommas(descBuf, specials, decimalPoint, integerEnd(), fractionalEnd(), scaleByRef);
             if (exponent == null)
             {
                 scale = scaleByRef[0];
@@ -348,13 +326,14 @@ namespace NPOI.SS.Format
                 }
                 fmtBuf.Append('E');
                 placeZeros(fmtBuf, exponentSpecials.GetRange(2, exponentSpecials.Count - 2));
-                decimalFmt = new DecimalFormat(fmtBuf.ToString());
+                decimalFmt = new DecimalFormat(fmtBuf.ToString(), locale.NumberFormat);
 
                 printfFmt = null;
             }
 
             desc = descBuf.ToString();
         }
+
 
         private static void placeZeros(StringBuilder sb, List<Special> specials)
         {
@@ -585,7 +564,7 @@ namespace NPOI.SS.Format
             }
 
             SortedList<CellNumberStringMod, object> mods = new SortedList<CellNumberStringMod, object>();
-            StringBuilder output = new StringBuilder(desc);
+            StringBuilder output = new StringBuilder(localiseFormat(desc));
 
             if (exponent != null)
             {
@@ -598,19 +577,20 @@ namespace NPOI.SS.Format
             else
             {
                 StringBuilder result = new StringBuilder();
-                //Formatter f = new Formatter(result);
-                //f.Format(LOCALE, printfFmt, value);
-                result.Append(value.ToString(printfFmt));
+
+                result.Append(value.ToString(printfFmt, locale));
                 if (numerator == null)
                 {
                     WriteFractional(result, output);
-                    Writeint(result, output, integerSpecials, mods, integerCommas);
+                    Writeint(result, output, integerSpecials, mods, showGroupingSeparator);
                 }
                 else
                 {
                     WriteFraction(value, result, fractional, output, mods);
                 }
             }
+
+            String groupingSeparator = locale.NumberFormat.NumberGroupSeparator;
 
             // Now strip out any remaining '#'s and add any pending text ...
             IEnumerator<Special> it = specials.GetEnumerator();//.ListIterator();
@@ -636,7 +616,7 @@ namespace NPOI.SS.Format
                     {
                         case CellNumberStringMod.AFTER:
                             // ignore Adding a comma After a deleted char (which was a '#')
-                            if (nextChange.ToAdd.Equals(",") && deletedChars.Get(s.pos))
+                            if (nextChange.ToAdd.Equals(groupingSeparator) && deletedChars.Get(s.pos))
                                 break;
                             output.Insert(modPos + 1, nextChange.ToAdd);
                             break;
@@ -734,7 +714,7 @@ namespace NPOI.SS.Format
                 result.Append(value.ToString("E"));
             }
 
-            Writeint(result, output, integerSpecials, mods, integerCommas);
+            Writeint(result, output, integerSpecials, mods, showGroupingSeparator);
             WriteFractional(result, output);
 
             /*
@@ -903,6 +883,53 @@ namespace NPOI.SS.Format
         //{
         //    return HasChar(ch, s1) || HasChar(ch, s2);
         //}
+
+        private String localiseFormat(String format)
+        {
+            NumberFormatInfo dfs = locale.NumberFormat;
+            if (format.Contains(',') && dfs.NumberGroupSeparator != ",")
+            {
+                if (format.Contains('.') && dfs.NumberDecimalSeparator != ".")
+                {
+                    format = ReplaceLast(format, ".", "[DECIMAL_SEPARATOR]");
+                    format = format.Replace(",", dfs.NumberGroupSeparator)
+                            .Replace("[DECIMAL_SEPARATOR]", dfs.NumberDecimalSeparator);
+                }
+                else
+                {
+                    format = format.Replace(",", dfs.NumberGroupSeparator);
+                }
+            }
+            else if (format.Contains('.') && dfs.NumberDecimalSeparator != ".")
+            {
+                format = format.Replace(".", dfs.NumberDecimalSeparator);
+            }
+            return format;
+        }
+
+        public static string ReplaceLast(string input, string oldValue, string newValue)
+        {
+            int index = input.LastIndexOf(oldValue);
+            if (index < 0)
+            {
+                return input;
+            }
+            else
+            {
+                //StringBuilder sb = new StringBuilder(input.Length - oldValue.Length + newValue.Length);
+                //sb.Append(input.Substring(0, index));
+                //sb.Append(newValue);
+                //sb.Append(input.Substring(index + oldValue.Length,
+                //   input.Length - index - oldValue.Length));
+
+                //return sb.ToString();
+
+                return input.Substring(0, index) + newValue
+                    + input.Substring(index + oldValue.Length, input.Length - index - oldValue.Length);
+            }
+        }
+
+
         private static bool HasChar(char ch, params List<Special>[] numSpecials)
         {
             foreach (List<Special> specials in numSpecials)
@@ -923,18 +950,20 @@ namespace NPOI.SS.Format
         {
 
             StringBuilder sb = new StringBuilder();
-            //Formatter formatter = new Formatter(sb);
-            //formatter.Format(LOCALE, fmt, num);
-            sb.Append(num.ToString(fmt));
+            
+
+            sb.Append(num.ToString(fmt, locale));
             Writeint(sb, output, numSpecials, mods, false);
         }
 
         private void Writeint(StringBuilder result, StringBuilder output,
                 List<Special> numSpecials, SortedList<CellNumberStringMod, object> mods,
-                bool ShowCommas)
+                bool showGroupingSeparator)
         {
-
-            int pos = result.ToString().IndexOf('.') - 1;
+            NumberFormatInfo dfs = locale.NumberFormat;
+            String decimalSeparator = dfs.NumberDecimalSeparator;
+            String groupingSeparator = dfs.NumberGroupSeparator;
+            int pos = result.ToString().IndexOf(decimalSeparator) - 1;
             if (pos < 0)
             {
                 if (exponent != null && numSpecials == integerSpecials)
@@ -947,12 +976,12 @@ namespace NPOI.SS.Format
             for (strip = 0; strip < pos; strip++)
             {
                 char resultCh = result[strip];
-                if (resultCh != '0' && resultCh != ',')
+                if (resultCh != '0' && resultCh != groupingSeparator[0])
                     break;
             }
 
             //ListIterator<Special> it = numSpecials.ListIterator(numSpecials.Count);
-            bool followWithComma = false;
+            bool followWithGroupingSeparator = false;
             Special lastOutputintDigit = null;
             int digit = 0;
             //while (it.HasPrevious()) {
@@ -967,7 +996,7 @@ namespace NPOI.SS.Format
                     resultCh = '0';
                 }
                 Special s = numSpecials[i];
-                followWithComma = ShowCommas && digit > 0 && digit % 3 == 0;
+                followWithGroupingSeparator = showGroupingSeparator && digit > 0 && digit % 3 == 0;
                 bool zeroStrip = false;
                 if (resultCh != '0' || s.ch == '0' || s.ch == '?' || pos >= strip)
                 {
@@ -975,10 +1004,10 @@ namespace NPOI.SS.Format
                     output[s.pos] = (zeroStrip ? ' ' : resultCh);
                     lastOutputintDigit = s;
                 }
-                if (followWithComma)
+                if (followWithGroupingSeparator)
                 {
-                    mods.Add(insertMod(s, zeroStrip ? " " : ",", CellNumberStringMod.AFTER), null);
-                    followWithComma = false;
+                    mods.Add(insertMod(s, zeroStrip ? " " : groupingSeparator, CellNumberStringMod.AFTER), null);
+                    followWithGroupingSeparator = false;
                 }
                 digit++;
                 --pos;
@@ -990,12 +1019,12 @@ namespace NPOI.SS.Format
                 // pos was decremented at the end of the loop above when the iterator was at its end
                 ++pos;
                 extraLeadingDigits = new StringBuilder(result.ToString().Substring(0, pos));
-                if (ShowCommas)
+                if (showGroupingSeparator)
                 {
                     while (pos > 0)
                     {
                         if (digit > 0 && digit % 3 == 0)
-                            extraLeadingDigits.Insert(pos, ',');
+                            extraLeadingDigits.Insert(pos, groupingSeparator);
                         digit++;
                         --pos;
                     }
@@ -1011,7 +1040,8 @@ namespace NPOI.SS.Format
             if (fractionalSpecials.Count > 0)
             {
                 string resultString = result.ToString();
-                digit = resultString.IndexOf('.') + 1;
+                String decimalSeparator = locale.NumberFormat.NumberDecimalSeparator;
+                digit = resultString.IndexOf(decimalSeparator) + 1;
                 if (exponent != null)
                     strip = resultString.IndexOf('E') - 1;
                 else
