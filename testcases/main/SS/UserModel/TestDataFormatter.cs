@@ -763,7 +763,7 @@ namespace TestCases.SS.UserModel
         }
 
         [Test]
-        public void testLargeNumbersAndENotation()
+        public void TestLargeNumbersAndENotation()
         {
             assertFormatsTo("1E+86", 99999999999999999999999999999999999999999999999999999999999999999999999999999999999999d);
             assertFormatsTo("1E-84", 0.000000000000000000000000000000000000000000000000000000000000000000000000000000000001d);
@@ -831,6 +831,36 @@ namespace TestCases.SS.UserModel
             IFormulaEvaluator evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
             ClassicAssert.AreEqual("5.6789", formatter.FormatCellValue(cell, evaluator));
             wb.Close();
+        }
+
+        [Test]
+        public void TestFormatWithTrailingDotsUS() {
+            DataFormatter dfUS = new DataFormatter(CultureInfo.GetCultureInfo("en-US"));
+            ClassicAssert.AreEqual("1,000,000", dfUS.FormatRawCellContents(1000000, -1, "#,##0"));
+            ClassicAssert.AreEqual("1,000", dfUS.FormatRawCellContents(1000000, -1, "#,##0,"));
+            ClassicAssert.AreEqual("1", dfUS.FormatRawCellContents(1000000, -1, "#,##0,,"));
+            ClassicAssert.AreEqual("1,000,000.0", dfUS.FormatRawCellContents(1000000, -1, "#,##0.0"));
+            ClassicAssert.AreEqual("1,000.0", dfUS.FormatRawCellContents(1000000, -1, "#,##0.0,"));
+            ClassicAssert.AreEqual("1.0", dfUS.FormatRawCellContents(1000000, -1, "#,##0.0,,"));
+            ClassicAssert.AreEqual("1,000,000.00", dfUS.FormatRawCellContents(1000000, -1, "#,##0.00"));
+            ClassicAssert.AreEqual("1,000.00", dfUS.FormatRawCellContents(1000000, -1, "#,##0.00,"));
+            ClassicAssert.AreEqual("1.00", dfUS.FormatRawCellContents(1000000, -1, "#,##0.00,,"));
+            ClassicAssert.AreEqual("1,000,000", dfUS.FormatRawCellContents(1e24, -1, "#,##0,,,,,,"));
+        }
+
+        [Test]
+        public void TestFormatWithTrailingDotsOtherLocale() {
+            DataFormatter dfIT = new DataFormatter(CultureInfo.GetCultureInfo("it-IT"));
+            ClassicAssert.AreEqual("1.000.000", dfIT.FormatRawCellContents(1000000, -1, "#,##0"));
+            ClassicAssert.AreEqual("1.000", dfIT.FormatRawCellContents(1000000, -1, "#,##0,"));
+            ClassicAssert.AreEqual("1", dfIT.FormatRawCellContents(1000000, -1, "#,##0,,"));
+            ClassicAssert.AreEqual("1.000.000,0", dfIT.FormatRawCellContents(1000000, -1, "#,##0.0"));
+            ClassicAssert.AreEqual("1.000,0", dfIT.FormatRawCellContents(1000000, -1, "#,##0.0,"));
+            ClassicAssert.AreEqual("1,0", dfIT.FormatRawCellContents(1000000, -1, "#,##0.0,,"));
+            ClassicAssert.AreEqual("1.000.000,00", dfIT.FormatRawCellContents(1000000, -1, "#,##0.00"));
+            ClassicAssert.AreEqual("1.000,00", dfIT.FormatRawCellContents(1000000, -1, "#,##0.00,"));
+            ClassicAssert.AreEqual("1,00", dfIT.FormatRawCellContents(1000000, -1, "#,##0.00,,"));
+            ClassicAssert.AreEqual("1.000.000", dfIT.FormatRawCellContents(1e24, -1, "#,##0,,,,,,"));
         }
 
         /**

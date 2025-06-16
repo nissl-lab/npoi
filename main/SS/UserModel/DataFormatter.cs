@@ -15,18 +15,17 @@
    limitations under the License.
 ==================================================================== */
 
+using Cysharp.Text;
+using ExtendedNumerics;
+using NPOI.SS.Format;
+using NPOI.SS.Formula;
+using NPOI.SS.Util;
+using NPOI.Util;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
-
-using NPOI.SS.Util;
-using NPOI.SS.Format;
-using NPOI.SS.Formula;
-using NPOI.Util;
-
-using Cysharp.Text;
 
 namespace NPOI.SS.UserModel
 {
@@ -816,6 +815,81 @@ namespace NPOI.SS.UserModel
 
             return sb.ToString();
         }
+
+        private class InternalDecimalFormatWithScale : FormatBase
+        {
+
+            private static Regex endsWithCommas = new Regex("(,+)$", RegexOptions.Compiled);
+            private BigDecimal? divider;
+            private static BigDecimal ONE_THOUSAND = new BigDecimal(1000);
+            private DecimalFormat df;
+            private static string TrimTrailingCommas(string s)
+            {
+                return Regex.Replace(s, ",+$", "");
+            }
+
+            public InternalDecimalFormatWithScale(string pattern, NumberFormatInfo symbols)
+            {
+                df = new DecimalFormat(TrimTrailingCommas(pattern), symbols);
+                //SetExcelStyleRoundingMode(df);
+                Match endsWithCommasMatcher = endsWithCommas.Match(pattern);
+                if(endsWithCommasMatcher.Success)
+                {
+                    string commas = endsWithCommasMatcher.Groups[1].Value;
+                    BigDecimal temp = BigDecimal.One;
+                    for(int i = 0; i < commas.Length; ++i)
+                    {
+                        temp = BigDecimal.Multiply(temp, ONE_THOUSAND);
+                    }
+                    divider = temp;
+                }
+                else
+                {
+                    divider = null;
+                }
+            }
+
+            private object ScaleInput(object obj)
+            {
+                if(divider != null)
+                {
+                    if(obj is BigDecimal)
+                    {
+                        obj = BigDecimal.Divide((BigDecimal) obj, divider.Value);
+                    }
+                    else if(obj is double)
+                    {
+                        obj = (double) obj / ((double?) divider);
+                    }
+                    else if(obj is Int32 || obj is Int64 || obj is decimal)
+                    {
+                        obj = (BigDecimal) obj / divider;
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException();
+                    }
+                }
+                return obj;
+            }
+
+            public override string Format(object obj)
+            {
+                obj = ScaleInput(obj);
+                return df.Format(obj, CultureInfo.CurrentCulture);
+            }
+
+            public override StringBuilder Format(object obj, StringBuilder toAppendTo, CultureInfo culture)
+            {
+                obj = ScaleInput(obj);
+                return df.Format(obj, toAppendTo, culture);
+            }
+            public override object ParseObject(string source, int pos)
+            {
+                throw new InvalidOperationException();
+            }
+        }
+
         private FormatBase CreateNumberFormat(string formatStr, double cellValue)
         {
             string format = cleanFormatForNumber(formatStr);
@@ -844,7 +918,7 @@ namespace NPOI.SS.UserModel
             {
                 //DecimalFormat df = new DecimalFormat(format, symbols);
                 //setExcelStyleRoundingMode(df);
-                return new DecimalFormat(format, symbols);
+                return new InternalDecimalFormatWithScale(format, symbols);
             }
             catch (ArgumentException)
             {
@@ -1006,7 +1080,7 @@ namespace NPOI.SS.UserModel
             }
             else
             {
-                result = numberFormat.Format(decimal.Parse(textValue));
+                result = numberFormat.Format(BigDecimal.Parse(textValue));
             }
             // Complete scientific notation by adding the missing +.
             if (result.Contains('E') && !result.Contains("E-"))
