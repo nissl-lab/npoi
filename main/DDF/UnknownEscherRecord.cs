@@ -54,14 +54,14 @@ using Cysharp.Text;
             int bytesRemaining = ReadHeader(data, offset);
             /*
 		     * Modified by Zhang Zhang
-		     * Have a check between avaliable bytes and bytesRemaining, 
-		     * take the avaliable length if the bytesRemaining out of range.
+		     * Have a check between available bytes and bytesRemaining, 
+		     * take the available length if the bytesRemaining out of range.
 		     * July 09, 2010
 		     */
-            int avaliable = data.Length - (offset + 8);
-            if (bytesRemaining > avaliable)
+            int available = data.Length - (offset + 8);
+            if (bytesRemaining > available)
             {
-                bytesRemaining = avaliable;
+                bytesRemaining = available;
             }
             if (IsContainerRecord)
             {
@@ -82,6 +82,9 @@ using Cysharp.Text;
             }
             else
             {
+                if (bytesRemaining < 0) {
+                    bytesRemaining = 0;
+                }
                 _thedata = new byte[bytesRemaining];
                 Array.Copy(data, offset + 8, _thedata, 0, bytesRemaining);
                 return bytesRemaining + 8;
