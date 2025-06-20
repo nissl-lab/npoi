@@ -168,7 +168,7 @@ namespace NPOI.XSSF.Extractor
                     if (table != null)
                     {
 
-                        List<CT_TableColumn> tableColumns = table.GetCTTable().tableColumns.GetTableColumnList();
+                        List<XSSFTableColumn> tableColumns = table.GetColumns();
 
                         XSSFSheet sheet = table.GetXSSFSheet();
 
@@ -185,25 +185,20 @@ namespace NPOI.XSSF.Extractor
                             XmlNode tableRootNode = GetNodeByXPath(table.GetCommonXpath(), doc.FirstChild, doc, true);
 
                             short startColumnIndex = table.StartCellReference.Col;
-                            for (int j = startColumnIndex; j <= table.EndCellReference.Col; j++)
+
+                            foreach (XSSFTableColumn tableColumn in tableColumns)
                             {
-                                XSSFCell cell = (XSSFCell)row.GetCell(j);
+                                XSSFCell cell = (XSSFCell)row.GetCell(startColumnIndex + tableColumn.ColumnIndex);
                                 if (cell != null)
                                 {
-                                    int tableColumnIndex = j - startColumnIndex;
-                                    if(tableColumnIndex < tableColumns.Count)
+                                    XSSFXmlColumnPr xmlColumnPr = tableColumn.GetXmlColumnPr();
+                                    if (xmlColumnPr != null)
                                     {
-                                        CT_TableColumn ctTableColumn = tableColumns[tableColumnIndex];
-                                        if(ctTableColumn.xmlColumnPr != null)
-                                        {
-                                            XSSFXmlColumnPr pointer = new XSSFXmlColumnPr(table, ctTableColumn,ctTableColumn.xmlColumnPr);
-                                            String localXPath = pointer.LocalXPath;
-                                            XmlNode currentNode = GetNodeByXPath(localXPath,tableRootNode,doc,false);
-                                            XSSFExportToXml.mapCellOnNode(cell, currentNode);
-                                        }
+                                        String localXPath = xmlColumnPr.LocalXPath;
+                                        XmlNode currentNode = GetNodeByXPath(localXPath,tableRootNode,doc,false);
+                                        mapCellOnNode(cell, currentNode);
                                     }
                                 }
-
                             }
 
                         }
@@ -230,7 +225,7 @@ namespace NPOI.XSSF.Extractor
                 /////////////////
                 //Output the XML
                 XmlWriterSettings settings = new XmlWriterSettings();
-                //settings.OmitXmlDeclaration=false;
+                settings.OmitXmlDeclaration = true;
                 settings.Indent=true;
                 settings.Encoding=Encoding.GetEncoding(encoding);
                 //create string from xml tree
