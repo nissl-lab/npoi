@@ -432,25 +432,6 @@ namespace NPOI.XSSF.UserModel
         }
 
         /**
-         * get the boldness to use
-         * @return boldweight
-         * @see #BOLDWEIGHT_NORMAL
-         * @see #BOLDWEIGHT_BOLD
-         */
-        [Obsolete("deprecated POI 3.15 beta 2. Use IsBold instead.")]
-        public short Boldweight
-        {
-            get
-            {
-                return (IsBold ? (short)FontBoldWeight.Bold : (short)FontBoldWeight.Normal);
-            }
-            set 
-            {
-                this.IsBold = (value == (short)FontBoldWeight.Bold);
-            }
-        }
-
-        /**
          * set character-set to use.
          *
          * @param charset - charset
@@ -676,7 +657,6 @@ namespace NPOI.XSSF.UserModel
             FontName = src.FontName;
             FontHeight = src.FontHeight;
             IsBold = src.IsBold;
-            Boldweight = src.Boldweight;
             IsItalic = src.IsItalic;
             IsStrikeout = src.IsStrikeout;
             Color = src.Color;

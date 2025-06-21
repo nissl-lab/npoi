@@ -15,6 +15,7 @@
    limitations under the License.
 ==================================================================== */
 using NPOI.SS.UserModel;
+using NPOI.SS.Util;
 using NPOI.Util;
 using NPOI.XSSF.UserModel;
 
@@ -65,5 +66,21 @@ namespace NPOI.XSSF.Streaming
         }
 
         //TODO: missing methods CreateExtendedColor()
+
+        /**
+         * {@inheritDoc}
+         */
+        public AreaReference CreateAreaReference(string reference)
+        {
+            return new AreaReference(reference, wb.SpreadsheetVersion);
+        }
+        
+        /**
+         * {@inheritDoc}
+         */
+        public AreaReference CreateAreaReference(CellReference topLeft, CellReference bottomRight)
+        {
+            return new AreaReference(topLeft, bottomRight, wb.SpreadsheetVersion);
+        }
     }
 }

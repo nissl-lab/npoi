@@ -1166,55 +1166,6 @@ namespace NPOI.HSSF.UserModel
             return GetFontAt(fontindex);
         }
 
-        //public NPOI.SS.UserModel.Font FindFont(NPOI.SS.UserModel.FontBoldWeight boldWeight, short color, short fontHeight,
-        //                 String name, bool italic, bool strikeout,
-        //                 NPOI.SS.UserModel.FontSuperScript typeOffset, NPOI.SS.UserModel.FontUnderlineType Underline)
-        //{
-        //    return this.FindFont(boldWeight, color, fontHeight, name, italic, strikeout, typeOffset, Underline);
-        //}
-
-        /// <summary>
-        /// Finds a font that matches the one with the supplied attributes
-        /// </summary>
-        /// <param name="boldWeight">The bold weight.</param>
-        /// <param name="color">The color.</param>
-        /// <param name="fontHeight">Height of the font.</param>
-        /// <param name="name">The name.</param>
-        /// <param name="italic">if set to <c>true</c> [italic].</param>
-        /// <param name="strikeout">if set to <c>true</c> [strikeout].</param>
-        /// <param name="typeOffset">The type offset.</param>
-        /// <param name="underline">The underline.</param>
-        /// <returns></returns>
-        [Obsolete("deprecated 3.15 beta 2. Use {@link #findFont(boolean, short, short, String, boolean, boolean, short, byte)} instead.")]
-        public NPOI.SS.UserModel.IFont FindFont(short boldWeight, short color, short fontHeight,
-                         String name, bool italic, bool strikeout,
-                         FontSuperScript typeOffset, FontUnderlineType underline)
-        {
-            short numberOfFonts = NumberOfFonts;
-            for (short i = 0; i <= numberOfFonts; i++)
-            {
-                // Remember - there is no 4!
-                if (i == 4)
-                    continue;
-
-                NPOI.SS.UserModel.IFont hssfFont = GetFontAt(i);
-                if (hssfFont.Boldweight == boldWeight
-                        && hssfFont.Color == color
-                        && hssfFont.FontHeight == fontHeight
-                        && hssfFont.FontName.Equals(name)
-                        && hssfFont.IsItalic == italic
-                        && hssfFont.IsStrikeout == strikeout
-                        && hssfFont.TypeOffset == typeOffset
-                        && hssfFont.Underline == underline)
-                {
-                    return hssfFont;
-                }
-            }
-
-            //        Console.WriteLine( "No font found" );
-            return null;
-        }
-
         /// <summary>
         /// Finds a font that matches the one with the supplied attributes
         /// </summary>
