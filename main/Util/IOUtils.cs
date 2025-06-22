@@ -37,6 +37,11 @@ namespace NPOI.Util
         private static POILogger logger = POILogFactory.GetLogger(typeof(IOUtils));
 
         /// <summary>
+        /// The default buffer size to use for the skip() methods.
+        /// </summary>
+        private static int SKIP_BUFFER_SIZE = 2048;
+        private static byte[] SKIP_BYTE_BUFFER;
+        /// <summary>
         /// The current set global allocation limit override,
         /// -1 means limits are applied per record type. 
         /// The current set global allocation limit override,
@@ -415,6 +420,72 @@ namespace NPOI.Util
             {
                 logger.Log(POILogger.ERROR, "Unable to close resource: " + exc, exc);
             }
+        }
+
+        /// <summary>
+        /// <para>
+        /// Skips bytes from an input byte stream.
+        /// This implementation guarantees that it will read as many bytes
+        /// as possible before giving up; this may not always be the case for
+        /// skip() implementations in subclasses of <see cref="InputStream"/>.
+        /// </para>
+        /// <para>
+        /// Note that the implementation uses <see cref="InputStream.Read(byte[], int, int)" /> rather
+        /// than delegating to <see cref="InputStream.Skip(long)" />.
+        /// This means that the method may be considerably less efficient than using the actual skip implementation,
+        /// this is done to guarantee that the correct number of bytes are skipped.
+        /// </para>
+        /// <para>
+        /// </para>
+        /// <para>
+        /// This mimics POI's <see cref="ReadFully(InputStream, byte[])" />.
+        /// If the end of file is reached before any bytes are read, returns <tt>-1</tt>. If
+        /// the end of the file is reached After some bytes are read, returns the
+        /// number of bytes read. If the end of the file isn't reached before <tt>len</tt>
+        /// bytes have been read, will return <tt>len</tt> bytes.
+        /// </para>
+        /// <para>
+        /// </para>
+        /// <para>
+        /// Copied nearly verbatim from commons-io 41a3e9c
+        /// </para>
+        /// </summary>
+        /// <param name="input">byte stream to skip</param>
+        /// <param name="toSkip">number of bytes to skip.</param>
+        /// <returns>number of bytes actually skipped.</returns>
+        /// <exception cref="IOException">             if there is a problem reading the file</exception>
+        /// <exception cref="ArgumentException">if toSkip is negative</exception>
+        /// @see InputStream#skip(long)
+        ///
+        public static long SkipFully(InputStream input, long toSkip)
+        {
+            if (toSkip < 0) {
+                throw new ArgumentException("Skip count must be non-negative, actual: " + toSkip);
+            }
+            if (toSkip == 0) {
+                return 0L;
+            }
+            /*
+             * N.B. no need to synchronize this because: - we don't care if the buffer is created multiple times (the data
+             * is ignored) - we always use the same size buffer, so if it it is recreated it will still be OK (if the buffer
+             * size were variable, we would need to synch. to ensure some other thread did not create a smaller one)
+             */
+            if (SKIP_BYTE_BUFFER == null) {
+                SKIP_BYTE_BUFFER = new byte[SKIP_BUFFER_SIZE];
+            }
+            long remain = toSkip;
+            while (remain > 0) {
+                // See https://issues.apache.org/jira/browse/IO-203 for why we use read() rather than delegating to skip()
+                long n = input.Read(SKIP_BYTE_BUFFER, 0, (int) Math.Min(remain, SKIP_BUFFER_SIZE));
+                if (n <= 0) { // EOF
+                    break;
+                }
+                remain -= n;
+            }
+            if (toSkip == remain) {
+                return -1L;
+            }
+            return toSkip - remain;
         }
 
         public static byte[] SafelyAllocate(long length, int maxLength)
