@@ -182,7 +182,8 @@ namespace NPOI.XSSF
             FileInfo file;
             if (testOutputDir != null)
             {
-                file = new FileInfo(Path.Combine(testOutputDir, testName + ".xlsx"));
+                String testNameWithExtension = testName.EndsWith(".xlsx") ? testName : testName + ".xlsx";
+                file = new FileInfo(Path.Combine(testOutputDir, testNameWithExtension));
             }
             else
             {

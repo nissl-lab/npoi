@@ -14,16 +14,17 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
-
-using System;
-using System.Globalization;
-using System.IO;
-using System.Text;
+using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using NPOI.Util;
 using NPOI.XSSF.Model;
 using NPOI.XSSF.UserModel;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Text;
 
 namespace NPOI.XSSF.Streaming
 {
@@ -44,13 +45,13 @@ namespace NPOI.XSSF.Streaming
          * If two cells contain the same string, then the cell value is the same index into SharedStringsTable
          */
         private readonly SharedStringsTable _sharedStringSource;
-        private readonly StreamWriter _outputWriter;
+        private readonly StreamWriter _out;
 
         public SheetDataWriter()
         {
             TemporaryFileInfo = CreateTempFile();
             OutputStream = CreateWriter(TemporaryFileInfo);
-            _outputWriter = new StreamWriter(OutputStream);
+            _out = new StreamWriter(OutputStream);
         }
         public SheetDataWriter(SharedStringsTable sharedStringsTable) : this()
         {
@@ -116,7 +117,7 @@ namespace NPOI.XSSF.Streaming
         {
             try
             {
-                _outputWriter.Dispose();
+                _out.Dispose();
                 OutputStream.Dispose();
             }
             catch
@@ -206,63 +207,53 @@ namespace NPOI.XSSF.Streaming
             NumberLastFlushedRow = Math.Max(lastRowNum, NumberLastFlushedRow);
             NumberOfCellsOfLastFlushedRow = lastRowCellsCount;
 
-            _outputWriter.Flush();
+            _out.Flush();
             OutputStream.Flush();
         }
 
         private void BeginRow(int rownum, SXSSFRow row)
         {
-            WriteAsBytes("<row r=\"");
-            WriteAsBytes(rownum + 1);
-            WriteAsBytes("\"");
+            _out.Write("<row");
+            WriteAttribute("r", (rownum + 1).ToString());
 
             if (row.HasCustomHeight())
             {
-                WriteAsBytes(" customHeight=\"1\" ht=\"");
-                WriteAsBytes(row.HeightInPoints);
-                WriteAsBytes("\"");
+                WriteAttribute("customHeight", "true");
+                WriteAttribute("ht", row.HeightInPoints.ToString(CultureInfo.InvariantCulture));
             }
             if (row.ZeroHeight)
             {
-                WriteAsBytes(" hidden=\"1\"");
+                WriteAttribute("hidden", "true");
             }
             if (row.IsFormatted)
             {
-                WriteAsBytes(" s=\"");
-                WriteAsBytes(row.RowStyle.Index);
-                WriteAsBytes("\"");
-                WriteAsBytes(" customFormat=\"1\"");
+                WriteAttribute("s", row.RowStyleIndex.ToString());
+                WriteAttribute("customFormat", "1");
             }
 
             if (row.OutlineLevel != 0)
             {
-                WriteAsBytes(" outlineLevel=\"");
-                WriteAsBytes(row.OutlineLevel);
-                WriteAsBytes("\"");
+                WriteAttribute("outlineLevel", row.OutlineLevel.ToString());
             }
             if (row.Hidden != null)
             {
-                WriteAsBytes(" hidden=\"");
-                WriteAsBytes(row.Hidden.Value ? "1" : "0");
-                WriteAsBytes("\"");
+                WriteAttribute("hidden", (row.Hidden?? true) ? "1" : "0");
             }
             if (row.Collapsed != null)
             {
-                WriteAsBytes(" collapsed=\"");
-                WriteAsBytes(row.Collapsed.Value ? "1" : "0");
-                WriteAsBytes("\"");
+                WriteAttribute("collapsed", (row.Collapsed ?? true) ? "1" : "0");
             }
 
-            WriteAsBytes(">\n");
+            _out.Write(">\n");
 
             RowNum = rownum;
         }
 
         private void EndRow()
         {
-            WriteAsBytes("</row>\n");
+            _out.Write("</row>\n");
         }
-        //TODO: Fix test case TestCases.XSSF.UserModel.TestEncodingBelowAscii
+
         public void WriteCell(int columnIndex, ICell cell)
         {
             if (cell == null)
@@ -270,34 +261,28 @@ namespace NPOI.XSSF.Streaming
                 return;
             }
             var cellRef = new CellReference(RowNum, columnIndex).FormatAsString();
-            WriteAsBytes("<c r=\"");
-            WriteAsBytes(cellRef);
-            WriteAsBytes("\"");
-
-            if (cell.CellStyle.Index != 0)
+            _out.Write("<c");
+            WriteAttribute("r", cellRef);
+            ICellStyle cellStyle = cell.CellStyle;
+            if (cellStyle.Index != 0)
             {
                 // need to convert the short to unsigned short as the indexes can be up to 64k
                 // ideally we would use int for this index, but that would need changes to some more 
                 // APIs
-                WriteAsBytes(" s=\"");
-                WriteAsBytes(cell.CellStyle.Index & 0xffff);
-                WriteAsBytes("\"");
+                WriteAttribute("s", (cellStyle.Index & 0xffff).ToString());
             }
             switch (cell.CellType)
             {
                 case CellType.Blank:
                     {
-                        WriteAsBytes(">");
+                        _out.Write('>');
                         break;
                     }
                 case CellType.Formula:
                     {
-                        WriteAsBytes(">");
-                        WriteAsBytes("<f>");
-
+                        _out.Write("><f>");
                         OutputQuotedString(cell.CellFormula);
-
-                        WriteAsBytes("</f>");
+                        _out.Write("</f>");
 
                         switch (cell.CachedFormulaResultType)
                         {
@@ -305,9 +290,9 @@ namespace NPOI.XSSF.Streaming
                                 double nval = cell.NumericCellValue;
                                 if (!Double.IsNaN(nval))
                                 {
-                                    WriteAsBytes("<v>");
-                                    WriteAsBytes(nval);
-                                    WriteAsBytes("</v>");
+                                    _out.Write("<v>");
+                                    _out.Write(nval.ToString(CultureInfo.InvariantCulture));
+                                    _out.Write("</v>");
                                 }
                                 break;
                             default:
@@ -322,55 +307,53 @@ namespace NPOI.XSSF.Streaming
                             XSSFRichTextString rt = new XSSFRichTextString(cell.StringCellValue);
                             int sRef = _sharedStringSource.AddEntry(rt.GetCTRst());
 
-                            WriteAsBytes(" t=\"");
-                            WriteAsBytes("s");
-                            WriteAsBytes("\">");
-                            WriteAsBytes("<v>");
-                            WriteAsBytes(sRef);
-                            WriteAsBytes("</v>");
+                            WriteAttribute("t", ST_CellType.s.ToString());
+                            _out.Write("><v>");
+                            _out.Write(sRef.ToString());
+                            _out.Write("</v>");
                         }
                         else
                         {
-                            WriteAsBytes(" t=\"inlineStr\">");
-                            WriteAsBytes("<is><t");
+                            WriteAttribute("t", "inlineStr");
+                            _out.Write("><is><t");
 
                             if (HasLeadingTrailingSpaces(cell.StringCellValue))
                             {
-                                WriteAsBytes(" xml:space=\"preserve\"");
+                                WriteAttribute("xml:space", "preserve");
                             }
 
-                            WriteAsBytes(">");
+                            _out.Write(">");
 
                             OutputQuotedString(cell.StringCellValue);
 
-                            WriteAsBytes("</t></is>");
+                            _out.Write("</t></is>");
                         }
                         break;
                     }
                 case CellType.Numeric:
                     {
-                        WriteAsBytes(" t=\"n\">");
-                        WriteAsBytes("<v>");
-                        WriteAsBytes(cell.NumericCellValue);
-                        WriteAsBytes("</v>");
+                        WriteAttribute("t", "n");
+                        _out.Write("><v>");
+                        _out.Write(cell.NumericCellValue.ToString(CultureInfo.InvariantCulture));
+                        _out.Write("</v>");
                         break;
                     }
                 case CellType.Boolean:
                     {
-                        WriteAsBytes(" t=\"b\">");
-                        WriteAsBytes("<v>");
-                        WriteAsBytes(cell.BooleanCellValue ? "1" : "0");
-                        WriteAsBytes("</v>");
+                        WriteAttribute("t", "b");
+                        _out.Write("><v>");
+                        _out.Write(cell.BooleanCellValue ? "1" : "0");
+                        _out.Write("</v>");
                         break;
                     }
                 case CellType.Error:
                     {
                         FormulaError error = FormulaError.ForInt(cell.ErrorCellValue);
 
-                        WriteAsBytes(" t=\"e\">");
-                        WriteAsBytes("<v>");
-                        WriteAsBytes(error.String);
-                        WriteAsBytes("</v>");
+                        WriteAttribute("t", "e");
+                        _out.Write("><v>");
+                        _out.Write(error.String);
+                        _out.Write("</v>");
                         break;
                     }
                 default:
@@ -378,32 +361,16 @@ namespace NPOI.XSSF.Streaming
                         throw new InvalidOperationException("Invalid cell type: " + cell.CellType);
                     }
             }
-            WriteAsBytes("</c>");
+            _out.Write("</c>");
         }
 
-        private void WriteAsBytes(string text)
+        private void WriteAttribute(string name, string value)
         {
-            _outputWriter.Write(text);
-        }
-
-        private void WriteAsBytes(ArraySegment<char> chars)
-        {
-            _outputWriter.Write(chars.Array, chars.Offset, chars.Count);
-        }
-
-        private void WriteAsBytes(int value)
-        {
-            _outputWriter.Write(value);
-        }
-
-        private void WriteAsBytes(float value)
-        {
-            _outputWriter.Write(value.ToString(CultureInfo.InvariantCulture));
-        }
-
-        private void WriteAsBytes(double value)
-        {
-            _outputWriter.Write(value.ToString(CultureInfo.InvariantCulture));
+            _out.Write(' ');
+            _out.Write(name);
+            _out.Write("=\"");
+            _out.Write(value);
+            _out.Write('\"');
         }
 
         /**
@@ -422,7 +389,7 @@ namespace NPOI.XSSF.Streaming
         }
 
         //Taken from jdk1.3/src/javax/swing/text/html/HTMLWriter.java
-        protected internal void OutputQuotedString(string s)
+        internal void OutputQuotedString(string s)
         {
             if (string.IsNullOrEmpty(s))
             {
@@ -438,123 +405,90 @@ namespace NPOI.XSSF.Streaming
                 switch (c)
                 {
                     case '<':
-                        if (counter > last)
-                        {
-                            WriteAsBytes(GetSubArray(chars, last, counter - last));
-                        }
+                        WriteLastChars(_out, chars, last, counter);
                         last = counter + 1;
 
-                        WriteAsBytes("&lt;");
+                        _out.Write("&lt;");
                         break;
                     case '>':
-                        if (counter > last)
-                        {
-                            WriteAsBytes(GetSubArray(chars, last, counter - last));
-                        }
+                        WriteLastChars(_out, chars, last, counter);
                         last = counter + 1;
-                        WriteAsBytes("&gt;");
+                        _out.Write("&gt;");
                         break;
                     case '&':
-                        if (counter > last)
-                        {
-                            WriteAsBytes(GetSubArray(chars, last, counter - last));
-                        }
+                        WriteLastChars(_out, chars, last, counter);
                         last = counter + 1;
-                        WriteAsBytes("&amp;");
+                        _out.Write("&amp;");
                         break;
                     case '"':
-                        if (counter > last)
-                        {
-                            WriteAsBytes(GetSubArray(chars, last, counter - last));
-                        }
+                        WriteLastChars(_out, chars, last, counter);
                         last = counter + 1;
-                        WriteAsBytes("&quot;");
+                        _out.Write("&quot;");
                         break;
                     // Special characters
                     case '\n':
-                        if(counter > last)
-                        {
-                            WriteAsBytes(GetSubArray(chars, last, counter - last));
-                        }
-                        WriteAsBytes("&#xa;");
+                        WriteLastChars(_out, chars, last, counter);
+                        _out.Write("&#xa;");
                         last = counter + 1;
                         break;
                     case '\r':
-                        if (counter > last)
-                        {
-                            WriteAsBytes(GetSubArray(chars, last, counter - last));
-                        }
-                        WriteAsBytes("&#xd;");
+                        WriteLastChars(_out, chars, last, counter);
+                        _out.Write("&#xd;");
                         last = counter + 1;
                         break;
                     case '\t':
-                        if (counter > last)
-                        {
-                            WriteAsBytes(GetSubArray(chars, last, counter - last));
-                        }
-                        WriteAsBytes("&#x9;");
+                        WriteLastChars(_out, chars, last, counter);
+                        _out.Write("&#x9;");
                         last = counter + 1;
                         break;
                     case (char)0xa0:
-                        if (counter > last)
-                        {
-                            WriteAsBytes(GetSubArray(chars, last, counter - last));
-                        }
-                        WriteAsBytes("&#xa0;");
+                        WriteLastChars(_out, chars, last, counter);
+                        _out.Write("&#xa0;");
                         last = counter + 1;
                         break;
                     default:
                         // YK: XmlBeans silently replaces all ISO control characters ( < 32) with question marks.
                         // the same rule applies to unicode surrogates and "not a character" symbols.
-                        if (ReplaceWithQuestionMark(c))
+                        if (ReplaceWithQuestionMark(c)) 
                         {
-                            if (counter > last)
-                            {
-                                WriteAsBytes(GetSubArray(chars, last, counter - last));
-                            }
-                            WriteAsBytes("?");
+                            WriteLastChars(_out, chars, last, counter);
+                            _out.Write('?');
                             last = counter + 1;
                         }
-                        else if (Char.IsLowSurrogate(c) || Char.IsHighSurrogate(c))
+                        else if (Char.IsHighSurrogate(c) || Char.IsLowSurrogate(c))
                         {
-                            if (counter > last)
-                            {
-                                WriteAsBytes(GetSubArray(chars, last, counter - last));
-                            }
-                            //WriteAsBytes(c);
-                            _outputWriter.Write(c);
+                            WriteLastChars(_out, chars, last, counter);
+                            _out.Write(c);
                             last = counter + 1;
                         }
                         else if (c > 127)
                         {
-                            if (counter > last)
-                            {
-                                WriteAsBytes(GetSubArray(chars, last, counter - last));
-                            }
+                            WriteLastChars(_out, chars, last, counter);
                             last = counter + 1;
-                            // If the character is outside of UTF8, write the
+                            // If the character is outside of ascii, write the
                             // numeric value.
-                            WriteAsBytes("&#");
-                            WriteAsBytes(c);
-                            WriteAsBytes(";");
+                            _out.Write("&#");
+                            _out.Write(((int) c).ToString());
+                            _out.Write(";");
                         }
                         break;
                 }
             }
             if (last < length)
             {
-                WriteAsBytes(GetSubArray(chars, last, length - last));
+                _out.Write(chars, last, length - last);
+            }
+        }
+        internal static bool ReplaceWithQuestionMark(char c) {
+            return c < ' ' || ('\uFFFE' <= c && c <= '\uFFFF');
+        }
+        private static void WriteLastChars(StreamWriter out1, char[] chars, int last, int counter)
+        {
+            if (counter > last) {
+                out1.Write(chars, last, counter - last);
             }
         }
 
-        private static ArraySegment<char> GetSubArray(char[] oldArray, int skip, int take)
-        {
-            return new ArraySegment<char>(oldArray, skip, take);
-        }
-        public static bool ReplaceWithQuestionMark(char c)
-        {
-            return c < ' ' || ('\uFFFE' <= c && c <= '\uFFFF');
-        }
         /**
          * Deletes the temporary file that backed this sheet on disk.
          * @return true if the file was deleted, false if it wasn't.
@@ -564,7 +498,7 @@ namespace NPOI.XSSF.Streaming
             bool ret;
             try
             {
-                _outputWriter.Close();
+                _out.Close();
                 OutputStream.Close();
             }
             finally
