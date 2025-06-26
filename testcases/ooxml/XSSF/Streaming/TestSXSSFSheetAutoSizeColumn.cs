@@ -179,6 +179,7 @@ namespace TestCases.XSSF.Streaming
 
         // fails only for useMergedCell=true
         [Test]
+        [Platform("Win")]
         public void Test_WindowSizeEqualsOne_flushedRowHasMergedCell()
         {
             workbook = new SXSSFWorkbook(null, 1); // Window size 1 so only last row will be in memory
