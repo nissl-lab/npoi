@@ -97,6 +97,14 @@ namespace TestCases.POIFS.FileSystem
             // xls file is
             ConfirmIsPOIFS("SampleSS.xls", true);
 
+            // older biff formats aren't
+            ConfirmIsPOIFS("testEXCEL_3.xls", false);
+            ConfirmIsPOIFS("testEXCEL_4.xls", false);
+        
+            // newer excel formats are
+            ConfirmIsPOIFS("testEXCEL_5.xls", true);
+            ConfirmIsPOIFS("testEXCEL_95.xls", true);
+
             // text file isn't
             ConfirmIsPOIFS("SampleSS.txt", false);
         }

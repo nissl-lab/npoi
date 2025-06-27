@@ -48,6 +48,11 @@ namespace NPOI.Util
             return inner.ReadByte();
         }
 
+        public override int Read(byte[] b, int off, int len)
+        {
+            return inner.Read(b, off, len);
+        }
+
         public override long Seek(long offset, SeekOrigin origin)
         {
             throw new NotImplementedException();

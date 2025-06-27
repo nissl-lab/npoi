@@ -71,7 +71,12 @@ namespace NPOI.POIFS.Storage
         0x00, 0x00, // unused
         0x00, 0x01
     };
-
+        private static byte[] MAGIC_MSWRITEa = {
+        0x31, (byte)0xbe, 0x00, 0x00
+    };
+        private static byte[] MAGIC_MSWRITEb = {
+            0x32, (byte)0xbe, 0x00, 0x00
+    };
         private static byte _default_value = (byte)0xFF;
          /**
          * What big block Size the file uses. Most files
@@ -144,6 +149,12 @@ namespace NPOI.POIFS.Storage
                 {
                     throw new NotOLE2FileException("The supplied data appears to be a raw XML file. "
                         + "Formats such as Office 2003 XML are not supported");
+                }
+
+                // Old MS Write raw stream
+                if (cmp(MAGIC_MSWRITEa, data) || cmp(MAGIC_MSWRITEb, data)) {
+                    throw new NotOLE2FileException("The supplied data appears to be in the old MS Write format. "
+                        + "NPOI doesn't currently support this format");
                 }
 
                 // BIFF2 raw stream

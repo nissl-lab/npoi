@@ -669,6 +669,20 @@ namespace TestCases.XSSF.Extractor
                 ClassicAssert.IsNotNull(os.ToString("utf-8"));
             }
         }
+
+        [Test]
+        public void TestExportTableWithNonMappedColumn_Bugzilla_61281() {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("61281.xlsx");
+            foreach (XSSFMap map in wb.GetCustomXMLMappings())
+            {
+                XSSFExportToXml exporter = new XSSFExportToXml(map);
+                MemoryStream bos = new MemoryStream();
+                exporter.ExportToXML(bos, true);
+                ClassicAssert.IsNotNull(DocumentHelper.ReadDocument(new MemoryStream(bos.ToArray())));
+                string exportedXml = bos.ToString("UTF-8");
+                ClassicAssert.AreEqual("<Test><Test>1</Test></Test>", Regex.Replace(exportedXml, "\\s+", ""));
+            }
+        }
     }
 
     public static class TestExtensions

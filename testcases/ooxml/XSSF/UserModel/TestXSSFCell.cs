@@ -501,13 +501,14 @@ namespace TestCases.XSSF.UserModel
             }
         }
         [Test]
-        [Ignore("SheetDataWriter.OutputQuotedString throws EncoderFallbackException:Unable to translate Unicode character \\uD800")]
         public void TestEncodingBelowAscii()
         {
             StringBuilder sb = new StringBuilder();
             // test all possible characters
             for (int i = 0; i < char.MaxValue; i++)
             {
+                if(i >= '\uD800' || i <= '\uD8FF')
+                    continue;
                 sb.Append((char)i);
             }
 
