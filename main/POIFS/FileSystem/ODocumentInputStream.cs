@@ -19,6 +19,7 @@
 using System;
 using NPOI.POIFS.Storage;
 using System.IO;
+using NPOI.Util;
 
 namespace NPOI.POIFS.FileSystem
 {
@@ -71,6 +72,10 @@ namespace NPOI.POIFS.FileSystem
             _current_offset = 0;
             _marked_offset = 0;
             _document_size = document.Size;
+            if (_document_size < 0)
+            {
+			    throw new RecordFormatException("document_size cannot be < 0");
+		    }
             _closed = false;
             _document = documentNode.Document;
             _currentBlock = GetDataInputBlock(0);

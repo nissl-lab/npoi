@@ -46,6 +46,7 @@ namespace TestCases.HSSF.UserModel
     using NPOI.HSSF;
     using System.Net;
     using SixLabors.ImageSharp;
+    using NPOI.HPSF;
 
     /**
      * Testcases for bugs entered in bugzilla
@@ -2369,8 +2370,8 @@ namespace TestCases.HSSF.UserModel
             ClassicAssert.AreEqual(3, wb.NumberOfSheets);
 
             // Find the SST record
-            UnicodeString withExt = wb.Workbook.GetSSTString(0);
-            UnicodeString withoutExt = wb.Workbook.GetSSTString(31);
+            NPOI.HSSF.Record.UnicodeString withExt = wb.Workbook.GetSSTString(0);
+            NPOI.HSSF.Record.UnicodeString withoutExt = wb.Workbook.GetSSTString(31);
 
             ClassicAssert.AreEqual("O:Alloc:Qty", withExt.String);
             ClassicAssert.IsTrue((withExt.OptionFlags & 0x0004) == 0x0004);
@@ -3508,6 +3509,19 @@ namespace TestCases.HSSF.UserModel
             String text = ex.Text;
             POITestCase.AssertContains(text, "\u8D44\u4EA7\u8D1F\u503A\u8868");
             wb.Close();
+        }
+
+        [Test]
+        public void Test61300()
+        {
+            ClassicAssert.Throws<RuntimeException>(()=>{
+                NPOIFSFileSystem npoifs = new NPOIFSFileSystem(HSSFTestDataSamples.OpenSampleFileStream("61300.xls"));
+
+                DocumentEntry entry =
+                        (DocumentEntry) npoifs.Root.GetEntry(SummaryInformation.DEFAULT_STREAM_NAME);
+                PropertySet properties =
+                        new PropertySet(new DocumentInputStream(entry));
+            });
         }
 
         // follow https://svn.apache.org/viewvc?view=revision&revision=1896552 to write a unit test for this fix.
