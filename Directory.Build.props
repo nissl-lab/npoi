@@ -8,7 +8,7 @@
     <DebugType>portable</DebugType>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
 
-    <VersionPrefix>2.7.3</VersionPrefix>
+    <VersionPrefix>2.7.4</VersionPrefix>
     <Title>NPOI</Title>
     <Authors>Tony Qu,NPOI Contributors</Authors>
     <Owners>Nissl Lab</Owners>
@@ -106,7 +106,7 @@
 
   <ItemGroup>
     <None Include="..\LICENSE" Pack="true" Visible="false" PackagePath="" />
-    <None Include="..\Read Me.txt" Pack="true" Visible="false" PackagePath="" />
+    <None Include="..\build\README.md" Pack="true" Visible="false" PackagePath="" />
     <None Include="..\logo\*.png" Pack="true" Visible="false" PackagePath="logo\" />
     <None Include="..\logo\*.jpg" Pack="true" Visible="false" PackagePath="logo\" />
   </ItemGroup>
