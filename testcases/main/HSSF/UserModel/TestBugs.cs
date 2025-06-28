@@ -3500,6 +3500,16 @@ namespace TestCases.HSSF.UserModel
             wb.Close();
         }
 
+        [Test]
+        public void Test61287()
+        {
+            IWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("61287.xls");
+            ExcelExtractor ex = new ExcelExtractor((HSSFWorkbook)wb);
+            String text = ex.Text;
+            POITestCase.AssertContains(text, "\u8D44\u4EA7\u8D1F\u503A\u8868");
+            wb.Close();
+        }
+
         // follow https://svn.apache.org/viewvc?view=revision&revision=1896552 to write a unit test for this fix.
         [Test]
         public void Test52447()
