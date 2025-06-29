@@ -59,7 +59,7 @@ jobs:
         run: ./build.cmd Clean Test Pack
       - name: 'Publish: publish'
         uses: actions/upload-artifact@v4
-        if: runner.os == 'Windows'
+        if: runner.os == 'Linux'
         with:
           name: publish
           path: publish
