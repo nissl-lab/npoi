@@ -16,6 +16,7 @@
 ==================================================================== */
 using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.SS.UserModel;
+using NPOI.SS.Util;
 using NPOI.XSSF.UserModel;
 using System;
 namespace NPOI.XSSF.UserModel
@@ -75,6 +76,22 @@ namespace NPOI.XSSF.UserModel
         {
             return new XSSFColor(new CT_Color(),
                 (workbook as XSSFWorkbook).GetStylesSource().IndexedColors);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public AreaReference CreateAreaReference(string reference)
+        {
+            return new AreaReference(reference, workbook.SpreadsheetVersion);
+        }
+        
+        /**
+         * {@inheritDoc}
+         */
+        public AreaReference CreateAreaReference(CellReference topLeft, CellReference bottomRight)
+        {
+            return new AreaReference(topLeft, bottomRight, workbook.SpreadsheetVersion);
         }
     }
 

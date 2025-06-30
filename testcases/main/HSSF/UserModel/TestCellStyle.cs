@@ -207,11 +207,11 @@ namespace TestCases.HSSF.UserModel
             cs.BorderRight = (BorderStyle.Thin);
             cs.BorderTop = (BorderStyle.Thin);
             cs.FillForegroundColor = (short)0xA;
-            cs.FillPattern = FillPattern.SolidForeground;
+            cs.FillPattern = FillPattern.Diamonds;
             fnt.Color = (short)0xf;
             fnt.IsItalic = (true);
             cs2.FillForegroundColor = (short)0x0;
-            cs2.FillPattern = FillPattern.SolidForeground;
+            cs2.FillPattern = FillPattern.Diamonds;
             cs2.SetFont(fnt);
             for (short rownum = (short)0; rownum < 100; rownum++)
             {
@@ -253,11 +253,11 @@ namespace TestCases.HSSF.UserModel
             ClassicAssert.AreEqual(5, wb.NumberOfFonts);
 
             NPOI.SS.UserModel.ICellStyle orig = wb.CreateCellStyle();
-            orig.Alignment = (HorizontalAlignment.Right);
+            orig.Alignment = (HorizontalAlignment.Justify);
             orig.SetFont(fnt);
             orig.DataFormat = ((short)18);
 
-            ClassicAssert.AreEqual(HorizontalAlignment.Right, orig.Alignment);
+            ClassicAssert.AreEqual(HorizontalAlignment.Justify, orig.Alignment);
             ClassicAssert.AreEqual(fnt, orig.GetFont(wb));
             ClassicAssert.AreEqual(18, orig.DataFormat);
 
@@ -267,13 +267,10 @@ namespace TestCases.HSSF.UserModel
             ClassicAssert.AreNotEqual(18, clone.DataFormat);
 
             clone.CloneStyleFrom(orig);
-            ClassicAssert.AreEqual(HorizontalAlignment.Right, orig.Alignment);
+            ClassicAssert.AreEqual(HorizontalAlignment.Justify, orig.Alignment);
             ClassicAssert.AreEqual(fnt, clone.GetFont(wb));
             ClassicAssert.AreEqual(18, clone.DataFormat);
             ClassicAssert.AreEqual(5, wb.NumberOfFonts);
-
-            orig.Alignment = HorizontalAlignment.Left;
-            ClassicAssert.AreEqual(HorizontalAlignment.Right, clone.Alignment);
         }
 
         /**

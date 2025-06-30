@@ -22,6 +22,7 @@ namespace TestCases.XSSF.UserModel
     using NPOI.OpenXmlFormats.Spreadsheet;
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
+    using NPOI.Util;
     using NPOI.XSSF;
     using NPOI.XSSF.UserModel;
     using NUnit.Framework;using NUnit.Framework.Legacy;
@@ -244,7 +245,7 @@ namespace TestCases.XSSF.UserModel
             table.UpdateReferences();
             ClassicAssert.AreEqual(new CellReference("C1"), table.StartCellReference);
             ClassicAssert.AreEqual(new CellReference("M3"), table.EndCellReference);
-            wb.Close();
+            IOUtils.CloseQuietly(wb);
         }
 
         [Test]
@@ -263,7 +264,7 @@ namespace TestCases.XSSF.UserModel
             // update cell references to clear the cache
             table.UpdateReferences();
             ClassicAssert.AreEqual(11, table.RowCount);
-            wb.Close();
+            IOUtils.CloseQuietly(wb);
         }
 
         [Test]
@@ -364,13 +365,14 @@ namespace TestCases.XSSF.UserModel
             t.AddColumn();
             t.AddColumn();
             t.AddColumn();
-            t.CellReferences = (new AreaReference(
+            t.CellReferences = (wb.GetCreationHelper().CreateAreaReference(
                     new CellReference(c1), new CellReference(c6)
             ));
 
             // Save and re-load
-            wb = XSSFTestDataSamples.WriteOutAndReadBack(wb);
-            s = wb.GetSheetAt(0) as XSSFSheet;
+            XSSFWorkbook wb2 = XSSFTestDataSamples.WriteOutAndReadBack(wb);
+            IOUtils.CloseQuietly(wb);
+            s = wb2.GetSheetAt(0) as XSSFSheet;
 
             // Check
             ClassicAssert.AreEqual(1, s.GetTables().Count);
@@ -382,8 +384,8 @@ namespace TestCases.XSSF.UserModel
             ClassicAssert.AreEqual("12", t.GetCTTable().tableColumns.GetTableColumnArray(0).name);
             ClassicAssert.AreEqual("34.56", t.GetCTTable().tableColumns.GetTableColumnArray(1).name);
             ClassicAssert.AreEqual("ABCD", t.GetCTTable().tableColumns.GetTableColumnArray(2).name);
-            // Done
-            wb.Close();
+            
+            IOUtils.CloseQuietly(wb2);
         }
     }
 }

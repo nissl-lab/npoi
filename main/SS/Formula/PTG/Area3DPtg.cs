@@ -43,7 +43,7 @@ namespace NPOI.SS.Formula.PTG
         private BitField colRelative = BitFieldFactory.GetInstance(0x4000);
 
 
-        public Area3DPtg(String arearef, int externIdx):base(arearef)
+        public Area3DPtg(String arearef, int externIdx):base(new AreaReference(arearef, SpreadsheetVersion.EXCEL97))
         {
             ExternSheetIndex=externIdx;
 
@@ -96,7 +96,10 @@ namespace NPOI.SS.Formula.PTG
             set { field_1_index_extern_sheet = value; }
         }
 
-
+        public String Format2DRefAsString()
+        {
+            return FormatReferenceAsString();
+        }
         /*public String Area{
             RangeAddress ra = new RangeAddress( FirstColumn,FirstRow + 1, LastColumn, LastRow + 1);
             String result = ra.GetAddress();
@@ -106,7 +109,7 @@ namespace NPOI.SS.Formula.PTG
 
         public void SetArea(String ref1)
         {
-            AreaReference ar = new AreaReference(ref1);
+            AreaReference ar = new AreaReference(ref1, SpreadsheetVersion.EXCEL97);
 
             CellReference frstCell = ar.FirstCell;
             CellReference lastCell = ar.LastCell;
@@ -126,9 +129,9 @@ namespace NPOI.SS.Formula.PTG
             throw new NotImplementedException("3D references need a workbook to determine formula text");
         }
         /**
- * @return text representation of this area reference that can be used in text
- *  formulas. The sheet name will get properly delimited if required.
- */
+         * @return text representation of this area reference that can be used in text
+         *  formulas. The sheet name will get properly delimited if required.
+         */
         public String ToFormulaString(IFormulaRenderingWorkbook book)
         {
             return ExternSheetNameResolver.PrependSheetName(book, field_1_index_extern_sheet, FormatReferenceAsString());

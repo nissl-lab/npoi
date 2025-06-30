@@ -460,7 +460,8 @@ namespace NPOI.XSSF.UserModel
         protected internal void CreateSourceReferences(CellReference position, ISheet sourceSheet, IPivotTableReferenceConfigurator refConfig)
         {
             //Get cell one to the right and one down from position, add both to AreaReference and Set pivot table location.
-            AreaReference destination = new AreaReference(position, new CellReference(position.Row + 1, position.Col + 1));
+            AreaReference destination = new AreaReference(position,
+                new CellReference(position.Row + 1, position.Col + 1), SpreadsheetVersion.EXCEL2007);
 
             CT_Location location;
             if (pivotTableDefinition.location == null)

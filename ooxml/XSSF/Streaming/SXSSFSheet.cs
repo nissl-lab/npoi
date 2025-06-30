@@ -737,17 +737,6 @@ namespace NPOI.XSSF.Streaming
         }
 
         /// <summary>
-        /// Returns cell comment for the specified row and column
-        /// </summary>
-        /// <param name="row">The row.</param>
-        /// <param name="column">The column.</param>
-        /// <returns>cell comment or <code>null</code> if not found</returns>
-        [Obsolete("deprecated as of 2015-11-23 (circa POI 3.14beta1). Use {@link #getCellComment(CellAddress)} instead.")]
-        public IComment GetCellComment(int row, int column)
-        {
-            return GetCellComment(new CellAddress(row, column));
-        }
-        /// <summary>
         /// Returns cell comment for the specified location
         /// </summary>
         /// <param name="ref1">cell location</param>
@@ -1260,12 +1249,6 @@ namespace NPOI.XSSF.Streaming
                 currRow = (SXSSFRow)GetRow(rowIndex);
             }
             return rowIndex;
-        }
-
-        [Obsolete("deprecated 2015-11-23 (circa POI 3.14beta1). Use {@link #setZoom(int)} instead.")]
-        public void SetZoom(int numerator, int denominator)
-        {
-            _sh.SetZoom(numerator, denominator);
         }
 
         /**
