@@ -258,8 +258,7 @@ namespace TestCases.OpenXml4Net.OPC
                     partB.GetRelationship("rId1").TargetUri.ToString());
             // Check core too
             ClassicAssert.AreEqual("/docProps/core.xml",
-                    pkg.GetRelationshipsByType(
-            "http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties").GetRelationship(0).TargetUri.ToString());
+                    pkg.GetRelationshipsByType(PackageRelationshipTypes.CORE_PROPERTIES).GetRelationship(0).TargetUri.ToString());
 
             // Add some more
             partB.AddExternalRelationship("http://poi.apache.org/new", "http://example/poi/new");

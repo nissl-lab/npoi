@@ -17,15 +17,13 @@ namespace NPOI.OpenXml4Net.OPC.Internal
      * @author Julien Chable
      * @version 1.0
      */
-    public class PackagePropertiesPart : PackagePart, PackageProperties
+    public class PackagePropertiesPart : PackagePart, IPackageProperties
     {
-        public static String NAMESPACE_DC = "http://purl.org/dc/elements/1.1/";
+        public static String NAMESPACE_DC_URI = PackageProperties.NAMESPACE_DC;
 
-        public static String NAMESPACE_DC_URI = "http://purl.org/dc/elements/1.1/";
+        public static String NAMESPACE_CP_URI = PackageNamespaces.CORE_PROPERTIES;
 
-        public static String NAMESPACE_CP_URI = "http://schemas.openxmlformats.org/package/2006/metadata/core-properties";
-
-        public static String NAMESPACE_DCTERMS_URI = "http://purl.org/dc/terms/";
+        public static String NAMESPACE_DCTERMS_URI = PackageProperties.NAMESPACE_DCTERMS;
 
         public static String NAMESPACE_XSI_URI = "http://www.w3.org/2001/XMLSchema-instance";
         private static String DEFAULT_DATEFORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";

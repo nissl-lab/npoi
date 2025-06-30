@@ -17,6 +17,7 @@
 
 namespace NPOI.XWPF.UserModel
 {
+    using NPOI.OpenXml4Net.OPC;
     using System;
     using System.Collections.Generic;
     /**
@@ -32,26 +33,26 @@ namespace NPOI.XWPF.UserModel
 
 
         public static XWPFRelation DOCUMENT = new XWPFRelation(
-                "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml",
-            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument",
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml",
+            PackageRelationshipTypes.CORE_DOCUMENT,
             "/word/document.xml",
-                null
+            null
         );
         public static XWPFRelation TEMPLATE = new XWPFRelation(
-              "application/vnd.openxmlformats-officedocument.wordprocessingml.template.main+xml",
-          "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument",
-          "/word/document.xml",
-              null
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.template.main+xml",
+            PackageRelationshipTypes.CORE_DOCUMENT,
+            "/word/document.xml",
+            null
         );
         public static XWPFRelation MACRO_DOCUMENT = new XWPFRelation(
-                "application/vnd.ms-word.document.macroEnabled.main+xml",
-            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument",
+            "application/vnd.ms-word.document.macroEnabled.main+xml",
+            PackageRelationshipTypes.CORE_DOCUMENT,
             "/word/document.xml",
-                null
+            null
         );
         public static XWPFRelation MACRO_TEMPLATE_DOCUMENT = new XWPFRelation(
-                "application/vnd.ms-word.template.macroEnabledTemplate.main+xml",
-            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument",
+            "application/vnd.ms-word.template.macroEnabledTemplate.main+xml",
+            PackageRelationshipTypes.CORE_DOCUMENT,
             "/word/document.xml",
             null
         );

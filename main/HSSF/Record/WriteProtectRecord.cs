@@ -46,7 +46,10 @@ namespace NPOI.HSSF.Record
 
         public WriteProtectRecord(RecordInputStream in1)
         {
-
+            if (in1.Remaining == 2)
+            {
+                in1.ReadShort();
+            }
         }
 
         public override String ToString()
