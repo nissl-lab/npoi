@@ -53,7 +53,7 @@ jobs:
         --results-directory test-results
       
     - name: RUN .NET 6 NPOI.OOXML.Multitarget.Testcases
-      if : always() && steps.build-npoi.outcome == 'success'
+      if: always() && steps.build-npoi.outcome == 'success'
       run: >-
         dotnet test solution/Debug/net6.0/NPOI.OOXML.TestCases.dll
         --settings ./test.runsettings
@@ -116,7 +116,7 @@ jobs:
         --results-directory test-results
       
     - name: RUN .NET 6 NPOI.OOXML.Multitarget.Testcases
-      if : always() && steps.build-npoi.outcome == 'success'
+      if: always() && steps.build-npoi.outcome == 'success'
       run: >-
         dotnet test solution/Debug/net6.0/NPOI.OOXML.TestCases.dll
         --settings ./test.runsettings
@@ -179,7 +179,7 @@ jobs:
         --results-directory test-results
       
     - name: RUN .NET 6 NPOI.OOXML.Multitarget.Testcases
-      if : always() && steps.build-npoi.outcome == 'success'
+      if: always() && steps.build-npoi.outcome == 'success'
       run: >-
         dotnet test solution/Debug/net6.0/NPOI.OOXML.TestCases.dll
         --settings ./test.runsettings
