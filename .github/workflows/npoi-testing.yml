@@ -1,5 +1,10 @@
 name: TEST NPOI
 
+permissions:
+  contents: read
+  actions: read
+  checks: write
+
 on:
   push:
     branches: [ "master" ]
@@ -66,7 +71,7 @@ jobs:
         --results-directory test-results
       
     - name: PUBLISH TEST RESULTS
-      uses: dorny/test-reporter@v1
+      uses: dorny/test-reporter@v2
       if: always() && steps.build-npoi.outcome == 'success'
       with:
         path: 'test-results/*.trx'
@@ -129,7 +134,7 @@ jobs:
         --results-directory test-results
     
     - name: PUBLISH TEST RESULTS
-      uses: dorny/test-reporter@v1
+      uses: dorny/test-reporter@v2
       if: always() && steps.build-npoi.outcome == 'success'
       with:
         path: 'test-results/*.trx'
@@ -192,7 +197,7 @@ jobs:
         --results-directory test-results
       
     - name: PUBLISH TEST RESULTS
-      uses: dorny/test-reporter@v1
+      uses: dorny/test-reporter@v2
       if: always() && steps.build-npoi.outcome == 'success'
       with:
         path: 'test-results/*.trx'
