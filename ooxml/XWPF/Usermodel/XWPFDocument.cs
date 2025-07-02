@@ -103,26 +103,31 @@ namespace NPOI.XWPF.UserModel
                 InitFootnotes();
                 // parse the document with cursor and add
                 //    // the XmlObject to its lists
-
-                foreach (object o in ctDocument.body.Items)
+                List<CT_Body> allBody = [ctDocument.body];
+                if(ctDocument.bodyList != null)
+                    allBody.AddRange(ctDocument.bodyList);
+                foreach(CT_Body body in allBody)
                 {
-                    if (o is CT_P ctP)
+                    foreach (object o in body.Items)
                     {
-                        XWPFParagraph p = new XWPFParagraph(ctP, this);
-                        bodyElements.Add(p);
-                        paragraphs.Add(p);
-                    }
-                    else if (o is CT_Tbl tbl)
-                    {
-                        XWPFTable t = new XWPFTable(tbl, this);
-                        bodyElements.Add(t);
-                        tables.Add(t);
-                    }
-                    else if (o is CT_SdtBlock block)
-                    {
-                        XWPFSDT c = new XWPFSDT(block, this);
-                        bodyElements.Add(c);
-                        contentControls.Add(c);
+                        if (o is CT_P ctP)
+                        {
+                            XWPFParagraph p = new XWPFParagraph(ctP, this);
+                            bodyElements.Add(p);
+                            paragraphs.Add(p);
+                        }
+                        else if (o is CT_Tbl tbl)
+                        {
+                            XWPFTable t = new XWPFTable(tbl, this);
+                            bodyElements.Add(t);
+                            tables.Add(t);
+                        }
+                        else if (o is CT_SdtBlock block)
+                        {
+                            XWPFSDT c = new XWPFSDT(block, this);
+                            bodyElements.Add(c);
+                            contentControls.Add(c);
+                        }
                     }
                 }
                 // Sort out headers and footers

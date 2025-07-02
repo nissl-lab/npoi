@@ -425,5 +425,16 @@ namespace TestCases.XWPF.Extractor
             extractor.Close();
         }
 
+        [Test]
+        public void TestMultipleBodyBug()
+        {
+            XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("MultipleBodyBug.docx");
+            XWPFWordExtractor extractor = new XWPFWordExtractor(doc);
+            ClassicAssert.AreEqual("START BODY 1 The quick, brown fox jumps over a lazy dog. END BODY 1.\n"
+                            + "START BODY 2 The quick, brown fox jumps over a lazy dog. END BODY 2.\n"
+                            + "START BODY 3 The quick, brown fox jumps over a lazy dog. END BODY 3.\n",
+                    extractor.Text);
+            extractor.Close();
+        }
     }
 }
