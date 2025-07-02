@@ -1,5 +1,10 @@
 name: TEST NPOI
 
+permissions:
+  contents: read
+  actions: read
+  checks: write
+
 on:
   push:
     branches: [ "master" ]
@@ -48,7 +53,7 @@ jobs:
         --results-directory test-results
       
     - name: RUN .NET 6 NPOI.OOXML.Multitarget.Testcases
-      if : always() && steps.build-npoi.outcome == 'success'
+      if: always() && steps.build-npoi.outcome == 'success'
       run: >-
         dotnet test solution/Debug/net6.0/NPOI.OOXML.TestCases.dll
         --settings ./test.runsettings
@@ -66,12 +71,13 @@ jobs:
         --results-directory test-results
       
     - name: PUBLISH TEST RESULTS
-      uses: dorny/test-reporter@v1
+      uses: dorny/test-reporter@v2
       if: always() && steps.build-npoi.outcome == 'success'
       with:
         path: 'test-results/*.trx'
         name: NPOI .NET 6 Windows Test Results
         reporter: 'dotnet-trx'
+        fail-on-error: false
 
   RUN-UBUNTU-TESTS:    
     runs-on: ubuntu-latest
@@ -111,7 +117,7 @@ jobs:
         --results-directory test-results
       
     - name: RUN .NET 6 NPOI.OOXML.Multitarget.Testcases
-      if : always() && steps.build-npoi.outcome == 'success'
+      if: always() && steps.build-npoi.outcome == 'success'
       run: >-
         dotnet test solution/Debug/net6.0/NPOI.OOXML.TestCases.dll
         --settings ./test.runsettings
@@ -129,12 +135,13 @@ jobs:
         --results-directory test-results
     
     - name: PUBLISH TEST RESULTS
-      uses: dorny/test-reporter@v1
+      uses: dorny/test-reporter@v2
       if: always() && steps.build-npoi.outcome == 'success'
       with:
         path: 'test-results/*.trx'
         name: NPOI .NET 6 Ubuntu Test Results
         reporter: 'dotnet-trx'
+        fail-on-error: false
 
   RUN-MACOS-TESTS:
     runs-on: macos-latest
@@ -174,7 +181,7 @@ jobs:
         --results-directory test-results
       
     - name: RUN .NET 6 NPOI.OOXML.Multitarget.Testcases
-      if : always() && steps.build-npoi.outcome == 'success'
+      if: always() && steps.build-npoi.outcome == 'success'
       run: >-
         dotnet test solution/Debug/net6.0/NPOI.OOXML.TestCases.dll
         --settings ./test.runsettings
@@ -192,9 +199,10 @@ jobs:
         --results-directory test-results
       
     - name: PUBLISH TEST RESULTS
-      uses: dorny/test-reporter@v1
+      uses: dorny/test-reporter@v2
       if: always() && steps.build-npoi.outcome == 'success'
       with:
         path: 'test-results/*.trx'
         name: NPOI .NET 6 macOS Test Results
         reporter: 'dotnet-trx'
+        fail-on-error: false
