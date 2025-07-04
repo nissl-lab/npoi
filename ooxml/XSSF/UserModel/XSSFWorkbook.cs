@@ -1396,6 +1396,11 @@ namespace NPOI.XSSF.UserModel
          */
         private void OnSheetDelete(int index)
         {
+            // remove all sheet relations
+            XSSFSheet sheet = GetSheetAt(index) as XSSFSheet;
+
+            sheet.OnSheetDelete();
+
             //delete the CT_Sheet reference from workbook.xml
             workbook.sheets.RemoveSheet(index);
 

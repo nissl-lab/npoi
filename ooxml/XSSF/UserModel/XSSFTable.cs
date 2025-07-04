@@ -838,5 +838,16 @@ namespace NPOI.XSSF.UserModel
             }
             return false;
         }
+
+        /// <summary>
+        /// Remove relations
+        /// </summary>
+        internal void OnTableDelete()
+        {
+            foreach (RelationPart part in RelationParts)
+            {
+                RemoveRelation(part.DocumentPart, true);
+            }
+        }
     }
 }

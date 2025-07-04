@@ -1145,6 +1145,27 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
+        /// <summary>
+        /// Remove table references and relations
+        /// </summary>
+        /// <param name="t">table to remove</param>
+        public void RemoveTable(XSSFTable t)
+        {
+            long id = t.GetCTTable().id;
+            KeyValuePair<String, XSSFTable>? toDelete = null;
+        
+            foreach (KeyValuePair<String, XSSFTable> entry in tables) {
+                if (entry.Value.GetCTTable().id == id) 
+                    toDelete = entry;
+            }
+            if (toDelete != null)
+            {
+                RemoveRelation(GetRelationById(toDelete.Value.Key), true);
+                tables.Remove(toDelete.Value.Key);
+                toDelete.Value.Value.OnTableDelete();
+            }
+        }
+
         public ISheetConditionalFormatting SheetConditionalFormatting
         {
             get
@@ -6551,6 +6572,20 @@ lblforbreak:
         public CellRangeAddressList GetCells(string cellranges)
         {
             return CellRangeAddressList.Parse(cellranges);
+        }
+
+        /// <summary>
+        /// called when a sheet is being deleted/removed from a workbook, to clean up relations and other document pieces tied to the sheet
+        /// </summary>
+        internal void OnSheetDelete() {
+            foreach (RelationPart part in RelationParts) {
+                if (part.DocumentPart is XSSFTable) {
+                    // call table delete
+                    RemoveTable((XSSFTable) part.DocumentPart);
+                    continue;
+                }
+                RemoveRelation(part.DocumentPart, true);
+            }
         }
     }
 }
