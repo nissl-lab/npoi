@@ -21,6 +21,7 @@ namespace TestCases.HSSF.UserModel
     using NPOI.HSSF.UserModel;
     using NPOI.DDF;
     using NPOI.HSSF.Record;
+    using System;
 
     /**
      * Helper class for HSSF Tests that aren't within the
@@ -38,11 +39,12 @@ namespace TestCases.HSSF.UserModel
             {
             }
 
+            [Obsolete]
             public override int AllocateShapeId(short drawingGroupId)
             {
                 return 1025; //Mock value
             }
-
+            [Obsolete]
             public override int AllocateShapeId(short drawingGroupId, EscherDgRecord dg)
             {
                 return 1025;

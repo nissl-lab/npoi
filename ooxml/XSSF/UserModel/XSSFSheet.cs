@@ -3395,14 +3395,6 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        [Obsolete("deprecated 3.14beta2 (circa 2015-12-05). Use {@link #setActiveCell(CellAddress)} instead.")]
-        public void SetActiveCell(string cellref)
-        {
-            CT_Selection ctsel = GetSheetTypeSelection();
-            ctsel.activeCell = cellref;
-            ctsel.SetSqref(new string[] { cellref });
-        }
-
         /// <summary>
         /// Enable sheet protection
         /// </summary>

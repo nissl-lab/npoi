@@ -542,7 +542,7 @@ namespace NPOI.HSSF.Model
                     return;
                 }
 
-                EscherDggRecord dgg = drawingManager.GetDgg();
+                EscherDggRecord dgg = drawingManager.Dgg;
 
                 //register a new drawing group for the cloned sheet
                 int dgId = drawingManager.FindNewDrawingGroupId();
@@ -573,7 +573,7 @@ namespace NPOI.HSSF.Model
                                 if (recordId == EscherSpRecord.RECORD_ID)
                                 {
                                     EscherSpRecord sp = (EscherSpRecord)shapeChildRecord;
-                                    int shapeId = drawingManager.AllocateShapeId((short)dgId, dg);
+                                    int shapeId = drawingManager.AllocateShapeId(dg);
                                     //allocateShapeId increments the number of shapes. roll back to the previous value
                                     dg.NumShapes = (dg.NumShapes - 1);
                                     sp.ShapeId = (shapeId);

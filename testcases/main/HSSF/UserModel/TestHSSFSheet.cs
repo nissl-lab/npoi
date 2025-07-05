@@ -961,19 +961,19 @@ namespace TestCases.HSSF.UserModel
 
             HSSFSheet sheet1 = (HSSFSheet)wb1.GetSheetAt(0);
 
-            wb1.Workbook.FindDrawingGroup();
-            DrawingManager2 dm1 = wb1.Workbook.DrawingManager;
+            DrawingManager2 dm1 = wb1.Workbook.FindDrawingGroup();
+            int maxDrawingGroupId1 = dm1.Dgg.MaxDrawingGroupId;
 
             wb1.CloneSheet(0);
+
+            //check EscherDggRecord - a workbook-level registry of drawing objects
+            ClassicAssert.AreEqual(maxDrawingGroupId1 + 1, dm1.Dgg.MaxDrawingGroupId);
 
             HSSFWorkbook wb2 = HSSFTestDataSamples.WriteOutAndReadBack(wb1);
             wb1.Close();
 
-            wb2.Workbook.FindDrawingGroup();
-            DrawingManager2 dm2 = wb2.Workbook.DrawingManager;
-
-            //Check EscherDggRecord - a workbook-level registry of drawing objects
-            ClassicAssert.AreEqual(dm1.GetDgg().MaxDrawingGroupId + 1, dm2.GetDgg().MaxDrawingGroupId);
+            DrawingManager2 dm2 = wb2.Workbook.FindDrawingGroup();
+            ClassicAssert.AreEqual(maxDrawingGroupId1 + 1, dm2.Dgg.MaxDrawingGroupId);
 
             HSSFSheet sheet2 = (HSSFSheet)wb2.GetSheetAt(1);
 

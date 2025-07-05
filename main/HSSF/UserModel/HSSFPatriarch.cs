@@ -444,8 +444,8 @@ namespace NPOI.HSSF.UserModel
             DrawingManager2 dm = ((HSSFWorkbook)_sheet.Workbook).Workbook.DrawingManager;
             EscherDgRecord dg =
                    (EscherDgRecord)_boundAggregate.GetEscherContainer().GetChildById(EscherDgRecord.RECORD_ID);
-            short drawingGroupId = dg.DrawingGroupId;
-            return dm.AllocateShapeId(drawingGroupId, dg);
+
+            return dm.AllocateShapeId(dg);
         }
         /// <summary>
         /// Does this HSSFPatriarch contain a chart?
