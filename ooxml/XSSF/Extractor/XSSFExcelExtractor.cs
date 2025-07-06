@@ -38,8 +38,8 @@ namespace NPOI.XSSF.Extractor
         private readonly XSSFWorkbook workbook;
         private readonly DataFormatter dataFormatter;
         private bool includeSheetNames = true;
-        private bool formulasNotResults = false;
-        private bool includeCellComments = false;
+        private bool formulasNotResults;
+        private bool includeCellComments;
         private bool includeHeadersFooters = true;
         private bool includeTextBoxes = true;
 
@@ -218,7 +218,7 @@ namespace NPOI.XSSF.Extractor
                     foreach (object rawR in sheet)
                     {
                         IRow row = (IRow)rawR;
-                        IEnumerator<ICell> ri = row.GetEnumerator();
+                        //IEnumerator<ICell> ri = row.GetEnumerator();
                         bool firsttime = true;
                         for (int j = 0; j < row.LastCellNum; j++)
                         {
@@ -241,7 +241,9 @@ namespace NPOI.XSSF.Extractor
                             {
                                 if (formulasNotResults)
                                 {
-                                    text.Append(cell.CellFormula);
+                                    String contents = cell.CellFormula;
+                                    CheckMaxTextSize(text, contents);
+                                    text.Append(contents);
                                 }
                                 else
                                 {
@@ -272,9 +274,9 @@ namespace NPOI.XSSF.Extractor
                                 // Replace any newlines with spaces, otherwise it
                                 //  breaks the output
                                 String commentText = comment.String.String.Replace('\n', ' ');
+                                CheckMaxTextSize(text, commentText);
                                 text.Append(" Comment by ").Append(comment.Author).Append(": ").Append(commentText);
                             }
-
                         }
                         text.Append("\n");
                     }
@@ -318,9 +320,11 @@ namespace NPOI.XSSF.Extractor
             }
         }
 
-        private static void HandleStringCell(StringBuilder text, ICell cell)
+        private void HandleStringCell(StringBuilder text, ICell cell)
         {
-            text.Append(cell.RichStringCellValue.String);
+            string contents = cell.RichStringCellValue.String;
+            CheckMaxTextSize(text, contents);
+            text.Append(contents);
         }
 
         private void HandleNonStringCell(StringBuilder text, ICell cell, DataFormatter formatter)
@@ -337,9 +341,12 @@ namespace NPOI.XSSF.Extractor
 
                 if (cs.GetDataFormatString() != null)
                 {
-                    text.Append(formatter.FormatRawCellContents(
+                    string contents1 = formatter.FormatRawCellContents(
                           cell.NumericCellValue, cs.DataFormat, cs.GetDataFormatString()
-                    ));
+                    );
+                    
+                    CheckMaxTextSize(text, contents1);
+                    text.Append(contents1);
                     return;
                 }
             }
@@ -354,7 +361,7 @@ namespace NPOI.XSSF.Extractor
                     // to match what XSSFEventBasedExcelExtractor does
                     contents = "ERROR:" + contents;
                 }
-
+                CheckMaxTextSize(text, contents);
                 text.Append(contents);
             }
         }
