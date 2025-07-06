@@ -307,6 +307,15 @@ namespace NPOI.SS.Formula
                 formulaType.GetAttributes().Get<SingleValueAttribute>().IsSingleValue);
             return EvaluateNameFormula(ptgs, ec);
         }
+        /// <summary>
+        /// Adjust formula relative references by the offset between the start of the given region and the given target cell.
+        /// </summary>
+        /// <param name="ptgs"></param>
+        /// <param name="target">cell within the region to use.</param>
+        /// <param name="region">containing the cell</param>
+        /// <returns>true if any Ptg references were shifted</returns>
+        /// <exception cref="IndexOutOfRangeException">if the resulting shifted row/column indexes are over the document format limits</exception>
+        /// <exception cref="ArgumentException">if target is not within region.</exception>
         protected bool AdjustRegionRelativeReference(Ptg[] ptgs, CellReference target, CellRangeAddressBase region)
         {
             if (!region.IsInRange(target))
@@ -314,10 +323,24 @@ namespace NPOI.SS.Formula
                 throw new ArgumentException(target + " is not within " + region);
             }
 
-            //return adjustRegionRelativeReference(ptgs, target.getRow() - region.getFirstRow(), target.getCol() - region.getFirstColumn());
-
-            int deltaRow = target.Row;
-            int deltaColumn = target.Col;
+            return AdjustRegionRelativeReference(ptgs, target.Row - region.FirstRow, target.Col - region.FirstColumn);
+        }
+    
+        /// <summary>
+        /// Adjust the formula relative cell references by a given delta
+        /// </summary>
+        /// <param name="ptgs"></param>
+        /// <param name="deltaRow">target row offset from the top left cell of a region</param>
+        /// <param name="deltaColumn">target column offset from the top left cell of a region</param>
+        /// <returns>true if any Ptg references were shifted</returns>
+        /// <exception cref="IndexOutOfRangeException">if the resulting shifted row/column indexes are over the document format limits</exception>
+        /// <exception cref="ArgumentException">if either of the deltas are negative, as the assumption is we are shifting formulas
+        /// relative to the top left cell of a region.
+        /// </exception>
+        protected bool AdjustRegionRelativeReference(Ptg[] ptgs, int deltaRow, int deltaColumn) 
+        {
+            if (deltaRow < 0) throw new ArgumentException("offset row must be positive");
+            if (deltaColumn < 0) throw new ArgumentException("offset column must be positive");
 
             bool shifted = false;
             foreach(Ptg ptg in ptgs)
