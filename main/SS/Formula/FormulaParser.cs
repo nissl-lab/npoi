@@ -863,7 +863,7 @@ using Cysharp.Text;
             // Done reading from input stream
             // Ok to return now
 
-            if (isTotalsSpec && !tbl.IsHasTotalsRow)
+            if (isTotalsSpec && tbl.TotalsRowCount == 0)
             {
                 return new ParseNode(ErrPtg.REF_INVALID);
             }
@@ -895,7 +895,7 @@ using Cysharp.Text;
                 }
                 else if (isDataSpec && isHeadersSpec)
                 {
-                    if (tbl.IsHasTotalsRow)
+                    if (tbl.TotalsRowCount > 0)
                     {
                         actualEndRow = endRow - 1;
                     }
@@ -907,7 +907,7 @@ using Cysharp.Text;
                 else if (nSpecQuantifiers == 1 && isDataSpec)
                 {
                     actualStartRow = startRow + 1;
-                    if (tbl.IsHasTotalsRow)
+                    if (tbl.TotalsRowCount > 0)
                     {
                         actualEndRow = endRow - 1;
                     }
@@ -933,13 +933,17 @@ using Cysharp.Text;
             else
             {
                 if (isThisRow)
-                { // there is a @
+                { 
+                    // there is a @
                     actualStartRow = _rowIndex; //The rowNum is 0 based
                     actualEndRow = _rowIndex;
                 }
                 else
-                { // Really no special quantifiers
+                { 
+                    // Really no special quantifiers
                     actualStartRow++;
+                    if (tbl.TotalsRowCount > 0)
+                        actualEndRow--;
                 }
             }
             //Selecting cols
