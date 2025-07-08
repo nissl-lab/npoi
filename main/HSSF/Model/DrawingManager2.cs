@@ -15,6 +15,7 @@
    limitations Under the License.
 ==================================================================== */
 
+using System;
 using System.Collections.Generic;
 
 using NPOI.DDF;
@@ -64,10 +65,17 @@ namespace NPOI.HSSF.Model
         /// </summary>
         /// <param name="drawingGroupId"></param>
         /// <returns>a new shape id.</returns>
+        [Obsolete("deprecated in POI 3.17-beta2, use AllocateShapeId(EscherDgRecord) ")]
         public virtual int AllocateShapeId(short drawingGroupId)
         {
-            EscherDgRecord dg = GetDrawingGroup(drawingGroupId);
-            return AllocateShapeId(drawingGroupId, dg);
+            foreach (EscherDgRecord dg in drawingGroups)
+            {
+                if (dg.DrawingGroupId == drawingGroupId) 
+                {
+                    return AllocateShapeId(dg);
+                }
+            }
+            throw new InvalidOperationException("Drawing group id "+drawingGroupId+" doesn't exist.");
         }
         /// <summary>
         /// Allocates new shape id for the new drawing group id.
@@ -75,74 +83,35 @@ namespace NPOI.HSSF.Model
         /// <param name="drawingGroupId"></param>
         /// <param name="dg"></param>
         /// <returns>a new shape id.</returns>
+        [Obsolete("deprecated in POI 3.17-beta2, use allocateShapeId(EscherDgRecord) ")]
         public virtual int AllocateShapeId(short drawingGroupId, EscherDgRecord dg)
         {
-            dgg.NumShapesSaved=(dgg.NumShapesSaved + 1);
-
-            // Add to existing cluster if space available
-            for (int i = 0; i < dgg.FileIdClusters.Length; i++)
-            {
-                EscherDggRecord.FileIdCluster c = dgg.FileIdClusters[i];
-                if (c.DrawingGroupId == drawingGroupId && c.NumShapeIdsUsed != 1024)
-                {
-                    int result = c.NumShapeIdsUsed + (1024 * (i + 1));
-                    c.IncrementShapeId();
-                    dg.NumShapes=(dg.NumShapes + 1);
-                    dg.LastMSOSPID=(result);
-                    if (result >= dgg.ShapeIdMax)
-                        dgg.ShapeIdMax=(result + 1);
-                    return result;
-                }
-            }
-
-            // Create new cluster
-            dgg.AddCluster(drawingGroupId, 0);
-            dgg.FileIdClusters[dgg.FileIdClusters.Length - 1].IncrementShapeId();
-            dg.NumShapes=(dg.NumShapes + 1);
-            int result2 = (1024 * dgg.FileIdClusters.Length);
-            dg.LastMSOSPID = (result2);
-            if (result2 >= dgg.ShapeIdMax)
-                dgg.ShapeIdMax = (result2 + 1);
-            return result2;
+            return AllocateShapeId(dg);
         }
 
+        /// <summary>
+        /// Allocates new shape id for the drawing group
+        /// </summary>
+        /// <param name="dg">the EscherDgRecord which receives the new shape</param>
+        /// <returns>a new shape id.</returns>
+        public int AllocateShapeId(EscherDgRecord dg) {
+            return dgg.AllocateShapeId(dg, true);
+        }
         /// <summary>
         /// Finds the next available (1 based) drawing Group id
         /// </summary>
         /// <returns></returns>
         public short FindNewDrawingGroupId()
         {
-            short dgId = 1;
-            while (DrawingGroupExists(dgId))
-                dgId++;
-            return dgId;
+            return dgg.FindNewDrawingGroupId();
         }
 
-        EscherDgRecord GetDrawingGroup(int drawingGroupId)
+        public EscherDggRecord Dgg
         {
-            return (EscherDgRecord)drawingGroups[drawingGroupId - 1];
-        }
-
-        bool DrawingGroupExists(short dgId)
-        {
-            for (int i = 0; i < dgg.FileIdClusters.Length; i++)
+            get
             {
-                if (dgg.FileIdClusters[i].DrawingGroupId == dgId)
-                    return true;
+                return dgg;
             }
-            return false;
-        }
-
-        int FindFreeSPIDBlock()
-        {
-            int max = dgg.ShapeIdMax;
-            int next = ((max / 1024) + 1) * 1024;
-            return next;
-        }
-
-        public EscherDggRecord GetDgg()
-        {
-            return dgg;
         }
         public void IncrementDrawingsSaved()
         {
