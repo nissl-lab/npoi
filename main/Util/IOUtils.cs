@@ -373,6 +373,10 @@ namespace NPOI.Util
             int count;
             while ((count = inp.Read(buff, 0, buff.Length)) >0)
             {
+                if (count < -1)
+                {
+                    throw new RecordFormatException("Can't have read < -1 bytes");
+                }
                 out1.Write(buff, 0, count);
             }
         }

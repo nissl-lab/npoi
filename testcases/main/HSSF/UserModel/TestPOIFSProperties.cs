@@ -20,11 +20,13 @@ namespace TestCases.HSSF.UserModel
     using System;
     using System.IO;
     using NPOI.HSSF.UserModel;
-    using NUnit.Framework;using NUnit.Framework.Legacy;
+    using NUnit.Framework;
+    using NUnit.Framework.Legacy;
 
     using TestCases.HSSF;
     using NPOI.HPSF;
     using NPOI.POIFS.FileSystem;
+    using NPOI.Util;
 
     /**
      * Old-style setting of POIFS properties doesn't work with POI 3.0.2
@@ -37,57 +39,88 @@ namespace TestCases.HSSF.UserModel
 
         private static String title = "Testing POIFS properties";
 
-        public void TestFail()  
+        [Test]
+        public void TestFail()
         {
-            Stream is1 = HSSFTestDataSamples.OpenSampleFileStream("Simple.xls");
-            POIFSFileSystem fs = new POIFSFileSystem(is1);
-
-            HSSFWorkbook wb = new HSSFWorkbook(fs);
-
-            //set POIFS properties after constructing HSSFWorkbook
-            //(a piece of code that used to work up to POI 3.0.2)
-            SummaryInformation summary1 = (SummaryInformation)PropertySetFactory.Create(fs.CreateDocumentInputStream(SummaryInformation.DEFAULT_STREAM_NAME));
-            summary1.Title=(title);
-            //Write the modified property back to POIFS
-            fs.Root.GetEntry(SummaryInformation.DEFAULT_STREAM_NAME).Delete();
-            fs.CreateDocument(summary1.ToInputStream(), SummaryInformation.DEFAULT_STREAM_NAME);
-
-            //save the workbook and read the property
             MemoryStream out1 = new MemoryStream();
-            wb.Write(out1);
-            out1.Close();
+            {
+                // read the workbook, adjust the SummaryInformation and write the data to a byte array
+                POIFSFileSystem fs = OpenFileSystem();
 
-            POIFSFileSystem fs2 = new POIFSFileSystem(new MemoryStream(out1.ToArray()));
-            SummaryInformation summary2 = (SummaryInformation)PropertySetFactory.Create(fs2.CreateDocumentInputStream(SummaryInformation.DEFAULT_STREAM_NAME));
+                HSSFWorkbook wb = new HSSFWorkbook(fs);
 
-            //Assert.Failing assertion
-            ClassicAssert.AreEqual(title, summary2.Title);
+                //set POIFS properties After constructing HSSFWorkbook
+                //(a piece of code that used to work up to POI 3.0.2)
+                SetTitle(fs);
+
+                //save the workbook and read the property
+                wb.Write(out1);
+                out1.Close();
+                wb.Close();
+            }
+
+            // process the byte array
+            CheckFromByteArray(out1.ToArray());
         }
 
         [Test]
         public void TestOK()
         {
+            MemoryStream out1 = new MemoryStream();
+            {
+                // read the workbook, adjust the SummaryInformation and write the data to a byte array
+                POIFSFileSystem fs = OpenFileSystem();
+
+                //set POIFS properties before constructing HSSFWorkbook
+                SetTitle(fs);
+
+                HSSFWorkbook wb = new HSSFWorkbook(fs);
+
+                wb.Write(out1);
+                out1.Close();
+                wb.Close();
+            }
+
+            // process the byte array
+            CheckFromByteArray(out1.ToArray());
+        }
+
+        private POIFSFileSystem OpenFileSystem()
+        {
             Stream is1 = HSSFTestDataSamples.OpenSampleFileStream("Simple.xls");
             POIFSFileSystem fs = new POIFSFileSystem(is1);
+            is1.Close();
+            return fs;
+        }
 
-            //set POIFS properties before constructing HSSFWorkbook
-            SummaryInformation summary1 = (SummaryInformation)PropertySetFactory.Create(fs.CreateDocumentInputStream(SummaryInformation.DEFAULT_STREAM_NAME));
-            summary1.Title = (title);
+        private void SetTitle(POIFSFileSystem fs)
+        {
+            SummaryInformation summary1 = (SummaryInformation) PropertySetFactory.Create(fs.CreateDocumentInputStream(SummaryInformation.DEFAULT_STREAM_NAME));
+            ClassicAssert.IsNotNull(summary1);
 
+            summary1.Title = title;
+            //write the modified property back to POIFS
             fs.Root.GetEntry(SummaryInformation.DEFAULT_STREAM_NAME).Delete();
             fs.CreateDocument(summary1.ToInputStream(), SummaryInformation.DEFAULT_STREAM_NAME);
 
-            HSSFWorkbook wb = new HSSFWorkbook(fs);
+            // check that the information was added successfully to the filesystem object
+            SummaryInformation summaryCheck = (SummaryInformation) PropertySetFactory.Create(fs.CreateDocumentInputStream(SummaryInformation.DEFAULT_STREAM_NAME));
+            ClassicAssert.IsNotNull(summaryCheck);
+        }
 
-            MemoryStream out1 = new MemoryStream();
-            wb.Write(out1);
-            out1.Close();
+        private void CheckFromByteArray(byte[] bytes)
+        {
+            // on some environments in CI we see strange Assert.Failures, let's verify that the size is exactly right
+            // this can be removed again After the problem is identified
+            // 5120
+            ClassicAssert.AreEqual(9216, bytes.Length, "Had: " + HexDump.ToHex(bytes));
 
-            //read the property
-            POIFSFileSystem fs2 = new POIFSFileSystem(new MemoryStream(out1.ToArray()));
-            SummaryInformation summary2 = (SummaryInformation)PropertySetFactory.Create(fs2.CreateDocumentInputStream(SummaryInformation.DEFAULT_STREAM_NAME));
+            POIFSFileSystem fs2 = new POIFSFileSystem(new MemoryStream(bytes));
+            SummaryInformation summary2 = (SummaryInformation) PropertySetFactory.Create(fs2.CreateDocumentInputStream(SummaryInformation.DEFAULT_STREAM_NAME));
+            ClassicAssert.IsNotNull(summary2);
+
             ClassicAssert.AreEqual(title, summary2.Title);
-
+            fs2.Close();
         }
     }
 }
