@@ -403,14 +403,14 @@ namespace NPOI.SS.Formula
             {
                 for (int idx = 0; idx < tokens.GetLength(1); idx++)
                 {
-                    values[index++] = convertObjectEval(tokens[jdx,idx]);
+                    values[index++] = ConvertObjectEval(tokens[jdx,idx]);
                 }
             }
 
             return new CacheAreaEval(firstRowIndex, firstColumnIndex, lastRowIndex,
                                      lastColumnIndex, values);
         }
-        private static ValueEval convertObjectEval(Object token)
+        private static ValueEval ConvertObjectEval(Object token)
         {
             if (token == null)
             {

@@ -731,7 +731,7 @@ namespace NPOI.SS.Formula
             {
                 throw new InvalidOperationException("evaluation stack not empty");
             }
-            // "unwrap" result to just the value relevant for the source cell if needed
+
             ValueEval result;
             if (ec.IsSingleValue)
             {
