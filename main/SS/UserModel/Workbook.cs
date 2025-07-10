@@ -158,21 +158,6 @@ namespace NPOI.SS.UserModel
         /// <summary>
         /// Finds a font that matches the one with the supplied attributes
         /// </summary>
-        /// <param name="boldWeight"></param>
-        /// <param name="color"></param>
-        /// <param name="fontHeight"></param>
-        /// <param name="name"></param>
-        /// <param name="italic"></param>
-        /// <param name="strikeout"></param>
-        /// <param name="typeOffset"></param>
-        /// <param name="underline"></param>
-        /// <returns>the font with the matched attributes or null</returns>
-        [Obsolete("deprecated 3.15 beta 2. Use {@link #findFont(boolean, short, short, String, boolean, boolean, short, byte)} instead.")]
-        IFont FindFont(short boldWeight, short color, short fontHeight, String name, bool italic, bool strikeout, FontSuperScript typeOffset, FontUnderlineType underline);
-
-        /// <summary>
-        /// Finds a font that matches the one with the supplied attributes
-        /// </summary>
         /// <param name="bold"></param>
         /// <param name="color"></param>
         /// <param name="fontHeight"></param>

@@ -58,8 +58,9 @@ namespace NPOI.SS.Formula.PTG
         private static BitField colRelative = BitFieldFactory.GetInstance(0x4000);
         private static BitField columnMask = BitFieldFactory.GetInstance(0x3FFF);
 
+        [Obsolete]
         protected AreaPtgBase(String arearef)
-            : this(new AreaReference(arearef)) 
+            : this(new AreaReference(arearef, SpreadsheetVersion.EXCEL97))
         {
             //AreaReference ar = new AreaReference(arearef);
             //CellReference firstCell = ar.FirstCell;
@@ -306,7 +307,7 @@ namespace NPOI.SS.Formula.PTG
 
             if (AreaReference.IsWholeColumnReference(SpreadsheetVersion.EXCEL97, topLeft, botRight))
             {
-                return (new AreaReference(topLeft, botRight)).FormatAsString();
+                return (new AreaReference(topLeft, botRight, SpreadsheetVersion.EXCEL97)).FormatAsString();
             }
             return topLeft.FormatAsString() + ":" + botRight.FormatAsString();
         }

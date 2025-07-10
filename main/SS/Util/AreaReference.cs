@@ -38,12 +38,6 @@ namespace NPOI.SS.Util
         private readonly bool _isSingleCell;
         private readonly SpreadsheetVersion _version; // never null
 
-        [Obsolete("deprecated since NPOI 2.5.1 Prefer supplying a spreadsheet version.")]
-        public AreaReference(String reference)
-            : this(reference, DEFAULT_SPREADSHEET_VERSION)
-        {
-            
-        }
         /**
          * Create an area ref from a string representation.  Sheet names containing special Chars should be
          * delimited and escaped as per normal syntax rules for formulas.<br/> 
@@ -299,12 +293,13 @@ namespace NPOI.SS.Util
         {
             return IsWholeColumnReference(_version, _firstCell, _lastCell);
         }
-
-        /**
-         * Takes a non-contiguous area reference, and
-         *  returns an array of contiguous area references.
-         */
-        public static AreaReference[] GenerateContiguous(String reference)
+        /// <summary>
+        /// Takes a non-contiguous area reference, and returns an array of contiguous area references
+        /// </summary>
+        /// <param name="version"></param>
+        /// <param name="reference"></param>
+        /// <returns></returns>
+        public static AreaReference[] GenerateContiguous(SpreadsheetVersion version, String reference)
         {
             ArrayList refs = new ArrayList();
             String st = reference;
@@ -312,7 +307,7 @@ namespace NPOI.SS.Util
             foreach (string t in token)
             {
                 refs.Add(
-                        new AreaReference(t)
+                        new AreaReference(t, version)
                 );
             }
             return (AreaReference[])refs.ToArray(typeof(AreaReference));

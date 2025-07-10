@@ -2492,18 +2492,6 @@ namespace NPOI.HSSF.UserModel
         /// <summary>
         /// Returns cell comment for the specified row and column
         /// </summary>
-        /// <param name="row">The row.</param>
-        /// <param name="column">The column.</param>
-        /// <returns>cell comment or null if not found</returns>
-        [Obsolete("deprecated as of 2015-11-23 (circa POI 3.14beta1). Use {@link #getCellComment(CellAddress)} instead.")]
-        public IComment GetCellComment(int row, int column)
-        {
-            return FindCellComment(row, column);
-        }
-
-        /// <summary>
-        /// Returns cell comment for the specified row and column
-        /// </summary>
         /// <param name="ref1">cell location</param>
         /// <returns>return cell comment or null if not found</returns>
         public IComment GetCellComment(CellAddress ref1)

@@ -32,6 +32,10 @@ namespace NPOI.OpenXml4Net.OPC
             XmlWriterSettings settings = new XmlWriterSettings();
             settings.Encoding = Encoding.UTF8;
             settings.OmitXmlDeclaration = false;
+            // don't indent xml documents, the indent will cause errors in calculating the xml signature
+            // because of different handling of linebreaks in Windows/Unix
+            // see https://stackoverflow.com/questions/36063375
+            settings.Indent = false;
             XmlWriter writer = XmlTextWriter.Create(outStream,settings);
             //XmlWriter writer = new XmlTextWriter(outStream,Encoding.UTF8);
             xmlContent.WriteContentTo(writer);

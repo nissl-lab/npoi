@@ -213,7 +213,7 @@ namespace TestCases.HSSF.UserModel
             IName name1 = wb.GetNameAt(0);
             ClassicAssert.AreEqual("a", name1.NameName);
             ClassicAssert.AreEqual("Sheet1!$A$1", name1.RefersToFormula);
-            new AreaReference(name1.RefersToFormula);
+            wb.GetCreationHelper().CreateAreaReference(name1.RefersToFormula);
             ClassicAssert.IsTrue(true, "Successfully constructed first reference");
 
             IName name2 = wb.GetNameAt(1);
@@ -222,7 +222,7 @@ namespace TestCases.HSSF.UserModel
             ClassicAssert.IsTrue(name2.IsDeleted);
             try
             {
-                new AreaReference(name2.RefersToFormula);
+                wb.GetCreationHelper().CreateAreaReference(name2.RefersToFormula);
                 Assert.Fail("attempt to supply an invalid reference to AreaReference constructor results in exception");
             }
             catch (ArgumentException)

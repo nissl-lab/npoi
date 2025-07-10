@@ -84,7 +84,10 @@ namespace TestCases.SS.Formula
 
                 // update Table
                 XSSFTable table = wb.GetTable("\\_Prime.1");
-                AreaReference newArea = new AreaReference(table.StartCellReference, new CellReference(table.EndRowIndex + 1, table.EndColIndex));
+                AreaReference newArea = wb.GetCreationHelper().CreateAreaReference(
+                    table.StartCellReference,
+                    new CellReference(table.EndRowIndex + 1, table.EndColIndex));
+
                 String newAreaStr = newArea.FormatAsString();
                 table.GetCTTable().@ref = (/*setter*/newAreaStr);
                 table.GetCTTable().autoFilter.@ref = (/*setter*/newAreaStr);

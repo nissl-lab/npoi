@@ -451,15 +451,6 @@ namespace NPOI.SS.UserModel
         /// <value>The drawing patriarch.</value>
         IDrawing DrawingPatriarch { get; }
 
-        /// <summary>
-        /// Sets the zoom magnication for the sheet.  The zoom is expressed as a
-        /// fraction.  For example to express a zoom of 75% use 3 for the numerator
-        /// and 4 for the denominator.
-        /// </summary>
-        /// <param name="numerator">The numerator for the zoom magnification.</param>
-        /// <param name="denominator">denominator for the zoom magnification.</param>
-        [Obsolete("deprecated 2015-11-23 (circa POI 3.14beta1). Use {@link #setZoom(int)} instead.")]
-        void SetZoom(int numerator, int denominator);
         /**
          * Window zoom magnification for current view representing percent values.
          * Valid values range from 10 to 400. Horizontal & Vertical scale together.
@@ -756,13 +747,6 @@ namespace NPOI.SS.UserModel
         /// </remarks>
         void AutoSizeRow(int row, bool useMergedCells);
 
-        /// <summary>
-        /// Returns cell comment for the specified row and column
-        /// </summary>
-        /// <param name="row">The row.</param>
-        /// <param name="column">The column.</param>
-        [Obsolete("deprecated as of 2015-11-23 (circa POI 3.14beta1). Use {@link #getCellComment(CellAddress)} instead.")]
-        IComment GetCellComment(int row, int column);
         /// <summary>
         /// Returns cell comment for the specified location
         /// </summary>

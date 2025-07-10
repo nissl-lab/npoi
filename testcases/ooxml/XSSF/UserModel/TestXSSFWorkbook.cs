@@ -829,7 +829,7 @@ namespace TestCases.XSSF.UserModel
             ICell cell9 = row3.CreateCell(2);
             cell9.SetCellValue("Bepa");
 
-            AreaReference source = new AreaReference("A1:B2", SpreadsheetVersion.EXCEL2007);
+            AreaReference source = wb.GetCreationHelper().CreateAreaReference("A1:B2");
             sheet.CreatePivotTable(source, new CellReference("H5"));
         }
 

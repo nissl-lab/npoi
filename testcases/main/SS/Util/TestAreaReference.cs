@@ -50,13 +50,5 @@ namespace TestCases.SS.Util
             ClassicAssert.AreEqual(SpreadsheetVersion.EXCEL2007.LastColumnIndex, newStyle.LastCell.Col);
             ClassicAssert.AreEqual(1, newStyle.LastCell.Row);
         }
-
-        [Test]
-        [Obsolete]
-        public void TestFallbackToExcel97IfVersionNotSupplied()
-        {
-            ClassicAssert.IsTrue(new AreaReference("A:B").IsWholeColumnReference());
-            ClassicAssert.IsTrue(AreaReference.IsWholeColumnReference(null, new CellReference("A$1"), new CellReference("A$" + SpreadsheetVersion.EXCEL97.MaxRows)));
-        }
     }
 }
