@@ -110,7 +110,6 @@ namespace TestCases.XSSF.Extractor
             ClassicAssert.IsTrue(text.Length > 0);
 
             // Might not have all formatting it should do!
-            // TODO decide if we should really have the "null" in there
             ClassicAssert.IsTrue(text.StartsWith(
                             "Avgtxfull\n" +
                             "\t\t(iii) AVERAGE TAX RATES ON ANNUAL"
