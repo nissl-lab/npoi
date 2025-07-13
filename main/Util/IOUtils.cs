@@ -95,15 +95,19 @@ namespace NPOI.Util
         public static byte[] PeekFirstNBytes(Stream stream, int limit)
         {
             long mark =  stream.Position;
-
+            if(stream is InputStream is1)
+            {
+                is1.Mark(limit);
+            }
             ByteArrayOutputStream bos = new ByteArrayOutputStream(limit);
             if(stream is ByteArrayInputStream inputStream)
                 Copy(new BoundedInputStream(inputStream, limit), bos);
             else
             {
-                MemoryStream ms = new MemoryStream();
-                stream.CopyTo(ms, limit);
-                Copy(new BoundedInputStream(new ByteArrayInputStream(ms.GetBuffer()), limit), bos);
+                //MemoryStream ms = new MemoryStream();
+                byte[] buffer = new byte[limit];
+                stream.Read(buffer, 0, limit);
+                Copy(new BoundedInputStream(new ByteArrayInputStream(buffer), limit), bos);
             }
 
             int readBytes = (int)bos.Length;
@@ -122,10 +126,13 @@ namespace NPOI.Util
                 //pin.unread(peekedBytes, 0, readBytes);
                 stream.Position -= peekedBytes.Length;
             }
+            else if(stream is InputStream is2)
+            {
+                is2.Reset();
+            }
             else
             {
                 stream.Position = mark;
-                (stream as InputStream)?.Reset();
             }
 
             return peekedBytes;

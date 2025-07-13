@@ -357,35 +357,22 @@ namespace NPOI.POIFS.FileSystem
          *  sure to always use that, and not the original!
          * @param inp An InputStream which supports either mark/reset, or is a PushbackInputStream
          */
+        [Obsolete("deprecated in 3.17-beta2, use {@link FileMagic#valueOf(InputStream)} == {@link FileMagic#OLE2} instead")]
+        [Removal(Version="4.0")]
         public static bool HasPOIFSHeader(Stream inp)
         {
-            // We want to peek at the first 8 bytes
-            //inp.Mark(8);
-
-            byte[] header = new byte[8];
-            int bytesRead = IOUtils.ReadFully(inp, header);
-            LongField signature = new LongField(HeaderBlockConstants._signature_offset, header);
-
-            // Wind back those 8 bytes
-            if (inp is PushbackInputStream pin) {
-                pin.Unread(header, 0, bytesRead);
-            } else {
-                inp.Position = 0;
-            }
-            
-
-            // Did it match the signature?
-            return (signature.Value == HeaderBlockConstants._signature);
+            return FileMagicContainer.ValueOf(inp) == FileMagic.OLE2;
         }
 
         /**
          * Checks if the supplied first 8 bytes of a stream / file
          *  has a POIFS (OLE2) header.
          */
+        [Obsolete("deprecated in 3.17-beta2, use {@link FileMagic#valueOf(InputStream)} == {@link FileMagic#OLE2} instead")]
+        [Removal(Version="4.0")]
         public static bool HasPOIFSHeader(byte[] header8Bytes)
         {
-            LongField signature = new LongField(HeaderBlockConstants._signature_offset, header8Bytes);
-            return (signature.Value == HeaderBlockConstants._signature);
+            return FileMagicContainer.ValueOf(header8Bytes) == FileMagic.OLE2;
         }
 
 

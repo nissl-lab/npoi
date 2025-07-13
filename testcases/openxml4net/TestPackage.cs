@@ -15,20 +15,22 @@
    limitations under the License.
 ==================================================================== */
 
-using NPOI.OpenXml4Net.OPC;
-using NPOI.OpenXml4Net.OPC.Internal;
-using System.IO;
-using System.Collections.Generic;
-using System;
-using NPOI.Util;
-using System.Reflection;
-using System.Text.RegularExpressions;
-using NUnit.Framework;using NUnit.Framework.Legacy;
-using System.Xml;
-using System.Text;
-using NPOI.SS.UserModel;
 using NPOI;
 using NPOI.Openxml4Net.Exceptions;
+using NPOI.OpenXml4Net.OPC;
+using NPOI.OpenXml4Net.OPC.Internal;
+using NPOI.SS.UserModel;
+using NPOI.Util;
+using NUnit.Framework;
+using NUnit.Framework.Legacy;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Xml;
 
 namespace TestCases.OpenXml4Net.OPC
 {
@@ -1061,23 +1063,37 @@ namespace TestCases.OpenXml4Net.OPC
         [Test]
         public void TestCorruptFile()
         {
-            OPCPackage pkg = null;
-            FileInfo file = OpenXml4NetTestDataSamples.GetSampleFile("invalid.xlsx");
-            try
-            {
-                pkg = OPCPackage.Open(file, PackageAccess.READ);
-            }
-            catch (Exception)
-            {
-                //System.out.println(e.GetClass().getName());
-                //System.out.println(e.GetMessage());
-                //e.printStackTrace();
-            }
-            finally
-            {
-                if (pkg != null)
-                {
-                    pkg.Close();
+            ClassicAssert.Throws<NotOfficeXmlFileException>(()=>{
+                FileInfo file = OpenXml4NetTestDataSamples.GetSampleFile("invalid.xlsx");
+                OPCPackage.Open(file, PackageAccess.READ);
+            });
+        }
+
+        [Test]
+        [Ignore("")]
+        public void TestTooShortFilterStreams()
+        {
+            Stream xssf;
+            Stream hssf = POIDataSamples.GetSpreadSheetInstance().GetFile("SampleSS.xls");
+        
+            InputStream[] isList = {
+                //new PushbackInputStream(new FileInputStream(xssf), 2),
+                //new BufferedInputStream(new FileInputStream(xssf), 2),
+                new PushbackInputStream(new FileInputStream(hssf), 2),
+                new BufferedInputStream(new FileInputStream(hssf), 2),
+            };
+        
+            try {
+                xssf = OpenXml4NetTestDataSamples.OpenSampleStream("sample.xlsx");
+                WorkbookFactory.Create(new PushbackInputStream(new FileInputStream(xssf), 2));
+                xssf = OpenXml4NetTestDataSamples.OpenSampleStream("sample.xlsx");
+                WorkbookFactory.Create(new BufferedInputStream(new FileInputStream(xssf), 2));
+                foreach (Stream is1 in isList) {
+                    WorkbookFactory.Create(is1);
+                }
+            } finally {
+                foreach (Stream is1 in isList) {
+                    IOUtils.CloseQuietly(is1);
                 }
             }
         }

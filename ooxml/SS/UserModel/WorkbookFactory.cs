@@ -121,26 +121,25 @@ namespace NPOI.SS.UserModel
         /// <returns>IWorkbook depending on the input HSSFWorkbook or XSSFWorkbook is returned.</returns>
         /// <remarks>Your input stream MUST either support mark/reset, or
         ///  be wrapped as a {@link PushbackInputStream}!</remarks>
-        public static IWorkbook Create(Stream inputStream, bool readOnly)
+        public static IWorkbook Create(Stream inputStream, string password)
         {
             if (inputStream.Length == 0)
                 throw new EmptyFileException();
-            inputStream = new PushbackStream(inputStream);
-            if (POIFSFileSystem.HasPOIFSHeader(inputStream))
+            FileMagic fm = FileMagicContainer.ValueOf(inputStream);
+            switch (fm)
             {
-                return new HSSFWorkbook(inputStream);
+                case FileMagic.OLE2:
+                    NPOIFSFileSystem fs = new NPOIFSFileSystem(inputStream);
+                    return Create(fs, password);
+                case FileMagic.OOXML:
+                    return new XSSFWorkbook(OPCPackage.Open(inputStream));
+                default:
+                    throw new InvalidFormatException("Your InputStream was neither an OLE2 stream, nor an OOXML stream");
             }
-            inputStream.Position = 0;
-            if (DocumentFactoryHelper.HasOOXMLHeader(inputStream))
-            {
-                return new XSSFWorkbook(OPCPackage.Open(inputStream, readOnly));
-            }
-            throw new InvalidFormatException("Your stream was neither an OLE2 stream, nor an OOXML stream.");
         }
-
         public static IWorkbook Create(Stream inputStream)
         {
-            return Create(inputStream, false);
+            return Create(inputStream, null);
         }
 
         public static IWorkbook Create(string file, string password, bool readOnly)
@@ -264,7 +263,7 @@ namespace NPOI.SS.UserModel
         public static IWorkbook Create(Stream inputStream, ImportOption importOption)
         {
             SetImportOption(importOption);
-            IWorkbook workbook = Create(inputStream, true);
+            IWorkbook workbook = Create(inputStream);
             return workbook;
         }
 
