@@ -157,9 +157,9 @@ namespace TestCases.XSSF.UserModel
             }
 
             // Name that looks similar to a cell reference but is outside the cell reference row and column limits
-            name.NameName = ("A0");
-            name.NameName = ("F04030020010");
-            name.NameName = ("XFDXFD10");
+            name.NameName = "A0";
+            name.NameName = "F04030020010";
+            name.NameName = "XFDXFD10";
         }
     }
 }
