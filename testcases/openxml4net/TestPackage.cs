@@ -1070,31 +1070,37 @@ namespace TestCases.OpenXml4Net.OPC
         }
 
         [Test]
-        [Ignore("")]
         public void TestTooShortFilterStreams()
         {
             Stream xssf;
-            Stream hssf = POIDataSamples.GetSpreadSheetInstance().GetFile("SampleSS.xls");
+            Stream hssf;
         
-            InputStream[] isList = {
-                //new PushbackInputStream(new FileInputStream(xssf), 2),
-                //new BufferedInputStream(new FileInputStream(xssf), 2),
-                new PushbackInputStream(new FileInputStream(hssf), 2),
-                new BufferedInputStream(new FileInputStream(hssf), 2),
-            };
+            //InputStream[] isList = {
+            //    new PushbackInputStream(new FileInputStream(xssf), 2),
+            //    new BufferedInputStream(new FileInputStream(xssf), 2),
+            //    new PushbackInputStream(new FileInputStream(hssf), 2),
+            //    new BufferedInputStream(new FileInputStream(hssf), 2),
+            //};
         
             try {
                 xssf = OpenXml4NetTestDataSamples.OpenSampleStream("sample.xlsx");
                 WorkbookFactory.Create(new PushbackInputStream(new FileInputStream(xssf), 2));
                 xssf = OpenXml4NetTestDataSamples.OpenSampleStream("sample.xlsx");
                 WorkbookFactory.Create(new BufferedInputStream(new FileInputStream(xssf), 2));
-                foreach (Stream is1 in isList) {
-                    WorkbookFactory.Create(is1);
-                }
+
+                hssf = POIDataSamples.GetSpreadSheetInstance().GetFile("SampleSS.xls");
+                WorkbookFactory.Create(new PushbackInputStream(new FileInputStream(hssf), 2));
+                hssf = POIDataSamples.GetSpreadSheetInstance().GetFile("SampleSS.xls");
+                WorkbookFactory.Create(new BufferedInputStream(new FileInputStream(hssf), 2));
+                //foreach(InputStream is1 in isList)
+                //{
+                //    WorkbookFactory.Create(is1);
+                //}
             } finally {
-                foreach (Stream is1 in isList) {
-                    IOUtils.CloseQuietly(is1);
-                }
+                //foreach(InputStream is1 in isList)
+                //{
+                //    IOUtils.CloseQuietly(is1);
+                //}
             }
         }
     }

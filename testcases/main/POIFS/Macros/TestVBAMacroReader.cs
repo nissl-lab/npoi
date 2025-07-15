@@ -84,7 +84,6 @@ namespace TestCases.POIFS.Macros
 
         //////////////////////////////// From Stream /////////////////////////////
         [Test]
-        [Ignore("Fix VBAMacroReader")]
         public void HSSFfromStream()
         {
             FromStream(POIDataSamples.GetSpreadSheetInstance(), "SimpleMacro.xls");
@@ -111,7 +110,6 @@ namespace TestCases.POIFS.Macros
         }
 
         [Test]
-        [Ignore("Fix VBAMacroReader")]
         public void HWPFfromStream()
         {
             FromStream(POIDataSamples.GetDocumentInstance(), "SimpleMacro.doc");

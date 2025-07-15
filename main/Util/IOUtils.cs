@@ -68,28 +68,29 @@ namespace NPOI.Util
         /// </summary>
         public static byte[] PeekFirst8Bytes(InputStream stream)
         {
+            return PeekFirstNBytes(stream, 8);
             // We want to peek at the first 8 bytes
-            stream.Mark(8);
+            //stream.Mark(8);
 
-            byte[] header = new byte[8];
-            int read = IOUtils.ReadFully(stream, header);
+            //byte[] header = new byte[8];
+            //int read = IOUtils.ReadFully(stream, header);
 
-            if(read < 1)
-                throw new EmptyFileException();
+            //if(read < 1)
+            //    throw new EmptyFileException();
 
-            // Wind back those 8 bytes
-            if(stream is PushbackInputStream)
-            {
-                //PushbackInputStream pin = (PushbackInputStream)stream;
-                //pin.Unread(header, 0, read);
-                stream.Position -= read;
-            }
-            else
-            {
-                stream.Reset();
-            }
+            //// Wind back those 8 bytes
+            //if(stream is PushbackInputStream)
+            //{
+            //    //PushbackInputStream pin = (PushbackInputStream)stream;
+            //    //pin.Unread(header, 0, read);
+            //    stream.Position -= read;
+            //}
+            //else
+            //{
+            //    stream.Reset();
+            //}
 
-            return header;
+            //return header;
         }
 
         public static byte[] PeekFirstNBytes(Stream stream, int limit)
