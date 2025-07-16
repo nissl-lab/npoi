@@ -276,6 +276,62 @@ namespace NPOI.XWPF.UserModel
                     .AddNewTblPr();
         }
 
+        /// <summary>
+        /// Returns CTTblPr object for table. Creates it if it does not exist.
+        /// </summary>
+        private CT_TblPr GetTblPr() {
+            return GetTblPr(true);
+        }
+
+        /// <summary>
+        /// Returns CTTblPr object for table. If force parameter is true, will
+        /// create the element if necessary. If force parameter is false, returns
+        /// null when CTTblPr element is missing.
+        /// </summary>
+        /// <param name="force">- force creation of CTTblPr element if necessary</param>
+        private CT_TblPr GetTblPr(bool force)
+        {
+            return (ctTbl.tblPr != null) ? ctTbl.tblPr 
+                    : (force ? ctTbl.AddNewTblPr() : null);
+        }
+
+        /// <summary>
+        /// Get or set the current table alignment or NULL
+        /// </summary>
+        /// <returns>Table Alignment as a <see cref="TableRowAlign"/> enum</returns>
+        public TableRowAlign? TableAlignment
+        {
+            get
+            {
+                CT_TblPr tPr = GetTblPr(false);
+                return tPr == null ? null
+                        : tPr.IsSetJc() ? TableRowAlignExtension.ValueOf((int)tPr.jc.val)
+                        : null;
+            }
+            set
+            {
+                if(value.HasValue) 
+                {
+                    CT_TblPr tPr = GetTblPr(true);
+                    CT_Jc jc = tPr.IsSetJc() ? tPr.jc : tPr.AddNewJc();
+                    jc.val = (ST_Jc)value.Value.GetValue();
+                }
+                else
+                {
+                    RemoveTableAlignment();
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Removes the table alignment attribute from a table
+        /// </summary>
+        public void RemoveTableAlignment() {
+            CT_TblPr tPr = GetTblPr(false);
+            if (tPr != null && tPr.IsSetJc()) {
+                tPr.UnsetJc();
+            }
+        }
         private static void AddColumn(XWPFTableRow tabRow, int sizeCol)
         {
             if (sizeCol > 0)
