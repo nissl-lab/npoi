@@ -17,12 +17,16 @@
 
 namespace NPOI.HSSF.UserModel
 {
-    using System;
+    using NPOI.SS.Formula;
     using NPOI.SS.Formula.Eval;
-
-    using System.Collections;
-    using System.Reflection;
+    using NPOI.SS.Formula.Function;
+    using NPOI.SS.Formula.Functions;
     using NPOI.SS.Formula.PTG;
+    using NPOI.Util;
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Reflection;
 
 
     /**
@@ -33,96 +37,77 @@ namespace NPOI.HSSF.UserModel
      */
     class OperationEvaluatorFactory
     {
-        private static readonly Type[] OPERATION_CONSTRUCTOR_CLASS_ARRAY = new Type[] { typeof(Ptg) };
-
-        private static readonly Hashtable _constructorsByPtgClass = InitialiseConstructorsMap();
-
+        private static Dictionary<OperationPtg, Function> _instancesByPtgClass = InitialiseConstructorsMap();
         private OperationEvaluatorFactory()
         {
             // no instances of this class
         }
 
-        private static Hashtable InitialiseConstructorsMap()
+        private static Dictionary<OperationPtg, Function> InitialiseConstructorsMap()
         {
-            Hashtable m = new Hashtable(32);
-            Add(m, typeof(AddPtg), typeof(AddEval));
-            Add(m, typeof(DividePtg), typeof(DivideEval));
-            Add(m, typeof(EqualPtg), typeof(EqualEval));
-            Add(m, typeof(MultiplyPtg), typeof(MultiplyEval));
-            Add(m, typeof(ConcatPtg), typeof(ConcatEval));
+            Dictionary<OperationPtg, Function> m = new Dictionary<OperationPtg, Function>(32);
 
-            Add(m, typeof(GreaterEqualPtg), typeof(GreaterEqualEval));
-            Add(m, typeof(GreaterThanPtg), typeof(GreaterThanEval));
-            Add(m, typeof(LessEqualPtg), typeof(LessEqualEval));
-            Add(m, typeof(LessThanPtg), typeof(LessThanEval));
-            Add(m, typeof(NotEqualPtg), typeof(NotEqualEval));
-            Add(m, typeof(PercentPtg), typeof(PercentEval));
-            Add(m, typeof(PowerPtg), typeof(PowerEval));
-            Add(m, typeof(SubtractPtg), typeof(SubtractEval));
-            Add(m, typeof(UnaryMinusPtg), typeof(UnaryMinusEval));
-            Add(m, typeof(UnaryPlusPtg), typeof(UnaryPlusEval));
+            m.Add(AddPtg.instance, TwoOperandNumericOperation.AddEval); // 0x03
+            m.Add(SubtractPtg.instance, TwoOperandNumericOperation.SubtractEval); // 0x04
+            m.Add(MultiplyPtg.instance, TwoOperandNumericOperation.MultiplyEval); // 0x05
+            m.Add(DividePtg.instance, TwoOperandNumericOperation.DivideEval); // 0x06
+            m.Add(PowerPtg.instance, TwoOperandNumericOperation.PowerEval); // 0x07
+            m.Add(ConcatPtg.instance, ConcatEval.instance); // 0x08
+            m.Add(LessThanPtg.instance, RelationalOperationEval.LessThanEval); // 0x09
+            m.Add(LessEqualPtg.instance, RelationalOperationEval.LessEqualEval); // 0x0a
+            m.Add(EqualPtg.instance, RelationalOperationEval.EqualEval); // 0x0b
+            m.Add(GreaterEqualPtg.instance, RelationalOperationEval.GreaterEqualEval); // 0x0c
+            m.Add(GreaterThanPtg.instance, RelationalOperationEval.GreaterThanEval); // 0x0D
+            m.Add(NotEqualPtg.instance, RelationalOperationEval.NotEqualEval); // 0x0e
+            m.Add(IntersectionPtg.instance, IntersectionEval.instance); // 0x0f
+            m.Add(RangePtg.instance, RangeEval.instance); // 0x11
+            m.Add(UnaryPlusPtg.instance, UnaryPlusEval.instance); // 0x12
+            m.Add(UnaryMinusPtg.instance, UnaryMinusEval.instance); // 0x13
+            m.Add(PercentPtg.instance, PercentEval.instance); // 0x14
+
             return m;
         }
 
-        private static void Add(Hashtable m, Type ptgClass, Type evalClass)
+
+        /// <summary>
+        /// returns the OperationEval concrete impl instance corresponding
+        /// to the supplied operationPtg
+        /// </summary>
+        public static ValueEval evaluate(OperationPtg ptg, ValueEval[] args,
+                OperationEvaluationContext ec)
         {
-
-            // perform some validation now, to keep later exception handlers simple
-            if (!typeof(Ptg).IsAssignableFrom(ptgClass))
-            {
-                throw new ArgumentException("Expected Ptg subclass");
-            }
-            if (!typeof(OperationEval).IsAssignableFrom(evalClass))
-            {
-                throw new ArgumentException("Expected OperationEval subclass");
-            }
-            if (!evalClass.IsPublic)
-            {
-                throw new Exception("Eval class must be public");
-            }
-            if (evalClass.IsAbstract)
-            {
-                throw new Exception("Eval class must not be abstract");
-            }
-
-            ConstructorInfo constructor;
-            constructor = evalClass.GetConstructor(OPERATION_CONSTRUCTOR_CLASS_ARRAY);
-            if (!constructor.IsPublic)
-            {
-                throw new Exception("Eval constructor must be public");
-            }
-            m[ptgClass] = constructor;
-        }
-
-        /**
-         * returns the OperationEval concrete impl instance corresponding
-         * to the supplied operationPtg
-         */
-        public static OperationEval Create(OperationPtg ptg)
-        {
-            if (ptg == null)
+            if(ptg == null)
             {
                 throw new ArgumentException("ptg must not be null");
             }
+            Function result = _instancesByPtgClass[ptg];
 
-            Type ptgClass = ptg.GetType();
-
-            ConstructorInfo constructor = (ConstructorInfo)_constructorsByPtgClass[ptgClass];
-            if (constructor == null)
+            if(result != null)
             {
-                if (ptgClass == typeof(ExpPtg))
-                {
-                    // ExpPtg Is used for array formulas and shared formulas.
-                    // it Is currently Unsupported, and may not even Get implemented here
-                    throw new Exception("ExpPtg currently not supported");
-                }
-                throw new Exception("Unexpected operation ptg class (" + ptgClass.Name + ")");
+                IEvaluationSheet evalSheet = ec.GetWorkbook().GetSheet(ec.SheetIndex);
+                IEvaluationCell evalCell = evalSheet.GetCell(ec.RowIndex, ec.ColumnIndex);
+
+                if(evalCell.IsPartOfArrayFormulaGroup && result is IArrayFunction)
+                    return ((IArrayFunction) result).EvaluateArray(args, ec.RowIndex, ec.ColumnIndex);
+
+                return result.Evaluate(args, ec.RowIndex, (short) ec.ColumnIndex);
             }
 
-            Object result;
-            Object[] initargs = { ptg };
-            result = constructor.Invoke(initargs);
-            return (OperationEval)result;
+            if(ptg is AbstractFunctionPtg)
+            {
+                AbstractFunctionPtg fptg = (AbstractFunctionPtg)ptg;
+                int functionIndex = fptg.FunctionIndex;
+                switch(functionIndex)
+                {
+                    case FunctionMetadataRegistry.FUNCTION_INDEX_INDIRECT:
+                        return Indirect.instance.Evaluate(args, ec);
+                    case FunctionMetadataRegistry.FUNCTION_INDEX_EXTERNAL:
+                        return UserDefinedFunction.instance.Evaluate(args, ec);
+                }
+
+                return FunctionEval.GetBasicFunction(functionIndex).Evaluate(args, ec.RowIndex, (short) ec.ColumnIndex);
+            }
+            throw new RuntimeException("Unexpected operation ptg class (" + ptg.GetType().Name + ")");
         }
     }
 }

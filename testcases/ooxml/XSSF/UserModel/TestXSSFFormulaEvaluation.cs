@@ -757,6 +757,18 @@ namespace TestCases.XSSF.UserModel
         }
 
         [Test]
+        public void TestBug61468()
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("simple-monthly-budget.xlsx");
+            IFormulaEvaluator evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
+            ICell cell = wb.GetSheetAt(0).GetRow(8).GetCell(4);
+            ClassicAssert.AreEqual(3750, cell.NumericCellValue, 0.001);
+
+            CellValue value = evaluator.Evaluate(cell);
+            ClassicAssert.AreEqual(3750, value.NumberValue, 0.001);
+        }
+
+        [Test]
         public void TestNPOIIssue_1057()
         {
             BaseTestNPOIIssue_1057("xparams.xlsx", "xinstall.xlsx");

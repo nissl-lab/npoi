@@ -148,7 +148,7 @@ namespace TestCases.XSSF.UserModel
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("StructuredReferences.xlsx");
             XSSFTable table = wb.GetTable("\\_Prime.1");
-            ClassicAssert.IsFalse(table.IsHasTotalsRow);
+            ClassicAssert.IsFalse(table.TotalsRowCount > 0);
             wb.Close();
         }
         [Test]
