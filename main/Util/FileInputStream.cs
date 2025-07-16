@@ -38,6 +38,11 @@ namespace NPOI.Util
             set { inner.Position = value;}
         }
 
+        public override int Available()
+        {
+            return (int)(inner.Length - inner.Position);
+        }
+
         public override void Flush()
         {
             throw new NotImplementedException();
@@ -51,6 +56,11 @@ namespace NPOI.Util
         public override int Read(byte[] b, int off, int len)
         {
             return inner.Read(b, off, len);
+        }
+
+        public override void Reset()
+        {
+            base.Reset();
         }
 
         public override long Seek(long offset, SeekOrigin origin)

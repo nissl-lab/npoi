@@ -125,7 +125,7 @@ namespace TestCases.POIFS.FileSystem
             InputStream testInput = new ByteArrayInputStream(testData);
 
             // detect header
-            InputStream in1 = new PushbackInputStream(testInput, 10);
+            InputStream in1 = FileMagicContainer.PrepareToCheckMagic(testInput);
             ClassicAssert.IsFalse(POIFSFileSystem.HasPOIFSHeader(in1));
 
             // check if InputStream is still intact
@@ -143,7 +143,7 @@ namespace TestCases.POIFS.FileSystem
             InputStream testInput = new ByteArrayInputStream(testData);
 
             // detect header
-            InputStream in1 = new PushbackInputStream(testInput, 10);
+            InputStream in1 = FileMagicContainer.PrepareToCheckMagic(testInput);
             ClassicAssert.IsFalse(OPOIFSFileSystem.HasPOIFSHeader(in1));
             // check if InputStream is still intact
             byte[] test = new byte[3];

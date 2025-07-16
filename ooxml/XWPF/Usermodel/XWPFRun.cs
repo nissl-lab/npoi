@@ -16,18 +16,19 @@
 ==================================================================== */
 namespace NPOI.XWPF.UserModel
 {
-    using System;
-    using NPOI.OpenXmlFormats.Wordprocessing;
-    using System.Collections.Generic;
-    using System.Text; 
 using Cysharp.Text;
-    using System.Xml;
-    using System.IO;
-    using NPOI.Util;
     using NPOI.OpenXmlFormats.Dml;
-    using System.Xml.Serialization;
     using NPOI.OpenXmlFormats.Dml.WordProcessing;
+    using NPOI.OpenXmlFormats.Wordprocessing;
+    using NPOI.Util;
     using NPOI.WP.UserModel;
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Text; 
+    using System.Xml;
+    using System.Xml.Linq;
+    using System.Xml.Serialization;
 
     /**
      * @see <a href="http://msdn.microsoft.com/en-us/library/ff533743(v=office.12).aspx">[MS-OI29500] Run Fonts</a> 
@@ -473,84 +474,214 @@ using Cysharp.Text;
             get
             {
                 StringBuilder text = new StringBuilder();
-                for (int i = 0; i < run.Items.Count; i++)
-                {
-                    object o = run.Items[i];
-                    if (o is CT_Text ctText)
-                    {
-                        if (!(run.ItemsElementName[i] == RunItemsChoiceType.instrText))
-                        {
-                            text.Append(ctText.Value);
-                        }
-                    }
-                    // Complex type evaluation (currently only for extraction of check boxes)
-                    if (o is CT_FldChar ctfldChar)
-                    {
-                        if (ctfldChar.fldCharType == ST_FldCharType.begin)
-                        {
-                            if (ctfldChar.ffData != null)
-                            {
-                                foreach (CT_FFCheckBox checkBox in ctfldChar.ffData.GetCheckBoxList())
-                                {
-                                    if (checkBox.@default != null && checkBox.@default.val == true)
-                                    {
-                                        text.Append("|X|");
-                                    }
-                                    else
-                                    {
-                                        text.Append("|_|");
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    if (o is CT_PTab)
-                    {
-                        text.Append("\t");
-                    }
-                    if (o is CT_Br)
-                    {
-                        text.Append("\n");
-                    }
-                    if (o is CT_Empty)
-                    {
-                        // Some inline text elements Get returned not as
-                        //  themselves, but as CTEmpty, owing to some odd
-                        //  defInitions around line 5642 of the XSDs
-                        // This bit works around it, and replicates the above
-                        //  rules for that case
-                        if (run.ItemsElementName[i] == RunItemsChoiceType.tab)
-                        {
-                            text.Append("\t");
-                        }
-                        if (run.ItemsElementName[i] == RunItemsChoiceType.br)
-                        {
-                            text.Append("\n");
-                        }
-                        if (run.ItemsElementName[i] == RunItemsChoiceType.cr)
-                        {
-                            text.Append("\n");
-                        }
-                    }
-
-                    if (o is CT_FtnEdnRef ftn)
-                    {
-                        String footnoteRef = ftn.DomNode.LocalName.Equals("footnoteReference") ?
-                            "[footnoteRef:" + ftn.id + "]" : "[endnoteRef:" + ftn.id + "]";
-                        text.Append(footnoteRef);
-                    }
-                }
-
-                // Any picture text?
-                if (pictureText != null && pictureText.Length > 0)
-                {
-                    text.Append("\n").Append(pictureText);
-                }
-
+                HandleRun(run, text);
                 return text.ToString();
             }
         }
 
+        /// <summary>
+        /// Returns the string version of the text and the phonetic string
+        /// </summary>
+        public override string ToString()
+        {
+            string phonetic = GetPhonetic();
+            StringBuilder text = new StringBuilder();
+            if (phonetic.Length > 0)
+            {
+                return HandleRun(run, text) +" ("+phonetic+")";
+            }
+            else
+            {
+                return HandleRun(run, text);
+            }
+        }
+        public string GetText()
+        {
+            StringBuilder text = new StringBuilder();
+            return HandleRun(run, text);
+        }
+        /// <summary>
+        /// Returns the string version of the text, with tabs and
+        /// carriage returns in place of their xml equivalents.
+        /// </summary>
+        private string HandleRun(CT_R run, StringBuilder text)
+        {
+            // Grab the text and tabs of the text run
+            // Do so in a way that preserves the ordering
+
+            for (int i = 0; i < run.Items.Count; i++)
+             {
+                object o = run.Items[i];
+                if (o is CT_Ruby)
+                {
+                    HandleRuby(o as CT_Ruby, text, false, run.ItemsElementName[i]);
+                    continue;
+                }
+                _getText(o, text, run.ItemsElementName[i]);
+            }
+
+            return text.ToString();
+
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>the phonetic (ruby) string associated with this run or an empty string if none exists</returns>
+        public string GetPhonetic()
+        {
+            StringBuilder text = new StringBuilder();
+
+            // Grab the text and tabs of the text run
+            // Do so in a way that preserves the ordering
+            for (int i = 0; i < run.Items.Count; i++)
+            {
+                object o = run.Items[i];
+                if (o is CT_Ruby)
+                {
+                    HandleRuby(o as CT_Ruby, text, true, run.ItemsElementName[i]);
+                }
+            }
+            // Any picture text?
+            if (pictureText != null && pictureText.Length > 0)
+            {
+                text.Append("\n").Append(pictureText).Append("\n");
+            }
+
+            return text.ToString();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="rubyObj">rubyobject</param>
+        /// <param name="text">buffer to which to append the content</param>
+        /// <param name="extractPhonetic">extract the phonetic (rt) component or the base component</param>
+        private void HandleRuby(CT_Ruby rubyObj, StringBuilder text,
+            bool extractPhonetic, RunItemsChoiceType itemType)
+        {
+            //according to the spec, a ruby object
+            //has the phonetic (rt) first, then the actual text (base)
+            //second.
+            if(extractPhonetic && rubyObj.rt!=null)
+            {
+                handleRubyContent(rubyObj.rt, text);
+            }
+            if(!extractPhonetic && rubyObj.rubyBase!=null)
+            {
+                handleRubyContent(rubyObj.rubyBase, text);
+            }
+        }
+
+        private void handleRubyContent(CT_RubyContent rbc, StringBuilder text)
+        {
+            for(int i= 0 ; i<rbc.Items.Count;i++)
+            {
+                if(rbc.ItemsElementName[i] == ItemsChoiceType16.r)
+                {
+                    HandleRun(rbc.Items[i] as CT_R, text);
+                }
+                else if(rbc.ItemsElementName[i] == ItemsChoiceType16.oMath)
+                {
+                    HandleOMath((OpenXmlFormats.Shared.CT_OMath)rbc.Items[i], text);
+                    
+                }
+                else if(rbc.ItemsElementName[i] == ItemsChoiceType16.oMathPara)
+                {
+                    OpenXmlFormats.Shared.CT_OMathPara oMathPara = (OpenXmlFormats.Shared.CT_OMathPara)rbc.Items[i];
+                    for(int j = 0;j<oMathPara.oMath.Count;j++)
+                    {
+                        HandleOMath(oMathPara.oMath[j], text);
+                    }
+                }
+                else if(rbc.Items[i] is CT_RunTrackChange rtc)
+                {
+                    for(int j= 0 ; j<rbc.Items.Count;j++)
+                    {
+                        if(rbc.ItemsElementName[j] == ItemsChoiceType16.r)
+                        {
+                            HandleRun(rbc.Items[j] as CT_R, text);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void HandleOMath(OpenXmlFormats.Shared.CT_OMath oMath, StringBuilder text)
+        {
+            for(var j= 0; j < oMath.Items.Count;j++)
+            {
+                if(oMath.ItemsElementName[j] == OpenXmlFormats.Shared.ItemsChoiceType8.r)
+                {
+                    HandleRun(oMath.Items[j] as CT_R, text);
+                }
+            }
+        }
+
+        private static void _getText(object o, StringBuilder text, RunItemsChoiceType itemType)
+        {
+            if (o is CT_Text ctText) {
+                // Field Codes (w:instrText, defined in spec sec. 17.16.23)
+                //  come up as instances of CTText, but we don't want them
+                //  in the normal text output
+                if (!(itemType == RunItemsChoiceType.instrText))
+                {
+                    text.Append(ctText.Value);
+                }
+            }
+
+            // Complex type evaluation (currently only for extraction of check boxes)
+            if (o is CT_FldChar ctfldChar)
+            {
+                if (ctfldChar.fldCharType == ST_FldCharType.begin)
+                {
+                    if (ctfldChar.ffData != null)
+                    {
+                        foreach (CT_FFCheckBox checkBox in ctfldChar.ffData.GetCheckBoxList())
+                        {
+                            if (checkBox.@default != null && checkBox.@default.val == true)
+                            {
+                                text.Append("|X|");
+                            } else {
+                                text.Append("|_|");
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (o is CT_PTab)
+            {
+                text.Append("\t");
+            }
+            if (o is CT_Br) 
+            {
+                text.Append("\n");
+            }
+            if (o is CT_Empty) {
+                // Some inline text elements Get returned not as
+                //  themselves, but as CTEmpty, owing to some odd
+                //  definitions around line 5642 of the XSDs
+                // This bit works around it, and replicates the above
+                //  rules for that case
+                if (itemType == RunItemsChoiceType.tab)
+                {
+                    text.Append("\t");
+                }
+                if (itemType == RunItemsChoiceType.br)
+                {
+                    text.Append("\n");
+                }
+                if (itemType == RunItemsChoiceType.cr)
+                {
+                    text.Append("\n");
+                }
+            }
+            if (o is CT_FtnEdnRef ftn)
+            {
+                string footnoteRef = ftn.DomNode.LocalName.Equals("footnoteReference") ?
+                        "[footnoteRef:" + ftn.id + "]" : "[endnoteRef:" + ftn.id + "]";
+                text.Append(footnoteRef);
+            }
+        }
         /**
          * Specifies that the contents of this run.shall be displayed with a single
          * horizontal line through the center of the line.
@@ -1308,14 +1439,14 @@ using Cysharp.Text;
             }
             return pr;
         }
-        /**
-         * Returns the string version of the text, with tabs and
-         *  carriage returns in place of their xml equivalents.
-         */
-        public override String ToString()
-        {
-            return Text;
-        }
+        ///**
+        // * Returns the string version of the text, with tabs and
+        // *  carriage returns in place of their xml equivalents.
+        // */
+        //public override String ToString()
+        //{
+        //    return Text;
+        //}
     }
 
 }

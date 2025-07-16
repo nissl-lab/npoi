@@ -357,7 +357,7 @@ namespace TestCases.SS
             InputStream emptyStream = new ByteArrayInputStream(new byte[0]);
             try
             {
-                WorkbookFactory.Create(emptyStream,true);
+                WorkbookFactory.Create(emptyStream);
                 Assert.Fail("Shouldn't be able to create for an empty stream");
             }
             catch (EmptyFileException )

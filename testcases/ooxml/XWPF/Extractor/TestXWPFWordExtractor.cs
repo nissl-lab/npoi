@@ -436,5 +436,18 @@ namespace TestCases.XWPF.Extractor
                     extractor.Text);
             extractor.Close();
         }
+
+        [Test]
+        public void TestPhonetic()
+        {
+            XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("61470.docx");
+            XWPFWordExtractor extractor = new XWPFWordExtractor(doc);
+            //expect: baseText (phoneticText)
+            ClassicAssert.AreEqual("\u6771\u4EAC (\u3068\u3046\u304D\u3087\u3046)", extractor.Text.Trim());
+            extractor.Close();
+            extractor = new XWPFWordExtractor(doc);
+            extractor.SetConcatenatePhoneticRuns(false);
+            ClassicAssert.AreEqual("\u6771\u4EAC", extractor.Text.Trim());
+        }
     }
 }

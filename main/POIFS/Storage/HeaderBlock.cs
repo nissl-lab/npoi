@@ -44,39 +44,6 @@ namespace NPOI.POIFS.Storage
     /// </summary>
     public class HeaderBlock : HeaderBlockConstants
     {
-        private static byte[] MAGIC_BIFF2 = {
-        0x09, 0x00, // sid=0x0009
-        0x04, 0x00, // size=0x0004
-        0x00, 0x00, // unused
-        0x70, 0x00  // 0x70 = multiple values
-    };
-
-        private static byte[] MAGIC_BIFF3 = {
-        0x09, 0x02, // sid=0x0209
-        0x06, 0x00, // size=0x0006
-        0x00, 0x00, // unused
-        0x70, 0x00  // 0x70 = multiple values
-    };
-
-        private static byte[] MAGIC_BIFF4a = {
-        0x09, 0x04, // sid=0x0409
-        0x06, 0x00, // size=0x0006
-        0x00, 0x00, // unused
-        0x70, 0x00  // 0x70 = multiple values
-    };
-
-        private static byte[] MAGIC_BIFF4b = {
-        0x09, 0x04, // sid=0x0409
-        0x06, 0x00, // size=0x0006
-        0x00, 0x00, // unused
-        0x00, 0x01
-    };
-        private static byte[] MAGIC_MSWRITEa = {
-        0x31, (byte)0xbe, 0x00, 0x00
-    };
-        private static byte[] MAGIC_MSWRITEb = {
-            0x32, (byte)0xbe, 0x00, 0x00
-    };
         private static byte _default_value = (byte)0xFF;
          /**
          * What big block Size the file uses. Most files
@@ -134,57 +101,35 @@ namespace NPOI.POIFS.Storage
         {
             _data = data;
 
-            long signature = LittleEndian.GetLong(_data, _signature_offset);
-
-            if (signature != _signature)
-            {
-                if (cmp(POIFSConstants.OOXML_FILE_HEADER, data))
-                {
-                    throw new OfficeXmlFileException("The supplied data appears to be in the Office 2007+ XML. "
-                        + "You are calling the part of POI that deals with OLE2 Office Documents. "
-                        + "You need to call a different part of POI to process this data (eg XSSF instead of HSSF)");
-                }
-
-                if (cmp(POIFSConstants.RAW_XML_FILE_HEADER, data))
-                {
-                    throw new NotOLE2FileException("The supplied data appears to be a raw XML file. "
-                        + "Formats such as Office 2003 XML are not supported");
-                }
-
-                // Old MS Write raw stream
-                if (cmp(MAGIC_MSWRITEa, data) || cmp(MAGIC_MSWRITEb, data)) {
-                    throw new NotOLE2FileException("The supplied data appears to be in the old MS Write format. "
-                        + "NPOI doesn't currently support this format");
-                }
-
-                // BIFF2 raw stream
-                if (cmp(MAGIC_BIFF2, data))
-                {
-                    throw new OldExcelFormatException("The supplied data appears to be in BIFF2 format. "
-                        + "HSSF only supports the BIFF8 format, try OldExcelExtractor");
-                }
-
-                // BIFF3 raw stream
-                if (cmp(MAGIC_BIFF3, data))
-                {
-                    throw new OldExcelFormatException("The supplied data appears to be in BIFF3 format. "
-                        + "HSSF only supports the BIFF8 format, try OldExcelExtractor");
-                }
-
-                // BIFF4 raw stream
-                if (cmp(MAGIC_BIFF4a, data) || cmp(MAGIC_BIFF4b, data))
-                {
-                    throw new OldExcelFormatException("The supplied data appears to be in BIFF4 format. "
-                        + "HSSF only supports the BIFF8 format, try OldExcelExtractor");
-                }
-
-
-                // Give a generic error if the OLE2 signature isn't found
-                throw new NotOLE2FileException("Invalid header signature; read "
-                                    + new String(HexDump.LongToHex(signature)) + ", expected "
-                                    + new String(HexDump.LongToHex(_signature)) + " - Your file appears "
-                                    + "not to be a valid OLE2 document");
-            }
+            // verify signature
+	        FileMagic fm = FileMagicContainer.ValueOf(data);
+	   
+	        switch (fm) {
+	            case FileMagic.OLE2:
+	               break;
+	            case FileMagic.OOXML:
+                   throw new OfficeXmlFileException("The supplied data appears to be in the Office 2007+ XML. "
+                       + "You are calling the part of POI that deals with OLE2 Office Documents. "
+                       + "You need to call a different part of POI to process this data (eg XSSF instead of HSSF)");
+	            case FileMagic.XML:
+                   throw new NotOLE2FileException("The supplied data appears to be a raw XML file. "
+                       + "Formats such as Office 2003 XML are not supported");
+	            case FileMagic.MSWRITE:
+                   throw new NotOLE2FileException("The supplied data appears to be in the old MS Write format. "
+                       + "Apache POI doesn't currently support this format");
+                case FileMagic.BIFF2:
+                case FileMagic.BIFF3:
+                case FileMagic.BIFF4:
+                   throw new OldExcelFormatException("The supplied data appears to be in "+fm+" format. "
+                       + "HSSF only supports the BIFF8 format, try OldExcelExtractor");
+	            default:
+                   // Give a generic error if the OLE2 signature isn't found
+	               String exp = new String(HexDump.LongToHex(_signature));
+	               String act = new String(HexDump.LongToHex(LittleEndian.GetLong(data, 0)));
+                   throw new NotOLE2FileException(
+                       "Invalid header signature; read " + act + ", expected " + exp +
+                       " - Your file appears not to be a valid OLE2 document");
+	        }
 
             if (_data[30] == 12)
             {
