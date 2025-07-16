@@ -134,7 +134,7 @@ namespace NPOI.Util
          * @param src source properties
          * @param tgt target properties
          */
-        private static void CopyProperties(PackageProperties src, PackageProperties tgt)
+        private static void CopyProperties(IPackageProperties src, IPackageProperties tgt)
         {
             tgt.SetCategoryProperty(src.GetCategoryProperty());
             tgt.SetContentStatusProperty(src.GetContentStatusProperty());

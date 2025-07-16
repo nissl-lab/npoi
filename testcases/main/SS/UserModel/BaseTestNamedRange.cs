@@ -496,10 +496,10 @@ namespace TestCases.SS.UserModel
             ClassicAssert.IsNotNull(aNamedCell);
 
             // retrieve the cell at the named range and Test its contents
-            RangeAddress aref = new RangeAddress(aNamedCell.RefersToFormula);
-            ClassicAssert.IsTrue(aref.Height == 1 && aref.Width == 1, "Should be exactly 1 cell in the named cell :'" + cellName + "'");
+            AreaReference aref = wb.GetCreationHelper().CreateAreaReference(aNamedCell.RefersToFormula);
+            ClassicAssert.IsTrue(aref.IsSingleCell, "Should be exactly 1 cell in the named cell :'" + cellName + "'");
 
-            CellReference cref = new CellReference($"\'{aref.SheetName}\'!{aref.ToCell}");
+            CellReference cref = aref.FirstCell;
             ClassicAssert.IsNotNull(cref);
             ISheet s = wb.GetSheet(cref.SheetName);
             ClassicAssert.IsNotNull(s);
@@ -566,7 +566,7 @@ namespace TestCases.SS.UserModel
             IWorkbook wb = _testDataProvider.CreateWorkbook();
             IName n = wb.CreateName();
             n.NameName = ("UPSState");
-            String formula;
+            String formula = null;
             try
             {
                 formula = n.RefersToFormula;
@@ -577,7 +577,6 @@ namespace TestCases.SS.UserModel
                 {
                     throw new AssertionException("Identified bug 46973");
                 }
-                throw e;
             }
             ClassicAssert.IsNull(formula);
             ClassicAssert.IsFalse(n.IsDeleted); // according to exact defInition of isDeleted()

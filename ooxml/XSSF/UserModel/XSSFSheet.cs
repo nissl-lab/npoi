@@ -1145,6 +1145,27 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
+        /// <summary>
+        /// Remove table references and relations
+        /// </summary>
+        /// <param name="t">table to remove</param>
+        public void RemoveTable(XSSFTable t)
+        {
+            long id = t.GetCTTable().id;
+            KeyValuePair<String, XSSFTable>? toDelete = null;
+        
+            foreach (KeyValuePair<String, XSSFTable> entry in tables) {
+                if (entry.Value.GetCTTable().id == id) 
+                    toDelete = entry;
+            }
+            if (toDelete != null)
+            {
+                RemoveRelation(GetRelationById(toDelete.Value.Key), true);
+                tables.Remove(toDelete.Value.Key);
+                toDelete.Value.Value.OnTableDelete();
+            }
+        }
+
         public ISheetConditionalFormatting SheetConditionalFormatting
         {
             get
@@ -2111,19 +2132,6 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Returns cell comment for the specified row and column
-        /// </summary>
-        /// <param name="row">The row.</param>
-        /// <param name="column">The column.</param>
-        /// <returns>cell comment or <code>null</code> if not found</returns>
-        [Obsolete(
-            "deprecated as of 2015-11-23 (circa POI 3.14beta1). Use {@link #getCellComment(CellAddress)} instead.")]
-        public IComment GetCellComment(int row, int column)
-        {
-            return GetCellComment(new CellAddress(row, column));
-        }
-
-        /// <summary>
         /// Returns cell comment for the specified location
         /// </summary>
         /// <param name="address">cell location</param>
@@ -2933,22 +2941,6 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Sets the zoom magnification for the sheet.  The zoom is expressed
-        /// as a fraction.  For example to express a zoom of 75% use 3 for the
-        /// numerator and 4 for the denominator.
-        /// </summary>
-        /// <param name="numerator">The numerator for the zoom
-        /// magnification.</param>
-        /// <param name="denominator">The denominator for the zoom
-        /// magnification.</param>
-        [Obsolete("deprecated 2015-11-23 (circa POI 3.14beta1). Use {@link #setZoom(int)} instead.")]
-        public void SetZoom(int numerator, int denominator)
-        {
-            int zoom = 100 * numerator / denominator;
-            SetZoom(zoom);
-        }
-
-        /// <summary>
         /// Window zoom magnification for current view representing percent
         /// values. Valid values range from 10 to 400. Horizontal &amp;
         /// Vertical scale toGether. For example:
@@ -3374,14 +3366,6 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        [Obsolete("deprecated 3.14beta2 (circa 2015-12-05). Use {@link #setActiveCell(CellAddress)} instead.")]
-        public void SetActiveCell(string cellref)
-        {
-            CT_Selection ctsel = GetSheetTypeSelection();
-            ctsel.activeCell = cellref;
-            ctsel.SetSqref(new string[] { cellref });
-        }
-
         /// <summary>
         /// Enable sheet protection
         /// </summary>
@@ -3758,19 +3742,6 @@ namespace NPOI.XSSF.UserModel
                 tables.Values
             );
             return tableList;
-        }
-
-        /// <summary>
-        /// Set background color of the sheet tab
-        /// </summary>
-        /// <param name="colorIndex">the indexed color to set, must be a
-        /// constant from <see cref="IndexedColors"/></param>
-        [Obsolete("deprecated 3.15-beta2. Removed in 3.17. Use {@link #setTabColor(XSSFColor)}.")]
-        public void SetTabColor(int colorIndex)
-        {
-            IndexedColors indexedColor = IndexedColors.FromInt(colorIndex);
-            XSSFColor color = new XSSFColor(indexedColor, (Workbook as XSSFWorkbook).GetStylesSource().IndexedColors);
-            TabColor = color;
         }
 
         #region ISheet Members
@@ -4973,8 +4944,6 @@ namespace NPOI.XSSF.UserModel
             return outlineLevel;
         }
 
-        //YK: GetXYZArray() array accessors are deprecated in xmlbeans with JDK 1.5 support
-        [Obsolete]
         private short GetMaxOutlineLevelCols()
         {
             CT_Cols ctCols = worksheet.GetColsArray(0);
@@ -6551,6 +6520,20 @@ lblforbreak:
         public CellRangeAddressList GetCells(string cellranges)
         {
             return CellRangeAddressList.Parse(cellranges);
+        }
+
+        /// <summary>
+        /// called when a sheet is being deleted/removed from a workbook, to clean up relations and other document pieces tied to the sheet
+        /// </summary>
+        internal void OnSheetDelete() {
+            foreach (RelationPart part in RelationParts) {
+                if (part.DocumentPart is XSSFTable) {
+                    // call table delete
+                    RemoveTable((XSSFTable) part.DocumentPart);
+                    continue;
+                }
+                RemoveRelation(part.DocumentPart, true);
+            }
         }
     }
 }

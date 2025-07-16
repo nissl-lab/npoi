@@ -69,18 +69,19 @@ namespace TestCases.OOXML
         public void TestFileCorruption()
         {
             // create test InputStream
-            byte[] testData = { (byte)1, (byte)2, (byte)3 };
+            byte[] testData = { 1, 2, 3 };
             ByteArrayInputStream testInput = new ByteArrayInputStream(testData);
-
+            InputStream is1 = FileMagicContainer.PrepareToCheckMagic(testInput);
+        
             // detect header
-            InputStream in1 = new PushbackInputStream(testInput, 10);
-            ClassicAssert.IsFalse(DocumentFactoryHelper.HasOOXMLHeader(in1));
-
+            ClassicAssert.IsFalse(DocumentFactoryHelper.HasOOXMLHeader(is1));
+        
             // check if InputStream is still intact
-            byte[] test = new byte[3];
-            ClassicAssert.AreEqual(3, in1.Read(test));
-            ClassicAssert.IsTrue(Arrays.Equals(testData, test));
-            ClassicAssert.AreEqual(-1, in1.Read());
+            byte[] act = IOUtils.ToByteArray(is1);
+            ClassicAssert.IsTrue(Arrays.Equals(testData, act));
+            //assertArrayEquals(testData, act);
+            ClassicAssert.AreEqual(-1, is1.Read());
+            is1.Close();
         }
     }
 }

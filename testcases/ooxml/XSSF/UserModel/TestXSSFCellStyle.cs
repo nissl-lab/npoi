@@ -630,7 +630,7 @@ namespace TestCases.XSSF.UserModel
             wb2.Close();
         }
 
-        [Ignore("test")]
+        [Test]
         public void TestGetFillForegroundColor()
         {
 

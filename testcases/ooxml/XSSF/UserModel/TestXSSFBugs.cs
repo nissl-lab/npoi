@@ -1235,7 +1235,7 @@ namespace TestCases.XSSF.UserModel
          * Default Column style
          */
         [Test]
-        public void Test51037()
+        public void Bug51037()
         {
             XSSFWorkbook wb = new XSSFWorkbook();
             XSSFSheet s = wb.CreateSheet() as XSSFSheet;
@@ -1297,7 +1297,7 @@ namespace TestCases.XSSF.UserModel
 
 
             // Save, re-load and re-check 
-            wb = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
+            wb = XSSFTestDataSamples.WriteOutAndReadBack(wb);
             s = wb.GetSheetAt(0) as XSSFSheet;
             defaultStyle = wb.GetCellStyleAt(defaultStyle.Index);
             blueStyle = wb.GetCellStyleAt(blueStyle.Index);
@@ -1476,7 +1476,7 @@ namespace TestCases.XSSF.UserModel
          * Sheet names with a , in them
          */
         [Test]
-        public void Test51963()
+        public void Bug51963()
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("51963.xlsx");
             ISheet sheet = wb.GetSheetAt(0);
@@ -1485,7 +1485,7 @@ namespace TestCases.XSSF.UserModel
             XSSFName name = wb.GetName("Intekon.ProdCodes") as XSSFName;
             ClassicAssert.AreEqual("'Abc,1'!$A$1:$A$2", name.RefersToFormula);
 
-            AreaReference ref1 = new AreaReference(name.RefersToFormula, NPOI.SS.SpreadsheetVersion.EXCEL2007);
+            AreaReference ref1 = wb.GetCreationHelper().CreateAreaReference(name.RefersToFormula);
             ClassicAssert.AreEqual(0, ref1.FirstCell.Row);
             ClassicAssert.AreEqual(0, ref1.FirstCell.Col);
             ClassicAssert.AreEqual(1, ref1.LastCell.Row);
@@ -1616,6 +1616,48 @@ namespace TestCases.XSSF.UserModel
          * (You need to supply a password explicitly for them)
          */
         [Test]
+        public void Bug55692_poifs()
+        {
+            // Via a POIFSFileSystem
+            ClassicAssert.Throws<EncryptedDocumentException>(()=>{
+                POIFSFileSystem fsP = new POIFSFileSystem(
+                        POIDataSamples.GetPOIFSInstance().OpenResourceAsStream("protect.xlsx"));
+                try
+                {
+                    WorkbookFactory.Create(fsP);
+                }
+                finally
+                {
+                    fsP.Close();
+                }
+            });
+        }
+        [Test]
+        public void Bug55692_stream()
+        {
+            // Directly on a Stream, will go via NPOIFS and spot it's
+            //  actually a .xlsx file encrypted with the default password, and open
+            IWorkbook wb = WorkbookFactory.Create(
+                    POIDataSamples.GetPOIFSInstance().OpenResourceAsStream("protect.xlsx"));
+            ClassicAssert.IsNotNull(wb);
+            ClassicAssert.AreEqual(3, wb.NumberOfSheets);
+            wb.Close();
+        }
+        [Test]
+        public void bug55692_npoifs() 
+        {
+            ClassicAssert.Throws<EncryptedDocumentException>(()=>{
+                // Via a NPOIFSFileSystem, will spot it's actually a .xlsx file
+                //  encrypted with the default password, and open
+                NPOIFSFileSystem fsNP = new NPOIFSFileSystem(
+                        POIDataSamples.GetPOIFSInstance().OpenResourceAsStream("protect.xlsx"));
+                IWorkbook wb = WorkbookFactory.Create(fsNP);
+                ClassicAssert.IsNotNull(wb);
+                ClassicAssert.AreEqual(3, wb.NumberOfSheets);
+                wb.Close();
+                fsNP.Close();
+            });
+        }
         public void Test55692()
         {
             Stream inpA = POIDataSamples.GetPOIFSInstance().OpenResourceAsStream("protect.xlsx");

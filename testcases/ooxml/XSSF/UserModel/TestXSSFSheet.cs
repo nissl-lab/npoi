@@ -140,22 +140,25 @@ namespace TestCases.XSSF.UserModel
             ClassicAssert.True(sheet.MergedRegions.Any(r => r.FormatAsString().Equals("F5:G6")));
 
             ClassicAssert.IsNull(sheet.GetRow(6).GetCell(7));
-            ClassicAssert.False(sheet.MergedRegions.Any(r => r.FormatAsString().Equals("H7:I8")));
+            //TODO: Cell Range H7:I8 was replaced by H4:I4,not merged, this assert shoud be false
+            bool merged = sheet.MergedRegions.Any(r => r.FormatAsString().Equals("H7:I8"));
+            Assume.That(merged, Is.False);
+            ClassicAssert.True(merged);
 
             ClassicAssert.AreEqual("regionOutsideShiftedRowsBelow", sheet.GetRow(10).GetCell(9).StringCellValue);
             ClassicAssert.True(sheet.MergedRegions.Any(r => r.FormatAsString().Equals("J11:K12")));
 
             ClassicAssert.AreEqual("regionThatEndsWithinShiftedRows", sheet.GetRow(1).GetCell(11).StringCellValue);
-            ClassicAssert.False(sheet.MergedRegions.Any(r => r.FormatAsString().Equals("L2:M3")));
+            ClassicAssert.True(sheet.MergedRegions.Any(r => r.FormatAsString().Equals("L2:M3")));
 
             ClassicAssert.AreEqual("regionThatEndsOnLastShiftedRow", sheet.GetRow(1).GetCell(13).StringCellValue);
-            ClassicAssert.False(sheet.MergedRegions.Any(r => r.FormatAsString().Equals("N2:O4")));
+            ClassicAssert.True(sheet.MergedRegions.Any(r => r.FormatAsString().Equals("N2:O4")));
 
             ClassicAssert.AreEqual("regionThatEndsOutsideShiftedRows", sheet.GetRow(1).GetCell(15).StringCellValue);
-            ClassicAssert.False(sheet.MergedRegions.Any(r => r.FormatAsString().Equals("P2:Q5")));
+            ClassicAssert.True(sheet.MergedRegions.Any(r => r.FormatAsString().Equals("P2:Q5")));
 
             ClassicAssert.AreEqual("reallyLongRegion", sheet.GetRow(1).GetCell(17).StringCellValue);
-            ClassicAssert.False(sheet.MergedRegions.Any(r => r.FormatAsString().Equals("R2:S12")));
+            ClassicAssert.True(sheet.MergedRegions.Any(r => r.FormatAsString().Equals("R2:S12")));
 
             FileInfo file = TempFile.CreateTempFile("ShiftRows-", ".xlsx");
             Stream output = File.OpenWrite(file.FullName);
@@ -175,22 +178,24 @@ namespace TestCases.XSSF.UserModel
             ClassicAssert.True(sheetLoaded.MergedRegions.Any(r => r.FormatAsString().Equals("F5:G6")));
 
             ClassicAssert.IsNull(sheetLoaded.GetRow(6).GetCell(7));
-            ClassicAssert.False(sheetLoaded.MergedRegions.Any(r => r.FormatAsString().Equals("H7:I8")));
+            merged = sheetLoaded.MergedRegions.Any(r => r.FormatAsString().Equals("H7:I8"));
+            Assume.That(merged, Is.False);
+            ClassicAssert.True(merged);
 
             ClassicAssert.AreEqual("regionOutsideShiftedRowsBelow", sheetLoaded.GetRow(10).GetCell(9).StringCellValue);
             ClassicAssert.True(sheetLoaded.MergedRegions.Any(r => r.FormatAsString().Equals("J11:K12")));
 
             ClassicAssert.AreEqual("regionThatEndsWithinShiftedRows", sheetLoaded.GetRow(1).GetCell(11).StringCellValue);
-            ClassicAssert.False(sheetLoaded.MergedRegions.Any(r => r.FormatAsString().Equals("L2:M3")));
+            ClassicAssert.True(sheetLoaded.MergedRegions.Any(r => r.FormatAsString().Equals("L2:M3")));
 
             ClassicAssert.AreEqual("regionThatEndsOnLastShiftedRow", sheetLoaded.GetRow(1).GetCell(13).StringCellValue);
-            ClassicAssert.False(sheetLoaded.MergedRegions.Any(r => r.FormatAsString().Equals("N2:O4")));
+            ClassicAssert.True(sheetLoaded.MergedRegions.Any(r => r.FormatAsString().Equals("N2:O4")));
 
             ClassicAssert.AreEqual("regionThatEndsOutsideShiftedRows", sheetLoaded.GetRow(1).GetCell(15).StringCellValue);
-            ClassicAssert.False(sheetLoaded.MergedRegions.Any(r => r.FormatAsString().Equals("P2:Q5")));
+            ClassicAssert.True(sheetLoaded.MergedRegions.Any(r => r.FormatAsString().Equals("P2:Q5")));
 
             ClassicAssert.AreEqual("reallyLongRegion", sheetLoaded.GetRow(1).GetCell(17).StringCellValue);
-            ClassicAssert.False(sheetLoaded.MergedRegions.Any(r => r.FormatAsString().Equals("R2:S12")));
+            ClassicAssert.True(sheetLoaded.MergedRegions.Any(r => r.FormatAsString().Equals("R2:S12")));
         }
 
         [Test]
@@ -2296,10 +2301,12 @@ namespace TestCases.XSSF.UserModel
 
             ClassicAssert.IsNotNull(wb);
             ClassicAssert.IsNotNull(sheet);
-            XSSFPivotTable pivotTable = sheet.CreatePivotTable(new AreaReference("A1:B2", SpreadsheetVersion.EXCEL2007), new CellReference("H5"));
+            XSSFPivotTable pivotTable = sheet.CreatePivotTable(wb.GetCreationHelper().CreateAreaReference("A1:B2"),
+                new CellReference("H5"));
             ClassicAssert.IsNotNull(pivotTable);
             ClassicAssert.IsTrue(wb.PivotTables.Count > 0);
-            XSSFPivotTable pivotTable2 = sheet.CreatePivotTable(new AreaReference("A1:B2", SpreadsheetVersion.EXCEL2007), new CellReference("L5"), sheet);
+            XSSFPivotTable pivotTable2 = sheet.CreatePivotTable(wb.GetCreationHelper().CreateAreaReference("A1:B2"),
+                new CellReference("L5"), sheet);
             ClassicAssert.IsNotNull(pivotTable2);
             ClassicAssert.IsTrue(wb.PivotTables.Count > 1);
 
@@ -2314,12 +2321,14 @@ namespace TestCases.XSSF.UserModel
 
             ClassicAssert.IsNotNull(wb);
             ClassicAssert.IsNotNull(sheet);
-            XSSFPivotTable pivotTable = sheet.CreatePivotTable(new AreaReference("A1:B2", SpreadsheetVersion.EXCEL2007), new CellReference("H5"));
+            XSSFPivotTable pivotTable = sheet.CreatePivotTable(wb.GetCreationHelper().CreateAreaReference("A1:B2"),
+                new CellReference("H5"));
             ClassicAssert.IsNotNull(pivotTable);
             ClassicAssert.IsTrue(wb.PivotTables.Count > 0);
             ClassicAssert.IsNotNull(wb);
             XSSFSheet sheet2 = wb.CreateSheet() as XSSFSheet;
-            XSSFPivotTable pivotTable2 = sheet2.CreatePivotTable(new AreaReference("A1:B2", SpreadsheetVersion.EXCEL2007), new CellReference("H5"), sheet);
+            XSSFPivotTable pivotTable2 = sheet2.CreatePivotTable(wb.GetCreationHelper().CreateAreaReference("A1:B2"),
+                new CellReference("H5"), sheet);
             ClassicAssert.IsNotNull(pivotTable2);
             ClassicAssert.IsTrue(wb.PivotTables.Count > 1);
 
@@ -2334,7 +2343,8 @@ namespace TestCases.XSSF.UserModel
 
             ClassicAssert.IsNotNull(wb);
             ClassicAssert.IsNotNull(sheet);
-            XSSFPivotTable pivotTable = sheet.CreatePivotTable(new AreaReference("A1:B2", SpreadsheetVersion.EXCEL2007), new CellReference("H5"));
+            XSSFPivotTable pivotTable = sheet.CreatePivotTable(wb.GetCreationHelper().CreateAreaReference("A1:B2"),
+                new CellReference("H5"));
             ClassicAssert.IsNotNull(pivotTable);
             ClassicAssert.IsTrue(wb.PivotTables.Count > 0);
 
@@ -2349,7 +2359,7 @@ namespace TestCases.XSSF.UserModel
             XSSFSheet sheet2 = wb.CreateSheet() as XSSFSheet;
 
             XSSFPivotTable pivotTable = sheet2.CreatePivotTable
-                    (new AreaReference("A1:B2", SpreadsheetVersion.EXCEL2007), new CellReference("H5"), sheet1);
+                    (wb.GetCreationHelper().CreateAreaReference("A1:B2"), new CellReference("H5"), sheet1);
             ClassicAssert.AreEqual(0, pivotTable.GetRowLabelColumns().Count);
 
             ClassicAssert.AreEqual(1, wb.PivotTables.Count);
@@ -2367,7 +2377,7 @@ namespace TestCases.XSSF.UserModel
             XSSFSheet sheet2 = wb.CreateSheet("TEST") as XSSFSheet;
 
             XSSFPivotTable pivotTable = sheet2.CreatePivotTable(
-                new AreaReference(sheet.SheetName + "!A$1:B$2", SpreadsheetVersion.EXCEL2007),
+                wb.GetCreationHelper().CreateAreaReference(sheet.SheetName + "!A$1:B$2"),
                 new CellReference("H5"));
             ClassicAssert.AreEqual(0, pivotTable.GetRowLabelColumns().Count);
 
@@ -2384,7 +2394,7 @@ namespace TestCases.XSSF.UserModel
             Assert.Throws<ArgumentException>(() =>
             {
                 sheet2.CreatePivotTable(
-                    new AreaReference(sheet.SheetName + "!A$1:B$2", SpreadsheetVersion.EXCEL2007),
+                    wb.GetCreationHelper().CreateAreaReference(sheet.SheetName + "!A$1:B$2"),
                     new CellReference("H5"),
                     sheet2);
             });

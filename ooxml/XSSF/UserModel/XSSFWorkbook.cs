@@ -960,14 +960,6 @@ namespace NPOI.XSSF.UserModel
         /**
          * Finds a font that matches the one with the supplied attributes
          */
-        [Obsolete("deprecated POI 3.15. Use {@link #findFont(boolean, short, short, String, boolean, boolean, short, byte)} instead.")]
-        public IFont FindFont(short boldWeight, short color, short fontHeight, String name, bool italic, bool strikeout, FontSuperScript typeOffset, FontUnderlineType underline)
-        {
-            return stylesSource.FindFont(boldWeight, color, fontHeight, name, italic, strikeout, typeOffset, underline);
-        }
-        /**
-         * Finds a font that matches the one with the supplied attributes
-         */
         public IFont FindFont(bool bold, short color, short fontHeight, String name, bool italic, bool strikeout, FontSuperScript typeOffset, FontUnderlineType underline)
         {
             return stylesSource.FindFont(bold, color, fontHeight, name, italic, strikeout, typeOffset, underline);
@@ -1396,6 +1388,11 @@ namespace NPOI.XSSF.UserModel
          */
         private void OnSheetDelete(int index)
         {
+            // remove all sheet relations
+            XSSFSheet sheet = GetSheetAt(index) as XSSFSheet;
+
+            sheet.OnSheetDelete();
+
             //delete the CT_Sheet reference from workbook.xml
             workbook.sheets.RemoveSheet(index);
 

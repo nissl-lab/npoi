@@ -68,42 +68,47 @@ namespace NPOI.Util
         /// </summary>
         public static byte[] PeekFirst8Bytes(InputStream stream)
         {
+            return PeekFirstNBytes(stream, 8);
             // We want to peek at the first 8 bytes
-            stream.Mark(8);
+            //stream.Mark(8);
 
-            byte[] header = new byte[8];
-            int read = IOUtils.ReadFully(stream, header);
+            //byte[] header = new byte[8];
+            //int read = IOUtils.ReadFully(stream, header);
 
-            if(read < 1)
-                throw new EmptyFileException();
+            //if(read < 1)
+            //    throw new EmptyFileException();
 
-            // Wind back those 8 bytes
-            if(stream is PushbackInputStream)
-            {
-                //PushbackInputStream pin = (PushbackInputStream)stream;
-                //pin.Unread(header, 0, read);
-                stream.Position -= read;
-            }
-            else
-            {
-                stream.Reset();
-            }
+            //// Wind back those 8 bytes
+            //if(stream is PushbackInputStream)
+            //{
+            //    //PushbackInputStream pin = (PushbackInputStream)stream;
+            //    //pin.Unread(header, 0, read);
+            //    stream.Position -= read;
+            //}
+            //else
+            //{
+            //    stream.Reset();
+            //}
 
-            return header;
+            //return header;
         }
 
         public static byte[] PeekFirstNBytes(Stream stream, int limit)
         {
             long mark =  stream.Position;
-
+            if(stream is InputStream is1)
+            {
+                is1.Mark(limit);
+            }
             ByteArrayOutputStream bos = new ByteArrayOutputStream(limit);
             if(stream is ByteArrayInputStream inputStream)
                 Copy(new BoundedInputStream(inputStream, limit), bos);
             else
             {
-                MemoryStream ms = new MemoryStream();
-                stream.CopyTo(ms, limit);
-                Copy(new BoundedInputStream(new ByteArrayInputStream(ms.GetBuffer()), limit), bos);
+                //MemoryStream ms = new MemoryStream();
+                byte[] buffer = new byte[limit];
+                stream.Read(buffer, 0, limit);
+                Copy(new BoundedInputStream(new ByteArrayInputStream(buffer), limit), bos);
             }
 
             int readBytes = (int)bos.Length;
@@ -122,10 +127,13 @@ namespace NPOI.Util
                 //pin.unread(peekedBytes, 0, readBytes);
                 stream.Position -= peekedBytes.Length;
             }
+            else if(stream is InputStream is2)
+            {
+                is2.Reset();
+            }
             else
             {
                 stream.Position = mark;
-                (stream as InputStream)?.Reset();
             }
 
             return peekedBytes;
@@ -373,6 +381,10 @@ namespace NPOI.Util
             int count;
             while ((count = inp.Read(buff, 0, buff.Length)) >0)
             {
+                if (count < -1)
+                {
+                    throw new RecordFormatException("Can't have read < -1 bytes");
+                }
                 out1.Write(buff, 0, count);
             }
         }

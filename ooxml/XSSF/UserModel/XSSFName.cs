@@ -291,7 +291,7 @@ namespace NPOI.XSSF.UserModel
                     return _workbook.GetSheetName(sheetId);
                 }
                 String ref1 = RefersToFormula;
-                AreaReference areaRef = new AreaReference(ref1);
+                AreaReference areaRef = new AreaReference(ref1, SpreadsheetVersion.EXCEL2007);
                 return areaRef.FirstCell.SheetName;
             }
         }

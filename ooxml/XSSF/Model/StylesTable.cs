@@ -928,28 +928,6 @@ namespace NPOI.XSSF.Model
         /**
          * Finds a font that matches the one with the supplied attributes
          */
-         [Obsolete("deprecated POI 3.15 beta 2. Use {@link #findFont(boolean, short, short, String, boolean, boolean, short, byte)} instead.")]
-        public XSSFFont FindFont(short boldWeight, short color, short fontHeight, String name, bool italic, bool strikeout, FontSuperScript typeOffset,FontUnderlineType underline)
-        {
-            foreach (XSSFFont font in fonts)
-            {
-                if ((font.Boldweight == boldWeight)
-                        && font.Color == color
-                        && font.FontHeight == fontHeight
-                        && font.FontName.Equals(name)
-                        && font.IsItalic == italic
-                        && font.IsStrikeout == strikeout
-                        && font.TypeOffset == typeOffset
-                        && font.Underline == underline)
-                {
-                    return font;
-                }
-            }
-            return null;
-        }
-        /**
-         * Finds a font that matches the one with the supplied attributes
-         */
         public XSSFFont FindFont(bool bold, short color, short fontHeight, String name, bool italic, bool strikeout, FontSuperScript typeOffset, FontUnderlineType underline)
         {
             foreach (XSSFFont font in fonts)

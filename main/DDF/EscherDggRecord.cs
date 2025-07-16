@@ -1,8 +1,7 @@
-
-/* ====================================================================
+﻿/* ====================================================================
    Licensed to the Apache Software Foundation (ASF) under one or more
    contributor license agreements.  See the NOTICE file distributed with
-   this work for Additional information regarding copyright ownership.
+   this work for additional information regarding copyright ownership.
    The ASF licenses this file to You under the Apache License, Version 2.0
    (the "License"); you may not use this file except in compliance with
    the License.  You may obtain a copy of the License at
@@ -16,143 +15,396 @@
    limitations under the License.
 ==================================================================== */
 
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using System.Text;
+
 namespace NPOI.DDF
 {
-    using System;
-    using System.Text;
-    using System.Collections;
     using NPOI.Util;
-using System.Collections.Generic;
-
-
+    using System.Linq;
     /// <summary>
-    /// This record defines the drawing groups used for a particular sheet.
+    /// This record defines the Drawing groups used for a particular sheet.
     /// </summary>
-    public class EscherDggRecord : EscherRecord
+    public sealed class EscherDggRecord : EscherRecord
     {
-        public const short RECORD_ID = unchecked((short)0xF006);
-        public const String RECORD_DESCRIPTION = "MsofbtDgg";
+        public static short RECORD_ID = unchecked((short) 0xF006);
+        public static string RECORD_DESCRIPTION = "MsofbtDgg";
 
         private int field_1_shapeIdMax;
-        //    private int field_2_numIdClusters;      // for some reason the number of clusters is actually the real number + 1
+        // for some reason the number of clusters is actually the real number + 1
+        // private int field_2_numIdClusters;
         private int field_3_numShapesSaved;
         private int field_4_drawingsSaved;
-        private FileIdCluster[] field_5_fileIdClusters;
+        private List<FileIdCluster> field_5_fileIdClusters = new List<FileIdCluster>();
         private int maxDgId;
 
         public class FileIdCluster
         {
-            public FileIdCluster(int drawingGroupId, int numShapeIdsUsed)
+            internal int field_1_drawingGroupId;
+            internal int field_2_numShapeIdsUsed;
+
+            public FileIdCluster(int DrawingGroupId, int numShapeIdsUsed)
             {
-                this.field_1_drawingGroupId = drawingGroupId;
+                this.field_1_drawingGroupId = DrawingGroupId;
                 this.field_2_numShapeIdsUsed = numShapeIdsUsed;
             }
 
-            private int field_1_drawingGroupId;
-            private int field_2_numShapeIdsUsed;
-
             public int DrawingGroupId
             {
-                get { return field_1_drawingGroupId; }
+                get
+                {
+                    return field_1_drawingGroupId;
+                }
             }
 
             public int NumShapeIdsUsed
             {
-                get { return field_2_numShapeIdsUsed; }
+                get
+                {
+                    return field_2_numShapeIdsUsed;
+                }
             }
 
-            public void IncrementShapeId()
+            public void IncrementUsedShapeId()
             {
-                this.field_2_numShapeIdsUsed++;
+                field_2_numShapeIdsUsed++;
             }
         }
-
-        /// <summary>
-        /// This method deSerializes the record from a byte array.
-        /// </summary>
-        /// <param name="data">The byte array containing the escher record information</param>
-        /// <param name="offset">The starting offset into data</param>
-        /// <param name="recordFactory">May be null since this is not a container record.</param>
-        /// <returns>The number of bytes Read from the byte array.</returns>
         public override int FillFields(byte[] data, int offset, IEscherRecordFactory recordFactory)
         {
-            int bytesRemaining = ReadHeader(data, offset);
-            int pos = offset + 8;
-            int size = 0;
-            field_1_shapeIdMax = LittleEndian.GetInt(data, pos + size); size += 4;
-            //int field_2_numIdClusters = LittleEndian.GetInt(data, pos + size);
-            size += 4;
-            field_3_numShapesSaved = LittleEndian.GetInt(data, pos + size); size += 4;
-            field_4_drawingsSaved = LittleEndian.GetInt(data, pos + size); size += 4;
-            field_5_fileIdClusters = new FileIdCluster[(bytesRemaining - size) / 8];  // Can't rely on field_2_numIdClusters
-            for (int i = 0; i < field_5_fileIdClusters.Length; i++)
+            int bytesRemaining = ReadHeader( data, offset );
+            int pos            = offset + 8;
+            int size           = 0;
+            field_1_shapeIdMax     =  LittleEndian.GetInt(data, pos + size);
+            size+=4;
+            // field_2_numIdClusters = LittleEndian.GetInt( data, pos + size );
+            size+=4;
+            field_3_numShapesSaved =  LittleEndian.GetInt(data, pos + size);
+            size+=4;
+            field_4_drawingsSaved  =  LittleEndian.GetInt(data, pos + size);
+            size+=4;
+
+            field_5_fileIdClusters.Clear();
+            // Can't rely on field_2_numIdClusters
+            int numIdClusters = (bytesRemaining-size) / 8;
+
+            for(int i = 0; i < numIdClusters; i++)
             {
-                field_5_fileIdClusters[i] = new FileIdCluster(LittleEndian.GetInt(data, pos + size), LittleEndian.GetInt(data, pos + size + 4));
-                maxDgId = Math.Max(maxDgId, field_5_fileIdClusters[i].DrawingGroupId);
+                int drawingGroupId = LittleEndian.GetInt( data, pos + size );
+                int numShapeIdsUsed = LittleEndian.GetInt( data, pos + size + 4 );
+                FileIdCluster fic = new FileIdCluster(drawingGroupId, numShapeIdsUsed);
+                field_5_fileIdClusters.Add(fic);
+                maxDgId = Math.Max(maxDgId, drawingGroupId);
                 size += 8;
             }
             bytesRemaining -= size;
-            if (bytesRemaining != 0)
+            if(bytesRemaining != 0)
+            {
                 throw new RecordFormatException("Expecting no remaining data but got " + bytesRemaining + " byte(s).");
-            return 8 + size + bytesRemaining;
+            }
+            return 8 + size;
         }
-
-        /// <summary>
-        /// This method Serializes this escher record into a byte array.
-        /// </summary>
-        /// <param name="offset">The offset into data to start writing the record data to.</param>
-        /// <param name="data">The byte array to Serialize to.</param>
-        /// <param name="listener">a listener for begin and end serialization events.</param>
-        /// <returns>The number of bytes written.</returns>
         public override int Serialize(int offset, byte[] data, EscherSerializationListener listener)
         {
             listener.BeforeRecordSerialize(offset, RecordId, this);
 
             int pos = offset;
-            LittleEndian.PutShort(data, pos, Options); pos += 2;
-            LittleEndian.PutShort(data, pos, RecordId); pos += 2;
+            LittleEndian.PutShort(data, pos, Options);
+            pos += 2;
+            LittleEndian.PutShort(data, pos, RecordId);
+            pos += 2;
             int remainingBytes = RecordSize - 8;
-            LittleEndian.PutInt(data, pos, remainingBytes); pos += 4;
+            LittleEndian.PutInt(data, pos, remainingBytes);
+            pos += 4;
 
-            LittleEndian.PutInt(data, pos, field_1_shapeIdMax); pos += 4;
-            LittleEndian.PutInt(data, pos, NumIdClusters); pos += 4;
-            LittleEndian.PutInt(data, pos, field_3_numShapesSaved); pos += 4;
-            LittleEndian.PutInt(data, pos, field_4_drawingsSaved); pos += 4;
-            for (int i = 0; i < field_5_fileIdClusters.Length; i++)
+            LittleEndian.PutInt(data, pos, field_1_shapeIdMax);
+            pos += 4;
+            LittleEndian.PutInt(data, pos, NumIdClusters);
+            pos += 4;
+            LittleEndian.PutInt(data, pos, field_3_numShapesSaved);
+            pos += 4;
+            LittleEndian.PutInt(data, pos, field_4_drawingsSaved);
+            pos += 4;
+
+            foreach(FileIdCluster fic in field_5_fileIdClusters)
             {
-                LittleEndian.PutInt(data, pos, field_5_fileIdClusters[i].DrawingGroupId); pos += 4;
-                LittleEndian.PutInt(data, pos, field_5_fileIdClusters[i].NumShapeIdsUsed); pos += 4;
+                LittleEndian.PutInt(data, pos, fic.DrawingGroupId);
+                pos += 4;
+                LittleEndian.PutInt(data, pos, fic.NumShapeIdsUsed);
+                pos += 4;
             }
 
             listener.AfterRecordSerialize(pos, RecordId, RecordSize, this);
             return RecordSize;
         }
-
-        /// <summary>
-        /// Returns the number of bytes that are required to Serialize this record.
-        /// </summary>
-        /// <value>Number of bytes</value>
         public override int RecordSize
         {
-            get { return 8 + 16 + (8 * field_5_fileIdClusters.Length); }
+            get
+            {
+                return 8 + 16 + (8 * field_5_fileIdClusters.Count);
+            }
         }
-
-        /// <summary>
-        /// Return the current record id.
-        /// </summary>
-        /// <value>The 16 bit record id.</value>
         public override short RecordId
         {
-            get { return RECORD_ID; }
+            get
+            {
+                return RECORD_ID;
+            }
+            set
+            {
+                
+            }
+        }
+        public override string RecordName
+        {
+            get
+            {
+                return "Dgg";
+            }
         }
 
         /// <summary>
-        /// The short name for this record
+        /// Gets or set the next available shape id
         /// </summary>
-        /// <value></value>
-        public override String RecordName
+        /// <returns>the next available shape id</returns>
+        public int ShapeIdMax
         {
-            get { return "Dgg"; }
+            get
+            {
+                return field_1_shapeIdMax;
+            }
+            set
+            {
+                this.field_1_shapeIdMax = value;
+            }
+        }
+
+        /// <summary>
+        /// Number of id clusters + 1
+        /// </summary>
+        /// <returns>the number of id clusters + 1</returns>
+        public int NumIdClusters
+        {
+            get
+            {
+                return (field_5_fileIdClusters.Count == 0 ? 0 : field_5_fileIdClusters.Count + 1);
+            }
+        }
+
+        /// <summary>
+        /// Gets or set the number of shapes saved
+        /// </summary>
+        /// <returns>the number of shapes saved</returns>
+        public int NumShapesSaved
+        {
+            get
+            {
+                return field_3_numShapesSaved;
+            }
+            set
+            {
+                this.field_3_numShapesSaved = value;
+            }
+        }
+
+        /// <summary>
+        /// Get or set the number of Drawings saved
+        /// </summary>
+        /// <returns>the number of Drawings saved</returns>
+        public int DrawingsSaved
+        {
+            get
+            {
+                return field_4_drawingsSaved;
+            }
+            set
+            {
+                this.field_4_drawingsSaved = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets the maximum Drawing group ID
+        /// </summary>
+        /// <returns>The maximum Drawing group ID</returns>
+        public int MaxDrawingGroupId
+        {
+            get
+            {
+                return maxDgId;
+            }
+        }
+
+        /// <summary>
+        /// Get or sets the file id clusters
+        /// </summary>
+        /// <returns>the file id clusters</returns>
+        public FileIdCluster[] FileIdClusters
+        {
+            get
+            {
+                return field_5_fileIdClusters.ToArray();
+            }
+            set
+            {
+                field_5_fileIdClusters.Clear();
+                if(value != null)
+                {
+                    field_5_fileIdClusters.AddRange(value);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Add a new cluster
+        /// </summary>
+        /// <param name="dgId"> id of the Drawing group (stored in the record options)</param>
+        /// <param name="numShapedUsed">initial value of the numShapedUsed field</param>
+        /// 
+        /// <returns>the new <see cref="FileIdCluster"/></returns>
+        public FileIdCluster AddCluster(int dgId, int numShapedUsed)
+        {
+            return AddCluster(dgId, numShapedUsed, true);
+        }
+
+        /// <summary>
+        /// Add a new cluster
+        /// </summary>
+        /// <param name="dgId"> id of the Drawing group (stored in the record options)</param>
+        /// <param name="numShapedUsed">initial value of the numShapedUsed field</param>
+        /// <param name="sort">if true then sort clusters by Drawing group id.(
+        /// In Excel the clusters are sorted but in PPT they are not)
+        /// </param>
+        /// <returns>the new <see cref="FileIdCluster"/></returns>
+        public FileIdCluster AddCluster(int dgId, int numShapedUsed, bool sort)
+        {
+            FileIdCluster ficNew = new FileIdCluster(dgId, numShapedUsed);
+            field_5_fileIdClusters.Add(ficNew);
+            maxDgId = Math.Min(maxDgId, dgId);
+            if(sort)
+            {
+                SortCluster();
+            }
+
+            return ficNew;
+        }
+        private sealed class EscherDggRecordComparer : IComparer<FileIdCluster>
+        {
+            #region IComparer Members
+
+            public int Compare(FileIdCluster f1, FileIdCluster f2)
+            {
+                if(f1.DrawingGroupId == f2.DrawingGroupId)
+                    return 0;
+                if(f1.DrawingGroupId < f2.DrawingGroupId)
+                    return -1;
+                else
+                    return +1;
+            }
+
+            #endregion
+        }
+
+        private void SortCluster()
+        {
+            field_5_fileIdClusters.Sort(new EscherDggRecordComparer());
+            //        Collections.sort(field_5_fileIdClusters, new Comparator<FileIdCluster>() {
+            //        public int compare(FileIdCluster f1, FileIdCluster f2)
+            //    {
+            //        int dgDif = f1.DrawingGroupId - f2.DrawingGroupId;
+            //        int cntDif = f2.NumShapeIdsUsed - f1.NumShapeIdsUsed;
+            //        return (dgDif != 0) ? dgDif : cntDif;
+            //    }
+            //});
+        }
+
+        /// <summary>
+        /// Finds the next available (1 based) Drawing group id
+        /// </summary>
+        /// <returns>the next available Drawing group id</returns>
+        public short FindNewDrawingGroupId()
+        {
+            BitArray bs = new BitArray(field_5_fileIdClusters.Count + 32);
+            bs.Set(0, true);
+            foreach(FileIdCluster fic in field_5_fileIdClusters)
+            {
+                bs.Set(fic.DrawingGroupId, true);
+            }
+            for(var i = 0; i<field_5_fileIdClusters.Count + 32; i++)
+            {
+                if(!bs.Get(i))
+                    return (short)i;
+            }
+            //return (short) bs.nextClearBit(0);
+            throw new InvalidOperationException();
+        }
+
+        /// <summary>
+        /// Allocates new shape id for the Drawing group
+        /// </summary>
+        /// <param name="dg">the EscherDgRecord which receives the new shape</param>
+        /// <param name="sort">if true then sort clusters by Drawing group id.(
+        /// In Excel the clusters are sorted but in PPT they are not)
+        /// </param>
+        /// 
+        /// <returns>a new shape id.</returns>
+        public int AllocateShapeId(EscherDgRecord dg, bool sort)
+        {
+            short DrawingGroupId = dg.DrawingGroupId;
+            field_3_numShapesSaved++;
+
+            // check for an existing cluster, which has space available
+            // see 2.2.46 OfficeArtIDCL (cspidCur) for the 1024 limitation
+            // multiple clusters can belong to the same Drawing group
+            FileIdCluster ficAdd = null;
+            int index = 1;
+            foreach(FileIdCluster fic in field_5_fileIdClusters)
+            {
+                if(fic.DrawingGroupId == DrawingGroupId
+                    && fic.NumShapeIdsUsed < 1024)
+                {
+                    ficAdd = fic;
+                    break;
+                }
+                index++;
+            }
+
+            if(ficAdd == null)
+            {
+                ficAdd = AddCluster(DrawingGroupId, 0, sort);
+                maxDgId = Math.Max(maxDgId, DrawingGroupId);
+            }
+
+            int shapeId = index*1024 + ficAdd.NumShapeIdsUsed;
+            ficAdd.IncrementUsedShapeId();
+
+            dg.NumShapes = dg.NumShapes + 1;
+            dg.LastMSOSPID = shapeId;
+            field_1_shapeIdMax = Math.Max(field_1_shapeIdMax, shapeId + 1);
+
+            return shapeId;
+        }
+        protected object[][] GetAttributeMap()
+        {
+            List<object> fldIds = new List<object>();
+            fldIds.Add("FileId Clusters");
+            fldIds.Add(field_5_fileIdClusters.Count);
+            foreach(FileIdCluster fic in field_5_fileIdClusters)
+            {
+                fldIds.Add("Group"+fic.field_1_drawingGroupId);
+                fldIds.Add(fic.field_2_numShapeIdsUsed);
+            }
+
+            return new object[][] {
+                new object[] { "ShapeIdMax", field_1_shapeIdMax },
+                new object[] { "NumIdClusters", NumIdClusters },
+                new object[] { "NumShapesSaved", field_3_numShapesSaved },
+                new object[] { "DrawingsSaved", field_4_drawingsSaved },
+                fldIds.ToArray()
+            };
         }
 
         /// <summary>
@@ -177,7 +429,7 @@ using System.Collections.Generic;
             //            extraData = "error";
             //        }
             StringBuilder field_5_string = new StringBuilder();
-            for (int i = 0; i < field_5_fileIdClusters.Length; i++)
+            for (int i = 0; i < field_5_fileIdClusters.Count; i++)
             {
                 field_5_string.Append("  DrawingGroupId").Append(i + 1).Append(": ");
                 field_5_string.Append(field_5_fileIdClusters[i].DrawingGroupId);
@@ -208,138 +460,6 @@ using System.Collections.Generic;
                     .Append(tab).Append("\t").Append("<DrawingsSaved>").Append(field_4_drawingsSaved).Append("</DrawingsSaved>\n");
             builder.Append(tab).Append("</").Append(GetType().Name).Append(">\n");
             return builder.ToString();
-        }
-
-        /// <summary>
-        /// Gets or sets the shape id max.
-        /// </summary>
-        /// <value>The shape id max.</value>
-        public int ShapeIdMax
-        {
-            get { return field_1_shapeIdMax; }
-            set { field_1_shapeIdMax = value; }
-        }
-
-        /// <summary>
-        /// Gets the Number of id clusters + 1
-        /// </summary>
-        /// <value>The num id clusters.</value>
-        public int NumIdClusters
-        {
-            get { return field_5_fileIdClusters.Length + 1; }
-        }
-
-        /// <summary>
-        /// Gets or sets the num shapes saved.
-        /// </summary>
-        /// <value>The num shapes saved.</value>
-        public int NumShapesSaved
-        {
-            get { return field_3_numShapesSaved; }
-            set { field_3_numShapesSaved = value; }
-        }
-
-
-        /// <summary>
-        /// Gets or sets the drawings saved.
-        /// </summary>
-        /// <value>The drawings saved.</value>
-        public int DrawingsSaved
-        {
-            get { return field_4_drawingsSaved; }
-            set { field_4_drawingsSaved = value; }
-        }
-
-
-        /// <summary>
-        /// Gets or sets the max drawing group id.
-        /// </summary>
-        /// <value>The max drawing group id.</value>
-        public int MaxDrawingGroupId
-        {
-            get { return maxDgId; }
-            set { maxDgId = value; }
-        }
-
-        /// <summary>
-        /// Gets or sets the file id clusters.
-        /// </summary>
-        /// <value>The file id clusters.</value>
-        public FileIdCluster[] FileIdClusters
-        {
-            get { return field_5_fileIdClusters; }
-            set { field_5_fileIdClusters = (FileIdCluster[])value.Clone(); }
-        }
-
-        /// <summary>
-        /// Adds the cluster.
-        /// </summary>
-        /// <param name="dgId">The dg id.</param>
-        /// <param name="numShapedUsed">The num shaped used.</param>
-        public void AddCluster(int dgId, int numShapedUsed)
-        {
-            AddCluster(dgId, numShapedUsed, true);
-        }
-
-
-        private sealed class EscherDggRecordComparer : IComparer<FileIdCluster>
-        {
-
-            #region IComparer Members
-
-            public int Compare(FileIdCluster f1, FileIdCluster f2)
-            {
-                if (f1.DrawingGroupId == f2.DrawingGroupId)
-                    return 0;
-                if (f1.DrawingGroupId < f2.DrawingGroupId)
-                    return -1;
-                else
-                    return +1;
-            }
-
-            #endregion
-        }
-        /// <summary>
-        /// Adds the cluster.
-        /// </summary>
-        /// <param name="dgId">id of the drawing group (stored in the record options)</param>
-        /// <param name="numShapedUsed">initial value of the numShapedUsed field</param>
-        /// <param name="sort">if set to <c>true</c> if true then sort clusters by drawing group id.(
-        /// In Excel the clusters are sorted but in PPT they are not).</param>
-        public void AddCluster(int dgId, int numShapedUsed, bool sort)
-        {
-            List<FileIdCluster> clusters = new List<FileIdCluster>(field_5_fileIdClusters);
-            clusters.Add(new FileIdCluster(dgId, numShapedUsed));
-            if (sort)
-            {
-                //ArrayList.Sort is not stable, we need a stable sort ,
-                //see test case TestHSSFComment.TestBug56380InsertTooManyComments
-                //clusters.Sort(new EscherDggRecordComparer());
-                InsertionSort<FileIdCluster>(clusters, new EscherDggRecordComparer());
-            }
-            maxDgId = Math.Min(maxDgId, dgId);
-            field_5_fileIdClusters = clusters.ToArray();
-        }
-
-        public static void InsertionSort<T>(List<T> list, IComparer<T> comparison)
-        {
-            if (list == null)
-                throw new ArgumentNullException("list");
-            if (comparison == null)
-                throw new ArgumentNullException("comparison");
-
-            int count = list.Count;
-            for (int j = 1; j < count; j++)
-            {
-                T key = list[j];
-
-                int i = j - 1;
-                for (; i >= 0 && comparison.Compare(list[i], key) > 0; i--)
-                {
-                    list[i + 1] = list[i];
-                }
-                list[i + 1] = key;
-            }
         }
     }
 }

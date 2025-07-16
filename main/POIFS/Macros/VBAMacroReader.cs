@@ -41,16 +41,15 @@ namespace NPOI.POIFS.Macros
 
         public VBAMacroReader(InputStream rstream)
         {
-            PushbackInputStream stream = new PushbackInputStream(rstream, 8);
-            byte[] header8 = IOUtils.PeekFirst8Bytes(stream);
-
-            if (NPOIFSFileSystem.HasPOIFSHeader(header8))
+            InputStream is1 = FileMagicContainer.PrepareToCheckMagic(rstream);
+            FileMagic fm = FileMagicContainer.ValueOf(is1);
+            if (fm == FileMagic.OLE2)
             {
-                fs = new NPOIFSFileSystem(stream);
+                fs = new NPOIFSFileSystem(is1);
             }
             else
             {
-                OpenOOXML(stream);
+                OpenOOXML(is1);
             }
         }
 

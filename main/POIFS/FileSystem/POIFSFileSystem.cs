@@ -137,6 +137,8 @@ namespace NPOI.POIFS.FileSystem
         /// <returns>
         /// 	<c>true</c> if [has POIFS header] [the specified inp]; otherwise, <c>false</c>.
         /// </returns>
+        [Obsolete("deprecated in 3.17-beta2, use {@link FileMagic#valueOf(InputStream)} == {@link FileMagic#OLE2} instead")]
+        [Removal(Version="4.0")]
         public static new bool HasPOIFSHeader(Stream inp)
         {
 
@@ -146,6 +148,8 @@ namespace NPOI.POIFS.FileSystem
          * Checks if the supplied first 8 bytes of a stream / file
          *  has a POIFS (OLE2) header.
          */
+        [Obsolete("deprecated in 3.17-beta2, use {@link FileMagic#valueOf(InputStream)} == {@link FileMagic#OLE2} instead")]
+        [Removal(Version="4.0")]
         public static new bool HasPOIFSHeader(byte[] header8Bytes)
         {
             return NPOIFSFileSystem.HasPOIFSHeader(header8Bytes);

@@ -1,9 +1,29 @@
-﻿using NPOI.HSSF.UserModel;
+﻿/* ====================================================================
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for Additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+==================================================================== */
+
+using NPOI.HSSF.UserModel;
 using NPOI.SS.Formula.Eval;
 using NPOI.SS.UserModel;
-using NUnit.Framework;using NUnit.Framework.Legacy;
+using NPOI.Util;
+using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 
 namespace TestCases.HSSF.UserModel
@@ -14,6 +34,7 @@ namespace TestCases.HSSF.UserModel
         private static HSSFWorkbook workbook;
         private static ISheet sheet;
         private static IFormulaEvaluator evaluator;
+        private static CultureInfo userLocale;
 
         private static class Navigator
         {
@@ -54,6 +75,8 @@ namespace TestCases.HSSF.UserModel
             // Function "Text" uses custom-formats which are locale specific
             // can't set the locale on a per-testrun execution, as some settings have been
             // already set, when we would try to change the locale by then
+            userLocale = LocaleUtil.GetUserLocale();
+            LocaleUtil.SetUserLocale(CultureInfo.CurrentCulture);
 
             workbook = HSSFTestDataSamples.OpenSampleWorkbook(Navigator.FILENAME);
             sheet = workbook.GetSheetAt(0);
@@ -62,29 +85,36 @@ namespace TestCases.HSSF.UserModel
             List<Object[]> data = new List<Object[]>();
 
             processFunctionGroup(data, Navigator.START_OPERATORS_ROW_INDEX, null);
-            
+
             return data;
         }
-    /**
- * @param startRowIndex row index in the spreadsheet where the first function/operator is found
- * @param testFocusFunctionName name of a single function/operator to test alone.
- * Typically pass <code>null</code> to test all functions
- */
-    private static void processFunctionGroup(List<Object[]> data, int startRowIndex, String testFocusFunctionName)
+                
+        [OneTimeTearDown]
+        public static void closeResource()
         {
-            for (int rowIndex = startRowIndex; true; rowIndex += Navigator.ROW_OFF_NEXT_OP)
+            LocaleUtil.SetUserLocale(userLocale);
+            workbook.Close();
+        }
+        /**
+         * @param startRowIndex row index in the spreadsheet where the first function/operator is found
+         * @param testFocusFunctionName name of a single function/operator to test alone.
+         * Typically pass <code>null</code> to test all functions
+         */
+        private static void processFunctionGroup(List<Object[]> data, int startRowIndex, String testFocusFunctionName)
+        {
+            for(int rowIndex = startRowIndex; true; rowIndex += Navigator.ROW_OFF_NEXT_OP)
             {
                 IRow r = sheet.GetRow(rowIndex);
                 String targetFunctionName = getTargetFunctionName(r);
                 ClassicAssert.IsNotNull("Test spreadsheet cell empty on row ("
                         + (rowIndex) + "). Expected function name or '"
                         + Navigator.END_OF_TESTS + "'", targetFunctionName);
-                if (targetFunctionName.Equals(Navigator.END_OF_TESTS))
+                if(targetFunctionName.Equals(Navigator.END_OF_TESTS))
                 {
                     // found end of functions list
                     break;
                 }
-                if (testFocusFunctionName == null || targetFunctionName.Equals(testFocusFunctionName, StringComparison.InvariantCultureIgnoreCase))
+                if(testFocusFunctionName == null || targetFunctionName.Equals(testFocusFunctionName, StringComparison.InvariantCultureIgnoreCase))
                 {
                     data.Add(new Object[] { targetFunctionName, rowIndex });
                 }
@@ -95,21 +125,21 @@ namespace TestCases.HSSF.UserModel
         {
             int endColNum = Navigator.START_RESULT_COL_INDEX + Navigator.COL_OFF_EXPECTED_RESULT;
 
-            for (int rowNum = formulasRowIdx; rowNum < formulasRowIdx + Navigator.ROW_OFF_NEXT_OP - 1; rowNum++)
+            for(int rowNum = formulasRowIdx; rowNum < formulasRowIdx + Navigator.ROW_OFF_NEXT_OP - 1; rowNum++)
             {
-                for (int colNum = Navigator.START_RESULT_COL_INDEX; colNum < endColNum; colNum++)
+                for(int colNum = Navigator.START_RESULT_COL_INDEX; colNum < endColNum; colNum++)
                 {
                     IRow r = sheet.GetRow(rowNum);
 
                     /* mainly to escape row failures on MDETERM which only returns a scalar */
-                    if (r == null)
+                    if(r == null)
                     {
                         continue;
                     }
 
                     ICell c = sheet.GetRow(rowNum).GetCell(colNum);
 
-                    if (c == null || c.CellType != CellType.Formula)
+                    if(c == null || c.CellType != CellType.Formula)
                     {
                         continue;
                     }
@@ -124,7 +154,7 @@ namespace TestCases.HSSF.UserModel
                     ClassicAssert.IsNotNull(actValue, msg + " - actual value was null");
 
                     CellType cellType = expValue.CellType;
-                    switch (cellType)
+                    switch(cellType)
                     {
                         case CellType.Blank:
                             ClassicAssert.AreEqual(CellType.Blank, actValue.CellType, msg);
@@ -156,27 +186,27 @@ namespace TestCases.HSSF.UserModel
             }
         }
         /**
-    * @return <code>null</code> if cell is missing, empty or Blank
-    */
+        * @return <code>null</code> if cell is missing, empty or Blank
+        */
         private static String getTargetFunctionName(IRow r)
         {
-            if (r == null)
+            if(r == null)
             {
                 Assert.Warn("Warning - given null row, can't figure out function name");
                 return null;
             }
             ICell cell = r.GetCell(Navigator.START_OPERATORS_COL_INDEX);
             //Assert.Warn(Navigator.START_OPERATORS_COL_INDEX.ToString());
-            if (cell == null)
+            if(cell == null)
             {
                 Assert.Warn("Warning - Row " + r.RowNum + " has no cell " + Navigator.START_OPERATORS_COL_INDEX + ", can't figure out function name");
                 return null;
             }
-            if (cell.CellType == CellType.Blank)
+            if(cell.CellType == CellType.Blank)
             {
                 return null;
             }
-            if (cell.CellType == CellType.String)
+            if(cell.CellType == CellType.String)
             {
                 return cell.RichStringCellValue.String;
             }

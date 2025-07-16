@@ -23,7 +23,7 @@ namespace NPOI.SS.Formula
     using System.Collections.Generic;
     using System.Globalization;
     using System.Text; 
-using Cysharp.Text;
+    using Cysharp.Text;
     using System.Text.RegularExpressions;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Formula.Constant;
@@ -863,7 +863,7 @@ using Cysharp.Text;
             // Done reading from input stream
             // Ok to return now
 
-            if (isTotalsSpec && !tbl.IsHasTotalsRow)
+            if (isTotalsSpec && tbl.TotalsRowCount == 0)
             {
                 return new ParseNode(ErrPtg.REF_INVALID);
             }
@@ -895,7 +895,7 @@ using Cysharp.Text;
                 }
                 else if (isDataSpec && isHeadersSpec)
                 {
-                    if (tbl.IsHasTotalsRow)
+                    if (tbl.TotalsRowCount > 0)
                     {
                         actualEndRow = endRow - 1;
                     }
@@ -907,7 +907,7 @@ using Cysharp.Text;
                 else if (nSpecQuantifiers == 1 && isDataSpec)
                 {
                     actualStartRow = startRow + 1;
-                    if (tbl.IsHasTotalsRow)
+                    if (tbl.TotalsRowCount > 0)
                     {
                         actualEndRow = endRow - 1;
                     }
@@ -933,13 +933,17 @@ using Cysharp.Text;
             else
             {
                 if (isThisRow)
-                { // there is a @
+                { 
+                    // there is a @
                     actualStartRow = _rowIndex; //The rowNum is 0 based
                     actualEndRow = _rowIndex;
                 }
                 else
-                { // Really no special quantifiers
+                { 
+                    // Really no special quantifiers
                     actualStartRow++;
+                    if (tbl.TotalsRowCount > 0)
+                        actualEndRow--;
                 }
             }
             //Selecting cols
@@ -976,7 +980,7 @@ using Cysharp.Text;
             CellReference topLeft = new CellReference(actualStartRow, actualStartCol);
             CellReference bottomRight = new CellReference(actualEndRow, actualEndCol);
             SheetIdentifier sheetIden = new SheetIdentifier(null, new NameIdentifier(sheetName, true));
-            Ptg ptg = _book.Get3DReferencePtg(new AreaReference(topLeft, bottomRight), sheetIden);
+            Ptg ptg = _book.Get3DReferencePtg(new AreaReference(topLeft, bottomRight, _ssVersion), sheetIden);
             return new ParseNode(ptg);
         }
 
@@ -1192,9 +1196,8 @@ using Cysharp.Text;
             {
                 return AreaReference.GetWholeColumn(_ssVersion, part1.Rep, part2.Rep);
             }
-            return new AreaReference(part1.CellReference, part2.CellReference);
+            return new AreaReference(part1.CellReference, part2.CellReference, _ssVersion);
         }
-
 
         /**
           * Parses out a potential LHS or RHS of a ':' intended to produce a plain AreaRef.  Normally these are

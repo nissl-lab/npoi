@@ -78,10 +78,24 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             if(node == null)
                 return null;
             CT_Document ctObj = new CT_Document();
+            bool firstBody = true;
             foreach(XmlNode childNode in node.ChildNodes)
             {
                 if(childNode.LocalName == "body")
-                    ctObj.body = CT_Body.Parse(childNode, namespaceManager);
+                {
+                    if(firstBody)
+                    {
+                        ctObj.body = CT_Body.Parse(childNode, namespaceManager);
+                        firstBody = false;
+                    }
+                    else
+                    {
+                        if(ctObj.bodyListField == null)
+                            ctObj.bodyListField = new List<CT_Body> ();
+                        ctObj.bodyListField.Add(CT_Body.Parse(childNode, namespaceManager));
+                    }
+                }
+                    
                 else if(childNode.LocalName == "background")
                     ctObj.background = CT_Background.Parse(childNode, namespaceManager);
             }
@@ -111,6 +125,13 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             sw.Write("mc:Ignorable=\"w14 w15 w16se w16cid w16 w16cex w16sdtdh wp14\">");
             if(this.body != null)
                 this.body.Write(sw, "body");
+            if(this.bodyList != null)
+            {
+                foreach(var b in this.bodyList)
+                {
+                    b.Write(sw, "body");
+                }
+            }
             if(this.background != null)
                 this.background.Write(sw, "background");
             sw.Write("</w:document>");
@@ -123,6 +144,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             this.bodyField = new CT_Body();
         }
 
+        private List<CT_Body> bodyListField;
+
         [XmlElement(Order = 0)]
         public CT_Body body
         {
@@ -133,6 +156,14 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             set
             {
                 this.bodyField = value;
+            }
+        }
+
+        public List<CT_Body> bodyList
+        {
+            get
+            {
+                return bodyListField;
             }
         }
 

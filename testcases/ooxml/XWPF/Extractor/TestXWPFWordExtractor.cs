@@ -425,5 +425,29 @@ namespace TestCases.XWPF.Extractor
             extractor.Close();
         }
 
+        [Test]
+        public void TestMultipleBodyBug()
+        {
+            XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("MultipleBodyBug.docx");
+            XWPFWordExtractor extractor = new XWPFWordExtractor(doc);
+            ClassicAssert.AreEqual("START BODY 1 The quick, brown fox jumps over a lazy dog. END BODY 1.\n"
+                            + "START BODY 2 The quick, brown fox jumps over a lazy dog. END BODY 2.\n"
+                            + "START BODY 3 The quick, brown fox jumps over a lazy dog. END BODY 3.\n",
+                    extractor.Text);
+            extractor.Close();
+        }
+
+        [Test]
+        public void TestPhonetic()
+        {
+            XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("61470.docx");
+            XWPFWordExtractor extractor = new XWPFWordExtractor(doc);
+            //expect: baseText (phoneticText)
+            ClassicAssert.AreEqual("\u6771\u4EAC (\u3068\u3046\u304D\u3087\u3046)", extractor.Text.Trim());
+            extractor.Close();
+            extractor = new XWPFWordExtractor(doc);
+            extractor.SetConcatenatePhoneticRuns(false);
+            ClassicAssert.AreEqual("\u6771\u4EAC", extractor.Text.Trim());
+        }
     }
 }

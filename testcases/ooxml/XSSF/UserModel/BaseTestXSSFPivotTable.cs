@@ -311,5 +311,22 @@ namespace TestCases.XSSF.UserModel
             ClassicAssert.AreEqual("A", cacheFields.cacheField[0].name);
         }
 
+        [Test]
+        public void TestPivotTableSheetNamesAreCaseInsensitive()
+        {
+            wb.SetSheetName(0, "original");
+            wb.SetSheetName(1, "offset");
+            XSSFSheet original = wb.GetSheet("OriginaL") as XSSFSheet;
+            XSSFSheet offset = wb.GetSheet("OffseT") as XSSFSheet;
+            // assume sheets are accessible via case-insensitive name
+            ClassicAssert.IsNotNull(original);
+            ClassicAssert.IsNotNull(offset);
+
+            AreaReference source = wb.GetCreationHelper().CreateAreaReference("ORIGinal!A1:C2");
+            // create a pivot table on the same sheet, case insensitive
+            original.CreatePivotTable(source, new CellReference("W1"));
+            // create a pivot table on a different sheet, case insensitive
+            offset.CreatePivotTable(source, new CellReference("W1"));
+        }
     }
 }

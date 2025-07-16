@@ -200,7 +200,7 @@ namespace TestCases.HSSF.UserModel
 
             NPOI.SS.UserModel.ICellStyle cs4 = wb.CreateCellStyle();
             cs4.SetFont(f1);
-            cs4.Alignment = HorizontalAlignment.CenterSelection;// ((short)22);
+            cs4.Alignment = HorizontalAlignment.Center;// ((short)22);
 
             NPOI.SS.UserModel.ICellStyle cs5 = wb.CreateCellStyle();
             cs5.SetFont(f2);

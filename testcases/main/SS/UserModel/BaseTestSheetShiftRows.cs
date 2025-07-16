@@ -700,7 +700,7 @@ namespace TestCases.SS.UserModel
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
             ISheet sheet = wb.CreateSheet("test");
-            PopulateSheetCells(sheet);
+            PopulateSheetCells(sheet, 2);
             CellRangeAddress A1_E1 = new CellRangeAddress(0, 0, 0, 4);
             CellRangeAddress A2_C2 = new CellRangeAddress(1, 1, 0, 2);
             sheet.AddMergedRegion(A1_E1);
@@ -712,10 +712,59 @@ namespace TestCases.SS.UserModel
             ClassicAssert.AreEqual(CellRangeAddress.ValueOf("A1:C1"), sheet.GetMergedRegion(0));
             wb.Close();
         }
-        private void PopulateSheetCells(ISheet sheet)
+
+        [Test]
+        public void ShiftMergedRowsToMergedRowsOverlappingMergedRegion()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb.CreateSheet("test");
+            PopulateSheetCells(sheet, 10);
+
+            CellRangeAddress A1_E1 = new CellRangeAddress(0, 0, 0, 4);
+            CellRangeAddress A2_C2 = new CellRangeAddress(1, 7, 0, 2);
+
+            sheet.AddMergedRegion(A1_E1);
+            sheet.AddMergedRegion(A2_C2);
+
+            // A1:E1 should Move to A5:E5
+            // A2:C2 should be removed
+            sheet.ShiftRows(0, 0, 4);
+
+            ClassicAssert.AreEqual(1, sheet.NumMergedRegions);
+            ClassicAssert.AreEqual(CellRangeAddress.ValueOf("A5:E5"), sheet.GetMergedRegion(0));
+
+            wb.Close();
+        }
+
+        [Test]
+        public void Bug60384ShiftMergedRegion()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb.CreateSheet("test");
+            PopulateSheetCells(sheet, 9);
+
+
+            CellRangeAddress A8_E8 = new CellRangeAddress(7, 7, 0, 4);
+            CellRangeAddress A9_C9 = new CellRangeAddress(8, 8, 0, 2);
+
+            sheet.AddMergedRegion(A8_E8);
+            sheet.AddMergedRegion(A9_C9);
+
+            // A1:E1 should be removed
+            // A2:C2 will be A1:C1
+            sheet.ShiftRows(3, sheet.LastRowNum, 1);
+
+            ClassicAssert.AreEqual(2, sheet.NumMergedRegions);
+            ClassicAssert.AreEqual(CellRangeAddress.ValueOf("A9:E9"), sheet.GetMergedRegion(0));
+            ClassicAssert.AreEqual(CellRangeAddress.ValueOf("A10:C10"), sheet.GetMergedRegion(1));
+
+            wb.Close();
+        }
+
+        private void PopulateSheetCells(ISheet sheet, int rowCount)
         {
             // populate sheet cells
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < rowCount; i++)
             {
                 IRow row = sheet.CreateRow(i);
                 for (int j = 0; j < 5; j++)
@@ -731,7 +780,7 @@ namespace TestCases.SS.UserModel
             IWorkbook wb = _testDataProvider.CreateWorkbook();
             ISheet sheet = wb.CreateSheet("test");
             // populate sheet cells
-            PopulateSheetCells(sheet);
+            PopulateSheetCells(sheet, 2);
             CellRangeAddress A1_E1 = new CellRangeAddress(0, 0, 0, 4);
             CellRangeAddress A2_C2 = new CellRangeAddress(1, 1, 0, 2);
             sheet.AddMergedRegion(A1_E1);

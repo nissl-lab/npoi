@@ -293,6 +293,26 @@ namespace NPOI.SS.Formula
         {
             return Evaluate(formula, target, region, FormulaType.Cell);
         }
+
+        
+        /**
+         * Some expressions need to be evaluated in terms of an offset from the top left corner of a region,
+         * such as some data validation and conditional format expressions, when those constraints apply
+         * to contiguous cells.  When a relative formula is used, it must be evaluated by shifting by the target
+         * offset position relative to the top left of the range.
+         * <p>
+         * Returns a ValueEval that may be one or more values, such as the allowed values for a data validation constraint.
+         * 
+         * @param formula
+         * @param target cell context for the operation
+         * @param region containing the cell
+         * @return ValueEval for one or more values
+         * @throws IllegalArgumentException if target does not define a sheet name to evaluate the formula on.
+         */
+        public ValueEval EvaluateList(String formula, CellReference target, CellRangeAddressBase region) {
+            return Evaluate(formula, target, region, FormulaType.DataValidationList);
+        }
+
         private ValueEval Evaluate(String formula, CellReference target, CellRangeAddressBase region, FormulaType formulaType)
         {
             String sheetName = target == null ? null : target.SheetName;
@@ -484,6 +504,8 @@ namespace NPOI.SS.Formula
             //return cce.GetValue();
             return result;
         }
+
+
         /**
          * Adds the current cell reference to the exception for easier debugging.
          * Would be nice to get the formula text as well, but that seems to require
@@ -732,6 +754,7 @@ namespace NPOI.SS.Formula
             {
                 throw new InvalidOperationException("evaluation stack not empty");
             }
+
             ValueEval result;
             if (ec.IsSingleValue)
             {
@@ -807,14 +830,14 @@ namespace NPOI.SS.Formula
             return value;
         }
         /**
- * Dereferences a single value from any AreaEval or RefEval evaluation
- * result. If the supplied evaluationResult is just a plain value, it is
- * returned as-is.
- *
- * @return a {@link NumberEval}, {@link StringEval}, {@link BoolEval}, or
- *         {@link ErrorEval}. Never <code>null</code>. {@link BlankEval} is
- *         converted to {@link NumberEval#ZERO}
- */
+         * Dereferences a single value from any AreaEval or RefEval evaluation
+         * result. If the supplied evaluationResult is just a plain value, it is
+         * returned as-is.
+         *
+         * @return a {@link NumberEval}, {@link StringEval}, {@link BoolEval}, or
+         *         {@link ErrorEval}. Never <code>null</code>. {@link BlankEval} is
+         *         converted to {@link NumberEval#ZERO}
+         */
         public static ValueEval DereferenceResult(ValueEval evaluationResult, OperationEvaluationContext ec)
         {
             ValueEval value;
