@@ -1100,7 +1100,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         public void Set(CT_AbstractNum cT_AbstractNum)
         {
             this.abstractNumIdField = cT_AbstractNum.abstractNumIdField;
-            this.lvlField = new List<CT_Lvl>(cT_AbstractNum.lvlField);
+            this.lvlField = cT_AbstractNum.lvlField == null ? new List<CT_Lvl>() : new List<CT_Lvl>(cT_AbstractNum.lvlField);
             this.multiLevelTypeField = cT_AbstractNum.multiLevelTypeField;
             this.nameField = cT_AbstractNum.nameField;
             this.nsidField = cT_AbstractNum.nsidField;
