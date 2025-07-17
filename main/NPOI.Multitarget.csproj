@@ -20,7 +20,7 @@
 	<ItemGroup>
 		<PackageReference Include="Enums.NET" Version="5.0.0" />
 		<PackageReference Include="ExtendedNumerics.BigDecimal" Version="2025.1004.0.247" />
-		<PackageReference Include="IronSoftware.System.Drawing" Version="2025.7.2" />
+		<PackageReference Include="IronSoftware.System.Drawing" Version="2025.7.11" />
 		<PackageReference Include="MathNet.Numerics.Signed" Version="5.0.0" />
 		<PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="3.0.1" />
 		<PackageReference Include="BouncyCastle.Cryptography" Version="2.4.0" />
