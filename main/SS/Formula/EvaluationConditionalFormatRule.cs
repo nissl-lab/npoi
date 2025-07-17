@@ -562,7 +562,10 @@ namespace NPOI.SS.Formula
                 case ConditionFilterType.TOP_10:
                     // from testing, Excel only operates on numbers and dates (which are stored as numbers) in the range.
                     // numbers stored as text are ignored, but numbers formatted as text are treated as numbers.
-
+                    if (! cv.IsNumber)
+                    {
+                        return false;
+                    }
                     return GetMeaningfulValues(region, true,  (allValues)=> {
                         IConditionFilterData fc = rule.FilterConfiguration;
 
@@ -696,16 +699,20 @@ namespace NPOI.SS.Formula
                     return OperatorEnumHelper.IsValid(op, val, comp, null);
                 case ConditionFilterType.CONTAINS_TEXT:
                     // implemented both by a cfRule "text" attribute and a formula.  Use the text.
-                    return text == null ? false : cv.ToString().ToLowerInvariant().Contains(lowerText);
+                    //return text == null ? false : cv.ToString().ToLowerInvariant().Contains(lowerText);
+                    return CheckFormula(reference, region);
                 case ConditionFilterType.NOT_CONTAINS_TEXT:
                     // implemented both by a cfRule "text" attribute and a formula.  Use the text.
-                    return text == null ? true : !cv.ToString().ToLowerInvariant().Contains(lowerText);
+                    //return text == null ? true : !cv.ToString().ToLowerInvariant().Contains(lowerText);
+                    return CheckFormula(reference, region);
                 case ConditionFilterType.BEGINS_WITH:
                     // implemented both by a cfRule "text" attribute and a formula.  Use the text.
-                    return cv.ToString().ToLowerInvariant().StartsWith(lowerText);
+                    //return cv.ToString().ToLowerInvariant().StartsWith(lowerText);
+                    return CheckFormula(reference, region);
                 case ConditionFilterType.ENDS_WITH:
                     // implemented both by a cfRule "text" attribute and a formula.  Use the text.
-                    return cv.ToString().ToLowerInvariant().EndsWith(lowerText);
+                    //return cv.ToString().ToLowerInvariant().EndsWith(lowerText);
+                    return CheckFormula(reference, region);
                 case ConditionFilterType.CONTAINS_BLANKS:
                     try
                     {
