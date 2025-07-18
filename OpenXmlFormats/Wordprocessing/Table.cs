@@ -2900,6 +2900,22 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             this.tblpPr = new CT_TblPPr();
             return this.tblpPr;
         }
+
+        public bool IsSetJc()
+        {
+            return this.jc != null;
+        }
+
+        public CT_Jc AddNewJc()
+        {
+            this.jc = new CT_Jc();
+            return this.jc;
+        }
+
+        public void UnsetJc()
+        {
+            this.jc = null;
+        }
     }
 
 

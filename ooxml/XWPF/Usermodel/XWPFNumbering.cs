@@ -24,6 +24,7 @@ namespace NPOI.XWPF.UserModel
     using System.IO;
     using System.Xml.Serialization;
     using System.Xml;
+    using NPOI.Util;
 
 
     /**
@@ -302,11 +303,15 @@ namespace NPOI.XWPF.UserModel
          */
         public bool RemoveAbstractNum(string abstractNumID)
         {
-            if (int.Parse(abstractNumID) < abstractNums.Count)
+            foreach (XWPFAbstractNum abstractNum in abstractNums)
             {
-                ctNumbering.RemoveAbstractNum(int.Parse(abstractNumID));
-                abstractNums.RemoveAt(int.Parse(abstractNumID));
-                return true;
+                string foundNumId = abstractNum.GetAbstractNum().abstractNumId;
+                if(abstractNumID.Equals(foundNumId))
+                {
+                    ctNumbering.RemoveAbstractNum(int.Parse(foundNumId));
+                    abstractNums.Remove(abstractNum);
+                    return true;
+                }
             }
             return false;
         }

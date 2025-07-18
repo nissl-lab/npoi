@@ -236,6 +236,57 @@ namespace TestCases.XWPF
             XWPFDocument docBack = XWPFTestDataSamples.WriteOutAndReadBack(doc);
             docBack.Close();
         }
+
+        [Test]
+        public void Test63788() {
+            using (XWPFDocument doc = new XWPFDocument())
+            {
+
+                XWPFNumbering numbering = doc.CreateNumbering();
+
+                for (int i = 10; i >= 0; i--) {
+                    addNumberingWithAbstractId(numbering, i);        //add numbers in reverse order
+                }
+
+                for (int i = 0; i <= 10; i++) {
+                    ClassicAssert.AreEqual(i, int.Parse(numbering.GetAbstractNum(i.ToString()).GetAbstractNum().abstractNumId));
+                }
+
+                //attempt to remove item with numId 2
+                ClassicAssert.IsTrue(numbering.RemoveAbstractNum("2"));
+
+                for (int i = 0; i <= 10; i++) {
+                    XWPFAbstractNum abstractNum = numbering.GetAbstractNum(i.ToString());
+
+                    // we removed id "2", so this one should be empty, all others not
+                    if (i == 2) {
+                        ClassicAssert.IsNull(abstractNum, "Failed for " + i);
+                    } else {
+                        ClassicAssert.IsNotNull(abstractNum, "Failed for " + i);
+                        ClassicAssert.AreEqual(i, int.Parse(abstractNum.GetAbstractNum().abstractNumId));
+                    }
+                }
+
+                // removing the same again fails
+                ClassicAssert.IsFalse(numbering.RemoveAbstractNum("2"));
+
+                // removing another one works
+                ClassicAssert.IsTrue(numbering.RemoveAbstractNum("4"));
+            }
+        }
+
+        private static void addNumberingWithAbstractId(XWPFNumbering documentNumbering, int id)
+        {
+            // create a numbering scheme
+            CT_AbstractNum cTAbstractNum = new CT_AbstractNum();
+            // give the scheme an ID
+            cTAbstractNum.abstractNumId = id.ToString();
+
+            XWPFAbstractNum abstractNum = new XWPFAbstractNum(cTAbstractNum);
+            string abstractNumID = documentNumbering.AddAbstractNum(abstractNum);
+
+            documentNumbering.AddNum(abstractNumID);
+        }
     }
 }
 
