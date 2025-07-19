@@ -28,6 +28,7 @@ using NPOI.SS.Util;
 using NPOI.Util;
 using System.Text.RegularExpressions;
 using System.Linq;
+using System.Collections;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -37,7 +38,7 @@ namespace NPOI.XSSF.UserModel
      *
      * @author Yegor Kozlov
      */
-    public class XSSFDrawing : POIXMLDocumentPart, IDrawing
+    public class XSSFDrawing : POIXMLDocumentPart, IDrawing, IDrawing<IShape>
     {
         public static String NAMESPACE_A = XSSFRelation.NS_DRAWINGML;
         public static String NAMESPACE_C = XSSFRelation.NS_CHART;
@@ -637,6 +638,16 @@ namespace NPOI.XSSF.UserModel
             }
             anchor = new XSSFClientAnchor(ctFrom, ctTo);
             return anchor;
+        }
+
+        public IEnumerator<IShape> GetEnumerator()
+        {
+            return GetShapes().GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }

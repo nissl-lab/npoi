@@ -223,6 +223,10 @@ namespace NPOI.HSSF.UserModel
         {
             get
             {
+                if(PictureIndex == -1)
+                {
+                    return null;
+                }
                 HSSFPatriarch patriarch = Patriarch;
                 HSSFShape parent = Parent as HSSFShape;
                 while(patriarch == null && parent != null)

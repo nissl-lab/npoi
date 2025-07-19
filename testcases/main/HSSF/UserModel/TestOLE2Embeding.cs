@@ -60,9 +60,9 @@ namespace TestCases.HSSF.UserModel
 
             IList<HSSFObjectData> objects = workbook.GetAllEmbeddedObjects();
             ClassicAssert.AreEqual(2, objects.Count, "Wrong number of objects");
-            ClassicAssert.AreEqual("MBD06CAB431", objects[0].GetDirectory().Name,
+            ClassicAssert.AreEqual("MBD06CAB431", objects[0].Directory.Name,
                     "Wrong name for first object");
-            ClassicAssert.AreEqual("MBD06CAC85A", objects[1].GetDirectory().Name, "Wrong name for second object");
+            ClassicAssert.AreEqual("MBD06CAC85A", objects[1].Directory.Name, "Wrong name for second object");
 
             workbook.Close();
         }
@@ -126,19 +126,19 @@ namespace TestCases.HSSF.UserModel
 
             MemoryStream bos = new MemoryStream();
             HSSFObjectData od = wb2.GetAllEmbeddedObjects()[0];
-            Ole10Native ole10 = Ole10Native.CreateFromEmbeddedOleObject((DirectoryNode)od.GetDirectory());
+            Ole10Native ole10 = Ole10Native.CreateFromEmbeddedOleObject((DirectoryNode)od.Directory);
             bos = new MemoryStream();
             pptPoifs.WriteFileSystem(bos);
             ClassicAssert.IsTrue(Arrays.Equals(ole10.DataBuffer, bos.ToArray()));
 
             od = wb2.GetAllEmbeddedObjects()[1];
-            ole10 = Ole10Native.CreateFromEmbeddedOleObject((DirectoryNode)od.GetDirectory());
+            ole10 = Ole10Native.CreateFromEmbeddedOleObject((DirectoryNode)od.Directory);
             bos = new MemoryStream();
             xlsPoifs.WriteFileSystem(bos);
             ClassicAssert.IsTrue(Arrays.Equals(ole10.DataBuffer, bos.ToArray()));
 
             od = wb2.GetAllEmbeddedObjects()[2];
-            ole10 = Ole10Native.CreateFromEmbeddedOleObject((DirectoryNode)od.GetDirectory());
+            ole10 = Ole10Native.CreateFromEmbeddedOleObject((DirectoryNode)od.Directory);
             ClassicAssert.IsTrue(Arrays.Equals(ole10.DataBuffer, GetSampleTXT()));
 
             xlsPoifs.Close();

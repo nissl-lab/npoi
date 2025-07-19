@@ -8294,6 +8294,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         private uint shapeIdField;
 
         private string idField;
+        // TODO: Parse CT_ObjectPr xml node
+        //private CT_ObjectPr objectPr;
 
         public CT_OleObject()
         {
@@ -8401,6 +8403,18 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.idField = value;
             }
         }
+
+        public bool IsSetId()
+        {
+            return !string.IsNullOrEmpty(this.idField);
+        }
+
+        public string Any
+        {
+            get;
+            set;
+        }
+
         public static CT_OleObject Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
@@ -8415,6 +8429,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             ctObj.autoLoad = XmlHelper.ReadBool(node.Attributes["autoLoad"]);
             ctObj.shapeId = XmlHelper.ReadUInt(node.Attributes["shapeId"]);
             ctObj.id = XmlHelper.ReadString(node.Attributes["id", PackageNamespaces.SCHEMA_RELATIONSHIPS]);
+            ctObj.Any = node.InnerXml;
             return ctObj;
         }
 
