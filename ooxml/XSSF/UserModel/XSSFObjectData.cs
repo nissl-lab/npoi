@@ -214,10 +214,12 @@ namespace NPOI.XSSF.UserModel
             get
             {
                 var oleObj = GetOleObject();
-                //String blipId = cur.GetAttributeText(new QName(PackageRelationshipTypes.CORE_PROPERTIES_ECMA376_NS, "id"));
-                // TODO: Parse CT_ObjectPr xml node
-                throw new NotImplementedException();
-                // return (XSSFPictureData) GetSheet().GetRelationById(oleObj.id);
+                if(oleObj.objectPr!=null && !string.IsNullOrEmpty(oleObj.objectPr.id))
+                {
+                    return (XSSFPictureData) GetSheet().GetRelationById(oleObj.objectPr.id);
+                }
+                else
+                    return null;
 
                 //XmlCursor cur = GetOleObject().newCursor();
                 //try
@@ -235,6 +237,8 @@ namespace NPOI.XSSF.UserModel
                 //}
             }
         }
+        [Obsolete]
+        [Removal(Version = "4.0.0")]
         public XSSFPictureData PictureData2 => (XSSFPictureData)PictureData;
         
     }
