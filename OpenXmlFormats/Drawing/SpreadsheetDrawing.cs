@@ -1996,7 +1996,7 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
 
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing")]
-    public class CT_Connector // empty interface: EG_ObjectChoices
+    public class CT_Connector: XmlObject // empty interface: EG_ObjectChoices
     {
         string macroField;
         bool fPublishedField;
@@ -2024,6 +2024,7 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
                 else if (childNode.LocalName == "style")
                     ctObj.style = CT_ShapeStyle.Parse(childNode, namespaceManager);
             }
+            ctObj.Node = node;
             return ctObj;
         }
 
