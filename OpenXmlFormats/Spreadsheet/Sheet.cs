@@ -11275,6 +11275,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_OleObjects
     {
+        private bool inAlternateContent = false;
         public static CT_OleObjects Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
@@ -11283,7 +11284,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             ctObj.oleObject = new List<CT_OleObject>();
             foreach (XmlNode childNode in node.ChildNodes)
             {
-                if (childNode.LocalName == "oleObject")
+                if(childNode.LocalName == "AlternateContent")
+                {
+                    ctObj.inAlternateContent = true;
+                    ctObj.oleObject.Add(CT_OleObject.Parse(childNode.ChildNodes[0].ChildNodes[0], namespaceManager));
+                }
+                else if (childNode.LocalName == "oleObject")
                     ctObj.oleObject.Add(CT_OleObject.Parse(childNode, namespaceManager));
             }
             if (ctObj.oleObject.Count == 0)

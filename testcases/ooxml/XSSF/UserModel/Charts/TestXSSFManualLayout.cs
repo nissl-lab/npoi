@@ -33,7 +33,7 @@ namespace TestCases.XSSF.UserModel.Charts
         {
             wb = new XSSFWorkbook();
             ISheet sheet = wb.CreateSheet();
-            IDrawing drawing = sheet.CreateDrawingPatriarch();
+            IDrawing<IShape> drawing = sheet.CreateDrawingPatriarch();
             IClientAnchor anchor = drawing.CreateAnchor(0, 0, 0, 0, 1, 1, 10, 30);
             IChart chart = drawing.CreateChart(anchor);
             IChartLegend legend = chart.GetOrCreateLegend();

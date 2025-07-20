@@ -36,7 +36,6 @@ namespace TestCases.SS.Extractor
         private static POIDataSamples samples = POIDataSamples.GetSpreadSheetInstance();
 
         [Test]
-        [Ignore("embedded object data")]
         public void ExtractPDFfromEMF()
         {
             Stream fis = samples.OpenResourceAsStream("Basic_Expense_Template_2011.xls");
@@ -66,7 +65,6 @@ namespace TestCases.SS.Extractor
         }
 
         [Test]
-        [Ignore("embedded object data")]
         public void ExtractFromXSSF()
         {
             Stream fis = samples.OpenResourceAsStream("58325_db.xlsx");
@@ -82,23 +80,23 @@ namespace TestCases.SS.Extractor
 
             ClassicAssert.AreEqual(4, edList.Count);
             EmbeddedData ed0 = edList[0];
-            ClassicAssert.AreEqual("object 1.pdf", ed0.Filename);
-            ClassicAssert.AreEqual("object 1", ed0.Shape.ShapeName.Trim());
+            ClassicAssert.AreEqual("Object 1.pdf", ed0.Filename);
+            ClassicAssert.AreEqual("Object 1", ed0.Shape.ShapeName.Trim());
             ClassicAssert.AreEqual("Oyys6UtQU1gbHYBYqA4NFA==", md5hash(ed0.GetEmbeddedData()));
 
             EmbeddedData ed1 = edList[1];
-            ClassicAssert.AreEqual("object 2.pdf", ed1.Filename);
-            ClassicAssert.AreEqual("object 2", ed1.Shape.ShapeName.Trim());
+            ClassicAssert.AreEqual("Object 2.pdf", ed1.Filename);
+            ClassicAssert.AreEqual("Object 2", ed1.Shape.ShapeName.Trim());
             ClassicAssert.AreEqual("xLScPUS0XH+5CTZ2A3neNw==", md5hash(ed1.GetEmbeddedData()));
 
             EmbeddedData ed2 = edList[2];
-            ClassicAssert.AreEqual("object 3.pdf", ed2.Filename);
-            ClassicAssert.AreEqual("object 3", ed2.Shape.ShapeName.Trim());
+            ClassicAssert.AreEqual("Object 3.pdf", ed2.Filename);
+            ClassicAssert.AreEqual("Object 3", ed2.Shape.ShapeName.Trim());
             ClassicAssert.AreEqual("rX4klZqJAeM5npb54Gi2+Q==", md5hash(ed2.GetEmbeddedData()));
 
             EmbeddedData ed3 = edList[3];
             ClassicAssert.AreEqual("Microsoft_Excel_Worksheet1.xlsx", ed3.Filename);
-            ClassicAssert.AreEqual("object 1", ed3.Shape.ShapeName.Trim());
+            ClassicAssert.AreEqual("Object 1", ed3.Shape.ShapeName.Trim());
             ClassicAssert.AreEqual("4m4N8ji2tjpEGPQuw2YwGA==", md5hash(ed3.GetEmbeddedData()));
         }
 
@@ -112,7 +110,6 @@ namespace TestCases.SS.Extractor
 
 
         [Test]
-        [Ignore("embedded object data")]
         public void TestNPE()
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("angelo.edu_content_files_19555-nsse-2011-multiyear-benchmark.xls");

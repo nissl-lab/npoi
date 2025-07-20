@@ -88,13 +88,13 @@ namespace NPOI.SS.Extractor
         public virtual List<EmbeddedData> ExtractAll(ISheet sheet)
         {
 
-            IDrawing patriarch = sheet.DrawingPatriarch;
+            IDrawing<IShape> patriarch = sheet.DrawingPatriarch;
             if (null == patriarch)
             {
                 return new List<EmbeddedData>();
             }
             List<EmbeddedData> embeddings = new List<EmbeddedData>();
-            ExtractAll(patriarch as IDrawing<IShape>, embeddings);
+            ExtractAll(patriarch, embeddings);
             return embeddings;
         }
 

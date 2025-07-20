@@ -1861,7 +1861,7 @@ namespace NPOI.HSSF.UserModel
             {
                 foreach (HSSFSheet sh in _sheets)
                 {
-                    IDrawing tmp = sh.DrawingPatriarch;
+                    IDrawing<IShape> _ = sh.DrawingPatriarch;
                 }
             }
             else

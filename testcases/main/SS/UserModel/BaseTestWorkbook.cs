@@ -961,7 +961,7 @@ namespace TestCases.SS.UserModel
             byte[] pictureData = _testDataProvider.GetTestDataFileContent("logoKarmokar4.png");
 
             int handle = wb.AddPicture(pictureData, PictureType.PNG);
-            IDrawing Drawing = sheet.CreateDrawingPatriarch();
+            IDrawing<IShape> Drawing = sheet.CreateDrawingPatriarch();
             ICreationHelper helper = wb.GetCreationHelper();
             IClientAnchor anchor = helper.CreateClientAnchor();
             anchor.AnchorType = (/*setter*/AnchorType.DontMoveAndResize);

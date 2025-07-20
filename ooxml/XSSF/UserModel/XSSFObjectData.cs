@@ -42,7 +42,7 @@ namespace NPOI.XSSF.UserModel
 
         private CT_OleObject oleObject;
 
-        protected XSSFObjectData(XSSFDrawing drawing, CT_Shape ctShape)
+        public XSSFObjectData(XSSFDrawing drawing, CT_Shape ctShape)
             : base(drawing, ctShape)
         {
             ;
@@ -127,7 +127,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                InputStream is1 = GetObjectPart().GetInputStream() as InputStream;
+                Stream is1 = GetObjectPart().GetInputStream();
                 MemoryStream bos = new MemoryStream();
                 IOUtils.Copy(is1, bos);
                 is1.Close();
@@ -149,22 +149,23 @@ namespace NPOI.XSSF.UserModel
         }
         public bool HasDirectoryEntry()
         {
-            InputStream is1 = null;
+            Stream is1 = null;
             try
             {
-                is1 = GetObjectPart().GetInputStream() as InputStream;
+                is1 = GetObjectPart().GetInputStream();// as InputStream;
 
                 // If Clearly doesn't do mark/reset, wrap up
-                if (!is1.MarkSupported())
-                {
-                    is1 = new PushbackInputStream(is1, 8);
-                }
+                //if (!is1.MarkSupported())
+                //{
+                //    is1 = new PushbackInputStream(is1, 8);
+                //}
 
                 // Ensure that there is at least some data there
-                byte[] header8 = IOUtils.PeekFirst8Bytes(is1);
+                byte[] header8 = IOUtils.PeekFirstNBytes(is1, 8);
 
                 // Try to create
-                return NPOIFSFileSystem.HasPOIFSHeader(header8);
+                //return NPOIFSFileSystem.HasPOIFSHeader(header8);
+                return FileMagicContainer.ValueOf(header8) == FileMagic.OLE2;
             }
             catch (IOException e)
             {

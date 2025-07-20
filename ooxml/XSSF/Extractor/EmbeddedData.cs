@@ -19,6 +19,7 @@ namespace NPOI.SS.Extractor
 {
     using NPOI.SS.UserModel;
     using System;
+    using System.Text.RegularExpressions;
 
     /// <summary>
     /// A collection of embedded object informations and content
@@ -37,6 +38,7 @@ namespace NPOI.SS.Extractor
             _contentType = contentType;
         }
 
+        private readonly Regex regFile = new Regex("[^/\\\\]*[/\\\\]", RegexOptions.Compiled);
         /// <summary>
         /// </summary>
         /// <return>filename </return>
@@ -51,7 +53,7 @@ namespace NPOI.SS.Extractor
                 }
                 else
                 {
-                    this._filename = value.Replace("[^/\\\\]*[/\\\\]", "").Trim();
+                    this._filename = regFile.Replace(value, "").Trim();
                 }
             }
         }

@@ -1884,7 +1884,7 @@ namespace NPOI.XSSF.UserModel
         /// Contains a Drawing - return that.
         /// </summary>
         /// <returns>a SpreadsheetML Drawing</returns>
-        public IDrawing CreateDrawingPatriarch()
+        public IDrawing<IShape> CreateDrawingPatriarch()
         {
             OpenXmlFormats.Spreadsheet.CT_Drawing ctDrawing = GetCTDrawing();
             if(ctDrawing != null)
@@ -3746,7 +3746,7 @@ namespace NPOI.XSSF.UserModel
 
         #region ISheet Members
 
-        public IDrawing DrawingPatriarch
+        public IDrawing<IShape> DrawingPatriarch
         {
             get
             {
@@ -5931,7 +5931,7 @@ namespace NPOI.XSSF.UserModel
             XSSFDrawing sheetDrawing = GetDrawingPatriarch();
             if(sheetDrawing != null)
             {
-                IDrawing destDraw = destSheet.CreateDrawingPatriarch();
+                IDrawing<IShape> destDraw = destSheet.CreateDrawingPatriarch();
                 IList<POIXMLDocumentPart> sheetPictures = sheetDrawing.GetRelations();
                 Dictionary<string, uint> pictureIdMapping = new Dictionary<string, uint>();
                 foreach(IEG_Anchor anchor in sheetDrawing.GetCTDrawing().CellAnchors)

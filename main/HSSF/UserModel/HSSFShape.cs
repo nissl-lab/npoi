@@ -459,7 +459,7 @@ namespace NPOI.HSSF.UserModel
                 }
                 EscherProperty ep = eor.Lookup(EscherProperties.GROUPSHAPE__SHAPENAME);
                 if (ep is EscherComplexProperty property) {
-                    return StringUtil.GetFromUnicodeLE(property.ComplexData);
+                    return StringUtil.Trim(StringUtil.GetFromUnicodeLE(property.ComplexData));
                 }
                 return null;
             }

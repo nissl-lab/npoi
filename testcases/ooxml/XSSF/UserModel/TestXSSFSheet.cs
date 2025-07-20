@@ -475,7 +475,7 @@ namespace TestCases.XSSF.UserModel
             XSSFWorkbook workbook = new XSSFWorkbook();
             XSSFSheet sheet = (XSSFSheet)workbook.CreateSheet();
 
-            IDrawing dg = sheet.CreateDrawingPatriarch();
+            IDrawing<IShape> dg = sheet.CreateDrawingPatriarch();
             IComment comment = dg.CreateCellComment(new XSSFClientAnchor());
 
             ICell cell = sheet.CreateRow(0).CreateCell(0);
@@ -2957,7 +2957,7 @@ namespace TestCases.XSSF.UserModel
 
         private void AddComments(ICreationHelper helper, ISheet sheet)
         {
-            IDrawing drawing = sheet.CreateDrawingPatriarch();
+            IDrawing<IShape> drawing = sheet.CreateDrawingPatriarch();
             for (int i = 0; i < 2; i++)
             {
                 IClientAnchor anchor = helper.CreateClientAnchor();
