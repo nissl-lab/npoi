@@ -54,7 +54,7 @@ namespace NPOI.XSSF.UserModel
         /// <summary>
         /// Prototype with the default structure of a new auto-shape.
         /// </summary>
-        protected new static CT_Shape Prototype()
+        public new static CT_Shape Prototype()
         {
             //String drawNS = "http://schemas.microsoft.com/office/drawing/2010/main";
 
@@ -77,7 +77,7 @@ namespace NPOI.XSSF.UserModel
                 //cur.InsertNamespace("a14", drawNS);
                 //cur.InsertAttributeWithValue("spid", "_x0000_s1");
                 //cur.Dispose();
-                ext.Any = "<a14:compatExt spid=\"_x0000_s1025\"/>";
+                ext.Any = "<a14:compatExt xmlns:a14=\"http://schemas.microsoft.com/office/drawing/2010/main\" spid=\"_x0000_s1\"/>";
 
                 nv.AddNewCNvSpPr();
 

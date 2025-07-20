@@ -66,5 +66,18 @@ namespace NPOI.SS.UserModel
         /// <param name="row2">the row (0 based) of the second cell.</param>
         /// <return>the newly created client anchor</return>
         IClientAnchor CreateAnchor(int dx1, int dy1, int dx2, int dy2, int col1, int row1, int col2, int row2);
+
+        /// <summary>
+        /// Adds a new OLE Package Shape
+        /// </summary>
+        /// <param name="anchor">      the client anchor describes how this picture is
+        /// attached to the sheet.
+        /// </param>
+        /// <param name="storageId">   the storageId returned by <see cref="Workbook.addOlePackage(byte[], String, String, String)" /></param>
+        /// <param name="pictureIndex">the index of the picture (used as preview image) in the
+        /// workbook collection of pictures.
+        /// </param>
+        /// <return>newly created shape</return>
+        IObjectData CreateObjectData(IClientAnchor anchor, int storageId, int pictureIndex);
     }
 }
