@@ -957,7 +957,7 @@ namespace TestCases.HPSF.Basic
             fs.WriteFileSystem();
             fs.Close();
 
-            fs = new NPOIFSFileSystem(new FileStream(copy.FullName, FileMode.Open));
+            fs = new NPOIFSFileSystem(File.OpenRead(copy.FullName));
             root = fs.Root;
 
             // Re-check on load
