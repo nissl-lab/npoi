@@ -173,9 +173,9 @@ namespace TestCases.XSSF.UserModel
             }
             finally
             {
-                pkg.Close();
+                
             }
-            //wb.Close(); //Package close twice
+            wb.Close();
         }
         [Test]
         public void TestClone()

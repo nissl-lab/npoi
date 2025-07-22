@@ -238,7 +238,7 @@ namespace NPOI.XSSF.UserModel
                 //}
             }
         }
-        [Obsolete]
+        [Obsolete("PictureData2 is obsolete. Use the PictureData property instead.")]
         [Removal(Version = "4.0.0")]
         public XSSFPictureData PictureData2 => (XSSFPictureData)PictureData;
         
