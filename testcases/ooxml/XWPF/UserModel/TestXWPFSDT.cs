@@ -150,6 +150,20 @@ namespace TestCases.XWPF.UserModel
             ClassicAssert.AreEqual("", sdts[0].GetTitle());
         }
 
+        [Test]
+        public void Test62859() 
+        {
+            //this doesn't test the exact code path for this issue, but
+            //it does test for a related issue, and the fix fixes both.
+            //We should try to add the actual triggering document
+            //to our test suite.
+            XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("Bug62859.docx");
+            List<AbstractXWPFSDT> sdts = ExtractAllSDTs(doc);
+            ClassicAssert.AreEqual(1, sdts.Count);
+            ClassicAssert.AreEqual("", sdts[0].GetTag());
+            ClassicAssert.AreEqual("", sdts[0].GetTitle());
+        }
+
         private List<AbstractXWPFSDT> ExtractAllSDTs(XWPFDocument doc)
         {
 

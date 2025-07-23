@@ -16,30 +16,21 @@
 ==================================================================== */
 namespace TestCases.XWPF.UserModel
 {
-    using System;
-    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.OpenXmlFormats.Wordprocessing;
-    using System.Collections.Generic;
     using NPOI.XWPF.UserModel;
+    using NUnit.Framework;
+    using NUnit.Framework.Legacy;
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
 
 
     /**
-     * Tests for XWPF Run
+     * Tests for XWPF Tables
      */
     [TestFixture]
     public class TestXWPFTable
     {
-        [SetUp]
-        public void SetUp()
-        {
-            /*
-              XWPFDocument doc = new XWPFDocument();
-              p = doc.CreateParagraph();
-
-              this.ctRun = CTR.Factory.NewInstance();
-           */
-        }
-
         [Test]
         public void TestConstructor()
         {
@@ -345,6 +336,29 @@ namespace TestCases.XWPF.UserModel
             //Assert Table Caption & Description
             ClassicAssert.AreEqual("Table Title", table.TableCaption);
             ClassicAssert.AreEqual("Table Description", table.TableDescription);
+        }
+
+        [Test]
+        public void TestSetGetTableAlignment() 
+        {
+            XWPFDocument doc = new XWPFDocument();
+            XWPFTable tbl = doc.CreateTable(1, 1);
+            tbl.TableAlignment = (TableRowAlign.LEFT);
+            ClassicAssert.AreEqual(TableRowAlign.LEFT, tbl.TableAlignment);
+            tbl.TableAlignment = (TableRowAlign.CENTER);
+            ClassicAssert.AreEqual(TableRowAlign.CENTER, tbl.TableAlignment);
+            tbl.TableAlignment = (TableRowAlign.RIGHT);
+            ClassicAssert.AreEqual(TableRowAlign.RIGHT, tbl.TableAlignment);
+            tbl.RemoveTableAlignment();
+            ClassicAssert.IsNull(tbl.TableAlignment);
+            try
+            {
+                doc.Close();
+            } 
+            catch (IOException e)
+            {
+                ClassicAssert.Fail("Unable to close doc");
+            }
         }
     }
 }

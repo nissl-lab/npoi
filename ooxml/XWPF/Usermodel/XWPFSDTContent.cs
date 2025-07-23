@@ -42,6 +42,10 @@ namespace NPOI.XWPF.UserModel
 
         public XWPFSDTContent(CT_SdtContentRun sdtRun, IBody part, IRunBody parent)
         {
+            if (sdtRun == null)
+            {
+                return;
+            }
             foreach (CT_R ctr in sdtRun.GetRList())
             {
                 XWPFRun run = new XWPFRun((CT_R)ctr, parent);
@@ -51,7 +55,10 @@ namespace NPOI.XWPF.UserModel
         }
         public XWPFSDTContent(CT_SdtContentBlock block, IBody part, IRunBody parent)
         {
-            
+            if (block == null)
+            {
+                return;
+            }
             foreach (object o in block.Items)
             {
                 if (o is CT_P ctP)
