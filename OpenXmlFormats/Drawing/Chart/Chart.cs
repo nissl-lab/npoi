@@ -7105,7 +7105,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             if (this.delete != null)
                 this.delete.Write(sw, "delete");
             if (this.separator != null)
-                sw.Write(string.Format("<separator>{0}</separator>", this.separator));
+                sw.Write(string.Format("<c:separator>{0}</c:separator>", this.separator));
             if (this.showLeaderLines != null)
                 this.showLeaderLines.Write(sw, "showLeaderLines");
             if (this.dLbl != null)
@@ -7417,7 +7417,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             if (this.showVal != null)
                 this.showVal.Write(sw, "showVal");
             if (this.separator != null)
-                sw.Write(string.Format("<separator>{0}</separator>", this.separator));
+                sw.Write(string.Format("<c:separator>{0}</c:separator>", this.separator));
             if (this.extLst != null)
             {
                 foreach (CT_Extension x in this.extLst)
