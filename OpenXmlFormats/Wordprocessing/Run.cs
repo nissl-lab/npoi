@@ -29,8 +29,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         private byte[] rsidDelField;
 
         private byte[] rsidRField;
-        
-        Vml.CT_AlternateContent alternateContentField = null;
+
+        List<Vml.CT_AlternateContent> alternateContentFields;
 
         public CT_R()
         {
@@ -64,15 +64,15 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             return this.rPrField;
         }
 
-        public Vml.CT_AlternateContent alternateContent
+        public List<Vml.CT_AlternateContent> alternateContent
         {
             get
             {
-                return alternateContentField;
+                return alternateContentFields;
             }
             set
             {
-                this.alternateContentField = value;
+                this.alternateContentFields = value;
             }
         }
 
@@ -610,7 +610,17 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 }
                 else if (childNode.LocalName == "AlternateContent")
                 {
-                    ctObj.alternateContent = Vml.CT_AlternateContent.Parse(childNode, namespaceManager);
+                    var ctAlternateContent = Vml.CT_AlternateContent.Parse(childNode, namespaceManager);
+
+                    if (ctAlternateContent != null)
+                    {
+                        if (ctObj.alternateContent == null)
+                        {
+                            ctObj.alternateContent = new List<Vml.CT_AlternateContent>();
+                        }
+
+                        ctObj.alternateContent.Add(ctAlternateContent);
+                    }
                 }
                 else if (childNode.LocalName == "endnoteRef")
                 {
@@ -790,10 +800,15 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                     sw.Write("<w:yearShort/>");
                 i++;
             }
-            if (this.alternateContent != null)
+
+            if (this.alternateContent != null && this.alternateContent.Count > 0)
             {
-                this.alternateContent.Write(sw, "AlternateContent");
+                foreach (var ctAlternateContent in this.alternateContent)
+                {
+                    ctAlternateContent.Write(sw, "AlternateContent");
+                }
             }
+
             sw.WriteEndW(nodeName);
         }
     }
