@@ -26,14 +26,12 @@ namespace NPOI.XSSF
     using NPOI.SS.UserModel;
     using NPOI.XSSF.Streaming;
     using NPOI.XSSF.UserModel;
-    using NUnit.Framework;using NUnit.Framework.Legacy;
     using TestCases;
     using TestCases.SS;
 
     /**
      * @author Yegor Kozlov
      */
-    [TestFixture]
     public class SXSSFITestDataProvider : ITestDataProvider
     {
         public static SXSSFITestDataProvider instance = new SXSSFITestDataProvider();

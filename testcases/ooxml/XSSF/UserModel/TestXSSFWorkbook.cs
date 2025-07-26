@@ -1251,7 +1251,7 @@ namespace TestCases.XSSF.UserModel
         private static void InsertPicture(IWorkbook wb, byte[] data, PictureType picType)
         {
             ISheet sheet = wb.GetSheetAt(0);
-            IDrawing patriarch = sheet.DrawingPatriarch;
+            IDrawing<IShape> patriarch = sheet.DrawingPatriarch;
             XSSFClientAnchor anchor = new(500, 200, 0, 0, 2, 2, 4, 7) {
                 AnchorType = AnchorType.MoveDontResize
             };

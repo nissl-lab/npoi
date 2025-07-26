@@ -34,7 +34,7 @@ namespace NPOI.HSSF.UserModel
     /// little other than act as a container for other shapes and Groups.
     /// @author Glen Stampoultzis (glens at apache.org)
     /// </summary>
-    public class HSSFPatriarch : HSSFShapeContainer, IDrawing, IDrawing<HSSFShape>
+    public class HSSFPatriarch : HSSFShapeContainer, IDrawing<HSSFShape>
     {
         //private static POILogger log = POILogFactory.GetLogger(typeof(HSSFPatriarch));
         readonly List<HSSFShape> _shapes = new List<HSSFShape>();
@@ -200,18 +200,8 @@ namespace NPOI.HSSF.UserModel
             return CreatePicture((HSSFClientAnchor)anchor, pictureIndex);
         }
 
-        /**
-     * Adds a new OLE Package Shape 
-     * 
-     * @param anchor       the client anchor describes how this picture is
-     *                     attached to the sheet.
-     * @param storageId    the storageId returned by {@Link HSSFWorkbook.AddOlePackage}
-     * @param pictureIndex the index of the picture (used as preview image) in the
-     *                     workbook collection of pictures.
-     *
-     * @return newly Created shape
-     */
-        public HSSFObjectData CreateObjectData(HSSFClientAnchor anchor, int storageId, int pictureIndex)
+
+        public IObjectData CreateObjectData(IClientAnchor anchor, int storageId, int pictureIndex)
         {
             ObjRecord obj = new ObjRecord();
 
@@ -274,7 +264,7 @@ namespace NPOI.HSSF.UserModel
             }
 
             // create picture shape, which need to be minimal modified for oleshapes
-            HSSFPicture shape = new HSSFPicture(null, anchor);
+            HSSFPicture shape = new HSSFPicture(null, (HSSFClientAnchor)anchor);
             shape.PictureIndex = (/*setter*/pictureIndex);
             EscherContainerRecord spContainer = shape.GetEscherContainer();
             EscherSpRecord spRecord = spContainer.GetChildById(EscherSpRecord.RECORD_ID) as EscherSpRecord;

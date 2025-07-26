@@ -449,7 +449,7 @@ namespace NPOI.SS.UserModel
         /// start from scratch!
         /// </summary>
         /// <value>The drawing patriarch.</value>
-        IDrawing DrawingPatriarch { get; }
+        IDrawing<IShape> DrawingPatriarch { get; }
 
         /**
          * Window zoom magnification for current view representing percent values.
@@ -763,7 +763,7 @@ namespace NPOI.SS.UserModel
         /// <summary>
         /// Creates the top-level drawing patriarch.
         /// </summary>
-        IDrawing CreateDrawingPatriarch();
+        IDrawing<IShape> CreateDrawingPatriarch();
 
         /// <summary>
         /// Gets the parent workbook.

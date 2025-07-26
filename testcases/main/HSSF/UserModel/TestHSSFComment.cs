@@ -92,7 +92,7 @@ namespace TestCases.HSSF.UserModel
         {
             HSSFWorkbook workbook = new HSSFWorkbook();
             ISheet sheet = workbook.CreateSheet();
-            IDrawing drawing = sheet.CreateDrawingPatriarch();
+            IDrawing<IShape> drawing = sheet.CreateDrawingPatriarch();
             int noOfRows = 1025;
             String comment = "c";
 
@@ -132,7 +132,7 @@ namespace TestCases.HSSF.UserModel
             try
             {
                 ISheet sheet = workbook.CreateSheet();
-                IDrawing drawing = sheet.CreateDrawingPatriarch();
+                IDrawing<IShape> drawing = sheet.CreateDrawingPatriarch();
                 String comment = "c";
 
                 for (int rowNum = 0; rowNum < 258; rowNum++)
@@ -181,7 +181,7 @@ namespace TestCases.HSSF.UserModel
             }
         }
 
-        private IComment insertComment(IDrawing Drawing, ICell cell, String message)
+        private IComment insertComment(IDrawing<IShape> Drawing, ICell cell, String message)
         {
             ICreationHelper factory = cell.Sheet.Workbook.GetCreationHelper();
 

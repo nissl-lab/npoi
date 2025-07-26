@@ -22,7 +22,7 @@ namespace NPOI.SS.UserModel
     /// A common interface for shape groups.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface IShapeContainer<T> : IEnumerable<T> where T : class, IShape
+    public interface IShapeContainer<out T> : IEnumerable<T> where T : class, IShape
     {
     }
 }

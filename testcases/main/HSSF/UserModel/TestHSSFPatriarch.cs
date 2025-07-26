@@ -36,7 +36,7 @@ namespace TestCases.HSSF.UserModel
             HSSFWorkbook wb = new HSSFWorkbook();
             NPOI.SS.UserModel.ISheet sheet = wb.CreateSheet();
 
-            IDrawing patr = sheet.CreateDrawingPatriarch();
+            IDrawing<IShape> patr = sheet.CreateDrawingPatriarch();
 
             ClassicAssert.IsNotNull(patr);
 
@@ -52,10 +52,10 @@ namespace TestCases.HSSF.UserModel
             NPOI.SS.UserModel.ISheet sheet = wb.CreateSheet();
 
             // 1. Create drawing patriarch
-            IDrawing patr = sheet.CreateDrawingPatriarch();
+            IDrawing<IShape> patr = sheet.CreateDrawingPatriarch();
 
             // 2. Try to re-get the patriarch
-            IDrawing existingPatr;
+            IDrawing<IShape> existingPatr;
             try
             {
                 existingPatr = sheet.DrawingPatriarch;
