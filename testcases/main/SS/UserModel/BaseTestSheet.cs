@@ -1228,7 +1228,7 @@ namespace TestCases.SS.UserModel
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
             ISheet sheet = workbook.CreateSheet();
-            IDrawing dg = sheet.CreateDrawingPatriarch();
+            IDrawing<IShape> dg = sheet.CreateDrawingPatriarch();
             IComment comment = dg.CreateCellComment(workbook.GetCreationHelper().CreateClientAnchor());
             ICell cell = sheet.CreateRow(9).CreateCell(2);
             comment.Author = (/*setter*/"test C10 author");
@@ -1253,7 +1253,7 @@ namespace TestCases.SS.UserModel
             //assertEquals(Collections.emptyMap(), sheet.getCellComments());
             ClassicAssert.AreEqual(0, sheet.GetCellComments().Count);
 
-            IDrawing dg = sheet.CreateDrawingPatriarch();
+            IDrawing<IShape> dg = sheet.CreateDrawingPatriarch();
             IClientAnchor anchor = workbook.GetCreationHelper().CreateClientAnchor();
 
             int nRows = 5;

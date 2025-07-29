@@ -261,7 +261,7 @@ namespace TestCases.XSSF.UserModel
                 IRow row = sheet.CreateRow(1);
                 ICell cell = row.CreateCell(3);
                 cell.SetCellValue("F4");
-                IDrawing drawing = sheet.CreateDrawingPatriarch();
+                IDrawing<IShape> drawing = sheet.CreateDrawingPatriarch();
                 ICreationHelper factory = wb.GetCreationHelper();
                 // When the comment box is visible, have it show in a 1x3 space
                 IClientAnchor anchor = factory.CreateClientAnchor();
@@ -327,7 +327,7 @@ namespace TestCases.XSSF.UserModel
                 ICell cell = row.CreateCell(0);
                 cell.SetCellValue("test");
 
-                IDrawing drawing = sheet.CreateDrawingPatriarch();
+                IDrawing<IShape> drawing = sheet.CreateDrawingPatriarch();
                 ICreationHelper factory = wb.GetCreationHelper();
                 // When the comment box is visible, have it show in a 1x3 space
                 IClientAnchor anchor = factory.CreateClientAnchor();
@@ -379,7 +379,7 @@ namespace TestCases.XSSF.UserModel
                 ICell cell = row.CreateCell(0);
                 cell.SetCellValue("test");
 
-                IDrawing drawing = sheet.CreateDrawingPatriarch();
+                IDrawing<IShape> drawing = sheet.CreateDrawingPatriarch();
                 ICreationHelper factory = wb.GetCreationHelper();
                 // When the comment box is visible, have it show in a 1x3 space
                 IClientAnchor anchor = factory.CreateClientAnchor();

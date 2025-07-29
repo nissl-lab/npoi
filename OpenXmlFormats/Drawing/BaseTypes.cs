@@ -48,6 +48,7 @@ namespace NPOI.OpenXmlFormats.Dml
             set
             {
                 this.uriField = value;
+                this.uriSpecifiedField = !string.IsNullOrEmpty(this.uriField);
             }
         }
 
@@ -2113,6 +2114,12 @@ namespace NPOI.OpenXmlFormats.Dml
             {
                 this.extField = value;
             }
+        }
+
+        public CT_OfficeArtExtension AddNewExt()
+        {
+            extField.Add(new CT_OfficeArtExtension());
+            return extField[extField.Count - 1];
         }
     }
 

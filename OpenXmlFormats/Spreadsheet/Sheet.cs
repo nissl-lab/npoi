@@ -17,6 +17,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     using System.Xml;
     using NPOI.OpenXml4Net.Util;
     using NPOI.OpenXml4Net.OPC;
+    using CT_Marker = NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_Marker;
 
     public enum ST_SmartTagShow
     {
@@ -8278,6 +8279,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_OleObject
     {
+        private CT_ObjectPr objectPrField;
 
         private string progIdField;
 
@@ -8294,11 +8296,26 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         private uint shapeIdField;
 
         private string idField;
+        // TODO: Parse CT_ObjectPr xml node
+        //private CT_ObjectPr objectPr;
 
         public CT_OleObject()
         {
+            this.objectPrField = new CT_ObjectPr();
             this.dvAspectField = ST_DvAspect.DVASPECT_CONTENT;
             this.autoLoadField = false;
+        }
+
+        public CT_ObjectPr objectPr
+        {
+            get
+            {
+                return this.objectPrField;
+            }
+            set
+            {
+                this.objectPrField = value;
+            }
         }
 
         public string progId
@@ -8401,6 +8418,18 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.idField = value;
             }
         }
+
+        public bool IsSetId()
+        {
+            return !string.IsNullOrEmpty(this.idField);
+        }
+
+        public string Any
+        {
+            get;
+            set;
+        }
+
         public static CT_OleObject Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
@@ -8415,7 +8444,20 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             ctObj.autoLoad = XmlHelper.ReadBool(node.Attributes["autoLoad"]);
             ctObj.shapeId = XmlHelper.ReadUInt(node.Attributes["shapeId"]);
             ctObj.id = XmlHelper.ReadString(node.Attributes["id", PackageNamespaces.SCHEMA_RELATIONSHIPS]);
+            ctObj.Any = node.InnerXml;
+            foreach(XmlNode childNode in node.ChildNodes)
+            {
+                if(childNode.LocalName == "objectPr")
+                    ctObj.objectPrField = CT_ObjectPr.Parse(childNode, namespaceManager);
+            }
             return ctObj;
+        }
+
+        internal void WriteFallback(StreamWriter sw)
+        {
+            sw.Write("<mc:Fallback>");
+            sw.Write($"<oleObject progId=\"{progId}\" dvAspect=\"{this.dvAspect.ToString()}\" shapeId=\"{shapeId}\" r:id=\"{id}\" />");
+            sw.Write("</mc:Fallback>");
         }
 
         internal void Write(StreamWriter sw, string nodeName)
@@ -8428,9 +8470,283 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "autoLoad", this.autoLoad);
             XmlHelper.WriteAttribute(sw, "shapeId", this.shapeId);
             XmlHelper.WriteAttribute(sw, "r:id", this.id);
-            sw.Write("/>");
+            sw.Write(">");
+            if(objectPrField!=null)
+            {
+                this.objectPrField.Write(sw, "objectPr");
+            }
+            sw.Write("</{0}>", nodeName);
         }
 
+    }
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    public class CT_ObjectPr
+    {
+
+        private CT_ObjectAnchor anchorField;
+
+        private bool lockedField;
+
+        private bool defaultSizeField;
+
+        private bool printField;
+
+        private bool disabledField;
+
+        private bool uiObjectField;
+
+        private bool autoFillField;
+
+        private bool autoLineField;
+
+        private bool autoPictField;
+
+        private string macroField;
+
+        private string altTextField;
+
+        private bool ddeField;
+
+        private string idField;
+
+        public static CT_ObjectPr Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if(node == null)
+                return null;
+            CT_ObjectPr ctObj = new CT_ObjectPr();
+            ctObj.lockedField = XmlHelper.ReadBool(node.Attributes["locked"], true);
+            ctObj.defaultSizeField = XmlHelper.ReadBool(node.Attributes["defaultSize"], true);
+            ctObj.printField = XmlHelper.ReadBool(node.Attributes["print"], true);
+            ctObj.disabledField = XmlHelper.ReadBool(node.Attributes["disabled"], false);
+            ctObj.uiObjectField = XmlHelper.ReadBool(node.Attributes["uiObject"], false);
+            ctObj.autoFillField = XmlHelper.ReadBool(node.Attributes["autoFill"], true);
+            ctObj.autoLineField = XmlHelper.ReadBool(node.Attributes["autoLine"], true);
+            ctObj.autoPictField = XmlHelper.ReadBool(node.Attributes["autoPict"], true);
+            ctObj.ddeField = XmlHelper.ReadBool(node.Attributes["dde"], false);
+            ctObj.altTextField = XmlHelper.ReadString(node.Attributes["altText"]);
+            ctObj.macroField = XmlHelper.ReadString(node.Attributes["macro"]);
+            ctObj.id = XmlHelper.ReadString(node.Attributes["id", PackageNamespaces.SCHEMA_RELATIONSHIPS]);
+
+            foreach(XmlNode childNode in node.ChildNodes)
+            {
+                if(childNode.LocalName == "anchor")
+                    ctObj.anchorField = CT_ObjectAnchor.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "locked", this.locked, false, true);
+            XmlHelper.WriteAttribute(sw, "defaultSize", this.defaultSize, false, true);
+            XmlHelper.WriteAttribute(sw, "print", this.print, false, true);
+            XmlHelper.WriteAttribute(sw, "disabled", this.disabled, false, false);
+            XmlHelper.WriteAttribute(sw, "uiObject", this.uiObject, false, false);
+            XmlHelper.WriteAttribute(sw, "autoFill", this.autoFill, false, true);
+            XmlHelper.WriteAttribute(sw, "autoLine", this.autoLine, false, true);
+            XmlHelper.WriteAttribute(sw, "autoPict", this.autoPict, false, true);
+            XmlHelper.WriteAttribute(sw, "dde", this.dde, false, false);
+            XmlHelper.WriteAttribute(sw, "altText", this.altText);
+            XmlHelper.WriteAttribute(sw, "macro", this.macro);
+            XmlHelper.WriteAttribute(sw, "r:id", this.id);
+            sw.Write(">");
+            if(anchorField!=null)
+            {
+                this.anchorField.Write(sw, "anchor");
+            }
+            sw.Write("</{0}>", nodeName);
+        }
+
+        public CT_ObjectPr()
+        {
+            this.anchorField = new CT_ObjectAnchor();
+            this.lockedField = true;
+            this.defaultSizeField = true;
+            this.printField = true;
+            this.disabledField = false;
+            this.uiObjectField = false;
+            this.autoFillField = true;
+            this.autoLineField = true;
+            this.autoPictField = true;
+            this.ddeField = false;
+        }
+
+        public CT_ObjectAnchor anchor
+        {
+            get
+            {
+                return this.anchorField;
+            }
+            set
+            {
+                this.anchorField = value;
+            }
+        }
+
+        [DefaultValue(true)]
+        public bool locked
+        {
+            get
+            {
+                return this.lockedField;
+            }
+            set
+            {
+                this.lockedField = value;
+            }
+        }
+
+        [DefaultValue(true)]
+        public bool defaultSize
+        {
+            get
+            {
+                return this.defaultSizeField;
+            }
+            set
+            {
+                this.defaultSizeField = value;
+            }
+        }
+
+        [DefaultValue(true)]
+        public bool print
+        {
+            get
+            {
+                return this.printField;
+            }
+            set
+            {
+                this.printField = value;
+            }
+        }
+
+        [DefaultValue(false)]
+        public bool disabled
+        {
+            get
+            {
+                return this.disabledField;
+            }
+            set
+            {
+                this.disabledField = value;
+            }
+        }
+
+        [DefaultValue(false)]
+        public bool uiObject
+        {
+            get
+            {
+                return this.uiObjectField;
+            }
+            set
+            {
+                this.uiObjectField = value;
+            }
+        }
+
+        [DefaultValue(true)]
+        public bool autoFill
+        {
+            get
+            {
+                return this.autoFillField;
+            }
+            set
+            {
+                this.autoFillField = value;
+            }
+        }
+
+        [DefaultValue(true)]
+        public bool autoLine
+        {
+            get
+            {
+                return this.autoLineField;
+            }
+            set
+            {
+                this.autoLineField = value;
+            }
+        }
+
+        [DefaultValue(true)]
+        public bool autoPict
+        {
+            get
+            {
+                return this.autoPictField;
+            }
+            set
+            {
+                this.autoPictField = value;
+            }
+        }
+
+        public string macro
+        {
+            get
+            {
+                return this.macroField;
+            }
+            set
+            {
+                this.macroField = value;
+            }
+        }
+
+        public string altText
+        {
+            get
+            {
+                return this.altTextField;
+            }
+            set
+            {
+                this.altTextField = value;
+            }
+        }
+
+        [DefaultValue(false)]
+        public bool dde
+        {
+            get
+            {
+                return this.ddeField;
+            }
+            set
+            {
+                this.ddeField = value;
+            }
+        }
+
+        public string id
+        {
+            get
+            {
+                return this.idField;
+            }
+            set
+            {
+                this.idField = value;
+            }
+        }
+
+        #region Clone method
+        /// <summary>
+        /// Create a clone of this CT_ObjectPr object
+        /// </summary>
+        public virtual CT_ObjectPr Clone()
+        {
+            return ((CT_ObjectPr) (this.MemberwiseClone()));
+        }
+        #endregion
     }
 
     public enum ST_DvAspect
@@ -10966,6 +11282,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
     [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
     public class CT_OleObjects
     {
+        private bool inAlternateContent = false;
         public static CT_OleObjects Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
@@ -10974,7 +11291,13 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             ctObj.oleObject = new List<CT_OleObject>();
             foreach (XmlNode childNode in node.ChildNodes)
             {
-                if (childNode.LocalName == "oleObject")
+                ctObj.inAlternateContent = true;
+                if(childNode.LocalName == "AlternateContent")
+                {
+                    ctObj.inAlternateContent = true;
+                    ctObj.oleObject.Add(CT_OleObject.Parse(childNode.ChildNodes[0].ChildNodes[0], namespaceManager));
+                }
+                else if (childNode.LocalName == "oleObject")
                     ctObj.oleObject.Add(CT_OleObject.Parse(childNode, namespaceManager));
             }
             if (ctObj.oleObject.Count == 0)
@@ -10988,9 +11311,26 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             sw.Write(">");
             if (this.oleObject != null)
             {
+                if(inAlternateContent)
+                {
+                    sw.Write("<mc:AlternateContent xmlns:mc=\"http://schemas.openxmlformats.org/markup-compatibility/2006\">");
+                }
                 foreach (CT_OleObject x in this.oleObject)
                 {
+                    if(inAlternateContent)
+                    {
+                        sw.Write("<mc:Choice Requires=\"x14\">");
+                    }
                     x.Write(sw, "oleObject");
+                    if(inAlternateContent)
+                    {
+                        sw.Write("</mc:Choice>");
+                        x.WriteFallback(sw);
+                    }
+                }
+                if(inAlternateContent)
+                {
+                    sw.Write("</mc:AlternateContent>");
                 }
             }
             sw.Write(string.Format("</{0}>", nodeName));
@@ -11013,6 +11353,17 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             {
                 this.oleObjectField = value;
             }
+        }
+
+        public CT_OleObject AddNewOleObject()
+        {
+            if(this.oleObjectField==null)
+            {
+                this.oleObjectField = new List<CT_OleObject>();
+            }
+            CT_OleObject obj = new CT_OleObject();
+            this.oleObjectField.Add(obj);
+            return obj;
         }
     }
 
@@ -11066,5 +11417,120 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.controlField = value;
             }
         }
+    }
+    [Serializable]
+    [XmlType(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]
+    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main", IsNullable = true)]
+    public partial class CT_ObjectAnchor
+    {
+
+        private CT_Marker fromField;
+
+        private CT_Marker toField;
+
+        private bool moveWithCellsField;
+
+        private bool sizeWithCellsField;
+
+        public static CT_ObjectAnchor Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if(node == null)
+                return null;
+            CT_ObjectAnchor ctObj = new CT_ObjectAnchor();
+            ctObj.moveWithCellsField = XmlHelper.ReadBool(node.Attributes["moveWithCells"], false);
+            ctObj.sizeWithCellsField = XmlHelper.ReadBool(node.Attributes["sizeWithCells"], false);
+
+            foreach(XmlNode childNode in node.ChildNodes)
+            {
+                if(childNode.LocalName == "from")
+                    ctObj.fromField = CT_Marker.Parse(childNode, namespaceManager);
+                else if(childNode.LocalName == "to")
+                    ctObj.toField = CT_Marker.Parse(childNode, namespaceManager);
+            }
+            return ctObj;
+        }
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<{0}", nodeName));
+            XmlHelper.WriteAttribute(sw, "moveWithCells", moveWithCells, false, false);
+            XmlHelper.WriteAttribute(sw, "sizeWithCells", sizeWithCells, false, false);
+            sw.Write(">");
+            if(this.fromField != null)
+            {
+                this.fromField.Write(sw, "from");
+            }
+            if(this.toField != null)
+            {
+                this.toField.Write(sw, "to");
+            }
+            sw.Write(string.Format("</{0}>", nodeName));
+        }
+
+        public CT_ObjectAnchor()
+        {
+            this.toField = new CT_Marker();
+            this.fromField = new CT_Marker();
+            this.moveWithCellsField = false;
+            this.sizeWithCellsField = false;
+        }
+
+        public CT_Marker from
+        {
+            get
+            {
+                return this.fromField;
+            }
+            set
+            {
+                this.fromField = value;
+            }
+        }
+
+        public CT_Marker to
+        {
+            get
+            {
+                return this.toField;
+            }
+            set
+            {
+                this.toField = value;
+            }
+        }
+
+        public bool moveWithCells
+        {
+            get
+            {
+                return this.moveWithCellsField;
+            }
+            set
+            {
+                this.moveWithCellsField = value;
+            }
+        }
+
+        public bool sizeWithCells
+        {
+            get
+            {
+                return this.sizeWithCellsField;
+            }
+            set
+            {
+                this.sizeWithCellsField = value;
+            }
+        }
+
+        #region Clone method
+        /// <summary>
+        /// Create a clone of this CT_ObjectAnchor object
+        /// </summary>
+        public virtual CT_ObjectAnchor Clone()
+        {
+            return ((CT_ObjectAnchor) (this.MemberwiseClone()));
+        }
+        #endregion
     }
 }

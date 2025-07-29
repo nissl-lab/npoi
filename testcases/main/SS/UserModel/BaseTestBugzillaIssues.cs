@@ -1085,7 +1085,7 @@ namespace TestCases.SS.UserModel
             ICreationHelper factory = wb.GetCreationHelper();
 
             ISheet sheet = wb.CreateSheet();
-            IDrawing drawing = sheet.CreateDrawingPatriarch();
+            IDrawing<IShape> drawing = sheet.CreateDrawingPatriarch();
             IClientAnchor anchor = factory.CreateClientAnchor();
 
             ICell cell0 = sheet.CreateRow(0).CreateCell(0);
@@ -1517,7 +1517,7 @@ namespace TestCases.SS.UserModel
 
             ICreationHelper helper = wb.GetCreationHelper();
             IClientAnchor anchor = helper.CreateClientAnchor();
-            IDrawing drawing = sheet.CreateDrawingPatriarch();
+            IDrawing<IShape> drawing = sheet.CreateDrawingPatriarch();
 
             IRow row = sheet.CreateRow(0);
 
