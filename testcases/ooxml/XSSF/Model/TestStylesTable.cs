@@ -100,7 +100,7 @@ namespace TestCases.XSSF.Model
             ClassicAssert.AreEqual(1, st.StyleXfsSize);
             ClassicAssert.AreEqual(8, st.NumDataFormats);
 
-            ClassicAssert.AreEqual(2, st.GetFonts().Count);
+            ClassicAssert.AreEqual(2, st.Fonts.Count);
             ClassicAssert.AreEqual(2, st.GetFills().Count);
             ClassicAssert.AreEqual(1, st.GetBorders().Count);
 
