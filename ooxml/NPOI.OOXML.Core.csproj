@@ -26,6 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="NSax" />
     <PackageReference Include="System.Security.Cryptography.Xml" />
   </ItemGroup>
 
