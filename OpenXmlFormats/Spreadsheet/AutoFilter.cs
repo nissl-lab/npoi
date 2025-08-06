@@ -1333,9 +1333,15 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "sortBy", this.sortBy.ToString());
             XmlHelper.WriteAttribute(sw, "ref", this.@ref);
             XmlHelper.WriteAttribute(sw, "customList", this.customList);
-            XmlHelper.WriteAttribute(sw, "dxfId", this.dxfId);
-            XmlHelper.WriteAttribute(sw, "iconSet",  this.iconSet.AsString(EnumFormat.Description));
-            XmlHelper.WriteAttribute(sw, "iconId", this.iconId);
+
+            if (this.sortBy is ST_SortBy.cellColor or ST_SortBy.fontColor)
+                XmlHelper.WriteAttribute(sw, "dxfId", this.dxfId);
+
+            if (this.sortBy == ST_SortBy.icon)
+            {
+                XmlHelper.WriteAttribute(sw, "iconSet", this.iconSet.AsString(EnumFormat.Description));
+                XmlHelper.WriteAttribute(sw, "iconId", this.iconId);
+            }
             sw.Write("/>");
         }
 
