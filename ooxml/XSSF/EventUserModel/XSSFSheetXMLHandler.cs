@@ -281,7 +281,7 @@ namespace NPOI.XSSF.EventUserModel
                 {
                     rowNum = nextRowNum;
                 }
-                output.startRow(rowNum);
+                output.StartRow(rowNum);
             }
             // c => cell
             else if("c".Equals(localName))
@@ -427,7 +427,7 @@ namespace NPOI.XSSF.EventUserModel
                 XSSFComment comment = commentsTable != null ? commentsTable.FindCellComment(new CellAddress(cellRef)) : null;
 
                 // Output
-                output.cell(cellRef, thisStr, comment);
+                output.Cell(cellRef, thisStr, comment);
             }
             else if("f".Equals(localName))
             {
@@ -443,7 +443,7 @@ namespace NPOI.XSSF.EventUserModel
                 CheckForEmptyCellComments(EmptyCellCommentsCheckType.EndOfRow);
 
                 // Finish up the row
-                output.endRow(rowNum);
+                output.EndRow(rowNum);
 
                 // some sheets do not have rowNum Set in the XML, Excel can read them so we should try to read them as well
                 nextRowNum = rowNum + 1;
@@ -457,13 +457,13 @@ namespace NPOI.XSSF.EventUserModel
                   "firstHeader".Equals(localName))
             {
                 hfIsOpen = false;
-                output.headerFooter(headerFooter.ToString(), true, localName);
+                output.HeaderFooter(headerFooter.ToString(), true, localName);
             }
             else if("oddFooter".Equals(localName) || "evenFooter".Equals(localName) ||
                   "firstFooter".Equals(localName))
             {
                 hfIsOpen = false;
-                output.headerFooter(headerFooter.ToString(), false, localName);
+                output.HeaderFooter(headerFooter.ToString(), false, localName);
             }
         }
 
@@ -572,7 +572,7 @@ namespace NPOI.XSSF.EventUserModel
         private void OutputEmptyCellComment(CellAddress cellRef)
         {
             XSSFComment comment = commentsTable.FindCellComment(cellRef);
-            output.cell(cellRef.FormatAsString(), null, comment);
+            output.Cell(cellRef.FormatAsString(), null, comment);
         }
 
         private enum EmptyCellCommentsCheckType
@@ -591,20 +591,20 @@ namespace NPOI.XSSF.EventUserModel
             /// <summary>
             /// A row with the (zero based) row number has started */
             /// </summary>
-            public void startRow(int rowNum);
+            public void StartRow(int rowNum);
             /// <summary>
             /// A row with the (zero based) row number has ended */
             /// </summary>
-            public void endRow(int rowNum);
+            public void EndRow(int rowNum);
             /// <summary>
             /// A cell, with the given formatted value (may be null),
             ///  and possibly a comment (may be null), was encountered */
             /// </summary>
-            public void cell(String cellReference, String formattedValue, XSSFComment comment);
+            public void Cell(String cellReference, String formattedValue, XSSFComment comment);
             /// <summary>
             /// A header or footer has been encountered */
             /// </summary>
-            public void headerFooter(String text, bool IsHeader, String tagName);
+            public void HeaderFooter(String text, bool IsHeader, String tagName);
         }
     }
 }

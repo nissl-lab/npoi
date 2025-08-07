@@ -42,7 +42,7 @@ using Cysharp.Text;
         private bool formulasNotResults = false;
         private bool includeCellComments = false;
         private bool includeBlankCells = false;
-        private bool includeHeaderFooter = true;
+        private bool includeHeadersFooters = true;
         /// <summary>
         /// Initializes a new instance of the <see cref="ExcelExtractor"/> class.
         /// </summary>
@@ -65,13 +65,13 @@ using Cysharp.Text;
         /// <summary>
         ///  Should header and footer be included? Default is true
         /// </summary>
-        public bool IncludeHeaderFooter
+        public bool IncludeHeadersFooters
         {
             get {
-                return this.includeHeaderFooter;
+                return this.includeHeadersFooters;
             }
             set {
-                this.includeHeaderFooter = value;
+                this.includeHeadersFooters = value;
             }
         }
         /// <summary>
@@ -137,6 +137,8 @@ using Cysharp.Text;
             }
         }
 
+        public bool AddTabEachEmptyCell { get; set; }
+
         /// <summary>
         /// Retreives the text contents of the file
         /// </summary>
@@ -168,7 +170,7 @@ using Cysharp.Text;
                     }
 
                     // Header text, if there is any
-                    if (sheet.Header != null && includeHeaderFooter)
+                    if (sheet.Header != null && includeHeadersFooters)
                     {
                         text.Append(
                                 ExtractHeaderFooter(sheet.Header)
@@ -289,7 +291,7 @@ using Cysharp.Text;
                     }
 
                     // Finally Feader text, if there is any
-                    if (sheet.Footer != null && includeHeaderFooter)
+                    if (sheet.Footer != null && includeHeadersFooters)
                     {
                         text.Append(
                                 ExtractHeaderFooter(sheet.Footer)

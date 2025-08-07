@@ -55,7 +55,7 @@ namespace TestCases.XSSF.Extractor
             ClassicAssert.IsTrue(text.EndsWith("Sheet3\n"));
 
             // Now without, will have text
-            extractor.SetIncludeSheetNames(false);
+            extractor.IncludeSheetNames = false;
             text = extractor.Text;
             string CHUNK1 =
                 "Lorem\t111\n" +
@@ -80,7 +80,7 @@ namespace TestCases.XSSF.Extractor
                     , text);
 
             // Now Get formulas not their values
-            extractor.SetFormulasNotResults(true);
+            extractor.FormulasNotResults = true;
             text = extractor.Text;
             ClassicAssert.AreEqual(
                     CHUNK1 +
@@ -88,7 +88,7 @@ namespace TestCases.XSSF.Extractor
                     CHUNK2, text);
 
             // With sheet names too
-            extractor.SetIncludeSheetNames(true);
+            extractor.IncludeSheetNames = true;
             text = extractor.Text;
             ClassicAssert.AreEqual(
                     "Sheet1\n" +
@@ -184,7 +184,7 @@ namespace TestCases.XSSF.Extractor
             ClassicAssert.IsFalse(text.Contains("test phrase"), "Unable to find expected word in text\n" + text);
 
             // Turn on comment extraction, will then be
-            extractor.SetIncludeCellComments(true);
+            extractor.IncludeCellComments = true;
             text = extractor.Text;
             ClassicAssert.IsTrue(text.Contains("testdoc"), "Unable to find expected word in text\n" + text);
             ClassicAssert.IsTrue(text.Contains("test phrase"), "Unable to find expected word in text\n" + text);
@@ -256,7 +256,7 @@ namespace TestCases.XSSF.Extractor
             XSSFExcelExtractor extractor = GetExtractor("WithTextBox.xlsx");
             try
             {
-                extractor.SetFormulasNotResults(true);
+                extractor.FormulasNotResults = true;
                 string text = extractor.Text;
                 ClassicAssert.IsTrue(text.IndexOf("Line 1") > -1);
                 ClassicAssert.IsTrue(text.IndexOf("Line 2") > -1);
