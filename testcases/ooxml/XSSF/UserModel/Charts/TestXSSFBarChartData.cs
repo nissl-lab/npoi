@@ -25,7 +25,7 @@ namespace TestCases.XSSF.UserModel.Charts
         {
             using IWorkbook wb = new XSSFWorkbook();
             ISheet sheet = new SheetBuilder(wb, plotData).Build();
-            IDrawing drawing = sheet.CreateDrawingPatriarch();
+            IDrawing<IShape> drawing = sheet.CreateDrawingPatriarch();
             IClientAnchor anchor = drawing.CreateAnchor(0, 0, 0, 0, 1, 1, 10, 30);
             IChart chart = drawing.CreateChart(anchor);
 
@@ -54,7 +54,7 @@ namespace TestCases.XSSF.UserModel.Charts
         {
             using IWorkbook wb = new XSSFWorkbook();
             ISheet sheet = new SheetBuilder(wb, plotData).Build();
-            IDrawing drawing = sheet.CreateDrawingPatriarch();
+            IDrawing<IShape> drawing = sheet.CreateDrawingPatriarch();
             IClientAnchor anchor = drawing.CreateAnchor(0, 0, 0, 0, 1, 1, 10, 30);
             IChart chart = drawing.CreateChart(anchor);
 

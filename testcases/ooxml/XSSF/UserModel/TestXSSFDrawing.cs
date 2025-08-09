@@ -156,7 +156,6 @@ namespace TestCases.XSSF.UserModel
             wb2.Close();
         }
         [Test]
-        [Ignore("TODO FIX CI TESTS")]
         public void TestMultipleDrawings()
         {
             XSSFWorkbook wb = new XSSFWorkbook();
@@ -174,7 +173,7 @@ namespace TestCases.XSSF.UserModel
             }
             finally
             {
-                pkg.Close();
+                
             }
             wb.Close();
         }
@@ -813,6 +812,67 @@ namespace TestCases.XSSF.UserModel
                 wb.Close();
             }
         }
+
+        [Test]
+        public void TestGroupShape()
+        {
+
+            XSSFWorkbook wb1 = new XSSFWorkbook();
+            XSSFSheet sheet = wb1.CreateSheet() as XSSFSheet;
+            XSSFDrawing drawing = sheet.CreateDrawingPatriarch() as XSSFDrawing;
+
+            XSSFSimpleShape s0 = drawing.CreateSimpleShape((XSSFClientAnchor)drawing.CreateAnchor(0, 0, Units.PixelToEMU(30), Units.PixelToEMU(30), 1, 1, 10, 10));
+            s0.ShapeType = (int)ShapeTypes.Rectangle;
+            s0.SetLineStyleColor(100, 0, 0);
+
+            XSSFShapeGroup g1 = drawing.CreateGroup((XSSFClientAnchor)drawing.CreateAnchor(0, 0, 300, 300, 1, 1, 10, 10));
+            CT_GroupTransform2D xfrmG1 = g1.GetCTGroupShape().grpSpPr.xfrm;
+
+            XSSFSimpleShape s1 = g1.CreateSimpleShape(new XSSFChildAnchor(
+                (int)(xfrmG1.chExt.cx*0.1),
+                (int)(xfrmG1.chExt.cy*0.1),
+                (int)(xfrmG1.chExt.cx*0.9),
+                (int)(xfrmG1.chExt.cy*0.9)
+            ));
+            s1.ShapeType = (int) ShapeTypes.Rectangle;
+            s1.SetLineStyleColor(0, 100, 0);
+
+            XSSFShapeGroup g2 = g1.CreateGroup(new XSSFChildAnchor(
+                (int)(xfrmG1.chExt.cx*0.2),
+                (int)(xfrmG1.chExt.cy*0.2),
+                (int)(xfrmG1.chExt.cx*0.8),
+                (int)(xfrmG1.chExt.cy*0.8)
+            ));
+            CT_GroupTransform2D xfrmG2 = g2.GetCTGroupShape().grpSpPr.xfrm;
+
+            XSSFSimpleShape s2 = g2.CreateSimpleShape(new XSSFChildAnchor(
+                (int)(xfrmG2.chExt.cx*0.1),
+                (int)(xfrmG2.chExt.cy*0.1),
+                (int)(xfrmG2.chExt.cx*0.9),
+                (int)(xfrmG2.chExt.cy*0.9)
+            ));
+            s2.ShapeType = (int) ShapeTypes.Rectangle;
+            s2.SetLineStyleColor(0, 0, 100);
+
+            XSSFWorkbook wb2 = XSSFTestDataSamples.WriteOutAndReadBack(wb1);
+            wb1.Close();
+
+            XSSFDrawing draw = wb2.GetSheetAt(0).DrawingPatriarch as XSSFDrawing;
+            List<XSSFShape> shapes = draw.GetShapes();
+            ClassicAssert.AreEqual(2, shapes.Count);
+            ClassicAssert.IsTrue(shapes[0] is XSSFSimpleShape);
+            ClassicAssert.IsTrue(shapes[1] is XSSFShapeGroup);
+            shapes = draw.GetShapes((XSSFShapeGroup) shapes[1]);
+            ClassicAssert.AreEqual(2, shapes.Count);
+            ClassicAssert.IsTrue(shapes[0] is XSSFSimpleShape);
+            ClassicAssert.IsTrue(shapes[1] is XSSFShapeGroup);
+            shapes = draw.GetShapes((XSSFShapeGroup) shapes[1]);
+            ClassicAssert.AreEqual(1, shapes.Count);
+            ClassicAssert.IsTrue(shapes[0] is XSSFSimpleShape);
+
+            wb2.Close();
+        }
+
         private static void checkRewrite(XSSFWorkbook wb)
         {
             XSSFWorkbook wb2 = XSSFTestDataSamples.WriteOutAndReadBack(wb);

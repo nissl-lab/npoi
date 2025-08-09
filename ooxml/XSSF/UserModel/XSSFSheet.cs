@@ -1884,7 +1884,7 @@ namespace NPOI.XSSF.UserModel
         /// Contains a Drawing - return that.
         /// </summary>
         /// <returns>a SpreadsheetML Drawing</returns>
-        public IDrawing CreateDrawingPatriarch()
+        public IDrawing<IShape> CreateDrawingPatriarch()
         {
             OpenXmlFormats.Spreadsheet.CT_Drawing ctDrawing = GetCTDrawing();
             if(ctDrawing != null)
@@ -3746,7 +3746,7 @@ namespace NPOI.XSSF.UserModel
 
         #region ISheet Members
 
-        public IDrawing DrawingPatriarch
+        public IDrawing<IShape> DrawingPatriarch
         {
             get
             {
@@ -5931,7 +5931,7 @@ namespace NPOI.XSSF.UserModel
             XSSFDrawing sheetDrawing = GetDrawingPatriarch();
             if(sheetDrawing != null)
             {
-                IDrawing destDraw = destSheet.CreateDrawingPatriarch();
+                IDrawing<IShape> destDraw = destSheet.CreateDrawingPatriarch();
                 IList<POIXMLDocumentPart> sheetPictures = sheetDrawing.GetRelations();
                 Dictionary<string, uint> pictureIdMapping = new Dictionary<string, uint>();
                 foreach(IEG_Anchor anchor in sheetDrawing.GetCTDrawing().CellAnchors)
@@ -6272,6 +6272,97 @@ namespace NPOI.XSSF.UserModel
             return result;
         }
 
+        /**
+         * Determine the OleObject which links shapes with embedded resources
+         *
+         * @param shapeId the shape id
+         * @return the CTOleObject of the shape
+         */
+        public CT_OleObject ReadOleObject(long shapeId)
+        {
+            if (!GetCTWorksheet().IsSetOleObjects())
+            {
+                return null;
+            }
+
+            CT_OleObjects objs = GetCTWorksheet().oleObjects;
+            CT_OleObject coo = null;
+            foreach(var obj in objs.oleObject)
+            {
+                if((long) obj.shapeId!=shapeId)
+                {
+                    continue;
+                }
+                coo = obj;
+                if(coo.objectPr!=null)
+                {
+                    break;
+                }
+            }
+
+            return coo;
+            // we use a XmlCursor here to handle oleObject with-/out AlternateContent wrappers
+            //String xquery = "declare namespace p='" + XSSFRelation.NS_SPREADSHEETML + "' .//p:oleObject";
+            //XmlCursor cur = GetCTWorksheet().oleObjects.newCursor();
+            //try
+            //{
+            //    cur.selectPath(xquery);
+            //    CT_OleObject coo = null;
+            //    while (cur.toNextSelection())
+            //    {
+            //        String sId = cur.getAttributeText(new QName(null, "shapeId"));
+            //        if (sId == null || long.Parse(sId) != shapeId)
+            //        {
+            //            continue;
+            //        }
+
+            //        XmlObject xObj = cur.getObject();
+            //        if (xObj is CT_OleObject) {
+            //            // the unusual case ...
+            //            coo = (CT_OleObject)xObj;
+            //        } else
+            //        {
+            //            XMLStreamReader reader = cur.newXMLStreamReader();
+            //            try
+            //            {
+            //                CT_OleObjects coos = CTOleObjects.Factory.parse(reader);
+            //                if (coos.SizeOfOleObjectArray() == 0)
+            //                {
+            //                    continue;
+            //                }
+            //                coo = coos.GetOleObjectArray(0);
+            //            }
+            //            catch (XmlException e)
+            //            {
+            //                logger.log(POILogger.INFO, "can't parse CTOleObjects", e);
+            //            }
+            //            finally
+            //            {
+            //                try
+            //                {
+            //                    reader.close();
+            //                }
+            //                catch (XMLStreamException e)
+            //                {
+            //                    logger.Log(POILogger.INFO, "can't close reader", e);
+            //                }
+            //            }
+            //        }
+
+            //        // there are choice and fallback OleObject ... we prefer the one having the objectPr element,
+            //        // which is in the choice element
+            //        if (cur.toChild(XSSFRelation.NS_SPREADSHEETML, "objectPr"))
+            //        {
+            //            break;
+            //        }
+            //    }
+            //    return (coo == null) ? null : coo;
+            //}
+            //finally
+            //{
+            //    cur.dispose();
+            //}
+        }
         #endregion
 
         #region Helper classes

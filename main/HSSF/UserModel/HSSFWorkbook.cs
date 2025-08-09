@@ -1861,7 +1861,7 @@ namespace NPOI.HSSF.UserModel
             {
                 foreach (HSSFSheet sh in _sheets)
                 {
-                    IDrawing tmp = sh.DrawingPatriarch;
+                    IDrawing<IShape> _ = sh.DrawingPatriarch;
                 }
             }
             else
@@ -2056,6 +2056,15 @@ namespace NPOI.HSSF.UserModel
             }
         }
 
+        /// <summary>
+        /// Adds an OLE package manager object with the given content to the sheet
+        /// </summary>
+        /// <param name="oleData">the payload</param>
+        /// <param name="label">the label of the payload</param>
+        /// <param name="fileName">the original filename</param>
+        /// <param name="command">the command to open the payload</param>
+        /// <return>the index of the added ole object, i.e. the storage id</return>
+        /// <exception cref="IOException">if the object can't be embedded</exception>
         public int AddOlePackage(byte[] oleData, String label, String fileName, String command)
         {
             // check if we were Created by POIFS otherwise create a new dummy POIFS for storing the package data

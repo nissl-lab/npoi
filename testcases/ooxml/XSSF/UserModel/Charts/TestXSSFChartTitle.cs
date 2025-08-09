@@ -52,7 +52,7 @@ namespace TestCases.XSSF.UserModel.Charts
                 }
             }
 
-            IDrawing Drawing = sheet.CreateDrawingPatriarch();
+            IDrawing<IShape> Drawing = sheet.CreateDrawingPatriarch();
             IClientAnchor anchor = Drawing.CreateAnchor(0, 0, 0, 0, 0, 5, 10, 15);
 
             IChart chart = Drawing.CreateChart(anchor);

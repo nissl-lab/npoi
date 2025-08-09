@@ -28,6 +28,8 @@ using NPOI.SS.Util;
 using NPOI.Util;
 using System.Text.RegularExpressions;
 using System.Linq;
+using System.Collections;
+using NPOI.OpenXml4Net.Exceptions;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -37,7 +39,7 @@ namespace NPOI.XSSF.UserModel
      *
      * @author Yegor Kozlov
      */
-    public class XSSFDrawing : POIXMLDocumentPart, IDrawing
+    public class XSSFDrawing : POIXMLDocumentPart, IDrawing<IShape>
     {
         public static String NAMESPACE_A = XSSFRelation.NS_DRAWINGML;
         public static String NAMESPACE_C = XSSFRelation.NS_CHART;
@@ -124,7 +126,7 @@ namespace NPOI.XSSF.UserModel
          */
         public XSSFTextBox CreateTextbox(IClientAnchor anchor)
         {
-            long shapeId = newShapeId();
+            long shapeId = NewShapeId();
             CT_TwoCellAnchor ctAnchor = CreateTwoCellAnchor(anchor);
             CT_Shape ctShape = ctAnchor.AddNewSp();
             ctShape.Set(XSSFSimpleShape.Prototype());
@@ -152,7 +154,7 @@ namespace NPOI.XSSF.UserModel
         {
             PackageRelationship rel = AddPictureReference(pictureIndex);
 
-            long shapeId = newShapeId();
+            long shapeId = NewShapeId();
             CT_TwoCellAnchor ctAnchor = CreateTwoCellAnchor(anchor);
             CT_Picture ctShape = ctAnchor.AddNewPic();
             ctShape.Set(XSSFPicture.Prototype());
@@ -272,7 +274,7 @@ namespace NPOI.XSSF.UserModel
          */
         public XSSFSimpleShape CreateSimpleShape(XSSFClientAnchor anchor)
         {
-            long shapeId = newShapeId();
+            long shapeId = NewShapeId();
             CT_TwoCellAnchor ctAnchor = CreateTwoCellAnchor(anchor);
             CT_Shape ctShape = ctAnchor.AddNewSp();
             ctShape.Set(XSSFSimpleShape.Prototype());
@@ -298,7 +300,7 @@ namespace NPOI.XSSF.UserModel
          */
         public XSSFConnector CreateConnector(XSSFClientAnchor anchor)
         {
-            long shapeId = newShapeId();
+            long shapeId = NewShapeId();
             CT_TwoCellAnchor ctAnchor = CreateTwoCellAnchor(anchor);
             CT_Connector ctShape = ctAnchor.AddNewCxnSp();
             ctShape.Set(XSSFConnector.Prototype());
@@ -328,7 +330,7 @@ namespace NPOI.XSSF.UserModel
         ) {
             var anchor = new XSSFClientAnchor(Sheet, (int)BFF.Left, (int)BFF.Top
                                                    , (int)BFF.Rigth, (int)BFF.Bottom);
-            long shapeId = newShapeId();
+            long shapeId = NewShapeId();
             CT_TwoCellAnchor ctAnchor = CreateTwoCellAnchor(anchor);
             CT_Shape ctShape = ctAnchor.AddNewSp();
             ctShape.Set(XSSFFreeform.Prototype());
@@ -352,7 +354,7 @@ namespace NPOI.XSSF.UserModel
          */
         public XSSFShapeGroup CreateGroup(XSSFClientAnchor anchor)
         {
-            long shapeId = newShapeId();
+            long shapeId = NewShapeId();
             CT_TwoCellAnchor ctAnchor = CreateTwoCellAnchor(anchor);
             CT_GroupShape ctGroup = ctAnchor.AddNewGrpSp();
             ctGroup.Set(XSSFShapeGroup.Prototype());
@@ -424,6 +426,7 @@ namespace NPOI.XSSF.UserModel
             CT_TwoCellAnchor ctAnchor = CreateTwoCellAnchor(anchor);
             CT_GraphicalObjectFrame ctGraphicFrame = ctAnchor.AddNewGraphicFrame();
             ctGraphicFrame.Set(XSSFGraphicFrame.Prototype());
+            ctGraphicFrame.xfrm = CreateXfrm(anchor);
 
             long frameId = numOfGraphicFrames++;
             XSSFGraphicFrame graphicFrame = new XSSFGraphicFrame(this, ctGraphicFrame);
@@ -433,6 +436,114 @@ namespace NPOI.XSSF.UserModel
             graphicFrame.cellanchor = ctAnchor;
 
             return graphicFrame;
+        }
+
+        public IObjectData CreateObjectData(IClientAnchor anchor, int storageId, int pictureIndex)
+        {
+            XSSFSheet sh = Sheet;
+            PackagePart sheetPart = sh.GetPackagePart();
+
+            /*
+             * The shape id of the ole object seems to be a legacy shape id.
+             * 
+             * see 5.3.2.1 legacyDrawing (Legacy Drawing Object):
+             * Legacy Shape ID that is unique throughout the entire document.
+             * Legacy shape IDs should be assigned based on which portion of the document the
+             * drawing resides on. The assignment of these ids is broken down into clusters of
+             * 1024 values. The first cluster is 1-1024, the second 1025-2048 and so on.
+             *
+             * Ole shapes seem to start with 1025 on the first sheet ...
+             * and not sure, if the ids need to be reindexed when sheets are removed
+             * or more than 1024 shapes are on a given sheet (see #51332 for a similar issue)
+             */
+            XSSFSheet sheet = Sheet;
+            XSSFWorkbook wb = sheet.Workbook as XSSFWorkbook;
+            int sheetIndex = wb.GetSheetIndex(sheet);
+            long shapeId = (sheetIndex+1)*1024 + NewShapeId();
+
+            // add reference to OLE part
+            PackagePartName olePN;
+            try
+            {
+                olePN = PackagingUriHelper.CreatePartName("/xl/embeddings/oleObject"+storageId+".bin");
+            }
+            catch(InvalidFormatException e)
+            {
+                throw new POIXMLException(e);
+            }
+            PackageRelationship olePR = sheetPart.AddRelationship( olePN, TargetMode.Internal, POIXMLDocument.OLE_OBJECT_REL_TYPE );
+
+            // add reference to image part
+            XSSFPictureData imgPD = sh.Workbook.GetAllPictures()[pictureIndex] as XSSFPictureData;
+            PackagePartName imgPN = imgPD.GetPackagePart().PartName;
+            PackageRelationship imgSheetPR = sheetPart.AddRelationship( imgPN, TargetMode.Internal, PackageRelationshipTypes.IMAGE_PART );
+            PackageRelationship imgDrawPR = GetPackagePart().AddRelationship( imgPN, TargetMode.Internal, PackageRelationshipTypes.IMAGE_PART );
+
+
+            // add OLE part metadata to sheet
+            NPOI.OpenXmlFormats.Spreadsheet.CT_Worksheet cwb = sh.GetCTWorksheet();
+            NPOI.OpenXmlFormats.Spreadsheet.CT_OleObjects oo = cwb.IsSetOleObjects() ? cwb.oleObjects : cwb.AddNewOleObjects();
+
+            NPOI.OpenXmlFormats.Spreadsheet.CT_OleObject ole1 = oo.AddNewOleObject();
+            ole1.progId = "Package";
+            ole1.shapeId = (uint) shapeId;
+            ole1.id = olePR.Id;
+
+            //XmlCursor cur1 = ole1.newCursor();
+            //cur1.toEndToken();
+            //cur1.beginElement("objectPr", XSSFRelation.NS_SPREADSHEETML);
+            //cur1.insertAttributeWithValue("id", PackageRelationshipTypes.CORE_PROPERTIES_ECMA376_NS, imgSheetPR.Id);
+            //cur1.insertAttributeWithValue("defaultSize", "0");
+            //cur1.beginElement("anchor", XSSFRelation.NS_SPREADSHEETML);
+            //cur1.insertAttributeWithValue("moveWithCells", "1");
+
+            ole1.objectPr.id = imgSheetPR.Id;
+            ole1.objectPr.defaultSize = false;
+            ole1.objectPr.anchor.moveWithCells = true;
+
+            CT_TwoCellAnchor ctAnchor = CreateTwoCellAnchor((XSSFClientAnchor)anchor);
+
+            //XmlCursor cur2 = ctAnchor.newCursor();
+            //cur2.copyXmlContents(cur1);
+            //cur2.dispose();
+
+            //cur1.toParent();
+            //cur1.toFirstChild();
+            //cur1.setName(new QName(XSSFRelation.NS_SPREADSHEETML, "from"));
+            //cur1.toNextSibling();
+            //cur1.setName(new QName(XSSFRelation.NS_SPREADSHEETML, "to"));
+
+            //cur1.dispose();
+
+            // add a new shape and link OLE & image part
+            CT_Shape ctShape = ctAnchor.AddNewSp();
+            ctShape.Set(XSSFObjectData.Prototype());
+            ctShape.spPr.xfrm = (CreateXfrm((XSSFClientAnchor) anchor));
+
+            // workaround for not having the vmlDrawing filled
+            NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_BlipFillProperties blipFill = ctShape.spPr.AddNewBlipFill();
+            blipFill.AddNewBlip().embed = imgDrawPR.Id;
+            blipFill.AddNewStretch().AddNewFillRect();
+
+            NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_NonVisualDrawingProps cNvPr = ctShape.nvSpPr.cNvPr;
+            cNvPr.id = (uint)shapeId;
+            cNvPr.name = "Object "+shapeId;
+
+            //XmlCursor extCur = cNvPr.getExtLst().getExtArray(0).newCursor();
+            //extCur.toFirstChild();
+            //extCur.setAttributeText(new QName("spid"), "_x0000_s"+shapeId);
+            //extCur.dispose();
+            var ext = cNvPr.extLst.ext[0];
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(ext.Any);
+            doc.FirstChild.Attributes["spid"].Value = "_x0000_s"+shapeId;
+
+            ext.Any = doc.InnerXml;
+
+            XSSFObjectData shape = new XSSFObjectData(this, ctShape);
+            shape.anchor = (XSSFClientAnchor) anchor;
+
+            return shape;
         }
 
         /**
@@ -483,7 +594,34 @@ namespace NPOI.XSSF.UserModel
             return ctAnchor;
         }
 
-        private long newShapeId()
+        private CT_Transform2D CreateXfrm(XSSFClientAnchor anchor)
+        {
+            CT_Transform2D xfrm = new CT_Transform2D();
+            CT_Point2D off = xfrm.AddNewOff();
+            off.x = anchor.Dx1;
+            off.y = anchor.Dy1;
+            XSSFSheet sheet = Sheet;
+            double widthPx = 0;
+            for(int col = anchor.Col1; col<anchor.Col2; col++)
+            {
+                widthPx += sheet.GetColumnWidthInPixels(col);
+            }
+            double heightPx = 0;
+            for(int row = anchor.Row1; row<anchor.Row2; row++)
+            {
+                heightPx += ImageUtils.GetRowHeightInPixels(sheet, row);
+            }
+            long width = Units.PixelToEMU((int)widthPx);
+            long height = Units.PixelToEMU((int)heightPx);
+            CT_PositiveSize2D ext = xfrm.AddNewExt();
+            ext.cx = (width - anchor.Dx1 + anchor.Dx2);
+            ext.cy = (height - anchor.Dy1 + anchor.Dy2);
+
+            // TODO: handle vflip/hflip
+            return xfrm;
+        }
+
+        private long NewShapeId()
         {
             return drawing.SizeOfTwoCellAnchorArray() + 1;
         }
@@ -497,10 +635,53 @@ namespace NPOI.XSSF.UserModel
 
         #endregion
 
+        /// <summary>
+        /// get shapes in this shape group
+        /// </summary>
+        /// <param name="groupshape"></param>
+        /// <returns>list of shapes in this shape group</returns>
+        public List<XSSFShape> GetShapes(XSSFShapeGroup groupshape)
+        {
+            List<XSSFShape> lst = new List<XSSFShape>();
+            var gs = groupshape.GetCTGroupShape();
+            AddShapes(gs, lst);
+            return lst;
+        }
+
+        private void AddShapes(CT_GroupShape gs, List<XSSFShape> lst)
+        {
+            XSSFShape shape = null;
+            foreach(var sp in gs.Shapes)
+            {
+                shape = HasOleLink(sp)
+                        ? new XSSFObjectData(this, sp)
+                        : new XSSFSimpleShape(this, sp);
+                shape.anchor = GetAnchorFromParent(sp.Node);
+                lst.Add(shape);
+            }
+            foreach(var p in gs.Pictures)
+            {
+                shape = new XSSFPicture(this, p);
+                shape.anchor = GetAnchorFromParent(p.Node);
+                lst.Add(shape);
+            }
+            foreach (var c in gs.Connectors)
+            {
+                shape = new XSSFConnector(this, c);
+                shape.anchor = GetAnchorFromParent(c.Node);
+                lst.Add(shape);
+            }
+            foreach(var g in gs.Groups)
+            {
+                shape = new XSSFShapeGroup(this, g);
+                shape.anchor = GetAnchorFromParent(g.Node);
+                lst.Add(shape);
+            }
+        }
         /**
-     *
-     * @return list of shapes in this drawing
-     */
+         *
+         * @return list of shapes in this drawing
+         */
         public List<XSSFShape> GetShapes()
         {
             List<XSSFShape> lst = new List<XSSFShape>();
@@ -515,41 +696,48 @@ namespace NPOI.XSSF.UserModel
                 {
                     shape = new XSSFConnector(this, anchor.connector);
                 }
+                else if(anchor.sp != null)
+                {
+                    shape = XSSFDrawing.HasOleLink(anchor.sp)
+                        ? new XSSFObjectData(this, anchor.sp)
+                        : new XSSFSimpleShape(this, anchor.sp);
+                }
                 else if (anchor.groupShape != null)
                 {
-                    List<object> lstCtShapes = new List<object>();
-                    anchor.groupShape.GetShapes(lstCtShapes);
+                    shape = new XSSFShapeGroup(this, anchor.groupShape);
+                    //List<object> lstCtShapes = new List<object>();
+                    //anchor.groupShape.GetShapes(lstCtShapes);
 
-                    foreach(var s in lstCtShapes)
-                    {
-                        XSSFShape gShape = null;
-                        if(s is CT_Connector connector)
-                        {
-                            gShape = new XSSFConnector(this, connector);
-                        }
-                        else if(s is CT_Picture picture)
-                        {
-                            gShape = new XSSFPicture(this, picture);
-                        }
-                        else if(s is CT_Shape ctShape)
-                        {
-                            gShape = new XSSFSimpleShape(this, ctShape);
-                        }
-                        else if(s is CT_GroupShape groupShape)
-                        {
-                            gShape = new XSSFShapeGroup(this, groupShape);
-                        }
-                        else if(s is CT_GraphicalObjectFrame frame)
-                        {
-                            gShape = new XSSFGraphicFrame(this, frame);
-                        }
-                        if(gShape != null)
-                        {
-                            gShape.anchor = GetAnchorFromIEGAnchor(anchor);
-                            gShape.cellanchor = anchor;
-                            lst.Add(gShape);
-                        }
-                    }
+                    //foreach(var s in lstCtShapes)
+                    //{
+                    //    XSSFShape gShape = null;
+                    //    if(s is CT_Connector)
+                    //    {
+                    //        gShape = new XSSFConnector(this, (CT_Connector)s);
+                    //    }
+                    //    else if(s is CT_Picture)
+                    //    {
+                    //        gShape = new XSSFPicture(this, (CT_Picture)s);
+                    //    }
+                    //    else if(s is CT_Shape)
+                    //    {
+                    //        gShape = new XSSFSimpleShape(this, (CT_Shape)s);
+                    //    }
+                    //    else if(s is CT_GroupShape)
+                    //    {
+                    //        gShape = new XSSFShapeGroup(this, (CT_GroupShape)s);
+                    //    }
+                    //    else if(s is CT_GraphicalObjectFrame)
+                    //    {
+                    //        gShape = new XSSFGraphicFrame(this, (CT_GraphicalObjectFrame)s);
+                    //    }
+                    //    if(gShape != null)
+                    //    {
+                    //        gShape.anchor = GetAnchorFromIEGAnchor(anchor);
+                    //        gShape.cellanchor = anchor;
+                    //        lst.Add(gShape);
+                    //    }
+                    //}
                 }
                 else if (anchor.graphicFrame != null)
                 {
@@ -566,30 +754,25 @@ namespace NPOI.XSSF.UserModel
                     lst.Add(shape);
                 }
             }
-            //foreach (XmlNode obj in xmldoc.SelectNodes("./*/*/*"))
-            //{
-            //    XSSFShape shape = null;
-            //    if (obj.LocalName == "sp")
-            //    {
-            //        shape = new XSSFSimpleShape(this, obj);
-            //    }
-            //    else if (obj.LocalName == "pic")
-            //    {
-            //        shape = new XSSFPicture(this, obj);
-            //    }
-            //    else if (obj.LocalName == "cxnSp")
-            //    {
-            //        shape = new XSSFConnector(this, obj);
-            //    }
-            //    //    else if (obj is CT_GraphicalObjectFrame) shape = new XSSFGraphicFrame(this, (CT_GraphicalObjectFrame)obj);
-            //    //    else if (obj is CT_GroupShape) shape = new XSSFShapeGroup(this, (CT_GroupShape)obj);
-            //    if (shape != null)
-            //    {
-            //        shape.anchor = GetAnchorFromParent(obj);
-            //        lst.Add(shape);
-            //    }
-            //}
+            
             return lst;
+        }
+
+        private static bool HasOleLink(CT_Shape shape)
+        {
+            try
+            {
+                string uri = shape.nvSpPr.cNvPr.extLst.ext[0].uri;
+                if("{63B3BB69-23CF-44E3-9099-C40C66FF867C}".Equals(uri))
+                {
+                    return true;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+            return false;
         }
  
         private XSSFAnchor GetAnchorFromIEGAnchor(IEG_Anchor ctAnchor)
@@ -625,6 +808,13 @@ namespace NPOI.XSSF.UserModel
         {
             XSSFAnchor anchor = null;
             XmlNode parentNode = obj.ParentNode;
+            while (parentNode != null)
+            {
+                if(parentNode.LocalName=="twoCellAnchor"||parentNode.LocalName=="oneCellAnchor" ||
+                    parentNode.LocalName=="absoluteAnchor")
+                    break;
+                parentNode = parentNode.ParentNode;
+            }
             XmlNode fromNode = parentNode.SelectSingleNode("xdr:from", POIXMLDocumentPart.NamespaceManager);
             if(fromNode==null)
                 throw new InvalidDataException("xdr:from node is missing");
@@ -637,6 +827,16 @@ namespace NPOI.XSSF.UserModel
             }
             anchor = new XSSFClientAnchor(ctFrom, ctTo);
             return anchor;
+        }
+
+        public IEnumerator<IShape> GetEnumerator()
+        {
+            return GetShapes().GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetShapes().GetEnumerator();
         }
     }
 }

@@ -33,6 +33,11 @@ namespace NPOI.OpenXml4Net.OPC
         public const string CORE_PROPERTIES_ECMA376 = "http://schemas.openxmlformats.org/officedocument/2006/relationships/metadata/core-properties";
 
         /**
+         * Namespace of Core properties relationship type as defiend in ECMA 376
+         */
+        public const string CORE_PROPERTIES_ECMA376_NS = "http://schemas.openxmlformats.org/officeDocument/2006/relationships";
+
+        /**
          * Digital signature relationship type.
          */
         public const string DIGITAL_SIGNATURE = "http://schemas.openxmlformats.org/package/2006/relationships/digital-signature/signature";

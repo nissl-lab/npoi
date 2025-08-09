@@ -173,6 +173,12 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
         {
             get { return (null != hiddenField); }
         }
+
+        public CT_OfficeArtExtensionList AddNewExtLst()
+        {
+            this.extLstField = new CT_OfficeArtExtensionList();
+            return this.extLst;
+        }
     }
     [Serializable]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
@@ -627,6 +633,13 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             this.solidFillField = new CT_SolidColorFillProperties();
             return this.solidFillField;
         }
+
+        public CT_BlipFillProperties AddNewBlipFill()
+        {
+            this.blipFillField = new CT_BlipFillProperties();
+            return this.blipFillField;
+        }
+
         public CT_CustomGeometry2D AddNewCustGeom()
         {
             this.custGeomField = new CT_CustomGeometry2D();
@@ -1317,7 +1330,7 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
     {
         private List<IEG_Anchor> cellAnchors = new List<IEG_Anchor>();
         //private List<CT_AbsoulteCellAnchor> absoluteCellAnchors = new List<CT_AbsoulteCellAnchor>();
-
+        private bool inAlternateContent = false;
         public CT_TwoCellAnchor AddNewTwoCellAnchor()
         {
             CT_TwoCellAnchor anchor = new CT_TwoCellAnchor();
@@ -1343,9 +1356,20 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             {
                 sw.Write("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>");
                 sw.Write("<xdr:wsDr xmlns:xdr=\"http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing\" xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\">");
+                if(inAlternateContent)
+                {
+                    sw.Write("<mc:AlternateContent xmlns:mc=\"http://schemas.openxmlformats.org/markup-compatibility/2006\">");
+                    sw.Write("<mc:Choice xmlns:a14=\"http://schemas.microsoft.com/office/drawing/2010/main\" Requires=\"a14\">");
+                }
                 foreach (IEG_Anchor anchor in this.cellAnchors)
                 {
                     anchor.Write(sw);
+                }
+                if(inAlternateContent)
+                {
+                    sw.Write("</mc:Choice>");
+                    sw.Write("<mc:Fallback />");
+                    sw.Write("</mc:AlternateContent>");
                 }
                 sw.Write("</xdr:wsDr>");
             }
@@ -1399,11 +1423,18 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             {
                 return new CT_Drawing();
             }
-            XmlNodeList cellanchorNodes = root.SelectNodes("descendant::xdr:oneCellAnchor|descendant::xdr:twoCellAnchor|descendant::xdr:absCellAnchor", namespaceManager);
+            //XmlNodeList childNodes = root.SelectNodes("descendant::xdr:oneCellAnchor|descendant::xdr:twoCellAnchor|descendant::xdr:absCellAnchor", namespaceManager);
+            XmlNodeList childNodes = xmldoc.SelectNodes("/xdr:wsDr/*", namespaceManager);
             CT_Drawing ctDrawing = new CT_Drawing();
-            foreach (XmlNode node in cellanchorNodes)
+            // handle with-/out AlternateContent wrappers
+            foreach (XmlNode node in childNodes)
             {
-                if (node.LocalName == "twoCellAnchor")
+                if(node.LocalName == "AlternateContent")
+                {
+                    ctDrawing.inAlternateContent = true;
+                    ctDrawing.cellAnchors.Add(ParseAlternateContent(node, namespaceManager));
+                }
+                else if (node.LocalName == "twoCellAnchor")
                 {
                     CT_TwoCellAnchor twoCellAnchor = CT_TwoCellAnchor.Parse(node, namespaceManager);
                     ctDrawing.cellAnchors.Add(twoCellAnchor);
@@ -1420,6 +1451,40 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
                 }
             }
             return ctDrawing;
+        }
+
+        private static IEG_Anchor ParseAlternateContent(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            IEG_Anchor anchor = null;
+            if(node.ChildNodes.Count == 0)
+                return null;
+            if(node.ChildNodes[0].LocalName == "Choice")
+            {
+                foreach(XmlNode cnode in node.ChildNodes[0].ChildNodes)
+                {
+                    if(cnode.LocalName == "twoCellAnchor")
+                    {
+                        anchor = CT_TwoCellAnchor.Parse(cnode, namespaceManager);
+                    }
+                    else if(cnode.LocalName == "oneCellAnchor")
+                    {
+                        anchor = CT_OneCellAnchor.Parse(cnode, namespaceManager);
+                    }
+                    else if(cnode.LocalName == "absCellAnchor")
+                    {
+                        anchor = CT_AbsoluteCellAnchor.Parse(cnode, namespaceManager);
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException($"invalid localname {cnode.LocalName}");
+                    }
+                }
+            }
+            else
+            {
+                throw new NotImplementedException($"invalid localname {node.ChildNodes[0].LocalName}");
+            }
+            return anchor;
         }
     }
     [Serializable]
@@ -1950,7 +2015,7 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
 
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing")]
-    public class CT_Connector // empty interface: EG_ObjectChoices
+    public class CT_Connector: XmlObject // empty interface: EG_ObjectChoices
     {
         string macroField;
         bool fPublishedField;
@@ -1978,6 +2043,7 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
                 else if (childNode.LocalName == "style")
                     ctObj.style = CT_ShapeStyle.Parse(childNode, namespaceManager);
             }
+            ctObj.Node = node;
             return ctObj;
         }
 

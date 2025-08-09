@@ -16,7 +16,6 @@
 ==================================================================== */
 
 using NPOI;
-using NPOI.HSSF.Record.Aggregates;
 
 namespace TestCases.HSSF.UserModel
 {
@@ -24,15 +23,12 @@ namespace TestCases.HSSF.UserModel
     using System.IO;
     using System.Text;
     using System.Collections;
-    using System.Linq;
     using NUnit.Framework;using NUnit.Framework.Legacy;
 
     using TestCases.HSSF;
 
     using NPOI.HSSF.UserModel;
-    //using NPOI.HSSF.Model;
     using NPOI.HSSF.Record;
-    using NPOI.SS.Formula;
     using NPOI.HSSF.Record.Aggregates;
     using NPOI.SS.Util;
     using NPOI.Util;
@@ -1147,13 +1143,13 @@ namespace TestCases.HSSF.UserModel
 
             // Doesn't have a directory
             ClassicAssert.IsFalse(obj.HasDirectoryEntry());
-            ClassicAssert.IsNotNull(obj.GetObjectData());
-            ClassicAssert.AreEqual(12, obj.GetObjectData().Length);
+            ClassicAssert.IsNotNull(obj.ObjectData);
+            ClassicAssert.AreEqual(12, obj.ObjectData.Length);
             ClassicAssert.AreEqual("Forms.CheckBox.1", obj.OLE2ClassName);
 
             try
             {
-                obj.GetDirectory();
+                var _ = obj.Directory;
                 Assert.Fail();
             }
             catch (FileNotFoundException)
