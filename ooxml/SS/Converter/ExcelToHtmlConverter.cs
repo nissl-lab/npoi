@@ -811,7 +811,7 @@ using Cysharp.Text;
                     var stylesSource = ((XSSFWorkbook) workbook).GetStylesSource();
                     if (stylesSource != null)
                     {
-                        var theme = stylesSource.GetTheme();
+                        var theme = stylesSource.Theme;
                         if (theme != null)
                             color = theme.GetThemeColor(borderColor);
                     }
@@ -853,9 +853,9 @@ using Cysharp.Text;
                 {
                     StylesTable st = ((XSSFWorkbook)workbook).GetStylesSource();
                     XSSFColor fontColor = null;
-                    if (st != null && st.GetTheme() != null)
+                    if (st != null && st.Theme != null)
                     {
-                        fontColor = st.GetTheme().GetThemeColor(font.Color);
+                        fontColor = st.Theme.GetThemeColor(font.Color);
                     }
                     else
                     {

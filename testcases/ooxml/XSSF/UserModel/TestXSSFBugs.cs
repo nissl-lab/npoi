@@ -1415,7 +1415,7 @@ namespace TestCases.XSSF.UserModel
 
             // Sheet 2 has comments
             ClassicAssert.IsNotNull(sh2.GetCommentsTable(false));
-            ClassicAssert.AreEqual(1, sh2.GetCommentsTable(false).GetNumberOfComments());
+            ClassicAssert.AreEqual(1, sh2.GetCommentsTable(false).NumberOfComments);
 
             // Sheet 1 doesn't (yet)
             ClassicAssert.IsNull(sh1.GetCommentsTable(false));
@@ -1464,10 +1464,10 @@ namespace TestCases.XSSF.UserModel
 
             // Check the comments
             ClassicAssert.IsNotNull(sh2.GetCommentsTable(false));
-            ClassicAssert.AreEqual(1, sh2.GetCommentsTable(false).GetNumberOfComments());
+            ClassicAssert.AreEqual(1, sh2.GetCommentsTable(false).NumberOfComments);
 
             ClassicAssert.IsNotNull(sh1.GetCommentsTable(false));
-            ClassicAssert.AreEqual(2, sh1.GetCommentsTable(false).GetNumberOfComments());
+            ClassicAssert.AreEqual(2, sh1.GetCommentsTable(false).NumberOfComments);
 
             wb2.Close();
         }
