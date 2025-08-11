@@ -8,7 +8,7 @@ namespace NPOI.HPSF
 
         internal Blob() { }
 
-        internal void Read(ILittleEndianInput lei)
+        internal void Read(LittleEndianByteArrayInputStream lei)
         {
             int size = lei.ReadInt();
             _value = new byte[size];

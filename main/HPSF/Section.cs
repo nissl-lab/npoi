@@ -743,14 +743,14 @@ namespace NPOI.HPSF
             return (d1 == null && d2 == null) || (d1 != null && d2 != null && CompareDictionaries(d1, d2));
         }
 
-        static bool CompareDictionaries(IDictionary dict1, IDictionary dict2)
+        static bool CompareDictionaries(Dictionary<long, string> dict1, IDictionary dict2)
         {
             if(dict1.Count != dict2.Count)
             {
                 return false;
             }
 
-            foreach(DictionaryEntry pair in dict1)
+            foreach(KeyValuePair<long, string> pair in dict1)
             {
                 if(!dict2.Contains(pair.Key) || !Equals(pair.Value, dict2[pair.Key]))
                 {
@@ -978,7 +978,7 @@ namespace NPOI.HPSF
         /// <param name="codepage">The codepage to be used to write the dictionary items.</param>
         /// <return>number of bytes written</return>
         /// <exception name="IOException">if an I/O exception occurs.</exception>
-        private int WriteDictionary(Stream out1, int codepage)
+        private int WriteDictionary(MemoryStream out1, int codepage)
         {
             byte[] padding = new byte[4];
             Dictionary<long,String> dic = Dictionary;

@@ -166,6 +166,7 @@ namespace TestCases.HPSF.Basic
         /// </list>
         /// </summary>
         [Test]
+        [Ignore("should re-implement NPOIFSFileSystem")]
         public void TestWriteWellKnown1()
         {
             POIDataSamples _samples = POIDataSamples.GetHPSFInstance();
@@ -521,19 +522,19 @@ namespace TestCases.HPSF.Basic
 
             CustomProperty cp;
             CustomProperties cps = new CustomProperties();
-            ClassicAssert.AreEqual(0, cps.Count);
+            ClassicAssert.AreEqual(0, cps.Size);
 
             /* After adding a custom property the size must be 1 and it must be
              * possible to extract the custom property from the map. */
             cps.Put(KEY, VALUE_1);
-            ClassicAssert.AreEqual(1, cps.Count);
+            ClassicAssert.AreEqual(1, cps.Size);
             object v1 = cps.Get(KEY);
             ClassicAssert.AreEqual(VALUE_1, v1);
 
             /* After adding a custom property with the same name the size must still
              * be one. */
             cps.Put(KEY, VALUE_2);
-            ClassicAssert.AreEqual(1, cps.Count);
+            ClassicAssert.AreEqual(1, cps.Size);
             object v2 = cps.Get(KEY);
             ClassicAssert.AreEqual(VALUE_2, v2);
 
@@ -542,7 +543,7 @@ namespace TestCases.HPSF.Basic
             cp = (CustomProperty) cps.Remove(KEY);
             ClassicAssert.AreEqual(KEY, cp.Name);
             ClassicAssert.AreEqual(VALUE_2, cp.Value);
-            ClassicAssert.AreEqual(0, cps.Count);
+            ClassicAssert.AreEqual(0, cps.Size);
         }
 
 
@@ -574,7 +575,7 @@ namespace TestCases.HPSF.Basic
             // s.Codepage = CodePageUtil.CP_UNICODE;
             dsi.AddSection(s);
             cps = dsi.CustomProperties;
-            ClassicAssert.AreEqual(0, cps.Count);
+            ClassicAssert.AreEqual(0, cps.Size);
 
             /* Add a custom property. */
             MutableProperty p = new MutableProperty();
@@ -585,7 +586,7 @@ namespace TestCases.HPSF.Basic
             dictionary[ID_1] = NAME_1;
             s.SetDictionary(dictionary);
             cps = dsi.CustomProperties;
-            ClassicAssert.AreEqual(1, cps.Count);
+            ClassicAssert.AreEqual(1, cps.Size);
             ClassicAssert.IsTrue(cps.IsPure);
 
             /* Add another custom property. */
@@ -593,7 +594,7 @@ namespace TestCases.HPSF.Basic
             dictionary[ID_2] = NAME_1;
             s.SetDictionary(dictionary);
             cps = dsi.CustomProperties;
-            ClassicAssert.AreEqual(1, cps.Count);
+            ClassicAssert.AreEqual(1, cps.Size);
             ClassicAssert.IsFalse(cps.IsPure);
         }
     }

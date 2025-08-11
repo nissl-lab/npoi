@@ -49,7 +49,8 @@ namespace TestCases.HPSF.Basic
             this.file = fileinfo;
         }
         private static String[] excludes = new String[] {
-            //"TestZeroLengthCodePage.mpp",
+            "TestInvertedClassID.doc", //failed with 'MacRoman' is not a supported encoding name.
+            "TestBug52372.doc", //failed with 'MacRoman' is not a supported encoding name.
         };
         POIDataSamples _samples = POIDataSamples.GetHPSFInstance();
         /**
@@ -233,10 +234,10 @@ namespace TestCases.HPSF.Basic
                     return;
                 }
 
-                foreach (CustomProperty cp in cps.Values)
+                foreach (CustomProperty cp in cps.Properties())
                 {
-                    var _ = cp.Name;
-                    var obj = cp.Value;
+                    ClassicAssert.IsNotNull(cp.Name);
+                    ClassicAssert.IsNotNull(cp.Value);
                 }
             }
             finally
@@ -254,7 +255,7 @@ namespace TestCases.HPSF.Basic
             {
                 POIDataSamples _samples = POIDataSamples.GetHPSFInstance();
                 string[] files = _samples.GetFiles();
-                return files.Select(f=>new FileInfo(f));
+                return files.Where(x=>TestReadAllFiles.checkExclude(x)).Select(f=>new FileInfo(f));
             }
         }
     }

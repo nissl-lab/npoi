@@ -683,7 +683,7 @@ namespace NPOI.HPSF
                 section.Codepage = cpCodepage;
                 section.SetDictionary(dictionary);
                 //i = section.Size;
-                foreach(CustomProperty p in value.Values)
+                foreach(CustomProperty p in value.Properties())
                 {
                     section.SetProperty(p);
                 }
