@@ -49,8 +49,8 @@ namespace TestCases.HPSF.Basic
             this.file = fileinfo;
         }
         private static String[] excludes = new String[] {
-            "TestInvertedClassID.doc", //failed with 'MacRoman' is not a supported encoding name.
-            "TestBug52372.doc", //failed with 'MacRoman' is not a supported encoding name.
+            //"TestInvertedClassID.doc", //failed with 'MacRoman' is not a supported encoding name.
+            //"TestBug52372.doc", //failed with 'MacRoman' is not a supported encoding name.
         };
         POIDataSamples _samples = POIDataSamples.GetHPSFInstance();
         /**

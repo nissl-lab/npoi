@@ -324,37 +324,37 @@ namespace NPOI.Util
                     return "johab";
                 case CP_MAC_ROMAN:
                 case CP_MAC_ROMAN_BIFF23:
-                    return "MacRoman";
+                    return "macintosh"; //"MacRoman";
                 case CP_MAC_JAPAN:
-                    return "SJIS";
+                    return "x-mac-japanese"; //"SJIS";
                 case CP_MAC_CHINESE_TRADITIONAL:
-                    return "Big5";
+                    return "x-mac-chinesetrad"; //"Big5";
                 case CP_MAC_KOREAN:
-                    return "EUC-KR";
+                    return "ks_c_5601-1987"; //"EUC-KR";
                 case CP_MAC_ARABIC:
-                    return "MacArabic";
+                    return "x-mac-arabic"; //"MacArabic";
                 case CP_MAC_HEBREW:
-                    return "MacHebrew";
+                    return "x-mac-hebrew"; //"MacHebrew";
                 case CP_MAC_GREEK:
-                    return "MacGreek";
+                    return "x-mac-greek"; //"MacGreek";
                 case CP_MAC_CYRILLIC:
-                    return "MacCyrillic";
+                    return "x-mac-cyrillic"; //"MacCyrillic";
                 case CP_MAC_CHINESE_SIMPLE:
-                    return "EUC_CN";
+                    return "GB2312"; //"EUC_CN";
                 case CP_MAC_ROMANIA:
-                    return "MacRomania";
+                    return "x-mac-romanian"; // "MacRomania";
                 case CP_MAC_UKRAINE:
-                    return "MacUkraine";
+                    return "x-mac-ukrainian"; //"MacUkraine";
                 case CP_MAC_THAI:
-                    return "MacThai";
+                    return "x-mac-thai"; //"MacThai";
                 case CP_MAC_CENTRAL_EUROPE:
-                    return "MacCentralEurope";
+                    return "x-mac-ce"; //"MacCentralEurope";
                 case CP_MAC_ICELAND:
-                    return "MacIceland";
+                    return "x-mac-icelandic"; //"MacIceland";
                 case CP_MAC_TURKISH:
-                    return "MacTurkish";
+                    return "x-mac-turkish"; //"MacTurkish";
                 case CP_MAC_CROATIAN:
-                    return "MacCroatian";
+                    return "x-mac-croatian"; //"MacCroatian";
                 case CP_US_ACSII:
                 case CP_US_ASCII2:
                     return "US-ASCII";
