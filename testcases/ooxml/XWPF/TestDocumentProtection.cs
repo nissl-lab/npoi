@@ -151,7 +151,7 @@ namespace TestCases.XWPF
             doc1.Write(out1);
             out1.Close();
 
-            FileStream inputStream = new FileStream(tempFile.FullName, FileMode.Open);
+            FileStream inputStream = File.OpenRead(tempFile.FullName);
             XWPFDocument doc2 = new XWPFDocument(inputStream);
             inputStream.Close();
 
