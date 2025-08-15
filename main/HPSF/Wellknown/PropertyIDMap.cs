@@ -29,6 +29,7 @@ namespace NPOI.HPSF.Wellknown
 {
     using System;
     using System.Collections;
+    using System.Collections.Generic;
 
 
     /// <summary>
@@ -43,7 +44,7 @@ namespace NPOI.HPSF.Wellknown
     /// <a href="mailto:klute@rainer-klute.de">&lt;klute@rainer-klute.de&gt;</a>
     /// @since 2002-02-09
     /// </summary>
-    public class PropertyIDMap : Hashtable
+    public class PropertyIDMap : IDictionary<long, string>
     {
 
         /*
@@ -54,94 +55,94 @@ namespace NPOI.HPSF.Wellknown
         /// <summary>
         /// ID of the property that denotes the document's title */
         /// </summary>
-        public static  int PID_TITLE = 2;
+        public const int PID_TITLE = 2;
 
         /// <summary>
         /// ID of the property that denotes the document's subject */
         /// </summary>
-        public static  int PID_SUBJECT = 3;
+        public const int PID_SUBJECT = 3;
 
         /// <summary>
         /// ID of the property that denotes the document's author */
         /// </summary>
-        public static  int PID_AUTHOR = 4;
+        public const int PID_AUTHOR = 4;
 
         /// <summary>
         /// ID of the property that denotes the document's keywords */
         /// </summary>
-        public static  int PID_KEYWORDS = 5;
+        public const int PID_KEYWORDS = 5;
 
         /// <summary>
         /// ID of the property that denotes the document's comments */
         /// </summary>
-        public static  int PID_COMMENTS = 6;
+        public const int PID_COMMENTS = 6;
 
         /// <summary>
         /// ID of the property that denotes the document's template */
         /// </summary>
-        public static  int PID_TEMPLATE = 7;
+        public const int PID_TEMPLATE = 7;
 
         /// <summary>
         /// ID of the property that denotes the document's last author */
         /// </summary>
-        public static  int PID_LASTAUTHOR = 8;
+        public const int PID_LASTAUTHOR = 8;
 
         /// <summary>
         /// ID of the property that denotes the document's revision number */
         /// </summary>
-        public static  int PID_REVNUMBER = 9;
+        public const int PID_REVNUMBER = 9;
 
         /// <summary>
         /// ID of the property that denotes the document's edit time */
         /// </summary>
-        public static  int PID_EDITTIME = 10;
+        public const int PID_EDITTIME = 10;
 
         /// <summary>
         /// ID of the property that denotes the date and time the document was
         /// last printed */
         /// </summary>
-        public static  int PID_LASTPRINTED = 11;
+        public const int PID_LASTPRINTED = 11;
 
         /// <summary>
         /// ID of the property that denotes the date and time the document was
         /// created. */
         /// </summary>
-        public static  int PID_CREATE_DTM = 12;
+        public const int PID_CREATE_DTM = 12;
 
         /// <summary>
         /// ID of the property that denotes the date and time the document was
         /// saved */
         /// </summary>
-        public static  int PID_LASTSAVE_DTM = 13;
+        public const int PID_LASTSAVE_DTM = 13;
 
         /// <summary>
         /// ID of the property that denotes the number of pages in the
         /// document */
         /// </summary>
-        public static  int PID_PAGECOUNT = 14;
+        public const int PID_PAGECOUNT = 14;
 
         /// <summary>
         /// ID of the property that denotes the number of words in the
         /// document */
         /// </summary>
-        public static  int PID_WORDCOUNT = 15;
+        public const int PID_WORDCOUNT = 15;
 
         /// <summary>
         /// ID of the property that denotes the number of characters in the
         /// document */
         /// </summary>
-        public static  int PID_CHARCOUNT = 16;
+        public const int PID_CHARCOUNT = 16;
 
         /// <summary>
         /// ID of the property that denotes the document's thumbnail */
         /// </summary>
-        public static  int PID_THUMBNAIL = 17;
+        public const int PID_THUMBNAIL = 17;
 
         /// <summary>
         /// ID of the property that denotes the application that created the
         /// document */
         /// </summary>
-        public static  int PID_APPNAME = 18;
+        public const int PID_APPNAME = 18;
 
         /// <summary>
         /// <para>
@@ -170,7 +171,7 @@ namespace NPOI.HPSF.Wellknown
         ///   </description></item>
         /// </para>
         /// </summary>
-        public static  int PID_SECURITY = 19;
+        public const int PID_SECURITY = 19;
 
 
 
@@ -182,66 +183,66 @@ namespace NPOI.HPSF.Wellknown
         /// <summary>
         /// The entry is a dictionary.
         /// </summary>
-        public static  int PID_DICTIONARY = 0;
+        public const int PID_DICTIONARY = 0;
 
         /// <summary>
         /// The entry denotes a code page.
         /// </summary>
-        public static  int PID_CODEPAGE = 1;
+        public const  int PID_CODEPAGE = 1;
 
         /// <summary>
         /// The entry is a string denoting the category the file belongs
         /// to, e.g. review, memo, etc. This is useful to find documents of
         /// same type.
         /// </summary>
-        public static  int PID_CATEGORY = 2;
+        public const int PID_CATEGORY = 2;
 
         /// <summary>
         /// Target format for power point presentation, e.g. 35mm,
         /// printer, video etc.
         /// </summary>
-        public static  int PID_PRESFORMAT = 3;
+        public const int PID_PRESFORMAT = 3;
 
         /// <summary>
         /// Number of bytes.
         /// </summary>
-        public static  int PID_BYTECOUNT = 4;
+        public const int PID_BYTECOUNT = 4;
 
         /// <summary>
         /// Number of lines.
         /// </summary>
-        public static  int PID_LINECOUNT = 5;
+        public const int PID_LINECOUNT = 5;
 
         /// <summary>
         /// Number of paragraphs.
         /// </summary>
-        public static  int PID_PARCOUNT = 6;
+        public const int PID_PARCOUNT = 6;
 
         /// <summary>
         /// Number of slides in a power point presentation.
         /// </summary>
-        public static  int PID_SLIDECOUNT = 7;
+        public const int PID_SLIDECOUNT = 7;
 
         /// <summary>
         /// Number of slides with notes.
         /// </summary>
-        public static  int PID_NOTECOUNT = 8;
+        public const int PID_NOTECOUNT = 8;
 
         /// <summary>
         /// Number of hidden slides.
         /// </summary>
-        public static  int PID_HIDDENCOUNT = 9;
+        public const int PID_HIDDENCOUNT = 9;
 
         /// <summary>
         /// Number of multimedia clips, e.g. sound or video.
         /// </summary>
-        public static  int PID_MMCLIPCOUNT = 10;
+        public const int PID_MMCLIPCOUNT = 10;
 
         /// <summary>
         /// This entry is Set to -1 when scaling of the thumbnail is
         /// desired. Otherwise the thumbnail should be cropped.
         /// </summary>
-        public static  int PID_SCALE = 11;
+        public const int PID_SCALE = 11;
 
         /// <summary>
         /// This entry denotes an internally used property. It is a
@@ -250,36 +251,36 @@ namespace NPOI.HPSF.Wellknown
         /// number tells how many document parts are under that
         /// heading.
         /// </summary>
-        public static  int PID_HEADINGPAIR = 12;
+        public const int PID_HEADINGPAIR = 12;
 
         /// <summary>
         /// This entry contains the names of document parts (word: names
         /// of the documents in the master document, excel: sheet names,
         /// power point: slide titles, binder: document names).
         /// </summary>
-        public static  int PID_DOCPARTS = 13;
+        public const int PID_DOCPARTS = 13;
 
         /// <summary>
         /// This entry contains the name of the project manager.
         /// </summary>
-        public static  int PID_MANAGER = 14;
+        public const int PID_MANAGER = 14;
 
         /// <summary>
         /// This entry contains the company name.
         /// </summary>
-        public static  int PID_COMPANY = 15;
+        public const int PID_COMPANY = 15;
 
         /// <summary>
         /// If this entry is -1 the links are dirty and should be
         /// re-evaluated.
         /// </summary>
-        public static  int PID_LINKSDIRTY = 0x10;
+        public const int PID_LINKSDIRTY = 0x10;
     
         /// <summary>
         /// The entry specifies an estimate of the number of characters
         ///  in the document, including whitespace, as an integer
         /// </summary>
-        public static  int PID_CCHWITHSPACES = 0x11;
+        public const int PID_CCHWITHSPACES = 0x11;
     
         // 0x12 Unused
         // 0x13 GKPIDDSI_SHAREDDOC - Must be False
@@ -291,51 +292,51 @@ namespace NPOI.HPSF.Wellknown
         ///  Property Set has been updated outside of the Application, if so the
         ///  hyperlinks should be updated on document load.
         /// </summary>
-        public static  int PID_HYPERLINKSCHANGED = 0x16;
+        public const int PID_HYPERLINKSCHANGED = 0x16;
     
         /// <summary>
         /// This entry contains the version of the Application which wrote the
         ///  Property Set, stored with the two high order bytes having the major
         ///  version number, and the two low order bytes the minor version number.
         /// </summary>
-        public static  int PID_VERSION = 0x17;
+        public const int PID_VERSION = 0x17;
     
         /// <summary>
         /// This entry contains the VBA digital signature for the VBA project
         ///  embedded in the document.
         /// </summary>
-        public static  int PID_DIGSIG = 0x18;
+        public const int PID_DIGSIG = 0x18;
     
         // 0x19 Unused
     
         /// <summary>
         /// This entry contains a string of the content type of the file.
         /// </summary>
-        public static  int PID_CONTENTTYPE = 0x1A;
+        public const int PID_CONTENTTYPE = 0x1A;
     
         /// <summary>
         /// This entry contains a string of the document status.
         /// </summary>
-        public static  int PID_CONTENTSTATUS = 0x1B;
+        public const int PID_CONTENTSTATUS = 0x1B;
     
         /// <summary>
         /// This entry contains a string of the document language, but
         ///  normally should be empty.
         /// </summary>
-        public static  int PID_LANGUAGE = 0x1C;
+        public const int PID_LANGUAGE = 0x1C;
     
         /// <summary>
         /// This entry contains a string of the document version, but
         ///  normally should be empty
         /// </summary>
-        public static  int PID_DOCVERSION = 0x1D;
+        public const int PID_DOCVERSION = 0x1D;
     
         /// <summary>
         /// The highest well-known property ID. Applications are free to use
         ///  higher values for custom purposes. (This value is based on Office 12,
         ///  earlier versions of Office had lower values)
         /// </summary>
-        public static  int PID_MAX = 0x1F;
+        public const int PID_MAX = 0x1F;
 
         /// <summary>
         /// The Locale property, if present, MUST have the property identifier 0x80000000,
@@ -343,7 +344,7 @@ namespace NPOI.HPSF.Wellknown
         /// If present, its value MUST be a valid language code identifier as specified in [MS-LCID].
         /// Its value is selected in an implementation-specific manner.
         /// </summary>
-        public static  int PID_LOCALE = unchecked((int) 0x80000000);
+        public const  int PID_LOCALE = unchecked((int) 0x80000000);
 
 
         /// <summary>
@@ -361,47 +362,116 @@ namespace NPOI.HPSF.Wellknown
         /// </list>
         /// </para>
         /// </summary>
-        public static  int PID_BEHAVIOUR = unchecked((int)0x80000003);
+        public const int PID_BEHAVIOUR = unchecked((int)0x80000003);
 
-        /**
-         * Contains the summary information property ID values and
-         * associated strings. See the overall HPSF documentation for
-         * details!
-         */
+        /// <summary>
+        /// Contains the summary information property ID values and
+        /// associated strings. See the overall HPSF documentation for
+        /// details!
+        /// </summary>
         private static PropertyIDMap summaryInformationProperties;
-
-        /**
-         * Contains the summary information property ID values and
-         * associated strings. See the overall HPSF documentation for
-         * details!
-         */
+        private static Object[][] summaryInformationIdValues = [
+            [(long)PID_TITLE, "PID_TITLE"],
+            [(long)PID_SUBJECT, "PID_SUBJECT"],
+            [(long)PID_AUTHOR, "PID_AUTHOR"],
+            [(long)PID_KEYWORDS, "PID_KEYWORDS"],
+            [(long)PID_COMMENTS, "PID_COMMENTS"],
+            [(long)PID_TEMPLATE, "PID_TEMPLATE"],
+            [(long)PID_LASTAUTHOR, "PID_LASTAUTHOR"],
+            [(long)PID_REVNUMBER, "PID_REVNUMBER"],
+            [(long)PID_EDITTIME, "PID_EDITTIME"],
+            [(long)PID_LASTPRINTED, "PID_LASTPRINTED"],
+            [(long)PID_CREATE_DTM, "PID_CREATE_DTM"],
+            [(long)PID_LASTSAVE_DTM, "PID_LASTSAVE_DTM"],
+            [(long)PID_PAGECOUNT, "PID_PAGECOUNT"],
+            [(long)PID_WORDCOUNT, "PID_WORDCOUNT"],
+            [(long)PID_CHARCOUNT, "PID_CHARCOUNT"],
+            [(long)PID_THUMBNAIL, "PID_THUMBNAIL"],
+            [(long)PID_APPNAME, "PID_APPNAME"],
+            [(long)PID_SECURITY, "PID_SECURITY"],
+        ];
+        /// <summary>
+        /// Contains the summary information property ID values and
+        /// associated strings. See the overall HPSF documentation for
+        /// details!
+        /// </summary>
         private static PropertyIDMap documentSummaryInformationProperties;
-
-
+        private static Object[][] documentSummaryInformationIdValues = [
+            [(long)PID_DICTIONARY, "PID_DICTIONARY" ],
+            [(long)PID_CODEPAGE, "PID_CODEPAGE" ],
+            [(long)PID_CATEGORY, "PID_CATEGORY" ],
+            [(long)PID_PRESFORMAT, "PID_PRESFORMAT" ],
+            [(long)PID_BYTECOUNT, "PID_BYTECOUNT" ],
+            [(long)PID_LINECOUNT, "PID_LINECOUNT" ],
+            [(long)PID_PARCOUNT, "PID_PARCOUNT" ],
+            [(long)PID_SLIDECOUNT, "PID_SLIDECOUNT" ],
+            [(long)PID_NOTECOUNT, "PID_NOTECOUNT" ],
+            [(long)PID_HIDDENCOUNT, "PID_HIDDENCOUNT" ],
+            [(long)PID_MMCLIPCOUNT, "PID_MMCLIPCOUNT" ],
+            [(long)PID_SCALE, "PID_SCALE" ],
+            [(long)PID_HEADINGPAIR, "PID_HEADINGPAIR" ],
+            [(long)PID_DOCPARTS, "PID_DOCPARTS" ],
+            [(long)PID_MANAGER, "PID_MANAGER" ],
+            [(long)PID_COMPANY, "PID_COMPANY" ],
+            [(long)PID_LINKSDIRTY, "PID_LINKSDIRTY" ],
+        ];
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PropertyIDMap"/> class.
+        /// Contains the fallback property ID values and associated strings.
+        /// This is only used for lookups and not for initializing a property Set
         /// </summary>
-        /// <param name="initialCapacity">initialCapacity The initial capacity as defined for
-        /// {@link HashMap}</param>
-        /// <param name="loadFactor">The load factor as defined for {@link HashMap}</param>
-        public PropertyIDMap(int initialCapacity, float loadFactor) : base(initialCapacity, loadFactor)
-        {
+        private static PropertyIDMap fallbackProperties;
+        private static Object[][] fallbackIdValues = [
+            [(long)PID_DICTIONARY, "PID_DICTIONARY" ],
+            [(long)PID_CODEPAGE, "PID_CODEPAGE" ],
+            [(long)PID_CATEGORY, "PID_CATEGORY" ],
+            [(long)PID_PRESFORMAT, "PID_PRESFORMAT" ],
+            [(long)PID_BYTECOUNT, "PID_BYTECOUNT" ],
+            [(long)PID_LINECOUNT, "PID_LINECOUNT" ],
+            [(long)PID_PARCOUNT, "PID_PARCOUNT" ],
+            [(long)PID_SLIDECOUNT, "PID_SLIDECOUNT" ],
+            [(long)PID_NOTECOUNT, "PID_NOTECOUNT" ],
+            [(long)PID_HIDDENCOUNT, "PID_HIDDENCOUNT" ],
+            [(long)PID_MMCLIPCOUNT, "PID_MMCLIPCOUNT" ],
+            [(long)PID_SCALE, "PID_SCALE" ],
+            [(long)PID_HEADINGPAIR, "PID_HEADINGPAIR" ],
+            [(long)PID_DOCPARTS, "PID_DOCPARTS" ],
+            [(long)PID_MANAGER, "PID_MANAGER" ],
+            [(long)PID_COMPANY, "PID_COMPANY" ],
+            [(long)PID_LINKSDIRTY, "PID_LINKSDIRTY" ],
+            [(long)PID_CCHWITHSPACES, "PID_CCHWITHSPACES" ],
+      // 0x12 Unused
+      // 0x13 GKPIDDSI_SHAREDDOC - Must be False
+      // 0x14 GKPIDDSI_LINKBASE - Must not be written
+      // 0x15 GKPIDDSI_HLINKS - Must not be written
+            [(long)PID_HYPERLINKSCHANGED, "PID_HYPERLINKSCHANGED" ],
+            [(long)PID_VERSION, "PID_VERSION" ],
+            [(long)PID_DIGSIG, "PID_DIGSIG" ],
+      // 0x19 Unused
+            [(long)PID_CONTENTTYPE, "PID_CONTENTTYPE" ],
+            [(long)PID_CONTENTSTATUS, "PID_CONTENTSTATUS" ],
+            [(long)PID_LANGUAGE, "PID_LANGUAGE" ],
+            [(long)PID_DOCVERSION, "PID_DOCVERSION" ],
+            [(long)PID_MAX, "PID_MAX" ],
+            [(long)PID_LOCALE, "PID_LOCALE" ],
+            [(long)PID_BEHAVIOUR, "PID_BEHAVIOUR" ],
+        ];
 
-        }
-
-
+        private readonly Dictionary<long, string> idMap;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PropertyIDMap"/> class.
+        /// Creates a <see cref="PropertyIDMap"/> backed by another map.
         /// </summary>
-        /// <param name="map">The instance To be Created is backed by this map.</param>
-        public PropertyIDMap(IDictionary map) : base(map)
+        /// <param name="map">The instance to be created is backed by this map.</param>
+        private PropertyIDMap(object[][] idValues)
         {
-
+            Dictionary<long,String> m = new Dictionary<long,String>(idValues.Length);
+            foreach (object[] idValue in idValues)
+            {
+                m.Add((long)idValue[0], (String)idValue[1]);
+            }
+            idMap = m;
         }
-
-
 
         /// <summary>
         /// Puts a ID string for an ID into the {@link
@@ -413,7 +483,7 @@ namespace NPOI.HPSF.Wellknown
         /// returns the previous value associated with the specified id</returns>
         public Object Put(long id, String idString)
         {
-            return this[id]=idString;
+            return idMap[id]=idString;
         }
 
 
@@ -426,7 +496,64 @@ namespace NPOI.HPSF.Wellknown
         /// <returns>The ID string associated with id</returns>
         public Object Get(long id)
         {
-            return this[id];
+            if(idMap.TryGetValue(id, out var value))
+                return value;
+            return null;
+        }
+
+        public void Add(long key, string value)
+        {
+            idMap.Add(key, value);
+        }
+
+        public bool ContainsKey(long key)
+        {
+            return idMap.ContainsKey(key);
+        }
+
+        public bool Remove(long key)
+        {
+            return idMap.Remove(key);
+        }
+
+        public bool TryGetValue(long key, out string value)
+        {
+            return idMap.TryGetValue(key, out value);
+        }
+
+        public void Add(KeyValuePair<long, string> item)
+        {
+            idMap.Add(item.Key, item.Value);
+        }
+
+        public void Clear()
+        {
+            idMap.Clear();
+        }
+
+        public bool Contains(KeyValuePair<long, string> item)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void CopyTo(KeyValuePair<long, string>[] array, int arrayIndex)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Remove(KeyValuePair<long, string> item)
+        {
+            return idMap.Remove(item.Key);
+        }
+
+        public IEnumerator<KeyValuePair<long, string>> GetEnumerator()
+        {
+            return idMap.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
 
 
@@ -439,30 +566,14 @@ namespace NPOI.HPSF.Wellknown
         {
             get
             {
-                if(summaryInformationProperties == null)
+                lock(summaryInformationIdValues)
                 {
-                    PropertyIDMap m = new PropertyIDMap(18, (float)1.0);
-                    m.Put(PID_TITLE, "PID_TITLE");
-                    m.Put(PID_SUBJECT, "PID_SUBJECT");
-                    m.Put(PID_AUTHOR, "PID_AUTHOR");
-                    m.Put(PID_KEYWORDS, "PID_KEYWORDS");
-                    m.Put(PID_COMMENTS, "PID_COMMENTS");
-                    m.Put(PID_TEMPLATE, "PID_TEMPLATE");
-                    m.Put(PID_LASTAUTHOR, "PID_LASTAUTHOR");
-                    m.Put(PID_REVNUMBER, "PID_REVNUMBER");
-                    m.Put(PID_EDITTIME, "PID_EDITTIME");
-                    m.Put(PID_LASTPRINTED, "PID_LASTPRINTED");
-                    m.Put(PID_CREATE_DTM, "PID_CREATE_DTM");
-                    m.Put(PID_LASTSAVE_DTM, "PID_LASTSAVE_DTM");
-                    m.Put(PID_PAGECOUNT, "PID_PAGECOUNT");
-                    m.Put(PID_WORDCOUNT, "PID_WORDCOUNT");
-                    m.Put(PID_CHARCOUNT, "PID_CHARCOUNT");
-                    m.Put(PID_THUMBNAIL, "PID_THUMBNAIL");
-                    m.Put(PID_APPNAME, "PID_APPNAME");
-                    m.Put(PID_SECURITY, "PID_SECURITY");
-                    summaryInformationProperties = m;
-                    //new PropertyIDMap(m);
+                    if (summaryInformationProperties == null)
+                    {
+                        summaryInformationProperties = new PropertyIDMap(summaryInformationIdValues);
+                    }
                 }
+
                 return summaryInformationProperties;
             }
         }
@@ -478,31 +589,47 @@ namespace NPOI.HPSF.Wellknown
         {
             get
             {
-                if(documentSummaryInformationProperties == null)
+                lock(documentSummaryInformationIdValues)
                 {
-                    PropertyIDMap m = new PropertyIDMap(17, (float)1.0);
-                    m.Put(PID_DICTIONARY, "PID_DICTIONARY");
-                    m.Put(PID_CODEPAGE, "PID_CODEPAGE");
-                    m.Put(PID_CATEGORY, "PID_CATEGORY");
-                    m.Put(PID_PRESFORMAT, "PID_PRESFORMAT");
-                    m.Put(PID_BYTECOUNT, "PID_BYTECOUNT");
-                    m.Put(PID_LINECOUNT, "PID_LINECOUNT");
-                    m.Put(PID_PARCOUNT, "PID_PARCOUNT");
-                    m.Put(PID_SLIDECOUNT, "PID_SLIDECOUNT");
-                    m.Put(PID_NOTECOUNT, "PID_NOTECOUNT");
-                    m.Put(PID_HIDDENCOUNT, "PID_HIDDENCOUNT");
-                    m.Put(PID_MMCLIPCOUNT, "PID_MMCLIPCOUNT");
-                    m.Put(PID_SCALE, "PID_SCALE");
-                    m.Put(PID_HEADINGPAIR, "PID_HEADINGPAIR");
-                    m.Put(PID_DOCPARTS, "PID_DOCPARTS");
-                    m.Put(PID_MANAGER, "PID_MANAGER");
-                    m.Put(PID_COMPANY, "PID_COMPANY");
-                    m.Put(PID_LINKSDIRTY, "PID_LINKSDIRTY");
-                    documentSummaryInformationProperties = m;
-                    //new PropertyIDMap(m);
+                    if (documentSummaryInformationProperties == null)
+                    {
+                        documentSummaryInformationProperties = new PropertyIDMap(documentSummaryInformationIdValues);
+                    }
                 }
+                
                 return documentSummaryInformationProperties;
             }
         }
+
+        /// <summary>
+        /// Returns a property map, which is only used as a fallback, i.e. if available, the correct map
+        /// for <see cref="DocumentSummaryInformation"/> or <see cref="SummaryInformation"/> should be used.
+        /// </summary>
+        public static PropertyIDMap FallbackProperties
+        {
+            get
+            {
+                lock(fallbackIdValues)
+                {
+                    if (fallbackProperties == null)
+                    {
+                        fallbackProperties = new PropertyIDMap(fallbackIdValues);
+                    }
+                }
+                
+                return fallbackProperties;
+            }
+            
+        }
+
+        public ICollection<long> Keys => idMap.Keys;
+
+        public ICollection<string> Values => idMap.Values;
+
+        public int Count => idMap.Count;
+
+        public bool IsReadOnly => false;
+
+        public string this[long key] { get => idMap.TryGetValue(key, out string value) ? value : null; set => idMap[key] = value; }
     }
 }

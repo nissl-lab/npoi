@@ -18,15 +18,16 @@
 
 namespace TestCases.HPSF.Basic
 {
-    using System;
-    using System.IO;
-    using System.Text;
-    using System.Collections;
-    using NUnit.Framework;
     using NPOI.HPSF;
     using NPOI.HPSF.Wellknown;
     using NPOI.Util;
+    using NUnit.Framework;
     using NUnit.Framework.Legacy;
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Text;
 
 
     /**
@@ -40,46 +41,38 @@ namespace TestCases.HPSF.Basic
     public class TestBasic
     {
         //static string dataDir = @"..\..\..\TestCases\HPSF\data\";
-        static String POI_FS = "TestGermanWord90.doc";
-        static String[] POI_FILES = new String[]
-        {
+        private static POIDataSamples samples = POIDataSamples.GetHPSFInstance();
+
+        private static String[] POI_FILES = {
             "\x0005SummaryInformation",
             "\x0005DocumentSummaryInformation",
             "WordDocument",
             "\x0001CompObj",
             "1Table"
         };
-        static int BYTE_ORDER = 0xfffe;
-        static int FORMAT = 0x0000;
-        static int OS_VERSION = 0x00020A04;
-        static byte[] CLASS_ID =
+        private static int BYTE_ORDER   = 0xfffe;
+        private static int FORMAT       = 0x0000;
+        private static int OS_VERSION   = 0x00020A04;
+        private static ClassID CLASS_ID = new ClassID("{00000000-0000-0000-0000-000000000000}");
+        private static int[] SECTION_COUNT = {1, 2};
+        private static bool[] IS_SUMMARY_INFORMATION = {true, false};
+        private static bool[] IS_DOCUMENT_SUMMARY_INFORMATION = {false, true};
+
+        List<POIFile> poiFiles;
+
+
+
+        
+        /// <summary>
+        /// Read a the test file from the "data" directory.
+        /// </summary>
+        /// <exception cref="FileNotFoundException">if the file to be read does not exist.</exception>
+        /// <exception cref="IOException">if any other I/O exception occurs.</exception>
+        [SetUp]
+        public void SetUp()
         {
-            (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
-            (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
-            (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
-            (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00
-        };
-        static int[] SECTION_COUNT = { 1, 2 };
-        static bool[] IS_SUMMARY_INFORMATION = { true, false };
-        static bool[] IS_DOCUMENT_SUMMARY_INFORMATION = { false, true };
-
-        POIFile[] poiFiles;
-
-
-
-        /**
-         * Test case constructor.
-         * 
-         * @param name The Test case's name.
-         */
-        public TestBasic()
-        {
-            //FileStream data =File.OpenRead(dataDir+POI_FS);
-            POIDataSamples samples = POIDataSamples.GetHPSFInstance();
-            using (Stream data = (Stream)samples.OpenResourceAsStream(POI_FS))
-            {
-                poiFiles = Util.ReadPOIFiles(data);
-            }
+            FileStream data = samples.GetFile("TestGermanWord90.doc");
+            poiFiles = Util.ReadPOIFiles(data);
         }
 
 
@@ -164,7 +157,7 @@ namespace TestCases.HPSF.Basic
                 ClassicAssert.AreEqual(ps.ByteOrder, BYTE_ORDER);
                 ClassicAssert.AreEqual(ps.Format, FORMAT);
                 ClassicAssert.AreEqual(ps.OSVersion, OS_VERSION);
-                CollectionAssert.AreEqual(CLASS_ID, ps.ClassID.Bytes);
+                ClassicAssert.AreEqual(CLASS_ID, ps.ClassID);
                 ClassicAssert.AreEqual(SECTION_COUNT[i], ps.SectionCount);
                 ClassicAssert.AreEqual(IS_SUMMARY_INFORMATION[i], ps.IsSummaryInformation);
                 ClassicAssert.AreEqual(IS_DOCUMENT_SUMMARY_INFORMATION[i], ps.IsDocumentSummaryInformation);
@@ -184,9 +177,8 @@ namespace TestCases.HPSF.Basic
         [Test]
         public void TestSectionMethods()
         {
-            SummaryInformation si = (SummaryInformation)
-                PropertySetFactory.Create(new ByteArrayInputStream
-                    (poiFiles[0].GetBytes()));
+            InputStream is1 = new ByteArrayInputStream(poiFiles[0].GetBytes());
+            SummaryInformation si = (SummaryInformation)PropertySetFactory.Create(is1);
             IList sections = si.Sections;
             Section s = (Section)sections[0];
             
@@ -197,5 +189,17 @@ namespace TestCases.HPSF.Basic
             ClassicAssert.AreEqual(1764, s.Size);
         }
 
+        [Test]
+        public void Bug52117LastPrinted()
+        {
+            FileStream f = samples.GetFile("TestBug52117.doc");
+            POIFile poiFile = Util.ReadPOIFiles(f, new String[]{POI_FILES[0]})[0];
+            InputStream in1 = new ByteArrayInputStream(poiFile.GetBytes());
+            SummaryInformation si = (SummaryInformation)PropertySetFactory.Create(in1);
+            var lastPrinted = si.LastPrinted;
+            long editTime = si.EditTime;
+            ClassicAssert.IsTrue(Filetime.IsUndefined(lastPrinted));
+            ClassicAssert.AreEqual(1800000000L, editTime);
+        }
     }
 }

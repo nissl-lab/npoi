@@ -272,11 +272,11 @@ namespace NPOI.HPSF
             {
                 DateTime? d = (DateTime?)GetProperty(PropertyIDMap.PID_EDITTIME);
 
-                return d.HasValue ? Util.DateToFileTime(d.Value) : 0;
+                return d.HasValue ? Filetime.DateToFileTime(d.Value) : 0;
             }
             set
             {
-                DateTime d = Util.FiletimeToDate(value);
+                DateTime d = Filetime.FiletimeToDate(value);
                 FirstSection.SetProperty(PropertyIDMap.PID_EDITTIME, Variant.VT_FILETIME, d);
             }
         }

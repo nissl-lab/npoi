@@ -51,28 +51,18 @@ namespace NPOI.HPSF
         /// The section's format ID, <see cref="FormatID"/>.
         /// </summary>
         private ClassID formatID;
-        /// <summary>
-        /// If the "dirty" flag is true, the section's size must be
-        /// (re-)calculated before the section is written.
-        /// </summary>
-        private bool dirty = true;
 
         /// <summary>
         /// Contains the bytes making out the section. This byte array is
         /// established when the section's size is calculated and can be reused
-        /// later. It is valid only if the "dirty" flag is false.
+        /// later. If the array is empty, the section was modified and the bytes need to be regenerated.
         /// </summary>
-        private byte[] sectionBytes;
+        private ByteArrayOutputStream sectionBytes = new ByteArrayOutputStream();
 
         /// <summary>
         /// The offset of the section in the stream.
         /// </summary>
         private long _offset;
-
-        /// <summary>
-        /// The section's size in bytes.
-        /// </summary>
-        private int size;
 
         /// <summary>
         /// This section's properties.
@@ -153,7 +143,7 @@ namespace NPOI.HPSF
             /*
              * Read the section length.
              */
-            size = (int)leis.ReadUInt();
+            int size = (int)Math.Min(leis.ReadUInt(), src.Length-_offset);
 
             /*
              * Read the number of properties.
@@ -216,6 +206,7 @@ namespace NPOI.HPSF
 
                 /* Read the codepage number. */
                 codepage = leis.ReadUShort();
+                Codepage = codepage;
             }
 
 
@@ -225,6 +216,10 @@ namespace NPOI.HPSF
             {
                 long off = me.Key;
                 long id = me.Value;
+                if (id == PropertyIDMap.PID_CODEPAGE)
+                {
+                    continue;
+                }
                 int pLen = propLen(offset2Id, off, size);
                 leis.SetReadIndex((int)(this._offset + off));
 
@@ -248,16 +243,13 @@ namespace NPOI.HPSF
                         }
                     }
                 }
-                else if (id == PropertyIDMap.PID_CODEPAGE)
-                {
-                    Codepage = codepage;
-                }
                 else
                 {
                     SetProperty(new MutableProperty(id, leis, pLen, codepage));
                 }
             }
-
+            sectionBytes.Write(src, (int)_offset, size);
+            padSectionBytes();
             /*
              * Extract the dictionary (if available).
              */
@@ -347,9 +339,8 @@ namespace NPOI.HPSF
             this.properties.Clear();
             foreach(Property p in properties)
             {
-                this.properties.Add(p.ID, p);
+                SetProperty(p);
             }
-            dirty = true;
         }
 
         /// <summary>
@@ -459,7 +450,7 @@ namespace NPOI.HPSF
             if(old == null || !old.Equals(p))
             {
                 properties[p.ID] = p;
-                dirty = true;
+                sectionBytes.Reset();
             }
         }
 
@@ -574,23 +565,23 @@ namespace NPOI.HPSF
         {
             get
             {
-                if(dirty)
+                int size = (int)sectionBytes.Position;
+                if (size > 0)
                 {
-                    try
-                    {
-                        size = CalcSize();
-                        dirty = false;
-                    }
-                    catch(HPSFRuntimeException ex)
-                    {
-                        throw;
-                    }
-                    catch(Exception ex)
-                    {
-                        throw new HPSFRuntimeException(ex);
-                    }
+                    return size;
                 }
-                return size;
+                try
+                {
+                    return CalcSize();
+                }
+                catch (HPSFRuntimeException ex)
+                {
+                    throw;
+                }
+                catch (Exception ex)
+                {
+                    throw new HPSFRuntimeException(ex);
+                }
             }
         }
 
@@ -604,19 +595,20 @@ namespace NPOI.HPSF
         /// <throws name="IOException">IOException</throws>
         private int CalcSize()
         {
-            using ByteArrayOutputStream out1 = new ByteArrayOutputStream();
-            Write(out1);
-            /* Pad to multiple of 4 bytes so that even the Windows shell (explorer)
-             * shows custom properties. */
-            byte[] padArray = { 0, 0, 0 };
-            int pad = (4 - (int)(out1.Length & 0x3)) & 0x3;
-            out1.Write(padArray, 0, pad);
-            //sectionBytes = Util.Pad4(out1.ToByteArray());
-            sectionBytes = out1.ToByteArray();
-            return sectionBytes.Length;
+            sectionBytes.Reset();
+            Write(sectionBytes);
+            padSectionBytes();
+            return (int)sectionBytes.Position;
         }
 
-
+        private void padSectionBytes()
+        {
+            byte[] padArray = { 0, 0, 0 };
+            /* Pad to multiple of 4 bytes so that even the Windows shell (explorer)
+             * shows custom properties. */
+            int pad = (4 - ((int)sectionBytes.Position & 0x3)) & 0x3;
+            sectionBytes.Write(padArray, 0, pad);
+        }
 
 
         /// <summary>
@@ -766,7 +758,10 @@ namespace NPOI.HPSF
         /// <param name="id">The ID of the property to be removed</param>
         public void RemoveProperty(long id)
         {
-            dirty |= (properties.Remove(id));
+            if(properties.Remove(id))
+            {
+                sectionBytes.Reset();
+            }
         }
 
         /// <summary>
@@ -812,10 +807,10 @@ namespace NPOI.HPSF
 
             /* Check whether we have already generated the bytes making out the
              * section. */
-            if(!dirty && sectionBytes != null)
+            if (sectionBytes.Position > 0)
             {
-                out1.Write(sectionBytes, 0, sectionBytes.Length);
-                return sectionBytes.Length;
+                sectionBytes.WriteTo(out1);
+                return (int)sectionBytes.Position;
             }
 
             /* Writing the section's dictionary it tricky. If there is a dictionary
@@ -1087,6 +1082,10 @@ namespace NPOI.HPSF
         /// @see Object#toString()
         public override String ToString()
         {
+            return ToString(null);
+        }
+        public String ToString(PropertyIDMap idMap)
+        {
             using var b= ZString.CreateStringBuilder();
             Property[] pa = Properties;
             b.Append("\n\n\n");
@@ -1108,7 +1107,7 @@ namespace NPOI.HPSF
             }
             foreach(Property p in pa)
             {
-                b.Append(p.ToString());
+                b.Append(p.ToString(codepage, idMap));
                 b.Append(",\n");
             }
             b.Append(']');

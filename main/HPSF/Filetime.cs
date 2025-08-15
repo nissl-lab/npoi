@@ -78,7 +78,6 @@ namespace NPOI.HPSF
          * @param filetime The filetime to convert.
          * @return The Windows FILETIME as a {@link Date}.
          */
-        [Obsolete]
         public static DateTime FiletimeToDate(long filetime)
         {
             //long ms_since_16010101 = filetime / NANO_100;
@@ -95,7 +94,6 @@ namespace NPOI.HPSF
          *
          * @see #filetimeToDate(long)
          */
-        [Obsolete]
         public static long DateToFileTime(DateTime date)
         {
             //long ms_since_19700101 = date.getTime();
@@ -110,10 +108,9 @@ namespace NPOI.HPSF
          * @param date the date
          * @return {@code true} if the date is undefined
          */
-        [Obsolete]
-        public static bool IsUndefined(DateTime date)
+        public static bool IsUndefined(DateTime? date)
         {
-            return DateToFileTime(date) == 0;
+            return !date.HasValue || DateToFileTime(date.Value) == 0;
         }
     }
 }

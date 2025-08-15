@@ -532,8 +532,8 @@ namespace TestCases.HPSF.Basic
                 poiFs.Close();
             }
             /* Read back: */
-            POIFile[] psf = Util.ReadPropertySets(copy);
-            ClassicAssert.AreEqual(1, psf.Length);
+            List<POIFile> psf = Util.ReadPropertySets(copy);
+            ClassicAssert.AreEqual(1, psf.Count);
             byte[] bytes = psf[0].GetBytes();
             InputStream in1 = new ByteArrayInputStream(bytes);
             PropertySet ps2 = PropertySetFactory.Create(in1);

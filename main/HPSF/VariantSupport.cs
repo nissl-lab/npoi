@@ -188,7 +188,7 @@ namespace NPOI.HPSF
 
                 case Variant.VT_FILETIME:
                     Filetime filetime = (Filetime) typedPropertyValue.Value;
-                    return Util.FiletimeToDate((int) filetime.High, (int) filetime.Low);
+                    return filetime.GetJavaValue();
 
                 case Variant.VT_LPSTR:
                     CodePageString cpString = (CodePageString) typedPropertyValue.Value;

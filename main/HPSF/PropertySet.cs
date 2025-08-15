@@ -918,7 +918,7 @@ namespace NPOI.HPSF
             b.Append(", sections: [\n");
             foreach(Section section in Sections)
             {
-                b.Append(section);
+                b.Append(section.ToString(PropertySetIDMap));
             }
             b.Append(']');
             b.Append(']');
