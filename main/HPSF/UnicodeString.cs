@@ -16,93 +16,53 @@
 ==================================================================== */
 
 using System;
+using System.IO;
 using NPOI.Util;
 
 namespace NPOI.HPSF
 {
-    public class UnicodeString
+    internal class UnicodeString
     {
         //private final static POILogger logger = POILogFactory
         //   .getLogger( UnicodeString.class );
+        internal UnicodeString() {}
+        private byte[] _value;
 
-        private readonly byte[] _value;
-
-        public UnicodeString(byte[] data, int offset)
+        internal void Read(LittleEndianByteArrayInputStream lei)
         {
-            int length = LittleEndian.GetInt(data, offset);
-            int dataOffset = offset + LittleEndian.INT_SIZE;
-
-            if (!validLength(length, data, dataOffset))
-            {
-                // If the length looks wrong, this might be because the offset is sometimes expected 
-                // to be on a 4 byte boundary. Try checking with that if so, rather than blowing up with
-                // and  ArrayIndexOutOfBoundsException below
-                bool valid = false;
-                int past4byte = offset % 4;
-                if (past4byte != 0)
-                {
-                    offset = offset + past4byte;
-                    length = LittleEndian.GetInt(data, offset);
-                    dataOffset = offset + LittleEndian.INT_SIZE;
-
-                    valid = validLength(length, data, dataOffset);
-                }
-
-                if (!valid)
-                {
-                    throw new IllegalPropertySetDataException(
-                            "UnicodeString started at offset #" + offset +
-                            " is not NULL-terminated");
-                }
-            }
-
+            int length = lei.ReadInt();
+            int unicodeBytes = length*2;
+            _value = new byte[unicodeBytes];
+        
+            // If Length is zero, this field MUST be zero bytes in length. If Length is
+            // nonzero, this field MUST be a null-terminated array of 16-bit Unicode characters, followed by
+            // zero padding to a multiple of 4 bytes. The string represented by this field SHOULD NOT
+            // contain embedded or additional trailing null characters.
+        
             if (length == 0)
             {
-                _value = [];
                 return;
             }
 
-            _value = LittleEndian.GetByteArray(data, dataOffset, length * 2);
-        }
+             int offset = lei.GetReadIndex();
+        
+            lei.ReadFully(_value);
 
-        /**
-         * Checks to see if the specified length seems valid,
-         *  given the amount of data available still to read,
-         *  and the requirement that the string be NULL-terminated
-         */
-        private static bool validLength(int length, byte[] data, int offset)
-        {
-            if (length == 0)
+            if (_value[unicodeBytes-2] != 0 || _value[unicodeBytes-1] != 0) 
             {
-                return true;
+                string msg = "UnicodeString started at offset #" + offset + " is not NULL-terminated";
+                throw new IllegalPropertySetDataException(msg);
             }
-
-            int endOffset = offset + (length * 2);
-            if (endOffset <= data.Length)
-            {
-                // Data Length is OK, ensure it's null terminated too
-                if (data[endOffset - 1] == 0 && data[endOffset - 2] == 0)
-                {
-                    // Length looks plausible
-                    return true;
-                }
-            }
-
-            // Something's up/invalid with that length for the given data+offset
-            return false;
+        
+            TypedPropertyValue.SkipPadding(lei);
         }
 
-        public int Size
-        {
-            get { return LittleEndian.INT_SIZE + _value.Length; }
-        }
-
-        public byte[] Value
+        internal byte[] Value
         {
             get { return _value; }
         }
 
-        public String ToJavaString()
+        internal String ToJavaString()
         {
             if (_value.Length == 0)
                 return null;
@@ -127,6 +87,18 @@ namespace NPOI.HPSF
                 //                + "Trimming and hope for the best." );
             }
             return result.Substring(0, terminator);
+        }
+
+        internal void SetJavaValue(string string1 ) 
+        {
+            _value = CodePageUtil.GetBytesInCodePage(string1 + "\0", CodePageUtil.CP_UNICODE);
+        }
+
+        internal int Write( Stream out1 ) 
+        {
+            LittleEndian.PutUInt( _value.Length / 2, out1 );
+            out1.Write( _value, 0, _value.Length );
+            return LittleEndianConsts.INT_SIZE + _value.Length;
         }
     }
 }

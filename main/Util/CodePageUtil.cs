@@ -15,6 +15,7 @@
    limitations under the License.
 ==================================================================== */
 
+using NPOI.HPSF;
 using System;
 using System.IO;
 using System.Text;
@@ -214,8 +215,15 @@ namespace NPOI.Util
         public static byte[] GetBytesInCodePage(String string1, int codepage)
         {
             String cp = CodepageToEncoding(codepage);
-            Encoding encoding = Encoding.GetEncoding(cp);
-            return encoding.GetBytes(string1);
+            try
+            {
+                Encoding encoding = Encoding.GetEncoding(cp);
+                return encoding.GetBytes(string1);
+            }
+            catch(Exception ex) when (ex is NotSupportedException || ex is ArgumentException)
+            {
+                throw new UnsupportedEncodingException("Codepage number may not be " + codepage);
+            }
             //return string1.GetBytes(encoding);
         }
 
@@ -226,9 +234,9 @@ namespace NPOI.Util
          * @param codepage The codepage number
          */
         public static String GetStringFromCodePage(byte[] string1, int codepage)
-    {
-        return GetStringFromCodePage(string1, 0, string1.Length, codepage);
-    }
+        {
+            return GetStringFromCodePage(string1, 0, string1.Length, codepage);
+        }
 
         /**
          * Converts the bytes into a String, based on the equivalent character encoding
@@ -241,6 +249,23 @@ namespace NPOI.Util
         {
             String encoding = CodepageToEncoding(codepage);
             return Encoding.GetEncoding(encoding).GetString(string1, offset, length);
+        }
+
+        public static bool CanEncode(string cpStr, string toEncodeString)
+        {
+            //can this codepage encode the _value
+            try
+            {
+                var testEncoding = (Encoding)Encoding.GetEncoding(cpStr,
+                    EncoderFallback.ExceptionFallback, DecoderFallback.ExceptionFallback);
+                testEncoding.GetBytes(toEncodeString);
+                return true;
+            }
+            catch(EncoderFallbackException)
+            {
+                return false;
+            }
+            return false;
         }
 
         /**
@@ -260,7 +285,7 @@ namespace NPOI.Util
         public static String CodepageToEncoding(int codepage)
         {
             if (codepage <= 0)
-                throw new ArgumentException("Codepage number may not be " + codepage);
+                throw new UnsupportedEncodingException("Codepage number may not be " + codepage);
 
             switch (codepage)
             {
@@ -299,37 +324,37 @@ namespace NPOI.Util
                     return "johab";
                 case CP_MAC_ROMAN:
                 case CP_MAC_ROMAN_BIFF23:
-                    return "MacRoman";
+                    return "macintosh"; //"MacRoman";
                 case CP_MAC_JAPAN:
-                    return "SJIS";
+                    return "x-mac-japanese"; //"SJIS";
                 case CP_MAC_CHINESE_TRADITIONAL:
-                    return "Big5";
+                    return "x-mac-chinesetrad"; //"Big5";
                 case CP_MAC_KOREAN:
-                    return "EUC-KR";
+                    return "ks_c_5601-1987"; //"EUC-KR";
                 case CP_MAC_ARABIC:
-                    return "MacArabic";
+                    return "x-mac-arabic"; //"MacArabic";
                 case CP_MAC_HEBREW:
-                    return "MacHebrew";
+                    return "x-mac-hebrew"; //"MacHebrew";
                 case CP_MAC_GREEK:
-                    return "MacGreek";
+                    return "x-mac-greek"; //"MacGreek";
                 case CP_MAC_CYRILLIC:
-                    return "MacCyrillic";
+                    return "x-mac-cyrillic"; //"MacCyrillic";
                 case CP_MAC_CHINESE_SIMPLE:
-                    return "EUC_CN";
+                    return "GB2312"; //"EUC_CN";
                 case CP_MAC_ROMANIA:
-                    return "MacRomania";
+                    return "x-mac-romanian"; // "MacRomania";
                 case CP_MAC_UKRAINE:
-                    return "MacUkraine";
+                    return "x-mac-ukrainian"; //"MacUkraine";
                 case CP_MAC_THAI:
-                    return "MacThai";
+                    return "x-mac-thai"; //"MacThai";
                 case CP_MAC_CENTRAL_EUROPE:
-                    return "MacCentralEurope";
+                    return "x-mac-ce"; //"MacCentralEurope";
                 case CP_MAC_ICELAND:
-                    return "MacIceland";
+                    return "x-mac-icelandic"; //"MacIceland";
                 case CP_MAC_TURKISH:
-                    return "MacTurkish";
+                    return "x-mac-turkish"; //"MacTurkish";
                 case CP_MAC_CROATIAN:
-                    return "MacCroatian";
+                    return "x-mac-croatian"; //"MacCroatian";
                 case CP_US_ACSII:
                 case CP_US_ASCII2:
                     return "US-ASCII";

@@ -15,8 +15,9 @@
    limitations Under the License.
 ==================================================================== */
 
-using System;
 using NPOI.Util;
+using System;
+using System.Collections.Generic;
 
 namespace NPOI.HPSF
 {
@@ -26,51 +27,42 @@ namespace NPOI.HPSF
 
         private TypedPropertyValue[] _values;
 
-        public Vector(byte[] data, int startOffset, short type)
-        {
-            this._type = type;
-            Read(data, startOffset);
-        }
-
         public Vector(short type)
         {
             this._type = type;
         }
 
-        public int Read(byte[] data, int startOffset)
+        internal void Read( LittleEndianByteArrayInputStream lei )
         {
-            int offset = startOffset;
+            long longLength = lei.ReadUInt();
 
-            long longLength = LittleEndian.GetUInt(data, offset);
-            offset += LittleEndian.INT_SIZE;
-
-            if (longLength > int.MaxValue)
-                throw new InvalidOperationException("Vector is too long -- "
-                        + longLength);
-            int length = (int)longLength;
-
-            _values = new TypedPropertyValue[length];
-
-            if (_type == Variant.VT_VARIANT)
+            if ( longLength > int.MaxValue )
             {
-                for (int i = 0; i < length; i++)
-                {
-                    TypedPropertyValue value = new TypedPropertyValue();
-                    offset += value.Read(data, offset);
-                    _values[i] = value;
-                }
+                throw new InvalidOperationException( "Vector is too long -- " + longLength );
             }
-            else
+            int length = (int) longLength;
+
+            //BUG-61295 -- avoid OOM on corrupt file.  Build list instead
+            //of allocating array of length "length".
+            //If the length is corrupted and crazily big but < Integer.MAX_VALUE,
+            //this will trigger a RuntimeException "Buffer overrun" in lei.checkPosition
+            List<TypedPropertyValue> values = new List<TypedPropertyValue>();
+
+            int paddedType = (_type == Variant.VT_VARIANT) ? 0 : _type;
+            for ( int i = 0; i < length; i++ )
             {
-                for (int i = 0; i < length; i++)
+                TypedPropertyValue value = new TypedPropertyValue(paddedType, null);
+                if (paddedType == 0)
                 {
-                    TypedPropertyValue value = new TypedPropertyValue(_type, null);
-                    // be aware: not padded here
-                    offset += value.ReadValue(data, offset);
-                    _values[i] = value;
+                    value.Read(lei);
                 }
+                else 
+                {
+                    value.ReadValue(lei);
+                }
+                values.Add(value);
             }
-            return offset - startOffset;
+            _values = [.. values];
         }
 
         public TypedPropertyValue[] Values

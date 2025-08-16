@@ -28,12 +28,15 @@ namespace NPOI.Util
         private readonly byte[] _buf;
         private readonly int _endIndex;
         private int _ReadIndex;
-
+        private int _mark = 0;
+        private int count = 0;
         public LittleEndianByteArrayInputStream(byte[] buf, int startOffset, int maxReadLen)
         {
             _buf = buf;
             _ReadIndex = startOffset;
             _endIndex = startOffset + maxReadLen;
+            _mark = startOffset;
+            count = Math.Min(startOffset + maxReadLen, buf.Length);
         }
         public LittleEndianByteArrayInputStream(byte[] buf, int startOffset) :
             this(buf, startOffset, buf.Length - startOffset)
@@ -44,6 +47,25 @@ namespace NPOI.Util
             this(buf, 0, buf.Length)
         {
 
+        }
+
+        public int Read() {
+            return (_ReadIndex < _endIndex) ? (_buf[_ReadIndex++] & 0xff) : -1;
+        }
+
+        /// <summary>
+        /// Set the current marked position in the stream.
+        /// </summary>
+        /// <param name="readAheadLimit"></param>
+        /// <remarks>
+        /// The <c>readAheadLimit</c> for this class has no meaning.
+        /// </remarks>
+        public void Mark(int readAheadLimit) {
+            _mark = _ReadIndex;
+        }
+
+        public void Reset() {
+            _ReadIndex = _mark;
         }
 
         public int Available()
@@ -62,6 +84,13 @@ namespace NPOI.Util
         {
             return _ReadIndex;
         }
+        public void SetReadIndex(int pos)
+        {
+	       if (pos < 0 || pos >= _endIndex) {
+	            throw new ArgumentOutOfRangeException();
+	       }
+	       this._ReadIndex = pos;
+	    }
         public int ReadByte()
         {
             CheckPosition(1);
@@ -122,6 +151,9 @@ namespace NPOI.Util
             _ReadIndex = i;
             return (b1 << 8) + (b0 << 0);
         }
+        public long ReadUInt() {
+	        return ReadInt() & 0x00FFFFFFFFL; 
+        }
         public void ReadFully(byte[] buf, int off, int len)
         {
             CheckPosition(len);
@@ -135,6 +167,17 @@ namespace NPOI.Util
         public double ReadDouble()
         {
             return BitConverter.Int64BitsToDouble(ReadLong());
+        }
+
+        internal long Skip(long n)
+        {
+            long k = count - _ReadIndex;
+            if (n < k) {
+                k = n < 0 ? 0 : n;
+            }
+
+            _ReadIndex += (int)k;
+            return k;
         }
     }
 }
