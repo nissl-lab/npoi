@@ -39,21 +39,21 @@ namespace NPOI
         /**
          * Returns the core document properties
          */
-        public CoreProperties GetCoreProperties()
+        public virtual CoreProperties GetCoreProperties()
         {
             return _document.GetProperties().CoreProperties;
         }
         /**
          * Returns the extended document properties
          */
-        public ExtendedProperties GetExtendedProperties()
+        public virtual ExtendedProperties GetExtendedProperties()
         {
             return _document.GetProperties().ExtendedProperties;
         }
         /**
          * Returns the custom document properties
          */
-        public CustomProperties GetCustomProperties()
+        public virtual CustomProperties GetCustomProperties()
         {
             return _document.GetProperties().CustomProperties;
         }
