@@ -2658,6 +2658,18 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
+        public CT_R AddNewR()
+        {
+            CT_R r = new CT_R();
+            this.Items.Add(r);
+            return r;
+        }
+
+        public CT_R GetRArray(int index)
+        { 
+            return this.itemsField[index] as CT_R;
+        }
+
         [XmlElement("ItemsElementName", Order = 1)]
         [XmlIgnore]
         public List<ItemsChoiceType12> ItemsElementName

@@ -1688,19 +1688,21 @@ using Cysharp.Text;
         /// </summary>
         /// <param name="rId">a new hyperlink run</param>
         /// <returns></returns>
-        public XWPFHyperlinkRun CreateHyperlinkRun(string rId)
+        public XWPFHyperlinkRun CreateHyperlinkRun(string uri)
         {
-            CT_R r = new CT_R();
-            r.AddNewRPr().rStyle = new CT_String() { val = "Hyperlink" };
+            // Create a relationship ID for this link. 
+            string rId = Part.GetPackagePart().AddExternalRelationship(
+                uri, XWPFRelation.HYPERLINK.Relation).Id;
 
-            CT_Hyperlink1 hl = paragraph.AddNewHyperlink();
-            hl.history = ST_OnOff.on;
+            // Create the run. 
+            CT_Hyperlink1 hl = GetCTP().AddNewHyperlink();
             hl.id = rId;
-            hl.Items.Add(r);
-            XWPFHyperlinkRun xwpfRun = new XWPFHyperlinkRun(hl, r, this);
-            runs.Add(xwpfRun);
-            iRuns.Add(xwpfRun);
-            return xwpfRun;
+            hl.AddNewR();
+
+            XWPFHyperlinkRun link = new XWPFHyperlinkRun(hl, hl.GetRArray(0), this);
+            runs.Add(link);
+            iRuns.Add(link);
+            return link;
         }
         /// <summary>
         /// insert a new hyperlink run in RunArray

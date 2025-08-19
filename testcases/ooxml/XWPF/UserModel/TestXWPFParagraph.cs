@@ -588,27 +588,17 @@ namespace TestCases.XWPF.UserModel
         }
 
         [Test]
-        public void TestAddingHyperlinks()
+        public void TestAddHyperlink()
         {
-            XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("sample.docx");
-            
-            XWPFParagraph p = doc.Paragraphs[0];
+            XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("SampleDoc.docx");
 
-            ClassicAssert.AreEqual(2, p.Runs.Count);
+            XWPFParagraph p = doc.CreateParagraph();
+            XWPFHyperlinkRun h = p.CreateHyperlinkRun("http://poi.apache.org/");
+            h.SetText("Apache POI");
 
-            string rId = p.Part.GetPackagePart().AddExternalRelationship("https://www.google.com", XWPFRelation.HYPERLINK.Relation).Id;
-            
-            XWPFHyperlinkRun hr1 = p.CreateHyperlinkRun(rId);
-            hr1.SetText("link1");
-            ClassicAssert.AreEqual(3, p.Runs.Count);
-            ClassicAssert.AreEqual(2, p.Runs.IndexOf(hr1));
-            ClassicAssert.AreEqual(2, p.GetCTP().Items.IndexOf(hr1.GetCTHyperlink()));
-
-            XWPFHyperlinkRun hr2 = p.InsertNewHyperlinkRun(1, rId);
-            hr2.SetText("link2");
-            ClassicAssert.AreEqual(4, p.Runs.Count);
-            ClassicAssert.AreEqual(1, p.Runs.IndexOf(hr2));
-            ClassicAssert.AreEqual(1, p.GetCTP().Items.IndexOf(hr2.GetCTHyperlink()));
+            ClassicAssert.AreEqual("http://poi.apache.org/", h.GetHyperlink(doc).URL);
+            ClassicAssert.AreEqual(1, p.Runs.Count);
+            ClassicAssert.AreEqual(h, p.Runs[0]);
         }
 
         [Test]

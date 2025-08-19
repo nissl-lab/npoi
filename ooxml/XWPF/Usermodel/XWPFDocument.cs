@@ -459,6 +459,17 @@ namespace NPOI.XWPF.UserModel
                     return link;
             }
 
+            // If the link was not found, rebuild the list (maybe a new link was added into the document) and check again.
+            InitHyperlinks();
+            foreach(XWPFHyperlink link in hyperlinks)
+            {
+                if(link.Id.Equals(id))
+                {
+                    return link;
+                }
+            }
+            // Link still not there? Giving up.
+
             return null;
         }
 
