@@ -21,6 +21,7 @@ using System.Text;
 using NPOI.SS.UserModel;
 using System.Globalization;
 using System.Collections.Generic;
+using NPOI.Util;
 
 namespace NPOI.XSSF.Extractor
 {
@@ -30,10 +31,10 @@ namespace NPOI.XSSF.Extractor
     public class XSSFExcelExtractor : POIXMLTextExtractor, NPOI.SS.Extractor.IExcelExtractor
     {
         public static XSSFRelation[] SUPPORTED_TYPES = new XSSFRelation[] {
-      XSSFRelation.WORKBOOK, XSSFRelation.MACRO_TEMPLATE_WORKBOOK,
-      XSSFRelation.MACRO_ADDIN_WORKBOOK, XSSFRelation.TEMPLATE_WORKBOOK,
-      XSSFRelation.MACROS_WORKBOOK
-   };
+            XSSFRelation.WORKBOOK, XSSFRelation.MACRO_TEMPLATE_WORKBOOK,
+            XSSFRelation.MACRO_ADDIN_WORKBOOK, XSSFRelation.TEMPLATE_WORKBOOK,
+            XSSFRelation.MACROS_WORKBOOK
+        };
 
         private readonly XSSFWorkbook workbook;
         private readonly DataFormatter dataFormatter;
@@ -60,7 +61,7 @@ namespace NPOI.XSSF.Extractor
         /// <summary>
         ///  Should header and footer be included? Default is true
         /// </summary>
-        public bool IncludeHeaderFooter
+        public bool IncludeHeadersFooters
         {
             get
             {
@@ -129,9 +130,12 @@ namespace NPOI.XSSF.Extractor
                 includeTextBoxes = value;
             }
         }
+        public bool AddTabEachEmptyCell { get; set; } = true;
         /**
          * Should sheet names be included? Default is true
          */
+        [Obsolete("use property IncludeSheetNames")]
+        [Removal(Version = "4.0")]
         public void SetIncludeSheetNames(bool includeSheetNames)
         {
             this.includeSheetNames = includeSheetNames;
@@ -140,6 +144,8 @@ namespace NPOI.XSSF.Extractor
          * Should we return the formula itself, and not
          *  the result it produces? Default is false
          */
+        [Obsolete("use property FormulasNotResults")]
+        [Removal(Version = "4.0")]
         public void SetFormulasNotResults(bool formulasNotResults)
         {
             this.formulasNotResults = formulasNotResults;
@@ -147,6 +153,8 @@ namespace NPOI.XSSF.Extractor
         /**
          * Should cell comments be included? Default is false
          */
+        [Obsolete("use property IncludeCellComments")]
+        [Removal(Version = "4.0")]
         public void SetIncludeCellComments(bool includeCellComments)
         {
             this.includeCellComments = includeCellComments;
@@ -154,6 +162,8 @@ namespace NPOI.XSSF.Extractor
         /**
          * Should headers and footers be included? Default is true
          */
+        [Obsolete("use property IncludeHeadersFooters")]
+        [Removal(Version = "4.0")]
         public void SetIncludeHeadersFooters(bool includeHeadersFooters)
         {
             this.includeHeadersFooters = includeHeadersFooters;
@@ -163,6 +173,8 @@ namespace NPOI.XSSF.Extractor
          * Should text within textboxes be included? Default is true
          * @param includeTextBoxes
          */
+        [Obsolete("use property IncludeTextBoxes")]
+        [Removal(Version = "4.0")]
         public void SetIncludeTextBoxes(bool includeTextBoxes)
         {
             this.includeTextBoxes = includeTextBoxes;
@@ -223,13 +235,16 @@ namespace NPOI.XSSF.Extractor
                         for (int j = 0; j < row.LastCellNum; j++)
                         {
                             // Add a tab delimiter for each empty cell.
-                            if (!firsttime)
+                            if(AddTabEachEmptyCell)
                             {
-                                text.Append("\t");
-                            }
-                            else
-                            {
-                                firsttime = false;
+                                if(!firsttime)
+                                {
+                                    text.Append("\t");
+                                }
+                                else
+                                {
+                                    firsttime = false;
+                                }
                             }
 
                             ICell cell = row.GetCell(j);

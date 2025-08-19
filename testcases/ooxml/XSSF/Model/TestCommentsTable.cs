@@ -38,7 +38,7 @@ namespace TestCases.XSSF.Model
         public void FindAuthor()
         {
             CommentsTable sheetComments = new CommentsTable();
-            ClassicAssert.AreEqual(1, sheetComments.GetNumberOfAuthors());
+            ClassicAssert.AreEqual(1, sheetComments.NumberOfAuthors);
             ClassicAssert.AreEqual(0, sheetComments.FindAuthor(""));
             ClassicAssert.AreEqual("", sheetComments.GetAuthor(0));
 
@@ -205,22 +205,22 @@ namespace TestCases.XSSF.Model
             ClassicAssert.AreSame(a1, sheetComments.GetCTComment(addrA1));
             ClassicAssert.AreSame(a2, sheetComments.GetCTComment(addrA2));
             ClassicAssert.AreSame(a3, sheetComments.GetCTComment(addrA3));
-            ClassicAssert.AreEqual(3, sheetComments.GetNumberOfComments());
+            ClassicAssert.AreEqual(3, sheetComments.NumberOfComments);
 
             ClassicAssert.IsTrue(sheetComments.RemoveComment(addrA1));
-            ClassicAssert.AreEqual(2, sheetComments.GetNumberOfComments());
+            ClassicAssert.AreEqual(2, sheetComments.NumberOfComments);
             ClassicAssert.IsNull(sheetComments.GetCTComment(addrA1));
             ClassicAssert.AreSame(a2, sheetComments.GetCTComment(addrA2));
             ClassicAssert.AreSame(a3, sheetComments.GetCTComment(addrA3));
 
             ClassicAssert.IsTrue(sheetComments.RemoveComment(addrA2));
-            ClassicAssert.AreEqual(1, sheetComments.GetNumberOfComments());
+            ClassicAssert.AreEqual(1, sheetComments.NumberOfComments);
             ClassicAssert.IsNull(sheetComments.GetCTComment(addrA1));
             ClassicAssert.IsNull(sheetComments.GetCTComment(addrA2));
             ClassicAssert.AreSame(a3, sheetComments.GetCTComment(addrA3));
 
             ClassicAssert.IsTrue(sheetComments.RemoveComment(addrA3));
-            ClassicAssert.AreEqual(0, sheetComments.GetNumberOfComments());
+            ClassicAssert.AreEqual(0, sheetComments.NumberOfComments);
             ClassicAssert.IsNull(sheetComments.GetCTComment(addrA1));
             ClassicAssert.IsNull(sheetComments.GetCTComment(addrA2));
             ClassicAssert.IsNull(sheetComments.GetCTComment(addrA3));

@@ -130,25 +130,26 @@ namespace NPOI.XSSF.Model
         {
             this.workbook = wb;
         }
-        public ThemesTable GetTheme()
+        public ThemesTable Theme 
         {
-            return theme;
-        }
-
-        public void SetTheme(ThemesTable theme)
-        {
-            this.theme = theme;
-
-            if (theme != null) theme.SetColorMap(indexedColors);
-            // Pass the themes table along to things which need to 
-            //  know about it, but have already been Created by now
-            foreach (XSSFFont font in fonts)
+            get
             {
-                font.SetThemesTable(theme);
+                return theme;
             }
-            foreach (XSSFCellBorder border in borders)
+            set
             {
-                border.SetThemesTable(theme);
+                this.theme = value;
+
+                // Pass the themes table along to things which need to 
+                //  know about it, but have already been Created by now
+                foreach(XSSFFont font in fonts)
+                {
+                    font.SetThemesTable(theme);
+                }
+                foreach(XSSFCellBorder border in borders)
+                {
+                    border.SetThemesTable(theme);
+                }
             }
         }
 
@@ -199,7 +200,7 @@ namespace NPOI.XSSF.Model
         {
             if (theme != null) return;
 
-            SetTheme((ThemesTable)workbook.CreateRelationship(XSSFRelation.THEME, XSSFFactory.GetInstance()));
+            theme = (ThemesTable)workbook.CreateRelationship(XSSFRelation.THEME, XSSFFactory.GetInstance());
         }
         /**
          * Read this shared styles table from an XML file.
@@ -551,10 +552,7 @@ namespace NPOI.XSSF.Model
             return fills.AsReadOnly();
         }
 
-        public ReadOnlyCollection<XSSFFont> GetFonts()
-        {
-            return fonts.AsReadOnly();
-        }
+        public ReadOnlyCollection<XSSFFont> Fonts => fonts.AsReadOnly();
 
         public IDictionary<short, String> GetNumberFormats()
         {
