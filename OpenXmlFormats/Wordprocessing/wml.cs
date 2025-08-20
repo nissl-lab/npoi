@@ -1724,12 +1724,20 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         private ST_OnOff dirtyField;
 
         private bool dirtyFieldSpecified;
+        internal CT_P parent;
 
         public CT_SimpleField()
         {
             this.itemsElementNameField = new List<ItemsChoiceType13>();
             this.itemsField = new ArrayList();
             //this.fldDataField = new CT_Text();
+        }
+
+        public CT_R AddNewR()
+        { 
+            CT_R r = new CT_R();
+            this.itemsField.Add(r);
+            return r;
         }
 
         [XmlElement(Order = 0)]
@@ -1742,6 +1750,17 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             set
             {
                 this.fldDataField = value;
+            }
+        }
+        public CT_P Parent
+        {
+            get
+            {
+                return parent;
+            }
+            set
+            {
+                parent=value;
             }
         }
         public static CT_SimpleField Parse(XmlNode node, XmlNamespaceManager namespaceManager)
@@ -2349,10 +2368,22 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         private string idField;
 
+        internal CT_P parent;
+
         public CT_Hyperlink1()
         {
             this.itemsElementNameField = new List<ItemsChoiceType12>();
             this.itemsField = new ArrayList();
+        }
+        public CT_P Parent
+        {
+            get
+            {
+                return parent;
+            }
+            set {
+                parent=value;
+            }
         }
         public static CT_Hyperlink1 Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
@@ -2656,6 +2687,18 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             {
                 this.itemsField = value;
             }
+        }
+
+        public CT_R AddNewR()
+        {
+            CT_R r = new CT_R();
+            this.Items.Add(r);
+            return r;
+        }
+
+        public CT_R GetRArray(int index)
+        { 
+            return this.itemsField[index] as CT_R;
         }
 
         [XmlElement("ItemsElementName", Order = 1)]

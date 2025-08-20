@@ -20,7 +20,8 @@ namespace TestCases.XWPF.UserModel
     using NPOI.OpenXmlFormats.Wordprocessing;
     using NPOI.Util;
     using NPOI.XWPF.UserModel;
-    using NUnit.Framework;using NUnit.Framework.Legacy;
+    using NUnit.Framework;
+    using NUnit.Framework.Legacy;
     using System;
     using System.Collections.Generic;
     using System.Text;
@@ -388,7 +389,7 @@ namespace TestCases.XWPF.UserModel
             NPOI.OpenXmlFormats.Dml.CT_GraphicalObject go = r.GetCTR().GetDrawingArray(0).GetInlineArray(0).graphic;
             NPOI.OpenXmlFormats.Dml.CT_GraphicalObjectData god = r.GetCTR().GetDrawingArray(0).GetInlineArray(0).graphic.graphicData;
             //PicDocument pd = new PicDocumentImpl(null);
-            //assertTrue(pd.isNil());
+            //ClassicAssert.IsTrue(pd.isNil());
         }
 
         [Test]
@@ -588,27 +589,17 @@ namespace TestCases.XWPF.UserModel
         }
 
         [Test]
-        public void TestAddingHyperlinks()
+        public void TestAddHyperlink()
         {
-            XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("sample.docx");
-            
-            XWPFParagraph p = doc.Paragraphs[0];
+            XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("SampleDoc.docx");
 
-            ClassicAssert.AreEqual(2, p.Runs.Count);
+            XWPFParagraph p = doc.CreateParagraph();
+            XWPFHyperlinkRun h = p.CreateHyperlinkRun("http://poi.apache.org/");
+            h.SetText("Apache POI");
 
-            string rId = p.Part.GetPackagePart().AddExternalRelationship("https://www.google.com", XWPFRelation.HYPERLINK.Relation).Id;
-            
-            XWPFHyperlinkRun hr1 = p.CreateHyperlinkRun(rId);
-            hr1.SetText("link1");
-            ClassicAssert.AreEqual(3, p.Runs.Count);
-            ClassicAssert.AreEqual(2, p.Runs.IndexOf(hr1));
-            ClassicAssert.AreEqual(2, p.GetCTP().Items.IndexOf(hr1.GetCTHyperlink()));
-
-            XWPFHyperlinkRun hr2 = p.InsertNewHyperlinkRun(1, rId);
-            hr2.SetText("link2");
-            ClassicAssert.AreEqual(4, p.Runs.Count);
-            ClassicAssert.AreEqual(1, p.Runs.IndexOf(hr2));
-            ClassicAssert.AreEqual(1, p.GetCTP().Items.IndexOf(hr2.GetCTHyperlink()));
+            ClassicAssert.AreEqual("http://poi.apache.org/", h.GetHyperlink(doc).URL);
+            ClassicAssert.AreEqual(1, p.Runs.Count);
+            ClassicAssert.AreEqual(h, p.Runs[0]);
         }
 
         [Test]
@@ -777,6 +768,137 @@ namespace TestCases.XWPF.UserModel
         
             // TODO Shouldn't we use XWPFNumbering or similar here?
             // TODO Make it easier to change
+        }
+        [Test]
+        public void TestCreateNewRuns()
+        {
+            using(XWPFDocument doc = new XWPFDocument())
+            {
+                XWPFParagraph p = doc.CreateParagraph();
+                XWPFHyperlinkRun h = p.CreateHyperlinkRun("http://poi.apache.org");
+                XWPFFieldRun fieldRun = p.CreateFieldRun();
+                XWPFRun r = p.CreateRun();
+
+                ClassicAssert.AreEqual(3, p.Runs.Count);
+                ClassicAssert.AreEqual(0, p.Runs.IndexOf(h));
+                ClassicAssert.AreEqual(1, p.Runs.IndexOf(fieldRun));
+                ClassicAssert.AreEqual(2, p.Runs.IndexOf(r));
+
+                ClassicAssert.AreEqual(3, p.IRuns.Count);
+                ClassicAssert.AreEqual(0, p.IRuns.IndexOf(h));
+                ClassicAssert.AreEqual(1, p.IRuns.IndexOf(fieldRun));
+                ClassicAssert.AreEqual(2, p.IRuns.IndexOf(r));
+            }
+        }
+        [Test]
+        public void TestInsertNewRuns()
+        {
+            using(XWPFDocument doc = new XWPFDocument())
+            {
+                XWPFParagraph p = doc.CreateParagraph();
+                XWPFRun r = p.CreateRun();
+                ClassicAssert.AreEqual(1, p.Runs.Count);
+                ClassicAssert.AreEqual(0, p.Runs.IndexOf(r));
+
+                XWPFHyperlinkRun h = p.InsertNewHyperlinkRun(0, "http://poi.apache.org");
+                ClassicAssert.AreEqual(2, p.Runs.Count);
+                ClassicAssert.AreEqual(0, p.Runs.IndexOf(h));
+                ClassicAssert.AreEqual(1, p.Runs.IndexOf(r));
+
+                XWPFFieldRun fieldRun2 = p.InsertNewFieldRun(2);
+                ClassicAssert.AreEqual(3, p.Runs.Count);
+                ClassicAssert.AreEqual(2, p.Runs.IndexOf(fieldRun2));
+            }
+        }
+        [Test]
+        public void TestRemoveRuns()
+        {
+            using(XWPFDocument doc = new XWPFDocument())
+            {
+                XWPFParagraph p = doc.CreateParagraph();
+                XWPFRun r = p.CreateRun();
+                p.CreateRun();
+                XWPFHyperlinkRun hyperlinkRun = p
+                    .CreateHyperlinkRun("http://poi.apache.org");
+                XWPFFieldRun fieldRun = p.CreateFieldRun();
+
+                ClassicAssert.AreEqual(4, p.Runs.Count);
+                ClassicAssert.AreEqual(2, p.Runs.IndexOf(hyperlinkRun));
+                ClassicAssert.AreEqual(3, p.Runs.IndexOf(fieldRun));
+
+                p.RemoveRun(2);
+                ClassicAssert.AreEqual(3, p.Runs.Count);
+                ClassicAssert.AreEqual(-1, p.Runs.IndexOf(hyperlinkRun));
+                ClassicAssert.AreEqual(2, p.Runs.IndexOf(fieldRun));
+
+                p.RemoveRun(0);
+                ClassicAssert.AreEqual(2, p.Runs.Count);
+                ClassicAssert.AreEqual(-1, p.Runs.IndexOf(r));
+                ClassicAssert.AreEqual(1, p.Runs.IndexOf(fieldRun));
+
+                p.RemoveRun(1);
+                ClassicAssert.AreEqual(1, p.Runs.Count);
+                ClassicAssert.AreEqual(-1, p.Runs.IndexOf(fieldRun));
+            }
+        }
+        [Test]
+        public void TestRemoveAndInsertRunsWithOtherIRunElement()
+        {
+            XWPFDocument doc = new XWPFDocument();
+
+            XWPFParagraph p = doc.CreateParagraph();
+            p.CreateRun();
+            // add other run element
+            p.GetCTP().AddNewSdt();
+            // add two CTR in hyperlink
+            XWPFHyperlinkRun hyperlinkRun = p
+                .CreateHyperlinkRun("http://poi.apache.org");
+            hyperlinkRun.GetCTHyperlink().AddNewR();
+            p.CreateFieldRun();
+
+            XWPFDocument doc2 = XWPFTestDataSamples.WriteOutAndReadBack(doc);
+            XWPFParagraph paragraph = doc2.GetParagraphArray(0);
+
+            ClassicAssert.AreEqual(4, paragraph.Runs.Count);
+            ClassicAssert.AreEqual(5, paragraph.IRuns.Count);
+
+            ClassicAssert.IsTrue(paragraph.Runs[1] is XWPFHyperlinkRun);
+            ClassicAssert.IsTrue(paragraph.Runs[2] is XWPFHyperlinkRun);
+            ClassicAssert.IsTrue(paragraph.Runs[3] is XWPFFieldRun);
+
+            ClassicAssert.IsTrue(paragraph.IRuns[1] is XWPFSDT);
+            ClassicAssert.IsTrue(paragraph.IRuns[2] is XWPFHyperlinkRun);
+
+            paragraph.RemoveRun(1);
+            ClassicAssert.AreEqual(3, paragraph.Runs.Count);
+            ClassicAssert.IsTrue(paragraph.Runs[1] is XWPFHyperlinkRun);
+            ClassicAssert.IsTrue(paragraph.Runs[2] is XWPFFieldRun);
+
+            ClassicAssert.IsTrue(paragraph.IRuns[1] is XWPFSDT);
+            ClassicAssert.IsTrue(paragraph.IRuns[2] is XWPFHyperlinkRun);
+
+            paragraph.RemoveRun(1);
+            ClassicAssert.AreEqual(2, paragraph.Runs.Count);
+            ClassicAssert.IsTrue(paragraph.Runs[1] is XWPFFieldRun);
+
+            ClassicAssert.IsTrue(paragraph.IRuns[1] is XWPFSDT);
+            ClassicAssert.IsTrue(paragraph.IRuns[2] is XWPFFieldRun);
+
+            paragraph.RemoveRun(0);
+            ClassicAssert.AreEqual(1, paragraph.Runs.Count);
+            ClassicAssert.IsTrue(paragraph.Runs[0] is XWPFFieldRun);
+
+            ClassicAssert.IsTrue(paragraph.IRuns[0] is XWPFSDT);
+            ClassicAssert.IsTrue(paragraph.IRuns[1] is XWPFFieldRun);
+
+            XWPFRun newRun = paragraph.InsertNewRun(0);
+            ClassicAssert.AreEqual(2, paragraph.Runs.Count);
+
+            ClassicAssert.AreEqual(3, paragraph.IRuns.Count);
+            ClassicAssert.AreEqual(0, paragraph.Runs.IndexOf(newRun));
+
+            doc.Close();
+            doc2.Close();
         }
     }
 }

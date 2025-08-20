@@ -20,11 +20,14 @@ namespace NPOI.XWPF.UserModel
     using System.Collections.Generic;
     using NPOI.OpenXmlFormats.Wordprocessing;
     using System.Text; 
-using Cysharp.Text;
+    using Cysharp.Text;
     using NPOI.Util;
     using System.Collections;
     using NPOI.WP.UserModel;
+    using System.Linq;
     using S=NPOI.OpenXmlFormats.Shared;
+    using NPOI.POIFS.Properties;
+    using System.Data;
 
     /**
 * <p>A Paragraph within a Document, Table, Header etc.</p> 
@@ -132,11 +135,9 @@ using Cysharp.Text;
                 {
                     foreach (CT_R r in link.GetRList())
                     {
-                        //runs.Add(new XWPFHyperlinkRun(link, r, this));
                         XWPFHyperlinkRun hr = new XWPFHyperlinkRun(link, r, this);
                         runs.Add(hr);
                         iRuns.Add(hr);
-
                     }
                 }
                 if (o is CT_SimpleField field) {
@@ -1578,28 +1579,38 @@ using Cysharp.Text;
          */
         public bool RemoveRun(int pos)
         {
-            if (pos >= 0 && pos < runs.Count)
+            if(pos >= 0 && pos < runs.Count)
             {
                 // Remove the run from our high level lists
                 XWPFRun run = runs[pos];
-                if (run is XWPFHyperlinkRun || run is XWPFFieldRun)
+
+                // CTP -> CTHyperlink -> R array
+                if(run is XWPFHyperlinkRun && IsTheOnlyCTHyperlinkInRuns((XWPFHyperlinkRun) run))
                 {
-                    // TODO Add support for removing these kinds of nested runs,
-                    //  which aren't on the CTP -> R array, but CTP -> XXX -> R array
-                    throw new ArgumentException("Removing Field or Hyperlink runs not yet supported");
+                    var hl=((XWPFHyperlinkRun) run).GetCTHyperlink();
+                    hl.Parent.RemoveHyperlink(hl);
+                }
+                // CTP -> CTField -> R array
+                if(run is XWPFFieldRun && IsTheOnlyCTFieldInRuns((XWPFFieldRun) run))
+                {
+                    var sf=((XWPFFieldRun) run).GetCTField();
+                    sf.Parent.RemoveSimpleField(sf);
                 }
                 runs.RemoveAt(pos);
                 iRuns.Remove(run);
-                // Remove the run from the low-level XML
-                //calculate the correct pos as our run/irun list contains hyperlinks and fields so is different to the paragraph R array.
-                int rPos = 0;
-                for (int i = 0; i < pos; i++)
+                if(!(run is XWPFHyperlinkRun|| run is XWPFFieldRun))
                 {
-                    XWPFRun currRun = runs[i];
-                    if (!(currRun is XWPFHyperlinkRun || currRun is XWPFFieldRun))
-                        rPos++;
+                    // Remove the run from the low-level XML
+                    //calculate the correct pos as our run/irun list contains hyperlinks and fields so is different to the paragraph R array.
+                    int rPos = 0;
+                    for(int i = 0; i < pos; i++)
+                    {
+                        XWPFRun currRun = runs[i];
+                        if(!(currRun is XWPFHyperlinkRun || currRun is XWPFFieldRun))
+                            rPos++;
+                    }
+                    GetCTP().RemoveR(rPos);
                 }
-                GetCTP().RemoveR(rPos);
                 return true;
             }
             return false;
@@ -1686,33 +1697,36 @@ using Cysharp.Text;
         /// <summary>
         /// Appends a new hyperlink run to this paragraph
         /// </summary>
-        /// <param name="rId">a new hyperlink run</param>
+        /// <param name="uri">hyperlink uri</param>
         /// <returns></returns>
-        public XWPFHyperlinkRun CreateHyperlinkRun(string rId)
+        public XWPFHyperlinkRun CreateHyperlinkRun(string uri)
         {
-            CT_R r = new CT_R();
-            r.AddNewRPr().rStyle = new CT_String() { val = "Hyperlink" };
+            // Create a relationship ID for this link. 
+            string rId = Part.GetPackagePart().AddExternalRelationship(
+                uri, XWPFRelation.HYPERLINK.Relation).Id;
 
-            CT_Hyperlink1 hl = paragraph.AddNewHyperlink();
-            hl.history = ST_OnOff.on;
+            // Create the run. 
+            CT_Hyperlink1 hl = GetCTP().AddNewHyperlink();
             hl.id = rId;
-            hl.Items.Add(r);
-            XWPFHyperlinkRun xwpfRun = new XWPFHyperlinkRun(hl, r, this);
-            runs.Add(xwpfRun);
-            iRuns.Add(xwpfRun);
-            return xwpfRun;
+            hl.Parent = paragraph;
+            hl.AddNewR();
+
+            XWPFHyperlinkRun link = new XWPFHyperlinkRun(hl, hl.GetRArray(0), this);
+            runs.Add(link);
+            iRuns.Add(link);
+            return link;
         }
         /// <summary>
         /// insert a new hyperlink run in RunArray
         /// </summary>
         /// <param name="pos">The position at which the new run should be added.</param>
-        /// <param name="rId">a new hyperlink run</param>
+        /// <param name="uri">hyperlink uri</param>
         /// <returns>the inserted hyperlink run or null if the given pos is out of bounds.</returns>
-        public XWPFHyperlinkRun InsertNewHyperlinkRun(int pos, string rId)
+        public XWPFHyperlinkRun InsertNewHyperlinkRun(int pos, string uri)
         {
             if(pos == runs.Count)
             {
-                return CreateHyperlinkRun(rId);
+                return CreateHyperlinkRun(uri);
             }
 
             if(pos >= 0 && pos < runs.Count)
@@ -1724,38 +1738,63 @@ using Cysharp.Text;
                     itemPos = paragraph.Items.Count;
                 }
 
-                CT_R r = new CT_R();
-                r.AddNewRPr().rStyle = new CT_String() { val = "Hyperlink" };
+                string rId = Part.GetPackagePart().AddExternalRelationship(
+                    uri, XWPFRelation.HYPERLINK.Relation).Id;
 
                 CT_Hyperlink1 hl = new CT_Hyperlink1();
+                hl.Parent = paragraph;
                 paragraph.Items.Insert(itemPos, hl);
                 paragraph.ItemsElementName.Insert(itemPos, ParagraphItemsChoiceType.hyperlink);
 
-                hl.history = ST_OnOff.on;
                 hl.id=rId;
-                hl.Items.Add(r);
-                XWPFHyperlinkRun newRun = new XWPFHyperlinkRun(hl, r, this);
-
-                // To update the iRuns, find where we're going
-                // in the normal Runs, and go in there
-                int iPos = iRuns.Count;
-                if(pos < runs.Count)
-                {
-                    XWPFRun oldAtPos = runs[pos];
-                    int oldAt = iRuns.IndexOf(oldAtPos);
-                    if(oldAt != -1)
-                    {
-                        iPos = oldAt;
-                    }
-                }
-                iRuns.Insert(iPos, newRun);
-
-                // Runs itself is easy to update
-                runs.Insert(pos, newRun);
-
+                XWPFHyperlinkRun newRun = new XWPFHyperlinkRun(hl, hl.AddNewR(), this);
+                UpdateRunAfterInsert(pos, newRun);
                 return newRun;
             }
             return null;
+        }
+        public XWPFFieldRun InsertNewFieldRun(int pos)
+        {
+            if(pos == runs.Count)
+            {
+                return CreateFieldRun();
+            }
+            if(pos >= 0 && pos < runs.Count)
+            {
+                int itemPos = paragraph.Items.IndexOf(runs[pos].GetCTR());
+                if(itemPos == -1)
+                {
+                    itemPos = paragraph.Items.Count;
+                }
+
+                CT_SimpleField ctSimpleField = new CT_SimpleField();
+                ctSimpleField.Parent = paragraph;
+                paragraph.Items.Insert(itemPos, ctSimpleField);
+                paragraph.ItemsElementName.Insert(itemPos, ParagraphItemsChoiceType.fldSimple);
+
+                XWPFFieldRun newRun = new XWPFFieldRun(ctSimpleField, ctSimpleField.AddNewR(), this);
+                UpdateRunAfterInsert(pos, newRun);
+                return newRun;
+            }
+            return null;
+        }
+        private void UpdateRunAfterInsert(int pos, XWPFRun newRun)
+        {
+            // To update the iRuns, find where we're going
+            // in the normal Runs, and go in there
+            int iPos = iRuns.Count;
+            if(pos < runs.Count)
+            {
+                XWPFRun oldAtPos = runs[pos];
+                int oldAt = iRuns.IndexOf(oldAtPos);
+                if(oldAt != -1)
+                {
+                    iPos = oldAt;
+                }
+            }
+            iRuns.Insert(iPos, newRun);
+            // Runs itself is easy to update
+            runs.Insert(pos, newRun);
         }
         /// <summary>
         /// Add a new run with a reference to the specified footnote. The footnote reference run will have the style name "FootnoteReference".
@@ -1769,6 +1808,31 @@ using Cysharp.Text;
             rstyle.val="FootnoteReference";
             var footnoteRef = ctRun.AddNewFootnoteReference();
             footnoteRef.id= footnote.Id.ToString();
+        }
+        public XWPFFieldRun CreateFieldRun()
+        {
+            CT_SimpleField ctSimpleField = paragraph.AddNewFldSimple();
+            ctSimpleField.Parent = paragraph;
+            XWPFFieldRun newRun = new XWPFFieldRun(ctSimpleField, ctSimpleField.AddNewR(), this);
+            runs.Add(newRun);
+            iRuns.Add(newRun);
+            return newRun;
+        }
+
+        private bool IsTheOnlyCTHyperlinkInRuns(XWPFHyperlinkRun run)
+        {
+            CT_Hyperlink1 ctHyperlink = run.GetCTHyperlink();
+            long count = runs.Count(r=>(r is XWPFHyperlinkRun) 
+            && ctHyperlink == ((XWPFHyperlinkRun) r).GetCTHyperlink());
+            return count <= 1;
+        }
+
+        private bool IsTheOnlyCTFieldInRuns(XWPFFieldRun run)
+        {
+            CT_SimpleField ctField = run.GetCTField();
+            long count = runs.Count(r=>(r is XWPFFieldRun)
+            && ctField  == ((XWPFFieldRun) r).GetCTField());
+            return count <= 1;
         }
     }
 
