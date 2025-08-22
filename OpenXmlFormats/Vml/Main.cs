@@ -3389,7 +3389,7 @@ namespace NPOI.OpenXmlFormats.Vml
             ctObj.id = XmlHelper.ReadString(node.Attributes["id"]);
             ctObj.style = XmlHelper.ReadString(node.Attributes["style"]);
             ctObj.inset = XmlHelper.ReadString(node.Attributes["inset"]);
-            ctObj.ItemXml = node.OuterXml;
+            ctObj.ItemXml = node.InnerXml;
             return ctObj;
         }
 
