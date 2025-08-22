@@ -698,9 +698,9 @@ namespace TestCases.HSSF.Record
             ArrayPtg arr = (ArrayPtg)ptg[0];
             ClassicAssert.AreEqual(696, arr.RowCount);
             ClassicAssert.AreEqual(1, arr.ColumnCount);
-            Object[,] vals = arr.GetTokenArrayValues();
-            ClassicAssert.AreEqual("1.T20.001", vals[0,0]);
-            ClassicAssert.AreEqual("1.T20.010", vals[vals.Length - 1,0]);
+            Object[][] vals = arr.GetTokenArrayValues();
+            ClassicAssert.AreEqual("1.T20.001", vals[0][0]);
+            ClassicAssert.AreEqual("1.T20.010", vals[vals.Length - 1][0]);
         }
         [Test]
         public void TestBug57923()
