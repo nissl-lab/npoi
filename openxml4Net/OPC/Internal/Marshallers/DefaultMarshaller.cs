@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.IO;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
 {
@@ -21,9 +23,15 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
          * @throws OpenXml4NetException
          *             If any error occur.
          */
-        public bool Marshall(PackagePart part, Stream out1)
+        public bool Marshall(PackagePart part, Stream stream)
         {
-            return part.Save(out1);
+            return part.Save(stream);
         }
+
+        public async Task<bool> MarshallAsync(PackagePart part, Stream stream, CancellationToken cancellationToken=default)
+        {
+            return await part.SaveAsync(stream, cancellationToken);
+        }
+
     }
 }

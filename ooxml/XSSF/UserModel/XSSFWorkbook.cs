@@ -38,6 +38,8 @@ using NPOI.SS;
 using System.Globalization;
 using System.Linq;
 using NPOI.POIFS.FileSystem;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -1839,6 +1841,27 @@ namespace NPOI.XSSF.UserModel
             if (originalValue.HasValue && Package is ZipPackage)
             {
                 ((ZipPackage)Package).IsExternalStream = originalValue.Value;
+            }
+        }
+
+        /// <summary>
+        /// Write the document to the specified stream, and optionally leave the stream open without closing it.
+        /// </summary>
+        /// <param name="stream">the stream you wish to write the xlsx to</param>
+        /// <param name="leaveOpen">leave stream open or not</param>
+        public async Task WriteAsync(Stream stream, bool leaveOpen = false, CancellationToken cancellationToken = default)
+        {
+            bool? originalValue = null;
+            if(Package is ZipPackage package)
+            {
+                //By default ZipPackage closes the stream if it wasn't constructed from a stream.
+                originalValue = ((ZipPackage) Package).IsExternalStream;
+                ((ZipPackage) Package).IsExternalStream = leaveOpen;
+            }
+            await base.WriteAsync(stream, cancellationToken);
+            if(originalValue.HasValue && Package is ZipPackage)
+            {
+                ((ZipPackage) Package).IsExternalStream = originalValue.Value;
             }
         }
 

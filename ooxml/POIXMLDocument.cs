@@ -26,6 +26,8 @@ namespace NPOI
     using NPOI.OpenXml4Net;
     using System.Reflection;
     using NPOI.POIFS.FileSystem;
+    using System.Threading.Tasks;
+    using System.Threading;
 
     public abstract class POIXMLDocument : POIXMLDocumentPart, ICloseable
     {
@@ -210,6 +212,28 @@ namespace NPOI
             GetProperties().Commit();
 
             pkg.Save(stream);
+        }
+
+        public async Task WriteAsync(Stream stream, CancellationToken cancellationToken= default)
+        {
+            OPCPackage pkg = Package;
+            if(pkg == null)
+            {
+                throw new IOException("Cannot write data, document seems to have been closed already");
+            }
+            if(!this.GetProperties().CustomProperties.Contains("Generator"))
+                this.GetProperties().CustomProperties.AddProperty("Generator", "NPOI");
+            if(!this.GetProperties().CustomProperties.Contains("Generator Version"))
+                this.GetProperties().CustomProperties.AddProperty("Generator Version", Assembly.GetExecutingAssembly().GetName().Version.ToString(3));
+            //force all children to commit their Changes into the underlying OOXML Package
+            List<PackagePart> context = new List<PackagePart>();
+            OnSave(context);
+            context.Clear();
+
+            //save extended and custom properties
+            GetProperties().Commit();
+
+            await pkg.SaveAsync(stream, cancellationToken);
         }
     }
 }

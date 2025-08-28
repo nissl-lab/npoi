@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml;
 using System.IO;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
 {
@@ -104,6 +106,49 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
             AddTitle();
             AddVersion();
             return true;
+        }
+
+        public virtual Task<bool> MarshallAsync(PackagePart part, Stream out1, CancellationToken cancellationToken = default)
+        {
+            if(part is not PackagePropertiesPart propertiesPart)
+                throw new ArgumentException(
+                        "'part' must be a PackagePropertiesPart instance.");
+            propsPart = propertiesPart;
+
+            // Configure the document
+            xmlDoc = new XmlDocument();
+            XmlElement rootElem = xmlDoc.CreateElement("coreProperties",namespaceCoreProperties);
+
+            nsmgr = new XmlNamespaceManager(xmlDoc.NameTable);
+            nsmgr.AddNamespace("cp", PackagePropertiesPart.NAMESPACE_CP_URI);
+            nsmgr.AddNamespace("dc", PackagePropertiesPart.NAMESPACE_DC_URI);
+            nsmgr.AddNamespace("dcterms", PackagePropertiesPart.NAMESPACE_DCTERMS_URI);
+            nsmgr.AddNamespace("xsi", PackagePropertiesPart.NAMESPACE_XSI_URI);
+
+            rootElem.SetAttribute("xmlns:cp", PackagePropertiesPart.NAMESPACE_CP_URI);
+            rootElem.SetAttribute("xmlns:dc", PackagePropertiesPart.NAMESPACE_DC_URI);
+            rootElem.SetAttribute("xmlns:dcterms", PackagePropertiesPart.NAMESPACE_DCTERMS_URI);
+            rootElem.SetAttribute("xmlns:xsi", PackagePropertiesPart.NAMESPACE_XSI_URI);
+
+            xmlDoc.AppendChild(rootElem);
+
+            AddCategory();
+            AddContentStatus();
+            AddContentType();
+            AddCreated();
+            AddCreator();
+            AddDescription();
+            AddIdentifier();
+            AddKeywords();
+            AddLanguage();
+            AddLastModifiedBy();
+            AddLastPrinted();
+            AddModified();
+            AddRevision();
+            AddSubject();
+            AddTitle();
+            AddVersion();
+            return Task.FromResult(true);
         }
 
         /**

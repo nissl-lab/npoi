@@ -1,9 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.IO;
+﻿using NPOI.OpenXml4Net.Exceptions;
 using NPOI.OpenXml4Net.OPC.Internal;
-using NPOI.OpenXml4Net.Exceptions;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 
 namespace NPOI.OpenXml4Net.OPC
@@ -748,7 +750,7 @@ namespace NPOI.OpenXml4Net.OPC
          *             If any exception occur.
          */
         public abstract bool Save(Stream zos);
-
+        public abstract Task<bool> SaveAsync(Stream zos, CancellationToken cancellationToken = default);
         /**
          * Load the content of this part.
          * 
