@@ -35,9 +35,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public void Save(Stream stream)
         {
-            using (StreamWriter sw1 = new StreamWriter(stream))
+            using (StreamWriter sw = new StreamWriter(stream))
             {
-                this.stylesheet.Write(sw1);
+                this.stylesheet.Write(sw);
             }
         }
     }
