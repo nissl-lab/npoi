@@ -17,11 +17,13 @@
 
 namespace TestCases.HPSF.Basic
 {
-    using System;
-    using System.IO;
-    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HPSF;
     using NPOI.Util;
+    using NUnit.Framework;
+using NUnit.Framework.Legacy;
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
 
     /**
      * Test case for OLE2 files with empty properties. An empty property's type
@@ -35,7 +37,7 @@ namespace TestCases.HPSF.Basic
     [TestFixture]
     public class TestEmptyProperties
     {
-       // static string dataDir = @"..\..\..\TestCases\HPSF\data\";
+        private static POIDataSamples samples = POIDataSamples.GetHPSFInstance();
         /**
          * This Test file's summary information stream Contains some empty
          * properties.
@@ -49,12 +51,11 @@ namespace TestCases.HPSF.Basic
             "Main"
         };
 
-        POIFile[] poiFiles;
+        List<POIFile> poiFiles;
 
         [SetUp]
         public void SetUp()
         {
-            POIDataSamples samples = POIDataSamples.GetHPSFInstance();
             Stream data = samples.OpenResourceAsStream(POI_FS);;
             poiFiles = Util.ReadPOIFiles(data);
         }

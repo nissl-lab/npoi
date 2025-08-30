@@ -61,6 +61,8 @@ namespace NPOI.HPSF
         /// </summary>
         private static List<long> unsupportedMessage;
 
+        private static  byte[] paddingBytes = new byte[3];
+
         /// <summary>
         /// Checks whether logging of unsupported variant types warning is turned
         /// on or off.
@@ -107,8 +109,8 @@ namespace NPOI.HPSF
         /// </return>
         public bool IsSupportedType(int variantType)
         {
-            for(int i = 0; i < SUPPORTED_TYPES.Length; i++)
-                if(variantType == SUPPORTED_TYPES[i])
+            foreach(var st in SUPPORTED_TYPES)
+                if(variantType == st)
                     return true;
             return false;
         }
@@ -137,23 +139,28 @@ namespace NPOI.HPSF
         public static Object Read(byte[] src, int offset,
                  int length, long type, int codepage)
         {
+            LittleEndianByteArrayInputStream lei = new LittleEndianByteArrayInputStream(src, offset);
+            return Read( lei, length, type, codepage );
+        }
 
-            TypedPropertyValue typedPropertyValue = new TypedPropertyValue((int)type, null);
-            int unpadded;
+        public static Object Read( LittleEndianByteArrayInputStream lei,
+            int length, long type, int codepage )
+        {
+            int offset = lei.GetReadIndex();
+            TypedPropertyValue typedPropertyValue = new TypedPropertyValue( (int) type, null );
             try
             {
-                unpadded = typedPropertyValue.ReadValue(src, offset);
+                typedPropertyValue.ReadValue(lei);
             }
-            catch(InvalidOperationException)
+            catch ( InvalidOperationException exc )
             {
-                int propLength = Math.Min(length, src.Length - offset);
+                int propLength = Math.Min( length, lei.Available() );
                 byte[] v = new byte[propLength];
-                System.Array.Copy(src, offset, v, 0, propLength);
-                throw new ReadingNotSupportedException(type, v);
+                lei.ReadFully(v, 0, propLength);
+                throw new ReadingNotSupportedException( type, v );
             }
 
-            switch((int) type)
-            {
+            switch ( (int) type ) {
                 /*
                  * we have more property types that can be converted into Java
                  * objects, but current API need to be preserved, and it returns
@@ -161,8 +168,14 @@ namespace NPOI.HPSF
                  * changed -- sergey
                  */
                 case Variant.VT_EMPTY:
+                case Variant.VT_I1:
+                case Variant.VT_UI1:
+                case Variant.VT_UI2:
                 case Variant.VT_I4:
+                case Variant.VT_UI4:
                 case Variant.VT_I8:
+                case Variant.VT_UI8:
+                case Variant.VT_R4:
                 case Variant.VT_R8:
                     return typedPropertyValue.Value;
 
@@ -171,18 +184,18 @@ namespace NPOI.HPSF
                  * --sergey
                  */
                 case Variant.VT_I2:
-                    return ((short) typedPropertyValue.Value);
+                    return (short)typedPropertyValue.Value;
 
                 case Variant.VT_FILETIME:
-                    Filetime filetime = (Filetime)typedPropertyValue.Value;
-                    return Util.FiletimeToDate((int) filetime.High, (int) filetime.Low);
+                    Filetime filetime = (Filetime) typedPropertyValue.Value;
+                    return filetime.GetJavaValue();
 
                 case Variant.VT_LPSTR:
-                    CodePageString cpString = (CodePageString)typedPropertyValue.Value;
-                    return cpString.GetJavaValue(codepage);
+                    CodePageString cpString = (CodePageString) typedPropertyValue.Value;
+                    return cpString.GetJavaValue( codepage );
 
                 case Variant.VT_LPWSTR:
-                    UnicodeString uniString = (UnicodeString)typedPropertyValue.Value;
+                    UnicodeString uniString = (UnicodeString) typedPropertyValue.Value;
                     return uniString.ToJavaString();
 
                 // if(l1 < 0) {
@@ -197,28 +210,30 @@ namespace NPOI.HPSF
                  *
                  * August 20, 2009
                  */
-                // l1 = LittleEndian.GetInt(src, o1); o1 += LittleEndian.INT_SIZE;
+                // l1 = LittleEndian.getInt(src, o1); o1 += LittleEndian.INT_SIZE;
                 // }
-                // final byte[] v = new byte[l1];
-                // Array.Copy(src, o1, v, 0, v.Length);
+                // byte[] v = new byte[l1];
+                // System.arraycopy(src, o1, v, 0, v.length);
                 // value = v;
                 // break;
                 case Variant.VT_CF:
-                    ClipboardData clipboardData = (ClipboardData)typedPropertyValue.Value;
+                    ClipboardData clipboardData = (ClipboardData) typedPropertyValue.Value;
                     return clipboardData.ToByteArray();
 
                 case Variant.VT_BOOL:
-                    VariantBool bool1 = (VariantBool)typedPropertyValue.Value;
+                    VariantBool bool1 = (VariantBool) typedPropertyValue.Value;
                     return bool1.Value;
-
+                
                 /*
                  * it is not very good, but what can do without breaking current
                  * API? --sergey
                  */
                 default:
+                    int unpadded = lei.GetReadIndex()-offset;
+                    lei.SetReadIndex(offset);
                     byte[] v = new byte[unpadded];
-                    System.Array.Copy(src, offset, v, 0, unpadded);
-                    throw new ReadingNotSupportedException(type, v);
+                    lei.ReadFully( v, 0, unpadded );
+                    throw new ReadingNotSupportedException( type, v );
             }
         }
 
@@ -273,122 +288,174 @@ namespace NPOI.HPSF
         public static int Write(Stream out1, long type,
                                  Object value, int codepage)
         {
-
-            int length = 0;
+            int length = -1;
             switch((int) type)
             {
                 case Variant.VT_BOOL:
-                    if((bool) value)
+                    if (value is Boolean bValue)
                     {
-                        out1.WriteByte(0xff);
-                        out1.WriteByte(0xff);
+                        int bb = bValue ? 0xff : 0x00;
+                        out1.WriteByte((byte)bb);
+                        out1.WriteByte((byte)bb);
+                        length = 2;
                     }
-                    else
-                    {
-                        out1.WriteByte(0x00);
-                        out1.WriteByte(0x00);
-                    }
-                    length += 2;
                     break;
 
                 case Variant.VT_LPSTR:
-                    CodePageString codePageString = new CodePageString((String)value, codepage);
-                    length += codePageString.Write(out1);
+                    if (value is String s1) {
+                        CodePageString codePageString = new CodePageString();
+                        codePageString.SetJavaValue(s1, codepage);
+                        length = codePageString.Write(out1);
+                    }
+                    //CodePageString codePageString = new CodePageString((String)value, codepage);
+                    //length += codePageString.Write(out1);
                     break;
 
                 case Variant.VT_LPWSTR:
-                    int nrOfChars = ((String)value).Length + 1;
-                    length += TypeWriter.WriteUIntToStream(out1, (uint) nrOfChars);
-                    foreach(char s in ((String) value).ToCharArray())
-                    {
-                        int high1 = ((s & 0x0000ff00) >> 8);
-                        int low1 = (s & 0x000000ff);
-                        byte highb = (byte)high1;
-                        byte lowb = (byte)low1;
-                        out1.WriteByte(lowb);
-                        out1.WriteByte(highb);
-                        length += 2;
+                    if (value is String) {
+                        UnicodeString uniString = new UnicodeString();
+                        uniString.SetJavaValue((String)value);
+                        length = uniString.Write(out1);
                     }
-                    // NullTerminator
-                    out1.WriteByte(0x00);
-                    out1.WriteByte(0x00);
-                    length += 2;
+                    //int nrOfChars = ((String)value).Length + 1;
+                    //length += TypeWriter.WriteUIntToStream(out1, (uint) nrOfChars);
+                    //foreach(char s in ((String) value).ToCharArray())
+                    //{
+                    //    int high1 = ((s & 0x0000ff00) >> 8);
+                    //    int low1 = (s & 0x000000ff);
+                    //    byte highb = (byte)high1;
+                    //    byte lowb = (byte)low1;
+                    //    out1.WriteByte(lowb);
+                    //    out1.WriteByte(highb);
+                    //    length += 2;
+                    //}
+                    //// NullTerminator
+                    //out1.WriteByte(0x00);
+                    //out1.WriteByte(0x00);
+                    //length += 2;
                     break;
 
                 case Variant.VT_CF:
-                    byte[] cf = (byte[])value;
-                    out1.Write(cf, 0, cf.Length);
-                    length = cf.Length;
+                    if (value is byte[] cf)
+                    {
+                        out1.Write(cf, 0, cf.Length);
+                        length = cf.Length;
+                    }
+                    //byte[] cf = (byte[])value;
+                    //out1.Write(cf, 0, cf.Length);
+                    //length = cf.Length;
                     break;
 
                 case Variant.VT_EMPTY:
-                    length += TypeWriter.WriteUIntToStream(out1, Variant.VT_EMPTY);
+                    LittleEndian.PutUInt(Variant.VT_EMPTY, out1);
+                    length = LittleEndianConsts.INT_SIZE;
                     break;
 
                 case Variant.VT_I2:
-                    short x;
-                    try
+                    if(Number.IsNumber(value))
                     {
-                        x = Convert.ToInt16(value, CultureInfo.InvariantCulture);
+                        LittleEndian.PutShort(out1, (short)(int)value);
+                        length = LittleEndianConsts.SHORT_SIZE;
                     }
-                    catch(OverflowException)
-                    {
-                        x = (short) ((int) value);
-                    }
-                    length += TypeWriter.WriteToStream(out1, x);
                     break;
-
+                case Variant.VT_UI2:
+                    if (Number.IsNumber(value)) {
+                        LittleEndian.PutUShort((ushort)(int)value, out1);
+                        length = LittleEndianConsts.SHORT_SIZE;
+                    }
+                break;
                 case Variant.VT_I4:
-                    if(value is not int)
+                    if(Number.IsNumber(value))
                     {
-                        throw new InvalidCastException("Could not cast an object to "
-                                + typeof(Int32).ToString() + ": "
-                                + value.GetType().ToString() + ", "
-                                + value.ToString());
+                        LittleEndian.PutInt((int)value, out1);
+                        length = LittleEndianConsts.INT_SIZE;
                     }
-                    length += TypeWriter.WriteToStream(out1, Convert.ToInt32(value));
                     break;
-
+                case Variant.VT_UI4:
+                    if (Number.IsNumber(value))
+                    {
+                        LittleEndian.PutUInt((uint)(long)value, out1);
+                        length = LittleEndianConsts.INT_SIZE;
+                    }
+                    break;
                 case Variant.VT_I8:
-                    length += TypeWriter.WriteToStream(out1, Convert.ToInt64(value));
+                    if (Number.IsNumber(value))
+                    {
+                        LittleEndian.PutLong(Convert.ToInt64(value), out1);
+                        length = LittleEndianConsts.LONG_SIZE;
+                    }
+                    
                     break;
-
+                case Variant.VT_UI8: 
+                    if (value is BigInteger || Number.IsNumber(value)) {
+                        BigInteger bi = (value is BigInteger) ? (BigInteger)value : BigInteger.ValueOf((long)value);
+                        if (bi.BitLength() > 64) {
+                            throw new WritingNotSupportedException(type, value);
+                        }
+                        byte[] biBytesBE = bi.ToByteArray();
+                        byte[] biBytesLE = new byte[LittleEndianConsts.LONG_SIZE];
+                        int i = biBytesBE.Length;
+                        foreach (byte b in biBytesBE)
+                        {
+                            if (i<=LittleEndianConsts.LONG_SIZE)
+                            {
+                                biBytesLE[i-1] = b;
+                            }
+                            i--;
+                        }
+    
+                        out1.Write(biBytesLE, 0, biBytesLE.Length);
+                        length = LittleEndianConsts.LONG_SIZE;
+                    }
+                    break;
+                case Variant.VT_R4:
+                    if (value is float)
+                    {
+                        int floatBits = BitConverter.ToInt32(BitConverter.GetBytes((float)value), 0);
+                        LittleEndian.PutInt(floatBits, out1);
+                        length = LittleEndianConsts.INT_SIZE;
+                    }
+                    break;
                 case Variant.VT_R8:
-                    length += TypeWriter.WriteToStream(out1, Convert.ToDouble(value));
+                    if (value is double)
+                    {
+                        LittleEndian.PutDouble((double)value, out1);
+                        length = LittleEndianConsts.DOUBLE_SIZE;
+                    }
                     break;
 
                 case Variant.VT_FILETIME:
-                    long filetime = Util.DateToFileTime(Convert.ToDateTime(value));
-                    int high = (int)((filetime >> 32) & 0x00000000FFFFFFFFL);
-                    int low = (int)(filetime & 0x00000000FFFFFFFFL);
-                    Filetime filetimeValue = new Filetime(low, high);
-                    length += filetimeValue.Write(out1);
+                    Filetime filetimeValue = (value is DateTime) ? new Filetime((DateTime)value) : new Filetime();
+                    length = filetimeValue.Write(out1);
                     break;
 
                 default:
-                    /* The variant type is not supported yet. However, if the value
-                     * is a byte array we can write it nevertheless. */
-                    if(value is byte[] bytes)
-                    {
-                        out1.Write(bytes, 0, bytes.Length);
-                        length = bytes.Length;
-                        WriteUnsupportedTypeMessage(new WritingNotSupportedException(type, bytes));
-                    }
-                    else
-                    {
-                        throw new WritingNotSupportedException(type, value);
-                    }
                     break;
             }
 
-            /* pad values to 4-bytes */
-            while((length & 0x3) != 0)
+            
+            /* The variant type is not supported yet. However, if the value
+             * is a byte array we can write it nevertheless. */
+            if (length == -1)
             {
-                out1.WriteByte(0x00);
-                length++;
+                if (value is byte[])
+                {
+                    byte[] b = (byte[]) value;
+                    out1.Write(b, 0, b.Length);
+                    length = b.Length;
+                    WriteUnsupportedTypeMessage(new WritingNotSupportedException(type, value));
+                }
+                else
+                {
+                    throw new WritingNotSupportedException(type, value);
+                }
             }
+        
+            /* pad values to 4-bytes */
+            int padding = (4-(length & 0x3)) & 0x3;
+            out1.Write(paddingBytes, 0, padding);
 
-            return length;
+            return length + padding;
         }
     }
 }

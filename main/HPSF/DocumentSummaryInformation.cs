@@ -21,18 +21,15 @@ using System.Collections.Generic;
 
 namespace NPOI.HPSF
 {
-
-
     using NPOI.HPSF.Wellknown;
     using NPOI.Util;
-    using Org.BouncyCastle.Asn1.Ocsp;
 
     /// <summary>
     /// Convenience class representing a DocumentSummary Information stream in a
     /// Microsoft Office document.
     /// </summary>
     /// @see SummaryInformation
-    public class DocumentSummaryInformation : SpecialPropertySet
+    public class DocumentSummaryInformation : PropertySet
     {
         /// <summary>
         /// The document name a document summary information stream
@@ -48,7 +45,7 @@ namespace NPOI.HPSF
         /// </summary>
         public DocumentSummaryInformation()
         {
-            FirstSection.SetFormatID(SectionIDMap.DOCUMENT_SUMMARY_INFORMATION_ID[0]);
+            FirstSection.FormatID = SectionIDMap.DOCUMENT_SUMMARY_INFORMATION_ID[0];
         }
 
 
@@ -73,6 +70,38 @@ namespace NPOI.HPSF
             }
         }
 
+        /// <summary>
+        /// <para>
+        /// Creates a <see cref="DocumentSummaryInformation"/> instance from an <see cref="/// InputStream} in the Horrible Property Set Format.
+        /// </para>
+        /// <para>
+        /// The constructor reads the first few bytes from the stream
+        /// and determines whether it is really a property set stream. If
+        /// it is, it parses the rest of the stream. If it is not, it
+        /// resets the stream to its beginning in order to let other
+        /// components mess around with the data and throws an
+        /// exception.
+        /// </para>
+        /// </summary>
+        /// <param name="stream">Holds the data making out the property set
+        /// stream.
+        /// </param>
+        /// <exception cref="MarkUnsupportedException">
+        /// if the stream does not support the {@link InputStream.markSupported" /> method.
+        /// </exception>
+        /// <exception cref="IOException">
+        /// if the <see cref="InputStream"/> cannot be accessed as needed.
+        /// </exception>
+        /// <exception cref="NoPropertySetStreamException">
+        /// if the input stream does not contain a property set.
+        /// </exception>
+        /// <exception cref="UnsupportedEncodingException">
+        /// if a character encoding is not supported.
+        /// </exception>
+        public DocumentSummaryInformation(InputStream stream)
+            : base(stream)
+        {
+        }
 
         /// <summary>
         /// get or set the category (or <c>null</c>).
@@ -605,18 +634,22 @@ namespace NPOI.HPSF
                 {
                     cps = new CustomProperties();
                     Section section = Sections[1];
-                    IDictionary dictionary = section.Dictionary;
+                    Dictionary<long, String> dictionary = section.Dictionary;
+
                     Property[] properties = section.Properties;
                     int propertyCount = 0;
-                    for(int i = 0; i < properties.Length; i++)
+                    foreach(var p in properties)
                     {
-                        Property p = properties[i];
                         long id = p.ID;
-                        if(id != 0 && id != 1)
+                        if(id == PropertyIDMap.PID_CODEPAGE)
+                        {
+                            cps.SetCodepage((int)p.Value);
+                        }
+                        else if(id > PropertyIDMap.PID_CODEPAGE)
                         {
                             propertyCount++;
-                            CustomProperty cp = new CustomProperty(p,
-                                (string)dictionary[id]);
+                            dictionary.TryGetValue(id, out string name);
+                            CustomProperty cp = new CustomProperty(p, name);
                             cps.Put(cp.Name, cp);
                         }
                     }
@@ -632,7 +665,7 @@ namespace NPOI.HPSF
                 ensureSection2();
                 Section section = Sections[1];
                 Dictionary<long, String> dictionary = value.GetDictionary();
-                section.clear();
+                //section.clear();
 
                 /* Set the codepage. If both custom properties and section have a
                  * codepage, the codepage from the custom properties wins, else take the
@@ -644,13 +677,13 @@ namespace NPOI.HPSF
                 }
                 if(cpCodepage < 0)
                 {
-                    cpCodepage = CodePageUtil.CP_UNICODE;
+                    cpCodepage = Property.DEFAULT_CODEPAGE;
                 }
                 value.SetCodepage(cpCodepage);
-                section.SetCodepage(cpCodepage);
+                section.Codepage = cpCodepage;
                 section.SetDictionary(dictionary);
                 //i = section.Size;
-                foreach(CustomProperty p in value.Values)
+                foreach(CustomProperty p in value.Properties())
                 {
                     section.SetProperty(p);
                 }
@@ -665,7 +698,7 @@ namespace NPOI.HPSF
             if(SectionCount < 2)
             {
                 Section s2 = new MutableSection();
-                s2.SetFormatID(SectionIDMap.DOCUMENT_SUMMARY_INFORMATION_ID[1]);
+                s2.FormatID = SectionIDMap.DOCUMENT_SUMMARY_INFORMATION_ID[1];
                 AddSection(s2);
             }
         }

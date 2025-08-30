@@ -19,6 +19,7 @@ namespace NPOI.HSSF.Record
 {
     using System;
     using System.Text;
+    using NPOI.HPSF;
     using NPOI.Util;
 
 
@@ -88,7 +89,7 @@ namespace NPOI.HSSF.Record
 
         protected internal static String GetString(byte[] data, CodepageRecord codepage)
         {
-            int cp = CodePageUtil.CP_ISO_8859_1;
+            int cp = Property.DEFAULT_CODEPAGE;
             if (codepage != null)
             {
                 cp = codepage.Codepage & 0xffff;
