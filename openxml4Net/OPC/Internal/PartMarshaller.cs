@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace NPOI.OpenXml4Net.OPC.Internal
 {
@@ -26,6 +28,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal
 	     *             Throws only if any other exceptions are thrown by inner
 	     *             methods.
 	     */
-        bool Marshall(PackagePart part, Stream out1);
+        bool Marshall(PackagePart part, Stream outStrean);
+        Task<bool> MarshallAsync(PackagePart part, Stream outStrean, CancellationToken cancellationToken = default);
     }
 }

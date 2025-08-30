@@ -1,8 +1,12 @@
 ﻿using NPOI.OpenXml4Net.Util;
 using System;
 using System.IO;
+using System.Runtime.CompilerServices;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Xml;
-using System.Xml.Serialization;
+
+#pragma warning disable CA2016
 
 namespace NPOI.OpenXmlFormats.Spreadsheet
 {
@@ -84,6 +88,39 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             sw.Write("</calcChain>");
             sw.Flush();
         }
+        public async Task SaveAsync(Stream stream, CancellationToken cancellationToken = default)
+        {
+            StreamWriter sw = new StreamWriter(stream);
+            await sw.WriteAsync("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\" ?>");
+            await sw.WriteAsync("<calcChain xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\">");
+            foreach(CT_CalcCell cc in calcChain.c)
+            {
+                await sw.WriteAsync("<c");
+                await sw.WriteAttributeAsync("r", cc.r);
 
+                if(cc.i > 0)
+                {
+                    await sw.WriteAttributeAsync("i", cc.i);
+                }
+
+                if(cc.s)
+                {
+                    await sw.WriteBooleanAttributeAsync("s", cc.s);
+                }
+
+                if(cc.t)
+                {
+                    await sw.WriteBooleanAttributeAsync("t", cc.t);
+                }
+
+                if(cc.l)
+                {
+                    await sw.WriteBooleanAttributeAsync("l", cc.l);
+                }
+                await sw.WriteAsync("/>");
+            }
+            await sw.WriteAsync("</calcChain>");
+            await sw.FlushAsync();
+        }
     }
 }
