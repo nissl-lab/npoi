@@ -67,44 +67,12 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
          */
         public virtual bool Marshall(PackagePart part, Stream out1)
         {
-            if (part is not PackagePropertiesPart propertiesPart)
-                throw new ArgumentException(
-                        "'part' must be a PackagePropertiesPart instance.");
-            propsPart = propertiesPart;
-
-            // Configure the document
-            xmlDoc = new XmlDocument();
-            XmlElement rootElem = xmlDoc.CreateElement("coreProperties",namespaceCoreProperties);
-
-            nsmgr = new XmlNamespaceManager(xmlDoc.NameTable);
-            nsmgr.AddNamespace("cp",PackagePropertiesPart.NAMESPACE_CP_URI);
-            nsmgr.AddNamespace("dc",PackagePropertiesPart.NAMESPACE_DC_URI);
-            nsmgr.AddNamespace("dcterms",PackagePropertiesPart.NAMESPACE_DCTERMS_URI);
-            nsmgr.AddNamespace("xsi", PackagePropertiesPart.NAMESPACE_XSI_URI);
-
-            rootElem.SetAttribute("xmlns:cp", PackagePropertiesPart.NAMESPACE_CP_URI);
-            rootElem.SetAttribute("xmlns:dc", PackagePropertiesPart.NAMESPACE_DC_URI);
-            rootElem.SetAttribute("xmlns:dcterms", PackagePropertiesPart.NAMESPACE_DCTERMS_URI);
-            rootElem.SetAttribute("xmlns:xsi", PackagePropertiesPart.NAMESPACE_XSI_URI);
-
-            xmlDoc.AppendChild(rootElem);
-
-            AddCategory();
-            AddContentStatus();
-            AddContentType();
-            AddCreated();
-            AddCreator();
-            AddDescription();
-            AddIdentifier();
-            AddKeywords();
-            AddLanguage();
-            AddLastModifiedBy();
-            AddLastPrinted();
-            AddModified();
-            AddRevision();
-            AddSubject();
-            AddTitle();
-            AddVersion();
+            // Build XML document (synchronous, in-memory operation)
+            if (!BuildXmlDocument(part))
+                return false;
+                
+            // Write XML to stream synchronously
+            StreamHelper.SaveXmlInStream(xmlDoc, out1);
             return true;
         }
 
@@ -492,10 +460,65 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
             elem.InnerText = propsPart.GetVersionProperty();
         }
 
-        public Task<bool> MarshallAsync(PackagePart part, Stream out1, CancellationToken cancellationToken = default)
+        public virtual async Task<bool> MarshallAsync(PackagePart part, Stream out1, CancellationToken cancellationToken = default)
         {
-            bool result = Marshall(part, out1);
-            return Task.FromResult(result);
+            cancellationToken.ThrowIfCancellationRequested();
+            
+            // Build XML document (synchronous, in-memory operation)
+            if (!BuildXmlDocument(part))
+                return false;
+                
+            // Write XML to stream asynchronously
+            await StreamHelper.SaveXmlInStreamAsync(xmlDoc, out1, cancellationToken).ConfigureAwait(false);
+            return true;
+        }
+
+        /// <summary>
+        /// Builds the XML document in memory without writing to stream
+        /// </summary>
+        /// <param name="part">The package part to marshall</param>
+        /// <returns>True if successful</returns>
+        protected virtual bool BuildXmlDocument(PackagePart part)
+        {
+            if (part is not PackagePropertiesPart propertiesPart)
+                throw new ArgumentException(
+                        "'part' must be a PackagePropertiesPart instance.");
+            propsPart = propertiesPart;
+
+            // Configure the document
+            xmlDoc = new XmlDocument();
+            XmlElement rootElem = xmlDoc.CreateElement("coreProperties",namespaceCoreProperties);
+
+            nsmgr = new XmlNamespaceManager(xmlDoc.NameTable);
+            nsmgr.AddNamespace("cp",PackagePropertiesPart.NAMESPACE_CP_URI);
+            nsmgr.AddNamespace("dc",PackagePropertiesPart.NAMESPACE_DC_URI);
+            nsmgr.AddNamespace("dcterms",PackagePropertiesPart.NAMESPACE_DCTERMS_URI);
+            nsmgr.AddNamespace("xsi", PackagePropertiesPart.NAMESPACE_XSI_URI);
+
+            rootElem.SetAttribute("xmlns:cp", PackagePropertiesPart.NAMESPACE_CP_URI);
+            rootElem.SetAttribute("xmlns:dc", PackagePropertiesPart.NAMESPACE_DC_URI);
+            rootElem.SetAttribute("xmlns:dcterms", PackagePropertiesPart.NAMESPACE_DCTERMS_URI);
+            rootElem.SetAttribute("xmlns:xsi", PackagePropertiesPart.NAMESPACE_XSI_URI);
+
+            xmlDoc.AppendChild(rootElem);
+
+            AddCategory();
+            AddContentStatus();
+            AddContentType();
+            AddCreated();
+            AddCreator();
+            AddDescription();
+            AddIdentifier();
+            AddKeywords();
+            AddLanguage();
+            AddLastModifiedBy();
+            AddLastPrinted();
+            AddModified();
+            AddRevision();
+            AddSubject();
+            AddTitle();
+            AddVersion();
+            return true;
         }
     }
 }

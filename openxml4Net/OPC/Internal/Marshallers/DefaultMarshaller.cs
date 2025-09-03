@@ -28,10 +28,9 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
             return part.Save(out1);
         }
 
-        public Task<bool> MarshallAsync(PackagePart part, Stream out1, CancellationToken cancellationToken = default)
+        public async Task<bool> MarshallAsync(PackagePart part, Stream out1, CancellationToken cancellationToken = default)
         {
-            bool result = part.Save(out1);
-            return Task.FromResult(result);
+            return await part.SaveAsync(out1, cancellationToken).ConfigureAwait(false);
         }
     }
 }
