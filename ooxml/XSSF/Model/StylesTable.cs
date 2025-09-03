@@ -19,6 +19,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Xml;
 using NPOI.OpenXml4Net.OPC;
 using NPOI.OpenXmlFormats.Spreadsheet;
@@ -822,7 +824,7 @@ namespace NPOI.XSSF.Model
             CT_NumFmts formats = new CT_NumFmts();
             formats.count = (uint)numberFormats.Count;
 
-            foreach (KeyValuePair<short, String> entry in numberFormats)
+            foreach (KeyValuePair<short, String > entry in numberFormats)
             {
                 CT_NumFmt ctFmt = formats.AddNewNumFmt();
                 ctFmt.numFmtId = (uint)entry.Key;
@@ -832,63 +834,89 @@ namespace NPOI.XSSF.Model
             styleSheet.numFmts = formats;
 
             // Fonts
-            CT_Fonts ctFonts = new CT_Fonts();
-            ctFonts.count = (uint)this.fonts.Count;
+            CT_Fonts ctFonts = styleSheet.fonts;
+            if (ctFonts == null)
+                ctFonts = new CT_Fonts();
+            ctFonts.count = (uint)fonts.Count;
             if (ctFonts.count > 0)
                 ctFonts.countSpecified = true;
-            ctFonts.font = new List<CT_Font>(fonts.Count);
+            List<CT_Font> ctfnt = new List<CT_Font>(fonts.Count);
+
             foreach (XSSFFont f in fonts)
-                ctFonts.font.Add(f.GetCTFont());
+                ctfnt.Add(f.GetCTFont());
+            ctFonts.SetFontArray(ctfnt);
             styleSheet.fonts = (ctFonts);
 
             // Fills
-            CT_Fills ctFills = new CT_Fills();
-            ctFills.count = (uint)this.fills.Count;
+            CT_Fills ctFills = styleSheet.fills;
+            if (ctFills == null)
+            {
+                ctFills = new CT_Fills();
+            }
+            ctFills.count = (uint)fills.Count;
+            List<CT_Fill> ctf = new List<CT_Fill>(fills.Count);
+            
+            foreach (XSSFCellFill f in fills)
+                ctf.Add( f.GetCTFill());
+            ctFills.SetFillArray(ctf);
             if (ctFills.count > 0)
                 ctFills.countSpecified = true;
-            ctFills.fill = new List<CT_Fill>(fills.Count);
-            foreach (XSSFCellFill f in fills)
-                ctFills.fill.Add(f.GetCTFill());
-            styleSheet.fills = (ctFills);
+            styleSheet.fills = ctFills;
 
             // Borders
-            CT_Borders ctBorders = new CT_Borders();
+            CT_Borders ctBorders = styleSheet.borders;
+            if (ctBorders == null)
+            {
+                ctBorders = new CT_Borders();
+            }
             ctBorders.count = (uint)borders.Count;
-            if (ctBorders.count > 0)
-                ctBorders.countSpecified = true;
-            ctBorders.border = new List<CT_Border>(borders.Count);
-            foreach (XSSFCellBorder b in borders)
-                ctBorders.border.Add(b.GetCTBorder());
-            styleSheet.borders = (ctBorders);
+            List<CT_Border> ctb = new List<CT_Border>(borders.Count);
+            foreach (XSSFCellBorder b in borders) 
+                ctb.Add(b.GetCTBorder());
+            
+            ctBorders.SetBorderArray(ctb);
+            styleSheet.borders = ctBorders;
 
             // Xfs
             if (xfs.Count > 0)
             {
-                CT_CellXfs ctXfs = new CT_CellXfs();
+                CT_CellXfs ctXfs = styleSheet.cellXfs;
+                if (ctXfs == null)
+                {
+                    ctXfs = new CT_CellXfs();
+                }
                 ctXfs.count = (uint)xfs.Count;
-                ctXfs.countSpecified = true;
-                ctXfs.xf = new List<CT_Xf>(xfs.Count);
-                foreach (XSSFCellStyle s in xfs)
-                    ctXfs.xf.Add(s.GetCoreXf());
+                if (ctXfs.count > 0)
+                    ctXfs.countSpecified = true;
+                ctXfs.xf = xfs;
+
                 styleSheet.cellXfs = (ctXfs);
             }
 
             // Style xfs
             if (styleXfs.Count > 0)
             {
-                CT_CellStyleXfs ctSXfs = new CT_CellStyleXfs();
-                ctSXfs.count = (uint)styleXfs.Count;
-                ctSXfs.countSpecified = true;
-                ctSXfs.xf = new List<CT_Xf>(styleXfs.Count);
-                foreach (XSSFCellStyle s in styleXfs)
-                    ctSXfs.xf.Add(s.GetCoreXf());
+                CT_CellStyleXfs ctSXfs = styleSheet.cellStyleXfs;
+                if (ctSXfs == null)
+                {
+                    ctSXfs = new CT_CellStyleXfs();
+                }
+                ctSXfs.count = (uint)(styleXfs.Count);
+                if (ctSXfs.count > 0)
+                    ctSXfs.countSpecified = true;
+                ctSXfs.xf = styleXfs;
+
                 styleSheet.cellStyleXfs = (ctSXfs);
             }
 
             // Style dxfs
             if (dxfs.Count > 0)
             {
-                CT_Dxfs ctDxfs = new CT_Dxfs();
+                CT_Dxfs ctDxfs = styleSheet.dxfs;
+                if (ctDxfs == null)
+                {
+                    ctDxfs = new CT_Dxfs();
+                }
                 ctDxfs.count = (uint)dxfs.Count;
                 if (ctDxfs.count > 0)
                     ctDxfs.countSpecified = true;

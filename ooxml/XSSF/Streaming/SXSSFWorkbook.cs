@@ -487,7 +487,7 @@ namespace NPOI.XSSF.Streaming
                             }
                             else
                             {
-#if NET8_0_OR_GREATER
+#if NETSTANDARD2_1_OR_GREATER || NET8_0_OR_GREATER
                                 await inputStream.CopyToAsync(zos, cancellationToken).ConfigureAwait(false);
 #else
                                 await inputStream.CopyToAsync(zos).ConfigureAwait(false);

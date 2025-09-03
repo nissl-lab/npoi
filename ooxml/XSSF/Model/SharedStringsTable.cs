@@ -22,6 +22,8 @@ namespace NPOI.XSSF.Model
     using OpenXmlFormats.Spreadsheet;
     using System;
     using System.IO;
+    using System.Threading;
+    using System.Threading.Tasks;
     using NPOI.OpenXml4Net.OPC;
     using System.Xml;
     using System.Security;

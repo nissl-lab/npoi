@@ -22,6 +22,8 @@ namespace NPOI
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Threading;
+    using System.Threading.Tasks;
     using NPOI.OpenXml4Net.Exceptions;
     using System.Xml;
     using NPOI.OpenXml4Net.OPC.Internal;

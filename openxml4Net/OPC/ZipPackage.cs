@@ -683,11 +683,7 @@ namespace NPOI.OpenXml4Net.OPC
                 // Save parts.
                 await WritePartsAsync(zos, cancellationToken).ConfigureAwait(false);
 
-                // Finish writing the ZIP output stream
-                if (isStream)
-                    zos.Finish();   //instead of use zos.Close, it will close the stream
-                else
-                    zos.Close();
+                zos.Finish();
             }
             catch (OpenXML4NetRuntimeException)
             {

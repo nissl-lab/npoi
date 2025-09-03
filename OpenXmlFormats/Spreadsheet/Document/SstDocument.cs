@@ -87,7 +87,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 }
                 
                 await sw.WriteAsync("</sst>").ConfigureAwait(false);
+#if NET6_0_OR_GREATER
+                await sw.FlushAsync(cancellationToken).ConfigureAwait(false);
+#else
                 await sw.FlushAsync().ConfigureAwait(false);
+#endif
             }
         }
 

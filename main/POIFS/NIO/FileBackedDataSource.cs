@@ -183,7 +183,7 @@ namespace NPOI.POIFS.NIO
         public override async Task CopyToAsync(Stream stream, CancellationToken cancellationToken = default)
         {
             byte[] tempBuffer = fileStream.ToArray();
-#if NET8_0_OR_GREATER
+#if NETSTANDARD2_1_OR_GREATER || NET8_0_OR_GREATER
             await stream.WriteAsync(tempBuffer.AsMemory(), cancellationToken).ConfigureAwait(false);
 #else
             await stream.WriteAsync(tempBuffer, 0, tempBuffer.Length, cancellationToken).ConfigureAwait(false);

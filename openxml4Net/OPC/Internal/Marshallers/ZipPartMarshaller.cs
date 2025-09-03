@@ -294,7 +294,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
                 while (true)
                 {
                     cancellationToken.ThrowIfCancellationRequested();
-#if NET8_0_OR_GREATER
+#if NETSTANDARD2_1_OR_GREATER || NET8_0_OR_GREATER
                     int resultRead = await ins.ReadAsync(buff.AsMemory(0, ZipHelper.READ_WRITE_FILE_BUFFER_SIZE), cancellationToken).ConfigureAwait(false);
 #else
                     int resultRead = await ins.ReadAsync(buff, 0, ZipHelper.READ_WRITE_FILE_BUFFER_SIZE, cancellationToken).ConfigureAwait(false);
@@ -306,7 +306,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
                     }
                     else
                     {
-#if NET8_0_OR_GREATER
+#if NETSTANDARD2_1_OR_GREATER || NET8_0_OR_GREATER
                         await zos.WriteAsync(buff.AsMemory(0, resultRead), cancellationToken).ConfigureAwait(false);
 #else
                         await zos.WriteAsync(buff, 0, resultRead, cancellationToken).ConfigureAwait(false);

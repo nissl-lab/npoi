@@ -105,7 +105,7 @@ namespace NPOI.POIFS.NIO
         /// <returns>A task that represents the asynchronous copy operation</returns>
         public override async Task CopyToAsync(Stream stream, CancellationToken cancellationToken = default)
         {
-#if NET8_0_OR_GREATER
+#if NETSTANDARD2_1_OR_GREATER || NET8_0_OR_GREATER
             await stream.WriteAsync(buffer.AsMemory(0, (int)size), cancellationToken).ConfigureAwait(false);
 #else
             await stream.WriteAsync(buffer, 0, (int)size, cancellationToken).ConfigureAwait(false);

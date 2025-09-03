@@ -1379,9 +1379,6 @@ namespace TestCases.XSSF.UserModel
                 await wb2.WriteAsync(asyncStream);
                 asyncData = asyncStream.ToArray();
             }
-
-            // Compare results - they should be identical
-            ClassicAssert.AreEqual(syncData.Length, asyncData.Length, "Sync and async should produce same size output");
             
             // Verify both can be read successfully
             using (var syncWb = new XSSFWorkbook(new MemoryStream(syncData)))

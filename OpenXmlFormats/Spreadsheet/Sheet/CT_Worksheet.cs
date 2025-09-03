@@ -1136,8 +1136,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                     this.legacyDrawing.Write(sw, "legacyDrawing");
                 if (this.legacyDrawingHF != null)
                     this.legacyDrawingHF.Write(sw, "legacyDrawingHF");
-                if (this.drawingHF != null)
-                    this.drawingHF.Write(sw, "drawingHF");
                 if (this.picture != null)
                     this.picture.Write(sw, "picture");
                 if (this.oleObjects != null)
@@ -1152,7 +1150,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                     this.extLst.Write(sw, "extLst");
 
                 await sw.WriteAsync("</worksheet>").ConfigureAwait(false);
+#if NET6_0_OR_GREATER
+                await sw.FlushAsync(cancellationToken).ConfigureAwait(false);
+#else
                 await sw.FlushAsync().ConfigureAwait(false);
+#endif
             }
         }
     }

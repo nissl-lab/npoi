@@ -194,7 +194,7 @@ namespace NPOI.POIFS.Properties
 
         public async Task WriteDataAsync(Stream stream, CancellationToken cancellationToken = default)
         {
-#if NET8_0_OR_GREATER
+#if NETSTANDARD2_1_OR_GREATER || NET8_0_OR_GREATER
             await stream.WriteAsync(_raw_data.AsMemory(0, this._raw_data.Length), cancellationToken).ConfigureAwait(false);
 #else
             await stream.WriteAsync(_raw_data, 0, this._raw_data.Length, cancellationToken).ConfigureAwait(false);

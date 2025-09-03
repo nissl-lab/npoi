@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
 {
@@ -488,6 +490,12 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
                 elem.InnerXml = "";// clear the old value
             }
             elem.InnerText = propsPart.GetVersionProperty();
+        }
+
+        public Task<bool> MarshallAsync(PackagePart part, Stream out1, CancellationToken cancellationToken = default)
+        {
+            bool result = Marshall(part, out1);
+            return Task.FromResult(result);
         }
     }
 }

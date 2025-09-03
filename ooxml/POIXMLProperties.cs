@@ -804,7 +804,7 @@ namespace NPOI
                     {
                         ext.props.Save(memStream);
                         memStream.Position = 0;
-#if NET8_0_OR_GREATER
+#if NETSTANDARD2_1_OR_GREATER || NET8_0_OR_GREATER
                         await memStream.CopyToAsync(out1, cancellationToken).ConfigureAwait(false);
 #else
                         await memStream.CopyToAsync(out1).ConfigureAwait(false);
@@ -821,7 +821,7 @@ namespace NPOI
                     {
                         cust.props.Save(memStream);
                         memStream.Position = 0;
-#if NET8_0_OR_GREATER
+#if NETSTANDARD2_1_OR_GREATER || NET8_0_OR_GREATER
                         await memStream.CopyToAsync(out1, cancellationToken).ConfigureAwait(false);
 #else
                         await memStream.CopyToAsync(out1).ConfigureAwait(false);

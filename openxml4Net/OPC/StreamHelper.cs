@@ -98,10 +98,17 @@ namespace NPOI.OpenXml4Net.OPC
         {
             byte[] buffer = new byte[1024];
             int bytesRead = 0;
+#if NETSTANDARD2_1_OR_GREATER || NET8_0_OR_GREATER
+            while ((bytesRead = await inStream.ReadAsync(buffer.AsMemory(), cancellationToken).ConfigureAwait(false)) > 0)
+            {
+                await outStream.WriteAsync(buffer.AsMemory(0, bytesRead), cancellationToken).ConfigureAwait(false);
+            }
+#else
             while ((bytesRead = await inStream.ReadAsync(buffer, 0, buffer.Length, cancellationToken).ConfigureAwait(false)) > 0)
             {
                 await outStream.WriteAsync(buffer, 0, bytesRead, cancellationToken).ConfigureAwait(false);
             }
+#endif
         }
     }
 

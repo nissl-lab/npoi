@@ -309,7 +309,7 @@ namespace NPOI.POIFS.FileSystem
             _filesystem.PropertyTable.Root.Size = (blocksUsed);
         }
 
-        public async Task SyncWithDataSourceAsync(CancellationToken cancellationToken = default)
+        public Task SyncWithDataSourceAsync(CancellationToken cancellationToken = default)
         {
             int blocksUsed = 0;
             foreach (BATBlock sbat in _sbat_blocks)
@@ -330,6 +330,7 @@ namespace NPOI.POIFS.FileSystem
             // Set the size on the root in terms of the number of SBAT blocks
             // RootProperty.setSize does the sbat -> bytes conversion for us
             _filesystem.PropertyTable.Root.Size = (blocksUsed);
+            return Task.CompletedTask;
         }
     }
 }
