@@ -20,6 +20,8 @@ namespace NPOI.SS.UserModel
     using System;
     using System.Collections;
     using System.IO;
+    using System.Threading;
+    using System.Threading.Tasks;
     using NPOI.SS.Formula.UDF;
     using System.Collections.Generic;
     using NPOI.Util;
@@ -205,6 +207,15 @@ namespace NPOI.SS.UserModel
         /// <param name="stream">the stream you wish to write to</param>
         /// <param name="leaveOpen">leave stream open or not</param>
         void Write(Stream stream, bool leaveOpen = false);
+
+        /// <summary>
+        /// Write out this workbook to an OutputStream asynchronously.
+        /// </summary>
+        /// <param name="stream">the stream you wish to write to</param>
+        /// <param name="leaveOpen">leave stream open or not</param>
+        /// <param name="cancellationToken">cancellation token to observe during the async operation</param>
+        /// <returns>A task that represents the asynchronous write operation</returns>
+        Task WriteAsync(Stream stream, bool leaveOpen = false, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// the total number of defined names in this workbook

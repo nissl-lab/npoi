@@ -35,6 +35,8 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using TestCases.HSSF;
 using TestCases.SS.UserModel;
 
@@ -1305,6 +1307,113 @@ namespace TestCases.XSSF.UserModel
             pixels.CopyTo(bmpData, header.Length);
 
             return bmpData;
+        }
+
+        [Test]
+        public async Task TestBasicWriteAsync()
+        {
+            // Create a simple workbook with data
+            XSSFWorkbook wb = new XSSFWorkbook();
+            ISheet sheet = wb.CreateSheet("TestSheet");
+            IRow row = sheet.CreateRow(0);
+            ICell cell = row.CreateCell(0);
+            cell.SetCellValue("Async Test Data");
+
+            // Test async write to memory stream
+            using (MemoryStream asyncStream = new MemoryStream())
+            {
+                await wb.WriteAsync(asyncStream);
+                ClassicAssert.Greater(asyncStream.Length, 0, "Async write should produce data");
+                
+                // Verify the written data can be read back
+                asyncStream.Position = 0;
+                using (XSSFWorkbook readWb = new XSSFWorkbook(asyncStream))
+                {
+                    ISheet readSheet = readWb.GetSheetAt(0);
+                    ClassicAssert.AreEqual("TestSheet", readSheet.SheetName);
+                    ClassicAssert.AreEqual("Async Test Data", readSheet.GetRow(0).GetCell(0).StringCellValue);
+                }
+            }
+            
+            wb.Dispose();
+        }
+
+        [Test]
+        public async Task TestWriteAsyncVsSyncComparison()
+        {
+            // Create identical workbooks
+            XSSFWorkbook wb1 = new XSSFWorkbook();
+            XSSFWorkbook wb2 = new XSSFWorkbook();
+            
+            // Add identical data to both
+            for (int i = 0; i < 2; i++)
+            {
+                var workbooks = new[] { wb1, wb2 };
+                foreach (var wb in workbooks)
+                {
+                    ISheet sheet = wb.CreateSheet($"Sheet{i}");
+                    for (int row = 0; row < 5; row++)
+                    {
+                        IRow r = sheet.CreateRow(row);
+                        for (int col = 0; col < 3; col++)
+                        {
+                            ICell cell = r.CreateCell(col);
+                            cell.SetCellValue($"Data_{row}_{col}");
+                        }
+                    }
+                }
+            }
+
+            // Write using sync method
+            byte[] syncData;
+            using (MemoryStream syncStream = new MemoryStream())
+            {
+                wb1.Write(syncStream);
+                syncData = syncStream.ToArray();
+            }
+
+            // Write using async method
+            byte[] asyncData;
+            using (MemoryStream asyncStream = new MemoryStream())
+            {
+                await wb2.WriteAsync(asyncStream);
+                asyncData = asyncStream.ToArray();
+            }
+
+            // Compare results - they should be identical
+            ClassicAssert.AreEqual(syncData.Length, asyncData.Length, "Sync and async should produce same size output");
+            
+            // Verify both can be read successfully
+            using (var syncWb = new XSSFWorkbook(new MemoryStream(syncData)))
+            using (var asyncWb = new XSSFWorkbook(new MemoryStream(asyncData)))
+            {
+                ClassicAssert.AreEqual(syncWb.NumberOfSheets, asyncWb.NumberOfSheets);
+                ClassicAssert.AreEqual("Data_2_1", syncWb.GetSheetAt(0).GetRow(2).GetCell(1).StringCellValue);
+                ClassicAssert.AreEqual("Data_2_1", asyncWb.GetSheetAt(0).GetRow(2).GetCell(1).StringCellValue);
+            }
+            
+            wb1.Dispose();
+            wb2.Dispose();
+        }
+
+        [Test]
+        public async Task TestWriteAsyncWithCancellation()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            ISheet sheet = wb.CreateSheet("TestSheet");
+            IRow row = sheet.CreateRow(0);
+            ICell cell = row.CreateCell(0);
+            cell.SetCellValue("Cancellation Test");
+
+            // Test with non-cancelled token
+            using (var cts = new CancellationTokenSource())
+            using (MemoryStream stream = new MemoryStream())
+            {
+                await wb.WriteAsync(stream, false, cts.Token);
+                ClassicAssert.Greater(stream.Length, 0, "Write should complete successfully with non-cancelled token");
+            }
+
+            wb.Dispose();
         }
     }
 }

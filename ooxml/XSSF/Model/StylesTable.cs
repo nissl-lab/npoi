@@ -811,6 +811,96 @@ namespace NPOI.XSSF.Model
             doc.Save(out1);
         }
 
+        public async Task WriteToAsync(Stream out1, CancellationToken cancellationToken = default)
+        {
+            // Work on the current one
+            // Need to do this, as we don't handle
+            //  all the possible entries yet
+            CT_Stylesheet styleSheet = doc.GetStyleSheet();
+
+            // Formats
+            CT_NumFmts formats = new CT_NumFmts();
+            formats.count = (uint)numberFormats.Count;
+
+            foreach (KeyValuePair<short, String> entry in numberFormats)
+            {
+                CT_NumFmt ctFmt = formats.AddNewNumFmt();
+                ctFmt.numFmtId = (uint)entry.Key;
+                ctFmt.formatCode = entry.Value;
+            }
+
+            styleSheet.numFmts = formats;
+
+            // Fonts
+            CT_Fonts ctFonts = new CT_Fonts();
+            ctFonts.count = (uint)this.fonts.Count;
+            if (ctFonts.count > 0)
+                ctFonts.countSpecified = true;
+            ctFonts.font = new List<CT_Font>(fonts.Count);
+            foreach (XSSFFont f in fonts)
+                ctFonts.font.Add(f.GetCTFont());
+            styleSheet.fonts = (ctFonts);
+
+            // Fills
+            CT_Fills ctFills = new CT_Fills();
+            ctFills.count = (uint)this.fills.Count;
+            if (ctFills.count > 0)
+                ctFills.countSpecified = true;
+            ctFills.fill = new List<CT_Fill>(fills.Count);
+            foreach (XSSFCellFill f in fills)
+                ctFills.fill.Add(f.GetCTFill());
+            styleSheet.fills = (ctFills);
+
+            // Borders
+            CT_Borders ctBorders = new CT_Borders();
+            ctBorders.count = (uint)borders.Count;
+            if (ctBorders.count > 0)
+                ctBorders.countSpecified = true;
+            ctBorders.border = new List<CT_Border>(borders.Count);
+            foreach (XSSFCellBorder b in borders)
+                ctBorders.border.Add(b.GetCTBorder());
+            styleSheet.borders = (ctBorders);
+
+            // Xfs
+            if (xfs.Count > 0)
+            {
+                CT_CellXfs ctXfs = new CT_CellXfs();
+                ctXfs.count = (uint)xfs.Count;
+                ctXfs.countSpecified = true;
+                ctXfs.xf = new List<CT_Xf>(xfs.Count);
+                foreach (XSSFCellStyle s in xfs)
+                    ctXfs.xf.Add(s.GetCoreXf());
+                styleSheet.cellXfs = (ctXfs);
+            }
+
+            // Style xfs
+            if (styleXfs.Count > 0)
+            {
+                CT_CellStyleXfs ctSXfs = new CT_CellStyleXfs();
+                ctSXfs.count = (uint)styleXfs.Count;
+                ctSXfs.countSpecified = true;
+                ctSXfs.xf = new List<CT_Xf>(styleXfs.Count);
+                foreach (XSSFCellStyle s in styleXfs)
+                    ctSXfs.xf.Add(s.GetCoreXf());
+                styleSheet.cellStyleXfs = (ctSXfs);
+            }
+
+            // Style dxfs
+            if (dxfs.Count > 0)
+            {
+                CT_Dxfs ctDxfs = new CT_Dxfs();
+                ctDxfs.count = (uint)dxfs.Count;
+                if (ctDxfs.count > 0)
+                    ctDxfs.countSpecified = true;
+                ctDxfs.dxf = dxfs;
+
+                styleSheet.dxfs = (ctDxfs);
+            }
+
+            // Save asynchronously
+            await doc.SaveAsync(out1, cancellationToken).ConfigureAwait(false);
+        }
+
 
         protected internal override void Commit()
         {
@@ -818,6 +908,15 @@ namespace NPOI.XSSF.Model
             Stream out1 = part.GetOutputStream();
             WriteTo(out1);
             out1.Close();
+        }
+
+        protected internal override async Task CommitAsync(CancellationToken cancellationToken = default)
+        {
+            PackagePart part = GetPackagePart();
+            using (Stream out1 = part.GetOutputStream())
+            {
+                await WriteToAsync(out1, cancellationToken).ConfigureAwait(false);
+            }
         }
 
         private void Initialize()

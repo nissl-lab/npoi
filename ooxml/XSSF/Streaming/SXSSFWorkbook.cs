@@ -21,6 +21,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using ICSharpCode.SharpZipLib.Zip;
 using NPOI.OpenXml4Net.Util;
 using NPOI.SS;
@@ -451,6 +453,60 @@ namespace NPOI.XSSF.Streaming
             return null;
         }
 
+        private async Task InjectDataAsync(FileInfo zipfile, Stream outStream, bool leaveOpen, CancellationToken cancellationToken)
+        {
+            // don't use ZipHelper.openZipFile here - see #59743
+            ZipFile zip = new ZipFile(zipfile.FullName);
+            try
+            {
+                ZipOutputStream zos = new ZipOutputStream(outStream);
+                try
+                {
+                    zos.IsStreamOwner = !leaveOpen;
+                    zos.UseZip64 = _useZip64;
+                    var en = zip.GetEnumerator();
+                    while (en.MoveNext())
+                    {
+                        cancellationToken.ThrowIfCancellationRequested();
+                        
+                        var ze = (ZipEntry)en.Current;
+                        zos.PutNextEntry(new ZipEntry(ze.Name));
+                        using (var inputStream = zip.GetInputStream(ze))
+                        {
+                            XSSFSheet xSheet = GetSheetFromZipEntryName(ze.Name);
+                            // See bug 56557, we should not inject data into the special ChartSheets
+                            if (xSheet != null && !(xSheet is XSSFChartSheet))
+                            {
+                                SXSSFSheet sxSheet = GetSXSSFSheet(xSheet);
+                                using (var xis = sxSheet.GetWorksheetXMLInputStream())
+                                {
+                                    // These operations are primarily streaming I/O and synchronous
+                                    cancellationToken.ThrowIfCancellationRequested();
+                                    CopyStreamAndInjectWorksheet(inputStream, zos, xis);
+                                }
+                            }
+                            else
+                            {
+#if NET8_0_OR_GREATER
+                                await inputStream.CopyToAsync(zos, cancellationToken).ConfigureAwait(false);
+#else
+                                await inputStream.CopyToAsync(zos).ConfigureAwait(false);
+#endif
+                            }
+                        }
+                    }
+                }
+                finally
+                {
+                    zos.Close();
+                }
+            }
+            finally
+            {
+                zip.Close();
+            }
+        }
+
         private void InjectData(FileInfo zipfile, Stream outStream, bool leaveOpen)
         {
             // don't use ZipHelper.openZipFile here - see #59743
@@ -787,6 +843,37 @@ namespace NPOI.XSSF.Streaming
                 //Substitute the template entries with the generated sheet data files
                 
                 InjectData(tmplFile, stream, leaveOpen);
+            }
+            finally
+            {
+                tmplFile.Delete();
+                if (File.Exists(tmplFile.FullName))
+                {
+                    throw new IOException("Could not delete temporary file after processing: " + tmplFile);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Write the workbook to the given stream asynchronously.
+        /// </summary>
+        /// <param name="stream">The stream to write to</param>
+        /// <param name="leaveOpen">True to leave the stream open after writing</param>
+        /// <param name="cancellationToken">Cancellation token to observe during the async operation</param>
+        /// <returns>A task that represents the asynchronous write operation</returns>
+        public async Task WriteAsync(Stream stream, bool leaveOpen = false, CancellationToken cancellationToken = default)
+        {
+            FlushSheets();
+            // Save the template
+            var tmplFile = TempFile.CreateTempFile("poi-sxssf-template", ".xlsx");
+            try
+            {
+                using (var os = new FileStream(tmplFile.FullName, FileMode.Open, FileAccess.ReadWrite))
+                {
+                    await XssfWorkbook.WriteAsync(os, false, cancellationToken).ConfigureAwait(false);
+                }
+                // Substitute the template entries with the generated sheet data files
+                await InjectDataAsync(tmplFile, stream, leaveOpen, cancellationToken).ConfigureAwait(false);
             }
             finally
             {

@@ -17,6 +17,8 @@
 
 using System.IO;
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 using NPOI.Util;
 using System.Collections.Generic;
 using System.Security;
@@ -171,6 +173,22 @@ namespace NPOI.POIFS.NIO
             //fileStream.Read(tempBuffer, 0, tempBuffer.Length);
             byte[] tempBuffer = fileStream.ToArray();
             stream.Write(tempBuffer, 0, tempBuffer.Length);        }
+
+        /// <summary>
+        /// Copies the contents to the specified Stream asynchronously
+        /// </summary>
+        /// <param name="stream">The stream to copy to</param>
+        /// <param name="cancellationToken">Cancellation token to observe during the async operation</param>
+        /// <returns>A task that represents the asynchronous copy operation</returns>
+        public override async Task CopyToAsync(Stream stream, CancellationToken cancellationToken = default)
+        {
+            byte[] tempBuffer = fileStream.ToArray();
+#if NET8_0_OR_GREATER
+            await stream.WriteAsync(tempBuffer.AsMemory(), cancellationToken).ConfigureAwait(false);
+#else
+            await stream.WriteAsync(tempBuffer, 0, tempBuffer.Length, cancellationToken).ConfigureAwait(false);
+#endif
+        }
 
         public override long Size
         {

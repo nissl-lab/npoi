@@ -548,6 +548,16 @@ namespace NPOI
         {
         }
 
+        /// <summary>
+        /// Commit changes to the underlying OOXML namespace asynchronously.
+        /// </summary>
+        /// <param name="cancellationToken">Cancellation token to observe during the async operation</param>
+        /// <returns>A task that represents the asynchronous commit operation</returns>
+        protected internal virtual Task CommitAsync(CancellationToken cancellationToken = default)
+        {
+            return Task.CompletedTask;
+        }
+
         /**
          * Save Changes in the underlying OOXML namespace.
          * Recursively fires {@link #commit()} for each namespace part
@@ -568,6 +578,30 @@ namespace NPOI
                 if (!alreadySaved.Contains(p.GetPackagePart()))
                 {
                     p.OnSave(alreadySaved);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Save Changes in the underlying OOXML namespace asynchronously.
+        /// Recursively fires CommitAsync for each namespace part
+        /// </summary>
+        /// <param name="alreadySaved">List of parts already saved</param>
+        /// <param name="cancellationToken">Cancellation token to observe during the async operation</param>
+        /// <returns>A task that represents the asynchronous save operation</returns>
+        protected internal async Task OnSaveAsync(List<PackagePart> alreadySaved, CancellationToken cancellationToken = default)
+        {
+            // this usually clears out previous content in the part...
+            PrepareForCommit();
+
+            await CommitAsync(cancellationToken).ConfigureAwait(false);
+            alreadySaved.Add(this.GetPackagePart());
+            foreach (RelationPart rp in relations.Values)
+            {
+                POIXMLDocumentPart p = rp.DocumentPart;
+                if (!alreadySaved.Contains(p.GetPackagePart()))
+                {
+                    await p.OnSaveAsync(alreadySaved, cancellationToken).ConfigureAwait(false);
                 }
             }
         }

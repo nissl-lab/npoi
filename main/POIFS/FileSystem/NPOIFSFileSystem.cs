@@ -21,6 +21,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using NPOI.POIFS.Common;
 using NPOI.POIFS.Dev;
 using NPOI.POIFS.NIO;
@@ -827,6 +829,21 @@ namespace NPOI.POIFS.FileSystem
             _data.CopyTo(stream);
         }
 
+        /// <summary>
+        /// Write the file system asynchronously to the given stream.
+        /// </summary>
+        /// <param name="stream">The stream to write to</param>
+        /// <param name="cancellationToken">Cancellation token to observe during the async operation</param>
+        /// <returns>A task that represents the asynchronous write operation</returns>
+        public async Task WriteFileSystemAsync(Stream stream, CancellationToken cancellationToken = default)
+        {
+            // Have the datasource updated
+            await syncWithDataSourceAsync(cancellationToken).ConfigureAwait(false);
+
+            // Now copy the contents to the stream asynchronously
+            await _data.CopyToAsync(stream, cancellationToken).ConfigureAwait(false);
+        }
+
         /**
          * Has our in-memory objects write their state
          *  to their backing blocks 
@@ -859,6 +876,20 @@ namespace NPOI.POIFS.FileSystem
                 ByteBuffer block = GetBlockAt(bat.OurBlockIndex);
                 BlockAllocationTableWriter.WriteBlock(bat, block);
             }
+        }
+
+        /// <summary>
+        /// Has our in-memory objects write their state to their backing blocks asynchronously.
+        /// Currently implemented as async-over-sync as the underlying operations are memory-based.
+        /// </summary>
+        /// <param name="cancellationToken">Cancellation token to observe during the async operation</param>
+        /// <returns>A task that represents the asynchronous sync operation</returns>
+        private async Task syncWithDataSourceAsync(CancellationToken cancellationToken)
+        {
+            // These operations are primarily memory-based and synchronous
+            await Task.Yield(); // Allow other tasks to run
+            cancellationToken.ThrowIfCancellationRequested();
+            syncWithDataSource();
         }
 
         /**

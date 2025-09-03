@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -33,6 +35,14 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             using (StreamWriter sw1 = new StreamWriter(stream))
             {
                 workbook.Write(sw1);
+            }
+        }
+
+        public async Task SaveAsync(Stream stream, CancellationToken cancellationToken = default)
+        {
+            using (StreamWriter sw1 = new StreamWriter(stream))
+            {
+                await workbook.WriteAsync(sw1, cancellationToken).ConfigureAwait(false);
             }
         }
     }

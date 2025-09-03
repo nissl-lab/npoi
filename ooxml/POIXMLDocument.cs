@@ -21,6 +21,8 @@ namespace NPOI
     using NPOI.Util;
     using NPOI.OpenXml4Net.Exceptions;
     using System.IO;
+    using System.Threading;
+    using System.Threading.Tasks;
     using NPOI.OpenXml4Net.OPC;
     using System.Collections.Generic;
     using NPOI.OpenXml4Net;
@@ -210,6 +212,49 @@ namespace NPOI
             GetProperties().Commit();
 
             pkg.Save(stream);
+        }
+
+        /// <summary>
+        /// Write out this document to an OutputStream asynchronously.
+        /// </summary>
+        /// <param name="stream">the stream to write to</param>
+        /// <param name="cancellationToken">cancellation token to observe during the async operation</param>
+        /// <returns>A task that represents the asynchronous write operation</returns>
+        public async Task WriteAsync(Stream stream, CancellationToken cancellationToken = default)
+        {
+            OPCPackage pkg = Package;
+            if (pkg == null)
+            {
+                throw new IOException("Cannot write data, document seems to have been closed already");
+            }
+            
+            if (!this.GetProperties().CustomProperties.Contains("Generator"))
+                this.GetProperties().CustomProperties.AddProperty("Generator", "NPOI");
+            if (!this.GetProperties().CustomProperties.Contains("Generator Version"))
+                this.GetProperties().CustomProperties.AddProperty("Generator Version", Assembly.GetExecutingAssembly().GetName().Version.ToString(3));
+                
+            //force all children to commit their changes into the underlying OOXML Package
+            List<PackagePart> context = new List<PackagePart>();
+            await OnSaveAsync(context, cancellationToken).ConfigureAwait(false);
+            context.Clear();
+
+            //save extended and custom properties
+            await GetProperties().CommitAsync(cancellationToken).ConfigureAwait(false);
+
+            await pkg.SaveAsync(stream, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Virtual method for derived classes to override async save behavior.
+        /// Default implementation calls synchronous OnSave for backward compatibility.
+        /// </summary>
+        /// <param name="context">list of package parts that have been saved</param>
+        /// <param name="cancellationToken">cancellation token to observe during the async operation</param>
+        /// <returns>A task that represents the asynchronous save operation</returns>
+        protected virtual async Task OnSaveAsync(List<PackagePart> context, CancellationToken cancellationToken)
+        {
+            // Call the new async OnSaveAsync from POIXMLDocumentPart
+            await base.OnSaveAsync(context, cancellationToken).ConfigureAwait(false);
         }
     }
 }

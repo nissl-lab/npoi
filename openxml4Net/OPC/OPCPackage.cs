@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using NPOI.OpenXml4Net.Exceptions;
 using NPOI.OpenXml4Net.OPC.Internal.Marshallers;
 using NPOI.OpenXml4Net.OPC.Internal;
@@ -1690,6 +1692,18 @@ namespace NPOI.OpenXml4Net.OPC
             this.SaveImpl(outputStream);
         }
 
+        /// <summary>
+        /// Save the document in the specified output stream asynchronously.
+        /// </summary>
+        /// <param name="outputStream">the stream to save to</param>
+        /// <param name="cancellationToken">cancellation token to observe during the async operation</param>
+        /// <returns>A task that represents the asynchronous save operation</returns>
+        public async Task SaveAsync(Stream outputStream, CancellationToken cancellationToken = default)
+        {
+            ThrowExceptionIfReadOnly();
+            await SaveImplAsync(outputStream, cancellationToken).ConfigureAwait(false);
+        }
+
         /**
          * Core method to Create a package part. This method must be implemented by
          * the subclass.
@@ -1736,6 +1750,14 @@ namespace NPOI.OpenXml4Net.OPC
          *            The output stream use to save this package.
          */
         protected abstract void SaveImpl(Stream outputStream);
+
+        /// <summary>
+        /// Core method to save the package asynchronously. This method must be implemented by the subclass.
+        /// </summary>
+        /// <param name="outputStream">the stream to save to</param>
+        /// <param name="cancellationToken">cancellation token to observe during the async operation</param>
+        /// <returns>A task that represents the asynchronous save operation</returns>
+        protected abstract Task SaveImplAsync(Stream outputStream, CancellationToken cancellationToken = default);
 
         /**
          * Get the package part mapped to the specified URI.

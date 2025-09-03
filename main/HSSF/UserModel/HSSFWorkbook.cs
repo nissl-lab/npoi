@@ -25,6 +25,8 @@ namespace NPOI.HSSF.UserModel
     using System.IO;
     using System.Security.Cryptography;
     using System.Text;
+    using System.Threading;
+    using System.Threading.Tasks;
     using NPOI.DDF;
     using NPOI.HPSF;
     using NPOI.HSSF.Model;
@@ -1389,6 +1391,27 @@ namespace NPOI.HSSF.UserModel
             {
                 Write(fs);
                 fs.WriteFileSystem(stream);
+            }
+            finally
+            {
+                fs.Close();
+            }
+        }
+
+        /// <summary>
+        /// Write the workbook to the given stream asynchronously.
+        /// </summary>
+        /// <param name="stream">The stream to write to</param>
+        /// <param name="leaveOpen">True to leave the stream open after writing</param>
+        /// <param name="cancellationToken">Cancellation token to observe during the async operation</param>
+        /// <returns>A task that represents the asynchronous write operation</returns>
+        public async Task WriteAsync(Stream stream, bool leaveOpen = false, CancellationToken cancellationToken = default)
+        {
+            NPOIFSFileSystem fs = new NPOIFSFileSystem();
+            try
+            {
+                Write(fs);
+                await fs.WriteFileSystemAsync(stream, cancellationToken).ConfigureAwait(false);
             }
             finally
             {

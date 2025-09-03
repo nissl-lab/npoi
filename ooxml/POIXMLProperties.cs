@@ -17,6 +17,8 @@
 
 using System;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using NPOI.OpenXml4Net.Exceptions;
 using NPOI.OpenXml4Net.OPC;
 using NPOI.OpenXml4Net.OPC.Internal;
@@ -755,8 +757,78 @@ namespace NPOI
                 cust.props.Save(out1);
                 out1.Close();
             }
+        }
 
-
+        /// <summary>
+        /// Commit changes to the underlying OPC namespace asynchronously
+        /// </summary>
+        /// <param name="cancellationToken">cancellation token to observe during the async operation</param>
+        /// <returns>A task that represents the asynchronous commit operation</returns>
+        public virtual async Task CommitAsync(CancellationToken cancellationToken = default)
+        {
+            if (extPart == null && !NEW_EXT_INSTANCE.ToString().Equals(ext.props.ToString()))
+            {
+                try
+                {
+                    PackagePartName prtname = PackagingUriHelper.CreatePartName("/docProps/app.xml");
+                    pkg.AddRelationship(prtname, TargetMode.Internal, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties");
+                    extPart = pkg.CreatePart(prtname, "application/vnd.openxmlformats-officedocument.extended-properties+xml");
+                }
+                catch (InvalidFormatException e)
+                {
+                    throw new POIXMLException(e);
+                }
+            }
+            if (custPart == null && !NEW_CUST_INSTANCE.ToString().Equals(cust.props.ToString()))
+            {
+                try
+                {
+                    PackagePartName prtname = PackagingUriHelper.CreatePartName("/docProps/custom.xml");
+                    pkg.AddRelationship(prtname, TargetMode.Internal, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/custom-properties");
+                    custPart = pkg.CreatePart(prtname, "application/vnd.openxmlformats-officedocument.custom-properties+xml");
+                }
+                catch (InvalidFormatException e)
+                {
+                    throw new POIXMLException(e);
+                }
+            }
+            if (extPart != null)
+            {
+                using (Stream out1 = extPart.GetOutputStream())
+                {
+                    if (extPart.Size > 0)
+                        extPart.Clear();
+                    
+                    // Save properties to a memory stream first, then copy async
+                    using (var memStream = new MemoryStream())
+                    {
+                        ext.props.Save(memStream);
+                        memStream.Position = 0;
+#if NET8_0_OR_GREATER
+                        await memStream.CopyToAsync(out1, cancellationToken).ConfigureAwait(false);
+#else
+                        await memStream.CopyToAsync(out1).ConfigureAwait(false);
+#endif
+                    }
+                }
+            }
+            if (custPart != null)
+            {
+                using (Stream out1 = custPart.GetOutputStream())
+                {
+                    // Save properties to a memory stream first, then copy async
+                    using (var memStream = new MemoryStream())
+                    {
+                        cust.props.Save(memStream);
+                        memStream.Position = 0;
+#if NET8_0_OR_GREATER
+                        await memStream.CopyToAsync(out1, cancellationToken).ConfigureAwait(false);
+#else
+                        await memStream.CopyToAsync(out1).ConfigureAwait(false);
+#endif
+                    }
+                }
+            }
         }
 
 

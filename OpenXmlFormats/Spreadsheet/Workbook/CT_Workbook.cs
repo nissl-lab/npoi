@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -166,6 +168,71 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             if (this.extLst != null)
                 this.extLst.Write(sw, "extLst");
             sw.Write("</workbook>");
+        }
+
+        internal async Task WriteAsync(StreamWriter sw, CancellationToken cancellationToken = default)
+        {
+            await sw.WriteAsync("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>").ConfigureAwait(false);
+            await sw.WriteAsync("<workbook xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" ").ConfigureAwait(false);
+            await sw.WriteAsync("xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" ").ConfigureAwait(false);
+            await sw.WriteAsync("xmlns:mc=\"http://schemas.openxmlformats.org/markup-compatibility/2006\" ").ConfigureAwait(false);
+            await sw.WriteAsync("mc:Ignorable=\"x15 xr xr6 xr10 xr2\" ").ConfigureAwait(false);
+            await sw.WriteAsync("xmlns:x15=\"http://schemas.microsoft.com/office/spreadsheetml/2010/11/main\" ").ConfigureAwait(false);
+            await sw.WriteAsync("xmlns:xr=\"http://schemas.microsoft.com/office/spreadsheetml/2014/revision\" ").ConfigureAwait(false);
+            await sw.WriteAsync("xmlns:xr6=\"http://schemas.microsoft.com/office/spreadsheetml/2016/revision6\" ").ConfigureAwait(false);
+            await sw.WriteAsync("xmlns:xr10=\"http://schemas.microsoft.com/office/spreadsheetml/2016/revision10\" ").ConfigureAwait(false);
+            await sw.WriteAsync("xmlns:xr2=\"http://schemas.microsoft.com/office/spreadsheetml/2015/revision2\">").ConfigureAwait(false);
+
+            cancellationToken.ThrowIfCancellationRequested();
+
+            // For now, use synchronous writes for child elements since they're likely small
+            // This can be further optimized by adding async methods to child elements
+            if (this.fileVersion != null)
+                this.fileVersion.Write(sw, "fileVersion");
+            if (this.fileSharing != null)
+                this.fileSharing.Write(sw, "fileSharing");
+            if (this.workbookPr != null)
+                this.workbookPr.Write(sw, "workbookPr");
+            if (this.workbookProtection != null)
+                this.workbookProtection.Write(sw, "workbookProtection");
+            if (this.bookViews != null)
+                this.bookViews.Write(sw, "bookViews");
+            if (this.sheets != null)
+                this.sheets.Write(sw, "sheets");
+            if (this.functionGroups != null)
+                this.functionGroups.Write(sw, "functionGroups");
+            if (this.externalReferences != null)
+                this.externalReferences.Write(sw, "externalReferences");
+            if (this.definedNames != null)
+                this.definedNames.Write(sw, "definedNames");
+            if (this.calcPr != null)
+                this.calcPr.Write(sw, "calcPr");
+            if (this.oleSize != null)
+                this.oleSize.Write(sw, "oleSize");
+            if (this.customWorkbookViews != null)
+                this.customWorkbookViews.Write(sw, "customWorkbookViews");
+            if (this.pivotCaches != null)
+                this.pivotCaches.Write(sw, "pivotCaches");
+            if (this.smartTagPr != null)
+                this.smartTagPr.Write(sw, "smartTagPr");
+            if (this.smartTagTypes != null)
+                this.smartTagTypes.Write(sw, "smartTagTypes");
+            if (this.webPublishing != null)
+                this.webPublishing.Write(sw, "webPublishing");
+            if (this.webPublishObjects != null)
+                this.webPublishObjects.Write(sw, "webPublishObjects");
+            if (this.fileRecoveryPr != null)
+            {
+                foreach (CT_FileRecoveryPr x in this.fileRecoveryPr)
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+                    x.Write(sw, "fileRecoveryPr");
+                }
+            }
+            if (this.extLst != null)
+                this.extLst.Write(sw, "extLst");
+
+            await sw.WriteAsync("</workbook>").ConfigureAwait(false);
         }
 
 
