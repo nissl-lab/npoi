@@ -235,6 +235,20 @@ namespace NPOI.XSSF.Model
            _sstDoc.Save(out1);
         }
 
+        public async Task WriteToAsync(Stream out1, CancellationToken cancellationToken = default)
+        {
+            // the following two lines turn off writing CDATA
+            // see Bugzilla 48936
+            //options.SetSaveCDataLengthThreshold(1000000);
+            //options.SetSaveCDataEntityCountThreshold(-1);
+            CT_Sst sst = _sstDoc.GetSst();
+            sst.count = count;
+           sst.uniqueCount = uniqueCount;
+
+           //re-create the sst table every time saving a workbook
+           await _sstDoc.SaveAsync(out1, cancellationToken).ConfigureAwait(false);
+        }
+
 
         protected internal override void Commit()
         {
@@ -243,6 +257,15 @@ namespace NPOI.XSSF.Model
             Stream out1 = part.GetOutputStream();
             WriteTo(out1);
             out1.Close();
+        }
+
+        protected internal override async Task CommitAsync(CancellationToken cancellationToken = default)
+        {
+            PackagePart part = GetPackagePart();
+            using (Stream out1 = part.GetOutputStream())
+            {
+                await WriteToAsync(out1, cancellationToken).ConfigureAwait(false);
+            }
         }
     }
 }

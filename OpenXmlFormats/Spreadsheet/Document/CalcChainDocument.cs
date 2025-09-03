@@ -1,6 +1,8 @@
 ﻿using NPOI.OpenXml4Net.Util;
 using System;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -83,6 +85,47 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
             sw.Write("</calcChain>");
             sw.Flush();
+        }
+
+        public async Task SaveAsync(Stream stream, CancellationToken cancellationToken = default)
+        {
+            using (StreamWriter sw = new StreamWriter(stream))
+            {
+                await sw.WriteAsync("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\" ?>").ConfigureAwait(false);
+                await sw.WriteAsync("<calcChain xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\">").ConfigureAwait(false);
+                
+                foreach (CT_CalcCell cc in calcChain.c)
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+                    await sw.WriteAsync("<c").ConfigureAwait(false);
+                    await sw.WriteAsync($" r=\"{cc.r}\"").ConfigureAwait(false);
+
+                    if (cc.i > 0)
+                    {
+                        await sw.WriteAsync($" i=\"{cc.i}\"").ConfigureAwait(false);
+                    }
+
+                    if (cc.s)
+                    {
+                        await sw.WriteAsync($" s=\"{(cc.s ? "1" : "0")}\"").ConfigureAwait(false);
+                    }
+
+                    if (cc.t)
+                    {
+                        await sw.WriteAsync($" t=\"{(cc.t ? "1" : "0")}\"").ConfigureAwait(false);
+                    }
+
+                    if (cc.l)
+                    {
+                        await sw.WriteAsync($" l=\"{(cc.l ? "1" : "0")}\"").ConfigureAwait(false);
+                    }
+                    
+                    await sw.WriteAsync("/>").ConfigureAwait(false);
+                }
+                
+                await sw.WriteAsync("</calcChain>").ConfigureAwait(false);
+                await sw.FlushAsync().ConfigureAwait(false);
+            }
         }
 
     }

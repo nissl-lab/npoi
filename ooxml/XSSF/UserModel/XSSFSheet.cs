@@ -1489,6 +1489,15 @@ namespace NPOI.XSSF.UserModel
             out1.Close();
         }
 
+        protected internal override async Task CommitAsync(CancellationToken cancellationToken = default)
+        {
+            PackagePart part = GetPackagePart();
+            using (Stream out1 = part.GetOutputStream())
+            {
+                await WriteAsync(out1, cancellationToken).ConfigureAwait(false);
+            }
+        }
+
         protected virtual OpenXmlFormats.Spreadsheet.CT_Drawing GetCTDrawing()
         {
             return worksheet.drawing;
@@ -1608,6 +1617,103 @@ namespace NPOI.XSSF.UserModel
             new WorksheetDocument(worksheet).Save(stream, leaveOpen);
 
             // Bug 52233: Ensure that we have a col-array even if write() removed it
+            if(setToNull)
+            {
+                worksheet.AddNewCols();
+            }
+        }
+
+        internal virtual async Task WriteAsync(Stream stream, CancellationToken cancellationToken = default)
+        {
+            bool setToNull = false;
+            if(worksheet.sizeOfColsArray() == 1)
+            {
+                CT_Cols col = worksheet.GetColsArray(0);
+                if(col.sizeOfColArray() == 0)
+                {
+                    setToNull = true;
+                    worksheet.SetColsArray(null);
+                }
+                else
+                {
+                    SetColWidthAttribute(col);
+                }
+            }
+
+            // Now re-generate our CT_Hyperlinks, if needed
+            if(hyperlinks.Count > 0)
+            {
+                if(worksheet.hyperlinks == null)
+                {
+                    worksheet.AddNewHyperlinks();
+                }
+
+                CT_Hyperlink[] ctHls = new CT_Hyperlink[hyperlinks.Count];
+                for(int i = 0; i < ctHls.Length; i++)
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+                    XSSFHyperlink hyperlink = hyperlinks[i];
+                    hyperlink.GenerateRelationIfNeeded(GetPackagePart());
+                    ctHls[i] = hyperlink.GetCTHyperlink();
+                }
+
+                worksheet.hyperlinks.SetHyperlinkArray(ctHls);
+            }
+            else
+            {
+                if(worksheet.hyperlinks != null)
+                {
+                    int count = worksheet.hyperlinks.SizeOfHyperlinkArray();
+                    for(int i = count - 1; i >= 0; i--)
+                    {
+                        worksheet.hyperlinks.RemoveHyperlink(i);
+                    }
+                    worksheet.UnsetHyperlinks();
+                }
+            }
+
+            foreach(XSSFRow row in _rows.Values)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                row.OnDocumentWrite();
+            }
+
+            int minCell = int.MaxValue, maxCell = int.MinValue;
+            foreach(XSSFRow row in _rows.Values)
+            {
+                row.OnDocumentWrite();
+
+                if(row.FirstCellNum != -1)
+                {
+                    minCell = Math.Min(minCell, row.FirstCellNum);
+                }
+
+                if(row.LastCellNum != -1)
+                {
+                    maxCell = Math.Max(maxCell, row.LastCellNum);
+                }
+            }
+
+            foreach(XSSFColumn column in _columns.Values)
+            {
+                XSSFColumn.OnDocumentWrite();
+            }
+
+            if(minCell != int.MaxValue)
+            {
+                string ref1 = new CellRangeAddress(FirstRowNum, LastRowNum, minCell, maxCell).FormatAsString();
+                if(worksheet.IsSetDimension())
+                {
+                    worksheet.dimension.@ref = ref1;
+                }
+                else
+                {
+                    worksheet.AddNewDimension().@ref = (ref1);
+                }
+            }
+
+            await new WorksheetDocument(worksheet).SaveAsync(stream, false, cancellationToken).ConfigureAwait(false);
+
             if(setToNull)
             {
                 worksheet.AddNewCols();

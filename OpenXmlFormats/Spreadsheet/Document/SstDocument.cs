@@ -4,6 +4,8 @@ using System.IO;
 using System.Security;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -68,6 +70,25 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
             sw.Write("</sst>");
             sw.Flush();
+        }
+
+        public async Task SaveAsync(Stream stream, CancellationToken cancellationToken = default)
+        {
+            using (StreamWriter sw = new StreamWriter(stream, Encoding.UTF8))
+            {
+                await sw.WriteAsync(string.Format("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\" ?><sst xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" count=\"{0}\" uniqueCount=\"{1}\">", this.GetSst().count, this.GetSst().uniqueCount)).ConfigureAwait(false);
+                
+                foreach (CT_Rst ssi in this.GetSst().si)
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+                    // For now, use synchronous Write for child elements
+                    // This can be optimized by adding WriteAsync to CT_Rst
+                    ssi.Write(sw, "si");
+                }
+                
+                await sw.WriteAsync("</sst>").ConfigureAwait(false);
+                await sw.FlushAsync().ConfigureAwait(false);
+            }
         }
 
     }

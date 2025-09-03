@@ -69,6 +69,13 @@ namespace NPOI.XSSF.Model
             doc.Save(out1);
         }
 
+        public async Task WriteToAsync(Stream out1, CancellationToken cancellationToken = default)
+        {
+            CalcChainDocument doc = new CalcChainDocument();
+            doc.SetCalcChain(chain);
+            await doc.SaveAsync(out1, cancellationToken).ConfigureAwait(false);
+        }
+
 
         protected internal override void Commit()
         {
@@ -76,6 +83,15 @@ namespace NPOI.XSSF.Model
             Stream out1 = part.GetOutputStream();
             WriteTo(out1);
             out1.Close();
+        }
+
+        protected internal override async Task CommitAsync(CancellationToken cancellationToken = default)
+        {
+            PackagePart part = GetPackagePart();
+            using (Stream out1 = part.GetOutputStream())
+            {
+                await WriteToAsync(out1, cancellationToken).ConfigureAwait(false);
+            }
         }
 
 

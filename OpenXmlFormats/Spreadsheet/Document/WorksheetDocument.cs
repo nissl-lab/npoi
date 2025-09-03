@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -31,6 +33,15 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public void Save(Stream stream, bool leaveOpen)
         {
+            this.sheet.Write(stream, leaveOpen);
+        }
+
+        public async Task SaveAsync(Stream stream, bool leaveOpen, CancellationToken cancellationToken = default)
+        {
+            // For now, use Task.Yield to avoid blocking and then call synchronous Write
+            // This can be optimized by adding WriteAsync to CT_Worksheet
+            await Task.Yield(); // Allow other tasks to run
+            cancellationToken.ThrowIfCancellationRequested();
             this.sheet.Write(stream, leaveOpen);
         }
     }
