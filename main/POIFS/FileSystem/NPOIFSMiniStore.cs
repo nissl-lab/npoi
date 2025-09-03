@@ -22,6 +22,8 @@ using NPOI.POIFS.Storage;
 using NPOI.POIFS.Properties;
 using System.Collections.Generic;
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 using NPOI.Util;
 
 namespace NPOI.POIFS.FileSystem
@@ -302,6 +304,29 @@ namespace NPOI.POIFS.FileSystem
                     blocksUsed += sbat.GetUsedSectors(false);
                 }
             }
+            // Set the size on the root in terms of the number of SBAT blocks
+            // RootProperty.setSize does the sbat -> bytes conversion for us
+            _filesystem.PropertyTable.Root.Size = (blocksUsed);
+        }
+
+        public async Task SyncWithDataSourceAsync(CancellationToken cancellationToken = default)
+        {
+            int blocksUsed = 0;
+            foreach (BATBlock sbat in _sbat_blocks)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                ByteBuffer block = _filesystem.GetBlockAt(sbat.OurBlockIndex);
+                BlockAllocationTableWriter.WriteBlock(sbat, block);
+                if (!sbat.HasFreeSectors)
+                {
+                    blocksUsed += _filesystem.GetBigBlockSizeDetails().GetBATEntriesPerBlock();
+                }
+                else
+                {
+                    blocksUsed += sbat.GetUsedSectors(false);
+                }
+            }
+
             // Set the size on the root in terms of the number of SBAT blocks
             // RootProperty.setSize does the sbat -> bytes conversion for us
             _filesystem.PropertyTable.Root.Size = (blocksUsed);

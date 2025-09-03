@@ -886,10 +886,35 @@ namespace NPOI.POIFS.FileSystem
         /// <returns>A task that represents the asynchronous sync operation</returns>
         private async Task syncWithDataSourceAsync(CancellationToken cancellationToken)
         {
-            // These operations are primarily memory-based and synchronous
-            await Task.Yield(); // Allow other tasks to run
-            cancellationToken.ThrowIfCancellationRequested();
-            syncWithDataSource();
+            // Mini Stream + SBATs first, as mini-stream details have
+            //  to be stored in the Root Property
+            await _mini_store.SyncWithDataSourceAsync(cancellationToken).ConfigureAwait(false);
+
+            // Properties
+            NPOIFSStream propStream = new NPOIFSStream(this, _header.PropertyStart);
+            _property_table.PreWrite();
+            await _property_table.WriteAsync(propStream, cancellationToken).ConfigureAwait(false);
+            // _header.setPropertyStart has been updated on write ...
+            
+            // HeaderBlock - memory operation
+            HeaderBlockWriter hbw = new HeaderBlockWriter(_header);
+            hbw.WriteBlock(GetBlockAt(-1));
+
+            // BATs - memory operations with cancellation support
+            foreach (BATBlock bat in _bat_blocks)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                ByteBuffer block = GetBlockAt(bat.OurBlockIndex);
+                BlockAllocationTableWriter.WriteBlock(bat, block);
+            }
+            
+            // XBats - memory operations with cancellation support
+            foreach (BATBlock bat in _xbat_blocks)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                ByteBuffer block = GetBlockAt(bat.OurBlockIndex);
+                BlockAllocationTableWriter.WriteBlock(bat, block);
+            }
         }
 
         /**

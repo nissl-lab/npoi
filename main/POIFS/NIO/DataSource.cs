@@ -48,12 +48,13 @@ namespace NPOI.POIFS.NIO
         /// <returns>A task that represents the asynchronous copy operation</returns>
         public virtual async Task CopyToAsync(Stream stream, CancellationToken cancellationToken = default)
         {
-            // Default implementation calls synchronous CopyTo
+            // Default implementation wraps synchronous CopyTo in Task.Run
             // Most subclasses override this with true async implementation
-            // This is kept for backward compatibility only
-            await Task.Yield(); // Allow other tasks to run
-            cancellationToken.ThrowIfCancellationRequested();
-            CopyTo(stream);
+            // Using Task.Run to avoid blocking the calling thread for I/O operations
+            await Task.Run(() => {
+                cancellationToken.ThrowIfCancellationRequested();
+                CopyTo(stream);
+            }, cancellationToken).ConfigureAwait(false);
         }
     }
 }

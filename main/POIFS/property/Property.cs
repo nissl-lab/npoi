@@ -30,6 +30,8 @@ using System.Text;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 
 using NPOI.POIFS.Dev;
 using NPOI.POIFS.Common;
@@ -188,6 +190,15 @@ namespace NPOI.POIFS.Properties
         public void WriteData(Stream stream)
         {
             stream.Write(_raw_data,0,this._raw_data.Length);
+        }
+
+        public async Task WriteDataAsync(Stream stream, CancellationToken cancellationToken = default)
+        {
+#if NET8_0_OR_GREATER
+            await stream.WriteAsync(_raw_data.AsMemory(0, this._raw_data.Length), cancellationToken).ConfigureAwait(false);
+#else
+            await stream.WriteAsync(_raw_data, 0, this._raw_data.Length, cancellationToken).ConfigureAwait(false);
+#endif
         }
 
         /// <summary>
