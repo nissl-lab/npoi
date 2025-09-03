@@ -38,11 +38,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public async Task SaveAsync(Stream stream, bool leaveOpen, CancellationToken cancellationToken = default)
         {
-            // For now, use Task.Yield to avoid blocking and then call synchronous Write
-            // This can be optimized by adding WriteAsync to CT_Worksheet
-            await Task.Yield(); // Allow other tasks to run
-            cancellationToken.ThrowIfCancellationRequested();
-            this.sheet.Write(stream, leaveOpen);
+            await this.sheet.WriteAsync(stream, leaveOpen, cancellationToken).ConfigureAwait(false);
         }
     }
 }

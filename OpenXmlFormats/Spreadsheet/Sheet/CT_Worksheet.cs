@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -1041,6 +1043,117 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             this.oleObjectsField = new CT_OleObjects();
             return this.oleObjectsField;
+        }
+
+        internal async Task WriteAsync(Stream stream, bool leaveOpen, CancellationToken cancellationToken = default)
+        {
+            using (StreamWriter sw = new StreamWriter(stream))
+            {
+                await sw.WriteAsync("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>").ConfigureAwait(false);
+                await sw.WriteAsync("<worksheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\"").ConfigureAwait(false);
+                await sw.WriteAsync(" xmlns:xdr=\"http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing\"").ConfigureAwait(false);
+                await sw.WriteAsync(" xmlns:mc=\"http://schemas.openxmlformats.org/markup-compatibility/2006\" mc:Ignorable=\"x14ac xr xr2 xr3\" xmlns:x14ac=\"http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac\"").ConfigureAwait(false);
+                await sw.WriteAsync(" xmlns:xr=\"http://schemas.microsoft.com/office/spreadsheetml/2014/revision\" xmlns:xr2=\"http://schemas.microsoft.com/office/spreadsheetml/2015/revision2\" xmlns:xr3=\"http://schemas.microsoft.com/office/spreadsheetml/2016/revision3\"").ConfigureAwait(false);
+                await sw.WriteAsync(">").ConfigureAwait(false);
+
+                cancellationToken.ThrowIfCancellationRequested();
+
+                // For now, use synchronous writes for child elements
+                // This can be further optimized by adding async methods to child elements
+                if (this.sheetPr != null)
+                    this.sheetPr.Write(sw, "sheetPr");
+                if (this.dimension != null)
+                    this.dimension.Write(sw, "dimension");
+                if (this.sheetViews != null)
+                    this.sheetViews.Write(sw, "sheetViews");
+                if (this.sheetFormatPr != null)
+                    this.sheetFormatPr.Write(sw, "sheetFormatPr");
+                if (this.cols != null)
+                {
+                    foreach (CT_Cols x in this.cols)
+                    {
+                        cancellationToken.ThrowIfCancellationRequested();
+                        x.Write(sw, "cols");
+                    }
+                }
+                if (this.sheetData != null)
+                    this.sheetData.Write(sw, "sheetData");
+                if (this.sheetCalcPr != null)
+                    this.sheetCalcPr.Write(sw, "sheetCalcPr");
+                if (this.sheetProtection != null)
+                    this.sheetProtection.Write(sw, "sheetProtection");
+                if (this.protectedRanges != null)
+                    this.protectedRanges.Write(sw, "protectedRanges");
+                if (this.scenarios != null)
+                    this.scenarios.Write(sw, "scenarios");
+                if (this.autoFilter != null)
+                    this.autoFilter.Write(sw, "autoFilter");
+                if (this.sortState != null)
+                    this.sortState.Write(sw, "sortState");
+                if (this.dataConsolidate != null)
+                    this.dataConsolidate.Write(sw, "dataConsolidate");
+                if (this.customSheetViews != null)
+                    this.customSheetViews.Write(sw, "customSheetViews");
+                if (this.mergeCells != null)
+                    this.mergeCells.Write(sw, "mergeCells");
+                if (this.phoneticPr != null)
+                    this.phoneticPr.Write(sw, "phoneticPr");
+                if (this.conditionalFormatting != null)
+                {
+                    foreach (CT_ConditionalFormatting x in this.conditionalFormatting)
+                    {
+                        cancellationToken.ThrowIfCancellationRequested();
+                        x.Write(sw, "conditionalFormatting");
+                    }
+                }
+                if (this.dataValidations != null)
+                    this.dataValidations.Write(sw, "dataValidations");
+                if (this.hyperlinks != null)
+                    this.hyperlinks.Write(sw, "hyperlinks");
+                if (this.printOptions != null)
+                    this.printOptions.Write(sw, "printOptions");
+                if (this.pageMargins != null)
+                    this.pageMargins.Write(sw, "pageMargins");
+                if (this.pageSetup != null)
+                    this.pageSetup.Write(sw, "pageSetup");
+                if (this.headerFooter != null)
+                    this.headerFooter.Write(sw, "headerFooter");
+                if (this.rowBreaks != null)
+                    this.rowBreaks.Write(sw, "rowBreaks");
+                if (this.colBreaks != null)
+                    this.colBreaks.Write(sw, "colBreaks");
+                if (this.customProperties != null)
+                    this.customProperties.Write(sw, "customProperties");
+                if (this.cellWatches != null)
+                    this.cellWatches.Write(sw, "cellWatches");
+                if (this.ignoredErrors != null)
+                    this.ignoredErrors.Write(sw, "ignoredErrors");
+                if (this.smartTags != null)
+                    this.smartTags.Write(sw, "smartTags");
+                if (this.drawing != null)
+                    this.drawing.Write(sw, "drawing");
+                if (this.legacyDrawing != null)
+                    this.legacyDrawing.Write(sw, "legacyDrawing");
+                if (this.legacyDrawingHF != null)
+                    this.legacyDrawingHF.Write(sw, "legacyDrawingHF");
+                if (this.drawingHF != null)
+                    this.drawingHF.Write(sw, "drawingHF");
+                if (this.picture != null)
+                    this.picture.Write(sw, "picture");
+                if (this.oleObjects != null)
+                    this.oleObjects.Write(sw, "oleObjects");
+                if (this.controls != null)
+                    this.controls.Write(sw, "controls");
+                if (this.webPublishItems != null)
+                    this.webPublishItems.Write(sw, "webPublishItems");
+                if (this.tableParts != null)
+                    this.tableParts.Write(sw, "tableParts");
+                if (this.extLst != null)
+                    this.extLst.Write(sw, "extLst");
+
+                await sw.WriteAsync("</worksheet>").ConfigureAwait(false);
+                await sw.FlushAsync().ConfigureAwait(false);
+            }
         }
     }
 
