@@ -20,12 +20,16 @@ namespace NPOI.HPSF
 {
 
 
+using Cysharp.Text;
+    using Microsoft.VisualBasic;
+    using NPOI.HPSF.Wellknown;
     using NPOI.Util;
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.IO;
+    using System.Runtime.InteropServices;
     using System.Text; 
-using Cysharp.Text;
 
     /// <summary>
     /// <para>
@@ -65,7 +69,10 @@ using Cysharp.Text;
     /// </summary>
     public class Property
     {
-
+        /// <summary>
+        /// Default codepage for <see cref="CodePageString"/>
+        /// </summary>
+        public static readonly int DEFAULT_CODEPAGE = CodePageUtil.CP_WINDOWS_1252; 
         /// <summary>
         /// The property's ID. */
         /// </summary>
@@ -160,7 +167,44 @@ using Cysharp.Text;
             }
         }
 
+        /// <summary>
+        /// Creates a <see cref="Property"/> instance by reading its bytes
+        /// from the property set stream.
+        /// </summary>
+        /// <param name="id">The property's ID.</param>
+        /// <param name="leis">The bytes the property set stream consists of.</param>
+        /// <param name="length">The property's type/value pair's length in bytes.</param>
+        /// <param name="codepage">The section's and thus the property's
+        /// codepage. It is needed only when reading string values.
+        /// </param>
+        /// <exception cref="UnsupportedEncodingException">if the specified codepage is not
+        /// supported.
+        /// </exception>
+        public Property(long id, LittleEndianByteArrayInputStream leis, int length, int codepage)
+        {
+            this.id = id;
 
+            /*
+             * ID 0 is a special case since it specifies a dictionary of
+             * property IDs and property names.
+             */
+            if (id == 0) 
+            {
+                throw new UnsupportedEncodingException("Dictionary not allowed here");
+            }
+
+            type = leis.ReadUInt();
+
+            try 
+            {
+                _value = VariantSupport.Read(leis, length, (int) type, codepage);
+            }
+            catch (UnsupportedVariantTypeException ex)
+            {
+                VariantSupport.WriteUnsupportedTypeMessage(ex);
+                _value = ex.Value;
+            }
+        }
 
         /// <summary>
         /// get or set the property's ID.
@@ -389,14 +433,36 @@ using Cysharp.Text;
                 return false;
             }
 
-            if(_value is byte[] bytes)
+            if(_value is byte[] thisVal)
             {
-                return Arrays.Equals(bytes, (byte[]) pValue);
+                byte[] otherVal = (byte[]) pValue;
+                int len = unpaddedLength(thisVal);
+                if (len != unpaddedLength(otherVal))
+                {
+                    return false;
+                }
+                for (int i=0; i<len; i++)
+                {
+                    if (thisVal[i] != otherVal[i])
+                    {
+                        return false;
+                    }
+                }
             }
 
             return _value.Equals(pValue);
         }
-
+        /// <summary>
+        /// Byte arrays can be 0-padded up to 3 bytes to form a full quad array.
+        /// This returns the truncated length without the potentially 0-padded bytes
+        /// </summary>
+        /// <param name="buf">the bytes</param>
+        /// <returns>the truncated size with a maximum of 4 bytes shorter (3 bytes + trailing 0 of strings)</returns>
+        private static int unpaddedLength(byte[] buf) {
+            int len;
+            for (len = buf.Length; len > 0 && len > buf.Length-4 && buf[len-1] == 0; len--);
+            return len;
+        }
         private static bool typesAreEqual(long t1, long t2)
         {
             return (t1 == t2 ||
@@ -427,52 +493,117 @@ using Cysharp.Text;
         /// @see Object#toString()
         public override String ToString()
         {
-           using var b= ZString.CreateStringBuilder();
-            b.Append(GetType().Name);
-            b.Append('[');
+           return ToString(Property.DEFAULT_CODEPAGE, null);
+        }
+
+        public string ToString(int codepage, PropertyIDMap idMap)
+        {
+            using var b= ZString.CreateStringBuilder();
+            b.Append("Property[");
             b.Append("id: ");
-            b.Append(ID);
+            b.Append(id);
+            string idName = (idMap == null) ? null : idMap.Get(id)?.ToString();
+            if (idName == null) {
+                idName = PropertyIDMap.FallbackProperties[id];
+            }
+            if (idName != null) {
+                b.Append(" (");
+                b.Append(idName);
+                b.Append(")");
+            }
             b.Append(", type: ");
-            b.Append(Type);
-            Object value = Value;
+            b.Append(GetType());
+            b.Append(" (");
+            b.Append(VariantName);
+            b.Append(") ");
+            object value = Value;
             b.Append(", value: ");
-            if(value is String s)
-            {
-                b.Append(s.ToString());
-                int l = s.Length;
-                byte[] bytes = new byte[l * 2];
-                for(int i = 0; i < l; i++)
-                {
-                    char c = s[i];
-                    byte high = (byte)((c & 0x00ff00) >> 8);
-                    byte low = (byte)((c & 0x0000ff) >> 0);
-                    bytes[i * 2] = high;
-                    bytes[i * 2 + 1] = low;
+            if (value is String) {
+                b.Append((String)value);
+                b.Append("\n");
+                MemoryStream bos = new MemoryStream();
+                try {
+                    Write(bos, codepage);
+                } catch (Exception e) {
+                    //LOG.log(POILogger.WARN, "can't serialize string", e);
                 }
-                b.Append(" [");
-                if(bytes.Length > 0)
-                {
-                    String hex = HexDump.Dump(bytes, 0L, 0);
+            
+                // skip length field
+                if(bos.Length > 2*LittleEndianConsts.INT_SIZE) {
+                    string hex = HexDump.Dump(bos.ToArray(), -2*LittleEndianConsts.INT_SIZE, 2*LittleEndianConsts.INT_SIZE);
                     b.Append(hex);
                 }
-                b.Append("]");
-            }
-            else if(value is byte[] bytes)
-            {
-                if(bytes.Length > 0)
-                {
-                    String hex = HexDump.Dump(bytes, 0L, 0);
+            } else if (value is byte[]) {
+                b.Append("\n");
+                byte[] bytes = (byte[])value;
+                if(bytes.Length > 0) {
+                    string hex = HexDump.Dump(bytes, 0L, 0);
                     b.Append(hex);
                 }
-            }
-            else
-            {
+            } else if (value is DateTime d) {
+                long filetime = Filetime.DateToFileTime(d);
+                if (Filetime.IsUndefined(d)) {
+                    b.Append("<undefined>");
+                } else if ((filetime >>> 32) == 0) {
+                    // if the upper dword isn't Set, we deal with time intervals
+                    //long l = filetime*100;
+                    //TimeUnit tu = TimeUnit.NANOSECONDS;
+                    //long hr  = tu.ToHours(l);
+                    //l -= TimeUnit.HOURS.ToNanos(hr);
+                    //long min = tu.ToMinutes(l);
+                    //l -= TimeUnit.MINUTES.ToNanos(min);
+                    //long sec = tu.ToSeconds(l);
+                    //l -= TimeUnit.SECONDS.ToNanos(sec);
+                    //long ms  = tu.ToMillis(l);
+                
+                    //string str = String.format(Locale.ROOT, "%02d:%02d:%02d.%03d",hr,min,sec,ms);
+                    TimeSpan ts = new TimeSpan(filetime);
+                    string str = string.Format("{0:D2}:{0:D2}:{0:D2}.{0:D3}",ts.Hours,ts.Minutes,ts.Seconds, ts.Milliseconds);
+                    b.Append(str);
+                } else {
+                    // use ISO-8601 timestamp format
+                    b.Append(d.ToString("u"));
+                }
+            } else if (type == Variant.VT_EMPTY || type == Variant.VT_NULL || value == null) {
+                b.Append("null");
+            } else {
                 b.Append(value.ToString());
+            
+                string decoded = decodeValueFromID();
+                if (decoded != null) {
+                    b.Append(" (");
+                    b.Append(decoded);
+                    b.Append(")");
+                }
             }
             b.Append(']');
             return b.ToString();
         }
-
+        private string VariantName
+        {
+            get
+            {
+                if (ID == 0)
+                {
+                    return "dictionary";
+                }
+                return Variant.GetVariantName(Type);
+            }
+        }
+        private string decodeValueFromID()
+        {
+            try {
+                switch((int)ID) {
+                    case PropertyIDMap.PID_CODEPAGE:
+                        return CodePageUtil.CodepageToEncoding((int)Value);
+                    case PropertyIDMap.PID_LOCALE:
+                        return LocaleUtil.GetLocaleFromLCID((int)Value);
+                }
+            } catch (Exception e) {
+                //LOG.log(POILogger.WARN, "Can't decode id " + ID);
+            }
+            return null;
+        }
         /// <summary>
         /// Writes the property to an output stream.
         /// </summary>
@@ -486,21 +617,30 @@ using Cysharp.Text;
         /// </exception>
         public int Write(Stream out1, int codepage)
         {
-
             int length = 0;
             long variantType = Type;
 
             /* Ensure that wide strings are written if the codepage is Unicode. */
-            if(codepage == CodePageUtil.CP_UNICODE && variantType == Variant.VT_LPSTR)
+            //if(codepage == CodePageUtil.CP_UNICODE && variantType == Variant.VT_LPSTR)
+            //{
+            //    variantType = Variant.VT_LPWSTR;
+            //}
+            if (variantType == Variant.VT_LPSTR && codepage != CodePageUtil.CP_UTF16) 
             {
-                variantType = Variant.VT_LPWSTR;
+                String csStr = CodePageUtil.CodepageToEncoding(codepage > 0 ? codepage : Property.DEFAULT_CODEPAGE);
+                
+                //if (!Charset.forName(csStr).newEncoder().canEncode((String)_value))
+                
+                if(!CodePageUtil.CanEncode(csStr, (String)_value))
+                {
+                    variantType = Variant.VT_LPWSTR;
+                }
             }
-
-            length += TypeWriter.WriteUIntToStream(out1, (uint) variantType);
+            LittleEndian.PutUInt(variantType, out1);
+            length += LittleEndianConsts.INT_SIZE;
             length += VariantSupport.Write(out1, variantType, Value, codepage);
             return length;
         }
-
     }
 }
 

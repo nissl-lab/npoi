@@ -16,10 +16,7 @@
 ==================================================================== */
 
 namespace NPOI.HPSF
-
 {
-
-
     using NPOI;
     using NPOI.HPSF.Wellknown;
     using NPOI.POIFS.FileSystem;
@@ -29,7 +26,7 @@ namespace NPOI.HPSF
     using System.Linq;
     using System.IO;
     using System.Text; 
-using Cysharp.Text;
+    using Cysharp.Text;
 
     /// <summary>
     /// <para>
@@ -97,17 +94,17 @@ using Cysharp.Text;
         /// <summary>
         /// The "byteOrder" field must equal this value.
         /// </summary>
-        private static int BYTE_ORDER_ASSERTION = 0xFFFE;
+        internal static int BYTE_ORDER_ASSERTION = 0xFFFE;
 
         /// <summary>
         /// The "format" field must equal this value.
         /// </summary>
-        private static int FORMAT_ASSERTION = 0x0000;
+        internal static int FORMAT_ASSERTION = 0x0000;
 
         /// <summary>
         /// The length of the property Set stream header.
         /// </summary>
-        private static int OFFSET_HEADER =
+        internal static int OFFSET_HEADER =
             LittleEndianConsts.SHORT_SIZE + /* Byte order    */
             LittleEndianConsts.SHORT_SIZE + /* Format        */
             LittleEndianConsts.INT_SIZE +   /* OS version    */
@@ -529,11 +526,11 @@ using Cysharp.Text;
             int nrSections = SectionCount;
 
             /* Write the property Set's header. */
-            TypeWriter.WriteToStream(out1, (short) ByteOrder);
-            TypeWriter.WriteToStream(out1, (short) Format);
-            TypeWriter.WriteToStream(out1, OSVersion);
-            TypeWriter.WriteToStream(out1, ClassID);
-            TypeWriter.WriteToStream(out1, nrSections);
+            LittleEndian.PutShort(out1, (short) ByteOrder);
+            LittleEndian.PutShort(out1, (short) Format);
+            LittleEndian.PutInt(OSVersion, out1);
+            PutClassId(out1, ClassID);
+            LittleEndian.PutInt(nrSections, out1);
             int offset = OFFSET_HEADER;
 
             /* Write the section list, i.e. the references to the sections. Each
@@ -548,8 +545,8 @@ using Cysharp.Text;
                 {
                     throw new NoFormatIDException();
                 }
-                TypeWriter.WriteToStream(out1, section.FormatID);
-                TypeWriter.WriteUIntToStream(out1, (uint) offset);
+                PutClassId(out1, formatID);
+                LittleEndian.PutUInt(offset, out1);
                 try
                 {
                     offset += section.Size;
@@ -557,7 +554,7 @@ using Cysharp.Text;
                 catch(HPSFRuntimeException ex)
                 {
                     Exception cause = ex.InnerException;
-                    if(cause is ArgumentException)
+                    if(cause is UnsupportedEncodingException)
                     {
                         throw new IllegalPropertySetDataException(cause);
                     }
@@ -674,7 +671,15 @@ using Cysharp.Text;
                         return LittleEndian.GetUInt(data).ToString();
                     default:
                         // Maybe it's a string? who knows!
-                        return Encoding.ASCII.GetString(data);
+                        try 
+                        {
+                            return CodePageUtil.GetStringFromCodePage(data, Property.DEFAULT_CODEPAGE);
+                        }
+                        catch (UnsupportedEncodingException e)
+                        {
+                            // doesn't happen ...
+                            return "";
+                        }
                 }
             }
             return propertyValue.ToString();
@@ -686,7 +691,8 @@ using Cysharp.Text;
         /// <return>true if this <see cref="PropertySet"/>
         /// represents a Summary Information, else <c>false</c>.
         /// </return>
-        public bool IsSummaryInformation => matchesSummary(SectionIDMap.SUMMARY_INFORMATION_ID);
+        public bool IsSummaryInformation => sections.Count != 0 && 
+            matchesSummary(FirstSection.FormatID, SectionIDMap.SUMMARY_INFORMATION_ID);
 
         /// <summary>
         /// Checks whether this <see cref="PropertySet"/> is a Document Summary Information.
@@ -694,9 +700,19 @@ using Cysharp.Text;
         /// <return>true if this <see cref="PropertySet"/>
         /// represents a Document Summary Information, else <c>false</c>.
         /// </return>
-        public bool IsDocumentSummaryInformation => matchesSummary(SectionIDMap.DOCUMENT_SUMMARY_INFORMATION_ID[0]);
+        public bool IsDocumentSummaryInformation => sections.Count != 0 && 
+            matchesSummary(FirstSection.FormatID, SectionIDMap.DOCUMENT_SUMMARY_INFORMATION_ID); 
 
-
+        internal static bool matchesSummary(ClassID actual, params ClassID[] expected) {
+            foreach (ClassID sum in expected)
+            {
+                if (sum.Equals(actual) || sum.EqualsInverted(actual))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
         private bool matchesSummary(byte[] summaryBytes)
         {
             return !(sections.Count == 0) &&
@@ -902,7 +918,7 @@ using Cysharp.Text;
             b.Append(", sections: [\n");
             foreach(Section section in Sections)
             {
-                b.Append(section);
+                b.Append(section.ToString(PropertySetIDMap));
             }
             b.Append(']');
             b.Append(']');
@@ -933,6 +949,13 @@ using Cysharp.Text;
         protected void Set1stProperty(long id, byte[] value)
         {
             FirstSection.SetProperty((int) id, value);
+        }
+
+        private static void PutClassId(Stream out1, ClassID n)
+        {
+            byte[] b = new byte[16];
+            n.Write(b, 0);
+            out1.Write(b, 0, b.Length);
         }
     }
 }

@@ -325,7 +325,7 @@ namespace NPOI.SS.UserModel
             //      string formatStr = (i < formatBits.length) ? formatBits[i] : formatBits[0];
 
             string formatStr = formatStrIn;
-
+            int firstAt = formatStr.IndexOf(';');
             // Excel supports 2+ part conditional data formats, eg positive/negative/zero,
             //  or (>1000),(>0),(0),(negative). As Java doesn't handle these kinds
             //  of different formats for different ranges, just +ve/-ve, we need to 
@@ -333,8 +333,10 @@ namespace NPOI.SS.UserModel
             // For now, if we detect 2+ parts, we call out to CellFormat to handle it
             // TODO Going forward, we should really merge the logic between the two classes
 
-            int firstSemiColon = formatStr.IndexOf(';');
-            if (firstSemiColon != -1 && (firstSemiColon != formatStr.LastIndexOf(';') || rangeConditionalPattern.IsMatch(formatStr)))
+            if (firstAt != -1 &&
+                (firstAt != formatStr.LastIndexOf(';')
+                 || rangeConditionalPattern.IsMatch(formatStr)
+                ))
             {
                 try
                 {
@@ -359,7 +361,7 @@ namespace NPOI.SS.UserModel
 
             // Excel supports positive/negative/zero, but java
             // doesn't, so we need to do it specially
-            int firstAt = firstSemiColon;
+            
             int lastAt = formatStr.LastIndexOf(';');
             // p and p;n are ok by default. p;n;z and p;n;z;s need to be fixed.
             if (firstAt != -1 && firstAt != lastAt)

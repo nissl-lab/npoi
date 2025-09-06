@@ -19,6 +19,7 @@ namespace NPOI.HPSF
 
 {
     using NPOI.HPSF.Wellknown;
+    using NPOI.Util;
     using System;
     using System.Xml.Linq;
 
@@ -42,7 +43,7 @@ namespace NPOI.HPSF
         /// </summary>
         public SummaryInformation()
         {
-            FirstSection.SetFormatID(SectionIDMap.SUMMARY_INFORMATION_ID);
+            FirstSection.FormatID = SectionIDMap.SUMMARY_INFORMATION_ID;
         }
 
         /// <summary>
@@ -63,7 +64,38 @@ namespace NPOI.HPSF
             }
         }
 
-
+        /// <summary>
+        /// <para>
+        /// Creates a <see cref="SummaryInformation"/> instance from an <see cref="/// InputStream} in the Horrible Property Set Format.
+        /// </para>
+        /// <para>
+        /// The constructor reads the first few bytes from the stream
+        /// and determines whether it is really a property Set stream. If
+        /// it is, it parses the rest of the stream. If it is not, it
+        /// resets the stream to its beginning in order to let other
+        /// components mess around with the data and throws an
+        /// exception.
+        /// </para>
+        /// </summary>
+        /// <param name="stream">Holds the data making out the property Set
+        /// stream.
+        /// </param>
+        /// <exception cref="MarkUnsupportedException">
+        /// if the stream does not support the {@link InputStream.markSupported" /> method.
+        /// </exception>
+        /// <exception cref="IOException">
+        /// if the <see cref="InputStream"/> cannot be accessed as needed.
+        /// </exception>
+        /// <exception cref="NoPropertySetStreamException">
+        /// if the input stream does not contain a property Set.
+        /// </exception>
+        /// <exception cref="UnsupportedEncodingException">
+        /// if a character encoding is not supported.
+        /// </exception>
+        public SummaryInformation(InputStream stream)
+            : base(stream)
+        {
+        }
 
         /// <summary>
         /// get or set the title.
@@ -240,11 +272,11 @@ namespace NPOI.HPSF
             {
                 DateTime? d = (DateTime?)GetProperty(PropertyIDMap.PID_EDITTIME);
 
-                return d.HasValue ? Util.DateToFileTime(d.Value) : 0;
+                return d.HasValue ? Filetime.DateToFileTime(d.Value) : 0;
             }
             set
             {
-                DateTime d = Util.FiletimeToDate(value);
+                DateTime d = Filetime.FiletimeToDate(value);
                 FirstSection.SetProperty(PropertyIDMap.PID_EDITTIME, Variant.VT_FILETIME, d);
             }
         }

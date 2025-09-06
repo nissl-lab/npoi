@@ -37,6 +37,7 @@ namespace NPOI.HPSF
     /// <a href="mailto:klute@rainer-klute.de">&lt;klute@rainer-klute.de&gt;</a>
     /// @since 2003-02-20 
     /// </summary>
+    [Obsolete]
     public class TypeWriter
     {
 

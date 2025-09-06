@@ -1,17 +1,9 @@
 ﻿namespace NPOI.HPSF
 {
-    public class IndirectPropertyName
+    public class IndirectPropertyName : CodePageString
     {
-        private readonly CodePageString _value;
-
-        public IndirectPropertyName(byte[] data, int offset)
+        internal IndirectPropertyName()
         {
-            _value = new CodePageString(data, offset);
         }
-
-        public int Size
-        {
-            get { return _value.Size; }
-        } 
     }
 }

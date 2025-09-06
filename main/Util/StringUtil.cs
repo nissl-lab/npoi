@@ -45,8 +45,18 @@ namespace NPOI.Util
     /// </summary>
     public static class StringUtil
     {
+        static StringUtil()
+        {
+        #if NETSTANDARD2_1 || NET6_0_OR_GREATER || NETSTANDARD2_0
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            BIG5 = Encoding.GetEncoding("big5");
+            WIN_1252 = Encoding.GetEncoding("windows-1252");
+        #endif 
+        }
         private static Encoding ISO_8859_1 = Encoding.GetEncoding("ISO-8859-1");
         private static Encoding UTF16LE = Encoding.Unicode;
+        public static Encoding BIG5;
+        public static Encoding WIN_1252;
         private static Dictionary<int, int> msCodepointToUnicode;
         /**     
          *  Constructor for the StringUtil object     

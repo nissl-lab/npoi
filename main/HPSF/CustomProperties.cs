@@ -21,7 +21,10 @@ using System.Linq;
 namespace NPOI.HPSF
 {
     using NPOI.HPSF.Wellknown;
+    using NPOI.Util;
     using System;
+    using System.Runtime.InteropServices;
+    using System.Text;
 
     /// <summary>
     /// <para>
@@ -57,7 +60,7 @@ namespace NPOI.HPSF
     /// Dictionary&lt;String,Object&gt; mapping between Names and Custom Property Values.
     /// </para>
     /// </summary>
-    public class CustomProperties : Dictionary<long, CustomProperty>
+    public class CustomProperties : Dictionary<string, object>
     {
         /// <summary>
         /// Maps property IDs to property names and vice versa.
@@ -65,13 +68,16 @@ namespace NPOI.HPSF
         //private TreeBidiDictionary<long, string> dictionary = new TreeBidiDictionary<long, string>();
 
         private readonly BidirectionalDictionary<long, string> dictionary = new();
-
+        /// <summary>
+        /// The custom properties
+        /// </summary>
+        private Dictionary<long,CustomProperty> props = new Dictionary<long,CustomProperty>();
         /// <summary>
         /// Tells whether this object is pure or not.
         /// </summary>
         private bool isPure = true;
 
-
+        private int codepage = -1;
         /// <summary>
         /// Puts a <see cref="CustomProperty"/> into this map. It is assumed that the
         /// <see cref="CustomProperty"/> already has a valid ID. Otherwise use
@@ -97,59 +103,74 @@ namespace NPOI.HPSF
                         ") do not match.");
             }
 
+            checkCodePage(name);
+
             /* Register name and ID in the dictionary. Mapping in both directions is possible. If there is already a  */
             if(dictionary.ContainsValue(name))
             {
                 long k = dictionary.GetKey(name);
                 dictionary.Remove(k);
-                base.Remove(k);
+                props.Remove(k);
             }
 
             dictionary[cp.ID] = name;
 
             /* Put the custom property into this map. */
-            base.Add(cp.ID, cp);
+            props.Add(cp.ID, cp);
             return cp;
         }
 
-
-
         /// <summary>
-        /// <para>
-        /// Puts a <see cref="CustomProperty"/> that has not yet a valid ID into this
-        /// map. The method will allocate a suitable ID for the custom property:
-        /// </para>
-        /// <para>
-        /// If there is already a property with the same name, take the ID
-        /// of that property.
-        /// </para>
-        /// <para>
-        /// Otherwise find the highest ID and use its value plus one.
-        /// </para>
+        /// Adds a named property.
         /// </summary>
-        /// <param name="customProperty">customProperty</param>
-        /// <return>there was already a property with the same name, the old property</return>
-        /// <exception cref="ClassCastException">ClassCastException</exception>
-        private CustomProperty Put(CustomProperty customProperty)
-        {
-            string name = customProperty.Name;
-
-            /* Check whether a property with this name is in the map already. */
-            long? oldId = (name == null|| !dictionary.ContainsValue(name)) ? null : dictionary.GetKey(name);
-            if(oldId != null)
-            {
-                customProperty.ID = (oldId.Value);
+        /// <param name="key">The property's name.</param>
+        /// <param name="value">The property's value.</param>
+        /// <returns>the property that was stored under the specified name before, or
+        /// <c>null</c> if there was no such property before.
+        /// </returns>
+        public object Put(string key, object value) {
+            int variantType;
+            if (value is String) {
+                variantType = Variant.VT_LPSTR;
+            } else if (value is short) {
+                variantType = Variant.VT_I2;
+            } else if (value is int) {
+                variantType = Variant.VT_I4;
+            } else if (value is long) {
+                variantType = Variant.VT_I8;
+            } else if (value is float) {
+                variantType = Variant.VT_R4;
+            } else if (value is Double) {
+                variantType = Variant.VT_R8;
+            } else if (value is Boolean) {
+                variantType = Variant.VT_BOOL;
+            } else if (value is BigInteger
+                && ((BigInteger)value).BitLength() <= 64
+                && ((BigInteger)value).CompareTo(BigInteger.ZERO) >= 0) {
+                variantType = Variant.VT_UI8;
+            } else if (value is DateTime) {
+                variantType = Variant.VT_FILETIME;
+            } else {
+                throw new InvalidOperationException("unsupported datatype - currently String,short,int,Long,Float,Double,Boolean,Bigint(unsigned long),Date can be processed.");
             }
-            else
-            {
-                long lastKey = (dictionary.Count == 0) ? 0 : dictionary.LastKey();
-                customProperty.ID = (Math.Max(lastKey, PropertyIDMap.PID_MAX) + 1);
-            }
-            return this.Put(name, customProperty);
+            Property p = new MutableProperty(-1, variantType, value);
+            return Put(new CustomProperty(p, key));
         }
 
-
-
+        /// <summary>
+        /// Gets a named value from the custom properties - only works for keys of type string 
+        /// </summary>
+        /// <param name="key">the name of the value to Get</param>
+        /// <returns>the value or <c>null</c> if a value with the specified
+        /// name is not found in the custom properties.
+        /// </returns>
+        public object Get(object key)
+        {
+            string name = key.ToString();
+            long? id = dictionary.ContainsValue(name) ? dictionary.GetKey(name) : null;
+            CustomProperty cp = id.HasValue ? (props.TryGetValue(id.Value, out CustomProperty value) ? value : null) : null;
+            return cp?.Value;
+        }
         /// <summary>
         /// Removes a custom property.
         /// </summary>
@@ -161,112 +182,70 @@ namespace NPOI.HPSF
         {
             long id = dictionary.RemoveValue(name);
             CustomProperty cp = null;
-            if(base.ContainsKey(id))
-                cp = this[id];
+            if(props.TryGetValue(id, out CustomProperty value))
+                cp = value;
 
-            base.Remove(id);
+            props.Remove(id);
             return cp;
         }
-
-        /// <summary>
-        /// Adds a named string property.
-        /// </summary>
-        /// <param name="name">The property's name.</param>
-        /// <param name="value">The property's value.</param>
-        /// <return>property that was stored under the specified name before, or
-        /// <c>null</c> if there was no such property before.
-        /// </return>
-        public Object Put(String name, String value)
+        public new int Count => props.Count;
+        public int Size => props.Count;
+        public bool IsEmpty => props.Count == 0;
+        public void Clear()
         {
-            Property p = new Property(-1, Variant.VT_LPWSTR, value);
-            return Put(new CustomProperty(p, name));
+            props.Clear();
         }
-
-        /// <summary>
-        /// Adds a named long property.
-        /// </summary>
-        /// <param name="name">The property's name.</param>
-        /// <param name="value">The property's value.</param>
-        /// <return>property that was stored under the specified name before, or
-        /// <c>null</c> if there was no such property before.
-        /// </return>
-        public Object Put(String name, long value)
+        public override int GetHashCode()
         {
-            Property p = new Property(-1, Variant.VT_I8, value);
-            return Put(new CustomProperty(p, name));
+            return props.GetHashCode();
         }
-
-        /// <summary>
-        /// Adds a named double property.
-        /// </summary>
-        /// <param name="name">The property's name.</param>
-        /// <param name="value">The property's value.</param>
-        /// <return>property that was stored under the specified name before, or
-        /// <c>null</c> if there was no such property before.
-        /// </return>
-        public Object Put(String name, Double value)
-        {
-            Property p = new Property(-1, Variant.VT_R8, value);
-            return Put(new CustomProperty(p, name));
+        public override bool Equals(object obj) {
+            if (!(obj is CustomProperties)) {
+                return false;
+            }
+            return props.Equals(((CustomProperties)obj).props);
         }
-
-        /// <summary>
-        /// Adds a named integer property.
-        /// </summary>
-        /// <param name="name">The property's name.</param>
-        /// <param name="value">The property's value.</param>
-        /// <return>property that was stored under the specified name before, or
-        /// <c>null</c> if there was no such property before.
-        /// </return>
-        public Object Put(String name, int value)
+        public void PutAll(Dictionary<string, object> m)
         {
-            Property p = new Property(-1, Variant.VT_I4, value);
-            return Put(new CustomProperty(p, name));
-        }
-
-        /// <summary>
-        /// Adds a named bool property.
-        /// </summary>
-        /// <param name="name">The property's name.</param>
-        /// <param name="value">The property's value.</param>
-        /// <return>property that was stored under the specified name before, or
-        /// <c>null</c> if there was no such property before.
-        /// </return>
-        public Object Put(String name, Boolean value)
-        {
-            Property p = new Property(-1, Variant.VT_BOOL, value);
-            return Put(new CustomProperty(p, name));
-        }
-
-
-        /// <summary>
-        /// Gets a named value from the custom properties.
-        /// </summary>
-        /// <param name="name">the name of the value to Get</param>
-        /// <return>value or <c>null</c> if a value with the specified
-        /// name is not found in the custom properties.
-        /// </return>
-        public Object Get(String name)
-        {
-            long? id = dictionary.ContainsValue(name) ? dictionary.GetKey(name) : null;
-            CustomProperty cp = id.HasValue ? (base.ContainsKey(id.Value) ? base[id.Value]: null) : null;
-            return cp?.Value;
+            foreach (KeyValuePair<string, object> me in m)
+            {
+                Put(me.Key, me.Value);
+            }
         }
 
         public object this[string name] => Get(name);
 
         /// <summary>
-        /// Adds a named date property.
         /// </summary>
-        /// <param name="name">The property's name.</param>
-        /// <param name="value">The property's value.</param>
-        /// <return>property that was stored under the specified name before, or
-        /// <c>null</c> if there was no such property before.
-        /// </return>
-        public Object Put(String name, DateTime value)
+        /// <returns>the list of properties</returns>
+        public List<CustomProperty> Properties()
         {
-            Property p = new Property(-1, Variant.VT_FILETIME, value);
-            return Put(new CustomProperty(p, name));
+            List<CustomProperty> list = new List<CustomProperty>(props.Count);
+            foreach (long l in dictionary.Keys) {
+                list.Add(props[l]);
+            }
+            return list;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>the list of property values - use <see cref="properties()" /> for the wrapped values</returns>
+        public ICollection<object> Values()
+        {
+            List<object> list = new List<object>(props.Count);
+            foreach (long l in dictionary.Keys)
+            {
+                list.Add(props[l].Value);
+            }
+            return list;
+        }
+        public Dictionary<String, object> entrySet() {
+            Dictionary<String,object> set = new Dictionary<String,object>(props.Count);
+            foreach (KeyValuePair<long,String> se in dictionary)
+            {
+                set.Add(se.Value, props[se.Key].Value);
+            }
+            return set;
         }
 
         /// <summary>
@@ -304,11 +283,13 @@ namespace NPOI.HPSF
         /// <param name="codepage">the codepage</param>
         public void SetCodepage(int codepage)
         {
-            Property p = new Property(PropertyIDMap.PID_CODEPAGE, Variant.VT_I2, codepage);
-            Put(new CustomProperty(p));
+            this.codepage = codepage;
         }
 
-
+        public int GetCodepage() 
+        {
+            return codepage;
+        }
 
         /// <summary>
         /// <para>
@@ -358,17 +339,6 @@ namespace NPOI.HPSF
         }
 
         /// <summary>
-        /// Gets the codepage.
-        /// </summary>
-        /// <return>codepage or -1 if the codepage is undefined.</return>
-        public int GetCodepage()
-        {
-            CustomProperty cp = ContainsKey(PropertyIDMap.PID_CODEPAGE) ? this[PropertyIDMap.PID_CODEPAGE] as CustomProperty
-                : null;
-            return (cp == null) ? -1 : (int) cp.Value;
-        }
-
-        /// <summary>
         /// Tells whether this <see cref="CustomProperties"/> instance is pure or one or
         /// more properties of the underlying low-level property Set has been
         /// dropped.
@@ -382,6 +352,67 @@ namespace NPOI.HPSF
             set => isPure = value;
         }
 
+        /// <summary>
+        /// <para>
+        /// Puts a <see cref="CustomProperty"/> that has not yet a valid ID into this
+        /// map. The method will allocate a suitable ID for the custom property:
+        /// </para>
+        /// <para>
+        /// If there is already a property with the same name, take the ID
+        /// of that property.
+        /// </para>
+        /// <para>
+        /// Otherwise find the highest ID and use its value plus one.
+        /// </para>
+        /// </summary>
+        /// <param name="customProperty">customProperty</param>
+        /// <return>there was already a property with the same name, the old property</return>
+        /// <exception cref="ClassCastException">ClassCastException</exception>
+        private CustomProperty Put(CustomProperty customProperty)
+        {
+            string name = customProperty.Name;
+
+            /* Check whether a property with this name is in the map already. */
+            long? oldId = (name == null|| !dictionary.ContainsValue(name)) ? null : dictionary.GetKey(name);
+            if(oldId != null)
+            {
+                customProperty.ID = (oldId.Value);
+            }
+            else
+            {
+                long lastKey = (dictionary.Count == 0) ? 0 : dictionary.LastKey();
+                long nextKey = Math.Max(lastKey,PropertyIDMap.PID_MAX)+1;
+                customProperty.ID = nextKey;
+            }
+            return this.Put(name, customProperty);
+        }
+
+        private void checkCodePage(String value)
+        {
+            int cp = GetCodepage();
+            if (cp == -1)
+            {
+                cp = Property.DEFAULT_CODEPAGE;
+            }
+            if (cp == CodePageUtil.CP_UNICODE)
+            {
+                return;
+            }
+            String cps = "";
+            try 
+            {
+                cps = CodePageUtil.CodepageToEncoding(cp);
+            } catch (UnsupportedEncodingException e) {
+                //LOG.log(POILogger.ERROR, "Codepage '"+cp+"' can't be found.");
+            }
+            if (!string.IsNullOrEmpty(cps) && CodePageUtil.CanEncode(cps, value))
+                //&& Charset.forName(cps).newEncoder().canEncode(value)) 
+            {
+                return;
+            }
+            //LOG.log(POILogger.DEBUG, "Charset '"+cps+"' can't encode '"+value+"' - switching to unicode.");
+            SetCodepage(CodePageUtil.CP_UNICODE);
+        }
     }
 }
 

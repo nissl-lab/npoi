@@ -15,7 +15,9 @@
    limitations under the License.
 ==================================================================== */
 
+using NPOI.Util;
 using System;
+using System.IO;
 
 namespace NPOI.HPSF
 
@@ -45,8 +47,11 @@ namespace NPOI.HPSF
 
         public SpecialPropertySet(PropertySet ps) : base(ps)
         {
+        }
+        internal SpecialPropertySet(InputStream stream)
+            : base(stream)
+        {
 
-            ;
         }
     }
 }
