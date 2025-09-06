@@ -20,6 +20,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using NPOI.POIFS.Common;
 using NPOI.POIFS.FileSystem;
 using NPOI.POIFS.Storage;
@@ -127,6 +129,25 @@ namespace NPOI.POIFS.Properties
             }
 
             os.Close();
+
+            // Update the start position if needed
+            if (StartBlock != stream.GetStartBlock())
+            {
+                StartBlock = stream.GetStartBlock();
+            }
+        }
+
+        public async Task WriteAsync(NPOIFSStream stream, CancellationToken cancellationToken = default)
+        {
+            using (Stream os = stream.GetOutputStream())
+            {
+                foreach (Property property in _properties)
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+                    if (property != null)
+                        await property.WriteDataAsync(os, cancellationToken).ConfigureAwait(false);
+                }
+            }
 
             // Update the start position if needed
             if (StartBlock != stream.GetStartBlock())

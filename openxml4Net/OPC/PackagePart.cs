@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using NPOI.OpenXml4Net.OPC.Internal;
 using NPOI.OpenXml4Net.Exceptions;
 
@@ -748,6 +750,14 @@ namespace NPOI.OpenXml4Net.OPC
          *             If any exception occur.
          */
         public abstract bool Save(Stream zos);
+
+        /// <summary>
+        /// Save the content of this part asynchronously
+        /// </summary>
+        /// <param name="zos">Output stream to save this part</param>
+        /// <param name="cancellationToken">Cancellation token to observe during the async operation</param>
+        /// <returns>A task that represents the asynchronous save operation</returns>
+        public abstract Task<bool> SaveAsync(Stream zos, CancellationToken cancellationToken = default);
 
         /**
          * Load the content of this part.

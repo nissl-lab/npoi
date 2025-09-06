@@ -21,6 +21,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using NPOI.POIFS.Common;
 using NPOI.POIFS.Dev;
 using NPOI.POIFS.NIO;
@@ -827,6 +829,21 @@ namespace NPOI.POIFS.FileSystem
             _data.CopyTo(stream);
         }
 
+        /// <summary>
+        /// Write the file system asynchronously to the given stream.
+        /// </summary>
+        /// <param name="stream">The stream to write to</param>
+        /// <param name="cancellationToken">Cancellation token to observe during the async operation</param>
+        /// <returns>A task that represents the asynchronous write operation</returns>
+        public async Task WriteFileSystemAsync(Stream stream, CancellationToken cancellationToken = default)
+        {
+            // Have the datasource updated
+            await syncWithDataSourceAsync(cancellationToken).ConfigureAwait(false);
+
+            // Now copy the contents to the stream asynchronously
+            await _data.CopyToAsync(stream, cancellationToken).ConfigureAwait(false);
+        }
+
         /**
          * Has our in-memory objects write their state
          *  to their backing blocks 
@@ -856,6 +873,45 @@ namespace NPOI.POIFS.FileSystem
             // XBats
             foreach (BATBlock bat in _xbat_blocks)
             {
+                ByteBuffer block = GetBlockAt(bat.OurBlockIndex);
+                BlockAllocationTableWriter.WriteBlock(bat, block);
+            }
+        }
+
+        /// <summary>
+        /// Has our in-memory objects write their state to their backing blocks asynchronously.
+        /// Currently implemented as async-over-sync as the underlying operations are memory-based.
+        /// </summary>
+        /// <param name="cancellationToken">Cancellation token to observe during the async operation</param>
+        /// <returns>A task that represents the asynchronous sync operation</returns>
+        private async Task syncWithDataSourceAsync(CancellationToken cancellationToken)
+        {
+            // Mini Stream + SBATs first, as mini-stream details have
+            //  to be stored in the Root Property
+            await _mini_store.SyncWithDataSourceAsync(cancellationToken).ConfigureAwait(false);
+
+            // Properties
+            NPOIFSStream propStream = new NPOIFSStream(this, _header.PropertyStart);
+            _property_table.PreWrite();
+            await _property_table.WriteAsync(propStream, cancellationToken).ConfigureAwait(false);
+            // _header.setPropertyStart has been updated on write ...
+            
+            // HeaderBlock - memory operation
+            HeaderBlockWriter hbw = new HeaderBlockWriter(_header);
+            hbw.WriteBlock(GetBlockAt(-1));
+
+            // BATs - memory operations with cancellation support
+            foreach (BATBlock bat in _bat_blocks)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                ByteBuffer block = GetBlockAt(bat.OurBlockIndex);
+                BlockAllocationTableWriter.WriteBlock(bat, block);
+            }
+            
+            // XBats - memory operations with cancellation support
+            foreach (BATBlock bat in _xbat_blocks)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
                 ByteBuffer block = GetBlockAt(bat.OurBlockIndex);
                 BlockAllocationTableWriter.WriteBlock(bat, block);
             }

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using NPOI.OpenXml4Net.OPC.Internal.Marshallers;
 using ICSharpCode.SharpZipLib.Zip;
 
@@ -102,6 +104,11 @@ public class ZipPackagePart : PackagePart {
 
     public override bool Save(Stream os){
         return new ZipPartMarshaller().Marshall(this, os);
+    }
+
+    public override async Task<bool> SaveAsync(Stream os, CancellationToken cancellationToken = default)
+    {
+        return await new ZipPartMarshaller().MarshallAsync(this, os, cancellationToken).ConfigureAwait(false);
     }
 
 

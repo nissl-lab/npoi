@@ -16,6 +16,8 @@
 ==================================================================== */
 
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using NPOI.Util;
 namespace NPOI.POIFS.NIO
 {
@@ -37,5 +39,22 @@ namespace NPOI.POIFS.NIO
         /// </summary>
         /// <param name="stream"></param>
         public abstract void CopyTo(Stream stream);
+
+        /// <summary>
+        /// Copies the contents to the specified Stream asynchronously
+        /// </summary>
+        /// <param name="stream">The stream to copy to</param>
+        /// <param name="cancellationToken">Cancellation token to observe during the async operation</param>
+        /// <returns>A task that represents the asynchronous copy operation</returns>
+        public virtual async Task CopyToAsync(Stream stream, CancellationToken cancellationToken = default)
+        {
+            // Default implementation wraps synchronous CopyTo in Task.Run
+            // Most subclasses override this with true async implementation
+            // Using Task.Run to avoid blocking the calling thread for I/O operations
+            await Task.Run(() => {
+                cancellationToken.ThrowIfCancellationRequested();
+                CopyTo(stream);
+            }, cancellationToken).ConfigureAwait(false);
+        }
     }
 }

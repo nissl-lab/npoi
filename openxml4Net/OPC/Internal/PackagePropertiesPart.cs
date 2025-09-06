@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using NPOI.OpenXml4Net.Exceptions;
 using NPOI.OpenXml4Net.OPC;
 using NPOI.SS.Util;
@@ -644,6 +646,11 @@ namespace NPOI.OpenXml4Net.OPC.Internal
 
 
         public override bool Save(Stream zos) {
+            throw new InvalidOperationException("Operation not authorized");
+        }
+
+        public override Task<bool> SaveAsync(Stream zos, CancellationToken cancellationToken = default)
+        {
             throw new InvalidOperationException("Operation not authorized");
         }
 

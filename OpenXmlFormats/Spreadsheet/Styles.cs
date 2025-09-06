@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 using NPOI.OpenXml4Net.Util;
@@ -115,6 +117,43 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             if (this.extLst != null)
                 this.extLst.Write(sw, "extLst");
             sw.Write("</styleSheet>");
+        }
+
+        internal async Task WriteAsync(StreamWriter sw, CancellationToken cancellationToken = default)
+        {
+            await sw.WriteAsync("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>").ConfigureAwait(false);
+            await sw.WriteAsync("<styleSheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\"").ConfigureAwait(false);
+            await sw.WriteAsync(" xmlns:mc=\"http://schemas.openxmlformats.org/markup-compatibility/2006\" mc:Ignorable=\"x14ac x16r2 xr\" xmlns:x14ac=\"http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac\" xmlns:x16r2=\"http://schemas.microsoft.com/office/spreadsheetml/2015/02/main\" xmlns:xr=\"http://schemas.microsoft.com/office/spreadsheetml/2014/revision\"").ConfigureAwait(false);
+            await sw.WriteAsync(">").ConfigureAwait(false);
+
+            cancellationToken.ThrowIfCancellationRequested();
+
+            // For now, use synchronous writes for child elements 
+            // This can be further optimized by adding async methods to child elements
+            if (this.numFmts != null)
+                this.numFmts.Write(sw, "numFmts");
+            if (this.fonts != null)
+                this.fonts.Write(sw, "fonts");
+            if (this.fills != null)
+                this.fills.Write(sw, "fills");
+            if (this.borders != null)
+                this.borders.Write(sw, "borders");
+            if (this.cellStyleXfs != null)
+                this.cellStyleXfs.Write(sw, "cellStyleXfs");
+            if (this.cellXfs != null)
+                this.cellXfs.Write(sw, "cellXfs");
+            if (this.cellStyles != null)
+                this.cellStyles.Write(sw, "cellStyles");
+            if (this.dxfs != null)
+                this.dxfs.Write(sw, "dxfs");
+            if (this.tableStyles != null)
+                this.tableStyles.Write(sw, "tableStyles");
+            if (this.colors != null)
+                this.colors.Write(sw, "colors");
+            if (this.extLst != null)
+                this.extLst.Write(sw, "extLst");
+
+            await sw.WriteAsync("</styleSheet>").ConfigureAwait(false);
         }
 
         public CT_Borders AddNewBorders()

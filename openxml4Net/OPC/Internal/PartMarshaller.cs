@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace NPOI.OpenXml4Net.OPC.Internal
 {
@@ -27,5 +29,14 @@ namespace NPOI.OpenXml4Net.OPC.Internal
 	     *             methods.
 	     */
         bool Marshall(PackagePart part, Stream out1);
+
+        /// <summary>
+        /// Save the content of the package in the stream asynchronously
+        /// </summary>
+        /// <param name="part">Part to marshall</param>
+        /// <param name="out1">The output stream into which the part will be marshall</param>
+        /// <param name="cancellationToken">Cancellation token to observe during the async operation</param>
+        /// <returns>A task that represents the asynchronous marshall operation</returns>
+        Task<bool> MarshallAsync(PackagePart part, Stream out1, CancellationToken cancellationToken = default);
     }
 }

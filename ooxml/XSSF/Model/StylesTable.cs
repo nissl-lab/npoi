@@ -19,6 +19,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Xml;
 using NPOI.OpenXml4Net.OPC;
 using NPOI.OpenXmlFormats.Spreadsheet;
@@ -811,6 +813,122 @@ namespace NPOI.XSSF.Model
             doc.Save(out1);
         }
 
+        public async Task WriteToAsync(Stream out1, CancellationToken cancellationToken = default)
+        {
+            // Work on the current one
+            // Need to do this, as we don't handle
+            //  all the possible entries yet
+            CT_Stylesheet styleSheet = doc.GetStyleSheet();
+
+            // Formats
+            CT_NumFmts formats = new CT_NumFmts();
+            formats.count = (uint)numberFormats.Count;
+
+            foreach (KeyValuePair<short, String > entry in numberFormats)
+            {
+                CT_NumFmt ctFmt = formats.AddNewNumFmt();
+                ctFmt.numFmtId = (uint)entry.Key;
+                ctFmt.formatCode = entry.Value;
+            }
+
+            styleSheet.numFmts = formats;
+
+            // Fonts
+            CT_Fonts ctFonts = styleSheet.fonts;
+            if (ctFonts == null)
+                ctFonts = new CT_Fonts();
+            ctFonts.count = (uint)fonts.Count;
+            if (ctFonts.count > 0)
+                ctFonts.countSpecified = true;
+            List<CT_Font> ctfnt = new List<CT_Font>(fonts.Count);
+
+            foreach (XSSFFont f in fonts)
+                ctfnt.Add(f.GetCTFont());
+            ctFonts.SetFontArray(ctfnt);
+            styleSheet.fonts = (ctFonts);
+
+            // Fills
+            CT_Fills ctFills = styleSheet.fills;
+            if (ctFills == null)
+            {
+                ctFills = new CT_Fills();
+            }
+            ctFills.count = (uint)fills.Count;
+            List<CT_Fill> ctf = new List<CT_Fill>(fills.Count);
+            
+            foreach (XSSFCellFill f in fills)
+                ctf.Add( f.GetCTFill());
+            ctFills.SetFillArray(ctf);
+            if (ctFills.count > 0)
+                ctFills.countSpecified = true;
+            styleSheet.fills = ctFills;
+
+            // Borders
+            CT_Borders ctBorders = styleSheet.borders;
+            if (ctBorders == null)
+            {
+                ctBorders = new CT_Borders();
+            }
+            ctBorders.count = (uint)borders.Count;
+            List<CT_Border> ctb = new List<CT_Border>(borders.Count);
+            foreach (XSSFCellBorder b in borders) 
+                ctb.Add(b.GetCTBorder());
+            
+            ctBorders.SetBorderArray(ctb);
+            styleSheet.borders = ctBorders;
+
+            // Xfs
+            if (xfs.Count > 0)
+            {
+                CT_CellXfs ctXfs = styleSheet.cellXfs;
+                if (ctXfs == null)
+                {
+                    ctXfs = new CT_CellXfs();
+                }
+                ctXfs.count = (uint)xfs.Count;
+                if (ctXfs.count > 0)
+                    ctXfs.countSpecified = true;
+                ctXfs.xf = xfs;
+
+                styleSheet.cellXfs = (ctXfs);
+            }
+
+            // Style xfs
+            if (styleXfs.Count > 0)
+            {
+                CT_CellStyleXfs ctSXfs = styleSheet.cellStyleXfs;
+                if (ctSXfs == null)
+                {
+                    ctSXfs = new CT_CellStyleXfs();
+                }
+                ctSXfs.count = (uint)(styleXfs.Count);
+                if (ctSXfs.count > 0)
+                    ctSXfs.countSpecified = true;
+                ctSXfs.xf = styleXfs;
+
+                styleSheet.cellStyleXfs = (ctSXfs);
+            }
+
+            // Style dxfs
+            if (dxfs.Count > 0)
+            {
+                CT_Dxfs ctDxfs = styleSheet.dxfs;
+                if (ctDxfs == null)
+                {
+                    ctDxfs = new CT_Dxfs();
+                }
+                ctDxfs.count = (uint)dxfs.Count;
+                if (ctDxfs.count > 0)
+                    ctDxfs.countSpecified = true;
+                ctDxfs.dxf = dxfs;
+
+                styleSheet.dxfs = (ctDxfs);
+            }
+
+            // Save asynchronously
+            await doc.SaveAsync(out1, cancellationToken).ConfigureAwait(false);
+        }
+
 
         protected internal override void Commit()
         {
@@ -818,6 +936,15 @@ namespace NPOI.XSSF.Model
             Stream out1 = part.GetOutputStream();
             WriteTo(out1);
             out1.Close();
+        }
+
+        protected internal override async Task CommitAsync(CancellationToken cancellationToken = default)
+        {
+            PackagePart part = GetPackagePart();
+            using (Stream out1 = part.GetOutputStream())
+            {
+                await WriteToAsync(out1, cancellationToken).ConfigureAwait(false);
+            }
         }
 
         private void Initialize()
