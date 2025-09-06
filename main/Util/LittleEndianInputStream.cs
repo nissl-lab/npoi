@@ -87,9 +87,26 @@ namespace NPOI.Util
             Seek(markPos - Position, SeekOrigin.Current);
         }
 
+        /// <summary>
+        /// <para>
+        /// Skips over and discards <c>n</c> bytes of data from the
+        /// input stream. The <c>skip</c> method may, for a variety of
+        /// reasons, end up skipping over some smaller number of bytes,
+        /// possibly <c>0</c>. The actual number of bytes skipped is
+        /// returned.
+        /// </para>
+        /// <para>
+        /// This method simply performs <c>in.Skip(n)</c>.
+        /// </para>
+        /// </summary>
+        /// <param name="n">  the number of bytes to be skipped.</param>
+        /// <return>the actual number of bytes skipped.</return>
+        /// <exception cref="IOException"> if <c>in.Skip(n)</c> throws an IOException.</exception>
         public override long Skip(long n)
         {
-            return Seek(n, SeekOrigin.Current);
+            var pos = input.Position;
+            var newPos = Seek(n, SeekOrigin.Current);
+            return newPos - pos;
         }
 
         public override int Available()

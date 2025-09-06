@@ -198,7 +198,7 @@ namespace NPOI.XSSF.Extractor
         /// Processes the given sheet
         /// </summary>
         public void ProcessSheet(
-                SheetContentsHandler sheetContentsExtractor,
+                ISheetContentsHandler sheetContentsExtractor,
                 StylesTable styles,
                 CommentsTable comments,
                 ReadOnlySharedStringsTable strings,
@@ -297,7 +297,7 @@ namespace NPOI.XSSF.Extractor
             
         }
 
-        static void ProcessShapes(List<XSSFShape> shapes, StringBuilder text)
+        public static void ProcessShapes(List<XSSFShape> shapes, StringBuilder text)
         {
             if(shapes == null)
             {
@@ -326,7 +326,7 @@ namespace NPOI.XSSF.Extractor
             base.Close();
         }
 
-        protected class SheetTextExtractor : SheetContentsHandler
+        protected class SheetTextExtractor : ISheetContentsHandler
         {
             private  StringBuilder output;
             private bool firstCellOfRow;

@@ -180,7 +180,7 @@ namespace NPOI.XSSF.EventUserModel
         ///  from the Iterator. It's up to you to close the
         ///  InputStreams when done with each one.
         /// </summary>
-        public IEnumerator<Stream> GetSheetsData()
+        public virtual IEnumerator<Stream> GetSheetsData()
         {
 
             return new SheetIterator(workbookPart);
@@ -244,7 +244,7 @@ namespace NPOI.XSSF.EventUserModel
                 }
             }
 
-            static List<XSSFSheetRef> CreateSheetIteratorFromWB(PackagePart wb)
+            public virtual List<XSSFSheetRef> CreateSheetIteratorFromWB(PackagePart wb)
             {
                 XMLSheetRefReader xmlSheetRefReader = new XMLSheetRefReader();
                 NSAX.AElfred.SAXDriver xmlReader;
