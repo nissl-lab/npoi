@@ -48,7 +48,34 @@ namespace NPOI.SS.Util
         private const double MAXIMUM_ROW_HEIGHT_IN_POINTS = 409.5;
         private const double POINTS_PER_INCH = 72.0;
         private const double HEIGHT_POINT_CORRECTION = 1.33;
-        private static readonly int SixLaborsFontsMajorVersion = typeof(SixLabors.Fonts.Font).Assembly.GetName().Version.Major;
+        #if NET6_0_OR_GREATER
+            private const int SixLaborsFontsMajorVersion = 2; // SixLabors.Fonts 2.x for .NET 6+
+        #else
+            private const int SixLaborsFontsMajorVersion = 1; // SixLabors.Fonts 1.x for older frameworks
+        #endif
+        
+        /// <summary>
+        /// Helper method to calculate cell padding width based on SixLabors.Fonts version.
+        /// For version 2.x and higher, adds padding per column. For version 1.x, no additional padding.
+        /// </summary>
+        /// <param name="majorVersion">The major version of SixLabors.Fonts library</param>
+        /// <param name="numberOfColumns">The number of columns to calculate padding for</param>
+        /// <returns>The calculated padding in pixels</returns>
+        private static double GetCellPaddingForFontVersion(int majorVersion, int numberOfColumns)
+        {
+            return majorVersion >= 2 ? numberOfColumns * CELL_PADDING_PIXEL : 0;
+        }
+
+        /// <summary>
+        /// Helper method to get width correction factor based on SixLabors.Fonts version.
+        /// </summary>
+        /// <param name="majorVersion">The major version of SixLabors.Fonts library</param>
+        /// <returns>The width correction factor</returns>
+        private static double GetWidthCorrectionForFontVersion(int majorVersion)
+        {
+            return majorVersion >= 2 ? 1.0 : WIDTH_CORRECTION;
+        }
+
         // /**
         // * This is the multiple that the font height is scaled by when determining the
         // * boundary of rotated text.
@@ -583,19 +610,16 @@ namespace NPOI.SS.Util
             {
                 // Account for merged pixel width
 
-                // check version of SixLabors.Fonts for calculation
-                if (SixLaborsFontsMajorVersion >= 2)
-                {
-                    var numberOfColumns = lastCol - firstCol + 1;
-                    wrapWidthPixels = GetMergedPixelWidth(cell.Sheet, firstRow, firstCol, lastRow, lastCol) + numberOfColumns * CELL_PADDING_PIXEL;
-                }
-                else
-                {
-                    wrapWidthPixels = GetMergedPixelWidth(cell.Sheet, firstRow, firstCol, lastRow, lastCol);
-                }
+                // Calculate merged width with version-specific padding
+                var numberOfColumns = lastCol - firstCol + 1;
+                var mergedPixelWidth = GetMergedPixelWidth(cell.Sheet, firstRow, firstCol, lastRow, lastCol);
+                var versionPadding = GetCellPaddingForFontVersion(SixLaborsFontsMajorVersion, numberOfColumns);
+                wrapWidthPixels = mergedPixelWidth + versionPadding;
             }
 
-            wrapWidthPixels = wrapWidthPixels <= 0 ? DEFAULT_PADDING_PIXEL : wrapWidthPixels; // fallback
+            // Fallback to DEFAULT_PADDING_PIXEL when calculated width is invalid (zero or negative)
+            // This can occur when column width calculations fail or return invalid dimensions
+            wrapWidthPixels = wrapWidthPixels <= 0 ? DEFAULT_PADDING_PIXEL : wrapWidthPixels;
             wrapWidthPixels = Math.Ceiling(wrapWidthPixels);
 
             var cacheOptions = GetTextOptions(font);
@@ -951,7 +975,7 @@ namespace NPOI.SS.Util
 
             // --- Final Calculation ---
             int padding = CELL_PADDING_PIXEL;
-            double correction = SixLaborsFontsMajorVersion >= 2 ? 1.0 : WIDTH_CORRECTION;
+            double correction = GetWidthCorrectionForFontVersion(SixLaborsFontsMajorVersion);
             int safeColspan = Math.Max(colspan, 1); // Avoid division by zero.
 
             double pixelWidthWithPadding = roundedWidth + padding;
@@ -1054,15 +1078,10 @@ namespace NPOI.SS.Util
 
             // var ver = typeof(SixLabors.Fonts.Font).Assembly.GetName().Version; // e.g., 2.1.3.0 vs 1.0.0.0
 
-            if (SixLaborsFontsMajorVersion >= 2)
-            {
-                var n = region.LastColumn - region.FirstColumn + 1;
-                mergedWidthPx = Math.Ceiling(Math.Max(mergedWidthPx + n * CELL_PADDING_PIXEL, DEFAULT_PADDING_PIXEL));
-            }
-            else
-            {
-                mergedWidthPx = Math.Ceiling(Math.Max(mergedWidthPx, DEFAULT_PADDING_PIXEL));
-            }
+            // Apply version-specific padding for merged cells
+            var numberOfColumns = region.LastColumn - region.FirstColumn + 1;
+            var versionPadding = GetCellPaddingForFontVersion(SixLaborsFontsMajorVersion, numberOfColumns);
+            mergedWidthPx = Math.Ceiling(Math.Max(mergedWidthPx + versionPadding, DEFAULT_PADDING_PIXEL));
 
             // use the FULL region span (rows + columns), not just the TL row.
             double totalPx = MeasureWrapTextHeight(
