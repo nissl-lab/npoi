@@ -78,7 +78,7 @@ namespace NPOI.XSSF.EventUserModel
         /// <summary>
         /// Where our text is going
         /// </summary>
-        private  SheetContentsHandler output;
+        private  ISheetContentsHandler output;
 
         // Set when V start element is seen
         private bool vIsOpen;
@@ -118,7 +118,7 @@ namespace NPOI.XSSF.EventUserModel
                 StylesTable styles,
                 CommentsTable comments,
                 ReadOnlySharedStringsTable strings,
-                SheetContentsHandler sheetContentsHandler,
+                ISheetContentsHandler sheetContentsHandler,
                 DataFormatter dataFormatter,
                 bool formulasNotResults)
         {
@@ -140,7 +140,7 @@ namespace NPOI.XSSF.EventUserModel
         public XSSFSheetXMLHandler(
                 StylesTable styles,
                 ReadOnlySharedStringsTable strings,
-                SheetContentsHandler sheetContentsHandler,
+                ISheetContentsHandler sheetContentsHandler,
                 DataFormatter dataFormatter,
                 bool formulasNotResults)
                  : this(styles, null, strings, sheetContentsHandler, dataFormatter, formulasNotResults)
@@ -156,7 +156,7 @@ namespace NPOI.XSSF.EventUserModel
         public XSSFSheetXMLHandler(
                 StylesTable styles,
                 ReadOnlySharedStringsTable strings,
-                SheetContentsHandler sheetContentsHandler,
+                ISheetContentsHandler sheetContentsHandler,
                 bool formulasNotResults)
                  : this(styles, strings, sheetContentsHandler, new DataFormatter(), formulasNotResults)
         {
@@ -586,7 +586,7 @@ namespace NPOI.XSSF.EventUserModel
         /// You need to implement this to handle the results
         ///  of the sheet parsing.
         /// </summary>
-        public interface SheetContentsHandler
+        public interface ISheetContentsHandler
         {
             /// <summary>
             /// A row with the (zero based) row number has started */
