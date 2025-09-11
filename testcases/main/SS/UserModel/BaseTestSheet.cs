@@ -1429,6 +1429,15 @@ namespace TestCases.SS.UserModel
             wb2.Close();
         }
 
+        protected static void AssertResultIsAproximatelyCorrect(double expected, double mesured)
+        {
+            double wiggleRoom = 0.095;
+            double lowerBound = expected * (1 - wiggleRoom);
+            double upperBound = expected * (1 + wiggleRoom);
+            Assert.True(lowerBound <= mesured, $"Lower bound is {lowerBound}, mesured {mesured} instead");
+            Assert.True(upperBound >= mesured, $"Upper bound is {upperBound}, mesured {mesured} instead");
+        }
+
     }
 
 }
