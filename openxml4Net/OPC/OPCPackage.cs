@@ -1,14 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.IO;
-using NPOI.OpenXml4Net.Exceptions;
-using NPOI.OpenXml4Net.OPC.Internal.Marshallers;
+﻿using NPOI.OpenXml4Net.Exceptions;
 using NPOI.OpenXml4Net.OPC.Internal;
+using NPOI.OpenXml4Net.OPC.Internal.Marshallers;
 using NPOI.OpenXml4Net.OPC.Internal.Unmarshallers;
-using NPOI.Util;
-using System.Text.RegularExpressions;
 using NPOI.OpenXml4Net.Util;
+using NPOI.Util;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace NPOI.OpenXml4Net.OPC
 {
@@ -1677,6 +1679,18 @@ namespace NPOI.OpenXml4Net.OPC
             }
         }
 
+        public async Task SaveAsync(string path, CancellationToken cancellationToken)
+        {
+            if(path == null)
+                throw new ArgumentException("targetFile");
+
+            this.ThrowExceptionIfReadOnly();
+            using(FileStream fos = new FileStream(path, FileMode.OpenOrCreate))
+            {
+                await this.SaveAsync(fos, cancellationToken);
+            }
+        }
+
         /**
          * Save the document in the specified output stream.
          * 
@@ -1688,6 +1702,12 @@ namespace NPOI.OpenXml4Net.OPC
         {
             ThrowExceptionIfReadOnly();
             this.SaveImpl(outputStream);
+        }
+
+        public async Task SaveAsync(Stream outputStream, CancellationToken cancellationToken= default)
+        {
+            ThrowExceptionIfReadOnly();
+            await this.SaveImplAsync(outputStream, cancellationToken);
         }
 
         /**
@@ -1736,6 +1756,9 @@ namespace NPOI.OpenXml4Net.OPC
          *            The output stream use to save this package.
          */
         protected abstract void SaveImpl(Stream outputStream);
+
+        protected abstract Task SaveImplAsync(Stream outputStream, CancellationToken caltoken);
+
 
         /**
          * Get the package part mapped to the specified URI.

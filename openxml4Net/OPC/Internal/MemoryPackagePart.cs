@@ -5,6 +5,8 @@ using System.IO;
 using NPOI.OpenXml4Net.OPC.Internal.Marshallers;
 using NPOI.OpenXml4Net.Exceptions;
 using NPOI.Util;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace NPOI.OpenXml4Net.OPC.Internal
 {
@@ -91,6 +93,11 @@ namespace NPOI.OpenXml4Net.OPC.Internal
         public override bool Save(Stream os)
         {
             return new ZipPartMarshaller().Marshall(this, os);
+        }
+
+        public override async Task<bool> SaveAsync(Stream os, CancellationToken cancellationToken = default)
+        {
+            return await new ZipPartMarshaller().MarshallAsync(this, os, cancellationToken);
         }
 
         public override bool Load(Stream ios)
