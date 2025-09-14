@@ -1819,6 +1819,34 @@ namespace NPOI.XWPF.UserModel
             return newRun;
         }
 
+        public void ChangeOrientation(ST_PageOrientation orientation)
+        {
+            var pPr = paragraph.IsSetPPr()
+            ? paragraph.pPr
+            : paragraph.AddNewPPr();
+
+            // Create <w:sectPr> inside <w:pPr>
+            var sectPr = pPr.IsSetSectPr()
+            ? pPr.sectPr
+            : pPr.AddNewSectPr();
+
+            var pageSize = sectPr.IsSetPgSz()
+            ? sectPr.pgSz
+            : sectPr.AddNewPgSz();
+
+            pageSize.orient = orientation;
+            if(orientation== ST_PageOrientation.landscape)
+            {
+                pageSize.w = 842 * 20;
+                pageSize.h = 595 * 20;
+            }
+            else
+            {
+                pageSize.h = 842 * 20;
+                pageSize.w = 595 * 20;
+            }
+        }
+
         private bool IsTheOnlyCTHyperlinkInRuns(XWPFHyperlinkRun run)
         {
             CT_Hyperlink1 ctHyperlink = run.GetCTHyperlink();
