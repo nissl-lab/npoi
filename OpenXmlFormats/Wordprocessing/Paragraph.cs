@@ -1211,10 +1211,23 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.numPr = new CT_NumPr();
             return this.numPr;
         }
+        public CT_SectPr AddNewSectPr()
+        {
+            if(this.sectPrField==null)
+            { 
+                this.sectPrField = new CT_SectPr();
+            }
+            return this.sectPrField;
+        }
 
         public bool IsSetSpacing()
         {
             return this.spacing != null;
+        }
+
+        public bool IsSetSectPr()
+        { 
+            return this.sectPr != null;
         }
     }
 
@@ -3028,6 +3041,18 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         public bool IsSetTitlePg()
         {
             return this.titlePgField != null;
+        }
+
+        public bool IsSetPgSz()
+        { 
+            return this.pgSzField != null;
+        }
+
+        public CT_PageSz AddNewPgSz()
+        {
+            if(this.pgSzField == null)
+                this.pgSzField = new CT_PageSz();
+            return this.pgSzField;
         }
 
         public CT_OnOff AddNewTitlePg()
