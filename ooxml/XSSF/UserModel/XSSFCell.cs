@@ -674,7 +674,10 @@ namespace NPOI.XSSF.UserModel
             f.Value = formula;
             _cell.f= (f);
             if (_cell.IsSetV()) _cell.unsetV();
+
+            CellUtil.TryInheritDateFormatFromFormula(this, formula);
         }
+
 
         /// <summary>
         /// Returns zero-based column index of this cell
@@ -843,6 +846,12 @@ namespace NPOI.XSSF.UserModel
                     return null;
                 }
 
+                // Only return DateCellValue for properly date-formatted cells
+                if (!DateUtil.IsCellDateFormatted(this))
+                {
+                    return null;
+                }
+
                 double value = NumericCellValue;
                 bool date1904 = Sheet.Workbook.IsDate1904();
                 return DateUtil.GetJavaDate(value, date1904);
@@ -893,6 +902,7 @@ namespace NPOI.XSSF.UserModel
         {
             bool date1904 = Sheet.Workbook.IsDate1904();
             SetCellValue(DateUtil.GetExcelDate(value, date1904));
+            CellUtil.ApplyDateFormatting(this);
         }
 
 #if NET6_0_OR_GREATER

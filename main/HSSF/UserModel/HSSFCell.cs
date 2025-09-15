@@ -514,6 +514,7 @@ namespace NPOI.HSSF.UserModel
         public void SetCellValue(DateTime value)
         {
             SetCellValue(DateUtil.GetExcelDate(value, this.book.IsDate1904()));
+            CellUtil.ApplyDateFormatting(this);
         }
 
 #if NET6_0_OR_GREATER
@@ -769,7 +770,10 @@ namespace NPOI.HSSF.UserModel
                 agg.XFIndex = ((short)0x0f);
             }
             agg.SetParsedExpression(ptgs);
+
+            CellUtil.TryInheritDateFormatFromFormula(this, formula);
         }
+
 
         /// <summary>
         /// Get the value of the cell as a number.  For strings we throw an exception.
@@ -861,6 +865,13 @@ namespace NPOI.HSSF.UserModel
                 {
                     return null;
                 }
+
+                // Only return DateCellValue for properly date-formatted cells
+                if (!DateUtil.IsCellDateFormatted(this))
+                {
+                    return null;
+                }
+
                 double value = this.NumericCellValue;
                 return DateUtil.GetJavaDate(value, book.IsDate1904());
             }

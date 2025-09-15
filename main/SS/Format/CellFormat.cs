@@ -292,7 +292,11 @@ namespace NPOI.SS.Format
                     {
                         if (DateUtil.IsValidExcelDate(value))
                         {
-                            return Apply((DateTime)c.DateCellValue, value);
+                            // For CellFormat, we should interpret numeric values as dates
+                            // when the format explicitly requires date formatting, regardless of cell's
+                            // intrinsic date formatting. Convert the numeric value to DateTime manually.
+                            DateTime dateValue = DateUtil.GetJavaDate(value, false); // Assume 1900 date system
+                            return Apply(dateValue, value);
                         }
                         else
                         {
