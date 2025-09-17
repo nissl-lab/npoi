@@ -72,15 +72,18 @@ namespace NPOI.XSSF.UserModel
             // to avoid re-creating the XSSFEvaluationSheet each time a new cell is evaluated
             // EvaluationWorkbooks make not guarantee to synchronize changes made to
             // the underlying workbook after the EvaluationWorkbook is created.
-            if (_sheetCache == null)
+            int numberOfSheets = _uBook.NumberOfSheets;
+
+            // Rebuild cache if number of sheets has changed (new sheets added)
+            if (_sheetCache == null || _sheetCache.Length != numberOfSheets)
             {
-                int numberOfSheets = _uBook.NumberOfSheets;
                 _sheetCache = new XSSFEvaluationSheet[numberOfSheets];
                 for (int i = 0; i < numberOfSheets; i++)
                 {
                     _sheetCache[i] = new XSSFEvaluationSheet(_uBook.GetSheetAt(i));
                 }
             }
+
             if (sheetIndex < 0 || sheetIndex >= _sheetCache.Length)
             {
                 // do this to reuse the out-of-bounds logic and message from XSSFWorkbook

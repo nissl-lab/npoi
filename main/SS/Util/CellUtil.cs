@@ -20,6 +20,7 @@ namespace NPOI.SS.Util
     using System;
     using System.Collections.Generic;
     using NPOI.SS.UserModel;
+    using NPOI.SS.Util;
     using NPOI.Util;
 
 
@@ -924,6 +925,222 @@ namespace NPOI.SS.Util
         private static UnicodeMapping um(String entityName, String resolvedValue)
         {
             return new UnicodeMapping(entityName, resolvedValue);
+        }
+
+        // Compiled regex patterns for performance optimization
+        private static readonly System.Text.RegularExpressions.Regex SimpleRefPattern =
+            new System.Text.RegularExpressions.Regex(@"^([^!]+!)?([A-Z]+[0-9]+)$",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase | System.Text.RegularExpressions.RegexOptions.Compiled);
+
+        private static readonly System.Text.RegularExpressions.Regex DateArithmeticPattern =
+            new System.Text.RegularExpressions.Regex(@"^([^!]*!)?([A-Z]+[0-9]+)\s*[\+\-]\s*([0-9]+(?:\.[0-9]+)?)$",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase | System.Text.RegularExpressions.RegexOptions.Compiled);
+
+        /// <summary>
+        /// Inherit date formatting from referenced cells when appropriate,
+        /// mimicking Excel's behavior for date-preserving formulas.
+        /// </summary>
+        /// <param name="cell">The formula cell to apply inheritance to</param>
+        /// <param name="formula">The formula string to analyze</param>
+        public static void TryInheritDateFormatFromFormula(ICell cell, string formula)
+        {
+            if (string.IsNullOrEmpty(formula) || cell == null)
+                return;
+
+            try
+            {
+                // Simple cell reference pattern: A1, Sheet1!A1, etc.
+                var simpleRefMatch = SimpleRefPattern.Match(formula);
+
+                if (simpleRefMatch.Success)
+                {
+                    // Simple reference like =A1 - inherit format from referenced cell
+                    InheritFormatFromCell(cell, simpleRefMatch.Groups[1].Value?.TrimEnd('!'), simpleRefMatch.Groups[2].Value);
+                    return;
+                }
+
+                // Date arithmetic patterns: =A1+5, =A1-5 (where A1 is date + number is days)
+                var dateArithmeticMatch = DateArithmeticPattern.Match(formula);
+
+                if (dateArithmeticMatch.Success)
+                {
+                    // Check if the cell reference is date-formatted
+                    string sheetName = dateArithmeticMatch.Groups[1].Value?.TrimEnd('!');
+                    string cellRef = dateArithmeticMatch.Groups[2].Value;
+                    if (IsCellDateFormatted(cell, sheetName, cellRef))
+                    {
+                        InheritFormatFromCell(cell, sheetName, cellRef);
+                    }
+                    return;
+                }
+
+                // Note: We don't inherit for Date - Date operations (they should remain numeric)
+                // or complex functions like SUM, as these typically produce numeric results
+            }
+            catch
+            {
+                // If format inheritance fails for any reason, just continue without it
+                // This ensures we don't break existing functionality
+            }
+        }
+
+        /// <summary>
+        /// Check if a specific cell reference is date-formatted
+        /// </summary>
+        /// <param name="contextCell">The context cell (for accessing workbook/sheet)</param>
+        /// <param name="sheetName">Target sheet name (null for current sheet)</param>
+        /// <param name="cellRef">Cell reference like "A1"</param>
+        /// <returns>True if the referenced cell is date-formatted</returns>
+        public static bool IsCellDateFormatted(ICell contextCell, string sheetName, string cellRef)
+        {
+            if (contextCell?.Sheet?.Workbook == null)
+                return false;
+
+            try
+            {
+                ISheet targetSheet;
+                if (string.IsNullOrEmpty(sheetName))
+                {
+                    targetSheet = contextCell.Sheet;
+                }
+                else
+                {
+                    // Use try-catch for sheet lookup to handle cases where sheet doesn't exist yet
+                    targetSheet = null;
+                    try
+                    {
+                        targetSheet = contextCell.Sheet.Workbook.GetSheet(sheetName);
+                    }
+                    catch (Exception)
+                    {
+                        // Sheet doesn't exist or other issue, return false
+                        return false;
+                    }
+                }
+
+                if (targetSheet != null)
+                {
+                    var cellAddress = new CellAddress(cellRef);
+                    IRow targetRow = targetSheet.GetRow(cellAddress.Row);
+                    if (targetRow != null)
+                    {
+                        ICell targetCell = targetRow.GetCell(cellAddress.Column);
+                        if (targetCell != null)
+                        {
+                            return DateUtil.IsCellDateFormatted(targetCell);
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                // If anything fails, assume not date-formatted
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Inherit date formatting from a referenced cell
+        /// </summary>
+        /// <param name="targetCell">The cell to apply formatting to</param>
+        /// <param name="sheetName">Source sheet name (null for current sheet)</param>
+        /// <param name="cellRef">Source cell reference like "A1"</param>
+        private static void InheritFormatFromCell(ICell targetCell, string sheetName, string cellRef)
+        {
+            if (targetCell?.Sheet?.Workbook == null)
+                return;
+
+            try
+            {
+                ISheet sourceSheet;
+                if (string.IsNullOrEmpty(sheetName))
+                {
+                    sourceSheet = targetCell.Sheet;
+                }
+                else
+                {
+                    // Use try-catch for sheet lookup to handle cases where sheet doesn't exist yet
+                    sourceSheet = null;
+                    try
+                    {
+                        sourceSheet = targetCell.Sheet.Workbook.GetSheet(sheetName);
+                    }
+                    catch (Exception)
+                    {
+                        // Sheet doesn't exist or other issue, skip inheritance
+                        return;
+                    }
+                }
+
+                if (sourceSheet != null)
+                {
+                    var cellAddress = new CellAddress(cellRef);
+                    IRow sourceRow = sourceSheet.GetRow(cellAddress.Row);
+                    if (sourceRow != null)
+                    {
+                        ICell sourceCell = sourceRow.GetCell(cellAddress.Column);
+                        if (sourceCell != null && DateUtil.IsCellDateFormatted(sourceCell))
+                        {
+                            // Clone the date formatting from the source cell
+                            targetCell.CellStyle = sourceCell.CellStyle;
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                // If inheritance fails, continue without it
+            }
+        }
+
+        /// <summary>
+        /// Apply automatic date formatting when setting DateTime values.
+        /// This method reuses existing date styles for performance optimization.
+        /// </summary>
+        /// <param name="cell">The cell to apply date formatting to</param>
+        public static void ApplyDateFormatting(ICell cell)
+        {
+            if (cell?.Sheet?.Workbook == null)
+                return;
+
+            // Only apply if no custom format is already set
+            if (cell.CellStyle.DataFormat != 0)
+                return;
+
+            try
+            {
+                // Use built-in format 22 which is "m/d/yy h:mm" (ShortDateAndTime)
+                short dateFormat = 22;
+                IWorkbook workbook = cell.Sheet.Workbook;
+
+                // Reuse existing date style or create one if none exists
+                ICellStyle dateStyle = null;
+
+                // Look for existing style with this date format
+                for (int i = 0; i < workbook.NumCellStyles; i++)
+                {
+                    ICellStyle existingStyle = workbook.GetCellStyleAt(i);
+                    if (existingStyle.DataFormat == dateFormat)
+                    {
+                        dateStyle = existingStyle;
+                        break;
+                    }
+                }
+
+                // Create new style only if none found
+                if (dateStyle == null)
+                {
+                    dateStyle = workbook.CreateCellStyle();
+                    dateStyle.DataFormat = dateFormat;
+                }
+
+                cell.CellStyle = dateStyle;
+            }
+            catch
+            {
+                // If date formatting fails, continue without it
+                // This ensures we don't break existing functionality
+            }
         }
     }
 }
