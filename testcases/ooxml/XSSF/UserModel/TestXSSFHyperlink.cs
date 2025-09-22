@@ -354,6 +354,48 @@ namespace TestCases.XSSF.UserModel
             wb.Close();
         }
 
+        [Test]
+        public void Test() {
+            XSSFWorkbook wb = new XSSFWorkbook();
+
+            ICreationHelper createHelper = wb.GetCreationHelper();
+            XSSFCellStyle hlinkStyle = wb.CreateCellStyle() as XSSFCellStyle;
+            IFont hlinkFont = wb.CreateFont();
+
+            ISheet sheet = wb.CreateSheet("test");
+
+            IRow rowDet = sheet.CreateRow(0);
+
+            ICell cellDet = rowDet.CreateCell(7);
+            cellDet.SetCellValue("http://www.google.at");
+            //set up style to be able to create hyperlinks
+                hlinkFont.Color = IndexedColors.Blue.Index;
+                hlinkStyle.SetFont(hlinkFont);
+            IHyperlink link = createHelper.CreateHyperlink(HyperlinkType.Url);
+                link.Address = "http://www.example.com";
+                cellDet.Hyperlink = link;
+                cellDet.CellStyle = hlinkStyle;
+
+            //set up style to be able to create hyperlinks
+            hlinkFont.Color = IndexedColors.Blue.Index;
+            hlinkStyle.SetFont(hlinkFont);
+            link = createHelper.CreateHyperlink(HyperlinkType.Url);
+
+            //string for hyperlink
+            cellDet = rowDet.CreateCell(13);
+            cellDet.SetCellValue("http://www.other.com");
+            link.Address = "http://www.gmx.at";
+            cellDet.Hyperlink = link;
+            cellDet.CellStyle = hlinkStyle;
+
+            XSSFWorkbook wbBack = XSSFTestDataSamples.WriteOutAndReadBack(wb);
+
+            ClassicAssert.IsNotNull(wbBack.GetSheetAt(0).GetRow(0).GetCell(7).Hyperlink);
+            ClassicAssert.IsNotNull(wbBack.GetSheetAt(0).GetRow(0).GetCell(13).Hyperlink);
+
+            wb.Close();
+            wbBack.Close();
+        }
     }
 }
 
