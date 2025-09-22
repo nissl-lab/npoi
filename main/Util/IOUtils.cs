@@ -252,6 +252,8 @@ namespace NPOI.Util
         /// <param name="doc"> a writeable document to write to the output stream</param>
         /// <param name="out"> the output stream that the document is written to</param>
         /// <exception cref="IOException">IOException</exception>
+        [Obsolete("since 4.0, use try-with-resources, will be removed in 4.2")]
+        [Removal(Version = "4.2")]
         public static void Write(POIDocument doc, OutputStream out1)
         {
 
@@ -265,6 +267,8 @@ namespace NPOI.Util
             }
         }
 
+        [Obsolete("since 4.0, use try-with-resources, will be removed in 4.2")]
+        [Removal(Version = "4.2")]
         public static void Write(IWorkbook doc, OutputStream out1)
         {
             try
@@ -291,6 +295,8 @@ namespace NPOI.Util
         /// <param name="doc"> a writeable and closeable document to write to the output stream, then close</param>
         /// <param name="out"> the output stream that the document is written to</param>
         /// <exception cref="IOException">IOException</exception>
+        [Obsolete("since 4.0, use try-with-resources, will be removed in 4.2")]
+        [Removal(Version = "4.2")]
         public static void WriteAndClose(POIDocument doc, OutputStream out1)
         {
 
@@ -317,6 +323,8 @@ namespace NPOI.Util
         /// <param name="doc"> a writeable and closeable document to write to the output file, then close</param>
         /// <param name="out"> the output file that the document is written to</param>
         /// <exception cref="IOException">IOException</exception>
+        [Obsolete("since 4.0, use try-with-resources, will be removed in 4.2")]
+        [Removal(Version = "4.2")]
         public static void WriteAndClose(POIDocument doc, FileInfo out1)
         {
 
@@ -342,6 +350,8 @@ namespace NPOI.Util
         /// </summary>
         /// <param name="doc"> a writeable document to write in-place</param>
         /// <exception cref="IOException">IOException</exception>
+        [Obsolete("since 4.0, use try-with-resources, will be removed in 4.2")]
+        [Removal(Version = "4.2")]
         public static void WriteAndClose(POIDocument doc)
         {
 
@@ -354,7 +364,8 @@ namespace NPOI.Util
                 CloseQuietly(doc);
             }
         }
-
+        [Obsolete("since 4.0, use try-with-resources, will be removed in 4.2")]
+        [Removal(Version = "4.2")]
         public static void WriteAndClose(IWorkbook doc, OutputStream out1)
         {
 

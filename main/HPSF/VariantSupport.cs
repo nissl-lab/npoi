@@ -238,29 +238,6 @@ namespace NPOI.HPSF
         }
 
         /// <summary>
-        /// Turns a codepage number into the equivalent character encoding's
-        /// name.
-        /// </summary>
-        /// <param name="codepage">The codepage number</param>
-        /// 
-        /// <return>character encoding's name. If the codepage number is 65001,
-        /// the encoding name is "UTF-8". All other positive numbers are mapped to
-        /// "cp" followed by the number, e.g. if the codepage number is 1252 the
-        /// returned character encoding name will be "cp1252".
-        /// </return>
-
-        /// <exception cref="UnsupportedEncodingException">if the specified codepage is
-        /// less than zero.
-        /// </exception>
-        // @Removal(version="3.18")
-        [Obsolete("POI 3.16 - use CodePageUtil.CodepageToEncoding(int)")]
-        public static String CodepageToEncoding(int codepage)
-        {
-            return CodePageUtil.CodepageToEncoding(codepage);
-        }
-
-
-        /// <summary>
         /// <para>
         /// Writes a variant value to an output stream. This method ensures that
         /// </para>
