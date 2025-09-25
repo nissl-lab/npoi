@@ -1024,6 +1024,7 @@ namespace NPOI.SS.Util
             // Excel's AutoSizeColumn algorithm differs from pure font measurement due to:
             // 1. Cross-platform rendering differences (SixLabors.Fonts vs Windows GDI+)
             // 2. Excel's conservative approach to ensure readability
+            // 3. SixLabors.Fonts version differences (v1.x vs v2.x) affecting TextMeasurer results
 
             if (contentLength >= 100)
             {
@@ -1034,14 +1035,35 @@ namespace NPOI.SS.Util
                 double adjustedWidth = contentLength * targetRatio;
 
                 // Ensure result stays within reasonable bounds while maintaining Excel compatibility
-                return Math.Min(calculatedWidth * 0.9, Math.Max(adjustedWidth, calculatedWidth * 0.75));
+                if (SixLaborsFontsMajorVersion == 1)
+                {
+                    // .NET Framework 4.8.1: v1.x measurements need slight increase to prevent cut-off
+                    // but not as much as removing the cap entirely
+                    return Math.Min(calculatedWidth * 0.95, Math.Max(adjustedWidth, calculatedWidth * 0.75));
+                }
+                else
+                {
+                    // .NET 6+: Original bounds checking with v2.x measurements
+                    return Math.Min(calculatedWidth * 0.9, Math.Max(adjustedWidth, calculatedWidth * 0.75));
+                }
             }
             else
             {
-                // Short content (<100 characters): Use standard font measurement
+                // Short content (<100 characters): Use standard font measurement with version-specific adjustments
                 // Produces 1.5-2.3x character count ratios, which is realistic for AutoSizeColumn
-                // Research confirmed this aligns with Apache POI and other Excel library behavior
-                return calculatedWidth;
+
+                if (SixLaborsFontsMajorVersion == 1)
+                {
+                    // .NET Framework 4.8.1 and older using SixLabors.Fonts v1.x
+                    // v1.x TextMeasurer slightly underestimates width for short content
+                    // Apply minimal correction to prevent cut-off without making it too wide
+                    return calculatedWidth * 1.05; // Add only 5% padding for v1.x short content
+                }
+                else
+                {
+                    // .NET 6+ using SixLabors.Fonts v2.x - measurements are more accurate
+                    return calculatedWidth;
+                }
             }
         }
 
