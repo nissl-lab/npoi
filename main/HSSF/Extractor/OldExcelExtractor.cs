@@ -115,7 +115,7 @@ namespace NPOI.HSSF.Extractor
             ? stream
             : new BufferedStream(biffStream, 8);
 
-            if (NPOIFSFileSystem.HasPOIFSHeader(bis))
+            if (FileMagicContainer.ValueOf(bis) == FileMagic.OLE2)
             {
                 NPOIFSFileSystem poifs = new NPOIFSFileSystem(bis);
                 try

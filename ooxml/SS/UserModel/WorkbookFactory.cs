@@ -57,7 +57,7 @@ namespace NPOI.SS.UserModel
         /// </summary>
         public static IWorkbook Create(POIFSFileSystem fs)
         {
-            return new HSSFWorkbook(fs);
+            return Create(fs, null);
         }
 
         /// <summary>
@@ -65,6 +65,8 @@ namespace NPOI.SS.UserModel
         /// </summary>
         /// <param name="fs"></param>
         /// <returns></returns>
+        [Obsolete]
+        [Removal(Version = "4.1")]
         public static IWorkbook Create(NPOIFSFileSystem fs)
         {
             return new HSSFWorkbook(fs.Root, true);
@@ -76,7 +78,7 @@ namespace NPOI.SS.UserModel
         /// <param name="fs"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        private static IWorkbook Create(NPOIFSFileSystem fs, string password)
+        private static IWorkbook Create(POIFSFileSystem fs, string password)
         {
             DirectoryNode root = fs.Root;
 
@@ -129,7 +131,7 @@ namespace NPOI.SS.UserModel
             switch (fm)
             {
                 case FileMagic.OLE2:
-                    NPOIFSFileSystem fs = new NPOIFSFileSystem(inputStream);
+                    POIFSFileSystem fs = new POIFSFileSystem(inputStream);
                     return Create(fs, password);
                 case FileMagic.OOXML:
                     return new XSSFWorkbook(OPCPackage.Open(inputStream));
@@ -149,15 +151,15 @@ namespace NPOI.SS.UserModel
                 throw new FileNotFoundException(file);
             }
 
-            Stream inputStream = new FileStream(file, FileMode.Open, readOnly ? FileAccess.Read : FileAccess.ReadWrite);
 
+            Stream inputStream = new FileStream(file, FileMode.Open, readOnly ? FileAccess.Read : FileAccess.ReadWrite);
             try
             {
                 return Create(inputStream, password, readOnly);
             }
             finally
             {
-                if (inputStream != null)
+                if(inputStream != null)
                     inputStream.Dispose();
             }
         }
@@ -191,13 +193,14 @@ namespace NPOI.SS.UserModel
         /// Note that for Workbooks opened this way, it is not possible
         /// to explicitly close the underlying File resource.
         /// </remarks>
-        public static IWorkbook Create(Stream inputStream, string password, bool readOnly)
+        private static IWorkbook Create(Stream inputStream, string password, bool readOnly)
         {
             inputStream = new PushbackStream(inputStream);
-
+            //FileMagicContainer.PrepareToCheckMagic(inputStream);
+            FileMagic fm = FileMagicContainer.ValueOf(inputStream);
             try
             {
-                if (POIFSFileSystem.HasPOIFSHeader(inputStream))
+                if (fm == FileMagic.OLE2)
                 {
                     if (DocumentFactoryHelper.GetPasswordProtected(inputStream) == DocumentFactoryHelper.OfficeProtectType.ProtectedOOXML)
                     {
@@ -210,7 +213,7 @@ namespace NPOI.SS.UserModel
                     }
 
                     inputStream.Position = 0;
-                    NPOIFSFileSystem nfs = new NPOIFSFileSystem(inputStream);
+                    POIFSFileSystem nfs = new POIFSFileSystem(inputStream);
 
                     try
                     {
@@ -225,7 +228,7 @@ namespace NPOI.SS.UserModel
                 }
 
                 inputStream.Position = 0;
-                if (DocumentFactoryHelper.HasOOXMLHeader(inputStream))
+                if (fm == FileMagic.OOXML)
                 {
                     inputStream.Position = 0;
                     OPCPackage pkg = OPCPackage.Open(inputStream, readOnly);

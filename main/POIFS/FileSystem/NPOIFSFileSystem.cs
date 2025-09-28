@@ -349,34 +349,6 @@ namespace NPOI.POIFS.FileSystem
         }
 
         /**
-         * Checks that the supplied InputStream (which MUST
-         *  support mark and reset, or be a PushbackInputStream)
-         *  has a POIFS (OLE2) header at the start of it.
-         * If your InputStream does not support mark / reset,
-         *  then wrap it in a PushBackInputStream, then be
-         *  sure to always use that, and not the original!
-         * @param inp An InputStream which supports either mark/reset, or is a PushbackInputStream
-         */
-        [Obsolete("deprecated in 3.17-beta2, use {@link FileMagic#valueOf(InputStream)} == {@link FileMagic#OLE2} instead")]
-        [Removal(Version="4.0")]
-        public static bool HasPOIFSHeader(Stream inp)
-        {
-            return FileMagicContainer.ValueOf(inp) == FileMagic.OLE2;
-        }
-
-        /**
-         * Checks if the supplied first 8 bytes of a stream / file
-         *  has a POIFS (OLE2) header.
-         */
-        [Obsolete("deprecated in 3.17-beta2, use {@link FileMagic#valueOf(InputStream)} == {@link FileMagic#OLE2} instead")]
-        [Removal(Version="4.0")]
-        public static bool HasPOIFSHeader(byte[] header8Bytes)
-        {
-            return FileMagicContainer.ValueOf(header8Bytes) == FileMagic.OLE2;
-        }
-
-
-        /**
          * Read and process the PropertiesTable and the
          *  FAT / XFAT blocks, so that we're Ready to
          *  work with the file

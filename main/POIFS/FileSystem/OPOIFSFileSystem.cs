@@ -178,34 +178,6 @@ namespace NPOI.POIFS.FileSystem
         }
 
         /// <summary>
-        /// Checks that the supplied Stream(which MUST
-        /// support mark and reset, or be a PushbackInputStream)
-        /// has a POIFS (OLE2) header at the start of it.
-        /// If your Streamdoes not support mark / reset,
-        /// then wrap it in a PushBackInputStream, then be
-        /// sure to always use that, and not the original!
-        /// </summary>
-        /// <param name="inp">An Streamwhich supports either mark/reset, or is a PushbackStream</param>
-        /// <returns>
-        /// 	<c>true</c> if [has POIFS header] [the specified inp]; otherwise, <c>false</c>.
-        /// </returns>
-        [Obsolete("deprecated in 3.17-beta2, use {@link FileMagic#valueOf(InputStream)} == {@link FileMagic#OLE2} instead")]
-        [Removal(Version="4.0")]
-        public static bool HasPOIFSHeader(InputStream inp)
-        {
-            return NPOIFSFileSystem.HasPOIFSHeader(inp);
-        }
-        /**
-         * Checks if the supplied first 8 bytes of a stream / file
-         *  has a POIFS (OLE2) header.
-         */
-        [Obsolete("deprecated in 3.17-beta2, use {@link FileMagic#valueOf(InputStream)} == {@link FileMagic#OLE2} instead")]
-        [Removal(Version="4.0")]
-        public static bool HasPOIFSHeader(byte[] header8Bytes)
-        {
-            return NPOIFSFileSystem.HasPOIFSHeader(header8Bytes);
-        }
-        /// <summary>
         /// Create a new document to be Added to the root directory
         /// </summary>
         /// <param name="stream"> the Streamfrom which the document's data will be obtained</param>
