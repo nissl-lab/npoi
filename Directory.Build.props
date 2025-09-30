@@ -8,7 +8,7 @@
     <DebugType>portable</DebugType>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
 
-    <VersionPrefix>2.7.4</VersionPrefix>
+    <VersionPrefix>2.7.5</VersionPrefix>
     <Title>NPOI</Title>
     <Authors>Tony Qu,NPOI Contributors</Authors>
     <Owners>Nissl Lab</Owners>
@@ -19,7 +19,7 @@
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageIcon>logo\60_60.jpg</PackageIcon>
     <PackageProjectUrl>https://github.com/nissl-lab/npoi</PackageProjectUrl>
-    <PackageReleaseNotes>https://github.com/nissl-lab/npoi/discussions/1422</PackageReleaseNotes>
+    <PackageReleaseNotes>https://github.com/nissl-lab/npoi/discussions/1636</PackageReleaseNotes>
     <Copyright>Nissl LLC</Copyright>
     <PackageTags>xlsx xls Excel Word docx office ole</PackageTags>
 
