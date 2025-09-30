@@ -4,6 +4,8 @@ using System.Text;
 using System.IO;
 using NPOI.OpenXml4Net.OPC.Internal.Marshallers;
 using ICSharpCode.SharpZipLib.Zip;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace NPOI.OpenXml4Net.OPC
 {
@@ -104,8 +106,13 @@ public class ZipPackagePart : PackagePart {
         return new ZipPartMarshaller().Marshall(this, os);
     }
 
+    public override async Task<bool> SaveAsync(Stream os, CancellationToken cancellationToken = default)
+    {
+        return await (new ZipPartMarshaller()).MarshallAsync(this, os, cancellationToken);
+    }
 
-    public override bool Load(Stream ios)
+
+        public override bool Load(Stream ios)
     {
         throw new InvalidOperationException("Method not implemented !");
     }

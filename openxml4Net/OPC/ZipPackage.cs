@@ -8,6 +8,8 @@ using NPOI.Util;
 using System;
 using System.Collections;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace NPOI.OpenXml4Net.OPC
 {
@@ -615,6 +617,108 @@ namespace NPOI.OpenXml4Net.OPC
                 throw;
             }
             catch (Exception e)
+            {
+                throw new OpenXML4NetRuntimeException(
+                    "Fail to save: an error occurs while saving the package : "
+                            + e.Message, e);
+            }
+        }
+
+        protected override async Task SaveImplAsync(Stream outputStream, CancellationToken cancellationToken = default)
+        {
+            // Check that the document was open in write mode
+            ThrowExceptionIfReadOnly();
+            ZipOutputStream zos = null;
+
+            try
+            {
+                if(outputStream is not ZipOutputStream stream)
+                    zos = new ZipOutputStream(outputStream);
+                else
+                    zos = stream;
+
+                zos.UseZip64 = UseZip64.Off;
+                // If the core properties part does not exist in the part list,
+                // we save it as well
+                if(this.GetPartsByRelationshipType(PackageRelationshipTypes.CORE_PROPERTIES).Count == 0 &&
+                this.GetPartsByRelationshipType(PackageRelationshipTypes.CORE_PROPERTIES_ECMA376).Count == 0)
+                {
+                    logger.Log(POILogger.DEBUG, "Save core properties part");
+
+                    // Ensure that core properties are added if missing
+                    GetPackageProperties();
+
+                    // Add core properties to part list ...
+                    AddPackagePart(this.packageProperties);
+
+                    // ... and to add its relationship ...
+                    this.relationships.AddRelationship(this.packageProperties
+                            .PartName.URI, TargetMode.Internal,
+                            PackageRelationshipTypes.CORE_PROPERTIES, null);
+                    // ... and the content if it has not been added yet.
+                    if(!this.contentTypeManager
+                            .IsContentTypeRegister(ContentTypes.CORE_PROPERTIES_PART))
+                    {
+                        this.contentTypeManager.AddContentType(
+                                this.packageProperties.PartName,
+                                ContentTypes.CORE_PROPERTIES_PART);
+                    }
+                }
+
+                // Save package relationships part.
+                logger.Log(POILogger.DEBUG, "Save package relationships");
+                await ZipPartMarshaller.MarshallRelationshipPartAsync(this.Relationships,
+                        PackagingUriHelper.PACKAGE_RELATIONSHIPS_ROOT_PART_NAME,
+                        zos, cancellationToken);
+
+                // Save content type part.
+                logger.Log(POILogger.DEBUG, "Save content types part");
+                await this.contentTypeManager.SaveAsync(zos, cancellationToken);
+
+                // Save parts.
+                foreach(PackagePart part in GetParts())
+                {
+                    // If the part is a relationship part, we don't save it, it's
+                    // the source part that will do the job.
+                    if(part.IsRelationshipPart)
+                        continue;
+
+                    logger.Log(POILogger.DEBUG, "Save part '"
+                            + ZipHelper.GetZipItemNameFromOPCName(part
+                                    .PartName.Name) + "'");
+                    if(partMarshallers.TryGetValue(part._contentType, out PartMarshaller marshaller))
+                    {
+                        if(!await marshaller.MarshallAsync(part, zos, cancellationToken))
+                        {
+                            throw new OpenXml4NetException(
+                                    "The part "
+                                            + part.PartName.URI
+                                            + " fail to be saved in the stream with marshaller "
+                                            + marshaller);
+                        }
+                    }
+                    else
+                    {
+                        if(!await defaultPartMarshaller.MarshallAsync(part, zos, cancellationToken))
+                            throw new OpenXml4NetException(
+                                    "The part "
+                                            + part.PartName.URI
+                                            + " fail to be saved in the stream with marshaller "
+                                            + defaultPartMarshaller);
+                    }
+                }
+                //Finishes writing the contents of the ZIP output stream without closing the underlying stream.
+                if(isStream)
+                    await zos.FinishAsync(cancellationToken);   //instead of use zos.Close, it will close the stream
+                else
+                    zos.Close();
+            }
+            catch(OpenXML4NetRuntimeException)
+            {
+                // no need to wrap this type of Exception
+                throw;
+            }
+            catch(Exception e)
             {
                 throw new OpenXML4NetRuntimeException(
                     "Fail to save: an error occurs while saving the package : "
