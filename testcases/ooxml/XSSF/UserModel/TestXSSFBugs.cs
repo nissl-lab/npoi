@@ -1619,18 +1619,16 @@ namespace TestCases.XSSF.UserModel
         public void Bug55692_poifs()
         {
             // Via a POIFSFileSystem
-            ClassicAssert.Throws<EncryptedDocumentException>(()=>{
-                POIFSFileSystem fsP = new POIFSFileSystem(
-                        POIDataSamples.GetPOIFSInstance().OpenResourceAsStream("protect.xlsx"));
-                try
-                {
-                    WorkbookFactory.Create(fsP);
-                }
-                finally
-                {
-                    fsP.Close();
-                }
-            });
+            POIFSFileSystem fsP = new POIFSFileSystem(
+                    POIDataSamples.GetPOIFSInstance().OpenResourceAsStream("protect.xlsx"));
+            try
+            {
+                WorkbookFactory.Create(fsP);
+            }
+            finally
+            {
+                fsP.Close();
+            }
         }
         [Test]
         public void Bug55692_stream()
@@ -1644,19 +1642,17 @@ namespace TestCases.XSSF.UserModel
             wb.Close();
         }
         [Test]
-        public void bug55692_npoifs() 
+        public void Bug55692_npoifs() 
         {
-            ClassicAssert.Throws<EncryptedDocumentException>(()=>{
-                // Via a NPOIFSFileSystem, will spot it's actually a .xlsx file
-                //  encrypted with the default password, and open
-                POIFSFileSystem fsNP = new POIFSFileSystem(
-                        POIDataSamples.GetPOIFSInstance().OpenResourceAsStream("protect.xlsx"));
-                IWorkbook wb = WorkbookFactory.Create(fsNP);
-                ClassicAssert.IsNotNull(wb);
-                ClassicAssert.AreEqual(3, wb.NumberOfSheets);
-                wb.Close();
-                fsNP.Close();
-            });
+            // Via a NPOIFSFileSystem, will spot it's actually a .xlsx file
+            //  encrypted with the default password, and open
+            POIFSFileSystem fsNP = new POIFSFileSystem(
+                    POIDataSamples.GetPOIFSInstance().OpenResourceAsStream("protect.xlsx"));
+            IWorkbook wb = WorkbookFactory.Create(fsNP);
+            ClassicAssert.IsNotNull(wb);
+            ClassicAssert.AreEqual(3, wb.NumberOfSheets);
+            wb.Close();
+            fsNP.Close();
         }
         public void Test55692()
         {
