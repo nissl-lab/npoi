@@ -17,13 +17,13 @@
 
 /* ================================================================
  * About NPOI
- * Author: Seijiro Ikehata
- * Author's email: modeverv (at) gmail.com
+ * Author: Tony Qu
+ * Author's email: tonyqus (at) gmail.com
+ * Author's Blog: tonyqus.wordpress.com.cn (wp.tonyqus.cn)
  * HomePage: http://www.codeplex.com/npoi
- * Contributors:
+ * Contributors: Seijiro Ikehata (modeverv at gmail.com)
  *
  * ==============================================================*/
-
 
 namespace TestCases.POIFS.FileSystem
 {
