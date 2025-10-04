@@ -26,5 +26,6 @@
     <PackageVersion Include="System.Formats.Asn1" Version="8.0.1" />
     <PackageVersion Include="System.Security.Cryptography.Xml" Version="8.0.2" />
     <PackageVersion Include="ZString" Version="2.6.0" />
+    <PackageVersion Include="OpenMcdf" Version="3.0.3"/>
   </ItemGroup>
 </Project>

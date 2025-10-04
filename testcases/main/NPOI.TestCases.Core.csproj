@@ -27,6 +27,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\main\NPOI.Core.csproj" />
+    <ProjectReference Include="..\..\ooxml\NPOI.OOXML.Core.csproj" />
   </ItemGroup>
 
   <Target Name="CopyCustomContent" AfterTargets="AfterBuild">

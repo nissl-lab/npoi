@@ -23,6 +23,7 @@
     <PackageReference Include="SixLabors.Fonts" />
     <PackageReference Include="SixLabors.ImageSharp" />
     <PackageReference Include="ZString" />
+    <PackageReference Include="OpenMcdf"/>
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net472' ">
