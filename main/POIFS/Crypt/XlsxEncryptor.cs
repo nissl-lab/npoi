@@ -41,8 +41,8 @@ namespace NPOI.POIFS.Crypt
         private const int KeySize = 128; // AES-128
         private const int BlockSize = 16; // 16 bytes
         private const int SaltSize = 16; // 16 bytes
-        private const int SpinCount = 100000; // Agile 既定
-        private const int SegmentLength = 4096; // パッケージ暗号化のセグメント長
+        private const int SpinCount = 100000; // Agile default
+        private const int SegmentLength = 4096; // segment package langth
         private const int HashSize = 20; // SHA1 = 20 bytes
 
         public static void FromBytesToFile(byte[] wbByte, string outputPath, string password)
@@ -89,12 +89,12 @@ namespace NPOI.POIFS.Crypt
             byte[] verifierSalt = RandomBytes(SaltSize); // p:encryptedKey.saltValue
             byte[] pwHash = HashPassword(password, verifierSalt, SpinCount);
 
-            // 検証データ（verifier / verifierHash）
+            // check data (verifier / verifierHash）
             byte[] verifier = RandomBytes(SaltSize);
-            byte[] keySpec = RandomBytes(KeySize / 8); // 実際の AES 鍵 (encryptedKey の中身)
+            byte[] keySpec = RandomBytes(KeySize / 8); // actual key of AES (inside of encryptedKey)
             byte[] encryptionKey = keySpec;
 
-            // POI 互換ブロックキー
+            // block key same of POI
             byte[] kVerifierInputBlock = { 0xFE, 0xA7, 0xD2, 0x76, 0x3B, 0x4B, 0x9E, 0x79 };
             byte[] kHashedVerifierBlock = { 0xD7, 0xAA, 0x0F, 0x6D, 0x30, 0x61, 0x34, 0x4E };
             byte[] kCryptoKeyBlock = { 0x14, 0x6E, 0x0B, 0xE7, 0xAB, 0xAC, 0xD0, 0xD6 };
@@ -109,21 +109,19 @@ namespace NPOI.POIFS.Crypt
             }
 #pragma warning restore CA5350
 
-
             byte[] encryptedVerifierHash =
                 HashInput(pwHash, verifierSalt, kHashedVerifierBlock, verifierHash, KeySize / 8);
 
-
             byte[] encryptedKey = HashInput(pwHash, verifierSalt, kCryptoKeyBlock, keySpec, KeySize / 8);
 
-            // dataIntegrity: encryptedHmacKey だけ先に作る
-            byte[] integritySalt = RandomBytes(HashSize); // HMAC の生鍵（20B）
+            // dataIntegrity: encryptedHmacKey
+            byte[] integritySalt = RandomBytes(HashSize); // HMAC key（20B）
             byte[] kIntegrityKeyBlock = { 0x5F, 0xB2, 0xAD, 0x01, 0x0C, 0xB9, 0xE1, 0xF6 };
             byte[] ivKey = GenerateIv(keySalt, kIntegrityKeyBlock, BlockSize);
-            byte[] hmacKeyPadded = PadBlock(integritySalt); // 16 境界に 0 詰め
+            byte[] hmacKeyPadded = PadBlock(integritySalt); // bound to 16 (0 pad)
             byte[] encryptedHmacKey = EncryptWithAes(hmacKeyPadded, encryptionKey, ivKey);
 
-            // EncryptionInfo XML の組み立て（encryptedHmacValue は後で埋める）
+            // build EncryptionInfo XML
             XNamespace ns = "http://schemas.microsoft.com/office/2006/encryption";
             XNamespace p = "http://schemas.microsoft.com/office/2006/keyEncryptor/password";
 
@@ -140,7 +138,7 @@ namespace NPOI.POIFS.Crypt
 
             var dataIntegrityElement = new XElement(ns + "dataIntegrity",
                 new XAttribute("encryptedHmacKey", Convert.ToBase64String(encryptedHmacKey)),
-                new XAttribute("encryptedHmacValue", "") // 後で UpdateIntegrityHMAC で上書き
+                new XAttribute("encryptedHmacValue", "") // hmac is set after process
             );
 
             var encryptedKeyElement = new XElement(p + "encryptedKey",
@@ -181,16 +179,16 @@ namespace NPOI.POIFS.Crypt
 #pragma warning disable CA5350
             using var hmac = new HMACSHA1(integritySalt);
 #pragma warning restore CA5350
-            // 先頭の StreamSize(8B, little-endian) を HMAC に供給
+            // provide to hmac a beginning StreamSize(8B, little-endian)
             var sizeBytes = BitConverter.GetBytes((long) oleStreamSize);
             hmac.TransformBlock(sizeBytes, 0, 8, null, 0);
 
-            // EncryptedPackage 本体（サイズ 8B を除く）
+            // EncryptedPackage body（exclude 8B）
             byte[] body = new byte[encryptedPackage.Length - 8];
             Buffer.BlockCopy(encryptedPackage, 8, body, 0, body.Length);
             hmac.TransformFinalBlock(body, 0, body.Length);
 
-            // HMAC を 16 バイト境界に 0 パディング → AES-CBC で暗号化
+            // padding HMAC to 16 byte and 0 padding -> AES-CBC
             byte[] hmacValPadded = PadBlock(hmac.Hash);
             byte[] kIntegrityValueBlock = { 0xA0, 0x67, 0x7F, 0x02, 0xB2, 0x2C, 0x84, 0x33 };
             byte[] ivVal = GenerateIv(keySalt, kIntegrityValueBlock, BlockSize);
@@ -204,7 +202,7 @@ namespace NPOI.POIFS.Crypt
             }
         }
 
-        // === Decrypt 実装 ===
+        // === Decrypt ===
         public static byte[] Decrypt(string encryptedPath, string password)
         {
             if(!File.Exists(encryptedPath))
@@ -219,7 +217,7 @@ namespace NPOI.POIFS.Crypt
 
             using var root = RootStorage.OpenRead(encryptedPath);
 
-            // EncryptionInfo の読み取り
+            // read EncryptionInfo
             CfbStream encInfoStream;
             try
             {
@@ -233,7 +231,7 @@ namespace NPOI.POIFS.Crypt
             using(encInfoStream)
             using(var reader = new BinaryReader(encInfoStream))
             {
-                // バージョン情報とフラグの読み取り
+                // read version info and flag
                 var versionMajor = reader.ReadUInt16();
                 var versionMinor = reader.ReadUInt16();
                 reader.ReadUInt32();
@@ -243,11 +241,10 @@ namespace NPOI.POIFS.Crypt
                     throw new NotSupportedException($"Unsupported encryption version: {versionMajor}.{versionMinor}");
                 }
 
-                // XML部分の読み取りとパース
+                // read XML
                 var xmlBytes = reader.ReadBytes((int)encInfoStream.Length - 8);
                 var xmlString = Encoding.UTF8.GetString(xmlBytes);
 
-                // XMLから必要な情報を抽出
                 var keySaltMatch = Regex.Match(xmlString, @"<keyData[^>]*saltValue=""([^""]+)""");
                 var verifierSaltMatch = Regex.Match(xmlString, @"<p:encryptedKey[^>]*saltValue=""([^""]+)""");
                 var spinCountMatch = Regex.Match(xmlString, @"spinCount=""(\d+)""");
@@ -264,13 +261,11 @@ namespace NPOI.POIFS.Crypt
                 int spinCount = int.Parse(spinCountMatch.Groups[1].Value);
                 var encryptedKey = Convert.FromBase64String(encryptedKeyMatch.Groups[1].Value);
 
-                // パスワード検証
                 if(!VerifyPassword(password, xmlString))
                 {
                     throw new UnauthorizedAccessException("Invalid password");
                 }
 
-                // 暗号化キーの復号化
                 byte[] pwHash = HashPassword(password, verifierSalt, spinCount);
                 byte[] kCryptoKeyBlock = { 0x14, 0x6E, 0x0B, 0xE7, 0xAB, 0xAC, 0xD0, 0xD6 };
                 byte[] keyIntermedKey = GenerateKey(pwHash, kCryptoKeyBlock, KeySize / 8);
@@ -289,7 +284,7 @@ namespace NPOI.POIFS.Crypt
                     Array.Copy(decryptionKey, actualKey, actualKey.Length);
                 }
 
-                // EncryptedPackage の読み取り（一度だけ）
+                // read EncryptedPackage
                 CfbStream encPackageStream;
                 try
                 {
@@ -307,7 +302,7 @@ namespace NPOI.POIFS.Crypt
                     _ = encPackageStream.Read(encryptedPackageData, 0, encryptedPackageData.Length);
                 }
 
-                // EncryptedPackage の復号化
+                // decrypt EncryptedPackage
                 byte[] decryptedData;
                 long streamSize;
 
@@ -325,12 +320,10 @@ namespace NPOI.POIFS.Crypt
                         int segSize = (int) Math.Min(SegmentLength, remaining);
                         bool isLast = remaining <= SegmentLength;
 
-                        // 暗号化されたセグメントの読み取り
                         var encryptedSeg = isLast
                             ? br.ReadBytes(PadLen((int) remaining))
                             : br.ReadBytes(SegmentLength);
 
-                        // ブロック番号からIVを生成
                         var blockKey = BitConverter.GetBytes(block);
                         byte[] segIv = GenerateIv(keySalt, blockKey, BlockSize);
 
@@ -352,7 +345,6 @@ namespace NPOI.POIFS.Crypt
                     decryptedData = outMs.ToArray();
                 }
 
-                // HMAC整合性検証
                 if(!VerifyIntegrity(encryptedPackageData, (int) streamSize, actualKey, keySalt, xmlString))
                 {
                     throw new InvalidOperationException(
@@ -364,7 +356,7 @@ namespace NPOI.POIFS.Crypt
         }
 
 
-        // === CFBファイル書き込み (DataSpaces含む) ===
+        // === CFB ===
         private static void CreateEncryptedFile(string outputPath, XDocument encryptionInfo, byte[] encryptedData)
         {
             using var root = RootStorage.Create(outputPath);
@@ -537,25 +529,25 @@ namespace NPOI.POIFS.Crypt
         private static void ValidateEncryptionParameters()
         {
             if(KeySize != 128 && KeySize != 192 && KeySize != 256)
-#pragma warning disable CS0162 // 到達できないコードが検出されました
+#pragma warning disable CS0162
             {
                 throw new InvalidOperationException($"Invalid key size: {KeySize}");
             }
-#pragma warning restore CS0162 // 到達できないコードが検出されました
+#pragma warning restore CS0162
 
             if(BlockSize != 16)
-#pragma warning disable CS0162 // 到達できないコードが検出されました
+#pragma warning disable CS0162
             {
                 throw new InvalidOperationException($"Invalid block size: {BlockSize}");
             }
-#pragma warning restore CS0162 // 到達できないコードが検出されました
+#pragma warning restore CS0162
 
             if(SpinCount < 1)
-#pragma warning disable CS0162 // 到達できないコードが検出されました
+#pragma warning disable CS0162
             {
                 throw new InvalidOperationException($"Invalid spin count: {SpinCount}");
             }
-#pragma warning restore CS0162 // 到達できないコードが検出されました
+#pragma warning restore CS0162
         }
 
         private static byte[] HashPassword(string pw, byte[] salt, int spin)
@@ -672,7 +664,6 @@ namespace NPOI.POIFS.Crypt
                 decryptedVerifier = dec.TransformFinalBlock(encryptedVerifier, 0, encryptedVerifier.Length);
             }
 
-            // 修正：usingを追加
             byte[] verifierHash;
 #pragma warning disable CA5350
             using(var sha = SHA1.Create())
