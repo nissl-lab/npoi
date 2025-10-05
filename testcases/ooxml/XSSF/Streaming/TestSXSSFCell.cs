@@ -31,7 +31,7 @@ namespace TestCases.XSSF.Streaming
      * Tests various functionality having to do with {@link SXSSFCell}.  For instance support for
      * particular datatypes, etc.
      */
-    [Ignore("This may cause file access denied")]
+    //[Ignore("This may cause file access denied")]
     public class TestSXSSFCell : BaseTestXCell
     {
 
@@ -69,12 +69,13 @@ namespace TestCases.XSSF.Streaming
                         XSSFCell xCell = xwb.GetSheetAt(0).GetRow(0).GetCell(0) as XSSFCell;
 
                         CT_Rst is1 = xCell.GetCTCell().@is;
+                        ClassicAssert.IsNotNull(is1);
                         //XmlCursor c = is1.NewCursor();
                         //c.ToNextToken();
                         //String t = c.GetAttributeText(new QName("http://www.w3.org/XML/1998/namespace", "space"));
                         //c.Dispose();
 
-
+                        ClassicAssert.IsTrue(is1.XmlText.Contains("xml:space=\"preserve\""));
                         //write is1 to xml stream writer ,get the xml text and parse it and get space attr.
                         //ClassicAssert.AreEqual("preserve", t, "expected xml:spaces=\"preserve\" \"" + str + "\"");
                     }
