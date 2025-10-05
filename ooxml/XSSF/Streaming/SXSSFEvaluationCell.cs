@@ -81,7 +81,8 @@ namespace NPOI.XSSF.Streaming
          * @deprecated POI 3.15 beta 3.
          * Will be deleted when we make the CellType enum transition. See bug 59791.
          */
-
+        [Obsolete("use CellType instead")]
+        [Removal(Version = "4.2")]
         public CellType CellTypeEnum
         {
             get

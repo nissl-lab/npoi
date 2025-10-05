@@ -1009,11 +1009,11 @@ namespace TestCases.SS.UserModel
             ISheet sheet = wb.CreateSheet();
             IRow row = sheet.CreateRow(0);
             ICell cell = row.CreateCell(0);
-            // CellType.* -> CellType.*
+            
             cell.SetCellValue(5.0);
             ClassicAssert.AreEqual(CellType.Numeric, cell.CellType);
             ClassicAssert.AreEqual(0, (int)cell.CellType);
-            //ClassicAssert.AreEqual(CellType.NUMERIC, cell.GetCellTypeEnum()); // make sure old way and new way are compatible
+
             // make sure switch(int|Enum) still works. Cases must be statically resolvable in1 Java 6 ("constant expression required")
             switch (cell.CellType)
             {
