@@ -97,6 +97,7 @@ namespace NPOI.XSSF.Streaming
         }
 
         [Obsolete("Will be removed at NPOI 2.8, Use CachedFormulaResultType instead.")]
+        [Removal(Version = "4.2")]
         public CellType GetCachedFormulaResultTypeEnum()
         {
             return CachedFormulaResultType;

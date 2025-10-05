@@ -31,6 +31,7 @@ namespace NPOI.HSSF.UserModel
     using System.Globalization;
     using System.Collections.Generic;
     using NPOI.SS.Formula.Eval;
+    using NPOI.Util;
 
     /// <summary>
     /// High level representation of a cell in a row of a spReadsheet.
@@ -100,7 +101,7 @@ namespace NPOI.HSSF.UserModel
                            CellType type)
         {
             HSSFCell.CheckBounds(col);
-            cellType = CellType.Unknown; // Force 'SetCellType' to Create a first Record
+            cellType = CellType._None; // Force 'SetCellType' to Create a first Record
             stringValue = null;
             this.book = book;
             this._sheet = sheet;
@@ -403,7 +404,7 @@ namespace NPOI.HSSF.UserModel
                     throw new InvalidOperationException("Invalid cell type: " + cellType);
             }
             if (cellType != this.cellType &&
-                this.cellType != CellType.Unknown)  // Special Value to indicate an Uninitialized Cell
+                this.cellType != CellType._None)  // Special Value to indicate an Uninitialized Cell
             {
                 _sheet.Sheet.ReplaceValueRecord(_record);
             }
@@ -1458,6 +1459,7 @@ namespace NPOI.HSSF.UserModel
         }
 
         [Obsolete("Will be removed at NPOI 2.8, Use CachedFormulaResultType instead.")]
+        [Removal(Version = "4.2")]
         public CellType GetCachedFormulaResultTypeEnum()
         {
             throw new NotImplementedException();

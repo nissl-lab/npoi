@@ -3257,7 +3257,7 @@ namespace TestCases.XSSF.UserModel
             row = worksheet.GetRow(2);
             cell = row.GetCell(1);
             ClassicAssert.AreEqual(CellType.Blank, cell.CellType);
-            ClassicAssert.AreEqual(CellType.Unknown, evaluator.EvaluateFormulaCell(cell));
+            ClassicAssert.AreEqual(CellType._None, evaluator.EvaluateFormulaCell(cell));
             // A3
             row = worksheet.GetRow(2);
             cell = row.GetCell(0);
