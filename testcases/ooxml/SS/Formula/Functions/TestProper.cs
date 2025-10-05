@@ -132,8 +132,8 @@ namespace TestCases.SS.Formula.Functions
                 ValueEval ret = TextFunction.PROPER.Evaluate(new ValueEval[] { strArg }, 0, 0);
                 ClassicAssert.AreEqual("Some Longer Text That Needs A Number Of Replacements To Check For Runtime Of Different Implementations", ((StringEval)ret).StringValue);
             }
-            // Took aprox. 600ms on a decent Laptop in July 2016
-            Console.WriteLine("Took: " + (TimeUtil.CurrentMillis() - start) + "ms");
+            // Took approx. 600ms on a decent Laptop in July 2016
+            //System.out.println("Took: " + (System.currentTimeMillis() - start) + "ms");
         }
         private void checkProper(String input, String expected)
         {

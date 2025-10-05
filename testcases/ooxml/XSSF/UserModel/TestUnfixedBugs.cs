@@ -85,7 +85,6 @@ namespace TestCases.XSSF.UserModel
             IWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook("54071.xlsx");
             ISheet sheet = workbook.GetSheetAt(0);
             int rows = sheet.PhysicalNumberOfRows;
-            Console.WriteLine(">> file rows is:" + (rows - 1) + " <<");
             IRow title = sheet.GetRow(0);
 
             DateTime? prev = null;
@@ -100,7 +99,7 @@ namespace TestCases.XSSF.UserModel
                     {
                         // here the output will produce ...59 or ...58 for the rows, probably POI is
                         // doing some different rounding or some other small difference...
-                        Console.WriteLine("==Time:" + cell.DateCellValue);
+                        //Console.WriteLine("==Time:" + cell.DateCellValue);
                         if (prev != null)
                         {
                             ClassicAssert.AreEqual(prev, cell.DateCellValue);

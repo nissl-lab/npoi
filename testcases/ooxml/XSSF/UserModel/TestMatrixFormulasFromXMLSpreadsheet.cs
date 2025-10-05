@@ -36,7 +36,8 @@ namespace TestCases.XSSF.UserModel
     [TestFixture]
     public sealed class TestMatrixFormulasFromXMLSpreadsheet
     {
-
+        private static POILogger LOG = POILogFactory.GetLogger(typeof(TestMatrixFormulasFromXMLSpreadsheet));
+        
         private static XSSFWorkbook workbook;
         private static ISheet sheet;
         private static IFormulaEvaluator evaluator;
@@ -211,14 +212,14 @@ namespace TestCases.XSSF.UserModel
         {
             if(r == null)
             {
-                Console.WriteLine("Warning - given null row, can't figure out function name");
+                LOG.Log(POILogger.WARN, "Warning - given null row, can't figure out function name");
                 return null;
             }
             ICell cell = r.GetCell(Navigator.START_OPERATORS_COL_INDEX);
-            Console.WriteLine(Navigator.START_OPERATORS_COL_INDEX);
+            LOG.Log(POILogger.DEBUG, Navigator.START_OPERATORS_COL_INDEX);
             if(cell == null)
             {
-                Console.WriteLine("Warning - Row " + r.RowNum + " has no cell " + Navigator.START_OPERATORS_COL_INDEX + ", can't figure out function name");
+                LOG.Log(POILogger.WARN, "Warning - Row " + r.RowNum + " has no cell " + Navigator.START_OPERATORS_COL_INDEX + ", can't figure out function name");
                 return null;
             }
             if(cell.CellType == CellType.Blank)

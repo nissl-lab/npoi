@@ -385,7 +385,6 @@ namespace TestCases.XSSF.Streaming
             out1.Delete();
             for(int i = 0; i < 2; i++)
             {
-                Console.WriteLine("Iteration " + i);
                 SXSSFWorkbook wb;
                 if(out1.Exists)
                 {

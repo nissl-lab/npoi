@@ -2957,7 +2957,6 @@ namespace TestCases.XSSF.UserModel
                 if (cell.CellType == CellType.Formula)
                 {
                     String formula = cell.CellFormula;
-                    //System.out.println("formula: " + formula);
                     ClassicAssert.IsNotNull(formula);
                     ClassicAssert.IsTrue(formula.Contains("WORKDAY"));
                 }
@@ -3100,7 +3099,7 @@ namespace TestCases.XSSF.UserModel
                 ISheet newSheet = wb.CreateSheet();
                 //Sheet newSheet = wb.createSheet(sheetName);
                 int newSheetIndex = wb.GetSheetIndex(newSheet);
-                //System.out.println(newSheetIndex);
+
                 wb.SetSheetName(newSheetIndex, sheetName);
                 wb.SetSheetOrder(sheetName, sheetIndex);
             }
@@ -3199,8 +3198,6 @@ namespace TestCases.XSSF.UserModel
                     {
                         ICell cell = row.GetCell(cellNum);
                         String fmtCellValue = formatter.FormatCellValue(cell);
-
-                        //System.out.Println("Cell: " + fmtCellValue);
                         ClassicAssert.IsNotNull(fmtCellValue);
                         ClassicAssert.IsFalse(fmtCellValue.Equals("0"));
                     }
