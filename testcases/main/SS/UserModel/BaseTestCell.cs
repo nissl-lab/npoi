@@ -742,6 +742,8 @@ namespace TestCases.SS.UserModel
             style = cell.CellStyle;
             ClassicAssert.IsFalse(style2.IsLocked);
             ClassicAssert.IsTrue(style2.IsHidden);
+            ClassicAssert.IsTrue(style.IsLocked);
+            ClassicAssert.IsFalse(style.IsHidden);
 
             style2.IsLocked = (/*setter*/true);
             style2.IsHidden = (/*setter*/false);
@@ -1009,8 +1011,10 @@ namespace TestCases.SS.UserModel
             cell.SetCellFormula("A2");
             cell.SetCellErrorValue(FormulaError.NAME.Code);
 
-            ClassicAssert.AreEqual(CellType.Formula, cell.CellType);
-            ClassicAssert.AreEqual(CellType.Error, cell.CachedFormulaResultType);
+            ClassicAssert.AreEqual(CellType.Formula, cell.CellType,
+                "Should still be a formula even after we set an error value");
+            ClassicAssert.AreEqual(CellType.Error, cell.CachedFormulaResultType,
+                "Should still be a formula even after we set an error value");
             ClassicAssert.AreEqual("A2", cell.CellFormula);
             try {
                 _ = cell.NumericCellValue;

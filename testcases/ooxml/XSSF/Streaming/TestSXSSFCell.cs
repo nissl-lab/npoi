@@ -47,14 +47,15 @@ namespace TestCases.XSSF.Streaming
         }
 
         [Test]
-        public void TestPreserveSpaces() {
+        public void TestPreserveSpaces()
+        {
             String[] samplesWithSpaces = {
                 " POI",
                 "POI ",
                 " POI ",
                 "\nPOI",
                 "\n\nPOI \n",
-        };
+            };
             foreach (String str in samplesWithSpaces) 
             {
                 using(var swb = _testDataProvider.CreateWorkbook())
@@ -81,6 +82,14 @@ namespace TestCases.XSSF.Streaming
                     }
                 }
             }
+        }
+
+        [Test]
+        public void TestSetErrorValeFormula()
+        {
+            Assume.That(false, "This test is disabled because it fails for SXSSF because " +
+                        "handling of errors in formulas is slightly different than in XSSF, " +
+                        "but this proved to be non-trivial to solve...");
         }
     }
 

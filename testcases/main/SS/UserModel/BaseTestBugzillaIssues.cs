@@ -1565,8 +1565,7 @@ namespace TestCases.SS.UserModel
             ClassicAssert.AreEqual("A1", cell.CellFormula);
             if (CellType.Formula == cell.CellType)
             {
-                int formulaResultType = (int)cell.CachedFormulaResultType;
-                ClassicAssert.AreEqual(CellType.String, formulaResultType);
+                ClassicAssert.AreEqual(CellType.String, cell.CachedFormulaResultType);
             }
             // *******************************
             // Second cell of array formula, NOT OK for xlsx files
@@ -1578,8 +1577,7 @@ namespace TestCases.SS.UserModel
             ClassicAssert.AreEqual("A1", cell.CellFormula);
             if (CellType.Formula == cell.CellType)
             {
-                int formulaResultType = (int)cell.CachedFormulaResultType;
-                ClassicAssert.AreEqual(CellType.String, formulaResultType);
+                ClassicAssert.AreEqual(CellType.String, cell.CachedFormulaResultType);
             }
             workbook.Close();
         }

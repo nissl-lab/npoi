@@ -128,7 +128,7 @@ namespace NPOI.SS.Formula
          * Be aware that your cell value will be Changed to hold the
          *  result of the formula. If you simply want the formula
          *  value computed for you, use {@link #EvaluateFormulaCellEnum(Cell)}}
-         * @param cell
+         * @param cell The {@code Cell} to evaluate and modify.
          * @return the {@code cell} that was passed in, allowing for chained calls
          */
 
@@ -144,6 +144,12 @@ namespace NPOI.SS.Formula
                 CellValue cv = EvaluateFormulaCellValue(cell);
                 SetCellValue(cell, cv);
                 SetCellType(cell, cv); // cell will no longer be a formula cell
+
+                // Due to bug 46479 we should call setCellValue() before setCellType(),
+                // but bug 61148 showed a case where it would be better the other
+                // way around, so for now we call setCellValue() a second time to
+                // handle both cases correctly. There is surely a better way to do this, though...
+                SetCellValue(cell, cv);
             }
             return result;
         }
