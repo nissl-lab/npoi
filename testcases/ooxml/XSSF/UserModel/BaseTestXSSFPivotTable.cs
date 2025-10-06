@@ -78,17 +78,9 @@ namespace TestCases.XSSF.UserModel
         [Test]
         public void TestAddRowLabelOutOfRangeThrowsException()
         {
-            int columnIndex = 5;
-
-            try
-            {
-                pivotTable.AddRowLabel(columnIndex);
-            }
-            catch (IndexOutOfRangeException)
-            {
-                return;
-            }
-            Assert.Fail();
+            ClassicAssert.Throws<IndexOutOfRangeException>(()=>{
+                pivotTable.AddRowLabel(5);
+            });
         }
 
         /**
@@ -199,17 +191,9 @@ namespace TestCases.XSSF.UserModel
         [Test]
         public void TestAddColumnLabelOutOfRangeThrowsException()
         {
-            int columnIndex = 5;
-
-            try
-            {
-                pivotTable.AddColumnLabel(DataConsolidateFunction.SUM, columnIndex);
-            }
-            catch (IndexOutOfRangeException)
-            {
-                return;
-            }
-            Assert.Fail();
+            ClassicAssert.Throws<IndexOutOfRangeException>(()=>{
+                pivotTable.AddColumnLabel(DataConsolidateFunction.SUM, 5);
+            });
         }
 
         /**
@@ -233,18 +217,9 @@ namespace TestCases.XSSF.UserModel
         [Test]
         public void TestAddDataColumnOutOfRangeThrowsException()
         {
-            int columnIndex = 5;
-            bool isDataField = true;
-
-            try
-            {
-                pivotTable.AddDataColumn(columnIndex, isDataField);
-            }
-            catch (IndexOutOfRangeException)
-            {
-                return;
-            }
-            Assert.Fail();
+            ClassicAssert.Throws<IndexOutOfRangeException>(()=>{
+                pivotTable.AddDataColumn(5, true);
+            });
         }
 
         /**
@@ -269,16 +244,9 @@ namespace TestCases.XSSF.UserModel
         [Test]
         public void TestAddReportFilterOutOfRangeThrowsException()
         {
-            int columnIndex = 5;
-            try
-            {
-                pivotTable.AddReportFilter(columnIndex);
-            }
-            catch (IndexOutOfRangeException)
-            {
-                return;
-            }
-            Assert.Fail();
+            ClassicAssert.Throws<IndexOutOfRangeException>(()=>{
+                pivotTable.AddReportFilter(5);
+            });
         }
 
         /**
