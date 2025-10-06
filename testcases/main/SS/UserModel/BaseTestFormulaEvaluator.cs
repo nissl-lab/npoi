@@ -705,6 +705,40 @@ namespace TestCases.SS.UserModel
             return sheet.GetRow(rowNo).GetCell(column);
         }
 
+        [Test]
+        public void TestBug61532() 
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            try 
+            {
+                ICell cell = wb.CreateSheet().CreateRow(0).CreateCell(0);
+                cell.SetCellFormula("1+2");
+
+                ClassicAssert.AreEqual(0, (int)cell.NumericCellValue);
+                ClassicAssert.AreEqual("1+2", cell.ToString());
+
+                IFormulaEvaluator eval = wb.GetCreationHelper().CreateFormulaEvaluator();
+
+                CellValue value = eval.Evaluate(cell);
+
+                ClassicAssert.AreEqual(CellType.Numeric, value.CellType);
+                ClassicAssert.AreEqual(3.0, value.NumberValue, 0.01);
+                ClassicAssert.AreEqual(CellType.Formula, cell.CellType);
+                ClassicAssert.AreEqual("1+2", cell.CellFormula);
+                ClassicAssert.AreEqual("1+2", cell.ToString());
+
+                ClassicAssert.IsNotNull(eval.EvaluateInCell(cell));
+
+                ClassicAssert.AreEqual("3", cell.ToString());
+                ClassicAssert.AreEqual(CellType.Numeric, cell.CellType);
+                ClassicAssert.AreEqual(3.0, cell.NumericCellValue, 0.01);
+            }
+            catch(Exception)
+            {
+                wb.Close();
+            }
+        }
+
         public void BaseTestNPOIIssue_1057(string paramsFile, string installFile)
         {
             DataFormatter formatter = new DataFormatter();
