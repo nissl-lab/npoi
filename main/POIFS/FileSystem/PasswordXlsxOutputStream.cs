@@ -24,7 +24,7 @@
  * Contributors: Seijiro Ikehata (modeverv at gmail.com)
  *
  * ==============================================================*/
-
+ /*
 namespace NPOI.POIFS.FileSystem
 {
     using NPOI.POIFS.Crypt;
@@ -82,3 +82,4 @@ namespace NPOI.POIFS.FileSystem
 
     }
 }
+*/

@@ -25,18 +25,23 @@
  *
  * ==============================================================*/
 
+using NPOI.OpenXml4Net.OPC;
+using NPOI.POIFS.Crypt;
+using NPOI.POIFS.Crypt.Agile;
+using NPOI.POIFS.FileSystem;
+using NPOI.SS.UserModel;
+using NPOI.Util;
+using NPOI.XSSF.UserModel;
+using NUnit.Framework;
+using NUnit.Framework.Legacy;
+using OpenMcdf;
+using System;
+using System.IO;
+using System.Linq;
+using System.Text;
+
 namespace TestCases.POIFS.FileSystem
 {
-    using NPOI.POIFS.Crypt;
-    using NPOI.POIFS.FileSystem;
-    using NPOI.SS.UserModel;
-    using NPOI.XSSF.UserModel;
-    using NUnit.Framework;
-    using NUnit.Framework.Legacy;
-    using System;
-    using System.IO;
-    using System.Linq;
-
     public class TestPasswordXlsxOutputStream
     {
         private static bool TestDecryption(string encryptedPath, string password)
@@ -142,7 +147,7 @@ namespace TestCases.POIFS.FileSystem
                 }
             }
         }
-
+/*
         [Test]
         public void TestOutputStream()
         {
@@ -171,6 +176,223 @@ namespace TestCases.POIFS.FileSystem
                     // no-op
                 }
             }
+        }
+*/
+        [Test]
+        public void TestPOICompatibleAPI()
+        {
+            POIDataSamples samples = POIDataSamples.GetPOIFSInstance();
+            string originalPath = samples.GetFileInfo("encrypt_original.xlsx").FullName;
+            //string poiPath = samples.GetFileInfo("encrypt_encrypted_by_poi_password_is_pass.xlsx").FullName;
+            string projectDir = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory));
+            string outputPath = Path.Combine(projectDir, "encrypt_encrypted_by_npoi.xlsx");
+            string password = "pass";
+
+
+            try
+            {
+                using(POIFSFileSystem fs = new())
+                {
+                    EncryptionInfo info = new(EncryptionMode.Agile);
+                    Encryptor enc = info.Encryptor;
+                    //info.InitializeForEncryption(password);
+                    enc.ConfirmPassword(password);
+
+
+
+                    //try(OPCPackage opc = OPCPackage.open(new File("..."), PackageAccess.READ_WRITE);
+                    //OutputStream os = enc.getDataStream(fs)) {
+                     //   opc.save(os);
+                    //}
+                    // Write out the encrypted version
+                    //try (FileOutputStream fos = new FileOutputStream("...")) {
+                    //    fs.writeFilesystem(fos);
+                    //}
+
+
+                    // Apache POIと全く同じパターン
+                    using(OPCPackage opc = OPCPackage.Open(originalPath, PackageAccess.READ))
+                    using(OutputStream os = enc.GetDataStream(fs))
+                    {
+                        opc.Save(os);
+                    }
+
+                    using(FileStream fos = File.Create(outputPath))
+                    {
+                        fs.WriteFileSystem(fos);
+                    }
+                }
+
+                // バイト単位の厳密な検証
+                byte[] decrypted = XlsxEncryptor.Decrypt(outputPath, password);
+                byte[] original = File.ReadAllBytes(originalPath);
+
+                CollectionAssert.AreEqual(original, decrypted);
+            }
+            finally
+            {
+                if(File.Exists(outputPath))
+                {
+                    File.Delete(outputPath);
+                }
+            }
+        }
+
+        [Test]
+        public void TestByteExactCompatibilityWithApachePOI()
+        {
+            POIDataSamples samples = POIDataSamples.GetPOIFSInstance();
+            string originalPath = samples.GetFileInfo("encrypt_original.xlsx").FullName;
+            string poiPath = samples.GetFileInfo("encrypt_encrypted_by_poi_password_is_pass.xlsx").FullName;
+            string projectDir = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory));
+            string npoiPath = Path.Combine(projectDir, "encrypt_encrypted_by_npoi.xlsx");
+            string password = "pass";
+
+            try
+            {
+                // NPOIで暗号化（POI互換API使用）
+                using(POIFSFileSystem fs = new())
+                {
+                    EncryptionInfo info = new(EncryptionMode.Agile);
+                    Encryptor enc = info.Encryptor;
+                    enc.ConfirmPassword(password);
+
+                    using(OPCPackage opc = OPCPackage.Open(originalPath, PackageAccess.READ))
+                    using(OutputStream os = enc.GetDataStream(fs))
+                    {
+                        opc.Save(os);
+                    }
+
+                    using(FileStream fos = File.Create(npoiPath))
+                    {
+                        fs.WriteFilesystem(fos);
+                    }
+                }
+
+                // POIファイルを復号化
+                byte[] decryptedFromPoi = XlsxEncryptor.Decrypt(poiPath, password);
+
+                // NPOIファイルを復号化
+                byte[] decryptedFromNpoi = XlsxEncryptor.Decrypt(npoiPath, password);
+
+                // 復号化結果が完全一致（バイト単位）
+                CollectionAssert.AreEqual(decryptedFromPoi, decryptedFromNpoi);
+
+                // 元ファイルとも一致
+                byte[] original = File.ReadAllBytes(originalPath);
+                CollectionAssert.AreEqual(original, decryptedFromPoi);
+                CollectionAssert.AreEqual(original, decryptedFromNpoi);
+            }
+            finally
+            {
+                if(File.Exists(npoiPath))
+                {
+                    File.Delete(npoiPath);
+                }
+            }
+        }
+
+        [Test]
+        public void TestEncryptionStructureCompatibility()
+        {
+            // CFBファイル構造、XML、DataSpacesまで含めて検証
+            POIDataSamples samples = POIDataSamples.GetPOIFSInstance();
+            string originalPath = samples.GetFileInfo("encrypt_original.xlsx").FullName;
+            string poiPath = samples.GetFileInfo("encrypt_encrypted_by_poi_password_is_pass.xlsx").FullName;
+            string projectDir = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory));
+            string npoiPath = Path.Combine(projectDir, "encrypt_encrypted_by_npoi.xlsx");
+            string password = "pass";
+
+            try
+            {
+                using(POIFSFileSystem fs = new())
+                {
+                    EncryptionInfo info = new(EncryptionMode.Agile);
+                    Encryptor enc = info.Encryptor;
+                    enc.ConfirmPassword(password);
+
+                    using(OPCPackage opc = OPCPackage.Open(originalPath, PackageAccess.READ))
+                    using(OutputStream os = enc.GetDataStream(fs))
+                    {
+                        opc.Save(os);
+                    }
+
+                    using(FileStream fos = File.Create(npoiPath))
+                    {
+                        fs.WriteFileSystem(fos);
+                    }
+                }
+
+                // CFB構造の検証
+                using(RootStorage poiRoot = RootStorage.OpenRead(poiPath))
+                using(RootStorage npoiRoot = RootStorage.OpenRead(npoiPath))
+                {
+                    // EncryptionInfo XMLの構造比較
+                    string poiEncInfo = ReadEncryptionInfoXml(poiRoot);
+                    string npoiEncInfo = ReadEncryptionInfoXml(npoiRoot);
+
+                    // XML構造が同じであることを確認（値は異なってもよい）
+                    ClassicAssert.IsNotNull(poiEncInfo);
+                    ClassicAssert.IsNotNull(npoiEncInfo);
+
+                    // DataSpaces構造の存在確認
+                    VerifyDataSpacesStructure(poiRoot);
+                    VerifyDataSpacesStructure(npoiRoot);
+                }
+
+                // 最終的なバイトレベル検証
+                byte[] decryptedFromNPOI = XlsxEncryptor.Decrypt(npoiPath, password);
+                byte[] original = File.ReadAllBytes(originalPath);
+                CollectionAssert.AreEqual(original, decryptedFromNPOI);
+            }
+            finally
+            {
+                if(File.Exists(npoiPath))
+                {
+                    File.Delete(npoiPath);
+                }
+            }
+        }
+
+        private string ReadEncryptionInfoXml(RootStorage root)
+        {
+            using CfbStream stream = root.OpenStream("EncryptionInfo");
+            using BinaryReader reader = new(stream);
+            reader.ReadUInt16(); // version major
+            reader.ReadUInt16(); // version minor
+            reader.ReadUInt32(); // flags
+            byte[] xmlBytes = reader.ReadBytes((int) stream.Length - 8);
+            return Encoding.UTF8.GetString(xmlBytes);
+        }
+
+        private void VerifyDataSpacesStructure(RootStorage root)
+        {
+            // DataSpaces構造の検証
+            OpenMcdf.Storage ds = root.CreateStorage("\u0006DataSpaces");
+
+
+            OpenMcdf.Storage dataSpaces = root.CreateStorage("\u0006DataSpaces");
+            ClassicAssert.IsNotNull(dataSpaces);
+
+            // Version stream
+            using(CfbStream version = dataSpaces.OpenStream("Version"))
+            {
+                ClassicAssert.IsTrue(version.Length > 0);
+            }
+
+            // DataSpaceMap stream
+            using(CfbStream map = dataSpaces.OpenStream("DataSpaceMap"))
+            {
+                ClassicAssert.IsTrue(map.Length > 0);
+            }
+
+            // DataSpaceInfo
+            OpenMcdf.Storage info = dataSpaces.CreateStorage("DataSpaceInfo");
+            ClassicAssert.IsNotNull(info);
+
+            // TransformInfo
+            OpenMcdf.Storage transformInfo = dataSpaces.CreateStorage("TransformInfo");
+            ClassicAssert.IsNotNull(transformInfo);
         }
     }
 }

@@ -22,6 +22,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using NPOI.POIFS.Common;
+using NPOI.POIFS.Crypt;
 using NPOI.POIFS.Dev;
 using NPOI.POIFS.NIO;
 using NPOI.POIFS.Properties;
@@ -39,7 +40,7 @@ namespace NPOI.POIFS.FileSystem
      * This is the new NIO version
      */
 
-    public class NPOIFSFileSystem : BlockStore, POIFSViewable , ICloseable
+    public class NPOIFSFileSystem : BlockStore, POIFSViewable , ICloseable, IDisposable
     {
         private static POILogger _logger =
                 POILogFactory.GetLogger(typeof(NPOIFSFileSystem));
@@ -115,11 +116,11 @@ namespace NPOI.POIFS.FileSystem
         /**
          * <p>Creates a POIFSFileSystem from a <tt>File</tt>. This uses less memory than
          *  creating from an <tt>InputStream</tt>. The File will be opened read-only</p>
-         *  
+         *
          * <p>Note that with this constructor, you will need to call {@link #close()}
          *  when you're done to have the underlying file closed, as the file is
-         *  kept open during normal operation to read the data out.</p> 
-         *  
+         *  kept open during normal operation to read the data out.</p>
+         *
          * @param file the File from which to read the data
          *
          * @exception IOException on errors reading, or on invalid data
@@ -127,16 +128,16 @@ namespace NPOI.POIFS.FileSystem
         public NPOIFSFileSystem(FileInfo file)
             : this(file, true)
         {
-            
+
         }
         /**
          * <p>Creates a POIFSFileSystem from a <tt>File</tt>. This uses less memory than
          *  creating from an <tt>InputStream</tt>.</p>
-         *  
+         *
          * <p>Note that with this constructor, you will need to call {@link #close()}
          *  when you're done to have the underlying file closed, as the file is
-         *  kept open during normal operation to read the data out.</p> 
-         *  
+         *  kept open during normal operation to read the data out.</p>
+         *
          * @param file the File from which to read or read/write the data
          * @param readOnly whether the POIFileSystem will only be used in read-only mode
          *
@@ -148,14 +149,14 @@ namespace NPOI.POIFS.FileSystem
             ;
         }
         /**
-         * <p>Creates a POIFSFileSystem from an open <tt>FileChannel</tt>. This uses 
+         * <p>Creates a POIFSFileSystem from an open <tt>FileChannel</tt>. This uses
          *  less memory than creating from an <tt>InputStream</tt>. The stream will
         *  be used in read-only mode.</p>
-         *  
+         *
          * <p>Note that with this constructor, you will need to call {@link #close()}
          *  when you're done to have the underlying Channel closed, as the channel is
-         *  kept open during normal operation to read the data out.</p> 
-         *  
+         *  kept open during normal operation to read the data out.</p>
+         *
          * @param channel the FileChannel from which to read the data
          *
          * @exception IOException on errors reading, or on invalid data
@@ -167,13 +168,13 @@ namespace NPOI.POIFS.FileSystem
         }
 
         /**
-         * <p>Creates a POIFSFileSystem from an open <tt>FileChannel</tt>. This uses 
+         * <p>Creates a POIFSFileSystem from an open <tt>FileChannel</tt>. This uses
          *  less memory than creating from an <tt>InputStream</tt>.</p>
-         *  
+         *
          * <p>Note that with this constructor, you will need to call {@link #close()}
          *  when you're done to have the underlying Channel closed, as the channel is
-         *  kept open during normal operation to read the data out.</p> 
-         *  
+         *  kept open during normal operation to read the data out.</p>
+         *
          * @param channel the FileChannel from which to read or read/write the data
          * @param readOnly whether the POIFileSystem will only be used in read-only mode
          *
@@ -397,7 +398,7 @@ namespace NPOI.POIFS.FileSystem
             }
             // Work out how many FAT blocks remain in the XFATs
             int remainingFATs = _header.BATCount - _header.BATArray.Length;
-       
+
             // Now read the XFAT blocks, and the FATs within them
             BATBlock xfat;
             int nextAt = _header.XBATIndex;
@@ -411,7 +412,7 @@ namespace NPOI.POIFS.FileSystem
                 _xbat_blocks.Add(xfat);
                 // Process all the (used) FATs from this XFAT
                 int xbatFATs = Math.Min(remainingFATs, bigBlockSize.GetXBATEntriesPerBlock());
-                for(int j=0; j<xbatFATs; j++) 
+                for(int j=0; j<xbatFATs; j++)
                 {
                     int fatAt = xfat.GetValueAt(j);
                     if (fatAt == POIFSConstants.UNUSED_BLOCK || fatAt == POIFSConstants.END_OF_CHAIN) break;
@@ -501,7 +502,7 @@ namespace NPOI.POIFS.FileSystem
         }
 
         /**
-         * Load the block at the given offset, 
+         * Load the block at the given offset,
          *  extending the file if needed
          */
         public override ByteBuffer CreateBlockIfNeeded(int offset)
@@ -583,7 +584,7 @@ namespace NPOI.POIFS.FileSystem
             bat.SetValueAt(0, POIFSConstants.FAT_SECTOR_BLOCK);
             _bat_blocks.Add(bat);
 
-            // Now store a reference to the BAT in the required place 
+            // Now store a reference to the BAT in the required place
             if (_header.BATCount >= 109)
             {
                 // Needs to come from an XBAT
@@ -680,7 +681,7 @@ namespace NPOI.POIFS.FileSystem
         }
 
         /**
-         * add a new POIFSDocument to the FileSytem 
+         * add a new POIFSDocument to the FileSytem
          *
          * @param document the POIFSDocument being Added
          */
@@ -787,9 +788,9 @@ namespace NPOI.POIFS.FileSystem
 
         /**
          * Write the filesystem out to the open file. Will thrown an
-         *  {@link ArgumentException} if opened from an 
+         *  {@link ArgumentException} if opened from an
          *  {@link InputStream}.
-         * 
+         *
          * @exception IOException thrown on errors writing to the stream
          */
         public void WriteFileSystem()
@@ -829,7 +830,7 @@ namespace NPOI.POIFS.FileSystem
 
         /**
          * Has our in-memory objects write their state
-         *  to their backing blocks 
+         *  to their backing blocks
          */
         private void syncWithDataSource()
         {
@@ -863,7 +864,7 @@ namespace NPOI.POIFS.FileSystem
 
         /**
          * Closes the FileSystem, freeing any underlying files, streams
-         *  and buffers. After this, you will be unable to read or 
+         *  and buffers. After this, you will be unable to read or
          *  write from the FileSystem.
          */
         public void Close()
@@ -1016,6 +1017,20 @@ namespace NPOI.POIFS.FileSystem
         }
 
         #endregion
+
+        /**
+         * Flag disposed
+         */
+        protected bool disposed = false;
+
+        public void Dispose()
+        {
+            if(!disposed)
+            {
+                Close();
+                disposed = true;
+            }
+        }
     }
 
 }

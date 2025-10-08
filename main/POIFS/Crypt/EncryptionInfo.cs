@@ -256,7 +256,7 @@ namespace NPOI.POIFS.Crypt
      * @param keyBits
      * @param blockSize
      * @param chainingMode
-     * 
+     *
      * @throws EncryptedDocumentException if the given parameters mismatch, e.g. only certain combinations
      *   of keyBits, blockSize are allowed for a given {@link CipherAlgorithm}
      */
@@ -316,7 +316,7 @@ namespace NPOI.POIFS.Crypt
         {
             get { return _versionMajor; }
         }
-        
+
         private readonly int _versionMinor;
         public int VersionMinor
         {
@@ -348,5 +348,31 @@ namespace NPOI.POIFS.Crypt
         {
             get { return _encryptor; }
         }
+/*
+        /// <summary>
+        /// initializer
+        /// </summary>
+        /// <param name="password"></param>
+        /// <exception cref="InvalidOperationException"></exception>
+        /// <exception cref="NotSupportedException"></exception>
+        public void InitializeForEncryption(string password)
+        {
+            if (Encryptor == null)
+            {
+                throw new InvalidOperationException("Encryptor not initialized");
+            }
+
+            // Agile encryptorの場合
+            if (Encryptor is AgileEncryptorForXlsx agileEnc)
+            {
+                agileEnc.ConfirmPassword(password);
+            }
+            else
+            {
+                throw new NotSupportedException("Only Agile encryption is currently supported");
+            }
+        }
+ */
     }
+
 }
