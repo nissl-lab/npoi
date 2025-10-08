@@ -45,7 +45,6 @@ namespace NPOI.POIFS.Crypt
 
         public EncryptionMode(string builder, int versionMajor, int versionMinor, int encryptionFlags)
         {
-            //NPOI.POIFS.Crypt.Agile. .AgileEncryptionInfoBuilderXlsx
             this.Builder = builder;
             this.VersionMajor = versionMajor;
             this.VersionMinor = versionMinor;
