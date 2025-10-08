@@ -181,6 +181,7 @@ namespace TestCases.POIFS.FileSystem
                 {
                     wb.Write(fos);
                 }
+
                 bool checkResult = TestDecryption(outputPath, password);
                 ClassicAssert.IsTrue(checkResult);
 
@@ -373,6 +374,51 @@ namespace TestCases.POIFS.FileSystem
             reader.ReadUInt32(); // flags
             byte[] xmlBytes = reader.ReadBytes((int) stream.Length - 8);
             return Encoding.UTF8.GetString(xmlBytes);
+        }
+
+
+        [Test]
+        public void TestOutput()
+        {
+            string projectDir = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory));
+            string outputPath = Path.Combine(projectDir, "protected_n.xlsx");
+            string outputPathNormal = Path.Combine(projectDir, "normal_n.xlsx");
+            string password = "pass";
+
+            try
+            {
+                XSSFWorkbook wb = new();
+                ISheet sheet = wb.CreateSheet("Sheet1");
+                sheet.CreateRow(0).CreateCell(0).SetCellValue("Hello");
+
+                using(FileStream fs = File.Create(outputPath))
+                {
+                    wb.Write(fs, password);
+                }
+                using(FileStream fs = File.Create(outputPathNormal))
+                {
+                    wb.Write(fs);
+                }
+
+                bool checkResult = TestDecryption(outputPath, password);
+                ClassicAssert.IsTrue(checkResult);
+
+                var decrypted = XlsxEncryptor.Decrypt(outputPath, password);
+                var normal = File.ReadAllBytes(outputPathNormal);
+                CollectionAssert.AreEqual(decrypted, normal);
+            }
+            finally
+            {
+                try
+                {
+                    File.Delete(outputPath);
+                    File.Delete(outputPathNormal);
+                }
+                catch(Exception)
+                {
+                    // no-op
+                }
+            }
         }
     }
 }
