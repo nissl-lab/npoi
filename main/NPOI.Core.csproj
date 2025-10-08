@@ -6,6 +6,7 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\npoi.snk</AssemblyOriginatorKeyFile>
     <OutputPath>..\solution\$(Configuration)\</OutputPath>
+    <NoWarn>$(NoWarn);CS8002</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -28,6 +29,24 @@
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net472' ">
     <Reference Include="System.Configuration" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="POIFS\Crypt\XlsxEncryptor.cs">
+      <CodeLanguage>cs</CodeLanguage>
+      <DefaultPackFolder>content</DefaultPackFolder>
+      <BuildAction>Compile</BuildAction>
+    </Compile>
+    <Compile Update="POIFS\Crypt\Agile\AgileEncryptorForXlsx.cs">
+      <CodeLanguage>cs</CodeLanguage>
+      <DefaultPackFolder>content</DefaultPackFolder>
+      <BuildAction>Compile</BuildAction>
+    </Compile>
+    <Compile Update="POIFS\Crypt\Agile\AgileEncryptionInfoBuilderXlsx.cs">
+      <CodeLanguage>cs</CodeLanguage>
+      <DefaultPackFolder>content</DefaultPackFolder>
+      <BuildAction>Compile</BuildAction>
+    </Compile>
   </ItemGroup>
 
 </Project>

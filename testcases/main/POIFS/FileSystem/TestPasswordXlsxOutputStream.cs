@@ -27,7 +27,6 @@
 
 using NPOI.OpenXml4Net.OPC;
 using NPOI.POIFS.Crypt;
-using NPOI.POIFS.Crypt.Agile;
 using NPOI.POIFS.FileSystem;
 using NPOI.SS.UserModel;
 using NPOI.Util;
@@ -147,12 +146,13 @@ namespace TestCases.POIFS.FileSystem
                 }
             }
         }
-/*
+
         [Test]
         public void TestOutputStream()
         {
             string projectDir = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory));
             string outputPath = Path.Combine(projectDir, "protected_n.xlsx");
+            string outputPathNormal = Path.Combine(projectDir, "normal_n.xlsx");
             string password = "pass";
 
             try
@@ -160,16 +160,46 @@ namespace TestCases.POIFS.FileSystem
                 XSSFWorkbook wb = new();
                 ISheet sheet = wb.CreateSheet("Sheet1");
                 sheet.CreateRow(0).CreateCell(0).SetCellValue("Hello");
-                using PasswordXlsxOutputStream outputStream = new(outputPath, password);
-                wb.Write(outputStream);
+
+                using(POIFSFileSystem fs = new())
+                {
+                    EncryptionInfo info = new(EncryptionMode.AgileXlsx);
+                    Encryptor enc = info.Encryptor;
+                    enc.ConfirmPassword(password);
+                    using(OutputStream os = enc.GetDataStream(fs))
+                    {
+                        wb.Write(os);
+                    }
+
+                    using(FileStream fos = File.Create(outputPath))
+                    {
+                        fs.WriteFileSystem(fos);
+                    }
+                }
+
+                using(FileStream fos = File.Create(outputPathNormal))
+                {
+                    wb.Write(fos);
+                }
                 bool checkResult = TestDecryption(outputPath, password);
                 ClassicAssert.IsTrue(checkResult);
+
+                // check a normal version
+                using(FileStream fis = File.OpenRead(outputPathNormal))
+                {
+                    XSSFWorkbook wbReloaded = new(fis);
+                    ClassicAssert.AreEqual(1, wbReloaded.NumberOfSheets);
+                    ClassicAssert.AreEqual("Sheet1", wbReloaded.GetSheetAt(0).SheetName);
+                    ClassicAssert.AreEqual("Hello",
+                        wbReloaded.GetSheetAt(0).GetRow(0).GetCell(0).StringCellValue);
+                }
             }
             finally
             {
                 try
                 {
                     File.Delete(outputPath);
+                    File.Delete(outputPathNormal);
                 }
                 catch(Exception)
                 {
@@ -177,40 +207,24 @@ namespace TestCases.POIFS.FileSystem
                 }
             }
         }
-*/
+
         [Test]
-        public void TestPOICompatibleAPI()
+        public void TestPoiCompatibleApi()
         {
             POIDataSamples samples = POIDataSamples.GetPOIFSInstance();
             string originalPath = samples.GetFileInfo("encrypt_original.xlsx").FullName;
-            //string poiPath = samples.GetFileInfo("encrypt_encrypted_by_poi_password_is_pass.xlsx").FullName;
             string projectDir = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory));
             string outputPath = Path.Combine(projectDir, "encrypt_encrypted_by_npoi.xlsx");
             string password = "pass";
-
 
             try
             {
                 using(POIFSFileSystem fs = new())
                 {
-                    EncryptionInfo info = new(EncryptionMode.Agile);
+                    EncryptionInfo info = new(EncryptionMode.AgileXlsx);
                     Encryptor enc = info.Encryptor;
-                    //info.InitializeForEncryption(password);
                     enc.ConfirmPassword(password);
 
-
-
-                    //try(OPCPackage opc = OPCPackage.open(new File("..."), PackageAccess.READ_WRITE);
-                    //OutputStream os = enc.getDataStream(fs)) {
-                     //   opc.save(os);
-                    //}
-                    // Write out the encrypted version
-                    //try (FileOutputStream fos = new FileOutputStream("...")) {
-                    //    fs.writeFilesystem(fos);
-                    //}
-
-
-                    // Apache POIと全く同じパターン
                     using(OPCPackage opc = OPCPackage.Open(originalPath, PackageAccess.READ))
                     using(OutputStream os = enc.GetDataStream(fs))
                     {
@@ -239,7 +253,7 @@ namespace TestCases.POIFS.FileSystem
         }
 
         [Test]
-        public void TestByteExactCompatibilityWithApachePOI()
+        public void TestByteExactCompatibilityWithApachePoi()
         {
             POIDataSamples samples = POIDataSamples.GetPOIFSInstance();
             string originalPath = samples.GetFileInfo("encrypt_original.xlsx").FullName;
@@ -253,7 +267,7 @@ namespace TestCases.POIFS.FileSystem
                 // NPOIで暗号化（POI互換API使用）
                 using(POIFSFileSystem fs = new())
                 {
-                    EncryptionInfo info = new(EncryptionMode.Agile);
+                    EncryptionInfo info = new(EncryptionMode.AgileXlsx);
                     Encryptor enc = info.Encryptor;
                     enc.ConfirmPassword(password);
 
@@ -265,7 +279,7 @@ namespace TestCases.POIFS.FileSystem
 
                     using(FileStream fos = File.Create(npoiPath))
                     {
-                        fs.WriteFilesystem(fos);
+                        fs.WriteFileSystem(fos);
                     }
                 }
 
@@ -307,7 +321,7 @@ namespace TestCases.POIFS.FileSystem
             {
                 using(POIFSFileSystem fs = new())
                 {
-                    EncryptionInfo info = new(EncryptionMode.Agile);
+                    EncryptionInfo info = new(EncryptionMode.AgileXlsx);
                     Encryptor enc = info.Encryptor;
                     enc.ConfirmPassword(password);
 
@@ -334,16 +348,12 @@ namespace TestCases.POIFS.FileSystem
                     // XML構造が同じであることを確認（値は異なってもよい）
                     ClassicAssert.IsNotNull(poiEncInfo);
                     ClassicAssert.IsNotNull(npoiEncInfo);
-
-                    // DataSpaces構造の存在確認
-                    VerifyDataSpacesStructure(poiRoot);
-                    VerifyDataSpacesStructure(npoiRoot);
                 }
 
                 // 最終的なバイトレベル検証
-                byte[] decryptedFromNPOI = XlsxEncryptor.Decrypt(npoiPath, password);
+                byte[] decryptedFromNpoi = XlsxEncryptor.Decrypt(npoiPath, password);
                 byte[] original = File.ReadAllBytes(originalPath);
-                CollectionAssert.AreEqual(original, decryptedFromNPOI);
+                CollectionAssert.AreEqual(original, decryptedFromNpoi);
             }
             finally
             {
@@ -354,7 +364,7 @@ namespace TestCases.POIFS.FileSystem
             }
         }
 
-        private string ReadEncryptionInfoXml(RootStorage root)
+        private static string ReadEncryptionInfoXml(RootStorage root)
         {
             using CfbStream stream = root.OpenStream("EncryptionInfo");
             using BinaryReader reader = new(stream);
@@ -363,36 +373,6 @@ namespace TestCases.POIFS.FileSystem
             reader.ReadUInt32(); // flags
             byte[] xmlBytes = reader.ReadBytes((int) stream.Length - 8);
             return Encoding.UTF8.GetString(xmlBytes);
-        }
-
-        private void VerifyDataSpacesStructure(RootStorage root)
-        {
-            // DataSpaces構造の検証
-            OpenMcdf.Storage ds = root.CreateStorage("\u0006DataSpaces");
-
-
-            OpenMcdf.Storage dataSpaces = root.CreateStorage("\u0006DataSpaces");
-            ClassicAssert.IsNotNull(dataSpaces);
-
-            // Version stream
-            using(CfbStream version = dataSpaces.OpenStream("Version"))
-            {
-                ClassicAssert.IsTrue(version.Length > 0);
-            }
-
-            // DataSpaceMap stream
-            using(CfbStream map = dataSpaces.OpenStream("DataSpaceMap"))
-            {
-                ClassicAssert.IsTrue(map.Length > 0);
-            }
-
-            // DataSpaceInfo
-            OpenMcdf.Storage info = dataSpaces.CreateStorage("DataSpaceInfo");
-            ClassicAssert.IsNotNull(info);
-
-            // TransformInfo
-            OpenMcdf.Storage transformInfo = dataSpaces.CreateStorage("TransformInfo");
-            ClassicAssert.IsNotNull(transformInfo);
         }
     }
 }

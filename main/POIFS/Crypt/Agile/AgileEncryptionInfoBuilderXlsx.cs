@@ -14,69 +14,29 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
+
+using NPOI.POIFS.FileSystem;
+using NPOI.Util;
+
 namespace NPOI.POIFS.Crypt.Agile
 {
-    using System;
-    using System.Text;
-    using System.Xml;
-    using OpenXmlFormats.Encryption;
-    using Crypt;
-    using FileSystem;
-    using Util;
-
     public class AgileEncryptionInfoBuilderXlsx : IEncryptionInfoBuilder
     {
+        private Encryptor encryptor;
 
-        EncryptionInfo info;
-        AgileEncryptionHeader header;
-        AgileEncryptionVerifier verifier;
-        AgileDecryptor decryptor;
-        Encryptor encryptor;
+        private EncryptionInfo info;
 
-        public void Initialize(EncryptionInfo info, ILittleEndianInput dis)
+        public void Initialize(EncryptionInfo ei, ILittleEndianInput dis)
         {
-            this.info = info;
+            info = ei;
             encryptor = new AgileEncryptorForXlsx();
         }
 
-        public void Initialize(EncryptionInfo info, CipherAlgorithm cipherAlgorithm, HashAlgorithm hashAlgorithm, int keyBits, int blockSize, ChainingMode chainingMode)
+        public void Initialize(EncryptionInfo ei, CipherAlgorithm cipherAlgorithm, HashAlgorithm hashAlgorithm,
+            int keyBits, int blockSize, ChainingMode chainingMode)
         {
-            this.info = info;
-        }
-
-        public AgileEncryptionHeader GetHeader()
-        {
-            return null;
-        }
-
-        public AgileEncryptionVerifier GetVerifier()
-        {
-            return null;
-        }
-
-        public AgileDecryptor GetDecryptor()
-        {
-            return null;
-        }
-
-        public Encryptor GetEncryptor()
-        {
-            return encryptor;
-        }
-
-        public EncryptionInfo GetInfo()
-        {
-            return info;
-        }
-
-        public static EncryptionDocument ParseDescriptor(String descriptor)
-        {
-            return null;
-        }
-
-        protected static EncryptionDocument ParseDescriptor(DocumentInputStream descriptor)
-        {
-            return null;
+            info = ei;
+            encryptor = new AgileEncryptorForXlsx();
         }
 
         EncryptionHeader IEncryptionInfoBuilder.GetHeader()
@@ -95,6 +55,26 @@ namespace NPOI.POIFS.Crypt.Agile
         }
 
         Encryptor IEncryptionInfoBuilder.GetEncryptor()
+        {
+            return encryptor;
+        }
+
+        public Encryptor GetEncryptor()
+        {
+            return encryptor;
+        }
+
+        public EncryptionInfo GetInfo()
+        {
+            return info;
+        }
+
+        public static object ParseDescriptor(string descriptor)
+        {
+            return null;
+        }
+
+        protected static object ParseDescriptor(DocumentInputStream descriptor)
         {
             return null;
         }

@@ -187,10 +187,5 @@ namespace NPOI.POIFS.FileSystem
             // Open it up again backed by the file
             return new POIFSFileSystem(file, false);
         }
-
-        public void WriteFilesystem(FileStream fos)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

@@ -34,8 +34,8 @@ namespace NPOI.POIFS.Crypt
         /* @see <a href="http://msdn.microsoft.com/en-us/library/dd906097(v=office.12).aspx">2.3.4.5 \EncryptionInfo Stream (Standard Encryption)</a> */
         public static readonly EncryptionMode Standard = new EncryptionMode("NPOI.POIFS.Crypt.Standard.StandardEncryptionInfoBuilder", 4, 2, 0x24);
         /* @see <a href="http://msdn.microsoft.com/en-us/library/dd925810(v=office.12).aspx">2.3.4.10 \EncryptionInfo Stream (Agile Encryption)</a> */
-        public static readonly EncryptionMode Agile = new EncryptionMode("NPOI.POIFS.Crypt.Agile.AgileEncryptionInfoBuilderXlsx", 4, 4, 0x40);
-        //public static readonly EncryptionMode AgileXlsx = new EncryptionMode("NPOI.POIFS.Crypt.Agile.AgileEncryptionInfoBuilderXlsx", 4, 4, 0x40);
+        public static readonly EncryptionMode Agile = new EncryptionMode("NPOI.POIFS.Crypt.Agile.AgileEncryptionInfoBuilder", 4, 4, 0x40);
+        public static readonly EncryptionMode AgileXlsx = new EncryptionMode("NPOI.POIFS.Crypt.Agile.AgileEncryptionInfoBuilderXlsx", 4, 4, 0x40);
 
 
         public string Builder { get; private set; }
@@ -45,6 +45,7 @@ namespace NPOI.POIFS.Crypt
 
         public EncryptionMode(string builder, int versionMajor, int versionMinor, int encryptionFlags)
         {
+            //NPOI.POIFS.Crypt.Agile. .AgileEncryptionInfoBuilderXlsx
             this.Builder = builder;
             this.VersionMajor = versionMajor;
             this.VersionMinor = versionMinor;

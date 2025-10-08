@@ -202,6 +202,9 @@ namespace NPOI.OpenXml4Net.OPC
             }
         }
 
+        /** data */
+        public byte[] FileDataBytes;
+
         /**
          * Open a package.
          *
@@ -225,7 +228,12 @@ namespace NPOI.OpenXml4Net.OPC
                 throw new ArgumentException("path must not be a directory");
 
 
+
             OPCPackage pack = new ZipPackage(path, access);
+            // to pass process when encrypt
+            var packageData = File.ReadAllBytes(path);
+            pack.FileDataBytes = packageData;
+
             bool success = false;
             if (pack.partList == null && access != PackageAccess.WRITE)
             {
@@ -1691,7 +1699,14 @@ namespace NPOI.OpenXml4Net.OPC
          */
         public void Save(Stream outputStream)
         {
-            ThrowExceptionIfReadOnly();
+            // 暗号化ストリームへの書き込みの場合は例外をスキップ
+            string outTypeName = outputStream?.GetType()?.FullName ?? "";
+            bool isEncryptionStream = outTypeName.Contains("AgileCipherOutputStream");
+
+            if (!isEncryptionStream)
+            {
+                ThrowExceptionIfReadOnly();
+            }
             this.SaveImpl(outputStream);
         }
 

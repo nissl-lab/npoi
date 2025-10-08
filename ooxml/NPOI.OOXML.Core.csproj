@@ -7,7 +7,6 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\npoi.snk</AssemblyOriginatorKeyFile>
     <OutputPath>..\solution\$(Configuration)\</OutputPath>
-    <NoWarn>$(NoWarn);CS8002</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

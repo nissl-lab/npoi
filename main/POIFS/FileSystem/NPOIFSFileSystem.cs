@@ -809,6 +809,15 @@ namespace NPOI.POIFS.FileSystem
             syncWithDataSource();
         }
 
+        /// <summary>
+        /// when do encrypt, sync is not need
+        /// </summary>
+        private bool isDirect;
+
+        public void MarkAsDirectWrite()
+        {
+            isDirect = true;
+        }
         /**
          * Write the filesystem out
          *
@@ -821,8 +830,11 @@ namespace NPOI.POIFS.FileSystem
         public void WriteFileSystem(Stream stream)
         {
 
-            // Have the datasource updated
-            syncWithDataSource();
+            if(!isDirect)
+            {
+                // Have the datasource updated
+                syncWithDataSource();
+            }
 
             // Now copy the contents to the stream
             _data.CopyTo(stream);
