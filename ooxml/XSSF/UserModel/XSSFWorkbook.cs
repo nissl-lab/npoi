@@ -1847,7 +1847,6 @@ namespace NPOI.XSSF.UserModel
         {
             if (string.IsNullOrEmpty(password))
             {
-                // パスワードが空なら通常保存
                 Write(stream);
                 return;
             }
