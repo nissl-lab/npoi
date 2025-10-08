@@ -145,7 +145,6 @@ namespace NPOI.POIFS.Crypt.Agile
 
             public override void Close()
             {
-                // 書き込みが完了したら暗号化
                 byte[] zipBytes = _buffer.ToArray();
 
                 if(_isClosed)
