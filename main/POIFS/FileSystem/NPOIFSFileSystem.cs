@@ -22,7 +22,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using NPOI.POIFS.Common;
-using NPOI.POIFS.Crypt;
 using NPOI.POIFS.Dev;
 using NPOI.POIFS.NIO;
 using NPOI.POIFS.Properties;
