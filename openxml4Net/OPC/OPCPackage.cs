@@ -9,6 +9,7 @@ using NPOI.OpenXml4Net.OPC.Internal.Unmarshallers;
 using NPOI.Util;
 using System.Text.RegularExpressions;
 using NPOI.OpenXml4Net.Util;
+using NPOI.POIFS.Crypt.Agile;
 
 namespace NPOI.OpenXml4Net.OPC
 {
@@ -226,7 +227,6 @@ namespace NPOI.OpenXml4Net.OPC
 
             if (new DirectoryInfo(path).Exists)
                 throw new ArgumentException("path must not be a directory");
-
 
 
             OPCPackage pack = new ZipPackage(path, access);
@@ -1699,9 +1699,8 @@ namespace NPOI.OpenXml4Net.OPC
          */
         public void Save(Stream outputStream)
         {
-            // 暗号化ストリームへの書き込みの場合は例外をスキップ
-            string outTypeName = outputStream?.GetType()?.FullName ?? "";
-            bool isEncryptionStream = outTypeName.Contains("AgileCipherOutputStream");
+            // skip when encrypt
+            bool isEncryptionStream = outputStream is AgileEncryptorForXlsx.AgileCipherOutputStream;
 
             if (!isEncryptionStream)
             {

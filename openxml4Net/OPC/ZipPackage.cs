@@ -4,6 +4,7 @@ using NPOI.OpenXml4Net.Exceptions;
 using NPOI.OpenXml4Net.OPC.Internal;
 using NPOI.OpenXml4Net.OPC.Internal.Marshallers;
 using NPOI.OpenXml4Net.Util;
+using NPOI.POIFS.Crypt.Agile;
 using NPOI.Util;
 using System;
 using System.Collections;
@@ -522,8 +523,7 @@ namespace NPOI.OpenXml4Net.OPC
 
         protected override void SaveImpl(Stream outputStream)
         {
-            string outTypeName = outputStream?.GetType()?.FullName ?? "";
-            bool isEncryptionStream = outTypeName.Contains("AgileCipherOutputStream");
+            bool isEncryptionStream = outputStream is AgileEncryptorForXlsx.AgileCipherOutputStream;
             if(FileDataBytes != null &&FileDataBytes.Length != 0)
             {
                 if (isEncryptionStream)

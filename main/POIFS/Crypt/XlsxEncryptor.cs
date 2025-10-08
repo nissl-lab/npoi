@@ -177,7 +177,6 @@ namespace NPOI.POIFS.Crypt
 
             try
             {
-                // スコープを明確に分離
                 using(RootStorage root = RootStorage.Create(tempFile))
                 {
                     using(CfbStream s = root.CreateStream("EncryptedPackage"))
@@ -203,16 +202,13 @@ namespace NPOI.POIFS.Crypt
                     }
 
                     root.Flush();
-                    // ここでrootのusingブロックが終了し、ファイルハンドルが解放される
                 }
 
-                // ファイルが完全に閉じられた後に読み取り
                 byte[] bytes = File.ReadAllBytes(tempFile);
                 return bytes;
             }
             finally
             {
-                // 確実にクリーンアップ
                 try
                 {
                     if(File.Exists(tempFile))
@@ -222,7 +218,7 @@ namespace NPOI.POIFS.Crypt
                 }
                 catch
                 {
-                    // 削除失敗時は無視（一時ファイルなので問題ない）
+                    // no-op
                 }
             }
         }

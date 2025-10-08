@@ -348,31 +348,5 @@ namespace NPOI.POIFS.Crypt
         {
             get { return _encryptor; }
         }
-/*
-        /// <summary>
-        /// initializer
-        /// </summary>
-        /// <param name="password"></param>
-        /// <exception cref="InvalidOperationException"></exception>
-        /// <exception cref="NotSupportedException"></exception>
-        public void InitializeForEncryption(string password)
-        {
-            if (Encryptor == null)
-            {
-                throw new InvalidOperationException("Encryptor not initialized");
-            }
-
-            // Agile encryptorの場合
-            if (Encryptor is AgileEncryptorForXlsx agileEnc)
-            {
-                agileEnc.ConfirmPassword(password);
-            }
-            else
-            {
-                throw new NotSupportedException("Only Agile encryption is currently supported");
-            }
-        }
- */
     }
-
 }
