@@ -256,7 +256,7 @@ namespace NPOI.POIFS.Crypt
      * @param keyBits
      * @param blockSize
      * @param chainingMode
-     *
+     * 
      * @throws EncryptedDocumentException if the given parameters mismatch, e.g. only certain combinations
      *   of keyBits, blockSize are allowed for a given {@link CipherAlgorithm}
      */
@@ -316,7 +316,7 @@ namespace NPOI.POIFS.Crypt
         {
             get { return _versionMajor; }
         }
-
+        
         private readonly int _versionMinor;
         public int VersionMinor
         {

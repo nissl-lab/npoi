@@ -25,7 +25,7 @@ using System;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using System.Xml;
 using NPOI.OpenXml4Net.OPC;
-using System.Text;
+using System.Text; 
 using Cysharp.Text;
 using NPOI.SS.Util;
 using NPOI.SS.Formula;
@@ -194,10 +194,10 @@ namespace NPOI.XSSF.UserModel
         /**
          * Constructs a XSSFWorkbook object given a OpenXML4J <code>Package</code> object,
          *  see <a href="http://poi.apache.org/oxml4j/">http://poi.apache.org/oxml4j/</a>.
-         *
+         * 
          * Once you have finished working with the Workbook, you should close the package
          * by calling pkg.close, to avoid leaving file handles open.
-         *
+         * 
          * Creating a XSSFWorkbook from a file-backed OPC Package has a lower memory
          *  footprint than an InputStream backed one.
          *
@@ -222,7 +222,7 @@ namespace NPOI.XSSF.UserModel
         /**
          * Constructs a XSSFWorkbook object, by buffering the whole stream into memory
          *  and then opening an {@link OPCPackage} object for it.
-         *
+         * 
          * Using an {@link InputStream} requires more memory than using a File, so
          *  if a {@link File} is available then you should instead do something like
          *   <pre><code>
@@ -231,7 +231,7 @@ namespace NPOI.XSSF.UserModel
          *       // work with the wb object
          *       ......
          *       pkg.close(); // gracefully closes the underlying zip file
-         *   </code></pre>
+         *   </code></pre>     
          */
         public XSSFWorkbook(Stream fileStream, bool readOnly = false)
             : base(PackageHelper.Open(fileStream, readOnly))
@@ -252,14 +252,14 @@ namespace NPOI.XSSF.UserModel
 
         /**
          * Constructs a XSSFWorkbook object from a given file.
-         *
-         * <p>Once you have finished working with the Workbook, you should close
-         * the package by calling  {@link #close()}, to avoid leaving file
+         * 
+         * <p>Once you have finished working with the Workbook, you should close 
+         * the package by calling  {@link #close()}, to avoid leaving file 
          * handles open.
-         *
-         * <p>Opening a XSSFWorkbook from a file has a lower memory footprint
+         * 
+         * <p>Opening a XSSFWorkbook from a file has a lower memory footprint 
          *  than opening from an InputStream
-         *
+         *  
          * @param file   the file to open
          */
         public XSSFWorkbook(FileInfo file, bool readOnly = false)
@@ -285,7 +285,7 @@ namespace NPOI.XSSF.UserModel
          *     then pass the data to ZipInputStream.
          *     </li>
          * <ol>
-         * <p>
+         * <p>    
          *     It should be noted, that (2) uses quite a bit more memory than (1), which
          *      doesn't need to hold the whole zip file in memory, and can take advantage
          *      of native methods.
@@ -299,9 +299,9 @@ namespace NPOI.XSSF.UserModel
          *       // work with the wb object
          *       ......
          *       pkg.close(); // gracefully closes the underlying zip file
-         *   </code></pre>
+         *   </code></pre>     
          * </p>
-         *
+         * 
          * @param      path   the file name.
          */
         public XSSFWorkbook(String path, bool readOnly = false)
@@ -391,7 +391,7 @@ namespace NPOI.XSSF.UserModel
                     ParseSheet(shIdMap, ctSheet);
 
                 }
-                // Load the external links tables. Their order is defined by the order
+                // Load the external links tables. Their order is defined by the order 
                 //  of CTExternalReference elements in the workbook
                 externalLinks = new List<ExternalLinksTable>(elIdMap.Count);
                 if (this.workbook.IsSetExternalReferences())
@@ -563,7 +563,7 @@ namespace NPOI.XSSF.UserModel
         /**
          * Create an XSSFSheet from an existing sheet in the XSSFWorkbook.
          *  The Cloned sheet is a deep copy of the original.
-         *
+         *  
          * @param sheetNum The index of the sheet to clone
          * @return XSSFSheet representing the Cloned sheet.
          * @throws ArgumentException if the sheet index in invalid
@@ -1293,9 +1293,9 @@ namespace NPOI.XSSF.UserModel
             return false;
         }
         /**
-         * As {@link #removeName(String)} is not necessarily unique
+         * As {@link #removeName(String)} is not necessarily unique 
          * (name + sheet index is unique), this method is more accurate.
-         *
+         * 
          * @param name the name to remove.
          */
         public void RemoveName(IName name)
@@ -2139,7 +2139,7 @@ namespace NPOI.XSSF.UserModel
 
         /**
          * Returns the list of {@link ExternalLinksTable} object for this workbook
-         *
+         * 
          * <p>The external links table specifies details of named ranges etc
          *  that are referenced from other workbooks, along with the last seen
          *  values of what they point to.</p>
@@ -2178,9 +2178,9 @@ namespace NPOI.XSSF.UserModel
         }
 
         /**
-         * Adds the External Link Table part and relations required to allow formulas
+         * Adds the External Link Table part and relations required to allow formulas 
          *  referencing the specified external workbook to be added to this one. Allows
-         *  formulas such as "[MyOtherWorkbook.xlsx]Sheet3!$A$5" to be added to the
+         *  formulas such as "[MyOtherWorkbook.xlsx]Sheet3!$A$5" to be added to the 
          *  file, for workbooks not already linked / referenced.
          *
          * @param name The name the workbook will be referenced as in formulas
@@ -2195,7 +2195,7 @@ namespace NPOI.XSSF.UserModel
          * A value true indicates the structure of the workbook is locked. Worksheets in the workbook can't be Moved,
          * deleted, hidden, unhidden, or Renamed, and new worksheets can't be inserted.<br/>
          * A value of false indicates the structure of the workbook is not locked.<br/>
-         *
+         * 
          * @return true if structure of workbook is locked
          */
         public bool IsStructureLocked()
@@ -2208,7 +2208,7 @@ namespace NPOI.XSSF.UserModel
          * A value of true indicates the workbook windows are locked. Windows are the same size and position each time the
          * workbook is opened.<br/>
          * A value of false indicates the workbook windows are not locked.
-         *
+         * 
          * @return true if windows that comprise the workbook are locked
          */
         public bool IsWindowsLocked()
@@ -2218,7 +2218,7 @@ namespace NPOI.XSSF.UserModel
 
         /**
          * Specifies a bool value that indicates whether the workbook is locked for revisions.
-         *
+         * 
          * @return true if the workbook is locked for revisions.
          */
         public bool IsRevisionLocked()
@@ -2245,7 +2245,7 @@ namespace NPOI.XSSF.UserModel
         }
 
         /**
-         * Locks the windows that comprise the workbook.
+         * Locks the windows that comprise the workbook. 
          */
         public void LockWindows()
         {
@@ -2254,7 +2254,7 @@ namespace NPOI.XSSF.UserModel
         }
 
         /**
-         * Unlocks the windows that comprise the workbook.
+         * Unlocks the windows that comprise the workbook. 
          */
         public void UnlockWindows()
         {
@@ -2400,7 +2400,7 @@ namespace NPOI.XSSF.UserModel
 
         /**
          * Returns the data table with the given name (case insensitive).
-         *
+         * 
          * @param name the data table name (case-insensitive)
          * @return The Data table in the workbook named <tt>name</tt>, or <tt>null</tt> if no table is named <tt>name</tt>.
          * @since 3.15 beta 2
@@ -2508,7 +2508,7 @@ namespace NPOI.XSSF.UserModel
 
                 imageNumber = previous + 1;
             }
-
+            
             XSSFPictureData img = (XSSFPictureData)CreateRelationship(XSSFPictureData.RELATIONS[(int)format], XSSFFactory.GetInstance(), imageNumber, true).DocumentPart;
             try
             {

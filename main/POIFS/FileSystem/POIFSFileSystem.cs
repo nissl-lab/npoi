@@ -17,12 +17,12 @@
 
 /* ================================================================
  * About NPOI
- * Author: Tony Qu
- * Author's email: tonyqus (at) gmail.com
+ * Author: Tony Qu 
+ * Author's email: tonyqus (at) gmail.com 
  * Author's Blog: tonyqus.wordpress.com.cn (wp.tonyqus.cn)
  * HomePage: http://www.codeplex.com/npoi
  * Contributors:
- *
+ * 
  * ==============================================================*/
 
 using System;
@@ -42,7 +42,7 @@ namespace NPOI.POIFS.FileSystem
     /// <summary>
     /// This is the main class of the POIFS system; it manages the entire
     /// life cycle of the filesystem.
-    /// @author Marc Johnson (mjohnson at apache dot org)
+    /// @author Marc Johnson (mjohnson at apache dot org) 
     /// </summary>
     [Serializable]
     public class POIFSFileSystem :
@@ -81,7 +81,7 @@ namespace NPOI.POIFS.FileSystem
         /// Create a POIFSFileSystem from an Stream. Normally the stream is Read until
         /// EOF.  The stream is always Closed.  In the unlikely case that the caller has such a stream and
         /// needs to use it after this constructor completes, a work around is to wrap the
-        /// stream in order to trap the Close() call.
+        /// stream in order to trap the Close() call.  
         /// </summary>
         /// <param name="stream">the Streamfrom which to Read the data</param>
         public POIFSFileSystem(Stream stream)
@@ -93,12 +93,12 @@ namespace NPOI.POIFS.FileSystem
         /**
          * <p>Creates a POIFSFileSystem from a <tt>File</tt>. This uses less memory than
          *  creating from an <tt>InputStream</tt>.</p>
-         *
+         *  
          * <p>Note that with this constructor, you will need to call {@link #close()}
          *  when you're done to have the underlying file closed, as the file is
-         *  kept open during normal operation to read the data out.</p>
+         *  kept open during normal operation to read the data out.</p> 
          * @param readOnly whether the POIFileSystem will only be used in read-only mode
-         *
+         *  
          * @param file the File from which to read the data
          *
          * @exception IOException on errors reading, or on invalid data
@@ -106,17 +106,17 @@ namespace NPOI.POIFS.FileSystem
         public POIFSFileSystem(FileInfo file, bool readOnly)
             : base(file, readOnly)
         {
-
+            
         }
 
         /**
          * <p>Creates a POIFSFileSystem from a <tt>File</tt>. This uses less memory than
          *  creating from an <tt>InputStream</tt>. The File will be opened read-only</p>
-         *
+         *  
          * <p>Note that with this constructor, you will need to call {@link #close()}
          *  when you're done to have the underlying file closed, as the file is
-         *  kept open during normal operation to read the data out.</p>
-         *
+         *  kept open during normal operation to read the data out.</p> 
+         *  
          * @param file the File from which to read the data
          *
          * @exception IOException on errors reading, or on invalid data
@@ -182,7 +182,7 @@ namespace NPOI.POIFS.FileSystem
             }
             finally
             {
-                tmp.Close();
+                tmp.Close(); 
             }
             // Open it up again backed by the file
             return new POIFSFileSystem(file, false);

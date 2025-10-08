@@ -15,7 +15,7 @@ namespace NPOI.OpenXml4Net.OPC
 {
     /**
      * Represents a container that can store multiple data objects.
-     *
+     * 
      * @author Julien Chable, CDubet
      * @version 0.1
      */
@@ -94,7 +94,7 @@ namespace NPOI.OpenXml4Net.OPC
 
         /**
          * Constructor.
-         *
+         * 
          * @param access
          *            Package access.
          */
@@ -141,7 +141,7 @@ namespace NPOI.OpenXml4Net.OPC
 
         /**
          * Open a package with read/write permission.
-         *
+         * 
          * @param path
          *            The document path.
          * @return A Package object, else <b>null</b>.
@@ -208,7 +208,7 @@ namespace NPOI.OpenXml4Net.OPC
 
         /**
          * Open a package.
-         *
+         * 
          * @param path
          *            The document path.
          * @param access
@@ -298,11 +298,11 @@ namespace NPOI.OpenXml4Net.OPC
 
         /**
          * Open a package.
-         *
+         * 
          * Note - uses quite a bit more memory than {@link #open(String)}, which
          * doesn't need to hold the whole zip file in memory, and can take advantage
          * of native methods
-         *
+         * 
          * @param in
          *            The InputStream to read the package from
          * @return A PackageBase object
@@ -343,7 +343,7 @@ namespace NPOI.OpenXml4Net.OPC
 
         /**
          * Opens a package if it exists, else it Creates one.
-         *
+         * 
          * @param file
          *            The file to open or to Create.
          * @return A newly Created package if the specified file does not exist,
@@ -365,7 +365,7 @@ namespace NPOI.OpenXml4Net.OPC
 
         /**
          * Creates a new package.
-         *
+         * 
          * @param file
          *            Path of the document.
          * @return A newly Created PackageBase ready to use.
@@ -422,7 +422,7 @@ namespace NPOI.OpenXml4Net.OPC
 
         /**
          * Flush the package : save all.
-         *
+         * 
          * @see #close()
          */
         public void Flush()
@@ -439,7 +439,7 @@ namespace NPOI.OpenXml4Net.OPC
 
         /**
          * Close the package and save its content.
-         *
+         * 
          * @throws IOException
          *             If an IO exception occur during the saving process.
          */
@@ -447,7 +447,7 @@ namespace NPOI.OpenXml4Net.OPC
         {
             if (this.packageAccess == PackageAccess.READ)
             {
-                logger.Log(POILogger.WARN,
+                logger.Log(POILogger.WARN, 
                     "The close() method is intended to SAVE a package. This package is open in READ ONLY mode, use the revert() method instead !");
                 Revert();
                 return;
@@ -506,8 +506,8 @@ namespace NPOI.OpenXml4Net.OPC
         }
 
         /// <summary>
-        /// Add a thumbnail to the package. This method is provided to make easier
-        /// the addition of a thumbnail in a package. You can do the same work by
+        /// Add a thumbnail to the package. This method is provided to make easier 
+        /// the addition of a thumbnail in a package. You can do the same work by 
         /// using the traditionnal relationship and part mechanism.
         /// </summary>
         /// <param name="path">path The full path to the image file.</param>
@@ -529,13 +529,13 @@ namespace NPOI.OpenXml4Net.OPC
             }
         }
         /// <summary>
-        /// Add a thumbnail to the package. This method is provided to make easier
-        /// the addition of a thumbnail in a package. You can do the same work by
+        /// Add a thumbnail to the package. This method is provided to make easier 
+        /// the addition of a thumbnail in a package. You can do the same work by 
         /// using the traditionnal relationship and part mechanism.
         /// </summary>
         /// <param name="filename"></param>
         /// <param name="data"></param>
-        public void AddThumbnail(String filename, Stream data)
+        public void AddThumbnail(String filename, Stream data) 
         {
             // Check parameter
             if (string.IsNullOrEmpty(filename))
@@ -585,7 +585,7 @@ namespace NPOI.OpenXml4Net.OPC
         /**
          * Throws an exception if the package access mode is in read only mode
          * (PackageAccess.Read).
-         *
+         * 
          * @throws InvalidOperationException
          *             Throws if a writing operation is done on a read only package.
          * @see org.apache.poi.OpenXml4Net.opc.PackageAccess
@@ -601,7 +601,7 @@ namespace NPOI.OpenXml4Net.OPC
          * Throws an exception if the package access mode is in write only mode
          * (PackageAccess.Write). This method is call when other methods need write
          * right.
-         *
+         * 
          * @throws InvalidOperationException if a read operation is done on a write only package.
          * @see org.apache.poi.OpenXml4Net.opc.PackageAccess
          */
@@ -614,7 +614,7 @@ namespace NPOI.OpenXml4Net.OPC
 
         /**
          * Retrieves or Creates if none exists, core package property part.
-         *
+         * 
          * @return The PackageProperties part of this package.
          */
         public IPackageProperties GetPackageProperties()
@@ -660,7 +660,7 @@ namespace NPOI.OpenXml4Net.OPC
         }
         /**
          * Retrieve a part identified by its name.
-         *
+         * 
          * @param PartName
          *            Part name of the part to retrieve.
          * @return The part with the specified name, else <code>null</code>.
@@ -689,7 +689,7 @@ namespace NPOI.OpenXml4Net.OPC
 
         /**
          * Retrieve parts by content type.
-         *
+         * 
          * @param contentType
          *            The content type criteria.
          * @return All part associated to the specified content type.
@@ -708,7 +708,7 @@ namespace NPOI.OpenXml4Net.OPC
 
         /**
          * Retrieve parts by relationship type.
-         *
+         * 
          * @param relationshipType
          *            Relationship type.
          * @return All parts which are the target of a relationship with the
@@ -760,7 +760,7 @@ namespace NPOI.OpenXml4Net.OPC
 
         /**
          * Get the target part from the specified relationship.
-         *
+         * 
          * @param partRel
          *            The part relationship uses to retrieve the part.
          */
@@ -790,11 +790,11 @@ namespace NPOI.OpenXml4Net.OPC
         /**
          * Load the parts of the archive if it has not been done yet. The
          * relationships of each part are not loaded.
-         *
+         * 
          * Note - Rule M4.1 states that there may only ever be one Core
          *  Properties Part, but Office produced files will sometimes
          *  have multiple! As Office ignores all but the first, we relax
-         *  Compliance with Rule M4.1, and ignore all others silently too.
+         *  Compliance with Rule M4.1, and ignore all others silently too. 
          *
          * @return All this package's parts.
          * @throws InvalidFormatException if the package is not valid.
@@ -901,7 +901,7 @@ namespace NPOI.OpenXml4Net.OPC
         /**
          * Create and Add a part, with the specified name and content type, to the
          * package.
-         *
+         * 
          * @param PartName
          *            Part name.
          * @param contentType
@@ -911,7 +911,7 @@ namespace NPOI.OpenXml4Net.OPC
          *             If rule M1.12 is not verified : Packages shall not contain
          *             equivalent part names and package implementers shall neither
          *             Create nor recognize packages with equivalent part names.
-         * @see #CreatePartImpl(PackagePartName, String, bool)
+         * @see #CreatePartImpl(PackagePartName, String, bool) 
          */
         public PackagePart CreatePart(PackagePartName partName, String contentType)
         {
@@ -922,7 +922,7 @@ namespace NPOI.OpenXml4Net.OPC
          * Create and Add a part, with the specified name and content type, to the
          * package. For general purpose, prefer the overload version of this method
          * without the 'loadRelationships' parameter.
-         *
+         * 
          * @param PartName
          *            Part name.
          * @param contentType
@@ -1003,7 +1003,7 @@ namespace NPOI.OpenXml4Net.OPC
 
         /**
          * Add a part to the package.
-         *
+         * 
          * @param PartName
          *            Part name of the part to Create.
          * @param contentType
@@ -1012,7 +1012,7 @@ namespace NPOI.OpenXml4Net.OPC
          *            the contents to Add. In order to have faster operation in
          *            document merge, the data are stored in memory not on a hard
          *            disk
-         *
+         * 
          * @return The new part.
          * @see #CreatePart(PackagePartName, String)
          */
@@ -1095,7 +1095,7 @@ namespace NPOI.OpenXml4Net.OPC
         /**
          * Remove the specified part in this package. If this part is relationship
          * part, then delete all relationships in the source part.
-         *
+         * 
          * @param part
          *            The part to Remove. If <code>null</code>, skip the action.
          * @see #RemovePart(PackagePartName)
@@ -1111,7 +1111,7 @@ namespace NPOI.OpenXml4Net.OPC
         /**
          * Remove a part in this package. If this part is relationship part, then
          * delete all relationships in the source part.
-         *
+         * 
          * @param PartName
          *            The part name of the part to Remove.
          */
@@ -1175,7 +1175,7 @@ namespace NPOI.OpenXml4Net.OPC
          * Remove a part from this package as well as its relationship part, if one
          * exists, and all parts listed in the relationship part. Be aware that this
          * do not delete relationships which target the specified part.
-         *
+         * 
          * @param PartName
          *            The name of the part to delete.
          * @throws InvalidFormatException
@@ -1225,7 +1225,7 @@ namespace NPOI.OpenXml4Net.OPC
          * part if one exists. Prefer the use of this method to delete a part in the
          * package, compare to the Remove() methods that don't Remove associated
          * relationships part.
-         *
+         * 
          * @param PartName
          *            Name of the part to delete
          */
@@ -1246,7 +1246,7 @@ namespace NPOI.OpenXml4Net.OPC
          * apply to all parts in the relationships part of the specified part.
          * Prefer the use of this method to delete a part in the package, compare to
          * the Remove() methods that don't Remove associated relationships part.
-         *
+         * 
          * @param PartName
          *            Name of the part to delete
          */
@@ -1287,7 +1287,7 @@ namespace NPOI.OpenXml4Net.OPC
 
         /**
          * Check if a part already exists in this package from its name.
-         *
+         * 
          * @param PartName
          *            Part name to check.
          * @return <i>true</i> if the part is logically Added to this package, else
@@ -1300,18 +1300,18 @@ namespace NPOI.OpenXml4Net.OPC
 
         /**
          * Add a relationship to the package (except relationships part).
-         *
+         * 
          * Check rule M4.1 : The format designer shall specify and the format
          * producer shall Create at most one core properties relationship for a
          * package. A format consumer shall consider more than one core properties
          * relationship for a package to be an error. If present, the relationship
          * shall target the Core Properties part.
-         *
+         * 
          * Check rule M1.25: The Relationships part shall not have relationships to
          * any other part. Package implementers shall enforce this requirement upon
          * the attempt to Create such a relationship and shall treat any such
          * relationship as invalid.
-         *
+         * 
          * @param targetPartName
          *            Target part name.
          * @param targetMode
@@ -1361,7 +1361,7 @@ namespace NPOI.OpenXml4Net.OPC
 
         /**
          * Add a package relationship.
-         *
+         * 
          * @param targetPartName
          *            Target part name.
          * @param targetMode
@@ -1379,11 +1379,11 @@ namespace NPOI.OpenXml4Net.OPC
 
         /**
          * Adds an external relationship to a part (except relationships part).
-         *
+         * 
          * The targets of external relationships are not subject to the same
          * validity checks that internal ones are, as the contents is potentially
          * any file, URL or similar.
-         *
+         * 
          * @param target
          *            External target of the relationship
          * @param relationshipType
@@ -1400,11 +1400,11 @@ namespace NPOI.OpenXml4Net.OPC
 
         /**
          * Adds an external relationship to a part (except relationships part).
-         *
+         * 
          * The targets of external relationships are not subject to the same
          * validity checks that internal ones are, as the contents is potentially
          * any file, URL or similar.
-         *
+         * 
          * @param target
          *            External target of the relationship
          * @param relationshipType
@@ -1446,7 +1446,7 @@ namespace NPOI.OpenXml4Net.OPC
 
         /**
          * Delete a relationship from this package.
-         *
+         * 
          * @param id
          *            Id of the relationship to delete.
          */
@@ -1476,7 +1476,7 @@ namespace NPOI.OpenXml4Net.OPC
 
         /**
          * Retrieves all relationships with the specified type.
-         *
+         * 
          * @param relationshipType
          *            The filter specifying the relationship type.
          * @return All relationships with the specified relationship type.
@@ -1495,7 +1495,7 @@ namespace NPOI.OpenXml4Net.OPC
         /**
          * Retrieves all relationships with specified id (normally just ine because
          * a relationship id is supposed to be unique).
-         *
+         * 
          * @param id
          *            Id of the wanted relationship.
          */
@@ -1570,7 +1570,7 @@ namespace NPOI.OpenXml4Net.OPC
 
         /**
          * Add a marshaller.
-         *
+         * 
          * @param contentType
          *            The content type to bind to the specified marshaller.
          * @param marshaller
@@ -1591,7 +1591,7 @@ namespace NPOI.OpenXml4Net.OPC
 
         /**
          * Add an unmarshaller.
-         *
+         * 
          * @param contentType
          *            The content type to bind to the specified unmarshaller.
          * @param unmarshaller
@@ -1614,7 +1614,7 @@ namespace NPOI.OpenXml4Net.OPC
 
         /**
          * Remove a marshaller by its content type.
-         *
+         * 
          * @param contentType
          *            The content type associated with the marshaller to Remove.
          */
@@ -1625,7 +1625,7 @@ namespace NPOI.OpenXml4Net.OPC
 
         /**
          * Remove an unmarshaller by its content type.
-         *
+         * 
          * @param contentType
          *            The content type associated with the unmarshaller to Remove.
          */
@@ -1638,7 +1638,7 @@ namespace NPOI.OpenXml4Net.OPC
 
         /**
          * Get the package access mode.
-         *
+         * 
          * @return the packageAccess The current package access.
          */
         public PackageAccess GetPackageAccess()
@@ -1648,7 +1648,7 @@ namespace NPOI.OpenXml4Net.OPC
 
         /**
          * Validates the package compliance with the OPC specifications.
-         *
+         * 
          * @return <b>true</b> if the package is valid else <b>false</b>
          */
         public bool ValidatePackage(OPCPackage pkg)
@@ -1658,7 +1658,7 @@ namespace NPOI.OpenXml4Net.OPC
 
         /**
          * Save the document in the specified file.
-         *
+         * 
          * @param targetFile
          *            Destination file.
          * @throws IOException
@@ -1692,7 +1692,7 @@ namespace NPOI.OpenXml4Net.OPC
 
         /**
          * Save the document in the specified output stream.
-         *
+         * 
          * @param outputStream
          *            The stream to save the package.
          * @see #saveImpl(OutputStream)
@@ -1712,7 +1712,7 @@ namespace NPOI.OpenXml4Net.OPC
         /**
          * Core method to Create a package part. This method must be implemented by
          * the subclass.
-         *
+         * 
          * @param PartName
          *            URI of the part to Create.
          * @param contentType
@@ -1725,7 +1725,7 @@ namespace NPOI.OpenXml4Net.OPC
         /**
          * Core method to delete a package part. This method must be implemented by
          * the subclass.
-         *
+         * 
          * @param PartName
          *            The URI of the part to delete.
          */
@@ -1738,7 +1738,7 @@ namespace NPOI.OpenXml4Net.OPC
 
         /**
          * Close the package and cause a save of the package.
-         *
+         * 
          */
         protected abstract void CloseImpl();
 
@@ -1750,7 +1750,7 @@ namespace NPOI.OpenXml4Net.OPC
 
         /**
          * Save the package into the specified output stream.
-         *
+         * 
          * @param outputStream
          *            The output stream use to save this package.
          */
@@ -1758,7 +1758,7 @@ namespace NPOI.OpenXml4Net.OPC
 
         /**
          * Get the package part mapped to the specified URI.
-         *
+         * 
          * @param PartName
          *            The URI of the part to retrieve.
          * @return The package part located by the specified URI, else <b>null</b>.
@@ -1767,7 +1767,7 @@ namespace NPOI.OpenXml4Net.OPC
 
         /**
          * Get all parts link to the package.
-         *
+         * 
          * @return A list of the part owned by the package.
          */
         protected abstract PackagePart[] GetPartsImpl();
