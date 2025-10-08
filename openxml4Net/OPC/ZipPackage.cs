@@ -4,6 +4,7 @@ using NPOI.OpenXml4Net.Exceptions;
 using NPOI.OpenXml4Net.OPC.Internal;
 using NPOI.OpenXml4Net.OPC.Internal.Marshallers;
 using NPOI.OpenXml4Net.Util;
+using NPOI.POIFS.Crypt.Agile;
 using NPOI.Util;
 using System;
 using System.Collections;
@@ -522,8 +523,21 @@ namespace NPOI.OpenXml4Net.OPC
 
         protected override void SaveImpl(Stream outputStream)
         {
-            // Check that the document was open in write mode
-            ThrowExceptionIfReadOnly();
+            bool isEncryptionStream = outputStream is AgileEncryptorForXlsx.AgileCipherOutputStream;
+            if(FileDataBytes != null &&FileDataBytes.Length != 0)
+            {
+                if (isEncryptionStream)
+                {
+                    outputStream.Write(FileDataBytes, 0, FileDataBytes.Length);
+                    return;
+                }
+            }
+
+            // skip when do encrypt
+            if (!isEncryptionStream)
+            {
+                ThrowExceptionIfReadOnly();
+            }
             ZipOutputStream zos = null;
 
             try

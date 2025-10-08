@@ -39,7 +39,7 @@ namespace NPOI.POIFS.FileSystem
      * This is the new NIO version
      */
 
-    public class NPOIFSFileSystem : BlockStore, POIFSViewable , ICloseable
+    public class NPOIFSFileSystem : BlockStore, POIFSViewable , ICloseable, IDisposable
     {
         private static POILogger _logger =
                 POILogFactory.GetLogger(typeof(NPOIFSFileSystem));
@@ -808,6 +808,15 @@ namespace NPOI.POIFS.FileSystem
             syncWithDataSource();
         }
 
+        /// <summary>
+        /// when do encrypt, sync is not need
+        /// </summary>
+        private bool isDirect;
+
+        public void MarkAsDirectWrite()
+        {
+            isDirect = true;
+        }
         /**
          * Write the filesystem out
          *
@@ -820,8 +829,11 @@ namespace NPOI.POIFS.FileSystem
         public void WriteFileSystem(Stream stream)
         {
 
-            // Have the datasource updated
-            syncWithDataSource();
+            if(!isDirect)
+            {
+                // Have the datasource updated
+                syncWithDataSource();
+            }
 
             // Now copy the contents to the stream
             _data.CopyTo(stream);
@@ -1016,6 +1028,20 @@ namespace NPOI.POIFS.FileSystem
         }
 
         #endregion
+
+        /**
+         * Flag disposed
+         */
+        protected bool disposed = false;
+
+        public void Dispose()
+        {
+            if(!disposed)
+            {
+                Close();
+                disposed = true;
+            }
+        }
     }
 
 }

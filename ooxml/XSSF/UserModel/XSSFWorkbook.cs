@@ -34,6 +34,7 @@ using NPOI.SS.Formula.UDF;
 using NPOI.OpenXmlFormats;
 using System.Collections;
 using NPOI.OpenXml4Net.Exceptions;
+using NPOI.POIFS.Crypt;
 using NPOI.SS;
 using System.Globalization;
 using System.Linq;
@@ -1839,6 +1840,25 @@ namespace NPOI.XSSF.UserModel
             if (originalValue.HasValue && Package is ZipPackage)
             {
                 ((ZipPackage)Package).IsExternalStream = originalValue.Value;
+            }
+        }
+
+        public void Write(Stream stream, string password)
+        {
+            if (string.IsNullOrEmpty(password))
+            {
+                // パスワードが空なら通常保存
+                Write(stream);
+                return;
+            }
+
+            using (MemoryStream tempStream = new MemoryStream())
+            {
+                Write(tempStream);
+                byte[] packageData = tempStream.ToArray();
+
+                byte[] encryptedData = XlsxEncryptor.FromBytesToBytes(packageData, password);
+                stream.Write(encryptedData, 0, encryptedData.Length);
             }
         }
 

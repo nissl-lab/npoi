@@ -9,6 +9,7 @@ using NPOI.OpenXml4Net.OPC.Internal.Unmarshallers;
 using NPOI.Util;
 using System.Text.RegularExpressions;
 using NPOI.OpenXml4Net.Util;
+using NPOI.POIFS.Crypt.Agile;
 
 namespace NPOI.OpenXml4Net.OPC
 {
@@ -18,7 +19,7 @@ namespace NPOI.OpenXml4Net.OPC
      * @author Julien Chable, CDubet
      * @version 0.1
      */
-    public abstract class OPCPackage : RelationshipSource, ICloseable
+    public abstract class OPCPackage : RelationshipSource, ICloseable, IDisposable
     {
 
         /**
@@ -85,6 +86,11 @@ namespace NPOI.OpenXml4Net.OPC
          * Output stream for writing this package.
          */
         protected Stream output;
+
+        /**
+         * Flag disposed
+         */
+        protected bool disposed = false;
 
         /**
          * Constructor.
@@ -197,6 +203,9 @@ namespace NPOI.OpenXml4Net.OPC
             }
         }
 
+        /** data */
+        public byte[] FileDataBytes;
+
         /**
          * Open a package.
          * 
@@ -221,6 +230,10 @@ namespace NPOI.OpenXml4Net.OPC
 
 
             OPCPackage pack = new ZipPackage(path, access);
+            // to pass process when encrypt
+            var packageData = File.ReadAllBytes(path);
+            pack.FileDataBytes = packageData;
+
             bool success = false;
             if (pack.partList == null && access != PackageAccess.WRITE)
             {
@@ -1686,7 +1699,13 @@ namespace NPOI.OpenXml4Net.OPC
          */
         public void Save(Stream outputStream)
         {
-            ThrowExceptionIfReadOnly();
+            // skip when encrypt
+            bool isEncryptionStream = outputStream is AgileEncryptorForXlsx.AgileCipherOutputStream;
+
+            if (!isEncryptionStream)
+            {
+                ThrowExceptionIfReadOnly();
+            }
             this.SaveImpl(outputStream);
         }
 
@@ -1827,6 +1846,15 @@ namespace NPOI.OpenXml4Net.OPC
             RemovePart(partName);
             this.contentTypeManager.RemoveContentType(partName);
             this.isDirty = true;
+        }
+
+        public void Dispose()
+        {
+            if (!disposed)
+            {
+                Close();
+                disposed = true;
+            }
         }
     }
 
