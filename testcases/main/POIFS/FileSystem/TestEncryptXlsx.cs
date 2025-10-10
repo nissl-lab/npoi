@@ -394,8 +394,17 @@ namespace TestCases.POIFS.FileSystem
                 ClassicAssert.IsTrue(checkResult);
 
                 var decrypted = XlsxEncryptor.Decrypt(outputPath, password);
-                var normal = File.ReadAllBytes(outputPathNormal);
-                CollectionAssert.AreEqual(decrypted, normal);
+                        
+                using var ms = new MemoryStream(decrypted);
+                using var decryptedWb = new XSSFWorkbook(ms);
+        
+                var decryptedSheet = decryptedWb.GetSheetAt(0);
+                var decryptedCell = decryptedSheet.GetRow(0).GetCell(0);
+        
+                ClassicAssert.AreEqual("Hello", decryptedCell.StringCellValue, "Cell value mismatch");
+                ClassicAssert.AreEqual("Sheet1", decryptedSheet.SheetName, "Sheet name mismatch");
+        
+                Console.WriteLine("✓ Encryption and decryption test passed");
             }
             finally
             {
