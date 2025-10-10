@@ -29,6 +29,9 @@ namespace NPOI.DDF
     /// </summary>
     public class EscherBlipRecord : EscherRecord
     {
+        //arbitrarily selected; may need to increase
+        private static int MAX_RECORD_LENGTH = 100_000_000;
+
         public const short RECORD_ID_START = unchecked((short)0xF018);
         public const short RECORD_ID_END = unchecked((short)0xF117);
         public const String RECORD_DESCRIPTION = "msofbtBlip";
@@ -53,7 +56,7 @@ namespace NPOI.DDF
             int bytesAfterHeader = ReadHeader(data, offset);
             int pos = offset + HEADER_SIZE;
 
-            field_pictureData = new byte[bytesAfterHeader];
+            field_pictureData = IOUtils.SafelyAllocate(bytesAfterHeader, MAX_RECORD_LENGTH);
             Array.Copy(data, pos, field_pictureData, 0, bytesAfterHeader);
 
             return bytesAfterHeader + 8;
@@ -128,7 +131,7 @@ namespace NPOI.DDF
             {
                 throw new ArgumentOutOfRangeException("picture data, offset, length were out of range");
             }
-            field_pictureData = new byte[length];
+            field_pictureData = IOUtils.SafelyAllocate(length, MAX_RECORD_LENGTH);
             Array.Copy(pictureData, offset, field_pictureData, 0, length);
         }
         /// <summary>

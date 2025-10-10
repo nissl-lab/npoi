@@ -37,6 +37,9 @@ namespace NPOI.POIFS.Storage
 {
     public class DocumentBlock : BigBlock
     {
+        //arbitrarily selected; may need to increase
+        private static int MAX_RECORD_LENGTH = 100_000;
+
         private static readonly byte _default_value = (byte)0xFF;
         private readonly byte[] _data;
         private readonly int _bytes_Read;
@@ -46,7 +49,7 @@ namespace NPOI.POIFS.Storage
         /// </summary>
         /// <param name="block">The block.</param>
         public DocumentBlock(RawDataBlock block) : 
-			base(block.BigBlockSize == POIFSConstants.SMALLER_BIG_BLOCK_SIZE ? 
+            base(block.BigBlockSize == POIFSConstants.SMALLER_BIG_BLOCK_SIZE ? 
                     POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS : POIFSConstants.LARGER_BIG_BLOCK_SIZE_DETAILS)
         {
             _data = block.Data;
@@ -68,7 +71,7 @@ namespace NPOI.POIFS.Storage
         public DocumentBlock(POIFSBigBlockSize bigBlockSize)
             :base(bigBlockSize)
         {
-            _data = new byte[POIFSConstants.BIG_BLOCK_SIZE];
+            _data = IOUtils.SafelyAllocate(bigBlockSize.GetBigBlockSize(), MAX_RECORD_LENGTH);
             Arrays.Fill(_data, _default_value);
         }
 

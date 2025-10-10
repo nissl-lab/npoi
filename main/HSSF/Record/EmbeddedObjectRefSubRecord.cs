@@ -38,6 +38,9 @@ namespace NPOI.HSSF.Record
        : SubRecord, ICloneable
     {
         private static POILogger logger = POILogFactory.GetLogger(typeof(EmbeddedObjectRefSubRecord));
+        //arbitrarily selected; may need to increase
+        private static int MAX_RECORD_LENGTH = 100_000;
+
         public const short sid = 0x9;
         private static byte[] EMPTY_BYTE_ARRAY = [];
 
@@ -206,7 +209,7 @@ namespace NPOI.HSSF.Record
             {
                 return EMPTY_BYTE_ARRAY;
             }
-            byte[] result = new byte[size];
+            byte[] result = IOUtils.SafelyAllocate(size, MAX_RECORD_LENGTH);
             in1.ReadFully(result);
             return result;
         }

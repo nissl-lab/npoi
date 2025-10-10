@@ -29,6 +29,8 @@ namespace NPOI.HSSF.Record
      */
     public class OldStringRecord
     {
+        //arbitrarily selected; may need to increase
+        private static int MAX_RECORD_LENGTH = 100_000;
         public const short biff2_sid = 0x0007;
         public const short biff345_sid = 0x0207;
 
@@ -54,7 +56,7 @@ namespace NPOI.HSSF.Record
             }
 
             // Can only decode properly later when you know the codepage
-            field_2_bytes = new byte[field_1_string_len];
+            field_2_bytes = IOUtils.SafelyAllocate(field_1_string_len, MAX_RECORD_LENGTH);
             in1.Read(field_2_bytes, 0, field_1_string_len);
         }
 

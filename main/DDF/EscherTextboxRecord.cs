@@ -34,6 +34,9 @@ namespace NPOI.DDF
     /// </summary>
     public class EscherTextboxRecord : EscherRecord, ICloneable
     {
+        //arbitrarily selected; may need to increase
+        private static int MAX_RECORD_LENGTH = 100_000;
+
         public const short RECORD_ID = unchecked((short)0xF00D);
         public const string RECORD_DESCRIPTION = "msofbtClientTextbox";
 
@@ -60,7 +63,7 @@ namespace NPOI.DDF
 
             // Save the data, Ready for the calling code to do something
             //  useful with it
-            _thedata = new byte[bytesRemaining];
+            _thedata = IOUtils.SafelyAllocate(bytesRemaining, MAX_RECORD_LENGTH);
             Array.Copy(data, offset + 8, _thedata, 0, bytesRemaining);
             return bytesRemaining + 8;
         }
@@ -112,7 +115,7 @@ namespace NPOI.DDF
         /// <param name="length">The length.</param>
         public void SetData(byte[] b, int start, int length)
         {
-            _thedata = new byte[length];
+            _thedata = IOUtils.SafelyAllocate(length, MAX_RECORD_LENGTH);
             Array.Copy(b, start, _thedata, 0, length);
         }
         /// <summary>

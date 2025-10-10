@@ -41,6 +41,9 @@ namespace NPOI.POIFS.FileSystem
 
     public class NPOIFSFileSystem : BlockStore, POIFSViewable , ICloseable
     {
+        //arbitrarily selected; may need to increase
+        private static int MAX_RECORD_LENGTH = 100_000;
+
         private static POILogger _logger =
                 POILogFactory.GetLogger(typeof(NPOIFSFileSystem));
 
@@ -87,7 +90,8 @@ namespace NPOI.POIFS.FileSystem
             {
                 // Data needs to Initially hold just the header block,
                 //  a single bat block, and an empty properties section
-                _data = new ByteArrayBackedDataSource(new byte[bigBlockSize.GetBigBlockSize() * 3]);
+                _data = new ByteArrayBackedDataSource(IOUtils.SafelyAllocate(
+                   bigBlockSize.GetBigBlockSize()*3, MAX_RECORD_LENGTH));
             }
         }
 

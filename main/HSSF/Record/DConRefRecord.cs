@@ -67,6 +67,8 @@ namespace NPOI.HSSF.Record
  */
     public class DConRefRecord : StandardRecord
     {
+        //arbitrarily selected; may need to increase
+        private static int MAX_RECORD_LENGTH = 100_000;
 
         /**
          * The id of the record type,
@@ -163,7 +165,7 @@ namespace NPOI.HSSF.Record
              */
             int byteLength = charCount * ((charType & 1) + 1);
 
-            path = LittleEndian.GetByteArray(data, offset, byteLength);
+            path = LittleEndian.GetByteArray(data, offset, byteLength, MAX_RECORD_LENGTH);
             offset += byteLength;
 
             /*
@@ -171,7 +173,7 @@ namespace NPOI.HSSF.Record
              * unused field. Not sure If i need to bother with this...
              */
             if (path[0] == 0x02)
-                _unused = LittleEndian.GetByteArray(data, offset, (charType + 1));
+                _unused = LittleEndian.GetByteArray(data, offset, (charType + 1), MAX_RECORD_LENGTH);
 
         }
 
@@ -196,7 +198,7 @@ namespace NPOI.HSSF.Record
             // byteLength depends on whether we are using single- or double-byte chars.
             int byteLength = charCount * (charType + 1);
 
-            path = new byte[byteLength];
+            path = IOUtils.SafelyAllocate(byteLength, MAX_RECORD_LENGTH);
             inStream.ReadFully(path);
 
             if (path[0] == 0x02)

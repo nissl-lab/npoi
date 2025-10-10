@@ -31,6 +31,8 @@ namespace NPOI.DDF
     public class EscherMetafileBlip:EscherBlipRecord
     {
         private static POILogger log = POILogFactory.GetLogger(typeof(EscherMetafileBlip));
+        //arbitrarily selected; may need to increase
+        private static int MAX_RECORD_LENGTH = 100_000_000;
 
         public const short RECORD_ID_EMF = unchecked((short) 0xF018) + 2;
         public const short RECORD_ID_WMF = unchecked((short)0xF018) + 3;
@@ -95,7 +97,7 @@ namespace NPOI.DDF
             field_6_fCompression = data[pos]; pos++;
             field_7_fFilter = data[pos]; pos++;
 
-            raw_pictureData = new byte[field_5_cbSave];
+            raw_pictureData = IOUtils.SafelyAllocate(field_5_cbSave, MAX_RECORD_LENGTH);
             Array.Copy( data, pos, raw_pictureData, 0, field_5_cbSave );
             pos += field_5_cbSave;
 
@@ -112,7 +114,7 @@ namespace NPOI.DDF
             int remaining = bytesAfterHeader - pos + offset + HEADER_SIZE;
             if (remaining > 0)
             {
-                remainingData = new byte[remaining];
+                remainingData = IOUtils.SafelyAllocate(remaining, MAX_RECORD_LENGTH);
                 Array.Copy(data, pos, remainingData, 0, remaining);
             }
             return bytesAfterHeader + HEADER_SIZE;

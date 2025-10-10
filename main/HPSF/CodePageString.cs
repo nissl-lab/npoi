@@ -24,8 +24,8 @@ namespace NPOI.HPSF
 {
     public class CodePageString
     {
-        //private final static POILogger logger = POILogFactory
-        //   .getLogger( CodePageString.class );
+        //arbitrarily selected; may need to increase
+        private static int MAX_RECORD_LENGTH = 100_000;
 
         private byte[] _value;
 
@@ -34,7 +34,7 @@ namespace NPOI.HPSF
         {
             int offset = lei.GetReadIndex();
             int size = lei.ReadInt();
-            _value = new byte[size];
+            _value = IOUtils.SafelyAllocate(size, MAX_RECORD_LENGTH);
             if (size == 0) {
                 return;
             }

@@ -71,8 +71,8 @@ namespace NPOI.POIFS.FileSystem
             _closed = false;
             if (_document_size < 0)
             {
-			    // throw new RecordFormatException("document_size cannot be < 0");
-		    }
+                // throw new RecordFormatException("document_size cannot be < 0");
+            }
 
             DocumentProperty property = (DocumentProperty)doc.Property;
             _document = new NPOIFSDocument(
@@ -248,7 +248,7 @@ namespace NPOI.POIFS.FileSystem
             long rval = new_offset - _current_offset;
 
             // TODO Do this better
-            byte[] Skip = new byte[(int)rval];
+            byte[] Skip = IOUtils.SafelyAllocate(rval, int.MaxValue);
             ReadFully(Skip);
             return rval;
         }

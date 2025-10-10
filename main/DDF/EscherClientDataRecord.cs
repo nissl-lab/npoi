@@ -31,6 +31,9 @@ namespace NPOI.DDF
     /// </summary>
     public class EscherClientDataRecord : EscherRecord
     {
+        //arbitrarily selected; may need to increase
+        private static int MAX_RECORD_LENGTH = 100_000;
+
         public const short RECORD_ID = unchecked((short)0xF011);
         public const String RECORD_DESCRIPTION = "MsofbtClientData";
 
@@ -47,7 +50,7 @@ namespace NPOI.DDF
         {
             int bytesRemaining = ReadHeader(data, offset);
             int pos = offset + 8;
-            remainingData = new byte[bytesRemaining];
+            remainingData = IOUtils.SafelyAllocate(bytesRemaining, MAX_RECORD_LENGTH);
             Array.Copy(data, pos, remainingData, 0, bytesRemaining);
             return 8 + bytesRemaining;
         }

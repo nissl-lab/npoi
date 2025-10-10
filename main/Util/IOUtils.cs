@@ -59,6 +59,19 @@ namespace NPOI.Util
         /// </summary>
         private static readonly int DEFAULT_BUFFER_SIZE = 4096;
 
+        /**
+         * If this value is set to > 0, {@link #safelyAllocate(long, int)} will ignore the
+         * maximum record length parameter.  This is designed to allow users to bypass
+         * the hard-coded maximum record lengths if they are willing to accept the risk
+         * of an OutOfMemoryException.
+         *
+         * @param maxOverride
+         * @since 4.0.0
+         */
+        public static void SetByteArrayMaxOverride(int maxOverride)
+        {
+            BYTE_ARRAY_MAX_OVERRIDE = maxOverride;
+        }
         /// <summary>
         /// Peeks at the first 8 bytes of the stream. Returns those bytes, but
         ///  with the stream unaffected. Requires a stream that supports mark/reset,
@@ -504,8 +517,18 @@ namespace NPOI.Util
         {
             SafelyAllocateCheck(length, maxLength);
 
-            CheckByteSizeLimit((int)length);
-
+            //CheckByteSizeLimit((int)length);
+            if(BYTE_ARRAY_MAX_OVERRIDE > 0)
+            {
+                if(length > BYTE_ARRAY_MAX_OVERRIDE)
+                {
+                    ThrowRFE(length, BYTE_ARRAY_MAX_OVERRIDE);
+                }
+            }
+            else if(length > maxLength)
+            {
+                ThrowRFE(length, maxLength);
+            }
             return new byte[(int)length];
         }
 
@@ -520,14 +543,6 @@ namespace NPOI.Util
                 throw new RecordFormatException("Can't allocate an array > " + int.MaxValue);
             }
             CheckLength(length, maxLength);
-        }
-
-        private static void CheckByteSizeLimit(int length)
-        {
-            if (BYTE_ARRAY_MAX_OVERRIDE != -1 && length > BYTE_ARRAY_MAX_OVERRIDE)
-            {
-                ThrowRFE(length, BYTE_ARRAY_MAX_OVERRIDE);
-            }
         }
 
         private static void CheckLength(long length, int maxLength)

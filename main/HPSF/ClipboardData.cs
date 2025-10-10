@@ -5,8 +5,8 @@ namespace NPOI.HPSF
 {
     public class ClipboardData
     {
-        //private static final POILogger logger = POILogFactory
-        //    .getLogger( ClipboardData.class );
+        //arbitrarily selected; may need to increase
+        private static int MAX_RECORD_LENGTH = 100_000_000;
 
         private int _format = 0;
         private byte[] _value;
@@ -27,7 +27,7 @@ namespace NPOI.HPSF
             }
 
             _format = lei.ReadInt();
-            _value = new byte[size - LittleEndianConsts.INT_SIZE];
+            _value = IOUtils.SafelyAllocate(size - LittleEndianConsts.INT_SIZE, MAX_RECORD_LENGTH);
             lei.ReadFully(_value);
         }
 

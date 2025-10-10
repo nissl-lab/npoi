@@ -25,6 +25,8 @@ namespace NPOI.HPSF
     {
         //private final static POILogger logger = POILogFactory
         //   .getLogger( UnicodeString.class );
+        //arbitrarily selected; may need to increase
+        private static int MAX_RECORD_LENGTH = 100_000;
         internal UnicodeString() {}
         private byte[] _value;
 
@@ -32,7 +34,7 @@ namespace NPOI.HPSF
         {
             int length = lei.ReadInt();
             int unicodeBytes = length*2;
-            _value = new byte[unicodeBytes];
+            _value = IOUtils.SafelyAllocate(unicodeBytes, MAX_RECORD_LENGTH);
         
             // If Length is zero, this field MUST be zero bytes in length. If Length is
             // nonzero, this field MUST be a null-terminated array of 16-bit Unicode characters, followed by

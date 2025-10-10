@@ -82,15 +82,15 @@ namespace NPOI.HSSF.Record
             field_3_flags = in1.ReadShort();
             field_4_shapeid = in1.ReadUShort();
             int length = in1.ReadShort();
-		    field_5_hasMultibyte = in1.ReadByte() != 0x00;
-		    if (field_5_hasMultibyte) {
-			    field_6_author = StringUtil.ReadUnicodeLE(in1, length);
-		    } else {
-			    field_6_author = StringUtil.ReadCompressedUnicode(in1, length);
-		    }
- 		    if (in1.Available() == 1) {
-			    field_7_padding = (byte)in1.ReadByte();
-		    }
+            field_5_hasMultibyte = in1.ReadByte() != 0x00;
+            if (field_5_hasMultibyte) {
+                field_6_author = StringUtil.ReadUnicodeLE(in1, length);
+            } else {
+                field_6_author = StringUtil.ReadCompressedUnicode(in1, length);
+            }
+            if (in1.Available() == 1) {
+                field_7_padding = (byte)in1.ReadByte();
+            }
             else if (in1.Available() == 2 && length == 0)
             {
                 // If there's no author, may be double padded
@@ -118,19 +118,19 @@ namespace NPOI.HSSF.Record
         public override void Serialize(ILittleEndianOutput out1)
         {
             out1.WriteShort(field_1_row);
-		    out1.WriteShort(field_2_col);
-		    out1.WriteShort(field_3_flags);
-		    out1.WriteShort(field_4_shapeid);
-		    out1.WriteShort(field_6_author.Length);
-		    out1.WriteByte(field_5_hasMultibyte ? 0x01 : 0x00);
-		    if (field_5_hasMultibyte) {
-			    StringUtil.PutUnicodeLE(field_6_author, out1);
-		    } else {
-			    StringUtil.PutCompressedUnicode(field_6_author, out1);
-		    }
-		    if (field_7_padding != null) {
-			    out1.WriteByte(Convert.ToInt32(field_7_padding, CultureInfo.InvariantCulture));
-		    }
+            out1.WriteShort(field_2_col);
+            out1.WriteShort(field_3_flags);
+            out1.WriteShort(field_4_shapeid);
+            out1.WriteShort(field_6_author.Length);
+            out1.WriteByte(field_5_hasMultibyte ? 0x01 : 0x00);
+            if (field_5_hasMultibyte) {
+                StringUtil.PutUnicodeLE(field_6_author, out1);
+            } else {
+                StringUtil.PutCompressedUnicode(field_6_author, out1);
+            }
+            if (field_7_padding != null) {
+                out1.WriteByte(Convert.ToInt32(field_7_padding, CultureInfo.InvariantCulture));
+            }
 
         }
 

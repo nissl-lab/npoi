@@ -30,6 +30,9 @@ namespace NPOI.Util
      */
     public abstract class LZWDecompresser
     {
+        //arbitrarily selected; may need to increase
+        private static int MAX_RECORD_LENGTH = 1_000_000;
+
         /**
          * Does the mask bit mean it's compressed or uncompressed?
          */
@@ -122,7 +125,7 @@ namespace NPOI.Util
             // These are bytes as looked up in the dictionary
             // It needs to be signed, as it'll Get passed on to
             //  the output stream
-            byte[] dataB = new byte[16 + codeLengthIncrease];
+            byte[] dataB = IOUtils.SafelyAllocate(16 + codeLengthIncrease, MAX_RECORD_LENGTH);
             // This is an unsigned byte read from the stream
             // It needs to be unsigned, so that bit stuff works
             int dataI;

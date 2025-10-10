@@ -6,7 +6,7 @@
    (the "License"); you may not use this file except in compliance with
    the License.  You may obtain a copy of the License at
 
-	   http://www.apache.org/licenses/LICENSE-2.0
+       http://www.apache.org/licenses/LICENSE-2.0
 
    Unless required by applicable law or agreed to in writing, software
    distributed Under the License is distributed on an "AS Is" BASIS,
@@ -25,6 +25,7 @@ namespace NPOI.SS.Formula.Function
     using NPOI.SS.Formula.PTG;
     using System.Globalization;
     using System.Text;
+    using NPOI.Util;
 
     /**
      * Converts the text meta-data file into a <c>FunctionMetadataRegistry</c>
@@ -33,6 +34,9 @@ namespace NPOI.SS.Formula.Function
      */
     class FunctionMetadataReader
     {
+        //arbitrarily selected; may need to increase
+        private static int MAX_RECORD_LENGTH = 100_000;
+
         private const String METADATA_FILE_NAME = "NPOI.Resources.functionMetadata.txt";
 
         /** plain ASCII text metadata file uses three dots for ellipsis */
@@ -43,11 +47,11 @@ namespace NPOI.SS.Formula.Function
         private static readonly byte[] EMPTY_BYTE_ARRAY = [];
 
         private static readonly string[] DIGIT_ENDING_FUNCTION_NAMES = {
-		// Digits at the end of a function might be due to a left-over footnote marker.
-		// except in these cases
-		"LOG10", "ATAN2", "DAYS360", "SUMXMY2", "SUMX2MY2", "SUMX2PY2",
-	};
-		private static List<string> DIGIT_ENDING_FUNCTION_NAMES_Set = new List<string> (DIGIT_ENDING_FUNCTION_NAMES);
+        // Digits at the end of a function might be due to a left-over footnote marker.
+        // except in these cases
+        "LOG10", "ATAN2", "DAYS360", "SUMXMY2", "SUMX2MY2", "SUMX2PY2",
+    };
+        private static List<string> DIGIT_ENDING_FUNCTION_NAMES_Set = new List<string> (DIGIT_ENDING_FUNCTION_NAMES);
 
         public static FunctionMetadataRegistry CreateRegistry()
         {
@@ -133,7 +137,7 @@ namespace NPOI.SS.Formula.Function
                 // (all Unspecified params are assumed to be the same as the last)
                 nItems--;
             }
-            byte[] result = new byte[nItems];
+            byte[] result = IOUtils.SafelyAllocate(nItems, MAX_RECORD_LENGTH);
             for (int i = 0; i < nItems; i++)
             {
                 result[i] = ParseOperandTypeCode(array[i]);

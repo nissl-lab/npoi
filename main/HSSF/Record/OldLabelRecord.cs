@@ -29,6 +29,8 @@ namespace NPOI.HSSF.Record
     public class OldLabelRecord : OldCellRecord
     {
         private static POILogger logger = POILogFactory.GetLogger(typeof(OldLabelRecord));
+        //arbitrarily set, may need to increase
+        private static int MAX_RECORD_LENGTH = 100_000;
 
         public const short biff2_sid = 0x0004;
         public const short biff345_sid = 0x0204;
@@ -53,7 +55,7 @@ namespace NPOI.HSSF.Record
             }
 
             // Can only decode properly later when you know the codepage
-            field_5_bytes = new byte[field_4_string_len];
+            field_5_bytes = IOUtils.SafelyAllocate(field_4_string_len, MAX_RECORD_LENGTH);
             in1.Read(field_5_bytes, 0, field_4_string_len);
 
             if (in1.Remaining > 0)

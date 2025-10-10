@@ -32,8 +32,11 @@ namespace NPOI.HSSF.Record
      * REFERENCE:  PG 951 Excel Binary File Format (.xls) Structure Specification v20091214 
      */
     public class UnicodeString : IComparable<UnicodeString>
-    { // TODO - make this when the compatibility version is Removed
+    { 
+        // TODO - make this when the compatibility version is Removed
         private static readonly POILogger _logger = POILogFactory.GetLogger(typeof(UnicodeString));
+        //arbitrarily selected; may need to increase
+        private static int MAX_RECORD_LENGTH = 100_000;
 
         private short field_1_charCount;
         private byte field_2_optionflags;
@@ -228,7 +231,7 @@ namespace NPOI.HSSF.Record
                     //System.err.Println("Warning - ExtRst overran by " + (0-extraDataLength) + " bytes");
                     extraDataLength = 0;
                 }
-                extraData = new byte[extraDataLength];
+                extraData = IOUtils.SafelyAllocate(extraDataLength, MAX_RECORD_LENGTH);
                 for (int i = 0; i < extraData.Length; i++)
                 {
                     extraData[i] = (byte)in1.ReadByte();

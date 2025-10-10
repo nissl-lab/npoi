@@ -29,6 +29,9 @@ namespace NPOI.POIFS.Properties
 {
     public class NPropertyTable : PropertyTableBase
     {
+        //arbitrarily selected; may need to increase
+        private static int MAX_RECORD_LENGTH = 100_000;
+
         private readonly POIFSBigBlockSize _bigBigBlockSize;
 
         public NPropertyTable(HeaderBlock headerBlock) : base(headerBlock)
@@ -61,7 +64,7 @@ namespace NPOI.POIFS.Properties
                 }
                 else
                 {
-                    data = new byte[bigBlockSize.GetBigBlockSize()];
+                    data = IOUtils.SafelyAllocate(bigBlockSize.GetBigBlockSize(), MAX_RECORD_LENGTH);
                     int toRead = data.Length;
                     if (bb.Remaining() < bigBlockSize.GetBigBlockSize())
                     {
