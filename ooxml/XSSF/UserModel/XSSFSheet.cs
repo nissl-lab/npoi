@@ -6181,7 +6181,7 @@ namespace NPOI.XSSF.UserModel
                 XSSFRelation.PIVOT_TABLE,
                 XSSFFactory.GetInstance(),
                 tableId);
-            pivotTable.SetParentSheet(this);
+            pivotTable.ParentSheet = this;
             pivotTables.Add(pivotTable);
             XSSFWorkbook workbook = GetWorkbook();
 
@@ -6202,7 +6202,7 @@ namespace NPOI.XSSF.UserModel
             pivotTable.SetPivotCacheDefinition(pivotCacheDefinition);
 
             //Create pivotCache and Sets up it's relationship with the workbook
-            pivotTable.SetPivotCache(new XSSFPivotCache(workbook.AddPivotCache(rId)));
+            pivotTable.PivotCache = new XSSFPivotCache(workbook.AddPivotCache(rId));
 
             //Create relationship between pivotcacherecord and pivotcachedefInition
             XSSFPivotCacheRecords pivotCacheRecords = (XSSFPivotCacheRecords) pivotCacheDefinition.CreateRelationship(
