@@ -41,7 +41,7 @@ using System.Text;
 
 namespace TestCases.POIFS.FileSystem
 {
-    public class TestPasswordXlsxOutputStream
+    public class TestEncryptXlsx
     {
         private static bool TestDecryption(string encryptedPath, string password)
         {
@@ -148,7 +148,7 @@ namespace TestCases.POIFS.FileSystem
         }
 
         [Test]
-        public void TestOutputStream()
+        public void TestPasswordXssfWorkbook()
         {
             string projectDir = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory));
             string outputPath = Path.Combine(projectDir, "protected_n.xlsx");
@@ -238,7 +238,7 @@ namespace TestCases.POIFS.FileSystem
                     }
                 }
 
-                // バイト単位の厳密な検証
+                // check
                 byte[] decrypted = XlsxEncryptor.Decrypt(outputPath, password);
                 byte[] original = File.ReadAllBytes(originalPath);
 
@@ -265,7 +265,6 @@ namespace TestCases.POIFS.FileSystem
 
             try
             {
-                // NPOIで暗号化（POI互換API使用）
                 using(POIFSFileSystem fs = new())
                 {
                     EncryptionInfo info = new(EncryptionMode.AgileXlsx);
@@ -284,16 +283,12 @@ namespace TestCases.POIFS.FileSystem
                     }
                 }
 
-                // POIファイルを復号化
                 byte[] decryptedFromPoi = XlsxEncryptor.Decrypt(poiPath, password);
 
-                // NPOIファイルを復号化
                 byte[] decryptedFromNpoi = XlsxEncryptor.Decrypt(npoiPath, password);
 
-                // 復号化結果が完全一致（バイト単位）
                 CollectionAssert.AreEqual(decryptedFromPoi, decryptedFromNpoi);
 
-                // 元ファイルとも一致
                 byte[] original = File.ReadAllBytes(originalPath);
                 CollectionAssert.AreEqual(original, decryptedFromPoi);
                 CollectionAssert.AreEqual(original, decryptedFromNpoi);
@@ -310,7 +305,6 @@ namespace TestCases.POIFS.FileSystem
         [Test]
         public void TestEncryptionStructureCompatibility()
         {
-            // CFBファイル構造、XML、DataSpacesまで含めて検証
             POIDataSamples samples = POIDataSamples.GetPOIFSInstance();
             string originalPath = samples.GetFileInfo("encrypt_original.xlsx").FullName;
             string poiPath = samples.GetFileInfo("encrypt_encrypted_by_poi_password_is_pass.xlsx").FullName;
@@ -338,20 +332,16 @@ namespace TestCases.POIFS.FileSystem
                     }
                 }
 
-                // CFB構造の検証
                 using(RootStorage poiRoot = RootStorage.OpenRead(poiPath))
                 using(RootStorage npoiRoot = RootStorage.OpenRead(npoiPath))
                 {
-                    // EncryptionInfo XMLの構造比較
                     string poiEncInfo = ReadEncryptionInfoXml(poiRoot);
                     string npoiEncInfo = ReadEncryptionInfoXml(npoiRoot);
 
-                    // XML構造が同じであることを確認（値は異なってもよい）
                     ClassicAssert.IsNotNull(poiEncInfo);
                     ClassicAssert.IsNotNull(npoiEncInfo);
                 }
 
-                // 最終的なバイトレベル検証
                 byte[] decryptedFromNpoi = XlsxEncryptor.Decrypt(npoiPath, password);
                 byte[] original = File.ReadAllBytes(originalPath);
                 CollectionAssert.AreEqual(original, decryptedFromNpoi);
