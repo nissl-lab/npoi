@@ -87,7 +87,7 @@ namespace NPOI.XSSF.Streaming
         {
             get
             {
-                if(_value.GetType() != CellType.Formula)
+                if(!IsFormulaCell())
                 {
                     throw new InvalidOperationException("Only formula cells have cached results");
                 }
@@ -97,6 +97,7 @@ namespace NPOI.XSSF.Streaming
         }
 
         [Obsolete("Will be removed at NPOI 2.8, Use CachedFormulaResultType instead.")]
+        [Removal(Version = "4.2")]
         public CellType GetCachedFormulaResultTypeEnum()
         {
             return CachedFormulaResultType;
@@ -188,12 +189,23 @@ namespace NPOI.XSSF.Streaming
                 _style = value;
             }
         }
-
+        private bool IsFormulaCell()
+        {
+            return _value is FormulaValue;
+        }
         public CellType CellType
         {
-            get { return _value.GetType(); }
+            get 
+            { 
+                if(IsFormulaCell())
+                {
+                    return CellType.Formula;
+                } 
+                return _value.GetType(); 
+            }
         }
 
+        
         public int ColumnIndex
         {
             get
@@ -448,12 +460,21 @@ namespace NPOI.XSSF.Streaming
 
         public ICell SetCellErrorValue(byte value)
         {
-            //ensure type garuntees that the type is error so the if condition is never true.
-            EnsureType(CellType.Error);
-            if (_value.GetType() == CellType.Formula)
-                ((ErrorFormulaValue)_value).PreEvaluatedValue = value;
+            // for formulas, we want to keep the type and only have an ERROR as formula value
+            if(_value.GetType()==CellType.Formula)
+            {
+                // ensure that the type is "ERROR"
+                SetFormulaType(CellType.Error);
+
+                // populate the value
+                ((ErrorFormulaValue) _value).PreEvaluatedValue = value;
+            }
             else
-                ((ErrorValue)_value).Value = value;
+            {
+                EnsureType(CellType.Error);
+                ((ErrorValue) _value).Value = value;
+            }
+
             return this;
         }
 

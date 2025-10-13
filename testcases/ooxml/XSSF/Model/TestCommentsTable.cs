@@ -264,7 +264,6 @@ namespace TestCases.XSSF.Model
         //
         private static void setComment(ISheet sheet, ICell cell, IDrawing<IShape> drawing, String commentText, ICreationHelper helper, IClientAnchor anchor)
         {
-            //System.out.println("Setting col: " + cell.getColumnIndex() + " and row " + cell.getRowIndex());
             anchor.Col1 = (cell.ColumnIndex);
             anchor.Col2 = (cell.ColumnIndex);
             anchor.Row1 = (cell.RowIndex);

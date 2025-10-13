@@ -128,19 +128,19 @@ namespace TestCases.HSSF.Util
             try
             {
                 new AreaReference(refDCSimple, SpreadsheetVersion.EXCEL97);
-                Assert.Fail();
+                Assert.Fail("expected ArgumentException");
             }
             catch (ArgumentException) { }
             try
             {
                 new AreaReference(refDC2D, SpreadsheetVersion.EXCEL97);
-                Assert.Fail();
+                Assert.Fail("expected ArgumentException");
             }
             catch (ArgumentException) { }
             try
             {
                 new AreaReference(refDC3D, SpreadsheetVersion.EXCEL97);
-                Assert.Fail();
+                Assert.Fail("expected ArgumentException");
             }
             catch (ArgumentException) { }
 

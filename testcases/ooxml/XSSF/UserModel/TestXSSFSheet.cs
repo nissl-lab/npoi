@@ -2484,7 +2484,7 @@ namespace TestCases.XSSF.UserModel
             ClassicAssert.AreEqual("J7", new CellReference(cell).FormatAsString());
             ClassicAssert.AreEqual(CellType.Formula, cell.CellType, "[Cell Formula] J7 cell type");
             ClassicAssert.AreEqual("5+2", cell.CellFormula, "[Cell Formula] J7 cell formula");
-            Console.WriteLine("Cell formula evaluation currently unsupported");
+            //Console.WriteLine("Cell formula evaluation currently unsupported");
 
             // Cell Formula with Reference
             // Formula row references should be adjusted by destRowNum-srcRowNum
@@ -2511,7 +2511,7 @@ namespace TestCases.XSSF.UserModel
 
             // Array Formula
             cell = CellUtil.GetCell(destRow, col++);
-            Console.WriteLine("Array formulas currently unsupported");
+            //Console.WriteLine("Array formulas currently unsupported");
             // FIXME: Array Formula set with Sheet.setArrayFormula() instead of cell.setFormula()
             /*
             ClassicAssert.AreEqual("[Array Formula] N7 cell type", CellType.Formula, cell.CellType);

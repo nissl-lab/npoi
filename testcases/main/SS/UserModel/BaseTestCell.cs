@@ -742,6 +742,8 @@ namespace TestCases.SS.UserModel
             style = cell.CellStyle;
             ClassicAssert.IsFalse(style2.IsLocked);
             ClassicAssert.IsTrue(style2.IsHidden);
+            ClassicAssert.IsTrue(style.IsLocked);
+            ClassicAssert.IsFalse(style.IsHidden);
 
             style2.IsLocked = (/*setter*/true);
             style2.IsHidden = (/*setter*/false);
@@ -999,6 +1001,52 @@ namespace TestCases.SS.UserModel
         }
 
         [Test]
+        public void TestSetErrorValue() 
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();   
+            ISheet sheet = wb.CreateSheet();
+            IRow row = sheet.CreateRow(0);
+            ICell cell = row.CreateCell(0);
+
+            cell.SetCellFormula("A2");
+            cell.SetCellErrorValue(FormulaError.NAME.Code);
+
+            ClassicAssert.AreEqual(CellType.Formula, cell.CellType,
+                "Should still be a formula even after we set an error value");
+            ClassicAssert.AreEqual(CellType.Error, cell.CachedFormulaResultType,
+                "Should still be a formula even after we set an error value");
+            ClassicAssert.AreEqual("A2", cell.CellFormula);
+            try {
+                _ = cell.NumericCellValue;
+                Assert.Fail("Should catch exception here");
+            } catch (InvalidOperationException) {
+                // expected here
+            }
+            try {
+                _ = cell.StringCellValue;
+                Assert.Fail("Should catch exception here");
+            } catch (InvalidOperationException) {
+                // expected here
+            }
+            try {
+                _ = cell.RichStringCellValue;
+                Assert.Fail("Should catch exception here");
+            } catch (InvalidOperationException) {
+                // expected here
+            }
+            try {
+                _ = cell.DateCellValue;
+                Assert.Fail("Should catch exception here");
+            } catch (InvalidOperationException) {
+                // expected here
+            }
+            ClassicAssert.AreEqual(FormulaError.NAME.Code, cell.ErrorCellValue);
+            ClassicAssert.IsNull(cell.Hyperlink);
+
+            wb.Close();
+        }
+
+        [Test]
         public void PrimitiveToEnumReplacementDoesNotBreakBackwardsCompatibility()
         {
             // bug 59836
@@ -1009,11 +1057,11 @@ namespace TestCases.SS.UserModel
             ISheet sheet = wb.CreateSheet();
             IRow row = sheet.CreateRow(0);
             ICell cell = row.CreateCell(0);
-            // CellType.* -> CellType.*
+            
             cell.SetCellValue(5.0);
             ClassicAssert.AreEqual(CellType.Numeric, cell.CellType);
             ClassicAssert.AreEqual(0, (int)cell.CellType);
-            //ClassicAssert.AreEqual(CellType.NUMERIC, cell.GetCellTypeEnum()); // make sure old way and new way are compatible
+
             // make sure switch(int|Enum) still works. Cases must be statically resolvable in1 Java 6 ("constant expression required")
             switch (cell.CellType)
             {

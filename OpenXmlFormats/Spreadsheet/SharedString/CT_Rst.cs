@@ -168,7 +168,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                             if (r.t != null)
                             {
                                 sw.Write("<t");
-                                if(r.t.Contains(' '))
+                                if(r.t.Contains(' ')||r.t.Contains('\n'))
                                     sw.Write(" xml:space=\"preserve\"");
                                 sw.Write(">");
                                 sw.Write(XmlHelper.EncodeXml(r.t));
@@ -181,7 +181,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                     if (this.t != null)
                     {
                         sw.Write("<t");
-                        if (t.Contains(' '))
+                        if (t.Contains(' ') || t.Contains('\n'))
                             sw.Write(" xml:space=\"preserve\"");
                         sw.Write(">");
                         sw.Write(XmlHelper.EncodeXml(this.t));

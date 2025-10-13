@@ -180,9 +180,9 @@ namespace TestCases.XWPF.UserModel
                     {
                         if (paragraph.Document != null)
                         {
-                            System.Console.WriteLine(picture.GetCTPicture());
                             XWPFPictureData data = picture.GetPictureData();
-                            if (data != null) System.Console.WriteLine(data.FileName);
+                            if (data != null) 
+                                Assert.Fail("Should have returned null: "+ data.FileName);
                         }
                     }
                 }

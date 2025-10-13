@@ -66,42 +66,6 @@ namespace TestCases.HSSF.UserModel
         }
 
         /**
-         * Test for bug due to attempt to convert a cached formula error result to a boolean
-         */
-        [Test]
-        public override void TestUpdateCachedFormulaResultFromErrorToNumber_bug46479()
-        {
-            HSSFWorkbook wb = new HSSFWorkbook();
-            HSSFSheet sheet = wb.CreateSheet("Sheet1") as HSSFSheet;
-            HSSFRow row = sheet.CreateRow(0) as HSSFRow;
-            HSSFCell cellA1 = row.CreateCell(0) as HSSFCell;
-            HSSFCell cellB1 = row.CreateCell(1) as HSSFCell;
-            cellB1.CellFormula = "A1+1";
-            HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
-            cellA1.SetCellErrorValue(FormulaError.NAME);
-            fe.EvaluateFormulaCell(cellB1);
-            cellA1.SetCellValue(2.5);
-            fe.NotifyUpdateCell(cellA1);
-            try
-            {
-                fe.EvaluateInCell(cellB1);
-            }
-            catch (InvalidOperationException e)
-            {
-                if (e.Message.Equals("Cannot get a numeric value from a error formula cell"))
-                {
-                    Assert.Fail("Identified bug 46479a");
-                }
-            }
-            ClassicAssert.AreEqual(3.5, cellB1.NumericCellValue, 0.0);
-
-            wb.Close();
-        }
-
-
-
-
-        /**
          * When evaluating defined names, POI has to decide whether it is capable.  Currently
          * (May2009) POI only supports simple cell and area refs.<br/>
          * The sample spreadsheet (bugzilla attachment 23508) had a name flagged as 'complex'
