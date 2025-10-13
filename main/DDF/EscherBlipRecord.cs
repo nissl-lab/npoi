@@ -30,7 +30,7 @@ namespace NPOI.DDF
     public class EscherBlipRecord : EscherRecord
     {
         //arbitrarily selected; may need to increase
-        private static int MAX_RECORD_LENGTH = 100_000_000;
+        private static int MAX_RECORD_LENGTH = 104_857_600;
 
         public const short RECORD_ID_START = unchecked((short)0xF018);
         public const short RECORD_ID_END = unchecked((short)0xF117);
