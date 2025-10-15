@@ -262,13 +262,9 @@ namespace NPOI.OpenXml4Net.OPC
          */
         public static String Combine(String prefix, String suffix)
         {
-            if (!prefix.EndsWith("" + FORWARD_SLASH_CHAR)
-                    && !suffix.StartsWith("" + FORWARD_SLASH_CHAR))
+            if (!prefix.EndsWith(FORWARD_SLASH_STRING) && !suffix.StartsWith(FORWARD_SLASH_STRING))
                 return prefix + FORWARD_SLASH_CHAR + suffix;
-            else if ((!prefix.EndsWith("" + FORWARD_SLASH_CHAR)
-                    && suffix.StartsWith("" + FORWARD_SLASH_CHAR) || (prefix
-                    .EndsWith("" + FORWARD_SLASH_CHAR) && !suffix.StartsWith(""
-                    + FORWARD_SLASH_CHAR))))
+            else if (prefix.EndsWith(FORWARD_SLASH_STRING) ^ suffix.StartsWith(FORWARD_SLASH_STRING))
                 return prefix + suffix;
             else
                 return "";
