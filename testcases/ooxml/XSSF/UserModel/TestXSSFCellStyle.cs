@@ -770,15 +770,19 @@ namespace TestCases.XSSF.UserModel
         public void TestGetSetReadingOrder()
         {
             ClassicAssert.AreEqual(ReadingOrder.CONTEXT, cellStyle.ReadingOrder);
+            ClassicAssert.AreEqual((long)ReadingOrder.CONTEXT, cellStyle.GetCellAlignment().GetCTCellAlignment().readingOrder);
 
             cellStyle.ReadingOrder = ReadingOrder.LEFT_TO_RIGHT;
             ClassicAssert.AreEqual(ReadingOrder.LEFT_TO_RIGHT, cellStyle.ReadingOrder);
+            ClassicAssert.AreEqual((long) ReadingOrder.LEFT_TO_RIGHT, cellStyle.GetCellAlignment().GetCTCellAlignment().readingOrder);
 
             cellStyle.ReadingOrder=ReadingOrder.RIGHT_TO_LEFT;
             ClassicAssert.AreEqual(ReadingOrder.RIGHT_TO_LEFT, cellStyle.ReadingOrder);
+            ClassicAssert.AreEqual((long) ReadingOrder.RIGHT_TO_LEFT, cellStyle.GetCellAlignment().GetCTCellAlignment().readingOrder);
 
             cellStyle.ReadingOrder = ReadingOrder.CONTEXT;
             ClassicAssert.AreEqual(ReadingOrder.CONTEXT, cellStyle.ReadingOrder);
+            ClassicAssert.AreEqual((long) ReadingOrder.CONTEXT, cellStyle.GetCellAlignment().GetCTCellAlignment().readingOrder);
         }
         [Test]
         public void TestGetSetVerticalAlignment()

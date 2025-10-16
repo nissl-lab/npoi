@@ -78,6 +78,22 @@ namespace NPOI.XSSF.UserModel.Extensions
             }
         }
 
+        public ReadingOrder ReadingOrder
+        {
+            get
+            {
+                if(cellAlignement != null && cellAlignement.readingOrderSpecified)
+                {
+                    return (ReadingOrder)cellAlignement.readingOrder;
+                }
+                return ReadingOrder.CONTEXT;
+            }
+            set
+            {
+                cellAlignement.readingOrder = (long)value;
+            }
+        }
+
         /**
          * Get the number of spaces to indent the text in the cell
          *
