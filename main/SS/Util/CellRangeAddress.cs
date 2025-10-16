@@ -24,7 +24,7 @@ namespace NPOI.SS.Util
         {
             if (lastRow < firstRow || lastCol < firstCol)
                 throw new ArgumentException("Invalid cell range, having lastRow < firstRow || lastCol < firstCol, " +
-					"had rows " + lastRow + " >= " + firstRow + " or cells " + lastCol + " >= " + firstCol);
+                    "had rows " + lastRow + " >= " + firstRow + " or cells " + lastCol + " >= " + firstCol);
         }
 
         public CellRangeAddress(RecordInputStream in1)

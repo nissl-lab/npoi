@@ -15,11 +15,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==================================================================== */
 using NPOI.SS.Util;
-using NUnit.Framework;using NUnit.Framework.Legacy;
+using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using TestCases.HSSF.Record;
 using NPOI.Util;
 using System.IO;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 namespace TestCases.SS.Util
 {
     //import java.io.ByteArrayOutputStream;
@@ -292,7 +295,49 @@ namespace TestCases.SS.Util
             ClassicAssert.IsFalse(region.ContainsColumn(6));
         }
 
+        [Test]
+        public void TestIterator()
+        {
+            CellRangeAddress A1_B2 = new CellRangeAddress(0, 1, 0, 1);
 
+            // the cell address iterator iterates in row major order
+            IEnumerator<CellAddress> iter = A1_B2.GetEnumerator();
+            iter.MoveNext();
+            ClassicAssert.AreEqual(new CellAddress(0, 0), iter.Current, "A1");
+            iter.MoveNext();
+            ClassicAssert.AreEqual(new CellAddress(0, 1), iter.Current, "B1");
+            iter.MoveNext();
+            ClassicAssert.AreEqual(new CellAddress(1, 0), iter.Current, "A2");
+            iter.MoveNext();
+            ClassicAssert.AreEqual(new CellAddress(1, 1), iter.Current, "B2");
+            
+            ClassicAssert.IsFalse(iter.MoveNext());
+            //try
+            //{
+            //    iter.next();
+            //    Assert.Fail("Expected NoSuchElementException");
+            //}
+            //catch(NoSuchElementException e) {
+            //    //expected
+            //}
+            //try
+            //{
+            //    iter.remove();
+            //    Assert.Fail("Expected UnsupportedOperationException");
+            //}
+            //catch(UnsupportedOperationException e) {
+            //    //expected
+            //}
+
+            // for each interface
+            int count = 0;
+            foreach(CellAddress addr in A1_B2)
+            {
+                ClassicAssert.IsNotNull(addr);
+                count++;
+            }
+            ClassicAssert.AreEqual(4, count);
+        }
 
         private static void assertIntersects(CellRangeAddress regionA, CellRangeAddress regionB)
         {
