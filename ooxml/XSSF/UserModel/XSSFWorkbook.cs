@@ -211,12 +211,7 @@ namespace NPOI.XSSF.UserModel
             Load(XSSFFactory.GetInstance());
 
             // some broken Workbooks miss this...
-            if (!workbook.IsSetBookViews())
-            {
-                CT_BookViews bvs = workbook.AddNewBookViews();
-                CT_BookView bv = bvs.AddNewWorkbookView();
-                bv.activeTab = (0);
-            }
+            SetBookViewsIfMissing();
         }
         /**
          * Constructs a XSSFWorkbook object, by buffering the whole stream into memory
@@ -233,20 +228,8 @@ namespace NPOI.XSSF.UserModel
          *   </code></pre>     
          */
         public XSSFWorkbook(Stream fileStream, bool readOnly = false)
-            : base(PackageHelper.Open(fileStream, readOnly))
+            : this(PackageHelper.Open(fileStream, readOnly))
         {
-            BeforeDocumentRead();
-
-            //build a tree of POIXMLDocumentParts, this workbook being the root
-            Load(XSSFFactory.GetInstance());
-
-            // some broken Workbooks miss this...
-            if (!workbook.IsSetBookViews())
-            {
-                CT_BookViews bvs = workbook.AddNewBookViews();
-                CT_BookView bv = bvs.AddNewWorkbookView();
-                bv.activeTab = (0);
-            }
         }
 
         /**
@@ -447,9 +430,7 @@ namespace NPOI.XSSF.UserModel
             CT_WorkbookPr workbookPr = workbook.AddNewWorkbookPr();
             workbookPr.date1904 = (false);
 
-            CT_BookViews bvs = workbook.AddNewBookViews();
-            CT_BookView bv = bvs.AddNewWorkbookView();
-            bv.activeTab = 0;
+            SetBookViewsIfMissing();
             workbook.AddNewSheets();
 
             ExtendedProperties expProps = GetProperties().ExtendedProperties;
@@ -477,6 +458,15 @@ namespace NPOI.XSSF.UserModel
             pivotTables = new List<XSSFPivotTable>();
         }
 
+        private void SetBookViewsIfMissing()
+        {
+            if(!workbook.IsSetBookViews())
+            {
+                CT_BookViews bvs = workbook.AddNewBookViews();
+                CT_BookView bv = bvs.AddNewWorkbookView();
+                bv.activeTab = 0;
+            }
+        }
         /**
          * Create a new SpreadsheetML namespace and Setup the default minimal content
          */
