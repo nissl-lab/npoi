@@ -2339,6 +2339,21 @@ namespace NPOI.HSSF.Model
             return _columnInfos.GetOutlineLevel(columnIndex);
         }
 
+        public int MinColumnIndex
+        {
+            get
+            {
+                return _columnInfos.MinColumnIndex;
+            }
+        }
+
+        public int MaxColumnIndex
+        {
+            get
+            {
+                return _columnInfos.MaxColumnIndex;
+            }
+        }
     }
 
     public class UnsupportedBOFType : RecordFormatException
