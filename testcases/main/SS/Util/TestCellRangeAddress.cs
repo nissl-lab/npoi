@@ -214,12 +214,14 @@ namespace TestCases.SS.Util
             // Invert first/last row, but refer to same area
             ref2.FirstRow = (2);
             ref2.LastRow = (1);
-            ClassicAssert.AreEqual(ref1, ref2);
+            //ClassicAssert.AreEqual(ref1, ref2);
+            ClassicAssert.True(ref1.Equals(ref2));
 
             // Invert first/last column, but refer to same area
             ref2.FirstColumn = (4);
             ref2.LastColumn = (3);
-            ClassicAssert.AreEqual(ref1, ref2);
+            //ClassicAssert.AreEqual(ref1, ref2);
+            ClassicAssert.True(ref1.Equals(ref2));
 
             // Refer to a different area
             ClassicAssert.AreNotEqual(ref1, new CellRangeAddress(3, 4, 1, 2));
