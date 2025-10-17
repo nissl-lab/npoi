@@ -3098,6 +3098,18 @@ namespace TestCases.XSSF.UserModel
         }
 
         [Test]
+        public void TestGetHeaderFooterProperties()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            XSSFSheet sh = wb.CreateSheet() as XSSFSheet;
+
+            XSSFHeaderFooterProperties hfProp = sh.HeaderFooterProperties;
+            ClassicAssert.IsNotNull(hfProp);
+
+            wb.Close();
+        }
+
+        [Test]
         public void TestGetCells_SingleCellRange_GetText()
         {
             var workbook = XSSFTestDataSamples.OpenSampleWorkbook("SampleSS.xlsx");

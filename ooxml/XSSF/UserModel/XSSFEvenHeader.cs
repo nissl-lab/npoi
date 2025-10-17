@@ -58,7 +58,18 @@ namespace NPOI.XSSF.UserModel
             }
             set
             {
-                GetHeaderFooter().evenHeader = value;
+                if(value == null)
+                {
+                    GetHeaderFooter().UnsetEvenHeader();
+                    if(!GetHeaderFooter().IsSetEvenFooter())
+                    {
+                        GetHeaderFooter().UnsetDifferentOddEven();
+                    }
+                }
+                else
+                {
+                    GetHeaderFooter().evenHeader = value;
+                }
             }
         }
 
