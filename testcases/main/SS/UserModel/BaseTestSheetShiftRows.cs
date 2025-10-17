@@ -793,6 +793,27 @@ namespace TestCases.SS.UserModel
             wb.Close();
         }
 
+        [Test]
+        public void Test61840_shifting_rows_up_does_not_produce_REF_errors()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb.CreateSheet();
+            ICell cell = sheet.CreateRow(4).CreateCell(0);
+
+            cell.SetCellFormula("(B5-C5)/B5");
+            sheet.ShiftRows(4, 4, -1);
+
+            // Cell objects created before a row shift are still valid.
+            // The row number of those cell references will be shifted if
+            // the cell is within the shift range.
+            ClassicAssert.AreEqual("(B4-C4)/B4", cell.CellFormula);
+
+            // New cell references are also valid.
+            ICell shiftedCell = sheet.GetRow(3).GetCell(0);
+            ClassicAssert.IsNotNull(shiftedCell);
+            ClassicAssert.AreEqual("(B4-C4)/B4", shiftedCell.CellFormula);
+            wb.Close();
+        }
 
         private void CreateHyperlink(ICreationHelper helper, ICell cell, HyperlinkType linkType, String ref1)
         {
