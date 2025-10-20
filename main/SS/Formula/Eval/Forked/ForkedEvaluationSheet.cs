@@ -47,6 +47,18 @@ namespace NPOI.SS.Formula.Eval.Forked
             _sharedCellsByRowCol = new Dictionary<RowColKey, ForkedEvaluationCell>();
         }
 
+        /* (non-Javadoc)
+         * @see org.apache.poi.ss.formula.EvaluationSheet#getlastRowNum()
+         * @since POI 4.0.0
+         */
+        public int LastRowNum
+        {
+            get
+            {
+                return _masterSheet.LastRowNum;
+            }
+        }
+
         public IEvaluationCell GetCell(int rowIndex, int columnIndex)
         {
             RowColKey key = new RowColKey(rowIndex, columnIndex);

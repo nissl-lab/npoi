@@ -29,10 +29,12 @@ namespace NPOI.HSSF.UserModel
     {
 
         private readonly HSSFSheet _hs;
+        private int _lastDefinedRow = -1;
 
         public HSSFEvaluationSheet(HSSFSheet hs)
         {
             _hs = hs;
+            _lastDefinedRow = _hs.LastRowNum;
         }
 
         public HSSFSheet HSSFSheet
@@ -42,6 +44,19 @@ namespace NPOI.HSSF.UserModel
                 return _hs;
             }
         }
+
+        /* (non-Javadoc)
+         * @see org.apache.poi.ss.formula.EvaluationSheet#getlastRowNum()
+         * @since POI 4.0.0
+         */
+        public int LastRowNum
+        {
+            get
+            {
+                return _lastDefinedRow;
+            }
+        }
+
         public IEvaluationCell GetCell(int rowIndex, int columnIndex)
         {
             HSSFRow row = (HSSFRow)_hs.GetRow(rowIndex);
@@ -59,7 +74,7 @@ namespace NPOI.HSSF.UserModel
 
         public void ClearAllCachedResultValues()
         {
-            // nothing to do
+            _lastDefinedRow = _hs.LastRowNum;
         }
     }
 }
