@@ -1193,7 +1193,7 @@ namespace NPOI.XSSF.UserModel
                     return null;
                 }
 
-                return new XSSFColor(pr.tabColor, (Workbook as XSSFWorkbook).GetStylesSource().IndexedColors);
+                return XSSFColor.From(pr.tabColor, (Workbook as XSSFWorkbook).GetStylesSource().IndexedColors);
             }
             set
             {

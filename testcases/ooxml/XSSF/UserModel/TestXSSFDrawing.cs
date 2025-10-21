@@ -232,7 +232,7 @@ namespace TestCases.XSSF.UserModel
             XSSFRichTextString rt = new XSSFRichTextString("Test String");
 
             XSSFFont font = wb.CreateFont() as XSSFFont;
-            font.SetColor(new XSSFColor(Color.FromRgb(0, 128, 128)));
+            font.SetColor(new XSSFColor(Color.FromRgb(0, 128, 128), wb.GetStylesSource().IndexedColors));
             font.IsItalic = (true);
             font.IsBold = (true);
             font.Underline = FontUnderlineType.Single;
@@ -310,7 +310,7 @@ namespace TestCases.XSSF.UserModel
             XSSFRichTextString rt = new XSSFRichTextString("Test String");
 
             XSSFFont font = wb.CreateFont() as XSSFFont;
-            font.SetColor(new XSSFColor(Color.FromRgb(0, 128, 128)));
+            font.SetColor(new XSSFColor(Color.FromRgb(0, 128, 128), wb.GetStylesSource().IndexedColors));
             font.FontName = ("Arial");
             rt.ApplyFont(font);
 
@@ -343,7 +343,7 @@ namespace TestCases.XSSF.UserModel
             XSSFRichTextString rt = new XSSFRichTextString("Test String");
 
             XSSFFont font = wb.CreateFont() as XSSFFont;
-            font.SetColor(new XSSFColor(Color.FromRgb(0, 255, 255)));
+            font.SetColor(new XSSFColor(Color.FromRgb(0, 255, 255), wb.GetStylesSource().IndexedColors));
             font.FontName = ("Arial");
             rt.ApplyFont(font);
 
@@ -406,12 +406,12 @@ namespace TestCases.XSSF.UserModel
             XSSFRichTextString rt = new XSSFRichTextString("Test Rich Text String");
 
             XSSFFont font = wb1.CreateFont() as XSSFFont;
-            font.SetColor(new XSSFColor(Color.FromRgb(0, 255, 255)));
+            font.SetColor(new XSSFColor(Color.FromRgb(0, 255, 255), wb1.GetStylesSource().IndexedColors));
             font.FontName = ("Arial");
             rt.ApplyFont(font);
 
             XSSFFont midfont = wb1.CreateFont() as XSSFFont;
-            midfont.SetColor(new XSSFColor(Color.FromRgb(0, 255, 0)));
+            midfont.SetColor(new XSSFColor(Color.FromRgb(0, 255, 0), wb1.GetStylesSource().IndexedColors));
             rt.ApplyFont(5, 14, midfont);	// Set the text "Rich Text" to be green and the default font
 
             XSSFTextParagraph para = shape.AddNewTextParagraph(rt);

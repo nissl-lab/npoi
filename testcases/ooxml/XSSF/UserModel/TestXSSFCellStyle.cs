@@ -417,7 +417,7 @@ namespace TestCases.XSSF.UserModel
 
             //setting XSSFColor
             num = stylesTable.GetBorders().Count;
-            clr = new XSSFColor(Color.Cyan);
+            clr = new XSSFColor(Color.Cyan, stylesTable.IndexedColors);
             cellStyle.SetBottomBorderColor(clr);
             ClassicAssert.AreEqual(clr.GetCTColor().ToString(), cellStyle.BottomBorderXSSFColor.GetCTColor().ToString());
             byte[] rgb = cellStyle.BottomBorderXSSFColor.RGB;
@@ -459,7 +459,7 @@ namespace TestCases.XSSF.UserModel
 
             //setting XSSFColor
             num = stylesTable.GetBorders().Count;
-            clr = new XSSFColor(Color.Cyan);
+            clr = new XSSFColor(Color.Cyan, stylesTable.IndexedColors);
             cellStyle.SetTopBorderColor(clr);
             ClassicAssert.AreEqual(clr.GetCTColor().ToString(), cellStyle.TopBorderXSSFColor.GetCTColor().ToString());
             byte[] rgb = cellStyle.TopBorderXSSFColor.RGB;
@@ -501,7 +501,7 @@ namespace TestCases.XSSF.UserModel
 
             //setting XSSFColor
             num = stylesTable.GetBorders().Count;
-            clr = new XSSFColor(Color.Cyan);
+            clr = new XSSFColor(Color.Cyan, stylesTable.IndexedColors);
             cellStyle.SetLeftBorderColor(clr);
             ClassicAssert.AreEqual(clr.GetCTColor().ToString(), cellStyle.LeftBorderXSSFColor.GetCTColor().ToString());
             byte[] rgb = cellStyle.LeftBorderXSSFColor.RGB;
@@ -543,7 +543,7 @@ namespace TestCases.XSSF.UserModel
 
             //setting XSSFColor
             num = stylesTable.GetBorders().Count;
-            clr = new XSSFColor(Color.Cyan);
+            clr = new XSSFColor(Color.Cyan, stylesTable.IndexedColors);
             cellStyle.SetRightBorderColor(clr);
             ClassicAssert.AreEqual(clr.GetCTColor().ToString(), cellStyle.RightBorderXSSFColor.GetCTColor().ToString());
             byte[] rgb = cellStyle.RightBorderXSSFColor.RGB;
@@ -585,7 +585,7 @@ namespace TestCases.XSSF.UserModel
 
             //setting XSSFColor
             num = stylesTable.GetFills().Count;
-            clr = new XSSFColor(Color.Cyan);
+            clr = new XSSFColor(Color.Cyan, stylesTable.IndexedColors);
             cellStyle.SetFillBackgroundColor(clr); // TODO this testcase assumes that cellStyle creates a new CT_Fill, but the implementation changes the existing style. - do not know whats right 8-(
             ClassicAssert.AreEqual(clr.GetCTColor().ToString(), ((XSSFColor)cellStyle.FillBackgroundColorColor).GetCTColor().ToString());
             byte[] rgb = ((XSSFColor)cellStyle.FillBackgroundColorColor).RGB;

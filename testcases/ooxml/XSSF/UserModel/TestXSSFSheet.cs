@@ -2926,10 +2926,8 @@ namespace TestCases.XSSF.UserModel
                 ClassicAssert.AreEqual(expected, (wb.GetSheet("indexedRed") as XSSFSheet).TabColor);
 
                 // test regular-colored (non-indexed, ARGB) sheet
-                expected = new XSSFColor
-                {
-                    ARGBHex = "FF7F2700"
-                };
+                expected = XSSFColor.From(new CT_Color(), wb.GetStylesSource().IndexedColors);
+                expected.ARGBHex = "FF7F2700";
                 ClassicAssert.AreEqual(expected, (wb.GetSheet("customOrange") as XSSFSheet).TabColor);
             }
             finally

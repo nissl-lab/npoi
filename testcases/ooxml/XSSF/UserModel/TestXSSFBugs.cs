@@ -3285,7 +3285,7 @@ namespace TestCases.XSSF.UserModel
             XSSFWorkbook workbook = new XSSFWorkbook();
             XSSFCell cell = workbook.CreateSheet().CreateRow(0).CreateCell(0) as XSSFCell;
 
-            XSSFColor color = new XSSFColor(Color.Red);
+            XSSFColor color = new XSSFColor(Color.Red, workbook.GetStylesSource().IndexedColors);
             XSSFCellStyle style = workbook.CreateCellStyle() as XSSFCellStyle;
             style.FillForegroundColorColor = color;
             style.FillPattern = FillPattern.SolidForeground;
@@ -3305,7 +3305,7 @@ namespace TestCases.XSSF.UserModel
             XSSFWorkbook nwb = XSSFTestDataSamples.WriteOutAndReadBack(workbook);
             workbook.Close();
             XSSFCell ncell = nwb.GetSheetAt(0).GetRow(0).GetCell(0) as XSSFCell;
-            XSSFColor ncolor = new XSSFColor(Color.Red);
+            XSSFColor ncolor = new XSSFColor(Color.Red, workbook.GetStylesSource().IndexedColors);
 
             // Now the cell is all black
             XSSFColor nactual = ncell.CellStyle.FillBackgroundColorColor as XSSFColor;
