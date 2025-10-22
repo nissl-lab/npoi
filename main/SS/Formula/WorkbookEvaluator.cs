@@ -424,11 +424,12 @@ namespace NPOI.SS.Formula
                 {
                     return ErrorEval.CIRCULAR_REF_ERROR;
                 }
-                OperationEvaluationContext ec = new OperationEvaluationContext(this, _workbook, sheetIndex, rowIndex, columnIndex, tracker);
 
                 try
                 {
                     Ptg[] ptgs = _workbook.GetFormulaTokens(srcCell);
+                    OperationEvaluationContext ec = new OperationEvaluationContext
+                        (this, _workbook, sheetIndex, rowIndex, columnIndex, tracker);
                     if (evalListener == null)
                     {
                         result = EvaluateFormula(ec, ptgs);

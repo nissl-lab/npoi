@@ -66,7 +66,7 @@ namespace NPOI.SS.Formula.Eval
                 _evaluateFunc = evalFunc;
             }
 
-            private readonly MatrixFunction.MutableValueCollector instance = new MatrixFunction.MutableValueCollector(false, true);
+            private readonly MatrixFunction.MutableValueCollector instance = new MatrixFunction.MutableValueCollector(true, true);
 
             protected override double[] CollectValues(ValueEval arg)
             {
