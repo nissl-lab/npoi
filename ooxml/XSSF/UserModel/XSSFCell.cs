@@ -510,7 +510,7 @@ namespace NPOI.XSSF.UserModel
                         _cell.t = ST_CellType.s;
                         XSSFRichTextString rt = (XSSFRichTextString)str;
                         rt.SetStylesTableReference(_stylesSource);
-                        int sRef = _sharedStringSource.AddEntry(rt.GetCTRst());
+                        int sRef = _sharedStringSource.AddSharedStringItem(rt);
                         _cell.v=sRef.ToString();
                     }
                     break;
@@ -1060,7 +1060,7 @@ namespace NPOI.XSSF.UserModel
                         String str = ConvertCellValueToString();
                         XSSFRichTextString rt = new XSSFRichTextString(str);
                         rt.SetStylesTableReference(_stylesSource);
-                        int sRef = _sharedStringSource.AddEntry(rt.GetCTRst());
+                        int sRef = _sharedStringSource.AddSharedStringItem(rt);
                         _cell.v= sRef.ToString();
                     }
                     _cell.t= (ST_CellType.s);

@@ -110,6 +110,75 @@ namespace TestCases.XSSF.Model
             ClassicAssert.AreEqual("Second string", new XSSFRichTextString(sst.GetEntryAt(1)).ToString());
             ClassicAssert.AreEqual("Second string", new XSSFRichTextString(sst.GetEntryAt(2)).ToString());
         }
+
+        [Test]
+        public void TestCreateUsingRichTextStrings()
+        {
+            SharedStringsTable sst = new SharedStringsTable();
+
+            // Check defaults
+            ClassicAssert.IsNotNull(sst.SharedStringItems);
+            ClassicAssert.AreEqual(0, sst.SharedStringItems.Count);
+            ClassicAssert.AreEqual(0, sst.Count);
+            ClassicAssert.AreEqual(0, sst.UniqueCount);
+
+            int idx;
+
+            XSSFRichTextString rts = new XSSFRichTextString("Hello, World!");
+
+            idx = sst.AddSharedStringItem(rts);
+            ClassicAssert.AreEqual(0, idx);
+            ClassicAssert.AreEqual(1, sst.Count);
+            ClassicAssert.AreEqual(1, sst.UniqueCount);
+
+            //add the same entry again
+            idx = sst.AddSharedStringItem(rts);
+            ClassicAssert.AreEqual(0, idx);
+            ClassicAssert.AreEqual(2, sst.Count);
+            ClassicAssert.AreEqual(1, sst.UniqueCount);
+
+            //and again
+            idx = sst.AddSharedStringItem(rts);
+            ClassicAssert.AreEqual(0, idx);
+            ClassicAssert.AreEqual(3, sst.Count);
+            ClassicAssert.AreEqual(1, sst.UniqueCount);
+
+            rts = new XSSFRichTextString("Second string");
+
+            idx = sst.AddSharedStringItem(rts);
+            ClassicAssert.AreEqual(1, idx);
+            ClassicAssert.AreEqual(4, sst.Count);
+            ClassicAssert.AreEqual(2, sst.UniqueCount);
+
+            //add the same entry again
+            idx = sst.AddSharedStringItem(rts);
+            ClassicAssert.AreEqual(1, idx);
+            ClassicAssert.AreEqual(5, sst.Count);
+            ClassicAssert.AreEqual(2, sst.UniqueCount);
+
+            rts = new XSSFRichTextString("Second string");
+            XSSFFont font = new XSSFFont();
+            font.FontName = "Arial";
+            font.IsBold = true;
+            rts.ApplyFont(font);
+
+            idx = sst.AddSharedStringItem(rts);
+            ClassicAssert.AreEqual(2, idx);
+            ClassicAssert.AreEqual(6, sst.Count);
+            ClassicAssert.AreEqual(3, sst.UniqueCount);
+
+            idx = sst.AddSharedStringItem(rts);
+            ClassicAssert.AreEqual(2, idx);
+            ClassicAssert.AreEqual(7, sst.Count);
+            ClassicAssert.AreEqual(3, sst.UniqueCount);
+
+            //OK. the sst table is filled, check the contents
+            ClassicAssert.AreEqual(3, sst.SharedStringItems.Count);
+            ClassicAssert.AreEqual("Hello, World!", sst.getItemAt(0).ToString());
+            ClassicAssert.AreEqual("Second string", sst.getItemAt(1).ToString());
+            ClassicAssert.AreEqual("Second string", sst.getItemAt(2).ToString());
+        }
+
         [Test]
         public void TestReadWrite()
         {
