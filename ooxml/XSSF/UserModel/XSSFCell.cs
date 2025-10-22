@@ -676,8 +676,25 @@ namespace NPOI.XSSF.UserModel
                 //validate through the FormulaParser
                 FormulaParser.Parse(formula, fpb, formulaType, wb.GetSheetIndex(this.Sheet), RowIndex);
             }
-            CT_CellFormula f = new CT_CellFormula { Value = formula };
-            _cell.f= f;
+
+            CT_CellFormula f;
+            if(_cell.IsSetF())
+            {
+                f = _cell.f;
+                f.Value = formula;
+                if(f.t == ST_CellFormulaType.shared)
+                {
+                    (Row.Sheet as XSSFSheet).OnReadCell(this);
+                }
+            }
+            else
+            {
+                f = new CT_CellFormula {
+                    Value = formula
+                };
+                _cell.f = f;
+            }
+
             if (_cell.IsSetV()) _cell.unsetV();
             return this;
         }

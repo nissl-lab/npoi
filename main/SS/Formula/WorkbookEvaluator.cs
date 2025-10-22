@@ -855,7 +855,7 @@ namespace NPOI.SS.Formula
             IEvaluationSheet evalSheet = ec.GetWorkbook().GetSheet(ec.SheetIndex);
             IEvaluationCell evalCell = evalSheet.GetCell(ec.RowIndex, ec.ColumnIndex);
 
-            if (evalCell.IsPartOfArrayFormulaGroup && evaluationResult is AreaEval eval)
+            if (evalCell != null && evalCell.IsPartOfArrayFormulaGroup && evaluationResult is AreaEval eval)
             {
                 value = OperandResolver.GetElementFromArray(eval, evalCell);
             }
