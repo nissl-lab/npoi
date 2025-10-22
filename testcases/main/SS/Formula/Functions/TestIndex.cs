@@ -177,7 +177,6 @@ namespace TestCases.SS.Formula.Functions
         }
 
         [Test]
-        [Ignore("bug 61116")]
         public void Test61859()
         {
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("maxindextest.xls");
@@ -198,6 +197,22 @@ namespace TestCases.SS.Formula.Functions
             ClassicAssert.AreEqual("MAX(INDEX(($B$2:$B$11=F4)*$A$2:$A$11,0))", ex1cell3.CellFormula);
             fe.Evaluate(ex1cell3);
             ClassicAssert.AreEqual(20.0, ex1cell3.NumericCellValue);
+        }
+
+        [Test]
+        public void Test61116()
+        {
+            IWorkbook workbook = HSSFTestDataSamples.OpenSampleWorkbook("61116.xls");
+            IFormulaEvaluator evaluator = workbook.GetCreationHelper().CreateFormulaEvaluator();
+            ISheet sheet = workbook.GetSheet("sample2");
+
+            IRow row = sheet.GetRow(1);
+            ClassicAssert.AreEqual(3.0, evaluator.Evaluate(row.GetCell(1)).NumberValue);
+            ClassicAssert.AreEqual(3.0, evaluator.Evaluate(row.GetCell(2)).NumberValue);
+
+            row = sheet.GetRow(2);
+            ClassicAssert.AreEqual(5.0, evaluator.Evaluate(row.GetCell(1)).NumberValue);
+            ClassicAssert.AreEqual(5.0, evaluator.Evaluate(row.GetCell(2)).NumberValue);
         }
 
         /// <summary>

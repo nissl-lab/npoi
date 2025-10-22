@@ -726,11 +726,39 @@ namespace NPOI.SS.Formula
                     ValueEval[] ops = new ValueEval[numops];
 
                     // storing the ops in reverse order since they are popping
+                    bool areaArg = false; // whether one of the operands is an area
                     for (int j = numops - 1; j >= 0; j--)
                     {
                         ValueEval p = (ValueEval)stack.Pop();
                         ops[j] = p;
+                        if(p is AreaEval)
+                        {
+                            areaArg = true;
+                        }
                     }
+                    bool arrayMode = false;
+                    if(areaArg)
+                        for(int ii = i; ii < iSize; ii++)
+                        {
+                            if(ptgs[ii] is FuncVarPtg)
+                            {
+                                FuncVarPtg f = (FuncVarPtg)ptgs[ii];
+                                try
+                                {
+                                    Functions.Function func = FunctionEval.GetBasicFunction(f.FunctionIndex);
+                                    if(func != null && func is IArrayMode) {
+                                        arrayMode = true;
+                                    }
+                                }
+                                catch(NotImplementedException ne)
+                                {
+                                    //FunctionEval.getBasicFunction can throw NotImplementedException
+                                    // if the fucntion is not yet supported.
+                                }
+                                break;
+                            }
+                        }
+                    ec.IsArraymode = arrayMode;
                     //				logDebug("Invoke " + operation + " (nAgs=" + numops + ")");
                     opResult = OperationEvaluatorFactory.Evaluate(optg, ops, ec);
                 }
