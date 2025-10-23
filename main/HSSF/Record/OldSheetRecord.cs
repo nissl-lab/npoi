@@ -15,6 +15,8 @@
    limitations under the License.
 ==================================================================== */
 
+using System.Diagnostics;
+
 namespace NPOI.HSSF.Record
 {
     using System;
@@ -44,7 +46,8 @@ namespace NPOI.HSSF.Record
             field_3_type = in1.ReadUByte();
             int field_4_sheetname_length = in1.ReadUByte();
             field_5_sheetname = new byte[field_4_sheetname_length];
-            in1.Read(field_5_sheetname, 0, field_4_sheetname_length);
+            int read = in1.Read(field_5_sheetname, 0, field_4_sheetname_length);
+            Debug.Assert(read == field_4_sheetname_length, "Didn't read the right number of bytes");
         }
 
         public void SetCodePage(CodepageRecord codepage)

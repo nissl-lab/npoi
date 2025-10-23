@@ -104,13 +104,8 @@ namespace NPOI.Util
         /// <returns></returns>
         public long FileCRC(string sInputFilename)
         {
-            using (FileStream inFile = new System.IO.FileStream(sInputFilename, System.IO.FileMode.Open, System.IO.FileAccess.Read))
-            {
-                byte[] bInput = new byte[inFile.Length];
-                inFile.Read(bInput, 0, bInput.Length);
-
-                return (long)ByteCRC(ref bInput);
-            }
+            byte[] bInput = File.ReadAllBytes(sInputFilename);
+            return (long) ByteCRC(ref bInput);
         }
 
         /// <summary>
@@ -120,11 +115,12 @@ namespace NPOI.Util
         /// <returns></returns>
         public long StreamCRC(Stream inFile)
         {
-            byte[] bInput = new byte[inFile.Length];
-            inFile.Read(bInput, 0, bInput.Length);
+            using MemoryStream ms = new();
+            inFile.CopyTo(ms);
             inFile.Close();
 
-            return (long)ByteCRC(ref bInput);
+            byte[] bytes = ms.ToArray();
+            return (long)ByteCRC(ref bytes);
         }
 
         public ulong Value { get; set; }
