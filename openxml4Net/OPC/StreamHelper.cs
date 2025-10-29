@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml;
 using System.IO;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace NPOI.OpenXml4Net.OPC
 {
@@ -37,9 +39,24 @@ namespace NPOI.OpenXml4Net.OPC
             // see https://stackoverflow.com/questions/36063375
             settings.Indent = false;
             XmlWriter writer = XmlTextWriter.Create(outStream,settings);
-            //XmlWriter writer = new XmlTextWriter(outStream,Encoding.UTF8);
             xmlContent.WriteContentTo(writer);
             writer.Flush();
+        }
+
+        public static async Task SaveXmlInStreamAsync(XmlDocument xmlContent,Stream outStream, CancellationToken cancellationToken = default)
+        {
+            //XmlNamespaceManager nsmgr = new XmlNamespaceManager(xmlContent.NameTable);
+            //nsmgr.AddNamespace("", "");
+            XmlWriterSettings settings = new XmlWriterSettings();
+            settings.Encoding = Encoding.UTF8;
+            settings.OmitXmlDeclaration = false;
+            // don't indent xml documents, the indent will cause errors in calculating the xml signature
+            // because of different handling of linebreaks in Windows/Unix
+            // see https://stackoverflow.com/questions/36063375
+            settings.Indent = false;
+            XmlWriter writer = XmlTextWriter.Create(outStream,settings);
+            xmlContent.WriteContentTo(writer);
+            await writer.FlushAsync();
         }
 
         /**

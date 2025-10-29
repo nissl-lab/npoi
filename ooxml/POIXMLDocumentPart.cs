@@ -26,6 +26,8 @@ namespace NPOI
     using System.Xml;
     using NPOI.OpenXml4Net.OPC.Internal;
     using System.Diagnostics;
+    using System.Threading.Tasks;
+    using System.Threading;
 
     /**
      * Represents an entry of a OOXML namespace.
@@ -548,6 +550,11 @@ namespace NPOI
         {
         }
 
+        protected internal virtual async Task CommitAsync(CancellationToken cancellationToken = default)
+        {
+            await Task.CompletedTask;
+        }
+
         /**
          * Save Changes in the underlying OOXML namespace.
          * Recursively fires {@link #commit()} for each namespace part
@@ -561,6 +568,23 @@ namespace NPOI
             PrepareForCommit();
 
             Commit();
+            alreadySaved.Add(this.GetPackagePart());
+            foreach (RelationPart rp in relations.Values)
+            {
+                POIXMLDocumentPart p = rp.DocumentPart;
+                if (!alreadySaved.Contains(p.GetPackagePart()))
+                {
+                    p.OnSave(alreadySaved);
+                }
+            }
+        }
+
+        protected internal async Task OnSaveAsync(List<PackagePart> alreadySaved, CancellationToken token)
+        {
+            // this usually clears out previous content in the part...
+            PrepareForCommit();
+
+            await CommitAsync(token);
             alreadySaved.Add(this.GetPackagePart());
             foreach (RelationPart rp in relations.Values)
             {
