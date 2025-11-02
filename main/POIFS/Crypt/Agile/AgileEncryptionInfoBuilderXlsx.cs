@@ -29,15 +29,18 @@ namespace NPOI.POIFS.Crypt.Agile
         public void Initialize(EncryptionInfo ei, ILittleEndianInput dis)
         {
             info = ei;
-            encryptor = new AgileEncryptorForXlsx();
+            encryptor = new AgileEncryptorForXlsx(20, 128);
         }
 
         public void Initialize(EncryptionInfo ei, CipherAlgorithm cipherAlgorithm, HashAlgorithm hashAlgorithm,
             int keyBits, int blockSize, ChainingMode chainingMode)
         {
             info = ei;
-            encryptor = new AgileEncryptorForXlsx();
-        }
+            encryptor = new AgileEncryptorForXlsx(
+                cipherAlgorithm != null && cipherAlgorithm.provider == CipherProvider.aes ? cipherAlgorithm.defaultKeySize : 128,
+                hashAlgorithm != null && (hashAlgorithm.jceId.Contains("SHA") || hashAlgorithm.jceId.Contains("MD5")) ? hashAlgorithm.hashSize : (int)XlsxEncryptor.HashAlgorithmType.Sha1
+            );
+         }
 
         EncryptionHeader IEncryptionInfoBuilder.GetHeader()
         {

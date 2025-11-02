@@ -67,8 +67,9 @@ namespace NPOI.HPSF
         /// <summary>
         /// This section's properties.
         /// </summary>
+#pragma warning disable CA1859
         private IDictionary<long, Property> properties = new Dictionary<long, Property>();
-
+#pragma warning restore CA1859
         /// <summary>
         /// This member is <c>true</c> if the last call to {@link
         /// #getPropertyIntValue} or <see cref="Property"/> tried to access a

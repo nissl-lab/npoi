@@ -16,6 +16,7 @@
 ==================================================================== */
 
 using NPOI.Util;
+using System.Security.Cryptography;
 
 namespace NPOI.POIFS.Crypt.Agile
 {
@@ -36,12 +37,31 @@ namespace NPOI.POIFS.Crypt.Agile
         private byte[]? _keySalt;
         private XDocument? _encryptionInfoXml;
         private string _password = "";
+        private XlsxEncryptor.AesKeySize KeySize { get; set; }
+        private XlsxEncryptor.HashAlgorithmType HashAlgorithm { get; set; }
 
-        public AgileEncryptorForXlsx()
+        public AgileEncryptorForXlsx(int keySize, int hashAlgorithm)
         {
+            if (Enum.TryParse<XlsxEncryptor.AesKeySize>(keySize.ToString(), out var parsedKeySize))
+            {
+                KeySize = parsedKeySize;
+            }
+            else
+            {
+                throw new ArgumentException($"not impl: {keySize}");
+            }
+            
+            if (Enum.TryParse<XlsxEncryptor.HashAlgorithmType>(hashAlgorithm.ToString(), out var parsedHash))
+            {
+                HashAlgorithm = parsedHash;
+            }
+            else
+            {
+                throw new ArgumentException($"not impl: {hashAlgorithm}");
+            }
         }
 
-        protected AgileEncryptorForXlsx(AgileEncryptorForXlsx other)
+        protected AgileEncryptorForXlsx(AgileEncryptorForXlsx other, EncryptionInfo? info, int keySize, XlsxEncryptor.HashAlgorithmType hashAlgorithm)
         {
             _integritySalt = other._integritySalt?.Clone() as byte[];
             _encryptionKey = other._encryptionKey?.Clone() as byte[];
@@ -49,6 +69,22 @@ namespace NPOI.POIFS.Crypt.Agile
             _encryptionInfoXml = other._encryptionInfoXml != null
                 ? new XDocument(other._encryptionInfoXml)
                 : null;
+            if (Enum.TryParse<XlsxEncryptor.AesKeySize>(keySize.ToString(), out var parsedKeySize))
+            {
+                KeySize = parsedKeySize;
+            }
+            else
+            {
+                throw new ArgumentException($"not impl: {keySize}");
+            }
+            if (Enum.TryParse<XlsxEncryptor.HashAlgorithmType>(hashAlgorithm.ToString(), out var parsedHash))
+            {
+                HashAlgorithm = parsedHash;
+            }
+            else
+            {
+                throw new ArgumentException($"not impl: {hashAlgorithm}");
+            }            
         }
 
         /// <summary>
@@ -68,9 +104,10 @@ namespace NPOI.POIFS.Crypt.Agile
             }
 
             this._password = password;
-
+            
+            var xlsxInstance = new XlsxEncryptor(KeySize, HashAlgorithm);
             var (xmlDoc, encryptionKey, keySalt, integritySalt) =
-                XlsxEncryptor.GenerateEncryptionInfo(password);
+                xlsxInstance.GenerateEncryptionInfo(password);
 
             _encryptionInfoXml = xmlDoc;
             _encryptionKey = encryptionKey;
@@ -136,8 +173,6 @@ namespace NPOI.POIFS.Crypt.Agile
                 Console.WriteLine("Warning: Write(int) is inefficient, consider using Write(byte[], int, int) instead.");
             }
 
-
-
             public override void Write(byte[] b, int off, int len)
             {
                 _buffer.Write(b, off, len);
@@ -151,8 +186,15 @@ namespace NPOI.POIFS.Crypt.Agile
                 {
                     return;
                 }
+                
                 _isClosed = true;
-                byte[] encryptedBytes = XlsxEncryptor.FromBytesToBytes(zipBytes, _encryptor._password);
+                byte[] encryptedBytes = XlsxEncryptor.FromBytesToBytes(
+                    zipBytes, 
+                    _encryptor._password,
+                    _encryptor.KeySize,
+                    _encryptor.HashAlgorithm
+                    );
+                
                 _dir.NFileSystem.Data.Write(new ByteBuffer(encryptedBytes, 0, encryptedBytes.Length), 0);
 
                 _dir.FileSystem.MarkAsDirectWrite();

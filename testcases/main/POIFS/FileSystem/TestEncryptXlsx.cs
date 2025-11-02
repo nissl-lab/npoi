@@ -32,6 +32,7 @@ using NPOI.SS.UserModel;
 using NPOI.Util;
 using NPOI.XSSF.UserModel;
 using NUnit.Framework;
+using NUnit.Framework.Internal;
 using NUnit.Framework.Legacy;
 using OpenMcdf;
 using System;
@@ -133,6 +134,105 @@ namespace TestCases.POIFS.FileSystem
                 ClassicAssert.IsTrue(checkResult);
                 checkResult = CompareWithOriginal(originalPath, outputPath, poiPath, password);
                 ClassicAssert.IsTrue(checkResult);
+                
+        // ========================================
+        // pattern2: AES-256 + SHA-256
+        // ========================================
+        var encryptor2 = new XlsxEncryptor(
+            XlsxEncryptor.AesKeySize.Aes256,
+            XlsxEncryptor.HashAlgorithmType.Sha256
+        );
+        outputPath = Path.Combine(projectDir, "encrypted_aes256_sha256.xlsx");
+        encryptor2.EncryptFile(
+            originalPath,
+            outputPath,
+            password
+        );
+        // compare
+        checkResult = TestDecryption(outputPath, password);
+        ClassicAssert.IsTrue(checkResult);
+        checkResult = TestDecryption(poiPath, password);
+        ClassicAssert.IsTrue(checkResult);
+        checkResult = CompareWithOriginal(originalPath, outputPath, poiPath, password);
+        ClassicAssert.IsTrue(checkResult);
+        
+        // ========================================
+        // pattern3: AES-192 + SHA-384
+        // ========================================
+        var encryptor3 = new XlsxEncryptor(
+            XlsxEncryptor.AesKeySize.Aes192,
+            XlsxEncryptor.HashAlgorithmType.Sha384
+        );
+        outputPath = Path.Combine(projectDir, "encrypted_aes384_sha384.xlsx");
+        encryptor3.EncryptFile(
+            originalPath,
+            outputPath,
+            password
+        );
+        // compare
+        checkResult = TestDecryption(outputPath, password);
+        ClassicAssert.IsTrue(checkResult);
+        checkResult = TestDecryption(poiPath, password);
+        ClassicAssert.IsTrue(checkResult);
+        checkResult = CompareWithOriginal(originalPath, outputPath, poiPath, password);
+        ClassicAssert.IsTrue(checkResult);
+
+        // ========================================
+        // pattern4: AES-256 + SHA-512
+        // ========================================
+        var encryptor4 = new XlsxEncryptor(
+            XlsxEncryptor.AesKeySize.Aes256,
+            XlsxEncryptor.HashAlgorithmType.Sha512
+        );
+        outputPath = Path.Combine(projectDir, "encrypted_aes256_sha512.xlsx");
+        encryptor4.EncryptFile(
+            originalPath,
+            outputPath,
+            password
+        );
+        // compare
+        checkResult = TestDecryption(outputPath, password);
+        ClassicAssert.IsTrue(checkResult);
+        checkResult = TestDecryption(poiPath, password);
+        ClassicAssert.IsTrue(checkResult);
+        checkResult = CompareWithOriginal(originalPath, outputPath, poiPath, password);
+        ClassicAssert.IsTrue(checkResult);
+        
+        // ========================================
+        // pattern5: MD5
+        // ========================================
+        var encryptor5 = new XlsxEncryptor(
+            XlsxEncryptor.AesKeySize.Aes128,
+            XlsxEncryptor.HashAlgorithmType.Md5
+        );
+        outputPath = Path.Combine(projectDir, "encrypted_aes128_md5.xlsx");
+        encryptor5.EncryptFile(
+            originalPath,
+            outputPath,
+            password
+        );
+        // compare
+        checkResult = TestDecryption(outputPath, password);
+        ClassicAssert.IsTrue(checkResult);
+        checkResult = TestDecryption(poiPath, password);
+        ClassicAssert.IsTrue(checkResult);
+        checkResult = CompareWithOriginal(originalPath, outputPath, poiPath, password);
+        ClassicAssert.IsTrue(checkResult);
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
             }
             finally
             {
@@ -210,7 +310,75 @@ namespace TestCases.POIFS.FileSystem
         }
 
         [Test]
-        public void TestPoiCompatibleApi()
+        public void TestPasswordXssfWorkbookCustom1()
+        {
+            string projectDir = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory));
+            string outputPath = Path.Combine(projectDir, "protected_n.xlsx");
+            string outputPathNormal = Path.Combine(projectDir, "normal_n.xlsx");
+            string password = "pass";
+
+            try
+            {
+                XSSFWorkbook wb = new();
+                ISheet sheet = wb.CreateSheet("Sheet1");
+                sheet.CreateRow(0).CreateCell(0).SetCellValue("Hello");
+
+                using(POIFSFileSystem fs = new())
+                {
+                    EncryptionInfo info = new EncryptionInfo(
+                        EncryptionMode.AgileXlsx,
+                        CipherAlgorithm.aes256,
+                        HashAlgorithm.sha512,
+                        -1,
+                        -1,
+                        null);
+                    Encryptor enc = info.Encryptor;
+                    enc.ConfirmPassword(password);
+                    using(OutputStream os = enc.GetDataStream(fs))
+                    {
+                        wb.Write(os);
+                    }
+
+                    using(FileStream fos = File.Create(outputPath))
+                    {
+                        fs.WriteFileSystem(fos);
+                    }
+                }
+
+                using(FileStream fos = File.Create(outputPathNormal))
+                {
+                    wb.Write(fos);
+                }
+
+                bool checkResult = TestDecryption(outputPath, password);
+                ClassicAssert.IsTrue(checkResult);
+
+                // check a normal version
+                using(FileStream fis = File.OpenRead(outputPathNormal))
+                {
+                    XSSFWorkbook wbReloaded = new(fis);
+                    ClassicAssert.AreEqual(1, wbReloaded.NumberOfSheets);
+                    ClassicAssert.AreEqual("Sheet1", wbReloaded.GetSheetAt(0).SheetName);
+                    ClassicAssert.AreEqual("Hello",
+                        wbReloaded.GetSheetAt(0).GetRow(0).GetCell(0).StringCellValue);
+                }
+            }
+            finally
+            {
+                try
+                {
+                    File.Delete(outputPath);
+                    File.Delete(outputPathNormal);
+                }
+                catch(Exception)
+                {
+                    // no-op
+                }
+            }
+        }
+
+        [Test]
+        public void TestNPoiCompatibleApi()
         {
             POIDataSamples samples = POIDataSamples.GetPOIFSInstance();
             string originalPath = samples.GetFileInfo("encrypt_original.xlsx").FullName;
@@ -301,6 +469,62 @@ namespace TestCases.POIFS.FileSystem
                 }
             }
         }
+        
+        [Test]
+        public void TestByteExactCompatibilityWithApachePoiCustom1()
+        {
+            POIDataSamples samples = POIDataSamples.GetPOIFSInstance();
+            string originalPath = samples.GetFileInfo("encrypt_original.xlsx").FullName;
+            string poiPath = samples.GetFileInfo("encrypt_encrypted_by_poi_password_is_pass.xlsx").FullName;
+            string projectDir = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory));
+            string npoiPath = Path.Combine(projectDir, "encrypt_encrypted_by_npoi.xlsx");
+            string password = "pass";
+            
+            try
+            {
+                using(POIFSFileSystem fs = new())
+                {
+                    EncryptionInfo info = new EncryptionInfo(
+                        EncryptionMode.AgileXlsx,
+                        CipherAlgorithm.aes192,
+                        HashAlgorithm.sha384,
+                        -1,
+                        -1,
+                        null);
+                    Encryptor enc = info.Encryptor;
+                    enc.ConfirmPassword(password);
+                    
+                    using(OPCPackage opc = OPCPackage.Open(originalPath, PackageAccess.READ))
+                    using(OutputStream os = enc.GetDataStream(fs))
+                    {
+                        opc.Save(os);
+                    }
+                    
+                    using(FileStream fos = File.Create(npoiPath))
+                    {
+                        fs.WriteFileSystem(fos);
+                    }
+                }
+                
+                byte[] decryptedFromPoi = XlsxEncryptor.Decrypt(poiPath, password);
+                
+                byte[] decryptedFromNpoi = XlsxEncryptor.Decrypt(npoiPath, password);
+                
+                CollectionAssert.AreEqual(decryptedFromPoi, decryptedFromNpoi);
+                
+                byte[] original = File.ReadAllBytes(originalPath);
+                CollectionAssert.AreEqual(original, decryptedFromPoi);
+                CollectionAssert.AreEqual(original, decryptedFromNpoi);
+            }
+            finally
+            {
+                if(File.Exists(npoiPath))
+                {
+                    File.Delete(npoiPath);
+                }
+            }
+        }
+        
 
         [Test]
         public void TestEncryptionStructureCompatibility()
