@@ -737,7 +737,7 @@ namespace TestCases.HSSF.Model
 
             byte[] dgBytes = Decompress(data);
 
-            IList<NPOI.HSSF.Record.Record> dgRecords = RecordFactory.CreateRecords(new MemoryStream(dgBytes));
+            IList<NPOI.HSSF.Record.Record> dgRecords = RecordFactory.CreateRecords(new ByteArrayInputStream(dgBytes));
             ClassicAssert.AreEqual(20, dgRecords.Count);
 
             short[] expectedSids = {
@@ -917,7 +917,7 @@ namespace TestCases.HSSF.Model
 
             byte[] dgBytes = Decompress(data);
 
-            IList<NPOI.HSSF.Record.Record> dgRecords = RecordFactory.CreateRecords(new MemoryStream(dgBytes));
+            IList<NPOI.HSSF.Record.Record> dgRecords = RecordFactory.CreateRecords(new ByteArrayInputStream(dgBytes));
             ClassicAssert.AreEqual(14, dgRecords.Count);
 
             short[] expectedSids = {

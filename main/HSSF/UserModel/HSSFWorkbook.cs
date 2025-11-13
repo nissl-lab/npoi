@@ -29,6 +29,7 @@ namespace NPOI.HSSF.UserModel
     using NPOI.HPSF;
     using NPOI.HSSF.Model;
     using NPOI.HSSF.Record;
+    using NPOI.HSSF.Record.Crypto;
     using NPOI.POIFS.Crypt;
     using NPOI.POIFS.FileSystem;
     using NPOI.SS;
@@ -317,7 +318,7 @@ namespace NPOI.HSSF.UserModel
 
             // Grab the data from the workbook stream, however
             //  it happens to be spelled.
-            Stream stream = directory.CreatePOIFSDocumentReader(workbookName);
+            InputStream stream = directory.CreatePOIFSDocumentReader(workbookName);
 
 
             List<Record> records = RecordFactory.CreateRecords(stream);
@@ -1469,6 +1470,8 @@ namespace NPOI.HSSF.UserModel
             List<HSSFSheet> sheets = GetSheets();
             int nSheets = sheets.Count;
 
+            UpdateEncryptionInfo();
+
             // before Getting the workbook size we must tell the sheets that
             // serialization Is about to occur.
             workbook.PreSerialize();
@@ -1515,8 +1518,139 @@ namespace NPOI.HSSF.UserModel
                 pos += serializedSize;
                 src.Dispose();
             }
-            
+
+            EncryptBytes(retval);
+
             return retval;
+        }
+
+        public override EncryptionInfo GetEncryptionInfo()
+        {
+            FilePassRecord fpr = (FilePassRecord)workbook.FindFirstRecordBySid(FilePassRecord.sid);
+            return fpr != null ? fpr.GetEncryptionInfo() : null;
+        }
+
+        private void EncryptBytes(byte[] buf)
+        {
+            EncryptionInfo ei = GetEncryptionInfo();
+            if (ei == null)
+            {
+                return;
+            }
+
+            Encryptor enc = ei.Encryptor;
+            int initialOffset = 0;
+
+            var bos = new MemoryStream(buf);
+            bos.Position = 0;
+            var plain = new LittleEndianInputStream(bos);
+            var leos = new LittleEndianByteArrayOutputStream(buf, 0);
+            enc.SetChunkSize(Biff8DecryptingStream.RC4_REKEYING_INTERVAL);
+            byte[] tmp = new byte[1024];
+
+            try
+            {
+                ChunkedCipherOutputStream os = enc.GetDataStream(leos, initialOffset);
+                int totalBytes = 0;
+
+                while (totalBytes < buf.Length)
+                {
+                    IOUtils.ReadFully(plain, tmp, 0, 4);
+                    int sid = LittleEndian.GetUShort(tmp, 0);
+                    int len = LittleEndian.GetUShort(tmp, 2);
+                    bool isPlain = Biff8DecryptingStream.IsNeverEncryptedRecord(sid);
+
+                    os.SetNextRecordSize(len, isPlain);
+                    os.WritePlain(tmp, 0, 4);
+
+                    if (sid == BoundSheetRecord.sid)
+                    {
+                        // special case for the field_1_position_of_BOF (=lbPlyPos) field of
+                        // the BoundSheet8 record which must be unencrypted
+                        byte[] bsrBuf = IOUtils.SafelyAllocate(len, CryptoFunctions.MAX_RECORD_LENGTH);
+                        plain.ReadFully(bsrBuf);
+                        os.WritePlain(bsrBuf, 0, 4);
+                        os.Write(bsrBuf, 4, len - 4);
+                    }
+                    else
+                    {
+                        int todo = len;
+                        while (todo > 0)
+                        {
+                            int nextLen = Math.Min(todo, tmp.Length);
+                            plain.ReadFully(tmp, 0, nextLen);
+                            if (isPlain)
+                            {
+                                os.WritePlain(tmp, 0, nextLen);
+                            }
+                            else
+                            {
+                                os.Write(tmp, 0, nextLen);
+                            }
+                            todo -= nextLen;
+                        }
+                    }
+                    totalBytes += 4 + len;
+                }
+                os.Close();
+            }
+            catch(Exception e)
+            {
+                throw new EncryptedDocumentException(e);
+            }
+        }
+
+        private void UpdateEncryptionInfo()
+        {
+            // make sure, that we've read all the streams ...
+            ReadProperties();
+            FilePassRecord fpr = (FilePassRecord)workbook.FindFirstRecordBySid(FilePassRecord.sid);
+
+            var password = Biff8EncryptionKey.CurrentUserPassword;
+            WorkbookRecordList wrl = workbook.GetWorkbookRecordList();
+
+            if (password == null)
+            {
+                if (fpr != null)
+                {
+                    // need to remove password data
+                    wrl.Remove(fpr);
+                }
+            }
+            else
+            {
+                // create password record
+                if (fpr == null)
+                {
+                    fpr = new FilePassRecord(EncryptionMode.CryptoAPI);
+                    wrl.Add(1, fpr);
+                }
+
+                // check if the password has been changed
+                EncryptionInfo ei = fpr.GetEncryptionInfo();
+                EncryptionVerifier ver = ei.Verifier;
+                byte[] encVer = ver.GetVerifier();
+                Decryptor dec = ei.Decryptor;
+                Encryptor enc = ei.Encryptor;
+
+                try
+                {
+                    if (encVer == null || !dec.VerifyPassword(password))
+                    {
+                        enc.ConfirmPassword(password);
+                    }
+                    else
+                    {
+                        byte[] verifier = dec.GetVerifier();
+                        byte[] salt = ver.Salt;
+                        enc.ConfirmPassword(password, null, null, verifier, salt, null);
+                    }
+                }
+                catch (Exception e)
+                {
+                    throw new EncryptedDocumentException("can't validate/update encryption setting", e);
+                }
+            }
         }
 
         /**

@@ -29,15 +29,52 @@ namespace NPOI.POIFS.Crypt.BinaryRC4
     {
 
         private BinaryRC4EncryptionInfoBuilder builder;
+        private int _chunkSize = 512;
+
+        public BinaryRC4Encryptor(BinaryRC4EncryptionInfoBuilder builder)
+        {
+            this.builder = builder;
+        }
+
+        protected BinaryRC4Encryptor(BinaryRC4Encryptor other) : base(other)
+        {
+            this.builder = other.builder;
+            _chunkSize = other._chunkSize;
+        }
+
+        public override OutputStream GetDataStream(DirectoryNode dir)
+        {
+            return new BinaryRC4CipherOutputStream(dir, builder, this);
+        }
+
+        public override ChunkedCipherOutputStream GetDataStream(OutputStream stream, int initialOffset)
+        {
+            return new BinaryRC4CipherOutputStream(stream, builder, this);
+        }
 
         protected class BinaryRC4CipherOutputStream : ChunkedCipherOutputStream
         {
-            protected override Cipher InitCipherForBlock(Cipher cipher, int block, bool lastChunk)
+            public BinaryRC4CipherOutputStream(OutputStream stream, IEncryptionInfoBuilder builder, BinaryRC4Encryptor binaryRC4Encryptor)
+                : base(stream, binaryRC4Encryptor._chunkSize, builder, binaryRC4Encryptor)
             {
-                return BinaryRC4Decryptor.InitCipherForBlock(cipher, block, builder, encryptor.GetSecretKey(), Cipher.ENCRYPT_MODE);
             }
 
-            protected override void CalculateChecksum(FileInfo file, int i)
+            //If not, wire your POIFS packaging where you create the output stream.
+            public BinaryRC4CipherOutputStream(DirectoryNode dir, IEncryptionInfoBuilder builder, BinaryRC4Encryptor binaryRC4Encryptor)
+                : base(dir, binaryRC4Encryptor._chunkSize, builder, binaryRC4Encryptor)
+            {
+            }
+
+            protected override Cipher InitCipherForBlock(Cipher cipher, int block, bool lastChunk)
+            {
+                // Reinitialize for given block in ENCRYPT mode.
+                return BinaryRC4Decryptor.InitCipherForBlock(cipher, block,
+                    builder,
+                    encryptor.GetSecretKey(),
+                    Cipher.ENCRYPT_MODE);
+            }
+
+            protected override void CalculateChecksum(FileInfo fileOut, int oleStreamSize)
             {
             }
 
@@ -45,17 +82,6 @@ namespace NPOI.POIFS.Crypt.BinaryRC4
             {
                 ((BinaryRC4Encryptor)encryptor).CreateEncryptionInfoEntry(dir);
             }
-
-            public BinaryRC4CipherOutputStream(DirectoryNode dir, BinaryRC4EncryptionInfoBuilder builder, BinaryRC4Encryptor encryptor)
-                : base(dir, 512, builder, encryptor)
-            {
-                
-            }
-        }
-
-        protected internal BinaryRC4Encryptor(BinaryRC4EncryptionInfoBuilder builder)
-        {
-            this.builder = builder;
         }
 
         public override void ConfirmPassword(String password)
@@ -92,13 +118,6 @@ namespace NPOI.POIFS.Crypt.BinaryRC4
             {
                 throw new EncryptedDocumentException("Password Confirmation failed", e);
             }
-        }
-
-        public override OutputStream GetDataStream(DirectoryNode dir)
-        {
-            Stream countStream = new BinaryRC4CipherOutputStream(dir, builder, this).out1;
-            throw new NotImplementedException("BinaryRC4CipherOutputStream should be derived from OutputStream");
-            //return countStream;
         }
 
         protected int GetKeySizeInBytes()

@@ -162,7 +162,7 @@ namespace TestCases.HSSF.Record
 
         private static RecordFactoryInputStream CreateRFIS(byte[] data)
         {
-            return new RecordFactoryInputStream(new MemoryStream(data), true);
+            return new RecordFactoryInputStream(new ByteArrayInputStream(data), true);
         }
     }
 

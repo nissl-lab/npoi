@@ -221,9 +221,9 @@ namespace NPOI.SS.UserModel
                     }
                     finally
                     {
-                        // ensure that the file-handle is closed again
-                        if (nfs != null)
-                            nfs.Close();
+                        // do not close NPOIFSFileSystem as Close dispose the _data source and fails to read document summary information
+                        //if(nfs != null)
+                        //    nfs.Close();
                     }
                 }
 

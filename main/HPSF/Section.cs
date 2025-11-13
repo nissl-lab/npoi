@@ -809,7 +809,7 @@ namespace NPOI.HPSF
              * section. */
             if (sectionBytes.Position > 0)
             {
-                sectionBytes.WriteTo(out1);
+                out1.Write(sectionBytes.ToByteArray(), 0, (int)sectionBytes.Length);
                 return (int)sectionBytes.Position;
             }
 
