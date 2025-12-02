@@ -310,21 +310,26 @@ namespace NPOI.HSSF.Model
             {
                 return true;
             }
-            short sid = ((Record)rb).Sid;
-            switch (sid)
+
+            if (rb is Record record)
             {
-                case WindowTwoRecord.sid:
-                case SCLRecord.sid:
-                case PaneRecord.sid:
-                case SelectionRecord.sid:
-                case UnknownRecord.STANDARDWIDTH_0099:
-                // MergedCellsTable
-                case UnknownRecord.LABELRANGES_015F:
-                case UnknownRecord.PHONETICPR_00EF:
-                // ConditionalFormattingTable
-                case HyperlinkRecord.sid:
-                case UnknownRecord.QUICKTIP_0800:
-                    return true;
+                short sid = record.Sid;
+
+                switch (sid)
+                {
+                    case WindowTwoRecord.sid:
+                    case SCLRecord.sid:
+                    case PaneRecord.sid:
+                    case SelectionRecord.sid:
+                    case UnknownRecord.STANDARDWIDTH_0099:
+                    // MergedCellsTable (Note: This type check is already handled above)
+                    case UnknownRecord.LABELRANGES_015F:
+                    case UnknownRecord.PHONETICPR_00EF:
+                    // ConditionalFormattingTable (Note: This type check is already handled above)
+                    case HyperlinkRecord.sid:
+                    case UnknownRecord.QUICKTIP_0800:
+                        return true;
+                }
             }
             return false;
         }
