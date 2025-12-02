@@ -287,17 +287,7 @@ namespace NPOI.HSSF.Model
                 RecordBase rb = records[i];
                 if (IsDVTPriorRecord(rb))
                 {
-                    Record nextRec = (Record)records[i + 1];
-                    if (!IsDVTSubsequentRecord(nextRec.Sid))
-                    {
-                        //throw new InvalidOperationException($"Unexpected ({nextRec.GetType().Name}) found after ({rb.GetType().Name})");
-                    }
                     return i + 1;
-                }
-                Record rec = (Record)rb;
-                if (!IsDVTSubsequentRecord(rec.Sid))
-                {
-                    //throw new InvalidOperationException($"Unexpected ({rec.GetType().Name}) while looking for DV Table insert pos");
                 }
             }
             return 0;
