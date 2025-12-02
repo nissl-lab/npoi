@@ -37,13 +37,13 @@ namespace NPOI.XWPF.UserModel
 
         public CT_SimpleField GetCTField()
         {
-            return field;
+            return this.field;
         }
 
         public string FieldInstruction
         {
-            get { return field.instr; }
-            set { field.instr = value; }
+            get { return this.field.instr; }
+            set { this.field.instr = value; }
         }
     }
 
