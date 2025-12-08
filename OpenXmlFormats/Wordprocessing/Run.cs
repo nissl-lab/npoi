@@ -1641,13 +1641,12 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     public enum ST_Jc
     {
     
-        left,
+        start,
 
     
         center,
 
-    
-        right,
+        end,
 
     
         both,
@@ -1669,6 +1668,12 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
     
         thaiDistribute,
+
+        
+        left,
+
+        
+        right
     }
 
 
