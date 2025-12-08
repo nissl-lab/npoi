@@ -32,16 +32,18 @@ namespace NPOI.XWPF.UserModel
     {
         //YK: TODO document each alignment option
 
-        LEFT = (1),
+        START = (1),
         CENTER = (2),
-        RIGHT = (3),
+        END = (3),
         BOTH = (4),
         MEDIUM_KASHIDA = (5),
         DISTRIBUTE = (6),
         NUM_TAB = (7),
         HIGH_KASHIDA = (8),
         LOW_KASHIDA = (9),
-        THAI_DISTRIBUTE = (10)
+        THAI_DISTRIBUTE = (10),
+        LEFT = (11),
+        RIGHT = (12)
 
         //private int value;
 
