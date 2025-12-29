@@ -97,7 +97,7 @@ namespace NPOI.HPSF
             LittleEndianInputStream leis = new LittleEndianInputStream(stream);
             int byteOrder =  leis.ReadUShort();
             int format = leis.ReadUShort();
-            int osVersion = (int)leis.ReadUInt();
+            _ = leis.ReadUInt();
             byte[] clsIdBuf = new byte[ClassID.LENGTH];
             leis.ReadFully(clsIdBuf);
             int sectionCount = (int)leis.ReadUInt();

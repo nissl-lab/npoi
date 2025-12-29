@@ -198,6 +198,19 @@ namespace TestCases.HPSF.Extractor
                 ext.Close();
             }
         }
+        [Test]
+        public void Test61300Extractor() 
+        {
+		    //HPSFPropertiesExtractor.Main(new String[]{
+				//POIDataSamples.GetPOIFSInstance().GetFile("61300.bin").Name
+		    //});
+            var testfile = POIDataSamples.GetPOIFSInstance().GetFileInfo("61300.bin");
+            HPSFPropertiesExtractor ext = new HPSFPropertiesExtractor(new POIFSFileSystem(testfile));
+            
+                
+            Console.WriteLine(ext.Text);
+            
+        }
     }
 
 
