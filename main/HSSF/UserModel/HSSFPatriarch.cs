@@ -100,7 +100,7 @@ namespace NPOI.HSSF.UserModel
             Hashtable coordinates = new Hashtable(tailRecords.Count);
             foreach (NoteRecord rec in tailRecords.Values)
             {
-                String noteRef = new CellReference(rec.Row, rec.Column).FormatAsString(); // A1-style notation
+                String noteRef = new CellReference(rec.Row, rec.Column, true, true).FormatAsString(); // A1-style notation
                 if (coordinates.Contains(noteRef))
                 {
                     throw new InvalidOperationException("found multiple cell comments for cell " + noteRef);

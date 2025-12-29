@@ -29,6 +29,9 @@ namespace NPOI.DDF
     /// </summary>
     public class EscherPropertyFactory
     {
+        //arbitrarily selected; may need to increase
+        private static int MAX_RECORD_LENGTH = 100_000_000;
+
         /// <summary>
         /// Create new properties from a byte array.
         /// </summary>
@@ -71,11 +74,11 @@ namespace NPOI.DDF
                         }
                         else if (propertyType == EscherPropertyMetaData.TYPE_ARRAY)
                         {
-                            ep = new EscherArrayProperty(propId, new byte[propData]);
+                            ep = new EscherArrayProperty(propId, IOUtils.SafelyAllocate(propData, MAX_RECORD_LENGTH));
                         }
                         else
                         {
-                            ep = new EscherComplexProperty(propId, new byte[propData]);
+                            ep = new EscherComplexProperty(propId, IOUtils.SafelyAllocate(propData, MAX_RECORD_LENGTH));
                         }
                         break;
                 }

@@ -32,6 +32,9 @@ using Cysharp.Text;
     /// </summary>
     public class UnknownEscherRecord : EscherRecord, ICloneable
     {
+        //arbitrarily selected; may need to increase
+        private static int MAX_RECORD_LENGTH = 100_000_000;
+
         private static byte[] NO_BYTES = [];
 
         /** The data for this record not including the the 8 byte header */
@@ -53,11 +56,11 @@ using Cysharp.Text;
         {
             int bytesRemaining = ReadHeader(data, offset);
             /*
-		     * Modified by Zhang Zhang
-		     * Have a check between available bytes and bytesRemaining, 
-		     * take the available length if the bytesRemaining out of range.
-		     * July 09, 2010
-		     */
+             * Modified by Zhang Zhang
+             * Have a check between available bytes and bytesRemaining, 
+             * take the available length if the bytesRemaining out of range.
+             * July 09, 2010
+             */
             int available = data.Length - (offset + 8);
             if (bytesRemaining > available)
             {
@@ -85,7 +88,7 @@ using Cysharp.Text;
                 if (bytesRemaining < 0) {
                     bytesRemaining = 0;
                 }
-                _thedata = new byte[bytesRemaining];
+                _thedata = IOUtils.SafelyAllocate(bytesRemaining, MAX_RECORD_LENGTH);
                 Array.Copy(data, offset + 8, _thedata, 0, bytesRemaining);
                 return bytesRemaining + 8;
             }

@@ -4719,6 +4719,13 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             return (uint)this.dataFieldField.Count;
         }
+
+        internal CT_DataField GetDataFieldArray(int index)
+        {
+            if(index< 0 || index>=this.dataFieldField.Count)
+                throw new ArgumentOutOfRangeException();
+            return this.dataField[index];
+        }
     }
 
     

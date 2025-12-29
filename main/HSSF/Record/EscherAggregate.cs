@@ -132,6 +132,9 @@ namespace NPOI.HSSF.Record
      */
     public class EscherAggregate : AbstractEscherHolderRecord
     {
+        //arbitrarily selected; may need to increase
+        private static int MAX_RECORD_LENGTH = 100_000_000;
+
         public const short sid = 9876;
         private static POILogger log = POILogFactory.GetLogger(typeof(EscherAggregate));
 
@@ -692,7 +695,7 @@ namespace NPOI.HSSF.Record
                 // Determine buffer size
                 List<EscherRecord> records = EscherRecords;
                 int rawEscherSize = GetEscherRecordSize(records);
-                byte[] buffer = new byte[rawEscherSize];
+                byte[] buffer = IOUtils.SafelyAllocate(rawEscherSize, MAX_RECORD_LENGTH);
                 List<int> spEndingOffsets = new List<int>();
                 int pos = 0;
                 foreach (EscherRecord e in records)

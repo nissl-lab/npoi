@@ -41,6 +41,9 @@ namespace NPOI.HSSF.Record
      */
     public class CFRule12Record : CFRuleBase, IFutureRecord, ICloneable
     {
+        //arbitrarily selected; may need to increase
+        private static int MAX_RECORD_LENGTH = 100_000;
+
         public static short sid = 0x087A;
 
         private FtrHeader futureHeader;
@@ -87,7 +90,7 @@ namespace NPOI.HSSF.Record
             priority = 0;
             template_type = ConditionType;
             template_param_length = 16;
-            template_params = new byte[template_param_length];
+            template_params = IOUtils.SafelyAllocate(template_param_length, MAX_RECORD_LENGTH);
         }
 
         /**
@@ -200,7 +203,7 @@ namespace NPOI.HSSF.Record
             } else {
                 int len = ReadFormatOptions(in1);
                 if (len < ext_formatting_length) {
-                    ext_formatting_data = new byte[ext_formatting_length - len];
+                    ext_formatting_data = IOUtils.SafelyAllocate(ext_formatting_length - len, MAX_RECORD_LENGTH);
                     in1.ReadFully(ext_formatting_data);
                 }
             }
@@ -216,7 +219,7 @@ namespace NPOI.HSSF.Record
             template_type = in1.ReadUShort();
             template_param_length = (byte)in1.ReadByte();
             if (template_param_length == 0 || template_param_length == 16) {
-                template_params = new byte[template_param_length];
+                template_params = IOUtils.SafelyAllocate(template_param_length, MAX_RECORD_LENGTH);
                 in1.ReadFully(template_params);
             } else {
                 //logger.Log(POILogger.WARN, "CF Rule v12 template params length should be 0 or 16, found " + template_param_length);
@@ -448,7 +451,7 @@ namespace NPOI.HSSF.Record
             // use min() to gracefully handle cases where the length-property and the array-lenght do not match
             // we saw some such files in circulation
             rec.ext_formatting_length = Math.Min(ext_formatting_length, ext_formatting_data.Length);
-            rec.ext_formatting_data = new byte[ext_formatting_length];
+            rec.ext_formatting_data = IOUtils.SafelyAllocate(ext_formatting_length, MAX_RECORD_LENGTH);
             Array.Copy(ext_formatting_data, 0, rec.ext_formatting_data, 0, rec.ext_formatting_length);
 
             rec.formula_scale = formula_scale.Copy();
@@ -457,7 +460,7 @@ namespace NPOI.HSSF.Record
             rec.priority = priority;
             rec.template_type = template_type;
             rec.template_param_length = template_param_length;
-            rec.template_params = new byte[template_param_length];
+            rec.template_params = IOUtils.SafelyAllocate(template_param_length, MAX_RECORD_LENGTH);
             Array.Copy(template_params, 0, rec.template_params, 0, template_param_length);
 
             if (color_gradient != null) {
@@ -470,7 +473,7 @@ namespace NPOI.HSSF.Record
                 rec.data_bar = (DataBarFormatting)data_bar.Clone();
             }
             if (filter_data != null) {
-                rec.filter_data = new byte[filter_data.Length];
+                rec.filter_data = IOUtils.SafelyAllocate(filter_data.Length, MAX_RECORD_LENGTH);
                 Array.Copy(filter_data, 0, rec.filter_data, 0, filter_data.Length);
             }
 

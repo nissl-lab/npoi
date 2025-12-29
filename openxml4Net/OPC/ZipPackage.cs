@@ -561,15 +561,15 @@ namespace NPOI.OpenXml4Net.OPC
                     }
                 }
 
+                // Save content type part.
+                logger.Log(POILogger.DEBUG, "Save content types part");
+                this.contentTypeManager.Save(zos);
+
                 // Save package relationships part.
                 logger.Log(POILogger.DEBUG, "Save package relationships");
                 ZipPartMarshaller.MarshallRelationshipPart(this.Relationships,
                         PackagingUriHelper.PACKAGE_RELATIONSHIPS_ROOT_PART_NAME,
                         zos);
-
-                // Save content type part.
-                logger.Log(POILogger.DEBUG, "Save content types part");
-                this.contentTypeManager.Save(zos);
 
                 // Save parts.
                 foreach (PackagePart part in GetParts())

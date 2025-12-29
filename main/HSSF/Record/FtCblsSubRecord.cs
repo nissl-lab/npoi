@@ -28,7 +28,7 @@ namespace NPOI.HSSF.Record
                 throw new RecordFormatException("Unexpected size (" + size + ")");
             }
             //just grab the raw data
-            byte[] buf = new byte[size];
+            byte[] buf = IOUtils.SafelyAllocate(size, ENCODED_SIZE);
             in1.ReadFully(buf);
             reserved = buf;
         }

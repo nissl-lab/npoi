@@ -36,6 +36,8 @@ namespace NPOI.SS.Extractor
     public class EmbeddedExtractor : IEnumerable<EmbeddedExtractor>
     {
         private static POILogger LOG = POILogFactory.GetLogger(typeof(EmbeddedExtractor));
+        //arbitrarily selected; may need to increase
+        private static int MAX_RECORD_LENGTH = 1_000_000;
 
         // contentType
         private static String CONTENT_TYPE_BYTES = "binary/octet-stream";
@@ -278,7 +280,7 @@ namespace NPOI.SS.Extractor
                 }
 
                 int pictureBytesLen = idxEnd - idxStart + 6;
-                byte[] pdfBytes = new byte[pictureBytesLen];
+                byte[] pdfBytes = IOUtils.SafelyAllocate(pictureBytesLen, MAX_RECORD_LENGTH);
                 System.Array.Copy(pictureBytes, idxStart, pdfBytes, 0, pictureBytesLen);
                 String filename = source.ShapeName.Trim();
                 if (!filename.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase))

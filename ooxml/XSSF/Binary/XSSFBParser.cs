@@ -31,6 +31,9 @@ namespace NPOI.XSSF.Binary
     /// @since 3.16-beta3
     public abstract class XSSFBParser
     {
+        //arbitrarily selected; may need to increase
+        private static int MAX_RECORD_LENGTH = 1_000_000;
+
         private  LittleEndianInputStream is1;
         private  BitArray records;
 
@@ -96,7 +99,7 @@ namespace NPOI.XSSF.Binary
             if(records == null || records.Get(recordId))
             {
                 //add sanity check for length?
-                byte[] buff = new byte[(int) recordLength];
+                byte[] buff = IOUtils.SafelyAllocate(recordLength, MAX_RECORD_LENGTH);
                 is1.ReadFully(buff);
                 HandleRecord(recordId, buff);
             }

@@ -233,14 +233,9 @@ namespace NPOI.HSSF.UserModel
         {
             foreach (String wbName in InternalWorkbook.WORKBOOK_DIR_ENTRY_NAMES)
             {
-                try
+                if(directory.HasEntry(wbName))
                 {
-                    directory.GetEntry(wbName);
                     return wbName;
-                }
-                catch (FileNotFoundException)
-                {
-                    // continue - to try other options
                 }
             }
             // check for an encrypted .xlsx file - they get OLE2 wrapped

@@ -35,6 +35,8 @@ namespace NPOI.HSSF.Record
     public class HyperlinkRecord : StandardRecord, ICloneable
     {
         private static POILogger logger = POILogFactory.GetLogger(typeof(HyperlinkRecord));
+        //arbitrarily selected; may need to increase
+        private static int MAX_RECORD_LENGTH = 100_000;
         /**
          * Link flags
          */
@@ -214,7 +216,7 @@ namespace NPOI.HSSF.Record
 
                     int len = in1.ReadInt();
 
-                    byte[] path_bytes = new byte[len];
+                    byte[] path_bytes = IOUtils.SafelyAllocate(len, MAX_RECORD_LENGTH);
                     in1.ReadFully(path_bytes);
 
                     _address = Encoding.UTF8.GetString(path_bytes);

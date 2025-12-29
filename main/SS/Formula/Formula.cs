@@ -30,6 +30,8 @@ namespace NPOI.SS.Formula
      */
     public class Formula
     {
+        //Arbitrarily set.  May need to increase.
+        private static int MAX_ENCODED_LEN = 100000;
 
         private static readonly Formula EMPTY = new Formula([], 0);
 
@@ -71,7 +73,7 @@ namespace NPOI.SS.Formula
          */
         public static Formula Read(int encodedTokenLen, ILittleEndianInput in1, int totalEncodedLen)
         {
-            byte[] byteEncoding = new byte[totalEncodedLen];
+            byte[] byteEncoding = IOUtils.SafelyAllocate(totalEncodedLen, MAX_ENCODED_LEN);
             in1.ReadFully(byteEncoding);
             return new Formula(byteEncoding, encodedTokenLen);
         }

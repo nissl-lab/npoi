@@ -54,7 +54,8 @@ namespace NPOI.HPSF
 
 
         //private static POILogger logger = POILogFactory.GetLogger(VariantSupport.class);
-
+        //arbitrarily selected; may need to increase
+        private static int MAX_RECORD_LENGTH = 100_000;
         /// <summary>
         /// Keeps a list of the variant types an "unsupported" message has already
         /// been issued for.
@@ -155,7 +156,7 @@ namespace NPOI.HPSF
             catch ( InvalidOperationException exc )
             {
                 int propLength = Math.Min( length, lei.Available() );
-                byte[] v = new byte[propLength];
+                byte[] v = IOUtils.SafelyAllocate(propLength, MAX_RECORD_LENGTH);
                 lei.ReadFully(v, 0, propLength);
                 throw new ReadingNotSupportedException( type, v );
             }
@@ -231,7 +232,7 @@ namespace NPOI.HPSF
                 default:
                     int unpadded = lei.GetReadIndex()-offset;
                     lei.SetReadIndex(offset);
-                    byte[] v = new byte[unpadded];
+                    byte[] v = IOUtils.SafelyAllocate(unpadded, MAX_RECORD_LENGTH);
                     lei.ReadFully( v, 0, unpadded );
                     throw new ReadingNotSupportedException( type, v );
             }
