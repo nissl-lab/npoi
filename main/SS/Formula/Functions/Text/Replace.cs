@@ -57,6 +57,7 @@ using Cysharp.Text;
                 return ErrorEval.VALUE_INVALID;
             }
             using var strBuff = ZString.CreateStringBuilder();
+            strBuff.Append(oldStr);
             // remove any characters that should be replaced
             if (startNum <= oldStr.Length && numChars != 0)
             {
