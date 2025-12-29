@@ -3520,6 +3520,34 @@ namespace TestCases.HSSF.UserModel
             });
         }
 
+        [Test]
+        public void Test51262() 
+        {
+            HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("51262.xls");
+            ISheet sheet = wb.GetSheetAt(0);
+            IRow row = sheet.GetRow(2);
+
+            ICell cell = row.GetCell(1);
+            ICellStyle style = cell.CellStyle;
+            ClassicAssert.AreEqual(26, style.FontIndex);
+
+            row = sheet.GetRow(3);
+            cell = row.GetCell(1);
+            style = cell.CellStyle;
+            ClassicAssert.AreEqual(28, style.FontIndex);
+
+            // check the two fonts
+            HSSFFont font = wb.GetFontAt((short) 26) as HSSFFont;
+            ClassicAssert.IsTrue(font.IsBold);
+            ClassicAssert.AreEqual(10, font.FontHeightInPoints);
+            ClassicAssert.AreEqual("\uFF2D\uFF33 \uFF30\u30B4\u30B7\u30C3\u30AF", font.FontName);
+
+            font = wb.GetFontAt((short) 28) as HSSFFont;
+            ClassicAssert.IsTrue(font.IsBold);
+            ClassicAssert.AreEqual(10, font.FontHeightInPoints);
+            ClassicAssert.AreEqual("\uFF2D\uFF33 \uFF30\u30B4\u30B7\u30C3\u30AF", font.FontName);
+        }
+
         // follow https://svn.apache.org/viewvc?view=revision&revision=1896552 to write a unit test for this fix.
         [Test]
         public void Test52447()

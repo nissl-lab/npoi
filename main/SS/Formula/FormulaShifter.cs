@@ -1005,13 +1005,19 @@ namespace NPOI.SS.Formula
             int refRow = rptg.Row;
             if (rptg.IsRowRelative)
             {
+                // check new location where the ref is located
                 int destRowIndex = _firstMovedIndex + _amountToMove;
                 if (destRowIndex < 0 || _version.LastRowIndex < destRowIndex)
                 {
                     return CreateDeletedRef(rptg);
                 }
-
-                rptg.Row = refRow + _amountToMove;
+                // check new location where the ref points to
+                int newRowIndex = refRow + _amountToMove;
+                if(newRowIndex < 0 || _version.LastRowIndex < newRowIndex)
+                {
+                    return CreateDeletedRef(rptg);
+                }
+                rptg.Row = newRowIndex;
                 return rptg;
             }
 

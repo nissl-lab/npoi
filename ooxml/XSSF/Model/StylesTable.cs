@@ -926,7 +926,8 @@ namespace NPOI.XSSF.Model
         /**
          * Finds a font that matches the one with the supplied attributes
          */
-        public XSSFFont FindFont(bool bold, short color, short fontHeight, String name, bool italic, bool strikeout, FontSuperScript typeOffset, FontUnderlineType underline)
+        public XSSFFont FindFont(bool bold, short color, short fontHeight, String name, bool italic, bool strikeout,
+            FontSuperScript typeOffset, FontUnderlineType underline)
         {
             foreach (XSSFFont font in fonts)
             {
@@ -945,6 +946,29 @@ namespace NPOI.XSSF.Model
             return null;
         }
 
+        /// <summary>
+        /// Finds a font that matches the one with the supplied attributes,
+        /// where color is the actual Color-value, not the indexed color
+        /// </summary>
+        public XSSFFont FindFont(bool bold, IColor color, short fontHeight, string name, bool italic, bool strikeout,
+            FontSuperScript typeOffset, FontUnderlineType underline)
+        {
+            foreach(XSSFFont font in fonts)
+            {
+                if((font.IsBold == bold)
+                        && font.GetXSSFColor().Equals(color)
+                        && font.FontHeight == fontHeight
+                        && font.FontName.Equals(name)
+                        && font.IsItalic == italic
+                        && font.IsStrikeout == strikeout
+                        && font.TypeOffset == typeOffset
+                        && font.Underline == underline)
+                {
+                    return font;
+                }
+            }
+            return null;
+        }
         /// <summary>
         /// default or custom indexed color to RGB mapping
         /// </summary>
