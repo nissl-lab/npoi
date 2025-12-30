@@ -67,7 +67,7 @@ namespace NPOI.HPSF
         /// <summary>
         /// This section's properties.
         /// </summary>
-        private IDictionary<long, Property> properties = new Dictionary<long, Property>();
+        private Dictionary<long, Property> properties = new Dictionary<long, Property>();
 
         /// <summary>
         /// This member is <c>true</c> if the last call to {@link
