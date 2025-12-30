@@ -21,10 +21,10 @@ namespace NPOI.Util
     using System.IO;
 
     /// <summary>
-    /// Wraps an <see cref="System.IO.Stream"/> providing <see cref="NPOI.Util.ILittleEndianOutput"/>
+    /// Wraps an <see cref="FilterOutputStream"/> providing <see cref="NPOI.Util.ILittleEndianOutput"/>
     /// </summary>
     /// <remarks>@author Josh Micich</remarks>
-    public class LittleEndianOutputStream : ILittleEndianOutput, IDisposable
+    public class LittleEndianOutputStream : FilterOutputStream,  ILittleEndianOutput, IDisposable
     {
         public void Dispose()
         {
@@ -36,22 +36,30 @@ namespace NPOI.Util
         {
             if (disposing)
             {
-                if (null != out1)
-                {
-                    out1.Dispose();
-                    out1 = null;
-                }
+                this.Close();
             }
         }
-        public void Close()
+
+        public override void Close()
         {
-            Dispose();
+            base.Close();
+            if (null != out1)
+            {
+                out1.Dispose();
+                out1 = null;
+            }
         }
+
         protected internal Stream out1 = null;
 
-        public LittleEndianOutputStream(Stream out1)
+        public LittleEndianOutputStream(Stream out1) : base(null)
         {
             this.out1 = out1;
+        }
+
+        public LittleEndianOutputStream(OutputStream outputStream) : base(outputStream)
+        {
+            this.out1 = outputStream;
         }
 
         public void WriteByte(int v)
@@ -110,7 +118,7 @@ namespace NPOI.Util
                 throw new RuntimeException(e);
             }
         }
-        public void Write(byte[] b)
+        public override void Write(byte[] b)
         {
             // suppress IOException for interface method
 
@@ -123,7 +131,7 @@ namespace NPOI.Util
                 throw new RuntimeException(e);
             }
         }
-        public void Write(byte[] b, int off, int len)
+        public override void Write(byte[] b, int off, int len)
         {
             // suppress IOException for interface method
             try
@@ -134,11 +142,6 @@ namespace NPOI.Util
             {
                 throw new RuntimeException(e);
             }
-        }
-
-        public void Flush()
-        {
-            out1.Flush();
         }
     }
 }

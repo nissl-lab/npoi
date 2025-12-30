@@ -313,10 +313,8 @@ namespace NPOI.POIFS.Crypt.Agile
 
             public AgileCipherInputStream(DocumentInputStream stream, long size,
                 IEncryptionInfoBuilder builder, AgileDecryptor decryptor)
-                    : base(stream, size, 4096, builder, decryptor)
+                    : base(stream, size, 4096, decryptor)
             {
-                this.builder = builder;
-                this.decryptor = decryptor;
             }
 
             // TODO: calculate integrity hmac while Reading the stream

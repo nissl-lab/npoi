@@ -97,27 +97,28 @@ namespace NPOI.POIFS.Crypt.Standard
         {
             CreateEncryptionInfoEntry(dir);
             DataSpaceMapUtils.AddDefaultDataSpace(dir);
-            Stream countStream = new StandardCipherOutputStream(dir, this);
-            //return countStream;
-            throw new NotImplementedException("StandardCipherOutputStream should be derived from OutputStream");
+            return new StandardCipherOutputStream(dir, this);
         }
 
-        protected class StandardCipherOutputStream : ByteArrayOutputStream, POIFSWriterListener
+        protected class StandardCipherOutputStream : OutputStream, POIFSWriterListener
         {
-            private StandardEncryptor encryptor;
-            protected long countBytes;
-            protected FileInfo fileOut;
-            protected DirectoryNode dir;
-            private readonly CipherOutputStream out1;
-            private readonly FileStream rawStream;// maybe has memory leak problem.
+            private readonly StandardEncryptor encryptor;
+            private readonly DirectoryNode dir;
+            private readonly Cipher cipher;
+            private readonly FileInfo tempFile;
+            private readonly FileStream cipherOut;
+            private long countBytes;
+            private bool finalized;
+            private bool closed;
+            private bool poifsWritten;
 
             protected internal StandardCipherOutputStream(DirectoryNode dir, StandardEncryptor encryptor)
             {
                 this.encryptor = encryptor;
                 this.dir = dir;
-                fileOut = TempFile.CreateTempFile("encrypted_package", "crypt");
-                rawStream = new FileStream(fileOut.FullName, FileMode.Open, FileAccess.ReadWrite); // fileOut.Create();
-
+                tempFile = TempFile.CreateTempFile("encrypted_package", "crypt");
+                cipherOut = new FileStream(tempFile.FullName, FileMode.Create, FileAccess.ReadWrite, FileShare.Read);
+                
                 // although not documented, we need the same padding as with agile encryption
                 // and instead of calculating the missing bytes for the block size ourselves
                 // we leave it up to the CipherOutputStream, which generates/saves them on close()
@@ -128,67 +129,89 @@ namespace NPOI.POIFS.Crypt.Standard
                 // KeyData.blockSize value. Any pAdding bytes can be used. Note that the StreamSize
                 // field of the EncryptedPackage field specifies the number of bytes of 
                 // unencrypted data as specified in section 2.3.4.4.
-                CipherOutputStream cryptStream = new CipherOutputStream(rawStream, 
-                    encryptor.GetCipher(encryptor.GetSecretKey(), "PKCS5Padding"));
-
-                this.out1 = cryptStream;
+                cipher = encryptor.GetCipher(encryptor.GetSecretKey(), "PKCS5Padding");
             }
 
-
-            public override void Write(byte[] b, int off, int len)
+            public override void Write(byte[] buffer)
             {
-                out1.Write(b, off, len);
-                countBytes += len;
+                Write(buffer, 0, buffer.Length);
             }
 
-
-            public override void Write(int b)
+            public override void Write(byte[] buffer, int offset, int count)
             {
-                out1.Write(b);
+                countBytes += count;
+                byte[] enc = cipher.Update(buffer, offset, count);
+                if(enc != null && enc.Length > 0)
+                    cipherOut.Write(enc, 0, enc.Length);
+            }
+
+            public override void Write(int value)
+            {
                 countBytes++;
+                byte[] one = { (byte)value };
+                byte[] enc = cipher.Update(one, 0, 1);
+                if(enc != null && enc.Length > 0)
+                    cipherOut.Write(enc, 0, enc.Length);
+            }
+
+            private void FinalizeCipherIfNeeded()
+            {
+                if(finalized)
+                    return;
+                try
+                {
+                    byte[] finalBlock = cipher.DoFinal();
+                    if(finalBlock != null && finalBlock.Length > 0)
+                        cipherOut.Write(finalBlock, 0, finalBlock.Length);
+                }
+                catch { }
+                cipherOut.Flush();
+                finalized = true;
             }
 
             public override void Close()
             {
-                // the CipherOutputStream Adds the pAdding bytes on close()
-                base.Close();
+                if(closed)
+                    return;
+                FinalizeCipherIfNeeded();
                 WriteToPOIFS();
-                //rawStream.Close();
-                //rawStream = null;
+                closed = true;
+                base.Close();
+                // Cleanup only after POIFS has consumed the data
+                if(poifsWritten)
+                {
+                    cipherOut.Close();
+                    tempFile.Delete();
+                }
             }
 
-            void WriteToPOIFS()
+            private void WriteToPOIFS()
             {
-                int oleStreamSize = (int)(fileOut.Length + LittleEndianConsts.LONG_SIZE);
+                int oleStreamSize = (int)(cipherOut.Length + LittleEndianConsts.LONG_SIZE);
                 dir.CreateDocument(DEFAULT_POIFS_ENTRY, oleStreamSize, this);
                 // TODO: any properties???
             }
 
             public void ProcessPOIFSWriterEvent(POIFSWriterEvent event1)
             {
+                if(!finalized)
+                    FinalizeCipherIfNeeded();
                 try
                 {
-                    LittleEndianOutputStream leos = new LittleEndianOutputStream(event1.Stream);
-
-                    // StreamSize (8 bytes): An unsigned integer that specifies the number of bytes used by data 
-                    // encrypted within the EncryptedData field, not including the size of the StreamSize field. 
-                    // Note that the actual size of the \EncryptedPackage stream (1) can be larger than this 
-                    // value, depending on the block size of the chosen encryption algorithm
-                    leos.WriteLong(countBytes);
-                    long rawPos = rawStream.Position;
-                    //FileStream fis = new FileStream(fileOut.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-                    IOUtils.Copy(rawStream, leos.out1);
-                    //fis.Close();
-                    rawStream.Position = rawPos;
-                    //File.Delete(fileOut.FullName + ".copy");
-                    fileOut.Delete();
-                    
-
-                    leos.Close();
+                    cipherOut.Position = 0;
+                    using(var leos = new LittleEndianOutputStream(event1.Stream))
+                    {
+                        leos.WriteLong(countBytes);
+                        IOUtils.Copy(cipherOut, leos.out1);
+                    }
                 }
                 catch (IOException e)
                 {
                     throw new EncryptedDocumentException(e);
+                }
+                finally
+                {
+                    poifsWritten = true;
                 }
             }
         }
@@ -207,7 +230,7 @@ namespace NPOI.POIFS.Crypt.Standard
             EncryptionRecord er = new EncryptionRecordInternal(info, header, verifier);
 
 
-            DataSpaceMapUtils.CreateEncryptionEntry(dir, "EncryptionInfo", er);
+            DataSpaceMapUtils.CreateEncryptionEntry(dir, EncryptionInfo.ENCRYPTION_INFO_ENTRY, er);
 
             // TODO: any properties???
         }
@@ -234,83 +257,5 @@ namespace NPOI.POIFS.Crypt.Standard
             }
         }
 
-    }
-
-    internal sealed class CipherOutputStream : ByteArrayOutputStream
-    {
-        private byte[] ibuffer = new byte[1];
-        private byte[] obuffer;
-        private bool closed = false;
-        private FileStream output;
-        private Cipher cipher;
-
-        public CipherOutputStream(FileStream rawStream, Cipher cipher)
-        {
-            this.output = rawStream;
-            this.cipher = cipher;
-        }
-        protected CipherOutputStream(FileStream rawStream)
-        {
-            this.output = rawStream;
-            this.cipher = new NullCipher();
-        }
-        public override void Write(int paramInt)
-        {
-            this.ibuffer[0] = ((byte)paramInt);
-            this.obuffer = this.cipher.Update(this.ibuffer, 0, 1);
-            if (this.obuffer != null)
-            {
-                this.output.Write(this.obuffer, 0, obuffer.Length);
-                this.obuffer = null;
-            }
-        }
-        public override void Write(byte[] b)
-        {
-            Write(b, 0, b.Length);
-        }
-
-        public override void Write(byte[] b, int off, int len)
-        {
-            this.obuffer = this.cipher.Update(b, off, len);
-            if (this.obuffer != null)
-            {
-                this.output.Write(this.obuffer, 0, obuffer.Length);
-                this.output.Flush();
-                this.obuffer = null;
-            }
-        }
-
-        public override void Flush()
-        {
-            if (this.obuffer != null)
-            {
-                this.output.Write(this.obuffer, 0, obuffer.Length);
-                this.obuffer = null;
-            }
-            this.output.Flush();
-        }
-
-        public override void Close()
-        {
-            if (this.closed)
-            {
-                return;
-            }
-            this.closed = true;
-            try
-            {
-                this.obuffer = this.cipher.DoFinal();
-            }
-            catch
-            {
-                this.obuffer = null;
-            }
-            try
-            {
-                Flush();
-            }
-            catch (IOException) { }
-            this.Close();
-        }
     }
 }

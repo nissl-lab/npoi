@@ -32,6 +32,7 @@ namespace NPOI.Util
     /// </remarks>
     public class LittleEndianInputStream : FilterInputStream, ILittleEndianInput
     {
+        private const int BUFFERED_SIZE = 8096;
         private int readLimit = -1;
         private long markPos = -1;
 
@@ -39,7 +40,7 @@ namespace NPOI.Util
         {
         }
 
-        public LittleEndianInputStream(InputStream is1) : base(is1)
+        public LittleEndianInputStream(InputStream is1) : base(is1.MarkSupported() ? is1 : new BufferedInputStream(is1, BUFFERED_SIZE))
         {
         }
 
@@ -111,7 +112,7 @@ namespace NPOI.Util
 
         public override int Available()
         {
-            return (int)(Length - Position);
+            return base.Available();
         }
 
         public override int ReadByte()
@@ -121,17 +122,17 @@ namespace NPOI.Util
 
         public int ReadUByte()
         {
-            int ch;
+            byte[] buf = new byte[1];
             try
             {
-                ch = Read();
+                CheckEOF(Read(buf), 1);
             }
             catch (IOException e)
             {
                 throw new RuntimeException(e);
             }
-            CheckEOF(ch);
-            return ch;
+            
+            return LittleEndian.GetUByte(buf);
         }
 
         public double ReadDouble()
@@ -141,23 +142,16 @@ namespace NPOI.Util
 
         public int ReadInt()
         {
-            int ch1;
-            int ch2;
-            int ch3;
-            int ch4;
+            byte[] buf = new byte[LittleEndianConsts.INT_SIZE];
             try
             {
-                ch1 = Read();
-                ch2 = Read();
-                ch3 = Read();
-                ch4 = Read();
+                CheckEOF(Read(buf), buf.Length);
             }
-            catch (IOException e)
+            catch(IOException e)
             {
                 throw new RuntimeException(e);
             }
-            CheckEOF(ch1 | ch2 | ch3 | ch4);
-            return (ch4 << 24) + (ch3 << 16) + (ch2 << 8) + (ch1 << 0);
+            return LittleEndian.GetInt(buf);
         }
 
         public long ReadUInt()
@@ -168,38 +162,16 @@ namespace NPOI.Util
 
         public long ReadLong()
         {
-            int b0;
-            int b1;
-            int b2;
-            int b3;
-            int b4;
-            int b5;
-            int b6;
-            int b7;
+            byte[] buf = new byte[LittleEndianConsts.LONG_SIZE];
             try
             {
-                b0 = Read();
-                b1 = Read();
-                b2 = Read();
-                b3 = Read();
-                b4 = Read();
-                b5 = Read();
-                b6 = Read();
-                b7 = Read();
+                CheckEOF(Read(buf), LittleEndianConsts.LONG_SIZE);
             }
-            catch (IOException e)
+            catch(IOException e)
             {
                 throw new RuntimeException(e);
             }
-            CheckEOF(b0 | b1 | b2 | b3 | b4 | b5 | b6 | b7);
-            return (((long)b7 << 56) +
-                    ((long)b6 << 48) +
-                    ((long)b5 << 40) +
-                    ((long)b4 << 32) +
-                    ((long)b3 << 24) +
-                    (b2 << 16) +
-                    (b1 << 8) +
-                    (b0 << 0));
+            return LittleEndian.GetLong(buf);
         }
 
         public short ReadShort()
@@ -209,24 +181,21 @@ namespace NPOI.Util
 
         public int ReadUShort()
         {
-            int ch1;
-            int ch2;
+            byte[] buf = new byte[LittleEndianConsts.SHORT_SIZE];
             try
             {
-                ch1 = Read();
-                ch2 = Read();
+                CheckEOF(Read(buf), LittleEndianConsts.SHORT_SIZE);
             }
-            catch (IOException e)
+            catch(IOException e)
             {
                 throw new RuntimeException(e);
             }
-            CheckEOF(ch1 | ch2);
-            return (ch2 << 8) + (ch1 << 0);
+            return LittleEndian.GetUShort(buf);
         }
 
-        private static void CheckEOF(int value)
+        private static void CheckEOF(int actualBytes, int expectedBytes)
         {
-            if (value < 0)
+            if (expectedBytes != 0 && (actualBytes == -1 || actualBytes != expectedBytes))
             {
                 throw new RuntimeException("Unexpected end-of-file");
             }
@@ -239,21 +208,19 @@ namespace NPOI.Util
 
         public void ReadFully(byte[] buf, int off, int len)
         {
-            int max = off + len;
-            for (int i = off; i < max; i++)
+            try
             {
-                byte ch;
-                try
-                {
-                    ch = (byte)Read();
-                }
-                catch (IOException e)
-                {
-                    throw new RuntimeException(e);
-                }
-                CheckEOF(ch);
-                buf[i] = ch;
+                CheckEOF(Read(buf, off, len), len);
             }
+            catch(IOException e)
+            {
+                throw new RuntimeException(e);
+            }
+        }
+
+        public void ReadPlain(byte[] buf, int off, int len)
+        {
+            ReadFully(buf, off, len);
         }
     }
 }

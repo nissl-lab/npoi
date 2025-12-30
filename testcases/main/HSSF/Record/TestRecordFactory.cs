@@ -136,7 +136,7 @@ namespace TestCases.HSSF.Record
             0x3C , 0, 1, 0, 4 // one more continuation record with 1 byte of data
             };
 
-            MemoryStream bois = new MemoryStream(data);
+            ByteArrayInputStream bois = new ByteArrayInputStream(data);
             Record[] records = (Record[])
               RecordFactory.CreateRecords(bois).ToArray();
             ClassicAssert.AreEqual(3, records.Length, "Created record count");
@@ -201,7 +201,7 @@ namespace TestCases.HSSF.Record
                     "00 00 00 00 00 00 00";
             byte[] data = HexRead.ReadFromString(dump);
 
-            IList records = RecordFactory.CreateRecords(new MemoryStream(data));
+            IList records = RecordFactory.CreateRecords(new ByteArrayInputStream(data));
             ClassicAssert.AreEqual(5, records.Count);
             ClassicAssert.IsTrue(records[0] is ObjRecord);
             ClassicAssert.IsTrue(records[1] is DrawingRecord);

@@ -46,22 +46,23 @@ namespace NPOI.OpenXml4Net.OPC.Internal
                 // Saving data in the ZIP file
 
                 StreamHelper.SaveXmlInStream(content, out1);
-                using MemoryStream ins = new MemoryStream();
+                // useless reading from empty stream
+                //using MemoryStream ins = new MemoryStream();
 
-                byte[] buff = new byte[ZipHelper.READ_WRITE_FILE_BUFFER_SIZE];
-                while(true)
-                {
-                    int resultRead = ins.Read(buff, 0, ZipHelper.READ_WRITE_FILE_BUFFER_SIZE);
-                    if(resultRead == 0)
-                    {
-                        // end of file reached
-                        break;
-                    }
-                    else
-                    {
-                        zos.Write(buff, 0, resultRead);
-                    }
-                }
+                //byte[] buff = new byte[ZipHelper.READ_WRITE_FILE_BUFFER_SIZE];
+                //while(true)
+                //{
+                //    int resultRead = ins.Read(buff, 0, ZipHelper.READ_WRITE_FILE_BUFFER_SIZE);
+                //    if(resultRead == 0)
+                //    {
+                //        // end of file reached
+                //        break;
+                //    }
+                //    else
+                //    {
+                //        zos.Write(buff, 0, resultRead);
+                //    }
+                //}
 
                 zos.CloseEntry();
             }

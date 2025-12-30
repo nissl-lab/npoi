@@ -56,7 +56,7 @@ namespace TestCases.HSSF.Record
                     "E2 00 02 00 B0 04 " + //INTERFACEEND with extra two bytes
                     "0A 00 00 00";    // EOF
             byte[] data = HexRead.ReadFromString(hex);
-            List<Record> records = RecordFactory.CreateRecords(new MemoryStream(data));
+            List<Record> records = RecordFactory.CreateRecords(new ByteArrayInputStream(data));
             ClassicAssert.AreEqual(3, records.Count);
             Record rec1 = records[(1)];
             ClassicAssert.AreEqual(typeof(InterfaceHdrRecord), rec1.GetType());

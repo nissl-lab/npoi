@@ -55,6 +55,11 @@ namespace NPOI.POIFS.Crypt
      * @return the encryptor
      */
         Encryptor GetEncryptor();
+
+        /**
+		* @return the EncryptionInfo
+		*/
+        EncryptionInfo GetEncryptionInfo();
     }
 
 }

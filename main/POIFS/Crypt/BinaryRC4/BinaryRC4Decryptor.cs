@@ -27,19 +27,23 @@ namespace NPOI.POIFS.Crypt.BinaryRC4
     public class BinaryRC4Decryptor : Decryptor
     {
         private long _length = -1L;
+        private int _chunkSize = 512;
 
         private sealed class BinaryRC4CipherInputStream : ChunkedCipherInputStream
         {
             protected override Cipher InitCipherForBlock(Cipher existing, int block)
             {
-                return BinaryRC4Decryptor.InitCipherForBlock(existing, block,
-                    decryptor.builder, decryptor.GetSecretKey(), Cipher.DECRYPT_MODE);
+                return BinaryRC4Decryptor.InitCipherForBlock(existing, block, builder, decryptor.GetSecretKey(), Cipher.DECRYPT_MODE);
             }
 
-            public BinaryRC4CipherInputStream(DocumentInputStream stream, long size, Decryptor decryptor)
-                : base(stream, size, 512, decryptor.builder, decryptor)
+            public BinaryRC4CipherInputStream(BinaryRC4Decryptor decryptor, InputStream stream, long size)
+                : base(stream, size, decryptor._chunkSize, decryptor)
             {
-                this.decryptor = decryptor;
+            }
+
+            public BinaryRC4CipherInputStream(BinaryRC4Decryptor decryptor, InputStream stream, int size, int initialPos)
+                : base(stream, size, decryptor._chunkSize, initialPos, decryptor)
+            {
             }
         }
 
@@ -125,9 +129,7 @@ namespace NPOI.POIFS.Crypt.BinaryRC4
         {
             DocumentInputStream dis = dir.CreateDocumentInputStream(DEFAULT_POIFS_ENTRY);
             _length = dis.ReadLong();
-            BinaryRC4CipherInputStream cipherStream = new BinaryRC4CipherInputStream(dis, _length, this);
-            //return cipherStream.GetStream();
-            throw new NotImplementedException("BinaryRC4CipherInputStream should be derived from InputStream");
+            return new BinaryRC4CipherInputStream(this, dis, _length);
         }
 
         public override long GetLength()
@@ -139,6 +141,11 @@ namespace NPOI.POIFS.Crypt.BinaryRC4
 
             return _length;
         }
-    }
 
+
+        public override void SetChunkSize(int chunkSize)
+        {
+            _chunkSize = chunkSize;
+        }
+    }
 }

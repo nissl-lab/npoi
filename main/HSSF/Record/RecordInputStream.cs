@@ -28,6 +28,8 @@ namespace NPOI.HSSF.Record
 
     using NPOI.HSSF.Record.Crypto;
     using System.Diagnostics;
+    using NPOI.POIFS.Crypt;
+    using NPOI.HPSF;
 
 
     [Serializable]
@@ -90,7 +92,7 @@ namespace NPOI.HSSF.Record
      * @author Jason Height (jheight @ apache dot org)
      */
 
-    public class RecordInputStream : Stream, ILittleEndianInput
+    public class RecordInputStream : ILittleEndianInput
     {
         /** Maximum size of a single record (minus the 4 byte header) without a continue*/
         public const short MAX_RECORD_DATA_SIZE = 8224;
@@ -104,8 +106,10 @@ namespace NPOI.HSSF.Record
         protected int _currentDataLength = -1;
         protected int _nextSid = -1;
         private int _currentDataOffset = 0;
-        // fix warning CS0169 "never used": private long _initialposition;
-        private long pos = 0;
+        /**
+         * index within the data section when mark() was called
+         */
+        private int _markedDataOffset;
 
         /** Header {@link LittleEndianInput} facet of the wrapped {@link InputStream} */
         private readonly BiffHeaderInput _bhi;
@@ -115,22 +119,33 @@ namespace NPOI.HSSF.Record
 
         //protected byte[] data = new byte[MAX_RECORD_DATA_SIZE];
 
-        public RecordInputStream(Stream in1)
+        public RecordInputStream(InputStream in1)
             : this(in1, null, 0)
         {
 
         }
 
-        public RecordInputStream(Stream in1, Biff8EncryptionKey key, int initialOffset)
+        public RecordInputStream(Stream in1)
         {
-            if (key == null)
+            _dataInput = SimpleHeaderInput.GetLEI(in1);
+            _bhi = new SimpleHeaderInput(in1);
+            _nextSid = ReadNextSid();
+        }
+
+        public RecordInputStream(InputStream in1, EncryptionInfo info, int initialOffset)
+        {
+            if (info == null)
             {
-                _dataInput = SimpleHeaderInput.GetLEI(in1);
+                _dataInput = (in1 is ILittleEndianInput)
+                    // accessing directly is an optimisation
+                    ? (ILittleEndianInput) in1
+                    // less optimal, but should work OK just the same. Often occurs in junit tests.
+                    : new LittleEndianInputStream(in1);
                 _bhi = new SimpleHeaderInput(in1);
             }
             else
             {
-                Biff8DecryptingStream bds = new Biff8DecryptingStream(in1, initialOffset, key);
+                Biff8DecryptingStream bds = new Biff8DecryptingStream(in1, initialOffset, info);
                 _bhi = bds;
                 _dataInput = bds;
             }
@@ -147,7 +162,6 @@ namespace NPOI.HSSF.Record
         {
             CheckRecordPosition(LittleEndianConsts.BYTE_SIZE);
             _currentDataOffset += LittleEndianConsts.BYTE_SIZE;
-            pos += LittleEndianConsts.BYTE_SIZE;
             return _dataInput.ReadByte();
         }
 
@@ -183,16 +197,20 @@ namespace NPOI.HSSF.Record
             get { return (short)_currentSid; }
         }
 
-        public override long Position
+        public void Mark(int readlimit)
         {
-            get
+            if (!(_dataInput is InputStream))
             {
-                return pos;
+                throw new ApplicationException("Cannot use mark for dataInput of type " + _dataInput.GetType() + ", need an InputStream");
             }
-            set
-            {
-                throw new NotImplementedException();
-            }
+            ((InputStream) _dataInput).Mark(readlimit);
+            _markedDataOffset = _currentDataOffset;
+        }
+
+        public void Reset()
+        {
+            ((InputStream) _dataInput).Reset();
+            _currentDataOffset = _markedDataOffset;
         }
 
         public long CurrentLength
@@ -203,41 +221,6 @@ namespace NPOI.HSSF.Record
         public int RecordOffset
         {
             get { return _currentDataOffset; }
-        }
-
-        public override long Seek(long offset, SeekOrigin origin)
-        {
-            //if (!this.CanSeek)
-            //{
-            //    throw new NotSupportedException();
-            //}
-            //int dwOrigin = 0;
-            //switch (origin)
-            //{
-            //    case SeekOrigin.Begin:
-            //        dwOrigin = 0;
-            //        if (0L > offset)
-            //        {
-            //            throw new ArgumentOutOfRangeException("offset", "offset must be positive");
-            //        }
-            //        this.Position = offset < this.Length ? offset : this.Length;
-            //        break;
-
-            //    case SeekOrigin.Current:
-            //        dwOrigin = 1;
-            //        this.Position = (this.Position + offset) < this.Length ? (this.Position + offset) : this.Length;
-            //        break;
-
-            //    case SeekOrigin.End:
-            //        dwOrigin = 2;
-            //        this.Position = this.Length;
-            //        break;
-
-            //    default:
-            //        throw new ArgumentException("incorrect SeekOrigin", "origin");
-            //}
-            //return Position;
-            throw new NotSupportedException();
         }
 
         public bool HasNextRecord
@@ -273,7 +256,6 @@ namespace NPOI.HSSF.Record
             _currentSid = _nextSid;
             _currentDataOffset = 0;
             _currentDataLength = _bhi.ReadDataSize();
-            pos += LittleEndianConsts.SHORT_SIZE;
             if (_currentDataLength > MAX_RECORD_DATA_SIZE)
             {
                 throw new RecordFormatException("The content of an excel record cannot exceed "
@@ -301,11 +283,10 @@ namespace NPOI.HSSF.Record
         /**
          * Reads an 8 bit, signed value
          */
-        public override int ReadByte()
+        public int ReadByte()
         {
             CheckRecordPosition(LittleEndianConsts.BYTE_SIZE);
             _currentDataOffset += LittleEndianConsts.BYTE_SIZE;
-            pos += LittleEndianConsts.BYTE_SIZE;
             return _dataInput.ReadByte();
         }
 
@@ -316,7 +297,6 @@ namespace NPOI.HSSF.Record
         {
             CheckRecordPosition(LittleEndianConsts.SHORT_SIZE);
             _currentDataOffset += LittleEndianConsts.SHORT_SIZE;
-            pos += LittleEndianConsts.SHORT_SIZE;
             return _dataInput.ReadShort();
         }
 
@@ -324,7 +304,6 @@ namespace NPOI.HSSF.Record
         {
             CheckRecordPosition(LittleEndianConsts.INT_SIZE);
             _currentDataOffset += LittleEndianConsts.INT_SIZE;
-            pos += LittleEndianConsts.INT_SIZE;
             return _dataInput.ReadInt();
         }
 
@@ -332,7 +311,6 @@ namespace NPOI.HSSF.Record
         {
             CheckRecordPosition(LittleEndianConsts.LONG_SIZE);
             _currentDataOffset += LittleEndianConsts.LONG_SIZE;
-            pos += LittleEndianConsts.LONG_SIZE;
             return _dataInput.ReadLong();
         }
 
@@ -357,7 +335,6 @@ namespace NPOI.HSSF.Record
         {
             CheckRecordPosition(LittleEndianConsts.SHORT_SIZE);
             _currentDataOffset += LittleEndianConsts.SHORT_SIZE;
-            pos += LittleEndianConsts.SHORT_SIZE;
             return _dataInput.ReadUShort();
         }
 
@@ -375,7 +352,6 @@ namespace NPOI.HSSF.Record
             //{
             //throw new Exception("Did not expect to read NaN"); // (Because Excel typically doesn't write NaN
             //}
-            pos += LittleEndianConsts.DOUBLE_SIZE;
             return result;
         }
         public void ReadFully(byte[] buf)
@@ -384,6 +360,11 @@ namespace NPOI.HSSF.Record
         }
 
         public void ReadFully(byte[] buf, int off, int len)
+        {
+            ReadFully(buf, off, len, false);
+        }
+
+        public void ReadFully(byte[] buf, int off, int len, bool isPlain)
         {
             /*CheckRecordPosition(len);
             _dataInput.ReadFully(buf, off, len);
@@ -417,12 +398,17 @@ namespace NPOI.HSSF.Record
                     }
                 }
                 CheckRecordPosition(nextChunk);
-                _dataInput.ReadFully(buf, off, nextChunk);
+                if (isPlain)
+                {
+                    _dataInput.ReadPlain(buf, off, nextChunk);
+                }
+                else
+                {
+                    _dataInput.ReadFully(buf, off, nextChunk);
+                }
                 _currentDataOffset += nextChunk;
                 off += nextChunk;
                 len -= nextChunk;
-
-                pos += nextChunk;
             }
         }
         /**     
@@ -605,52 +591,9 @@ namespace NPOI.HSSF.Record
             }
         }
 
-        public override long Length
-        {
-            get { return _currentDataLength; }
-        }
 
-        public override void SetLength(long value)
-        {
-            _currentDataLength = (int)value;
-        }
 
-        public override void Flush()
-        {
-            throw new NotSupportedException();
-        }
-
-        // Properties
-        public override bool CanRead
-        {
-            get
-            {
-                return true;
-            }
-        }
-
-        public override bool CanSeek
-        {
-            get
-            {
-                return false;
-            }
-        }
-
-        public override bool CanWrite
-        {
-            get
-            {
-                return false;
-            }
-        }
-
-        public override void Write(byte[] buffer, int offset, int count)
-        {
-            throw new NotSupportedException();
-        }
-
-        public override int Read(byte[] b, int off, int len)
+        public int Read(byte[] b, int off, int len)
         {
             int limit = Math.Min(len, Remaining);
             if (limit == 0)
@@ -671,6 +614,11 @@ namespace NPOI.HSSF.Record
         public int GetNextSid()
         {
             return _nextSid;
+        }
+
+        public void ReadPlain(byte[] buf, int off, int len)
+        {
+            ReadFully(buf, 0, buf.Length, true);
         }
     }
 }

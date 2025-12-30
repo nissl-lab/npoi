@@ -165,7 +165,7 @@ namespace NPOI.XSSF.EventUserModel
         /// </summary>
         /// <param name="is1">The input stream containing the XML document.</param>
         /// <exception cref="IOException"> if an error occurs while reading.</exception>
-        /// <exception cref=""="SAXException"> if parsing the XML data fails.</exception>
+        /// <exception cref="SAXException"> if parsing the XML data fails.</exception>
         public void ReadFrom(Stream is1)
         {
             // test if the file is empty, otherwise parse it

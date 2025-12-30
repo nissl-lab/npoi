@@ -127,6 +127,10 @@ namespace NPOI.HSSF.Record.Cont
             _in.ReadFully(buf, off, len);
         }
 
+        public void ReadPlain(byte[] buf, int off, int len)
+        {
+            ReadFully(buf, off, len);
+        }
     }
 
 }

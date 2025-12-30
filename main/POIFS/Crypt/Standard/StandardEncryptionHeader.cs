@@ -19,6 +19,7 @@ namespace NPOI.POIFS.Crypt.Standard
     using System;
     using NPOI.Util;
     using System.Text;
+    using NPOI.HSSF.Record;
 
     public class StandardEncryptionHeader : EncryptionHeader, EncryptionRecord
     {
@@ -45,9 +46,23 @@ namespace NPOI.POIFS.Crypt.Standard
 
             // CSPName may not always be specified
             // In some cases, the salt value of the EncryptionVerifier is the next chunk of data
-            ((ByteArrayInputStream)is1).Mark(LittleEndianConsts.INT_SIZE + 1);
+            if(is1 is RecordInputStream)
+            {
+                ((RecordInputStream)is1).Mark(LittleEndianConsts.INT_SIZE + 1);
+            }
+            else
+            {
+                ((InputStream)is1).Mark(LittleEndianConsts.INT_SIZE + 1);
+            }
             int CheckForSalt = is1.ReadInt();
-            ((ByteArrayInputStream)is1).Reset();
+            if (is1 is RecordInputStream)
+            {
+                ((RecordInputStream)is1).Reset();
+            }
+            else
+            {
+                ((InputStream)is1).Reset();
+            }
 
             if (CheckForSalt == 16)
             {

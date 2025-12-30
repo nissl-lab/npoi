@@ -24,6 +24,8 @@ namespace NPOI.HSSF.Record
     using NPOI.Util;
     using NPOI.HSSF.Record.Chart;
     using NPOI.POIFS.Crypt;
+    using NPOI.SS.Formula.Functions;
+    using Org.BouncyCastle.Security;
 
     /**
 * A stream based way to get at complete records, with
@@ -83,9 +85,6 @@ namespace NPOI.HSSF.Record
                         if (rec is FilePassRecord record)
                         {
                             fpr = record;
-                            outputRecs.RemoveAt(outputRecs.Count - 1);
-                            // TODO - add fpr not Added to outPutRecs
-                            rec = outputRecs[0];
                         }
                         else
                         {
@@ -111,17 +110,36 @@ namespace NPOI.HSSF.Record
                 _lastRecord = rec;
             }
 
-            public RecordInputStream CreateDecryptingStream(Stream original)
+
+            public RecordInputStream CreateDecryptingStream(InputStream original)
             {
-                FilePassRecord fpr = _filePassRec;
+                if (_filePassRec == null)
+                {
+                    throw new InvalidOperationException("No FilePassRecord found; stream is not encrypted.");
+                }
+
                 String userPassword = Biff8EncryptionKey.CurrentUserPassword;
                 if (userPassword == null)
                 {
                     userPassword = Decryptor.DEFAULT_PASSWORD;
                 }
 
-                //return new RecordInputStream(original, key, _InitialRecordsSize);
-                throw new NotImplementedException("Implement it based on poi 4.2 in the future");
+                EncryptionInfo info = _filePassRec.GetEncryptionInfo();
+                try
+                {
+                    if (!info.Decryptor.VerifyPassword(userPassword))
+                    {
+                        throw new EncryptedDocumentException(
+                                (Decryptor.DEFAULT_PASSWORD.Equals(userPassword) ? "Default" : "Supplied")
+                                + " password is invalid for salt/verifier/verifierHash");
+                    }
+                }
+                catch (GeneralSecurityException e)
+                {
+                    throw new EncryptedDocumentException(e);
+                }
+
+                return new RecordInputStream(original, info, _InitialRecordsSize);
             }
 
             public bool HasEncryption
@@ -192,7 +210,7 @@ namespace NPOI.HSSF.Record
          * {@link ContinueRecord}s should be skipped (this is sometimes useful in event based
          * processing).
          */
-        public RecordFactoryInputStream(Stream in1, bool shouldIncludeContinueRecords)
+        public RecordFactoryInputStream(InputStream in1, bool shouldIncludeContinueRecords)
         {
             RecordInputStream rs = new RecordInputStream(in1);
             List<Record> records = new List<Record>();
@@ -258,9 +276,6 @@ namespace NPOI.HSSF.Record
                     return null;
                 }
 
-                // step underlying RecordInputStream to the next record
-                _recStream.NextRecord();
-
                 if (_lastRecordWasEOFLevelZero)
                 {
                     // Potential place for ending the workbook stream
@@ -268,12 +283,15 @@ namespace NPOI.HSSF.Record
                     // Normally the input stream Contains only zero pAdding after the last EOFRecord,
                     // but bug 46987 and 48068 suggests that the padding may be garbage.
                     // This code relies on the pAdding bytes not starting with BOFRecord.sid
-                    if (_recStream.Sid != BOFRecord.sid)
+                    if (_recStream.GetNextSid() != BOFRecord.sid)
                     {
                         return null;
                     }
                     // else - another sheet substream starting here
                 }
+
+                // step underlying RecordInputStream to the next record
+                _recStream.NextRecord();
 
                 r = ReadNextRecord();
                 if (r == null)

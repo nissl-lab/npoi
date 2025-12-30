@@ -102,7 +102,7 @@ namespace TestCases.HPSF.Basic
                     ByteArrayOutputStream psStream = new ByteArrayOutputStream();
                     ps.Write(psStream);
                     psStream.Close();
-                    byte[] streamData = psStream.ToArray();
+                    byte[] streamData = psStream.ToByteArray();
                     poiFs.CreateDocument(new MemoryStream(streamData),
                                          SummaryInformation.DEFAULT_STREAM_NAME);
                     poiFs.WriteFileSystem(out1);
@@ -156,7 +156,7 @@ namespace TestCases.HPSF.Basic
                 ByteArrayOutputStream psStream = new ByteArrayOutputStream();
                 ps.Write(psStream);
                 psStream.Close();
-                byte[] streamData = psStream.ToArray();
+                byte[] streamData = psStream.ToByteArray();
                 poiFs.CreateDocument(new MemoryStream(streamData),
                                      SummaryInformation.DEFAULT_STREAM_NAME);
                 poiFs.WriteFileSystem(out1);
@@ -460,7 +460,7 @@ namespace TestCases.HPSF.Basic
             ByteArrayOutputStream out1 = new ByteArrayOutputStream();
             mps.Write(out1);
             out1.Close();
-            byte[] bytes = out1.ToArray();
+            byte[] bytes = out1.ToByteArray();
 
             PropertySet psr = new PropertySet(bytes);
             ClassicAssert.IsTrue(psr.IsSummaryInformation);
@@ -673,8 +673,8 @@ namespace TestCases.HPSF.Basic
             InputStream dinfStream4 = new NDocumentInputStream(dinfDoc);
             byte[] dinfData = IOUtils.ToByteArray(dinfStream4);
             dinfStream4.Close();
-            Assert.That(sinfBytes.ToArray(), new EqualConstraint(sinfData));
-            Assert.That(dinfBytes.ToArray(), new EqualConstraint(dinfData));
+            Assert.That(sinfBytes.ToByteArray(), new EqualConstraint(sinfData));
+            Assert.That(dinfBytes.ToByteArray(), new EqualConstraint(dinfData));
 
 
             // Read back in as-is

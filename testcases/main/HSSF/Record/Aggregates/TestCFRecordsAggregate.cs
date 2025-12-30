@@ -31,6 +31,7 @@ namespace TestCases.HSSF.Record.Aggregates
     using NPOI.SS.UserModel;
     using System.Collections.Generic;
     using NPOI.HSSF.Model;
+    using NPOI.Util;
 
     /**
      * Tests the serialization and deserialization of the CFRecordsAggregate
@@ -67,7 +68,7 @@ namespace TestCases.HSSF.Record.Aggregates
             // Serialize
             byte [] serializedRecord = new byte[record.RecordSize];
 		    record.Serialize(0, serializedRecord);
-		    Stream in1 = new MemoryStream(serializedRecord);
+            ByteArrayInputStream in1 = new ByteArrayInputStream(serializedRecord);
 
             //Parse
             recs = RecordFactory.CreateRecords(in1);

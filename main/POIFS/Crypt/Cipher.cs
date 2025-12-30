@@ -4,6 +4,7 @@ using Org.BouncyCastle.Security;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace NPOI.POIFS.Crypt
@@ -20,6 +21,13 @@ namespace NPOI.POIFS.Crypt
         public const int SECRET_KEY = 3;
 
         protected IBufferedCipher cipherImpl;
+        private CipherAlgorithm _alogrithm;
+
+        public CipherAlgorithm Algorithm
+        {
+            get => _alogrithm;
+            set => _alogrithm = value;
+        }
 
         public static Cipher GetInstance(string transformation)
         {

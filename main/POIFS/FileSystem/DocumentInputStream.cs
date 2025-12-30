@@ -220,6 +220,11 @@ namespace NPOI.POIFS.FileSystem
         {
             return delegate1.ReadUByte();
         }
+
+        public void ReadPlain(byte[] buf, int off, int len)
+        {
+            ReadFully(buf, off, len);
+        }
     }
 
 }

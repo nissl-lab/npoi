@@ -25,6 +25,9 @@ namespace NPOI
     using System.Collections.Generic;
     using NPOI.POIFS.Crypt;
     using NPOI.Util;
+    using NPOI.POIFS.Crypt.CryptoAPI;  
+    using System.Security;
+    using System.Security.Cryptography;
 
 
     /// <summary>
@@ -153,6 +156,11 @@ namespace NPOI
         /// </summary>
         protected internal void ReadProperties()
         {
+            if(initialized)
+            {
+                return;
+            }
+
             PropertySet ps;
 
             // DocumentSummaryInformation
@@ -197,7 +205,7 @@ namespace NPOI
         /// <exception cref="IOException">If retrieving properties fails</exception>
         protected PropertySet GetPropertySet(string setName)
         {
-            return GetPropertySet(setName, null);
+            return GetPropertySet(setName, GetEncryptionInfo());
         }
         /// <summary>
         /// For a given named property entry, either return it or null if
@@ -215,10 +223,16 @@ namespace NPOI
             String step = "getting";
             try
             {
-                if (encryptionInfo != null)
+                if (encryptionInfo != null && encryptionInfo.IsDocPropsEncrypted())
                 {
                     step = "getting encrypted";
-                    InputStream is1 = encryptionInfo.Decryptor.GetDataStream(directory);
+                    var encryptedStream = GetEncryptedPropertyStreamName();
+                    if(!dirNode.HasEntryCaseInsensitive(encryptedStream))
+                    {
+                        throw new EncryptedDocumentException("can't find encrypted property stream '"+encryptedStream+"'");
+                    }
+                    CryptoAPIDecryptor dec = (CryptoAPIDecryptor)encryptionInfo.Decryptor;
+                    InputStream is1 = dec.GetDataStream(directory);
                     try
                     {
                         encPoifs = new NPOIFSFileSystem(is1);
@@ -226,12 +240,12 @@ namespace NPOI
                     }
                     finally
                     {
-                    is1.Close();
+                        is1.Close();
                     }
                 }
 
                 //directory can be null when creating new documents
-                if (dirNode == null || !dirNode.HasEntry(setName))
+                if (dirNode == null || !dirNode.HasEntryCaseInsensitive(setName))
                 {
                     return null;
                 }
@@ -297,23 +311,57 @@ namespace NPOI
         /// </summary>
         /// <param name="outFS">the POIFSFileSystem to Write the properties into.</param>
         /// <param name="writtenEntries">a list of POIFS entries to Add the property names too.</param>
-        protected internal void WriteProperties(NPOIFSFileSystem outFS, IList writtenEntries)
+        protected void WriteProperties(NPOIFSFileSystem outFS, List<string> writtenEntries)
         {
-            if (sInf != null)
+            var ei = GetEncryptionInfo();
+            var encGen = ei?.Encryptor;
+            bool encryptProps = ei != null && ei.IsDocPropsEncrypted() && encGen is CryptoAPIEncryptor;
+
+            var tmpFS = new NPOIFSFileSystem();
+            var fs = encryptProps ? tmpFS : outFS;
+
+            WritePropertySet(SummaryInformation.DEFAULT_STREAM_NAME, SummaryInformation, fs, writtenEntries);
+            WritePropertySet(DocumentSummaryInformation.DEFAULT_STREAM_NAME, DocumentSummaryInformation, fs, writtenEntries);
+
+            if (!encryptProps)
             {
-                WritePropertySet(SummaryInformation.DEFAULT_STREAM_NAME, sInf, outFS);
-                if (writtenEntries != null)
-                {
-                    writtenEntries.Add(SummaryInformation.DEFAULT_STREAM_NAME);
-                }
+                return;
             }
-            if (dsInf != null)
+
+            // Only CryptoAPI encryption supports encrypted property sets
+
+            // create empty document summary
+            WritePropertySet(DocumentSummaryInformation.DEFAULT_STREAM_NAME, new DocumentSummaryInformation(), outFS);
+
+            // remove summary, if previously available
+            if (outFS.Root.HasEntryCaseInsensitive(SummaryInformation.DEFAULT_STREAM_NAME))
             {
-                WritePropertySet(DocumentSummaryInformation.DEFAULT_STREAM_NAME, dsInf, outFS);
-                if (writtenEntries != null)
-                {
-                    writtenEntries.Add(DocumentSummaryInformation.DEFAULT_STREAM_NAME);
-                }
+                outFS.Root.GetEntryCaseInsensitive(SummaryInformation.DEFAULT_STREAM_NAME).Delete();
+            }
+
+            var enc = (CryptoAPIEncryptor)encGen;
+            try
+            {
+                enc.SetSummaryEntries(outFS.Root, GetEncryptedPropertyStreamName(), fs);
+            }
+            catch (Exception e) when(e is CryptographicException || e is SecurityException)
+            {
+                throw new IOException("Encryption error", e);
+            }
+        }
+
+        private void WritePropertySet(String name, PropertySet ps, NPOIFSFileSystem outFS, List<String> writtenEntries)
+        {
+            if (ps == null) 
+            {
+                return;
+            }
+
+            WritePropertySet(name, ps, outFS);
+            
+            if (writtenEntries != null) 
+            {
+                writtenEntries.Add(name);
             }
         }
 
@@ -473,6 +521,19 @@ namespace NPOI
             DirectoryNode dn = directory;
             directory = newDirectory;
             return dn;
+        }
+
+        /**
+         * @return the stream name of the property set collection, if the document is encrypted
+         */
+        protected String GetEncryptedPropertyStreamName()
+        {
+            return "encryption";
+        }
+
+        public virtual EncryptionInfo GetEncryptionInfo()
+        {
+            return null;
         }
     }
 }
