@@ -39,7 +39,7 @@ namespace NPOI.XSSF.UserModel
         private XSSFPivotCacheDefinition pivotCacheDefinition;
         private XSSFPivotCache pivotCache;
         private XSSFPivotCacheRecords pivotCacheRecords;
-        private ISheet parentSheet;
+        private XSSFSheet parentSheet;
         private ISheet dataSheet;
         private IPivotTableStyleInfo styleInfo;
 
@@ -91,27 +91,29 @@ namespace NPOI.XSSF.UserModel
         }
 
 
-        public void SetPivotCache(XSSFPivotCache pivotCache)
+        public XSSFPivotCache PivotCache
         {
-            this.pivotCache = pivotCache;
+            get
+            {
+                return pivotCache;
+            }
+            set
+            {
+                pivotCache = value;
+            }
         }
 
 
-        public XSSFPivotCache GetPivotCache()
+        public XSSFSheet ParentSheet
         {
-            return pivotCache;
-        }
-
-
-        public ISheet GetParentSheet()
-        {
-            return parentSheet;
-        }
-
-
-        public void SetParentSheet(XSSFSheet parentSheet)
-        {
-            this.parentSheet = parentSheet;
+            get
+            {
+                return parentSheet;
+            }
+            set
+            {
+                this.parentSheet = value;
+            }
         }
 
 
@@ -309,6 +311,79 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
+        /// <summary>
+        /// Add a col label using data from the given column.
+        /// </summary>
+        /// <param name="columnIndex">the index of the source column to be used as row label.
+        /// <c>columnIndex</c> is 0-based indexed and relative to the first column in the source.
+        /// </param>
+        /// <param name="valueFormat">format of column value (e.g. for date: "DD.MM.YYYY")</param>
+        public void AddColLabel(int columnIndex, string valueFormat)
+        {
+            CheckColumnIndex(columnIndex);
+        
+            AreaReference pivotArea = GetPivotArea();
+            int lastRowIndex = pivotArea.LastCell.Row - pivotArea.FirstCell.Row;
+            CT_PivotFields pivotFields = pivotTableDefinition.pivotFields;
+
+            CT_PivotField pivotField = new CT_PivotField();
+            CT_Items items = pivotField.AddNewItems();
+
+            pivotField.axis = ST_Axis.axisCol;
+            pivotField.showAll = false;
+            if (valueFormat != null && !string.IsNullOrEmpty(valueFormat.Trim()))
+            {
+                IDataFormat df = parentSheet.Workbook.CreateDataFormat();
+                pivotField.numFmtId = (uint)df.GetFormat(valueFormat);
+            }
+            for (int i = 0; i <= lastRowIndex; i++)
+            {
+                items.AddNewItem().t = ST_ItemType.@default;
+            }
+            items.count = items.SizeOfItemArray();
+            pivotFields.SetPivotFieldArray(columnIndex, pivotField);
+
+            CT_ColFields colFields;
+            if(pivotTableDefinition.colFields != null)
+            {
+                colFields = pivotTableDefinition.colFields;
+            }
+            else
+            {
+                colFields = pivotTableDefinition.AddNewColFields();
+            }
+
+            colFields.AddNewField().x = columnIndex;
+            colFields.count = colFields.SizeOfFieldArray();
+        }
+
+        /// <summary>
+        /// Add a col label using data from the given column.
+        /// </summary>
+        /// <param name="columnIndex">the index of the source column to be used as row label.
+        /// <c>columnIndex</c> is 0-based indexed and relative to the first column in the source.
+        /// </param>
+        public void AddColLabel(int columnIndex)
+        {
+            AddColLabel(columnIndex, null);
+        }
+        public List<int> GetColLabelColumns()
+        {
+            if (pivotTableDefinition.colFields != null)
+            {
+                List<int> columnIndexes = new List<int>();
+                foreach (CT_Field f in pivotTableDefinition.colFields.field)
+                {
+                    columnIndexes.Add(f.x);
+                }
+                return columnIndexes;
+            }
+            else
+            {
+                return new List<int>();
+            }
+        }
+
         /**
          * Add a column label using data from the given column and specified function
          * @param columnIndex the index of the column to be used as column label.
@@ -318,12 +393,13 @@ namespace NPOI.XSSF.UserModel
          * @param valueFieldName the name of pivot table value field
          */
 
-        public void AddColumnLabel(DataConsolidateFunction function, int columnIndex, String valueFieldName)
+        public void AddColumnLabel(DataConsolidateFunction function, int columnIndex, 
+            String valueFieldName, string valueFormat)
         {
             CheckColumnIndex(columnIndex);
 
             AddDataColumn(columnIndex, true);
-            AddDataField(function, columnIndex, valueFieldName);
+            AddDataField(function, columnIndex, valueFieldName, valueFormat);
 
             // colfield should be Added for the second one.
             if (pivotTableDefinition.dataFields.count == 2)
@@ -342,6 +418,21 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
+        /// <summary>
+        /// Add a column label using data from the given column and specified function
+        /// </summary>
+        /// <param name="columnIndex">the index of the source column to be used as column label.
+        /// <c>columnIndex</c> is 0-based indexed and relative to the first column in the source.
+        /// </param>
+        /// <param name="function">the function to be used on the data
+        /// The following functions exists:
+        /// Sum, Count, Average, Max, Min, Product, Count numbers, StdDev, StdDevp, Var, Varp
+        /// </param>
+        /// <param name="valueFieldName">the name of pivot table value field</param>
+        public void AddColumnLabel(DataConsolidateFunction function, int columnIndex, string valueFieldName)
+        {
+            AddColumnLabel(function, columnIndex, valueFieldName, null);
+        }
         /**
          * Add a column label using data from the given column and specified function
          * @param columnIndex the index of the column to be used as column label.
@@ -352,7 +443,7 @@ namespace NPOI.XSSF.UserModel
 
         public void AddColumnLabel(DataConsolidateFunction function, int columnIndex)
         {
-            AddColumnLabel(function, columnIndex, function.Name);
+            AddColumnLabel(function, columnIndex, function.Name, null);
         }
 
         /**
@@ -364,7 +455,8 @@ namespace NPOI.XSSF.UserModel
          * @param valueFieldName the name of pivot table value field
          */
 
-        private void AddDataField(DataConsolidateFunction function, int columnIndex, String valueFieldName)
+        private void AddDataField(DataConsolidateFunction function, int columnIndex, 
+            String valueFieldName, string valueFormat)
         {
             CheckColumnIndex(columnIndex);
             AreaReference pivotArea = GetPivotArea();
@@ -384,6 +476,11 @@ namespace NPOI.XSSF.UserModel
             cell.SetCellType(CellType.String);
             dataField.name = (/*setter*/valueFieldName);
             dataField.fld = (uint)columnIndex;
+            if (valueFormat != null && !"".Equals(valueFormat.Trim()))
+            {
+                IDataFormat df = parentSheet.Workbook.CreateDataFormat();
+                dataField.numFmtId = (uint)df.GetFormat(valueFormat);
+            }
             dataFields.count = (/*setter*/dataFields.SizeOfDataFieldArray());
         }
 
@@ -417,6 +514,15 @@ namespace NPOI.XSSF.UserModel
             
             int lastRowIndex = pivotArea.LastCell.Row - pivotArea.FirstCell.Row;
 
+            // check and change row of location
+            CT_Location location = pivotTableDefinition.location;
+            AreaReference destination = new AreaReference(location.@ref, SpreadsheetVersion.EXCEL2007);
+            if (destination.FirstCell.Row < 2)
+            {
+                AreaReference newDestination = new AreaReference(new CellReference(2, destination.FirstCell.Col), new CellReference(
+                        3, destination.FirstCell.Col+1), SpreadsheetVersion.EXCEL2007);
+                location.@ref = newDestination.FormatAsString();
+            }
             CT_PivotFields pivotFields = pivotTableDefinition.pivotFields;
 
             CT_PivotField pivotField = new CT_PivotField();

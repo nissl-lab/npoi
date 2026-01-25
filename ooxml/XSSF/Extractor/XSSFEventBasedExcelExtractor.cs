@@ -347,6 +347,7 @@ namespace NPOI.XSSF.Extractor
             {
                 output.Append('\n');
             }
+            public void EndSheet() { }
             public void Cell(String cellRef, String formattedValue, XSSFComment comment)
             {
                 if(firstCellOfRow)
