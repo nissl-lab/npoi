@@ -46,7 +46,7 @@ namespace NPOI.Util
     {
         private int[] _array;
         private int _limit;
-        private int fillval = 0;
+
         private static int _default_size = 128;
 
         /// <summary>
@@ -57,10 +57,10 @@ namespace NPOI.Util
         {
         }
 
-        public IntList(int InitialCapacity)
-            : this(InitialCapacity, 0)
+        public IntList(int initialCapacity)
         {
-
+            _array = new int[initialCapacity];
+            _limit = 0;
         }
 
         /// <summary>
@@ -72,30 +72,6 @@ namespace NPOI.Util
         {
             Array.Copy(list._array, 0, _array, 0, _array.Length);
             _limit = list._limit;
-        }
-
-        /// <summary>
-        /// create an IntList with a predefined Initial size
-        /// </summary>
-        /// <param name="initialCapacity">the size for the internal array</param>
-        /// <param name="fillvalue"></param>
-        public IntList(int initialCapacity, int fillvalue)
-        {
-            _array = new int[initialCapacity];
-            if (fillval != 0)
-            {
-                fillval = fillvalue;
-                FillArray(fillval, _array, 0);
-            }
-            _limit = 0;
-        }
-
-        private static void FillArray(int val, int[] array, int index)
-        {
-            for (int k = index; k < array.Length; k++)
-            {
-                array[k] = val;
-            }
         }
 
         /// <summary>
@@ -579,11 +555,6 @@ namespace NPOI.Util
             int size = (new_size == _array.Length) ? new_size + 1
                                                           : new_size;
             int[] new_array = new int[size];
-
-            if (fillval != 0)
-            {
-                FillArray(fillval, new_array, _array.Length);
-            }
 
             Array.Copy(_array, 0, new_array, 0, _limit);
             _array = new_array;

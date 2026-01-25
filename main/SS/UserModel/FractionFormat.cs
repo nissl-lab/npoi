@@ -173,7 +173,7 @@ namespace NPOI.SS.UserModel
             }
 
             //if whole part has to go into the numerator
-            if ("".Equals(wholePartFormatString))
+            if (string.IsNullOrEmpty(wholePartFormatString))
             {
                 int trueNum = (fract.Denominator * (int)wholePart) + fract.Numerator;
                 sb1.Append(trueNum).Append("/").Append(fract.Denominator);
