@@ -112,8 +112,7 @@ namespace TestCases.POIFS.FileSystem
         {
             using(Stream fs = OpenSampleStream(sampleFileName))
             {
-                bool actualResult = POIFSFileSystem.HasPOIFSHeader(fs);
-                ClassicAssert.AreEqual(expectedResult, actualResult);
+                ClassicAssert.AreEqual(expectedResult, FileMagicContainer.ValueOf(fs) == FileMagic.OLE2);
              }
         }
         [Test]
@@ -126,16 +125,16 @@ namespace TestCases.POIFS.FileSystem
 
             // detect header
             InputStream in1 = FileMagicContainer.PrepareToCheckMagic(testInput);
-            ClassicAssert.IsFalse(POIFSFileSystem.HasPOIFSHeader(in1));
+            ClassicAssert.IsFalse(FileMagicContainer.ValueOf(in1) == FileMagic.OLE2);
 
             // check if InputStream is still intact
             byte[] test = new byte[3];
-            in1.Read(test);
+            ClassicAssert.AreEqual(3, in1.Read(test));
             ClassicAssert.IsTrue(Arrays.Equals(testData, test));
             ClassicAssert.AreEqual(-1, in1.Read());
         }
         [Test]
-        public void testFileCorruptionOPOIFS()
+        public void TestFileCorruptionOPOIFS()
         {
 
             // create test InputStream
@@ -144,10 +143,12 @@ namespace TestCases.POIFS.FileSystem
 
             // detect header
             InputStream in1 = FileMagicContainer.PrepareToCheckMagic(testInput);
-            ClassicAssert.IsFalse(OPOIFSFileSystem.HasPOIFSHeader(in1));
+            ClassicAssert.IsFalse(FileMagicContainer.ValueOf(in1) == FileMagic.OLE2);
+            ClassicAssert.AreEqual(FileMagic.UNKNOWN, FileMagicContainer.ValueOf(in1));
+
             // check if InputStream is still intact
             byte[] test = new byte[3];
-            in1.Read(test);
+            ClassicAssert.AreEqual(3, in1.Read(test));
             ClassicAssert.IsTrue(Arrays.Equals(testData, test));
             ClassicAssert.AreEqual(-1, in1.Read());
         }

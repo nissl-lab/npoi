@@ -30,6 +30,9 @@ namespace NPOI.HSSF.Record
      */
     public abstract class SubRecord : ICloneable
     {
+        //arbitrarily selected; may need to increase
+        internal static int MAX_RECORD_LENGTH = 1_000_000;
+
         public static SubRecord CreateSubRecord(ILittleEndianInput in1, CommonObjectType cmoOt)
         {
             int sid = in1.ReadUShort();
@@ -94,52 +97,52 @@ namespace NPOI.HSSF.Record
         public abstract Object Clone();
     }
 
-     public class UnknownSubRecord : SubRecord
-     {
+    public class UnknownSubRecord : SubRecord
+    {
 
-         private readonly int _sid;
-         private readonly byte[] _data;
+        private readonly int _sid;
+        private readonly byte[] _data;
 
-         public UnknownSubRecord(ILittleEndianInput in1, int sid, int size)
-         {
-             _sid = sid;
-             byte[] buf = new byte[size];
-             in1.ReadFully(buf);
-             _data = buf;
-         }
-         public override int DataSize
-         {
-             get
-             {
-                 return _data.Length;
-             }
-         }
-         public override short Sid
-         {
-             get 
-             {
-                 return (short)_sid;
-             }
-         }
-         public override void Serialize(ILittleEndianOutput out1)
-         {
-             out1.WriteShort(_sid);
-             out1.WriteShort(_data.Length);
-             out1.Write(_data);
-         }
-         public override Object Clone()
-         {
-             return this;
-         }
-         public override String ToString()
-         {
-             StringBuilder sb = new StringBuilder(64);
-             sb.Append(GetType().Name).Append(" [");
-             sb.Append("sid=").Append(HexDump.ShortToHex(_sid));
-             sb.Append(" size=").Append(_data.Length);
-             sb.Append(" : ").Append(HexDump.ToHex(_data));
-             sb.Append("]\n");
-             return sb.ToString();
-         }
-     }
+        public UnknownSubRecord(ILittleEndianInput in1, int sid, int size)
+        {
+            _sid = sid;
+            byte[] buf = IOUtils.SafelyAllocate(size, SubRecord.MAX_RECORD_LENGTH);
+            in1.ReadFully(buf);
+            _data = buf;
+        }
+        public override int DataSize
+        {
+            get
+            {
+                return _data.Length;
+            }
+        }
+        public override short Sid
+        {
+            get 
+            {
+                return (short)_sid;
+            }
+        }
+        public override void Serialize(ILittleEndianOutput out1)
+        {
+            out1.WriteShort(_sid);
+            out1.WriteShort(_data.Length);
+            out1.Write(_data);
+        }
+        public override Object Clone()
+        {
+            return this;
+        }
+        public override String ToString()
+        {
+            StringBuilder sb = new StringBuilder(64);
+            sb.Append(GetType().Name).Append(" [");
+            sb.Append("sid=").Append(HexDump.ShortToHex(_sid));
+            sb.Append(" size=").Append(_data.Length);
+            sb.Append(" : ").Append(HexDump.ToHex(_data));
+            sb.Append("]\n");
+            return sb.ToString();
+        }
+    }
 }

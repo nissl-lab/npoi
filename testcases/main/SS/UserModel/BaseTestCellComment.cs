@@ -388,7 +388,7 @@ namespace TestCases.SS.UserModel
             catch (InvalidOperationException e)
             {
                 // HSSFWorkbooks fail when writing out workbook
-                ClassicAssert.AreEqual(e.Message, "found multiple cell comments for cell A1");
+                ClassicAssert.AreEqual(e.Message, "found multiple cell comments for cell $A$1");
             }
             catch (ArgumentException e)
             {

@@ -11,7 +11,7 @@ using System.Collections.Generic;
     InvokedTargets = [nameof(Clean), nameof(Test), nameof(Pack)],
     TimeoutMinutes = 20,
     CacheKeyFiles = [],
-    PublishCondition = "runner.os == 'Windows'"
+    PublishCondition = "runner.os == 'Linux'"
 )]
 [CustomGitHubActions("PR",
     GitHubActionsImage.WindowsLatest,
@@ -21,7 +21,7 @@ using System.Collections.Generic;
     TimeoutMinutes = 20,
     CacheKeyFiles = [],
     ConcurrencyCancelInProgress = true,
-    PublishCondition = "runner.os == 'Windows'"
+    PublishCondition = "runner.os == 'Linux'"
 )]
 partial class Build;
 
@@ -37,7 +37,7 @@ class CustomGitHubActionsAttribute : GitHubActionsAttribute
 
         var newSteps = new List<GitHubActionsStep>(job.Steps);
 
-        newSteps.Insert(0, new GitHubActionsSetupDotNetStep(["8.0", "9.0"]));
+        newSteps.Insert(0, new GitHubActionsSetupDotNetStep(["10.0"]));
 
         job.Steps = newSteps.ToArray();
         return job;
@@ -55,7 +55,7 @@ class GitHubActionsSetupDotNetStep : GitHubActionsStep
 
     public override void Write(CustomFileWriter writer)
     {
-        writer.WriteLine("- uses: actions/setup-dotnet@v4");
+        writer.WriteLine("- uses: actions/setup-dotnet@v5");
 
         using (writer.Indent())
         {

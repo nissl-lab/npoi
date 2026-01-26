@@ -185,6 +185,24 @@ namespace TestCases.XSSF.UserModel
             ClassicAssert.AreEqual(defintion.dataFields.dataField[(0)].name, customName);
         }
 
+        /// <summary>
+        /// Verify that it's possible to Set the format to the data column
+        /// </summary>
+        [Test]
+        public void TestColumnLabelSetDataFormat()
+        {
+            int columnIndex = 0;
+
+            string format = "#,##0.0";
+        
+            pivotTable.AddColumnLabel(DataConsolidateFunction.SUM, columnIndex, null, format);
+
+            CT_PivotTableDefinition defintion = pivotTable.GetCTPivotTableDefinition();
+
+            ClassicAssert.AreEqual(defintion.dataFields.GetDataFieldArray(0).fld, columnIndex);
+            ClassicAssert.AreEqual(defintion.dataFields.GetDataFieldArray(0).numFmtId, wb.CreateDataFormat().GetFormat(format));
+        }
+
         /**
          * Verify that it's not possible to create a column label outside of the referenced area.
          */
@@ -295,6 +313,42 @@ namespace TestCases.XSSF.UserModel
             original.CreatePivotTable(source, new CellReference("W1"));
             // create a pivot table on a different sheet, case insensitive
             offset.CreatePivotTable(source, new CellReference("W1"));
+        }
+
+        /// <summary>
+        /// Verify that when creating a col label it's  created on the correct column
+        /// and the count is increased by one.
+        /// </summary>
+        [Test]
+        public void TestAddColLabelToPivotTable()
+        {
+            int columnIndex = 0;
+
+            ClassicAssert.AreEqual(0, pivotTable.GetColLabelColumns().Count);
+        
+            pivotTable.AddColLabel(columnIndex);
+            CT_PivotTableDefinition defintion = pivotTable.GetCTPivotTableDefinition();
+
+            ClassicAssert.AreEqual(defintion.colFields.field[0].x, columnIndex);
+            ClassicAssert.AreEqual(defintion.colFields.count, 1);
+            ClassicAssert.AreEqual(1, pivotTable.GetColLabelColumns().Count);
+        
+            columnIndex = 1;
+            pivotTable.AddColLabel(columnIndex);
+            ClassicAssert.AreEqual(2, pivotTable.GetColLabelColumns().Count);
+        
+            ClassicAssert.AreEqual(0, (int)pivotTable.GetColLabelColumns()[0]);
+            ClassicAssert.AreEqual(1, (int)pivotTable.GetColLabelColumns()[1]);
+        }
+
+        /// <summary>
+        /// Verify that it's not possible to create a col label outside of the referenced area.
+        /// </summary>
+        [Test]
+        public void TestAddColLabelOutOfRangeThrowsException()
+        {
+            ClassicAssert.Throws<IndexOutOfRangeException>(() => 
+                pivotTable.AddColLabel(5));
         }
     }
 }

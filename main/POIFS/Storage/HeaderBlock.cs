@@ -44,6 +44,9 @@ namespace NPOI.POIFS.Storage
     /// </summary>
     public class HeaderBlock : HeaderBlockConstants
     {
+        //arbitrarily selected; may need to increase
+        private static int MAX_RECORD_LENGTH = 100_000;
+
         private static byte _default_value = (byte)0xFF;
          /**
          * What big block Size the file uses. Most files
@@ -82,7 +85,7 @@ namespace NPOI.POIFS.Storage
             if (bigBlockSize.GetBigBlockSize() != 512)
             {
                 int rest = bigBlockSize.GetBigBlockSize() - 512;
-                byte[] temp = new byte[rest];
+                byte[] temp = IOUtils.SafelyAllocate(rest, MAX_RECORD_LENGTH);
                 IOUtils.ReadFully(stream, temp);
             }
         }
@@ -102,19 +105,19 @@ namespace NPOI.POIFS.Storage
             _data = data;
 
             // verify signature
-	        FileMagic fm = FileMagicContainer.ValueOf(data);
-	   
-	        switch (fm) {
-	            case FileMagic.OLE2:
-	               break;
-	            case FileMagic.OOXML:
+            FileMagic fm = FileMagicContainer.ValueOf(data);
+       
+            switch (fm) {
+                case FileMagic.OLE2:
+                   break;
+                case FileMagic.OOXML:
                    throw new OfficeXmlFileException("The supplied data appears to be in the Office 2007+ XML. "
                        + "You are calling the part of POI that deals with OLE2 Office Documents. "
                        + "You need to call a different part of POI to process this data (eg XSSF instead of HSSF)");
-	            case FileMagic.XML:
+                case FileMagic.XML:
                    throw new NotOLE2FileException("The supplied data appears to be a raw XML file. "
                        + "Formats such as Office 2003 XML are not supported");
-	            case FileMagic.MSWRITE:
+                case FileMagic.MSWRITE:
                    throw new NotOLE2FileException("The supplied data appears to be in the old MS Write format. "
                        + "Apache POI doesn't currently support this format");
                 case FileMagic.BIFF2:
@@ -122,14 +125,14 @@ namespace NPOI.POIFS.Storage
                 case FileMagic.BIFF4:
                    throw new OldExcelFormatException("The supplied data appears to be in "+fm+" format. "
                        + "HSSF only supports the BIFF8 format, try OldExcelExtractor");
-	            default:
+                default:
                    // Give a generic error if the OLE2 signature isn't found
-	               String exp = new String(HexDump.LongToHex(_signature));
-	               String act = new String(HexDump.LongToHex(LittleEndian.GetLong(data, 0)));
+                   String exp = new String(HexDump.LongToHex(_signature));
+                   String act = new String(HexDump.LongToHex(LittleEndian.GetLong(data, 0)));
                    throw new NotOLE2FileException(
                        "Invalid header signature; read " + act + ", expected " + exp +
                        " - Your file appears not to be a valid OLE2 document");
-	        }
+            }
 
             if (_data[30] == 12)
             {

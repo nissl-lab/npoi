@@ -54,7 +54,8 @@ namespace NPOI.HPSF
 
 
         //private static POILogger logger = POILogFactory.GetLogger(VariantSupport.class);
-
+        //arbitrarily selected; may need to increase
+        private static int MAX_RECORD_LENGTH = 100_000;
         /// <summary>
         /// Keeps a list of the variant types an "unsupported" message has already
         /// been issued for.
@@ -155,7 +156,7 @@ namespace NPOI.HPSF
             catch ( InvalidOperationException exc )
             {
                 int propLength = Math.Min( length, lei.Available() );
-                byte[] v = new byte[propLength];
+                byte[] v = IOUtils.SafelyAllocate(propLength, MAX_RECORD_LENGTH);
                 lei.ReadFully(v, 0, propLength);
                 throw new ReadingNotSupportedException( type, v );
             }
@@ -231,34 +232,11 @@ namespace NPOI.HPSF
                 default:
                     int unpadded = lei.GetReadIndex()-offset;
                     lei.SetReadIndex(offset);
-                    byte[] v = new byte[unpadded];
+                    byte[] v = IOUtils.SafelyAllocate(unpadded, MAX_RECORD_LENGTH);
                     lei.ReadFully( v, 0, unpadded );
                     throw new ReadingNotSupportedException( type, v );
             }
         }
-
-        /// <summary>
-        /// Turns a codepage number into the equivalent character encoding's
-        /// name.
-        /// </summary>
-        /// <param name="codepage">The codepage number</param>
-        /// 
-        /// <return>character encoding's name. If the codepage number is 65001,
-        /// the encoding name is "UTF-8". All other positive numbers are mapped to
-        /// "cp" followed by the number, e.g. if the codepage number is 1252 the
-        /// returned character encoding name will be "cp1252".
-        /// </return>
-
-        /// <exception cref="UnsupportedEncodingException">if the specified codepage is
-        /// less than zero.
-        /// </exception>
-        // @Removal(version="3.18")
-        [Obsolete("POI 3.16 - use CodePageUtil.CodepageToEncoding(int)")]
-        public static String CodepageToEncoding(int codepage)
-        {
-            return CodePageUtil.CodepageToEncoding(codepage);
-        }
-
 
         /// <summary>
         /// <para>

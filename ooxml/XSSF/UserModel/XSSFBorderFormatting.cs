@@ -171,7 +171,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                return GetIndexedColor(RightBorderColorColor as XSSFColor);
+                return GetIndexedColor(TopBorderColorColor as XSSFColor);
             }
             set
             {

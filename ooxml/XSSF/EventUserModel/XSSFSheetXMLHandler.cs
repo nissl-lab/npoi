@@ -452,6 +452,8 @@ namespace NPOI.XSSF.EventUserModel
             {
                 // Handle any "missing" cells which had comments attached
                 CheckForEmptyCellComments(EmptyCellCommentsCheckType.EndOfSheetData);
+                // indicate that this sheet is now done
+                output.EndSheet();
             }
             else if("oddHeader".Equals(localName) || "evenHeader".Equals(localName) ||
                   "firstHeader".Equals(localName))
@@ -605,6 +607,8 @@ namespace NPOI.XSSF.EventUserModel
             /// A header or footer has been encountered */
             /// </summary>
             public void HeaderFooter(String text, bool IsHeader, String tagName);
+
+            public void EndSheet();
         }
     }
 }

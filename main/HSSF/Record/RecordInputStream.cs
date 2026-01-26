@@ -92,6 +92,8 @@ namespace NPOI.HSSF.Record
 
     public class RecordInputStream : Stream, ILittleEndianInput
     {
+        //arbitrarily selected; may need to increase
+        private static int MAX_RECORD_LENGTH = 100_000;
         /** Maximum size of a single record (minus the 4 byte header) without a continue*/
         public const short MAX_RECORD_DATA_SIZE = 8224;
         private const int INVALID_SID_VALUE = -1;
@@ -529,7 +531,7 @@ namespace NPOI.HSSF.Record
             {
                 return [];
             }
-            byte[] result = new byte[size];
+            byte[] result = IOUtils.SafelyAllocate(size, MAX_RECORD_LENGTH);
             ReadFully(result);
             return result;
         }

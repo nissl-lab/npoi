@@ -40,6 +40,8 @@ namespace NPOI.HSSF.Extractor
     public class OldExcelExtractor
     {
         private const int FILE_PASS_RECORD_SID = 0x2f;
+        //arbitrarily selected; may need to increase
+        private static int MAX_RECORD_LENGTH = 100_000;
         private RecordInputStream ris;
 
         // sometimes we hold the stream here and thus need to ensure it is closed at some point
@@ -115,7 +117,7 @@ namespace NPOI.HSSF.Extractor
             ? stream
             : new BufferedStream(biffStream, 8);
 
-            if (NPOIFSFileSystem.HasPOIFSHeader(bis))
+            if (FileMagicContainer.ValueOf(bis) == FileMagic.OLE2)
             {
                 NPOIFSFileSystem poifs = new NPOIFSFileSystem(bis);
                 try
@@ -310,7 +312,7 @@ namespace NPOI.HSSF.Extractor
                             break;
 
                         default:
-                            ris.ReadFully(new byte[ris.Remaining]);
+                            ris.ReadFully(IOUtils.SafelyAllocate(ris.Remaining, MAX_RECORD_LENGTH));
                             break;
                     }
                 }

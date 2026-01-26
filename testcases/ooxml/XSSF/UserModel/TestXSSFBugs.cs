@@ -19,9 +19,11 @@ using NPOI.HSSF.UserModel;
 using NPOI.OpenXml4Net.OPC;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.POIFS.FileSystem;
+using NPOI.SS;
 using NPOI.SS.Formula;
 using NPOI.SS.Formula.Eval;
 using NPOI.SS.Formula.Functions;
+using NPOI.SS.Formula.PTG;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using NPOI.Util;
@@ -310,7 +312,7 @@ namespace TestCases.XSSF.UserModel
          *  a theme is used 
          */
         [Test]
-        public void Test48779()
+        public void Bug48779()
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("48779.xlsx");
             XSSFCell cell = wb.GetSheetAt(0).GetRow(0).GetCell(0) as XSSFCell;
@@ -1567,7 +1569,7 @@ namespace TestCases.XSSF.UserModel
          * Bug 53101:
          */
         [Test]
-        public void Test5301()
+        public void Bug5301()
         {
             IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("53101.xlsx");
             IFormulaEvaluator Evaluator =
@@ -1619,18 +1621,16 @@ namespace TestCases.XSSF.UserModel
         public void Bug55692_poifs()
         {
             // Via a POIFSFileSystem
-            ClassicAssert.Throws<EncryptedDocumentException>(()=>{
-                POIFSFileSystem fsP = new POIFSFileSystem(
-                        POIDataSamples.GetPOIFSInstance().OpenResourceAsStream("protect.xlsx"));
-                try
-                {
-                    WorkbookFactory.Create(fsP);
-                }
-                finally
-                {
-                    fsP.Close();
-                }
-            });
+            POIFSFileSystem fsP = new POIFSFileSystem(
+                    POIDataSamples.GetPOIFSInstance().OpenResourceAsStream("protect.xlsx"));
+            try
+            {
+                WorkbookFactory.Create(fsP);
+            }
+            finally
+            {
+                fsP.Close();
+            }
         }
         [Test]
         public void Bug55692_stream()
@@ -1644,19 +1644,17 @@ namespace TestCases.XSSF.UserModel
             wb.Close();
         }
         [Test]
-        public void bug55692_npoifs() 
+        public void Bug55692_npoifs() 
         {
-            ClassicAssert.Throws<EncryptedDocumentException>(()=>{
-                // Via a NPOIFSFileSystem, will spot it's actually a .xlsx file
-                //  encrypted with the default password, and open
-                NPOIFSFileSystem fsNP = new NPOIFSFileSystem(
-                        POIDataSamples.GetPOIFSInstance().OpenResourceAsStream("protect.xlsx"));
-                IWorkbook wb = WorkbookFactory.Create(fsNP);
-                ClassicAssert.IsNotNull(wb);
-                ClassicAssert.AreEqual(3, wb.NumberOfSheets);
-                wb.Close();
-                fsNP.Close();
-            });
+            // Via a NPOIFSFileSystem, will spot it's actually a .xlsx file
+            //  encrypted with the default password, and open
+            POIFSFileSystem fsNP = new POIFSFileSystem(
+                    POIDataSamples.GetPOIFSInstance().OpenResourceAsStream("protect.xlsx"));
+            IWorkbook wb = WorkbookFactory.Create(fsNP);
+            ClassicAssert.IsNotNull(wb);
+            ClassicAssert.AreEqual(3, wb.NumberOfSheets);
+            wb.Close();
+            fsNP.Close();
         }
         public void Test55692()
         {
@@ -1682,7 +1680,7 @@ namespace TestCases.XSSF.UserModel
             catch (EncryptedDocumentException) { }
 
             // Via a NPOIFSFileSystem
-            NPOIFSFileSystem fsNP = new NPOIFSFileSystem(inpC);
+            POIFSFileSystem fsNP = new POIFSFileSystem(inpC);
             try
             {
                 WorkbookFactory.Create(fsNP);
@@ -3484,7 +3482,7 @@ namespace TestCases.XSSF.UserModel
 
             // we currently only populate the dimension during writing out
             // to avoid having to iterate all rows/cells in each add/remove of a row or cell
-            IOUtils.Write(wb, new NullOutputStream());
+            wb.Write(new NullOutputStream());
 
             ClassicAssert.AreEqual("B2:I5", ((XSSFSheet)sheet).GetCTWorksheet().dimension.@ref);
 
@@ -3509,6 +3507,59 @@ namespace TestCases.XSSF.UserModel
             wb.Close();
         }
 
+        [Test]
+        public void Bug61516()
+        {
+            string initialFormula = "A1";
+            string expectedFormula = "#REF!"; // from ms excel
+
+            IWorkbook wb = new XSSFWorkbook();
+            ISheet sheet = wb.CreateSheet("sheet1");
+            sheet.CreateRow(0).CreateCell(0).SetCellValue(1); // A1 = 1
+
+            {
+                ICell c3 = sheet.CreateRow(2).CreateCell(2);
+                c3.SetCellFormula(initialFormula); // C3 = =A1
+                IFormulaEvaluator evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
+                CellValue cellValue = evaluator.Evaluate(c3);
+                ClassicAssert.AreEqual(1, cellValue.NumberValue, 0.0001);
+            }
+
+            {
+                FormulaShifter formulaShifter = FormulaShifter.CreateForRowCopy(0, "sheet1", 2/*firstRowToShift*/, 2/*lastRowToShift*/
+                    , -1/*step*/, SpreadsheetVersion.EXCEL2007);    // parameters 2, 2, -1 should mean : Move row range [2-2] one level up
+                XSSFEvaluationWorkbook fpb = XSSFEvaluationWorkbook.Create((XSSFWorkbook) wb);
+                Ptg[] ptgs = FormulaParser.Parse(initialFormula, fpb, FormulaType.Cell, 0); // [A1]
+                formulaShifter.AdjustFormula(ptgs, 0);    // adjusted to [A]
+                string shiftedFmla = FormulaRenderer.ToFormulaString(fpb, ptgs);    //A
+                                                                                    //Console.WriteLine(String.format("initial formula : A1; expected formula value After shifting up : #REF!; actual formula value : %s", shiftedFmla));
+                ClassicAssert.AreEqual(expectedFormula, shiftedFmla,
+                    "On copy we expect the formula to be adjusted, in this case it would point to row -1, which is an invalid REF");
+            }
+
+            {
+                FormulaShifter formulaShifter = FormulaShifter.CreateForRowShift(0, "sheet1", 2/*firstRowToShift*/, 2/*lastRowToShift*/
+                    , -1/*step*/, SpreadsheetVersion.EXCEL2007);    // parameters 2, 2, -1 should mean : Move row range [2-2] one level up
+                XSSFEvaluationWorkbook fpb = XSSFEvaluationWorkbook.Create((XSSFWorkbook) wb);
+                Ptg[] ptgs = FormulaParser.Parse(initialFormula, fpb, FormulaType.Cell, 0); // [A1]
+                formulaShifter.AdjustFormula(ptgs, 0);    // adjusted to [A]
+                string shiftedFmla = FormulaRenderer.ToFormulaString(fpb, ptgs);    //A
+                                                                                    //Console.WriteLine(String.format("initial formula : A1; expected formula value After shifting up : #REF!; actual formula value : %s", shiftedFmla));
+                ClassicAssert.AreEqual(initialFormula, shiftedFmla,
+                    "On Move we expect the formula to stay the same, thus expecting the initial formula A1 here");
+            }
+
+            sheet.ShiftRows(2, 2, -1);
+            {
+                ICell c2 = sheet.GetRow(1).GetCell(2);
+                ClassicAssert.IsNotNull(c2, "cell C2 needs to exist now");
+                ClassicAssert.AreEqual(CellType.Formula, c2.CellType);
+                ClassicAssert.AreEqual(initialFormula, c2.CellFormula);
+                IFormulaEvaluator evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
+                CellValue cellValue = evaluator.Evaluate(c2);
+                ClassicAssert.AreEqual(1, cellValue.NumberValue, 0.0001);
+            }
+        }
         [Test]
         public void TestBug690()
         {
@@ -3588,5 +3639,7 @@ namespace TestCases.XSSF.UserModel
                 ClassicAssert.IsTrue(shiftedRow.GetCell(3).StringCellValue.Equals("D2"));
             }
         }
+
+
     }
 }

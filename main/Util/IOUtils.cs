@@ -59,6 +59,19 @@ namespace NPOI.Util
         /// </summary>
         private static readonly int DEFAULT_BUFFER_SIZE = 4096;
 
+        /**
+         * If this value is set to > 0, {@link #safelyAllocate(long, int)} will ignore the
+         * maximum record length parameter.  This is designed to allow users to bypass
+         * the hard-coded maximum record lengths if they are willing to accept the risk
+         * of an OutOfMemoryException.
+         *
+         * @param maxOverride
+         * @since 4.0.0
+         */
+        public static void SetByteArrayMaxOverride(int maxOverride)
+        {
+            BYTE_ARRAY_MAX_OVERRIDE = maxOverride;
+        }
         /// <summary>
         /// Peeks at the first 8 bytes of the stream. Returns those bytes, but
         ///  with the stream unaffected. Requires a stream that supports mark/reset,
@@ -252,6 +265,8 @@ namespace NPOI.Util
         /// <param name="doc"> a writeable document to write to the output stream</param>
         /// <param name="out"> the output stream that the document is written to</param>
         /// <exception cref="IOException">IOException</exception>
+        [Obsolete("since 4.0, use try-with-resources, will be removed in 4.2")]
+        [Removal(Version = "4.2")]
         public static void Write(POIDocument doc, OutputStream out1)
         {
 
@@ -265,6 +280,8 @@ namespace NPOI.Util
             }
         }
 
+        [Obsolete("since 4.0, use try-with-resources, will be removed in 4.2")]
+        [Removal(Version = "4.2")]
         public static void Write(IWorkbook doc, OutputStream out1)
         {
             try
@@ -291,6 +308,8 @@ namespace NPOI.Util
         /// <param name="doc"> a writeable and closeable document to write to the output stream, then close</param>
         /// <param name="out"> the output stream that the document is written to</param>
         /// <exception cref="IOException">IOException</exception>
+        [Obsolete("since 4.0, use try-with-resources, will be removed in 4.2")]
+        [Removal(Version = "4.2")]
         public static void WriteAndClose(POIDocument doc, OutputStream out1)
         {
 
@@ -317,6 +336,8 @@ namespace NPOI.Util
         /// <param name="doc"> a writeable and closeable document to write to the output file, then close</param>
         /// <param name="out"> the output file that the document is written to</param>
         /// <exception cref="IOException">IOException</exception>
+        [Obsolete("since 4.0, use try-with-resources, will be removed in 4.2")]
+        [Removal(Version = "4.2")]
         public static void WriteAndClose(POIDocument doc, FileInfo out1)
         {
 
@@ -342,6 +363,8 @@ namespace NPOI.Util
         /// </summary>
         /// <param name="doc"> a writeable document to write in-place</param>
         /// <exception cref="IOException">IOException</exception>
+        [Obsolete("since 4.0, use try-with-resources, will be removed in 4.2")]
+        [Removal(Version = "4.2")]
         public static void WriteAndClose(POIDocument doc)
         {
 
@@ -354,7 +377,8 @@ namespace NPOI.Util
                 CloseQuietly(doc);
             }
         }
-
+        [Obsolete("since 4.0, use try-with-resources, will be removed in 4.2")]
+        [Removal(Version = "4.2")]
         public static void WriteAndClose(IWorkbook doc, OutputStream out1)
         {
 
@@ -504,8 +528,18 @@ namespace NPOI.Util
         {
             SafelyAllocateCheck(length, maxLength);
 
-            CheckByteSizeLimit((int)length);
-
+            //CheckByteSizeLimit((int)length);
+            if(BYTE_ARRAY_MAX_OVERRIDE > 0)
+            {
+                if(length > BYTE_ARRAY_MAX_OVERRIDE)
+                {
+                    ThrowRFE(length, BYTE_ARRAY_MAX_OVERRIDE);
+                }
+            }
+            else if(length > maxLength)
+            {
+                ThrowRFE(length, maxLength);
+            }
             return new byte[(int)length];
         }
 
@@ -520,14 +554,6 @@ namespace NPOI.Util
                 throw new RecordFormatException("Can't allocate an array > " + int.MaxValue);
             }
             CheckLength(length, maxLength);
-        }
-
-        private static void CheckByteSizeLimit(int length)
-        {
-            if (BYTE_ARRAY_MAX_OVERRIDE != -1 && length > BYTE_ARRAY_MAX_OVERRIDE)
-            {
-                ThrowRFE(length, BYTE_ARRAY_MAX_OVERRIDE);
-            }
         }
 
         private static void CheckLength(long length, int maxLength)

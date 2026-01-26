@@ -33,6 +33,8 @@ namespace NPOI.HSSF.Record
      */
     public class GroupMarkerSubRecord : SubRecord, ICloneable
     {
+        //arbitrarily selected; may need to increase
+        private static int MAX_RECORD_LENGTH = 100_000;
         public const short sid = 0x06;
 
         private byte[] reserved;    // would really love to know what goes in here.
@@ -51,7 +53,7 @@ namespace NPOI.HSSF.Record
 
         public GroupMarkerSubRecord(ILittleEndianInput in1, int size)
         {
-            byte[] buf = new byte[size];
+            byte[] buf = IOUtils.SafelyAllocate(size, MAX_RECORD_LENGTH);
             in1.ReadFully(buf);
             reserved = buf;
         }

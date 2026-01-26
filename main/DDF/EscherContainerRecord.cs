@@ -20,7 +20,7 @@ namespace NPOI.DDF
 {
     using System;
     using System.Text; 
-using Cysharp.Text;
+    using Cysharp.Text;
     using System.Collections;
     using NPOI.Util;
     using System.Collections.Generic;
@@ -197,6 +197,8 @@ using Cysharp.Text;
         {
             return _childRecords.Remove(toBeRemoved);
         }
+        [Obsolete("remove 4.0")]
+        [Removal(Version = "4.2")]
         public List<EscherRecord>.Enumerator GetChildIterator()
         {
             return _childRecords.GetEnumerator();

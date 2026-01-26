@@ -34,7 +34,8 @@ namespace NPOI.HPSF
     /// </summary>
     public class Section
     {
-
+        //arbitrarily selected; may need to increase
+        private static int MAX_RECORD_LENGTH = 100_000;
         /// <summary>
         /// <para>
         /// Maps property IDs to section-private PID strings. These
@@ -941,7 +942,7 @@ namespace NPOI.HPSF
 
                 try 
                 {
-                    byte[] buf = new byte[nrBytes];
+                    byte[] buf = IOUtils.SafelyAllocate(nrBytes, MAX_RECORD_LENGTH);
                     leis.ReadFully(buf, 0, nrBytes);
                     String str = CodePageUtil.GetStringFromCodePage(buf, 0, nrBytes, cp);
 
