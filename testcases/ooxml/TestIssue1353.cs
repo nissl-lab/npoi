@@ -13,7 +13,7 @@ namespace TestCases
     {
         
         [Test]
-        public void TestOutputHasNorotWithShapeAttribute()
+        public void TestOutputHasNoRotWithShapeAttribute()
         {
             var samples = POIDataSamples.GetDocumentInstance();
             string inputPath = samples.GetFileInfo("issue1353from.docx").FullName;
