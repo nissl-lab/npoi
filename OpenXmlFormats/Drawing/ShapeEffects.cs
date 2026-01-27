@@ -2746,9 +2746,9 @@ namespace NPOI.OpenXmlFormats.Dml
         private uint dpiField;
         private bool dpiFieldSpecified;
 
-        private bool rotWithShapeField;
+        private bool rotWithShapeField = true; // set true
 
-        private bool rotWithShapeFieldSpecified;
+        private bool rotWithShapeFieldSpecified = false;
 
         public CT_Blip AddNewBlip()
         {
@@ -2768,7 +2768,11 @@ namespace NPOI.OpenXmlFormats.Dml
                 return null;
             CT_BlipFillProperties ctObj = new CT_BlipFillProperties();
             ctObj.dpi = XmlHelper.ReadUInt(node.Attributes["dpi"]);
-            ctObj.rotWithShape = XmlHelper.ReadBool(node.Attributes["rotWithShape"]);
+            if (node.Attributes["rotWithShape"] != null)
+            {
+                ctObj.rotWithShape = XmlHelper.ReadBool(node.Attributes["rotWithShape"]);
+                ctObj.rotWithShapeSpecified = true;
+            }
             foreach (XmlNode childNode in node.ChildNodes)
             {
                 if (childNode.LocalName == "blip")
@@ -2789,7 +2793,10 @@ namespace NPOI.OpenXmlFormats.Dml
         {
             sw.Write(string.Format("<{0}", nodeName));
             XmlHelper.WriteAttribute(sw, "dpi", this.dpi);
-            XmlHelper.WriteAttribute(sw, "rotWithShape", this.rotWithShape);
+            if (rotWithShapeSpecified && !rotWithShape)
+            {
+                XmlHelper.WriteAttribute(sw, "rotWithShape", this.rotWithShape);
+            }
             sw.Write(">");
             if (this.blip != null)
                 this.blip.Write(sw, "blip");
