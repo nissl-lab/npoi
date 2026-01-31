@@ -459,7 +459,7 @@ lblforbreak:
             }
             set
             {
-                cell1.colOff = value;
+                Cell1.colOff = value;
             }
         }
 
@@ -471,7 +471,7 @@ lblforbreak:
             }
             set
             {
-                cell1.rowOff = value;
+                Cell1.rowOff = value;
             }
         }
 
@@ -483,7 +483,7 @@ lblforbreak:
             }
             set
             {
-                cell2.rowOff = value;
+                Cell2.rowOff = value;
             }
         }
 
@@ -495,7 +495,7 @@ lblforbreak:
             }
             set
             {
-                cell2.colOff = value;
+                Cell2.colOff = value;
             }
         }
         public AnchorType AnchorType
@@ -514,7 +514,7 @@ lblforbreak:
         {
             get
             {
-                return cell1.col;
+                return Cell1.col;
             }
             set
             {
@@ -530,7 +530,7 @@ lblforbreak:
             }
             set
             {
-                cell2.col = value;
+                Cell2.col = value;
             }
         }
 
@@ -542,7 +542,7 @@ lblforbreak:
             }
             set
             {
-                cell1.row = value;
+                Cell1.row = value;
             }
         }
 
@@ -554,7 +554,7 @@ lblforbreak:
             }
             set
             {
-                cell2.row = value;
+                Cell2.row = value;
             }
         }
 
