@@ -141,20 +141,9 @@ namespace NPOI.POIFS.FileSystem
         {
             foreach(var fm in Values)
             {
-                int i=0;
-                bool found = true;
                 foreach(byte[] ma in fm.Value.magic)
                 {
-                    foreach(byte m in ma)
-                    {
-                        byte d = magic[i++];
-                        if(!(d == m || (m == 0x70 && (d == 0x10 || d == 0x20 || d == 0x40))))
-                        {
-                            found = false;
-                            break;
-                        }
-                    }
-                    if(found)
+                    if(FindMagic(ma, magic))
                     {
                         return fm.Key;
                     }
@@ -162,7 +151,20 @@ namespace NPOI.POIFS.FileSystem
             }
             return FileMagic.UNKNOWN;
         }
-
+        private static bool FindMagic(byte[] expected, byte[] actual)
+        {
+            int i=0;
+            foreach(byte expectedByte in expected)
+            {
+                byte actualByte = actual[i++];
+                if((actualByte != expectedByte &&
+                        (expectedByte != 0x70 || (actualByte != 0x10 && actualByte != 0x20 && actualByte != 0x40))))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
         /**
          * Get the file magic of the supplied InputStream (which MUST
          *  support mark and reset).<p>
