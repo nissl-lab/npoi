@@ -9,6 +9,7 @@ using NPOI.OpenXml4Net.OPC.Internal.Unmarshallers;
 using NPOI.Util;
 using System.Text.RegularExpressions;
 using NPOI.OpenXml4Net.Util;
+using System.Threading.Tasks;
 
 namespace NPOI.OpenXml4Net.OPC
 {
@@ -1691,6 +1692,19 @@ namespace NPOI.OpenXml4Net.OPC
         }
 
         /**
+         * Save the document in the specified output stream asynchronously.
+         * 
+         * @param outputStream
+         *            The stream to save the package.
+         * @see #saveImplAsync(OutputStream)
+         */
+        public async Task SaveAsync(Stream outputStream)
+        {
+            ThrowExceptionIfReadOnly();
+            await this.SaveImplAsync(outputStream);
+        }
+
+        /**
          * Core method to Create a package part. This method must be implemented by
          * the subclass.
          * 
@@ -1736,6 +1750,14 @@ namespace NPOI.OpenXml4Net.OPC
          *            The output stream use to save this package.
          */
         protected abstract void SaveImpl(Stream outputStream);
+
+        /**
+         * Save the package into the specified output stream asynchronously.
+         * 
+         * @param outputStream
+         *            The output stream use to save this package.
+         */
+        protected abstract Task SaveImplAsync(Stream outputStream);
 
         /**
          * Get the package part mapped to the specified URI.

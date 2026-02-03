@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace NPOI.OpenXml4Net.OPC
 {
@@ -60,6 +61,47 @@ namespace NPOI.OpenXml4Net.OPC
             {
                 outStream.Write(buffer, 0, bytesRead);
                 totalRead += bytesRead;
+            }
+        }
+
+        /**
+         * Turning the DOM4j object in the specified output stream asynchronously.
+         *
+         * @param xmlContent
+         *            The XML document.
+         * @param outStream
+         *            The Stream in which the XML document will be written.
+         */
+        public static async Task SaveXmlInStreamAsync(XmlDocument xmlContent, Stream outStream)
+        {
+            XmlWriterSettings settings = new XmlWriterSettings();
+            settings.Encoding = Encoding.UTF8;
+            settings.OmitXmlDeclaration = false;
+            settings.Indent = false;
+            settings.Async = true;
+            
+            using (XmlWriter writer = XmlTextWriter.Create(outStream, settings))
+            {
+                xmlContent.WriteContentTo(writer);
+                await writer.FlushAsync();
+            }
+        }
+
+        /**
+         * Copy the input stream into the output stream asynchronously.
+         *
+         * @param inStream
+         *            The source stream.
+         * @param outStream
+         *            The destination stream.
+         */
+        public static async Task CopyStreamAsync(Stream inStream, Stream outStream)
+        {
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = await inStream.ReadAsync(buffer, 0, buffer.Length)) > 0)
+            {
+                await outStream.WriteAsync(buffer, 0, bytesRead);
             }
         }
     }
