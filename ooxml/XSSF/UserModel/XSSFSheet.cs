@@ -3861,6 +3861,7 @@ namespace NPOI.XSSF.UserModel
         /// <returns></returns>
         public List<XSSFTable> GetTables()
         {
+            EnsureLoaded();
             List<XSSFTable> tableList = new List<XSSFTable>(
                 tables.Values
             );
