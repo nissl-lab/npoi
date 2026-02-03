@@ -9,6 +9,7 @@ using NPOI.OpenXml4Net.OPC.Internal.Unmarshallers;
 using NPOI.Util;
 using System.Text.RegularExpressions;
 using NPOI.OpenXml4Net.Util;
+using System.Threading.Tasks;
 
 namespace NPOI.OpenXml4Net.OPC
 {
@@ -1688,6 +1689,18 @@ namespace NPOI.OpenXml4Net.OPC
         {
             ThrowExceptionIfReadOnly();
             this.SaveImpl(outputStream);
+        }
+
+        /**
+         * Save the document in the specified output stream asynchronously.
+         * 
+         * @param outputStream
+         *            The stream to save the package.
+         */
+        public async Task SaveAsync(Stream outputStream)
+        {
+            ThrowExceptionIfReadOnly();
+            await Task.Run(() => this.SaveImpl(outputStream));
         }
 
         /**

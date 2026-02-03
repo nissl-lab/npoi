@@ -26,6 +26,7 @@ namespace NPOI
     using NPOI.OpenXml4Net;
     using System.Reflection;
     using NPOI.POIFS.FileSystem;
+    using System.Threading.Tasks;
 
     public abstract class POIXMLDocument : POIXMLDocumentPart, ICloseable
     {
@@ -210,6 +211,44 @@ namespace NPOI
             GetProperties().Commit();
 
             pkg.Save(stream);
+        }
+
+        /**
+         * Write out this document to an Outputstream asynchronously.
+         *
+         * Note - if the Document was opened from a {@link File} rather
+         *  than an {@link InputStream}, you <b>must</b> write out to
+         *  a different file, overwriting via an OutputStream isn't possible.
+         *  
+         * If {@code stream} is a {@link java.io.FileOutputStream} on a networked drive
+         * or has a high cost/latency associated with each written byte,
+         * consider wrapping the OutputStream in a {@link java.io.BufferedOutputStream}
+         * to improve write performance.
+         * 
+         * @param stream - the java Stream you wish to write the file to
+         *
+         * @exception IOException if anything can't be written.
+         */
+        public async Task WriteAsync(Stream stream)
+        {
+            OPCPackage pkg = Package;
+            if (pkg == null)
+            {
+                throw new IOException("Cannot write data, document seems to have been closed already");
+            }
+            if (!this.GetProperties().CustomProperties.Contains("Generator"))
+                this.GetProperties().CustomProperties.AddProperty("Generator", "NPOI");
+            if (!this.GetProperties().CustomProperties.Contains("Generator Version"))
+                this.GetProperties().CustomProperties.AddProperty("Generator Version", Assembly.GetExecutingAssembly().GetName().Version.ToString(3));
+            //force all children to commit their Changes into the underlying OOXML Package
+            List<PackagePart> context = new List<PackagePart>();
+            OnSave(context);
+            context.Clear();
+
+            //save extended and custom properties
+            GetProperties().Commit();
+
+            await pkg.SaveAsync(stream);
         }
     }
 }
