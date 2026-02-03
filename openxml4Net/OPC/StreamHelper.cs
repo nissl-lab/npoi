@@ -37,6 +37,7 @@ namespace NPOI.OpenXml4Net.OPC
             // because of different handling of linebreaks in Windows/Unix
             // see https://stackoverflow.com/questions/36063375
             settings.Indent = false;
+            settings.CloseOutput = false;
             XmlWriter writer = XmlTextWriter.Create(outStream,settings);
             //XmlWriter writer = new XmlTextWriter(outStream,Encoding.UTF8);
             xmlContent.WriteContentTo(writer);
@@ -79,12 +80,11 @@ namespace NPOI.OpenXml4Net.OPC
             settings.OmitXmlDeclaration = false;
             settings.Indent = false;
             settings.Async = true;
+            settings.CloseOutput = false;
             
-            using (XmlWriter writer = XmlTextWriter.Create(outStream, settings))
-            {
-                xmlContent.WriteContentTo(writer);
-                await writer.FlushAsync();
-            }
+            XmlWriter writer = XmlTextWriter.Create(outStream, settings);
+            xmlContent.WriteContentTo(writer);
+            await writer.FlushAsync();
         }
 
         /**
