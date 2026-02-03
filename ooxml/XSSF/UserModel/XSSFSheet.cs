@@ -285,6 +285,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
+                EnsureLoaded();
                 if(_rows.Count == 0)
                 {
                     return 0;
@@ -308,6 +309,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
+                EnsureLoaded();
                 if(_columns.Count == 0)
                 {
                     return 0;
@@ -472,6 +474,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
+                EnsureLoaded();
                 return _rows.Count == 0 ? 0 : XSSFSheet.GetLastKey(_rows.Keys);
             }
         }
@@ -480,6 +483,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
+                EnsureLoaded();
                 return _columns.Count == 0 ? 0 : XSSFSheet.GetLastKey(_columns.Keys);
             }
         }
@@ -570,6 +574,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
+                EnsureLoaded();
                 return _rows.Count;
             }
         }
@@ -582,6 +587,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
+                EnsureLoaded();
                 return _columns.Count;
             }
         }
@@ -2087,6 +2093,7 @@ namespace NPOI.XSSF.UserModel
         /// row in the sheet</returns>
         public virtual IRow CreateRow(int rownum)
         {
+            EnsureLoaded();
             CT_Row ctRow;
             XSSFRow prev = _rows.TryGetValue(rownum, out XSSFRow row) ? row : null;
             if (prev != null)
@@ -2512,6 +2519,7 @@ namespace NPOI.XSSF.UserModel
         /// if its not defined on the sheet</returns>
         public IRow GetRow(int rownum)
         {
+            EnsureLoaded();
             if (_rows.TryGetValue(rownum, out XSSFRow row))
             {
                 return row;
@@ -2530,6 +2538,7 @@ namespace NPOI.XSSF.UserModel
         /// if its not defined on the sheet</returns>
         public IColumn GetColumn(int columnnum, bool createIfNull = false)
         {
+            EnsureLoaded();
             if (_columns.TryGetValue(columnnum, out XSSFColumn column))
             {
                 return column;
@@ -2745,6 +2754,7 @@ namespace NPOI.XSSF.UserModel
         /// <exception cref="ArgumentException"></exception>
         public void RemoveRow(IRow row)
         {
+            EnsureLoaded();
             if(row.Sheet != this)
             {
                 throw new ArgumentException("Specified row does not belong to" +
@@ -3870,11 +3880,13 @@ namespace NPOI.XSSF.UserModel
 
         public IEnumerator GetEnumerator()
         {
+            EnsureLoaded();
             return _rows.Values.GetEnumerator();
         }
 
         public IEnumerator GetRowEnumerator()
         {
+            EnsureLoaded();
             return GetEnumerator();
         }
 
