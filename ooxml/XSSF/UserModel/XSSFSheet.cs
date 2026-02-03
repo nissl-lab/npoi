@@ -1345,12 +1345,23 @@ namespace NPOI.XSSF.UserModel
         {
             try
             {
-                Read(GetPackagePart().GetInputStream());
+                // Set isLoaded BEFORE calling Read() to prevent stack overflow
+                // from recursive EnsureLoaded() calls during initialization
+                // (e.g., XSSFRow constructor may access LastRowNum which calls EnsureLoaded)
                 isLoaded = true;
+                Read(GetPackagePart().GetInputStream());
             }
             catch(IOException e)
             {
+                // Reset isLoaded on failure so it can be retried
+                isLoaded = false;
                 throw new POIXMLException(e);
+            }
+            catch(Exception)
+            {
+                // Reset isLoaded on any failure
+                isLoaded = false;
+                throw;
             }
         }
 
