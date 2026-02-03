@@ -542,7 +542,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 ctObj.type = (ST_TableStyleType)Enum.Parse(typeof(ST_TableStyleType), node.Attributes["type"].Value);
             ctObj.size = XmlHelper.ReadUInt(node.Attributes["size"]);
             ctObj.dxfIdFieldSpecified = node.Attributes["dxfId"] != null;
-            ctObj.dxfId = XmlHelper.ReadUInt(node.Attributes["dxfId"]);
+            if(ctObj.dxfIdFieldSpecified)
+                ctObj.dxfId = XmlHelper.ReadUInt(node.Attributes["dxfId"]);
             return ctObj;
         }
 
