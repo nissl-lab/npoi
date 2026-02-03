@@ -71,7 +71,12 @@ namespace NPOI.XSSF.UserModel
         /// <summary>
         /// Flag to track if the sheet data has been loaded from XML
         /// </summary>
-        private bool _isLoaded = false;
+        private bool isLoaded = false;
+        
+        /// <summary>
+        /// Lock object for thread-safe lazy loading
+        /// </summary>
+        private readonly object loadLock = new object();
 
         private readonly SortedList<int, XSSFRow> _rows = new SortedList<int, XSSFRow>();
         private readonly SortedList<int, XSSFColumn> _columns = new SortedList<int, XSSFColumn>();
@@ -1340,7 +1345,7 @@ namespace NPOI.XSSF.UserModel
             try
             {
                 Read(GetPackagePart().GetInputStream());
-                _isLoaded = true;
+                isLoaded = true;
             }
             catch(IOException e)
             {
@@ -1350,12 +1355,19 @@ namespace NPOI.XSSF.UserModel
 
         /// <summary>
         /// Ensures the sheet data is loaded. This is called lazily when the sheet is first accessed.
+        /// Thread-safe implementation using double-check locking pattern.
         /// </summary>
         private void EnsureLoaded()
         {
-            if (!_isLoaded)
+            if (!isLoaded)
             {
-                OnDocumentRead();
+                lock (loadLock)
+                {
+                    if (!isLoaded)
+                    {
+                        OnDocumentRead();
+                    }
+                }
             }
         }
 
@@ -1409,7 +1421,7 @@ namespace NPOI.XSSF.UserModel
             InitColumns(worksheet);
             columnHelper = new ColumnHelper(worksheet);
             hyperlinks = new List<XSSFHyperlink>();
-            _isLoaded = true; // New sheets are already "loaded"
+            isLoaded = true; // New sheets are already "loaded"
         }
 
         /// <summary>
