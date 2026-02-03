@@ -97,7 +97,7 @@ namespace NPOI.OpenXml4Net.OPC
          */
         public static async Task CopyStreamAsync(Stream inStream, Stream outStream)
         {
-            byte[] buffer = new byte[1024];
+            byte[] buffer = new byte[81920]; // Use 80KB buffer for better async performance
             int bytesRead;
             while ((bytesRead = await inStream.ReadAsync(buffer, 0, buffer.Length)) > 0)
             {

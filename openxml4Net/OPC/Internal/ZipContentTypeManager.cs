@@ -90,25 +90,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal
                 // Referenced in ZIP
                 zos.PutNextEntry(partEntry);
                 // Saving data in the ZIP file
-
-                await StreamHelper.SaveXmlInStreamAsync(content, out1);
-                using MemoryStream ins = new MemoryStream();
-
-                byte[] buff = new byte[ZipHelper.READ_WRITE_FILE_BUFFER_SIZE];
-                while(true)
-                {
-                    int resultRead = await ins.ReadAsync(buff, 0, ZipHelper.READ_WRITE_FILE_BUFFER_SIZE);
-                    if(resultRead == 0)
-                    {
-                        // end of file reached
-                        break;
-                    }
-                    else
-                    {
-                        await zos.WriteAsync(buff, 0, resultRead);
-                    }
-                }
-
+                await StreamHelper.SaveXmlInStreamAsync(content, zos);
                 zos.CloseEntry();
             }
             catch(IOException ioe)

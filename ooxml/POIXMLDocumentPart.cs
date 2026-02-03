@@ -552,9 +552,9 @@ namespace NPOI
         /**
          * Commit Changes in the underlying OOXML namespace asynchronously.
          */
-        protected internal virtual async Task CommitAsync()
+        protected internal virtual Task CommitAsync()
         {
-            await Task.CompletedTask;
+            return Task.CompletedTask;
         }
 
         /**
