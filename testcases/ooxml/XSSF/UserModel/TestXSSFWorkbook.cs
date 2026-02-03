@@ -1261,6 +1261,52 @@ namespace TestCases.XSSF.UserModel
             picture.Resize();
         }
 
+        [Test]
+        public async System.Threading.Tasks.Task TestWriteAsync()
+        {
+            // Create a workbook with some data
+            using XSSFWorkbook wb1 = new XSSFWorkbook();
+            ISheet sheet1 = wb1.CreateSheet("sheet1");
+            IRichTextString rts = wb1.GetCreationHelper().CreateRichTextString("hello world");
+            sheet1.CreateRow(0).CreateCell(0).SetCellValue(1.2);
+            sheet1.CreateRow(1).CreateCell(0).SetCellValue(rts);
+
+            // Write asynchronously to a memory stream
+            using MemoryStream ms = new MemoryStream();
+            await wb1.WriteAsync(ms);
+            ClassicAssert.IsTrue(ms.Length > 0, "WriteAsync should write data to the stream");
+
+            // Read back the workbook
+            ms.Position = 0;
+            using XSSFWorkbook wb2 = new XSSFWorkbook(ms);
+            ClassicAssert.AreEqual(1, wb2.NumberOfSheets);
+            ISheet sheet2 = wb2.GetSheetAt(0);
+            ClassicAssert.AreEqual("sheet1", sheet2.SheetName);
+            ClassicAssert.AreEqual(1.2, sheet2.GetRow(0).GetCell(0).NumericCellValue, 0.0001);
+            ClassicAssert.AreEqual("hello world", sheet2.GetRow(1).GetCell(0).StringCellValue);
+        }
+
+        [Test]
+        public async System.Threading.Tasks.Task TestWriteAsyncLeaveOpen()
+        {
+            // Create a workbook with some data
+            using XSSFWorkbook wb1 = new XSSFWorkbook();
+            ISheet sheet1 = wb1.CreateSheet("sheet1");
+            sheet1.CreateRow(0).CreateCell(0).SetCellValue(42.0);
+
+            // Write asynchronously to a memory stream with leaveOpen = true
+            using MemoryStream ms = new MemoryStream();
+            await wb1.WriteAsync(ms, leaveOpen: true);
+            ClassicAssert.IsTrue(ms.Length > 0, "WriteAsync should write data to the stream");
+            ClassicAssert.IsTrue(ms.CanRead, "Stream should remain open when leaveOpen is true");
+
+            // Read back the workbook
+            ms.Position = 0;
+            using XSSFWorkbook wb2 = new XSSFWorkbook(ms);
+            ISheet sheet2 = wb2.GetSheetAt(0);
+            ClassicAssert.AreEqual(42.0, sheet2.GetRow(0).GetCell(0).NumericCellValue, 0.0001);
+        }
+
         private static byte[] GenerateBitmap(int width, int height) {
             // BMP file header
             byte[] header = new byte[]
