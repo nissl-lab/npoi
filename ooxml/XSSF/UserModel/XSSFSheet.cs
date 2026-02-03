@@ -1557,16 +1557,19 @@ namespace NPOI.XSSF.UserModel
 
         protected virtual OpenXmlFormats.Spreadsheet.CT_Drawing GetCTDrawing()
         {
+            EnsureLoaded();
             return worksheet.drawing;
         }
 
         protected virtual OpenXmlFormats.Spreadsheet.CT_LegacyDrawing GetCTLegacyDrawing()
         {
+            EnsureLoaded();
             return worksheet.legacyDrawing;
         }
 
         internal virtual void Write(Stream stream, bool leaveOpen = false)
         {
+            EnsureLoaded();
             bool setToNull = false;
             if(worksheet.sizeOfColsArray() == 1)
             {
@@ -4920,11 +4923,13 @@ namespace NPOI.XSSF.UserModel
 
         private CT_SheetFormatPr GetSheetTypeSheetFormatPr()
         {
+            EnsureLoaded();
             return worksheet.IsSetSheetFormatPr() ? worksheet.sheetFormatPr : worksheet.AddNewSheetFormatPr();
         }
 
         private CT_SheetPr GetSheetTypeSheetPr()
         {
+            EnsureLoaded();
             if(worksheet.sheetPr == null)
             {
                 worksheet.sheetPr = new CT_SheetPr();
@@ -4935,6 +4940,7 @@ namespace NPOI.XSSF.UserModel
 
         private CT_HeaderFooter GetSheetTypeHeaderFooter()
         {
+            EnsureLoaded();
             if(worksheet.headerFooter == null)
             {
                 worksheet.headerFooter = new CT_HeaderFooter();
@@ -5097,6 +5103,7 @@ namespace NPOI.XSSF.UserModel
 
         private CT_SheetView GetSheetTypeSheetView()
         {
+            EnsureLoaded();
             if(GetDefaultSheetView() == null)
             {
                 GetSheetTypeSheetViews().SetSheetViewArray(0, new CT_SheetView());
@@ -5700,6 +5707,7 @@ namespace NPOI.XSSF.UserModel
 
         private CT_Selection GetSheetTypeSelection()
         {
+            EnsureLoaded();
             if(GetSheetTypeSheetView().SizeOfSelectionArray() == 0)
             {
                 GetSheetTypeSheetView().InsertNewSelection(0);
@@ -5723,6 +5731,7 @@ namespace NPOI.XSSF.UserModel
         /// <returns></returns>
         private CT_SheetView GetDefaultSheetView()
         {
+            EnsureLoaded();
             CT_SheetViews views = GetSheetTypeSheetViews();
             int sz = views == null ? 0 : views.sizeOfSheetViewArray();
             if(sz == 0)
@@ -5735,6 +5744,7 @@ namespace NPOI.XSSF.UserModel
 
         private CT_PageSetUpPr GetSheetTypePageSetUpPr()
         {
+            EnsureLoaded();
             CT_SheetPr sheetPr = GetSheetTypeSheetPr();
             return sheetPr.IsSetPageSetUpPr() ? sheetPr.pageSetUpPr : sheetPr.AddNewPageSetUpPr();
         }
@@ -5758,6 +5768,7 @@ namespace NPOI.XSSF.UserModel
 
         private CT_Pane GetPane()
         {
+            EnsureLoaded();
             if(GetDefaultSheetView().pane == null)
             {
                 GetDefaultSheetView().AddNewPane();
@@ -5780,6 +5791,7 @@ namespace NPOI.XSSF.UserModel
 
         private CT_SheetViews GetSheetTypeSheetViews()
         {
+            EnsureLoaded();
             if(worksheet.sheetViews == null)
             {
                 worksheet.sheetViews = new CT_SheetViews();
