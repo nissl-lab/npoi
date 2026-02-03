@@ -37,6 +37,7 @@ using System.Linq;
 using System.Text;
 using TestCases.HSSF;
 using TestCases.SS.UserModel;
+using System.Threading.Tasks;
 
 namespace TestCases.XSSF.UserModel
 {
@@ -1305,6 +1306,73 @@ namespace TestCases.XSSF.UserModel
             pixels.CopyTo(bmpData, header.Length);
 
             return bmpData;
+        }
+
+        /**
+         * Tests that we can save asynchronously using WriteAsync
+         */
+        [Test]
+        public async Task WriteAsync_BasicFunctionality()
+        {
+            XSSFWorkbook wb1 = new XSSFWorkbook();
+
+            ISheet sheet1 = wb1.CreateSheet("sheet1");
+            ISheet sheet2 = wb1.CreateSheet("sheet2");
+            wb1.CreateSheet("sheet3");
+
+            IRichTextString rts = wb1.GetCreationHelper().CreateRichTextString("hello world async");
+
+            sheet1.CreateRow(0).CreateCell(0).SetCellValue(1.2);
+            sheet1.CreateRow(1).CreateCell(0).SetCellValue(rts);
+            sheet2.CreateRow(0);
+
+            FileInfo file = TempFile.CreateTempFile("poi-async-", ".xlsx");
+            using (Stream outStream = File.OpenWrite(file.FullName))
+            {
+                await wb1.WriteAsync(outStream);
+            }
+
+            // Load back the XSSFWorkbook
+            XSSFWorkbook wb2 = new XSSFWorkbook(file.ToString());
+            ClassicAssert.AreEqual(3, wb2.NumberOfSheets);
+            ClassicAssert.AreEqual("sheet1", wb2.GetSheetName(0));
+            ClassicAssert.AreEqual("sheet2", wb2.GetSheetName(1));
+            ClassicAssert.AreEqual("sheet3", wb2.GetSheetName(2));
+            
+            ISheet sheet = wb2.GetSheetAt(0);
+            ClassicAssert.AreEqual(1.2, sheet.GetRow(0).GetCell(0).NumericCellValue, 0.0001);
+            ClassicAssert.AreEqual("hello world async", sheet.GetRow(1).GetCell(0).RichStringCellValue.String);
+
+            wb1.Close();
+            wb2.Close();
+        }
+
+        /**
+         * Tests that we can save asynchronously using WriteAsync with leaveOpen parameter
+         */
+        [Test]
+        public async Task WriteAsync_WithLeaveOpen()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            ISheet sheet = wb.CreateSheet("test");
+            sheet.CreateRow(0).CreateCell(0).SetCellValue("test async leave open");
+
+            MemoryStream ms = new MemoryStream();
+            await wb.WriteAsync(ms, leaveOpen: true);
+            
+            // Stream should still be open and usable
+            ClassicAssert.IsTrue(ms.CanRead, "Stream should still be open");
+            ClassicAssert.IsTrue(ms.Length > 0, "Stream should have data");
+
+            // Seek back and read the workbook
+            ms.Position = 0;
+            XSSFWorkbook wb2 = new XSSFWorkbook(ms);
+            ClassicAssert.AreEqual(1, wb2.NumberOfSheets);
+            ClassicAssert.AreEqual("test async leave open", wb2.GetSheetAt(0).GetRow(0).GetCell(0).StringCellValue);
+
+            wb.Close();
+            wb2.Close();
+            ms.Close();
         }
     }
 }
