@@ -113,6 +113,10 @@ namespace NPOI.Util
             {
                 is1.Mark(limit);
             }
+            else
+            {
+                stream.Seek(0, SeekOrigin.Begin);
+            }
             ByteArrayOutputStream bos = new ByteArrayOutputStream(limit);
             if(stream is ByteArrayInputStream inputStream)
                 Copy(new BoundedInputStream(inputStream, limit), bos);
@@ -146,7 +150,7 @@ namespace NPOI.Util
             }
             else
             {
-                stream.Position = mark;
+                stream.Seek(mark, SeekOrigin.Begin);
             }
 
             return peekedBytes;
