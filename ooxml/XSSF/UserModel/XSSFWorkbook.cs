@@ -1869,13 +1869,13 @@ namespace NPOI.XSSF.UserModel
             if (Package is ZipPackage package)
             {
                 //By default ZipPackage closes the stream if it wasn't constructed from a stream.
-                originalValue = ((ZipPackage)Package).IsExternalStream;
-                ((ZipPackage)Package).IsExternalStream = leaveOpen;
+                originalValue = package.IsExternalStream;
+                package.IsExternalStream = leaveOpen;
             }
             await base.WriteAsync(stream);
-            if (originalValue.HasValue && Package is ZipPackage)
+            if (originalValue.HasValue && Package is ZipPackage package2)
             {
-                ((ZipPackage)Package).IsExternalStream = originalValue.Value;
+                package2.IsExternalStream = originalValue.Value;
             }
         }
 

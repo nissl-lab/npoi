@@ -1333,7 +1333,7 @@ namespace TestCases.XSSF.UserModel
             }
 
             // Load back the XSSFWorkbook
-            XSSFWorkbook wb2 = new XSSFWorkbook(file.ToString());
+            XSSFWorkbook wb2 = new XSSFWorkbook(file.FullName);
             ClassicAssert.AreEqual(3, wb2.NumberOfSheets);
             ClassicAssert.AreEqual("sheet1", wb2.GetSheetName(0));
             ClassicAssert.AreEqual("sheet2", wb2.GetSheetName(1));
