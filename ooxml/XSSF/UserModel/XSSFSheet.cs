@@ -69,9 +69,10 @@ namespace NPOI.XSSF.UserModel
         internal CT_Worksheet worksheet;
 
         /// <summary>
-        /// Flag to track if the sheet data has been loaded from XML
+        /// Flag to track if the sheet data has been loaded from XML.
+        /// Marked as volatile for thread-safe double-check locking pattern.
         /// </summary>
-        private bool isLoaded = false;
+        private volatile bool isLoaded = false;
         
         /// <summary>
         /// Lock object for thread-safe lazy loading
@@ -1421,7 +1422,7 @@ namespace NPOI.XSSF.UserModel
             InitColumns(worksheet);
             columnHelper = new ColumnHelper(worksheet);
             hyperlinks = new List<XSSFHyperlink>();
-            isLoaded = true; // New sheets are already "loaded"
+            isLoaded = true; // New sheets are initialized directly, not loaded from XML
         }
 
         /// <summary>
