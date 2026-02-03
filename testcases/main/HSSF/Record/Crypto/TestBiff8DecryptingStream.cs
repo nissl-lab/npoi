@@ -17,12 +17,13 @@
 
 namespace TestCases.HSSF.Record.Crypto
 {
-    using System;
-    using System.IO;
-    using NUnit.Framework;using NUnit.Framework.Legacy;
-    using NPOI.Util;
-    using TestCases.Exceptions;
     using NPOI.HSSF.Record.Crypto;
+    using NPOI.POIFS.Crypt;
+    using NPOI.Util;
+    using NUnit.Framework;
+    using NUnit.Framework.Legacy;
+    using System;
+    using TestCases.Exceptions;
 
     /**
      * Tests for {@link Biff8DecryptingStream}
@@ -30,7 +31,6 @@ namespace TestCases.HSSF.Record.Crypto
      * @author Josh Micich
      */
     [TestFixture]
-    [Ignore("Ignored as RC4 encryption/decryption is validated in TestEncryptor.cs")]
     public class TestBiff8DecryptingStream
     {
 
@@ -39,23 +39,22 @@ namespace TestCases.HSSF.Record.Crypto
          * slightly interesting data. Each successive data byte value is one greater
          * than the previous.
          */
-        private class MockStream : MemoryStream
+        private class MockStream : ByteArrayInputStream
         {
             private int _val;
-            private int _position;
 
             public MockStream(int InitialValue)
             {
                 _val = InitialValue & 0xFF;
             }
-            public override int ReadByte()
+
+            public override int Read(byte[] buffer, int offset, int count)
             {
-                _position++;
-                return _val++ & 0xFF;
-            }
-            public int GetPosition()
-            {
-                    return _position;
+                for(int i = 0; i < count; i++)
+                {
+                    buffer[offset + i] = (byte) (_val++ & 0xFF);
+                }
+                return count;
             }
         }
 
@@ -74,7 +73,18 @@ namespace TestCases.HSSF.Record.Crypto
             {
                 _ms = ms;
                 byte[] keyDigest = HexRead.ReadFromString(keyDigestHex);
-                //_bds = new Biff8DecryptingStream(_ms, 0, new Biff8EncryptionKey(keyDigest));
+                EncryptionInfo ei = new EncryptionInfo(EncryptionMode.BinaryRC4);
+
+                // Create secret key directly from the key digest
+                ISecretKey secretKey = new SecretKeySpec(keyDigest, "RC4");
+
+                // Get the decryptor and set the secret key using reflection
+                Decryptor dec = ei.Decryptor;
+                var setSecretKeyMethod = dec.GetType().BaseType.GetMethod("SetSecretKey",
+                    System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                setSecretKeyMethod.Invoke(dec, new object[] { secretKey });
+
+                _bds = new Biff8DecryptingStream(ms, 0, ei);
                 ClassicAssert.AreEqual(expectedFirstInt, _bds.ReadInt());
                 _errorsOccurred = false;
             }
@@ -90,12 +100,12 @@ namespace TestCases.HSSF.Record.Crypto
              */
             public void RollForward(int fromPosition, int toPosition)
             {
-                ClassicAssert.AreEqual(fromPosition, _ms.GetPosition());
+                ClassicAssert.AreEqual(fromPosition, _bds.GetPosition());
                 for (int i = fromPosition; i < toPosition; i++)
                 {
                     _bds.ReadByte();
                 }
-                ClassicAssert.AreEqual(toPosition, _ms.GetPosition());
+                ClassicAssert.AreEqual(toPosition, _bds.GetPosition());
             }
 
             public void ConfirmByte(int expVal)
@@ -185,7 +195,6 @@ namespace TestCases.HSSF.Record.Crypto
          * Tests Reading of 64,32,16 and 8 bit integers aligned with key changing boundaries
          */
         [Test]
-        [Ignore("Ignored as RC4 encryption/decryption is validated in TestEncryptor.cs")]
         public void TestReadsAlignedWithBoundary()
         {
             StreamTester st = CreateStreamTester(0x50, "BA AD F0 0D 00",  unchecked((int)0x96C66829));
@@ -220,7 +229,6 @@ namespace TestCases.HSSF.Record.Crypto
          * Tests Reading of 64,32 and 16 bit integers <i>across</i> key changing boundaries
          */
         [Test]
-        [Ignore("Ignored as RC4 encryption/decryption is validated in TestEncryptor.cs")]
         public void TestReadsSpanningBoundary()
         {
             StreamTester st = CreateStreamTester(0x50, "BA AD F0 0D 00",  unchecked((int)0x96C66829));
@@ -239,7 +247,6 @@ namespace TestCases.HSSF.Record.Crypto
          * and that the RC4 stream stays aligned during these calls
          */
         [Test]
-        [Ignore("Ignored as RC4 encryption/decryption is validated in TestEncryptor.cs")]
         public void TestReadHeaderUshort()
         {
             StreamTester st = CreateStreamTester(0x50, "BA AD F0 0D 00",  unchecked((int)0x96C66829));
@@ -272,7 +279,6 @@ namespace TestCases.HSSF.Record.Crypto
          * Tests Reading of byte sequences <i>across</i> and <i>aligned with</i> key changing boundaries
          */
         [Test]
-        [Ignore("Ignored as RC4 encryption/decryption is validated in TestEncryptor.cs")]
         public void TestReadByteArrays()
         {
             StreamTester st = CreateStreamTester(0x50, "BA AD F0 0D 00", unchecked((int)0x96C66829));

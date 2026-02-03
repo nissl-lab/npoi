@@ -182,6 +182,11 @@ namespace NPOI.HSSF.Record.Crypto
 
         public bool IsCurrentRecordEncrypted() => !shouldSkipEncryptionOnCurrentRecord;
 
+        public long GetPosition()
+        {
+            return ccis.GetPos();
+        }
+
         public static bool IsNeverEncryptedRecord(int sid)
         {
             switch(sid)
