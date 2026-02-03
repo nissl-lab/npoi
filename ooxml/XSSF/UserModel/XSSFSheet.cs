@@ -5991,6 +5991,7 @@ namespace NPOI.XSSF.UserModel
         private void SetRepeatingRowsAndColumns(
             CellRangeAddress rowDef, CellRangeAddress colDef)
         {
+            EnsureLoaded();
             int col1 = -1;
             int col2 = -1;
             int row1 = -1;
