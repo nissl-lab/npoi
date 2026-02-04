@@ -359,7 +359,6 @@ using NPOI.HSSF.Record.Crypto;
             }
         }
         [Test]
-        [Ignore("encrypt/decrypt were not implemented")]
         public void TestPassword()
         {
             Biff8EncryptionKey.CurrentUserPassword = ("password");
@@ -370,6 +369,7 @@ using NPOI.HSSF.Record.Crypto;
             POITestCase.AssertContains(text,"ZIP");
             extractor.Close();
         }
+
         [Test]
         public void TestNullPointerException()
         {

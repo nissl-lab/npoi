@@ -18,6 +18,7 @@
 using NPOI.POIFS.Common;
 using NPOI.POIFS.Crypt;
 using NPOI.Util;
+using Org.BouncyCastle.Security;
 using System;
 using System.IO;
 using System.Text;
@@ -65,7 +66,7 @@ namespace NPOI.POIFS.FileSystem
                         throw new EncryptedDocumentException("The supplied spreadsheet is protected, but no password was supplied");
                 }
             }
-            catch (Exception e)
+            catch (GeneralSecurityException e)
             {
                 throw new IOException("password does not match", e);
             }
