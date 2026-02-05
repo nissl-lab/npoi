@@ -1,4 +1,4 @@
-using NPOI.OpenXml4Net.Util;
+﻿using NPOI.OpenXml4Net.Util;
 using System;
 using System.ComponentModel;
 using System.IO;
@@ -45,7 +45,7 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<xdr:{0}", nodeName));
+            sw.Write("<xdr:{0}", nodeName);
             XmlHelper.WriteAttribute(sw, "macro", this.macro);
             if (this.fPublished)
                 XmlHelper.WriteAttribute(sw, "fPublished", this.fPublished);
@@ -58,7 +58,7 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
                 this.spPr.Write(sw, "spPr");
             if (this.style != null)
                 this.style.Write(sw, "style");
-            sw.Write(string.Format("</xdr:{0}>", nodeName));
+            sw.Write("</xdr:{0}>", nodeName);
         }
 
         [XmlElement]
@@ -194,13 +194,13 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<xdr:{0}", nodeName));
+            sw.Write("<xdr:{0}", nodeName);
             sw.Write(">");
             if (this.cNvPr != null)
                 this.cNvPr.Write(sw, "cNvPr");
             if (this.cNvPicPr != null)
                 this.cNvPicPr.Write(sw, "cNvPicPr");
-            sw.Write(string.Format("</xdr:{0}>", nodeName));
+            sw.Write("</xdr:{0}>", nodeName);
         }
         public CT_NonVisualDrawingProps AddNewCNvPr()
         {

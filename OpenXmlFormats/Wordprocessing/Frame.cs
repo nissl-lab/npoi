@@ -474,7 +474,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.Write("<w:{0}", nodeName);
             XmlHelper.WriteAttribute(sw, "w:dropCap", this.dropCap.ToString());
             XmlHelper.WriteAttribute(sw, "w:lines", this.lines);
             XmlHelper.WriteAttribute(sw, "w:w", this.w);

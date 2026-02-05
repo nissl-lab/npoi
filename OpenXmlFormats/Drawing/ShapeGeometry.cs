@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Xml.Serialization;
@@ -736,7 +736,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<a:{0}", nodeName));
+            sw.Write("<a:{0}", nodeName);
             XmlHelper.WriteAttribute(sw, "name", this.name);
             XmlHelper.WriteAttribute(sw, "fmla", this.fmla);
             sw.Write("/>");
@@ -846,7 +846,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<a:{0}", nodeName));
+            sw.Write("<a:{0}", nodeName);
             XmlHelper.WriteAttribute(sw, "x", this.x);
             XmlHelper.WriteAttribute(sw, "y", this.y);
             sw.Write("/>");
@@ -1002,7 +1002,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<a:{0}", nodeName));
+            sw.Write("<a:{0}", nodeName);
             XmlHelper.WriteAttribute(sw, "l", this.l);
             XmlHelper.WriteAttribute(sw, "t", this.t);
             XmlHelper.WriteAttribute(sw, "r", this.r);
@@ -1338,12 +1338,12 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<a:{0}", nodeName));
+            sw.Write("<a:{0}", nodeName);
             XmlHelper.WriteAttribute(sw, "ang", this.ang);
             sw.Write(">");
             if (this.pos != null)
                 this.pos.Write(sw, "pos");
-            sw.Write(string.Format("</a:{0}>", nodeName));
+            sw.Write("</a:{0}>", nodeName);
         }
 
         [XmlElement(Order = 0)]
@@ -1480,7 +1480,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<a:{0}", nodeName));
+            sw.Write("<a:{0}", nodeName);
             XmlHelper.WriteAttribute(sw, "id", this.id);
             XmlHelper.WriteAttribute(sw, "idx", this.idx, true);
             sw.Write("/>");
@@ -1758,7 +1758,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<a:{0}", nodeName));
+            sw.Write("<a:{0}", nodeName);
             XmlHelper.WriteAttribute(sw, "w", this.w);
             XmlHelper.WriteAttribute(sw, "h", this.h);
             XmlHelper.WriteAttribute(sw, "fill", this.fill.ToString());
@@ -1774,7 +1774,7 @@ namespace NPOI.OpenXmlFormats.Dml
 					cub.Write(sw, "cubicBezTo");
 				}
 			}
-			sw.Write(string.Format("</a:{0}>", nodeName));
+			sw.Write("</a:{0}>", nodeName);
         }
 
         public CT_Path2D()
@@ -2023,14 +2023,14 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<a:{0}", nodeName));
+            sw.Write("<a:{0}", nodeName);
             XmlHelper.WriteAttribute(sw, "prst", this.prst.ToString());
             sw.Write(">");
             if (this.avLst != null)
             {
                 avLst.Write(sw, "avLst");
             }
-            sw.Write(string.Format("</a:{0}>", nodeName));
+            sw.Write("</a:{0}>", nodeName);
         }
 
 
@@ -2091,7 +2091,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<a:{0}", nodeName));
+            sw.Write("<a:{0}", nodeName);
             XmlHelper.WriteAttribute(sw, "prst", this.prst.ToString());
             sw.Write(">");
             if (this.avLst != null)
@@ -2101,7 +2101,7 @@ namespace NPOI.OpenXmlFormats.Dml
                     x.Write(sw, "avLst");
                 }
             }
-            sw.Write(string.Format("</a:{0}>", nodeName));
+            sw.Write("</a:{0}>", nodeName);
         }
 
         private List<CT_GeomGuide> avLstField;
@@ -2185,7 +2185,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<a:{0}", nodeName));
+            sw.Write("<a:{0}", nodeName);
             sw.Write(">");
             if (this.rect != null)
                 this.rect.Write(sw, "rect");
@@ -2205,7 +2205,7 @@ namespace NPOI.OpenXmlFormats.Dml
             {
                 this.pathLstField.Write(sw, "pathLst");
             }
-            sw.Write(string.Format("</a:{0}>", nodeName));
+            sw.Write("</a:{0}>", nodeName);
         }
 
         [XmlElement(Order = 0)]

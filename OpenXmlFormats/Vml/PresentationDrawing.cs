@@ -1,4 +1,4 @@
-using NPOI.OpenXml4Net.Util;
+﻿using NPOI.OpenXml4Net.Util;
 using System;
 using System.IO;
 using System.Xml;
@@ -50,10 +50,10 @@ namespace NPOI.OpenXmlFormats.Vml.Presentation
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<p:{0}", nodeName));
+            sw.Write("<p:{0}", nodeName);
             XmlHelper.WriteAttribute(sw, "r:id", this.id);
             sw.Write(">");
-            sw.Write(string.Format("</p:{0}>", nodeName));
+            sw.Write("</p:{0}>", nodeName);
         }
 
     }

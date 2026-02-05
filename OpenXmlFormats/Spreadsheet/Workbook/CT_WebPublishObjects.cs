@@ -99,7 +99,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.Write("<{0}", nodeName);
             XmlHelper.WriteAttribute(sw, "css", this.css);
             XmlHelper.WriteAttribute(sw, "thicket", this.thicket);
             XmlHelper.WriteAttribute(sw, "longFileNames", this.longFileNames);
@@ -109,7 +109,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "dpi", this.dpi);
             XmlHelper.WriteAttribute(sw, "codePage", this.codePage);
             sw.Write(">");
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.Write("</{0}>", nodeName);
         }
 
         public CT_WebPublishing()
@@ -278,7 +278,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.Write("<{0}", nodeName);
             XmlHelper.WriteAttribute(sw, "id", this.id);
             XmlHelper.WriteAttribute(sw, "divId", this.divId);
             XmlHelper.WriteAttribute(sw, "sourceObject", this.sourceObject);
@@ -286,7 +286,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "title", this.title);
             XmlHelper.WriteAttribute(sw, "autoRepublish", this.autoRepublish);
             sw.Write(">");
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.Write("</{0}>", nodeName);
         }
         [XmlAnyAttribute]
         public uint id
@@ -393,7 +393,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.Write("<{0}", nodeName);
             XmlHelper.WriteAttribute(sw, "count", this.count);
             sw.Write(">");
             if (this.webPublishObject != null)
@@ -403,7 +403,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                     x.Write(sw, "webPublishObject");
                 }
             }
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.Write("</{0}>", nodeName);
         }
 
         public CT_WebPublishObjects()

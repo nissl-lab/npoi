@@ -1,4 +1,4 @@
-
+﻿
 using System;
 using System.Xml.Serialization;
 using System.Collections.Generic;
@@ -35,14 +35,14 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<a:{0}", nodeName));
+            sw.Write("<a:{0}", nodeName);
             XmlHelper.WriteAttribute(sw, "uri", this.uri);
             sw.Write(">");
             foreach (string x in this.Any)
             {
                 sw.Write(x);
             }
-            sw.Write(string.Format("</a:{0}>", nodeName));
+            sw.Write("</a:{0}>", nodeName);
         }
 
         private List<string> anyField = new List<string>();
@@ -116,10 +116,10 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<a:{0} xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\">", nodeName));
+            sw.Write("<a:{0} xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\">", nodeName);
             if (this.graphicData != null)
                 this.graphicData.Write(sw, "graphicData");
-            sw.Write(string.Format("</a:{0}>", nodeName));
+            sw.Write("</a:{0}>", nodeName);
         }
 
         [XmlElement(Order = 0)]

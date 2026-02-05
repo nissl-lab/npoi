@@ -70,7 +70,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<c:{0}", nodeName));
+            sw.Write("<c:{0}", nodeName);
             sw.Write(">");
             if (this.grouping != null)
                 this.grouping.Write(sw, "grouping");
@@ -103,7 +103,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                     x.Write(sw, "extLst");
                 }
             }
-            sw.Write(string.Format("</c:{0}>", nodeName));
+            sw.Write("</c:{0}>", nodeName);
         }
 
         public int GetSeriesCount()
@@ -291,7 +291,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<c:{0}", nodeName));
+            sw.Write("<c:{0}", nodeName);
             sw.Write(">");
             if (this.idx != null)
                 this.idx.Write(sw, "idx");
@@ -337,7 +337,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                     x.Write(sw, "extLst");
                 }
             }
-            sw.Write(string.Format("</c:{0}>", nodeName));
+            sw.Write("</c:{0}>", nodeName);
         }
 
         public CT_AreaSer()
@@ -594,7 +594,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<c:{0}", nodeName));
+            sw.Write("<c:{0}", nodeName);
             sw.Write(">");
             if (this.grouping != null)
                 this.grouping.Write(sw, "grouping");
@@ -625,7 +625,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                     x.Write(sw, "extLst");
                 }
             }
-            sw.Write(string.Format("</c:{0}>", nodeName));
+            sw.Write("</c:{0}>", nodeName);
         }
 
         public int GetSeriesCount()

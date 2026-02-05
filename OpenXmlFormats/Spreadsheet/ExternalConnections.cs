@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Xml.Serialization;
@@ -555,10 +555,10 @@ namespace NPOI.OpenXmlFormats {
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.Write("<{0}", nodeName);
             XmlHelper.WriteAttribute(sw, "v", this.v);
             sw.Write(">");
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.Write("</{0}>", nodeName);
         }
 
 

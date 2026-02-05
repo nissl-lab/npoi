@@ -1,4 +1,4 @@
-using NPOI.OpenXml4Net.Util;
+﻿using NPOI.OpenXml4Net.Util;
 using System;
 using System.IO;
 using System.Xml;
@@ -38,7 +38,7 @@ namespace NPOI.OpenXmlFormats.Vml.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.Write("<w:{0}", nodeName);
             if(this.type!= ST_BorderType.none)
                 XmlHelper.WriteAttribute(sw, "type", this.type.ToString());
             XmlHelper.WriteAttribute(sw, "width", this.width);
@@ -253,7 +253,7 @@ namespace NPOI.OpenXmlFormats.Vml.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.Write("<w:{0}", nodeName);
             if(this.type!=ST_WrapType.none)
                 XmlHelper.WriteAttribute(sw, "type", this.type.ToString());
             XmlHelper.WriteAttribute(sw, "side", this.side.ToString());

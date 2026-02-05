@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Xml.Schema;
 using System.Xml.Serialization;
@@ -120,7 +120,7 @@ namespace NPOI.OpenXmlFormats.Vml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<v:{0}", nodeName));
+            sw.Write("<v:{0}", nodeName);
             XmlHelper.WriteAttribute(sw, "id", this.id);
             XmlHelper.WriteAttribute(sw, "type", this.type.ToString());
             NPOI.OpenXmlFormats.Util.XmlHelper.WriteAttribute(sw, "on", this.on);
@@ -142,7 +142,7 @@ namespace NPOI.OpenXmlFormats.Vml
             NPOI.OpenXmlFormats.Util.XmlHelper.WriteAttribute(sw, "recolor", this.recolor);
             NPOI.OpenXmlFormats.Util.XmlHelper.WriteAttribute(sw, "rotate", this.rotate);
             sw.Write(">");
-            sw.Write(string.Format("</v:{0}>", nodeName));
+            sw.Write("</v:{0}>", nodeName);
         }
 
         [XmlAttribute]
@@ -719,7 +719,7 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         public void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<v:{0}", nodeName));
+            sw.Write("<v:{0}", nodeName);
             XmlHelper.WriteAttribute(sw, "id", this.id);
             XmlHelper.WriteAttribute(sw, "o:spid", this.spid);
             XmlHelper.WriteAttribute(sw, "type", this.type);
@@ -775,7 +775,7 @@ namespace NPOI.OpenXmlFormats.Vml
                     x.Write(sw, "ClientData");
                 }
             }
-            sw.Write(string.Format("</v:{0}>", nodeName));
+            sw.Write("</v:{0}>", nodeName);
         }
 
         [XmlAttribute]
@@ -1187,7 +1187,7 @@ namespace NPOI.OpenXmlFormats.Vml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<v:{0}", nodeName));
+            sw.Write("<v:{0}", nodeName);
             sw.Write(">");
             if (this.f != null)
             {
@@ -1196,7 +1196,7 @@ namespace NPOI.OpenXmlFormats.Vml
                     x.Write(sw, "f");
                 }
             }
-            sw.Write(string.Format("</v:{0}>", nodeName));
+            sw.Write("</v:{0}>", nodeName);
         }
 
     }
@@ -1234,7 +1234,7 @@ namespace NPOI.OpenXmlFormats.Vml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<v:{0}", nodeName));
+            sw.Write("<v:{0}", nodeName);
             XmlHelper.WriteAttribute(sw, "eqn", this.eqn);
             sw.Write("/>");
         }
@@ -1290,7 +1290,7 @@ namespace NPOI.OpenXmlFormats.Vml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<v:{0}", nodeName));
+            sw.Write("<v:{0}", nodeName);
             sw.Write(">");
             if (this.h != null)
             {
@@ -1299,7 +1299,7 @@ namespace NPOI.OpenXmlFormats.Vml
                     x.Write(sw, "h");
                 }
             }
-            sw.Write(string.Format("</v:{0}>", nodeName));
+            sw.Write("</v:{0}>", nodeName);
         }
 
     }
@@ -1490,7 +1490,7 @@ namespace NPOI.OpenXmlFormats.Vml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<v:{0}", nodeName));
+            sw.Write("<v:{0}", nodeName);
             XmlHelper.WriteAttribute(sw, "position", this.position);
             XmlHelper.WriteAttribute(sw, "polar", this.polar);
             XmlHelper.WriteAttribute(sw, "map", this.map);
@@ -1501,7 +1501,7 @@ namespace NPOI.OpenXmlFormats.Vml
             XmlHelper.WriteAttribute(sw, "yrange", this.yrange);
             XmlHelper.WriteAttribute(sw, "radiusrange", this.radiusrange);
             sw.Write(">");
-            sw.Write(string.Format("</v:{0}>", nodeName));
+            sw.Write("</v:{0}>", nodeName);
         }
     }
     
@@ -1590,7 +1590,7 @@ namespace NPOI.OpenXmlFormats.Vml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<v:{0}", nodeName));
+            sw.Write("<v:{0}", nodeName);
             XmlHelper.WriteAttribute(sw, "id", this.id);
             XmlHelper.WriteAttribute(sw, "src", this.src);
             XmlHelper.WriteAttribute(sw, "cropleft", this.cropleft);
@@ -2235,7 +2235,7 @@ namespace NPOI.OpenXmlFormats.Vml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<v:{0}", nodeName));
+            sw.Write("<v:{0}", nodeName);
             XmlHelper.WriteAttribute(sw, "id", this.id);
             XmlHelper.WriteAttribute(sw, "o:connecttype", this.connecttype.ToString());
             XmlHelper.WriteAttribute(sw, "v", this.v);
@@ -2252,7 +2252,7 @@ namespace NPOI.OpenXmlFormats.Vml
             XmlHelper.WriteAttribute(sw, "connectangles", this.connectangles);
             NPOI.OpenXmlFormats.Util.XmlHelper.WriteAttribute(sw, "o:extrusionok", this.extrusionok, false);
             sw.Write(">");
-            sw.Write(string.Format("</v:{0}>", nodeName));
+            sw.Write("</v:{0}>", nodeName);
         }
 
     }
@@ -2318,7 +2318,7 @@ namespace NPOI.OpenXmlFormats.Vml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<v:{0}", nodeName));
+            sw.Write("<v:{0}", nodeName);
             XmlHelper.WriteAttribute(sw, "id", this.id);
             NPOI.OpenXmlFormats.Util.XmlHelper.WriteAttribute(sw, "on", this.on);
             XmlHelper.WriteAttribute(sw, "type", this.type.ToString());
@@ -2331,7 +2331,7 @@ namespace NPOI.OpenXmlFormats.Vml
             XmlHelper.WriteAttribute(sw, "origin", this.origin);
             XmlHelper.WriteAttribute(sw, "matrix", this.matrix);
             sw.Write(">");
-            sw.Write(string.Format("</v:{0}>", nodeName));
+            sw.Write("</v:{0}>", nodeName);
         }
 
 
@@ -2737,7 +2737,7 @@ namespace NPOI.OpenXmlFormats.Vml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<v:{0}", nodeName));
+            sw.Write("<v:{0}", nodeName);
             XmlHelper.WriteAttribute(sw, "id", this.id);
             NPOI.OpenXmlFormats.Util.XmlHelper.WriteAttribute(sw, "on", this.on);
             XmlHelper.WriteAttribute(sw, "weight", this.weight);
@@ -3400,14 +3400,14 @@ namespace NPOI.OpenXmlFormats.Vml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<v:{0}", nodeName));
+            sw.Write("<v:{0}", nodeName);
             XmlHelper.WriteAttribute(sw, "id", this.id);
             XmlHelper.WriteAttribute(sw, "style", this.style);
             XmlHelper.WriteAttribute(sw, "inset", this.inset);
             sw.Write(">");
             if (this.ItemXml != null)
                 sw.Write(this.ItemXml);
-            sw.Write(string.Format("</v:{0}>", nodeName));
+            sw.Write("</v:{0}>", nodeName);
         }
 
     }
@@ -3471,7 +3471,7 @@ namespace NPOI.OpenXmlFormats.Vml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<v:{0}", nodeName));
+            sw.Write("<v:{0}", nodeName);
             XmlHelper.WriteAttribute(sw, "id", this.id);
             XmlHelper.WriteAttribute(sw, "style", this.style);
             NPOI.OpenXmlFormats.Util.XmlHelper.WriteAttribute(sw, "on", this.on);
@@ -3481,7 +3481,7 @@ namespace NPOI.OpenXmlFormats.Vml
             NPOI.OpenXmlFormats.Util.XmlHelper.WriteAttribute(sw, "xscale", this.xscale);
             XmlHelper.WriteAttribute(sw, "string", this.@string);
             sw.Write(">");
-            sw.Write(string.Format("</v:{0}>", nodeName));
+            sw.Write("</v:{0}>", nodeName);
         }
 
         [XmlAttribute]
@@ -3841,7 +3841,7 @@ namespace NPOI.OpenXmlFormats.Vml
 
         public void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<v:{0}", nodeName));
+            sw.Write("<v:{0}", nodeName);
             NPOI.OpenXmlFormats.Util.XmlHelper.WriteAttribute(sw, "stroked", this.stroked, true);
             NPOI.OpenXmlFormats.Util.XmlHelper.WriteAttribute(sw, "filled", this.filled, true);
             NPOI.OpenXmlFormats.Util.XmlHelper.WriteAttribute(sw, "o:preferrelative", this.preferrelative);
@@ -3962,7 +3962,7 @@ namespace NPOI.OpenXmlFormats.Vml
                     x.Write(sw, "textdata");
                 }
             }
-            sw.Write(string.Format("</v:{0}>", nodeName));
+            sw.Write("</v:{0}>", nodeName);
         }
 
         [XmlAttribute]

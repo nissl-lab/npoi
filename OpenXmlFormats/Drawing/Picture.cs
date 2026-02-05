@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.IO;
 using System.Xml.Serialization;
@@ -59,7 +59,7 @@ namespace NPOI.OpenXmlFormats.Dml.Picture
         }
         public void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0} xmlns:pic=\"{1}\">", nodeName, "http://schemas.openxmlformats.org/drawingml/2006/picture"));
+            sw.Write("<{0} xmlns:pic=\"{1}\">", nodeName, "http://schemas.openxmlformats.org/drawingml/2006/picture");
             if (this.nvPicPr != null)
             {
                 this.nvPicPr.Write(sw, "pic:nvPicPr");
@@ -72,7 +72,7 @@ namespace NPOI.OpenXmlFormats.Dml.Picture
             {
                 this.spPr.Write(sw, "pic:spPr");
             }
-            sw.Write(string.Format("</{0}>",nodeName));
+            sw.Write("</{0}>",nodeName);
         }
 
     }
@@ -116,7 +116,7 @@ namespace NPOI.OpenXmlFormats.Dml.Picture
 
         internal void Write(StreamWriter sw, string p)
         {
-            sw.Write(string.Format("<{0}>",p));
+            sw.Write("<{0}>",p);
             if (this.cNvPr!=null)
             {
                 this.cNvPr.Write(sw, "cNvPr");
@@ -125,7 +125,7 @@ namespace NPOI.OpenXmlFormats.Dml.Picture
             {
                 this.cNvPicPr.Write(sw, "cNvPicPr");
             }
-            sw.Write(string.Format("</{0}>", p));
+            sw.Write("</{0}>", p);
         }
     }
 

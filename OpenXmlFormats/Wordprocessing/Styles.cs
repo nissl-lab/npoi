@@ -178,7 +178,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.Write("<w:{0}", nodeName);
             sw.Write(">");
             if (this.rPrDefault != null)
                 this.rPrDefault.Write(sw, "rPrDefault");
@@ -267,7 +267,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.Write("<w:{0}", nodeName);
             sw.Write(">");
             if (this.rPr != null)
                 this.rPr.Write(sw, "rPr");
@@ -329,7 +329,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.Write("<w:{0}", nodeName);
             sw.Write(">");
             if (this.pPr != null)
                 this.pPr.Write(sw, "pPr");
@@ -418,7 +418,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.Write("<w:{0}", nodeName);
             XmlHelper.WriteAttribute(sw, "w:defLockedState", this.defLockedState== ST_OnOff.off?"0":"1");
             XmlHelper.WriteAttribute(sw, "w:defUIPriority", this.defUIPriority);
             XmlHelper.WriteAttribute(sw, "w:defSemiHidden", this.defSemiHidden == ST_OnOff.off ? "0" : "1");
@@ -756,7 +756,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.Write("<w:{0}", nodeName);
             XmlHelper.WriteAttribute(sw, "w:type", this.type.ToString());
             if(this.@default!= ST_OnOff.off)
                 XmlHelper.WriteAttribute(sw, "w:default", "1");
@@ -1218,7 +1218,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.Write("<w:{0}", nodeName);
             XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
             sw.Write(">");
             sw.WriteEndW(nodeName);
@@ -1262,7 +1262,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.Write("<w:{0}", nodeName);
             if(val.HasValue)
                 XmlHelper.WriteAttribute(sw, "w:val", this.val.Value.ToString());
             sw.Write("/>");
@@ -1382,7 +1382,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.Write("<w:{0}", nodeName);
             XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
             XmlHelper.WriteAttribute(sw, "w:color", this.color);
             if(this.themeColor!= ST_ThemeColor.none)
@@ -1696,7 +1696,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.Write("<w:{0}", nodeName);
             XmlHelper.WriteAttribute(sw, "w:val", this.val);
             sw.Write(">");
             sw.WriteEndW(nodeName);
@@ -1743,7 +1743,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.Write("<w:{0}", nodeName);
             XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
             sw.Write(">");
             sw.WriteEndW(nodeName);
@@ -1808,7 +1808,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.Write("<w:{0}", nodeName);
             XmlHelper.WriteAttribute(sw, "w:val", this.val, true);
             if(this.themeColorField!= ST_ThemeColor.none)
                 XmlHelper.WriteAttribute(sw, "w:themeColor", this.themeColor.ToString());
@@ -1939,7 +1939,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.Write("<w:{0}", nodeName);
             XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
             XmlHelper.WriteAttribute(sw, "w:color", this.color);
             if(this.themeColor!= ST_ThemeColor.none)
@@ -2174,7 +2174,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.Write("<w:{0}", nodeName);
             XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
             sw.Write("/>");
         }
@@ -2304,7 +2304,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.Write("<w:{0}", nodeName);
             XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
             if (this.sz != null)
                 XmlHelper.WriteAttribute(sw, "w:sz", (ulong)this.sz, true);

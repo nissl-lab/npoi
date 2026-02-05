@@ -94,7 +94,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.Write("<{0}", nodeName);
             sw.Write(">");
             if (this.b != null)
             {
@@ -180,7 +180,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                     x.Write(sw, "scheme");
                 }
             }
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.Write("</{0}>", nodeName);
         }
 
         #region name

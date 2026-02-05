@@ -69,7 +69,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.Write("<{0}", nodeName);
             XmlHelper.WriteAttribute(sw, "syncHorizontal", this.syncHorizontal, false);
             XmlHelper.WriteAttribute(sw, "syncVertical", this.syncVertical, false);
             XmlHelper.WriteAttribute(sw, "syncRef", this.syncRef);
@@ -86,7 +86,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.outlinePr.Write(sw, "outlinePr");
             if (this.pageSetUpPr != null)
                 this.pageSetUpPr.Write(sw, "pageSetUpPr");
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.Write("</{0}>", nodeName);
         }
 
 

@@ -1,4 +1,4 @@
-using NPOI.OpenXml4Net.Util;
+﻿using NPOI.OpenXml4Net.Util;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -45,7 +45,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.Write("<{0}", nodeName);
             XmlHelper.WriteAttribute(sw, "SelectionNamespaces", this.SelectionNamespaces);
             sw.Write(">");
             foreach(CT_Schema ctSchema in Schema)
@@ -57,7 +57,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             {
                 ctMap.Write(sw, "Map");
             }
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.Write("</{0}>", nodeName);
         }
         [XmlElement("Schema")]
         public List<CT_Schema> Schema
@@ -127,7 +127,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.Write("<{0}", nodeName);
             XmlHelper.WriteAttribute(sw, "ID", this.ID);
             XmlHelper.WriteAttribute(sw, "Namespace", this.Namespace);
             XmlHelper.WriteAttribute(sw, "SchemaRef", this.SchemaRef);
@@ -135,7 +135,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             sw.Write(">");
             if(anyField != null)
                 sw.Write(anyField.OuterXml);
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.Write("</{0}>", nodeName);
         }
         [XmlAnyElement]
         public System.Xml.XmlElement Any
@@ -275,7 +275,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.Write("<{0}", nodeName);
             XmlHelper.WriteAttribute(sw, "ID", this.ID);
             XmlHelper.WriteAttribute(sw, "Name", this.Name);
             XmlHelper.WriteAttribute(sw, "RootElement", this.RootElement);
@@ -290,7 +290,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             {
                 sw.Write(">");
                 dataBindingField.Write(sw, "DataBinding");
-                sw.Write(string.Format("</{0}>", nodeName));
+                sw.Write("</{0}>", nodeName);
             }
             else
                 sw.Write("/>");
@@ -476,7 +476,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.Write("<{0}", nodeName);
             if(this.FileBindingSpecified)
                 XmlHelper.WriteAttribute(sw, "FileBinding", FileBinding);
             if(this.ConnectionIDSpecified)
@@ -487,7 +487,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             sw.Write(">");
             if(anyField != null)
                 sw.Write(anyField.OuterXml);
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.Write("</{0}>", nodeName);
         }
         [XmlAnyElement]
         public System.Xml.XmlElement Any

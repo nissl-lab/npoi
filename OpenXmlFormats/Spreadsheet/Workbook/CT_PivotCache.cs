@@ -39,7 +39,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.Write("<{0}", nodeName);
             sw.Write(">");
             if (this.pivotCache != null)
             {
@@ -48,7 +48,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                     x.Write(sw, "pivotCache");
                 }
             }
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.Write("</{0}>", nodeName);
         }
         [XmlElement]
         public List<CT_PivotCache> pivotCache
@@ -101,11 +101,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.Write("<{0}", nodeName);
             XmlHelper.WriteAttribute(sw, "cacheId", this.cacheId, true);
             XmlHelper.WriteAttribute(sw, "r:id", this.id);
             sw.Write(">");
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.Write("</{0}>", nodeName);
         }
         [XmlAttribute]
         public uint cacheId

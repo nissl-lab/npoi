@@ -200,34 +200,34 @@ namespace NPOI.OpenXmlFormats.Vml.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<x:{0}", nodeName));
+            sw.Write("<x:{0}", nodeName);
             XmlHelper.WriteAttribute(sw, "ObjectType", this.ObjectType.ToString());
             sw.Write(">");
             if (this.moveWithCells == ST_TrueFalseBlank.t || this.moveWithCells == ST_TrueFalseBlank.@true)
-                sw.Write(string.Format("<x:MoveWithCells/>", this.moveWithCells));
+                sw.Write("<x:MoveWithCells/>", this.moveWithCells);
             if (this.sizeWithCells == ST_TrueFalseBlank.t || this.sizeWithCells == ST_TrueFalseBlank.@true)
-                sw.Write(string.Format("<x:SizeWithCells/>", this.sizeWithCells));
+                sw.Write("<x:SizeWithCells/>", this.sizeWithCells);
             if (this.anchor != null)
-                sw.Write(string.Format("<x:Anchor>{0}</x:Anchor>", this.anchor));
+                sw.Write("<x:Anchor>{0}</x:Anchor>", this.anchor);
             if (this.autoFill != ST_TrueFalseBlank.NONE)
-                sw.Write(string.Format("<x:AutoFill>{0}</x:AutoFill>", this.autoFill));
+                sw.Write("<x:AutoFill>{0}</x:AutoFill>", this.autoFill);
             if (this.visible != ST_TrueFalseBlank.NONE)
-                sw.Write(string.Format("<x:Visible>{0}</x:Visible>", this.visible));
+                sw.Write("<x:Visible>{0}</x:Visible>", this.visible);
             if (this.row != null)
             {
                 foreach (Int32 x in this.row)
                 {
-                    sw.Write(string.Format("<x:Row>{0}</x:Row>", x));
+                    sw.Write("<x:Row>{0}</x:Row>", x);
                 }
             }
             if (this.column != null)
             {
                 foreach (Int32 x in this.column)
                 {
-                    sw.Write(string.Format("<x:Column>{0}</x:Column>", x));
+                    sw.Write("<x:Column>{0}</x:Column>", x);
                 }
             }
-            sw.Write(string.Format("</x:{0}>", nodeName));
+            sw.Write("</x:{0}>", nodeName);
         }
 
 

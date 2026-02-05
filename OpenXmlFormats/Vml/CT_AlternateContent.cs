@@ -27,16 +27,16 @@ namespace NPOI.OpenXmlFormats.Vml
         }
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<mc:{0} xmlns:mc=\"http://schemas.openxmlformats.org/markup-compatibility/2006\"", nodeName));
+            sw.Write("<mc:{0} xmlns:mc=\"http://schemas.openxmlformats.org/markup-compatibility/2006\"", nodeName);
             if (this.InnerXml == null)
             {
-                sw.Write(string.Format("/>", nodeName));
+                sw.Write("/>", nodeName);
             }
             else
             {
                 sw.Write(">");
                 sw.Write(this.InnerXml);
-                sw.Write(string.Format("</mc:{0}>", nodeName));
+                sw.Write("</mc:{0}>", nodeName);
             }
         }
     }

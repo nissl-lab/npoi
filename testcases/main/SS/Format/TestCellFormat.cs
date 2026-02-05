@@ -17,31 +17,26 @@
 
 namespace TestCases.SS.Format
 {
-    using System;
-    using System.Globalization;
-    using System.Text;
-    using System.Threading;
-
-
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Format;
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
-
-    using NUnit.Framework;using NUnit.Framework.Legacy;
+    using NPOI.Util;
+    using NUnit.Framework;
+    using NUnit.Framework.Legacy;
+    using System;
+    using System.Threading;
 
     [TestFixture]
+    [SetCulture("en-US")]
     public class TestCellFormat
     {
-        private static String _255_POUND_SIGNS;
-        static TestCellFormat()
+        private static string _255_POUND_SIGNS = new string('#', 255);
+
+        [SetUp]
+        public void SetUp()
         {
-            StringBuilder sb = new StringBuilder();
-            for (int i = 1; i <= 255; i++)
-            {
-                sb.Append('#');
-            }
-            _255_POUND_SIGNS = sb.ToString();
+            LocaleUtil.SetUserLocale(Thread.CurrentThread.CurrentCulture);
         }
 
         [Test]
@@ -55,7 +50,6 @@ namespace TestCases.SS.Format
         [Test]
         public void TestPositiveFormatHasOnePart()
         {
-            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
             CellFormat fmt = CellFormat.GetInstance("0.00");
             CellFormatResult result = fmt.Apply(12.345);
             ClassicAssert.AreEqual("12.35", result.Text);
@@ -64,7 +58,6 @@ namespace TestCases.SS.Format
         [Test]
         public void TestNegativeFormatHasOnePart()
         {
-            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
             CellFormat fmt = CellFormat.GetInstance("0.00");
             CellFormatResult result = fmt.Apply(-12.345);
             ClassicAssert.AreEqual("-12.35", result.Text);
@@ -73,7 +66,6 @@ namespace TestCases.SS.Format
         [Test]
         public void TestZeroFormatHasOnePart()
         {
-            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
             CellFormat fmt = CellFormat.GetInstance("0.00");
             CellFormatResult result = fmt.Apply(0.0);
             ClassicAssert.AreEqual("0.00", result.Text);
@@ -82,7 +74,6 @@ namespace TestCases.SS.Format
         [Test]
         public void TestPositiveFormatHasPosAndNegParts()
         {
-            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
             CellFormat fmt = CellFormat.GetInstance("0.00;-0.00");
             CellFormatResult result = fmt.Apply(12.345);
             ClassicAssert.AreEqual("12.35", result.Text);
@@ -91,7 +82,6 @@ namespace TestCases.SS.Format
         [Test]
         public void TestNegativeFormatHasPosAndNegParts()
         {
-            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
             CellFormat fmt = CellFormat.GetInstance("0.00;-0.00");
             CellFormatResult result = fmt.Apply(-12.345);
             ClassicAssert.AreEqual("-12.35", result.Text);
@@ -100,7 +90,6 @@ namespace TestCases.SS.Format
         [Test]
         public void TestNegativeFormatHasPosAndNegParts2()
         {
-            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
             CellFormat fmt = CellFormat.GetInstance("0.00;(0.00)");
             CellFormatResult result = fmt.Apply(-12.345);
             ClassicAssert.AreEqual("(12.35)", result.Text);
@@ -109,7 +98,6 @@ namespace TestCases.SS.Format
         [Test]
         public void TestZeroFormatHasPosAndNegParts()
         {
-            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
             CellFormat fmt = CellFormat.GetInstance("0.00;-0.00");
             CellFormatResult result = fmt.Apply(0.0);
             ClassicAssert.AreEqual("0.00", result.Text);
@@ -118,7 +106,6 @@ namespace TestCases.SS.Format
         [Test]
         public void TestFormatWithThreeSections()
         {
-            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
             CellFormat fmt = CellFormat.GetInstance("0.00;-0.00;-");
 
             ClassicAssert.AreEqual("12.35", fmt.Apply(12.345).Text);
@@ -130,7 +117,6 @@ namespace TestCases.SS.Format
         [Test]
         public void TestFormatWithFourSections()
         {
-            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
             CellFormat fmt = CellFormat.GetInstance("0.00;-0.00;-; @ ");
 
             ClassicAssert.AreEqual("12.35", fmt.Apply(12.345).Text);
@@ -142,8 +128,6 @@ namespace TestCases.SS.Format
         [Test]
         public void TestApplyCellForGeneralFormat()
         {
-            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
-
             // Create a workbook, IRow and ICell to test with
             IWorkbook wb = new HSSFWorkbook();
             ISheet sheet = wb.CreateSheet();
@@ -185,8 +169,6 @@ namespace TestCases.SS.Format
         [Test]
         public void TestApplyCellForAtFormat()
         {
-            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
-
             // Create a workbook, IRow and ICell to test with
             IWorkbook wb = new HSSFWorkbook();
             ISheet sheet = wb.CreateSheet();
@@ -228,8 +210,6 @@ namespace TestCases.SS.Format
         [Test]
         public void TestApplyCellForDateFormat()
         {
-            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
-
             // Create a workbook, IRow and ICell to test with
             IWorkbook wb = new HSSFWorkbook();
             ISheet sheet = wb.CreateSheet();
@@ -271,8 +251,6 @@ namespace TestCases.SS.Format
         [Test]
         public void TestApplyCellForDateFormatAndNegativeFormat()
         {
-            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
-
             // Create a workbook, IRow and ICell to test with
             IWorkbook wb = new HSSFWorkbook();
             ISheet sheet = wb.CreateSheet();
@@ -296,8 +274,6 @@ namespace TestCases.SS.Format
         [Test]
         public void TestApplyFormatHasOnePartAndPartHasCondition()
         {
-            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
-
             // Create a workbook, IRow and ICell to test with
             IWorkbook wb = new HSSFWorkbook();
             ISheet sheet = wb.CreateSheet();
@@ -327,8 +303,6 @@ namespace TestCases.SS.Format
         [Test]
         public void TestApplyFormatHasTwoPartsFirstHasCondition()
         {
-            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
-
             // Create a workbook, IRow and ICell to test with
             IWorkbook wb = new HSSFWorkbook();
             ISheet sheet = wb.CreateSheet();
@@ -364,8 +338,6 @@ namespace TestCases.SS.Format
         [Test]
         public void TestApplyFormatHasTwoPartsBothHaveCondition()
         {
-            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
-
             // Create a workbook, IRow and ICell to test with
             IWorkbook wb = new HSSFWorkbook();
             ISheet sheet = wb.CreateSheet();
@@ -398,8 +370,6 @@ namespace TestCases.SS.Format
         [Test]
         public void TestApplyFormatHasThreePartsFirstHasCondition()
         {
-            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
-
             // Create a workbook, IRow and ICell to test with
             IWorkbook wb = new HSSFWorkbook();
             ISheet sheet = wb.CreateSheet();
@@ -434,8 +404,6 @@ namespace TestCases.SS.Format
         [Test]
         public void TestApplyFormatHasThreePartsFirstTwoHaveCondition()
         {
-            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
-
             // Create a workbook, IRow and ICell to test with
             IWorkbook wb = new HSSFWorkbook();
             ISheet sheet = wb.CreateSheet();
@@ -465,8 +433,6 @@ namespace TestCases.SS.Format
         [Test]
         public void TestApplyFormatHasThreePartsFirstIsDateFirstTwoHaveCondition()
         {
-            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
-
             // Create a workbook, IRow and ICell to test with
             IWorkbook wb = new HSSFWorkbook();
             ISheet sheet = wb.CreateSheet();
@@ -496,8 +462,6 @@ namespace TestCases.SS.Format
         [Test]
         public void TestApplyFormatHasTwoPartsFirstHasConditionSecondIsGeneral()
         {
-            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
-
             // Create a workbook, IRow and ICell to test with
             IWorkbook wb = new HSSFWorkbook();
             ISheet sheet = wb.CreateSheet();
@@ -527,8 +491,6 @@ namespace TestCases.SS.Format
         [Test]
         public void TestApplyFormatHasThreePartsFirstTwoHaveConditionThirdIsGeneral()
         {
-            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
-
             // Create a workbook, IRow and ICell to test with
             IWorkbook wb = new HSSFWorkbook();
             ISheet sheet = wb.CreateSheet();
@@ -558,8 +520,6 @@ namespace TestCases.SS.Format
         [Test]
         public void TestApplyFormatHasFourPartsFirstHasCondition()
         {
-            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
-
             // Create a workbook, IRow and ICell to test with
             IWorkbook wb = new HSSFWorkbook();
             ISheet sheet = wb.CreateSheet();
@@ -594,8 +554,6 @@ namespace TestCases.SS.Format
         [Test]
         public void TestApplyFormatHasFourPartsSecondHasCondition()
         {
-            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
-
             // Create a workbook, IRow and ICell to test with
             IWorkbook wb = new HSSFWorkbook();
             ISheet sheet = wb.CreateSheet();
@@ -631,8 +589,6 @@ namespace TestCases.SS.Format
         [Test]
         public void TestApplyFormatHasFourPartsFirstTwoHaveCondition()
         {
-            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
-
             // Create a workbook, IRow and ICell to test with
             IWorkbook wb = new HSSFWorkbook();
             ISheet sheet = wb.CreateSheet();
@@ -668,8 +624,6 @@ namespace TestCases.SS.Format
         [Test]
         public void TestApplyObjectNumber()
         {
-            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
-
             CellFormat cf1 = CellFormat.GetInstance("0.000");
 
             ClassicAssert.AreEqual("1.235", cf1.Apply(1.2345).Text);
@@ -697,7 +651,6 @@ namespace TestCases.SS.Format
         [Test]
         public void TestApplyObjectDate()
         {
-            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
             CellFormat cf1 = CellFormat.GetInstance("m/d/yyyy");
             DateTime date1 = new SimpleDateFormat("M/d/y").Parse("01/11/2012");
             ClassicAssert.AreEqual("1/11/2012", cf1.Apply(date1).Text);
@@ -706,8 +659,6 @@ namespace TestCases.SS.Format
         [Test]
         public void TestApplyCellForDateFormatWithConditions()
         {
-            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
-
             // Create a workbook, IRow and ICell to test with
             IWorkbook wb = new HSSFWorkbook();
             ISheet sheet = wb.CreateSheet();
@@ -832,7 +783,6 @@ namespace TestCases.SS.Format
         [Test]
         public void TestThreePartComplexFormat1()
         {
-            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
             // verify a rather complex format found e.g. in http://wahl.land-oberoesterreich.gv.at/Downloads/bp10.xls
             CellFormatPart posPart = new CellFormatPart("[$-F400]h:mm:ss\\ AM/PM");
             ClassicAssert.IsNotNull(posPart);
@@ -855,7 +805,6 @@ namespace TestCases.SS.Format
         [Test]
         public void TestThreePartComplexFormat2()
         {
-            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
             // verify a rather complex format found e.g. in http://wahl.land-oberoesterreich.gv.at/Downloads/bp10.xls
             CellFormatPart posPart = new CellFormatPart("dd/mm/yyyy");
             ClassicAssert.IsNotNull(posPart);

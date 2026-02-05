@@ -673,7 +673,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.Write("<{0}", nodeName);
             XmlHelper.WriteAttribute(sw, "count", this.count);
             sw.Write(">");
             if (this.tableColumn != null)
@@ -683,7 +683,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                     x.Write(sw, "tableColumn");
                 }
             }
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.Write("</{0}>", nodeName);
         }
         public CT_TableColumn InsertNewTableColumn(int columnIndex)
         {
@@ -854,7 +854,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.Write("<{0}", nodeName);
             XmlHelper.WriteAttribute(sw, "id", this.id);
             XmlHelper.WriteAttribute(sw, "uniqueName", this.uniqueName);
             XmlHelper.WriteAttribute(sw, "name", this.name);
@@ -876,7 +876,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.xmlColumnPr.Write(sw, "xmlColumnPr");
             if (this.extLst != null)
                 this.extLst.Write(sw, "extLst");
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.Write("</{0}>", nodeName);
         }
 
         [XmlElement]
@@ -1179,11 +1179,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.Write("<{0}", nodeName);
             XmlHelper.WriteAttribute(sw, "array", this.array);
             sw.Write(">");
             sw.Write(XmlHelper.EncodeXml(this.valueField));
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.Write("</{0}>", nodeName);
         }
 
     }

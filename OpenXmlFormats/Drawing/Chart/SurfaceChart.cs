@@ -53,7 +53,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<c:{0}", nodeName));
+            sw.Write("<c:{0}", nodeName);
             sw.Write(">");
             if (this.thickness != null)
                 this.thickness.Write(sw, "thickness");
@@ -68,7 +68,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                     x.Write(sw, "extLst");
                 }
             }
-            sw.Write(string.Format("</c:{0}>", nodeName));
+            sw.Write("</c:{0}>", nodeName);
         }
 
 
@@ -178,7 +178,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<c:{0}", nodeName));
+            sw.Write("<c:{0}", nodeName);
             sw.Write(">");
             if (this.wireframe != null)
                 this.wireframe.Write(sw, "wireframe");
@@ -210,7 +210,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                     x.Write(sw, "extLst");
                 }
             }
-            sw.Write(string.Format("</c:{0}>", nodeName));
+            sw.Write("</c:{0}>", nodeName);
         }
 
         public int GetSeriesCount()
@@ -342,7 +342,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<c:{0}", nodeName));
+            sw.Write("<c:{0}", nodeName);
             sw.Write(">");
             if (this.idx != null)
                 this.idx.Write(sw, "idx");
@@ -363,7 +363,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                     x.Write(sw, "extLst");
                 }
             }
-            sw.Write(string.Format("</c:{0}>", nodeName));
+            sw.Write("</c:{0}>", nodeName);
         }
 
         [XmlElement(Order = 0)]

@@ -1,4 +1,4 @@
-
+﻿
 using NPOI.OpenXml4Net.Util;
 using System;
 using System.IO;
@@ -60,7 +60,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<a:{0}", nodeName));
+            sw.Write("<a:{0}", nodeName);
             XmlHelper.WriteAttribute(sw, "idx", this.idx, true);
             sw.Write(">");
             if (this.scrgbClr != null)
@@ -75,7 +75,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.schemeClr.Write(sw, "schemeClr");
             if (this.prstClr != null)
                 this.prstClr.Write(sw, "prstClr");
-            sw.Write(string.Format("</a:{0}>", nodeName));
+            sw.Write("</a:{0}>", nodeName);
         }
 
         [XmlElement(Order = 0)]
@@ -228,7 +228,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<a:{0}", nodeName));
+            sw.Write("<a:{0}", nodeName);
             XmlHelper.WriteAttribute(sw, "idx", this.idx.ToString());
             sw.Write(">");
             if (this.scrgbClr != null)
@@ -243,7 +243,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.schemeClr.Write(sw, "schemeClr");
             if (this.prstClr != null)
                 this.prstClr.Write(sw, "prstClr");
-            sw.Write(string.Format("</a:{0}>", nodeName));
+            sw.Write("</a:{0}>", nodeName);
         }
         [XmlElement(Order = 0)]
         public CT_ScRgbColor scrgbClr
@@ -383,7 +383,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<a:{0}", nodeName));
+            sw.Write("<a:{0}", nodeName);
             sw.Write(">");
             if (this.lnRef != null)
                 this.lnRef.Write(sw, "lnRef");
@@ -393,7 +393,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.effectRef.Write(sw, "effectRef");
             if (this.fontRef != null)
                 this.fontRef.Write(sw, "fontRef");
-            sw.Write(string.Format("</a:{0}>", nodeName));
+            sw.Write("</a:{0}>", nodeName);
         }
 
         public CT_StyleMatrixReference AddNewFillRef()

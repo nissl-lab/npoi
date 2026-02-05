@@ -106,7 +106,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.Write("<{0}", nodeName);
             if(this.visibility!= ST_Visibility.visible)
                 XmlHelper.WriteAttribute(sw, "visibility", this.visibility.ToString());
             XmlHelper.WriteAttribute(sw, "minimized", this.minimized, false);
@@ -129,7 +129,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             {
                 sw.Write(">");
                 this.extLst.Write(sw, "extLst");
-                sw.Write(string.Format("</{0}>", nodeName));
+                sw.Write("</{0}>", nodeName);
             }
             else
             {
@@ -414,7 +414,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.Write("<{0}", nodeName);
             sw.Write(">");
             if (this.workbookView != null)
             {
@@ -423,7 +423,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                     x.Write(sw, "workbookView");
                 }
             }
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.Write("</{0}>", nodeName);
         }
 
         public CT_BookViews()
@@ -582,7 +582,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.Write("<{0}", nodeName);
             XmlHelper.WriteAttribute(sw, "name", this.name);
             XmlHelper.WriteAttribute(sw, "guid", this.guid);
             XmlHelper.WriteAttribute(sw, "autoUpdate", this.autoUpdate);
@@ -610,7 +610,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             sw.Write(">");
             if (this.extLst != null)
                 this.extLst.Write(sw, "extLst");
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.Write("</{0}>", nodeName);
         }
 
         [XmlElement]
@@ -969,7 +969,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.Write("<{0}", nodeName);
             sw.Write(">");
             if (this.customWorkbookView != null)
             {
@@ -978,7 +978,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                     x.Write(sw, "customWorkbookView");
                 }
             }
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.Write("</{0}>", nodeName);
         }
 
         public CT_CustomWorkbookViews()

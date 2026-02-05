@@ -206,7 +206,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal new void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.Write("<w:{0}", nodeName);
             XmlHelper.WriteAttribute(sw, "w:edGrp", this.edGrp.ToString());
             XmlHelper.WriteAttribute(sw, "w:ed", this.ed);
             XmlHelper.WriteAttribute(sw, "w:colFirst", this.colFirst);

@@ -102,7 +102,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.Write("<{0}", nodeName);
             XmlHelper.WriteAttribute(sw, "diagonalUp", this.diagonalUp, false);
             XmlHelper.WriteAttribute(sw, "diagonalDown", this.diagonalDown, false);
             XmlHelper.WriteAttribute(sw, "outline", this.outline, false);
@@ -121,7 +121,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.vertical.Write(sw, "vertical");
             if (this.horizontal != null)
                 this.horizontal.Write(sw, "horizontal");
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.Write("</{0}>", nodeName);
         }
 
         public CT_Border Copy()

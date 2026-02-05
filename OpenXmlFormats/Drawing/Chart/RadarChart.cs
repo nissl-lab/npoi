@@ -80,7 +80,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<c:{0}", nodeName));
+            sw.Write("<c:{0}", nodeName);
             sw.Write(">");
             if (this.idx != null)
                 this.idx.Write(sw, "idx");
@@ -112,7 +112,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                     x.Write(sw, "extLst");
                 }
             }
-            sw.Write(string.Format("</c:{0}>", nodeName));
+            sw.Write("</c:{0}>", nodeName);
         }
 
 
@@ -274,10 +274,10 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<c:{0}", nodeName));
+            sw.Write("<c:{0}", nodeName);
             XmlHelper.WriteAttribute(sw, "val", this.val.ToString());
             sw.Write(">");
-            sw.Write(string.Format("</c:{0}>", nodeName));
+            sw.Write("</c:{0}>", nodeName);
         }
 
         [XmlAttribute]
@@ -365,7 +365,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<c:{0}", nodeName));
+            sw.Write("<c:{0}", nodeName);
             sw.Write(">");
             if (this.radarStyle != null)
                 this.radarStyle.Write(sw, "radarStyle");
@@ -394,7 +394,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                     x.Write(sw, "extLst");
                 }
             }
-            sw.Write(string.Format("</c:{0}>", nodeName));
+            sw.Write("</c:{0}>", nodeName);
         }
 
         public int GetSeriesCount()

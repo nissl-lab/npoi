@@ -1,4 +1,4 @@
-
+﻿
 using Cysharp.Text;
 using NPOI.OpenXml4Net.Util;
 using System;
@@ -171,7 +171,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<a:{0}", nodeName));
+            sw.Write("<a:{0}", nodeName);
             sw.Write(">");
             if (this.defPPr != null)
                 this.defPPr.Write(sw, "defPPr");
@@ -195,7 +195,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.lvl9pPr.Write(sw, "lvl9pPr");
             if (this.extLst != null)
                 this.extLst.Write(sw, "extLst");
-            sw.Write(string.Format("</a:{0}>", nodeName));
+            sw.Write("</a:{0}>", nodeName);
         }
 
         public CT_TextParagraphProperties defPPr {
@@ -338,11 +338,11 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<a:{0}", nodeName));
+            sw.Write("<a:{0}", nodeName);
             XmlHelper.WriteAttribute(sw, "fontScale", this.fontScale);
             XmlHelper.WriteAttribute(sw, "lnSpcReduction", this.lnSpcReduction);
             sw.Write(">");
-            sw.Write(string.Format("</a:{0}>", nodeName));
+            sw.Write("</a:{0}>", nodeName);
         }
     
         [XmlAttribute]
@@ -555,7 +555,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<a:{0}", nodeName));
+            sw.Write("<a:{0}", nodeName);
             if(this.rotFieldSpecified)
                 XmlHelper.WriteAttribute(sw, "rot", this.rotField,true);
             if(spcFirstLastPara)
@@ -601,7 +601,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.flatTx.Write(sw, "flatTx");
             if (this.extLst != null)
                 this.extLst.Write(sw, "extLst");
-            sw.Write(string.Format("</a:{0}>", nodeName));
+            sw.Write("</a:{0}>", nodeName);
         }
 
         public CT_PresetTextShape prstTxWarp
@@ -1415,7 +1415,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<a:{0}", nodeName));
+            sw.Write("<a:{0}", nodeName);
             sw.Write(">");
             if (this.bodyPr != null)
                 this.bodyPr.Write(sw, "bodyPr");
@@ -1425,7 +1425,7 @@ namespace NPOI.OpenXmlFormats.Dml
             {
                 x.Write(sw, "p");
             }
-            sw.Write(string.Format("</a:{0}>", nodeName));
+            sw.Write("</a:{0}>", nodeName);
         }
 
         public void SetPArray(CT_TextParagraph[] array)

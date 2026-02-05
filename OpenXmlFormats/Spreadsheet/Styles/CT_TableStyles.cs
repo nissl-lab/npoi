@@ -51,7 +51,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.Write("<{0}", nodeName);
             XmlHelper.WriteAttribute(sw, "name", this.name);
             XmlHelper.WriteAttribute(sw, "pivot", this.pivot);
             XmlHelper.WriteAttribute(sw, "table", this.table);
@@ -64,7 +64,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                     x.Write(sw, "tableStyleElement");
                 }
             }
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.Write("</{0}>", nodeName);
         }
 
         [XmlElement]
@@ -187,7 +187,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.Write("<{0}", nodeName);
             XmlHelper.WriteAttribute(sw, "name", this.name);
             XmlHelper.WriteAttribute(sw, "showFirstColumn", this.showFirstColumn);
             XmlHelper.WriteAttribute(sw, "showLastColumn", this.showLastColumn);
@@ -343,7 +343,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.Write("<{0}", nodeName);
             XmlHelper.WriteAttribute(sw, "count", this.count, true);
             XmlHelper.WriteAttribute(sw, "defaultTableStyle", this.defaultTableStyle);
             XmlHelper.WriteAttribute(sw, "defaultPivotStyle", this.defaultPivotStyle);
@@ -355,7 +355,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 {
                     x.Write(sw, "tableStyle");
                 }
-                sw.Write(string.Format("</{0}>", nodeName));
+                sw.Write("</{0}>", nodeName);
             }
             else
             {
@@ -548,13 +548,13 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.Write("<{0}", nodeName);
             XmlHelper.WriteAttribute(sw, "type", this.type.ToString());
             XmlHelper.WriteAttribute(sw, "size", this.size);
             if(this.dxfIdFieldSpecified)
                 XmlHelper.WriteAttribute(sw, "dxfId", this.dxfId);
             sw.Write(">");
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.Write("</{0}>", nodeName);
         }
 
         [XmlAttribute]

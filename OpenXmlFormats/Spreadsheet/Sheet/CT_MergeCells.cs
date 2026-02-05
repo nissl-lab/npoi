@@ -40,7 +40,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.Write("<{0}", nodeName);
             XmlHelper.WriteAttribute(sw, "count", this.count);
             sw.Write(">");
             if (this.mergeCell != null)
@@ -52,7 +52,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                     }
                 }
             }
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.Write("</{0}>", nodeName);
         }
 
 
