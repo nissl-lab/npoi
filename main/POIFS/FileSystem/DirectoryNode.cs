@@ -49,6 +49,8 @@ namespace NPOI.POIFS.FileSystem
     {
         // Map of Entry instances, keyed by their names
         private Dictionary<string, Entry> _byname;
+        // Parallel map keyed by upper-case names for fast case-insensitive lookup
+        private Dictionary<string, Entry> _byUCName;
 
         private List<Entry> _entries;
 
@@ -106,6 +108,7 @@ namespace NPOI.POIFS.FileSystem
             }
 
             _byname = new Dictionary<string, Entry>();
+            _byUCName = new Dictionary<string, Entry>();
             _entries = new List<Entry>();
             IEnumerator<Property> iter = property.Children;
 
@@ -132,6 +135,7 @@ namespace NPOI.POIFS.FileSystem
                 }
                 _entries.Add(childNode);
                 _byname.Add(childNode.Name, childNode);
+                _byUCName.Add(childNode.Name.ToUpperInvariant(), childNode);
             }
         }
         
@@ -168,6 +172,7 @@ namespace NPOI.POIFS.FileSystem
 
             _entries.Add(rval);
             _byname.Add(property.Name, rval);
+            _byUCName.Add(property.Name.ToUpperInvariant(), rval);
 
             return rval;
         }
@@ -190,7 +195,10 @@ namespace NPOI.POIFS.FileSystem
                 if (rval)
                 {
                     _byname.Remove(oldName);
+                    _byUCName.Remove(oldName.ToUpperInvariant());
+
                     _byname[child.Property.Name] = child;
+                    _byUCName[child.Property.Name.ToUpperInvariant()] = child;
                 }
             }
             return rval;
@@ -211,6 +219,7 @@ namespace NPOI.POIFS.FileSystem
             {
                 _entries.Remove(entry);
                 _byname.Remove(entry.Name);
+                _byUCName.Remove(entry.Name.ToUpperInvariant());
 
                 if (_oFilesSystem != null)
                 {
@@ -281,6 +290,43 @@ namespace NPOI.POIFS.FileSystem
         {
             get { return _entries.GetEnumerator(); }
         }
+
+        public bool HasEntryCaseInsensitive(String name)
+        {
+            return name != null && _byUCName.ContainsKey(name.ToUpperInvariant());
+        }
+
+        public Entry GetEntryCaseInsensitive(string name)
+        {
+            Entry rval = null;
+
+            if (name != null) 
+            {
+                rval = _byUCName[name.ToUpperInvariant()];
+            }
+
+            if (rval == null) 
+            {
+                // throw more useful exceptions for known wrong file-extensions
+                if (_byname.ContainsKey("Workbook"))
+                {
+                    throw new ArgumentException("The document is really a XLS file");
+                }
+                else if (_byname.ContainsKey("PowerPoint Document"))
+                {
+                    throw new ArgumentException("The document is really a PPT file");
+                }
+                else if (_byname.ContainsKey("VisioDocument"))
+                {
+                    throw new ArgumentException("The document is really a VSD file");
+                }
+                // either a null name was given, or there is no such name
+                throw new FileNotFoundException("no such entry: \"" + name + "\", had: " + _byUCName.Keys);
+            }
+
+            return rval;
+        }
+
         internal Entry GetEntry(int index)
         {
             return _entries[index];
@@ -410,6 +456,7 @@ namespace NPOI.POIFS.FileSystem
 
             _entries.Add(rval);
             _byname[property.Name] = rval;
+            _byUCName.Add(property.Name.ToUpperInvariant(), rval);
 
             return rval;
         }
@@ -439,6 +486,7 @@ namespace NPOI.POIFS.FileSystem
             ((DirectoryProperty)Property).AddChild(property);
             _entries.Add(rval);
             _byname[name] = rval;
+            _byUCName[name.ToUpperInvariant()] = rval;
 
             return rval;
         }

@@ -125,7 +125,9 @@ namespace NPOI.POIFS.Crypt.Standard
 
 
             ByteArrayInputStream boundedDis = new BoundedInputStream(dis, cipherLen);
-            return new BoundedInputStream(new CipherInputStream(boundedDis, cipher), _length);
+
+            // Pass expected plain length so CipherInputStream can trim padding
+            return new CipherInputStream(boundedDis, cipher, _length);
         }
 
         /**
@@ -137,170 +139,198 @@ namespace NPOI.POIFS.Crypt.Standard
         }
     }
 
-    public class CipherInputStream : ByteArrayInputStream
+    public class CipherInputStream : FilterInputStream
     {
-        private Cipher cipher;
-        private ByteArrayInputStream input;
-        private byte[] ibuffer = new byte['?'];
-        private bool done = false;
-        private byte[] obuffer;
-        private int ostart = 0;
-        private int ofinish = 0;
-        private bool closed = false;
-        public CipherInputStream(ByteArrayInputStream paramInputStream, Cipher paramCipher)
-        //: base(paramInputStream)
+        // Decrypts the encrypted package stream produced by StandardEncryptor.CipherOutputStream.
+        // Handles block cipher with PKCS5/PKCS7 padding and trims padding bytes so that only the
+        // original unencrypted length (passed from StandardDecryptor) is exposed.
+        private readonly Cipher cipher;
+        private readonly ByteArrayInputStream encryptedInput; // bounded encrypted stream
+        private readonly long expectedPlainLength;            // original unencrypted length (StreamSize)
+        private bool finalized;                               // cipher.DoFinal executed
+        private bool closed;
+        private long totalPlainProduced;
+        private byte[] encBuffer = new byte[4096];
+        private byte[] plainBuffer = Array.Empty<byte>();
+        private int plainOffset;
+        private int plainCount;
+
+        public CipherInputStream(ByteArrayInputStream encryptedInput, Cipher cipher, long expectedPlainLength)
+            : base(encryptedInput)
         {
-            this.input = paramInputStream;
-            this.cipher = paramCipher;
+            this.encryptedInput = encryptedInput;
+            this.cipher = cipher;
+            this.expectedPlainLength = expectedPlainLength;
         }
+
+        // Legacy protected ctor kept (NullCipher fallback)
         protected CipherInputStream(ByteArrayInputStream paramInputStream)
-        //   : base(paramInputStream)
+            : base(paramInputStream)
         {
-            this.input = paramInputStream;
+            this.encryptedInput = paramInputStream;
             this.cipher = new NullCipher();
+            this.expectedPlainLength = 0;
         }
-        private int getMoreData()
+
+        private bool EnsurePlainData()
         {
-            if (this.done)
+            if(plainOffset < plainCount)
+                return true; // still have plaintext
+
+            // Reset consumption markers
+            plainOffset = 0;
+            plainCount = 0;
+
+            if(finalized)
+                return false;
+
+            int read = encryptedInput.Read(encBuffer, 0, encBuffer.Length);
+            if(read > 0)
             {
-                return -1;
+                var block = cipher.Update(encBuffer, 0, read);
+                if(block != null && block.Length > 0)
+                {
+                    SetPlainBuffer(block, false);
+                    return plainCount > 0;
+                }
+                // No plaintext produced yet, keep looping
+                return EnsurePlainData();
             }
-            int i = this.input.Read(this.ibuffer, 0, this.ibuffer.Length);
-            if (i == -1)
-            {
-                this.done = true;
-                try
-                {
-                    this.obuffer = this.cipher.DoFinal();
-                }
-                catch (Exception ex)
-                {
-                    this.obuffer = null;
-                    throw new IOException(ex.Message);
-                }
-                if (this.obuffer == null)
-                {
-                    return -1;
-                }
-                this.ostart = 0;
-                this.ofinish = this.obuffer.Length;
-                return this.ofinish;
-            }
+
+            // End of encrypted stream: finalize
+            byte[] finalPlain;
             try
             {
-                this.obuffer = this.cipher.Update(this.ibuffer, 0, i);
+                finalPlain = cipher.DoFinal();
             }
             catch
             {
-                this.obuffer = null;
-                throw;
+                finalPlain = Array.Empty<byte>();
             }
-            this.ostart = 0;
-            if (this.obuffer == null)
+            finalized = true;
+            if(finalPlain.Length > 0)
             {
-                this.ofinish = 0;
+                SetPlainBuffer(finalPlain, true);
+                return plainCount > 0;
+            }
+            return false;
+        }
+
+        private void SetPlainBuffer(byte[] data, bool isFinal)
+        {
+            // Trim any excess beyond expectedPlainLength (remove padding visibility)
+            long remaining = expectedPlainLength - totalPlainProduced;
+            if(remaining <= 0)
+            {
+                // Already satisfied length; ignore further (padding)
+                plainBuffer = Array.Empty<byte>();
+                plainCount = 0;
+                plainOffset = 0;
+                return;
+            }
+
+            int usable = data.Length;
+            if(usable > remaining)
+                usable = (int) remaining;
+
+            if(usable == data.Length)
+            {
+                plainBuffer = data;
             }
             else
             {
-                this.ofinish = this.obuffer.Length;
+                // Copy only the usable portion (discard padding tail)
+                plainBuffer = new byte[usable];
+                Array.Copy(data, 0, plainBuffer, 0, usable);
             }
-            return this.ofinish;
+            plainCount = plainBuffer.Length;
+            plainOffset = 0;
+            totalPlainProduced += plainCount;
+
+            if(isFinal)
+            {
+                // After final block, mark finalized even if we truncated
+                finalized = true;
+            }
         }
+
         public override int Read()
         {
-            if (this.ostart >= this.ofinish)
-            {
-                int i = 0;
-                while (i == 0)
-                {
-                    i = getMoreData();
-                }
-                if (i == -1)
-                {
-                    return -1;
-                }
-            }
-            return this.obuffer[(this.ostart++)] & 0xFF;
+            if(!EnsurePlainData())
+                return -1;
+            int val = plainBuffer[plainOffset++] & 0xFF;
+            return val;
         }
-        public int Read(byte[] b)
-        {
-            return Read(b, 0, b.Length);
-        }
+
+        public int Read(byte[] b) => Read(b, 0, b.Length);
 
         public override int Read(byte[] b, int off, int len)
         {
-            int i;
-            if (this.ostart >= this.ofinish)
-            {
-                i = 0;
-                while (i == 0)
-                {
-                    i = getMoreData();
-                }
-                if (i == -1)
-                {
-                    return -1;
-                }
-            }
-            if (len <= 0)
-            {
+            if(off < 0 || len < 0 || (off + len) > b.Length)
+                throw new ArgumentOutOfRangeException();
+
+            if(len == 0)
                 return 0;
-            }
-            i = this.ofinish - this.ostart;
-            if (len < i)
-            {
-                i = len;
-            }
-            if (b != null)
-            {
-                Array.Copy(this.obuffer, this.ostart, b, off, i);
-            }
-            this.ostart += i;
-            return i;
+            if(!EnsurePlainData())
+                return -1;
+
+            int available = plainCount - plainOffset;
+            if(available <= 0 && !EnsurePlainData())
+                return -1;
+            available = plainCount - plainOffset;
+
+            int toCopy = available < len ? available : len;
+            Array.Copy(plainBuffer, plainOffset, b, off, toCopy);
+            plainOffset += toCopy;
+            return toCopy;
         }
 
-        public long Skip(long paramLong)
+        public long Skip(long n)
         {
-            int i = this.ofinish - this.ostart;
-            if (paramLong > i)
+            if(n <= 0)
+                return 0;
+            long skipped = 0;
+            while(skipped < n)
             {
-                paramLong = i;
+                if(!EnsurePlainData())
+                    break;
+                int available = plainCount - plainOffset;
+                if(available <= 0)
+                    break;
+                int step = (int)Math.Min(available, n - skipped);
+                plainOffset += step;
+                skipped += step;
             }
-            if (paramLong < 0L)
-            {
-                return 0L;
-            }
-            this.ostart = ((int)(this.ostart + paramLong));
-            return paramLong;
+            return skipped;
         }
 
         public override int Available()
         {
-            return this.ofinish - this.ostart;
+            return (plainCount - plainOffset);
         }
 
         public override void Close()
         {
-            if (this.closed)
-            {
+            if(closed)
                 return;
-            }
-            this.closed = true;
-            this.input.Close();
-            if (!this.done)
+            closed = true;
+            // Drain remaining to finalize cipher (optional)
+            if(!finalized)
             {
                 try
                 {
-                    this.cipher.DoFinal();
+                    while(EnsurePlainData())
+                    {
+                        plainOffset = plainCount; // discard
+                    }
                 }
-                catch
-                {
-                }
+                catch { }
             }
-            this.ostart = 0;
-            this.ofinish = 0;
+            encryptedInput.Close();
+            plainBuffer = Array.Empty<byte>();
+            plainCount = 0;
+            plainOffset = 0;
         }
-
 
         public bool MarkSupported()
         {

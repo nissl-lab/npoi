@@ -18,7 +18,6 @@
 namespace TestCases.HSSF.Record
 {
     using System;
-    using System.IO;
     using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI;
     using NPOI.HSSF.Record;
@@ -63,7 +62,6 @@ namespace TestCases.HSSF.Record
          * Makes sure that a default password mismatch condition is represented with {@link EncryptedDocumentException}
          */
         [Test]
-        [Ignore("not implemented")]
         public void TestDefaultPassword()
         {
             // This encodng depends on docId, password and stream position
@@ -85,7 +83,7 @@ namespace TestCases.HSSF.Record
             catch (EncryptedDocumentException e)
             {
                 // expected during successful Test
-                if (!e.Message.Equals("Default password is invalid for docId/saltData/saltHash"))
+                if (!e.Message.Equals("Default password is invalid for salt/verifier/verifierHash"))
                 {
                     throw e;
                 }
@@ -106,7 +104,6 @@ namespace TestCases.HSSF.Record
          * Makes sure that an incorrect user supplied password condition is represented with {@link EncryptedDocumentException}
          */
         [Test]
-        [Ignore("not implemented")]
         public void TestSuppliedPassword()
         {
             // This encodng depends on docId, password and stream position
@@ -131,7 +128,7 @@ namespace TestCases.HSSF.Record
             catch (EncryptedDocumentException e)
             {
                 // expected during successful Test
-                if (!e.Message.Equals("Supplied password is invalid for docId/saltData/saltHash"))
+                if (!e.Message.Equals("Supplied password is invalid for salt/verifier/verifierHash"))
                 {
                     throw e;
                 }
@@ -156,13 +153,14 @@ namespace TestCases.HSSF.Record
         private void ConfirmReadInitialRecords(RecordFactoryInputStream rfis)
         {
             ClassicAssert.AreEqual(typeof(BOFRecord), rfis.NextRecord().GetType());
+            FilePassRecord recFP = (FilePassRecord)rfis.NextRecord();
             WindowOneRecord rec1 = (WindowOneRecord)rfis.NextRecord();
             ClassicAssert.IsTrue(Arrays.Equals(HexRead.ReadFromString(SAMPLE_WINDOW1), rec1.Serialize()));
         }
 
         private static RecordFactoryInputStream CreateRFIS(byte[] data)
         {
-            return new RecordFactoryInputStream(new MemoryStream(data), true);
+            return new RecordFactoryInputStream(new ByteArrayInputStream(data), true);
         }
     }
 

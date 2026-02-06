@@ -26,8 +26,8 @@ namespace NPOI.SS.Formula.Functions
     ///     Syntax is IRR(values) or IRR(values,guess)
     /// </para>
     /// </summary>
-    /// <see cref="http://en.wikipedia.org/wiki/Internal_rate_of_return#Numerical_solution">Wikipedia on IRR</see>
-    /// <see cref="http://office.microsoft.com/en-us/excel-help/irr-HP005209146.aspx">Excel IRR</see>
+    /// <see href="http://en.wikipedia.org/wiki/Internal_rate_of_return#Numerical_solution">Wikipedia on IRR</see>
+    /// <see href="http://office.microsoft.com/en-us/excel-help/irr-HP005209146.aspx">Excel IRR</see>
     public class Irr : Function
     {
 

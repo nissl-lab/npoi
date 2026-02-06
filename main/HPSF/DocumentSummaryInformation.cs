@@ -72,7 +72,7 @@ namespace NPOI.HPSF
 
         /// <summary>
         /// <para>
-        /// Creates a <see cref="DocumentSummaryInformation"/> instance from an <see cref="/// InputStream} in the Horrible Property Set Format.
+        /// Creates a <see cref="DocumentSummaryInformation"/> instance from an <see cref="InputStream"/> in the Horrible Property Set Format.
         /// </para>
         /// <para>
         /// The constructor reads the first few bytes from the stream

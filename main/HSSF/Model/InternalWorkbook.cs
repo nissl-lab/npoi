@@ -3110,5 +3110,10 @@ namespace NPOI.HSSF.Model
         {
             return linkTable.ChangeExternalReference(oldUrl, newUrl);
         }
+
+        public WorkbookRecordList GetWorkbookRecordList()
+        {
+            return records;
+        }
     }
 }

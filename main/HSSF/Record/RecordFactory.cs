@@ -243,6 +243,8 @@ namespace NPOI.HSSF.Record
 		        typeof(WriteProtectRecord),
 		        typeof(WSBoolRecord),
                 typeof(SheetExtRecord),
+                typeof(FeatHdrRecord),
+                typeof(FeatRecord),
 
                 // chart records
                 //typeof(AlRunsRecord),
@@ -454,7 +456,7 @@ namespace NPOI.HSSF.Record
          *            InputStream
          */
 
-        public static List<Record> CreateRecords(Stream in1)
+        public static List<Record> CreateRecords(InputStream in1)
         {
             List<Record> records = new List<Record>(NUM_RECORDS);
 
