@@ -40,7 +40,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<w:{0}", nodeName);
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:val", this.valField.ToString());
             sw.Write("/>");
         }
@@ -107,7 +107,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<w:{0}", nodeName);
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:val", this.val, true);
             sw.Write("/>");
         }
@@ -181,7 +181,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<w:{0}", nodeName);
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:fldCharType", this.fldCharType.ToString());
             if(this.fldLock!= ST_OnOff.off)
                 XmlHelper.WriteAttribute(sw, "w:fldLock", this.fldLock.ToString());
@@ -193,7 +193,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
             else
             {
-                sw.Write(">");
+                sw.Write('>');
                 if (this.ffDataField != null)
                 {
                     this.ffDataField.Write(sw, "ffData");
@@ -390,7 +390,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         }
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<w:{0}>", nodeName);
+            sw.WriteStartW(nodeName);
+            sw.Write('>');
 
             for (int i=0;i<this.itemsElementNameField.Count;i++)
             {
@@ -630,7 +631,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<w:{0}>", nodeName);
+            sw.WriteStartW(nodeName);
+            sw.Write('>');
             if (this.defaultField != null)
                 this.defaultField.Write(sw, "default");
             if (this.checkedField != null)
@@ -733,7 +735,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<w:{0}>", nodeName);
+            sw.WriteStartW(nodeName);
+            sw.Write('>');
             if (this.defaultField != null)
                 this.defaultField.Write(sw, "default");
             if (this.resultField != null)
@@ -815,7 +818,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<w:{0}", nodeName);
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:val", this.valField);
             if (this.typeFieldSpecified)
             {
@@ -907,7 +910,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<w:{0}", nodeName);
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:val", this.valField);
             if (this.typeFieldSpecified)
             {
@@ -1024,7 +1027,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<w:{0}>", nodeName);
+            sw.WriteStartW(nodeName);
+            sw.Write('>');
             if (this.typeField == null)
                 this.typeField.Write(sw, "type");
             if (this.defaultField != null)

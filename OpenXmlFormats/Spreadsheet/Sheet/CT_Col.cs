@@ -297,7 +297,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<{0}", nodeName);
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "min", this.min);
             XmlHelper.WriteAttribute(sw, "max", this.max);
             XmlHelper.WriteAttribute(sw, "width", this.width);

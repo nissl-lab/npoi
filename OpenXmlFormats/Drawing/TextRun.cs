@@ -49,17 +49,15 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<a:{0}", nodeName);
-            sw.Write(">");
+            sw.WriteStart("a", nodeName);
+            sw.Write('>');
             if (this.rPr != null)
                 this.rPr.Write(sw, "rPr");
             if(this.t !=null)
             {
-                sw.Write("<a:t>");
-                sw.Write(XmlHelper.EncodeXml(t));
-                sw.Write("</a:t>");
+                sw.WriteElementAndContent("a:t", XmlHelper.EncodeXml(t));
             }
-            sw.Write("</a:{0}>", nodeName);
+            sw.WriteEndElement("a", nodeName);
         }
 
         public CT_RegularTextRun()

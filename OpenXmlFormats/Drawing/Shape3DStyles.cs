@@ -46,13 +46,13 @@ namespace NPOI.OpenXmlFormats.Dml {
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<a:{0}", nodeName);
+            sw.WriteStart("a", nodeName);
             XmlHelper.WriteAttribute(sw, "w", this.w, true);
             XmlHelper.WriteAttribute(sw, "h", this.h, true);
             if(this.prst != ST_BevelPresetType.circle)
                 XmlHelper.WriteAttribute(sw, "prst", this.prst.ToString());
-            sw.Write(">");
-            sw.Write("</a:{0}>", nodeName);
+            sw.Write('>');
+            sw.WriteEndElement("a", nodeName);
         }
 
         public CT_Bevel() {
@@ -192,12 +192,12 @@ namespace NPOI.OpenXmlFormats.Dml {
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<a:{0}", nodeName);
+            sw.WriteStart("a", nodeName);
             XmlHelper.WriteAttribute(sw, "z", this.z);
             XmlHelper.WriteAttribute(sw, "extrusionH", this.extrusionH);
             XmlHelper.WriteAttribute(sw, "contourW", this.contourW);
             XmlHelper.WriteAttribute(sw, "prstMaterial", this.prstMaterial.ToString());
-            sw.Write(">");
+            sw.Write('>');
             if (this.bevelT != null)
                 this.bevelT.Write(sw, "bevelT");
             if (this.bevelB != null)
@@ -208,7 +208,7 @@ namespace NPOI.OpenXmlFormats.Dml {
                 this.contourClr.Write(sw, "contourClr");
             if (this.extLst != null)
                 this.extLst.Write(sw, "extLst");
-            sw.Write("</a:{0}>", nodeName);
+            sw.WriteEndElement("a", nodeName);
         }
 
         public CT_Shape3D() {
@@ -389,10 +389,10 @@ namespace NPOI.OpenXmlFormats.Dml {
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<a:{0}", nodeName);
+            sw.WriteStart("a", nodeName);
             XmlHelper.WriteAttribute(sw, "z", this.z);
-            sw.Write(">");
-            sw.Write("</a:{0}>", nodeName);
+            sw.Write('>');
+            sw.WriteEndElement("a", nodeName);
         }
 
         [XmlAttribute]

@@ -114,17 +114,17 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<{0}", nodeName);
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "sb", this.sb.ToString(), true);
             XmlHelper.WriteAttribute(sw, "eb", this.eb.ToString(), true);
-            sw.Write(">");
+            sw.Write('>');
             sw.Write("<t>");
             if (this.t != null)
             {
                 sw.Write(XmlHelper.EncodeXml(this.t));
             }
             sw.Write("</t>");
-            sw.Write("</{0}>", nodeName);
+            sw.WriteEndElement(nodeName);
         }
 
     }
@@ -162,7 +162,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<{0}", nodeName);
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "fontId", this.fontId,true);
             XmlHelper.WriteAttribute(sw, "type", this.type.ToString());
             if(this.alignment!= ST_PhoneticAlignment.left)

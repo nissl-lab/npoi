@@ -39,8 +39,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<{0}", nodeName);
-            sw.Write(">");
+            sw.WriteStart(nodeName);
+            sw.Write('>');
             if (this.sheet != null)
             {
                 foreach (CT_Sheet x in this.sheet)
@@ -48,7 +48,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                     x.Write(sw, "sheet");
                 }
             }
-            sw.Write("</{0}>", nodeName);
+            sw.WriteEndElement(nodeName);
         }
 
         public CT_Sheet AddNewSheet()

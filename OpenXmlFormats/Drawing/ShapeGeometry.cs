@@ -736,7 +736,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<a:{0}", nodeName);
+            sw.WriteStart("a", nodeName);
             XmlHelper.WriteAttribute(sw, "name", this.name);
             XmlHelper.WriteAttribute(sw, "fmla", this.fmla);
             sw.Write("/>");
@@ -794,11 +794,12 @@ namespace NPOI.OpenXmlFormats.Dml
 
 		internal void Write(StreamWriter sw, string nodeName) {
 
-			sw.Write("<a:{0}>", nodeName);
-			foreach(var cub in pts) {
+			sw.WriteStart("a", nodeName);
+            sw.Write('>');
+            foreach(var cub in pts) {
 				cub.Write(sw, "pt");
 			}
-			sw.Write("</a:{0}>", nodeName);
+			sw.WriteEndElement("a", nodeName);
 		}
 
 		public CT_Path2DCubicBezierTo() {
@@ -846,7 +847,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<a:{0}", nodeName);
+            sw.WriteStart("a", nodeName);
             XmlHelper.WriteAttribute(sw, "x", this.x);
             XmlHelper.WriteAttribute(sw, "y", this.y);
             sw.Write("/>");
@@ -951,19 +952,19 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<a:{0}", nodeName);
+            sw.WriteStart("a", nodeName);
             if (this.gdField == null||this.gdField.Count==0)
             {
                 sw.Write("/>");
             }
             else
             {
-                sw.Write(">");
+                sw.Write('>');
                 foreach (CT_GeomGuide gg in gdField)
                 {
                     gg.Write(sw, "gd");
                 }
-                sw.Write("</a:{0}>", nodeName);
+                sw.WriteEndElement("a", nodeName);
             }
 
         }
@@ -1002,7 +1003,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<a:{0}", nodeName);
+            sw.WriteStart("a", nodeName);
             XmlHelper.WriteAttribute(sw, "l", this.l);
             XmlHelper.WriteAttribute(sw, "t", this.t);
             XmlHelper.WriteAttribute(sw, "r", this.r);
@@ -1338,12 +1339,12 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<a:{0}", nodeName);
+            sw.WriteStart("a", nodeName);
             XmlHelper.WriteAttribute(sw, "ang", this.ang);
-            sw.Write(">");
+            sw.Write('>');
             if (this.pos != null)
                 this.pos.Write(sw, "pos");
-            sw.Write("</a:{0}>", nodeName);
+            sw.WriteEndElement("a", nodeName);
         }
 
         [XmlElement(Order = 0)]
@@ -1441,7 +1442,8 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<a:{0}>", nodeName);
+            sw.WriteStart("a", nodeName);
+            sw.Write('>');
             if (this.cxnField != null)
             {
                 foreach (CT_ConnectionSite gg in cxnField)
@@ -1449,7 +1451,7 @@ namespace NPOI.OpenXmlFormats.Dml
                     gg.Write(sw, "cxn");
                 }
             }
-            sw.Write("</a:{0}>", nodeName);
+            sw.WriteEndElement("a", nodeName);
 
         }
     }
@@ -1480,7 +1482,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<a:{0}", nodeName);
+            sw.WriteStart("a", nodeName);
             XmlHelper.WriteAttribute(sw, "id", this.id);
             XmlHelper.WriteAttribute(sw, "idx", this.idx, true);
             sw.Write("/>");
@@ -1543,12 +1545,13 @@ namespace NPOI.OpenXmlFormats.Dml
 
 		internal void Write(StreamWriter sw, string nodeName) {
 
-			sw.Write("<a:{0}>", nodeName);
+			sw.WriteStart("a", nodeName);
+            sw.Write('>');
 
-			if(this.ptField != null) {
+            if(this.ptField != null) {
 				this.ptField.Write(sw, "pt");
 			}
-			sw.Write("</a:{0}>", nodeName);
+			sw.WriteEndElement("a", nodeName);
 		}
 
 		[XmlElement(Order = 0)]
@@ -1758,13 +1761,13 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<a:{0}", nodeName);
+            sw.WriteStart("a", nodeName);
             XmlHelper.WriteAttribute(sw, "w", this.w);
             XmlHelper.WriteAttribute(sw, "h", this.h);
             XmlHelper.WriteAttribute(sw, "fill", this.fill.ToString());
             XmlHelper.WriteAttribute(sw, "stroke", this.stroke);
             XmlHelper.WriteAttribute(sw, "extrusionOk", this.extrusionOk);
-            sw.Write(">");
+            sw.Write('>');
 			//if (this.ItemsElementName != null)
 			//    this.ItemsElementName.Write(sw, "ItemsElementName");
 			if(this.moveToFeild != null)
@@ -1774,7 +1777,7 @@ namespace NPOI.OpenXmlFormats.Dml
 					cub.Write(sw, "cubicBezTo");
 				}
 			}
-			sw.Write("</a:{0}>", nodeName);
+			sw.WriteEndElement("a", nodeName);
         }
 
         public CT_Path2D()
@@ -1967,7 +1970,8 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<a:{0}>", nodeName);
+            sw.WriteStart("a", nodeName);
+            sw.Write('>');
             if (this.pathField != null)
             {
                 foreach (CT_Path2D gg in pathField)
@@ -1975,7 +1979,7 @@ namespace NPOI.OpenXmlFormats.Dml
                     gg.Write(sw, "path");
                 }
             }
-            sw.Write("</a:{0}>", nodeName);
+            sw.WriteEndElement("a", nodeName);
 
         }
     }
@@ -2023,14 +2027,14 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<a:{0}", nodeName);
+            sw.WriteStart("a", nodeName);
             XmlHelper.WriteAttribute(sw, "prst", this.prst.ToString());
-            sw.Write(">");
+            sw.Write('>');
             if (this.avLst != null)
             {
                 avLst.Write(sw, "avLst");
             }
-            sw.Write("</a:{0}>", nodeName);
+            sw.WriteEndElement("a", nodeName);
         }
 
 
@@ -2091,9 +2095,9 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<a:{0}", nodeName);
+            sw.WriteStart("a", nodeName);
             XmlHelper.WriteAttribute(sw, "prst", this.prst.ToString());
-            sw.Write(">");
+            sw.Write('>');
             if (this.avLst != null)
             {
                 foreach (CT_GeomGuide x in this.avLst)
@@ -2101,7 +2105,7 @@ namespace NPOI.OpenXmlFormats.Dml
                     x.Write(sw, "avLst");
                 }
             }
-            sw.Write("</a:{0}>", nodeName);
+            sw.WriteEndElement("a", nodeName);
         }
 
         private List<CT_GeomGuide> avLstField;
@@ -2185,8 +2189,8 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<a:{0}", nodeName);
-            sw.Write(">");
+            sw.WriteStart("a", nodeName);
+            sw.Write('>');
             if (this.rect != null)
                 this.rect.Write(sw, "rect");
             if (this.avLst != null)
@@ -2205,7 +2209,7 @@ namespace NPOI.OpenXmlFormats.Dml
             {
                 this.pathLstField.Write(sw, "pathLst");
             }
-            sw.Write("</a:{0}>", nodeName);
+            sw.WriteEndElement("a", nodeName);
         }
 
         [XmlElement(Order = 0)]

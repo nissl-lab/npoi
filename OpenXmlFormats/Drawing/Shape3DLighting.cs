@@ -55,13 +55,13 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<a:{0}", nodeName);
+            sw.WriteStart("a", nodeName);
             XmlHelper.WriteAttribute(sw, "rig", this.rig.ToString());
             XmlHelper.WriteAttribute(sw, "dir", this.dir.ToString());
-            sw.Write(">");
+            sw.Write('>');
             if (this.rot != null)
                 this.rot.Write(sw, "rot");
-            sw.Write("</a:{0}>", nodeName);
+            sw.WriteEndElement("a", nodeName);
         }
 
         [XmlElement(Order = 0)]

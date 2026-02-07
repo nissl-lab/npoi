@@ -30,10 +30,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<{0}", nodeName);
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "r:id", this.id);
-            sw.Write(">");
-            sw.Write("</{0}>", nodeName);
+            sw.Write('>');
+            sw.WriteEndElement(nodeName);
         }
 
         [XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/relationships")]
@@ -73,8 +73,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<{0}", nodeName);
-            sw.Write(">");
+            sw.WriteStart(nodeName);
+            sw.Write('>');
             if (this.externalReference != null)
             {
                 foreach (CT_ExternalReference x in this.externalReference)
@@ -82,7 +82,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                     x.Write(sw, "externalReference");
                 }
             }
-            sw.Write("</{0}>", nodeName);
+            sw.WriteEndElement(nodeName);
         }
 
         public CT_ExternalReferences()

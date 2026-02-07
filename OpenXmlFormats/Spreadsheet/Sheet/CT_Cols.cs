@@ -146,8 +146,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             List<CT_Col> combinedCols = CombineCols(col);
 
-            sw.Write("<{0}", nodeName);
-            sw.Write(">");
+            sw.WriteStart(nodeName);
+            sw.Write('>');
 
             if (combinedCols != null)
             {
@@ -157,7 +157,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 }
             }
 
-            sw.Write("</{0}>", nodeName);
+            sw.WriteEndElement(nodeName);
         }
 
         /// <summary>

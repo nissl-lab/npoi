@@ -45,11 +45,11 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<xdr:{0}", nodeName);
+            sw.WriteStart("xdr", nodeName);
             XmlHelper.WriteAttribute(sw, "macro", this.macro);
             if (this.fPublished)
                 XmlHelper.WriteAttribute(sw, "fPublished", this.fPublished);
-            sw.Write(">");
+            sw.Write('>');
             if (this.nvPicPr != null)
                 this.nvPicPr.Write(sw, "nvPicPr");
             if (this.blipFill != null)
@@ -58,7 +58,7 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
                 this.spPr.Write(sw, "spPr");
             if (this.style != null)
                 this.style.Write(sw, "style");
-            sw.Write("</xdr:{0}>", nodeName);
+            sw.WriteEndElement("xdr", nodeName);
         }
 
         [XmlElement]
@@ -194,13 +194,13 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<xdr:{0}", nodeName);
-            sw.Write(">");
+            sw.WriteStart("xdr", nodeName);
+            sw.Write('>');
             if (this.cNvPr != null)
                 this.cNvPr.Write(sw, "cNvPr");
             if (this.cNvPicPr != null)
                 this.cNvPicPr.Write(sw, "cNvPicPr");
-            sw.Write("</xdr:{0}>", nodeName);
+            sw.WriteEndElement("xdr", nodeName);
         }
         public CT_NonVisualDrawingProps AddNewCNvPr()
         {

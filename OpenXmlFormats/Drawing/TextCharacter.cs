@@ -57,7 +57,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<a:{0}", nodeName);
+            sw.WriteStart("a", nodeName);
             XmlHelper.WriteAttribute(sw, "typeface", this.typeface,true);
             XmlHelper.WriteAttribute(sw, "panose", this.panose);
             XmlHelper.WriteAttribute(sw, "pitchFamily", this.pitchFamily);
@@ -187,8 +187,8 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<a:{0}", nodeName);
-            sw.Write(">");
+            sw.WriteStart("a", nodeName);
+            sw.Write('>');
             if (this.noFill != null)
                 sw.Write("<a:noFill/>");
             if (this.solidFill != null)
@@ -201,7 +201,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.pattFill.Write(sw, "pattFill");
             if (this.grpFill != null)
                 sw.Write("<a:grpFill/>");
-            sw.Write("</a:{0}>", nodeName);
+            sw.WriteEndElement("a", nodeName);
         }
 
         [XmlElement(Order = 1)]
@@ -483,7 +483,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<a:{0}", nodeName);
+            sw.WriteStart("a", nodeName);
             XmlHelper.WriteAttribute(sw, "kumimoji", this.kumimoji, false);
             XmlHelper.WriteAttribute(sw, "lang", this.lang);
             XmlHelper.WriteAttribute(sw, "altLang", this.altLang);
@@ -511,7 +511,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 XmlHelper.WriteAttribute(sw, "smtClean", this.smtClean);
             XmlHelper.WriteAttribute(sw, "smtId", this.smtId);
             XmlHelper.WriteAttribute(sw, "bmk", this.bmk);
-            sw.Write(">");
+            sw.Write('>');
             if (this.ln != null)
                 this.ln.Write(sw, "ln");
             if (this.noFill != null)
@@ -554,7 +554,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.hlinkMouseOver.Write(sw, "hlinkMouseOver");
             if (this.extLst != null)
                 this.extLst.Write(sw, "extLst");
-            sw.Write("</a:{0}>", nodeName);
+            sw.WriteEndElement("a", nodeName);
         }
 
         public CT_TextCharacterProperties()

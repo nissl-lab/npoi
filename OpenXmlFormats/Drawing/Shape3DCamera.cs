@@ -54,14 +54,14 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<a:{0}", nodeName);
+            sw.WriteStart("a", nodeName);
             XmlHelper.WriteAttribute(sw, "prst", this.prst.ToString());
             XmlHelper.WriteAttribute(sw, "fov", this.fov);
             XmlHelper.WriteAttribute(sw, "zoom", this.zoom);
-            sw.Write(">");
+            sw.Write('>');
             if (this.rot != null)
                 this.rot.Write(sw, "rot");
-            sw.Write("</a:{0}>", nodeName);
+            sw.WriteEndElement("a", nodeName);
         }
 
         public CT_Camera()

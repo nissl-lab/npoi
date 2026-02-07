@@ -43,10 +43,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<{0}", nodeName);
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "count", this.count);
             XmlHelper.WriteAttribute(sw, "x14ac:knownFonts", this.knownFontsField, false);
-            sw.Write(">");
+            sw.Write('>');
             if (this.font != null)
             {
                 foreach (CT_Font x in this.font)
@@ -54,7 +54,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                     x.Write(sw, "font");
                 }
             }
-            sw.Write("</{0}>", nodeName);
+            sw.WriteEndElement(nodeName);
         }
 
         public void SetFontArray(List<CT_Font> array)

@@ -35,7 +35,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<{0}>", nodeName);
+            sw.WriteStart(nodeName);
+            sw.Write('>');
             if (this.comment != null)
             {
                 foreach (CT_Comment x in this.comment)
@@ -43,7 +44,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                     x.Write(sw, "comment");
                 }
             }
-            sw.Write("</{0}>", nodeName);
+            sw.WriteEndElement(nodeName);
         }
 
         private List<CT_Comment> commentField = null; // optional field [0..*]

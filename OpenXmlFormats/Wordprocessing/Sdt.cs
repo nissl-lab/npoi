@@ -197,8 +197,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<w:{0}", nodeName);
-            sw.Write(">");
+            sw.WriteStartW(nodeName);
+            sw.Write('>');
             foreach (object o in this.Items)
             {
                 if (o is CT_PermStart start)
@@ -450,8 +450,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<w:{0}", nodeName);
-            sw.Write(">");
+            sw.WriteStartW(nodeName);
+            sw.Write('>');
             if (this.sdtPr != null)
                 this.sdtPr.Write(sw, "sdtPr");
             if (this.sdtEndPr != null)
@@ -570,8 +570,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<w:{0}", nodeName);
-            sw.Write(">");
+            sw.WriteStartW(nodeName);
+            sw.Write('>');
             if (this.sdtPr != null)
                 this.sdtPr.Write(sw, "sdtPr");
             if (this.sdtContent != null)
@@ -669,8 +669,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<w:{0}", nodeName);
-            sw.Write(">");
+            sw.WriteStartW(nodeName);
+            sw.Write('>');
             if (this.sdtPr != null)
                 this.sdtPr.Write(sw, "sdtPr");
             if (this.sdtContent != null)
@@ -751,9 +751,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<w:{0}", nodeName);
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:lastValue", this.lastValue);
-            sw.Write(">");
+            sw.Write('>');
             if (this.listItem != null)
             {
                 foreach (CT_SdtListItem x in this.listItem)
@@ -841,8 +841,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<w:{0}", nodeName);
-            sw.Write(">");
+            sw.WriteStartW(nodeName);
+            sw.Write('>');
             if (this.docPartGallery != null)
                 this.docPartGallery.Write(sw, "docPartGallery");
             if (this.docPartCategory != null)
@@ -934,9 +934,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<w:{0}", nodeName);
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:lastValue", this.lastValue);
-            sw.Write(">");
+            sw.Write('>');
             if (this.listItem != null)
             {
                 foreach (CT_SdtListItem x in this.listItem)
@@ -1148,8 +1148,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<w:{0}", nodeName);
-            sw.Write(">");
+            sw.WriteStartW(nodeName);
+            sw.Write('>');
             foreach (object o in this.Items)
             {
                 if (o is CT_Bookmark bookmark)
@@ -1644,8 +1644,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<w:{0}", nodeName);
-            sw.Write(">");
+            sw.WriteStartW(nodeName);
+            sw.Write('>');
             foreach (object o in this.Items)
             {
                 if (o is CT_OMath math)
@@ -1947,8 +1947,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<w:{0}", nodeName);
-            sw.Write(">");
+            sw.WriteStartW(nodeName);
+            sw.Write('>');
             
             for (int i=0;i<this.Items.Count;i++)
             {
@@ -2416,8 +2416,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<w:{0}", nodeName);
-            sw.Write(">");
+            sw.WriteStartW(nodeName);
+            sw.Write('>');
             foreach (object o in this.Items)
             {
                 if (o is CT_PermStart start)
@@ -2785,10 +2785,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<w:{0}", nodeName);
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:displayText", this.displayText);
             XmlHelper.WriteAttribute(sw, "w:value", this.value);
-            sw.Write(">");
+            sw.Write('>');
             sw.WriteEndW(nodeName);
         }
 
@@ -2844,9 +2844,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<w:{0}", nodeName);
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
-            sw.Write(">");
+            sw.Write('>');
             sw.WriteEndW(nodeName);
         }
 
@@ -2919,9 +2919,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<w:{0}", nodeName);
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
-            sw.Write(">");
+            sw.Write('>');
             sw.WriteEndW(nodeName);
         }
 
@@ -3041,9 +3041,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<w:{0}", nodeName);
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:fullDate", this.fullDateField);
-            sw.Write(">");
+            sw.Write('>');
             if (this.dateFormat != null)
                 this.dateFormat.Write(sw, "dateFormat");
             if (this.lid != null)
@@ -3175,8 +3175,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<w:{0}", nodeName);
-            sw.Write(">");
+            sw.WriteStartW(nodeName);
+            sw.Write('>');
             if (this.sdtPr != null)
                 this.sdtPr.Write(sw, "sdtPr");
             if (this.sdtContent != null)
@@ -3255,9 +3255,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<w:{0}", nodeName);
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:multiLine", this.multiLine.ToString());
-            sw.Write(">");
+            sw.Write('>');
             sw.WriteEndW(nodeName);
         }
 
@@ -3308,9 +3308,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<w:{0}", nodeName);
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
-            sw.Write(">");
+            sw.Write('>');
             sw.WriteEndW(nodeName);
         }
 

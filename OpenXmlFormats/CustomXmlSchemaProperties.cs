@@ -66,11 +66,11 @@ namespace NPOI.OpenXmlFormats
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<w:{0}", nodeName);
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:uri", this.uri);
             XmlHelper.WriteAttribute(sw, "w:manifestLocation", this.manifestLocation);
             XmlHelper.WriteAttribute(sw, "w:schemaLocation", this.schemaLocation);
-            sw.Write(">");
+            sw.Write('>');
             sw.WriteEndW(nodeName);
         }
 

@@ -76,14 +76,14 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<{0}", nodeName);
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "position", this.positionField,true);
-            sw.Write(">");
+            sw.Write('>');
             if (this.colorField != null)
             {
                 this.colorField.Write(sw, "color");
             }
-            sw.Write("</{0}>", nodeName);
+            sw.WriteEndElement(nodeName);
         }
     }
 
@@ -130,14 +130,14 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<{0}", nodeName);
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "type", this.type.ToString());
             XmlHelper.WriteAttribute(sw, "degree", this.degree);
             XmlHelper.WriteAttribute(sw, "left", this.left);
             XmlHelper.WriteAttribute(sw, "right", this.right);
             XmlHelper.WriteAttribute(sw, "top", this.top);
             XmlHelper.WriteAttribute(sw, "bottom", this.bottom);
-            sw.Write(">");
+            sw.Write('>');
             if (this.stop != null)
             {
                 foreach (CT_GradientStop x in this.stop)
@@ -145,7 +145,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                     x.Write(sw, "stop");
                 }
             }
-            sw.Write("</{0}>", nodeName);
+            sw.WriteEndElement(nodeName);
         }
         public CT_GradientStop AddNewStop()
         {
@@ -260,12 +260,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<{0}", nodeName);
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "uri", this.uri);
-            sw.Write(">");
+            sw.Write('>');
             if (this.Any != null)
                 sw.Write(this.Any);
-            sw.Write("</{0}>", nodeName);
+            sw.WriteEndElement(nodeName);
         }
 
 
@@ -347,7 +347,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<{0}>", nodeName);
+            sw.WriteStart(nodeName);
+            sw.Write('>');
             if (this.ext != null)
             {
                 foreach (CT_Extension x in this.ext)
@@ -355,7 +356,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                     x.Write(sw, "ext");
                 }
             }
-            sw.Write("</{0}>", nodeName);
+            sw.WriteEndElement(nodeName);
         }
 
     }

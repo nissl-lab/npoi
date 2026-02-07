@@ -200,7 +200,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<w:{0}>", nodeName);
+            sw.WriteStartW(nodeName);
+            sw.Write('>');
             if (this.movie != null)
                 this.movie.Write(sw, "movie");
             if (this.control != null)
@@ -264,7 +265,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<w:{0}", nodeName);
+            sw.WriteStartW(nodeName);
             if(themeColorField!= ST_ThemeColor.none)
                 XmlHelper.WriteAttribute(sw, "w:themeColor", this.themeColor.ToString());
             XmlHelper.WriteAttribute(sw, "w:themeTint", this.themeTint);
@@ -445,10 +446,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<w:{0}", nodeName);
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:dxaOrig", this.dxaOrig);
             XmlHelper.WriteAttribute(sw, "w:dyaOrig", this.dyaOrig);
-            sw.Write(">");
+            sw.Write('>');
             if (this.control != null)
                 this.control.Write(sw, "control");
             sw.WriteEndW(nodeName);
@@ -477,11 +478,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<w:{0}", nodeName);
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:name", this.name);
             XmlHelper.WriteAttribute(sw, "w:shapeid", this.shapeid);
             XmlHelper.WriteAttribute(sw, "r:id", this.id);
-            sw.Write(">");
+            sw.Write('>');
             sw.WriteEndW(nodeName);
         }
 

@@ -42,19 +42,19 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<xdr:{0}", nodeName);
+            sw.WriteStart("xdr", nodeName);
             XmlHelper.WriteAttribute(sw, "id", this.id, true);
             XmlHelper.WriteAttribute(sw, "name", this.name);
             XmlHelper.WriteAttribute(sw, "descr", this.descr);
             XmlHelper.WriteAttribute(sw, "hidden", this.hidden, false);
-            sw.Write(">");
+            sw.Write('>');
             if (this.hlinkClick != null)
                 this.hlinkClick.Write(sw, "hlinkClick");
             if (this.hlinkHover != null)
                 this.hlinkHover.Write(sw, "hlinkHover");
             if (this.extLst != null)
                 this.extLst.Write(sw, "extLst");
-            sw.Write("</xdr:{0}>", nodeName);
+            sw.WriteEndElement("xdr", nodeName);
         }
 
         private CT_Hyperlink hlinkClickField = null;
@@ -214,13 +214,13 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<xdr:{0}", nodeName);
-            sw.Write(">");
+            sw.WriteStart("xdr", nodeName);
+            sw.Write('>');
             if (this.graphicFrameLocks != null)
                 this.graphicFrameLocks.Write(sw, "graphicFrameLocks");
             if (this.extLst != null)
                 this.extLst.Write(sw, "extLst");
-            sw.Write("</xdr:{0}>", nodeName);
+            sw.WriteEndElement("xdr", nodeName);
         }
 
         [XmlElement(Order = 0)]
@@ -275,13 +275,13 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<xdr:{0}", nodeName);
-            sw.Write(">");
+            sw.WriteStart("xdr", nodeName);
+            sw.Write('>');
             if (this.cNvPr != null)
                 this.cNvPr.Write(sw, "cNvPr");
             if (this.cNvGraphicFramePr != null)
                 this.cNvGraphicFramePr.Write(sw, "cNvGraphicFramePr");
-            sw.Write("</xdr:{0}>", nodeName);
+            sw.WriteEndElement("xdr", nodeName);
         }
 
         public CT_NonVisualDrawingProps AddNewCNvPr()
@@ -331,15 +331,15 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<xdr:{0}", nodeName);
+            sw.WriteStart("xdr", nodeName);
             if(!preferRelativeResize)
                 XmlHelper.WriteAttribute(sw, "preferRelativeResize", this.preferRelativeResize);
-            sw.Write(">");
+            sw.Write('>');
             if (this.picLocks != null)
                 this.picLocks.Write(sw, "picLocks");
             if (this.extLst != null)
                 this.extLst.Write(sw, "extLst");
-            sw.Write("</xdr:{0}>", nodeName);
+            sw.WriteEndElement("xdr", nodeName);
         }
 
         private CT_PictureLocking picLocksField = null;
@@ -455,11 +455,11 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<xdr:{0}", nodeName);
+            sw.WriteStart("xdr", nodeName);
             XmlHelper.WriteAttribute(sw, "dpi", this.dpi);
             if(rotWithShape)
                 XmlHelper.WriteAttribute(sw, "rotWithShape", this.rotWithShape);
-            sw.Write(">");
+            sw.Write('>');
             if (this.blip != null)
                 this.blip.Write(sw, "blip");
             if (this.srcRect != null)
@@ -468,7 +468,7 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
                 this.tile.Write(sw, "tile");
             if (this.stretch != null)
                 this.stretch.Write(sw, "stretch");
-            sw.Write("</xdr:{0}>", nodeName);
+            sw.WriteEndElement("xdr", nodeName);
         }
 
         [XmlElement(Order = 0)]
@@ -931,10 +931,10 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<xdr:{0}", nodeName);
+            sw.WriteStart("xdr", nodeName);
             if(bwMode!= ST_BlackWhiteMode.none)
                 XmlHelper.WriteAttribute(sw, "bwMode", this.bwMode.ToString());
-            sw.Write(">");
+            sw.Write('>');
             if (this.xfrm != null)
                 this.xfrm.Write(sw, "a:xfrm");
             if (this.custGeom != null)
@@ -965,7 +965,7 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
                 this.sp3d.Write(sw, "sp3d");
             if (this.extLst != null)
                 this.extLst.Write(sw, "extLst");
-            sw.Write("</xdr:{0}>", nodeName);
+            sw.WriteEndElement("xdr", nodeName);
         }
 
     }
@@ -1060,17 +1060,17 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<xdr:{0}", nodeName);
+            sw.WriteStart("xdr", nodeName);
             XmlHelper.WriteAttribute(sw, "macro", this.macro, true);
             XmlHelper.WriteAttribute(sw, "fPublished", this.fPublished, false);
-            sw.Write(">");
+            sw.Write('>');
             if (this.nvGraphicFramePr != null)
                 this.nvGraphicFramePr.Write(sw, "nvGraphicFramePr");
             if (this.xfrm != null)
                 this.xfrm.Write(sw, "xdr:xfrm");
             if (this.graphic != null)
                 this.graphic.Write(sw, "graphic");
-            sw.Write("</xdr:{0}>", nodeName);
+            sw.WriteEndElement("xdr", nodeName);
         }
 
     }
@@ -1135,13 +1135,13 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<xdr:{0}", nodeName);
-            sw.Write(">");
+            sw.WriteStart("xdr", nodeName);
+            sw.Write('>');
             if (this.cNvPr != null)
                 this.cNvPr.Write(sw, "cNvPr");
             if (this.cNvCxnSpPr != null)
                 this.cNvCxnSpPr.Write(sw, "cNvCxnSpPr");
-            sw.Write("</xdr:{0}>", nodeName);
+            sw.WriteEndElement("xdr", nodeName);
         }
 
 
@@ -1244,7 +1244,8 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<{0}>", nodeName);
+            sw.WriteStart(nodeName);
+            sw.Write('>');
             sw.Write("<xdr:col>");
             sw.Write(this.col.ToString());
             sw.Write("</xdr:col>");
@@ -1257,7 +1258,7 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             sw.Write("<xdr:rowOff>");
             sw.Write(this.rowOff.ToString());
             sw.Write("</xdr:rowOff>");
-            sw.Write("</{0}>", nodeName);
+            sw.WriteEndElement(nodeName);
         }
     }
     public enum ST_EditAs
@@ -1287,7 +1288,7 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<xdr:{0}", nodeName);
+            sw.WriteStart("xdr", nodeName);
             XmlHelper.WriteAttribute(sw, "fLocksWithSheet", this.fLocksWithSheet, false, true);
             XmlHelper.WriteAttribute(sw, "fPrintsWithSheet", this.fPrintsWithSheet, false, true);
             sw.Write("/>");
@@ -1940,7 +1941,7 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             sw.Write("<xdr:twoCellAnchor");
             if(this.editAsField!= ST_EditAs.NONE)
                 sw.Write(" editAs=\"{0}\"",this.editAsField.ToString());
-            sw.Write(">");
+            sw.Write('>');
             this.from.Write(sw, "xdr:from");
             this.to.Write(sw, "xdr:to");
             if (this.sp != null)
@@ -2051,17 +2052,17 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<xdr:{0}", nodeName);
+            sw.WriteStart("xdr", nodeName);
             XmlHelper.WriteAttribute(sw, "macro", this.macro, true);
             XmlHelper.WriteAttribute(sw, "fPublished", this.fPublished,false);
-            sw.Write(">");
+            sw.Write('>');
             if (this.nvCxnSpPr != null)
                 this.nvCxnSpPr.Write(sw, "nvCxnSpPr");
             if (this.spPr != null)
                 this.spPr.Write(sw, "spPr");
             if (this.style != null)
                 this.style.Write(sw, "style");
-            sw.Write("</xdr:{0}>", nodeName);
+            sw.WriteEndElement("xdr", nodeName);
         }
 
         public void Set(CT_Connector obj)

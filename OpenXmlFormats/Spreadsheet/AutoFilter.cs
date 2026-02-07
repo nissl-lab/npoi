@@ -61,9 +61,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<{0}", nodeName);
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "ref", this.@ref);
-            sw.Write(">");
+            sw.Write('>');
             if (this.filterColumn != null)
             {
                 foreach (CT_FilterColumn x in this.filterColumn)
@@ -75,7 +75,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.sortState.Write(sw, "sortState");
             if (this.extLst != null)
                 this.extLst.Write(sw, "extLst");
-            sw.Write("</{0}>", nodeName);
+            sw.WriteEndElement(nodeName);
         }
 
         [XmlElement]
@@ -222,7 +222,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<{0}", nodeName);
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "colId", this.colId, true);
             XmlHelper.WriteAttribute(sw, "hiddenButton", this.hiddenButton, false);
             XmlHelper.WriteAttribute(sw, "showButton", this.showButton, false);
@@ -233,13 +233,13 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
             else
             {
-                sw.Write(">");
+                sw.Write('>');
                 if (this.customFilters != null && this.customFilters.customFilter.Count > 0)
                 {
                     if (this.customFilters != null)
                         this.customFilters.Write(sw, "customFilters");
                 }
-                sw.Write("</{0}>", nodeName);
+                sw.WriteEndElement(nodeName);
             }
         }
 
@@ -355,7 +355,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<{0}", nodeName);
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "and", this.and, false);
 
             if (this.customFilter == null || this.customFilter.Count == 0)
@@ -364,7 +364,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
             else
             {
-                sw.Write(">");
+                sw.Write('>');
                 if (this.customFilter != null && this.customFilter.Count > 0)
                 {
                     foreach (CT_CustomFilter x in this.customFilter)
@@ -372,7 +372,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                         x.Write(sw, "customFilter");
                     }
                 }
-                sw.Write("</{0}>", nodeName);
+                sw.WriteEndElement(nodeName);
             }
         }
     }
@@ -429,7 +429,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<{0}", nodeName);
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "operator", this.@operator.ToString(), true);
             XmlHelper.WriteAttribute(sw, "val", this.val, true);
             sw.Write("/>");
@@ -1180,12 +1180,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<{0}", nodeName);
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "columnSort", this.columnSort);
             XmlHelper.WriteAttribute(sw, "caseSensitive", this.caseSensitive);
             XmlHelper.WriteAttribute(sw, "sortMethod", this.sortMethod.ToString());
             XmlHelper.WriteAttribute(sw, "ref", this.@ref);
-            sw.Write(">");
+            sw.Write('>');
             if (this.extLst != null)
                 this.extLst.Write(sw, "extLst");
             if (this.sortCondition != null)
@@ -1195,7 +1195,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                     x.Write(sw, "sortCondition");
                 }
             }
-            sw.Write("</{0}>", nodeName);
+            sw.WriteEndElement(nodeName);
         }
 
         [XmlElement]
@@ -1328,7 +1328,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<{0}", nodeName);
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "descending", this.descending);
             XmlHelper.WriteAttribute(sw, "sortBy", this.sortBy.ToString());
             XmlHelper.WriteAttribute(sw, "ref", this.@ref);

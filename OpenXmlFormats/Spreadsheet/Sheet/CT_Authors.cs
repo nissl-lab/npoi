@@ -70,15 +70,18 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<{0}>", nodeName);
+            sw.WriteStart(nodeName);
+            sw.Write('>');
             if (this.author != null)
             {
                 foreach (String x in this.author)
                 {
-                    sw.Write("<author>{0}</author>", XmlHelper.EncodeXml(x));
+                    sw.Write("<author>");
+                    sw.Write(XmlHelper.EncodeXml(x));
+                    sw.Write("</author>");
                 }
             }
-            sw.Write("</{0}>", nodeName);
+            sw.WriteEndElement(nodeName);
         }
 
     }

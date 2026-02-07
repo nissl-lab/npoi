@@ -38,12 +38,12 @@ namespace NPOI.OpenXmlFormats.Vml.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<w:{0}", nodeName);
+            sw.WriteStartW(nodeName);
             if(this.type!= ST_BorderType.none)
                 XmlHelper.WriteAttribute(sw, "type", this.type.ToString());
             XmlHelper.WriteAttribute(sw, "width", this.width);
             NPOI.OpenXmlFormats.Util.XmlHelper.WriteAttribute(sw, "shadow", this.shadow);
-            sw.Write(">");
+            sw.Write('>');
             sw.WriteEndW(nodeName);
         }
 
@@ -253,13 +253,13 @@ namespace NPOI.OpenXmlFormats.Vml.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<w:{0}", nodeName);
+            sw.WriteStartW(nodeName);
             if(this.type!=ST_WrapType.none)
                 XmlHelper.WriteAttribute(sw, "type", this.type.ToString());
             XmlHelper.WriteAttribute(sw, "side", this.side.ToString());
             XmlHelper.WriteAttribute(sw, "anchorx", this.anchorx.ToString());
             XmlHelper.WriteAttribute(sw, "anchory", this.anchory.ToString());
-            sw.Write(">");
+            sw.Write('>');
             sw.WriteEndW(nodeName);
         }
 

@@ -44,7 +44,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             sw.Write("mc:Ignorable=\"xr\" ");
             sw.Write("xmlns:xr=\"http://schemas.microsoft.com/office/spreadsheetml/2014/revision\" ");
             XmlHelper.WriteAttribute(sw, "count", this.count);
-            sw.Write(">");
+            sw.Write('>');
             if (this.extLst != null)
                 this.extLst.Write(sw, "extLst");
             if (this.r != null && this.r.Count > 0)

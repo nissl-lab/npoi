@@ -487,7 +487,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<w:{0}", nodeName);
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:ascii", this.ascii);
             if(this.eastAsiaTheme !=null)
                 XmlHelper.WriteAttribute(sw, "w:eastAsiaTheme", this.eastAsiaTheme.ToString());

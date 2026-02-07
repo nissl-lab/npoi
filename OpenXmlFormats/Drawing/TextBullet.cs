@@ -60,10 +60,10 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<a:{0}", nodeName);
+            sw.WriteStart("a", nodeName);
             XmlHelper.WriteAttribute(sw, "val", this.val);
-            sw.Write(">");
-            sw.Write("</a:{0}>", nodeName);
+            sw.Write('>');
+            sw.WriteEndElement("a", nodeName);
         }
 
         private int valField;
@@ -119,10 +119,10 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<a:{0}", nodeName);
+            sw.WriteStart("a", nodeName);
             XmlHelper.WriteAttribute(sw, "val", this.val);
-            sw.Write(">");
-            sw.Write("</a:{0}>", nodeName);
+            sw.Write('>');
+            sw.WriteEndElement("a", nodeName);
         }
 
         private int valField;
@@ -190,11 +190,11 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<a:{0}", nodeName);
+            sw.WriteStart("a", nodeName);
             XmlHelper.WriteAttribute(sw, "type", this.type.ToString());
             XmlHelper.WriteAttribute(sw, "startAt", this.startAt);
-            sw.Write(">");
-            sw.Write("</a:{0}>", nodeName);
+            sw.Write('>');
+            sw.WriteEndElement("a", nodeName);
         }
 
         private ST_TextAutonumberScheme typeField;
@@ -405,10 +405,10 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<a:{0}", nodeName);
+            sw.WriteStart("a", nodeName);
             XmlHelper.WriteAttribute(sw, "char", this.@char);
-            sw.Write(">");
-            sw.Write("</a:{0}>", nodeName);
+            sw.Write('>');
+            sw.WriteEndElement("a", nodeName);
         }
 
         private string charField;
@@ -450,11 +450,11 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<a:{0}", nodeName);
-            sw.Write(">");
+            sw.WriteStart("a", nodeName);
+            sw.Write('>');
             if (this.blip != null)
                 this.blip.Write(sw, "blip");
-            sw.Write("</a:{0}>", nodeName);
+            sw.WriteEndElement("a", nodeName);
         }
 
         private CT_Blip blipField;

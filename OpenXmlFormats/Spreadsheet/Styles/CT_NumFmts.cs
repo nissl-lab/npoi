@@ -42,9 +42,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<{0}", nodeName);
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "count", this.count, true);
-            sw.Write(">");
+            sw.Write('>');
             if (this.numFmt != null)
             {
                 foreach (CT_NumFmt x in this.numFmt)
@@ -52,7 +52,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                     x.Write(sw, "numFmt");
                 }
             }
-            sw.Write("</{0}>", nodeName);
+            sw.WriteEndElement(nodeName);
         }
 
         public CT_NumFmt AddNewNumFmt()

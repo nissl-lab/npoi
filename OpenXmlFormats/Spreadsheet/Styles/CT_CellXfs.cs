@@ -37,9 +37,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<{0}", nodeName);
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "count", this.count);
-            sw.Write(">");
+            sw.Write('>');
             if (this.xf != null)
             {
                 foreach (CT_Xf x in this.xf)
@@ -47,7 +47,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                     x.Write(sw, "xf");
                 }
             }
-            sw.Write("</{0}>", nodeName);
+            sw.WriteEndElement(nodeName);
         }
 
         public CT_CellXfs()

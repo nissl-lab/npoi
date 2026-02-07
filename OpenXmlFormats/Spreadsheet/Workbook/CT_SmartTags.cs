@@ -38,8 +38,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<{0}", nodeName);
-            sw.Write(">");
+            sw.WriteStart(nodeName);
+            sw.Write('>');
             if (this.smartTagType != null)
             {
                 foreach (CT_SmartTagType x in this.smartTagType)
@@ -47,7 +47,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                     x.Write(sw, "smartTagType");
                 }
             }
-            sw.Write("</{0}>", nodeName);
+            sw.WriteEndElement(nodeName);
         }
 
         [XmlElement]
@@ -82,12 +82,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<{0}", nodeName);
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "namespaceUri", this.namespaceUri);
             XmlHelper.WriteAttribute(sw, "name", this.name);
             XmlHelper.WriteAttribute(sw, "url", this.url);
-            sw.Write(">");
-            sw.Write("</{0}>", nodeName);
+            sw.Write('>');
+            sw.WriteEndElement(nodeName);
         }
 
         private string namespaceUriField;
@@ -156,11 +156,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<{0}", nodeName);
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "embed", this.embed);
             XmlHelper.WriteAttribute(sw, "show", this.show.ToString());
-            sw.Write(">");
-            sw.Write("</{0}>", nodeName);
+            sw.Write('>');
+            sw.WriteEndElement(nodeName);
         }
 
         public CT_SmartTagPr()

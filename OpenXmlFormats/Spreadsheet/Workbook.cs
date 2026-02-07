@@ -50,7 +50,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<{0}", nodeName);
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "appName", this.appName);
             XmlHelper.WriteAttribute(sw, "lastEdited", this.lastEdited);
             XmlHelper.WriteAttribute(sw, "lowestEdited", this.lowestEdited);
@@ -151,13 +151,13 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<{0}", nodeName);
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "autoRecover", this.autoRecover);
             XmlHelper.WriteAttribute(sw, "crashSave", this.crashSave);
             XmlHelper.WriteAttribute(sw, "dataExtractLoad", this.dataExtractLoad);
             XmlHelper.WriteAttribute(sw, "repairLoad", this.repairLoad);
-            sw.Write(">");
-            sw.Write("</{0}>", nodeName);
+            sw.Write('>');
+            sw.WriteEndElement(nodeName);
         }
 
         public CT_FileRecoveryPr()
@@ -252,10 +252,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<{0}", nodeName);
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "ref", this.@ref);
-            sw.Write(">");
-            sw.Write("</{0}>", nodeName);
+            sw.Write('>');
+            sw.WriteEndElement(nodeName);
         }
 
         private string refField;
@@ -336,7 +336,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<{0}", nodeName);
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "calcId", this.calcId);
             if(this.calcMode!= ST_CalcMode.auto)
                 XmlHelper.WriteAttribute(sw, "calcMode", this.calcMode.ToString());
@@ -641,7 +641,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<{0}", nodeName);
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "workbookPassword", this.workbookPassword);
             XmlHelper.WriteAttribute(sw, "revisionsPassword", this.revisionsPassword);
             XmlHelper.WriteAttribute(sw, "lockStructure", this.lockStructure);
@@ -802,7 +802,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<{0}", nodeName);
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "date1904", this.date1904, false);
             if(this.showObjects!= ST_Objects.all)
                 XmlHelper.WriteAttribute(sw, "showObjects", this.showObjects.ToString());
@@ -1150,12 +1150,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<{0}", nodeName);
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "readOnlyRecommended", this.readOnlyRecommended);
             XmlHelper.WriteAttribute(sw, "userName", this.userName);
             XmlHelper.WriteAttribute(sw, "reservationPassword", this.reservationPassword);
-            sw.Write(">");
-            sw.Write("</{0}>", nodeName);
+            sw.Write('>');
+            sw.WriteEndElement(nodeName);
         }
         [XmlAttribute]
         [DefaultValue(false)]
@@ -1236,10 +1236,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<{0}", nodeName);
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "r:id", this.id);
-            sw.Write(">");
-            sw.Write("</{0}>", nodeName);
+            sw.Write('>');
+            sw.WriteEndElement(nodeName);
         }
 
     }

@@ -44,7 +44,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<w:{0}", nodeName);
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:w", this.w);
             XmlHelper.WriteAttribute(sw, "w:h", this.h);
             if( this.orientField!= ST_PageOrientation.portrait)
@@ -199,7 +199,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<w:{0}", nodeName);
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:top", this.top);
             XmlHelper.WriteAttribute(sw, "w:right", this.right);
             XmlHelper.WriteAttribute(sw, "w:bottom", this.bottom);
@@ -326,10 +326,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<w:{0}", nodeName);
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:first", this.first);
             XmlHelper.WriteAttribute(sw, "w:other", this.other);
-            sw.Write(">");
+            sw.Write('>');
             sw.WriteEndW(nodeName);
         }
 
@@ -424,11 +424,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<w:{0}", nodeName);
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:zOrder", this.zOrder.ToString());
             XmlHelper.WriteAttribute(sw, "w:display", this.display.ToString());
             XmlHelper.WriteAttribute(sw, "w:offsetFrom", this.offsetFrom.ToString());
-            sw.Write(">");
+            sw.Write('>');
             if (this.top != null)
                 this.top.Write(sw, "top");
             if (this.left != null)
@@ -651,7 +651,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<w:{0}", nodeName);
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:fmt", this.fmt.ToString());
             XmlHelper.WriteAttribute(sw, "w:start", this.start);
             XmlHelper.WriteAttribute(sw, "w:chapStyle", this.chapStyle);
@@ -762,9 +762,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<w:{0}", nodeName);
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
-            sw.Write(">");
+            sw.Write('>');
             sw.WriteEndW(nodeName);
         }
 
@@ -851,12 +851,12 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<w:{0}", nodeName);
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:countBy", this.countBy);
             XmlHelper.WriteAttribute(sw, "w:start", this.start);
             XmlHelper.WriteAttribute(sw, "w:distance", this.distance);
             XmlHelper.WriteAttribute(sw, "w:restart", this.restart.ToString());
-            sw.Write(">");
+            sw.Write('>');
             sw.WriteEndW(nodeName);
         }
 

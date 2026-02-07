@@ -53,8 +53,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<c:{0}", nodeName);
-            sw.Write(">");
+            sw.WriteStart("c", nodeName);
+            sw.Write('>');
             if (this.thickness != null)
                 this.thickness.Write(sw, "thickness");
             if (this.spPr != null)
@@ -68,7 +68,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                     x.Write(sw, "extLst");
                 }
             }
-            sw.Write("</c:{0}>", nodeName);
+            sw.WriteEndElement("c", nodeName);
         }
 
 
@@ -178,8 +178,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<c:{0}", nodeName);
-            sw.Write(">");
+            sw.WriteStart("c", nodeName);
+            sw.Write('>');
             if (this.wireframe != null)
                 this.wireframe.Write(sw, "wireframe");
             if (this.ser != null)
@@ -210,7 +210,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                     x.Write(sw, "extLst");
                 }
             }
-            sw.Write("</c:{0}>", nodeName);
+            sw.WriteEndElement("c", nodeName);
         }
 
         public int GetSeriesCount()
@@ -342,8 +342,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<c:{0}", nodeName);
-            sw.Write(">");
+            sw.WriteStart("c", nodeName);
+            sw.Write('>');
             if (this.idx != null)
                 this.idx.Write(sw, "idx");
             if (this.order != null)
@@ -363,7 +363,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                     x.Write(sw, "extLst");
                 }
             }
-            sw.Write("</c:{0}>", nodeName);
+            sw.WriteEndElement("c", nodeName);
         }
 
         [XmlElement(Order = 0)]

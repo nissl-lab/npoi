@@ -50,10 +50,10 @@ namespace NPOI.OpenXmlFormats.Vml.Presentation
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<p:{0}", nodeName);
+            sw.WriteStart("p", nodeName);
             XmlHelper.WriteAttribute(sw, "r:id", this.id);
-            sw.Write(">");
-            sw.Write("</p:{0}>", nodeName);
+            sw.Write('>');
+            sw.WriteEndElement("p", nodeName);
         }
 
     }

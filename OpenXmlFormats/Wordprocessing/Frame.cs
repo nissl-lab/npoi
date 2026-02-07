@@ -474,7 +474,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<w:{0}", nodeName);
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:dropCap", this.dropCap.ToString());
             XmlHelper.WriteAttribute(sw, "w:lines", this.lines);
             XmlHelper.WriteAttribute(sw, "w:w", this.w);
@@ -490,7 +490,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             XmlHelper.WriteAttribute(sw, "w:yAlign", this.yAlign.ToString());
             XmlHelper.WriteAttribute(sw, "w:hRule", this.hRule.ToString());
             XmlHelper.WriteAttribute(sw, "w:anchorLock", this.anchorLock.ToString());
-            sw.Write(">");
+            sw.Write('>');
             sw.WriteEndW(nodeName);
         }
 

@@ -200,34 +200,38 @@ namespace NPOI.OpenXmlFormats.Vml.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<x:{0}", nodeName);
+            sw.WriteStart("x", nodeName);
             XmlHelper.WriteAttribute(sw, "ObjectType", this.ObjectType.ToString());
-            sw.Write(">");
+            sw.Write('>');
             if (this.moveWithCells == ST_TrueFalseBlank.t || this.moveWithCells == ST_TrueFalseBlank.@true)
-                sw.Write("<x:MoveWithCells/>", this.moveWithCells);
+                sw.Write("<x:MoveWithCells/>");
             if (this.sizeWithCells == ST_TrueFalseBlank.t || this.sizeWithCells == ST_TrueFalseBlank.@true)
-                sw.Write("<x:SizeWithCells/>", this.sizeWithCells);
+                sw.Write("<x:SizeWithCells/>");
             if (this.anchor != null)
-                sw.Write("<x:Anchor>{0}</x:Anchor>", this.anchor);
+                sw.WriteElementAndContent("x:Anchor", this.anchor);
             if (this.autoFill != ST_TrueFalseBlank.NONE)
-                sw.Write("<x:AutoFill>{0}</x:AutoFill>", this.autoFill);
+                sw.WriteElementAndContent("x:AutoFill", this.autoFill.ToString());
             if (this.visible != ST_TrueFalseBlank.NONE)
-                sw.Write("<x:Visible>{0}</x:Visible>", this.visible);
+                sw.WriteElementAndContent("x:Visible", this.visible.ToString());
             if (this.row != null)
             {
                 foreach (Int32 x in this.row)
                 {
-                    sw.Write("<x:Row>{0}</x:Row>", x);
+                    sw.Write("<x:Row>");
+                    sw.Write(x);
+                    sw.Write("</x:Row>");
                 }
             }
             if (this.column != null)
             {
                 foreach (Int32 x in this.column)
                 {
-                    sw.Write("<x:Column>{0}</x:Column>", x);
+                    sw.Write("<x:Column>");
+                    sw.Write(x);
+                    sw.Write("</x:Column>");
                 }
             }
-            sw.Write("</x:{0}>", nodeName);
+            sw.WriteEndElement("x", nodeName);
         }
 
 

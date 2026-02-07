@@ -40,8 +40,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<{0}", nodeName);
-            sw.Write(">");
+            sw.WriteStart(nodeName);
+            sw.Write('>');
             if (this.row != null)
             {
                 foreach (CT_Row x in this.row)
@@ -49,7 +49,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                     x.Write(sw, "row");
                 }
             }
-            sw.Write("</{0}>", nodeName);
+            sw.WriteEndElement(nodeName);
         }
 
 

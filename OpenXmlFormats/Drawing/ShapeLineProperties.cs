@@ -51,7 +51,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<a:{0}", nodeName);
+            sw.WriteStart("a", nodeName);
             if(this.type!= ST_LineEndType.none)
                 XmlHelper.WriteAttribute(sw, "type", this.type.ToString());
             if (this.w != ST_LineEndWidth.sm)
@@ -201,7 +201,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<a:{0}", nodeName);
+            sw.WriteStart("a", nodeName);
             XmlHelper.WriteAttribute(sw, "lim", this.lim);
             sw.Write("/>");
         }
@@ -259,7 +259,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<a:{0}", nodeName);
+            sw.WriteStart("a", nodeName);
             XmlHelper.WriteAttribute(sw, "val", this.val.ToString());
             sw.Write("/>");
         }
@@ -357,11 +357,11 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<a:{0}", nodeName);
+            sw.WriteStart("a", nodeName);
             XmlHelper.WriteAttribute(sw, "d", this.d);
             XmlHelper.WriteAttribute(sw, "sp", this.sp);
-            sw.Write(">");
-            sw.Write("</a:{0}>", nodeName);
+            sw.Write('>');
+            sw.WriteEndElement("a", nodeName);
         }
 
         private int dField;
@@ -520,7 +520,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<a:{0}", nodeName);
+            sw.WriteStart("a", nodeName);
             XmlHelper.WriteAttribute(sw, "w", this.w);
             if(this.cap!= ST_LineCap.NONE)
                 XmlHelper.WriteAttribute(sw, "cap", this.cap.ToString());
@@ -528,7 +528,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 XmlHelper.WriteAttribute(sw, "cmpd", this.cmpd.ToString());
             if(this.algn!= ST_PenAlignment.NONE)
                 XmlHelper.WriteAttribute(sw, "algn", this.algn.ToString());
-            sw.Write(">");
+            sw.Write('>');
             if (this.noFill != null)
                 sw.Write("<a:noFill/>");
             if (this.solidFill != null)
@@ -559,7 +559,7 @@ namespace NPOI.OpenXmlFormats.Dml
             if (this.extLst != null)
                 this.extLst.Write(sw, "extLst");
 
-            sw.Write("</a:{0}>", nodeName);
+            sw.WriteEndElement("a", nodeName);
         }
 
         public CT_LineProperties()

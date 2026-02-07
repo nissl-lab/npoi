@@ -555,10 +555,10 @@ namespace NPOI.OpenXmlFormats {
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<{0}", nodeName);
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "v", this.v);
-            sw.Write(">");
-            sw.Write("</{0}>", nodeName);
+            sw.Write('>');
+            sw.WriteEndElement(nodeName);
         }
 
 

@@ -98,9 +98,9 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<a:{0}", nodeName);
+            sw.WriteStart("a", nodeName);
             XmlHelper.WriteAttribute(sw, "name", this.name);
-            sw.Write(">");
+            sw.Write('>');
             if (this.dk1 != null)
                 this.dk1.Write(sw, "dk1");
             if (this.lt1 != null)
@@ -127,7 +127,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.folHlink.Write(sw, "folHlink");
             if (this.extLst != null)
                 this.extLst.Write(sw, "extLst");
-            sw.Write("</a:{0}>", nodeName);
+            sw.WriteEndElement("a", nodeName);
         }
 
         [XmlElement(Order = 0)]
@@ -362,9 +362,9 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<a:{0}", nodeName);
+            sw.WriteStart("a", nodeName);
             XmlHelper.WriteAttribute(sw, "name", this.name);
-            sw.Write(">");
+            sw.Write('>');
             if (this.scrgbClr != null)
                 this.scrgbClr.Write(sw, "scrgbClr");
             if (this.srgbClr != null)
@@ -377,7 +377,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.schemeClr.Write(sw, "schemeClr");
             if (this.prstClr != null)
                 this.prstClr.Write(sw, "prstClr");
-            sw.Write("</a:{0}>", nodeName);
+            sw.WriteEndElement("a", nodeName);
         }
 
         public CT_CustomColor()
@@ -509,7 +509,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<a:{0}", nodeName);
+            sw.WriteStart("a", nodeName);
             XmlHelper.WriteAttribute(sw, "script", this.script);
             XmlHelper.WriteAttribute(sw, "typeface", this.typeface, true);
             sw.Write("/>");
@@ -614,8 +614,8 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<a:{0}", nodeName);
-            sw.Write(">");
+            sw.WriteStart("a", nodeName);
+            sw.Write('>');
             if (this.latin != null)
                 this.latin.Write(sw, "latin");
             if (this.ea != null)
@@ -631,7 +631,7 @@ namespace NPOI.OpenXmlFormats.Dml
                     x.Write(sw, "font");
                 }
             }
-            sw.Write("</a:{0}>", nodeName);
+            sw.WriteEndElement("a", nodeName);
         }
 
         public CT_FontCollection()
@@ -748,8 +748,8 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<a:{0}", nodeName);
-            sw.Write(">");
+            sw.WriteStart("a", nodeName);
+            sw.Write('>');
             if (this.effectLst != null)
                 this.effectLst.Write(sw, "effectLst");
             if (this.effectDag != null)
@@ -758,7 +758,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.scene3d.Write(sw, "scene3d");
             if (this.sp3d != null)
                 this.sp3d.Write(sw, "sp3d");
-            sw.Write("</a:{0}>", nodeName);
+            sw.WriteEndElement("a", nodeName);
         }
 
         public CT_EffectStyleItem()
@@ -859,16 +859,16 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<a:{0}", nodeName);
+            sw.WriteStart("a", nodeName);
             XmlHelper.WriteAttribute(sw, "name", this.name);
-            sw.Write(">");
+            sw.Write('>');
             if (this.majorFont != null)
                 this.majorFont.Write(sw, "majorFont");
             if (this.minorFont != null)
                 this.minorFont.Write(sw, "minorFont");
             if (this.extLst != null)
                 this.extLst.Write(sw, "extLst");
-            sw.Write("</a:{0}>", nodeName);
+            sw.WriteEndElement("a", nodeName);
         }
 
         public CT_FontScheme()
@@ -975,8 +975,8 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<a:{0}", nodeName);
-            sw.Write(">");
+            sw.WriteStart("a", nodeName);
+            sw.Write('>');
             if (this.blipFill != null)
             {
                 foreach (CT_BlipFillProperties x in this.blipFill)
@@ -1019,7 +1019,7 @@ namespace NPOI.OpenXmlFormats.Dml
                     x.Write(sw, "pattFill");
                 }
             }
-            sw.Write("</a:{0}>", nodeName);
+            sw.WriteEndElement("a", nodeName);
         }
 
 
@@ -1140,7 +1140,8 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<a:{0}>", nodeName);
+            sw.WriteStart("a", nodeName);
+            sw.Write('>');
             if (this.ln.Count>0)
             {
                 foreach (CT_LineProperties x in this.ln)
@@ -1148,7 +1149,7 @@ namespace NPOI.OpenXmlFormats.Dml
                     x.Write(sw, "ln");
                 }
             }
-            sw.Write("</a:{0}>", nodeName);
+            sw.WriteEndElement("a", nodeName);
         }
     }
 
@@ -1194,7 +1195,8 @@ namespace NPOI.OpenXmlFormats.Dml
         }
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<a:{0}>", nodeName);
+            sw.WriteStart("a", nodeName);
+            sw.Write('>');
             if (this.effectStyle.Count > 0)
             {
                 foreach (CT_EffectStyleItem x in this.effectStyle)
@@ -1202,7 +1204,7 @@ namespace NPOI.OpenXmlFormats.Dml
                     x.Write(sw, "effectStyle");
                 }
             }
-            sw.Write("</a:{0}>", nodeName);
+            sw.WriteEndElement("a", nodeName);
         }
     }
 
@@ -1246,8 +1248,8 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<a:{0}", nodeName);
-            sw.Write(">");
+            sw.WriteStart("a", nodeName);
+            sw.Write('>');
             if (this.solidFill != null)
             {
                 foreach (CT_SolidColorFillProperties x in this.solidFill)
@@ -1290,7 +1292,7 @@ namespace NPOI.OpenXmlFormats.Dml
                     x.Write(sw, "pattFill");
                 }
             }
-            sw.Write("</a:{0}>", nodeName);
+            sw.WriteEndElement("a", nodeName);
         }
 
 
@@ -1418,9 +1420,9 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<a:{0}", nodeName);
+            sw.WriteStart("a", nodeName);
             XmlHelper.WriteAttribute(sw, "name", this.name);
-            sw.Write(">");
+            sw.Write('>');
             if (this.fillStyleLst != null)
                 this.fillStyleLst.Write(sw, "fillStyleLst");
             if (this.lnStyleLst != null)
@@ -1433,7 +1435,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
             if (this.bgFillStyleLst != null)
                 this.bgFillStyleLst.Write(sw, "bgFillStyleLst");
-            sw.Write("</a:{0}>", nodeName);
+            sw.WriteEndElement("a", nodeName);
         }
 
         public CT_StyleMatrix()
@@ -1548,8 +1550,8 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<a:{0}", nodeName);
-            sw.Write(">");
+            sw.WriteStart("a", nodeName);
+            sw.Write('>');
             if (this.clrScheme != null)
                 this.clrScheme.Write(sw, "clrScheme");
             if (this.fontScheme != null)
@@ -1558,7 +1560,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.fmtScheme.Write(sw, "fmtScheme");
             if (this.extLst != null)
                 this.extLst.Write(sw, "extLst");
-            sw.Write("</a:{0}>", nodeName);
+            sw.WriteEndElement("a", nodeName);
         }
 
         public CT_BaseStyles()

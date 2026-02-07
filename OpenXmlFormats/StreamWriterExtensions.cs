@@ -31,7 +31,7 @@ internal static class StreamWriterExtensions
         sw.Write(" ");
         sw.Write(name);
         sw.Write("=\"");
-        sw.Write(value ? 1 : 0);
+        sw.Write(value ? '1' : '0');
         sw.Write("\"");
     }
 
@@ -40,11 +40,27 @@ internal static class StreamWriterExtensions
     {
         sw.Write("<");
         sw.Write(name);
-        sw.Write(">");
+        sw.Write('>');
         sw.Write(value);
         sw.Write("</");
         sw.Write(name);
-        sw.Write(">");
+        sw.Write('>');
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void WriteStart(this StreamWriter sw, string nodeName)
+    {
+        sw.Write('<');
+        sw.Write(nodeName);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void WriteStart(this StreamWriter sw, string ns, string nodeName)
+    {
+        sw.Write('<');
+        sw.Write(ns);
+        sw.Write(':');
+        sw.Write(nodeName);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -52,14 +68,28 @@ internal static class StreamWriterExtensions
     {
         sw.Write("</");
         sw.Write(name);
-        sw.Write(">");
+        sw.Write('>');
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void WriteEndElement(this StreamWriter sw, string ns, string nodeName)
+    {
+        sw.Write("</");
+        sw.Write(ns);
+        sw.Write(':');
+        sw.Write(nodeName);
+        sw.Write('>');
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void WriteStartW(this StreamWriter sw, string nodeName)
+    {
+        sw.WriteStart("w", nodeName);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void WriteEndW(this StreamWriter sw, string nodeName)
     {
-        sw.Write("</w:");
-        sw.Write(nodeName);
-        sw.Write(">");
+        sw.WriteEndElement("w", nodeName);
     }
 }

@@ -200,7 +200,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 sw.Write(" xmlns:xdr=\"http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing\"");
                 sw.Write(" xmlns:mc=\"http://schemas.openxmlformats.org/markup-compatibility/2006\" mc:Ignorable=\"x14ac xr xr2 xr3\" xmlns:x14ac=\"http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac\"");
                 sw.Write(" xmlns:xr=\"http://schemas.microsoft.com/office/spreadsheetml/2014/revision\" xmlns:xr2=\"http://schemas.microsoft.com/office/spreadsheetml/2015/revision2\" xmlns:xr3=\"http://schemas.microsoft.com/office/spreadsheetml/2016/revision3\"");
-                sw.Write(">");
+                sw.Write('>');
                 if (this.sheetPr != null)
                     this.sheetPr.Write(sw, "sheetPr");
                 if (this.dimension != null)

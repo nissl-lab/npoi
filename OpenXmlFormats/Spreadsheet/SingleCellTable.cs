@@ -52,15 +52,15 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<{0}", nodeName);
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "mapId", this.mapId);
             XmlHelper.WriteAttribute(sw, "xpath", this.xpath);
             XmlHelper.WriteAttribute(sw, "denormalized", this.denormalized);
             XmlHelper.WriteAttribute(sw, "xmlDataType", this.xmlDataType.ToString());
-            sw.Write(">");
+            sw.Write('>');
             if (this.extLst != null)
                 this.extLst.Write(sw, "extLst");
-            sw.Write("</{0}>", nodeName);
+            sw.WriteEndElement(nodeName);
         }
 
 

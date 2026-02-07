@@ -60,9 +60,9 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<a:{0}", nodeName);
+            sw.WriteStart("a", nodeName);
             XmlHelper.WriteAttribute(sw, "idx", this.idx, true);
-            sw.Write(">");
+            sw.Write('>');
             if (this.scrgbClr != null)
                 this.scrgbClr.Write(sw, "scrgbClr");
             if (this.srgbClr != null)
@@ -75,7 +75,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.schemeClr.Write(sw, "schemeClr");
             if (this.prstClr != null)
                 this.prstClr.Write(sw, "prstClr");
-            sw.Write("</a:{0}>", nodeName);
+            sw.WriteEndElement("a", nodeName);
         }
 
         [XmlElement(Order = 0)]
@@ -228,9 +228,9 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<a:{0}", nodeName);
+            sw.WriteStart("a", nodeName);
             XmlHelper.WriteAttribute(sw, "idx", this.idx.ToString());
-            sw.Write(">");
+            sw.Write('>');
             if (this.scrgbClr != null)
                 this.scrgbClr.Write(sw, "scrgbClr");
             if (this.srgbClr != null)
@@ -243,7 +243,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.schemeClr.Write(sw, "schemeClr");
             if (this.prstClr != null)
                 this.prstClr.Write(sw, "prstClr");
-            sw.Write("</a:{0}>", nodeName);
+            sw.WriteEndElement("a", nodeName);
         }
         [XmlElement(Order = 0)]
         public CT_ScRgbColor scrgbClr
@@ -383,8 +383,8 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<a:{0}", nodeName);
-            sw.Write(">");
+            sw.WriteStart("a", nodeName);
+            sw.Write('>');
             if (this.lnRef != null)
                 this.lnRef.Write(sw, "lnRef");
             if (this.fillRef != null)
@@ -393,7 +393,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.effectRef.Write(sw, "effectRef");
             if (this.fontRef != null)
                 this.fontRef.Write(sw, "fontRef");
-            sw.Write("</a:{0}>", nodeName);
+            sw.WriteEndElement("a", nodeName);
         }
 
         public CT_StyleMatrixReference AddNewFillRef()

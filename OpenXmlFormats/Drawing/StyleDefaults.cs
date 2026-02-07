@@ -59,8 +59,8 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<a:{0}", nodeName);
-            sw.Write(">");
+            sw.WriteStart("a", nodeName);
+            sw.Write('>');
             if (this.spPr != null)
                 this.spPr.Write(sw, "a:spPr");
             if (this.bodyPr != null)
@@ -71,7 +71,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.style.Write(sw, "style");
             if (this.extLst != null)
                 this.extLst.Write(sw, "extLst");
-            sw.Write("</a:{0}>", nodeName);
+            sw.WriteEndElement("a", nodeName);
         }
 
         public CT_DefaultShapeDefinition()
@@ -196,8 +196,8 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<a:{0}", nodeName);
-            sw.Write(">");
+            sw.WriteStart("a", nodeName);
+            sw.Write('>');
             if (this.spDef != null)
                 this.spDef.Write(sw, "spDef");
             if (this.lnDef != null)
@@ -206,7 +206,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.txDef.Write(sw, "txDef");
             if (this.extLst != null)
                 this.extLst.Write(sw, "extLst");
-            sw.Write("</a:{0}>", nodeName);
+            sw.WriteEndElement("a", nodeName);
         }
 
         [XmlElement(Order = 0)]

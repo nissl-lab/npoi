@@ -471,9 +471,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<{0}", nodeName);
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "r:id", this.idField);
-            sw.Write(">");
+            sw.Write('>');
 
             if (this.sheetNamesField != null)
                 this.sheetNamesField.Write(sw, "sheetNames");
@@ -483,7 +483,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             if (this.sheetDataSetField != null)
                 this.sheetDataSetField.Write(sw, "sheetDataSet");
 
-            sw.Write("</{0}>", nodeName);
+            sw.WriteEndElement(nodeName);
         }
     }
     
@@ -512,7 +512,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<{0}", nodeName);
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "val", this.valField);
             sw.Write("/>");
         }
@@ -599,7 +599,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<{0}", nodeName);
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "name", this.nameField);
             XmlHelper.WriteAttribute(sw, "refersTo", this.refersToField);
             if(this.sheetIdFieldSpecified)
@@ -679,17 +679,17 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<{0}", nodeName);
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "sheetId", this.sheetIdField,true);
             if(this.refreshError)
                 XmlHelper.WriteAttribute(sw, "refreshError", this.refreshErrorField);
-            sw.Write(">");
+            sw.Write('>');
             foreach (CT_ExternalRow ctObj in this.rowField)
             {
                 ctObj.Write(sw, "row");
             }
 
-            sw.Write("</{0}>", nodeName);
+            sw.WriteEndElement(nodeName);
         }
     }
     
@@ -748,15 +748,15 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<{0}", nodeName);
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "r", this.rField);
-            sw.Write(">");
+            sw.Write('>');
             foreach (CT_ExternalCell ctObj in this.cellField)
             {
                 ctObj.Write(sw, "cell");
             }
 
-            sw.Write("</{0}>", nodeName);
+            sw.WriteEndElement(nodeName);
         }
     }
     
@@ -844,7 +844,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<{0}", nodeName);
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "r", this.rField);
             if (this.t != ST_CellType.n)
                 XmlHelper.WriteAttribute(sw, "t", this.tField.ToString());
@@ -856,9 +856,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
             else
             {
-                sw.Write(">");
-                sw.Write("<v>{0}</v>", XmlHelper.EncodeXml(this.v));
-                sw.Write("</{0}>", nodeName);
+                sw.Write('>');
+                sw.WriteElementAndContent("v", XmlHelper.EncodeXml(this.v));
+                sw.WriteEndElement(nodeName);
             }
         }
     }
@@ -931,10 +931,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<{0}", nodeName);
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "r:id", this.idField);
             XmlHelper.WriteAttribute(sw, "progId", this.progIdField);
-            sw.Write(">");
+            sw.Write('>');
             if (this.oleItemsField.Count > 0)
             {
                 sw.Write("<oleItems>");
@@ -944,7 +944,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 }
                 sw.Write("</oleItems>");
             }
-            sw.Write("</{0}>", nodeName);
+            sw.WriteEndElement(nodeName);
         }
     }
     
@@ -1027,7 +1027,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<{0}", nodeName);
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "name", this.name);
             XmlHelper.WriteAttribute(sw, "advise", this.advise);
             XmlHelper.WriteAttribute(sw, "icon", this.iconField, false);
@@ -1078,14 +1078,15 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<{0}>", nodeName);
+            sw.WriteStart(nodeName);
+            sw.Write('>');
 
             foreach (CT_ExternalSheetName ctObj in this.sheetNameField)
             {
                 ctObj.Write(sw, "sheetName");
             }
 
-            sw.Write("</{0}>", nodeName);
+            sw.WriteEndElement(nodeName);
         }
     }
     
@@ -1130,14 +1131,15 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<{0}>", nodeName);
+            sw.WriteStart(nodeName);
+            sw.Write('>');
 
             foreach (CT_ExternalDefinedName ctObj in this.definedNameField)
             {
                 ctObj.Write(sw, "definedName");
             }
 
-            sw.Write("</{0}>", nodeName);
+            sw.WriteEndElement(nodeName);
         }
     }
     
@@ -1181,14 +1183,14 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<{0}", nodeName);
-            sw.Write(">");
+            sw.WriteStart(nodeName);
+            sw.Write('>');
             foreach (CT_ExternalSheetData ctObj in this.sheetDataField)
             {
                 ctObj.Write(sw, "sheetData");
             }
 
-            sw.Write("</{0}>", nodeName);
+            sw.WriteEndElement(nodeName);
         }
     }
     

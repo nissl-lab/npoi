@@ -69,7 +69,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<{0}", nodeName);
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "syncHorizontal", this.syncHorizontal, false);
             XmlHelper.WriteAttribute(sw, "syncVertical", this.syncVertical, false);
             XmlHelper.WriteAttribute(sw, "syncRef", this.syncRef);
@@ -79,14 +79,14 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "codeName", this.codeName);
             XmlHelper.WriteAttribute(sw, "filterMode", this.filterMode,false);
             XmlHelper.WriteAttribute(sw, "enableFormatConditionsCalculation", this.enableFormatConditionsCalculation, false);
-            sw.Write(">");
+            sw.Write('>');
             if (this.tabColor != null)
                 this.tabColor.Write(sw, "tabColor");
             if (this.outlinePr != null)
                 this.outlinePr.Write(sw, "outlinePr");
             if (this.pageSetUpPr != null)
                 this.pageSetUpPr.Write(sw, "pageSetUpPr");
-            sw.Write("</{0}>", nodeName);
+            sw.WriteEndElement(nodeName);
         }
 
 

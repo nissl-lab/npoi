@@ -61,8 +61,8 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<a:{0}", nodeName);
-            sw.Write(">");
+            sw.WriteStart("a", nodeName);
+            sw.Write('>');
             if (this.anchor != null)
                 this.anchor.Write(sw, "anchor");
             if (this.norm != null)
@@ -71,7 +71,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.up.Write(sw, "up");
             if (this.extLst != null)
                 this.extLst.Write(sw, "extLst");
-            sw.Write("</a:{0}>", nodeName);
+            sw.WriteEndElement("a", nodeName);
         }
 
         [XmlElement(Order = 0)]

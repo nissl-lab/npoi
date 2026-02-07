@@ -45,14 +45,14 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<{0}", nodeName);
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "ref", this.@ref);
             XmlHelper.WriteAttribute(sw, "authorId", this.authorId, true);
             XmlHelper.WriteAttribute(sw, "guid", this.guid);
-            sw.Write(">");
+            sw.Write('>');
             if (this.text != null)
                 this.text.Write(sw, "text");
-            sw.Write("</{0}>", nodeName);
+            sw.WriteEndElement(nodeName);
         }
         [XmlElement("text")]
         public CT_Rst text

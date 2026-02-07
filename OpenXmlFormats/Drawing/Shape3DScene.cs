@@ -61,8 +61,8 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<a:{0}", nodeName);
-            sw.Write(">");
+            sw.WriteStart("a", nodeName);
+            sw.Write('>');
             if (this.camera != null)
                 this.camera.Write(sw, "camera");
             if (this.lightRig != null)
@@ -71,7 +71,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.backdrop.Write(sw, "backdrop");
             if (this.extLst != null)
                 this.extLst.Write(sw, "extLst");
-            sw.Write("</a:{0}>", nodeName);
+            sw.WriteEndElement("a", nodeName);
         }
 
         [XmlElement(Order = 0)]

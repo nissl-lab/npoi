@@ -38,7 +38,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<a:{0}", nodeName);
+            sw.WriteStart("a", nodeName);
             XmlHelper.WriteAttribute(sw, "val", this.val, true);
             sw.Write("/>");
         }
@@ -83,7 +83,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<a:{0}", nodeName);
+            sw.WriteStart("a", nodeName);
             XmlHelper.WriteAttribute(sw, "val", this.val, true);
             sw.Write("/>");
         }
@@ -138,7 +138,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<a:{0}", nodeName);
+            sw.WriteStart("a", nodeName);
             XmlHelper.WriteAttribute(sw, "pos", this.pos);
             XmlHelper.WriteAttribute(sw, "algn", this.algn.ToString());
             sw.Write("/>");
@@ -245,9 +245,10 @@ namespace NPOI.OpenXmlFormats.Dml
             }
         }
 
-        internal void Write(StreamWriter sw, string p)
+        internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<a:{0}>", p);
+            sw.WriteStart("a", nodeName);
+            sw.Write('>');
             if (this.tab != null)
             {
                 foreach (CT_TextTabStop tts in tab)
@@ -255,7 +256,7 @@ namespace NPOI.OpenXmlFormats.Dml
                     tts.Write(sw, "tab");
                 }
             }
-            sw.Write("</a:{0}>", p);
+            sw.WriteEndElement("a", nodeName);
         }
 
         internal static CT_TextTabStopList Parse(XmlNode node, XmlNamespaceManager namespaceManager)
@@ -320,10 +321,11 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<a:{0}>", nodeName);
+            sw.WriteStart("a", nodeName);
+            sw.Write('>');
             if (this.rPr != null)
                 this.rPr.Write(sw, "rPr");
-            sw.Write("</a:{0}>", nodeName);
+            sw.WriteEndElement("a", nodeName);
         }
 
         [XmlElement(Order = 0)]
@@ -374,12 +376,13 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<a:{0}>", nodeName);
+            sw.WriteStart("a", nodeName);
+            sw.Write('>');
             if (this.spcPct != null)
                 this.spcPct.Write(sw, "spcPct");
             if (this.spcPts != null)
                 this.spcPts.Write(sw, "spcPts");
-            sw.Write("</a:{0}>", nodeName);
+            sw.WriteEndElement("a", nodeName);
         }
         public CT_TextSpacingPercent spcPct
         {
@@ -470,8 +473,8 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<a:{0}", nodeName);
-            sw.Write(">");
+            sw.WriteStart("a", nodeName);
+            sw.Write('>');
             if (this.pPr != null)
                 this.pPr.Write(sw, "pPr");
             //if (this.r != null)
@@ -512,7 +515,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
             if (this.endParaRPr != null)
                 this.endParaRPr.Write(sw, "endParaRPr");
-            sw.Write("</a:{0}>", nodeName);
+            sw.WriteEndElement("a", nodeName);
         }
 
         private CT_TextParagraphProperties pPrField;
@@ -814,7 +817,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<a:{0}", nodeName);
+            sw.WriteStart("a", nodeName);
             XmlHelper.WriteAttribute(sw, "marL", this.marL);
             XmlHelper.WriteAttribute(sw, "marR", this.marR);
             if(this.lvlFieldSpecified)
@@ -831,7 +834,7 @@ namespace NPOI.OpenXmlFormats.Dml
             if(this.latinLnBrkFieldSpecified)
                 XmlHelper.WriteAttribute(sw, "latinLnBrk", this.latinLnBrk, true);
             XmlHelper.WriteAttribute(sw, "hangingPunct", this.hangingPunct, false);
-            sw.Write(">");
+            sw.Write('>');
             if (this.lnSpc != null)
                 this.lnSpc.Write(sw, "lnSpc");
             if (this.spcBef != null)
@@ -868,7 +871,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.defRPr.Write(sw, "defRPr");
             if (this.extLst != null)
                 this.extLst.Write(sw, "extLst");
-            sw.Write("</a:{0}>", nodeName);
+            sw.WriteEndElement("a", nodeName);
         }
         
         [XmlElement(Order = 0)]
@@ -1702,16 +1705,16 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<a:{0}", nodeName);
+            sw.WriteStart("a", nodeName);
             XmlHelper.WriteAttribute(sw, "t", this.t);
             XmlHelper.WriteAttribute(sw, "id", this.id);
             XmlHelper.WriteAttribute(sw, "type", this.type);
-            sw.Write(">");
+            sw.Write('>');
             if (this.rPr != null)
                 this.rPr.Write(sw, "rPr");
             if (this.pPr != null)
                 this.pPr.Write(sw, "pPr");
-            sw.Write("</a:{0}>", nodeName);
+            sw.WriteEndElement("a", nodeName);
         }
 
         public CT_TextField()
