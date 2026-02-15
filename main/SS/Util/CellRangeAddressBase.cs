@@ -1,8 +1,12 @@
 ﻿namespace NPOI.SS.Util
 {
     using EnumsNET;
+    using NPOI.HSSF;
+    using NPOI.SS.UserModel;
     using System;
+    using System.Collections;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
 
     /**
 * See OOO documentation: excelfileformat.pdf sec 2.5.14 - 'Cell Range Address'<p/>
@@ -11,7 +15,7 @@
 * 
 * @author Josh Micich
 */
-    public abstract class CellRangeAddressBase
+    public abstract class CellRangeAddressBase : IEnumerable<CellAddress>
     {
 
         // /** max 65536 rows in BIFF8 */
@@ -59,11 +63,11 @@
         //}
 
         /**
-	 * Validate the range limits against the supplied version of Excel
-	 *
-	 * @param ssVersion the version of Excel to validate against
-	 * @throws IllegalArgumentException if the range limits are outside of the allowed range
-	 */
+     * Validate the range limits against the supplied version of Excel
+     *
+     * @param ssVersion the version of Excel to validate against
+     * @throws IllegalArgumentException if the range limits are outside of the allowed range
+     */
         public void Validate(SpreadsheetVersion ssVersion)
         {
             ValidateRow(_firstRow, ssVersion);
@@ -72,9 +76,9 @@
             ValidateColumn(_lastCol, ssVersion);
         }
         /**
-	 * Runs a bounds check for row numbers
-	 * @param row
-	 */
+     * Runs a bounds check for row numbers
+     * @param row
+     */
         private static void ValidateRow(int row, SpreadsheetVersion ssVersion)
         {
             int maxrow = ssVersion.LastRowIndex;
@@ -96,15 +100,73 @@
             if(column < 0)
                 throw new ArgumentException("Minimum column number is 0");
         }
+        /// <summary>
+        /// Determines if the given coordinates lie within the bounds
+        /// of this range.
+        /// </summary>
+        /// <param name="rowInd">The row, 0-based.</param>
+        /// <param name="colInd">The column, 0-based.</param>
+        /// <returns>True if the coordinates lie within the bounds, false otherwise.</returns>
+        /// @see #intersects(CellRangeAddressBase) for checking if two ranges overlap
         public bool IsInRange(int rowInd, int colInd)
         {
             return _firstRow <= rowInd && rowInd <= _lastRow && //containsRow
                 _firstCol <= colInd && colInd <= _lastCol; //containsColumn
         }
+        /// <summary>
+        /// <para>
+        /// Determines if the given <see cref="CellReference"/> lies within the bounds
+        /// of this range.
+        /// </para>
+        /// <para>
+        /// NOTE: It is up to the caller to ensure the reference is
+        /// for the correct sheet, since this instance doesn't have a sheet reference.
+        /// </para>
+        /// </summary>
+        /// <param name="reference">the CellReference to check</param>
+        /// <returns>True if the reference lies within the bounds, false otherwise.</returns>
+        /// @see #intersects(CellRangeAddressBase) for checking if two ranges overlap
         public bool IsInRange(CellReference reference)
         {
             return IsInRange(reference.Row, reference.Col);
         }
+
+        /// <summary>
+        /// <para>
+        /// Determines if the given <see cref="CellAddress"/> lies within the bounds
+        /// of this range.
+        /// </para>
+        /// <para>
+        /// NOTE: It is up to the caller to ensure the reference is
+        /// for the correct sheet, since this instance doesn't have a sheet reference.
+        /// </para>
+        /// </summary>
+        /// <param name="ref">the CellAddress to check</param>
+        /// <returns>True if the reference lies within the bounds, false otherwise.</returns>
+        /// @see #intersects(CellRangeAddressBase) for checking if two ranges overlap
+        public bool IsInRange(CellAddress ref1)
+        {
+            return IsInRange(ref1.Row, ref1.Column);
+        }
+
+        /// <summary>
+        /// <para>
+        /// Determines if the given <see cref="Cell"/> lies within the bounds
+        /// of this range.
+        /// </para>
+        /// <para>
+        /// NOTE: It is up to the caller to ensure the reference is
+        /// for the correct sheet, since this instance doesn't have a sheet reference.
+        /// </para>
+        /// </summary>
+        /// <param name="cell">the Cell to check</param>
+        /// <returns>True if the cell lies within the bounds, false otherwise.</returns>
+        /// @see #intersects(CellRangeAddressBase) for checking if two ranges overlap
+        public bool IsInRange(ICell cell)
+        {
+            return IsInRange(cell.RowIndex, cell.ColumnIndex);
+        }
+
         public bool IsFullColumnRange
         {
             get
@@ -168,19 +230,19 @@
         /// </remarks>
         public ISet<CellPosition> GetPosition(int rowInd, int colInd)
         {
-	        HashSet<CellPosition> positions = new HashSet<CellPosition>();
-	        if (rowInd > FirstRow && rowInd < LastRow && colInd > FirstColumn && colInd < LastColumn) {
-	            positions.Add(CellPosition.INSIDE);
-	            return positions; // entirely inside, matches no boundaries
-	        }
-	        // check edges
-	        if (rowInd == FirstRow) positions.Add(CellPosition.TOP);
-	        if (rowInd == LastRow) positions.Add(CellPosition.BOTTOM);
-	        if (colInd == FirstColumn) positions.Add(CellPosition.LEFT);
-	        if (colInd == LastColumn) positions.Add(CellPosition.RIGHT);
-	    
-	        return positions;
-	    }
+            HashSet<CellPosition> positions = new HashSet<CellPosition>();
+            if (rowInd > FirstRow && rowInd < LastRow && colInd > FirstColumn && colInd < LastColumn) {
+                positions.Add(CellPosition.INSIDE);
+                return positions; // entirely inside, matches no boundaries
+            }
+            // check edges
+            if (rowInd == FirstRow) positions.Add(CellPosition.TOP);
+            if (rowInd == LastRow) positions.Add(CellPosition.BOTTOM);
+            if (colInd == FirstColumn) positions.Add(CellPosition.LEFT);
+            if (colInd == LastColumn) positions.Add(CellPosition.RIGHT);
+        
+            return positions;
+        }
 
         /**
          * @return column number for the upper left hand corner
@@ -240,6 +302,7 @@
                 return (_lastRow - _firstRow + 1) * (_lastCol - _firstCol + 1);
             }
         }
+
         public override String ToString()
         {
             CellReference crA = new CellReference(_firstRow, _firstCol);
@@ -299,7 +362,86 @@
                 (MaxRow << 24));
             return code;
         }
-    }
+
+        /// <summary>
+        /// Returns an enumerator over the CellAddresses in this cell range in row-major order.
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerator<CellAddress> GetEnumerator()
+        {
+            return new RowMajorCellAddressEnumerator(this);
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+        private class RowMajorCellAddressEnumerator : IEnumerator<CellAddress>
+        {
+
+            private int firstRow, firstCol, lastRow, lastCol;
+            private int r, c;
+            public RowMajorCellAddressEnumerator(CellRangeAddressBase ref1)
+            {
+                r = firstRow = ref1.FirstRow;
+                c = firstCol = ref1.FirstColumn;
+                lastRow = ref1.LastRow;
+                lastCol = ref1.LastColumn;
+
+                // whole row and whole column ranges currently not supported
+                if(firstRow < 0)
+                    throw new InvalidOperationException("First row cannot be negative.");
+                if(firstCol < 0)
+                    throw new InvalidOperationException("First column cannot be negative.");
+
+                // avoid infinite iteration
+                if(firstRow > lastRow)
+                    throw new InvalidOperationException("First row cannot be greater than last row.");
+                if(firstCol > lastCol)
+                    throw new InvalidOperationException("First column cannot be greater than last column.");
+            }
+
+            public CellAddress Current { get; private set; }
+
+            object IEnumerator.Current => Current;
+
+            public void Dispose()
+            {
+                
+            }
+
+            public bool MoveNext()
+            {
+                if(r <= lastRow && c <= lastCol)
+                {
+                    CellAddress addr = new CellAddress(r, c);
+                    // row major order
+                    if(c < lastCol)
+                    {
+                        c++;
+                    }
+                    else
+                    { //c >= lastCol, end of row reached
+                        c = firstCol; //CR
+                        r++;          //LF
+                    }
+                    Current = addr;
+                    return true;
+                }
+                else
+                {
+                    Current = null;
+                    return false;
+                }
+            }
+
+            public void Reset()
+            {
+                throw new InvalidOperationException();
+            }
+        }
+
+}
 
     /// <summary>
     /// Indicates a cell or range is in the given relative position in a range.
