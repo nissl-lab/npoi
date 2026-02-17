@@ -21,6 +21,9 @@ using System.IO;
 using NPOI.OpenXml4Net.OPC;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using System.Xml;
+using System.Runtime.CompilerServices;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace NPOI.XSSF.Model
 {
@@ -68,13 +71,26 @@ namespace NPOI.XSSF.Model
             doc.SetCalcChain(chain);
             doc.Save(out1);
         }
-
+        public async Task WriteToAsync(Stream outStream, CancellationToken cancellationToken = default)
+        {
+            CalcChainDocument doc = new CalcChainDocument();
+            doc.SetCalcChain(chain);
+            await doc.SaveAsync(outStream, cancellationToken);
+        }
 
         protected internal override void Commit()
         {
             PackagePart part = GetPackagePart();
             Stream out1 = part.GetOutputStream();
             WriteTo(out1);
+            out1.Close();
+        }
+
+        protected internal override async Task CommitAsync(CancellationToken cancellationToken =default)
+        {
+            PackagePart part = GetPackagePart();
+            Stream out1 = part.GetOutputStream();
+            await WriteToAsync(out1, cancellationToken);
             out1.Close();
         }
 

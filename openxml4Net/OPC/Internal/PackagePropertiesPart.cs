@@ -8,6 +8,8 @@ using NPOI.SS.Util;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using NPOI.Util;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace NPOI.OpenXml4Net.OPC.Internal
 {
@@ -647,7 +649,10 @@ namespace NPOI.OpenXml4Net.OPC.Internal
             throw new InvalidOperationException("Operation not authorized");
         }
 
-
+        public override Task<bool> SaveAsync(Stream zos, CancellationToken cancellationToken = default)
+        {
+            throw new InvalidOperationException("Operation not authorized");
+        }
         public override bool Load(Stream ios) {
             throw new InvalidOperationException("Operation not authorized");
         }
