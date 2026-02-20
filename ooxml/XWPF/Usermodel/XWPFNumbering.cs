@@ -308,8 +308,17 @@ namespace NPOI.XWPF.UserModel
                 string foundNumId = abstractNum.GetAbstractNum().abstractNumId;
                 if(abstractNumID.Equals(foundNumId))
                 {
-                    ctNumbering.RemoveAbstractNum(int.Parse(foundNumId));
                     abstractNums.Remove(abstractNum);
+                    break;
+                }
+            }
+            for(int i = 0; i < ctNumbering.SizeOfAbstractNumArray; i++)
+            {
+                var ctAbstractNum = ctNumbering.abstractNum[i];
+                string foundNumId = ctAbstractNum.abstractNumId;
+                if(abstractNumID.Equals(foundNumId))
+                {
+                    ctNumbering.RemoveAbstractNum(i);
                     return true;
                 }
             }

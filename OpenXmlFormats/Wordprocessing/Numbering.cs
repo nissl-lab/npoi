@@ -339,6 +339,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
+        public int SizeOfAbstractNumArray
+        {
+            get { return abstractNum.Count; }
+        }
+
         public IList<CT_Num> GetNumList()
         {
             return numField;
