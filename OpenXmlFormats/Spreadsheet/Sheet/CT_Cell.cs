@@ -65,9 +65,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<");
-            sw.Write(nodeName);
-
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "r", this.r);
             XmlHelper.WriteAttribute(sw, "s", this.s, true);
             if (this.t != ST_CellType.n)
@@ -84,7 +82,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
             else
             {
-                sw.Write(">");
+                sw.Write('>');
                 if (this.f != null)
                     this.f.Write(sw, "f");
                 if (!string.IsNullOrEmpty(this.v))

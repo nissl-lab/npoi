@@ -264,7 +264,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "fieldListSortAscending", this.fieldListSortAscending);
             XmlHelper.WriteAttribute(sw, "mdxSubqueries", this.mdxSubqueries);
             XmlHelper.WriteAttribute(sw, "customListSort", this.customListSort);
-            sw.Write(">");
+            sw.Write('>');
             if (this.location != null)
                 this.location.Write(sw, "location");
             if (this.pivotFields != null)
@@ -1894,7 +1894,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "ref", this.@ref, true);
             XmlHelper.WriteAttribute(sw, "firstHeaderRow", this.firstHeaderRow, true);
             XmlHelper.WriteAttribute(sw, "firstDataRow", this.firstDataRow, true);
@@ -2030,7 +2030,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "count", this.count);
             if (this.pivotField == null || this.pivotField.Count == 0)
             {
@@ -2038,7 +2038,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
             else
             {
-                sw.Write(">");
+                sw.Write('>');
                 if (this.pivotField != null && this.pivotField.Count > 0)
                 {
                     foreach (CT_PivotField x in this.pivotField)
@@ -2046,7 +2046,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                         x.Write(sw, "pivotField");
                     }
                 }
-                sw.Write(string.Format("</{0}>", nodeName));
+                sw.WriteEndElement(nodeName);
             }
         }
 
@@ -2250,7 +2250,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "name", this.name);
             if (this.axis != null)
                 XmlHelper.WriteAttribute(sw, "axis", this.axis.ToString());
@@ -2307,14 +2307,14 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
             else
             {
-                sw.Write(">");
+                sw.Write('>');
                 if (this.items != null)
                     this.items.Write(sw, "items");
                 if (this.autoSortScope != null)
                     this.autoSortScope.Write(sw, "autoSortScope");
                 if (this.extLst != null)
                     this.extLst.Write(sw, "extLst");
-                sw.Write(string.Format("</{0}>", nodeName));
+                sw.WriteEndElement(nodeName);
             }
         }
 
@@ -3266,7 +3266,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "count", this.count);
             if (this.item == null || this.item.Count == 0)
             {
@@ -3274,7 +3274,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
             else
             {
-                sw.Write(">");
+                sw.Write('>');
                 if (this.item != null && this.item.Count > 0)
                 {
                     foreach (CT_Item x in this.item)
@@ -3282,7 +3282,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                         x.Write(sw, "item");
                     }
                 }
-                sw.Write(string.Format("</{0}>", nodeName));
+                sw.WriteEndElement(nodeName);
             }
         }
 
@@ -3393,7 +3393,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "n", this.n, false);
             if (this.t != ST_ItemType.data)
                 XmlHelper.WriteAttribute(sw, "t", this.t.ToString());
@@ -3689,17 +3689,17 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteStart(nodeName);
             if (this.pivotArea == null)
             {
                 sw.Write("/>");
             }
             else
             {
-                sw.Write(">");
+                sw.Write('>');
                 if (this.pivotArea != null)
                     this.pivotArea.Write(sw, "pivotArea");
-                sw.Write(string.Format("</{0}>", nodeName));
+                sw.WriteEndElement(nodeName);
             }
         }
 
@@ -3768,7 +3768,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "count", this.count);
             if (this.field == null || this.field.Count == 0)
             {
@@ -3776,7 +3776,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
             else
             {
-                sw.Write(">");
+                sw.Write('>');
                 if (this.field != null && this.field.Count > 0)
                 {
                     foreach (CT_Field x in this.field)
@@ -3784,7 +3784,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                         x.Write(sw, "field");
                     }
                 }
-                sw.Write(string.Format("</{0}>", nodeName));
+                sw.WriteEndElement(nodeName);
             }
         }
 
@@ -3869,7 +3869,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "x", this.x, true);
             sw.Write("/>");
         }
@@ -3917,7 +3917,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "count", this.count);
             if (this.i == null || this.i.Count == 0)
             {
@@ -3925,7 +3925,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
             else
             {
-                sw.Write(">");
+                sw.Write('>');
                 if (this.i != null && this.i.Count > 0)
                 {
                     foreach (CT_I x in this.i)
@@ -3933,7 +3933,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                         x.Write(sw, "i");
                     }
                 }
-                sw.Write(string.Format("</{0}>", nodeName));
+                sw.WriteEndElement(nodeName);
             }
         }
 
@@ -4019,7 +4019,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteStart(nodeName);
             if (this.t != ST_ItemType.data)
                 XmlHelper.WriteAttribute(sw, "t", this.t.ToString());
             XmlHelper.WriteAttribute(sw, "r", this.r);
@@ -4031,7 +4031,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
             else
             {
-                sw.Write(">");
+                sw.Write('>');
                 if (this.x != null && this.x.Count > 0)
                 {
                     foreach (CT_X x in this.x)
@@ -4039,7 +4039,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                         x.Write(sw, "x");
                     }
                 }
-                sw.Write(string.Format("</{0}>", nodeName));
+                sw.WriteEndElement(nodeName);
             }
         }
 
@@ -4142,7 +4142,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "count", this.count);
 
             if (this.field == null || this.field.Count == 0)
@@ -4151,7 +4151,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
             else
             {
-                sw.Write(">");
+                sw.Write('>');
                 if (this.field != null && this.field.Count > 0)
                 {
                     foreach (CT_Field x in this.field)
@@ -4159,7 +4159,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                         x.Write(sw, "field");
                     }
                 }
-                sw.Write(string.Format("</{0}>", nodeName));
+                sw.WriteEndElement(nodeName);
             }
         }
 
@@ -4244,7 +4244,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "count", this.count);
 
             if (this.i == null || this.i.Count == 0)
@@ -4253,7 +4253,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
             else
             {
-                sw.Write(">");
+                sw.Write('>');
                 if (this.i != null && this.i.Count > 0)
                 {
                     foreach (CT_I x in this.i)
@@ -4261,7 +4261,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                         x.Write(sw, "i");
                     }
                 }
-                sw.Write(string.Format("</{0}>", nodeName));
+                sw.WriteEndElement(nodeName);
             }
         }
 
@@ -4343,7 +4343,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "count", this.count);
 
             if (this.pageField == null || this.pageField.Count == 0)
@@ -4352,7 +4352,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
             else
             {
-                sw.Write(">");
+                sw.Write('>');
                 if (this.pageField != null && this.pageField.Count > 0)
                 {
                     foreach (CT_PageField x in this.pageField)
@@ -4360,7 +4360,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                         x.Write(sw, "pageField");
                     }
                 }
-                sw.Write(string.Format("</{0}>", nodeName));
+                sw.WriteEndElement(nodeName);
             }
         }
 
@@ -4463,7 +4463,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "fld", this.fld, true);
             XmlHelper.WriteAttribute(sw, "item", this.item, false);
             XmlHelper.WriteAttribute(sw, "hier", this.hier, false);
@@ -4476,10 +4476,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
             else
             {
-                sw.Write(">");
+                sw.Write('>');
                 if (this.extLst != null)
                     this.extLst.Write(sw, "extLst");
-                sw.Write(string.Format("</{0}>", nodeName));
+                sw.WriteEndElement(nodeName);
             }
         }
 
@@ -4635,7 +4635,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "count", this.count);
 
             if (this.dataField == null || this.dataField.Count == 0)
@@ -4644,7 +4644,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
             else
             {
-                sw.Write(">");
+                sw.Write('>');
                 if (this.dataField != null && this.dataField.Count > 0)
                 {
                     foreach (CT_DataField x in this.dataField)
@@ -4652,7 +4652,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                         x.Write(sw, "dataField");
                     }
                 }
-                sw.Write(string.Format("</{0}>", nodeName));
+                sw.WriteEndElement(nodeName);
             }
         }
 
@@ -4765,7 +4765,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "name", this.name);
             XmlHelper.WriteAttribute(sw, "fld", this.fld, true);
             XmlHelper.WriteAttribute(sw, "subtotal", this.subtotal.ToString(), false);
@@ -4780,10 +4780,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
             else
             {
-                sw.Write(">");
+                sw.Write('>');
                 if (this.extLst != null)
                     this.extLst.Write(sw, "extLst");
-                sw.Write(string.Format("</{0}>", nodeName));
+                sw.WriteEndElement(nodeName);
             }
         }
 
@@ -4998,7 +4998,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "count", this.count);
             if (this.format == null || this.format.Count == 0)
             {
@@ -5006,7 +5006,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
             else
             {
-                sw.Write(">");
+                sw.Write('>');
                 if (this.format != null && this.format.Count > 0)
                 {
                     foreach (CT_Format x in this.format)
@@ -5014,7 +5014,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                         x.Write(sw, "format");
                     }
                 }
-                sw.Write(string.Format("</{0}>", nodeName));
+                sw.WriteEndElement(nodeName);
             }
         }
 
@@ -5086,7 +5086,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "action", this.action.ToString(), false, ST_FormatAction.formatting.ToString());
             XmlHelper.WriteAttribute(sw, "dxfId", this.dxfId);
             if (this.pivotArea == null && (this.extLst == null || this.extLst.ext.Count == 0))
@@ -5095,12 +5095,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
             else
             {
-                sw.Write(">");
+                sw.Write('>');
                 if (this.pivotArea != null)
                     this.pivotArea.Write(sw, "pivotArea");
                 if (this.extLst != null && this.extLst.ext.Count != 0)
                     this.extLst.Write(sw, "extLst");
-                sw.Write(string.Format("</{0}>", nodeName));
+                sw.WriteEndElement(nodeName);
             }
         }
 
@@ -5235,7 +5235,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "count", this.count);
 
             if (this.conditionalFormat == null || this.conditionalFormat.Count == 0)
@@ -5244,7 +5244,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
             else
             {
-                sw.Write(">");
+                sw.Write('>');
                 if (this.conditionalFormat != null && this.conditionalFormat.Count > 0)
                 {
                     foreach (CT_ConditionalFormat x in this.conditionalFormat)
@@ -5252,7 +5252,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                         x.Write(sw, "conditionalFormat");
                     }
                 }
-                sw.Write(string.Format("</{0}>", nodeName));
+                sw.WriteEndElement(nodeName);
             }
         }
 
@@ -5326,7 +5326,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "scope", this.scope.ToString());
             XmlHelper.WriteAttribute(sw, "type", this.type.ToString());
             XmlHelper.WriteAttribute(sw, "priority", this.priority);
@@ -5337,12 +5337,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
             else
             {
-                sw.Write(">");
+                sw.Write('>');
                 if (this.pivotAreas != null)
                     this.pivotAreas.Write(sw, "pivotAreas");
                 if (this.extLst != null)
                     this.extLst.Write(sw, "extLst");
-                sw.Write(string.Format("</{0}>", nodeName));
+                sw.WriteEndElement(nodeName);
             }
         }
 
@@ -5458,7 +5458,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "count", this.count);
 
             if (this.pivotArea == null || this.pivotArea.Count == 0)
@@ -5467,7 +5467,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
             else
             {
-                sw.Write(">");
+                sw.Write('>');
                 if (this.pivotArea != null && this.pivotArea.Count > 0)
                 {
                     foreach (CT_PivotArea x in this.pivotArea)
@@ -5475,7 +5475,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                         x.Write(sw, "pivotArea");
                     }
                 }
-                sw.Write(string.Format("</{0}>", nodeName));
+                sw.WriteEndElement(nodeName);
             }
         }
 
@@ -5594,7 +5594,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "count", this.count);
 
             if (this.chartFormat == null || this.chartFormat.Count == 0)
@@ -5603,7 +5603,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
             else
             {
-                sw.Write(">");
+                sw.Write('>');
                 if (this.chartFormat != null && this.chartFormat.Count > 0)
                 {
                     foreach (CT_ChartFormat x in this.chartFormat)
@@ -5611,7 +5611,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                         x.Write(sw, "chartFormat");
                     }
                 }
-                sw.Write(string.Format("</{0}>", nodeName));
+                sw.WriteEndElement(nodeName);
             }
         }
 
@@ -5683,7 +5683,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "chart", this.chart, true);
             XmlHelper.WriteAttribute(sw, "format", this.format, true);
             XmlHelper.WriteAttribute(sw, "series", this.series);
@@ -5694,10 +5694,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
             else
             {
-                sw.Write(">");
+                sw.Write('>');
                 if (this.pivotArea != null)
                     this.pivotArea.Write(sw, "pivotArea");
-                sw.Write(string.Format("</{0}>", nodeName));
+                sw.WriteEndElement(nodeName);
             }
         }
 
@@ -5796,7 +5796,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "count", this.count);
             if (this.pivotHierarchy == null || this.pivotHierarchy.Count == 0)
             {
@@ -5804,7 +5804,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
             else
             {
-                sw.Write(">");
+                sw.Write('>');
                 if (this.pivotHierarchy != null && this.pivotHierarchy.Count > 0)
                 {
                     foreach (CT_PivotHierarchy x in this.pivotHierarchy)
@@ -5812,7 +5812,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                         x.Write(sw, "pivotHierarchy");
                     }
                 }
-                sw.Write(string.Format("</{0}>", nodeName));
+                sw.WriteEndElement(nodeName);
             }
         }
 
@@ -5917,7 +5917,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "outline", this.outline, false);
             XmlHelper.WriteAttribute(sw, "multipleItemSelectionAllowed", this.multipleItemSelectionAllowed, false);
             XmlHelper.WriteAttribute(sw, "subtotalTop", this.subtotalTop, false);
@@ -5936,7 +5936,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
             else
             {
-                sw.Write(">");
+                sw.Write('>');
                 if (this.mps != null)
                     this.mps.Write(sw, "mps");
                 if (this.extLst != null)
@@ -5948,7 +5948,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                         x.Write(sw, "members");
                     }
                 }
-                sw.Write(string.Format("</{0}>", nodeName));
+                sw.WriteEndElement(nodeName);
             }
         }
 
@@ -6217,7 +6217,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "count", this.count);
 
             if (this.mp == null || this.mp.Count == 0)
@@ -6226,7 +6226,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
             else
             {
-                sw.Write(">");
+                sw.Write('>');
                 if (this.mp != null && this.mp.Count > 0)
                 {
                     foreach (CT_MemberProperty x in this.mp)
@@ -6234,7 +6234,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                         x.Write(sw, "mp");
                     }
                 }
-                sw.Write(string.Format("</{0}>", nodeName));
+                sw.WriteEndElement(nodeName);
             }
         }
 
@@ -6325,7 +6325,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "name", this.name);
             XmlHelper.WriteAttribute(sw, "showCell", this.showCell);
             XmlHelper.WriteAttribute(sw, "showTip", this.showTip);
@@ -6573,7 +6573,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "count", this.count);
             XmlHelper.WriteAttribute(sw, "level", this.level);
             if (this.member == null || this.member.Count == 0)
@@ -6582,7 +6582,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
             else
             {
-                sw.Write(">");
+                sw.Write('>');
                 if (this.member != null && this.member.Count > 0)
                 {
                     foreach (CT_Member x in this.member)
@@ -6590,7 +6590,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                         x.Write(sw, "member");
                     }
                 }
-                sw.Write(string.Format("</{0}>", nodeName));
+                sw.WriteEndElement(nodeName);
             }
         }
 
@@ -6695,7 +6695,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "name", this.name);
             sw.Write("/>");
         }
@@ -6746,7 +6746,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "name", this.name);
             XmlHelper.WriteAttribute(sw, "showRowHeaders", this.showRowHeaders, false);
             XmlHelper.WriteAttribute(sw, "showColHeaders", this.showColHeaders, false);
@@ -6949,7 +6949,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "count", this.count);
             if (this.filter == null || this.filter.Count == 0)
             {
@@ -6957,7 +6957,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
             else
             {
-                sw.Write(">");
+                sw.Write('>');
                 if (this.filter != null && this.filter.Count > 0)
                 {
                     foreach (CT_PivotFilter x in this.filter)
@@ -6965,7 +6965,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                         x.Write(sw, "filter");
                     }
                 }
-                sw.Write(string.Format("</{0}>", nodeName));
+                sw.WriteEndElement(nodeName);
             }
         }
 
@@ -7051,7 +7051,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "fld", this.fld, true);
             XmlHelper.WriteAttribute(sw, "mpFld", this.mpFld, false);
             XmlHelper.WriteAttribute(sw, "type", this.type.ToString(), true);
@@ -7069,12 +7069,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
             else
             {
-                sw.Write(">");
+                sw.Write('>');
                 if (this.autoFilter != null)
                     this.autoFilter.Write(sw, "autoFilter");
                 if (this.extLst != null)
                     this.extLst.Write(sw, "extLst");
-                sw.Write(string.Format("</{0}>", nodeName));
+                sw.WriteEndElement(nodeName);
             }
         }
 
@@ -7559,7 +7559,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "count", this.count);
             if (this.rowHierarchyUsage == null || this.rowHierarchyUsage.Count == 0)
             {
@@ -7567,7 +7567,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
             else
             {
-                sw.Write(">");
+                sw.Write('>');
                 if (this.rowHierarchyUsage != null && this.rowHierarchyUsage.Count > 0)
                 {
                     foreach (CT_HierarchyUsage x in this.rowHierarchyUsage)
@@ -7575,7 +7575,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                         x.Write(sw, "rowHierarchyUsage");
                     }
                 }
-                sw.Write(string.Format("</{0}>", nodeName));
+                sw.WriteEndElement(nodeName);
             }
         }
 
@@ -7651,7 +7651,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "hierarchyUsage", this.hierarchyUsage, true);
             sw.Write("/>");
         }
@@ -7699,7 +7699,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "count", this.count);
             if (this.colHierarchyUsage == null || this.colHierarchyUsage.Count == 0)
             {
@@ -7707,7 +7707,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
             else
             {
-                sw.Write(">");
+                sw.Write('>');
                 if (this.colHierarchyUsage != null && this.colHierarchyUsage.Count > 0)
                 {
                     foreach (CT_HierarchyUsage x in this.colHierarchyUsage)
@@ -7715,7 +7715,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                         x.Write(sw, "colHierarchyUsage");
                     }
                 }
-                sw.Write(string.Format("</{0}>", nodeName));
+                sw.WriteEndElement(nodeName);
             }
         }
 

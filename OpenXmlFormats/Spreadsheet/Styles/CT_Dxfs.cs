@@ -63,12 +63,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "count", this.count, true);
 
             if (this.dxf.Count > 0)
             {
-                sw.Write(">");
+                sw.Write('>');
                 for(int i=0; i<this.dxf.Count;i++)
                 {
                     if(dictAlternateContent.TryGetValue(i, out string value))
@@ -80,7 +80,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 //{
                 //    x.Write(sw, "dxf");
                 //}
-                sw.Write(string.Format("</{0}>", nodeName));
+                sw.WriteEndElement(nodeName);
             }
             else
             {
@@ -181,8 +181,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
-            sw.Write(">");
+            sw.WriteStart(nodeName);
+            sw.Write('>');
             if (this.font != null)
                 this.font.Write(sw, "font");
             if (this.numFmt != null)
@@ -197,7 +197,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.protection.Write(sw, "protection");
             if (this.extLst != null)
                 this.extLst.Write(sw, "extLst");
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.WriteEndElement(nodeName);
         }
 
         public CT_Dxf()

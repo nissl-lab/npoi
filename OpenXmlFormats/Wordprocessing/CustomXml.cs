@@ -193,10 +193,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:uri", this.uri);
             XmlHelper.WriteAttribute(sw, "w:element", this.element);
-            sw.Write(">");
+            sw.Write('>');
             if (this.customXmlPr != null)
                 this.customXmlPr.Write(sw, "customXmlPr");
             foreach (object o in this.Items)
@@ -393,8 +393,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
-            sw.Write(">");
+            sw.WriteStartW(nodeName);
+            sw.Write('>');
             if (this.placeholder != null)
                 this.placeholder.Write(sw, "placeholder");
             if (this.attr != null)
@@ -462,11 +462,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:uri", this.uri);
             XmlHelper.WriteAttribute(sw, "w:name", this.name);
             XmlHelper.WriteAttribute(sw, "w:val", this.val);
-            sw.Write(">");
+            sw.Write('>');
             sw.WriteEndW(nodeName);
         }
 
@@ -996,10 +996,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:uri", this.uri);
             XmlHelper.WriteAttribute(sw, "w:element", this.element);
-            sw.Write(">");
+            sw.Write('>');
             foreach (object o in this.Items)
             {
                 if (o is CT_Bookmark bookmark)
@@ -1481,10 +1481,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         }
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:uri", this.uri);
             XmlHelper.WriteAttribute(sw, "w:element", this.element);
-            sw.Write(">");
+            sw.Write('>');
             if (this.smartTagPr != null)
             {
                 foreach (CT_Attr x in this.smartTagPr)
@@ -1867,10 +1867,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:uri", this.uri);
             XmlHelper.WriteAttribute(sw, "w:element", this.element);
-            sw.Write(">");
+            sw.Write('>');
             foreach (object o in this.Items)
             {
                 if (o is CT_RunTrackChange change)
@@ -2298,10 +2298,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:uri", this.uri);
             XmlHelper.WriteAttribute(sw, "w:element", this.element);
-            sw.Write(">");
+            sw.Write('>');
             if (this.customXmlPr != null)
                 this.customXmlPr.Write(sw, "customXmlPr");
             foreach (object o in this.Items)

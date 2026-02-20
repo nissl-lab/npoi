@@ -123,7 +123,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
             if(this.leader!= ST_TabTlc.none)
                 XmlHelper.WriteAttribute(sw, "w:leader", this.leader.ToString());
@@ -215,11 +215,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:alignment", this.alignment.ToString());
             XmlHelper.WriteAttribute(sw, "w:relativeTo", this.relativeTo.ToString());
             XmlHelper.WriteAttribute(sw, "w:leader", this.leader.ToString());
-            sw.Write(">");
+            sw.Write('>');
             sw.WriteEndW(nodeName);
         }
 

@@ -111,7 +111,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName, bool writingCellStyle=false)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "numFmtId", this.numFmtId, true);
             XmlHelper.WriteAttribute(sw, "fontId", this.fontId, true);
             XmlHelper.WriteAttribute(sw, "fillId", this.fillId, true);
@@ -137,14 +137,14 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
             else
             {
-                sw.Write(">");
+                sw.Write('>');
                 if (this.alignment != null)
                     this.alignment.Write(sw, "alignment");
                 if (this.protection != null)
                     this.protection.Write(sw, "protection");
                 if (this.extLst != null)
                     this.extLst.Write(sw, "extLst");
-                sw.Write(string.Format("</{0}>", nodeName));
+                sw.WriteEndElement(nodeName);
             }
         }
 

@@ -77,7 +77,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal new void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:id", this.id);
             XmlHelper.WriteAttribute(sw, "w:name", this.name);
             XmlHelper.WriteAttribute(sw, "w:colFirst", this.colFirst);
@@ -134,7 +134,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal new void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:author", this.author);
             XmlHelper.WriteAttribute(sw, "w:date", this.date);
             XmlHelper.WriteAttribute(sw, "w:name", this.name);
@@ -241,17 +241,17 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 return;
             foreach (var kv in ns)
             {
-                sw.Write(string.Format($"xmlns:{kv.Key}=\"{kv.Value}\" ", kv.Key, kv.Value));
+                sw.Write($"xmlns:{kv.Key}=\"{kv.Value}\" ", kv.Key, kv.Value);
             }
         }
 
         internal void Write(StreamWriter sw)
         {
             sw.Write("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>");
-            sw.Write(string.Format("<w:comments "));
+            sw.Write("<w:comments ");
             WriteXmlNamespace(sw, defaultXmlNamespace);
             WriteXmlNamespace(sw, extraXmlNamespace);
-            sw.Write(">");
+            sw.Write('>');
             if (this.comment != null)
             {
                 foreach (CT_Comment x in this.comment)
@@ -474,12 +474,12 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal new void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:initials", this.initials);
             XmlHelper.WriteAttribute(sw, "w:author", this.author);
             XmlHelper.WriteAttribute(sw, "w:date", this.date);
             XmlHelper.WriteAttribute(sw, "w:id", this.id);
-            sw.Write(">");
+            sw.Write('>');
             foreach (object o in this.Items)
             {
                 if (o is CT_PermStart start)
@@ -1119,7 +1119,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal new void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:author", this.author, true);
             XmlHelper.WriteAttribute(sw, "w:date", this.date);
             XmlHelper.WriteAttribute(sw, "w:id", this.id, true);
@@ -1172,7 +1172,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:id", this.id);
             sw.Write("/>");
         }
@@ -1218,7 +1218,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal new void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.WriteStartW(nodeName);
             if (this.displacedByCustomXml!= ST_DisplacedByCustomXml.next)
                 XmlHelper.WriteAttribute(sw, "w:displacedByCustomXml", this.displacedByCustomXml.ToString());
             XmlHelper.WriteAttribute(sw, "w:id", this.id);

@@ -6,6 +6,8 @@ root = true
 
 #### コア EditorConfig オプション ####
 
+charset = utf-8bom
+
 # インデントと間隔
 indent_size = 4
 indent_style = space

@@ -53,7 +53,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}>", nodeName));
+            sw.WriteStart(nodeName);
+            sw.Write('>');
             if (this.indexedColors != null)
             {
                 sw.Write("<indexedColors>");
@@ -72,7 +73,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 }
                 sw.Write("</mruColors>");
             }
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.WriteEndElement(nodeName);
         }
 
         public override string ToString()
@@ -138,7 +139,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "rgb", this.rgb);
             sw.Write("/>");
         }
@@ -366,7 +367,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "auto", this.auto,false);
             if (indexedSpecified)
                 XmlHelper.WriteAttribute(sw, "indexed", this.indexed, true);
