@@ -1229,6 +1229,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         { 
             return this.sectPr != null;
         }
+
+        public void UnsetJc()
+        {
+            this.jc=null;
+        }
     }
 
 

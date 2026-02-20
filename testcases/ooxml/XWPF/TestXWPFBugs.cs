@@ -27,6 +27,7 @@ namespace TestCases.XWPF
     using NUnit.Framework;using NUnit.Framework.Legacy;
     using System;
     using System.IO;
+    using System.Reflection.Metadata;
     using System.Xml;
     using TestCases;
 
@@ -287,6 +288,20 @@ namespace TestCases.XWPF
 
             documentNumbering.AddNum(abstractNumID);
         }
+
+        [Test]
+        public void CorrectParagraphAlignment()
+        {
+            using (var document = XWPFTestDataSamples.OpenSampleDocument("bug-paragraph-alignment.docx")) {
+                XWPFParagraph centeredParagraph = document.GetParagraphArray(0);
+                ClassicAssert.IsFalse(centeredParagraph.IsAlignmentSet());
+                ClassicAssert.AreEqual(ParagraphAlignment.LEFT, centeredParagraph.Alignment); // LEFT is a fallback value here.
+
+                XWPFParagraph leftParagraph = document.GetParagraphArray(1);
+                ClassicAssert.IsTrue(leftParagraph.IsAlignmentSet());
+                ClassicAssert.AreEqual(ParagraphAlignment.LEFT, leftParagraph.Alignment); // LEFT is the real alignment value.
+            }
+            }
     }
 }
 

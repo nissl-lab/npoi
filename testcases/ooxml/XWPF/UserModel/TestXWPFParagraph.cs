@@ -105,23 +105,32 @@ namespace TestCases.XWPF.UserModel
         }
 
         [Test]
-        public void TestSetAlignment()
+        public void TestSetGetAlignment()
         {
             //new clean instance of paragraph
-            XWPFDocument doc = new XWPFDocument();
-            XWPFParagraph p = doc.CreateParagraph();
+            using(XWPFDocument doc = new XWPFDocument())
+            {
+                XWPFParagraph p = doc.CreateParagraph();
 
-            ClassicAssert.AreEqual(ParagraphAlignment.LEFT, p.Alignment);
+                ClassicAssert.AreEqual(ParagraphAlignment.LEFT, p.Alignment);
+                ClassicAssert.IsFalse(p.IsAlignmentSet());
 
-            CT_P ctp = p.GetCTP();
-            CT_PPr ppr = ctp.pPr == null ? ctp.AddNewPPr() : ctp.pPr;
+                CT_P ctp = p.GetCTP();
+                CT_PPr ppr = ctp.pPr == null ? ctp.AddNewPPr() : ctp.pPr;
 
-            CT_Jc align = ppr.AddNewJc();
-            align.val = (ST_Jc.center);
-            ClassicAssert.AreEqual(ParagraphAlignment.CENTER, p.Alignment);
+                CT_Jc align = ppr.AddNewJc();
+                align.val = (ST_Jc.center);
+                ClassicAssert.AreEqual(ParagraphAlignment.CENTER, p.Alignment);
+                ClassicAssert.IsTrue(p.IsAlignmentSet());
 
-            p.Alignment = (ParagraphAlignment.BOTH);
-            ClassicAssert.AreEqual((int)ST_Jc.both, (int)ppr.jc.val);
+                p.Alignment = (ParagraphAlignment.BOTH);
+                ClassicAssert.AreEqual((int) ST_Jc.both, (int) ppr.jc.val);
+                ClassicAssert.IsTrue(p.IsAlignmentSet());
+
+                p.Alignment=null;
+                ClassicAssert.AreEqual(ParagraphAlignment.LEFT, p.Alignment);
+                ClassicAssert.IsFalse(p.IsAlignmentSet());
+            }
         }
 
         [Test]
