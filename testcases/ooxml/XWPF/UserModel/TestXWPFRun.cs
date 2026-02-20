@@ -650,6 +650,16 @@ namespace TestCases.XWPF.UserModel
             }
         }
         [Test]
+        public void TestGetNumberOfTexts()
+        {
+            XWPFDocument doc = new XWPFDocument();
+            var p = doc.CreateParagraph(); 
+            XWPFRun run = p.CreateRun();
+            ClassicAssert.AreEqual(0, run.NumberOfTexts);
+            run.SetText("TEST STRING");
+            ClassicAssert.AreEqual(1, run.NumberOfTexts);
+        }
+        [Test]
         public void TestSetStyleId()
         {
             XWPFDocument document = XWPFTestDataSamples.OpenSampleDocument("SampleDoc.docx");
