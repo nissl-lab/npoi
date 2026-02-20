@@ -469,6 +469,15 @@ using Cysharp.Text;
                 }
             }
         }
+
+        /// <summary>
+        /// Returns number of text element
+        /// </summary>
+        public int NumberOfTexts
+        {
+            get { return run.SizeOfTArray(); }
+        }
+
         public string Text
         {
             get
