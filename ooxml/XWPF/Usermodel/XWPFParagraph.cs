@@ -28,6 +28,7 @@ namespace NPOI.XWPF.UserModel
     using S=NPOI.OpenXmlFormats.Shared;
     using NPOI.POIFS.Properties;
     using System.Data;
+    using Org.BouncyCastle.Asn1.Mozilla;
 
     /**
 * <p>A Paragraph within a Document, Table, Header etc.</p> 
@@ -1332,7 +1333,11 @@ namespace NPOI.XWPF.UserModel
         private CT_Spacing GetCTSpacing(bool create)
         {
             CT_PPr pr = GetCTPPr(create);
-            CT_Spacing ct = pr.spacing == null ? null : pr.spacing;
+            if(pr==null)
+            {
+                return null;
+            }
+            CT_Spacing ct = pr?.spacing;
             if (create && ct == null)
                 ct = pr.AddNewSpacing();
             return ct;
@@ -1905,6 +1910,49 @@ namespace NPOI.XWPF.UserModel
         public bool RunsIsEmpty()
         {
             return runs.Count==0;
+        }
+
+        /// <summary>
+        /// Indicates whether this paragraph should be kept on the same page as the next one.
+        /// </summary>
+        public bool IsKeepNext
+        {
+            get {
+                if(GetCTP() != null && GetCTP().pPr != null && GetCTP().pPr.IsSetKeepNext())
+                {
+                    return GetCTP().pPr.keepNext.val;
+                }
+                return false;
+
+            }
+        }
+
+        public int IndentationLeftChars 
+        {
+            get
+            {
+                var indentation = GetCTInd(false);
+                return (indentation != null && indentation.IsSetLeftChars()) ? Int32.Parse(indentation.leftChars)
+                        : -1;
+            }
+            set {
+                var indent = GetCTInd(true);
+                indent.leftChars= value.ToString();
+            }
+        }
+        public int IndentationRightChars
+        {
+            get
+            {
+                var indentation = GetCTInd(false);
+                return (indentation != null && indentation.IsSetRightChars()) ? Int32.Parse(indentation.rightChars)
+                        : -1;
+            }
+            set
+            {
+                var indent = GetCTInd(true);
+                indent.rightChars= value.ToString();
+            }
         }
     }
 

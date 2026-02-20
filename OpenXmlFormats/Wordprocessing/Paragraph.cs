@@ -1234,6 +1234,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             this.jc=null;
         }
+
+        public bool IsSetKeepNext()
+        {
+            return this.keepNext!=null;
+        }
     }
 
 
@@ -3954,6 +3959,16 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         public bool IsSetFirstLine()
         {
             return !(this.firstLineField==0);
+        }
+
+        public bool IsSetLeftChars()
+        {
+            return this.leftChars!=null;
+        }
+
+        public bool IsSetRightChars()
+        {
+            return this.rightChars!=null;
         }
     }
 
