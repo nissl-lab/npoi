@@ -75,6 +75,8 @@ namespace TestCases.XWPF.UserModel
             ClassicAssert.IsNotNull(xml.Document);
             ClassicAssert.IsNotNull(xml.Document.body);
             ClassicAssert.IsNotNull(xml.GetStyles());
+            ClassicAssert.IsNotNull(xml.GetTheme());
+            ClassicAssert.AreEqual("Cambria", xml.GetTheme().MajorFont);
         }
 
         [Test]

@@ -26,6 +26,8 @@ namespace NPOI.XWPF.UserModel
     public class XWPFRelation : POIXMLRelation
     {
 
+        private static String NS_DRAWINGML = XSSF.UserModel.XSSFRelation.NS_DRAWINGML;
+
         /**
          * A map to lookup POIXMLRelation by its relation type
          */
@@ -109,7 +111,7 @@ namespace NPOI.XWPF.UserModel
             "application/vnd.openxmlformats-officedocument.theme+xml",
             "http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme",
             "/word/theme/theme#.xml",
-            null
+            typeof(XWPFTheme)
         );
         public static XWPFRelation HYPERLINK = new XWPFRelation(
                 null,

@@ -479,7 +479,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
 
 
-        internal void Write(StreamWriter sw)
+        public void Write(StreamWriter sw)
         {
             sw.Write("<a:theme xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\"");
             XmlHelper.WriteAttribute(sw, "name", this.name);
