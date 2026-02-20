@@ -123,5 +123,45 @@ namespace TestCases.XWPF.UserModel
                 ClassicAssert.AreEqual(doc.GetNumbering().GetAbstractNums().Count, count);
             }
         }
+        [Test]
+        public void testAddAbstractNumIfAbstractNumNotEqualNull()
+        {
+            string abstractNumId = "1";
+            XWPFDocument docOut = new XWPFDocument();
+            XWPFNumbering numbering = docOut.CreateNumbering();
+
+            var cTAbstractNum = new CT_AbstractNum();
+            // must set the AbstractNumId, Otherwise fail
+            cTAbstractNum.abstractNumId = abstractNumId;
+            XWPFAbstractNum abstractNum = new XWPFAbstractNum(cTAbstractNum);
+            abstractNumId = numbering.AddAbstractNum(abstractNum);
+            var numId = numbering.AddNum(abstractNumId);
+
+            XWPFDocument docIn = XWPFTestDataSamples.WriteOutAndReadBack(docOut);
+
+            numbering = docIn.GetNumbering();
+            XWPFNum num = numbering.GetNum(numId);
+            var compareAbstractNum = num.GetCTNum().abstractNumId.val;
+            ClassicAssert.AreEqual(abstractNumId, compareAbstractNum);
+        }
+
+        [Test]
+        public void testAddAbstractNumIfAbstractNumEqualNull()
+        {
+            XWPFDocument docOut = new XWPFDocument();
+            XWPFNumbering numbering = docOut.CreateNumbering();
+
+            XWPFAbstractNum abstractNum = new XWPFAbstractNum();
+            var abstractNumId = numbering.AddAbstractNum(abstractNum);
+            var numId = numbering.AddNum(abstractNumId);
+
+            XWPFDocument docIn = XWPFTestDataSamples.WriteOutAndReadBack(docOut);
+
+            numbering = docIn.GetNumbering();
+            XWPFNum num = numbering.GetNum(numId);
+
+            var compareAbstractNum = num.GetCTNum().abstractNumId.val;
+            ClassicAssert.AreEqual(abstractNumId, compareAbstractNum);
+        }
     }
 }
