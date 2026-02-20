@@ -23,9 +23,7 @@ using System.Xml;
 namespace NPOI.XWPF.UserModel
 {
     /// <summary>
-    /// Representation of a WordprocessingML theme part (theme1.xml).
-    /// 该类为从 Apache POI 的 XWPFTheme.java 移植的一个精简版实现，
-    /// 主要职责：解析 theme 部件、提供对主题颜色的读取与序列化。
+    ///  A shared style sheet in a .docx document
     /// </summary>
     public class XWPFTheme : POIXMLDocumentPart
     {
@@ -129,7 +127,7 @@ namespace NPOI.XWPF.UserModel
 
 
         /// <summary>
-        /// 返回底层 CT_OfficeStyleSheet（drawingml theme）
+        /// CT_OfficeStyleSheet（drawingml theme）
         /// </summary>
         public CT_OfficeStyleSheet GetCTTheme()
         {
