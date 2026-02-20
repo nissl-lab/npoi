@@ -36,12 +36,14 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}>", nodeName));
+            sw.WriteStart(nodeName);
+            sw.Write('>');
             if (this.t != null)
             {
                 //TODO: diff has-space case and no-space case
-                 sw.Write(string.Format("<t xml:space=\"preserve\">{0}</t>", 
-                      XmlHelper.ExcelEncodeString(XmlHelper.EncodeXml(t))));
+                sw.Write("<t xml:space=\"preserve\">");
+                sw.Write(XmlHelper.ExcelEncodeString(XmlHelper.EncodeXml(t)));
+                sw.Write("</t>");
             }
             if (this.r != null)
             {
@@ -59,7 +61,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
             if (this.phoneticPr != null)
                 this.phoneticPr.Write(sw, "phoneticPr");
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.WriteEndElement(nodeName);
         }
 
 
@@ -170,7 +172,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                                 sw.Write("<t");
                                 if(r.t.Contains(' ')||r.t.Contains('\n'))
                                     sw.Write(" xml:space=\"preserve\"");
-                                sw.Write(">");
+                                sw.Write('>');
                                 sw.Write(XmlHelper.EncodeXml(r.t));
                                 sw.Write("</t>");
                             }
@@ -183,7 +185,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                         sw.Write("<t");
                         if (t.Contains(' ') || t.Contains('\n'))
                             sw.Write(" xml:space=\"preserve\"");
-                        sw.Write(">");
+                        sw.Write('>');
                         sw.Write(XmlHelper.EncodeXml(this.t));
                         sw.Write("</t>");
                     }

@@ -364,8 +364,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
-            sw.Write(">");
+            sw.WriteStartW(nodeName);
+            sw.Write('>');
             int i=0;
             foreach(object o in this.Items)
             {
@@ -1405,7 +1405,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.WriteStartW(nodeName);
             if(this.type!= ST_DocGrid.@default)
                 XmlHelper.WriteAttribute(sw, "w:type", this.type.ToString());
             XmlHelper.WriteAttribute(sw, "w:linePitch", this.linePitch);
@@ -1527,8 +1527,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
-            sw.Write(">");
+            sw.WriteStartW(nodeName);
+            sw.Write('>');
             if(this.docVar != null)
             {
                 foreach(CT_DocVar x in this.docVar)
