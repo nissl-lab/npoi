@@ -205,6 +205,13 @@ namespace NPOI.XWPF.UserModel
                 "/word/media/image#.wpg",
                 typeof(XWPFPictureData)
         );
+        public static XWPFRelation HDPHOTO_WDP = new XWPFRelation(
+            "image/vnd.ms-photo",
+            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image",
+            "/ppt/media/hdphoto#.wdp",
+            typeof(XWPFPictureData)
+    );
+
         public static XWPFRelation IMAGE_SVG = new XWPFRelation(
                 "image/svg",
                 "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image",
