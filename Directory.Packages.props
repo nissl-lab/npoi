@@ -5,7 +5,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageVersion Include="BenchmarkDotNet" Version="0.13.12" />
-    <PackageVersion Include="BouncyCastle.Cryptography" Version="2.4.0" />
+    <PackageVersion Include="BouncyCastle.Cryptography" Version="2.6.2" />
     <PackageVersion Include="Enums.NET" Version="5.0.0" />
     <PackageVersion Include="ExtendedNumerics.BigDecimal" Version="2025.1001.2.129" />
     <PackageVersion Include="GitHubActionsTestLogger" Version="2.4.1" />
