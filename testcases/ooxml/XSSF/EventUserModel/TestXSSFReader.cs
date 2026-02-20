@@ -26,12 +26,14 @@ namespace TestCases.XSSF.EventUserModel
 {
     using NPOI;
     using NPOI.OpenXml4Net.OPC;
+    using NPOI.SS.UserModel;
     using NPOI.Util;
     using NPOI.XSSF;
     using NPOI.XSSF.EventUserModel;
     using NPOI.XSSF.Model;
     using NPOI.XSSF.UserModel;
     using NUnit.Framework;
+    using NUnit.Framework.Internal;
     using NUnit.Framework.Legacy;
 
 
@@ -347,6 +349,20 @@ namespace TestCases.XSSF.EventUserModel
                 stream.Close();
             }
             pkg.Close();
+        }
+        [Test]
+        [Ignore("until we fix issue https://bz.apache.org/bugzilla/show_bug.cgi?id=61701")]
+        public void Test61701()
+        {
+            XSSFWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook("simple-table-named-range.xlsx");
+            try
+            {
+                IName name = workbook.GetName("total");
+                Console.WriteLine("workbook.getName(\"total\").getSheetName() returned: " + name.SheetName);
+            }
+            catch(Exception) {
+                workbook.Close();
+            }
         }
     }
 }

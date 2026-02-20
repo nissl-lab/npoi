@@ -770,5 +770,48 @@ namespace NPOI.HSSF.Record.Aggregates
                 return 0;
             }
         }
+
+        public int MinColumnIndex
+        {
+            get
+            {
+                if(records.Count == 0)
+                {
+                    return 0;
+                }
+
+                int minIndex = int.MaxValue;
+                int nInfos = records.Count;
+                for(int i = 0; i< nInfos; i++)
+                {
+                    ColumnInfoRecord ci = GetColInfo(i);
+                    minIndex = Math.Min(minIndex, ci.FirstColumn);
+                }
+
+                return minIndex;
+            }
+            
+        }
+
+        public int MaxColumnIndex
+        {
+            get
+            {
+                if(records.Count == 0)
+                {
+                    return 0;
+                }
+
+                int maxIndex = 0;
+                int nInfos = records.Count;
+                for(int i = 0; i< nInfos; i++)
+                {
+                    ColumnInfoRecord ci = GetColInfo(i);
+                    maxIndex = Math.Max(maxIndex, ci.LastColumn);
+                }
+
+                return maxIndex;
+            }
+        }
     }
 }

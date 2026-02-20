@@ -87,17 +87,20 @@ namespace NPOI.OpenXmlFormats.Encryption
 
         public CT_KeyData AddNewKeyData()
         {
-            throw new NotImplementedException();
+            keyDataField = new CT_KeyData();
+            return keyDataField;
         }
 
         public CT_KeyEncryptors AddNewKeyEncryptors()
         {
-            throw new NotImplementedException();
+            keyEncryptorsField = new CT_KeyEncryptors();
+            return keyEncryptorsField;
         }
 
         public CT_DataIntegrity AddNewDataIntegrity()
         {
-            throw new NotImplementedException();
+            dataIntegrityField = new CT_DataIntegrity();
+            return dataIntegrityField;
         }
 
         internal static CT_Encryption Parse(XmlNode node, XmlNamespaceManager nameSpaceManager)
@@ -393,6 +396,7 @@ namespace NPOI.OpenXmlFormats.Encryption
             set
             {
                 this.uriField = value;
+                this.uriFieldSpecified = true;
             }
         }
 

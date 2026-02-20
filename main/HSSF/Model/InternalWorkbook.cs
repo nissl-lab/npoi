@@ -1001,11 +1001,12 @@ namespace NPOI.HSSF.Model
             }
             throw new ArgumentException("Could not find that font!");
         }
+
         /**
- * Returns the StyleRecord for the given
- *  xfIndex, or null if that ExtendedFormat doesn't
- *  have a Style set.
- */
+         * Returns the StyleRecord for the given
+         *  xfIndex, or null if that ExtendedFormat doesn't
+         *  have a Style set.
+         */
         public StyleRecord GetStyleRecord(int xfIndex)
         {
             // Style records always follow after 
@@ -1031,6 +1032,31 @@ namespace NPOI.HSSF.Model
                 }
             }
             return null;
+        }
+
+        /**
+         * Update the StyleRecord to point to the new
+         * given index.
+         *
+         * @param oldXf the extended format index that was previously associated with this StyleRecord
+         * @param newXf the extended format index that is now associated with this StyleRecord
+         */
+        public void UpdateStyleRecord(int oldXf, int newXf)
+        {
+            // Style records always follow after
+            //  the ExtendedFormat records
+            for(int i = records.Xfpos; i<records.Count; i++)
+            {
+                Record r = records[i];
+                if(r is StyleRecord)
+                {
+                    StyleRecord sr = (StyleRecord)r;
+                    if(sr.XFIndex == oldXf)
+                    {
+                        sr.XFIndex = (short)newXf;
+                    }
+                }
+            }
         }
         /**
          * Gets the ExtendedFormatRecord at the given 0-based index
@@ -2047,10 +2073,10 @@ namespace NPOI.HSSF.Model
         }
 
         /**
-     * Creates a new StyleRecord, for the given Extended
-     *  Format index, and adds it onto the end of the
-     *  records collection
-     */
+         * Creates a new StyleRecord, for the given Extended
+         *  Format index, and adds it onto the end of the
+         *  records collection
+         */
         public StyleRecord CreateStyleRecord(int xfIndex) {
             // Style records always follow after 
             //  the ExtendedFormat records
@@ -3109,6 +3135,11 @@ namespace NPOI.HSSF.Model
         public bool ChangeExternalReference(String oldUrl, String newUrl)
         {
             return linkTable.ChangeExternalReference(oldUrl, newUrl);
+        }
+
+        public WorkbookRecordList GetWorkbookRecordList()
+        {
+            return records;
         }
     }
 }

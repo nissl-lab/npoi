@@ -128,7 +128,7 @@ namespace TestCases.HPSF.Basic
                 //bos.Seek(0, SeekOrigin.Begin);
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
                 psIn.Write(bos);
-                poiFs.CreateDocument(new MemoryStream(bos.ToArray()), poifile.GetName());
+                poiFs.CreateDocument(new MemoryStream(bos.ToByteArray()), poifile.GetName());
             }
 
             /* Read the property Set streams from the POI filesystem just

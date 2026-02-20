@@ -32,7 +32,6 @@ namespace TestCases.POIFS.Crypt
     public class TestEncryptor
     {
         [Test]
-        [Ignore("TODO FIX CI TESTS")]
         public void BinaryRC4Encryption()
         {
             // please contribute a real sample file, which is binary rc4 encrypted
@@ -74,8 +73,8 @@ namespace TestCases.POIFS.Crypt
         [Test]
         public void AgileEncryption()
         {
-            int maxKeyLen = Cipher.GetMaxAllowedKeyLength("AES");
-            Assume.That(maxKeyLen == 2147483647, "Please install JCE Unlimited Strength Jurisdiction Policy files for AES 256");
+            //int maxKeyLen = Cipher.GetMaxAllowedKeyLength("AES");
+            //Assume.That(maxKeyLen == 2147483647, "Please install JCE Unlimited Strength Jurisdiction Policy files for AES 256");
 
             FileStream file = POIDataSamples.GetDocumentInstance().GetFile("bug53475-password-is-pass.docx");
             String pass = "pass";
@@ -96,12 +95,11 @@ namespace TestCases.POIFS.Crypt
             ClassicAssert.AreEqual(decPackLenExpected, payloadExpected.Length);
 
             is1 = nfs.Root.CreateDocumentInputStream(Decryptor.DEFAULT_POIFS_ENTRY);
-            ///is1 = new BoundedInputStream(is1, is1.Available() - 16); // ignore pAdding block
-            ///throw new NotImplementedException(BoundedInputStream); 
-            byte[] encPackExpected = IOUtils.ToByteArray(is1);
+            DocumentEntry entry = (DocumentEntry)nfs.Root.GetEntryCaseInsensitive(Decryptor.DEFAULT_POIFS_ENTRY);
+            is1 = nfs.Root.CreateDocumentInputStream(entry);
+            // ignore pAdding block
+            byte[] encPackExpected = IOUtils.ToByteArray(is1, entry.Size - 16);
             is1.Close();
-
-            // listDir(nfs.Root, "orig", "");
 
             nfs.Close();
 
@@ -147,14 +145,11 @@ namespace TestCases.POIFS.Crypt
             is1.Close();
 
             long decPackLenActual = decActual.GetLength();
-
-            is1 = nfs.Root.CreateDocumentInputStream(Decryptor.DEFAULT_POIFS_ENTRY);
-            ///is1 = new BoundedInputStream(is1, is1.Available() - 16); // ignore pAdding block
-            ///throw new NotImplementedException(BoundedInputStream);
-            byte[] encPackActual = IOUtils.ToByteArray(is1);
+            entry = (DocumentEntry)nfs.Root.GetEntryCaseInsensitive(Decryptor.DEFAULT_POIFS_ENTRY);
+            is1 = nfs.Root.CreateDocumentInputStream(entry);
+            // ignore pAdding block
+            byte[] encPackActual = IOUtils.ToByteArray(is1, entry.Size - 16);
             is1.Close();
-
-            // listDir(nfs.Root, "copy", "");
 
             nfs.Close();
 
@@ -167,7 +162,6 @@ namespace TestCases.POIFS.Crypt
         }
 
         [Test]
-        [Ignore("TODO FIX CI TESTS")]
         public void StandardEncryption()
         {
             FileStream file = POIDataSamples.GetDocumentInstance().GetFile("bug53475-password-is-solrcell.docx");
@@ -231,15 +225,10 @@ namespace TestCases.POIFS.Crypt
             IOUtils.Copy(new MemoryStream(payloadExpected), os);
             os.Close();
 
-            bos.Seek(0, SeekOrigin.Begin); //bos.Reset();
+            bos.Seek(0, SeekOrigin.Begin);
             fs.WriteFileSystem(bos);
 
             ByteArrayInputStream bis = new ByteArrayInputStream(bos.ToArray());
-
-            // FileOutputStream fos = new FileOutputStream("encrypted.docx");
-            // IOUtils.Copy(bis, fos);
-            // fos.Close();
-            // bis.Reset();
 
             nfs = new NPOIFSFileSystem(bis);
             infoExpected = new EncryptionInfo(nfs);
@@ -247,7 +236,8 @@ namespace TestCases.POIFS.Crypt
             passed = d.VerifyPassword(pass);
             ClassicAssert.IsTrue(passed, "Unable to Process: document is encrypted");
 
-            bos.Seek(0, SeekOrigin.Begin); //bos.Reset();
+            bos.SetLength(0);          // truncate previous contents
+            bos.Seek(0, SeekOrigin.Begin);
             is1 = d.GetDataStream(nfs);
             IOUtils.Copy(is1, bos);
             is1.Close();
@@ -265,18 +255,16 @@ namespace TestCases.POIFS.Crypt
          * http://stackoverflow.com/questions/28593223
          */
         [Test]
-        [Ignore("TODO FIX CI TESTS")]
         public void EncryptPackageWithoutCoreProperties()
         {
             // Open our file without core properties
             FileStream inp = POIDataSamples.GetOpenXML4JInstance().GetFile("OPCCompliance_NoCoreProperties.xlsx");
-            OPCPackage pkg = OPCPackage.Open(inp.Name);
+            OPCPackage pkg = OPCPackage.Open(inp);
 
             // It doesn't have any core properties yet
             ClassicAssert.AreEqual(0, pkg.GetPartsByContentType(ContentTypes.CORE_PROPERTIES_PART).Count);
             ClassicAssert.IsNotNull(pkg.GetPackageProperties());
-            ClassicAssert.IsNotNull(pkg.GetPackageProperties().GetLanguageProperty());
-            //ClassicAssert.IsNull(pkg.GetPackageProperties().GetLanguageProperty().GetValue());
+            ClassicAssert.IsNull(pkg.GetPackageProperties().GetLanguageProperty());
 
             // Encrypt it
             EncryptionInfo info = new EncryptionInfo(EncryptionMode.Agile);
@@ -286,6 +274,7 @@ namespace TestCases.POIFS.Crypt
             enc.ConfirmPassword("password");
             OutputStream os = enc.GetDataStream(fs);
             pkg.Save(os);
+            os.Close();
             pkg.Revert();
 
             // Save the resulting OLE2 document, and re-open it
@@ -305,8 +294,7 @@ namespace TestCases.POIFS.Crypt
             // Check it now has empty core properties
             ClassicAssert.AreEqual(1, inpPkg.GetPartsByContentType(ContentTypes.CORE_PROPERTIES_PART).Count);
             ClassicAssert.IsNotNull(inpPkg.GetPackageProperties());
-            ClassicAssert.IsNotNull(inpPkg.GetPackageProperties().GetLanguageProperty());
-            //ClassicAssert.IsNull(inpPkg.PackageProperties.LanguageProperty.Value);
+            ClassicAssert.IsNull(inpPkg.GetPackageProperties().GetLanguageProperty());
         }
 
         [Test]

@@ -126,6 +126,7 @@ namespace NPOI.SS.Util
                         }
                         somethingGotMerged = true;
                         // overwrite range1 with first result 
+                        range1 = mergeResult[0];
                         cellRangeList[i] = mergeResult[0];
                         // remove range2
                         cellRangeList.RemoveAt(j--);

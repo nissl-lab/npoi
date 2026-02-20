@@ -15,8 +15,6 @@
    limitations under the License.
 ==================================================================== */
 
-using System;
-using System.IO;
 using NPOI.HSSF.UserModel;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.OpenXmlFormats.Vml;
@@ -26,7 +24,11 @@ using NPOI.XSSF;
 using NPOI.XSSF.Model;
 using NPOI.XSSF.Streaming;
 using NPOI.XSSF.UserModel;
-using NUnit.Framework;using NUnit.Framework.Legacy;
+using NUnit.Framework;
+using NUnit.Framework.Legacy;
+using System;
+using System.IO;
+using System.Xml.Linq;
 using TestCases.SS.UserModel;
 
 namespace TestCases.XSSF.UserModel
@@ -295,6 +297,52 @@ namespace TestCases.XSSF.UserModel
                 wb.Close();
             }
         }
+
+        [Test]
+        public void TestBug55814()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("55814.xlsx");
+            try
+            {
+
+                int oldsheetIndex = wb.GetSheetIndex("example");
+                ISheet oldsheet = wb.GetSheetAt(oldsheetIndex);
+
+                IComment comment = oldsheet.GetRow(0).GetCell(0).CellComment;
+                ClassicAssert.AreEqual("Comment Here\n", comment.String.String);
+
+                ISheet newsheet = wb.CloneSheet(oldsheetIndex);
+
+                wb.RemoveSheetAt(oldsheetIndex);
+
+                //wb.write(new FileOutputStream("/tmp/outnocomment.xlsx"));
+
+                comment = newsheet.GetRow(0).GetCell(0).CellComment;
+                ClassicAssert.IsNotNull(comment, "Should have a comment on A1 in the new sheet");
+                ClassicAssert.AreEqual("Comment Here\n", comment.String.String);
+
+                XSSFWorkbook wbBack = XSSFTestDataSamples.WriteOutAndReadBack(wb);
+                ClassicAssert.IsNotNull(wbBack);
+                wbBack.Close();
+            }
+            catch(Exception)
+            {
+                wb.Close();
+            }
+            wb = XSSFTestDataSamples.OpenSampleWorkbook("55814.xlsx");
+            try
+            {
+                int oldsheetIndex = wb.GetSheetIndex("example");
+                ISheet newsheet = wb.GetSheetAt(oldsheetIndex);
+                IComment comment = newsheet.GetRow(0).GetCell(0).CellComment;
+                ClassicAssert.AreEqual("Comment Here\n", comment.String.String);
+            }
+            catch(Exception)
+            {
+                wb.Close();
+            };
+        }
+
         [Test]
         public void Bug57838DeleteRowsWthCommentsBug()
         {

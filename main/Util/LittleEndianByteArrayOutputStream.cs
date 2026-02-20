@@ -24,7 +24,7 @@ namespace NPOI.Util
     /// Adapts a plain byte array to <see cref="NPOI.Util.ILittleEndianOutput"/>
     /// </summary>
     /// <remarks>@author Josh Micich</remarks>
-    public class LittleEndianByteArrayOutputStream : ILittleEndianOutput, IDelayableLittleEndianOutput
+    public class LittleEndianByteArrayOutputStream : OutputStream, ILittleEndianOutput, IDelayableLittleEndianOutput
     {
         private readonly byte[] _buf;
         private readonly int _endIndex;
@@ -58,6 +58,11 @@ namespace NPOI.Util
             {
                 throw new RuntimeException(string.Format(CultureInfo.InvariantCulture, "Buffer overrun i={0};endIndex={1};writeIndex={2}", i, _endIndex, _writeIndex));
             }
+        }
+
+        public override void Write(int b)
+        {
+            WriteByte(b & 0xFF);
         }
 
         public void WriteByte(int v)

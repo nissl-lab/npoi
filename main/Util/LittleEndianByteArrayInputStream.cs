@@ -179,5 +179,10 @@ namespace NPOI.Util
             _ReadIndex += (int)k;
             return k;
         }
+
+        public void ReadPlain(byte[] buf, int off, int len)
+        {
+            ReadFully(buf, off, len);
+        }
     }
 }
