@@ -21,6 +21,8 @@ namespace TestCases.XWPF.UserModel
     using NPOI.OpenXmlFormats.Wordprocessing;
     using NPOI.XWPF.UserModel;
     using NUnit.Framework;using NUnit.Framework.Legacy;
+    using System;
+    using System.Linq;
 
     [TestFixture]
     public class TestXWPFNumbering
@@ -110,6 +112,16 @@ namespace TestCases.XWPF.UserModel
             CT_NumLvl ctNumLvl = ctNum.GetLvlOverrideArray(0);
             ClassicAssert.AreEqual("upperLetter", ctNumLvl.lvl.numFmt.val.ToString());
         }
-
+        [Test]
+        public void TestAddAbstractNum()
+        {
+            using(XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("NumberingWithOutOfOrderId.docx"))
+            {
+                doc.GetNumbering().AddAbstractNum(new XWPFAbstractNum());
+                var count = doc.GetNumbering()
+                    .GetAbstractNums().Select(e=>Int32.Parse(e.GetCTAbstractNum().abstractNumId)).Distinct().Count();
+                ClassicAssert.AreEqual(doc.GetNumbering().GetAbstractNums().Count, count);
+            }
+        }
     }
 }
