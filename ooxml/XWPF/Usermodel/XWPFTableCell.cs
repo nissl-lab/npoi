@@ -261,9 +261,18 @@ using Cysharp.Text;
 
         public void SetText(String text)
         {
-            CT_P ctP = (ctTc.SizeOfPArray() == 0) ? ctTc.AddNewP() : ctTc.GetPArray(0);
-            XWPFParagraph par = new XWPFParagraph(ctP, this);
-            par.CreateRun().AppendText(text);
+            XWPFParagraph par = paragraphs.Count==0 ? AddParagraph() : paragraphs[0];
+            while(!par.RunsIsEmpty())
+            {
+                par.RemoveRun(0);
+            }
+            par.CreateRun().SetText(text);
+        }
+
+        public void AppendText(String text)
+        {
+            XWPFParagraph par = paragraphs.Count==0 ? AddParagraph() : paragraphs[0];
+            par.CreateRun().SetText(text);
         }
 
         public XWPFTableRow GetTableRow()

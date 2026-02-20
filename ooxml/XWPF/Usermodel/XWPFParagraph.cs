@@ -1901,6 +1901,11 @@ namespace NPOI.XWPF.UserModel
             var pr = GetCTPPr(false);
             return pr != null && pr.IsSetJc();
         }
+
+        public bool RunsIsEmpty()
+        {
+            return runs.Count==0;
+        }
     }
 
 }
