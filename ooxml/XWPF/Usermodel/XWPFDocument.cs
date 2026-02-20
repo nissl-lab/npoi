@@ -66,7 +66,8 @@ namespace NPOI.XWPF.UserModel
         protected XWPFNumbering numbering;
         protected XWPFStyles styles;
         protected XWPFFootnotes footnotes;
-        private XWPFComments comments;
+        protected XWPFComments comments;
+        protected XWPFTheme theme;
 
         /** Handles the joy of different headers/footers for different pages */
         private XWPFHeaderFooterPolicy headerFooterPolicy;
@@ -138,50 +139,55 @@ namespace NPOI.XWPF.UserModel
                 foreach (RelationPart rp in RelationParts) {
                     POIXMLDocumentPart p = rp.DocumentPart;
                     String relation = rp.Relationship.RelationshipType;
-                    if (relation.Equals(XWPFRelation.STYLES.Relation))
+                    if(relation.Equals(XWPFRelation.STYLES.Relation))
                     {
-                        this.styles = (XWPFStyles)p;
+                        this.styles = (XWPFStyles) p;
                         this.styles.OnDocumentRead();
                     }
-                    else if (relation.Equals(XWPFRelation.NUMBERING.Relation))
+                    else if(relation.Equals(XWPFRelation.THEME.Relation))
+                    { 
+                        this.theme = (XWPFTheme) p;
+                        this.theme.OnDocumentRead();
+                    }
+                    else if(relation.Equals(XWPFRelation.NUMBERING.Relation))
                     {
-                        this.numbering = (XWPFNumbering)p;
+                        this.numbering = (XWPFNumbering) p;
                         this.numbering.OnDocumentRead();
                     }
-                    else if (relation.Equals(XWPFRelation.FOOTER.Relation))
+                    else if(relation.Equals(XWPFRelation.FOOTER.Relation))
                     {
                         XWPFFooter footer = (XWPFFooter)p;
                         footers.Add(footer);
                         footer.OnDocumentRead();
                     }
-                    else if (relation.Equals(XWPFRelation.HEADER.Relation))
+                    else if(relation.Equals(XWPFRelation.HEADER.Relation))
                     {
                         XWPFHeader header = (XWPFHeader)p;
                         headers.Add(header);
                         header.OnDocumentRead();
                     }
-                    else if (relation.Equals(XWPFRelation.COMMENT.Relation))
+                    else if(relation.Equals(XWPFRelation.COMMENT.Relation))
                     {
-                        this.comments = (XWPFComments)p;
+                        this.comments = (XWPFComments) p;
                         this.comments.OnDocumentRead();
                     }
-                    else if (relation.Equals(XWPFRelation.SETTINGS.Relation))
+                    else if(relation.Equals(XWPFRelation.SETTINGS.Relation))
                     {
-                        settings = (XWPFSettings)p;
+                        settings = (XWPFSettings) p;
                         settings.OnDocumentRead();
                     }
-                    else if (relation.Equals(XWPFRelation.IMAGES.Relation))
+                    else if(relation.Equals(XWPFRelation.IMAGES.Relation))
                     {
                         XWPFPictureData picData = (XWPFPictureData)p;
                         picData.OnDocumentRead();
                         RegisterPackagePictureData(picData);
                         pictures.Add(picData);
                     }
-                    else if (relation.Equals(XWPFRelation.GLOSSARY_DOCUMENT.Relation))
+                    else if(relation.Equals(XWPFRelation.GLOSSARY_DOCUMENT.Relation))
                     {
                         // We don't currently process the glossary itself
                         // Until we do, we do need to load the glossary child parts of it
-                        foreach (POIXMLDocumentPart gp in p.GetRelations())
+                        foreach(POIXMLDocumentPart gp in p.GetRelations())
                         {
                             // Trigger the onDocumentRead for all the child parts
                             // Otherwise we'll hit issues on Styles, Settings etc on save
@@ -192,7 +198,7 @@ namespace NPOI.XWPF.UserModel
                                 //onDocumentRead.setAccessible(true);
                                 //onDocumentRead.invoke(gp);
                             }
-                            catch (Exception e)
+                            catch(Exception e)
                             {
                                 throw new POIXMLException(e);
                             }
@@ -1050,6 +1056,23 @@ namespace NPOI.XWPF.UserModel
             return styles;
         }
 
+        public XWPFTheme CreateTheme()
+        {
+            if(theme == null)
+            {
+                OpenXmlFormats.Spreadsheet.ThemeDocument themeDoc = new OpenXmlFormats.Spreadsheet.ThemeDocument();
+
+                XWPFRelation relation = XWPFRelation.THEME;
+                int i = GetRelationIndex(relation);
+
+                XWPFTheme wrapper = (XWPFTheme) CreateRelationship(relation, XWPFFactory.GetInstance() , i);
+                wrapper.SetTheme(themeDoc.AddNewTheme());
+                theme = wrapper;
+            }
+
+            return theme;
+        }
+
         /**
          * Creates an empty footnotes element for the document if one does not already exist
          * @return footnotes
@@ -1729,13 +1752,22 @@ namespace NPOI.XWPF.UserModel
             return numbering;
         }
 
-        /**
-         * Get Styles
-         * @return styles for this document
-         */
+        /// <summary>
+        /// return styles for this document
+        /// </summary>
+        /// <returns></returns>
         public XWPFStyles GetStyles()
         {
             return styles;
+        }
+
+        /// <summary>
+        ///  Theme document (can be null)
+        /// </summary>
+        /// <returns></returns>
+        public XWPFTheme GetTheme()
+        {
+            return theme;
         }
 
         /**
