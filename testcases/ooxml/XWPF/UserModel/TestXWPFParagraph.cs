@@ -651,7 +651,25 @@ namespace TestCases.XWPF.UserModel
             String s = str.ToString();
             ClassicAssert.IsFalse(s.Contains("This is another Test"));
         }
-
+        [Test]
+        public void TestSearchText()
+        {
+            using(XWPFDocument doc = new XWPFDocument())
+            {
+                XWPFParagraph paragraph = doc.CreateParagraph();
+                paragraph.CreateRun().SetText("abc");
+                paragraph.CreateRun().SetText("de");
+                paragraph.CreateRun().SetText("f");
+                paragraph.CreateRun().SetText("g");
+                TextSegment result = paragraph.SearchText("cdefg", new PositionInParagraph());
+                ClassicAssert.AreEqual(0, result.BeginRun);
+                ClassicAssert.AreEqual(3, result.EndRun);
+                ClassicAssert.AreEqual(0, result.BeginText);
+                ClassicAssert.AreEqual(0, result.EndText);
+                ClassicAssert.AreEqual(2, result.BeginChar);
+                ClassicAssert.AreEqual(0, result.EndChar);
+            }
+        }
         [Test]
         public void Testpullrequest404()
         {
