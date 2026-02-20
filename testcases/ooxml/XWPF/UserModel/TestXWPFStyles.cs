@@ -236,5 +236,20 @@ namespace TestCases.XWPF.UserModel
 
             doc.Close();
         }
+        [Test]
+        public void TestRemoveStyle()
+        {
+            using(XWPFDocument sampleDoc = XWPFTestDataSamples.OpenSampleDocument("Styles.docx"))
+            {
+                XWPFStyles styles = sampleDoc.GetStyles();
+                ClassicAssert.AreEqual(12, styles.GetStyles().Count);
+                XWPFStyle removedStyle = styles.GetStyle("Standard");
+                styles.RemoveStyle(styles.GetStyles().IndexOf(removedStyle));
+
+                XWPFDocument docIn = XWPFTestDataSamples.WriteOutAndReadBack(sampleDoc);
+                ClassicAssert.AreEqual(11, docIn.GetStyles().GetStyles().Count);
+                ClassicAssert.IsNull(docIn.GetStyles().GetStyle("Standard"));
+            }
+}
     }
 }

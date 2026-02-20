@@ -140,6 +140,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             this.docDefaultsField = new CT_DocDefaults();
             return this.docDefaultsField;
         }
+
+        public void RemoveStyle(int pos)
+        {
+            this.styleField.RemoveAt(pos);
+        }
     }
 
 
