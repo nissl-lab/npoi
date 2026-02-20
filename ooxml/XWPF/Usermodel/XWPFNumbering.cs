@@ -230,6 +230,14 @@ namespace NPOI.XWPF.UserModel
             }
             return null;
         }
+        public List<XWPFAbstractNum> GetAbstractNums()
+        {
+            return abstractNums;
+        }   
+        public List<XWPFNum> GetNums()
+        {
+            return nums;
+        }
         /**
          * Compare AbstractNum with abstractNums of this numbering document.
          * If the content of abstractNum Equals with an abstractNum of the List in numbering
@@ -273,12 +281,21 @@ namespace NPOI.XWPF.UserModel
             }
             else
             {
-                ctNumbering.AddNewAbstractNum();
-                abstractNum.GetAbstractNum().abstractNumId = pos.ToString();
+                abstractNum.SetCTAbstractNum(ctNumbering.AddNewAbstractNum());
+                abstractNum.GetAbstractNum().abstractNumId = FindNextAbstractNumberingId().ToString();
                 ctNumbering.SetAbstractNumArray(pos, abstractNum.GetAbstractNum());
             }
             abstractNums.Add(abstractNum);
             return abstractNum.GetAbstractNum().abstractNumId;
+        }
+        private long FindNextAbstractNumberingId()
+        {
+            long maxId = 0;
+            foreach(XWPFAbstractNum num in abstractNums)
+            {
+                maxId = Math.Max(maxId, long.Parse(num.GetAbstractNum().abstractNumId));
+            }
+            return maxId + 1;
         }
         /// <summary>
         /// Add a new AbstractNum
