@@ -24,11 +24,12 @@ namespace TestCases.XWPF
     using NPOI.Util;
     using NPOI.XWPF;
     using NPOI.XWPF.UserModel;
-    using NUnit.Framework;using NUnit.Framework.Legacy;
+    using NUnit.Framework; using NUnit.Framework.Legacy;
     using System;
     using System.IO;
     using System.Reflection.Metadata;
     using System.Xml;
+    using System.Xml.Linq;
     using TestCases;
 
     [TestFixture]
@@ -46,7 +47,7 @@ namespace TestCases.XWPF
             XWPFDocument doc = new XWPFDocument();
             XWPFRun run = doc.CreateParagraph().CreateRun();
 
-            foreach (String str in blabla.Split("\n".ToCharArray()))
+            foreach(String str in blabla.Split("\n".ToCharArray()))
             {
                 run.SetText(str);
                 run.AddBreak();
@@ -76,27 +77,27 @@ namespace TestCases.XWPF
                 Biff8EncryptionKey.CurrentUserPassword = (/*setter*/"solrcell");
                 FileStream file = POIDataSamples.GetDocumentInstance().GetFile("bug53475-password-is-solrcell.docx");
                 NPOIFSFileSystem filesystem = new NPOIFSFileSystem(file,null, true, true);
-/*
-                // Check the encryption details
-                EncryptionInfo info = new EncryptionInfo(filesystem);
-                ClassicAssert.AreEqual(128, info.Header.KeySize);
-                ClassicAssert.AreEqual(EncryptionHeader.ALGORITHM_AES_128, info.Header.Algorithm);
-                ClassicAssert.AreEqual(EncryptionHeader.HASH_SHA1, info.Header.HashAlgorithm);
+                /*
+                                // Check the encryption details
+                                EncryptionInfo info = new EncryptionInfo(filesystem);
+                                ClassicAssert.AreEqual(128, info.Header.KeySize);
+                                ClassicAssert.AreEqual(EncryptionHeader.ALGORITHM_AES_128, info.Header.Algorithm);
+                                ClassicAssert.AreEqual(EncryptionHeader.HASH_SHA1, info.Header.HashAlgorithm);
 
-                // Check it can be decoded
-                Decryptor d = Decryptor.GetInstance(info);
-                ClassicAssert.IsTrue("Unable to Process: document is encrypted", d.VerifyPassword("solrcell"));
+                                // Check it can be decoded
+                                Decryptor d = Decryptor.GetInstance(info);
+                                ClassicAssert.IsTrue("Unable to Process: document is encrypted", d.VerifyPassword("solrcell"));
 
-                // Check we can read the word document in that
-                InputStream dataStream = d.GetDataStream(filesystem);
-                OPCPackage opc = OPCPackage.Open(dataStream);
-                XWPFDocument doc = new XWPFDocument(opc);
-                XWPFWordExtractor ex = new XWPFWordExtractor(doc);
-                String text = ex.Text;
-                ClassicAssert.IsNotNull(text);
-                ClassicAssert.AreEqual("This is password protected Word document.", text.Trim());
-                ex.Close();
- */
+                                // Check we can read the word document in that
+                                InputStream dataStream = d.GetDataStream(filesystem);
+                                OPCPackage opc = OPCPackage.Open(dataStream);
+                                XWPFDocument doc = new XWPFDocument(opc);
+                                XWPFWordExtractor ex = new XWPFWordExtractor(doc);
+                                String text = ex.Text;
+                                ClassicAssert.IsNotNull(text);
+                                ClassicAssert.AreEqual("This is password protected Word document.", text.Trim());
+                                ex.Close();
+                 */
                 filesystem.Close();
             }
             finally
@@ -109,7 +110,7 @@ namespace TestCases.XWPF
         {
             XWPFDocument doc = new XWPFDocument();
             //let's create a few tables for the test
-            for (int i = 0; i < 3; i++)
+            for(int i = 0; i < 3; i++)
             {
                 doc.CreateTable(2, 2);
             }
@@ -147,18 +148,18 @@ namespace TestCases.XWPF
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("57312.docx");
             ClassicAssert.IsNotNull(doc);
 
-            foreach (IBodyElement bodyElement in doc.BodyElements)
+            foreach(IBodyElement bodyElement in doc.BodyElements)
             {
                 BodyElementType elementType = bodyElement.ElementType;
 
-                if (elementType == BodyElementType.PARAGRAPH)
+                if(elementType == BodyElementType.PARAGRAPH)
                 {
                     XWPFParagraph paragraph = (XWPFParagraph)bodyElement;
 
-                    foreach (IRunElement iRunElem in paragraph.IRuns)
+                    foreach(IRunElement iRunElem in paragraph.IRuns)
                     {
 
-                        if (iRunElem is XWPFRun)
+                        if(iRunElem is XWPFRun)
                         {
                             XWPFRun RunElement = (XWPFRun)iRunElem;
 
@@ -189,7 +190,7 @@ namespace TestCases.XWPF
             ClassicAssert.IsNotNull(doc);
             ClassicAssert.AreEqual(3, doc.Paragraphs.Count);
 
-            foreach (XWPFParagraph paragraph in doc.Paragraphs)
+            foreach(XWPFParagraph paragraph in doc.Paragraphs)
             {
                 paragraph.RemoveRun(0);
                 ClassicAssert.IsNotNull(paragraph.Text);
@@ -215,7 +216,7 @@ namespace TestCases.XWPF
         public void Bug59058()
         {
             String[] files = { "bug57031.docx", "bug59058.docx" };
-            foreach (String f in files)
+            foreach(String f in files)
             {
                 ZipFile zf = new ZipFile(POIDataSamples.GetDocumentInstance().GetFile(f));
                 ZipEntry entry = zf.GetEntry("word/document.xml");
@@ -240,27 +241,27 @@ namespace TestCases.XWPF
 
         [Test]
         public void Test63788() {
-            using (XWPFDocument doc = new XWPFDocument())
+            using(XWPFDocument doc = new XWPFDocument())
             {
 
                 XWPFNumbering numbering = doc.CreateNumbering();
 
-                for (int i = 10; i >= 0; i--) {
+                for(int i = 10; i >= 0; i--) {
                     addNumberingWithAbstractId(numbering, i);        //add numbers in reverse order
                 }
 
-                for (int i = 0; i <= 10; i++) {
+                for(int i = 0; i <= 10; i++) {
                     ClassicAssert.AreEqual(i, int.Parse(numbering.GetAbstractNum(i.ToString()).GetAbstractNum().abstractNumId));
                 }
 
                 //attempt to remove item with numId 2
                 ClassicAssert.IsTrue(numbering.RemoveAbstractNum("2"));
 
-                for (int i = 0; i <= 10; i++) {
+                for(int i = 0; i <= 10; i++) {
                     XWPFAbstractNum abstractNum = numbering.GetAbstractNum(i.ToString());
 
                     // we removed id "2", so this one should be empty, all others not
-                    if (i == 2) {
+                    if(i == 2) {
                         ClassicAssert.IsNull(abstractNum, "Failed for " + i);
                     } else {
                         ClassicAssert.IsNotNull(abstractNum, "Failed for " + i);
@@ -292,7 +293,7 @@ namespace TestCases.XWPF
         [Test]
         public void CorrectParagraphAlignment()
         {
-            using (var document = XWPFTestDataSamples.OpenSampleDocument("bug-paragraph-alignment.docx")) {
+            using(var document = XWPFTestDataSamples.OpenSampleDocument("bug-paragraph-alignment.docx")) {
                 XWPFParagraph centeredParagraph = document.GetParagraphArray(0);
                 ClassicAssert.IsFalse(centeredParagraph.IsAlignmentSet());
                 ClassicAssert.AreEqual(ParagraphAlignment.LEFT, centeredParagraph.Alignment); // LEFT is a fallback value here.
@@ -301,7 +302,19 @@ namespace TestCases.XWPF
                 ClassicAssert.IsTrue(leftParagraph.IsAlignmentSet());
                 ClassicAssert.AreEqual(ParagraphAlignment.LEFT, leftParagraph.Alignment); // LEFT is the real alignment value.
             }
+        }
+        [Test]
+        public void Bug66988()
+        {
+            using(var document = XWPFTestDataSamples.OpenSampleDocument("Bug66988.docx"))
+            {
+                XWPFTableCell cell = document.GetTableArray(0).GetRow(0).GetCell(0);
+                cell.AppendText("World");
+                ClassicAssert.AreEqual("HelloWorld", cell.GetText());
+                cell.SetText("FooBar");
+                ClassicAssert.AreEqual("FooBar", cell.GetText());
             }
+        }
     }
 }
 

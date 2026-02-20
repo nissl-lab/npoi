@@ -252,11 +252,12 @@ namespace TestCases.XWPF.UserModel
             doc.AddPictureData(new byte[18], (int) PictureType.EPS);
             doc.AddPictureData(new byte[19], (int) PictureType.BMP);
             doc.AddPictureData(new byte[20], (int) PictureType.WPG);
+            doc.AddPictureData(new byte[21], (int) PictureType.SVG);
 
-            ClassicAssert.AreEqual(11, doc.AllPictures.Count);
+            ClassicAssert.AreEqual(12, doc.AllPictures.Count);
 
             doc = XWPFTestDataSamples.WriteOutAndReadBack(doc);
-            ClassicAssert.AreEqual(11, doc.AllPictures.Count);
+            ClassicAssert.AreEqual(12, doc.AllPictures.Count);
 
         }
         [Test]

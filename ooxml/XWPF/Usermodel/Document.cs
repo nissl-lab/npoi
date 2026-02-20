@@ -59,11 +59,12 @@ namespace NPOI.XWPF.UserModel
          * WordPerfect graphics (.wpg)
          */
         WPG = 12,
-
+        /** Microsoft Windows Media Photo image (.wdp) */
+        WDP=13,
         /**
          * Scalable Vector Graphics (.svg)
          */
-        SVG = 13
+        SVG = 14
     }
     public interface Document
     {
