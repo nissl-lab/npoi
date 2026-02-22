@@ -68,7 +68,33 @@ namespace NPOI.SS.UserModel
                 }
             }
         }
-        public IHyperlink Hyperlink { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public NCellRange SetHyperlink(IHyperlink hyperlink, bool createMissingRowAndCol=true)
+        {
+            for(int i = _address.FirstRow; i<=_address.LastRow; i++)
+            {
+                var row = _sheet.GetRow(i);
+                if(row==null)
+                {
+                    if(!createMissingRowAndCol)
+                        continue;
+                    else
+                        row = _sheet.CreateRow(i);
+                }
+                for(int j = _address.FirstColumn; j<=_address.LastColumn; j++)
+                {
+                    var cell = row.GetCell(j);
+                    if(cell==null)
+                    {
+                        if(!createMissingRowAndCol)
+                            continue;
+                        else
+                            cell = row.CreateCell(j);
+                    }
+                    cell.Hyperlink = hyperlink;
+                }
+            }
+            return this;
+        }
 
         public NCellRange(ISheet sheet, int fromRow, int fromCol, int toRow, int toCol)
         {

@@ -1446,8 +1446,13 @@ namespace NPOI.XSSF.Streaming
                 _sh.TabColor = value;
             }
         }
-
-        public NCellRange Cells => throw new NotImplementedException();
+        public NCellRange Cells
+        {
+            get
+            {
+                return new NCellRange(this, 0, 0, this.Workbook.SpreadsheetVersion.MaxRows, this.Workbook.SpreadsheetVersion.MaxColumns);
+            }
+        }
 
         public void CopyTo(IWorkbook dest, string name, bool copyStyle, bool keepFormulas)
         {
