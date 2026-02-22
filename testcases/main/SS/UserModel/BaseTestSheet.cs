@@ -1496,8 +1496,13 @@ namespace TestCases.SS.UserModel
         {
             var wb1 = _testDataProvider.CreateWorkbook();
             var sheet = wb1.CreateSheet();
-            var cellRanges= sheet.GetCells("A1");
-            ClassicAssert.AreEqual(1, cellRanges.CountRanges());
+            var cellRanges= sheet.Cells["A1"];
+            cellRanges.SetCellValue(1.0);
+            ClassicAssert.AreEqual(1, cellRanges.Size);
+            ClassicAssert.AreEqual("A1", cellRanges.Address);
+            ClassicAssert.AreEqual(0, cellRanges.TopLeftCell.RowIndex);
+            ClassicAssert.AreEqual(0, cellRanges.TopLeftCell.ColumnIndex);
+            ClassicAssert.AreEqual(1.0, cellRanges.TopLeftCell.NumericCellValue);
         }
 
         [Test]
@@ -1514,13 +1519,19 @@ namespace TestCases.SS.UserModel
         {
             var wb1 = _testDataProvider.CreateWorkbook();
             var sheet = wb1.CreateSheet();
-            var cellRanges = sheet.GetCells("Sheet1!B1:D3");
-            ClassicAssert.AreEqual(1, cellRanges.CountRanges());
-            ClassicAssert.AreEqual(1, cellRanges.GetCellRangeAddress(0).FirstColumn);
-            ClassicAssert.AreEqual(3, cellRanges.GetCellRangeAddress(0).LastColumn);
-            ClassicAssert.AreEqual(0, cellRanges.GetCellRangeAddress(0).FirstRow);
-            ClassicAssert.AreEqual(2, cellRanges.GetCellRangeAddress(0).LastRow);
-            ClassicAssert.AreEqual(9, cellRanges.GetCellRangeAddress(0).NumberOfCells);
+            var cellRanges = sheet.Cells["Sheet1!B1:D3"];
+            ClassicAssert.AreEqual(9, cellRanges.Size);
+            cellRanges.SetCellValue("Hello");
+
+            foreach (var cell in cellRanges)
+            {
+                ClassicAssert.AreEqual("Hello", cell.StringCellValue);
+            }
+            var C2 = cellRanges.GetCell(1, 1);  //get relative coordinate of B1:D3 range
+            ClassicAssert.AreEqual(1, C2.RowIndex);
+            ClassicAssert.AreEqual(2, C2.ColumnIndex);
+            ClassicAssert.AreEqual("C2", C2.Address.FormatAsString());
+
         }        
     }
 

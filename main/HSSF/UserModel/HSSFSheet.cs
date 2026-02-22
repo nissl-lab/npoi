@@ -3378,5 +3378,13 @@ namespace NPOI.HSSF.UserModel
         {
             return CellRangeAddressList.Parse(cellranges);
         }
+
+        public NCellRange Cells
+        {
+            get
+            {
+                return new NCellRange(this, 0, 0, this.Workbook.SpreadsheetVersion.MaxRows, this.Workbook.SpreadsheetVersion.MaxColumns);
+            }
+        }
     }
 }
