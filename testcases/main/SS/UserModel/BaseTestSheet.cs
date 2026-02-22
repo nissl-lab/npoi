@@ -1571,6 +1571,20 @@ namespace TestCases.SS.UserModel
                 ClassicAssert.AreEqual("Hello", cell.StringCellValue);
             }        
         }
+        [Test]
+        public void TestGetCells_SingleCellRange_SetCellFormula()
+        {
+            var wb1 = _testDataProvider.CreateWorkbook();
+            var sheet = wb1.CreateSheet();
+            var cellRanges = sheet.Cells["Sheet1!B1:D3"];
+            ClassicAssert.AreEqual(9, cellRanges.Size);
+            cellRanges.CellFormula="A1+B1";
+
+            foreach (var cell in cellRanges)
+            {
+                ClassicAssert.AreEqual("A1+B1", cell.CellFormula);
+            }
+        }
     }
 
 }
