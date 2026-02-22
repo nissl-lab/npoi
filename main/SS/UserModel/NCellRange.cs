@@ -87,7 +87,10 @@ namespace NPOI.SS.UserModel
 
         public ICell GetCell(int rowInRange, int colInRange)
         {
-            return _sheet.GetRow(_address.FirstRow+rowInRange)?.GetCell(_address.FirstColumn+colInRange);
+            var row = _sheet.GetRow(_address.FirstRow+rowInRange);
+            if(row==null)
+                row = _sheet.CreateRow(_address.FirstRow+rowInRange);
+            return row.GetCell(_address.FirstColumn+colInRange, MissingCellPolicy.CREATE_NULL_AS_BLANK);
         }
 
         public List<ICell> Cells
@@ -386,7 +389,32 @@ namespace NPOI.SS.UserModel
             }
             return this;
         }
+        public object Value { 
+            set {
+                if(value is double || value is Double)
+                {
+                    SetCellValue((double) value);
+                    return;
+                }
+                else if(value is string || value is String)
+                {
+                    SetCellValue((string) value);
+                    return;
+                }
+                else if(value is bool || value is Boolean)
+                {
+                    SetCellValue((bool) value);
+                    return;
+                }
+                else if(value is DateTime)
+                {
+                    SetCellValue((DateTime) value);
+                    return;
+                }
 
+                throw new InvalidOperationException("invalid value type for cell value");
+            } 
+        }
         public NCellRange RemoveCellComment()
         {
             for(int i = _address.FirstRow; i<=_address.LastRow; i++)

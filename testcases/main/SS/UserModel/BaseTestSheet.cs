@@ -1506,6 +1506,19 @@ namespace TestCases.SS.UserModel
         }
 
         [Test]
+        public void TestGetCells_SingleCell_UseRowColIndexer()
+        {
+            var wb1 = _testDataProvider.CreateWorkbook();
+            var sheet = wb1.CreateSheet();
+            var cellRanges = sheet.Cells[0,5];
+
+            ClassicAssert.AreEqual(1, cellRanges.Size);
+            ClassicAssert.AreEqual("F1", cellRanges.Address);
+            ClassicAssert.AreEqual(0, cellRanges.TopLeftCell.RowIndex);
+            ClassicAssert.AreEqual(5, cellRanges.TopLeftCell.ColumnIndex);
+        }
+
+        [Test]
         public void TestGetCells_SingleCellRange_SetBlank()
         {
             var wb1 = _testDataProvider.CreateWorkbook();
@@ -1543,7 +1556,21 @@ namespace TestCases.SS.UserModel
             ClassicAssert.AreEqual(1, C2.RowIndex);
             ClassicAssert.AreEqual(2, C2.ColumnIndex);
             ClassicAssert.AreEqual("C2", C2.Address.FormatAsString());
-        }        
+        }
+        [Test]
+        public void TestGetCells_SingleCellRange_SetCellValueWithValueProperty()
+        {
+            var wb1 = _testDataProvider.CreateWorkbook();
+            var sheet = wb1.CreateSheet();
+            var cellRanges = sheet.Cells["Sheet1!B1:D3"];
+            ClassicAssert.AreEqual(9, cellRanges.Size);
+            cellRanges.Value = "Hello";
+
+            foreach (var cell in cellRanges)
+            {
+                ClassicAssert.AreEqual("Hello", cell.StringCellValue);
+            }        
+        }
     }
 
 }
