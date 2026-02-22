@@ -1446,13 +1446,6 @@ namespace NPOI.XSSF.Streaming
                 _sh.TabColor = value;
             }
         }
-        public NCellRange Cells
-        {
-            get
-            {
-                return new NCellRange(this, 0, 0, this.Workbook.SpreadsheetVersion.MaxRows, this.Workbook.SpreadsheetVersion.MaxColumns);
-            }
-        }
 
         public void CopyTo(IWorkbook dest, string name, bool copyStyle, bool keepFormulas)
         {
@@ -1669,6 +1662,20 @@ namespace NPOI.XSSF.Streaming
         IEnumerator<IRow> IEnumerable<IRow>.GetEnumerator()
         {
             return ((IEnumerable<IRow>) _sh).GetEnumerator();
+        }
+        public NCellRange Cells
+        {
+            get
+            {
+                return new NCellRange(this, 0, 0, this.Workbook.SpreadsheetVersion.MaxRows, this.Workbook.SpreadsheetVersion.MaxColumns);
+            }
+        }
+        public NRowRange Rows
+        {
+            get
+            {
+                return new NRowRange(this, 0, this.Workbook.SpreadsheetVersion.MaxRows);
+            }
         }
     }
 }

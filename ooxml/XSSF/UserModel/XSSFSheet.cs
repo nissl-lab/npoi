@@ -6628,5 +6628,12 @@ lblforbreak:
                 return new NCellRange(this, 0, 0, this.Workbook.SpreadsheetVersion.MaxRows, this.Workbook.SpreadsheetVersion.MaxColumns);
             }
         }
+
+        public NRowRange Rows
+        {
+            get {
+                return new NRowRange(this, 0, this.Workbook.SpreadsheetVersion.MaxRows);
+            }
+        }
     }
 }

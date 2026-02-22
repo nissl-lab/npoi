@@ -15,7 +15,7 @@ namespace NPOI.SS.UserModel
         private int _toRow;
         private ISheet _sheet;
 
-        public NRowRange(int fromRow, int toRow, ISheet sheet)
+        public NRowRange(ISheet sheet, int fromRow, int toRow)
         {
             _fromRow=fromRow;
             _toRow=toRow;
@@ -80,6 +80,27 @@ namespace NPOI.SS.UserModel
                     row.ZeroHeight=value;
                 }
             }
+        }
+        public ICellStyle RowStyle
+        {
+            get => throw new NotImplementedException();
+            set
+            {
+                if(RowStyle==null)
+                    return;
+                for(int i = _fromRow; i<=_toRow; i++)
+                {
+                    var row = _sheet.GetRow(i);
+                    if(row==null)
+                        row=_sheet.CreateRow(i);
+                    row.RowStyle=value;
+                }
+            }
+        }
+        public NRowRange Group()
+        {
+            _sheet.GroupRow(_fromRow, _toRow);
+            return this;
         }
         public List<IRow> Rows
         {
