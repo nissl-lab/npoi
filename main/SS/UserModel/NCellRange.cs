@@ -24,7 +24,7 @@ namespace NPOI.SS.UserModel
         public ICell TopLeftCell => GetCell(0,0);
         public ISheet Sheet => _sheet;
 
-        public string CellFormula { get => throw new NotImplementedException(); set => this.SetCellFormula(value); }
+        public string Formula { get => throw new NotImplementedException(); set => this.SetCellFormula(value); }
 
         public NCellRange SetCellStyle(ICellStyle style, bool createMissingRowAndCol)
         {
@@ -123,12 +123,12 @@ namespace NPOI.SS.UserModel
         {
             get {
                 List<ICell> cells = new List<ICell>();
-                for(int i = _address.FirstRow; i<=_address.LastRow; i++)
+                for(int i = _address.FirstRow; i<=((_address.LastRow<_sheet.LastRowNum)?_address.LastRow: _sheet.LastRowNum); i++)
                 {
                     var row = _sheet.GetRow(i);
                     if(row==null)
                         continue;
-                    for(int j = _address.FirstColumn; j<=_address.LastColumn; j++)
+                    for(int j = _address.FirstColumn; j<=((_address.LastColumn<row.LastCellNum)?_address.LastColumn:row.LastCellNum); j++)
                     {
                         var cell = row.GetCell(j,MissingCellPolicy.RETURN_NULL_AND_BLANK);
                         if(cell!=null)

@@ -1524,6 +1524,8 @@ namespace TestCases.SS.UserModel
             var wb1 = _testDataProvider.CreateWorkbook();
             var sheet = wb1.CreateSheet();
             var cellRanges = sheet.Cells["D5:F6"];
+            ClassicAssert.AreEqual(3, cellRanges.Width);
+            ClassicAssert.AreEqual(2, cellRanges.Height);
             ClassicAssert.AreEqual(6, cellRanges.Size);
 
             sheet.CreateRow(5).CreateCell(5).SetCellValue(1.0); //Set F5 value
@@ -1578,12 +1580,20 @@ namespace TestCases.SS.UserModel
             var sheet = wb1.CreateSheet();
             var cellRanges = sheet.Cells["Sheet1!B1:D3"];
             ClassicAssert.AreEqual(9, cellRanges.Size);
-            cellRanges.CellFormula="A1+B1";
-
+            cellRanges.Formula="A1+B1";
+            
             foreach (var cell in cellRanges)
             {
                 ClassicAssert.AreEqual("A1+B1", cell.CellFormula);
             }
+        }
+        [Test]
+        public void TestGetCells_SingleCellRange_ColumnSelector()
+        {
+            var wb1 = _testDataProvider.CreateWorkbook();
+            var sheet = wb1.CreateSheet();
+            var cellRanges = sheet.Cells["A:B"];
+            ClassicAssert.AreEqual(2, cellRanges.Size);
         }
     }
 
