@@ -26,29 +26,38 @@ namespace NPOI.SS.UserModel
 
         public string CellFormula { get => throw new NotImplementedException(); set => this.SetCellFormula(value); }
 
-        public ICellStyle CellStyle
+        public NCellRange SetCellStyle(ICellStyle style, bool createMissingRowAndCol)
         {
-            set 
+            for(int i = _address.FirstRow; i<=_address.LastRow; i++)
             {
-                for(int i = _address.FirstRow; i<=_address.LastRow; i++)
+                var row = _sheet.GetRow(i);
+                if(row==null)
                 {
-                    var row = _sheet.GetRow(i);
-                    if(row==null)
+                    if(!createMissingRowAndCol)
                         continue;
-                    for(int j = _address.FirstColumn; j<=_address.LastColumn; j++)
+                    else
+                        row = _sheet.CreateRow(i);
+                }
+                for(int j = _address.FirstColumn; j<=_address.LastColumn; j++)
+                {
+                    var cell = row.GetCell(j);
+                    if(cell==null)
                     {
-                        var cell = row.GetCell(j,MissingCellPolicy.RETURN_NULL_AND_BLANK);
-                        if(cell!=null)
-                            cell.CellStyle=value;
+                        if(!createMissingRowAndCol)
+                            continue;
+                        else
+                            cell = row.CreateCell(j);
                     }
+                    cell.CellStyle=style;
                 }
             }
+            return this;
         }
 
         public void SetCellComment(IComment comment) {
             if(comment==null)
             {
-                //remove comment
+                RemoveCellComment();
                 return;
             }
             for(int i = _address.FirstRow; i<=_address.LastRow; i++)
@@ -81,227 +90,290 @@ namespace NPOI.SS.UserModel
             return _sheet.GetRow(_address.FirstRow+rowInRange)?.GetCell(_address.FirstColumn+colInRange);
         }
 
+        public List<ICell> Cells
+        {
+            get {
+                List<ICell> cells = new List<ICell>();
+                for(int i = _address.FirstRow; i<=_address.LastRow; i++)
+                {
+                    var row = _sheet.GetRow(i);
+                    if(row==null)
+                        continue;
+                    for(int j = _address.FirstColumn; j<=_address.LastColumn; j++)
+                    {
+                        var cell = row.GetCell(j,MissingCellPolicy.RETURN_NULL_AND_BLANK);
+                        if(cell!=null)
+                            cells.Add(cell);
+                    }
+                }
+                return cells;
+            }
+        }
+
         public IEnumerator<ICell> GetEnumerator()
         {
-            List<ICell> cells = new List<ICell>(); 
+            return Cells.GetEnumerator();
+        }
+
+        public NCellRange SetCellType(CellType cellType, bool createMissingRowAndCol= true)
+        {
             for(int i = _address.FirstRow; i<=_address.LastRow; i++)
             {
                 var row = _sheet.GetRow(i);
                 if(row==null)
-                    continue;
-                for(int j = _address.FirstColumn; j<=_address.LastColumn; j++)
                 {
-                    var cell = row.GetCell(j,MissingCellPolicy.RETURN_NULL_AND_BLANK);
-                    if(cell!=null)
-                        cells.Add(cell);
-                }
-            }
-            return cells.GetEnumerator();
-        }
-
-        public void SetCellType(CellType cellType, bool createMissingRowAndCol= true)
-        {
-            for(int i = _address.FirstRow; i<=_address.LastRow; i++)
-            {
-                var row = _sheet.GetRow(i);
-                if(row==null&&!createMissingRowAndCol)
-                {
-                    continue;
-                }
-                row = _sheet.CreateRow(i);
-                for(int j = _address.FirstColumn; j<=_address.LastColumn; j++)
-                {
-                    var cell = row.GetCell(j,MissingCellPolicy.CREATE_NULL_AS_BLANK);
-                    if(cell==null&&!createMissingRowAndCol)
+                    if(!createMissingRowAndCol)
                         continue;
-
-                    cell = row.CreateCell(j);
+                    else
+                        row = _sheet.CreateRow(i);
+                }
+                for(int j = _address.FirstColumn; j<=_address.LastColumn; j++)
+                {
+                    var cell = row.GetCell(j);
+                    if(cell==null)
+                    {
+                        if(!createMissingRowAndCol)
+                            continue;
+                        else
+                            cell = row.CreateCell(j);
+                    }
                     cell.SetCellType(cellType);
                 }
             }
+            return this;
         }
 
-        public void SetBlank(bool createMissingRowAndCol = false)
+        public NCellRange SetBlank(bool createMissingRowAndCol = false)
         {
             for(int i = _address.FirstRow; i<=_address.LastRow; i++)
             {
                 var row = _sheet.GetRow(i);
-                if(row==null&&!createMissingRowAndCol)
+                if(row==null)
                 {
-                    continue;
+                    if(!createMissingRowAndCol)
+                        continue;
+                    else
+                        row = _sheet.CreateRow(i);
                 }
-                row = _sheet.CreateRow(i);
                 for(int j = _address.FirstColumn; j<=_address.LastColumn; j++)
                 {
-                    var cell = row.GetCell(j,MissingCellPolicy.CREATE_NULL_AS_BLANK);
-                    if(cell==null&&!createMissingRowAndCol)
-                        continue;
-
-                    cell = row.CreateCell(j);
+                    var cell = row.GetCell(j,MissingCellPolicy.RETURN_NULL_AND_BLANK);
+                    if(cell==null)
+                    {
+                        if(!createMissingRowAndCol)
+                            continue;
+                        else
+                            cell = row.CreateCell(j);
+                    }
                     cell.SetBlank();
                 }
             }
+            return this;
         }
 
-        public void SetCellValue(double value, bool createMissingRowAndCol = true)
+        public NCellRange SetCellValue(double value, bool createMissingRowAndCol = true)
         {
             for(int i = _address.FirstRow; i<=_address.LastRow; i++)
             {
                 var row = _sheet.GetRow(i);
-                if(row==null&&!createMissingRowAndCol)
+                if(row==null)
                 {
-                    continue;
+                    if(!createMissingRowAndCol)
+                        continue;
+                    else
+                        row = _sheet.CreateRow(i);
                 }
-                row = _sheet.CreateRow(i);
                 for(int j = _address.FirstColumn; j<=_address.LastColumn; j++)
                 {
-                    var cell = row.GetCell(j,MissingCellPolicy.CREATE_NULL_AS_BLANK);
-                    if(cell==null&&!createMissingRowAndCol)
-                        continue;
-
-                    cell = row.CreateCell(j);
+                    var cell = row.GetCell(j,MissingCellPolicy.RETURN_NULL_AND_BLANK);
+                    if(cell==null)
+                    {
+                        if(!createMissingRowAndCol)
+                            continue;
+                        else
+                            cell = row.CreateCell(j);
+                    }
                     cell.SetCellValue(value);
                 }
             }
+            return this;
         }
 
-        public void SetCellErrorValue(byte value, bool createMissingRowAndCol = true)
+        public NCellRange SetCellErrorValue(byte value, bool createMissingRowAndCol = true)
         {
             for(int i = _address.FirstRow; i<=_address.LastRow; i++)
             {
                 var row = _sheet.GetRow(i);
-                if(row==null&&!createMissingRowAndCol)
+                if(row==null)
                 {
-                    continue;
+                    if(!createMissingRowAndCol)
+                        continue;
+                    else
+                        row = _sheet.CreateRow(i);
                 }
-                row = _sheet.CreateRow(i);
                 for(int j = _address.FirstColumn; j<=_address.LastColumn; j++)
                 {
-                    var cell = row.GetCell(j,MissingCellPolicy.CREATE_NULL_AS_BLANK);
-                    if(cell==null&&!createMissingRowAndCol)
-                        continue;
+                    var cell = row.GetCell(j,MissingCellPolicy.RETURN_NULL_AND_BLANK);
+                    if(cell==null)
+                    {
+                        if(!createMissingRowAndCol)
+                            continue;
+                        else
+                            cell = row.CreateCell(j);
+                    }
 
                     cell = row.CreateCell(j);
                     cell.SetCellErrorValue(value);
                 }
             }
+            return this;
         }
 
-        public void SetCellValue(DateTime value, bool createMissingRowAndCol = true)
-        {
-            for(int i = _address.FirstRow; i<=_address.LastRow; i++)
-            {
-                var row = _sheet.GetRow(i);
-                if(row==null&&!createMissingRowAndCol)
-                {
-                    continue;
-                }
-                row = _sheet.CreateRow(i);
-                for(int j = _address.FirstColumn; j<=_address.LastColumn; j++)
-                {
-                    var cell = row.GetCell(j,MissingCellPolicy.CREATE_NULL_AS_BLANK);
-                    if(cell==null&&!createMissingRowAndCol)
-                        continue;
-
-                    cell = row.CreateCell(j);
-                    cell.SetCellValue(value);
-                }
-            }
-        }
-
-        public void SetCellValue(IRichTextString value, bool createMissingRowAndCol = true)
-        {
-            for(int i = _address.FirstRow; i<=_address.LastRow; i++)
-            {
-                var row = _sheet.GetRow(i);
-                if(row==null&&!createMissingRowAndCol)
-                {
-                    continue;
-                }
-                row = _sheet.CreateRow(i);
-                for(int j = _address.FirstColumn; j<=_address.LastColumn; j++)
-                {
-                    var cell = row.GetCell(j,MissingCellPolicy.CREATE_NULL_AS_BLANK);
-                    if(cell==null&&!createMissingRowAndCol)
-                        continue;
-
-                    cell = row.CreateCell(j);
-                    cell.SetCellValue(value);
-                }
-            }
-        }
-
-        public void SetCellValue(string value, bool createMissingRowAndCol = true)
-        {
-            for(int i = _address.FirstRow; i<=_address.LastRow; i++)
-            {
-                var row = _sheet.GetRow(i);
-                if(row==null&&!createMissingRowAndCol)
-                {
-                    continue;
-                }
-                row = _sheet.CreateRow(i);
-                for(int j = _address.FirstColumn; j<=_address.LastColumn; j++)
-                {
-                    var cell = row.GetCell(j,MissingCellPolicy.CREATE_NULL_AS_BLANK);
-                    if(cell==null&&!createMissingRowAndCol)
-                        continue;
-
-                    cell = row.CreateCell(j);
-                    cell.SetCellValue(value);
-                }
-            }
-        }
-
-        public void RemoveFormula()
+        public NCellRange SetCellValue(DateTime value, bool createMissingRowAndCol = true)
         {
             for(int i = _address.FirstRow; i<=_address.LastRow; i++)
             {
                 var row = _sheet.GetRow(i);
                 if(row==null)
                 {
-                    row = _sheet.CreateRow(i);
+                    if(!createMissingRowAndCol)
+                        continue;
+                    else
+                        row = _sheet.CreateRow(i);
                 }
                 for(int j = _address.FirstColumn; j<=_address.LastColumn; j++)
                 {
-                    var cell = row.GetCell(j,MissingCellPolicy.CREATE_NULL_AS_BLANK);
-                    cell.RemoveFormula();
+                    var cell = row.GetCell(j,MissingCellPolicy.RETURN_NULL_AND_BLANK);
+                    if(cell==null)
+                    {
+                        if(!createMissingRowAndCol)
+                            continue;
+                        else
+                            cell = row.CreateCell(j);
+                    }
+                    cell.SetCellValue(value);
                 }
             }
+            return this;
         }
 
-        public void SetCellFormula(string formula, bool createMissingRowAndCol = true)
+        public NCellRange SetCellValue(IRichTextString value, bool createMissingRowAndCol = true)
         {
             for(int i = _address.FirstRow; i<=_address.LastRow; i++)
             {
                 var row = _sheet.GetRow(i);
-                if(row==null&&!createMissingRowAndCol)
+                if(row==null)
+                {
+                    if(!createMissingRowAndCol)
+                        continue;
+                    else
+                        row = _sheet.CreateRow(i);
+                }
+                for(int j = _address.FirstColumn; j<=_address.LastColumn; j++)
+                {
+                    var cell = row.GetCell(j,MissingCellPolicy.RETURN_NULL_AND_BLANK);
+                    if(cell==null)
+                    {
+                        if(!createMissingRowAndCol)
+                            continue;
+                        else
+                            cell = row.CreateCell(j);
+                    }
+                    cell.SetCellValue(value);
+                }
+            }
+            return this;
+        }
+
+        public NCellRange SetCellValue(string value, bool createMissingRowAndCol = true)
+        {
+            for(int i = _address.FirstRow; i<=_address.LastRow; i++)
+            {
+                var row = _sheet.GetRow(i);
+                if(row==null)
+                {
+                    if(!createMissingRowAndCol)
+                        continue;
+                    else
+                        row = _sheet.CreateRow(i);
+                }
+                for(int j = _address.FirstColumn; j<=_address.LastColumn; j++)
+                {
+                    var cell = row.GetCell(j,MissingCellPolicy.RETURN_NULL_AND_BLANK);
+                    if(cell==null)
+                    {
+                        if(!createMissingRowAndCol)
+                            continue;
+                        else
+                            cell = row.CreateCell(j);
+                    }
+                    cell.SetCellValue(value);
+                }
+            }
+            return this;
+        }
+
+        public NCellRange RemoveFormula()
+        {
+            for(int i = _address.FirstRow; i<=_address.LastRow; i++)
+            {
+                var row = _sheet.GetRow(i);
+                if(row==null)
                 {
                     continue;
                 }
-                row = _sheet.CreateRow(i);
                 for(int j = _address.FirstColumn; j<=_address.LastColumn; j++)
                 {
-                    var cell = row.GetCell(j,MissingCellPolicy.CREATE_NULL_AS_BLANK);
-                    if(cell==null&&!createMissingRowAndCol)
-                        continue;
+                    var cell = row.GetCell(j);
+                    if(cell!=null&&cell.CellFormula!=null)
+                    {
+                        cell.RemoveFormula();
+                    }
+                }
+            }
+            return this;
+        }
 
-                    cell = row.CreateCell(j);
+        public NCellRange SetCellFormula(string formula, bool createMissingRowAndCol = true)
+        {
+            for(int i = _address.FirstRow; i<=_address.LastRow; i++)
+            {
+                var row = _sheet.GetRow(i);
+                if(row==null)
+                {
+                    if(!createMissingRowAndCol)
+                        continue;
+                    else
+                        row = _sheet.CreateRow(i);
+                }
+                for(int j = _address.FirstColumn; j<=_address.LastColumn; j++)
+                {
+                    var cell = row.GetCell(j,MissingCellPolicy.RETURN_NULL_AND_BLANK);
+                    if(cell==null)
+                    {
+                        if(!createMissingRowAndCol)
+                            continue;
+                        else
+                            cell = row.CreateCell(j);
+                    }
                     cell.SetCellFormula(formula);
                 }
             }
+            return this;
         }
 
-        public void SetCellValue(bool value, bool createMissingRowAndCol = true)
+        public NCellRange SetCellValue(bool value, bool createMissingRowAndCol = true)
         {
             for(int i = _address.FirstRow; i<=_address.LastRow; i++)
             {
                 var row = _sheet.GetRow(i);
-                if(row==null&&!createMissingRowAndCol)
+                if(row==null)
                 {
-                    continue;
+                    if(!createMissingRowAndCol)
+                        continue;
+                    else
+                        row = _sheet.CreateRow(i);
                 }
-                row = _sheet.CreateRow(i);
                 for(int j = _address.FirstColumn; j<=_address.LastColumn; j++)
                 {
                     var cell = row.GetCell(j,MissingCellPolicy.CREATE_NULL_AS_BLANK);
@@ -312,16 +384,51 @@ namespace NPOI.SS.UserModel
                     cell.SetCellValue(value);
                 }
             }
+            return this;
         }
 
-        public void RemoveCellComment()
+        public NCellRange RemoveCellComment()
         {
-            throw new NotImplementedException();
+            for(int i = _address.FirstRow; i<=_address.LastRow; i++)
+            {
+                var row = _sheet.GetRow(i);
+                if(row==null)
+                {
+                    continue;
+                }
+                for(int j = _address.FirstColumn; j<=_address.LastColumn; j++)
+                {
+                    var cell = row.GetCell(j,MissingCellPolicy.CREATE_NULL_AS_BLANK);
+                    if(cell.CellComment!=null)
+                    {
+                        cell.RemoveCellComment();
+                    }
+                }
+            }
+            return this;
         }
 
-        public void RemoveHyperlink()
+        public NCellRange RemoveHyperlink()
         {
-            throw new NotImplementedException();
+            for(int i = _address.FirstRow; i<=_address.LastRow; i++)
+            {
+                var row = _sheet.GetRow(i);
+                if(row==null)
+                {
+                    continue;
+                }
+                for(int j = _address.FirstColumn; j<=_address.LastColumn; j++)
+                {
+                    var cell = row.GetCell(j);
+                    if(cell==null)
+                        continue;
+                    if(cell.Hyperlink!=null)
+                    {
+                        cell.RemoveHyperlink();
+                    }
+                }
+            }
+            return this;
         }
 
         IEnumerator IEnumerable.GetEnumerator()

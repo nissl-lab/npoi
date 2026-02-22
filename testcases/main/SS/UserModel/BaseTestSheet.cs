@@ -1506,16 +1506,28 @@ namespace TestCases.SS.UserModel
         }
 
         [Test]
-        public void TestGetCells_MultipleCellRange()
+        public void TestGetCells_SingleCellRange_SetBlank()
         {
             var wb1 = _testDataProvider.CreateWorkbook();
             var sheet = wb1.CreateSheet();
-            var cellRanges = sheet.GetCells("A1:B2, D5:F7");
-            ClassicAssert.AreEqual(2, cellRanges.CountRanges());
-            ClassicAssert.AreEqual(4+9, cellRanges.NumberOfCells());
+            var cellRanges = sheet.Cells["D5:F6"];
+            ClassicAssert.AreEqual(6, cellRanges.Size);
+
+            sheet.CreateRow(5).CreateCell(5).SetCellValue(1.0); //Set F5 value
+
+            cellRanges.SetBlank(false); //don't create row and cells
+            ClassicAssert.AreEqual(1, cellRanges.Cells.Count);
+
+            cellRanges.SetBlank(true); //Create row and cells
+            ClassicAssert.AreEqual(6, cellRanges.Cells.Count);
+            foreach (var cell in cellRanges)
+            {
+                ClassicAssert.AreEqual(CellType.Blank, cell.CellType);
+                ClassicAssert.AreEqual("", cell.ToString());
+            }
         }
         [Test]
-        public void TestGetCells_SingleCellRange()
+        public void TestGetCells_SingleCellRange_SetCellValue()
         {
             var wb1 = _testDataProvider.CreateWorkbook();
             var sheet = wb1.CreateSheet();
@@ -1531,7 +1543,6 @@ namespace TestCases.SS.UserModel
             ClassicAssert.AreEqual(1, C2.RowIndex);
             ClassicAssert.AreEqual(2, C2.ColumnIndex);
             ClassicAssert.AreEqual("C2", C2.Address.FormatAsString());
-
         }        
     }
 
