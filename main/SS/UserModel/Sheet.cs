@@ -937,8 +937,6 @@ namespace NPOI.SS.UserModel
         CellAddress ActiveCell { get; set; }
 
         void CopyTo(IWorkbook dest, string name, bool copyStyle, bool keepFormulas);
-        
-        CellRangeAddressList GetCells(string cellranges);
 
         NCellRange Cells { get; }
     }

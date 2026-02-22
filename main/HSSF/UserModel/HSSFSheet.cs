@@ -3374,10 +3374,6 @@ namespace NPOI.HSSF.UserModel
         {
             return rows.Values.GetEnumerator();
         }
-        public CellRangeAddressList GetCells(string cellranges)
-        {
-            return CellRangeAddressList.Parse(cellranges);
-        }
 
         public NCellRange Cells
         {

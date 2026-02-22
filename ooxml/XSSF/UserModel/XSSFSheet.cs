@@ -6608,11 +6608,6 @@ lblforbreak:
 
         #endregion
 
-        public CellRangeAddressList GetCells(string cellranges)
-        {
-            return CellRangeAddressList.Parse(cellranges);
-        }
-
         /// <summary>
         /// called when a sheet is being deleted/removed from a workbook, to clean up relations and other document pieces tied to the sheet
         /// </summary>

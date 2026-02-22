@@ -1665,9 +1665,5 @@ namespace NPOI.XSSF.Streaming
         {
             return ((IEnumerable<IRow>) _sh).GetEnumerator();
         }
-        public CellRangeAddressList GetCells(string cellranges)
-        {
-            return CellRangeAddressList.Parse(cellranges);
-        }
     }
 }
