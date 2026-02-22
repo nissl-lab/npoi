@@ -132,5 +132,59 @@ namespace TestCases.XWPF.UserModel
                 }
             }
         }
+
+        [Test]
+        public void TestAddParagraph()
+        {
+            using (XWPFDocument doc = new XWPFDocument())
+            {
+                XWPFTable table = doc.CreateTable();
+                XWPFTableRow tr = table.CreateRow();
+                XWPFTableCell cell = tr.AddNewTableCell();
+
+                // cell have at least one paragraph by default
+                ClassicAssert.AreEqual(1, cell.Paragraphs.Count);
+                ClassicAssert.AreEqual(1, cell.BodyElements.Count);
+                ClassicAssert.AreEqual(cell.GetParagraphArray(0), cell.BodyElements[0]);
+
+                XWPFParagraph p = cell.AddParagraph();
+                ClassicAssert.AreEqual(2, cell.Paragraphs.Count);
+                ClassicAssert.AreEqual(2, cell.BodyElements.Count);
+                ClassicAssert.AreEqual(p, cell.GetParagraphArray(1));
+                ClassicAssert.AreEqual(cell.GetParagraphArray(1), cell.BodyElements[1]);
+            }
+        }
+
+        [Test]
+        public void TestRemoveParagraph()
+        {
+            using (XWPFDocument doc = new XWPFDocument())
+            {
+                XWPFTable table = doc.CreateTable();
+                XWPFTableRow tr = table.CreateRow();
+                XWPFTableCell cell = tr.AddNewTableCell();
+
+                // cell have at least one paragraph by default
+                XWPFParagraph p0 = cell.GetParagraphArray(0);
+                XWPFParagraph p1 = cell.AddParagraph();
+                cell.AddParagraph();
+
+                // remove 3rd
+                cell.RemoveParagraph(2);
+                ClassicAssert.AreEqual(2, cell.Paragraphs.Count);
+                ClassicAssert.AreEqual(2, cell.BodyElements.Count);
+                ClassicAssert.AreEqual(p0, cell.GetParagraphArray(0));
+                ClassicAssert.AreEqual(p1, cell.GetParagraphArray(1));
+                ClassicAssert.AreEqual(p0, cell.BodyElements[0]);
+                ClassicAssert.AreEqual(p1, cell.BodyElements[1]);
+
+                // remove 2nd
+                cell.RemoveParagraph(1);
+                ClassicAssert.AreEqual(1, cell.Paragraphs.Count);
+                ClassicAssert.AreEqual(1, cell.BodyElements.Count);
+                ClassicAssert.AreEqual(p0, cell.GetParagraphArray(0));
+                ClassicAssert.AreEqual(p0, cell.BodyElements[0]);
+            }
+        }
     }
 }
