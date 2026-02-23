@@ -721,7 +721,7 @@ namespace NPOI.SS.UserModel
                 }
                 // Ensure it has some date letters in it
                 // (Avoids false positives on the rest of pattern 3)
-                if (!date_ptrn3a.Match(fs).Success)
+                if (!date_ptrn3a.IsMatch(fs))
                 //if (!Regex.Match(fs, "[yYmMdDhHsS]").Success)
                 {
                     return false;
