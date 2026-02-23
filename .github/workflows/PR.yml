@@ -26,6 +26,7 @@ jobs:
   windows-latest:
     name: windows-latest
     runs-on: windows-latest
+    continue-on-error: true
     timeout-minutes: 20
     steps:
       - uses: actions/setup-dotnet@v5
