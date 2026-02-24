@@ -3839,7 +3839,11 @@ namespace NPOI.XSSF.UserModel
 
         public void SetActiveCellRange(int firstRow, int lastRow, int firstColumn, int lastColumn)
         {
-            throw new NotImplementedException();
+            var ctSelection = this.GetSheetTypeSelection();
+            var address = new CellRangeAddress(firstRow,lastRow, firstColumn, lastColumn);
+            string reference= address.FormatAsString();
+            ctSelection.activeCell = reference;
+            ctSelection.sqref = reference;
         }
 
         public short TabColorIndex

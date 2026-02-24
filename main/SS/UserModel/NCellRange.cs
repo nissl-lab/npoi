@@ -24,6 +24,16 @@ namespace NPOI.SS.UserModel
         public ICell TopLeftCell => GetCell(0,0);
         public ISheet Sheet => _sheet;
 
+        /// <summary>
+        /// Set this cell range as active
+        /// </summary>
+        /// <returns></returns>
+        public NCellRange SetActive()
+        {
+            _sheet.SetActiveCellRange(_address.FirstRow, _address.LastRow, _address.FirstColumn, _address.LastColumn);
+            return this;
+        }
+
         public string Formula { get => throw new NotImplementedException(); set => this.SetCellFormula(value); }
 
         public NCellRange SetCellStyle(ICellStyle style, bool createMissingRowAndCol)
