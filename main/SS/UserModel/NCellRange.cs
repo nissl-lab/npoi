@@ -437,7 +437,11 @@ namespace NPOI.SS.UserModel
                     SetCellValue((DateTime) value);
                     return;
                 }
-
+                else if(value is IRichTextString)
+                {
+                    SetCellValue((IRichTextString) value);
+                    return;
+                }
                 throw new InvalidOperationException("invalid value type for cell value");
             } 
         }
