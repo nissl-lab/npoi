@@ -38,7 +38,9 @@ namespace NPOI.SS.UserModel
             return GetEnumerator();
         }
 
-        public int RowCount { get => _toRow-_fromRow+1; }
+        public int NumberOfRows { get => _toRow-_fromRow+1; }
+
+        public int PhysicalNumberOfRows { get => this.Rows.Count; }
 
         public short Height
         {
@@ -102,6 +104,12 @@ namespace NPOI.SS.UserModel
             _sheet.GroupRow(_fromRow, _toRow);
             return this;
         }
+        public NRowRange Ungroup()
+        { 
+            _sheet.UngroupRow(_fromRow, _toRow);
+            return this;
+        }
+
         public List<IRow> Rows
         {
             get

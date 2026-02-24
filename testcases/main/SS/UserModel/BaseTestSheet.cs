@@ -1612,9 +1612,11 @@ namespace TestCases.SS.UserModel
                 var x=sheet.Rows[1, 100000000];
             });
             var rowRange = sheet.Rows[1, 5];
-            ClassicAssert.AreEqual(5, rowRange.RowCount);
+            ClassicAssert.AreEqual(5, rowRange.NumberOfRows);
+            ClassicAssert.AreEqual(0, rowRange.PhysicalNumberOfRows);
             ClassicAssert.IsNull(rowRange.GetRow(0));
             rowRange.Create();  //create rows 1-5
+            ClassicAssert.AreEqual(5, rowRange.PhysicalNumberOfRows);
             ClassicAssert.AreEqual(1, rowRange.GetRow(0).RowNum);
             ClassicAssert.AreEqual(3, rowRange.GetRow(2).RowNum);
             ClassicAssert.AreEqual(5, rowRange.GetRow(4).RowNum);
