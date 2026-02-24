@@ -1602,7 +1602,7 @@ namespace TestCases.SS.UserModel
         {
             var wb1 = _testDataProvider.CreateWorkbook();
             var sheet = wb1.CreateSheet();
-            
+
             Assert.Throws<ArgumentException>(() =>
             {
                 var x=sheet.Rows[-1, 100];
@@ -1631,6 +1631,16 @@ namespace TestCases.SS.UserModel
                 ClassicAssert.AreEqual(500, row.Height);
                 ClassicAssert.AreEqual(25, row.HeightInPoints);
             }
+        }
+        [Test]
+        public void TestGetRows_ExistingRow()
+        {
+            var wb1 = _testDataProvider.CreateWorkbook();
+            var sheet = wb1.CreateSheet();
+            sheet.CreateRow(1);
+            sheet.CreateRow(3);
+            var rowRange=sheet.Rows[1, 3];  //Rows[1,3] will not create rows
+            ClassicAssert.AreEqual(2, rowRange.Rows.Count);
         }
     }
 }
