@@ -415,6 +415,41 @@ namespace NPOI.SS.UserModel
             }
             return this;
         }
+        public string[][] Texts
+        {
+            get
+            {
+                string[][] texts= new string[Height][];
+                for(int i = _address.FirstRow; i<=_address.LastRow; i++)
+                {
+                    bool emptyRow = false;
+                    var row=_sheet.GetRow(i);
+                    if(row==null)
+                    {
+                        emptyRow=true;
+                    }
+                    texts[i-_address.FirstRow]=new string[Width];
+                    for(int j = _address.FirstColumn; j<=_address.LastColumn; j++)
+                    {
+                        if(emptyRow)
+                        {
+                            texts[i-_address.FirstRow][j-_address.FirstColumn]=null;
+                            break;
+                        }
+                        var c=row.GetCell(j);
+                        if(c==null)
+                        {
+                            texts[i-_address.FirstRow][j-_address.FirstColumn]=null;
+                        }
+                        else
+                        {
+                            texts[i-_address.FirstRow][j-_address.FirstColumn]=c.ToString();
+                        }
+                    }
+                }
+                return texts;
+            }
+        }
         public object Value { 
             set {
                 if(value is double || value is Double)
