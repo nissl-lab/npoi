@@ -86,7 +86,6 @@ namespace NPOI.SS.UserModel
     /// </remarks>
     public interface ISheet : IEnumerable<IRow>
     {
-
         /// <summary>
         /// Create a new row within the sheet and return the high level representation
         /// </summary>
@@ -297,14 +296,8 @@ namespace NPOI.SS.UserModel
         /// Call <see cref="NPOI.SS.UserModel.IRow.RowNum"/> on each row 
         /// if you care which one it is.
         /// </returns>
+        [Obsolete("Use ISheet.GetEnumerator() instead")]
         IEnumerator GetRowEnumerator();
-
-
-        /// <summary>
-        /// Get the row enumerator
-        /// </summary>
-        /// <returns></returns>
-        IEnumerator GetEnumerator();
 
         /// <summary>
         /// Gets the flag indicating whether the window should show 0 (zero) in cells Containing zero value.

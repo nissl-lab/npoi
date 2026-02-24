@@ -22,10 +22,10 @@ namespace NPOI.SS.UserModel
             _sheet=sheet;
         }
 
-        private void validateRow(int col)
+        private void validateRow(int row)
         {
-            if(col<0||col>_sheet.Workbook.SpreadsheetVersion.MaxColumns)
-                throw new ArgumentException($"column index {col} is out of range");
+            if(row<0||row>_sheet.Workbook.SpreadsheetVersion.MaxRows)
+                throw new ArgumentException($"row index {row} is out of range");
         }
 
         public IEnumerator<IRow> GetEnumerator()
@@ -127,6 +127,21 @@ namespace NPOI.SS.UserModel
                 _toRow = toRow;
                 return this;
             }
+        }
+        public void Create()
+        {
+            for(int i = _fromRow; i<=_toRow; i++)
+            {
+                var row = _sheet.GetRow(i);
+                if(row==null)
+                    row=_sheet.CreateRow(i);
+            }
+        }
+
+        public IRow GetRow(int relativeRow)
+        {
+            validateRow(_fromRow+relativeRow);
+            return _sheet.GetRow(_fromRow+relativeRow);
         }
     }
 }
