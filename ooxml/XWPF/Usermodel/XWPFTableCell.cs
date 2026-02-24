@@ -155,6 +155,7 @@ using Cysharp.Text;
         public void AddParagraph(XWPFParagraph p)
         {
             paragraphs.Add(p);
+            bodyElements.Add(p);
         }
 
         /**
@@ -163,8 +164,10 @@ using Cysharp.Text;
          */
         public void RemoveParagraph(int pos)
         {
+            XWPFParagraph removedParagraph = paragraphs[pos];
             paragraphs.RemoveAt(pos);
             ctTc.RemoveP(pos);
+            bodyElements.Remove(removedParagraph);
         }
 
         /**

@@ -144,7 +144,7 @@ namespace NPOI.SS.UserModel
         /// true if conditional formatting rule processing stops when this one is true, false if not
         /// </para>
         /// </summary>
-        /// <see cref="https://support.office.com/en-us/article/Manage-conditional-formatting-rule-precedence-063cde21-516e-45ca-83f5-8e8126076249" /> Microsoft Excel help
+        /// <see href="https://support.office.com/en-us/article/Manage-conditional-formatting-rule-precedence-063cde21-516e-45ca-83f5-8e8126076249">Microsoft Excel help</see>
         bool StopIfTrue { get; }
         
         /// <summary>
