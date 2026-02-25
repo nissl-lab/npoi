@@ -160,7 +160,7 @@ using Cysharp.Text;
 
             List<CT_Property> properties = props.GetPropertyList();
             foreach (CT_Property property in properties)
-            {;
+            {
                 if(property.Item==null)
                     continue;
 
