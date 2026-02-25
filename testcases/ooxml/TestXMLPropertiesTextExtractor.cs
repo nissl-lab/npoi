@@ -14,15 +14,15 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
-namespace NPOI
+namespace TestCases.OOXML
 {
     using System;
+    using NPOI;
     using NPOI.OpenXml4Net.OPC;
     using NPOI.Util;
     using NPOI.XSSF.Extractor;
     using NPOI.XSSF.UserModel;
     using NUnit.Framework;using NUnit.Framework.Legacy;
-    using TestCases;
 
     [TestFixture]
     public class TestXMLPropertiesTextExtractor
@@ -31,71 +31,72 @@ namespace NPOI
         private static POIDataSamples _slSamples = POIDataSamples.GetSlideShowInstance();
 
         [Test]
-        [Ignore("TODO NOT IMPLEMENTED")]
         public void TestGetFromMainExtractor()
         {
             OPCPackage pkg = PackageHelper.Open(_ssSamples.OpenResourceAsStream("ExcelWithAttachments.xlsm"));
 
-            XSSFWorkbook wb = new XSSFWorkbook(pkg);
+            using(XSSFWorkbook wb = new XSSFWorkbook(pkg))
+            {
+                XSSFExcelExtractor ext = new XSSFExcelExtractor(wb);
+                POIXMLPropertiesTextExtractor textExt = (POIXMLPropertiesTextExtractor)ext.MetadataTextExtractor;
 
-            XSSFExcelExtractor ext = new XSSFExcelExtractor(wb);
-            POIXMLPropertiesTextExtractor textExt = (POIXMLPropertiesTextExtractor)ext.MetadataTextExtractor;
+                // Check basics
+                ClassicAssert.IsNotNull(textExt);
+                ClassicAssert.IsTrue(textExt.Text.Length > 0);
 
-            // Check basics
-            ClassicAssert.IsNotNull(textExt);
-            ClassicAssert.IsTrue(textExt.Text.Length > 0);
+                // Check some of the content
+                String text = textExt.Text;
+                String cText = textExt.GetCorePropertiesText();
 
-            // Check some of the content
-            String text = textExt.Text;
-            String cText = textExt.GetCorePropertiesText();
+                POITestCase.AssertContains(text, "LastModifiedBy = Yury Batrakov");
+                POITestCase.AssertContains(text, "LastModifiedBy = Yury Batrakov");
 
-            POITestCase.AssertContains(text, "LastModifiedBy = Yury Batrakov");
-            POITestCase.AssertContains(text, "LastModifiedBy = Yury Batrakov");
-
-            textExt.Close();
-            ext.Close();
+                textExt.Close();
+                ext.Close();
+            }
         }
         [Test]
-        [Ignore("TODO NOT IMPLEMENTED")]
         public void TestCore()
         {
             OPCPackage pkg = PackageHelper.Open(
                     _ssSamples.OpenResourceAsStream("ExcelWithAttachments.xlsm")
             );
-            XSSFWorkbook wb = new XSSFWorkbook(pkg);
+            using(XSSFWorkbook wb = new XSSFWorkbook(pkg))
+            {
+                POIXMLPropertiesTextExtractor ext = new POIXMLPropertiesTextExtractor(wb);
 
-            POIXMLPropertiesTextExtractor ext = new POIXMLPropertiesTextExtractor(wb);
+                // Now check
+                String text = ext.Text;
+                String cText = ext.GetCorePropertiesText();
 
-            // Now check
-            String text = ext.Text;
-            String cText = ext.GetCorePropertiesText();
+                POITestCase.AssertContains(text, "LastModifiedBy = Yury Batrakov");
+                POITestCase.AssertContains(text, "LastModifiedBy = Yury Batrakov");
 
-            POITestCase.AssertContains(text, "LastModifiedBy = Yury Batrakov");
-            POITestCase.AssertContains(text, "LastModifiedBy = Yury Batrakov");
-
-            ext.Close();
+                ext.Close();
+            }
         }
         [Test]
-        [Ignore("TODO NOT IMPLEMENTED")]
         public void TestExtended()
         {
             OPCPackage pkg = OPCPackage.Open(
                     _ssSamples.OpenResourceAsStream("ExcelWithAttachments.xlsm")
             );
-            XSSFWorkbook wb = new XSSFWorkbook(pkg);
+            using(XSSFWorkbook wb = new XSSFWorkbook(pkg))
+            {
 
-            POIXMLPropertiesTextExtractor ext = new POIXMLPropertiesTextExtractor(wb);
+                POIXMLPropertiesTextExtractor ext = new POIXMLPropertiesTextExtractor(wb);
 
-            // Now check
-            String text = ext.Text;
-            String eText = ext.GetExtendedPropertiesText();
+                // Now check
+                String text = ext.Text;
+                String eText = ext.GetExtendedPropertiesText();
 
-            POITestCase.AssertContains(text, "Application = Microsoft Excel");
-            POITestCase.AssertContains(text, "Company = Mera");
-            POITestCase.AssertContains(text, "Application = Microsoft Excel");
-            POITestCase.AssertContains(text, "Company = Mera");
+                POITestCase.AssertContains(text, "Application = Microsoft Excel");
+                POITestCase.AssertContains(text, "Company = Mera");
+                POITestCase.AssertContains(text, "Application = Microsoft Excel");
+                POITestCase.AssertContains(text, "Company = Mera");
 
-            ext.Close();
+                ext.Close();
+            }
         }
 
     }

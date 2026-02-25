@@ -122,13 +122,12 @@ namespace TestCases.HSSF.UserModel
         /**Test writing a hyperlink
          * Open resulting sheet in Excel and Check that A1 contains a hyperlink*/
         [Test]
-        [Ignore("not found in poi")]
         public void Test23094()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
             ISheet s = wb.CreateSheet();
             IRow r = s.CreateRow(0);
-            r.CreateCell(0).CellFormula = ("HYPERLINK( \"http://jakarta.apache.org\", \"Jakarta\" )");
+            r.CreateCell(0).CellFormula = "HYPERLINK( \"http://jakarta.apache.org\", \"Jakarta\" )";
 
             WriteTestOutputFileForViewing(wb, "Test23094");
         }
