@@ -205,7 +205,7 @@ namespace TestCases.XSSF.UserModel
             ClassicAssert.AreEqual((numOfCells * 2) - 1, column2Loaded.PhysicalNumberOfCells);
         }
 
-        [Ignore("may fail in unit test running")]
+        [Test]
         public void ZeroWidthTest()
         {
             FileInfo file = TempFile.CreateTempFile("poi-", ".xlsx");
@@ -424,7 +424,7 @@ namespace TestCases.XSSF.UserModel
             ClassicAssert.IsNull(sheetLoaded.GetColumn(columnIndex).GetCell(6));
         }
 
-        [Ignore("This unit test may fail")]
+        [Test]
         public void GetCell_GetExistingAndNonExistinCells_CellsReturnedWhenExistsNullsWhenNot()
         {
             FileInfo file = TempFile.CreateTempFile("poi-", ".xlsx");
