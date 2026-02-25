@@ -1051,8 +1051,7 @@ namespace TestCases.XSSF.UserModel
             }
             wb.Close();
         }
-
-        [Ignore("This unit test may fail on Windows")]
+        [Test]
         public void TestBug56957CloseWorkbook()
         {
             FileInfo file = TempFile.CreateTempFile("TestBug56957_", ".xlsx");
