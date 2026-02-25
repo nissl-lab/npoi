@@ -3,6 +3,7 @@ using NPOI.XSSF.UserModel;
 
 namespace NPOI.Benchmarks;
 
+[ShortRunJob]
 [MemoryDiagnoser]
 public class AddRowBenchmark
 {
