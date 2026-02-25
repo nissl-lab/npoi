@@ -61,18 +61,19 @@ namespace NPOI
             OPCPackage pkg = PackageHelper.Open(
                     _ssSamples.OpenResourceAsStream("ExcelWithAttachments.xlsm")
             );
-            XSSFWorkbook wb = new XSSFWorkbook(pkg);
+            using(XSSFWorkbook wb = new XSSFWorkbook(pkg))
+            {
+                POIXMLPropertiesTextExtractor ext = new POIXMLPropertiesTextExtractor(wb);
 
-            POIXMLPropertiesTextExtractor ext = new POIXMLPropertiesTextExtractor(wb);
+                // Now check
+                String text = ext.Text;
+                String cText = ext.GetCorePropertiesText();
 
-            // Now check
-            String text = ext.Text;
-            String cText = ext.GetCorePropertiesText();
+                POITestCase.AssertContains(text, "LastModifiedBy = Yury Batrakov");
+                POITestCase.AssertContains(text, "LastModifiedBy = Yury Batrakov");
 
-            POITestCase.AssertContains(text, "LastModifiedBy = Yury Batrakov");
-            POITestCase.AssertContains(text, "LastModifiedBy = Yury Batrakov");
-
-            ext.Close();
+                ext.Close();
+            }
         }
         [Test]
         public void TestExtended()
@@ -80,20 +81,22 @@ namespace NPOI
             OPCPackage pkg = OPCPackage.Open(
                     _ssSamples.OpenResourceAsStream("ExcelWithAttachments.xlsm")
             );
-            XSSFWorkbook wb = new XSSFWorkbook(pkg);
+            using(XSSFWorkbook wb = new XSSFWorkbook(pkg))
+            {
 
-            POIXMLPropertiesTextExtractor ext = new POIXMLPropertiesTextExtractor(wb);
+                POIXMLPropertiesTextExtractor ext = new POIXMLPropertiesTextExtractor(wb);
 
-            // Now check
-            String text = ext.Text;
-            String eText = ext.GetExtendedPropertiesText();
+                // Now check
+                String text = ext.Text;
+                String eText = ext.GetExtendedPropertiesText();
 
-            POITestCase.AssertContains(text, "Application = Microsoft Excel");
-            POITestCase.AssertContains(text, "Company = Mera");
-            POITestCase.AssertContains(text, "Application = Microsoft Excel");
-            POITestCase.AssertContains(text, "Company = Mera");
+                POITestCase.AssertContains(text, "Application = Microsoft Excel");
+                POITestCase.AssertContains(text, "Company = Mera");
+                POITestCase.AssertContains(text, "Application = Microsoft Excel");
+                POITestCase.AssertContains(text, "Company = Mera");
 
-            ext.Close();
+                ext.Close();
+            }
         }
 
     }
