@@ -68,7 +68,7 @@ namespace NPOI.XSSF.UserModel
         internal CT_Sheet sheet;
         internal CT_Worksheet worksheet;
 
-        private readonly SortedList<int, XSSFRow> _rows = new SortedList<int, XSSFRow>();
+        private readonly Dictionary<int, XSSFRow> _rows = new Dictionary<int, XSSFRow>();
         private readonly SortedList<int, XSSFColumn> _columns = new SortedList<int, XSSFColumn>();
         private List<XSSFHyperlink> hyperlinks;
         private ColumnHelper columnHelper;
@@ -275,12 +275,7 @@ namespace NPOI.XSSF.UserModel
                 }
                 else
                 {
-                    foreach(int key in _rows.Keys)
-                    {
-                        return key;
-                    }
-
-                    throw new ArgumentOutOfRangeException();
+                    return _rows.Keys.Min();
                 }
             }
         }
@@ -4603,10 +4598,7 @@ namespace NPOI.XSSF.UserModel
                 foreach(CT_Row row in worksheetParam.sheetData.row)
                 {
                     XSSFRow r = new XSSFRow(row, this);
-                    if(!_rows.ContainsKey(r.RowNum))
-                    {
-                        _rows.Add(r.RowNum, r);
-                    }
+                    _rows.TryAdd(r.RowNum, r);
                 }
             }
         }
@@ -4806,28 +4798,14 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        private static int GetLastKey(IList<int> keys)
+        private static int GetLastKey(IEnumerable<int> keys)
         {
-            _ = keys.Count;
-            return keys[keys.Count - 1];
+            return keys.Max();
         }
 
-        private static int HeadMapCount(IList<int> keys, int rownum)
+        private static int HeadMapCount(IEnumerable<int> keys, int rownum)
         {
-            int count = 0;
-            foreach(int key in keys)
-            {
-                if(key < rownum)
-                {
-                    count++;
-                }
-                else
-                {
-                    break;
-                }
-            }
-
-            return count;
+            return keys.Count(k => k < rownum);
         }
 
         private CT_SheetFormatPr GetSheetTypeSheetFormatPr()
@@ -4892,8 +4870,8 @@ namespace NPOI.XSSF.UserModel
             else
             {
                 //rows.addAll(_rows.subMap(startRowNum, endRowNum + 1).values());
-                rows.AddRange(_rows.SkipWhile(x => x.Key < startRowNum)
-                    .TakeWhile(x => x.Key < endRowNum + 1)
+                rows.AddRange(_rows.Where(x => x.Key >= startRowNum && x.Key <= endRowNum)
+                    .OrderBy(x => x.Key)
                     .Select(x => x.Value));
             }
 
@@ -5227,7 +5205,7 @@ namespace NPOI.XSSF.UserModel
                 {
                     // remove row from worksheet.GetSheetData row array
                     //int idx = _rows.headMap(row.getRowNum()).size();
-                    int idx = _rows.IndexOfValue(row);
+                    int idx = _rows.Keys.Count(k => k < row.RowNum);
                     //worksheet.sheetData.RemoveRow(idx);
                     ctRowsToRemove.Add(worksheet.sheetData.GetRowArray(idx));
 
