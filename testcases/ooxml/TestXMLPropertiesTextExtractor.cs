@@ -31,32 +31,31 @@ namespace NPOI
         private static POIDataSamples _slSamples = POIDataSamples.GetSlideShowInstance();
 
         [Test]
-        [Ignore("TODO NOT IMPLEMENTED")]
         public void TestGetFromMainExtractor()
         {
             OPCPackage pkg = PackageHelper.Open(_ssSamples.OpenResourceAsStream("ExcelWithAttachments.xlsm"));
 
-            XSSFWorkbook wb = new XSSFWorkbook(pkg);
+            using(XSSFWorkbook wb = new XSSFWorkbook(pkg))
+            {
+                XSSFExcelExtractor ext = new XSSFExcelExtractor(wb);
+                POIXMLPropertiesTextExtractor textExt = (POIXMLPropertiesTextExtractor)ext.MetadataTextExtractor;
 
-            XSSFExcelExtractor ext = new XSSFExcelExtractor(wb);
-            POIXMLPropertiesTextExtractor textExt = (POIXMLPropertiesTextExtractor)ext.MetadataTextExtractor;
+                // Check basics
+                ClassicAssert.IsNotNull(textExt);
+                ClassicAssert.IsTrue(textExt.Text.Length > 0);
 
-            // Check basics
-            ClassicAssert.IsNotNull(textExt);
-            ClassicAssert.IsTrue(textExt.Text.Length > 0);
+                // Check some of the content
+                String text = textExt.Text;
+                String cText = textExt.GetCorePropertiesText();
 
-            // Check some of the content
-            String text = textExt.Text;
-            String cText = textExt.GetCorePropertiesText();
+                POITestCase.AssertContains(text, "LastModifiedBy = Yury Batrakov");
+                POITestCase.AssertContains(text, "LastModifiedBy = Yury Batrakov");
 
-            POITestCase.AssertContains(text, "LastModifiedBy = Yury Batrakov");
-            POITestCase.AssertContains(text, "LastModifiedBy = Yury Batrakov");
-
-            textExt.Close();
-            ext.Close();
+                textExt.Close();
+                ext.Close();
+            }
         }
         [Test]
-        [Ignore("TODO NOT IMPLEMENTED")]
         public void TestCore()
         {
             OPCPackage pkg = PackageHelper.Open(
@@ -76,7 +75,6 @@ namespace NPOI
             ext.Close();
         }
         [Test]
-        [Ignore("TODO NOT IMPLEMENTED")]
         public void TestExtended()
         {
             OPCPackage pkg = OPCPackage.Open(

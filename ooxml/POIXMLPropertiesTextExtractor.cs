@@ -160,95 +160,15 @@ using Cysharp.Text;
 
             List<CT_Property> properties = props.GetPropertyList();
             foreach (CT_Property property in properties)
-            {
-                String val = "(not implemented!)";
-                //val = property.Item.ToString();
-                if (property.IsSetLpwstr())
-                {
-                    val = property.GetLpwstr();
-                }
-                else if (property.IsSetLpstr())
-                {
-                    val = property.GetLpstr();
-                }
-                else if (property.IsSetDate())
-                {
-                    val = property.GetDate().ToString();
-                }
-                else if (property.IsSetFiletime())
-                {
-                    val = property.GetFiletime().ToString();
-                }
-                else if (property.IsSetBool())
-                {
-                    val = property.GetBool().ToString();
-                }
+            {;
+                if(property.Item==null)
+                    continue;
 
-                // Integers
-                else if (property.IsSetI1())
-                {
-                    val = property.GetI1().ToString();
-                }
-                else if (property.IsSetI2())
-                {
-                    val = property.GetI2().ToString();
-                }
-                else if (property.IsSetI4())
-                {
-                    val = property.GetI4().ToString();
-                }
-                else if (property.IsSetI8())
-                {
-                    val = property.GetI8().ToString();
-                }
-                else if (property.IsSetInt())
-                {
-                    val = property.GetInt().ToString();
-                }
-
-                // Unsigned Integers
-                else if (property.IsSetUi1())
-                {
-                    val = property.GetUi1().ToString();
-                }
-                else if (property.IsSetUi2())
-                {
-                    val = property.GetUi2().ToString();
-                }
-                else if (property.IsSetUi4())
-                {
-                    val = property.GetUi4().ToString();
-                }
-                else if (property.IsSetUi8())
-                {
-                    val = property.GetUi8().ToString();
-                }
-                else if (property.IsSetUint())
-                {
-                    val = property.GetUint().ToString();
-                }
-
-                // Reals
-                else if (property.IsSetR4())
-                {
-                    val = property.GetR4().ToString();
-                }
-                else if (property.IsSetR8())
-                {
-                    val = property.GetR8().ToString();
-                }
-                else if (property.IsSetDecimal())
-                {
-                    Decimal? d = property.GetDecimal();
-                    if (d == null)
-                    {
-                        val = null;
-                    }
-                    else
-                    {
-                        val = d.ToString();
-                    }
-                }
+                string val=null;
+                if(property.Item is string)
+                    val = (string) property.Item;
+                else
+                    val = property.Item.ToString();
 
                 //else if (property.IsSetArray())
                 //{
@@ -274,9 +194,9 @@ using Cysharp.Text;
                 //}
 
                 text.Append(
-                      property.name +
-                      " = " + val + "\n"
-                );
+                          property.name +
+                          " = " + val + "\n"
+                    );
             }
 
             return text.ToString();
