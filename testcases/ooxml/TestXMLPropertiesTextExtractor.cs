@@ -14,15 +14,15 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
-namespace NPOI
+namespace TestCases.OOXML
 {
     using System;
+    using NPOI;
     using NPOI.OpenXml4Net.OPC;
     using NPOI.Util;
     using NPOI.XSSF.Extractor;
     using NPOI.XSSF.UserModel;
     using NUnit.Framework;using NUnit.Framework.Legacy;
-    using TestCases;
 
     [TestFixture]
     public class TestXMLPropertiesTextExtractor
