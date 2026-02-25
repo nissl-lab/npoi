@@ -370,7 +370,7 @@ namespace NPOI.XSSF.Streaming
         
         IEnumerator IEnumerable.GetEnumerator()
         {
-            throw new NotImplementedException();
+            return this.GetEnumerator();
         }
 
         /**

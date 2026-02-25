@@ -3096,5 +3096,32 @@ namespace TestCases.XSSF.UserModel
 
             }
         }
+
+        [Test]
+        public void TestGetCells_SingleCellRange_GetText()
+        {
+            var workbook = XSSFTestDataSamples.OpenSampleWorkbook("SampleSS.xlsx");
+            var sheet = workbook.GetSheetAt(1);
+            var cellRange = sheet.Cells["A6:D7"];
+            var texts=cellRange.Texts;
+            ClassicAssert.AreEqual(2, texts.Length);
+            ClassicAssert.AreEqual(4, texts[0].Length);
+
+            ClassicAssert.AreEqual("cb=1", texts[0][0]);
+            ClassicAssert.AreEqual("cb=10", texts[0][1]);
+            ClassicAssert.AreEqual("cb=2", texts[0][2]);
+            ClassicAssert.AreEqual("cb=sum", texts[0][3]);
+            ClassicAssert.AreEqual("1", texts[1][0]);
+            ClassicAssert.AreEqual("10", texts[1][1]);
+            ClassicAssert.AreEqual("2", texts[1][2]);
+            ClassicAssert.AreEqual("SUM(A7:C7)", texts[1][3]);
+
+            var texts2 = sheet.Cells["A5:D6"].Texts;
+            for(var i = 0; i<texts2[0].Length; i++)
+            {
+                ClassicAssert.IsNull(texts2[0][i]);
+                ClassicAssert.IsNotNull(texts2[1][i]);
+            }
+        }
     }
 }
