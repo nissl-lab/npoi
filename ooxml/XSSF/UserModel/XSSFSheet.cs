@@ -3839,7 +3839,11 @@ namespace NPOI.XSSF.UserModel
 
         public void SetActiveCellRange(int firstRow, int lastRow, int firstColumn, int lastColumn)
         {
-            throw new NotImplementedException();
+            var ctSelection = this.GetSheetTypeSelection();
+            var address = new CellRangeAddress(firstRow,lastRow, firstColumn, lastColumn);
+            string reference= address.FormatAsString();
+            ctSelection.activeCell = reference;
+            ctSelection.sqref = reference;
         }
 
         public short TabColorIndex
@@ -6608,11 +6612,6 @@ lblforbreak:
 
         #endregion
 
-        public CellRangeAddressList GetCells(string cellranges)
-        {
-            return CellRangeAddressList.Parse(cellranges);
-        }
-
         /// <summary>
         /// called when a sheet is being deleted/removed from a workbook, to clean up relations and other document pieces tied to the sheet
         /// </summary>
@@ -6624,6 +6623,20 @@ lblforbreak:
                     continue;
                 }
                 RemoveRelation(part.DocumentPart, true);
+            }
+        }
+
+        public NCellRange Cells
+        {
+            get {
+                return new NCellRange(this, 0, 0, this.Workbook.SpreadsheetVersion.MaxRows, this.Workbook.SpreadsheetVersion.MaxColumns);
+            }
+        }
+
+        public NRowRange Rows
+        {
+            get {
+                return new NRowRange(this, 0, this.Workbook.SpreadsheetVersion.MaxRows);
             }
         }
     }

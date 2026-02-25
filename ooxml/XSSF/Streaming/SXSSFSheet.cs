@@ -786,11 +786,6 @@ namespace NPOI.XSSF.Streaming
             return _sh.GetDataValidations();
         }
 
-        public IEnumerator GetEnumerator()
-        {
-            return (IEnumerator<IRow>)new SortedDictionary<int,SXSSFRow>(_rows).Values.GetEnumerator();
-        }
-
         public double GetMargin(MarginType margin)
         {
             return _sh.GetMargin(margin);
@@ -811,7 +806,7 @@ namespace NPOI.XSSF.Streaming
 
         public IEnumerator GetRowEnumerator()
         {
-            return GetEnumerator();
+            return _rows.GetEnumerator();
         }
 
         public void GroupColumn(int fromColumn, int toColumn)
@@ -1446,6 +1441,7 @@ namespace NPOI.XSSF.Streaming
                 _sh.TabColor = value;
             }
         }
+
         public void CopyTo(IWorkbook dest, string name, bool copyStyle, bool keepFormulas)
         {
             throw new NotImplementedException();
@@ -1660,11 +1656,27 @@ namespace NPOI.XSSF.Streaming
 
         IEnumerator<IRow> IEnumerable<IRow>.GetEnumerator()
         {
-            return ((IEnumerable<IRow>) _sh).GetEnumerator();
+            return _rows.Values.GetEnumerator();
         }
-        public CellRangeAddressList GetCells(string cellranges)
+
+        public IEnumerator GetEnumerator()
         {
-            return CellRangeAddressList.Parse(cellranges);
+            return _rows.Values.GetEnumerator();
+        }
+
+        public NCellRange Cells
+        {
+            get
+            {
+                return new NCellRange(this, 0, 0, this.Workbook.SpreadsheetVersion.MaxRows, this.Workbook.SpreadsheetVersion.MaxColumns);
+            }
+        }
+        public NRowRange Rows
+        {
+            get
+            {
+                return new NRowRange(this, 0, this.Workbook.SpreadsheetVersion.MaxRows);
+            }
         }
     }
 }

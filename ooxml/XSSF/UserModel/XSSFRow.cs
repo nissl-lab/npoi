@@ -518,7 +518,7 @@ namespace NPOI.XSSF.UserModel
         /// <param name="style"></param>
         public void SetRowStyle(ICellStyle style)
         {
-
+            this.RowStyle = style;
         }
 
         /// <summary>
