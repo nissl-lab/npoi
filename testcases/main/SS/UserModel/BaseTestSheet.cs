@@ -59,7 +59,7 @@ namespace TestCases.SS.UserModel
             IRow row2 = sheet.CreateRow(1);
             ClassicAssert.AreEqual(0, row1.RowNum);
             ClassicAssert.AreEqual(1, row2.RowNum);
-            IEnumerator it = sheet.GetRowEnumerator();
+            var it = sheet.GetEnumerator();
             ClassicAssert.IsTrue(it.MoveNext());
             ClassicAssert.AreSame(row1, it.Current);
             ClassicAssert.IsTrue(it.MoveNext());
@@ -76,11 +76,11 @@ namespace TestCases.SS.UserModel
             IRow row2_ovrewritten = sheet.CreateRow(1);
             ICell cell = row2_ovrewritten.CreateCell(0);
             cell.SetCellValue(100);
-            IEnumerator it2 = sheet.GetRowEnumerator();
+            var it2 = sheet.GetEnumerator();
             ClassicAssert.IsTrue(it2.MoveNext());
             ClassicAssert.AreSame(row1, it2.Current);
             ClassicAssert.IsTrue(it2.MoveNext());
-            IRow row2_ovrewritten_ref = (IRow)it2.Current;
+            IRow row2_ovrewritten_ref = it2.Current;
             ClassicAssert.AreSame(row2_ovrewritten, row2_ovrewritten_ref);
             ClassicAssert.AreEqual(100.0, row2_ovrewritten_ref.GetCell(0).NumericCellValue, 0.0);
 
