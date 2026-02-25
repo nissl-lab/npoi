@@ -786,11 +786,6 @@ namespace NPOI.XSSF.Streaming
             return _sh.GetDataValidations();
         }
 
-        public IEnumerator GetEnumerator()
-        {
-            return (IEnumerator<IRow>)new SortedDictionary<int,SXSSFRow>(_rows).Values.GetEnumerator();
-        }
-
         public double GetMargin(MarginType margin)
         {
             return _sh.GetMargin(margin);
@@ -811,7 +806,7 @@ namespace NPOI.XSSF.Streaming
 
         public IEnumerator GetRowEnumerator()
         {
-            return GetEnumerator();
+            return _rows.GetEnumerator();
         }
 
         public void GroupColumn(int fromColumn, int toColumn)
@@ -1661,8 +1656,14 @@ namespace NPOI.XSSF.Streaming
 
         IEnumerator<IRow> IEnumerable<IRow>.GetEnumerator()
         {
-            return ((IEnumerable<IRow>) _sh).GetEnumerator();
+            return _rows.Values.GetEnumerator();
         }
+
+        public IEnumerator GetEnumerator()
+        {
+            return _rows.Values.GetEnumerator();
+        }
+
         public NCellRange Cells
         {
             get
