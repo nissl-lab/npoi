@@ -415,7 +415,7 @@ namespace NPOI.XSSF.UserModel
                 return;
             }
             sh.sheet = ctSheet;
-            sh.OnDocumentRead();
+            // Don't call OnDocumentRead() here - defer until sheet is accessed (lazy loading)
             sheets.Add(sh);
         }
         /**

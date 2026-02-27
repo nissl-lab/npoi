@@ -68,6 +68,17 @@ namespace NPOI.XSSF.UserModel
         internal CT_Sheet sheet;
         internal CT_Worksheet worksheet;
 
+        /// <summary>
+        /// Flag to track if the sheet data has been loaded from XML.
+        /// Marked as volatile for thread-safe double-check locking pattern.
+        /// </summary>
+        private volatile bool isLoaded = false;
+        
+        /// <summary>
+        /// Lock object for thread-safe lazy loading
+        /// </summary>
+        private readonly object loadLock = new object();
+
         private readonly SortedList<int, XSSFRow> _rows = new SortedList<int, XSSFRow>();
         private readonly SortedList<int, XSSFColumn> _columns = new SortedList<int, XSSFColumn>();
         private List<XSSFHyperlink> hyperlinks;
@@ -135,6 +146,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
+                EnsureLoaded();
                 if(!worksheet.IsSetColBreaks() || worksheet.colBreaks.sizeOfBrkArray() == 0)
                 {
                     return [];
@@ -161,11 +173,13 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
+                EnsureLoaded();
                 CT_SheetFormatPr pr = worksheet.sheetFormatPr;
                 return (pr == null || pr.defaultColWidth == 0.0) ? 8.43 : pr.defaultColWidth;
             }
             set
             {
+                EnsureLoaded();
                 var pr = GetSheetTypeSheetFormatPr();
                 pr.defaultColWidth = value;
                 pr.baseColWidth = 0;
@@ -196,11 +210,13 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
+                EnsureLoaded();
                 CT_SheetFormatPr pr = worksheet.sheetFormatPr;
                 return (float) (pr == null ? 0 : pr.defaultRowHeight);
             }
             set
             {
+                EnsureLoaded();
                 CT_SheetFormatPr pr = GetSheetTypeSheetFormatPr();
                 pr.defaultRowHeight = value;
                 pr.customHeight = true;
@@ -214,11 +230,13 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
+                EnsureLoaded();
                 CT_SheetView view = GetDefaultSheetView();
                 return view != null && view.rightToLeft;
             }
             set
             {
+                EnsureLoaded();
                 CT_SheetView view = GetDefaultSheetView();
                 view.rightToLeft = value;
             }
@@ -231,12 +249,14 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
+                EnsureLoaded();
                 CT_SheetPr sheetPr = GetSheetTypeSheetPr();
                 CT_OutlinePr outlinePr = sheetPr.outlinePr ?? new CT_OutlinePr();
                 return outlinePr.showOutlineSymbols;
             }
             set
             {
+                EnsureLoaded();
                 CT_SheetPr sheetPr = GetSheetTypeSheetPr();
                 CT_OutlinePr outlinePr = sheetPr.outlinePr ?? sheetPr.AddNewOutlinePr();
                 outlinePr.showOutlineSymbols = value;
@@ -252,11 +272,13 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
+                EnsureLoaded();
                 CT_SheetView view = GetDefaultSheetView();
                 return view == null || view.showZeros;
             }
             set
             {
+                EnsureLoaded();
                 CT_SheetView view = GetSheetTypeSheetView();
                 view.showZeros = value;
             }
@@ -269,6 +291,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
+                EnsureLoaded();
                 if(_rows.Count == 0)
                 {
                     return 0;
@@ -292,6 +315,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
+                EnsureLoaded();
                 if(_columns.Count == 0)
                 {
                     return 0;
@@ -315,6 +339,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
+                EnsureLoaded();
                 CT_SheetPr sheetPr = GetSheetTypeSheetPr();
                 CT_PageSetUpPr psSetup = (sheetPr == null || !sheetPr.IsSetPageSetUpPr())
                     ? new CT_PageSetUpPr()
@@ -323,6 +348,7 @@ namespace NPOI.XSSF.UserModel
             }
             set
             {
+                EnsureLoaded();
                 GetSheetTypePageSetUpPr().fitToPage = value;
             }
         }
@@ -435,11 +461,13 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
+                EnsureLoaded();
                 CT_PrintOptions opts = worksheet.printOptions;
                 return opts != null && opts.horizontalCentered;
             }
             set
             {
+                EnsureLoaded();
                 CT_PrintOptions opts = worksheet.IsSetPrintOptions()
                     ? worksheet.printOptions
                     : worksheet.AddNewPrintOptions();
@@ -452,6 +480,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
+                EnsureLoaded();
                 return _rows.Count == 0 ? 0 : XSSFSheet.GetLastKey(_rows.Keys);
             }
         }
@@ -460,6 +489,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
+                EnsureLoaded();
                 return _columns.Count == 0 ? 0 : XSSFSheet.GetLastKey(_columns.Keys);
             }
         }
@@ -472,6 +502,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
+                EnsureLoaded();
                 List<CellRangeAddress> addresses = new List<CellRangeAddress>();
                 CT_MergeCells ctMergeCells = worksheet.mergeCells;
                 if(ctMergeCells == null)
@@ -496,6 +527,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
+                EnsureLoaded();
                 CT_MergeCells ctMergeCells = worksheet.mergeCells;
                 return ctMergeCells != null
                     ? ctMergeCells.sizeOfMergeCellArray()
@@ -548,6 +580,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
+                EnsureLoaded();
                 return _rows.Count;
             }
         }
@@ -560,6 +593,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
+                EnsureLoaded();
                 return _columns.Count;
             }
         }
@@ -571,6 +605,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
+                EnsureLoaded();
                 return new XSSFPrintSetup(worksheet);
             }
         }
@@ -596,6 +631,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
+                EnsureLoaded();
                 if(!worksheet.IsSetRowBreaks() || worksheet.rowBreaks.sizeOfBrkArray() == 0)
                 {
                     return [];
@@ -625,6 +661,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
+                EnsureLoaded();
                 CT_SheetPr sheetPr = worksheet.sheetPr;
                 CT_OutlinePr outlinePr = (sheetPr != null && sheetPr.IsSetOutlinePr())
                     ? sheetPr.outlinePr
@@ -648,6 +685,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
+                EnsureLoaded();
                 CT_SheetPr sheetPr = worksheet.sheetPr;
                 CT_OutlinePr outlinePr = (sheetPr != null && sheetPr.IsSetOutlinePr())
                     ? sheetPr.outlinePr
@@ -668,6 +706,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
+                EnsureLoaded();
                 return worksheet.IsSetSheetProtection()
                        && worksheet.sheetProtection.scenarios;
             }
@@ -677,6 +716,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
+                EnsureLoaded();
                 string cellRef = GetPane().topLeftCell;
                 if(cellRef == null)
                 {
@@ -700,6 +740,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
+                EnsureLoaded();
                 string cellRef = GetSheetTypeSheetView().topLeftCell;
                 if(cellRef == null)
                 {
@@ -711,6 +752,7 @@ namespace NPOI.XSSF.UserModel
             }
             set
             {
+                EnsureLoaded();
                 GetSheetTypeSheetView().topLeftCell = "A" + value.ToString();
             }
         }
@@ -723,11 +765,13 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
+                EnsureLoaded();
                 CT_PrintOptions opts = worksheet.printOptions;
                 return opts != null && opts.verticalCentered;
             }
             set
             {
+                EnsureLoaded();
                 CT_PrintOptions opts = worksheet.IsSetPrintOptions()
                     ? worksheet.printOptions
                     : worksheet.AddNewPrintOptions();
@@ -743,10 +787,12 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
+                EnsureLoaded();
                 return GetSheetTypeSheetView().showFormulas;
             }
             set
             {
+                EnsureLoaded();
                 GetSheetTypeSheetView().showFormulas = value;
             }
         }
@@ -759,10 +805,12 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
+                EnsureLoaded();
                 return GetSheetTypeSheetView().showGridLines;
             }
             set
             {
+                EnsureLoaded();
                 GetSheetTypeSheetView().showGridLines = value;
             }
         }
@@ -777,10 +825,12 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
+                EnsureLoaded();
                 return GetSheetTypeSheetView().showRowColHeaders;
             }
             set
             {
+                EnsureLoaded();
                 GetSheetTypeSheetView().showRowColHeaders = value;
             }
         }
@@ -792,11 +842,13 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
+                EnsureLoaded();
                 CT_PrintOptions opts = worksheet.printOptions;
                 return opts != null && opts.gridLines;
             }
             set
             {
+                EnsureLoaded();
                 CT_PrintOptions opts = worksheet.IsSetPrintOptions()
                     ? worksheet.printOptions
                     : worksheet.AddNewPrintOptions();
@@ -811,11 +863,13 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
+                EnsureLoaded();
                 CT_PrintOptions opts = worksheet.printOptions;
                 return opts != null && opts.headings;
             }
             set
             {
+                EnsureLoaded();
                 CT_PrintOptions opts = worksheet.IsSetPrintOptions()
                     ? worksheet.printOptions
                     : worksheet.AddNewPrintOptions();
@@ -831,6 +885,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
+                EnsureLoaded();
                 if(worksheet.IsSetSheetCalcPr())
                 {
                     CT_SheetCalcPr calc = worksheet.sheetCalcPr;
@@ -841,6 +896,7 @@ namespace NPOI.XSSF.UserModel
             }
             set
             {
+                EnsureLoaded();
                 CT_CalcPr calcPr = (Workbook as XSSFWorkbook).GetCTWorkbook().calcPr;
                 if(worksheet.IsSetSheetCalcPr())
                 {
@@ -870,6 +926,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
+                EnsureLoaded();
                 CT_SheetPr sheetPr = GetSheetTypeSheetPr();
                 CT_PageSetUpPr psSetup = (sheetPr == null || !sheetPr.IsSetPageSetUpPr())
                     ? new CT_PageSetUpPr()
@@ -878,6 +935,7 @@ namespace NPOI.XSSF.UserModel
             }
             set
             {
+                EnsureLoaded();
                 CT_SheetPr sheetPr = GetSheetTypeSheetPr();
                 CT_PageSetUpPr psSetup = sheetPr.IsSetPageSetUpPr()
                     ? sheetPr.pageSetUpPr
@@ -900,11 +958,13 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
+                EnsureLoaded();
                 CT_SheetView view = GetDefaultSheetView();
                 return view != null && view.tabSelected;
             }
             set
             {
+                EnsureLoaded();
                 CT_SheetViews views = GetSheetTypeSheetViews();
                 foreach(CT_SheetView view in views.sheetView)
                 {
@@ -920,6 +980,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
+                EnsureLoaded();
                 string address = GetSheetTypeSelection().activeCell;
                 if(address == null)
                 {
@@ -930,6 +991,7 @@ namespace NPOI.XSSF.UserModel
             }
             set
             {
+                EnsureLoaded();
                 string ref1 = value.FormatAsString();
                 CT_Selection ctsel = GetSheetTypeSelection();
                 ctsel.activeCell = ref1;
@@ -1141,6 +1203,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
+                EnsureLoaded();
                 return worksheet.IsSetSheetProtection() && SafeGetProtectionField().sheet;
             }
         }
@@ -1182,6 +1245,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
+                EnsureLoaded();
                 CT_SheetPr pr = worksheet.sheetPr;
                 if(pr == null)
                 {
@@ -1197,6 +1261,7 @@ namespace NPOI.XSSF.UserModel
             }
             set
             {
+                EnsureLoaded();
                 CT_SheetPr pr = worksheet.sheetPr;
                 if(pr == null)
                 {
@@ -1280,11 +1345,41 @@ namespace NPOI.XSSF.UserModel
         {
             try
             {
+                // Set isLoaded BEFORE calling Read() to prevent stack overflow
+                // from recursive EnsureLoaded() calls during initialization
+                // (e.g., XSSFRow constructor may access LastRowNum which calls EnsureLoaded)
+                isLoaded = true;
                 Read(GetPackagePart().GetInputStream());
             }
             catch(IOException e)
             {
+                // Reset isLoaded on failure so it can be retried
+                isLoaded = false;
                 throw new POIXMLException(e);
+            }
+            catch(Exception)
+            {
+                // Reset isLoaded on any failure
+                isLoaded = false;
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Ensures the sheet data is loaded. This is called lazily when the sheet is first accessed.
+        /// Thread-safe implementation using double-check locking pattern.
+        /// </summary>
+        private void EnsureLoaded()
+        {
+            if (!isLoaded)
+            {
+                lock (loadLock)
+                {
+                    if (!isLoaded)
+                    {
+                        OnDocumentRead();
+                    }
+                }
             }
         }
 
@@ -1338,6 +1433,7 @@ namespace NPOI.XSSF.UserModel
             InitColumns(worksheet);
             columnHelper = new ColumnHelper(worksheet);
             hyperlinks = new List<XSSFHyperlink>();
+            isLoaded = true; // New sheets are initialized directly, not loaded from XML
         }
 
         /// <summary>
@@ -1491,16 +1587,19 @@ namespace NPOI.XSSF.UserModel
 
         protected virtual OpenXmlFormats.Spreadsheet.CT_Drawing GetCTDrawing()
         {
+            EnsureLoaded();
             return worksheet.drawing;
         }
 
         protected virtual OpenXmlFormats.Spreadsheet.CT_LegacyDrawing GetCTLegacyDrawing()
         {
+            EnsureLoaded();
             return worksheet.legacyDrawing;
         }
 
         internal virtual void Write(Stream stream, bool leaveOpen = false)
         {
+            EnsureLoaded();
             bool setToNull = false;
             if(worksheet.sizeOfColsArray() == 1)
             {
@@ -1714,11 +1813,13 @@ namespace NPOI.XSSF.UserModel
         /// <returns>the CT_Worksheet bean holding this sheet's data</returns>
         public CT_Worksheet GetCTWorksheet()
         {
+            EnsureLoaded();
             return worksheet;
         }
 
         public ColumnHelper GetColumnHelper()
         {
+            EnsureLoaded();
             columnHelper = columnHelper ?? new ColumnHelper(worksheet);
             return columnHelper;
         }
@@ -1886,6 +1987,7 @@ namespace NPOI.XSSF.UserModel
         /// <returns>a SpreadsheetML Drawing</returns>
         public IDrawing<IShape> CreateDrawingPatriarch()
         {
+            EnsureLoaded();
             OpenXmlFormats.Spreadsheet.CT_Drawing ctDrawing = GetCTDrawing();
             if(ctDrawing != null)
             {
@@ -2015,6 +2117,7 @@ namespace NPOI.XSSF.UserModel
         /// row in the sheet</returns>
         public virtual IRow CreateRow(int rownum)
         {
+            EnsureLoaded();
             CT_Row ctRow;
             XSSFRow prev = _rows.TryGetValue(rownum, out XSSFRow row) ? row : null;
             if (prev != null)
@@ -2252,6 +2355,7 @@ namespace NPOI.XSSF.UserModel
         /// <exception cref="ArgumentException"></exception>
         public double GetMargin(MarginType margin)
         {
+            EnsureLoaded();
             if(!worksheet.IsSetPageMargins())
             {
                 return 0;
@@ -2286,6 +2390,7 @@ namespace NPOI.XSSF.UserModel
         /// <exception cref="InvalidOperationException"></exception>
         public void SetMargin(MarginType margin, double size)
         {
+            EnsureLoaded();
             CT_PageMargins pageMargins =
                 worksheet.IsSetPageMargins() ? worksheet.pageMargins : worksheet.AddNewPageMargins();
             switch(margin)
@@ -2323,6 +2428,7 @@ namespace NPOI.XSSF.UserModel
         /// does not contain merged regions</exception>
         public CellRangeAddress GetMergedRegion(int index)
         {
+            EnsureLoaded();
             CT_MergeCells ctMergeCells = worksheet.mergeCells;
             if(ctMergeCells == null)
             {
@@ -2342,6 +2448,7 @@ namespace NPOI.XSSF.UserModel
 
         public CellRangeAddress GetMergedRegion(CellRangeAddress mergedRegion)
         {
+            EnsureLoaded();
             if(worksheet.mergeCells == null || worksheet.mergeCells.mergeCell == null)
             {
                 return null;
@@ -2374,6 +2481,7 @@ namespace NPOI.XSSF.UserModel
         /// to remove protection</param>
         public void ProtectSheet(string password)
         {
+            EnsureLoaded();
 
             if(password != null)
             {
@@ -2435,6 +2543,7 @@ namespace NPOI.XSSF.UserModel
         /// if its not defined on the sheet</returns>
         public IRow GetRow(int rownum)
         {
+            EnsureLoaded();
             if (_rows.TryGetValue(rownum, out XSSFRow row))
             {
                 return row;
@@ -2453,6 +2562,7 @@ namespace NPOI.XSSF.UserModel
         /// if its not defined on the sheet</returns>
         public IColumn GetColumn(int columnnum, bool createIfNull = false)
         {
+            EnsureLoaded();
             if (_columns.TryGetValue(columnnum, out XSSFColumn column))
             {
                 return column;
@@ -2543,6 +2653,7 @@ namespace NPOI.XSSF.UserModel
         /// <param name="row">the row to break, inclusive</param>
         public void SetRowBreak(int row)
         {
+            EnsureLoaded();
 
             CT_PageBreak pgBreak = worksheet.IsSetRowBreaks()
                 ? worksheet.rowBreaks
@@ -2567,6 +2678,7 @@ namespace NPOI.XSSF.UserModel
         //YK: GetXYZArray() array accessors are deprecated in xmlbeans with JDK 1.5 support
         public void RemoveColumnBreak(int column)
         {
+            EnsureLoaded();
             if(!worksheet.IsSetColBreaks())
             {
                 // no breaks
@@ -2590,6 +2702,7 @@ namespace NPOI.XSSF.UserModel
         /// <param name="index"></param>
         public void RemoveMergedRegion(int index)
         {
+            EnsureLoaded();
             CT_MergeCells ctMergeCells = worksheet.mergeCells;
 
             int size = ctMergeCells.sizeOfMergeCellArray();
@@ -2625,6 +2738,7 @@ namespace NPOI.XSSF.UserModel
         /// <param name="indices">A Set of the regions to unmerge</param>
         public void RemoveMergedRegions(IList<int> indices)
         {
+            EnsureLoaded();
             if(!worksheet.IsSetMergeCells())
             {
                 return;
@@ -2664,6 +2778,7 @@ namespace NPOI.XSSF.UserModel
         /// <exception cref="ArgumentException"></exception>
         public void RemoveRow(IRow row)
         {
+            EnsureLoaded();
             if(row.Sheet != this)
             {
                 throw new ArgumentException("Specified row does not belong to" +
@@ -2764,6 +2879,7 @@ namespace NPOI.XSSF.UserModel
         //YK: GetXYZArray() array accessors are deprecated in xmlbeans with JDK 1.5 support
         public void RemoveRowBreak(int row)
         {
+            EnsureLoaded();
             if(!worksheet.IsSetRowBreaks())
             {
                 return;
@@ -2792,6 +2908,7 @@ namespace NPOI.XSSF.UserModel
         /// <param name="column">the column to break, inclusive</param>
         public void SetColumnBreak(int column)
         {
+            EnsureLoaded();
             if(!IsColumnBroken(column))
             {
                 CT_PageBreak pgBreak = worksheet.IsSetColBreaks() ? worksheet.colBreaks : worksheet.AddNewColBreaks();
@@ -3343,6 +3460,7 @@ namespace NPOI.XSSF.UserModel
         /// <param name="column">column index</param>
         public void RemoveHyperlink(int row, int column)
         {
+            EnsureLoaded();
             // CTHyperlinks is regenerated from scratch when writing out the
             // spreadsheet so don't worry about maintaining hyperlinks and
             // CTHyperlinks in parallel. only maintain hyperlinks
@@ -3593,6 +3711,7 @@ namespace NPOI.XSSF.UserModel
         //YK: GetXYZArray() array accessors are deprecated in xmlbeans with JDK 1.5 support
         public List<IDataValidation> GetDataValidations()
         {
+            EnsureLoaded();
             List<IDataValidation> xssfValidations = new List<IDataValidation>();
             CT_DataValidations dataValidations = worksheet.dataValidations;
             if(dataValidations != null && dataValidations.count > 0)
@@ -3633,6 +3752,7 @@ namespace NPOI.XSSF.UserModel
 
         public void AddValidationData(IDataValidation dataValidation)
         {
+            EnsureLoaded();
             XSSFDataValidation xssfDataValidation = (XSSFDataValidation) dataValidation;
             CT_DataValidations dataValidations = worksheet.dataValidations;
             if(dataValidations == null)
@@ -3648,6 +3768,7 @@ namespace NPOI.XSSF.UserModel
 
         public void RemoveDataValidation(IDataValidation dataValidation)
         {
+            EnsureLoaded();
             XSSFDataValidation xssfDataValidation = (XSSFDataValidation) dataValidation;
             CT_DataValidations dataValidations = worksheet.dataValidations;
 
@@ -3673,6 +3794,7 @@ namespace NPOI.XSSF.UserModel
 
         public IAutoFilter SetAutoFilter(CellRangeAddress range)
         {
+            EnsureLoaded();
             CT_AutoFilter af = worksheet.autoFilter;
             if(af == null)
             {
@@ -3707,6 +3829,7 @@ namespace NPOI.XSSF.UserModel
         /// <returns></returns>
         public XSSFTable CreateTable()
         {
+            EnsureLoaded();
             if(!worksheet.IsSetTableParts())
             {
                 worksheet.AddNewTableParts();
@@ -3738,6 +3861,7 @@ namespace NPOI.XSSF.UserModel
         /// <returns></returns>
         public List<XSSFTable> GetTables()
         {
+            EnsureLoaded();
             List<XSSFTable> tableList = new List<XSSFTable>(
                 tables.Values
             );
@@ -3781,11 +3905,13 @@ namespace NPOI.XSSF.UserModel
 
         public IEnumerator GetEnumerator()
         {
+            EnsureLoaded();
             return _rows.Values.GetEnumerator();
         }
 
         public IEnumerator GetRowEnumerator()
         {
+            EnsureLoaded();
             return GetEnumerator();
         }
 
@@ -3803,6 +3929,7 @@ namespace NPOI.XSSF.UserModel
 
         public bool IsMergedRegion(CellRangeAddress mergedRegion)
         {
+            EnsureLoaded();
             if(worksheet.mergeCells == null || worksheet.mergeCells.mergeCell == null)
             {
                 return false;
@@ -4497,6 +4624,7 @@ namespace NPOI.XSSF.UserModel
         /// <returns>Map of error type to the range(s) where they are ignored.</returns>
         public Dictionary<IgnoredErrorType, ISet<CellRangeAddress>> GetIgnoredErrors()
         {
+            EnsureLoaded();
             Dictionary<IgnoredErrorType, ISet<CellRangeAddress>> result = new();
             if(worksheet.IsSetIgnoredErrors())
             {
@@ -4836,11 +4964,13 @@ namespace NPOI.XSSF.UserModel
 
         private CT_SheetFormatPr GetSheetTypeSheetFormatPr()
         {
+            EnsureLoaded();
             return worksheet.IsSetSheetFormatPr() ? worksheet.sheetFormatPr : worksheet.AddNewSheetFormatPr();
         }
 
         private CT_SheetPr GetSheetTypeSheetPr()
         {
+            EnsureLoaded();
             if(worksheet.sheetPr == null)
             {
                 worksheet.sheetPr = new CT_SheetPr();
@@ -4851,6 +4981,7 @@ namespace NPOI.XSSF.UserModel
 
         private CT_HeaderFooter GetSheetTypeHeaderFooter()
         {
+            EnsureLoaded();
             if(worksheet.headerFooter == null)
             {
                 worksheet.headerFooter = new CT_HeaderFooter();
@@ -5013,6 +5144,7 @@ namespace NPOI.XSSF.UserModel
 
         private CT_SheetView GetSheetTypeSheetView()
         {
+            EnsureLoaded();
             if(GetDefaultSheetView() == null)
             {
                 GetSheetTypeSheetViews().SetSheetViewArray(0, new CT_SheetView());
@@ -5616,6 +5748,7 @@ namespace NPOI.XSSF.UserModel
 
         private CT_Selection GetSheetTypeSelection()
         {
+            EnsureLoaded();
             if(GetSheetTypeSheetView().SizeOfSelectionArray() == 0)
             {
                 GetSheetTypeSheetView().InsertNewSelection(0);
@@ -5639,6 +5772,7 @@ namespace NPOI.XSSF.UserModel
         /// <returns></returns>
         private CT_SheetView GetDefaultSheetView()
         {
+            EnsureLoaded();
             CT_SheetViews views = GetSheetTypeSheetViews();
             int sz = views == null ? 0 : views.sizeOfSheetViewArray();
             if(sz == 0)
@@ -5651,6 +5785,7 @@ namespace NPOI.XSSF.UserModel
 
         private CT_PageSetUpPr GetSheetTypePageSetUpPr()
         {
+            EnsureLoaded();
             CT_SheetPr sheetPr = GetSheetTypeSheetPr();
             return sheetPr.IsSetPageSetUpPr() ? sheetPr.pageSetUpPr : sheetPr.AddNewPageSetUpPr();
         }
@@ -5674,6 +5809,7 @@ namespace NPOI.XSSF.UserModel
 
         private CT_Pane GetPane()
         {
+            EnsureLoaded();
             if(GetDefaultSheetView().pane == null)
             {
                 GetDefaultSheetView().AddNewPane();
@@ -5696,6 +5832,7 @@ namespace NPOI.XSSF.UserModel
 
         private CT_SheetViews GetSheetTypeSheetViews()
         {
+            EnsureLoaded();
             if(worksheet.sheetViews == null)
             {
                 worksheet.sheetViews = new CT_SheetViews();
@@ -5859,6 +5996,7 @@ namespace NPOI.XSSF.UserModel
         private void SetRepeatingRowsAndColumns(
             CellRangeAddress rowDef, CellRangeAddress colDef)
         {
+            EnsureLoaded();
             int col1 = -1;
             int col2 = -1;
             int row1 = -1;
@@ -6464,6 +6602,7 @@ namespace NPOI.XSSF.UserModel
         /// <param name="Width">In EMU</param>
         public void SetDefaultColWidth(int Width)
         {
+            EnsureLoaded();
             IFont ift = GetWorkbook().GetStylesSource().GetFontAt(0);
             Font ft = SheetUtil.IFont2Font(ift);
             var rt = TextMeasurer.MeasureSize("0", new TextOptions(ft));
@@ -6483,6 +6622,7 @@ namespace NPOI.XSSF.UserModel
         [Obsolete("")]
         public double GetDefaultColWidthInPixel()
         {
+            EnsureLoaded();
             double fontwidth;
             double width_px;
 
@@ -6576,6 +6716,7 @@ namespace NPOI.XSSF.UserModel
             , out int cell
         )
         {
+            EnsureLoaded();
 
             double width_px;
             cell = 0;
