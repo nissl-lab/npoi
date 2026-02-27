@@ -4,4 +4,4 @@ NPOI has been maintained by Tony Qu and its contributors for 16 years. Developer
 
 To learn more about how NPOI library succeeds, you can read [this post](https://tonyqus.medium.com/how-npoi-succeeds-67ceb7333eb). 
 
-[PLEASE DONATE if you benefits from NPOI library](https://github.com/nissl-lab/npoi/discussions/923)
+[Don't forget to donate if you benefit from NPOI library](https://github.com/nissl-lab/npoi/discussions/923)
