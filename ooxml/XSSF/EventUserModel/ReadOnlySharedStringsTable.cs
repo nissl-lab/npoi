@@ -22,8 +22,7 @@ namespace NPOI.XSSF.EventUserModel
     using System.Collections.Generic;
     using System.IO;
     using System.Text;
-    using NSAX;
-    using NSAX.Helpers;
+    using System.Xml;
 
     /// <summary>
     /// <para>
@@ -72,7 +71,7 @@ namespace NPOI.XSSF.EventUserModel
     /// </code>
     /// </para>
     /// </summary>
-    public class ReadOnlySharedStringsTable : DefaultHandler
+    public class ReadOnlySharedStringsTable
     {
 
         private bool includePhoneticRuns;
@@ -106,7 +105,6 @@ namespace NPOI.XSSF.EventUserModel
         /// </summary>
         /// <param name="pkg">The <see cref="OPCPackage"/> to use as basis for the shared-strings table.</param>
         /// <exception cref="IOException"> If reading the data from the package fails.</exception>
-        /// <exception cref="SAXException"> if parsing the XML data fails.</exception>
         public ReadOnlySharedStringsTable(OPCPackage pkg)
             : this(pkg, true)
         {
@@ -117,8 +115,6 @@ namespace NPOI.XSSF.EventUserModel
         /// <param name="pkg">The <see cref="OPCPackage"/> to use as basis for the shared-strings table.</param>
         /// <param name="includePhoneticRuns">whether or not to concatenate phoneticRuns onto the shared string</param>
         /// <exception cref="IOException">IOException If reading the data from the package fails.</exception>
-        /// <exception cref="SAXException">SAXException if parsing the XML data fails.</exception>
-        /// @since POI 3.14-Beta3
         public ReadOnlySharedStringsTable(OPCPackage pkg, bool includePhoneticRuns)
         {
             this.includePhoneticRuns = includePhoneticRuns;
@@ -153,9 +149,7 @@ namespace NPOI.XSSF.EventUserModel
         /// </summary>
         /// @since POI 3.14-Beta3
         public ReadOnlySharedStringsTable(PackagePart part, bool includePhoneticRuns)
-
         {
-
             this.includePhoneticRuns = includePhoneticRuns;
             ReadFrom(part.GetInputStream());
         }
@@ -165,27 +159,32 @@ namespace NPOI.XSSF.EventUserModel
         /// </summary>
         /// <param name="is1">The input stream containing the XML document.</param>
         /// <exception cref="IOException"> if an error occurs while reading.</exception>
-        /// <exception cref="SAXException"> if parsing the XML data fails.</exception>
         public void ReadFrom(Stream is1)
         {
             // test if the file is empty, otherwise parse it
-            //PushbackInputStream pis = new PushbackInputStream(is1, 1);
-            //int emptyTest = pis.Read();
-            //if (emptyTest > -1)
             if(is1.Length > 0)
             {
-                //pis.Unread(emptyTest);
-                InputSource sheetSource = new InputSource(is1);
-                //try
+                XmlReaderSettings settings = new XmlReaderSettings();
+                settings.DtdProcessing = DtdProcessing.Ignore;
+                var reader = XmlReader.Create(is1, settings);
+                while(reader.Read())
                 {
-                    NSAX.AElfred.SAXDriver sheetParser = new NSAX.AElfred.SAXDriver();
-                    sheetParser.ContentHandler = (this);
-                    sheetParser.Parse(sheetSource);
+                    if(reader.NodeType == XmlNodeType.Element)
+                    {
+                        //begin element
+                        StartElement(reader);
+                    }
+                    else if(reader.NodeType == XmlNodeType.EndElement)
+                    {
+                        EndElement(reader);
+                    }
+                    else if(reader.NodeType == XmlNodeType.Text ||
+                        reader.NodeType == XmlNodeType.SignificantWhitespace ||
+                        reader.NodeType == XmlNodeType.Whitespace)
+                    {
+                        TextNode(reader);
+                    }
                 }
-                //catch (ParserConfigurationException e)
-                //{
-                //    throw new RuntimeException("SAX parser appears to be broken - " + e.GetMessage());
-                //}
             }
         }
 
@@ -224,83 +223,83 @@ namespace NPOI.XSSF.EventUserModel
         private bool tIsOpen;
         private bool inRPh;
 
-        public override void StartElement(String uri, String localName, String name,
-                                 IAttributes attributes)
+        public void TextNode(XmlReader reader)
         {
+            if(tIsOpen)
+            {
+                if(inRPh && includePhoneticRuns)
+                {
+                    characters.Append(reader.Value);
+                }
+                else if(!inRPh)
+                {
+                    characters.Append(reader.Value);
+                }
+            }
+        }
 
-            if (uri != null && !uri.Equals(XSSFRelation.NS_SPREADSHEETML))
+        public void StartElement(XmlReader reader)
+        {
+            string uri = reader.NamespaceURI;
+            string localName = reader.LocalName;
+            //string name = reader.Name;
+            if(uri != null && !uri.Equals(XSSFRelation.NS_SPREADSHEETML))
             {
                 return;
             }
-
-            if ("sst".Equals(localName))
+            if("sst".Equals(localName))
             {
-                String count = attributes.GetValue("count");
-                if (count != null) this.count = Int32.Parse(count);
-                String uniqueCount = attributes.GetValue("uniqueCount");
-                if (uniqueCount != null) this.uniqueCount = Int32.Parse(uniqueCount);
+                String count = reader.GetAttribute("count");
+                if(count != null)
+                    this.count = Int32.Parse(count);
+                String uniqueCount = reader.GetAttribute("uniqueCount");
+                if(uniqueCount != null)
+                    this.uniqueCount = Int32.Parse(uniqueCount);
 
                 this.strings = new List<String>(this.uniqueCount);
                 this.phoneticStrings = new Dictionary<int, String>();
                 characters = new StringBuilder();
             }
-            else if ("si".Equals(localName))
+            else if("si".Equals(localName))
             {
                 characters.Length = 0;
             }
-            else if ("t".Equals(localName))
+            else if("t".Equals(localName))
             {
                 tIsOpen = true;
             }
-            else if ("rPh".Equals(localName))
+            else if("rPh".Equals(localName))
             {
                 inRPh = true;
                 //append space...this assumes that rPh always comes After regular <t>
-                if (includePhoneticRuns && characters.Length > 0)
+                if(includePhoneticRuns && characters.Length > 0)
                 {
                     characters.Append(" ");
                 }
             }
         }
 
-        public override void EndElement(String uri, String localName, String name)
-
+        public void EndElement(XmlReader reader)
         {
-
-            if (uri != null && !uri.Equals(XSSFRelation.NS_SPREADSHEETML))
+            string uri = reader.NamespaceURI;
+            string localName = reader.LocalName;
+            //string name = reader.Name;
+            if(uri != null && !uri.Equals(XSSFRelation.NS_SPREADSHEETML))
             {
                 return;
             }
 
-            if ("si".Equals(localName))
+            if("si".Equals(localName))
             {
                 strings.Add(characters.ToString());
             }
-            else if ("t".Equals(localName))
+            else if("t".Equals(localName))
             {
                 tIsOpen = false;
             }
-            else if ("rPh".Equals(localName))
+            else if("rPh".Equals(localName))
             {
                 inRPh = false;
-            }
-        }
-
-        /// <summary>
-        /// Captures characters only if a t(ext) element is open.
-        /// </summary>
-        public override void Characters(char[] ch, int start, int length)
-        {
-            if (tIsOpen)
-            {
-                if (inRPh && includePhoneticRuns)
-                {
-                    characters.Append(ch, start, length);
-                }
-                else if (!inRPh)
-                {
-                    characters.Append(ch, start, length);
-                }
             }
         }
     }
