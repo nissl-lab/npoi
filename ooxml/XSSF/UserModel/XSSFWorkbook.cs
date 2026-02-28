@@ -38,6 +38,7 @@ using NPOI.SS;
 using System.Globalization;
 using System.Linq;
 using NPOI.POIFS.FileSystem;
+using System.Threading.Tasks;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -1811,6 +1812,21 @@ namespace NPOI.XSSF.UserModel
             doc.Save(part.GetOutputStream());
         }
 
+        protected internal override async Task CommitAsync()
+        {
+            SaveNamedRanges();
+            SaveCalculationChain();
+
+            PackagePart part = GetPackagePart();
+            using (Stream outputStream = part.GetOutputStream())
+            {
+                // doc.Save uses synchronous writes to the stream internally
+                // We need to await the flush to ensure everything is written
+                doc.Save(outputStream);
+                await outputStream.FlushAsync();
+            }
+        }
+
         /// <summary>
         /// Write the document to the specified stream, and optionally leave the stream open without closing it.
         /// </summary>
@@ -1829,6 +1845,27 @@ namespace NPOI.XSSF.UserModel
             if (originalValue.HasValue && Package is ZipPackage)
             {
                 ((ZipPackage)Package).IsExternalStream = originalValue.Value;
+            }
+        }
+
+        /// <summary>
+        /// Write the document to the specified stream asynchronously, and optionally leave the stream open without closing it.
+        /// </summary>
+        /// <param name="stream">the stream you wish to write the xlsx to</param>
+        /// <param name="leaveOpen">leave stream open or not</param>
+        public async Task WriteAsync(Stream stream, bool leaveOpen = false)
+        {
+            bool? originalValue = null;
+            if (Package is ZipPackage package)
+            {
+                //By default ZipPackage closes the stream if it wasn't constructed from a stream.
+                originalValue = package.IsExternalStream;
+                package.IsExternalStream = leaveOpen;
+            }
+            await base.WriteAsync(stream);
+            if (originalValue.HasValue && Package is ZipPackage package2)
+            {
+                package2.IsExternalStream = originalValue.Value;
             }
         }
 

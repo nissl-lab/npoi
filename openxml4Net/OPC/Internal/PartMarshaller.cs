@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace NPOI.OpenXml4Net.OPC.Internal
 {
@@ -27,5 +28,20 @@ namespace NPOI.OpenXml4Net.OPC.Internal
 	     *             methods.
 	     */
         bool Marshall(PackagePart part, Stream out1);
+
+        /**
+         * Save the content of the package in the stream asynchronously
+         *
+         * @param part
+         *            Part to marshall.
+         * @param out
+         *            The output stream into which the part will be marshall.
+         * @return A task that represents the asynchronous operation. The task result contains
+         *         false if any marshall error occurs, else <b>true</b>
+         * @throws OpenXml4NetException
+         *             Throws only if any other exceptions are thrown by inner
+         *             methods.
+         */
+        Task<bool> MarshallAsync(PackagePart part, Stream out1);
     }
 }
