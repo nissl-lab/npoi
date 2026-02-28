@@ -18,7 +18,7 @@ namespace NPOI.OpenXml4Net.OPC
      * @author Julien Chable, CDubet
      * @version 0.1
      */
-    public abstract class OPCPackage : RelationshipSource, ICloseable
+    public abstract class OPCPackage : RelationshipSource, ICloseable,IDisposable
     {
 
         /**
@@ -1827,6 +1827,11 @@ namespace NPOI.OpenXml4Net.OPC
             RemovePart(partName);
             this.contentTypeManager.RemoveContentType(partName);
             this.isDirty = true;
+        }
+
+        public void Dispose()
+        {
+            this.Close();
         }
     }
 
