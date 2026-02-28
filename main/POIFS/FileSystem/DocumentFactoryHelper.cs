@@ -18,6 +18,7 @@
 using NPOI.POIFS.Common;
 using NPOI.POIFS.Crypt;
 using NPOI.Util;
+using Org.BouncyCastle.Security;
 using System;
 using System.IO;
 using System.Text;
@@ -65,7 +66,7 @@ namespace NPOI.POIFS.FileSystem
                         throw new EncryptedDocumentException("The supplied spreadsheet is protected, but no password was supplied");
                 }
             }
-            catch (Exception e)
+            catch (GeneralSecurityException e)
             {
                 throw new IOException("password does not match", e);
             }
@@ -76,33 +77,11 @@ namespace NPOI.POIFS.FileSystem
         /// If your InputStream does not support mark / reset, then wrap it in a PushBackInputStream, then be sure to always use that, and not the original!
         /// </summary>
         /// <param name="inp">An InputStream which supports either mark/reset, or is a PushbackInputStream</param>
+        [Obsolete("deprecated in 3.17-beta2, use FileMagic#valueOf(InputStream) == FileMagic.OOXML instead")]
+        [Removal(Version = "4.0")]
         public static bool HasOOXMLHeader(Stream inp)
         {
-            // We want to peek at the first 4 bytes
-            //inp.mark(4);
-
-            byte[] header = new byte[4];
-            int bytesRead = IOUtils.ReadFully(inp, header);
-
-            // Wind back those 4 bytes
-            if (inp is PushbackStream pin)
-            {
-                pin.Position = pin.Position - 4;
-                //pin.unread(header, 0, bytesRead);
-            }
-            else
-            {
-                inp.Position = 0;
-            }
-
-            // Did it match the ooxml zip signature?
-            return (
-                bytesRead == 4 &&
-                header[0] == POIFSConstants.OOXML_FILE_HEADER[0] &&
-                header[1] == POIFSConstants.OOXML_FILE_HEADER[1] &&
-                header[2] == POIFSConstants.OOXML_FILE_HEADER[2] &&
-                header[3] == POIFSConstants.OOXML_FILE_HEADER[3]
-            );
+            return FileMagicContainer.ValueOf(inp) == FileMagic.OOXML;
         }
 
         /// <summary>

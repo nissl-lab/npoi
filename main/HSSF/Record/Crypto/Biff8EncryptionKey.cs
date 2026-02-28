@@ -50,30 +50,27 @@ namespace NPOI.HSSF.Record.Crypto
                 passwordData[i * 2 + 1] = (byte)((ch << 8) & 0xFF);
             }
 
-            byte[] kd;
-            using (MD5 md5 = new MD5CryptoServiceProvider())
+            using MD5CryptoServiceProvider md5 = new();
+            byte[] passwordHash = md5.ComputeHash(passwordData);
+
+            md5.Initialize();
+
+            byte[] data = new byte[PASSWORD_HASH_NUMBER_OF_BYTES_USED * 16 + docIdData.Length * 16];
+
+            int offset = 0;
+            for (int i = 0; i < 16; i++)
             {
-                byte[] passwordHash = md5.ComputeHash(passwordData);
-
-                md5.Initialize();
-
-                byte[] data = new byte[PASSWORD_HASH_NUMBER_OF_BYTES_USED * 16 + docIdData.Length * 16];
-
-                int offset = 0;
-                for (int i = 0; i < 16; i++)
-                {
-                    Array.Copy(passwordHash, 0, data, offset, PASSWORD_HASH_NUMBER_OF_BYTES_USED);
-                    offset += PASSWORD_HASH_NUMBER_OF_BYTES_USED;// passwordHash.Length;
-                    Array.Copy(docIdData, 0, data, offset, docIdData.Length);
-                    offset += docIdData.Length;
-                }
-                kd = md5.ComputeHash(data);
-                byte[] result = new byte[KEY_DIGEST_LENGTH];
-                Array.Copy(kd, 0, result, 0, KEY_DIGEST_LENGTH);
-                md5.Clear();
-
-                return result;
+                Array.Copy(passwordHash, 0, data, offset, PASSWORD_HASH_NUMBER_OF_BYTES_USED);
+                offset += PASSWORD_HASH_NUMBER_OF_BYTES_USED;// passwordHash.Length;
+                Array.Copy(docIdData, 0, data, offset, docIdData.Length);
+                offset += docIdData.Length;
             }
+            byte[] kd = md5.ComputeHash(data);
+            byte[] result = new byte[KEY_DIGEST_LENGTH];
+            Array.Copy(kd, 0, result, 0, KEY_DIGEST_LENGTH);
+            md5.Clear();
+
+            return result;
         }
 
         /**

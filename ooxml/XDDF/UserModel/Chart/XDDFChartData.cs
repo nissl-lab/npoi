@@ -183,7 +183,7 @@ namespace NPOI.XDDF.UserModel.Chart
                 FillNumCache(cache, numOfPoints, valuesData);
             }
 
-            private CT_NumData RetrieveNumCache(CT_AxDataSource axDataSource, 
+            private static CT_NumData RetrieveNumCache(CT_AxDataSource axDataSource, 
                 IXDDFDataSource<T> data)
             {
                 CT_NumData numCache;
@@ -230,7 +230,7 @@ namespace NPOI.XDDF.UserModel.Chart
                 return numCache;
             }
 
-            private CT_StrData RetrieveStrCache(CT_AxDataSource axDataSource, IXDDFDataSource<T> data)
+            private static CT_StrData RetrieveStrCache(CT_AxDataSource axDataSource, IXDDFDataSource<T> data)
             {
                 CT_StrData strCache;
                 if(data.IsReference)
@@ -276,7 +276,7 @@ namespace NPOI.XDDF.UserModel.Chart
                 return strCache;
             }
 
-            private CT_NumData RetrieveNumCache(CT_NumDataSource numDataSource,
+            private static CT_NumData RetrieveNumCache(CT_NumDataSource numDataSource,
                 IXDDFNumericalDataSource<V> data)
             {
                 CT_NumData numCache;
@@ -323,7 +323,7 @@ namespace NPOI.XDDF.UserModel.Chart
                 return numCache;
             }
 
-            private void FillStringCache(CT_StrData cache, int numOfPoints, IXDDFDataSource<T> data)
+            private static void FillStringCache(CT_StrData cache, int numOfPoints, IXDDFDataSource<T> data)
             {
                 cache.SetPtArray(null); // unset old values
                 if(cache.IsSetPtCount())
@@ -346,7 +346,7 @@ namespace NPOI.XDDF.UserModel.Chart
                 }
             }
 
-            private void FillNumCache(CT_NumData cache, int numOfPoints, IXDDFNumericalDataSource<V> data)
+            private static void FillNumCache(CT_NumData cache, int numOfPoints, IXDDFNumericalDataSource<V> data)
             {
                 string formatCode = data.FormatCode;
                 if(formatCode == null)

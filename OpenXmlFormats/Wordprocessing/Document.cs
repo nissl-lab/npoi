@@ -78,10 +78,24 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             if(node == null)
                 return null;
             CT_Document ctObj = new CT_Document();
+            bool firstBody = true;
             foreach(XmlNode childNode in node.ChildNodes)
             {
                 if(childNode.LocalName == "body")
-                    ctObj.body = CT_Body.Parse(childNode, namespaceManager);
+                {
+                    if(firstBody)
+                    {
+                        ctObj.body = CT_Body.Parse(childNode, namespaceManager);
+                        firstBody = false;
+                    }
+                    else
+                    {
+                        if(ctObj.bodyListField == null)
+                            ctObj.bodyListField = new List<CT_Body> ();
+                        ctObj.bodyListField.Add(CT_Body.Parse(childNode, namespaceManager));
+                    }
+                }
+                    
                 else if(childNode.LocalName == "background")
                     ctObj.background = CT_Background.Parse(childNode, namespaceManager);
             }
@@ -111,6 +125,13 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             sw.Write("mc:Ignorable=\"w14 w15 w16se w16cid w16 w16cex w16sdtdh wp14\">");
             if(this.body != null)
                 this.body.Write(sw, "body");
+            if(this.bodyList != null)
+            {
+                foreach(var b in this.bodyList)
+                {
+                    b.Write(sw, "body");
+                }
+            }
             if(this.background != null)
                 this.background.Write(sw, "background");
             sw.Write("</w:document>");
@@ -123,6 +144,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             this.bodyField = new CT_Body();
         }
 
+        private List<CT_Body> bodyListField;
+
         [XmlElement(Order = 0)]
         public CT_Body body
         {
@@ -133,6 +156,14 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             set
             {
                 this.bodyField = value;
+            }
+        }
+
+        public List<CT_Body> bodyList
+        {
+            get
+            {
+                return bodyListField;
             }
         }
 
@@ -333,8 +364,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
-            sw.Write(">");
+            sw.WriteStartW(nodeName);
+            sw.Write('>');
             int i=0;
             foreach(object o in this.Items)
             {
@@ -1374,7 +1405,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.WriteStartW(nodeName);
             if(this.type!= ST_DocGrid.@default)
                 XmlHelper.WriteAttribute(sw, "w:type", this.type.ToString());
             XmlHelper.WriteAttribute(sw, "w:linePitch", this.linePitch);
@@ -1496,8 +1527,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
-            sw.Write(">");
+            sw.WriteStartW(nodeName);
+            sw.Write('>');
             if(this.docVar != null)
             {
                 foreach(CT_DocVar x in this.docVar)

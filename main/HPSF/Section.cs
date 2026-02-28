@@ -26,15 +26,16 @@ namespace NPOI.HPSF
     using System.Collections.Generic;
     using System.Linq;
     using System.IO;
-    using System.Text; 
-using Cysharp.Text;
+    using System.Text;
+    using Cysharp.Text;
 
     /// <summary>
     /// Represents a section in a {@link PropertySet}.
     /// </summary>
     public class Section
     {
-
+        //arbitrarily selected; may need to increase
+        private static int MAX_RECORD_LENGTH = 100_000;
         /// <summary>
         /// <para>
         /// Maps property IDs to section-private PID strings. These
@@ -45,39 +46,29 @@ using Cysharp.Text;
         /// </para></summary>
         //private Dictionary<long, String> dictionary;
 
-        private IDictionary dictionary;
+        private Dictionary<long, String> dictionary;
 
         /// <summary>
         /// The section's format ID, <see cref="FormatID"/>.
         /// </summary>
         private ClassID formatID;
-        /// <summary>
-        /// If the "dirty" flag is true, the section's size must be
-        /// (re-)calculated before the section is written.
-        /// </summary>
-        private bool dirty = true;
 
         /// <summary>
         /// Contains the bytes making out the section. This byte array is
         /// established when the section's size is calculated and can be reused
-        /// later. It is valid only if the "dirty" flag is false.
+        /// later. If the array is empty, the section was modified and the bytes need to be regenerated.
         /// </summary>
-        private byte[] sectionBytes;
+        private ByteArrayOutputStream sectionBytes = new ByteArrayOutputStream();
 
         /// <summary>
         /// The offset of the section in the stream.
         /// </summary>
-        private long offset = -1;
-
-        /// <summary>
-        /// The section's size in bytes.
-        /// </summary>
-        private int size;
+        private long _offset;
 
         /// <summary>
         /// This section's properties.
         /// </summary>
-        private IDictionary<long, Property> properties = new SortedDictionary<long, Property>();
+        private Dictionary<long, Property> properties = new Dictionary<long, Property>();
 
         /// <summary>
         /// This member is <c>true</c> if the last call to {@link
@@ -91,6 +82,7 @@ using Cysharp.Text;
         /// </summary>
         public Section()
         {
+            this._offset = -1;
         }
 
         /// <summary>
@@ -102,6 +94,7 @@ using Cysharp.Text;
         /// <param name="s">The section Set to copy</param>
         public Section(Section s)
         {
+            this._offset = -1;
             FormatID = (s.FormatID);
             foreach(Property p in s.properties.Values)
             {
@@ -125,33 +118,38 @@ using Cysharp.Text;
         /// </exception>  
         public Section(byte[] src, int offset)
         {
-
-            int o1 = offset;
-
             /*
              * Read the format ID.
              */
-            formatID = new ClassID(src, o1);
-            o1 += ClassID.LENGTH;
+            formatID = new ClassID(src, offset);
 
             /*
              * Read the offset from the stream's start and positions to
              * the section header.
              */
-            this.offset = LittleEndian.GetUInt(src, o1);
-            o1 = (int) this.offset;
+            int offFix = (int)LittleEndian.GetUInt(src, offset + ClassID.LENGTH);
+
+            // some input files have a invalid (padded?) offset, which need to be fixed
+            // search for beginning of size field
+            if (src[offFix] == 0) {
+                for (int i=0; i<3 && src[offFix] == 0; i++,offFix++);
+                // cross check with propertyCount field and the property list field
+                for (int i=0; i<3 && (src[offFix+3] != 0 || src[offFix+7] != 0 || src[offFix+11] != 0); i++,offFix--);
+            }
+
+            this._offset = offFix;
+
+            LittleEndianByteArrayInputStream leis = new LittleEndianByteArrayInputStream(src, offFix);
 
             /*
              * Read the section length.
              */
-            size = (int) LittleEndian.GetUInt(src, o1);
-            o1 += LittleEndianConsts.INT_SIZE;
+            int size = (int)Math.Min(leis.ReadUInt(), src.Length-_offset);
 
             /*
              * Read the number of properties.
              */
-            int propertyCount = (int)LittleEndian.GetUInt(src, o1);
-            o1 += LittleEndianConsts.INT_SIZE;
+            int propertyCount = (int)leis.ReadUInt();
 
             /*
              * Read the properties. The offset is positioned at the first
@@ -178,46 +176,38 @@ using Cysharp.Text;
              *    seconds pass reads the other properties.
              */
             /* Pass 1: Read the property list. */
-            int pass1Offset = o1;
-            long cpOffset = -1;
             //TreeBidiDictionary<long, long> offset2Id = new TreeBidiDictionary<long, long>();
             BidirectionalDictionary<long, long> offset2Id = new ();
             for(int i = 0; i < propertyCount; i++)
             {
                 /* Read the property ID. */
-                long id = LittleEndian.GetUInt(src, pass1Offset);
-                pass1Offset += LittleEndianConsts.INT_SIZE;
+                long id = (int)leis.ReadUInt();
 
                 /* Offset from the section's start. */
-                long off = LittleEndian.GetUInt(src, pass1Offset);
-                pass1Offset += LittleEndianConsts.INT_SIZE;
+                long off = (int)leis.ReadUInt();
 
                 offset2Id.Add(off, id);
-
-                if(id == PropertyIDMap.PID_CODEPAGE)
-                {
-                    cpOffset = off;
-                }
             }
 
+            long? cpOffset = offset2Id.ContainsValue((long)PropertyIDMap.PID_CODEPAGE) ? 
+                offset2Id.GetKey((long)PropertyIDMap.PID_CODEPAGE) : null;
             /* Look for the codepage. */
             int codepage = -1;
-            if(cpOffset != -1)
+            if(cpOffset.HasValue)
             {
                 /* Read the property's value type. It must be VT_I2. */
-                long o = this.offset + cpOffset;
-                long type = LittleEndian.GetUInt(src, (int)o);
-                o += LittleEndianConsts.INT_SIZE;
+                leis.SetReadIndex((int)(this._offset + cpOffset.Value));
+                long type = leis.ReadUInt();
 
                 if(type != Variant.VT_I2)
                 {
                     throw new HPSFRuntimeException
-                        ("Value type of property ID 1 is not VT_I2 but " +
-                         type + ".");
+                        ("Value type of property ID 1 is not VT_I2 but " + type + ".");
                 }
 
                 /* Read the codepage number. */
-                codepage = LittleEndian.GetUShort(src, (int) o);
+                codepage = leis.ReadUShort();
+                Codepage = codepage;
             }
 
 
@@ -227,24 +217,44 @@ using Cysharp.Text;
             {
                 long off = me.Key;
                 long id = me.Value;
-                Property p;
-                if(id == PropertyIDMap.PID_CODEPAGE)
+                if (id == PropertyIDMap.PID_CODEPAGE)
                 {
-                    p = new Property(PropertyIDMap.PID_CODEPAGE, Variant.VT_I2, codepage);
+                    continue;
+                }
+                int pLen = propLen(offset2Id, off, size);
+                leis.SetReadIndex((int)(this._offset + off));
+
+                if (id == PropertyIDMap.PID_DICTIONARY)
+                {
+                    leis.Mark(100000);
+                    if (!ReadDictionary(leis, pLen, codepage))
+                    {
+                        // there was an error reading the dictionary, maybe because the pid (0) was used wrong
+                        // try reading a property instead
+                        leis.Reset();
+                        try
+                        {
+                            // fix id
+                            id = Math.Max((long)PropertyIDMap.PID_MAX, offset2Id.Inverse.LastKey())+1;
+                            SetProperty(new MutableProperty(id, leis, pLen, codepage));
+                        }
+                        catch (RuntimeException e)
+                        {
+                            //LOG.log(POILogger.INFO, "Dictionary fallback failed - ignoring property");
+                        }
+                    }
                 }
                 else
                 {
-                    int pLen = propLen(offset2Id, off, size);
-                    long o = this.offset + off;
-                    p = new Property(id, src, o, pLen, codepage);
+                    SetProperty(new MutableProperty(id, leis, pLen, codepage));
                 }
-                properties.Add(id, p);
             }
-
+            sectionBytes.Write(src, (int)_offset, size);
+            padSectionBytes();
             /*
              * Extract the dictionary (if available).
              */
-            dictionary = (IDictionary) GetProperty(0);
+            dictionary = (Dictionary<long, String>) GetProperty(0);
         }
 
         /// <summary>
@@ -307,7 +317,7 @@ using Cysharp.Text;
         /// Returns the offset of the section in the stream.
         /// </summary>
         /// <return>offset of the section in the stream.</return>
-        public long Offset => this.offset;
+        public long Offset => this._offset;
 
         /// <summary>
         /// Returns the number of properties in this section.
@@ -330,9 +340,8 @@ using Cysharp.Text;
             this.properties.Clear();
             foreach(Property p in properties)
             {
-                this.properties.Add(p.ID, p);
+                SetProperty(p);
             }
-            dirty = true;
         }
 
         /// <summary>
@@ -359,7 +368,7 @@ using Cysharp.Text;
         /// </param>
         public void SetProperty(int id, String value)
         {
-            SetProperty(id, Variant.VT_LPWSTR, value);
+            SetProperty(id, Variant.VT_LPSTR, value);
         }
 
         /// <summary>
@@ -423,7 +432,7 @@ using Cysharp.Text;
         /// @see Variant
         public void SetProperty(int id, long variantType, Object value)
         {
-            SetProperty(new Property(id, variantType, value));
+            SetProperty(new MutableProperty(id, variantType, value));
         }
 
 
@@ -442,7 +451,7 @@ using Cysharp.Text;
             if(old == null || !old.Equals(p))
             {
                 properties[p.ID] = p;
-                dirty = true;
+                sectionBytes.Reset();
             }
         }
 
@@ -557,23 +566,23 @@ using Cysharp.Text;
         {
             get
             {
-                if(dirty)
+                int size = (int)sectionBytes.Position;
+                if (size > 0)
                 {
-                    try
-                    {
-                        size = CalcSize();
-                        dirty = false;
-                    }
-                    catch(HPSFRuntimeException ex)
-                    {
-                        throw;
-                    }
-                    catch(Exception ex)
-                    {
-                        throw new HPSFRuntimeException(ex);
-                    }
+                    return size;
                 }
-                return size;
+                try
+                {
+                    return CalcSize();
+                }
+                catch (HPSFRuntimeException ex)
+                {
+                    throw;
+                }
+                catch (Exception ex)
+                {
+                    throw new HPSFRuntimeException(ex);
+                }
             }
         }
 
@@ -587,16 +596,20 @@ using Cysharp.Text;
         /// <throws name="IOException">IOException</throws>
         private int CalcSize()
         {
-            ByteArrayOutputStream out1 = new ByteArrayOutputStream();
-            Write(out1);
-            out1.Close();
-            /* Pad to multiple of 4 bytes so that even the Windows shell (explorer)
-             * shows custom properties. */
-            sectionBytes = Util.Pad4(out1.ToByteArray());
-            return sectionBytes.Length;
+            sectionBytes.Reset();
+            Write(sectionBytes);
+            padSectionBytes();
+            return (int)sectionBytes.Position;
         }
 
-
+        private void padSectionBytes()
+        {
+            byte[] padArray = { 0, 0, 0 };
+            /* Pad to multiple of 4 bytes so that even the Windows shell (explorer)
+             * shows custom properties. */
+            int pad = (4 - ((int)sectionBytes.Position & 0x3)) & 0x3;
+            sectionBytes.Write(padArray, 0, pad);
+        }
 
 
         /// <summary>
@@ -637,7 +650,7 @@ using Cysharp.Text;
             }
             if(s == null)
             {
-                s = SectionIDMap.GetPIDString(FormatID.Bytes, pid);
+                s = SectionIDMap.GetPIDString(FormatID, pid);
             }
             return s;
         }
@@ -646,7 +659,7 @@ using Cysharp.Text;
         /// Removes all properties from the section including 0 (dictionary) and
         /// 1 (codepage).
         /// </summary>
-        public void clear()
+        public void Clear()
         {
             Property[] properties = Properties;
             for(int i = 0; i < properties.Length; i++)
@@ -655,18 +668,6 @@ using Cysharp.Text;
                 RemoveProperty(p.ID);
             }
         }
-
-        /// <summary>
-        /// Sets the codepage.
-        /// </summary>
-        /// <param name="codepage">the codepage</param>
-        public void SetCodepage(int codepage)
-        {
-            SetProperty(PropertyIDMap.PID_CODEPAGE, Variant.VT_I2,
-                    codepage);
-        }
-
-
 
         /// <summary>
         /// <para>
@@ -713,80 +714,36 @@ using Cysharp.Text;
                 return false;
             }
 
-            /* Compare all properties except 0 and 1 as they must be handled
-             * specially. */
-            Property[] pa1 = new Property[Properties.Length];
-            Property[] pa2 = new Property[section.Properties.Length];
-            System.Array.Copy(Properties, 0, pa1, 0, pa1.Length);
-            System.Array.Copy(section.Properties, 0, pa2, 0, pa2.Length);
+            /* Compare all properties except the dictionary (id 0) and
+             * the codepage (id 1 / ignored) as they must be handled specially. */
+            HashSet<long> propIds = [.. properties.Keys, .. section.properties.Keys];
+            propIds.Remove(0L);
+            propIds.Remove(1L);
 
-            /* Extract properties 0 and 1 and remove them from the copy of the
-             * arrays. */
-            Property p10 = null;
-            Property p20 = null;
-            for(int i = 0; i < pa1.Length; i++)
-            {
-                long id = pa1[i].ID;
-                if(id == 0)
+            foreach (long id in propIds) {
+                properties.TryGetValue(id, out Property p1);
+                section.properties.TryGetValue(id, out Property p2);
+                if (p1 == null || p2 == null || !p1.Equals(p2))
                 {
-                    p10 = pa1[i];
-                    pa1 = Remove(pa1, i);
-                    i--;
+                    return false;
                 }
-                if(id == 1)
-                {
-                    pa1 = Remove(pa1, i);
-                    i--;
-                }
-            }
-            for(int i = 0; i < pa2.Length; i++)
-            {
-                long id = pa2[i].ID;
-                if(id == 0)
-                {
-                    p20 = pa2[i];
-                    pa2 = Remove(pa2, i);
-                    i--;
-                }
-                if(id == 1)
-                {
-                    pa2 = Remove(pa2, i);
-                    i--;
-                }
-            }
-
-            /* If the number of properties (not counting property 1) is unequal the
-             * sections are unequal. */
-            if(pa1.Length != pa2.Length)
-            {
-                return false;
             }
 
             /* If the dictionaries are unequal the sections are unequal. */
-            bool dictionaryEqual = true;
-            if(p10 != null && p20 != null)
-            {
-                // dictionaryEqual = p10.Value.Equals(p20.Value);
-                dictionaryEqual = CompareDictionaries(p10.Value as IDictionary, p20.Value as IDictionary);
-            }
-            else if(p10 != null || p20 != null)
-            {
-                dictionaryEqual = false;
-            }
-            if(dictionaryEqual)
-            {
-                return Util.AreEqual(pa1, pa2);
-            }
-            return false;
+            Dictionary<long, String> d1 = Dictionary;
+            Dictionary<long, String> d2 = section.Dictionary;
+
+            return (d1 == null && d2 == null) || (d1 != null && d2 != null && CompareDictionaries(d1, d2));
         }
-        static bool CompareDictionaries(IDictionary dict1, IDictionary dict2)
+
+        static bool CompareDictionaries(Dictionary<long, string> dict1, IDictionary dict2)
         {
             if(dict1.Count != dict2.Count)
             {
                 return false;
             }
 
-            foreach(DictionaryEntry pair in dict1)
+            foreach(KeyValuePair<long, string> pair in dict1)
             {
                 if(!dict2.Contains(pair.Key) || !Equals(pair.Value, dict2[pair.Key]))
                 {
@@ -802,7 +759,10 @@ using Cysharp.Text;
         /// <param name="id">The ID of the property to be removed</param>
         public void RemoveProperty(long id)
         {
-            dirty |= (properties.Remove(id));
+            if(properties.Remove(id))
+            {
+                sectionBytes.Reset();
+            }
         }
 
         /// <summary>
@@ -812,6 +772,7 @@ using Cysharp.Text;
         /// <param name="pa">The property array.</param>
         /// <param name="i">The index of the field to be removed.</param>
         /// <return>compactified array.</return>
+        [Obsolete]
         private static Property[] Remove(Property[] pa, int i)
         {
             Property[] h = new Property[pa.Length - 1];
@@ -847,10 +808,22 @@ using Cysharp.Text;
 
             /* Check whether we have already generated the bytes making out the
              * section. */
-            if(!dirty && sectionBytes != null)
+            if (sectionBytes.Position > 0)
             {
-                out1.Write(sectionBytes, 0, sectionBytes.Length);
-                return sectionBytes.Length;
+                out1.Write(sectionBytes.ToByteArray(), 0, (int)sectionBytes.Length);
+                return (int)sectionBytes.Position;
+            }
+
+            /* Writing the section's dictionary it tricky. If there is a dictionary
+             * (property 0) the codepage property (property 1) must be set, too. */
+            int codepage = Codepage;
+            if (codepage == -1)
+            {
+                //String msg =
+                //    "The codepage property is not set although a dictionary is present. "+
+                //    "Defaulting to ISO-8859-1.";
+                //LOG.log(POILogger.WARN, msg);
+                codepage = Property.DEFAULT_CODEPAGE;
             }
 
             /* The properties are written to this stream. */
@@ -869,32 +842,6 @@ using Cysharp.Text;
              * properties themselves. */
             position += 2 * LittleEndianConsts.INT_SIZE + PropertyCount * 2 * LittleEndianConsts.INT_SIZE;
 
-            /* Writing the section's dictionary it tricky. If there is a dictionary
-             * (property 0) the codepage property (property 1) must be Set, too. */
-            int codepage = -1;
-            if(GetProperty(PropertyIDMap.PID_DICTIONARY) != null)
-            {
-                Object p1 = GetProperty(PropertyIDMap.PID_CODEPAGE);
-                if(p1 != null)
-                {
-                    if(p1 is not int)
-                    {
-                        throw new IllegalPropertySetDataException
-                            ("The codepage property (ID = 1) must be an " +
-                             "int object.");
-                    }
-                }
-                else
-                {
-                    /* Warning: The codepage property is not Set although a
-                     * dictionary is present. In order to cope with this problem we
-                     * add the codepage property and Set it to Unicode. */
-                    SetProperty(PropertyIDMap.PID_CODEPAGE, Variant.VT_I2,
-                                CodePageUtil.CP_UNICODE);
-                }
-                codepage = Codepage;
-            }
-
             /* Write the properties and the property list into their respective
              * streams: */
             foreach(Property p in properties.Values)
@@ -902,51 +849,122 @@ using Cysharp.Text;
                 long id = p.ID;
 
                 /* Write the property list entry. */
-                TypeWriter.WriteUIntToStream(propertyListStream, (uint) p.ID);
-                TypeWriter.WriteUIntToStream(propertyListStream, (uint) position);
-
+                LittleEndian.PutUInt(id, propertyListStream);
+                LittleEndian.PutUInt(position, propertyListStream);
                 /* If the property ID is not equal 0 we write the property and all
                  * is fine. However, if it equals 0 we have to write the section's
                  * dictionary which has an implicit type only and an explicit
                  * value. */
                 if(id != 0)
+                {
                     /* Write the property and update the position to the next
                      * property. */
                     position += p.Write(propertyStream, Codepage);
+                }
                 else
                 {
                     if(codepage == -1)
-                        throw new IllegalPropertySetDataException
-                            ("Codepage (property 1) is undefined.");
-                    position += WriteDictionary(propertyStream, dictionary,
-                                                codepage);
+                    {
+                        throw new IllegalPropertySetDataException("Codepage (property 1) is undefined.");
+                    }
+                    position += WriteDictionary(propertyStream, codepage);
                 }
             }
-            propertyStream.Close();
-            propertyListStream.Close();
-
+            
             /* Write the section: */
-            byte[] pb1 = propertyListStream.ToArray();
-            byte[] pb2 = propertyStream.ToArray();
+            int streamLength = LittleEndianConsts.INT_SIZE * 2 + 
+                (int)propertyListStream.Length + (int)propertyStream.Length;
 
             /* Write the section's length: */
-            TypeWriter.WriteToStream(out1, LittleEndianConsts.INT_SIZE * 2 +
-                                          pb1.Length + pb2.Length);
+            LittleEndian.PutInt(streamLength, out1);
 
             /* Write the section's number of properties: */
-            TypeWriter.WriteToStream(out1, PropertyCount);
+            LittleEndian.PutInt(PropertyCount, out1);
 
             /* Write the property list: */
-            out1.Write(pb1, 0, pb1.Length);
+            propertyListStream.WriteTo(out1);
 
             /* Write the properties: */
-            out1.Write(pb2, 0, pb2.Length);
+            propertyStream.WriteTo(out1);
 
-            int streamLength = LittleEndianConsts.INT_SIZE * 2 + pb1.Length + pb2.Length;
             return streamLength;
         }
 
+        /**
+         * Reads a dictionary.
+         *
+         * @param leis The byte stream containing the bytes making out the dictionary.
+         * @param length The dictionary contains at most this many bytes.
+         * @param codepage The codepage of the string values.
+         *
+         * @return {@code true} if dictionary was read successful, {@code false} otherwise
+         *
+         * @throws UnsupportedEncodingException if the dictionary's codepage is not
+         *         (yet) supported.
+         */
+        private bool ReadDictionary(LittleEndianByteArrayInputStream leis, int length, int codepage)
+        {
+            Dictionary<long,String> dic = new Dictionary<long,String>();
 
+            /*
+             * Read the number of dictionary entries.
+             */
+            long nrEntries = leis.ReadUInt();
+
+            long id = -1;
+            bool isCorrupted = false;
+            for (int i = 0; i < nrEntries; i++)
+            {
+                String errMsg =
+                    "The property set's dictionary contains bogus data. "
+                    + "All dictionary entries starting with the one with ID "
+                    + id + " will be ignored.";
+
+                /* The key. */
+                id = leis.ReadUInt();
+
+                /* The value (a string). The length is the either the
+                 * number of (two-byte) characters if the character set is Unicode
+                 * or the number of bytes if the character set is not Unicode.
+                 * The length includes terminating 0x00 bytes which we have to strip
+                 * off to create a Java string. */
+                long sLength = leis.ReadUInt();
+
+                /* Read the string - Strip 0x00 characters from the end of the string. */
+                int cp = (codepage == -1) ? Property.DEFAULT_CODEPAGE : codepage;
+                int nrBytes = (int)((sLength-1) * (cp == CodePageUtil.CP_UNICODE ? 2 : 1));
+                if (nrBytes > 0xFFFFFF)
+                {
+                    //LOG.log(POILogger.WARN, errMsg);
+                    isCorrupted = true;
+                    break;
+                }
+
+                try 
+                {
+                    byte[] buf = IOUtils.SafelyAllocate(nrBytes, MAX_RECORD_LENGTH);
+                    leis.ReadFully(buf, 0, nrBytes);
+                    String str = CodePageUtil.GetStringFromCodePage(buf, 0, nrBytes, cp);
+
+                    int pad = 1;
+                    if (cp == CodePageUtil.CP_UNICODE)
+                    {
+                        pad = 2+((4 - ((nrBytes+2) & 0x3)) & 0x3);
+                    }
+                    leis.Skip(pad);
+
+                    dic[id] = str;
+                } 
+                catch (RuntimeException ex)
+                {
+                    //LOG.log(POILogger.WARN, errMsg, ex);
+                    isCorrupted = true;
+                    break;
+                }
+            }
+            SetDictionary(dic);
+            return !isCorrupted;
+        }
 
         /// <summary>
         /// Writes the section's dictionary.
@@ -956,58 +974,35 @@ using Cysharp.Text;
         /// <param name="codepage">The codepage to be used to write the dictionary items.</param>
         /// <return>number of bytes written</return>
         /// <exception name="IOException">if an I/O exception occurs.</exception>
-        private static int WriteDictionary(Stream out1, IDictionary dictionary, int codepage)
+        private int WriteDictionary(MemoryStream out1, int codepage)
         {
-            int length = TypeWriter.WriteUIntToStream(out1, (uint)dictionary.Count);
-            foreach(DictionaryEntry ls in dictionary)
+            byte[] padding = new byte[4];
+            Dictionary<long,String> dic = Dictionary;
+            LittleEndian.PutUInt(dic.Count, out1);
+            int length = LittleEndianConsts.INT_SIZE;
+            foreach(KeyValuePair<long, string> ls in dic)
             {
-                long key = (long)ls.Key;
-                string value = (string)ls.Value;
+                LittleEndian.PutUInt(ls.Key, out1);
+                length += LittleEndianConsts.INT_SIZE;
+
+                String value = ls.Value+"\0";
+                LittleEndian.PutUInt(value.Length, out1);
+                length += LittleEndianConsts.INT_SIZE;
+
+                byte[] bytes = CodePageUtil.GetBytesInCodePage(value, codepage);
+                out1.Write(bytes, 0, bytes.Length);
+                length += bytes.Length;
 
                 if(codepage == CodePageUtil.CP_UNICODE)
                 {
-                    /* Write the dictionary item in Unicode. */
-                    int sLength = value.Length + 1;
-                    if((sLength & 1) == 1)
-                    {
-                        sLength++;
-                    }
-                    length += TypeWriter.WriteUIntToStream(out1, (uint) key);
-                    length += TypeWriter.WriteUIntToStream(out1, (uint) sLength);
-                    byte[] ca = CodePageUtil.GetBytesInCodePage(value, codepage);
-                    //in poi, the length of byte array ca was 10, the first two bytes was [-2,-1]
-                    //in C#, the length of byte array ca was 8, so the var j should be zero here.
-                    for(int j = 0; j < ca.Length; j += 2)
-                    {
-                        out1.WriteByte(ca[j]);
-                        out1.WriteByte(ca[j + 1]);
-                        length += 2;
-                    }
-                    sLength -= value.Length;
-                    while(sLength > 0)
-                    {
-                        out1.WriteByte(0x00);
-                        out1.WriteByte(0x00);
-                        length += 2;
-                        sLength--;
-                    }
-                }
-                else
-                {
-                    /* Write the dictionary item in another codepage than
-                     * Unicode. */
-                    length += TypeWriter.WriteUIntToStream(out1, (uint) key);
-                    length += TypeWriter.WriteUIntToStream(out1, (uint) (value.Length + 1L));
-                    byte[] ba = CodePageUtil.GetBytesInCodePage(value, codepage);
-                    for(int j = 0; j < ba.Length; j++)
-                    {
-                        out1.WriteByte(ba[j]);
-                        length++;
-                    }
-                    out1.WriteByte(0x00);
-                    length++;
+                    int pad = (4 - (length & 0x3)) & 0x3;
+                    out1.Write(padding, 0, pad);
+                    length += pad;
                 }
             }
+            int pad2 = (4 - (length & 0x3)) & 0x3;
+            out1.Write(padding, 0, pad2);
+            length += pad2;
             return length;
         }
 
@@ -1027,33 +1022,39 @@ using Cysharp.Text;
         /// </exception>
         /// 
         /// @see Section#getDictionary()
-        public void SetDictionary(IDictionary dictionary)
+        public void SetDictionary(Dictionary<long, String> dictionary)
         {
 
             if(dictionary != null)
             {
-                this.dictionary = dictionary;
-
+                if(this.dictionary == null)
+                {
+                    this.dictionary = new Dictionary<long, String>();
+                }
+                foreach(var kv in dictionary)
+                {
+                    this.dictionary[kv.Key] = kv.Value;
+                }
+                
+                /* If the codepage property (ID 1) for the strings (keys and values)
+                 * used in the dictionary is not yet defined, set it to ISO-8859-1. */
+                int cp = Codepage;
+                if (cp == -1)
+                {
+                    Codepage = Property.DEFAULT_CODEPAGE;
+                }
                 /* Set the dictionary property (ID 0). Please note that the second
                  * parameter in the method call below is unused because dictionaries
                  * don't have a type. */
                 SetProperty(PropertyIDMap.PID_DICTIONARY, -1, dictionary);
 
-                /* If the codepage property (ID 1) for the strings (keys and
-                 * values) used in the dictionary is not yet defined, Set it to
-                 * Unicode. */
-                object codepage = GetProperty(PropertyIDMap.PID_CODEPAGE);
-                if(codepage == null)
-                {
-                    SetProperty(PropertyIDMap.PID_CODEPAGE, Variant.VT_I2,
-                                CodePageUtil.CP_UNICODE);
-                }
             }
             else
             {
                 /* Setting the dictionary to null means to remove property 0.
                  * However, it does not mean to remove property 1 (codepage). */
                 RemoveProperty(PropertyIDMap.PID_DICTIONARY);
+                this.dictionary = null;
             }
         }
 
@@ -1082,8 +1083,13 @@ using Cysharp.Text;
         /// @see Object#toString()
         public override String ToString()
         {
-           using var b= ZString.CreateStringBuilder();
+            return ToString(null);
+        }
+        public String ToString(PropertyIDMap idMap)
+        {
+            using var b= ZString.CreateStringBuilder();
             Property[] pa = Properties;
+            b.Append("\n\n\n");
             b.Append(GetType().Name);
             b.Append('[');
             b.Append("formatID: ");
@@ -1095,9 +1101,14 @@ using Cysharp.Text;
             b.Append(", size: ");
             b.Append(Size);
             b.Append(", properties: [\n");
-            for(int i = 0; i < pa.Length; i++)
+            int codepage = Codepage;
+            if (codepage == -1)
             {
-                b.Append(pa[i].ToString());
+                codepage = Property.DEFAULT_CODEPAGE;
+            }
+            foreach(Property p in pa)
+            {
+                b.Append(p.ToString(codepage, idMap));
                 b.Append(",\n");
             }
             b.Append(']');
@@ -1117,8 +1128,17 @@ using Cysharp.Text;
         /// <return>dictionary or <c>null</c> if the section does not have
         /// a dictionary.
         /// </return>
-        public IDictionary Dictionary => dictionary;
-
+        public Dictionary<long, String> Dictionary 
+        {
+            get
+            {
+                if(dictionary == null)
+                {
+                    dictionary = (Dictionary<long, String>)GetProperty(PropertyIDMap.PID_DICTIONARY);
+                }
+                return dictionary;
+            }    
+        }
 
         /// <summary>
         /// Gets the section's codepage, if any.
@@ -1135,6 +1155,10 @@ using Cysharp.Text;
                 }
                 int cp = (int)codepage;
                 return cp;
+            }
+            set
+            {
+                SetProperty(PropertyIDMap.PID_CODEPAGE, Variant.VT_I2, value);
             }
         }
     }

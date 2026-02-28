@@ -249,16 +249,16 @@ namespace TestCases.XSSF.Model
             ClassicAssert.AreEqual(null, wb.GetTheme());
 
             StylesTable styles = wb.GetStylesSource();
-            ClassicAssert.AreEqual(null, styles.GetTheme());
+            ClassicAssert.AreEqual(null, styles.Theme);
 
             styles.EnsureThemesTable();
 
-            ClassicAssert.IsNotNull(styles.GetTheme());
+            ClassicAssert.IsNotNull(styles.Theme);
             ClassicAssert.IsNotNull(wb.GetTheme());
 
             wb = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
             styles = wb.GetStylesSource();
-            ClassicAssert.IsNotNull(styles.GetTheme());
+            ClassicAssert.IsNotNull(styles.Theme);
             ClassicAssert.IsNotNull(wb.GetTheme());
         }
     }

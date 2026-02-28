@@ -169,7 +169,7 @@ namespace NPOI.XSSF.Streaming
             //assert(w > scaledWidth);
             double cw = GetColumnWidthInPixels(col2);
             double deltaW = w - scaledWidth;
-            int dx2 = (int)(XSSFShape.EMU_PER_PIXEL * (cw - deltaW));
+            int dx2 = (int)(Units.EMU_PER_PIXEL * (cw - deltaW));
 
             anchor.Col2 = (/*setter*/col2);
             anchor.Dx2 = (/*setter*/dx2);
@@ -185,13 +185,13 @@ namespace NPOI.XSSF.Streaming
             //assert(h > scaledHeight);
             double ch = GetRowHeightInPixels(row2);
             double deltaH = h - scaledHeight;
-            int dy2 = (int)(XSSFShape.EMU_PER_PIXEL * (ch - deltaH));
+            int dy2 = (int)(Units.EMU_PER_PIXEL * (ch - deltaH));
             anchor.Row2 = (/*setter*/row2);
             anchor.Dy2 = (/*setter*/dy2);
 
             CT_PositiveSize2D size2d = GetCTPicture().spPr.xfrm.ext;
-            size2d.cx = (/*setter*/(long)(scaledWidth * XSSFShape.EMU_PER_PIXEL));
-            size2d.cy = (/*setter*/(long)(scaledHeight * XSSFShape.EMU_PER_PIXEL));
+            size2d.cx = (/*setter*/(long)(scaledWidth * Units.EMU_PER_PIXEL));
+            size2d.cy = (/*setter*/(long)(scaledHeight * Units.EMU_PER_PIXEL));
 
             return anchor;
         }
@@ -203,7 +203,7 @@ namespace NPOI.XSSF.Streaming
             CT_Col col = sheet.GetColumnHelper().GetColumn(columnIndex, false);
             double numChars = col == null || !col.IsSetWidth() ? DEFAULT_COLUMN_WIDTH : col.width;
 
-            return (float)numChars * XSSFWorkbook.DEFAULT_CHARACTER_WIDTH;
+            return (float)numChars * Units.DEFAULT_CHARACTER_WIDTH;
         }
 
         private float GetRowHeightInPixels(int rowIndex)
@@ -214,7 +214,7 @@ namespace NPOI.XSSF.Streaming
             SXSSFSheet sheet = _wb.GetSXSSFSheet(xssfSheet);
             IRow row = sheet.GetRow(rowIndex);
             float height = row != null ? row.HeightInPoints : sheet.DefaultRowHeightInPoints;
-            return height * XSSFShape.PIXEL_DPI / XSSFShape.POINT_DPI;
+            return height * Units.PIXEL_DPI / Units.POINT_DPI;
         }
         /// <summary>
         /// <para>

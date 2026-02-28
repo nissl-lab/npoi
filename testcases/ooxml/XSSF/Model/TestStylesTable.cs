@@ -100,7 +100,7 @@ namespace TestCases.XSSF.Model
             ClassicAssert.AreEqual(1, st.StyleXfsSize);
             ClassicAssert.AreEqual(8, st.NumDataFormats);
 
-            ClassicAssert.AreEqual(2, st.GetFonts().Count);
+            ClassicAssert.AreEqual(2, st.Fonts.Count);
             ClassicAssert.AreEqual(2, st.GetFills().Count);
             ClassicAssert.AreEqual(1, st.GetBorders().Count);
 
@@ -326,7 +326,7 @@ namespace TestCases.XSSF.Model
         }
 
         [Test]
-        public void addDataFormatsBeyondUpperLimit()
+        public void AddDataFormatsBeyondUpperLimit()
         {
             XSSFWorkbook wb = new XSSFWorkbook();
 
@@ -360,7 +360,7 @@ namespace TestCases.XSSF.Model
         }
 
         [Test]
-        public void decreaseUpperLimitBelowCurrentNumDataFormats()
+        public void DecreaseUpperLimitBelowCurrentNumDataFormats()
         {
             XSSFWorkbook wb = new XSSFWorkbook();
 
@@ -392,6 +392,15 @@ namespace TestCases.XSSF.Model
                 wb.Close();
             }
         }
+        [Test]
+        public void TestLoadWithAlternateContent()
+        {
+            XSSFWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook("style-alternate-content.xlsx");
+            ClassicAssert.IsNotNull(workbook.GetStylesSource());
 
+            StylesTable st = workbook.GetStylesSource();
+
+            ClassicAssert.IsNotNull(XSSFTestDataSamples.WriteOutAndReadBack(workbook));
+        }
     }
 }

@@ -369,7 +369,7 @@ namespace TestCases.SS.Formula
         {
             TestIFEqualsFormulaEvaluation_evaluate(formula, cellType, expectedFormula, expectedValue);
             TestIFEqualsFormulaEvaluation_evaluateFormulaCell(formula, cellType, expectedFormula, expectedValue);
-            TestIFEqualsFormulaEvaluation_evaluateInCell(formula, cellType, expectedFormula, expectedValue);
+            TestIFEqualsFormulaEvaluation_evaluateInCell(formula, cellType, expectedValue);
             TestIFEqualsFormulaEvaluation_evaluateAll(formula, cellType, expectedFormula, expectedValue);
             TestIFEqualsFormulaEvaluation_evaluateAllFormulaCells(formula, cellType, expectedFormula, expectedValue);
         }
@@ -529,7 +529,7 @@ namespace TestCases.SS.Formula
         }
 
         private void TestIFEqualsFormulaEvaluation_evaluateInCell(
-                String formula, CellType cellType, String expectedFormula, double expectedResult)
+                String formula, CellType cellType, double expectedResult)
         {
             IWorkbook wb = TestIFEqualsFormulaEvaluation_setup(formula, cellType);
             ICell D1 = wb.GetSheet("IFEquals").GetRow(0).GetCell(3);

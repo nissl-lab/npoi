@@ -291,7 +291,7 @@ namespace NPOI.XSSF.UserModel
                     return _workbook.GetSheetName(sheetId);
                 }
                 String ref1 = RefersToFormula;
-                AreaReference areaRef = new AreaReference(ref1);
+                AreaReference areaRef = new AreaReference(ref1, SpreadsheetVersion.EXCEL2007);
                 return areaRef.FirstCell.SheetName;
             }
         }
@@ -422,9 +422,16 @@ namespace NPOI.XSSF.UserModel
             {
                 string col = Regex.Replace(name, "\\d", "");
                 string row = Regex.Replace(name, "[A-Za-z]", "");
-                if (CellReference.CellReferenceIsWithinRange(col, row, SpreadsheetVersion.EXCEL97))
+                try
                 {
-                    throw new ArgumentException("Invalid name: '" + name + "': cannot be $A$1-style cell reference");
+                    if (CellReference.CellReferenceIsWithinRange(col, row, SpreadsheetVersion.EXCEL2007))
+                    {
+                        throw new ArgumentException("Invalid name: '" + name + "': cannot be $A$1-style cell reference");
+                    }
+                }
+                catch (FormatException) {
+                    // row was not parseable as an Integer, such as a BigInt
+                    // therefore name passes the not-a-cell-reference criteria
                 }
             }
 

@@ -125,7 +125,7 @@ namespace NPOI.SS.Formula
             throw new InvalidOperationException("No empty space found");
         }
 
-        public bool Remove(CellCacheEntry cce)
+        public bool Remove(FormulaCellCacheEntry cce)
         {
             FormulaCellCacheEntry[] arr = _arr;
 

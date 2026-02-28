@@ -1,7 +1,7 @@
 What's NPOI
 ===================
 [![NuGet](https://img.shields.io/nuget/dt/npoi)](https://www.nuget.org/packages/NPOI)
-[![Nuget Ranking!](https://img.shields.io/badge/Nuget%20Ranking-268-1abc9c.svg)](https://github.com/nissl-lab/npoi/issues/1532)
+[![Nuget Ranking!](https://img.shields.io/badge/Nuget%20Ranking-268-red.svg)](https://github.com/nissl-lab/npoi/issues/1532)
 [![Discord](https://img.shields.io/badge/Chat-Discord-d82679.svg?logo=discord&logoColor=white)](https://discord.gg/rABUseUHme)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=flat-square&logo=Apache)](LICENSE)
 [![traffic](https://api.segment.io/v1/pixel/track?data=ewogICJ3cml0ZUtleSI6ICJBV2NjaWd1UkhKODBuNkJ4WlI4cHRaRzBINzY0RmJObCIsCiAgInVzZXJJZCI6ICJ0b255cXVzIiwKICAiZXZlbnQiOiAiTlBPSSBIb21lcGFnZSIKfQ==
@@ -19,20 +19,18 @@ Donation
 =========
 If you profits/benefits from NPOI, please [sponsor me via Github Sponsor](https://github.com/sponsors/tonyqus) or [donate this project](https://github.com/nissl-lab/npoi/discussions/923). Thank you!
 
-Get Started with NPOI
+Documentation
 ============
 
-[NPOI Tutorial on Youtube](https://github.com/nissl-lab/npoi-tutorial)
-
-[How NPOI succeed](https://tonyqus.medium.com/how-npoi-succeeds-67ceb7333eb)
+[NPOI Tutorials on Youtube](https://www.youtube.com/watch?v=H4FzMWkZNH8&list=PL7J6yRMWV1ot32hsgCZJ5sI4Fp2QKovCM&index=9)
 
 [Getting Started with NPOI](https://github.com/nissl-lab/npoi/wiki/Getting-Started-with-NPOI)
+
+[How NPOI library succeeds](https://tonyqus.medium.com/how-npoi-succeeds-67ceb7333eb)
 
 [How to use NPOI on Linux](https://github.com/nissl-lab/npoi/wiki/How-to-use-NPOI-on-Linux)
 
 [Useful Packages based on NPOI](https://github.com/nissl-lab/npoi/wiki/ORM-on-NPOI)
-
-[NPOI Changelog](https://github.com/nissl-lab/npoi/wiki/Changelog)
 
 [NPOI code examples (This example repo is private. You can get access by sponsoring me)](https://github.com/sponsors/tonyqus)
 
@@ -54,6 +52,8 @@ g. Works on both Windows and Linux
 
 System Requirement
 ===================
+.NET 8
+
 .NET Standard 2.1 (.NET Core 3.x, .NET 5, .NET 6)
 
 .NET Standard 2.0 (.NET Core 2.x)
@@ -63,5 +63,9 @@ System Requirement
 Contributors
 ===================
 ![Contributors](https://contrib.rocks/image?repo=nissl-lab/npoi)
+
+### Sponsored By
+<img src="https://github.com/user-attachments/assets/88dd41a5-9c25-43dd-ba6b-2f4f82b60ecc" alt="drawing" width="200"/>
+
 
 <a href="https://info.flagcounter.com/bndt"><img src="https://s01.flagcounter.com/count/bndt/bg_FFFFFF/txt_000000/border_CCCCCC/columns_3/maxflags_20/viewers_0/labels_1/pageviews_1/flags_0/percent_0/" alt="Flag Counter" border="0"></a>

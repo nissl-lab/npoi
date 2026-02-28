@@ -19,9 +19,11 @@ using NPOI.HSSF.UserModel;
 using NPOI.OpenXml4Net.OPC;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.POIFS.FileSystem;
+using NPOI.SS;
 using NPOI.SS.Formula;
 using NPOI.SS.Formula.Eval;
 using NPOI.SS.Formula.Functions;
+using NPOI.SS.Formula.PTG;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using NPOI.Util;
@@ -30,7 +32,8 @@ using NPOI.XSSF.Model;
 using NPOI.XSSF.Streaming;
 using NPOI.XSSF.UserModel;
 using NPOI.XSSF.UserModel.Extensions;
-using NUnit.Framework;using NUnit.Framework.Legacy;
+using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using NUnit.Framework.Constraints;
 using SixLabors.ImageSharp;
 using System;
@@ -41,6 +44,7 @@ using System.Text;
 using TestCases;
 using TestCases.HSSF;
 using TestCases.SS.UserModel;
+using TestCases.Util;
 namespace TestCases.XSSF.UserModel
 {
 
@@ -308,7 +312,7 @@ namespace TestCases.XSSF.UserModel
          *  a theme is used 
          */
         [Test]
-        public void Test48779()
+        public void Bug48779()
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("48779.xlsx");
             XSSFCell cell = wb.GetSheetAt(0).GetRow(0).GetCell(0) as XSSFCell;
@@ -1233,7 +1237,7 @@ namespace TestCases.XSSF.UserModel
          * Default Column style
          */
         [Test]
-        public void Test51037()
+        public void Bug51037()
         {
             XSSFWorkbook wb = new XSSFWorkbook();
             XSSFSheet s = wb.CreateSheet() as XSSFSheet;
@@ -1295,7 +1299,7 @@ namespace TestCases.XSSF.UserModel
 
 
             // Save, re-load and re-check 
-            wb = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
+            wb = XSSFTestDataSamples.WriteOutAndReadBack(wb);
             s = wb.GetSheetAt(0) as XSSFSheet;
             defaultStyle = wb.GetCellStyleAt(defaultStyle.Index);
             blueStyle = wb.GetCellStyleAt(blueStyle.Index);
@@ -1413,14 +1417,14 @@ namespace TestCases.XSSF.UserModel
 
             // Sheet 2 has comments
             ClassicAssert.IsNotNull(sh2.GetCommentsTable(false));
-            ClassicAssert.AreEqual(1, sh2.GetCommentsTable(false).GetNumberOfComments());
+            ClassicAssert.AreEqual(1, sh2.GetCommentsTable(false).NumberOfComments);
 
             // Sheet 1 doesn't (yet)
             ClassicAssert.IsNull(sh1.GetCommentsTable(false));
 
             // Try to add comments to Sheet 1
             ICreationHelper factory = wb1.GetCreationHelper();
-            IDrawing Drawing = sh1.CreateDrawingPatriarch();
+            IDrawing<IShape> Drawing = sh1.CreateDrawingPatriarch();
 
             IClientAnchor anchor = factory.CreateClientAnchor();
             anchor.Col1 = (0);
@@ -1462,10 +1466,10 @@ namespace TestCases.XSSF.UserModel
 
             // Check the comments
             ClassicAssert.IsNotNull(sh2.GetCommentsTable(false));
-            ClassicAssert.AreEqual(1, sh2.GetCommentsTable(false).GetNumberOfComments());
+            ClassicAssert.AreEqual(1, sh2.GetCommentsTable(false).NumberOfComments);
 
             ClassicAssert.IsNotNull(sh1.GetCommentsTable(false));
-            ClassicAssert.AreEqual(2, sh1.GetCommentsTable(false).GetNumberOfComments());
+            ClassicAssert.AreEqual(2, sh1.GetCommentsTable(false).NumberOfComments);
 
             wb2.Close();
         }
@@ -1474,7 +1478,7 @@ namespace TestCases.XSSF.UserModel
          * Sheet names with a , in them
          */
         [Test]
-        public void Test51963()
+        public void Bug51963()
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("51963.xlsx");
             ISheet sheet = wb.GetSheetAt(0);
@@ -1483,7 +1487,7 @@ namespace TestCases.XSSF.UserModel
             XSSFName name = wb.GetName("Intekon.ProdCodes") as XSSFName;
             ClassicAssert.AreEqual("'Abc,1'!$A$1:$A$2", name.RefersToFormula);
 
-            AreaReference ref1 = new AreaReference(name.RefersToFormula, NPOI.SS.SpreadsheetVersion.EXCEL2007);
+            AreaReference ref1 = wb.GetCreationHelper().CreateAreaReference(name.RefersToFormula);
             ClassicAssert.AreEqual(0, ref1.FirstCell.Row);
             ClassicAssert.AreEqual(0, ref1.FirstCell.Col);
             ClassicAssert.AreEqual(1, ref1.LastCell.Row);
@@ -1565,7 +1569,7 @@ namespace TestCases.XSSF.UserModel
          * Bug 53101:
          */
         [Test]
-        public void Test5301()
+        public void Bug5301()
         {
             IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("53101.xlsx");
             IFormulaEvaluator Evaluator =
@@ -1614,6 +1618,44 @@ namespace TestCases.XSSF.UserModel
          * (You need to supply a password explicitly for them)
          */
         [Test]
+        public void Bug55692_poifs()
+        {
+            // Via a POIFSFileSystem
+            POIFSFileSystem fsP = new POIFSFileSystem(
+                    POIDataSamples.GetPOIFSInstance().OpenResourceAsStream("protect.xlsx"));
+            try
+            {
+                WorkbookFactory.Create(fsP);
+            }
+            finally
+            {
+                fsP.Close();
+            }
+        }
+        [Test]
+        public void Bug55692_stream()
+        {
+            // Directly on a Stream, will go via NPOIFS and spot it's
+            //  actually a .xlsx file encrypted with the default password, and open
+            IWorkbook wb = WorkbookFactory.Create(
+                    POIDataSamples.GetPOIFSInstance().OpenResourceAsStream("protect.xlsx"));
+            ClassicAssert.IsNotNull(wb);
+            ClassicAssert.AreEqual(3, wb.NumberOfSheets);
+            wb.Close();
+        }
+        [Test]
+        public void Bug55692_npoifs() 
+        {
+            // Via a NPOIFSFileSystem, will spot it's actually a .xlsx file
+            //  encrypted with the default password, and open
+            POIFSFileSystem fsNP = new POIFSFileSystem(
+                    POIDataSamples.GetPOIFSInstance().OpenResourceAsStream("protect.xlsx"));
+            IWorkbook wb = WorkbookFactory.Create(fsNP);
+            ClassicAssert.IsNotNull(wb);
+            ClassicAssert.AreEqual(3, wb.NumberOfSheets);
+            wb.Close();
+            fsNP.Close();
+        }
         public void Test55692()
         {
             Stream inpA = POIDataSamples.GetPOIFSInstance().OpenResourceAsStream("protect.xlsx");
@@ -1638,7 +1680,7 @@ namespace TestCases.XSSF.UserModel
             catch (EncryptedDocumentException) { }
 
             // Via a NPOIFSFileSystem
-            NPOIFSFileSystem fsNP = new NPOIFSFileSystem(inpC);
+            POIFSFileSystem fsNP = new POIFSFileSystem(inpC);
             try
             {
                 WorkbookFactory.Create(fsNP);
@@ -2534,7 +2576,7 @@ namespace TestCases.XSSF.UserModel
                 ClassicAssert.IsNotNull(orig);
 
                 ISheet sheet = wb.CloneSheet(0);
-                IDrawing Drawing = sheet.CreateDrawingPatriarch();
+                IDrawing<IShape> Drawing = sheet.CreateDrawingPatriarch();
                 foreach (XSSFShape shape in ((XSSFDrawing)Drawing).GetShapes())
                 {
                     if (shape is XSSFPicture)
@@ -2913,7 +2955,6 @@ namespace TestCases.XSSF.UserModel
                 if (cell.CellType == CellType.Formula)
                 {
                     String formula = cell.CellFormula;
-                    //System.out.println("formula: " + formula);
                     ClassicAssert.IsNotNull(formula);
                     ClassicAssert.IsTrue(formula.Contains("WORKDAY"));
                 }
@@ -3056,7 +3097,7 @@ namespace TestCases.XSSF.UserModel
                 ISheet newSheet = wb.CreateSheet();
                 //Sheet newSheet = wb.createSheet(sheetName);
                 int newSheetIndex = wb.GetSheetIndex(newSheet);
-                //System.out.println(newSheetIndex);
+
                 wb.SetSheetName(newSheetIndex, sheetName);
                 wb.SetSheetOrder(sheetName, sheetIndex);
             }
@@ -3155,8 +3196,6 @@ namespace TestCases.XSSF.UserModel
                     {
                         ICell cell = row.GetCell(cellNum);
                         String fmtCellValue = formatter.FormatCellValue(cell);
-
-                        //System.out.Println("Cell: " + fmtCellValue);
                         ClassicAssert.IsNotNull(fmtCellValue);
                         ClassicAssert.IsFalse(fmtCellValue.Equals("0"));
                     }
@@ -3165,42 +3204,39 @@ namespace TestCases.XSSF.UserModel
             wb.Close();
         }
 
-        private void CreateXls()
+        /**
+         * helper function for {@link #test58043()}
+         * Side-effects: closes the provided workbook!
+         *
+         * @param workbook the workbook to save for manual checking
+         * @param outputFile the output file location to save the workbook to
+         */
+        private void saveRotatedTextExample(IWorkbook workbook, FileInfo outputFile)
         {
-            IWorkbook workbook = new HSSFWorkbook();
-            FileStream fileOut = new FileStream("/tmp/rotated.xls", FileMode.Create, FileAccess.ReadWrite);
-            ISheet sheet1 = workbook.CreateSheet();
-            IRow row1 = sheet1.CreateRow((short)0);
-            ICell cell1 = row1.CreateCell(0);
-            cell1.SetCellValue("Successful rotated text.");
+            ISheet sheet = workbook.CreateSheet();
+            IRow row = sheet.CreateRow((short)0);
+
+            ICell cell = row.CreateCell(0);
+
+            cell.SetCellValue("Unsuccessful rotated text.");
+
             ICellStyle style = workbook.CreateCellStyle();
-            style.Rotation = ((short)-90);
-            cell1.CellStyle = (style);
-            workbook.Write(fileOut, false);
-            fileOut.Close();
+            style.Rotation = (short)-90;
+
+            cell.CellStyle = style;
+
+            Stream fos = new FileStream(outputFile.FullName, FileMode.Create, FileAccess.ReadWrite);
+            workbook.Write(fos);
+            fos.Close();
             workbook.Close();
         }
-        private void CreateXlsx()
-        {
-            IWorkbook workbook = new XSSFWorkbook();
-            FileStream fileOut = new FileStream("/tmp/rotated.xlsx", FileMode.Create, FileAccess.ReadWrite);
-            ISheet sheet1 = workbook.CreateSheet();
-            IRow row1 = sheet1.CreateRow((short)0);
-            ICell cell1 = row1.CreateCell(0);
-            cell1.SetCellValue("Unsuccessful rotated text.");
-            ICellStyle style = workbook.CreateCellStyle();
-            style.Rotation = ((short)-90);
-            cell1.CellStyle = (style);
-            workbook.Write(fileOut, false);
-            fileOut.Close();
-            workbook.Close();
-        }
+
         [Ignore("Creates files for checking results manually, actual values are tested in Test*CellStyle")]
         [Test]
         public void Test58043()
         {
-            CreateXls();
-            CreateXlsx();
+            saveRotatedTextExample(new HSSFWorkbook(), TempFile.CreateTempFile("rotated", ".xls"));
+            saveRotatedTextExample(new XSSFWorkbook(), TempFile.CreateTempFile("rotated", ".xlsx"));
         }
         [Test]
         public void Test59132()
@@ -3216,7 +3252,7 @@ namespace TestCases.XSSF.UserModel
             row = worksheet.GetRow(2);
             cell = row.GetCell(1);
             ClassicAssert.AreEqual(CellType.Blank, cell.CellType);
-            ClassicAssert.AreEqual(CellType.Unknown, evaluator.EvaluateFormulaCell(cell));
+            ClassicAssert.AreEqual(CellType._None, evaluator.EvaluateFormulaCell(cell));
             // A3
             row = worksheet.GetRow(2);
             cell = row.GetCell(0);
@@ -3446,13 +3482,7 @@ namespace TestCases.XSSF.UserModel
 
             // we currently only populate the dimension during writing out
             // to avoid having to iterate all rows/cells in each add/remove of a row or cell
-            //OutputStream str = new FileOutputStream("/tmp/53611.xlsx");
-            var str = new ByteArrayOutputStream();
-            try {
-                wb.Write(str);
-            } finally {
-                str.Close();
-            }
+            wb.Write(new NullOutputStream());
 
             ClassicAssert.AreEqual("B2:I5", ((XSSFSheet)sheet).GetCTWorksheet().dimension.@ref);
 
@@ -3460,7 +3490,6 @@ namespace TestCases.XSSF.UserModel
         }
 
         [Test]
-        [Ignore("TODO FIX CI TESTS")]
         public void Bug61063()
         {
             IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("61063.xlsx");
@@ -3478,6 +3507,59 @@ namespace TestCases.XSSF.UserModel
             wb.Close();
         }
 
+        [Test]
+        public void Bug61516()
+        {
+            string initialFormula = "A1";
+            string expectedFormula = "#REF!"; // from ms excel
+
+            IWorkbook wb = new XSSFWorkbook();
+            ISheet sheet = wb.CreateSheet("sheet1");
+            sheet.CreateRow(0).CreateCell(0).SetCellValue(1); // A1 = 1
+
+            {
+                ICell c3 = sheet.CreateRow(2).CreateCell(2);
+                c3.SetCellFormula(initialFormula); // C3 = =A1
+                IFormulaEvaluator evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
+                CellValue cellValue = evaluator.Evaluate(c3);
+                ClassicAssert.AreEqual(1, cellValue.NumberValue, 0.0001);
+            }
+
+            {
+                FormulaShifter formulaShifter = FormulaShifter.CreateForRowCopy(0, "sheet1", 2/*firstRowToShift*/, 2/*lastRowToShift*/
+                    , -1/*step*/, SpreadsheetVersion.EXCEL2007);    // parameters 2, 2, -1 should mean : Move row range [2-2] one level up
+                XSSFEvaluationWorkbook fpb = XSSFEvaluationWorkbook.Create((XSSFWorkbook) wb);
+                Ptg[] ptgs = FormulaParser.Parse(initialFormula, fpb, FormulaType.Cell, 0); // [A1]
+                formulaShifter.AdjustFormula(ptgs, 0);    // adjusted to [A]
+                string shiftedFmla = FormulaRenderer.ToFormulaString(fpb, ptgs);    //A
+                                                                                    //Console.WriteLine(String.format("initial formula : A1; expected formula value After shifting up : #REF!; actual formula value : %s", shiftedFmla));
+                ClassicAssert.AreEqual(expectedFormula, shiftedFmla,
+                    "On copy we expect the formula to be adjusted, in this case it would point to row -1, which is an invalid REF");
+            }
+
+            {
+                FormulaShifter formulaShifter = FormulaShifter.CreateForRowShift(0, "sheet1", 2/*firstRowToShift*/, 2/*lastRowToShift*/
+                    , -1/*step*/, SpreadsheetVersion.EXCEL2007);    // parameters 2, 2, -1 should mean : Move row range [2-2] one level up
+                XSSFEvaluationWorkbook fpb = XSSFEvaluationWorkbook.Create((XSSFWorkbook) wb);
+                Ptg[] ptgs = FormulaParser.Parse(initialFormula, fpb, FormulaType.Cell, 0); // [A1]
+                formulaShifter.AdjustFormula(ptgs, 0);    // adjusted to [A]
+                string shiftedFmla = FormulaRenderer.ToFormulaString(fpb, ptgs);    //A
+                                                                                    //Console.WriteLine(String.format("initial formula : A1; expected formula value After shifting up : #REF!; actual formula value : %s", shiftedFmla));
+                ClassicAssert.AreEqual(initialFormula, shiftedFmla,
+                    "On Move we expect the formula to stay the same, thus expecting the initial formula A1 here");
+            }
+
+            sheet.ShiftRows(2, 2, -1);
+            {
+                ICell c2 = sheet.GetRow(1).GetCell(2);
+                ClassicAssert.IsNotNull(c2, "cell C2 needs to exist now");
+                ClassicAssert.AreEqual(CellType.Formula, c2.CellType);
+                ClassicAssert.AreEqual(initialFormula, c2.CellFormula);
+                IFormulaEvaluator evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
+                CellValue cellValue = evaluator.Evaluate(c2);
+                ClassicAssert.AreEqual(1, cellValue.NumberValue, 0.0001);
+            }
+        }
         [Test]
         public void TestBug690()
         {
@@ -3557,5 +3639,7 @@ namespace TestCases.XSSF.UserModel
                 ClassicAssert.IsTrue(shiftedRow.GetCell(3).StringCellValue.Equals("D2"));
             }
         }
+
+
     }
 }

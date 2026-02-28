@@ -135,7 +135,7 @@ namespace TestCases.HSSF.UserModel
             if (recs.Length == 28 && recs[23] is StringRecord)
             {
                 wb.Close();
-                throw new AssertionException("Identified bug - leftover StringRecord");
+                Assert.Fail("Identified bug - leftover StringRecord");
             }
             ConfirmStringRecord(sheet, false);
 
@@ -246,6 +246,7 @@ namespace TestCases.HSSF.UserModel
             ClassicAssert.AreEqual(0, ((HSSFSheet)wb.GetSheetAt(0)).Sheet.ActiveCellCol);
 
             cell.SetAsActiveCell();
+            cell.SetCellValue("this should be active");
 
             ClassicAssert.AreEqual(1, ((HSSFSheet)wb.GetSheetAt(0)).Sheet.ActiveCellRow);
             ClassicAssert.AreEqual(3, ((HSSFSheet)wb.GetSheetAt(0)).Sheet.ActiveCellCol);
@@ -387,13 +388,13 @@ namespace TestCases.HSSF.UserModel
             try
             {
                 styA.VerifyBelongsToWorkbook(wbB);
-                Assert.Fail();
+                Assert.Fail("expected ArgumentException");
             }
             catch (ArgumentException) { }
             try
             {
                 styB.VerifyBelongsToWorkbook(wbA);
-                Assert.Fail();
+                Assert.Fail("expected ArgumentException");
             }
             catch (ArgumentException) { }
 
@@ -405,13 +406,13 @@ namespace TestCases.HSSF.UserModel
             try
             {
                 cellA.CellStyle = (styB);
-                Assert.Fail();
+                Assert.Fail("expected ArgumentException");
             }
             catch (ArgumentException) { }
             try
             {
                 cellB.CellStyle = (styA);
-                Assert.Fail();
+                Assert.Fail("expected ArgumentException");
             }
             catch (ArgumentException) { }
 

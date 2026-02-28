@@ -128,7 +128,7 @@ namespace NPOI.SS.Formula
          * Be aware that your cell value will be Changed to hold the
          *  result of the formula. If you simply want the formula
          *  value computed for you, use {@link #EvaluateFormulaCellEnum(Cell)}}
-         * @param cell
+         * @param cell The {@code Cell} to evaluate and modify.
          * @return the {@code cell} that was passed in, allowing for chained calls
          */
 
@@ -144,6 +144,12 @@ namespace NPOI.SS.Formula
                 CellValue cv = EvaluateFormulaCellValue(cell);
                 SetCellValue(cell, cv);
                 SetCellType(cell, cv); // cell will no longer be a formula cell
+
+                // Due to bug 46479 we should call setCellValue() before setCellType(),
+                // but bug 61148 showed a case where it would be better the other
+                // way around, so for now we call setCellValue() a second time to
+                // handle both cases correctly. There is surely a better way to do this, though...
+                SetCellValue(cell, cv);
             }
             return result;
         }
@@ -151,23 +157,34 @@ namespace NPOI.SS.Formula
         protected abstract CellValue EvaluateFormulaCellValue(ICell cell);
 
         /**
-         * If cell Contains formula, it Evaluates the formula, and saves the result of the formula. The
-         * cell remains as a formula cell. If the cell does not contain formula, this method returns -1
-         * and leaves the cell unChanged.
-         *
-         * Note that the type of the <em>formula result</em> is returned, so you know what kind of
-         * cached formula result is also stored with  the formula.
+         * If cell contains formula, it evaluates the formula,
+         *  and saves the result of the formula. The cell
+         *  remains as a formula cell.
+         * Else if cell does not contain formula, this method leaves
+         *  the cell unchanged.
+         * Note that the type of the formula result is returned,
+         *  so you know what kind of value is also stored with
+         *  the formula.
          * <pre>
-         * int EvaluatedCellType = Evaluator.EvaluateFormulaCell(cell);
+         * CellType evaluatedCellType = evaluator.evaluateFormulaCellEnum(cell);
          * </pre>
-         * Be aware that your cell will hold both the formula, and the result. If you want the cell
-         * Replaced with the result of the formula, use {@link #EvaluateInCell(NPOI.SS.UserModel.Cell)}
-         * @param cell The cell to Evaluate
-         * @return -1 for non-formula cells, or the type of the <em>formula result</em>
+         * Be aware that your cell will hold both the formula,
+         *  and the result. If you want the cell replaced with
+         *  the result of the formula, use {@link #evaluate(org.apache.poi.ss.usermodel.Cell)} }
+         * @param cell The cell to evaluate
+         * @return The type of the formula result (the cell's type remains as CellType.FORMULA however)
+         *         If cell is not a formula cell, returns {@link CellType#_NONE} rather than throwing an exception.
          */
         public CellType EvaluateFormulaCell(ICell cell)
         {
-            return EvaluateFormulaCellEnum(cell);
+            if (cell == null || cell.CellType != CellType.Formula)
+            {
+                return CellType._None;
+            }
+            CellValue cv = EvaluateFormulaCellValue(cell);
+            // cell remains a formula cell, but the cached value is Changed
+            SetCellValue(cell, cv);
+            return cv.CellType;
         }
 
         /**
@@ -190,16 +207,11 @@ namespace NPOI.SS.Formula
          *         If cell is not a formula cell, returns {@link CellType#_NONE} rather than throwing an exception.
          * @since POI 3.15 beta 3
          */
+        [Obsolete("use <c>evaluateFormulaCell(cell)</c> instead")]
+        [Removal(Version = "4.2")]
         public virtual CellType EvaluateFormulaCellEnum(ICell cell)
         {
-            if (cell == null || cell.CellType != CellType.Formula)
-            {
-                return CellType.Unknown;
-            }
-            CellValue cv = EvaluateFormulaCellValue(cell);
-            // cell remains a formula cell, but the cached value is Changed
-            SetCellValue(cell, cv);
-            return cv.CellType;
+            return EvaluateFormulaCell(cell);
         }
 
         protected static void SetCellType(ICell cell, CellValue cv)

@@ -52,7 +52,7 @@ namespace NPOI.SS.Formula.Functions
         }
 
 
-        protected override int MaxNumOperands
+        internal override int MaxNumOperands
         {
             get
             {

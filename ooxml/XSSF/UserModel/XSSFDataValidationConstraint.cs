@@ -20,6 +20,7 @@ using System.Text;
 using NPOI.Util;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using System.Text.RegularExpressions;
+using NPOI.OpenXml4Net.Util;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -127,7 +128,7 @@ namespace NPOI.XSSF.UserModel
                         {
                             builder.Append(LIST_SEPARATOR);
                         }
-                        builder.Append(string1);
+                        builder.Append(XmlHelper.EncodeCDATAContent(string1));
                     }
                     builder.Append(QUOTE);
                     Formula1 = builder.ToString();

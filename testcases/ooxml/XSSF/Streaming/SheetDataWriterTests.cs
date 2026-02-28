@@ -31,7 +31,7 @@ namespace TestCases.XSSF.Streaming
         private SheetDataWriter _objectToTest;
         private SXSSFRow _row;
         private ICell _cell;
-
+        private ICellStyle _cellStyle;
         [SetUp]
         public void Init()
         {
@@ -40,6 +40,7 @@ namespace TestCases.XSSF.Streaming
             var _workbook = Substitute.For<SXSSFWorkbook>();
             var _sheet = Substitute.For<SXSSFSheet>(_workbook, _xssfsheet);
             _row = Substitute.For<SXSSFRow>(_sheet);
+            _cellStyle = _workbook.CreateCellStyle();
             _cell = Substitute.For<ICell>();
         }
 
@@ -77,7 +78,7 @@ namespace TestCases.XSSF.Streaming
             var lines = File.ReadAllLines(_objectToTest.TemporaryFilePath());
 
             ClassicAssert.True(lines.Length == 2);
-            ClassicAssert.AreEqual($"<row r=\"{1}\" customHeight=\"1\" ht=\"{row.HeightInPoints}\">", lines[0]);
+            ClassicAssert.AreEqual($"<row r=\"{1}\" customHeight=\"true\" ht=\"{row.HeightInPoints}\">", lines[0]);
             ClassicAssert.AreEqual("</row>", lines[1]);
         }
 
@@ -95,7 +96,7 @@ namespace TestCases.XSSF.Streaming
             var lines = File.ReadAllLines(_objectToTest.TemporaryFilePath());
 
             ClassicAssert.True(lines.Length == 2);
-            ClassicAssert.AreEqual("<row r=\"" + 1 + "\" hidden=\"1\">", lines[0]);
+            ClassicAssert.AreEqual("<row r=\"" + 1 + "\" hidden=\"true\">", lines[0]);
             ClassicAssert.AreEqual("</row>", lines[1]);
 
 
@@ -109,14 +110,14 @@ namespace TestCases.XSSF.Streaming
             _row.HasCustomHeight().Returns(false);
             _row.ZeroHeight.Returns(false);
             _row.IsFormatted.Returns(true);
-            _row.RowStyle.Index.Returns((short)1);
+            _row.RowStyle.Returns(_cellStyle);
             _objectToTest.WriteRow(0, _row);
             _objectToTest.Close();
 
             var lines = File.ReadAllLines(_objectToTest.TemporaryFilePath());
 
             ClassicAssert.True(lines.Length == 2);
-            ClassicAssert.AreEqual("<row r=\"" + 1 + "\" s=\"" + _row.RowStyle.Index + "\" customFormat=\"1\">", lines[0]);
+            ClassicAssert.AreEqual("<row r=\"" + 1 + "\" s=\"" + _row.RowStyleIndex + "\" customFormat=\"1\">", lines[0]);
             ClassicAssert.AreEqual("</row>", lines[1]);
 
 

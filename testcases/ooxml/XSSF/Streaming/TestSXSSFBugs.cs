@@ -21,7 +21,6 @@ namespace TestCases.XSSF.Streaming
         [Ignore("cloneSheet() not implemented")]  public override void Bug18800() { /* cloneSheet() not implemented */ }
         [Ignore("cloneSheet() not implemented")]  public override void Bug22720() { /* cloneSheet() not implemented */ }
         [Ignore("Evaluation is not fully supported")]  public override void Bug47815() { /* Evaluation is not supported */ }
-        [Ignore("Evaluation is not fully supported")]  public override void Test58113() { /* Evaluation is not supported */ }
         [Ignore("Evaluation is not fully supported")] public override void Bug46729_testMaxFunctionArguments() { /* Evaluation is not supported */ }
         [Ignore("Reading data is not supported")] public override void Bug57798() { /* Reading data is not supported */ }
 

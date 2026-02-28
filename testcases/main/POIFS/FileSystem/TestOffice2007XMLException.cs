@@ -97,6 +97,14 @@ namespace TestCases.POIFS.FileSystem
             // xls file is
             ConfirmIsPOIFS("SampleSS.xls", true);
 
+            // older biff formats aren't
+            ConfirmIsPOIFS("testEXCEL_3.xls", false);
+            ConfirmIsPOIFS("testEXCEL_4.xls", false);
+        
+            // newer excel formats are
+            ConfirmIsPOIFS("testEXCEL_5.xls", true);
+            ConfirmIsPOIFS("testEXCEL_95.xls", true);
+
             // text file isn't
             ConfirmIsPOIFS("SampleSS.txt", false);
         }
@@ -104,8 +112,7 @@ namespace TestCases.POIFS.FileSystem
         {
             using(Stream fs = OpenSampleStream(sampleFileName))
             {
-                bool actualResult = POIFSFileSystem.HasPOIFSHeader(fs);
-                ClassicAssert.AreEqual(expectedResult, actualResult);
+                ClassicAssert.AreEqual(expectedResult, FileMagicContainer.ValueOf(fs) == FileMagic.OLE2);
              }
         }
         [Test]
@@ -117,17 +124,17 @@ namespace TestCases.POIFS.FileSystem
             InputStream testInput = new ByteArrayInputStream(testData);
 
             // detect header
-            InputStream in1 = new PushbackInputStream(testInput, 10);
-            ClassicAssert.IsFalse(POIFSFileSystem.HasPOIFSHeader(in1));
+            InputStream in1 = FileMagicContainer.PrepareToCheckMagic(testInput);
+            ClassicAssert.IsFalse(FileMagicContainer.ValueOf(in1) == FileMagic.OLE2);
 
             // check if InputStream is still intact
             byte[] test = new byte[3];
-            in1.Read(test);
+            ClassicAssert.AreEqual(3, in1.Read(test));
             ClassicAssert.IsTrue(Arrays.Equals(testData, test));
             ClassicAssert.AreEqual(-1, in1.Read());
         }
         [Test]
-        public void testFileCorruptionOPOIFS()
+        public void TestFileCorruptionOPOIFS()
         {
 
             // create test InputStream
@@ -135,11 +142,13 @@ namespace TestCases.POIFS.FileSystem
             InputStream testInput = new ByteArrayInputStream(testData);
 
             // detect header
-            InputStream in1 = new PushbackInputStream(testInput, 10);
-            ClassicAssert.IsFalse(OPOIFSFileSystem.HasPOIFSHeader(in1));
+            InputStream in1 = FileMagicContainer.PrepareToCheckMagic(testInput);
+            ClassicAssert.IsFalse(FileMagicContainer.ValueOf(in1) == FileMagic.OLE2);
+            ClassicAssert.AreEqual(FileMagic.UNKNOWN, FileMagicContainer.ValueOf(in1));
+
             // check if InputStream is still intact
             byte[] test = new byte[3];
-            in1.Read(test);
+            ClassicAssert.AreEqual(3, in1.Read(test));
             ClassicAssert.IsTrue(Arrays.Equals(testData, test));
             ClassicAssert.AreEqual(-1, in1.Read());
         }

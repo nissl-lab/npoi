@@ -86,7 +86,6 @@ namespace NPOI.SS.UserModel
     /// </remarks>
     public interface ISheet : IEnumerable<IRow>
     {
-
         /// <summary>
         /// Create a new row within the sheet and return the high level representation
         /// </summary>
@@ -297,14 +296,8 @@ namespace NPOI.SS.UserModel
         /// Call <see cref="NPOI.SS.UserModel.IRow.RowNum"/> on each row 
         /// if you care which one it is.
         /// </returns>
+        [Obsolete("Use ISheet.GetEnumerator() instead")]
         IEnumerator GetRowEnumerator();
-
-
-        /// <summary>
-        /// Get the row enumerator
-        /// </summary>
-        /// <returns></returns>
-        IEnumerator GetEnumerator();
 
         /// <summary>
         /// Gets the flag indicating whether the window should show 0 (zero) in cells Containing zero value.
@@ -449,17 +442,8 @@ namespace NPOI.SS.UserModel
         /// start from scratch!
         /// </summary>
         /// <value>The drawing patriarch.</value>
-        IDrawing DrawingPatriarch { get; }
+        IDrawing<IShape> DrawingPatriarch { get; }
 
-        /// <summary>
-        /// Sets the zoom magnication for the sheet.  The zoom is expressed as a
-        /// fraction.  For example to express a zoom of 75% use 3 for the numerator
-        /// and 4 for the denominator.
-        /// </summary>
-        /// <param name="numerator">The numerator for the zoom magnification.</param>
-        /// <param name="denominator">denominator for the zoom magnification.</param>
-        [Obsolete("deprecated 2015-11-23 (circa POI 3.14beta1). Use {@link #setZoom(int)} instead.")]
-        void SetZoom(int numerator, int denominator);
         /**
          * Window zoom magnification for current view representing percent values.
          * Valid values range from 10 to 400. Horizontal & Vertical scale together.
@@ -757,13 +741,6 @@ namespace NPOI.SS.UserModel
         void AutoSizeRow(int row, bool useMergedCells);
 
         /// <summary>
-        /// Returns cell comment for the specified row and column
-        /// </summary>
-        /// <param name="row">The row.</param>
-        /// <param name="column">The column.</param>
-        [Obsolete("deprecated as of 2015-11-23 (circa POI 3.14beta1). Use {@link #getCellComment(CellAddress)} instead.")]
-        IComment GetCellComment(int row, int column);
-        /// <summary>
         /// Returns cell comment for the specified location
         /// </summary>
         /// <param name="ref1">cell location</param>
@@ -779,7 +756,7 @@ namespace NPOI.SS.UserModel
         /// <summary>
         /// Creates the top-level drawing patriarch.
         /// </summary>
-        IDrawing CreateDrawingPatriarch();
+        IDrawing<IShape> CreateDrawingPatriarch();
 
         /// <summary>
         /// Gets the parent workbook.
@@ -953,7 +930,8 @@ namespace NPOI.SS.UserModel
         CellAddress ActiveCell { get; set; }
 
         void CopyTo(IWorkbook dest, string name, bool copyStyle, bool keepFormulas);
-        
-        CellRangeAddressList GetCells(string cellranges);
+
+        NCellRange Cells { get; }
+        NRowRange Rows { get; }
     }
 }

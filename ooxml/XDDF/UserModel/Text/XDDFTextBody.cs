@@ -484,8 +484,8 @@ namespace NPOI.XDDF.UserModel.Text
             }
         }
 
-        internal Option<R> FindDefinedParagraphProperty<R>(Func<CT_TextParagraphProperties, Boolean> isSet,
-            Func<CT_TextParagraphProperties, R> getter, int level) where R : class
+        internal Option<TR> FindDefinedParagraphProperty<TR>(Func<CT_TextParagraphProperties, Boolean> isSet,
+            Func<CT_TextParagraphProperties, TR> getter, int level) where TR : class
         {
             if(_body.IsSetLstStyle() && level >= 0)
             {
@@ -493,7 +493,7 @@ namespace NPOI.XDDF.UserModel.Text
                 CT_TextParagraphProperties props = level == 0 ? list.defPPr : RetrieveProperties(list, level);
                 if(props != null && isSet.Invoke(props))
                 {
-                    return Option<R>.Some(getter.Invoke(props));
+                    return Option<TR>.Some(getter.Invoke(props));
                 }
                 else
                 {
@@ -506,11 +506,11 @@ namespace NPOI.XDDF.UserModel.Text
             }
             else
             {
-                return Option<R>.None();
+                return Option<TR>.None();
             }
         }
-        internal Option<R> FindDefinedRunProperty<R>(Func<CT_TextCharacterProperties, Boolean> isSet,
-            Func<CT_TextCharacterProperties, R> getter, int level) where R : class
+        internal Option<TR> FindDefinedRunProperty<TR>(Func<CT_TextCharacterProperties, Boolean> isSet,
+            Func<CT_TextCharacterProperties, TR> getter, int level) where TR : class
         {
             if(_body.IsSetLstStyle() && level >= 0)
             {
@@ -518,7 +518,7 @@ namespace NPOI.XDDF.UserModel.Text
                 CT_TextParagraphProperties props = level == 0 ? list.defPPr : RetrieveProperties(list, level);
                 if(props != null && props.IsSetDefRPr() && isSet.Invoke(props.defRPr))
                 {
-                    return Option<R>.Some(getter.Invoke(props.defRPr));
+                    return Option<TR>.Some(getter.Invoke(props.defRPr));
                 }
                 else
                 {
@@ -531,13 +531,13 @@ namespace NPOI.XDDF.UserModel.Text
             }
             else
             {
-                return Option<R>.None();
+                return Option<TR>.None();
             }
         }
 
 
-        internal ValueOption<R> FindDefinedParagraphValueProperty<R>(Func<CT_TextParagraphProperties, Boolean> isSet,
-            Func<CT_TextParagraphProperties, R> getter, int level) where R : struct
+        internal ValueOption<TR> FindDefinedParagraphValueProperty<TR>(Func<CT_TextParagraphProperties, Boolean> isSet,
+            Func<CT_TextParagraphProperties, TR> getter, int level) where TR : struct
         {
             if(_body.IsSetLstStyle() && level >= 0)
             {
@@ -545,7 +545,7 @@ namespace NPOI.XDDF.UserModel.Text
                 CT_TextParagraphProperties props = level == 0 ? list.defPPr : RetrieveProperties(list, level);
                 if(props != null && isSet.Invoke(props))
                 {
-                    return ValueOption<R>.Some(getter.Invoke(props));
+                    return ValueOption<TR>.Some(getter.Invoke(props));
                 }
                 else
                 {
@@ -558,11 +558,11 @@ namespace NPOI.XDDF.UserModel.Text
             }
             else
             {
-                return ValueOption<R>.None();
+                return ValueOption<TR>.None();
             }
         }
-        internal ValueOption<R> FindDefinedRunValueProperty<R>(Func<CT_TextCharacterProperties, Boolean> isSet,
-            Func<CT_TextCharacterProperties, R> getter, int level) where R : struct
+        internal ValueOption<TR> FindDefinedRunValueProperty<TR>(Func<CT_TextCharacterProperties, Boolean> isSet,
+            Func<CT_TextCharacterProperties, TR> getter, int level) where TR : struct
         {
             if(_body.IsSetLstStyle() && level >= 0)
             {
@@ -570,7 +570,7 @@ namespace NPOI.XDDF.UserModel.Text
                 CT_TextParagraphProperties props = level == 0 ? list.defPPr : RetrieveProperties(list, level);
                 if(props != null && props.IsSetDefRPr() && isSet.Invoke(props.defRPr))
                 {
-                    return ValueOption<R>.Some(getter.Invoke(props.defRPr));
+                    return ValueOption<TR>.Some(getter.Invoke(props.defRPr));
                 }
                 else
                 {
@@ -583,11 +583,11 @@ namespace NPOI.XDDF.UserModel.Text
             }
             else
             {
-                return ValueOption<R>.None();
+                return ValueOption<TR>.None();
             }
         }
 
-        private CT_TextParagraphProperties RetrieveProperties(CT_TextListStyle list, int level)
+        private static CT_TextParagraphProperties RetrieveProperties(CT_TextListStyle list, int level)
         {
             switch(level)
             {

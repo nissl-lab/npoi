@@ -70,24 +70,17 @@ namespace TestCases.HPSF.Basic
             POIDataSamples samples = POIDataSamples.GetHPSFInstance();
             using (FileStream data = samples.GetFile(POI_FS))
             {
-
                 POIFile poiFile = Util.ReadPOIFiles(data, POI_FILES)[0];
                 byte[] b = poiFile.GetBytes();
-                PropertySet ps =
-                    PropertySetFactory.Create(new ByteArrayInputStream(b));
+                PropertySet ps = PropertySetFactory.Create(new ByteArrayInputStream(b));
                 ClassicAssert.IsTrue(ps.IsDocumentSummaryInformation, "IsDocumentSummaryInformation");
                 ClassicAssert.AreEqual(ps.SectionCount, 2);
                 Section s = (Section)ps.Sections[1];
-                ClassicAssert.AreEqual(s.GetProperty(1),
-                                    CodePageUtil.CP_UTF16);
-                ClassicAssert.AreEqual(s.GetProperty(2),
-                                    -96070278);
-                ClassicAssert.AreEqual(s.GetProperty(3),
-                                    "MCon_Info zu Office bei Schreiner");
-                ClassicAssert.AreEqual(s.GetProperty(4),
-                                    "petrovitsch@schreiner-online.de");
-                ClassicAssert.AreEqual(s.GetProperty(5),
-                                    "Petrovitsch, Wilhelm");
+                ClassicAssert.AreEqual(s.GetProperty(1), CodePageUtil.CP_UTF16);
+                ClassicAssert.AreEqual(s.GetProperty(2), -96070278);
+                ClassicAssert.AreEqual(s.GetProperty(3), "MCon_Info zu Office bei Schreiner");
+                ClassicAssert.AreEqual(s.GetProperty(4), "petrovitsch@schreiner-online.de");
+                ClassicAssert.AreEqual(s.GetProperty(5), "Petrovitsch, Wilhelm");
             }
         }
     }

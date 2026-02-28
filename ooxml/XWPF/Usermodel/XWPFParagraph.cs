@@ -20,11 +20,15 @@ namespace NPOI.XWPF.UserModel
     using System.Collections.Generic;
     using NPOI.OpenXmlFormats.Wordprocessing;
     using System.Text; 
-using Cysharp.Text;
+    using Cysharp.Text;
     using NPOI.Util;
     using System.Collections;
     using NPOI.WP.UserModel;
+    using System.Linq;
     using S=NPOI.OpenXmlFormats.Shared;
+    using NPOI.POIFS.Properties;
+    using System.Data;
+    using Org.BouncyCastle.Asn1.Mozilla;
 
     /**
 * <p>A Paragraph within a Document, Table, Header etc.</p> 
@@ -132,11 +136,9 @@ using Cysharp.Text;
                 {
                     foreach (CT_R r in link.GetRList())
                     {
-                        //runs.Add(new XWPFHyperlinkRun(link, r, this));
                         XWPFHyperlinkRun hr = new XWPFHyperlinkRun(link, r, this);
                         runs.Add(hr);
                         iRuns.Add(hr);
-
                     }
                 }
                 if (o is CT_SimpleField field) {
@@ -568,18 +570,27 @@ using Cysharp.Text;
         /// <summary>
         /// Returns the paragraph alignment which shall be applied to text in this paragraph.
         /// </summary>
-        public ParagraphAlignment Alignment
+        public ParagraphAlignment? Alignment
         {
             get
             {
-                CT_PPr pr = GetCTPPr();
-                return pr == null || !pr.IsSetJc() ? ParagraphAlignment.LEFT : EnumConverter.ValueOf<ParagraphAlignment, ST_Jc>(pr.jc.val);
+                CT_PPr pr = GetCTPPr(false);
+                return (pr == null || !pr.IsSetJc()) ? ParagraphAlignment.LEFT : EnumConverter.ValueOf<ParagraphAlignment, ST_Jc>(pr.jc.val);
             }
             set
             {
-                CT_PPr pr = GetCTPPr();
-                CT_Jc jc = pr.IsSetJc() ? pr.jc : pr.AddNewJc();
-                jc.val = EnumConverter.ValueOf<ST_Jc, ParagraphAlignment>(value);
+                if(value==null)
+                {
+                    CT_PPr pr = GetCTPPr(false);
+                    if(pr!=null)
+                        pr.UnsetJc();
+                }
+                else
+                {
+                    CT_PPr pr = GetCTPPr(true);
+                    CT_Jc jc = pr.IsSetJc() ? pr.jc : pr.AddNewJc();
+                    jc.val = EnumConverter.ValueOf<ST_Jc, ParagraphAlignment>((ParagraphAlignment) value);
+                }
             }
         }
 
@@ -620,7 +631,7 @@ using Cysharp.Text;
         {
             get
             {
-                CT_PPr pr = GetCTPPr();
+                CT_PPr pr = GetCTPPr(false);
                 return (pr == null || !pr.IsSetTextAlignment()) ? TextAlignment.AUTO
                         : EnumConverter.ValueOf<TextAlignment, ST_TextAlignment>(pr.textAlignment.val);
             }
@@ -1241,8 +1252,8 @@ using Cysharp.Text;
         {
             get
             {
-                CT_OnOff wordWrap = GetCTPPr().IsSetWordWrap() ? GetCTPPr()
-                        .wordWrap : null;
+                var ppr = GetCTPPr(false);
+                CT_OnOff wordWrap = ppr!=null && ppr.IsSetWordWrap() ? ppr.wordWrap : null;
                 if (wordWrap != null)
                 {
                     return wordWrap.val;
@@ -1273,15 +1284,28 @@ using Cysharp.Text;
         {
             get
             {
-                CT_PPr pr = GetCTPPr();
+                CT_PPr pr = GetCTPPr(false);
+                if(pr==null)
+                {
+                    return null;
+                }
                 CT_String style = pr.IsSetPStyle() ? pr.pStyle : null;
                 return style != null ? style.val : null;
             }
             set
             {
-                CT_PPr pr = GetCTPPr();
-                CT_String style = pr.pStyle != null ? pr.pStyle : pr.AddNewPStyle();
-                style.val = value;
+                if(value==null)
+                {
+                    var pr= GetCTPPr(false);
+                    if(pr!=null)
+                        pr.jc = null;
+                }
+                else
+                { 
+                    CT_PPr pr = GetCTPPr(true);
+                    CT_String style = pr.pStyle != null ? pr.pStyle : pr.AddNewPStyle();
+                    style.val = value;
+                }
             }
         }
 
@@ -1291,12 +1315,15 @@ using Cysharp.Text;
          */
         private CT_PBdr GetCTPBrd(bool create)
         {
-            CT_PPr pr = GetCTPPr();
+            CT_PPr pr = GetCTPPr(create);
+            if(pr==null)
+            {
+                return null;
+            }
             CT_PBdr ct = pr.IsSetPBdr() ? pr.pBdr : null;
-            if (create && ct == null)
+            if(create && ct == null)
                 ct = pr.AddNewPBdr();
             return ct;
-
         }
 
         /**
@@ -1305,8 +1332,12 @@ using Cysharp.Text;
          */
         private CT_Spacing GetCTSpacing(bool create)
         {
-            CT_PPr pr = GetCTPPr();
-            CT_Spacing ct = pr.spacing == null ? null : pr.spacing;
+            CT_PPr pr = GetCTPPr(create);
+            if(pr==null)
+            {
+                return null;
+            }
+            CT_Spacing ct = pr?.spacing;
             if (create && ct == null)
                 ct = pr.AddNewSpacing();
             return ct;
@@ -1318,20 +1349,23 @@ using Cysharp.Text;
          */
         private CT_Ind GetCTInd(bool create)
         {
-            CT_PPr pr = GetCTPPr();
+            CT_PPr pr = GetCTPPr(create);
             CT_Ind ct = pr.ind == null ? null : pr.ind;
             if (create && ct == null)
                 ct = pr.AddNewInd();
             return ct;
         }
-
+        internal CT_PPr GetCTPPr()
+        {
+            return GetCTPPr(true);
+        }
         /**
          * Get a <b>copy</b> of the currently used CTPPr, if none is used, return
          * a new instance.
          */
-        internal CT_PPr GetCTPPr()
+        internal CT_PPr GetCTPPr(bool create)
         {
-            CT_PPr pr = paragraph.pPr == null ? paragraph.AddNewPPr()
+            CT_PPr pr = (paragraph.pPr == null||!create) ? paragraph.AddNewPPr()
                     : paragraph.pPr;
             return pr;
         }
@@ -1487,7 +1521,12 @@ using Cysharp.Text;
         /// <returns>the inserted run or null if the given pos is out of bounds.</returns>
         public XWPFRun InsertNewRun(int pos)
         {
-            if (pos >= 0 && pos <= runs.Count)
+            if(pos == runs.Count)
+            {
+                return CreateRun();
+            }
+
+            if (pos >= 0 && pos < runs.Count)
             {
                 // calculate the correct pos as our run/irun list contains
                 // hyperlinks
@@ -1511,7 +1550,7 @@ using Cysharp.Text;
             int iPos = iRuns.Count;
                 if (pos < runs.Count)
                 {
-                    XWPFRun oldAtPos = runs[(pos)];
+                    XWPFRun oldAtPos = runs[pos];
                     int oldAt = iRuns.IndexOf(oldAtPos);
                     if (oldAt != -1)
                     {
@@ -1573,28 +1612,38 @@ using Cysharp.Text;
          */
         public bool RemoveRun(int pos)
         {
-            if (pos >= 0 && pos < runs.Count)
+            if(pos >= 0 && pos < runs.Count)
             {
                 // Remove the run from our high level lists
-                XWPFRun run = runs[(pos)];
-                if (run is XWPFHyperlinkRun || run is XWPFFieldRun)
+                XWPFRun run = runs[pos];
+
+                // CTP -> CTHyperlink -> R array
+                if(run is XWPFHyperlinkRun && IsTheOnlyCTHyperlinkInRuns((XWPFHyperlinkRun) run))
                 {
-                    // TODO Add support for removing these kinds of nested runs,
-                    //  which aren't on the CTP -> R array, but CTP -> XXX -> R array
-                    throw new ArgumentException("Removing Field or Hyperlink runs not yet supported");
+                    var hl=((XWPFHyperlinkRun) run).GetCTHyperlink();
+                    hl.Parent.RemoveHyperlink(hl);
+                }
+                // CTP -> CTField -> R array
+                if(run is XWPFFieldRun && IsTheOnlyCTFieldInRuns((XWPFFieldRun) run))
+                {
+                    var sf=((XWPFFieldRun) run).GetCTField();
+                    sf.Parent.RemoveSimpleField(sf);
                 }
                 runs.RemoveAt(pos);
                 iRuns.Remove(run);
-                // Remove the run from the low-level XML
-                //calculate the correct pos as our run/irun list contains hyperlinks and fields so is different to the paragraph R array.
-                int rPos = 0;
-                for (int i = 0; i < pos; i++)
+                if(!(run is XWPFHyperlinkRun|| run is XWPFFieldRun))
                 {
-                    XWPFRun currRun = runs[i];
-                    if (!(currRun is XWPFHyperlinkRun || currRun is XWPFFieldRun))
-                        rPos++;
+                    // Remove the run from the low-level XML
+                    //calculate the correct pos as our run/irun list contains hyperlinks and fields so is different to the paragraph R array.
+                    int rPos = 0;
+                    for(int i = 0; i < pos; i++)
+                    {
+                        XWPFRun currRun = runs[i];
+                        if(!(currRun is XWPFHyperlinkRun || currRun is XWPFFieldRun))
+                            rPos++;
+                    }
+                    GetCTP().RemoveR(rPos);
                 }
-                GetCTP().RemoveR(pos);
                 return true;
             }
             return false;
@@ -1681,21 +1730,104 @@ using Cysharp.Text;
         /// <summary>
         /// Appends a new hyperlink run to this paragraph
         /// </summary>
-        /// <param name="rId">a new hyperlink run</param>
+        /// <param name="uri">hyperlink uri</param>
         /// <returns></returns>
-        public XWPFHyperlinkRun CreateHyperlinkRun(string rId)
+        public XWPFHyperlinkRun CreateHyperlinkRun(string uri)
         {
-            CT_R r = new CT_R();
-            r.AddNewRPr().rStyle = new CT_String() { val = "Hyperlink" };
+            // Create a relationship ID for this link. 
+            string rId = Part.GetPackagePart().AddExternalRelationship(
+                uri, XWPFRelation.HYPERLINK.Relation).Id;
 
-            CT_Hyperlink1 hl = paragraph.AddNewHyperlink();
-            hl.history = ST_OnOff.on;
+            // Create the run. 
+            CT_Hyperlink1 hl = GetCTP().AddNewHyperlink();
             hl.id = rId;
-            hl.Items.Add(r);
-            XWPFHyperlinkRun xwpfRun = new XWPFHyperlinkRun(hl, r, this);
-            runs.Add(xwpfRun);
-            iRuns.Add(xwpfRun);
-            return xwpfRun;
+            hl.Parent = paragraph;
+            hl.AddNewR();
+
+            XWPFHyperlinkRun link = new XWPFHyperlinkRun(hl, hl.GetRArray(0), this);
+            runs.Add(link);
+            iRuns.Add(link);
+            return link;
+        }
+        /// <summary>
+        /// insert a new hyperlink run in RunArray
+        /// </summary>
+        /// <param name="pos">The position at which the new run should be added.</param>
+        /// <param name="uri">hyperlink uri</param>
+        /// <returns>the inserted hyperlink run or null if the given pos is out of bounds.</returns>
+        public XWPFHyperlinkRun InsertNewHyperlinkRun(int pos, string uri)
+        {
+            if(pos == runs.Count)
+            {
+                return CreateHyperlinkRun(uri);
+            }
+
+            if(pos >= 0 && pos < runs.Count)
+            {
+                //find on which position of the low level XML the new run is to be added (position of the element currently in pos in the Runs list)
+                int itemPos = paragraph.Items.IndexOf(runs[pos].GetCTR());
+                if(itemPos == -1)
+                {
+                    itemPos = paragraph.Items.Count;
+                }
+
+                string rId = Part.GetPackagePart().AddExternalRelationship(
+                    uri, XWPFRelation.HYPERLINK.Relation).Id;
+
+                CT_Hyperlink1 hl = new CT_Hyperlink1();
+                hl.Parent = paragraph;
+                paragraph.Items.Insert(itemPos, hl);
+                paragraph.ItemsElementName.Insert(itemPos, ParagraphItemsChoiceType.hyperlink);
+
+                hl.id=rId;
+                XWPFHyperlinkRun newRun = new XWPFHyperlinkRun(hl, hl.AddNewR(), this);
+                UpdateRunAfterInsert(pos, newRun);
+                return newRun;
+            }
+            return null;
+        }
+        public XWPFFieldRun InsertNewFieldRun(int pos)
+        {
+            if(pos == runs.Count)
+            {
+                return CreateFieldRun();
+            }
+            if(pos >= 0 && pos < runs.Count)
+            {
+                int itemPos = paragraph.Items.IndexOf(runs[pos].GetCTR());
+                if(itemPos == -1)
+                {
+                    itemPos = paragraph.Items.Count;
+                }
+
+                CT_SimpleField ctSimpleField = new CT_SimpleField();
+                ctSimpleField.Parent = paragraph;
+                paragraph.Items.Insert(itemPos, ctSimpleField);
+                paragraph.ItemsElementName.Insert(itemPos, ParagraphItemsChoiceType.fldSimple);
+
+                XWPFFieldRun newRun = new XWPFFieldRun(ctSimpleField, ctSimpleField.AddNewR(), this);
+                UpdateRunAfterInsert(pos, newRun);
+                return newRun;
+            }
+            return null;
+        }
+        private void UpdateRunAfterInsert(int pos, XWPFRun newRun)
+        {
+            // To update the iRuns, find where we're going
+            // in the normal Runs, and go in there
+            int iPos = iRuns.Count;
+            if(pos < runs.Count)
+            {
+                XWPFRun oldAtPos = runs[pos];
+                int oldAt = iRuns.IndexOf(oldAtPos);
+                if(oldAt != -1)
+                {
+                    iPos = oldAt;
+                }
+            }
+            iRuns.Insert(iPos, newRun);
+            // Runs itself is easy to update
+            runs.Insert(pos, newRun);
         }
         /// <summary>
         /// Add a new run with a reference to the specified footnote. The footnote reference run will have the style name "FootnoteReference".
@@ -1709,6 +1841,118 @@ using Cysharp.Text;
             rstyle.val="FootnoteReference";
             var footnoteRef = ctRun.AddNewFootnoteReference();
             footnoteRef.id= footnote.Id.ToString();
+        }
+        public XWPFFieldRun CreateFieldRun()
+        {
+            CT_SimpleField ctSimpleField = paragraph.AddNewFldSimple();
+            ctSimpleField.Parent = paragraph;
+            XWPFFieldRun newRun = new XWPFFieldRun(ctSimpleField, ctSimpleField.AddNewR(), this);
+            runs.Add(newRun);
+            iRuns.Add(newRun);
+            return newRun;
+        }
+
+        public void ChangeOrientation(ST_PageOrientation orientation)
+        {
+            var pPr = paragraph.IsSetPPr()
+            ? paragraph.pPr
+            : paragraph.AddNewPPr();
+
+            // Create <w:sectPr> inside <w:pPr>
+            var sectPr = pPr.IsSetSectPr()
+            ? pPr.sectPr
+            : pPr.AddNewSectPr();
+
+            var pageSize = sectPr.IsSetPgSz()
+            ? sectPr.pgSz
+            : sectPr.AddNewPgSz();
+
+            pageSize.orient = orientation;
+            if(orientation== ST_PageOrientation.landscape)
+            {
+                pageSize.w = 842 * 20;
+                pageSize.h = 595 * 20;
+            }
+            else
+            {
+                pageSize.h = 842 * 20;
+                pageSize.w = 595 * 20;
+            }
+        }
+
+        private bool IsTheOnlyCTHyperlinkInRuns(XWPFHyperlinkRun run)
+        {
+            CT_Hyperlink1 ctHyperlink = run.GetCTHyperlink();
+            long count = runs.Count(r=>(r is XWPFHyperlinkRun) 
+            && ctHyperlink == ((XWPFHyperlinkRun) r).GetCTHyperlink());
+            return count <= 1;
+        }
+
+        private bool IsTheOnlyCTFieldInRuns(XWPFFieldRun run)
+        {
+            CT_SimpleField ctField = run.GetCTField();
+            long count = runs.Count(r=>(r is XWPFFieldRun)
+            && ctField  == ((XWPFFieldRun) r).GetCTField());
+            return count <= 1;
+        }
+
+        /// <summary>
+        /// Returns true if the paragraph has a paragraph alignment value of its own
+        /// or false in case it should fall back to the alignment value set by the paragraph style.
+        /// </summary>
+        /// <returns></returns>
+        public bool IsAlignmentSet()
+        {
+            var pr = GetCTPPr(false);
+            return pr != null && pr.IsSetJc();
+        }
+
+        public bool RunsIsEmpty()
+        {
+            return runs.Count==0;
+        }
+
+        /// <summary>
+        /// Indicates whether this paragraph should be kept on the same page as the next one.
+        /// </summary>
+        public bool IsKeepNext
+        {
+            get {
+                if(GetCTP() != null && GetCTP().pPr != null && GetCTP().pPr.IsSetKeepNext())
+                {
+                    return GetCTP().pPr.keepNext.val;
+                }
+                return false;
+
+            }
+        }
+
+        public int IndentationLeftChars 
+        {
+            get
+            {
+                var indentation = GetCTInd(false);
+                return (indentation != null && indentation.IsSetLeftChars()) ? Int32.Parse(indentation.leftChars)
+                        : -1;
+            }
+            set {
+                var indent = GetCTInd(true);
+                indent.leftChars= value.ToString();
+            }
+        }
+        public int IndentationRightChars
+        {
+            get
+            {
+                var indentation = GetCTInd(false);
+                return (indentation != null && indentation.IsSetRightChars()) ? Int32.Parse(indentation.rightChars)
+                        : -1;
+            }
+            set
+            {
+                var indent = GetCTInd(true);
+                indent.rightChars= value.ToString();
+            }
         }
     }
 

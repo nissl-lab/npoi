@@ -279,7 +279,7 @@ namespace TestCases.XSSF.UserModel
             // Has 8 number formats
             ClassicAssert.AreEqual(8, st.NumDataFormats);
             // Has 2 fonts
-            ClassicAssert.AreEqual(2, st.GetFonts().Count);
+            ClassicAssert.AreEqual(2, st.Fonts.Count);
             // Has 2 Fills
             ClassicAssert.AreEqual(2, st.GetFills().Count);
             // Has 1 border
@@ -303,7 +303,7 @@ namespace TestCases.XSSF.UserModel
             ClassicAssert.IsNotNull(ss);
 
             ClassicAssert.AreEqual(10, st.NumDataFormats);
-            ClassicAssert.AreEqual(2, st.GetFonts().Count);
+            ClassicAssert.AreEqual(2, st.Fonts.Count);
             ClassicAssert.AreEqual(2, st.GetFills().Count);
             ClassicAssert.AreEqual(1, st.GetBorders().Count);
 
@@ -829,7 +829,7 @@ namespace TestCases.XSSF.UserModel
             ICell cell9 = row3.CreateCell(2);
             cell9.SetCellValue("Bepa");
 
-            AreaReference source = new AreaReference("A1:B2", SpreadsheetVersion.EXCEL2007);
+            AreaReference source = wb.GetCreationHelper().CreateAreaReference("A1:B2");
             sheet.CreatePivotTable(source, new CellReference("H5"));
         }
 
@@ -1051,8 +1051,7 @@ namespace TestCases.XSSF.UserModel
             }
             wb.Close();
         }
-
-        [Ignore("This unit test may fail on Windows")]
+        [Test]
         public void TestBug56957CloseWorkbook()
         {
             FileInfo file = TempFile.CreateTempFile("TestBug56957_", ".xlsx");
@@ -1251,7 +1250,7 @@ namespace TestCases.XSSF.UserModel
         private static void InsertPicture(IWorkbook wb, byte[] data, PictureType picType)
         {
             ISheet sheet = wb.GetSheetAt(0);
-            IDrawing patriarch = sheet.DrawingPatriarch;
+            IDrawing<IShape> patriarch = sheet.DrawingPatriarch;
             XSSFClientAnchor anchor = new(500, 200, 0, 0, 2, 2, 4, 7) {
                 AnchorType = AnchorType.MoveDontResize
             };

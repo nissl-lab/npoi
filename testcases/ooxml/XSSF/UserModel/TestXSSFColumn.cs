@@ -205,7 +205,7 @@ namespace TestCases.XSSF.UserModel
             ClassicAssert.AreEqual((numOfCells * 2) - 1, column2Loaded.PhysicalNumberOfCells);
         }
 
-        [Ignore("may fail in unit test running")]
+        [Test]
         public void ZeroWidthTest()
         {
             FileInfo file = TempFile.CreateTempFile("poi-", ".xlsx");
@@ -395,7 +395,7 @@ namespace TestCases.XSSF.UserModel
             ClassicAssert.AreEqual(CellType.Blank, sheet.GetRow(4).GetCell(columnIndex).CellType); // Numeric cell with no data will return blank by default
             ClassicAssert.AreEqual(CellType.String, sheet.GetRow(5).GetCell(columnIndex).CellType);
 
-            _ = Assert.Throws<ArgumentException>(() => column.CreateCell(6, CellType.Unknown));
+            _ = Assert.Throws<ArgumentException>(() => column.CreateCell(6, CellType._None));
             ClassicAssert.IsNull(sheet.GetRow(6));
             ClassicAssert.IsNull(column.GetCell(6));
 
@@ -424,7 +424,7 @@ namespace TestCases.XSSF.UserModel
             ClassicAssert.IsNull(sheetLoaded.GetColumn(columnIndex).GetCell(6));
         }
 
-        [Ignore("This unit test may fail")]
+        [Test]
         public void GetCell_GetExistingAndNonExistinCells_CellsReturnedWhenExistsNullsWhenNot()
         {
             FileInfo file = TempFile.CreateTempFile("poi-", ".xlsx");

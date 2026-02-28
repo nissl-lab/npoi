@@ -19,18 +19,17 @@
 namespace NPOI.XWPF.UserModel
 {
     using System;
-    using System.IO;
-    using NPOI.Util;
     using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Xml;
+
+    using NPOI.Util;
     using NPOI.OpenXml4Net.OPC;
     using NPOI.OpenXmlFormats.Wordprocessing;
-    using System.Xml;
     using NPOI.WP.UserModel;
     using NPOI.XWPF.Model;
-    using System.Xml.Serialization;
-    using System.Diagnostics;
     using NPOI.OOXML.XWPF.Util;
-    using System.Linq;
     using NPOI.POIFS.Crypt;
 
     /**
@@ -67,7 +66,8 @@ namespace NPOI.XWPF.UserModel
         protected XWPFNumbering numbering;
         protected XWPFStyles styles;
         protected XWPFFootnotes footnotes;
-        private XWPFComments comments;
+        protected XWPFComments comments;
+        protected XWPFTheme theme;
 
         /** Handles the joy of different headers/footers for different pages */
         private XWPFHeaderFooterPolicy headerFooterPolicy;
@@ -104,26 +104,31 @@ namespace NPOI.XWPF.UserModel
                 InitFootnotes();
                 // parse the document with cursor and add
                 //    // the XmlObject to its lists
-
-                foreach (object o in ctDocument.body.Items)
+                List<CT_Body> allBody = [ctDocument.body];
+                if(ctDocument.bodyList != null)
+                    allBody.AddRange(ctDocument.bodyList);
+                foreach(CT_Body body in allBody)
                 {
-                    if (o is CT_P ctP)
+                    foreach (object o in body.Items)
                     {
-                        XWPFParagraph p = new XWPFParagraph(ctP, this);
-                        bodyElements.Add(p);
-                        paragraphs.Add(p);
-                    }
-                    else if (o is CT_Tbl tbl)
-                    {
-                        XWPFTable t = new XWPFTable(tbl, this);
-                        bodyElements.Add(t);
-                        tables.Add(t);
-                    }
-                    else if (o is CT_SdtBlock block)
-                    {
-                        XWPFSDT c = new XWPFSDT(block, this);
-                        bodyElements.Add(c);
-                        contentControls.Add(c);
+                        if (o is CT_P ctP)
+                        {
+                            XWPFParagraph p = new XWPFParagraph(ctP, this);
+                            bodyElements.Add(p);
+                            paragraphs.Add(p);
+                        }
+                        else if (o is CT_Tbl tbl)
+                        {
+                            XWPFTable t = new XWPFTable(tbl, this);
+                            bodyElements.Add(t);
+                            tables.Add(t);
+                        }
+                        else if (o is CT_SdtBlock block)
+                        {
+                            XWPFSDT c = new XWPFSDT(block, this);
+                            bodyElements.Add(c);
+                            contentControls.Add(c);
+                        }
                     }
                 }
                 // Sort out headers and footers
@@ -134,50 +139,55 @@ namespace NPOI.XWPF.UserModel
                 foreach (RelationPart rp in RelationParts) {
                     POIXMLDocumentPart p = rp.DocumentPart;
                     String relation = rp.Relationship.RelationshipType;
-                    if (relation.Equals(XWPFRelation.STYLES.Relation))
+                    if(relation.Equals(XWPFRelation.STYLES.Relation))
                     {
-                        this.styles = (XWPFStyles)p;
+                        this.styles = (XWPFStyles) p;
                         this.styles.OnDocumentRead();
                     }
-                    else if (relation.Equals(XWPFRelation.NUMBERING.Relation))
+                    else if(relation.Equals(XWPFRelation.THEME.Relation))
+                    { 
+                        this.theme = (XWPFTheme) p;
+                        this.theme.OnDocumentRead();
+                    }
+                    else if(relation.Equals(XWPFRelation.NUMBERING.Relation))
                     {
-                        this.numbering = (XWPFNumbering)p;
+                        this.numbering = (XWPFNumbering) p;
                         this.numbering.OnDocumentRead();
                     }
-                    else if (relation.Equals(XWPFRelation.FOOTER.Relation))
+                    else if(relation.Equals(XWPFRelation.FOOTER.Relation))
                     {
                         XWPFFooter footer = (XWPFFooter)p;
                         footers.Add(footer);
                         footer.OnDocumentRead();
                     }
-                    else if (relation.Equals(XWPFRelation.HEADER.Relation))
+                    else if(relation.Equals(XWPFRelation.HEADER.Relation))
                     {
                         XWPFHeader header = (XWPFHeader)p;
                         headers.Add(header);
                         header.OnDocumentRead();
                     }
-                    else if (relation.Equals(XWPFRelation.COMMENT.Relation))
+                    else if(relation.Equals(XWPFRelation.COMMENT.Relation))
                     {
-                        this.comments = (XWPFComments)p;
+                        this.comments = (XWPFComments) p;
                         this.comments.OnDocumentRead();
                     }
-                    else if (relation.Equals(XWPFRelation.SETTINGS.Relation))
+                    else if(relation.Equals(XWPFRelation.SETTINGS.Relation))
                     {
-                        settings = (XWPFSettings)p;
+                        settings = (XWPFSettings) p;
                         settings.OnDocumentRead();
                     }
-                    else if (relation.Equals(XWPFRelation.IMAGES.Relation))
+                    else if(relation.Equals(XWPFRelation.IMAGES.Relation))
                     {
                         XWPFPictureData picData = (XWPFPictureData)p;
                         picData.OnDocumentRead();
                         RegisterPackagePictureData(picData);
                         pictures.Add(picData);
                     }
-                    else if (relation.Equals(XWPFRelation.GLOSSARY_DOCUMENT.Relation))
+                    else if(relation.Equals(XWPFRelation.GLOSSARY_DOCUMENT.Relation))
                     {
                         // We don't currently process the glossary itself
                         // Until we do, we do need to load the glossary child parts of it
-                        foreach (POIXMLDocumentPart gp in p.GetRelations())
+                        foreach(POIXMLDocumentPart gp in p.GetRelations())
                         {
                             // Trigger the onDocumentRead for all the child parts
                             // Otherwise we'll hit issues on Styles, Settings etc on save
@@ -188,7 +198,7 @@ namespace NPOI.XWPF.UserModel
                                 //onDocumentRead.setAccessible(true);
                                 //onDocumentRead.invoke(gp);
                             }
-                            catch (Exception e)
+                            catch(Exception e)
                             {
                                 throw new POIXMLException(e);
                             }
@@ -449,29 +459,33 @@ namespace NPOI.XWPF.UserModel
 
         public XWPFHyperlink GetHyperlinkByID(String id)
         {
-            IEnumerator<XWPFHyperlink> iter = hyperlinks.GetEnumerator();
-            while (iter.MoveNext())
+            foreach (XWPFHyperlink link in hyperlinks)
             {
-                XWPFHyperlink link = iter.Current;
                 if (link.Id.Equals(id))
                     return link;
             }
+
+            // If the link was not found, rebuild the list (maybe a new link was added into the document) and check again.
+            InitHyperlinks();
+            foreach(XWPFHyperlink link in hyperlinks)
+            {
+                if(link.Id.Equals(id))
+                {
+                    return link;
+                }
+            }
+            // Link still not there? Giving up.
 
             return null;
         }
 
         public XWPFFootnote GetFootnoteByID(int id)
         {
-            if (footnotes == null) return null;
-            return footnotes.GetFootnoteById(id);
+            return footnotes?.GetFootnoteById(id);
         }
-        public Dictionary<int, XWPFFootnote> Endnotes
-        {
-            get
-            {
-                return endnotes;
-            }
-        }
+
+        public Dictionary<int, XWPFFootnote> Endnotes => endnotes;
+
         public XWPFFootnote GetEndnoteByID(int id)
         {
             if (endnotes == null || !endnotes.TryGetValue(id, out XWPFFootnote byId)) 
@@ -483,7 +497,7 @@ namespace NPOI.XWPF.UserModel
         {
             if (footnotes == null)
             {
-                return new List<XWPFFootnote>();
+                return [];
             }
             return footnotes.GetFootnotesList();
         }
@@ -1042,6 +1056,23 @@ namespace NPOI.XWPF.UserModel
             return styles;
         }
 
+        public XWPFTheme CreateTheme()
+        {
+            if(theme == null)
+            {
+                OpenXmlFormats.Spreadsheet.ThemeDocument themeDoc = new OpenXmlFormats.Spreadsheet.ThemeDocument();
+
+                XWPFRelation relation = XWPFRelation.THEME;
+                int i = GetRelationIndex(relation);
+
+                XWPFTheme wrapper = (XWPFTheme) CreateRelationship(relation, XWPFFactory.GetInstance() , i);
+                wrapper.SetTheme(themeDoc.AddNewTheme());
+                theme = wrapper;
+            }
+
+            return theme;
+        }
+
         /**
          * Creates an empty footnotes element for the document if one does not already exist
          * @return footnotes
@@ -1589,18 +1620,15 @@ namespace NPOI.XWPF.UserModel
              * Try to find PictureData with this Checksum. Create new, if none
              * exists.
              */
-            List<XWPFPictureData> xwpfPicDataList = null;
-            if(packagePictures.TryGetValue(Checksum, out List<XWPFPictureData> picture))
-               xwpfPicDataList = picture;
-            if (xwpfPicDataList != null)
+
+            if (packagePictures.TryGetValue(Checksum, out List<XWPFPictureData> xwpfPicDataList))
             {
-                IEnumerator<XWPFPictureData> iter = xwpfPicDataList.GetEnumerator();
-                while (iter.MoveNext() && xwpfPicData == null)
+                foreach (XWPFPictureData curElem in xwpfPicDataList)
                 {
-                    XWPFPictureData curElem = iter.Current;
                     if (Arrays.Equals(pictureData, curElem.Data))
                     {
                         xwpfPicData = curElem;
+                        break;
                     }
                 }
             }
@@ -1724,13 +1752,22 @@ namespace NPOI.XWPF.UserModel
             return numbering;
         }
 
-        /**
-         * Get Styles
-         * @return styles for this document
-         */
+        /// <summary>
+        /// return styles for this document
+        /// </summary>
+        /// <returns></returns>
         public XWPFStyles GetStyles()
         {
             return styles;
+        }
+
+        /// <summary>
+        ///  Theme document (can be null)
+        /// </summary>
+        /// <returns></returns>
+        public XWPFTheme GetTheme()
+        {
+            return theme;
         }
 
         /**
@@ -1882,44 +1919,72 @@ namespace NPOI.XWPF.UserModel
             return this;
         }
 
-        private static void FindAndReplaceTextInParagraph(XWPFParagraph paragraph, string oldValue, string newValue)
+        private static void FindAndReplaceTextInParagraph(XWPFParagraph paragraph, string oldValue, string newValue, int startPos = 0)
         {
-            var index = paragraph?.Text.IndexOf(oldValue) ?? -1;
-            if (index != -1)
+            if(paragraph == null)
+                return;
+
+            string paragraphText = string.Concat(paragraph.Runs.Select(p => p.Text));
+
+            var startIndex = paragraphText.IndexOf(oldValue, startPos);
+            if(startIndex == -1)
+                return;
+
+            int firstRun = -1;
+            int firstIndex = -1;
+
+            int lastRun = -1;
+            int lastIndex = -1;
+
+            int processedRuns = 0;
+            int processedChars = 0;
+
+            for(; processedRuns < paragraph.Runs.Count; processedRuns++)
             {
-                int? firstIndex = null;
-                int? lastIndex = null;
-                for (var i = 0; i < paragraph.Runs.Count; ++i)
+                var text = paragraph.Runs[processedRuns].Text;
+                if(processedChars + text.Length > startIndex)
                 {
-                    if (index < paragraph.Runs[i].Text.Length)
-                    {
-                        if (-index <= oldValue.Length)
-                        {
-                            if (firstIndex == null)
-                            {
-                                firstIndex = i;
-                            }
-                        }
-                        else
-                        {
-                            lastIndex = i;
-                            break;
-                        }
-                    }
-                    index -= paragraph.Runs[i].Text.Length;
+                    firstRun = processedRuns;
+                    firstIndex = startIndex - processedChars;
+                    break;
                 }
-                if (lastIndex == null)
-                {
-                    lastIndex = paragraph.Runs.Count - 1;
-                }
-                var newText = String.Concat(paragraph.Runs.Skip(firstIndex ?? 0).Take((lastIndex ?? 0) - (firstIndex ?? 0) + 1).Select(_ => _.Text));
-                newText = newText.Replace(oldValue, newValue);
-                paragraph.Runs[firstIndex ?? 0].SetText(newText);
-                for (var i = (firstIndex ?? 0) + 1; i <= lastIndex; ++i)
-                {
-                    paragraph.RemoveRun((firstIndex ?? 0) + 1);
-                }
+
+                processedChars += text.Length;
             }
+
+            int endIndex = startIndex + oldValue.Length;
+
+            for(; processedRuns < paragraph.Runs.Count; processedRuns++)
+            {
+                var text = paragraph.Runs[processedRuns].Text;
+                if(processedChars + text.Length > endIndex)
+                {
+                    lastRun = processedRuns;
+                    lastIndex = endIndex - processedChars;
+                    break;
+                }
+
+                processedChars += text.Length;
+            }
+
+            var initialFirstText = paragraph.Runs[firstRun].Text;
+            if(firstRun == lastRun)
+            {
+                paragraph.Runs[firstRun].SetText(initialFirstText.Substring(0, firstIndex) + newValue + initialFirstText.Substring(lastIndex));
+            }
+            else
+            {
+                paragraph.Runs[firstRun].SetText(initialFirstText.Substring(0, firstIndex) + newValue);
+
+                if(lastRun != -1)
+                    paragraph.Runs[lastRun].SetText(paragraph.Runs[lastRun].Text.Substring(lastIndex));
+            }
+
+            int removeTo = lastRun == -1 ? paragraph.Runs.Count : lastRun;
+            for(int i = firstRun + 1; i < removeTo; i++)
+                paragraph.RemoveRun(firstRun + 1);
+
+            FindAndReplaceTextInParagraph(paragraph, oldValue, newValue, startIndex + newValue.Length);
         }
 
         private static void FindAndReplaceTextInTable(XWPFTable table, string oldValue, string newValue)

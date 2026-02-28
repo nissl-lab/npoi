@@ -94,8 +94,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
-            sw.Write(">");
+            sw.WriteStart(nodeName);
+            sw.Write('>');
             if (this.b != null)
             {
                 foreach (CT_BooleanProperty x in this.b)
@@ -180,18 +180,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                     x.Write(sw, "scheme");
                 }
             }
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.WriteEndElement(nodeName);
         }
 
-
-        //public static string GetString(CT_Font font)
-        //{
-        //    using (StringWriter writer = new StringWriter())
-        //    {
-        //        serializer.Serialize(writer, font, namespaces);
-        //        return writer.ToString();
-        //    }
-        //}
         #region name
         [XmlElement]
         public CT_FontName name

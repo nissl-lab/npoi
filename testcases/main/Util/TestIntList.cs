@@ -201,6 +201,18 @@ namespace TestCases.Util
             ClassicAssert.AreEqual(list.Get(4), empty.Get(9));
             ClassicAssert.AreEqual(list.Get(4), empty.Get(14));
         }
+
+        [Test]
+        public void AestAddAllGrow()
+        {
+            IntList list = new IntList(0);
+            IntList addList = new IntList(0);
+            addList.Add(1);
+            addList.Add(2);
+
+            ClassicAssert.IsTrue(list.AddAll(0, addList));
+        }
+
         [Test]
         public void TestClear()
         {
@@ -240,7 +252,7 @@ namespace TestCases.Util
                 }
                 else
                 {
-                    ClassicAssert.IsTrue(!list.Contains(j));
+                    ClassicAssert.IsFalse(list.Contains(j));
                 }
             }
         }
@@ -260,10 +272,10 @@ namespace TestCases.Util
             ClassicAssert.IsTrue(list.ContainsAll(list2));
             list2.Add(10);
             ClassicAssert.IsTrue(list2.ContainsAll(list));
-            ClassicAssert.IsTrue(!list.ContainsAll(list2));
+            ClassicAssert.IsFalse(list.ContainsAll(list2));
             list.Add(11);
-            ClassicAssert.IsTrue(!list2.ContainsAll(list));
-            ClassicAssert.IsTrue(!list.ContainsAll(list2));
+            ClassicAssert.IsFalse(list2.ContainsAll(list));
+            ClassicAssert.IsFalse(list.ContainsAll(list2));
         }
         [Test]
         public void TestEquals()
@@ -271,7 +283,7 @@ namespace TestCases.Util
             IntList list = new IntList();
 
             ClassicAssert.AreEqual(list, list);
-            ClassicAssert.IsTrue(!list.Equals(null));
+            ClassicAssert.IsFalse(list.Equals(null));
             IntList list2 = new IntList(200);
 
             ClassicAssert.IsTrue(list.Equals(list2));//ClassicAssert.AreEqual(list, list2);
@@ -281,14 +293,15 @@ namespace TestCases.Util
             list.Add(1);
             list2.Add(1);
             list2.Add(0);
-            ClassicAssert.IsTrue(!list.Equals(list2));
+            ClassicAssert.IsFalse(list.Equals(list2));
             list2.RemoveValue(1);
             list2.Add(1);
             ClassicAssert.IsTrue(list.Equals(list2));//ClassicAssert.AreEqual(list, list2);
             ClassicAssert.IsTrue(list2.Equals(list));//ClassicAssert.AreEqual(list2, list);
+            ClassicAssert.AreEqual(list.GetHashCode(), list.GetHashCode());
             list2.Add(2);
-            ClassicAssert.IsTrue(!list.Equals(list2));
-            ClassicAssert.IsTrue(!list2.Equals(list));
+            ClassicAssert.IsFalse(list.Equals(list2));
+            ClassicAssert.IsFalse(list2.Equals(list));
         }
         [Test]
         public void TestGet()
@@ -352,9 +365,9 @@ namespace TestCases.Util
             list1.Add(1);
             list2.Add(2);
             list3 = new IntList(list2);
-            ClassicAssert.IsTrue(!list1.IsEmpty());
-            ClassicAssert.IsTrue(!list2.IsEmpty());
-            ClassicAssert.IsTrue(!list3.IsEmpty());
+            ClassicAssert.IsFalse(list1.IsEmpty());
+            ClassicAssert.IsFalse(list2.IsEmpty());
+            ClassicAssert.IsFalse(list3.IsEmpty());
             list1.Clear();
             list2.Remove(0);
             list3.RemoveValue(2);
@@ -433,7 +446,7 @@ namespace TestCases.Util
                     ClassicAssert.IsTrue(list.RemoveValue(j));
                     ClassicAssert.IsTrue(list.RemoveValue(j));
                 }
-                ClassicAssert.IsTrue(!list.RemoveValue(j));
+                ClassicAssert.IsFalse(list.RemoveValue(j));
             }
         }
         [Test]
@@ -460,16 +473,22 @@ namespace TestCases.Util
                     listOdd.Add(j);
                 }
             }
-            list.RemoveAll(listEven);
-            //ClassicAssert.AreEqual(list, listOdd);
-            ClassicAssert.IsTrue(list.Equals(listOdd));
-            list.RemoveAll(listOdd);
+            ClassicAssert.IsTrue(list.RemoveAll(listEven));
+            ClassicAssert.AreEqual(list, listOdd);
+
+            ClassicAssert.IsTrue(list.RemoveAll(listOdd));
             ClassicAssert.IsTrue(list.IsEmpty());
-            listCopy.RemoveAll(listOdd);
-            //ClassicAssert.AreEqual(listCopy, listEven);
-            ClassicAssert.IsTrue(listCopy.Equals(listEven));
-            listCopy.RemoveAll(listEven);
+
+            ClassicAssert.IsTrue(listCopy.RemoveAll(listOdd));
+            ClassicAssert.AreEqual(listCopy, listEven);
+
+            ClassicAssert.IsTrue(listCopy.RemoveAll(listEven));
             ClassicAssert.IsTrue(listCopy.IsEmpty());
+
+            ClassicAssert.IsFalse(list.RemoveAll(listEven));
+            ClassicAssert.IsFalse(list.RemoveAll(listOdd));
+            ClassicAssert.IsFalse(listCopy.RemoveAll(listEven));
+            ClassicAssert.IsFalse(listCopy.RemoveAll(listEven));
         }
         [Test]
         public void TestRetainAll()
@@ -495,16 +514,22 @@ namespace TestCases.Util
                     listOdd.Add(j);
                 }
             }
-            list.RetainAll(listOdd);
-            //ClassicAssert.AreEqual(list, listOdd);
-            ClassicAssert.IsTrue(list.Equals(listOdd));
-            list.RetainAll(listEven);
+            ClassicAssert.IsTrue(list.RetainAll(listOdd));
+            ClassicAssert.AreEqual(list, listOdd);
+
+            ClassicAssert.IsTrue(list.RetainAll(listEven));
             ClassicAssert.IsTrue(list.IsEmpty());
-            listCopy.RetainAll(listEven);
-            //ClassicAssert.AreEqual(listCopy, listEven);
-            ClassicAssert.IsTrue(listCopy.Equals(listEven));
-            listCopy.RetainAll(listOdd);
+
+            ClassicAssert.IsTrue(listCopy.RetainAll(listEven));
+            ClassicAssert.AreEqual(listCopy, listEven);
+
+            ClassicAssert.IsTrue(listCopy.RetainAll(listOdd));
             ClassicAssert.IsTrue(listCopy.IsEmpty());
+
+            ClassicAssert.IsFalse(list.RetainAll(listOdd));
+            ClassicAssert.IsFalse(list.RetainAll(listEven));
+            ClassicAssert.IsFalse(listCopy.RetainAll(listEven));
+            ClassicAssert.IsFalse(listCopy.RetainAll(listOdd));
         }
         [Test]
         public void TestSet()

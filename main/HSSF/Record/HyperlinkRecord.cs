@@ -35,6 +35,8 @@ namespace NPOI.HSSF.Record
     public class HyperlinkRecord : StandardRecord, ICloneable
     {
         private static POILogger logger = POILogFactory.GetLogger(typeof(HyperlinkRecord));
+        //arbitrarily selected; may need to increase
+        private static int MAX_RECORD_LENGTH = 100_000;
         /**
          * Link flags
          */
@@ -214,7 +216,7 @@ namespace NPOI.HSSF.Record
 
                     int len = in1.ReadInt();
 
-                    byte[] path_bytes = new byte[len];
+                    byte[] path_bytes = IOUtils.SafelyAllocate(len, MAX_RECORD_LENGTH);
                     in1.ReadFully(path_bytes);
 
                     _address = Encoding.UTF8.GetString(path_bytes);
@@ -232,7 +234,8 @@ namespace NPOI.HSSF.Record
                 Console.WriteLine(HexDump.ToHex(in1.ReadRemainder()));
             }
         }
-        private static byte[] ReadTail(byte[] expectedTail, ILittleEndianInput in1)
+
+        private static byte[] ReadTail(byte[] expectedTail, RecordInputStream in1)
         {
             byte[] result = new byte[TAIL_SIZE];
             in1.ReadFully(result);
@@ -249,6 +252,7 @@ namespace NPOI.HSSF.Record
             //}
             return result;
         }
+
         private static void WriteTail(byte[] tail, ILittleEndianOutput out1)
         {
             out1.Write(tail);

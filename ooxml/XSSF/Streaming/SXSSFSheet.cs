@@ -27,6 +27,7 @@ using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using NPOI.Util;
 using NPOI.XSSF.UserModel;
+using NPOI.OpenXmlFormats.Spreadsheet;
 
 namespace NPOI.XSSF.Streaming
 {
@@ -36,7 +37,7 @@ namespace NPOI.XSSF.Streaming
         internal XSSFSheet _sh;
         private readonly SXSSFWorkbook _workbook;
         //private TreeMap<Integer, SXSSFRow> _rows = new TreeMap<Integer, SXSSFRow>();
-        private readonly IDictionary<int, SXSSFRow> _rows = new Dictionary<int, SXSSFRow>();
+        private readonly Dictionary<int, SXSSFRow> _rows = new Dictionary<int, SXSSFRow>();
         private readonly SheetDataWriter _writer;
         private int _randomAccessWindowSize = SXSSFWorkbook.DEFAULT_WINDOW_SIZE;
         private readonly Lazy<AutoSizeColumnTracker> _autoSizeColumnTracker;
@@ -181,7 +182,7 @@ namespace NPOI.XSSF.Streaming
             }
         }
 
-        public IDrawing DrawingPatriarch
+        public IDrawing<IShape> DrawingPatriarch
         {
             get
             {
@@ -657,7 +658,7 @@ namespace NPOI.XSSF.Streaming
             return _sh.GetHyperlinkList();
         }
 
-        public IDrawing CreateDrawingPatriarch()
+        public IDrawing<IShape> CreateDrawingPatriarch()
         {
             return new SXSSFDrawing((SXSSFWorkbook)Workbook, (XSSFDrawing)_sh.CreateDrawingPatriarch());
         }
@@ -736,17 +737,6 @@ namespace NPOI.XSSF.Streaming
         }
 
         /// <summary>
-        /// Returns cell comment for the specified row and column
-        /// </summary>
-        /// <param name="row">The row.</param>
-        /// <param name="column">The column.</param>
-        /// <returns>cell comment or <code>null</code> if not found</returns>
-        [Obsolete("deprecated as of 2015-11-23 (circa POI 3.14beta1). Use {@link #getCellComment(CellAddress)} instead.")]
-        public IComment GetCellComment(int row, int column)
-        {
-            return GetCellComment(new CellAddress(row, column));
-        }
-        /// <summary>
         /// Returns cell comment for the specified location
         /// </summary>
         /// <param name="ref1">cell location</param>
@@ -796,11 +786,6 @@ namespace NPOI.XSSF.Streaming
             return _sh.GetDataValidations();
         }
 
-        public IEnumerator GetEnumerator()
-        {
-            return (IEnumerator<IRow>)new SortedDictionary<int,SXSSFRow>(_rows).Values.GetEnumerator();
-        }
-
         public double GetMargin(MarginType margin)
         {
             return _sh.GetMargin(margin);
@@ -821,7 +806,7 @@ namespace NPOI.XSSF.Streaming
 
         public IEnumerator GetRowEnumerator()
         {
-            return GetEnumerator();
+            return _rows.GetEnumerator();
         }
 
         public void GroupColumn(int fromColumn, int toColumn)
@@ -1261,12 +1246,6 @@ namespace NPOI.XSSF.Streaming
             return rowIndex;
         }
 
-        [Obsolete("deprecated 2015-11-23 (circa POI 3.14beta1). Use {@link #setZoom(int)} instead.")]
-        public void SetZoom(int numerator, int denominator)
-        {
-            _sh.SetZoom(numerator, denominator);
-        }
-
         /**
          * Window zoom magnification for current view representing percent values.
          * Valid values range from 10 to 400. Horizontal & Vertical scale together.
@@ -1462,6 +1441,7 @@ namespace NPOI.XSSF.Streaming
                 _sh.TabColor = value;
             }
         }
+
         public void CopyTo(IWorkbook dest, string name, bool copyStyle, bool keepFormulas)
         {
             throw new NotImplementedException();
@@ -1477,13 +1457,226 @@ namespace NPOI.XSSF.Streaming
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Enable sheet protection
+        /// </summary>
+        public void EnableLocking()
+        {
+            SafeGetProtectionField().sheet = true;
+        }
+
+        /// <summary>
+        /// Disable sheet protection
+        /// </summary>
+        public void DisableLocking()
+        {
+            SafeGetProtectionField().sheet = false;
+        }
+
+        /// <summary>
+        /// Enable or disable Autofilters locking.
+        /// This does not modify sheet protection status.
+        /// To enforce this un-/locking, call <see cref="DisableLocking()" /> or <see cref="EnableLocking()" />
+        /// </summary>
+        public void LockAutoFilter(bool enabled)
+        {
+            SafeGetProtectionField().autoFilter = enabled;
+        }
+
+        /// <summary>
+        /// Enable or disable Deleting columns locking.
+        /// This does not modify sheet protection status.
+        /// To enforce this un-/locking, call <see cref="DisableLocking()" /> or <see cref="EnableLocking()" />
+        /// </summary>
+        public void LockDeleteColumns(bool enabled)
+        {
+            SafeGetProtectionField().deleteColumns = enabled;
+        }
+
+        /// <summary>
+        /// Enable or disable Deleting rows locking.
+        /// This does not modify sheet protection status.
+        /// To enforce this un-/locking, call <see cref="DisableLocking()" /> or <see cref="EnableLocking()" />
+        /// </summary>
+        public void LockDeleteRows(bool enabled)
+        {
+            SafeGetProtectionField().deleteRows = enabled;
+        }
+
+        /// <summary>
+        /// Enable or disable Formatting cells locking.
+        /// This does not modify sheet protection status.
+        /// To enforce this un-/locking, call <see cref="DisableLocking()" /> or <see cref="EnableLocking()" />
+        /// </summary>
+        public void LockFormatCells(bool enabled)
+        {
+            SafeGetProtectionField().formatCells = enabled;
+        }
+
+        /// <summary>
+        /// Enable or disable Formatting columns locking.
+        /// This does not modify sheet protection status.
+        /// To enforce this un-/locking, call <see cref="DisableLocking()" /> or <see cref="EnableLocking()" />
+        /// </summary>
+        public void LockFormatColumns(bool enabled)
+        {
+            SafeGetProtectionField().formatColumns = enabled;
+        }
+
+        /// <summary>
+        /// Enable or disable Formatting rows locking.
+        /// This does not modify sheet protection status.
+        /// To enforce this un-/locking, call <see cref="DisableLocking()" /> or <see cref="EnableLocking()" />
+        /// </summary>
+        public void LockFormatRows(bool enabled)
+        {
+            SafeGetProtectionField().formatRows = enabled;
+        }
+
+        /// <summary>
+        /// Enable or disable Inserting columns locking.
+        /// This does not modify sheet protection status.
+        /// To enforce this un-/locking, call <see cref="DisableLocking()" /> or <see cref="EnableLocking()" />
+        /// </summary>
+        public void LockInsertColumns(bool enabled)
+        {
+            SafeGetProtectionField().insertColumns = enabled;
+        }
+
+        /// <summary>
+        /// Enable or disable Inserting hyperlinks locking.
+        /// This does not modify sheet protection status.
+        /// To enforce this un-/locking, call <see cref="DisableLocking()" /> or <see cref="EnableLocking()" />
+        /// </summary>
+        public void LockInsertHyperlinks(bool enabled)
+        {
+            SafeGetProtectionField().insertHyperlinks = enabled;
+        }
+
+        /// <summary>
+        /// Enable or disable Inserting rows locking.
+        /// This does not modify sheet protection status.
+        /// To enforce this un-/locking, call <see cref="DisableLocking()" /> or <see cref="EnableLocking()" />
+        /// </summary>
+        public void LockInsertRows(bool enabled)
+        {
+            SafeGetProtectionField().insertRows = enabled;
+        }
+
+        /// <summary>
+        /// Enable or disable Pivot Tables locking.
+        /// This does not modify sheet protection status.
+        /// To enforce this un-/locking, call <see cref="DisableLocking()" /> or <see cref="EnableLocking()" />
+        /// </summary>
+        public void LockPivotTables(bool enabled)
+        {
+            SafeGetProtectionField().pivotTables = enabled;
+        }
+
+        /// <summary>
+        /// Enable or disable Sort locking.
+        /// This does not modify sheet protection status.
+        /// To enforce this un-/locking, call <see cref="DisableLocking()" /> or <see cref="EnableLocking()" />
+        /// </summary>
+        public void LockSort(bool enabled)
+        {
+            SafeGetProtectionField().sort = enabled;
+        }
+
+        /// <summary>
+        /// Enable or disable Objects locking.
+        /// This does not modify sheet protection status.
+        /// To enforce this un-/locking, call <see cref="DisableLocking()" /> or <see cref="EnableLocking()" />
+        /// </summary>
+        public void LockObjects(bool enabled)
+        {
+            SafeGetProtectionField().objects = enabled;
+        }
+
+        /// <summary>
+        /// Enable or disable Scenarios locking.
+        /// This does not modify sheet protection status.
+        /// To enforce this un-/locking, call <see cref="DisableLocking()" /> or <see cref="EnableLocking()" />
+        /// </summary>
+        public void LockScenarios(bool enabled)
+        {
+            SafeGetProtectionField().scenarios = enabled;
+        }
+
+        /// <summary>
+        /// Enable or disable Selection of locked cells locking.
+        /// This does not modify sheet protection status.
+        /// To enforce this un-/locking, call <see cref="DisableLocking()" /> or <see cref="EnableLocking()" />
+        /// </summary>
+        public void LockSelectLockedCells(bool enabled)
+        {
+            SafeGetProtectionField().selectLockedCells = enabled;
+        }
+
+        /// <summary>
+        /// Enable or disable Selection of unlocked cells locking.
+        /// This does not modify sheet protection status.
+        /// To enforce this un-/locking, call <see cref="DisableLocking()" /> or <see cref="EnableLocking()" />
+        /// </summary>
+        public void LockSelectUnlockedCells(bool enabled)
+        {
+            SafeGetProtectionField().selectUnlockedCells = enabled;
+        }
+
+        private CT_SheetProtection SafeGetProtectionField()
+        {
+            CT_Worksheet ct = _sh.GetCTWorksheet();
+            if (!IsSheetProtectionEnabled())
+            {
+                return ct.AddNewSheetProtection();
+            }
+            return ct.sheetProtection;
+        }
+
+        /* package */
+        internal bool IsSheetProtectionEnabled()
+        {
+            CT_Worksheet ct = _sh.GetCTWorksheet();
+            return (ct.IsSetSheetProtection());
+        }
+
+        /// <summary>
+        /// Set background color of the sheet tab
+        /// </summary>
+        /// <param name="colorIndex"> the indexed color to Set, must be a constant from <see cref="IndexedColors"/></param>
+        public void SetTabColor(int colorIndex)
+        {
+            CT_Worksheet ct = _sh.GetCTWorksheet();
+            CT_SheetPr pr = ct.sheetPr;
+            if (pr == null) pr = ct.AddNewSheetPr();
+            CT_Color color = new CT_Color();
+            color.indexed = (uint)colorIndex;
+            pr.tabColor = color;
+        }
+
         IEnumerator<IRow> IEnumerable<IRow>.GetEnumerator()
         {
-            return ((IEnumerable<IRow>) _sh).GetEnumerator();
+            return _rows.Values.GetEnumerator();
         }
-        public CellRangeAddressList GetCells(string cellranges)
+
+        public IEnumerator GetEnumerator()
         {
-            return CellRangeAddressList.Parse(cellranges);
+            return _rows.Values.GetEnumerator();
+        }
+
+        public NCellRange Cells
+        {
+            get
+            {
+                return new NCellRange(this, 0, 0, this.Workbook.SpreadsheetVersion.MaxRows, this.Workbook.SpreadsheetVersion.MaxColumns);
+            }
+        }
+        public NRowRange Rows
+        {
+            get
+            {
+                return new NRowRange(this, 0, this.Workbook.SpreadsheetVersion.MaxRows);
+            }
         }
     }
 }

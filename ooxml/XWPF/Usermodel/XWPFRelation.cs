@@ -17,6 +17,7 @@
 
 namespace NPOI.XWPF.UserModel
 {
+    using NPOI.OpenXml4Net.OPC;
     using System;
     using System.Collections.Generic;
     /**
@@ -25,6 +26,8 @@ namespace NPOI.XWPF.UserModel
     public class XWPFRelation : POIXMLRelation
     {
 
+        private static String NS_DRAWINGML = XSSF.UserModel.XSSFRelation.NS_DRAWINGML;
+
         /**
          * A map to lookup POIXMLRelation by its relation type
          */
@@ -32,26 +35,26 @@ namespace NPOI.XWPF.UserModel
 
 
         public static XWPFRelation DOCUMENT = new XWPFRelation(
-                "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml",
-            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument",
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml",
+            PackageRelationshipTypes.CORE_DOCUMENT,
             "/word/document.xml",
-                null
+            null
         );
         public static XWPFRelation TEMPLATE = new XWPFRelation(
-              "application/vnd.openxmlformats-officedocument.wordprocessingml.template.main+xml",
-          "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument",
-          "/word/document.xml",
-              null
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.template.main+xml",
+            PackageRelationshipTypes.CORE_DOCUMENT,
+            "/word/document.xml",
+            null
         );
         public static XWPFRelation MACRO_DOCUMENT = new XWPFRelation(
-                "application/vnd.ms-word.document.macroEnabled.main+xml",
-            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument",
+            "application/vnd.ms-word.document.macroEnabled.main+xml",
+            PackageRelationshipTypes.CORE_DOCUMENT,
             "/word/document.xml",
-                null
+            null
         );
         public static XWPFRelation MACRO_TEMPLATE_DOCUMENT = new XWPFRelation(
-                "application/vnd.ms-word.template.macroEnabledTemplate.main+xml",
-            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument",
+            "application/vnd.ms-word.template.macroEnabledTemplate.main+xml",
+            PackageRelationshipTypes.CORE_DOCUMENT,
             "/word/document.xml",
             null
         );
@@ -108,7 +111,7 @@ namespace NPOI.XWPF.UserModel
             "application/vnd.openxmlformats-officedocument.theme+xml",
             "http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme",
             "/word/theme/theme#.xml",
-            null
+            typeof(XWPFTheme)
         );
         public static XWPFRelation HYPERLINK = new XWPFRelation(
                 null,
@@ -204,6 +207,13 @@ namespace NPOI.XWPF.UserModel
                 "/word/media/image#.wpg",
                 typeof(XWPFPictureData)
         );
+        public static XWPFRelation HDPHOTO_WDP = new XWPFRelation(
+            "image/vnd.ms-photo",
+            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image",
+            "/ppt/media/hdphoto#.wdp",
+            typeof(XWPFPictureData)
+    );
+
         public static XWPFRelation IMAGE_SVG = new XWPFRelation(
                 "image/svg",
                 "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image",

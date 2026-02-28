@@ -196,8 +196,6 @@ namespace TestCases.XSSF.Streaming
         private static void assumeRequiredFontsAreInstalled(IWorkbook workbook, ICell cell) {
             // autoSize will fail if required fonts are not installed, skip this test then
             IFont font = workbook.GetFontAt(cell.CellStyle.FontIndex);
-            //System.out.Println(font.FontHeightInPoints);
-            //System.out.Println(font.FontName);
             Assume.That(SheetUtil.CanComputeColumnWidth(font),
                 "Cannot verify autoSizeColumn() because the necessary Fonts are not installed on this machine: " + font);
         }

@@ -46,9 +46,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:numId", this.numId);
-            sw.Write(">");
+            sw.Write('>');
             if (this.abstractNumId != null)
                 this.abstractNumId.Write(sw, "abstractNumId");
             if (this.lvlOverride != null)
@@ -159,9 +159,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:ilvl", this.ilvl);
-            sw.Write(">");
+            sw.Write('>');
             if (this.startOverride != null)
                 this.startOverride.Write(sw, "startOverride");
             if (this.lvl != null)
@@ -339,6 +339,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             }
         }
 
+        public int SizeOfAbstractNumArray
+        {
+            get { return abstractNum.Count; }
+        }
+
         public IList<CT_Num> GetNumList()
         {
             return numField;
@@ -454,9 +459,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:numPicBulletId", this.numPicBulletId);
-            sw.Write(">");
+            sw.Write('>');
             if (this.pict != null)
                 this.pict.Write(sw, "pict");
             sw.WriteEndW(nodeName);
@@ -488,7 +493,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
             sw.Write("/>");
         }
@@ -719,9 +724,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
-            sw.Write(">");
+            sw.Write('>');
             sw.WriteEndW(nodeName);
         }
 
@@ -801,8 +806,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
-            sw.Write(">");
+            sw.WriteStartW(nodeName);
+            sw.Write('>');
             if (this.ilvl != null)
                 this.ilvl.Write(sw, "ilvl");
             if (this.numId != null)
@@ -904,10 +909,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:font", this.font);
             XmlHelper.WriteAttribute(sw, "w:char", this.@char);
-            sw.Write(">");
+            sw.Write('>');
             sw.WriteEndW(nodeName);
         }
 
@@ -1100,7 +1105,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         public void Set(CT_AbstractNum cT_AbstractNum)
         {
             this.abstractNumIdField = cT_AbstractNum.abstractNumIdField;
-            this.lvlField = new List<CT_Lvl>(cT_AbstractNum.lvlField);
+            this.lvlField = cT_AbstractNum.lvlField == null ? new List<CT_Lvl>() : new List<CT_Lvl>(cT_AbstractNum.lvlField);
             this.multiLevelTypeField = cT_AbstractNum.multiLevelTypeField;
             this.nameField = cT_AbstractNum.nameField;
             this.nsidField = cT_AbstractNum.nsidField;
@@ -1138,9 +1143,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:abstractNumId", this.abstractNumId);
-            sw.Write(">");
+            sw.Write('>');
             if (this.nsid != null)
                 this.nsid.Write(sw, "nsid");
             if (this.multiLevelType != null)
@@ -1205,7 +1210,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
             sw.Write("/>");
         }
@@ -1344,12 +1349,12 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:ilvl", this.ilvl);
             XmlHelper.WriteAttribute(sw, "w:tplc", this.tplc);
             if(this.tentative!= ST_OnOff.off|| this.tentativeFieldSpecified)
                 XmlHelper.WriteAttribute(sw, "w:tentative", this.tentative.ToString());
-            sw.Write(">");
+            sw.Write('>');
             if (this.start != null)
                 this.start.Write(sw, "start");
             if (this.numFmt != null)
@@ -1622,7 +1627,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
             sw.Write("/>");
         }
@@ -1682,7 +1687,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:val", this.val);
             if(this.@null!= ST_OnOff.off)
                 XmlHelper.WriteAttribute(sw, "w:null", this.@null.ToString());
@@ -1762,11 +1767,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:legacy", this.legacy.ToString());
             XmlHelper.WriteAttribute(sw, "w:legacySpace", this.legacySpace);
             XmlHelper.WriteAttribute(sw, "w:legacyIndent", this.legacyIndent);
-            sw.Write(">");
+            sw.Write('>');
             sw.WriteEndW(nodeName);
         }
 
@@ -1893,7 +1898,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:name", this.name);
             if (locked != ST_OnOff.off)
                 XmlHelper.WriteAttribute(sw, "w:locked", this.locked.ToString());
@@ -2061,13 +2066,13 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal new void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "original", this.original);
             XmlHelper.WriteAttribute(sw, "author", this.author);
             XmlHelper.WriteAttribute(sw, "date", this.date);
             XmlHelper.WriteAttribute(sw, "id", this.id);
-            sw.Write(">");
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.Write('>');
+            sw.WriteEndElement(nodeName);
         }
 
         private string originalField;

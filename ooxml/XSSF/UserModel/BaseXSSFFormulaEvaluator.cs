@@ -37,18 +37,6 @@ namespace NPOI.XSSF.UserModel
         {
             return new XSSFRichTextString(str);
         }
-        public override void NotifySetFormula(ICell cell)
-        {
-            _bookEvaluator.NotifyUpdateCell(new XSSFEvaluationCell((XSSFCell)cell));
-        }
-        public override void NotifyDeleteCell(ICell cell)
-        {
-            _bookEvaluator.NotifyDeleteCell(new XSSFEvaluationCell((XSSFCell)cell));
-        }
-        public override void NotifyUpdateCell(ICell cell)
-        {
-            _bookEvaluator.NotifyUpdateCell(new XSSFEvaluationCell((XSSFCell)cell));
-        }
 
         /**
          * Turns a XSSFCell / SXSSFCell into a XSSFEvaluationCell

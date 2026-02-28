@@ -53,5 +53,23 @@ namespace NPOI.HPSF
             : base(p)
         {
         }
+
+        public MutableProperty(long id, long type, Object value)
+            : base(id, type, value)
+        {
+            
+        }
+    
+        public MutableProperty(long id, byte[] src, long offset, int length, int codepage)
+            : base(id, src, offset, length, codepage)
+        {
+            
+        }
+    
+        public MutableProperty(long id, LittleEndianByteArrayInputStream leis, int length, int codepage)
+            : base(id, leis, length, codepage)
+        {
+            
+        }
     }
 }

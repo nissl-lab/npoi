@@ -21,8 +21,6 @@ using NPOI.SS.Formula.Atp;
 namespace NPOI.SS.Formula
 {
     using System;
-    using System.Collections;
-    using NPOI.SS.Formula;
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.Util;
     using NPOI.SS.Formula.Functions;
@@ -57,7 +55,7 @@ namespace NPOI.SS.Formula
         private readonly Dictionary<String, int> _sheetIndexesByName;
         private CollaboratingWorkbooksEnvironment _collaboratingWorkbookEnvironment;
         private readonly IStabilityClassifier _stabilityClassifier;
-        private readonly UDFFinder _udfFinder;
+        private readonly AggregatingUDFFinder _udfFinder;
 
         private bool _ignoreMissingWorkbooks = false;
 
@@ -295,6 +293,26 @@ namespace NPOI.SS.Formula
         {
             return Evaluate(formula, target, region, FormulaType.Cell);
         }
+
+        
+        /**
+         * Some expressions need to be evaluated in terms of an offset from the top left corner of a region,
+         * such as some data validation and conditional format expressions, when those constraints apply
+         * to contiguous cells.  When a relative formula is used, it must be evaluated by shifting by the target
+         * offset position relative to the top left of the range.
+         * <p>
+         * Returns a ValueEval that may be one or more values, such as the allowed values for a data validation constraint.
+         * 
+         * @param formula
+         * @param target cell context for the operation
+         * @param region containing the cell
+         * @return ValueEval for one or more values
+         * @throws IllegalArgumentException if target does not define a sheet name to evaluate the formula on.
+         */
+        public ValueEval EvaluateList(String formula, CellReference target, CellRangeAddressBase region) {
+            return Evaluate(formula, target, region, FormulaType.DataValidationList);
+        }
+
         private ValueEval Evaluate(String formula, CellReference target, CellRangeAddressBase region, FormulaType formulaType)
         {
             String sheetName = target == null ? null : target.SheetName;
@@ -309,6 +327,15 @@ namespace NPOI.SS.Formula
                 formulaType.GetAttributes().Get<SingleValueAttribute>().IsSingleValue);
             return EvaluateNameFormula(ptgs, ec);
         }
+        /// <summary>
+        /// Adjust formula relative references by the offset between the start of the given region and the given target cell.
+        /// </summary>
+        /// <param name="ptgs"></param>
+        /// <param name="target">cell within the region to use.</param>
+        /// <param name="region">containing the cell</param>
+        /// <returns>true if any Ptg references were shifted</returns>
+        /// <exception cref="IndexOutOfRangeException">if the resulting shifted row/column indexes are over the document format limits</exception>
+        /// <exception cref="ArgumentException">if target is not within region.</exception>
         protected bool AdjustRegionRelativeReference(Ptg[] ptgs, CellReference target, CellRangeAddressBase region)
         {
             if (!region.IsInRange(target))
@@ -316,10 +343,24 @@ namespace NPOI.SS.Formula
                 throw new ArgumentException(target + " is not within " + region);
             }
 
-            //return adjustRegionRelativeReference(ptgs, target.getRow() - region.getFirstRow(), target.getCol() - region.getFirstColumn());
-
-            int deltaRow = target.Row;
-            int deltaColumn = target.Col;
+            return AdjustRegionRelativeReference(ptgs, target.Row - region.FirstRow, target.Col - region.FirstColumn);
+        }
+    
+        /// <summary>
+        /// Adjust the formula relative cell references by a given delta
+        /// </summary>
+        /// <param name="ptgs"></param>
+        /// <param name="deltaRow">target row offset from the top left cell of a region</param>
+        /// <param name="deltaColumn">target column offset from the top left cell of a region</param>
+        /// <returns>true if any Ptg references were shifted</returns>
+        /// <exception cref="IndexOutOfRangeException">if the resulting shifted row/column indexes are over the document format limits</exception>
+        /// <exception cref="ArgumentException">if either of the deltas are negative, as the assumption is we are shifting formulas
+        /// relative to the top left cell of a region.
+        /// </exception>
+        protected bool AdjustRegionRelativeReference(Ptg[] ptgs, int deltaRow, int deltaColumn) 
+        {
+            if (deltaRow < 0) throw new ArgumentException("offset row must be positive");
+            if (deltaColumn < 0) throw new ArgumentException("offset column must be positive");
 
             bool shifted = false;
             foreach(Ptg ptg in ptgs)
@@ -463,6 +504,8 @@ namespace NPOI.SS.Formula
             //return cce.GetValue();
             return result;
         }
+
+
         /**
          * Adds the current cell reference to the exception for easier debugging.
          * Would be nice to get the formula text as well, but that seems to require
@@ -678,8 +721,6 @@ namespace NPOI.SS.Formula
                 ValueEval opResult;
                 if (ptg is OperationPtg optg)
                 {
-                    if (optg is UnionPtg) { continue; }
-
                     int numops = optg.NumberOfOperands;
                     ValueEval[] ops = new ValueEval[numops];
 
@@ -713,6 +754,7 @@ namespace NPOI.SS.Formula
             {
                 throw new InvalidOperationException("evaluation stack not empty");
             }
+
             ValueEval result;
             if (ec.IsSingleValue)
             {
@@ -788,14 +830,14 @@ namespace NPOI.SS.Formula
             return value;
         }
         /**
- * Dereferences a single value from any AreaEval or RefEval evaluation
- * result. If the supplied evaluationResult is just a plain value, it is
- * returned as-is.
- *
- * @return a {@link NumberEval}, {@link StringEval}, {@link BoolEval}, or
- *         {@link ErrorEval}. Never <code>null</code>. {@link BlankEval} is
- *         converted to {@link NumberEval#ZERO}
- */
+         * Dereferences a single value from any AreaEval or RefEval evaluation
+         * result. If the supplied evaluationResult is just a plain value, it is
+         * returned as-is.
+         *
+         * @return a {@link NumberEval}, {@link StringEval}, {@link BoolEval}, or
+         *         {@link ErrorEval}. Never <code>null</code>. {@link BlankEval} is
+         *         converted to {@link NumberEval#ZERO}
+         */
         public static ValueEval DereferenceResult(ValueEval evaluationResult, OperationEvaluationContext ec)
         {
             ValueEval value;

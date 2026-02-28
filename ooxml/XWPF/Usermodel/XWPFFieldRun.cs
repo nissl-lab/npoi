@@ -25,25 +25,25 @@ namespace NPOI.XWPF.UserModel
      */
     public class XWPFFieldRun : XWPFRun
     {
-        private CT_SimpleField field;
+        private CT_SimpleField _field;
 
         public XWPFFieldRun(CT_SimpleField field, CT_R run, IRunBody p)
                 : base(run, p)
         {
             ;
-            this.field = field;
+            this._field = field;
         }
 
 
         public CT_SimpleField GetCTField()
         {
-            return field;
+            return _field;
         }
 
         public string FieldInstruction
         {
-            get { return field.instr; }
-            set { field.instr = value; }
+            get { return _field.instr; }
+            set { _field.instr = value; }
         }
     }
 

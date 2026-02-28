@@ -47,7 +47,7 @@ namespace NPOI.SS.Formula.PTG
 
         public NamePtg(ILittleEndianInput in1)
         {
-            field_1_label_index = in1.ReadShort();
+            field_1_label_index = in1.ReadUShort();
             field_2_zero = in1.ReadShort();
         }
 

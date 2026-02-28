@@ -1,4 +1,4 @@
-using NPOI.OpenXml4Net.Util;
+﻿using NPOI.OpenXml4Net.Util;
 using System;
 using System.ComponentModel;
 using System.IO;
@@ -10,7 +10,7 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
 
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing")]
-    public class CT_Picture // empty interface: EG_ObjectChoices
+    public class CT_Picture : XmlObject // empty interface: EG_ObjectChoices
     {
         private CT_PictureNonVisual nvPicPrField = new CT_PictureNonVisual();        //  draw-ssdraw: 1..1 
         private CT_BlipFillProperties blipFillField = new CT_BlipFillProperties();   //  draw-ssdraw: 1..1 
@@ -37,6 +37,7 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
                 else if (childNode.LocalName == "style")
                     ctObj.style = CT_ShapeStyle.Parse(childNode, namespaceManager);
             }
+            ctObj.Node = node;
             return ctObj;
         }
 
@@ -44,11 +45,11 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<xdr:{0}", nodeName));
+            sw.WriteStart("xdr", nodeName);
             XmlHelper.WriteAttribute(sw, "macro", this.macro);
             if (this.fPublished)
                 XmlHelper.WriteAttribute(sw, "fPublished", this.fPublished);
-            sw.Write(">");
+            sw.Write('>');
             if (this.nvPicPr != null)
                 this.nvPicPr.Write(sw, "nvPicPr");
             if (this.blipFill != null)
@@ -57,7 +58,7 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
                 this.spPr.Write(sw, "spPr");
             if (this.style != null)
                 this.style.Write(sw, "style");
-            sw.Write(string.Format("</xdr:{0}>", nodeName));
+            sw.WriteEndElement("xdr", nodeName);
         }
 
         [XmlElement]
@@ -167,7 +168,7 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
     // see same class in different name space in Picture.cs
     [Serializable]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing")]
-    public class CT_PictureNonVisual
+    public class CT_PictureNonVisual: XmlObject
     {
 
         private CT_NonVisualDrawingProps cNvPrField = new CT_NonVisualDrawingProps(); // 1..1
@@ -185,6 +186,7 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
                 else if (childNode.LocalName == "cNvPicPr")
                     ctObj.cNvPicPr = CT_NonVisualPictureProperties.Parse(childNode, namespaceManager);
             }
+            ctObj.Node = node;
             return ctObj;
         }
 
@@ -192,13 +194,13 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<xdr:{0}", nodeName));
-            sw.Write(">");
+            sw.WriteStart("xdr", nodeName);
+            sw.Write('>');
             if (this.cNvPr != null)
                 this.cNvPr.Write(sw, "cNvPr");
             if (this.cNvPicPr != null)
                 this.cNvPicPr.Write(sw, "cNvPicPr");
-            sw.Write(string.Format("</xdr:{0}>", nodeName));
+            sw.WriteEndElement("xdr", nodeName);
         }
         public CT_NonVisualDrawingProps AddNewCNvPr()
         {

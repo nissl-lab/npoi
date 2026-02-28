@@ -17,6 +17,7 @@
 namespace TestCases.XSSF.UserModel
 {
     using NPOI.SS.Util;
+    using NPOI.Util;
     using NPOI.XSSF;
     using NPOI.XSSF.UserModel;
     using NUnit.Framework;using NUnit.Framework.Legacy;
@@ -26,6 +27,7 @@ namespace TestCases.XSSF.UserModel
     [TestFixture]
     public class TestXSSFSheetMergeRegions
     {
+        private static POILogger LOG = POILogFactory.GetLogger(typeof(TestXSSFSheetMergeRegions));
         [Test]
         public void TestMergeRegionsSpeed()
         {
@@ -43,7 +45,7 @@ namespace TestCases.XSSF.UserModel
                     {
                         break;
                     }
-                    System.Console.WriteLine("Retry " + i + " because run-time is too high: " + millis);
+                    LOG.Log(POILogger.INFO,"Retry " + i + " because run-time is too high: " + millis);
                 }
 
                 // This time is typically ~800ms, versus ~7800ms to iterate getMergedRegion(int).

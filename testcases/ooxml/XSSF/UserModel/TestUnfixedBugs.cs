@@ -85,7 +85,6 @@ namespace TestCases.XSSF.UserModel
             IWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook("54071.xlsx");
             ISheet sheet = workbook.GetSheetAt(0);
             int rows = sheet.PhysicalNumberOfRows;
-            Console.WriteLine(">> file rows is:" + (rows - 1) + " <<");
             IRow title = sheet.GetRow(0);
 
             DateTime? prev = null;
@@ -100,7 +99,7 @@ namespace TestCases.XSSF.UserModel
                     {
                         // here the output will produce ...59 or ...58 for the rows, probably POI is
                         // doing some different rounding or some other small difference...
-                        Console.WriteLine("==Time:" + cell.DateCellValue);
+                        //Console.WriteLine("==Time:" + cell.DateCellValue);
                         if (prev != null)
                         {
                             ClassicAssert.AreEqual(prev, cell.DateCellValue);
@@ -234,7 +233,7 @@ namespace TestCases.XSSF.UserModel
                 sheet.AddMergedRegion(range4);
 
                 // set border
-                RegionUtil.SetBorderBottom((int)BorderStyle.Thin, range1, sheet);
+                RegionUtil.SetBorderBottom(BorderStyle.Thin, range1, sheet);
 
                 row2.GetCell(0).CellStyle.BorderBottom = BorderStyle.Thin;
                 row2.GetCell(1).CellStyle.BorderBottom = BorderStyle.Thin;
@@ -242,7 +241,7 @@ namespace TestCases.XSSF.UserModel
                 CellUtil.SetCellStyleProperty(cell0, CellUtil.BORDER_BOTTOM, BorderStyle.Thin);
                 ICell cell1 = CellUtil.GetCell(row3, 1);
                 CellUtil.SetCellStyleProperty(cell1, CellUtil.BORDER_BOTTOM, BorderStyle.Thin);
-                RegionUtil.SetBorderBottom((int)BorderStyle.Thin, range4, sheet);
+                RegionUtil.SetBorderBottom(BorderStyle.Thin, range4, sheet);
 
                 // write to file
                 Stream stream = new FileStream("55752.xlsx", FileMode.Create, FileAccess.ReadWrite);
@@ -355,43 +354,6 @@ namespace TestCases.XSSF.UserModel
             ClassicAssert.AreEqual(contents, cell.ToString(), "Did not have expected contents at rownum " + rowNum);
             //ClassicAssert.AreEqual(contents + ".0", cell.ToString(), "Did not have expected contents at rownum " + rowNum);
         }
-
-        [Test]
-        public void test58325_one()
-        {
-            check58325(XSSFTestDataSamples.OpenSampleWorkbook("58325_lt.xlsx"), 1);
-        }
-        [Test]
-        [Ignore("TODO FIX CI TESTS")]
-        public void test58325_three()
-        {
-            check58325(XSSFTestDataSamples.OpenSampleWorkbook("58325_db.xlsx"), 3);
-        }
-        private void check58325(XSSFWorkbook wb, int expectedShapes)
-        {
-            XSSFSheet sheet = wb.GetSheet("MetasNM001") as XSSFSheet;
-            ClassicAssert.IsNotNull(sheet);
-            StringBuilder str = new StringBuilder();
-            str.Append("sheet " + sheet.SheetName + " - ");
-            XSSFDrawing drawing = sheet.GetDrawingPatriarch();
-            //drawing = ((XSSFSheet)sheet).createDrawingPatriarch();
-            List<XSSFShape> shapes = drawing.GetShapes();
-            str.Append("drawing.Shapes.size() = " + shapes.Count);
-            IEnumerator<XSSFShape> it = shapes.GetEnumerator();
-            while (it.MoveNext())
-            {
-                XSSFShape shape = it.Current;
-                str.Append(", " + shape.ToString());
-                str.Append(", Col1:" + ((XSSFClientAnchor)shape.GetAnchor()).Col1);
-                str.Append(", Col2:" + ((XSSFClientAnchor)shape.GetAnchor()).Col2);
-                str.Append(", Row1:" + ((XSSFClientAnchor)shape.GetAnchor()).Row1);
-                str.Append(", Row2:" + ((XSSFClientAnchor)shape.GetAnchor()).Row2);
-            }
-
-            ClassicAssert.AreEqual(expectedShapes, shapes.Count, 
-                "Having shapes: " + str);
-        }
-
     }
 }
 

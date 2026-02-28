@@ -21,6 +21,7 @@ namespace NPOI.SS.Formula.PTG
     using System.Text;
 
     using NPOI.SS.Formula.Function;
+    using NPOI.Util;
 
 
     /**
@@ -44,13 +45,17 @@ namespace NPOI.SS.Formula.PTG
         protected byte returnClass;
         protected byte[] paramClass;
 
-        protected byte _numberOfArgs;
+        protected int _numberOfArgs;
         protected short _functionIndex;
 
         protected AbstractFunctionPtg(int functionIndex, int pReturnClass, byte[] paramTypes, int nParams)
         {
-            _numberOfArgs = (byte)nParams;
+            _numberOfArgs = nParams;
+            if (functionIndex < short.MinValue || functionIndex > short.MaxValue)
+                throw new RuntimeException("functionIndex " + functionIndex + " cannot be cast to short");
             _functionIndex = (short)functionIndex;
+            if (pReturnClass < Byte.MinValue || pReturnClass > Byte.MaxValue)
+                throw new RuntimeException("pReturnClass " + pReturnClass + " cannot be cast to byte");
             returnClass = (byte)pReturnClass;
             paramClass = paramTypes;
         }

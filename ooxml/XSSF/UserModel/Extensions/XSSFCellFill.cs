@@ -16,6 +16,7 @@
 ==================================================================== */
 using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.OpenXmlFormats;
+using NPOI.OOXML.XSSF.UserModel;
 namespace NPOI.XSSF.UserModel.Extensions
 {
 
@@ -25,7 +26,7 @@ namespace NPOI.XSSF.UserModel.Extensions
      */
     public class XSSFCellFill
     {
-
+        private IIndexedColorMap _indexedColorMap;
         private readonly CT_Fill _fill;
 
         /**
@@ -33,9 +34,10 @@ namespace NPOI.XSSF.UserModel.Extensions
          *
          * @param fill - fill
          */
-        public XSSFCellFill(CT_Fill fill)
+        public XSSFCellFill(CT_Fill fill, IIndexedColorMap colorMap)
         {
             _fill = fill;
+            _indexedColorMap = colorMap;
         }
 
         /**
@@ -57,7 +59,7 @@ namespace NPOI.XSSF.UserModel.Extensions
             if (ptrn == null) return null;
 
             CT_Color CT_Color = ptrn.bgColor;
-            return CT_Color == null ? null : new XSSFColor(CT_Color);
+            return CT_Color == null ? null : new XSSFColor(CT_Color, _indexedColorMap);
         }
 
         /**
@@ -96,7 +98,7 @@ namespace NPOI.XSSF.UserModel.Extensions
             if (ptrn == null) return null;
 
             CT_Color ctColor = ptrn.fgColor;
-            return ctColor == null ? null : new XSSFColor(ctColor);
+            return ctColor == null ? null : new XSSFColor(ctColor, _indexedColorMap);
         }
 
         /**

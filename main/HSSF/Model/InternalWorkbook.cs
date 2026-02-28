@@ -542,7 +542,7 @@ namespace NPOI.HSSF.Model
                     return;
                 }
 
-                EscherDggRecord dgg = drawingManager.GetDgg();
+                EscherDggRecord dgg = drawingManager.Dgg;
 
                 //register a new drawing group for the cloned sheet
                 int dgId = drawingManager.FindNewDrawingGroupId();
@@ -573,7 +573,7 @@ namespace NPOI.HSSF.Model
                                 if (recordId == EscherSpRecord.RECORD_ID)
                                 {
                                     EscherSpRecord sp = (EscherSpRecord)shapeChildRecord;
-                                    int shapeId = drawingManager.AllocateShapeId((short)dgId, dg);
+                                    int shapeId = drawingManager.AllocateShapeId(dg);
                                     //allocateShapeId increments the number of shapes. roll back to the previous value
                                     dg.NumShapes = (dg.NumShapes - 1);
                                     sp.ShapeId = (shapeId);
@@ -1001,11 +1001,12 @@ namespace NPOI.HSSF.Model
             }
             throw new ArgumentException("Could not find that font!");
         }
+
         /**
- * Returns the StyleRecord for the given
- *  xfIndex, or null if that ExtendedFormat doesn't
- *  have a Style set.
- */
+         * Returns the StyleRecord for the given
+         *  xfIndex, or null if that ExtendedFormat doesn't
+         *  have a Style set.
+         */
         public StyleRecord GetStyleRecord(int xfIndex)
         {
             // Style records always follow after 
@@ -1031,6 +1032,31 @@ namespace NPOI.HSSF.Model
                 }
             }
             return null;
+        }
+
+        /**
+         * Update the StyleRecord to point to the new
+         * given index.
+         *
+         * @param oldXf the extended format index that was previously associated with this StyleRecord
+         * @param newXf the extended format index that is now associated with this StyleRecord
+         */
+        public void UpdateStyleRecord(int oldXf, int newXf)
+        {
+            // Style records always follow after
+            //  the ExtendedFormat records
+            for(int i = records.Xfpos; i<records.Count; i++)
+            {
+                Record r = records[i];
+                if(r is StyleRecord)
+                {
+                    StyleRecord sr = (StyleRecord)r;
+                    if(sr.XFIndex == oldXf)
+                    {
+                        sr.XFIndex = (short)newXf;
+                    }
+                }
+            }
         }
         /**
          * Gets the ExtendedFormatRecord at the given 0-based index
@@ -1261,7 +1287,7 @@ namespace NPOI.HSSF.Model
          * @return record containing a BOFRecord
          */
 
-        private static Record CreateBOF()
+        private static BOFRecord CreateBOF()
         {
             BOFRecord retval = new BOFRecord();
 
@@ -1299,7 +1325,7 @@ namespace NPOI.HSSF.Model
          * @return record containing a MMSRecord
          */
 
-        private static Record CreateMMS()
+        private static MMSRecord CreateMMS()
         {
             MMSRecord retval = new MMSRecord();
 
@@ -1328,7 +1354,7 @@ namespace NPOI.HSSF.Model
          * @return record containing a WriteAccessRecord
          */
 
-        private static Record CreateWriteAccess()
+        private static WriteAccessRecord CreateWriteAccess()
         {
             WriteAccessRecord retval = new WriteAccessRecord();
             String defaultUserName = "NPOI";
@@ -1356,7 +1382,7 @@ namespace NPOI.HSSF.Model
          * @return record containing a CodepageRecord
          */
 
-        private static Record CreateCodepage()
+        private static CodepageRecord CreateCodepage()
         {
             CodepageRecord retval = new CodepageRecord();
 
@@ -1371,7 +1397,7 @@ namespace NPOI.HSSF.Model
          * @return record containing a DSFRecord
          */
 
-        private static Record CreateDSF()
+        private static DSFRecord CreateDSF()
         {
             return new DSFRecord(false); // we don't even support double stream files
         }
@@ -1383,15 +1409,10 @@ namespace NPOI.HSSF.Model
          * @see org.apache.poi.hssf.record.Record
          * @return record containing a TabIdRecord
          */
-
-        private static Record CreateTabId()
+        private static TabIdRecord CreateTabId()
         {
-            TabIdRecord retval = new TabIdRecord();
-            short[] tabidarray = {
-            0
-        };
-
-            retval.SetTabIdArray(tabidarray);
+            TabIdRecord retval = new();
+            retval.SetTabIdArray([0]);
             return retval;
         }
 
@@ -1402,12 +1423,12 @@ namespace NPOI.HSSF.Model
          * @return record containing a FnGroupCountRecord
          */
 
-        private static Record CreateFnGroupCount()
+        private static FnGroupCountRecord CreateFnGroupCount()
         {
-            FnGroupCountRecord retval = new FnGroupCountRecord();
-
-            retval.Count=(short)14;
-            return retval;
+            return new FnGroupCountRecord
+            {
+                Count = 14
+            };
         }
 
         /**
@@ -1417,7 +1438,7 @@ namespace NPOI.HSSF.Model
          * @return record containing a WindowProtectRecord
          */
 
-        private static Record CreateWindowProtect()
+        private static WindowProtectRecord CreateWindowProtect()
         {
             // by default even when we support it we won't
             // want it to be protected
@@ -1443,7 +1464,7 @@ namespace NPOI.HSSF.Model
          * @return record containing a PasswordRecord
          */
 
-        private static Record CreatePassword()
+        private static PasswordRecord CreatePassword()
         {
             return new PasswordRecord(0x0000); // no password by default!
         }
@@ -1467,7 +1488,7 @@ namespace NPOI.HSSF.Model
          * @return record containing a PasswordRev4Record
          */
 
-        private static Record CreatePasswordRev4()
+        private static PasswordRev4Record CreatePasswordRev4()
         {
             return new PasswordRev4Record(0x0000);
         }
@@ -1488,7 +1509,7 @@ namespace NPOI.HSSF.Model
          * @return record containing a WindowOneRecord
          */
 
-        private static Record CreateWindowOne()
+        private static WindowOneRecord CreateWindowOne()
         {
             WindowOneRecord retval = new WindowOneRecord();
 
@@ -1511,7 +1532,7 @@ namespace NPOI.HSSF.Model
          * @return record containing a BackupRecord
          */
 
-        private static Record CreateBackup()
+        private static BackupRecord CreateBackup()
         {
             BackupRecord retval = new BackupRecord();
 
@@ -1526,7 +1547,7 @@ namespace NPOI.HSSF.Model
          * @return record containing a HideObjRecord
          */
 
-        private static Record CreateHideObj()
+        private static HideObjRecord CreateHideObj()
         {
             HideObjRecord retval = new HideObjRecord();
 
@@ -1541,7 +1562,7 @@ namespace NPOI.HSSF.Model
          * @return record containing a DateWindow1904Record
          */
 
-        private static Record CreateDateWindow1904()
+        private static DateWindow1904Record CreateDateWindow1904()
         {
             DateWindow1904Record retval = new DateWindow1904Record();
 
@@ -1556,7 +1577,7 @@ namespace NPOI.HSSF.Model
          * @return record containing a PrecisionRecord
          */
 
-        private static Record CreatePrecision()
+        private static PrecisionRecord CreatePrecision()
         {
             PrecisionRecord retval = new PrecisionRecord();
 
@@ -1571,7 +1592,7 @@ namespace NPOI.HSSF.Model
          * @return record containing a RefreshAllRecord
          */
 
-        private static Record CreateRefreshAll()
+        private static RefreshAllRecord CreateRefreshAll()
         {
             return new RefreshAllRecord(false);
         }
@@ -1583,12 +1604,12 @@ namespace NPOI.HSSF.Model
          * @return record containing a BookBoolRecord
          */
 
-        private static Record CreateBookBool()
+        private static BookBoolRecord CreateBookBool()
         {
-            BookBoolRecord retval = new BookBoolRecord();
-
-            retval.SaveLinkValues=(short)0;
-            return retval;
+            return new BookBoolRecord
+            {
+                SaveLinkValues = 0
+            };
         }
 
         /**
@@ -1605,7 +1626,7 @@ namespace NPOI.HSSF.Model
          * @return record containing a FontRecord
          */
 
-        private static Record CreateFont()
+        private static FontRecord CreateFont()
         {
             FontRecord retval = new FontRecord();
 
@@ -1699,7 +1720,7 @@ namespace NPOI.HSSF.Model
          * @see org.apache.poi.hssf.record.Record
          */
 
-        private static Record CreateExtendedFormat(int id)
+        private static ExtendedFormatRecord CreateExtendedFormat(int id)
         {   // we'll need multiple editions
             ExtendedFormatRecord retval = new ExtendedFormatRecord();
 
@@ -2052,10 +2073,10 @@ namespace NPOI.HSSF.Model
         }
 
         /**
-     * Creates a new StyleRecord, for the given Extended
-     *  Format index, and adds it onto the end of the
-     *  records collection
-     */
+         * Creates a new StyleRecord, for the given Extended
+         *  Format index, and adds it onto the end of the
+         *  records collection
+         */
         public StyleRecord CreateStyleRecord(int xfIndex) {
             // Style records always follow after 
             //  the ExtendedFormat records
@@ -2090,7 +2111,7 @@ namespace NPOI.HSSF.Model
          * @see org.apache.poi.hssf.record.Record
          */
 
-        private static Record CreateStyle(int id)
+        private static StyleRecord CreateStyle(int id)
         {   // we'll need multiple editions
             StyleRecord retval = new StyleRecord();
 
@@ -2169,7 +2190,7 @@ namespace NPOI.HSSF.Model
          * @see org.apache.poi.hssf.record.Record
          */
 
-        private static Record CreateBoundSheet(int id)
+        private static BoundSheetRecord CreateBoundSheet(int id)
         {   
             return new BoundSheetRecord("Sheet" + (id + 1));
         }
@@ -2182,8 +2203,9 @@ namespace NPOI.HSSF.Model
          * @see org.apache.poi.hssf.record.Record
          */
 
-        private static Record CreateCountry()
-        {   // what a novel idea, Create your own!
+        private static CountryRecord CreateCountry()
+        {
+            // what a novel idea, Create your own!
             CountryRecord retval = new CountryRecord();
 
             retval.DefaultCountry=((short)1);
@@ -2211,12 +2233,12 @@ namespace NPOI.HSSF.Model
          * @see org.apache.poi.hssf.record.Record
          */
 
-        private static Record CreateExtendedSST()
+        private static ExtSSTRecord CreateExtendedSST()
         {
-            ExtSSTRecord retval = new ExtSSTRecord();
-
-            retval.NumStringsPerBucket=((short)0x8);
-            return retval;
+            return new ExtSSTRecord
+            {
+                NumStringsPerBucket = 0x8
+            };
         }
 
         /**
@@ -3113,6 +3135,11 @@ namespace NPOI.HSSF.Model
         public bool ChangeExternalReference(String oldUrl, String newUrl)
         {
             return linkTable.ChangeExternalReference(oldUrl, newUrl);
+        }
+
+        public WorkbookRecordList GetWorkbookRecordList()
+        {
+            return records;
         }
     }
 }

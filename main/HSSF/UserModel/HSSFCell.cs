@@ -19,7 +19,6 @@
 namespace NPOI.HSSF.UserModel
 {
     using System;
-    using System.Collections;
     using System.IO;
     using NPOI.HSSF.Model;
     using NPOI.HSSF.Record;
@@ -31,8 +30,8 @@ namespace NPOI.HSSF.UserModel
     using NPOI.SS.Formula;
     using System.Globalization;
     using System.Collections.Generic;
-    using NPOI.Util;
     using NPOI.SS.Formula.Eval;
+    using NPOI.Util;
 
     /// <summary>
     /// High level representation of a cell in a row of a spReadsheet.
@@ -102,7 +101,7 @@ namespace NPOI.HSSF.UserModel
                            CellType type)
         {
             HSSFCell.CheckBounds(col);
-            cellType = CellType.Unknown; // Force 'SetCellType' to Create a first Record
+            cellType = CellType._None; // Force 'SetCellType' to Create a first Record
             stringValue = null;
             this.book = book;
             this._sheet = sheet;
@@ -405,7 +404,7 @@ namespace NPOI.HSSF.UserModel
                     throw new InvalidOperationException("Invalid cell type: " + cellType);
             }
             if (cellType != this.cellType &&
-                this.cellType != CellType.Unknown)  // Special Value to indicate an Uninitialized Cell
+                this.cellType != CellType._None)  // Special Value to indicate an Uninitialized Cell
             {
                 _sheet.Sheet.ReplaceValueRecord(_record);
             }
@@ -831,7 +830,7 @@ namespace NPOI.HSSF.UserModel
         /// <param name="actualTypeCode">The actual type code.</param>
         /// <param name="isFormulaCell">if set to <c>true</c> [is formula cell].</param>
         /// <returns></returns>
-        private static Exception TypeMismatch(CellType expectedTypeCode, CellType actualTypeCode, bool isFormulaCell)
+        private static InvalidOperationException TypeMismatch(CellType expectedTypeCode, CellType actualTypeCode, bool isFormulaCell)
         {
             String msg = "Cannot get a "
                 + HSSFCell.GetCellTypeName(expectedTypeCode) + " value from a "
@@ -1358,9 +1357,8 @@ namespace NPOI.HSSF.UserModel
         public void RemoveHyperlink()
         {
             RecordBase toRemove = null;
-            for (IEnumerator<RecordBase> it = _sheet.Sheet.Records.GetEnumerator(); it.MoveNext(); )
+            foreach (var rec in _sheet.Sheet.Records)
             {
-                RecordBase rec = it.Current;
                 if (rec is HyperlinkRecord link)
                 {
                     if (link.FirstColumn == _record.Column && link.FirstRow == _record.Row)
@@ -1461,6 +1459,7 @@ namespace NPOI.HSSF.UserModel
         }
 
         [Obsolete("Will be removed at NPOI 2.8, Use CachedFormulaResultType instead.")]
+        [Removal(Version = "4.2")]
         public CellType GetCachedFormulaResultTypeEnum()
         {
             throw new NotImplementedException();

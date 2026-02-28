@@ -1,4 +1,4 @@
-
+﻿
 using Cysharp.Text;
 using NPOI.OpenXml4Net.Util;
 using System;
@@ -171,8 +171,8 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<a:{0}", nodeName));
-            sw.Write(">");
+            sw.WriteStart("a", nodeName);
+            sw.Write('>');
             if (this.defPPr != null)
                 this.defPPr.Write(sw, "defPPr");
             if (this.lvl1pPr != null)
@@ -195,7 +195,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.lvl9pPr.Write(sw, "lvl9pPr");
             if (this.extLst != null)
                 this.extLst.Write(sw, "extLst");
-            sw.Write(string.Format("</a:{0}>", nodeName));
+            sw.WriteEndElement("a", nodeName);
         }
 
         public bool IsSetLvl1pPr()
@@ -440,11 +440,11 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<a:{0}", nodeName));
+            sw.WriteStart("a", nodeName);
             XmlHelper.WriteAttribute(sw, "fontScale", this.fontScale);
             XmlHelper.WriteAttribute(sw, "lnSpcReduction", this.lnSpcReduction);
-            sw.Write(">");
-            sw.Write(string.Format("</a:{0}>", nodeName));
+            sw.Write('>');
+            sw.WriteEndElement("a", nodeName);
         }
 
         public bool IsSetFontScale()
@@ -677,7 +677,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<a:{0}", nodeName));
+            sw.WriteStart("a", nodeName);
             if(this.rotFieldSpecified)
                 XmlHelper.WriteAttribute(sw, "rot", this.rotField,true);
             if(spcFirstLastPara)
@@ -706,7 +706,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 XmlHelper.WriteAttribute(sw, "upright", this.upright);
             if (compatLnSpc)
                 XmlHelper.WriteAttribute(sw, "compatLnSpc", this.compatLnSpc);
-            sw.Write(">");
+            sw.Write('>');
             if (this.prstTxWarp != null)
                 this.prstTxWarp.Write(sw, "prstTxWarp");
             if (this.noAutofit != null)
@@ -723,7 +723,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.flatTx.Write(sw, "flatTx");
             if (this.extLst != null)
                 this.extLst.Write(sw, "extLst");
-            sw.Write(string.Format("</a:{0}>", nodeName));
+            sw.WriteEndElement("a", nodeName);
         }
 
         public CT_PresetTextShape prstTxWarp
@@ -1550,8 +1550,8 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<a:{0}", nodeName));
-            sw.Write(">");
+            sw.WriteStart("a", nodeName);
+            sw.Write('>');
             if (this.bodyPr != null)
                 this.bodyPr.Write(sw, "bodyPr");
             if (this.lstStyle != null)
@@ -1560,7 +1560,7 @@ namespace NPOI.OpenXmlFormats.Dml
             {
                 x.Write(sw, "p");
             }
-            sw.Write(string.Format("</a:{0}>", nodeName));
+            sw.WriteEndElement("a", nodeName);
         }
 
         public void SetPArray(CT_TextParagraph[] array)

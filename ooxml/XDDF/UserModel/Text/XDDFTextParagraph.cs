@@ -823,13 +823,13 @@ namespace NPOI.XDDF.UserModel.Text
             }
         }
 
-        private Option<R> FindDefinedParagraphProperty<R>(Func<CT_TextParagraphProperties, Boolean> isSet,
-            Func<CT_TextParagraphProperties, R> getter, int level) where R : class
+        private Option<TR> FindDefinedParagraphProperty<TR>(Func<CT_TextParagraphProperties, Boolean> isSet,
+            Func<CT_TextParagraphProperties, TR> getter, int level) where TR : class
         {
             CT_TextParagraphProperties props = _p.pPr;
             if(props != null && isSet.Invoke(props))
             {
-                return Option<R>.Some(getter.Invoke(props));
+                return Option<TR>.Some(getter.Invoke(props));
             }
             else
             {
@@ -837,8 +837,8 @@ namespace NPOI.XDDF.UserModel.Text
             }
         }
 
-        internal Option<R> FindDefinedRunProperty<R>(Func<CT_TextCharacterProperties, Boolean> isSet,
-            Func<CT_TextCharacterProperties, R> getter) where R : class
+        internal Option<TR> FindDefinedRunProperty<TR>(Func<CT_TextCharacterProperties, Boolean> isSet,
+            Func<CT_TextCharacterProperties, TR> getter) where TR : class
         {
             if(_p.IsSetPPr())
             {
@@ -851,13 +851,13 @@ namespace NPOI.XDDF.UserModel.Text
             }
         }
 
-        private Option<R> FindDefinedRunProperty<R>(Func<CT_TextCharacterProperties, Boolean> isSet,
-            Func<CT_TextCharacterProperties, R> getter, int level) where R : class
+        private Option<TR> FindDefinedRunProperty<TR>(Func<CT_TextCharacterProperties, Boolean> isSet,
+            Func<CT_TextCharacterProperties, TR> getter, int level) where TR : class
         {
             CT_TextCharacterProperties props = _p.pPr.IsSetDefRPr() ? _p.pPr.defRPr : null;
             if(props != null && isSet.Invoke(props))
             {
-                return Option<R>.Some(getter.Invoke(props));
+                return Option<TR>.Some(getter.Invoke(props));
             }
             else
             {
@@ -880,13 +880,13 @@ namespace NPOI.XDDF.UserModel.Text
             }
         }
 
-        private ValueOption<R> FindDefinedParagraphValueProperty<R>(Func<CT_TextParagraphProperties, Boolean> isSet,
-            Func<CT_TextParagraphProperties, R> getter, int level) where R : struct
+        private ValueOption<TR> FindDefinedParagraphValueProperty<TR>(Func<CT_TextParagraphProperties, Boolean> isSet,
+            Func<CT_TextParagraphProperties, TR> getter, int level) where TR : struct
         {
             CT_TextParagraphProperties props = _p.pPr;
             if(props != null && isSet.Invoke(props))
             {
-                return ValueOption<R>.Some(getter.Invoke(props));
+                return ValueOption<TR>.Some(getter.Invoke(props));
             }
             else
             {
@@ -894,8 +894,8 @@ namespace NPOI.XDDF.UserModel.Text
             }
         }
 
-        internal ValueOption<R> FindDefinedRunValueProperty<R>(Func<CT_TextCharacterProperties, Boolean> isSet,
-            Func<CT_TextCharacterProperties, R> getter) where R : struct
+        internal ValueOption<TR> FindDefinedRunValueProperty<TR>(Func<CT_TextCharacterProperties, Boolean> isSet,
+            Func<CT_TextCharacterProperties, TR> getter) where TR : struct
         {
             if(_p.IsSetPPr())
             {
@@ -908,13 +908,13 @@ namespace NPOI.XDDF.UserModel.Text
             }
         }
 
-        private ValueOption<R> FindDefinedRunValueProperty<R>(Func<CT_TextCharacterProperties, Boolean> isSet,
-            Func<CT_TextCharacterProperties, R> getter, int level) where R : struct
+        private ValueOption<TR> FindDefinedRunValueProperty<TR>(Func<CT_TextCharacterProperties, Boolean> isSet,
+            Func<CT_TextCharacterProperties, TR> getter, int level) where TR : struct
         {
             CT_TextCharacterProperties props = _p.pPr.IsSetDefRPr() ? _p.pPr.defRPr : null;
             if(props != null && isSet.Invoke(props))
             {
-                return ValueOption<R>.Some(getter.Invoke(props));
+                return ValueOption<TR>.Some(getter.Invoke(props));
             }
             else
             {

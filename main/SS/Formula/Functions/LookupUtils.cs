@@ -184,15 +184,16 @@ namespace NPOI.SS.Formula.Functions
             }
         }
 
-
-        public static ValueVector CreateRowVector(TwoDEval tableArray, int relativeRowIndex)
+        public static RowVector CreateRowVector(TwoDEval tableArray, int relativeRowIndex)
         {
             return new RowVector((AreaEval)tableArray, relativeRowIndex);
         }
-        public static ValueVector CreateColumnVector(TwoDEval tableArray, int relativeColumnIndex)
+
+        public static ColumnVector CreateColumnVector(TwoDEval tableArray, int relativeColumnIndex)
         {
             return new ColumnVector((AreaEval)tableArray, relativeColumnIndex);
         }
+
         /**
          * @return <c>null</c> if the supplied area is neither a single row nor a single colum
          */
@@ -438,10 +439,11 @@ namespace NPOI.SS.Formula.Functions
                 // zero Is FALSE, everything else Is TRUE
                 return 0.0 != nve.NumberValue;
             }
-            throw new Exception("Unexpected eval type (" + valEval.GetType().Name + ")");
+            throw new Exception("Unexpected eval type (" + valEval + ")");
         }
 
-        public static int lookupFirstIndexOfValue(ValueEval lookupValue, ValueVector vector, bool isRangeLookup)
+
+        public static int LookupIndexOfValue(ValueEval lookupValue, ValueVector vector, bool isRangeLookup)
         {
             LookupValueComparer lookupComparer = CreateLookupComparer(lookupValue, isRangeLookup, false);
             int result;
@@ -451,7 +453,48 @@ namespace NPOI.SS.Formula.Functions
             }
             else
             {
-                result = lookupFirstIndexOfValue(lookupComparer, vector, MatchMode.ExactMatch);
+                result = LookupIndexOfExactValue(lookupComparer, vector);
+            }
+            if (result < 0)
+            {
+                throw new EvaluationException(ErrorEval.NA);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Finds first (lowest index) exact occurrence of specified value.
+        /// </summary>
+        /// <param name="lookupComparer">the value to be found in column or row vector</param>
+        /// <param name="vector">the values to be searched. For VLOOKUP this is the first column of the
+        /// tableArray. For HLOOKUP this is the first row of the tableArray.</param>
+        /// <returns>zero based index into the vector, -1 if value cannot be found</returns>
+        private static int LookupIndexOfExactValue(LookupValueComparer lookupComparer, ValueVector vector)
+        {
+
+            // find first occurrence of lookup value
+            int size = vector.Size;
+            for (int i = 0; i < size; i++)
+            {
+                if (lookupComparer.CompareTo(vector.GetItem(i)).IsEqual)
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        public static int LookupFirstIndexOfValue(ValueEval lookupValue, ValueVector vector, bool isRangeLookup)
+        {
+            LookupValueComparer lookupComparer = CreateLookupComparer(lookupValue, isRangeLookup, false);
+            int result;
+            if (isRangeLookup)
+            {
+                result = PerformBinarySearch(vector, lookupComparer);
+            }
+            else
+            {
+                result = LookupFirstIndexOfValue(lookupComparer, vector, MatchMode.ExactMatch);
             }
             if (result < 0)
             {
@@ -469,7 +512,7 @@ namespace NPOI.SS.Formula.Functions
             }
             else
             {
-                result = lookupFirstIndexOfValue(lookupComparer, vector, matchMode);
+                result = LookupFirstIndexOfValue(lookupComparer, vector, matchMode);
             }
             if (result < 0)
             {
@@ -485,7 +528,7 @@ namespace NPOI.SS.Formula.Functions
          * 	tableArray. For HLOOKUP this Is the first row of the tableArray. 
          * @return zero based index into the vector, -1 if value cannot be found
          */
-        private static int lookupFirstIndexOfValue(LookupValueComparer lookupComparer, ValueVector vector, MatchMode matchMode)
+        private static int LookupFirstIndexOfValue(LookupValueComparer lookupComparer, ValueVector vector, MatchMode matchMode)
         {
 
             // Find first occurrence of lookup value

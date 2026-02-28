@@ -76,15 +76,16 @@ namespace NPOI.SS.Util
             int flatIndex = _width * relativeRowIndex + relativeColumnIndex;
             return _flattenedArray[flatIndex];
         }
-        internal sealed class ArrayIterator<D> :IEnumerator<D>
+
+        internal sealed class ArrayIterator<T> :IEnumerator<T>
         {
 
-            private readonly D[] _array;
+            private readonly T[] _array;
             private int _index;
 
-            public ArrayIterator(D[] array)
+            public ArrayIterator(T[] array)
             {
-                _array = (D[])array.Clone();
+                _array = (T[])array.Clone();
                 _index = 0;
             }
 
@@ -103,7 +104,7 @@ namespace NPOI.SS.Util
             { 
             }
 
-            public D Current
+            public T Current
             {
                 get
                 {

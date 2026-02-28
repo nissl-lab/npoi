@@ -15,13 +15,13 @@
    limitations Under the License.
 ==================================================================== */
 
-using System.Collections.ObjectModel;
-
 namespace NPOI.HSSF.UserModel
 {
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Globalization;
+
     using NPOI.DDF;
     using NPOI.HSSF.Model;
     using NPOI.HSSF.Record;
@@ -33,13 +33,10 @@ namespace NPOI.HSSF.UserModel
     using NPOI.SS.Formula.PTG;
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
-    using System.Globalization;
-    using NPOI.Util;
     using NPOI.SS.UserModel.Helpers;
     using NPOI.HSSF.UserModel.helpers;
+
     using SixLabors.Fonts;
-
-
 
     /// <summary>
     /// High level representation of a worksheet.
@@ -120,7 +117,7 @@ namespace NPOI.HSSF.UserModel
         /// <returns>the cloned sheet</returns>
         public ISheet CloneSheet(HSSFWorkbook workbook)
         {
-            IDrawing iDrawing = this.DrawingPatriarch;/*Aggregate drawing records*/
+            IDrawing<IShape> iDrawing = this.DrawingPatriarch;/*Aggregate drawing records*/
             HSSFSheet sheet = new HSSFSheet(workbook, _sheet.CloneSheet());
             int pos = sheet._sheet.FindFirstRecordLocBySid(DrawingRecord.sid);
             DrawingRecord dr = (DrawingRecord)sheet._sheet.FindFirstRecordBySid(DrawingRecord.sid);
@@ -2087,7 +2084,7 @@ namespace NPOI.HSSF.UserModel
      *
      * @return the top-level drawing patriarch, if there is one, else returns null
      */
-        public IDrawing DrawingPatriarch
+        public IDrawing<IShape> DrawingPatriarch
         {
             get
             {
@@ -2104,7 +2101,7 @@ namespace NPOI.HSSF.UserModel
          *
          * @return The new patriarch.
          */
-        public IDrawing CreateDrawingPatriarch()
+        public IDrawing<IShape> CreateDrawingPatriarch()
         {
             _patriarch = GetPatriarch(true);
             return _patriarch;
@@ -2243,7 +2240,7 @@ namespace NPOI.HSSF.UserModel
         /// <summary>
         /// Also creates cells if they don't exist.
         /// </summary>
-        private ICellRange<ICell> GetCellRange(CellRangeAddress range)
+        private SSCellRange<ICell> GetCellRange(CellRangeAddress range)
         {
             int firstRow = range.FirstRow;
             int firstColumn = range.FirstColumn;
@@ -2283,7 +2280,7 @@ namespace NPOI.HSSF.UserModel
             // make sure the formula parses OK first
             int sheetIndex = _workbook.GetSheetIndex(this);
             Ptg[] ptgs = HSSFFormulaParser.Parse(formula, _workbook, FormulaType.Array, sheetIndex);
-            ICellRange<ICell> cells = GetCellRange(range);
+            SSCellRange<ICell> cells = GetCellRange(range);
 
             foreach (HSSFCell c in cells)
             {
@@ -2495,18 +2492,6 @@ namespace NPOI.HSSF.UserModel
         /// <summary>
         /// Returns cell comment for the specified row and column
         /// </summary>
-        /// <param name="row">The row.</param>
-        /// <param name="column">The column.</param>
-        /// <returns>cell comment or null if not found</returns>
-        [Obsolete("deprecated as of 2015-11-23 (circa POI 3.14beta1). Use {@link #getCellComment(CellAddress)} instead.")]
-        public IComment GetCellComment(int row, int column)
-        {
-            return FindCellComment(row, column);
-        }
-
-        /// <summary>
-        /// Returns cell comment for the specified row and column
-        /// </summary>
         /// <param name="ref1">cell location</param>
         /// <returns>return cell comment or null if not found</returns>
         public IComment GetCellComment(CellAddress ref1)
@@ -2631,14 +2616,14 @@ namespace NPOI.HSSF.UserModel
         {
             get
             {
-                IList dvRecords = new ArrayList();
-                IList records = _sheet.Records;
+                List<DVRecord> dvRecords = [];
+                List<RecordBase> records = _sheet.Records;
 
                 for (int index = 0; index < records.Count; index++)
                 {
-                    if (records[index] is DVRecord)
+                    if (records[index] is DVRecord dvRecord)
                     {
-                        dvRecords.Add(records[index]);
+                        dvRecords.Add(dvRecord);
                     }
                 }
                 return dvRecords;
@@ -3389,9 +3374,20 @@ namespace NPOI.HSSF.UserModel
         {
             return rows.Values.GetEnumerator();
         }
-        public CellRangeAddressList GetCells(string cellranges)
+
+        public NCellRange Cells
         {
-            return CellRangeAddressList.Parse(cellranges);
+            get
+            {
+                return new NCellRange(this, 0, 0, this.Workbook.SpreadsheetVersion.MaxRows, this.Workbook.SpreadsheetVersion.MaxColumns);
+            }
+        }
+        public NRowRange Rows
+        {
+            get
+            {
+                return new NRowRange(this, 0, this.Workbook.SpreadsheetVersion.MaxRows);
+            }
         }
     }
 }

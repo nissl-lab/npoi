@@ -15,8 +15,6 @@
    limitations under the License.
 ==================================================================== */
 
-using System;
-using System.IO;
 using NPOI.HSSF.UserModel;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.OpenXmlFormats.Vml;
@@ -26,7 +24,11 @@ using NPOI.XSSF;
 using NPOI.XSSF.Model;
 using NPOI.XSSF.Streaming;
 using NPOI.XSSF.UserModel;
-using NUnit.Framework;using NUnit.Framework.Legacy;
+using NUnit.Framework;
+using NUnit.Framework.Legacy;
+using System;
+using System.IO;
+using System.Xml.Linq;
 using TestCases.SS.UserModel;
 
 namespace TestCases.XSSF.UserModel
@@ -53,7 +55,7 @@ namespace TestCases.XSSF.UserModel
             ClassicAssert.IsNotNull(sheetComments.GetCTComments().commentList);
             ClassicAssert.IsNotNull(sheetComments.GetCTComments().authors);
             ClassicAssert.AreEqual(1, sheetComments.GetCTComments().authors.SizeOfAuthorArray());
-            ClassicAssert.AreEqual(1, sheetComments.GetNumberOfAuthors());
+            ClassicAssert.AreEqual(1, sheetComments.NumberOfAuthors);
 
             CT_Comment ctComment = sheetComments.NewComment(CellAddress.A1);
             CT_Shape vmlShape = new CT_Shape();
@@ -167,17 +169,17 @@ namespace TestCases.XSSF.UserModel
             CommentsTable sheetComments = new CommentsTable();
             CT_Comment ctComment = sheetComments.NewComment(CellAddress.A1);
 
-            ClassicAssert.AreEqual(1, sheetComments.GetNumberOfAuthors());
+            ClassicAssert.AreEqual(1, sheetComments.NumberOfAuthors);
             XSSFComment comment = new XSSFComment(sheetComments, ctComment, null);
             ClassicAssert.AreEqual("", comment.Author);
             comment.Author = ("Apache POI");
             ClassicAssert.AreEqual("Apache POI", comment.Author);
-            ClassicAssert.AreEqual(2, sheetComments.GetNumberOfAuthors());
+            ClassicAssert.AreEqual(2, sheetComments.NumberOfAuthors);
             comment.Author = ("Apache POI");
-            ClassicAssert.AreEqual(2, sheetComments.GetNumberOfAuthors());
+            ClassicAssert.AreEqual(2, sheetComments.NumberOfAuthors);
             comment.Author = ("");
             ClassicAssert.AreEqual("", comment.Author);
-            ClassicAssert.AreEqual(2, sheetComments.GetNumberOfAuthors());
+            ClassicAssert.AreEqual(2, sheetComments.NumberOfAuthors);
         }
 
         [Test]
@@ -261,7 +263,7 @@ namespace TestCases.XSSF.UserModel
                 IRow row = sheet.CreateRow(1);
                 ICell cell = row.CreateCell(3);
                 cell.SetCellValue("F4");
-                IDrawing drawing = sheet.CreateDrawingPatriarch();
+                IDrawing<IShape> drawing = sheet.CreateDrawingPatriarch();
                 ICreationHelper factory = wb.GetCreationHelper();
                 // When the comment box is visible, have it show in a 1x3 space
                 IClientAnchor anchor = factory.CreateClientAnchor();
@@ -295,6 +297,52 @@ namespace TestCases.XSSF.UserModel
                 wb.Close();
             }
         }
+
+        [Test]
+        public void TestBug55814()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("55814.xlsx");
+            try
+            {
+
+                int oldsheetIndex = wb.GetSheetIndex("example");
+                ISheet oldsheet = wb.GetSheetAt(oldsheetIndex);
+
+                IComment comment = oldsheet.GetRow(0).GetCell(0).CellComment;
+                ClassicAssert.AreEqual("Comment Here\n", comment.String.String);
+
+                ISheet newsheet = wb.CloneSheet(oldsheetIndex);
+
+                wb.RemoveSheetAt(oldsheetIndex);
+
+                //wb.write(new FileOutputStream("/tmp/outnocomment.xlsx"));
+
+                comment = newsheet.GetRow(0).GetCell(0).CellComment;
+                ClassicAssert.IsNotNull(comment, "Should have a comment on A1 in the new sheet");
+                ClassicAssert.AreEqual("Comment Here\n", comment.String.String);
+
+                XSSFWorkbook wbBack = XSSFTestDataSamples.WriteOutAndReadBack(wb);
+                ClassicAssert.IsNotNull(wbBack);
+                wbBack.Close();
+            }
+            catch(Exception)
+            {
+                wb.Close();
+            }
+            wb = XSSFTestDataSamples.OpenSampleWorkbook("55814.xlsx");
+            try
+            {
+                int oldsheetIndex = wb.GetSheetIndex("example");
+                ISheet newsheet = wb.GetSheetAt(oldsheetIndex);
+                IComment comment = newsheet.GetRow(0).GetCell(0).CellComment;
+                ClassicAssert.AreEqual("Comment Here\n", comment.String.String);
+            }
+            catch(Exception)
+            {
+                wb.Close();
+            };
+        }
+
         [Test]
         public void Bug57838DeleteRowsWthCommentsBug()
         {
@@ -327,7 +375,7 @@ namespace TestCases.XSSF.UserModel
                 ICell cell = row.CreateCell(0);
                 cell.SetCellValue("test");
 
-                IDrawing drawing = sheet.CreateDrawingPatriarch();
+                IDrawing<IShape> drawing = sheet.CreateDrawingPatriarch();
                 ICreationHelper factory = wb.GetCreationHelper();
                 // When the comment box is visible, have it show in a 1x3 space
                 IClientAnchor anchor = factory.CreateClientAnchor();
@@ -379,7 +427,7 @@ namespace TestCases.XSSF.UserModel
                 ICell cell = row.CreateCell(0);
                 cell.SetCellValue("test");
 
-                IDrawing drawing = sheet.CreateDrawingPatriarch();
+                IDrawing<IShape> drawing = sheet.CreateDrawingPatriarch();
                 ICreationHelper factory = wb.GetCreationHelper();
                 // When the comment box is visible, have it show in a 1x3 space
                 IClientAnchor anchor = factory.CreateClientAnchor();

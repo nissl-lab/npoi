@@ -15,13 +15,14 @@
    limitations under the License.
 ==================================================================== */
 
+using System;
+
+using NPOI.SS.Formula.PTG;
+
+using Cysharp.Text;
+
 namespace NPOI.SS.Formula
 {
-
-    using NPOI.SS.Formula.PTG;
-    using System;
-    using System.Text; 
-using Cysharp.Text;
     /**
      * @author Josh Micich
      */
@@ -540,7 +541,7 @@ using Cysharp.Text;
             return null;
         }
 
-        private Ptg AdjustPtgDueToSheetMove(Ptg ptg)
+        private Ref3DPtg AdjustPtgDueToSheetMove(Ptg ptg)
         {
             if (ptg is Ref3DPtg refPtg)
             {
@@ -1004,13 +1005,19 @@ using Cysharp.Text;
             int refRow = rptg.Row;
             if (rptg.IsRowRelative)
             {
+                // check new location where the ref is located
                 int destRowIndex = _firstMovedIndex + _amountToMove;
                 if (destRowIndex < 0 || _version.LastRowIndex < destRowIndex)
                 {
                     return CreateDeletedRef(rptg);
                 }
-
-                rptg.Row = refRow + _amountToMove;
+                // check new location where the ref points to
+                int newRowIndex = refRow + _amountToMove;
+                if(newRowIndex < 0 || _version.LastRowIndex < newRowIndex)
+                {
+                    return CreateDeletedRef(rptg);
+                }
+                rptg.Row = newRowIndex;
                 return rptg;
             }
 

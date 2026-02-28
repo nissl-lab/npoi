@@ -284,7 +284,7 @@ namespace NPOI.OOXML.XSSF.UserModel.Helpers
             {
                 CT_ConditionalFormatting cf = conditionalFormattingArray[j];
                 List<CellRangeAddress> cellRanges = new List<CellRangeAddress>();
-                string[] regions = cf.sqref.ToString().Split(new char[] { ' ' });
+                string[] regions = cf.sqref.Split(' ');
 
                 for (int i = 0; i < regions.Length; i++)
                 {

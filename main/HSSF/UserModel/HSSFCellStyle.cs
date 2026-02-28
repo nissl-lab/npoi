@@ -513,15 +513,15 @@ namespace NPOI.HSSF.UserModel
          *
          * @return order - the reading order (0,1,2)
          */
-        public short ReadingOrder
+        public ReadingOrder ReadingOrder
         {
             get
             {
-                return _format.ReadingOrder;
+                return (ReadingOrder)_format.ReadingOrder;
             }
             set
             {
-                _format.ReadingOrder = (value);
+                _format.ReadingOrder = (short)value;
             }
         }
 

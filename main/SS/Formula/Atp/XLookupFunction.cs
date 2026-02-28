@@ -6,7 +6,7 @@ using System.Text;
 
 namespace NPOI.SS.Formula.Atp
 {
-    class XLookupFunction : FreeRefFunction, ArrayFunction
+    class XLookupFunction : FreeRefFunction, IArrayFunction
     {
         public static FreeRefFunction instance = new XLookupFunction(ArgumentsEvaluator.instance);
 

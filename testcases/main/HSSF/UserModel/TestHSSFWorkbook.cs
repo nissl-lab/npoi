@@ -677,7 +677,7 @@ namespace TestCases.HSSF.UserModel
                 {
                     if (embeddedObject.HasDirectoryEntry())
                     {
-                        DirectoryEntry dir = embeddedObject.GetDirectory();
+                        DirectoryEntry dir = embeddedObject.Directory;
                         if (dir is DirectoryNode)
                         {
                             DirectoryNode dNode = (DirectoryNode)dir;
@@ -1396,6 +1396,12 @@ namespace TestCases.HSSF.UserModel
         public void TestBug854()
         {
             Assert.DoesNotThrow(() => HSSFTestDataSamples.OpenSampleWorkbook("ATM.xls"));
+        }
+
+        [Test]
+        public void TestMissingLabelOptionsForEmptyLabel()
+        {
+            Assert.DoesNotThrow(() => HSSFTestDataSamples.OpenSampleWorkbook("optional_label_options.xls"));
         }
     }
 }

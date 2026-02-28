@@ -117,21 +117,6 @@ namespace NPOI
         }
 
         /**
-         * Checks that the supplied Stream (which MUST
-         *  support mark and reSet, or be a PushbackStream)
-         *  has a OOXML (zip) header at the start of it.
-         * If your Stream does not support mark / reSet,
-         *  then wrap it in a PushBackStream, then be
-         *  sure to always use that, and not the original!
-         * @param inp An Stream which supports either mark/reSet, or is a PushbackStream
-         */
-        [Obsolete("Use the method from DocumentFactoryHelper")]
-        public static bool HasOOXMLHeader(Stream inp)
-        {
-            return DocumentFactoryHelper.HasOOXMLHeader(inp);
-        }
-
-        /**
          * Get the document properties. This gives you access to the
          *  core ooxml properties, and the extended ooxml properties.
          */

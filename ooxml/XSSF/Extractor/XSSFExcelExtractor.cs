@@ -21,6 +21,7 @@ using System.Text;
 using NPOI.SS.UserModel;
 using System.Globalization;
 using System.Collections.Generic;
+using NPOI.Util;
 
 namespace NPOI.XSSF.Extractor
 {
@@ -30,16 +31,16 @@ namespace NPOI.XSSF.Extractor
     public class XSSFExcelExtractor : POIXMLTextExtractor, NPOI.SS.Extractor.IExcelExtractor
     {
         public static XSSFRelation[] SUPPORTED_TYPES = new XSSFRelation[] {
-      XSSFRelation.WORKBOOK, XSSFRelation.MACRO_TEMPLATE_WORKBOOK,
-      XSSFRelation.MACRO_ADDIN_WORKBOOK, XSSFRelation.TEMPLATE_WORKBOOK,
-      XSSFRelation.MACROS_WORKBOOK
-   };
+            XSSFRelation.WORKBOOK, XSSFRelation.MACRO_TEMPLATE_WORKBOOK,
+            XSSFRelation.MACRO_ADDIN_WORKBOOK, XSSFRelation.TEMPLATE_WORKBOOK,
+            XSSFRelation.MACROS_WORKBOOK
+        };
 
         private readonly XSSFWorkbook workbook;
         private readonly DataFormatter dataFormatter;
         private bool includeSheetNames = true;
-        private bool formulasNotResults = false;
-        private bool includeCellComments = false;
+        private bool formulasNotResults;
+        private bool includeCellComments;
         private bool includeHeadersFooters = true;
         private bool includeTextBoxes = true;
 
@@ -60,7 +61,7 @@ namespace NPOI.XSSF.Extractor
         /// <summary>
         ///  Should header and footer be included? Default is true
         /// </summary>
-        public bool IncludeHeaderFooter
+        public bool IncludeHeadersFooters
         {
             get
             {
@@ -129,9 +130,12 @@ namespace NPOI.XSSF.Extractor
                 includeTextBoxes = value;
             }
         }
+        public bool AddTabEachEmptyCell { get; set; } = true;
         /**
          * Should sheet names be included? Default is true
          */
+        [Obsolete("use property IncludeSheetNames")]
+        [Removal(Version = "4.0")]
         public void SetIncludeSheetNames(bool includeSheetNames)
         {
             this.includeSheetNames = includeSheetNames;
@@ -140,6 +144,8 @@ namespace NPOI.XSSF.Extractor
          * Should we return the formula itself, and not
          *  the result it produces? Default is false
          */
+        [Obsolete("use property FormulasNotResults")]
+        [Removal(Version = "4.0")]
         public void SetFormulasNotResults(bool formulasNotResults)
         {
             this.formulasNotResults = formulasNotResults;
@@ -147,6 +153,8 @@ namespace NPOI.XSSF.Extractor
         /**
          * Should cell comments be included? Default is false
          */
+        [Obsolete("use property IncludeCellComments")]
+        [Removal(Version = "4.0")]
         public void SetIncludeCellComments(bool includeCellComments)
         {
             this.includeCellComments = includeCellComments;
@@ -154,6 +162,8 @@ namespace NPOI.XSSF.Extractor
         /**
          * Should headers and footers be included? Default is true
          */
+        [Obsolete("use property IncludeHeadersFooters")]
+        [Removal(Version = "4.0")]
         public void SetIncludeHeadersFooters(bool includeHeadersFooters)
         {
             this.includeHeadersFooters = includeHeadersFooters;
@@ -163,6 +173,8 @@ namespace NPOI.XSSF.Extractor
          * Should text within textboxes be included? Default is true
          * @param includeTextBoxes
          */
+        [Obsolete("use property IncludeTextBoxes")]
+        [Removal(Version = "4.0")]
         public void SetIncludeTextBoxes(bool includeTextBoxes)
         {
             this.includeTextBoxes = includeTextBoxes;
@@ -218,18 +230,21 @@ namespace NPOI.XSSF.Extractor
                     foreach (object rawR in sheet)
                     {
                         IRow row = (IRow)rawR;
-                        IEnumerator<ICell> ri = row.GetEnumerator();
+                        //IEnumerator<ICell> ri = row.GetEnumerator();
                         bool firsttime = true;
                         for (int j = 0; j < row.LastCellNum; j++)
                         {
                             // Add a tab delimiter for each empty cell.
-                            if (!firsttime)
+                            if(AddTabEachEmptyCell)
                             {
-                                text.Append("\t");
-                            }
-                            else
-                            {
-                                firsttime = false;
+                                if(!firsttime)
+                                {
+                                    text.Append("\t");
+                                }
+                                else
+                                {
+                                    firsttime = false;
+                                }
                             }
 
                             ICell cell = row.GetCell(j);
@@ -241,7 +256,9 @@ namespace NPOI.XSSF.Extractor
                             {
                                 if (formulasNotResults)
                                 {
-                                    text.Append(cell.CellFormula);
+                                    String contents = cell.CellFormula;
+                                    CheckMaxTextSize(text, contents);
+                                    text.Append(contents);
                                 }
                                 else
                                 {
@@ -272,9 +289,9 @@ namespace NPOI.XSSF.Extractor
                                 // Replace any newlines with spaces, otherwise it
                                 //  breaks the output
                                 String commentText = comment.String.String.Replace('\n', ' ');
+                                CheckMaxTextSize(text, commentText);
                                 text.Append(" Comment by ").Append(comment.Author).Append(": ").Append(commentText);
                             }
-
                         }
                         text.Append("\n");
                     }
@@ -318,9 +335,11 @@ namespace NPOI.XSSF.Extractor
             }
         }
 
-        private static void HandleStringCell(StringBuilder text, ICell cell)
+        private void HandleStringCell(StringBuilder text, ICell cell)
         {
-            text.Append(cell.RichStringCellValue.String);
+            string contents = cell.RichStringCellValue.String;
+            CheckMaxTextSize(text, contents);
+            text.Append(contents);
         }
 
         private void HandleNonStringCell(StringBuilder text, ICell cell, DataFormatter formatter)
@@ -337,9 +356,12 @@ namespace NPOI.XSSF.Extractor
 
                 if (cs.GetDataFormatString() != null)
                 {
-                    text.Append(formatter.FormatRawCellContents(
+                    string contents1 = formatter.FormatRawCellContents(
                           cell.NumericCellValue, cs.DataFormat, cs.GetDataFormatString()
-                    ));
+                    );
+                    
+                    CheckMaxTextSize(text, contents1);
+                    text.Append(contents1);
                     return;
                 }
             }
@@ -354,7 +376,7 @@ namespace NPOI.XSSF.Extractor
                     // to match what XSSFEventBasedExcelExtractor does
                     contents = "ERROR:" + contents;
                 }
-
+                CheckMaxTextSize(text, contents);
                 text.Append(contents);
             }
         }

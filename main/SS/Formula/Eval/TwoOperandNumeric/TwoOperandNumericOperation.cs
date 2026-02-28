@@ -4,7 +4,7 @@ using NPOI.SS.Formula.Functions;
 namespace NPOI.SS.Formula.Eval
 {
 
-    public abstract class TwoOperandNumericOperation : Fixed2ArgFunction, ArrayFunction
+    public abstract class TwoOperandNumericOperation : Fixed2ArgFunction, IArrayFunction
     {
         protected double SingleOperandEvaluate(ValueEval arg, int srcCellRow, int srcCellCol)
         {

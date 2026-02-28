@@ -27,6 +27,7 @@
 
 namespace NPOI.Util
 {
+    using NPOI.SS.UserModel;
     using System;
     using System.IO;
     using System.Runtime.Serialization;
@@ -35,6 +36,11 @@ namespace NPOI.Util
     {
         private static POILogger logger = POILogFactory.GetLogger(typeof(IOUtils));
 
+        /// <summary>
+        /// The default buffer size to use for the skip() methods.
+        /// </summary>
+        private static int SKIP_BUFFER_SIZE = 2048;
+        private static byte[] SKIP_BYTE_BUFFER;
         /// <summary>
         /// The current set global allocation limit override,
         /// -1 means limits are applied per record type. 
@@ -53,6 +59,19 @@ namespace NPOI.Util
         /// </summary>
         private static readonly int DEFAULT_BUFFER_SIZE = 4096;
 
+        /**
+         * If this value is set to > 0, {@link #safelyAllocate(long, int)} will ignore the
+         * maximum record length parameter.  This is designed to allow users to bypass
+         * the hard-coded maximum record lengths if they are willing to accept the risk
+         * of an OutOfMemoryException.
+         *
+         * @param maxOverride
+         * @since 4.0.0
+         */
+        public static void SetByteArrayMaxOverride(int maxOverride)
+        {
+            BYTE_ARRAY_MAX_OVERRIDE = maxOverride;
+        }
         /// <summary>
         /// Peeks at the first 8 bytes of the stream. Returns those bytes, but
         ///  with the stream unaffected. Requires a stream that supports mark/reset,
@@ -62,42 +81,51 @@ namespace NPOI.Util
         /// </summary>
         public static byte[] PeekFirst8Bytes(InputStream stream)
         {
+            return PeekFirstNBytes(stream, 8);
             // We want to peek at the first 8 bytes
-            stream.Mark(8);
+            //stream.Mark(8);
 
-            byte[] header = new byte[8];
-            int read = IOUtils.ReadFully(stream, header);
+            //byte[] header = new byte[8];
+            //int read = IOUtils.ReadFully(stream, header);
 
-            if(read < 1)
-                throw new EmptyFileException();
+            //if(read < 1)
+            //    throw new EmptyFileException();
 
-            // Wind back those 8 bytes
-            if(stream is PushbackInputStream)
-            {
-                //PushbackInputStream pin = (PushbackInputStream)stream;
-                //pin.Unread(header, 0, read);
-                stream.Position -= read;
-            }
-            else
-            {
-                stream.Reset();
-            }
+            //// Wind back those 8 bytes
+            //if(stream is PushbackInputStream)
+            //{
+            //    //PushbackInputStream pin = (PushbackInputStream)stream;
+            //    //pin.Unread(header, 0, read);
+            //    stream.Position -= read;
+            //}
+            //else
+            //{
+            //    stream.Reset();
+            //}
 
-            return header;
+            //return header;
         }
 
         public static byte[] PeekFirstNBytes(Stream stream, int limit)
         {
             long mark =  stream.Position;
-
+            if(stream is InputStream is1)
+            {
+                is1.Mark(limit);
+            }
+            else
+            {
+                stream.Seek(0, SeekOrigin.Begin);
+            }
             ByteArrayOutputStream bos = new ByteArrayOutputStream(limit);
             if(stream is ByteArrayInputStream inputStream)
                 Copy(new BoundedInputStream(inputStream, limit), bos);
             else
             {
-                MemoryStream ms = new MemoryStream();
-                stream.CopyTo(ms, limit);
-                Copy(new BoundedInputStream(new ByteArrayInputStream(ms.GetBuffer()), limit), bos);
+                //MemoryStream ms = new MemoryStream();
+                byte[] buffer = new byte[limit];
+                stream.Read(buffer, 0, limit);
+                Copy(new BoundedInputStream(new ByteArrayInputStream(buffer), limit), bos);
             }
 
             int readBytes = (int)bos.Length;
@@ -116,10 +144,13 @@ namespace NPOI.Util
                 //pin.unread(peekedBytes, 0, readBytes);
                 stream.Position -= peekedBytes.Length;
             }
+            else if(stream is InputStream is2)
+            {
+                is2.Reset();
+            }
             else
             {
-                stream.Position = mark;
-                (stream as InputStream)?.Reset();
+                stream.Seek(mark, SeekOrigin.Begin);
             }
 
             return peekedBytes;
@@ -226,6 +257,146 @@ namespace NPOI.Util
         }
 
         /// <summary>
+        /// <para>
+        /// Write a POI Document (<see cref="NPOI.SS.UserModel.Workbook}, {@link NPOI.sl.UserModel.SlideShow" />, etc) to an output stream and close the output stream.
+        /// This will attempt to close the output stream at the end even if there was a problem writing the document to the stream.
+        /// </para>
+        /// <para>
+        /// If you are using Java 7 or higher, you may prefer to use a try-with-resources statement instead.
+        /// This function exists for Java 6 code.
+        /// </para>
+        /// </summary>
+        /// <param name="doc"> a writeable document to write to the output stream</param>
+        /// <param name="out"> the output stream that the document is written to</param>
+        /// <exception cref="IOException">IOException</exception>
+        [Obsolete("since 4.0, use try-with-resources, will be removed in 4.2")]
+        [Removal(Version = "4.2")]
+        public static void Write(POIDocument doc, OutputStream out1)
+        {
+
+            try
+            {
+                doc.Write(out1);
+            }
+            finally
+            {
+                CloseQuietly(out1);
+            }
+        }
+
+        [Obsolete("since 4.0, use try-with-resources, will be removed in 4.2")]
+        [Removal(Version = "4.2")]
+        public static void Write(IWorkbook doc, OutputStream out1)
+        {
+            try
+            {
+                doc.Write(out1);
+            }
+            finally
+            {
+                CloseQuietly(out1);
+            }
+        }
+
+        /// <summary>
+        /// <para>
+        /// Write a POI Document (<see cref="IWorkbook" />, etc) to an output stream and close the output stream.
+        /// This will attempt to close the output stream at the end even if there was a problem writing the document to the stream.
+        /// This will also attempt to close the document, even if an error occurred while writing the document or closing the output stream.
+        /// </para>
+        /// <para>
+        /// If you are using Java 7 or higher, you may prefer to use a try-with-resources statement instead.
+        /// This function exists for Java 6 code.
+        /// </para>
+        /// </summary>
+        /// <param name="doc"> a writeable and closeable document to write to the output stream, then close</param>
+        /// <param name="out"> the output stream that the document is written to</param>
+        /// <exception cref="IOException">IOException</exception>
+        [Obsolete("since 4.0, use try-with-resources, will be removed in 4.2")]
+        [Removal(Version = "4.2")]
+        public static void WriteAndClose(POIDocument doc, OutputStream out1)
+        {
+
+            try
+            {
+                Write(doc, out1);
+            }
+            finally
+            {
+                CloseQuietly(doc);
+            }
+        }
+
+        /// <summary>
+        /// <para>
+        /// Like <see cref="WriteAndClose(POIDocument, OutputStream)" />, but for writing to a File instead of an OutputStream.
+        /// This will attempt to close the document, even if an error occurred while writing the document.
+        /// </para>
+        /// <para>
+        /// If you are using Java 7 or higher, you may prefer to use a try-with-resources statement instead.
+        /// This function exists for Java 6 code.
+        /// </para>
+        /// </summary>
+        /// <param name="doc"> a writeable and closeable document to write to the output file, then close</param>
+        /// <param name="out"> the output file that the document is written to</param>
+        /// <exception cref="IOException">IOException</exception>
+        [Obsolete("since 4.0, use try-with-resources, will be removed in 4.2")]
+        [Removal(Version = "4.2")]
+        public static void WriteAndClose(POIDocument doc, FileInfo out1)
+        {
+
+            try
+            {
+                doc.Write(out1);
+            }
+            finally
+            {
+                CloseQuietly(doc);
+            }
+        }
+
+        /// <summary>
+        /// <para>
+        /// Like <see cref="write(POIDocument, File)" />, but for writing a POI Document in place (to the same file that it was opened from).
+        /// This will attempt to close the document, even if an error occurred while writing the document.
+        /// </para>
+        /// <para>
+        /// If you are using Java 7 or higher, you may prefer to use a try-with-resources statement instead.
+        /// This function exists for Java 6 code.
+        /// </para>
+        /// </summary>
+        /// <param name="doc"> a writeable document to write in-place</param>
+        /// <exception cref="IOException">IOException</exception>
+        [Obsolete("since 4.0, use try-with-resources, will be removed in 4.2")]
+        [Removal(Version = "4.2")]
+        public static void WriteAndClose(POIDocument doc)
+        {
+
+            try
+            {
+                doc.Write();
+            }
+            finally
+            {
+                CloseQuietly(doc);
+            }
+        }
+        [Obsolete("since 4.0, use try-with-resources, will be removed in 4.2")]
+        [Removal(Version = "4.2")]
+        public static void WriteAndClose(IWorkbook doc, OutputStream out1)
+        {
+
+            try
+            {
+                doc.Write(out1);
+            }
+            finally
+            {
+                CloseQuietly(doc);
+            }
+        }
+
+        /// <summary>
         /// Copies all the data from the given InputStream to the OutputStream. It
         /// leaves both streams open, so you will still need to close them once done.
         /// </summary>
@@ -238,6 +409,10 @@ namespace NPOI.Util
             int count;
             while ((count = inp.Read(buff, 0, buff.Length)) >0)
             {
+                if (count < -1)
+                {
+                    throw new RecordFormatException("Can't have read < -1 bytes");
+                }
                 out1.Write(buff, 0, count);
             }
         }
@@ -287,12 +462,88 @@ namespace NPOI.Util
             }
         }
 
+        /// <summary>
+        /// <para>
+        /// Skips bytes from an input byte stream.
+        /// This implementation guarantees that it will read as many bytes
+        /// as possible before giving up; this may not always be the case for
+        /// skip() implementations in subclasses of <see cref="InputStream"/>.
+        /// </para>
+        /// <para>
+        /// Note that the implementation uses <see cref="InputStream.Read(byte[], int, int)" /> rather
+        /// than delegating to <see cref="InputStream.Skip(long)" />.
+        /// This means that the method may be considerably less efficient than using the actual skip implementation,
+        /// this is done to guarantee that the correct number of bytes are skipped.
+        /// </para>
+        /// <para>
+        /// </para>
+        /// <para>
+        /// This mimics POI's <see cref="ReadFully(InputStream, byte[])" />.
+        /// If the end of file is reached before any bytes are read, returns <tt>-1</tt>. If
+        /// the end of the file is reached After some bytes are read, returns the
+        /// number of bytes read. If the end of the file isn't reached before <tt>len</tt>
+        /// bytes have been read, will return <tt>len</tt> bytes.
+        /// </para>
+        /// <para>
+        /// </para>
+        /// <para>
+        /// Copied nearly verbatim from commons-io 41a3e9c
+        /// </para>
+        /// </summary>
+        /// <param name="input">byte stream to skip</param>
+        /// <param name="toSkip">number of bytes to skip.</param>
+        /// <returns>number of bytes actually skipped.</returns>
+        /// <exception cref="IOException">             if there is a problem reading the file</exception>
+        /// <exception cref="ArgumentException">if toSkip is negative</exception>
+        /// @see InputStream#skip(long)
+        ///
+        public static long SkipFully(InputStream input, long toSkip)
+        {
+            if (toSkip < 0) {
+                throw new ArgumentException("Skip count must be non-negative, actual: " + toSkip);
+            }
+            if (toSkip == 0) {
+                return 0L;
+            }
+            /*
+             * N.B. no need to synchronize this because: - we don't care if the buffer is created multiple times (the data
+             * is ignored) - we always use the same size buffer, so if it it is recreated it will still be OK (if the buffer
+             * size were variable, we would need to synch. to ensure some other thread did not create a smaller one)
+             */
+            if (SKIP_BYTE_BUFFER == null) {
+                SKIP_BYTE_BUFFER = new byte[SKIP_BUFFER_SIZE];
+            }
+            long remain = toSkip;
+            while (remain > 0) {
+                // See https://issues.apache.org/jira/browse/IO-203 for why we use read() rather than delegating to skip()
+                long n = input.Read(SKIP_BYTE_BUFFER, 0, (int) Math.Min(remain, SKIP_BUFFER_SIZE));
+                if (n <= 0) { // EOF
+                    break;
+                }
+                remain -= n;
+            }
+            if (toSkip == remain) {
+                return -1L;
+            }
+            return toSkip - remain;
+        }
+
         public static byte[] SafelyAllocate(long length, int maxLength)
         {
             SafelyAllocateCheck(length, maxLength);
 
-            CheckByteSizeLimit((int)length);
-
+            //CheckByteSizeLimit((int)length);
+            if(BYTE_ARRAY_MAX_OVERRIDE > 0)
+            {
+                if(length > BYTE_ARRAY_MAX_OVERRIDE)
+                {
+                    ThrowRFE(length, BYTE_ARRAY_MAX_OVERRIDE);
+                }
+            }
+            else if(length > maxLength)
+            {
+                ThrowRFE(length, maxLength);
+            }
             return new byte[(int)length];
         }
 
@@ -307,14 +558,6 @@ namespace NPOI.Util
                 throw new RecordFormatException("Can't allocate an array > " + int.MaxValue);
             }
             CheckLength(length, maxLength);
-        }
-
-        private static void CheckByteSizeLimit(int length)
-        {
-            if (BYTE_ARRAY_MAX_OVERRIDE != -1 && length > BYTE_ARRAY_MAX_OVERRIDE)
-            {
-                ThrowRFE(length, BYTE_ARRAY_MAX_OVERRIDE);
-            }
         }
 
         private static void CheckLength(long length, int maxLength)

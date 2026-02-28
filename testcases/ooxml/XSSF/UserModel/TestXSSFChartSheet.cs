@@ -59,7 +59,6 @@ namespace TestCases.XSSF.UserModel
             ClassicAssert.IsNull(sheet.ActiveCell);
             ClassicAssert.IsTrue(sheet.Autobreaks);
             ClassicAssert.IsNull(sheet.GetCellComment(new CellAddress(0, 0)));
-            ClassicAssert.IsNull(sheet.GetCellComment(new CellAddress(0, 0)));
             ClassicAssert.AreEqual(0, sheet.ColumnBreaks.Length);
             ClassicAssert.IsTrue(sheet.RowSumsBelow);
 

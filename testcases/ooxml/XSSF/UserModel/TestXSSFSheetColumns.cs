@@ -217,49 +217,52 @@ namespace TestCases.XSSF.UserModel
         [Test]
         public void RemoveColumn_RemoveExistingColumn_ColumnIsRemoved()
         {
-            XSSFWorkbook wb = new XSSFWorkbook();
-            XSSFSheet sheet = (XSSFSheet)wb.CreateSheet("sheet1");
+            FileInfo file;
+            using(XSSFWorkbook wb = new XSSFWorkbook())
+            {
+                XSSFSheet sheet = (XSSFSheet)wb.CreateSheet("sheet1");
 
-            _ = sheet.CreateColumn(1);
-            _ = sheet.CreateColumn(2);
-            _ = sheet.CreateColumn(3);
+                _ = sheet.CreateColumn(1);
+                _ = sheet.CreateColumn(2);
+                _ = sheet.CreateColumn(3);
 
-            ClassicAssert.NotNull(sheet.GetColumn(1));
-            ClassicAssert.NotNull(sheet.GetColumn(2));
-            ClassicAssert.NotNull(sheet.GetColumn(3));
-            ClassicAssert.AreEqual(1, sheet.FirstColumnNum);
-            ClassicAssert.AreEqual(3, sheet.LastColumnNum);
+                ClassicAssert.NotNull(sheet.GetColumn(1));
+                ClassicAssert.NotNull(sheet.GetColumn(2));
+                ClassicAssert.NotNull(sheet.GetColumn(3));
+                ClassicAssert.AreEqual(1, sheet.FirstColumnNum);
+                ClassicAssert.AreEqual(3, sheet.LastColumnNum);
 
-            sheet.RemoveColumn(sheet.GetColumn(3));
+                sheet.RemoveColumn(sheet.GetColumn(3));
 
-            ClassicAssert.IsNull(sheet.GetColumn(3));
-            ClassicAssert.AreEqual(1, sheet.FirstColumnNum);
-            ClassicAssert.AreEqual(2, sheet.LastColumnNum);
+                ClassicAssert.IsNull(sheet.GetColumn(3));
+                ClassicAssert.AreEqual(1, sheet.FirstColumnNum);
+                ClassicAssert.AreEqual(2, sheet.LastColumnNum);
 
-            _ = sheet.CreateColumn(3);
+                _ = sheet.CreateColumn(3);
 
-            sheet.RemoveColumn(sheet.GetColumn(1));
+                sheet.RemoveColumn(sheet.GetColumn(1));
 
-            ClassicAssert.IsNull(sheet.GetColumn(1));
-            ClassicAssert.AreEqual(2, sheet.FirstColumnNum);
-            ClassicAssert.AreEqual(3, sheet.LastColumnNum);
+                ClassicAssert.IsNull(sheet.GetColumn(1));
+                ClassicAssert.AreEqual(2, sheet.FirstColumnNum);
+                ClassicAssert.AreEqual(3, sheet.LastColumnNum);
 
-            _ = sheet.CreateColumn(1);
+                _ = sheet.CreateColumn(1);
 
-            ClassicAssert.NotNull(sheet.GetColumn(3));
-            ClassicAssert.AreEqual(3, sheet.LastColumnNum);
+                ClassicAssert.NotNull(sheet.GetColumn(3));
+                ClassicAssert.AreEqual(3, sheet.LastColumnNum);
 
-            sheet.RemoveColumn(sheet.GetColumn(2));
+                sheet.RemoveColumn(sheet.GetColumn(2));
 
-            ClassicAssert.IsNull(sheet.GetColumn(2));
-            ClassicAssert.AreEqual(1, sheet.FirstColumnNum);
-            ClassicAssert.AreEqual(3, sheet.LastColumnNum);
+                ClassicAssert.IsNull(sheet.GetColumn(2));
+                ClassicAssert.AreEqual(1, sheet.FirstColumnNum);
+                ClassicAssert.AreEqual(3, sheet.LastColumnNum);
 
-            FileInfo file = TempFile.CreateTempFile("poi-", ".xlsx");
-            Stream output = File.OpenWrite(file.FullName);
-            wb.Write(output);
-            output.Close();
-
+                file = TempFile.CreateTempFile("poi-", ".xlsx");
+                using(Stream output = File.OpenWrite(file.FullName))
+                {
+                    wb.Write(output);
+                }
+            }
             XSSFWorkbook wbLoaded = new XSSFWorkbook(file.ToString());
             XSSFSheet sheetLoaded = (XSSFSheet)wbLoaded.GetSheet("sheet1");
 

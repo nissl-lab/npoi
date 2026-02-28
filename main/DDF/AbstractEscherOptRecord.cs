@@ -155,11 +155,9 @@ namespace NPOI.DDF
          */
         public void SetEscherProperty(EscherProperty value)
         {
-            List<EscherProperty> toRemove = new List<EscherProperty>();
-            for (IEnumerator<EscherProperty> iterator =
-                          properties.GetEnumerator(); iterator.MoveNext(); )
+            List<EscherProperty> toRemove = [];
+            foreach (var prop in properties)
             {
-                EscherProperty prop = iterator.Current;
                 if (prop.Id == value.Id)
                 {
                     //iterator.Remove();
@@ -174,18 +172,20 @@ namespace NPOI.DDF
 
         public void RemoveEscherProperty(int num)
         {
-            List<EscherProperty> toRemove = new List<EscherProperty>();
-            for (IEnumerator<EscherProperty> iterator = EscherProperties.GetEnumerator(); iterator.MoveNext(); )
+            List<EscherProperty> toRemove = [];
+            foreach(var prop in EscherProperties)
             {
-                EscherProperty prop = iterator.Current;
                 if (prop.PropertyNumber == num)
                 {
                     //iterator.Remove();
                     toRemove.Add(prop);
                 }
             }
-            foreach (EscherProperty e in toRemove)
+
+            foreach(EscherProperty e in toRemove)
+            {
                 EscherProperties.Remove(e);
+            }
         }
 
         /**

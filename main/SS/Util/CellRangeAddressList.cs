@@ -52,7 +52,7 @@ namespace NPOI.SS.Util
             {
                 throw new ArgumentException("cell range cannot be null or empty");
             }
-            var ranges = cellRanges.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            var ranges = cellRanges.Split(',', StringSplitOptions.RemoveEmptyEntries);
             var list = new CellRangeAddressList();
             foreach(var range in ranges)
             {

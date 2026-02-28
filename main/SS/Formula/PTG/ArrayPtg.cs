@@ -96,18 +96,20 @@ using Cysharp.Text;
             _reserved1Short = 0;
             _reserved2Byte = 0;
         }
-        public Object[,] GetTokenArrayValues()
+        public Object[][] GetTokenArrayValues()
         {
             if (_arrayValues == null)
             {
                 throw new InvalidOperationException("array values not read yet");
             }
-            Object[,] result = new Object[_nRows,_nColumns];
+            Object[][] result = new Object[_nRows][];
             for (int r = 0; r < _nRows; r++)
             {
+                result[r] = new object[_nColumns];
+                object[] rowData = result[r];
                 for (int c = 0; c < _nColumns; c++)
                 {
-                    result[r,c] = _arrayValues[GetValueIndex(c, r)];
+                    rowData[c] = _arrayValues[GetValueIndex(c, r)];
                 }
             }
             return result;

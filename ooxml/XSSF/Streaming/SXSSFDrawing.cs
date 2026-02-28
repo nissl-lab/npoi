@@ -27,7 +27,7 @@ namespace NPOI.XSSF.Streaming
     /// Delegates most tasks to the non-streaming XSSF code.
     /// TODO: Potentially, Comment and Chart need a similar streaming wrapper like Picture.
     /// </summary>
-    public class SXSSFDrawing : IDrawing, IDrawing<XSSFShape>
+    public class SXSSFDrawing : IDrawing<XSSFShape>
     {
         private readonly SXSSFWorkbook _wb;
         private readonly XSSFDrawing _drawing;
@@ -64,10 +64,10 @@ namespace NPOI.XSSF.Streaming
         {
             return this.GetEnumerator();
         }
-        //public ObjectData CreateObjectData(IClientAnchor anchor, int storageId, int pictureIndex)
-        //{
-        //    return _drawing.CreateObjectData(anchor, storageId, pictureIndex);
-        //}
+        public IObjectData CreateObjectData(IClientAnchor anchor, int storageId, int pictureIndex)
+        {
+            return _drawing.CreateObjectData(anchor, storageId, pictureIndex);
+        }
         //public Iterator<XSSFShape> iterator()
         //{
         //    return _drawing.Shapes.Iterator();

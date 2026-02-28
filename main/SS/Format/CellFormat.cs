@@ -17,12 +17,12 @@
 
 namespace NPOI.SS.Format
 {
-    using System;
-
     using NPOI.SS.UserModel;
-    using System.Text.RegularExpressions;
-    using System.Collections.Generic;
     using NPOI.Util;
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.Text.RegularExpressions;
 
     /**
      * Format a value according to the standard Excel behavior.  This "standard" is
@@ -72,6 +72,7 @@ namespace NPOI.SS.Format
      */
     public class CellFormat
     {
+        private CultureInfo locale;
         private readonly String format;
         private readonly CellFormatPart posNumFmt;
         private readonly CellFormatPart zeroNumFmt;
@@ -80,9 +81,6 @@ namespace NPOI.SS.Format
         private readonly int formatPartCount;
 
         private static readonly Regex ONE_PART = new Regex(CellFormatPart.FORMAT_PAT.ToString() + "(;|$)", RegexOptions.IgnoreCase | RegexOptions.IgnorePatternWhitespace | RegexOptions.Compiled);
-
-        private static readonly CellFormatPart DEFAULT_TEXT_FORMAT =
-                new CellFormatPart("@");
 
         /*
          * Cells that cannot be formatted, e.g. cells that have a date or time
@@ -97,28 +95,32 @@ namespace NPOI.SS.Format
                 "###################################################";
 
         private const string QUOTE = "\"";
-
-        private static readonly CellFormat GENERAL_FORMAT = new GeneralCellFormat();
+        [Obsolete("use {@link #getInstance(Locale, \"General\")} instead")]
+        private static readonly CellFormat GENERAL_FORMAT = CreateGeneralFormat(LocaleUtil.GetUserLocale());
         /**
          * Format a value as it would be were no format specified.  This is also
          * used when the format specified is <tt>General</tt>.
          */
         public class GeneralCellFormat : CellFormat
         {
-            public GeneralCellFormat()
-                : base("General")
+            public GeneralCellFormat(CultureInfo locale)
+                : base(locale, "General")
             {
             }
             public override CellFormatResult Apply(Object value)
             {
-                String text = (new CellGeneralFormatter()).Format(value);
+                String text = (new CellGeneralFormatter(locale)).Format(value);
                 return new CellFormatResult(true, text, POIUtils.Color_Empty);
             }
         }
 
+        private static GeneralCellFormat CreateGeneralFormat(CultureInfo locale)
+        {
+            return new GeneralCellFormat(locale);
+        }
         /** Maps a format string to its Parsed version for efficiencies sake. */
-        private static readonly Dictionary<String, CellFormat> formatCache =
-                new Dictionary<String, CellFormat>();
+        private static Dictionary<CultureInfo, Dictionary<String, CellFormat>> formatCache =
+                    new Dictionary<CultureInfo, Dictionary<String, CellFormat>>();
 
         /**
          * Returns a {@link CellFormat} that applies the given format.  Two calls
@@ -130,28 +132,48 @@ namespace NPOI.SS.Format
          */
         public static CellFormat GetInstance(String format)
         {
+            return GetInstance(LocaleUtil.GetUserLocale(), format);
+        }
+                /**
+         * Returns a {@link CellFormat} that applies the given format.  Two calls
+         * with the same format may or may not return the same object.
+         *
+         * @param locale The locale.
+         * @param format The format.
+         *
+         * @return A {@link CellFormat} that applies the given format.
+         */
+        public static CellFormat GetInstance(CultureInfo locale, String format)
+        {
+            Dictionary<String, CellFormat> formatMap = formatCache.TryGetValue(locale, out Dictionary<string, CellFormat> value) ? value : null;
+            if (formatMap == null)
+            {
+                formatMap = new Dictionary<String, CellFormat>();
+                formatCache[locale] = formatMap;
+            }
             CellFormat fmt = null;
-            if (formatCache.TryGetValue(format, out CellFormat value))
-                fmt = value;
+            if (formatMap.TryGetValue(format, out CellFormat value1))
+                fmt = value1;
             if (fmt == null)
             {
                 if (format.Equals("General") || format.Equals("@"))
-                    fmt = GENERAL_FORMAT;
+                   fmt = CreateGeneralFormat(locale);
                 else
-                    fmt = new CellFormat(format);
-                formatCache.Add(format, fmt);
+                   fmt = new CellFormat(locale, format);
+               formatMap.Add(format, fmt);
             }
             return fmt;
         }
-
         /**
          * Creates a new object.
          *
          * @param format The format.
          */
-        private CellFormat(String format)
+        private CellFormat(CultureInfo locale, String format)
         {
+            this.locale = locale;
             this.format = format;
+            CellFormatPart defaultTextFormat = new CellFormatPart(locale, "@");
             MatchCollection mc = ONE_PART.Matches(format);
             List<CellFormatPart> parts = new List<CellFormatPart>();
 
@@ -166,7 +188,7 @@ namespace NPOI.SS.Format
                     if (valueDesc.EndsWith(';'))
                         valueDesc = valueDesc.Substring(0, valueDesc.Length - 1);
 
-                    parts.Add(new CellFormatPart(valueDesc));
+                    parts.Add(new CellFormatPart(locale, valueDesc));
                 }
                 catch
                 {
@@ -182,19 +204,19 @@ namespace NPOI.SS.Format
                     posNumFmt = parts[(0)];
                     negNumFmt = null;
                     zeroNumFmt = null;
-                    textFmt = DEFAULT_TEXT_FORMAT;
+                    textFmt = defaultTextFormat;
                     break;
                 case 2:
                     posNumFmt = parts[0];
                     negNumFmt = parts[1];
                     zeroNumFmt = null;
-                    textFmt = DEFAULT_TEXT_FORMAT;
+                    textFmt = defaultTextFormat;
                     break;
                 case 3:
                     posNumFmt = parts[0];
                     negNumFmt = parts[1];
                     zeroNumFmt = parts[2];
-                    textFmt = DEFAULT_TEXT_FORMAT;
+                    textFmt = defaultTextFormat;
                     break;
                 case 4:
                 default:
@@ -335,7 +357,7 @@ namespace NPOI.SS.Format
                     }
                     else
                     {
-                        return new CellFormatPart("General");
+                        return new CellFormatPart(locale, "General");
                     }
                 }
                 else if (formatPartCount == 2)

@@ -36,6 +36,14 @@ namespace NPOI.SS.UserModel
      */
     public class IndexedColors
     {
+        public static readonly IndexedColors Black1;
+        public static readonly IndexedColors White1;
+        public static readonly IndexedColors Red1;
+        public static readonly IndexedColors BrightGreen1;
+        public static readonly IndexedColors Blue1;
+        public static readonly IndexedColors Yellow1;
+        public static readonly IndexedColors Pink1;
+        public static readonly IndexedColors Turquoise1;
         public static readonly IndexedColors Black;
         public static readonly IndexedColors White;
         public static readonly IndexedColors Red;
@@ -55,6 +63,7 @@ namespace NPOI.SS.UserModel
         public static readonly IndexedColors CornflowerBlue;
         public static readonly IndexedColors Maroon;
         public static readonly IndexedColors LemonChiffon;
+        public static readonly IndexedColors LightTurquoise1;
         public static readonly IndexedColors Orchid;
         public static readonly IndexedColors Coral;
         public static readonly IndexedColors RoyalBlue;
@@ -98,6 +107,14 @@ namespace NPOI.SS.UserModel
         static readonly Dictionary<int, IndexedColors> mappingIndex = null;
         static IndexedColors()
         {
+            Black1 = new IndexedColors(0, new HSSFColor.Black());
+            White1 = new IndexedColors(1, new HSSFColor.White());
+            Red1 = new IndexedColors(2, new HSSFColor.Red());
+            BrightGreen1 = new IndexedColors(3, new HSSFColor.BrightGreen());
+            Blue1 = new IndexedColors(4, new HSSFColor.Blue());
+            Yellow1 = new IndexedColors(5, new HSSFColor.Yellow());
+            Pink1 = new IndexedColors(6, new HSSFColor.Pink());
+            Turquoise1 = new IndexedColors(7, new HSSFColor.Turquoise());
             Black = new IndexedColors(8, new HSSFColor.Black());
             White = new IndexedColors(9, new HSSFColor.White());
             Red = new IndexedColors(10, new HSSFColor.Red());
@@ -117,6 +134,7 @@ namespace NPOI.SS.UserModel
             CornflowerBlue = new IndexedColors(24, new HSSFColor.CornflowerBlue());
             Maroon = new IndexedColors(25, new HSSFColor.Maroon());
             LemonChiffon = new IndexedColors(26, new HSSFColor.LemonChiffon());
+            LightTurquoise1 = new IndexedColors(27, new HSSFColor.LemonChiffon());
             Orchid = new IndexedColors(28, new HSSFColor.Orchid());
             Coral = new IndexedColors(29, new HSSFColor.Coral());
             RoyalBlue = new IndexedColors(30, new HSSFColor.RoyalBlue());
@@ -149,6 +167,14 @@ namespace NPOI.SS.UserModel
 
 
             mappingName = new Dictionary<string, IndexedColors>();
+            mappingName.Add("black1", IndexedColors.Black);
+            mappingName.Add("white1", IndexedColors.White);
+            mappingName.Add("red1", IndexedColors.Red);
+            mappingName.Add("brightgreen1", IndexedColors.BrightGreen);
+            mappingName.Add("blue1", IndexedColors.Blue);
+            mappingName.Add("yellow1", IndexedColors.Yellow);
+            mappingName.Add("pink1", IndexedColors.Pink);
+            mappingName.Add("turquoise1", IndexedColors.Turquoise);
             mappingName.Add("black", IndexedColors.Black);
             mappingName.Add("white", IndexedColors.White);
             mappingName.Add("red", IndexedColors.Red);
@@ -168,6 +194,7 @@ namespace NPOI.SS.UserModel
             mappingName.Add("cornflowerblue", IndexedColors.CornflowerBlue);
             mappingName.Add("maroon", IndexedColors.Maroon);
             mappingName.Add("lemonchiffon", IndexedColors.LemonChiffon);
+            mappingName.Add("lightturquoise1", IndexedColors.LightTurquoise);
             mappingName.Add("orchid", IndexedColors.Orchid);
             mappingName.Add("coral", IndexedColors.Coral);
             mappingName.Add("royalblue", IndexedColors.RoyalBlue);
@@ -200,6 +227,14 @@ namespace NPOI.SS.UserModel
 
 
             mappingIndex = new Dictionary<int, IndexedColors>();
+            mappingIndex.Add(0, IndexedColors.Black);
+            mappingIndex.Add(1, IndexedColors.White);
+            mappingIndex.Add(2, IndexedColors.Red);
+            mappingIndex.Add(3, IndexedColors.BrightGreen);
+            mappingIndex.Add(4, IndexedColors.Blue);
+            mappingIndex.Add(5, IndexedColors.Yellow);
+            mappingIndex.Add(6, IndexedColors.Pink);
+            mappingIndex.Add(7, IndexedColors.Turquoise);
             mappingIndex.Add(8, IndexedColors.Black);
             mappingIndex.Add(9, IndexedColors.White);
             mappingIndex.Add(10, IndexedColors.Red);
@@ -219,6 +254,7 @@ namespace NPOI.SS.UserModel
             mappingIndex.Add(24, IndexedColors.CornflowerBlue);
             mappingIndex.Add(25, IndexedColors.Maroon);
             mappingIndex.Add(26, IndexedColors.LemonChiffon);
+            mappingIndex.Add(27, IndexedColors.LightTurquoise);
             mappingIndex.Add(28, IndexedColors.Orchid);
             mappingIndex.Add(29, IndexedColors.Coral);
             mappingIndex.Add(30, IndexedColors.RoyalBlue);

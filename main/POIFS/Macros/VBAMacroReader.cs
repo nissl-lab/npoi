@@ -41,16 +41,15 @@ namespace NPOI.POIFS.Macros
 
         public VBAMacroReader(InputStream rstream)
         {
-            PushbackInputStream stream = new PushbackInputStream(rstream, 8);
-            byte[] header8 = IOUtils.PeekFirst8Bytes(stream);
-
-            if (NPOIFSFileSystem.HasPOIFSHeader(header8))
+            InputStream is1 = FileMagicContainer.PrepareToCheckMagic(rstream);
+            FileMagic fm = FileMagicContainer.ValueOf(is1);
+            if (fm == FileMagic.OLE2)
             {
-                fs = new NPOIFSFileSystem(stream);
+                fs = new NPOIFSFileSystem(is1);
             }
             else
             {
-                OpenOOXML(stream);
+                OpenOOXML(is1);
             }
         }
 
@@ -218,7 +217,7 @@ namespace NPOI.POIFS.Macros
          * @throws IOException
          */
 
-        private static String ReadString(InputStream stream, int length, Encoding charset)
+        private static String ReadString(RLEDecompressingInputStream stream, int length, Encoding charset)
         {
             byte[] buffer = new byte[length];
             int count = stream.Read(buffer);
@@ -254,9 +253,8 @@ namespace NPOI.POIFS.Macros
             else
             {
                 // Decompress a previously found module and store the decompressed result into module.buf
-                InputStream stream = new RLEDecompressingInputStream(
-                        new MemoryStream(module.buf, moduleOffset, module.buf.Length - moduleOffset)
-                );
+                using MemoryStream memoryStream = new(module.buf, moduleOffset, module.buf.Length - moduleOffset);
+                using RLEDecompressingInputStream stream = new(memoryStream);
                 module.Read(stream);
                 stream.Close();
             }
@@ -287,7 +285,7 @@ namespace NPOI.POIFS.Macros
                 {
                     throw new IOException("tried to skip " + module.offset + " bytes, but actually skipped " + skippedBytes + " bytes");
                 }
-                InputStream stream = new RLEDecompressingInputStream(dis);
+                using RLEDecompressingInputStream stream = new(dis);
                 module.Read(stream);
                 stream.Close();
             }
@@ -299,7 +297,7 @@ namespace NPOI.POIFS.Macros
           * @throws IOException
           */
 
-        private static void TrySkip(InputStream in1, long n)
+        private static void TrySkip(RLEDecompressingInputStream in1, long n)
         {
             long skippedBytes = in1.Skip(n);
             if (skippedBytes != n)

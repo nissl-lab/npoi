@@ -2,6 +2,7 @@
 using System.Text;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using ExtendedNumerics;
 
 namespace NPOI.SS.Util
 {
@@ -188,10 +189,10 @@ namespace NPOI.SS.Util
 
         private string _pattern;
         private readonly NumberFormatInfo _formatInfo;
-
+        
         public DecimalFormat(string pattern)
         {
-            if (pattern.Contains("'"))
+            if (pattern.Contains('\''))
                 throw new ArgumentException("invalid pattern");
             this._pattern = pattern;
         }
@@ -206,7 +207,7 @@ namespace NPOI.SS.Util
         }
 
         private static readonly Regex RegexFraction = new Regex("#+/#+", RegexOptions.Compiled);
-        public override string Format(Object obj)
+        public override string Format(object obj)
         {
             return Format(obj, CultureInfo.CurrentCulture);
         }
@@ -220,13 +221,16 @@ namespace NPOI.SS.Util
                 culture.NumberFormat = _formatInfo;
             }
                 
-            if (_pattern.Contains("'"))
+            if (_pattern.Contains('\''))
             {
                 return Convert.ToDouble(obj, CultureInfo.InvariantCulture).ToString(culture);
             }
             else
             {
-                var value = Convert.ToDouble(obj, CultureInfo.InvariantCulture);
+                object toConvert = obj;
+                if(obj is BigDecimal)
+                    toConvert = obj.ToString();
+                var value = Convert.ToDouble(toConvert, CultureInfo.InvariantCulture);
                 var ret = value.ToString(_pattern, culture);
                 if (string.IsNullOrEmpty(ret))
                     ret = "0";

@@ -188,7 +188,7 @@ namespace NPOI.XSSF.UserModel
                 sw.Write(" xmlns:x=\"urn:schemas-microsoft-com:office:excel\"");
                 sw.Write(" xmlns:w=\"urn:schemas-microsoft-com:office:word\"");
                 sw.Write(" xmlns:p=\"urn:schemas-microsoft-com:office:powerpoint\"");
-                sw.Write(">");
+                sw.Write('>');
 
                 for (int i = 0; i < _items.Count; i++)
                 {

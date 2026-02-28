@@ -158,21 +158,6 @@ namespace NPOI.SS.UserModel
         /// <summary>
         /// Finds a font that matches the one with the supplied attributes
         /// </summary>
-        /// <param name="boldWeight"></param>
-        /// <param name="color"></param>
-        /// <param name="fontHeight"></param>
-        /// <param name="name"></param>
-        /// <param name="italic"></param>
-        /// <param name="strikeout"></param>
-        /// <param name="typeOffset"></param>
-        /// <param name="underline"></param>
-        /// <returns>the font with the matched attributes or null</returns>
-        [Obsolete("deprecated 3.15 beta 2. Use {@link #findFont(boolean, short, short, String, boolean, boolean, short, byte)} instead.")]
-        IFont FindFont(short boldWeight, short color, short fontHeight, String name, bool italic, bool strikeout, FontSuperScript typeOffset, FontUnderlineType underline);
-
-        /// <summary>
-        /// Finds a font that matches the one with the supplied attributes
-        /// </summary>
         /// <param name="bold"></param>
         /// <param name="color"></param>
         /// <param name="fontHeight"></param>
@@ -449,5 +434,16 @@ namespace NPOI.SS.UserModel
         /// Returns the spreadsheet version (EXCLE97) of this workbook
         /// </summary>
         SpreadsheetVersion SpreadsheetVersion { get; }
+
+        /// <summary>
+        /// Adds an OLE package manager object with the given content to the sheet
+        /// </summary>
+        /// <param name="oleData">the payload</param>
+        /// <param name="label">the label of the payload</param>
+        /// <param name="fileName">the original filename</param>
+        /// <param name="command">the command to open the payload</param>
+        /// <return>the index of the added ole object, i.e. the storage id</return>
+        /// <exception cref="IOException">if the object can't be embedded</exception>
+        int AddOlePackage(byte[] oleData, String label, String fileName, String command);
     }
 }

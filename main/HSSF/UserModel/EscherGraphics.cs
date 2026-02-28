@@ -313,7 +313,7 @@ namespace NPOI.HSSF.UserModel
                 hssfColor = workbook.GetCustomPalette().FindSimilarColor((byte)foreground.R, (byte)foreground.G, (byte)foreground.B);
             bool bold = font.IsBold;
             bool italic = font.IsItalic;
-            HSSFFont hssfFont = (HSSFFont)workbook.FindFont(bold ? (short)NPOI.SS.UserModel.FontBoldWeight.Bold : (short)NPOI.SS.UserModel.FontBoldWeight.Normal,
+            HSSFFont hssfFont = (HSSFFont)workbook.FindFont(bold,
                         hssfColor.Indexed,
                         (short)(font.Size * 20),
                         font.Name,
@@ -325,7 +325,7 @@ namespace NPOI.HSSF.UserModel
             if (hssfFont == null)
             {
                 hssfFont = (HSSFFont)workbook.CreateFont();
-                hssfFont.Boldweight = (short)(bold ? NPOI.SS.UserModel.FontBoldWeight.Bold : 0);
+                hssfFont.IsBold = bold;
                 hssfFont.Color = (hssfColor.Indexed);
                 hssfFont.FontHeight = ((short)(font.Size * 20));
                 hssfFont.FontName = font.Name;

@@ -30,7 +30,7 @@ namespace TestCases.SS.UserModel
         [Test]
         public void FromInt()
         {
-            int[] illegalIndices = { -1, 0, 27, 65 };
+            int[] illegalIndices = { -1, 65 };
             foreach (int index in illegalIndices)
             {
                 try

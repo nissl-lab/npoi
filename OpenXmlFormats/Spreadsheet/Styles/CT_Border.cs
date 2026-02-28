@@ -61,16 +61,15 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public override string ToString()
         {
-            MemoryStream ms = new MemoryStream();
-            StreamWriter sw = new StreamWriter(ms);
+            using MemoryStream ms = new MemoryStream();
+            using StreamWriter sw = new StreamWriter(ms);
             this.Write(sw, "border");
             sw.Flush();
             ms.Position = 0;
-            using (StreamReader sr = new StreamReader(ms))
-            {
-                return sr.ReadToEnd();
-            }
+            using StreamReader sr = new StreamReader(ms);
+            return sr.ReadToEnd();
         }
+
         public static CT_Border Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
@@ -103,11 +102,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "diagonalUp", this.diagonalUp, false);
             XmlHelper.WriteAttribute(sw, "diagonalDown", this.diagonalDown, false);
             XmlHelper.WriteAttribute(sw, "outline", this.outline, false);
-            sw.Write(">");
+            sw.Write('>');
             if (this.left != null)
                 this.left.Write(sw, "left");
             if (this.right != null)
@@ -122,7 +121,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.vertical.Write(sw, "vertical");
             if (this.horizontal != null)
                 this.horizontal.Write(sw, "horizontal");
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.WriteEndElement(nodeName);
         }
 
         public CT_Border Copy()
@@ -154,20 +153,20 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             return this.diagonalField != null;
         }
-        public void unsetDiagonal()
+        public void UnsetDiagonal()
         {
             this.diagonalField = null;
         }
 
-        public void unsetRight()
+        public void UnsetRight()
         {
             this.rightField = null;
         }
-        public void unsetLeft()
+        public void UnsetLeft()
         {
             this.leftField = null;
         }
-        public void unsetTop()
+        public void UnsetTop()
         {
             this.topField = null;
         }
@@ -228,6 +227,38 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             if (this.bottomField == null)
                 this.bottomField = new CT_BorderPr();
             return this.bottomField;
+        }
+
+        public bool IsSetVertical()
+        {
+            return verticalField != null;
+        }
+
+        public CT_BorderPr AddNewVertical()
+        {
+            verticalField = new CT_BorderPr();
+            return verticalField;
+        }
+
+        public void UnsetVertical()
+        {
+            verticalField = null;
+        }
+
+        public bool IsSetHorizontal()
+        {
+            return horizontalField != null;
+        }
+
+        public CT_BorderPr AddNewHorizontal()
+        {
+            horizontalField = new CT_BorderPr();
+            return horizontalField;
+        }
+
+        public void UnsetHorizontal()
+        {
+            horizontalField = null;
         }
 
         [XmlElement(Namespace = "http://schemas.openxmlformats.org/spreadsheetml/2006/main")]

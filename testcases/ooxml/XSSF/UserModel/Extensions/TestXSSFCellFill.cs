@@ -31,7 +31,7 @@ namespace TestCases.XSSF.UserModel.Extensions
         public void TestGetFillBackgroundColor()
         {
             CT_Fill ctFill = new CT_Fill();
-            XSSFCellFill cellFill = new XSSFCellFill(ctFill);
+            XSSFCellFill cellFill = new XSSFCellFill(ctFill, null);
             CT_PatternFill ctPatternFill = ctFill.AddNewPatternFill();
             CT_Color bgColor = ctPatternFill.AddNewBgColor();
             ClassicAssert.IsNotNull(cellFill.GetFillBackgroundColor());
@@ -43,7 +43,7 @@ namespace TestCases.XSSF.UserModel.Extensions
         public void TestGetFillForegroundColor()
         {
             CT_Fill ctFill = new CT_Fill();
-            XSSFCellFill cellFill = new XSSFCellFill(ctFill);
+            XSSFCellFill cellFill = new XSSFCellFill(ctFill, null);
             CT_PatternFill ctPatternFill = ctFill.AddNewPatternFill();
             CT_Color fgColor = ctPatternFill.AddNewFgColor();
             ClassicAssert.IsNotNull(cellFill.GetFillForegroundColor());
@@ -55,7 +55,7 @@ namespace TestCases.XSSF.UserModel.Extensions
         public void TestGetSetPatternType()
         {
             CT_Fill ctFill = new CT_Fill();
-            XSSFCellFill cellFill = new XSSFCellFill(ctFill);
+            XSSFCellFill cellFill = new XSSFCellFill(ctFill, null);
             CT_PatternFill ctPatternFill = ctFill.AddNewPatternFill();
             ctPatternFill.patternType = (ST_PatternType.solid);
             ClassicAssert.AreEqual(ST_PatternType.solid, cellFill.GetPatternType());
@@ -64,7 +64,7 @@ namespace TestCases.XSSF.UserModel.Extensions
         public void TestGetNotModifies()
         {
             CT_Fill ctFill = new CT_Fill();
-            XSSFCellFill cellFill = new XSSFCellFill(ctFill);
+            XSSFCellFill cellFill = new XSSFCellFill(ctFill, null);
             CT_PatternFill ctPatternFill = ctFill.AddNewPatternFill();
             ctPatternFill.patternType = (ST_PatternType.darkDown);
             ClassicAssert.AreEqual(ST_PatternType.darkDown, cellFill.GetPatternType());

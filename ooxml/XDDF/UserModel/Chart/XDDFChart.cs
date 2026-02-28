@@ -721,9 +721,9 @@ namespace NPOI.XDDF.UserModel.Chart
             int numOfPoints = categoryData.PointCount;
             for(int i = 0; i < numOfPoints; i++)
             {
-                XSSFRow row = this.GetRow(sheet, i + 1); // first row is for title
-                this.GetCell(row, categoryData.ColIndex).SetCellValue(categoryData.GetPointAt(i).ToString());
-                this.GetCell(row, valuesData.ColIndex).SetCellValue(Convert.ToDouble(valuesData.GetPointAt(i)));
+                XSSFRow row = GetRow(sheet, i + 1); // first row is for title
+                GetCell(row, categoryData.ColIndex).SetCellValue(categoryData.GetPointAt(i).ToString());
+                GetCell(row, valuesData.ColIndex).SetCellValue(Convert.ToDouble(valuesData.GetPointAt(i)));
             }
         }
 
@@ -740,7 +740,7 @@ namespace NPOI.XDDF.UserModel.Chart
         /// <remarks>
         /// @since POI 4.0.0
         /// </remarks>
-        private XSSFRow GetRow(XSSFSheet sheet, int index)
+        private static XSSFRow GetRow(XSSFSheet sheet, int index)
         {
             if(sheet.GetRow(index) != null)
             {
@@ -766,7 +766,7 @@ namespace NPOI.XDDF.UserModel.Chart
         /// <remarks>
         /// @since POI 4.0.0
         /// </remarks>
-        private XSSFCell GetCell(XSSFRow row, int index)
+        private static XSSFCell GetCell(XSSFRow row, int index)
         {
             if(row.GetCell(index) != null)
             {
@@ -837,10 +837,10 @@ namespace NPOI.XDDF.UserModel.Chart
         public CellReference SetSheetTitle(string title, int column)
         {
             XSSFSheet sheet = GetSheet();
-            XSSFRow row = this.GetRow(sheet, 0);
-            XSSFCell cell = this.GetCell(row, column);
+            XSSFRow row = GetRow(sheet, 0);
+            XSSFCell cell = GetCell(row, column);
             cell.SetCellValue(title);
-            this.updateSheetTable(sheet.GetTables()[0].GetCTTable(), title, column);
+            updateSheetTable(sheet.GetTables()[0].GetCTTable(), title, column);
             return new CellReference(sheet.SheetName, 0, column, true, true);
         }
 
@@ -856,7 +856,7 @@ namespace NPOI.XDDF.UserModel.Chart
         /// <param name="index">
         /// index of column
         /// </param>
-        private void updateSheetTable(OpenXmlFormats.Spreadsheet.CT_Table ctTable,
+        private static void updateSheetTable(OpenXmlFormats.Spreadsheet.CT_Table ctTable,
             string title, int index)
         {
             CT_TableColumns tableColumnList = ctTable.tableColumns;

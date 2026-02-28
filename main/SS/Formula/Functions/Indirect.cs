@@ -129,7 +129,7 @@ namespace NPOI.SS.Formula.Functions
 
             String refStrPart1;
             String refStrPart2;
-            if (Table.IsStructuredReference.Match(refText).Success)
+            if (Table.IsStructuredReference.IsMatch(refText))
             { // The argument is structured reference
                 Area3DPxg areaPtg = null;
                 try

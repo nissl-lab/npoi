@@ -100,8 +100,6 @@ namespace NPOI.XDDF.UserModel.Chart
             }
         }
 
-
-
         public XDDFTextBody TextBody
         {
             get

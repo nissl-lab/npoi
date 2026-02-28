@@ -32,6 +32,9 @@ using Cysharp.Text;
     /// </summary>
     public class UnknownEscherRecord : EscherRecord, ICloneable
     {
+        //arbitrarily selected; may need to increase
+        private static int MAX_RECORD_LENGTH = 100_000_000;
+
         private static byte[] NO_BYTES = [];
 
         /** The data for this record not including the the 8 byte header */
@@ -53,15 +56,15 @@ using Cysharp.Text;
         {
             int bytesRemaining = ReadHeader(data, offset);
             /*
-		     * Modified by Zhang Zhang
-		     * Have a check between avaliable bytes and bytesRemaining, 
-		     * take the avaliable length if the bytesRemaining out of range.
-		     * July 09, 2010
-		     */
-            int avaliable = data.Length - (offset + 8);
-            if (bytesRemaining > avaliable)
+             * Modified by Zhang Zhang
+             * Have a check between available bytes and bytesRemaining, 
+             * take the available length if the bytesRemaining out of range.
+             * July 09, 2010
+             */
+            int available = data.Length - (offset + 8);
+            if (bytesRemaining > available)
             {
-                bytesRemaining = avaliable;
+                bytesRemaining = available;
             }
             if (IsContainerRecord)
             {
@@ -82,7 +85,10 @@ using Cysharp.Text;
             }
             else
             {
-                _thedata = new byte[bytesRemaining];
+                if (bytesRemaining < 0) {
+                    bytesRemaining = 0;
+                }
+                _thedata = IOUtils.SafelyAllocate(bytesRemaining, MAX_RECORD_LENGTH);
                 Array.Copy(data, offset + 8, _thedata, 0, bytesRemaining);
                 return bytesRemaining + 8;
             }
@@ -222,11 +228,12 @@ using Cysharp.Text;
             builder.Append(tab).Append(FormatXmlRecordHeader(GetType().Name, HexDump.ToHex(RecordId), HexDump.ToHex(Version), HexDump.ToHex(Instance)))
                     .Append(tab).Append("\t").Append("<IsContainer>").Append(IsContainerRecord).Append("</IsContainer>\n")
                     .Append(tab).Append("\t").Append("<Numchildren>").Append(HexDump.ToHex(_childRecords.Count)).Append("</Numchildren>\n");
-            for (IEnumerator<EscherRecord> iterator = _childRecords.GetEnumerator(); iterator.MoveNext(); )
+
+            foreach (EscherRecord record in _childRecords)
             {
-                EscherRecord record = iterator.Current;
                 builder.Append(record.ToXml(tab + "\t"));
             }
+
             builder.Append(theDumpHex).Append("\n");
             builder.Append(tab).Append("</").Append(GetType().Name).Append(">\n");
             return builder.ToString();

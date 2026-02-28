@@ -425,6 +425,14 @@ namespace NPOI.Util
             return destinationArray;
         }
 
+        public static byte[] GetByteArray(byte[] data, int offset, int size, int maxSize)
+        {
+            byte[] copy = IOUtils.SafelyAllocate(size, maxSize);
+            Array.Copy(data, offset, copy, 0, size);
+
+            return copy;
+        }
+
         //Are the following methods Obsoleted?
         [Obsolete]
         public static double GetDouble(byte[] data)

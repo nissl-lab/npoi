@@ -35,6 +35,14 @@ namespace NPOI.SS.UserModel
 
         BorderStyle BorderTop { get; set; }
 
+        /// <summary>
+        /// Only valid for range borders, such as table styles
+        /// </summary>
+        BorderStyle BorderVertical { get; set; }
+        /// <summary>
+        /// Only valid for range borders, such as table styles
+        /// </summary>
+        BorderStyle BorderHorizontal { get; set; }
         short BottomBorderColor { get; set; }
 
         short DiagonalBorderColor { get; set; }
@@ -53,5 +61,22 @@ namespace NPOI.SS.UserModel
 
         IColor RightBorderColorColor { get; set; }
         IColor TopBorderColorColor { get; set; }
+        /// <summary>
+        /// Range internal borders. Only relevant for range styles, such as table formatting
+        /// </summary>
+        short VerticalBorderColor { get; set; }
+        /// <summary>
+        /// Range internal borders. Only relevant for range styles, such as table formatting
+        /// </summary>
+        IColor VerticalBorderColorColor { get; set; }
+
+        /// <summary>
+        /// Range internal borders. Only relevant for range styles, such as table formatting
+        /// </summary>
+        short HorizontalBorderColor { get; set; }
+        /// <summary>
+        /// Range internal borders. Only relevant for range styles, such as table formatting
+        /// </summary>
+        IColor HorizontalBorderColorColor {  get; set; }
     }
 }

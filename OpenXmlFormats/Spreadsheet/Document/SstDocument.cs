@@ -61,7 +61,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         public void Save(Stream stream)
         {
             StreamWriter sw = new StreamWriter(stream, Encoding.UTF8);
-            sw.Write("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\" ?><sst xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" count=\"{0}\" uniqueCount=\"{1}\">", this.GetSst().count, this.GetSst().uniqueCount);
+            sw.Write("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\" ?><sst xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\"");
+            sw.WriteAttribute("count", this.GetSst().count);
+            sw.WriteAttribute("uniqueCount", this.GetSst().uniqueCount);
+            sw.Write('>');
             foreach (CT_Rst ssi in this.GetSst().si)
             {
                 ssi.Write(sw, "si");

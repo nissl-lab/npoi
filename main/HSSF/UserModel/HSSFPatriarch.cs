@@ -34,7 +34,7 @@ namespace NPOI.HSSF.UserModel
     /// little other than act as a container for other shapes and Groups.
     /// @author Glen Stampoultzis (glens at apache.org)
     /// </summary>
-    public class HSSFPatriarch : HSSFShapeContainer, IDrawing, IDrawing<HSSFShape>
+    public class HSSFPatriarch : HSSFShapeContainer, IDrawing<HSSFShape>
     {
         //private static POILogger log = POILogFactory.GetLogger(typeof(HSSFPatriarch));
         readonly List<HSSFShape> _shapes = new List<HSSFShape>();
@@ -100,7 +100,7 @@ namespace NPOI.HSSF.UserModel
             Hashtable coordinates = new Hashtable(tailRecords.Count);
             foreach (NoteRecord rec in tailRecords.Values)
             {
-                String noteRef = new CellReference(rec.Row, rec.Column).FormatAsString(); // A1-style notation
+                String noteRef = new CellReference(rec.Row, rec.Column, true, true).FormatAsString(); // A1-style notation
                 if (coordinates.Contains(noteRef))
                 {
                     throw new InvalidOperationException("found multiple cell comments for cell " + noteRef);
@@ -200,18 +200,8 @@ namespace NPOI.HSSF.UserModel
             return CreatePicture((HSSFClientAnchor)anchor, pictureIndex);
         }
 
-        /**
-     * Adds a new OLE Package Shape 
-     * 
-     * @param anchor       the client anchor describes how this picture is
-     *                     attached to the sheet.
-     * @param storageId    the storageId returned by {@Link HSSFWorkbook.AddOlePackage}
-     * @param pictureIndex the index of the picture (used as preview image) in the
-     *                     workbook collection of pictures.
-     *
-     * @return newly Created shape
-     */
-        public HSSFObjectData CreateObjectData(HSSFClientAnchor anchor, int storageId, int pictureIndex)
+
+        public IObjectData CreateObjectData(IClientAnchor anchor, int storageId, int pictureIndex)
         {
             ObjRecord obj = new ObjRecord();
 
@@ -274,7 +264,7 @@ namespace NPOI.HSSF.UserModel
             }
 
             // create picture shape, which need to be minimal modified for oleshapes
-            HSSFPicture shape = new HSSFPicture(null, anchor);
+            HSSFPicture shape = new HSSFPicture(null, (HSSFClientAnchor)anchor);
             shape.PictureIndex = (/*setter*/pictureIndex);
             EscherContainerRecord spContainer = shape.GetEscherContainer();
             EscherSpRecord spRecord = spContainer.GetChildById(EscherSpRecord.RECORD_ID) as EscherSpRecord;
@@ -444,8 +434,8 @@ namespace NPOI.HSSF.UserModel
             DrawingManager2 dm = ((HSSFWorkbook)_sheet.Workbook).Workbook.DrawingManager;
             EscherDgRecord dg =
                    (EscherDgRecord)_boundAggregate.GetEscherContainer().GetChildById(EscherDgRecord.RECORD_ID);
-            short drawingGroupId = dg.DrawingGroupId;
-            return dm.AllocateShapeId(drawingGroupId, dg);
+
+            return dm.AllocateShapeId(dg);
         }
         /// <summary>
         /// Does this HSSFPatriarch contain a chart?

@@ -23,6 +23,7 @@ using NPOI.SS.UserModel;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
+using NPOI.OOXML.XSSF.UserModel;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -34,21 +35,28 @@ namespace NPOI.XSSF.UserModel
     {
 
         private CT_Color ctColor;
+        private IIndexedColorMap indexedColorMap;
 
         /**
          * Create an instance of XSSFColor from the supplied XML bean
          */
+        [Obsolete("Remove it at NPOI 2.8.0")]
         public XSSFColor(CT_Color color)
+            : this(color, new DefaultIndexedColorMap())
+        {
+
+        }
+        public XSSFColor(CT_Color color, IIndexedColorMap map)
         {
             this.ctColor = color;
+            this.indexedColorMap = map;
         }
-
         /**
          * Create an new instance of XSSFColor
          */
         public XSSFColor()
+            : this(new CT_Color(), null)
         {
-            this.ctColor = new CT_Color();
         }
 
         public XSSFColor(Color clr)
@@ -64,15 +72,15 @@ namespace NPOI.XSSF.UserModel
             ctColor.SetRgb(clr.R, clr.G, clr.B);
         }
 
-        public XSSFColor(byte[] rgb)
-            : this()
+        public XSSFColor(byte[] rgb, IIndexedColorMap colorMap)
+            : this(new CT_Color(), colorMap)
         {
 
             ctColor.SetRgb(rgb);
         }
 
-        public XSSFColor(IndexedColors indexedColor)
-            : this()
+        public XSSFColor(IndexedColors indexedColor, IIndexedColorMap colorMap)
+            : this(new CT_Color(), colorMap)
         {
             ctColor.indexed = (uint)indexedColor.Index;
         }
@@ -178,6 +186,20 @@ namespace NPOI.XSSF.UserModel
             }
             
         }
+
+        protected override byte[] IndexedRGB
+        {
+            get
+            {
+                if (IsIndexed)
+                {
+                   if (indexedColorMap != null) return indexedColorMap.GetRGB(Index);
+                   return DefaultIndexedColorMap.GetDefaultRGB(Index);
+                }
+                return null;
+            }
+           
+       }
         /**
          * Standard Red Green Blue ctColor value (RGB).
          * If there was an A (Alpha) value, it will be stripped.

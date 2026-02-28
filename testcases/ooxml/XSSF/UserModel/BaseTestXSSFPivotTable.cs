@@ -78,17 +78,9 @@ namespace TestCases.XSSF.UserModel
         [Test]
         public void TestAddRowLabelOutOfRangeThrowsException()
         {
-            int columnIndex = 5;
-
-            try
-            {
-                pivotTable.AddRowLabel(columnIndex);
-            }
-            catch (IndexOutOfRangeException)
-            {
-                return;
-            }
-            Assert.Fail();
+            ClassicAssert.Throws<IndexOutOfRangeException>(()=>{
+                pivotTable.AddRowLabel(5);
+            });
         }
 
         /**
@@ -193,23 +185,33 @@ namespace TestCases.XSSF.UserModel
             ClassicAssert.AreEqual(defintion.dataFields.dataField[(0)].name, customName);
         }
 
+        /// <summary>
+        /// Verify that it's possible to Set the format to the data column
+        /// </summary>
+        [Test]
+        public void TestColumnLabelSetDataFormat()
+        {
+            int columnIndex = 0;
+
+            string format = "#,##0.0";
+        
+            pivotTable.AddColumnLabel(DataConsolidateFunction.SUM, columnIndex, null, format);
+
+            CT_PivotTableDefinition defintion = pivotTable.GetCTPivotTableDefinition();
+
+            ClassicAssert.AreEqual(defintion.dataFields.GetDataFieldArray(0).fld, columnIndex);
+            ClassicAssert.AreEqual(defintion.dataFields.GetDataFieldArray(0).numFmtId, wb.CreateDataFormat().GetFormat(format));
+        }
+
         /**
          * Verify that it's not possible to create a column label outside of the referenced area.
          */
         [Test]
         public void TestAddColumnLabelOutOfRangeThrowsException()
         {
-            int columnIndex = 5;
-
-            try
-            {
-                pivotTable.AddColumnLabel(DataConsolidateFunction.SUM, columnIndex);
-            }
-            catch (IndexOutOfRangeException)
-            {
-                return;
-            }
-            Assert.Fail();
+            ClassicAssert.Throws<IndexOutOfRangeException>(()=>{
+                pivotTable.AddColumnLabel(DataConsolidateFunction.SUM, 5);
+            });
         }
 
         /**
@@ -233,18 +235,9 @@ namespace TestCases.XSSF.UserModel
         [Test]
         public void TestAddDataColumnOutOfRangeThrowsException()
         {
-            int columnIndex = 5;
-            bool isDataField = true;
-
-            try
-            {
-                pivotTable.AddDataColumn(columnIndex, isDataField);
-            }
-            catch (IndexOutOfRangeException)
-            {
-                return;
-            }
-            Assert.Fail();
+            ClassicAssert.Throws<IndexOutOfRangeException>(()=>{
+                pivotTable.AddDataColumn(5, true);
+            });
         }
 
         /**
@@ -269,16 +262,9 @@ namespace TestCases.XSSF.UserModel
         [Test]
         public void TestAddReportFilterOutOfRangeThrowsException()
         {
-            int columnIndex = 5;
-            try
-            {
-                pivotTable.AddReportFilter(columnIndex);
-            }
-            catch (IndexOutOfRangeException)
-            {
-                return;
-            }
-            Assert.Fail();
+            ClassicAssert.Throws<IndexOutOfRangeException>(()=>{
+                pivotTable.AddReportFilter(5);
+            });
         }
 
         /**
@@ -311,5 +297,58 @@ namespace TestCases.XSSF.UserModel
             ClassicAssert.AreEqual("A", cacheFields.cacheField[0].name);
         }
 
+        [Test]
+        public void TestPivotTableSheetNamesAreCaseInsensitive()
+        {
+            wb.SetSheetName(0, "original");
+            wb.SetSheetName(1, "offset");
+            XSSFSheet original = wb.GetSheet("OriginaL") as XSSFSheet;
+            XSSFSheet offset = wb.GetSheet("OffseT") as XSSFSheet;
+            // assume sheets are accessible via case-insensitive name
+            ClassicAssert.IsNotNull(original);
+            ClassicAssert.IsNotNull(offset);
+
+            AreaReference source = wb.GetCreationHelper().CreateAreaReference("ORIGinal!A1:C2");
+            // create a pivot table on the same sheet, case insensitive
+            original.CreatePivotTable(source, new CellReference("W1"));
+            // create a pivot table on a different sheet, case insensitive
+            offset.CreatePivotTable(source, new CellReference("W1"));
+        }
+
+        /// <summary>
+        /// Verify that when creating a col label it's  created on the correct column
+        /// and the count is increased by one.
+        /// </summary>
+        [Test]
+        public void TestAddColLabelToPivotTable()
+        {
+            int columnIndex = 0;
+
+            ClassicAssert.AreEqual(0, pivotTable.GetColLabelColumns().Count);
+        
+            pivotTable.AddColLabel(columnIndex);
+            CT_PivotTableDefinition defintion = pivotTable.GetCTPivotTableDefinition();
+
+            ClassicAssert.AreEqual(defintion.colFields.field[0].x, columnIndex);
+            ClassicAssert.AreEqual(defintion.colFields.count, 1);
+            ClassicAssert.AreEqual(1, pivotTable.GetColLabelColumns().Count);
+        
+            columnIndex = 1;
+            pivotTable.AddColLabel(columnIndex);
+            ClassicAssert.AreEqual(2, pivotTable.GetColLabelColumns().Count);
+        
+            ClassicAssert.AreEqual(0, (int)pivotTable.GetColLabelColumns()[0]);
+            ClassicAssert.AreEqual(1, (int)pivotTable.GetColLabelColumns()[1]);
+        }
+
+        /// <summary>
+        /// Verify that it's not possible to create a col label outside of the referenced area.
+        /// </summary>
+        [Test]
+        public void TestAddColLabelOutOfRangeThrowsException()
+        {
+            ClassicAssert.Throws<IndexOutOfRangeException>(() => 
+                pivotTable.AddColLabel(5));
+        }
     }
 }

@@ -51,6 +51,21 @@ namespace NPOI.POIFS.Crypt
      */
         public abstract InputStream GetDataStream(DirectoryNode dir);
 
+        /**
+         * Wraps a stream for decryption<p>
+         *
+         * As we are handling streams and don't know the total length beforehand,
+         * it's the callers duty to care for the length of the entries.
+         *
+         * @param stream the stream to be wrapped
+         * @param initialPos initial/current byte position within the stream
+         * @return decrypted stream
+         */
+        public virtual InputStream GetDataStream(InputStream stream, int size, int initialPos)
+        {
+            throw new EncryptedDocumentException("this decryptor doesn't support reading from a stream");
+        }
+
         public abstract bool VerifyPassword(String password);
 
         /**
@@ -69,6 +84,19 @@ namespace NPOI.POIFS.Crypt
      * was not called
      */
         public abstract long GetLength();
+
+
+        /**
+         * Sets the chunk size of the data stream.
+         * Needs to be set before the data stream is requested.
+         * When not set, the implementation uses method specific default values
+         *
+         * @param chunkSize the chunk size, i.e. the block size with the same encryption key
+         */
+        public virtual void SetChunkSize(int chunkSize)
+        {
+            throw new EncryptedDocumentException("this decryptor doesn't support changing the chunk size");
+        }
 
         public static Decryptor GetInstance(EncryptionInfo info)
         {

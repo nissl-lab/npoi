@@ -32,13 +32,14 @@ namespace NPOI.XWPF.Extractor
     public class XWPFWordExtractor : POIXMLTextExtractor
     {
         public static XWPFRelation[] SUPPORTED_TYPES = new XWPFRelation[] {
-      XWPFRelation.DOCUMENT, XWPFRelation.TEMPLATE,
-      XWPFRelation.MACRO_DOCUMENT, 
-      XWPFRelation.MACRO_TEMPLATE_DOCUMENT
-   };
+            XWPFRelation.DOCUMENT, XWPFRelation.TEMPLATE,
+            XWPFRelation.MACRO_DOCUMENT, 
+            XWPFRelation.MACRO_TEMPLATE_DOCUMENT
+        };
 
         private XWPFDocument document;
         private bool fetchHyperlinks = false;
+        private bool concatenatePhoneticRuns = true;
 
         public XWPFWordExtractor(OPCPackage Container)
             : this(new XWPFDocument(Container))
@@ -62,6 +63,13 @@ namespace NPOI.XWPF.Extractor
             fetchHyperlinks = fetch;
         }
 
+        /**
+         * Should we concatenate phonetic runs in extraction.  Default is <code>true</code>
+         * @param concatenatePhoneticRuns
+         */
+        public void SetConcatenatePhoneticRuns(bool concatenatePhoneticRuns) {
+            this.concatenatePhoneticRuns = concatenatePhoneticRuns;
+        }
 
         public override String Text
         {
@@ -124,7 +132,14 @@ namespace NPOI.XWPF.Extractor
 
                 foreach (IRunElement run in paragraph.Runs)
                 {
-                    text.Append(run.ToString());
+                    if (!concatenatePhoneticRuns && run is XWPFRun xr)
+                    {
+                        text.Append(xr.GetText());
+                    }
+                    else
+                    {
+                        text.Append(run.ToString());
+                    }
                     if (run is XWPFHyperlinkRun hyperlinkRun && fetchHyperlinks)
                     {
                         XWPFHyperlink link = hyperlinkRun.GetHyperlink(document);

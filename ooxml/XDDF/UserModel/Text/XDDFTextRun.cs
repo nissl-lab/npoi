@@ -794,13 +794,13 @@ namespace NPOI.XDDF.UserModel.Text
                 .OrElse(null);
         }
 
-        private Option<R> FindDefinedProperty<R>(Func<CT_TextCharacterProperties, Boolean> isSet,
-            Func<CT_TextCharacterProperties, R> getter) where R : class
+        private Option<TR> FindDefinedProperty<TR>(Func<CT_TextCharacterProperties, Boolean> isSet,
+            Func<CT_TextCharacterProperties, TR> getter) where TR : class
         {
             CT_TextCharacterProperties props = GetProperties();
             if(props != null && isSet.Invoke(props))
             {
-                return Option<R>.Some(getter.Invoke(props));
+                return Option<TR>.Some(getter.Invoke(props));
             }
             else
             {
@@ -809,13 +809,13 @@ namespace NPOI.XDDF.UserModel.Text
         }
 
 
-        private ValueOption<R> FindDefinedValueProperty<R>(Func<CT_TextCharacterProperties, Boolean> isSet,
-            Func<CT_TextCharacterProperties, R> getter) where R : struct
+        private ValueOption<TR> FindDefinedValueProperty<TR>(Func<CT_TextCharacterProperties, Boolean> isSet,
+            Func<CT_TextCharacterProperties, TR> getter) where TR : struct
         {
             CT_TextCharacterProperties props = GetProperties();
             if(props != null && isSet.Invoke(props))
             {
-                return ValueOption<R>.Some(getter.Invoke(props));
+                return ValueOption<TR>.Some(getter.Invoke(props));
             }
             else
             {

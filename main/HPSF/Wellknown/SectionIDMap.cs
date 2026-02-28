@@ -30,6 +30,8 @@ namespace NPOI.HPSF.Wellknown
     using System;
     using System.Text;
     using System.Collections;
+    using System.Threading;
+    using System.Collections.Generic;
 
     /// <summary>
     /// Maps section format IDs To {@link PropertyIDMap}s. It Is
@@ -46,52 +48,33 @@ namespace NPOI.HPSF.Wellknown
     /// @author Rainer Klute (klute@rainer-klute.de)
     /// @since 2002-02-09
     /// </summary>
-    public class SectionIDMap : Hashtable
+    public class SectionIDMap
     {
-
+        private static ThreadLocal<Dictionary<ClassID,PropertyIDMap>> defaultMap =
+        new ThreadLocal<Dictionary<ClassID,PropertyIDMap>>();
         /**
          * The SummaryInformation's section's format ID.
          */
-        public static readonly byte[] SUMMARY_INFORMATION_ID = new[]
-        {
-            (byte) 0xF2, (byte) 0x9F, (byte) 0x85, (byte) 0xE0,
-            (byte) 0x4F, (byte) 0xF9, (byte) 0x10, (byte) 0x68,
-            (byte) 0xAB, (byte) 0x91, (byte) 0x08, (byte) 0x00,
-            (byte) 0x2B, (byte) 0x27, (byte) 0xB3, (byte) 0xD9
-        };
+        public static ClassID SUMMARY_INFORMATION_ID =
+            new ClassID("{F29F85E0-4FF9-1068-AB91-08002B27B3D9}");
 
         /**
          * The DocumentSummaryInformation's first and second sections' format
          * ID.
          */
-        public static readonly byte[][] DOCUMENT_SUMMARY_INFORMATION_ID = new[]
-        {
-            new[] {
-                (byte) 0xD5, (byte) 0xCD, (byte) 0xD5, (byte) 0x02,
-                (byte) 0x2E, (byte) 0x9C, (byte) 0x10, (byte) 0x1B,
-                (byte) 0x93, (byte) 0x97, (byte) 0x08, (byte) 0x00,
-                (byte) 0x2B, (byte) 0x2C, (byte) 0xF9, (byte) 0xAE
-            },
-            new[] {
-                (byte) 0xD5, (byte) 0xCD, (byte) 0xD5, (byte) 0x05,
-                (byte) 0x2E, (byte) 0x9C, (byte) 0x10, (byte) 0x1B,
-                (byte) 0x93, (byte) 0x97, (byte) 0x08, (byte) 0x00,
-                (byte) 0x2B, (byte) 0x2C, (byte) 0xF9, (byte) 0xAE
-            }
+        private static readonly ClassID DOC_SUMMARY_INFORMATION =
+            new ClassID("{D5CDD502-2E9C-101B-9397-08002B2CF9AE}");    
+        private static ClassID USER_DEFINED_PROPERTIES =
+            new ClassID("{D5CDD505-2E9C-101B-9397-08002B2CF9AE}");
+    
+        public static ClassID[] DOCUMENT_SUMMARY_INFORMATION_ID = {
+            DOC_SUMMARY_INFORMATION, USER_DEFINED_PROPERTIES
         };
 
         /**
          * A property without a known name is described by this string. 
          */
         public const string UNDEFINED = "[undefined]";
-
-        /**
-         * The default section ID map. It maps section format IDs To
-         * {@link PropertyIDMap}s.
-         */
-        private static SectionIDMap defaultMap;
-
-
 
         /// <summary>
         /// Returns the singleton instance of the default {@link
@@ -100,16 +83,22 @@ namespace NPOI.HPSF.Wellknown
         /// <returns>The instance value</returns>
         public static SectionIDMap GetInstance()
         {
-            if(defaultMap == null)
+            Dictionary<ClassID,PropertyIDMap> m = defaultMap.Value;
+            if(m == null)
             {
-                SectionIDMap m = new SectionIDMap();
-                m.Put(SUMMARY_INFORMATION_ID,
-                      PropertyIDMap.SummaryInformationProperties);
-                m.Put(DOCUMENT_SUMMARY_INFORMATION_ID[0],
-                      PropertyIDMap.DocumentSummaryInformationProperties);
-                defaultMap = m;
+                m = new Dictionary<ClassID, PropertyIDMap> {
+                    {
+                        SUMMARY_INFORMATION_ID,
+                        PropertyIDMap.SummaryInformationProperties
+                    },
+                    {
+                        DOCUMENT_SUMMARY_INFORMATION_ID[0],
+                        PropertyIDMap.DocumentSummaryInformationProperties
+                    }
+                };
+                defaultMap.Value = m;
             }
-            return defaultMap;
+            return new SectionIDMap();
         }
 
 
@@ -126,7 +115,7 @@ namespace NPOI.HPSF.Wellknown
         /// sectionFormatID combination is not well-known, the
         /// string "[undefined]" is returned.
         /// </returns>
-        public static String GetPIDString(byte[] sectionFormatID,
+        public static String GetPIDString(ClassID sectionFormatID,
                                           long pid)
         {
             PropertyIDMap m = GetInstance().Get(sectionFormatID);
@@ -149,9 +138,10 @@ namespace NPOI.HPSF.Wellknown
         /// </summary>
         /// <param name="sectionFormatID">The section format ID.</param>
         /// <returns>the property ID map</returns>
-        public PropertyIDMap Get(byte[] sectionFormatID)
+        public PropertyIDMap Get(ClassID sectionFormatID)
         {
-            return (PropertyIDMap) this[Encoding.UTF8.GetString(sectionFormatID)];
+            return GetInstance().Get(sectionFormatID);
+            //return (PropertyIDMap) this[Encoding.UTF8.GetString(sectionFormatID)];
         }
 
         /// <summary>
@@ -161,10 +151,20 @@ namespace NPOI.HPSF.Wellknown
         /// <param name="sectionFormatID">the section format ID</param>
         /// <param name="propertyIDMap">The property ID map.</param>
         /// <returns></returns>
-        public Object Put(byte[] sectionFormatID,
-                          PropertyIDMap propertyIDMap)
+        public Object Put(ClassID sectionFormatID, PropertyIDMap propertyIDMap)
         {
-            return this[sectionFormatID] = propertyIDMap;
+            return GetInstance().Put(sectionFormatID, propertyIDMap);
+        }
+        /**
+         * Associates the string representation of a section format ID with a {@link PropertyIDMap}
+         * 
+         * @param key the key of the PropertyIDMap
+         * @param value the PropertyIDMap itself
+         * 
+         * @return the previous PropertyIDMap stored under this key, or {@code null} if there wasn't one
+         */
+        protected PropertyIDMap Put(String key, PropertyIDMap value) {
+            return (PropertyIDMap)Put(new ClassID(key), value);
         }
     }
 }

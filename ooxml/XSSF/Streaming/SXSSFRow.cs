@@ -26,7 +26,7 @@ namespace NPOI.XSSF.Streaming
     public class SXSSFRow : IRow, IComparable<SXSSFRow>
     {
         private readonly SXSSFSheet _sheet; // parent sheet
-        private readonly IDictionary<int, SXSSFCell> _cells = new Dictionary<int, SXSSFCell>();
+        private readonly Dictionary<int, SXSSFCell> _cells = new Dictionary<int, SXSSFCell>();
         private short _style = -1; // index of cell style in style table
         private bool _zHeight; // row zero-height (this is somehow different than being hidden)
         private float _height = -1;
@@ -293,7 +293,7 @@ namespace NPOI.XSSF.Streaming
                 case MissingCellPolicy.CREATE_NULL_AS_BLANK:
                     return (cell == null) ? CreateCell(cellnum, CellType.Blank) : cell;
                 default:
-                    throw new ArgumentException("Illegal policy " + policy + " (" + policy + ")");
+                    throw new ArgumentException("Illegal policy " + policy);
 
             }
         }
@@ -370,7 +370,7 @@ namespace NPOI.XSSF.Streaming
         
         IEnumerator IEnumerable.GetEnumerator()
         {
-            throw new NotImplementedException();
+            return this.GetEnumerator();
         }
 
         /**

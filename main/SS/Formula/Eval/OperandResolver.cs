@@ -336,9 +336,9 @@ namespace NPOI.SS.Formula.Eval
             throw new ArgumentException("Unexpected eval class (" + ve.GetType().Name + ")");
         }
         /**
- * @return <c>null</c> to represent blank values
- * @throws EvaluationException if ve is an ErrorEval, or if a string value cannot be converted
- */
+         * @return <c>null</c> to represent blank values
+         * @throws EvaluationException if ve is an ErrorEval, or if a string value cannot be converted
+         */
         public static Boolean? CoerceValueToBoolean(ValueEval ve, bool stringsAreBlanks)
         {
 
@@ -387,15 +387,14 @@ namespace NPOI.SS.Formula.Eval
             throw new InvalidOperationException("Unexpected eval (" + ve.GetType().Name + ")");
         }
         /**
-  * Retrieves a single value from an area evaluation utilizing the 2D indices of the cell
-  * within its own area reference to index the value in the area evaluation.
-  *
-  * @param ae area reference after evaluation
-  * @param cell the source cell of the formula that contains its 2D indices
-  * @return a <tt>NumberEval</tt>, <tt>StringEval</tt>, <tt>BoolEval</tt> or <tt>BlankEval</tt>. or <tt>ErrorEval<tt>
-  * Never <code>null</code>.
-  */
-
+          * Retrieves a single value from an area evaluation utilizing the 2D indices of the cell
+          * within its own area reference to index the value in the area evaluation.
+          *
+          * @param ae area reference after evaluation
+          * @param cell the source cell of the formula that contains its 2D indices
+          * @return a <tt>NumberEval</tt>, <tt>StringEval</tt>, <tt>BoolEval</tt> or <tt>BlankEval</tt>. or <tt>ErrorEval<tt>
+          * Never <code>null</code>.
+          */
         public static ValueEval GetElementFromArray(AreaEval ae, IEvaluationCell cell)
         {
             CellRangeAddress range = cell.ArrayFormulaRange;

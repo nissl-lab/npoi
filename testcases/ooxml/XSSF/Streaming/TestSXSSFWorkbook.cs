@@ -385,7 +385,6 @@ namespace TestCases.XSSF.Streaming
             out1.Delete();
             for(int i = 0; i < 2; i++)
             {
-                Console.WriteLine("Iteration " + i);
                 SXSSFWorkbook wb;
                 if(out1.Exists)
                 {
@@ -613,6 +612,20 @@ namespace TestCases.XSSF.Streaming
             ClassicAssert.AreEqual("Test Row 9", s.GetRow(9).GetCell(2).StringCellValue);
         }
 
-    }
+        [Test]
+        public void Test56557()
+        {
+            IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("56557.xlsx");
 
+            // Using streaming XSSFWorkbook makes the output file invalid
+            wb = new SXSSFWorkbook((XSSFWorkbook)wb);
+        
+            // Should not throw POIXMLException: java.io.IOException: Unable to parse xml bean when reading back
+            IWorkbook wbBack = XSSFTestDataSamples.WriteOutAndReadBack(wb);
+            ClassicAssert.IsNotNull(wbBack);
+            wbBack.Close();
+        
+            wb.Close();
+        }
+    }
 }

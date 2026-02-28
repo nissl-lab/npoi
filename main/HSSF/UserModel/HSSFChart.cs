@@ -1108,7 +1108,7 @@ namespace NPOI.HSSF.UserModel
                 return series;
             }
 
-            private static CellRangeAddressBase GetCellRange(LinkedDataRecord linkedDataRecord)
+            private static CellRangeAddress GetCellRange(LinkedDataRecord linkedDataRecord)
             {
                 if (linkedDataRecord == null)
                 {

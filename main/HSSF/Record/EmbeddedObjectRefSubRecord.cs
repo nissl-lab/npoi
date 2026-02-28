@@ -38,6 +38,9 @@ namespace NPOI.HSSF.Record
        : SubRecord, ICloneable
     {
         private static POILogger logger = POILogFactory.GetLogger(typeof(EmbeddedObjectRefSubRecord));
+        //arbitrarily selected; may need to increase
+        private static int MAX_RECORD_LENGTH = 100_000;
+
         public const short sid = 0x9;
         private static byte[] EMPTY_BYTE_ARRAY = [];
 
@@ -183,19 +186,17 @@ namespace NPOI.HSSF.Record
 
         private static Ptg ReadRefPtg(byte[] formulaRawBytes)
         {
-            using (MemoryStream ms = RecyclableMemory.GetStream(formulaRawBytes))
+            using MemoryStream ms = RecyclableMemory.GetStream(formulaRawBytes);
+            LittleEndianInputStream in1 = new LittleEndianInputStream(ms);
+            byte ptgSid = (byte)in1.ReadByte();
+            switch (ptgSid)
             {
-                ILittleEndianInput in1 = new LittleEndianInputStream(ms);
-                byte ptgSid = (byte)in1.ReadByte();
-                switch (ptgSid)
-                {
-                    case AreaPtg.sid: return new AreaPtg(in1);
-                    case Area3DPtg.sid: return new Area3DPtg(in1);
-                    case RefPtg.sid: return new RefPtg(in1);
-                    case Ref3DPtg.sid: return new Ref3DPtg(in1);
-                }
-                return null;
+                case AreaPtg.sid: return new AreaPtg(in1);
+                case Area3DPtg.sid: return new Area3DPtg(in1);
+                case RefPtg.sid: return new RefPtg(in1);
+                case Ref3DPtg.sid: return new Ref3DPtg(in1);
             }
+            return null;
         }
 
         private static byte[] ReadRawData(ILittleEndianInput in1, int size)
@@ -208,7 +209,7 @@ namespace NPOI.HSSF.Record
             {
                 return EMPTY_BYTE_ARRAY;
             }
-            byte[] result = new byte[size];
+            byte[] result = IOUtils.SafelyAllocate(size, MAX_RECORD_LENGTH);
             in1.ReadFully(result);
             return result;
         }

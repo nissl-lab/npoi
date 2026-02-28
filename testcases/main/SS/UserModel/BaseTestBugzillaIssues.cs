@@ -649,6 +649,7 @@ namespace TestCases.SS.UserModel
         }
 
         [Test]
+        [Platform("Win")]
         public void Stackoverflow23114397()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
@@ -1084,7 +1085,7 @@ namespace TestCases.SS.UserModel
             ICreationHelper factory = wb.GetCreationHelper();
 
             ISheet sheet = wb.CreateSheet();
-            IDrawing drawing = sheet.CreateDrawingPatriarch();
+            IDrawing<IShape> drawing = sheet.CreateDrawingPatriarch();
             IClientAnchor anchor = factory.CreateClientAnchor();
 
             ICell cell0 = sheet.CreateRow(0).CreateCell(0);
@@ -1516,7 +1517,7 @@ namespace TestCases.SS.UserModel
 
             ICreationHelper helper = wb.GetCreationHelper();
             IClientAnchor anchor = helper.CreateClientAnchor();
-            IDrawing drawing = sheet.CreateDrawingPatriarch();
+            IDrawing<IShape> drawing = sheet.CreateDrawingPatriarch();
 
             IRow row = sheet.CreateRow(0);
 
@@ -1558,27 +1559,25 @@ namespace TestCases.SS.UserModel
             // First cell of array formula, OK
             int rowId = 0;
             int cellId = 1;
-            Console.WriteLine("Reading row " + rowId + ", col " + cellId);
+
             IRow row = sheet.GetRow(rowId);
             ICell cell = row.GetCell(cellId);
-            Console.WriteLine("Formula:" + cell.CellFormula);
+            ClassicAssert.AreEqual("A1", cell.CellFormula);
             if (CellType.Formula == cell.CellType)
             {
-                int formulaResultType = (int)cell.CachedFormulaResultType;
-                Console.WriteLine("Formual Result Type:" + formulaResultType);
+                ClassicAssert.AreEqual(CellType.String, cell.CachedFormulaResultType);
             }
             // *******************************
             // Second cell of array formula, NOT OK for xlsx files
             rowId = 1;
             cellId = 1;
-            Console.WriteLine("Reading row " + rowId + ", col " + cellId);
+
             row = sheet.GetRow(rowId);
             cell = row.GetCell(cellId);
-            Console.WriteLine("Formula:" + cell.CellFormula);
+            ClassicAssert.AreEqual("A1", cell.CellFormula);
             if (CellType.Formula == cell.CellType)
             {
-                int formulaResultType = (int)cell.CachedFormulaResultType;
-                Console.WriteLine("Formual Result Type:" + formulaResultType);
+                ClassicAssert.AreEqual(CellType.String, cell.CachedFormulaResultType);
             }
             workbook.Close();
         }

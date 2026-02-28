@@ -50,6 +50,18 @@ namespace NPOI.XSSF.Streaming
             return new SXSSFFormulaEvaluator(workbook, stabilityClassifier, udfFinder);
         }
 
+        public override void NotifySetFormula(ICell cell)
+        {
+            _bookEvaluator.NotifyUpdateCell(new SXSSFEvaluationCell((SXSSFCell)cell));
+        }
+        public override void NotifyDeleteCell(ICell cell)
+        {
+            _bookEvaluator.NotifyDeleteCell(new SXSSFEvaluationCell((SXSSFCell)cell));
+        }
+        public override void NotifyUpdateCell(ICell cell)
+        {
+            _bookEvaluator.NotifyUpdateCell(new SXSSFEvaluationCell((SXSSFCell)cell));
+        }
         protected override IEvaluationCell ToEvaluationCell(ICell cell)
         {
             if (cell is not SXSSFCell sxssfCell)

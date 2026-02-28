@@ -604,7 +604,7 @@ namespace NPOI.OpenXml4Net.OPC
          * 
          * @return The PackageProperties part of this package.
          */
-        public PackageProperties GetPackageProperties()
+        public IPackageProperties GetPackageProperties()
         {
             this.ThrowExceptionIfWriteOnly();
             // If no properties part has been found then we Create one

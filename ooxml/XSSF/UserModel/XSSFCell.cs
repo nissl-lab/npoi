@@ -660,7 +660,8 @@ namespace NPOI.XSSF.UserModel
             //un-register the single-cell array formula from the parent sheet through public interface
             Row.Sheet.RemoveArrayFormula(this);
         }
-        private ICell SetFormula(String formula, FormulaType formulaType)
+
+        private XSSFCell SetFormula(String formula, FormulaType formulaType)
         {
             XSSFWorkbook wb = (XSSFWorkbook)_row.Sheet.Workbook;
             if (formula == null)
@@ -758,12 +759,22 @@ namespace NPOI.XSSF.UserModel
                 }
             }
         }
-
+        /// <summary>
+        /// POI currently supports these formula types:
+        /// <list type="bullet">
+        /// <item><description> <see cref="ST_CellFormulaType.normal" /></description></item>
+        /// <item><description> <see cref="ST_CellFormulaType.shared" /></description></item>
+        /// <item><description> <see cref="ST_CellFormulaType.array" /></description></item>
+        /// </list>
+        /// POI does not support <see cref="ST_CellFormulaType.dataTable" /> formulas.
+        /// </summary>
+        /// <return>true if the cell is of a formula type POI can handle
+        /// </return>
         private bool IsFormulaCell
         {
             get
             {
-                if (_cell.f != null || ((XSSFSheet)Sheet).IsCellInArrayFormulaContext(this))
+                if ((_cell.f != null && _cell.f.t != ST_CellFormulaType.dataTable) || ((XSSFSheet)Sheet).IsCellInArrayFormulaContext(this))
                 {
                     return true;
                 }
@@ -772,7 +783,12 @@ namespace NPOI.XSSF.UserModel
             
         }
         /// <summary>
-        /// Return the cell type.
+        /// Return the cell type.  Tables in an array formula return
+        /// <see cref="CellType.FORMULA" /> for all cells, even though the formula is only defined
+        /// in the OOXML file for the top left cell of the array.
+        /// <para>
+        /// NOTE: POI does not support data table formulas.
+        /// Cells in a data table appear to POI as plain cells typed from their cached value.</para>
         /// </summary>
         public CellType CellType
         {
@@ -1090,7 +1106,7 @@ namespace NPOI.XSSF.UserModel
                 case CellType.Numeric:
                     if (DateUtil.IsCellDateFormatted(this))
                     {
-                        FormatBase sdf = new SimpleDateFormat("dd-MMM-yyyy");
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
                         return sdf.Format(DateCellValue, CultureInfo.CurrentCulture);
                     }
                     return NumericCellValue.ToString();
@@ -1140,7 +1156,7 @@ namespace NPOI.XSSF.UserModel
         /**
          * Used to help format error messages
          */
-        private static Exception TypeMismatch(CellType expectedTypeCode, CellType actualTypeCode, bool isFormulaCell)
+        private static InvalidOperationException TypeMismatch(CellType expectedTypeCode, CellType actualTypeCode, bool isFormulaCell)
         {
             String msg = "Cannot get a "
                 + GetCellTypeName(expectedTypeCode) + " value from a "
@@ -1399,6 +1415,7 @@ namespace NPOI.XSSF.UserModel
         }
 
         [Obsolete("Will be removed at NPOI 2.8, Use CachedFormulaResultType instead.")]
+        [Removal(Version = "4.2")]
         public CellType GetCachedFormulaResultTypeEnum()
         {
             if(!IsFormulaCell)

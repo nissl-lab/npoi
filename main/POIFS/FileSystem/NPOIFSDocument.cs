@@ -35,6 +35,9 @@ namespace NPOI.POIFS.FileSystem
  */
     public class NPOIFSDocument : POIFSViewable
     {
+        //arbitrarily selected; may need to increase
+        private static int MAX_RECORD_LENGTH = 100_000;
+
         private readonly DocumentProperty _property;
 
         private readonly NPOIFSFileSystem _filesystem;
@@ -146,7 +149,7 @@ namespace NPOI.POIFS.FileSystem
             if (usedInBlock != 0 && usedInBlock != _block_size)
             {
                 int toBlockEnd = _block_size - usedInBlock;
-                byte[] padding = new byte[toBlockEnd];
+                byte[] padding = IOUtils.SafelyAllocate(toBlockEnd, MAX_RECORD_LENGTH);
                 Arrays.Fill(padding, (byte)0xFF);
                 outStream.Write(padding, 0, padding.Length);
             }
@@ -173,7 +176,7 @@ namespace NPOI.POIFS.FileSystem
 
             Stream innerOs = _stream.GetOutputStream();
             DocumentOutputStream os = new DocumentOutputStream(innerOs, size);
-            POIFSDocumentPath path = new POIFSDocumentPath(name.Split(new string[] { "\\\\" }, StringSplitOptions.RemoveEmptyEntries));
+            POIFSDocumentPath path = new POIFSDocumentPath(name.Split([@"\\"], StringSplitOptions.RemoveEmptyEntries));
             String docName = path.GetComponent(path.Length - 1);
             POIFSWriterEvent event1 = new POIFSWriterEvent(os, path, docName, size);
             Writer.ProcessPOIFSWriterEvent(event1);
@@ -257,7 +260,7 @@ namespace NPOI.POIFS.FileSystem
             if (Size > 0)
             {
                 // Get all the data into a single array
-                byte[] data = new byte[Size];
+                byte[] data = IOUtils.SafelyAllocate(Size, MAX_RECORD_LENGTH);
                 int offset = 0;
                 foreach (ByteBuffer buffer in _stream)
                 {

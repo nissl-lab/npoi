@@ -56,8 +56,12 @@ namespace NPOI.XSSF.UserModel
         private CellReference startCellReference;
         private CellReference endCellReference;
         private String commonXPath;
+        private String name;
+        private String styleName;
 
-
+        /// <summary>
+        /// empty implementation, not attached to a workbook/worksheet yet
+        /// </summary>
         public XSSFTable()
             : base()
         {
@@ -79,6 +83,11 @@ namespace NPOI.XSSF.UserModel
         {
 
         }
+        /// <summary>
+        /// read table XML
+        /// </summary>
+        /// <param name="xmlDoc"></param>
+        /// <exception cref="IOException"></exception>
         public void ReadFrom(XmlDocument xmlDoc)
         {
             try
@@ -92,11 +101,19 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns>owning sheet</returns>
         public XSSFSheet GetXSSFSheet()
         {
             return (XSSFSheet)GetParent();
         }
 
+        /// <summary>
+        /// write table XML to stream
+        /// </summary>
+        /// <param name="out1"></param>
         public void WriteTo(Stream out1)
         {
             UpdateHeaders();
@@ -114,6 +131,10 @@ namespace NPOI.XSSF.UserModel
             out1.Close();
         }
 
+        /// <summary>
+        /// get the underlying CTTable
+        /// </summary>
+        /// <returns></returns>
         public CT_Table GetCTTable()
         {
             return ctTable;
@@ -161,7 +182,7 @@ namespace NPOI.XSSF.UserModel
                     if (column.GetXmlColumnPr() != null)
                     {
                         String xpath = column.GetXmlColumnPr().XPath;
-                        String[] tokens = xpath.Split(new char[] { '/' });
+                        String[] tokens = xpath.Split('/');
                         if (commonTokens==null)
                         {
                             commonTokens = tokens;
@@ -220,7 +241,26 @@ namespace NPOI.XSSF.UserModel
             }
             return xmlColumnPrs;
         }
-        private string name;
+
+        public void AddColumn()
+        {
+            // Ensure we have Table Columns
+            CT_TableColumns columns = ctTable.tableColumns;
+            if (columns == null)
+            {
+                columns = ctTable.AddNewTableColumns();
+            }
+
+            // Add another Column, and give it a sensible ID
+            CT_TableColumn column = columns.AddNewTableColumn();
+            int num = columns.tableColumn.Count;
+            columns.count = (uint)num;
+            column.id = (uint)num;
+
+            // Have the Headers updated if possible
+            UpdateHeaders();
+        }
+
         /**
          * @return the name of the Table, if set
          */
@@ -246,6 +286,43 @@ namespace NPOI.XSSF.UserModel
                 name = value;
             }
         }
+
+   
+        /// <summary>
+        /// Get or set the name of the Table
+        /// </summary>
+        /// <remarks>
+        /// @since 3.17 beta 1
+        /// </remarks>
+        public string StyleName
+        {
+            get {
+                if (styleName == null && ctTable.IsSetTableStyleInfo())
+                {
+                    StyleName = ctTable.tableStyleInfo.name;
+                }
+                return styleName;
+            }
+            set
+            {
+                if (value == null)
+                {
+                    if (ctTable.IsSetTableStyleInfo())
+                    {
+                        ctTable.tableStyleInfo.name =null;
+                    }
+                    styleName = null;
+                    return;
+                }
+                if (!ctTable.IsSetTableStyleInfo())
+                {
+                    ctTable.AddNewTableStyleInfo();
+                }
+                ctTable.tableStyleInfo.name = value;
+                styleName = value;
+            }
+        }
+
         public XSSFTableColumn CreateColumn(String columnName)
         {
             return CreateColumn(columnName, this.ColumnCount);
@@ -312,41 +389,38 @@ namespace NPOI.XSSF.UserModel
 
             return GetColumns()[columnIndex];
         }
-        /**
-         * Get the area reference for the cells which this table covers. The area
-         * includes header rows and totals rows.
-         *
-         * Does not track updates to underlying changes to CTTable To synchronize
-         * with changes to the underlying CTTable, call {@link #updateReferences()}.
-         * 
-         * @return the area of the table
-         * @see "Open Office XML Part 4: chapter 3.5.1.2, attribute ref"
-         */
-        public AreaReference GetCellReferences()
+        
+        /// <summary>
+        /// <para>
+        /// Get or set the area reference for the cells which this table covers.
+        /// The area includes header rows and totals rows.</para>
+        /// <para>Does not track updates to underlying changes to CTTable To synchronize
+        /// with changes to the underlying CTTable, call <see cref="UpdateReferences"/></para>
+        /// </summary>
+        /// <remarks>
+        /// The area's width should be identical to the amount of columns in
+        /// the table or the table may be invalid. All header rows, totals rows and
+        /// at least one data row must fit inside the area. Updating the area with
+        /// this method does not create or remove any columns and does not change any
+        /// cell values.
+        /// @see "Open Office XML Part 4: chapter 3.5.1.2, attribute ref"
+        /// </remarks>
+        public AreaReference CellReferences
         {
-            return new AreaReference(
+            get
+            {
+                return new AreaReference(
                     StartCellReference,
                     EndCellReference,
                     SpreadsheetVersion.EXCEL2007
-            );
+                );
+            }
+            set
+            {
+                SetCellRef(value);
+            }
         }
-        /**
-         * Set the area reference for the cells which this table covers. The area
-         * includes includes header rows and totals rows. Automatically synchronizes
-         * any changes by calling {@link #updateHeaders()}.
-         * 
-         * Note: The area's width should be identical to the amount of columns in
-         * the table or the table may be invalid. All header rows, totals rows and
-         * at least one data row must fit inside the area. Updating the area with
-         * this method does not create or remove any columns and does not change any
-         * cell values.
-         * 
-         * @see "Open Office XML Part 4: chapter 3.5.1.2, attribute ref"
-         */
-        public void SetCellReferences(AreaReference refs)
-        {
-            SetCellRef(refs);
-        }
+        
         protected void SetCellRef(AreaReference refs)
         {
 
@@ -383,35 +457,7 @@ namespace NPOI.XSSF.UserModel
             UpdateReferences();
             UpdateHeaders();
         }
-        private String styleName;
-        public string StyleName
-        {
-            get {
-                if (styleName == null && ctTable.IsSetTableStyleInfo())
-                {
-                    StyleName = ctTable.tableStyleInfo.name;
-                }
-                return styleName;
-            }
-            set
-            {
-                if (value == null)
-                {
-                    if (ctTable.IsSetTableStyleInfo())
-                    {
-                        ctTable.tableStyleInfo.name =null;
-                    }
-                    styleName = null;
-                    return;
-                }
-                if (!ctTable.IsSetTableStyleInfo())
-                {
-                    ctTable.AddNewTableStyleInfo();
-                }
-                ctTable.tableStyleInfo.name = value;
-                styleName = value;
-            }
-        }
+        
         public ITableStyleInfo Style
         {
             get
@@ -447,6 +493,7 @@ namespace NPOI.XSSF.UserModel
                 return ctTable.tableColumns.count;
             }
         }
+
         public int ColumnCount
         {
             get
@@ -532,7 +579,7 @@ namespace NPOI.XSSF.UserModel
         {
             string ref1 = ctTable.@ref;
             if (ref1 != null) {
-                string[] boundaries = ref1.Split(new char[] { ':' }, 2);
+                string[] boundaries = ref1.Split([':'], 2);
                 string from = boundaries[0];
                 string to = boundaries.Length == 2 ? boundaries[1] : boundaries[0];
                 startCellReference = new CellReference(from);
@@ -581,15 +628,23 @@ namespace NPOI.XSSF.UserModel
         }
 
 
-        /**
-         * Synchronize table headers with cell values in the parent sheet.
-         * Headers <em>must</em> be in sync, otherwise Excel will display a
-         * "Found unreadable content" message on startup.
-         * 
-         * If calling both {@link #updateReferences()} and
-         * {@link #updateHeaders()}, {@link #updateReferences()}
-         * should be called first.
-         */
+        /// <summary>
+        /// <para>
+        /// Synchronize table headers with cell values in the parent sheet.
+        /// Headers <em>must</em> be in sync, otherwise Excel will display a
+        /// "Found unreadable content" message on startup.
+        /// </para>
+        /// <para>
+        /// If calling both <see cref="UpdateReferences()" /> and
+        /// <see cref="UpdateHeaders()" />, <see cref="UpdateReferences()" />
+        /// should be called first.
+        /// </para>
+        /// <para>
+        /// Note that a Table <em>must</em> have a header. To reproduce
+        ///  the equivalent of inserting a table in Excel without Headers,
+        ///  manually add cells with values of "Column1", "Column2" etc first.
+        /// </para>
+        /// </summary>
         public void UpdateHeaders()
         {
             XSSFSheet sheet = (XSSFSheet)GetParent();
@@ -601,6 +656,7 @@ namespace NPOI.XSSF.UserModel
             int firstHeaderColumn = ref1.Col;
 
             XSSFRow row = sheet.GetRow(headerRow) as XSSFRow;
+            DataFormatter formatter = new DataFormatter();
 
             if (row != null && row.GetCTRow() != null)
             {
@@ -613,7 +669,7 @@ namespace NPOI.XSSF.UserModel
                     {
                         if (row.GetCell(cellnum) is XSSFCell cell)
                         {
-                            col.name = cell.StringCellValue;
+                            col.name = formatter.FormatCellValue(cell);
                         }
                         cellnum++;
                     }
@@ -760,6 +816,38 @@ namespace NPOI.XSSF.UserModel
                 return true;
             }
             return false;
+        }
+
+        /// <summary>
+        /// <see cref="NPOI.SS.UserModel.Table.Contains(ICell)" />
+        /// </summary>
+        /// <remarks>
+        /// @since 3.17 beta 1
+        /// </remarks>
+        public bool Contains(ICell cell)
+        {
+            if (cell == null) return false;
+            // check if cell is on the same sheet as the table
+            if (!SheetName.Equals(cell.Sheet.SheetName)) return false;
+            // check if the cell is inside the table
+            if (cell.RowIndex >= StartRowIndex
+                && cell.RowIndex <= EndRowIndex
+                && cell.ColumnIndex >= StartColIndex
+                && cell.ColumnIndex <= EndColIndex) {
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Remove relations
+        /// </summary>
+        internal void OnTableDelete()
+        {
+            foreach (RelationPart part in RelationParts)
+            {
+                RemoveRelation(part.DocumentPart, true);
+            }
         }
     }
 }

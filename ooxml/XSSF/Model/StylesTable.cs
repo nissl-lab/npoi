@@ -49,7 +49,7 @@ namespace NPOI.XSSF.Model
 
         private readonly List<CT_Dxf> dxfs = new List<CT_Dxf>();
         private readonly Dictionary<string, ITableStyle> tableStyles = new Dictionary<string, ITableStyle>();
-        private readonly IIndexedColorMap indexedColors = new DefaultIndexedColorMap();
+        private IIndexedColorMap indexedColors = new DefaultIndexedColorMap();
         /**
          * The first style id available for use as a custom style
          */
@@ -130,26 +130,35 @@ namespace NPOI.XSSF.Model
         {
             this.workbook = wb;
         }
-        public ThemesTable GetTheme()
+        public ThemesTable Theme 
         {
-            return theme;
+            get
+            {
+                return theme;
+            }
+            set
+            {
+                this.theme = value;
+
+                // Pass the themes table along to things which need to 
+                //  know about it, but have already been Created by now
+                foreach(XSSFFont font in fonts)
+                {
+                    font.SetThemesTable(theme);
+                }
+                foreach(XSSFCellBorder border in borders)
+                {
+                    border.SetThemesTable(theme);
+                }
+            }
         }
 
-        public void SetTheme(ThemesTable theme)
-        {
-            this.theme = theme;
-
-            // Pass the themes table along to things which need to 
-            //  know about it, but have already been Created by now
-            foreach (XSSFFont font in fonts)
-            {
-                font.SetThemesTable(theme);
-            }
-            foreach (XSSFCellBorder border in borders)
-            {
-                border.SetThemesTable(theme);
-            }
-        }
+        /// <summary>
+        /// </summary>
+        /// <param name="name">of the table style</param>
+        /// <return>defined style, either explicit or built-in, or null if not found</return>
+        ///
+        /// @since 3.17 beta 1
         public ITableStyle GetTableStyle(String name)
         {
             if (name == null) return null;
@@ -163,9 +172,24 @@ namespace NPOI.XSSF.Model
                 return GetExplicitTableStyle(name);
             }
         }
+        /// <summary>
+        /// NOTE: this only returns explicitly defined styles
+        /// </summary>
+        /// <param name="name">of the table style</param>
+        /// <return>defined style, or null if not explicitly defined</return>
+        ///
+        /// @since 3.17 beta 1
         public ITableStyle GetExplicitTableStyle(String name)
         {
             return tableStyles[name];
+        }
+
+        public ISet<string> ExplicitTableStyleNames
+        {
+            get
+            {
+                return new HashSet<string>(tableStyles.Keys);
+            }
         }
         /**
          * If there isn't currently a {@link ThemesTable} for the
@@ -194,6 +218,9 @@ namespace NPOI.XSSF.Model
                 CT_Stylesheet styleSheet = doc.GetStyleSheet();
 
                 // Grab all the different bits we care about
+                // keep this first, as some constructors below want it
+                IIndexedColorMap customColors = CustomIndexedColorMap.FromColors(styleSheet.colors);
+                if (customColors != null) indexedColors = customColors;
                 CT_NumFmts ctfmts = styleSheet.numFmts;
                 if (ctfmts != null)
                 {
@@ -212,7 +239,7 @@ namespace NPOI.XSSF.Model
                     foreach (CT_Font font in ctfonts.font)
                     {
                         // Create the font and save it. Themes Table supplied later
-                        XSSFFont f = new XSSFFont(font, idx);
+                        XSSFFont f = new XSSFFont(font, idx, indexedColors);
                         fonts.Add(f);
                         idx++;
                     }
@@ -222,7 +249,7 @@ namespace NPOI.XSSF.Model
                 {
                     foreach (CT_Fill fill in ctFills.fill)
                     {
-                        fills.Add(new XSSFCellFill(fill));
+                        fills.Add(new XSSFCellFill(fill, indexedColors));
                     }
                 }
 
@@ -231,7 +258,7 @@ namespace NPOI.XSSF.Model
                 {
                     foreach (CT_Border border in ctborders.border)
                     {
-                        borders.Add(new XSSFCellBorder(border));
+                        borders.Add(new XSSFCellBorder(border, indexedColors));
                     }
                 }
 
@@ -525,10 +552,7 @@ namespace NPOI.XSSF.Model
             return fills.AsReadOnly();
         }
 
-        public ReadOnlyCollection<XSSFFont> GetFonts()
-        {
-            return fonts.AsReadOnly();
-        }
+        public ReadOnlyCollection<XSSFFont> Fonts => fonts.AsReadOnly();
 
         public IDictionary<short, String> GetNumberFormats()
         {
@@ -803,8 +827,8 @@ namespace NPOI.XSSF.Model
             fonts.Add(xssfFont);
 
             CT_Fill[] ctFill = CreateDefaultFills();
-            fills.Add(new XSSFCellFill(ctFill[0]));
-            fills.Add(new XSSFCellFill(ctFill[1]));
+            fills.Add(new XSSFCellFill(ctFill[0], indexedColors));
+            fills.Add(new XSSFCellFill(ctFill[1], indexedColors));
 
             CT_Border ctBorder = CreateDefaultBorder();
             borders.Add(new XSSFCellBorder(ctBorder));
@@ -848,7 +872,7 @@ namespace NPOI.XSSF.Model
         private static XSSFFont CreateDefaultFont()
         {
             CT_Font ctFont = new CT_Font();
-            XSSFFont xssfFont = new XSSFFont(ctFont, 0);
+            XSSFFont xssfFont = new XSSFFont(ctFont, 0, null);
             xssfFont.FontHeightInPoints = (XSSFFont.DEFAULT_FONT_SIZE);
             xssfFont.Color = (XSSFFont.DEFAULT_FONT_COLOR);//SetTheme
             xssfFont.FontName = (XSSFFont.DEFAULT_FONT_NAME);
@@ -872,6 +896,7 @@ namespace NPOI.XSSF.Model
             this.dxfs.Add(dxf);
             return this.dxfs.Count;
         }
+
         /**
          * Create a cell style in this style table.
          * Note - End users probably want to call {@link XSSFWorkbook#createCellStyle()}
@@ -901,29 +926,8 @@ namespace NPOI.XSSF.Model
         /**
          * Finds a font that matches the one with the supplied attributes
          */
-         [Obsolete("deprecated POI 3.15 beta 2. Use {@link #findFont(boolean, short, short, String, boolean, boolean, short, byte)} instead.")]
-        public XSSFFont FindFont(short boldWeight, short color, short fontHeight, String name, bool italic, bool strikeout, FontSuperScript typeOffset,FontUnderlineType underline)
-        {
-            foreach (XSSFFont font in fonts)
-            {
-                if ((font.Boldweight == boldWeight)
-                        && font.Color == color
-                        && font.FontHeight == fontHeight
-                        && font.FontName.Equals(name)
-                        && font.IsItalic == italic
-                        && font.IsStrikeout == strikeout
-                        && font.TypeOffset == typeOffset
-                        && font.Underline == underline)
-                {
-                    return font;
-                }
-            }
-            return null;
-        }
-        /**
-         * Finds a font that matches the one with the supplied attributes
-         */
-        public XSSFFont FindFont(bool bold, short color, short fontHeight, String name, bool italic, bool strikeout, FontSuperScript typeOffset, FontUnderlineType underline)
+        public XSSFFont FindFont(bool bold, short color, short fontHeight, String name, bool italic, bool strikeout,
+            FontSuperScript typeOffset, FontUnderlineType underline)
         {
             foreach (XSSFFont font in fonts)
             {
@@ -942,9 +946,38 @@ namespace NPOI.XSSF.Model
             return null;
         }
 
-        public IIndexedColorMap GetIndexedColors()
+        /// <summary>
+        /// Finds a font that matches the one with the supplied attributes,
+        /// where color is the actual Color-value, not the indexed color
+        /// </summary>
+        public XSSFFont FindFont(bool bold, IColor color, short fontHeight, string name, bool italic, bool strikeout,
+            FontSuperScript typeOffset, FontUnderlineType underline)
         {
-            return indexedColors;
+            foreach(XSSFFont font in fonts)
+            {
+                if((font.IsBold == bold)
+                        && font.GetXSSFColor().Equals(color)
+                        && font.FontHeight == fontHeight
+                        && font.FontName.Equals(name)
+                        && font.IsItalic == italic
+                        && font.IsStrikeout == strikeout
+                        && font.TypeOffset == typeOffset
+                        && font.Underline == underline)
+                {
+                    return font;
+                }
+            }
+            return null;
+        }
+        /// <summary>
+        /// default or custom indexed color to RGB mapping
+        /// </summary>
+        public IIndexedColorMap IndexedColors
+        {
+            get
+            {
+                return indexedColors;
+            }
         }
     }
 }

@@ -16,7 +16,6 @@
 ==================================================================== */
 
 using NPOI;
-using NPOI.HSSF.Record.Aggregates;
 
 namespace TestCases.HSSF.UserModel
 {
@@ -24,15 +23,12 @@ namespace TestCases.HSSF.UserModel
     using System.IO;
     using System.Text;
     using System.Collections;
-    using System.Linq;
     using NUnit.Framework;using NUnit.Framework.Legacy;
 
     using TestCases.HSSF;
 
     using NPOI.HSSF.UserModel;
-    //using NPOI.HSSF.Model;
     using NPOI.HSSF.Record;
-    using NPOI.SS.Formula;
     using NPOI.HSSF.Record.Aggregates;
     using NPOI.SS.Util;
     using NPOI.Util;
@@ -46,6 +42,7 @@ namespace TestCases.HSSF.UserModel
     using NPOI.HSSF;
     using System.Net;
     using SixLabors.ImageSharp;
+    using NPOI.HPSF;
 
     /**
      * Testcases for bugs entered in bugzilla
@@ -125,13 +122,12 @@ namespace TestCases.HSSF.UserModel
         /**Test writing a hyperlink
          * Open resulting sheet in Excel and Check that A1 contains a hyperlink*/
         [Test]
-        [Ignore("not found in poi")]
         public void Test23094()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
             ISheet s = wb.CreateSheet();
             IRow r = s.CreateRow(0);
-            r.CreateCell(0).CellFormula = ("HYPERLINK( \"http://jakarta.apache.org\", \"Jakarta\" )");
+            r.CreateCell(0).CellFormula = "HYPERLINK( \"http://jakarta.apache.org\", \"Jakarta\" )";
 
             WriteTestOutputFileForViewing(wb, "Test23094");
         }
@@ -1146,13 +1142,13 @@ namespace TestCases.HSSF.UserModel
 
             // Doesn't have a directory
             ClassicAssert.IsFalse(obj.HasDirectoryEntry());
-            ClassicAssert.IsNotNull(obj.GetObjectData());
-            ClassicAssert.AreEqual(12, obj.GetObjectData().Length);
+            ClassicAssert.IsNotNull(obj.ObjectData);
+            ClassicAssert.AreEqual(12, obj.ObjectData.Length);
             ClassicAssert.AreEqual("Forms.CheckBox.1", obj.OLE2ClassName);
 
             try
             {
-                obj.GetDirectory();
+                var _ = obj.Directory;
                 Assert.Fail();
             }
             catch (FileNotFoundException)
@@ -1266,7 +1262,7 @@ namespace TestCases.HSSF.UserModel
             //  yet to Add
             ClassicAssert.IsNull(
                 wb.FindFont(
-                    true, (short)123, (short)22,
+                    false, (short)123, (short)22,
                     "Thingy", false, true, FontSuperScript.Sub, FontUnderlineType.Double
                 )
             );
@@ -1277,7 +1273,7 @@ namespace TestCases.HSSF.UserModel
             ClassicAssert.AreEqual(5, nf.Index);
             ClassicAssert.AreEqual(nf, wb.GetFontAt((short)5));
 
-            nf.IsBold = true;
+            nf.IsBold = false;
             nf.Color = ((short)123);
             nf.FontHeight = ((short)22);
             nf.FontName = ("Thingy");
@@ -1292,20 +1288,20 @@ namespace TestCases.HSSF.UserModel
             // Find it now
             ClassicAssert.IsNotNull(
                 wb.FindFont(
-                    true, (short)123, (short)22,
+                    false, (short)123, (short)22,
                     "Thingy", false, true, FontSuperScript.Sub, FontUnderlineType.Double
                 )
             );
             ClassicAssert.AreEqual(
                 5,
                 wb.FindFont(
-                       true, (short)123, (short)22,
+                       false, (short)123, (short)22,
                        "Thingy", false, true, FontSuperScript.Sub, FontUnderlineType.Double
                    ).Index
             );
             ClassicAssert.AreEqual(nf,
                    wb.FindFont(
-                       true, (short)123, (short)22,
+                       false, (short)123, (short)22,
                        "Thingy", false, true, FontSuperScript.Sub, FontUnderlineType.Double
                    )
             );
@@ -2369,8 +2365,8 @@ namespace TestCases.HSSF.UserModel
             ClassicAssert.AreEqual(3, wb.NumberOfSheets);
 
             // Find the SST record
-            UnicodeString withExt = wb.Workbook.GetSSTString(0);
-            UnicodeString withoutExt = wb.Workbook.GetSSTString(31);
+            NPOI.HSSF.Record.UnicodeString withExt = wb.Workbook.GetSSTString(0);
+            NPOI.HSSF.Record.UnicodeString withoutExt = wb.Workbook.GetSSTString(31);
 
             ClassicAssert.AreEqual("O:Alloc:Qty", withExt.String);
             ClassicAssert.IsTrue((withExt.OptionFlags & 0x0004) == 0x0004);
@@ -3498,6 +3494,57 @@ namespace TestCases.HSSF.UserModel
             IWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("named-cell-test.xls");
             wb.GetCreationHelper().CreateFormulaEvaluator().EvaluateAll();
             wb.Close();
+        }
+
+        [Test]
+        public void Test61287()
+        {
+            IWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("61287.xls");
+            ExcelExtractor ex = new ExcelExtractor((HSSFWorkbook)wb);
+            String text = ex.Text;
+            POITestCase.AssertContains(text, "\u8D44\u4EA7\u8D1F\u503A\u8868");
+            wb.Close();
+        }
+
+        [Test]
+        public void Test61300()
+        {
+            ClassicAssert.Throws<RuntimeException>(()=>{
+                NPOIFSFileSystem npoifs = new NPOIFSFileSystem(HSSFTestDataSamples.OpenSampleFileStream("61300.xls"));
+
+                DocumentEntry entry =
+                        (DocumentEntry) npoifs.Root.GetEntry(SummaryInformation.DEFAULT_STREAM_NAME);
+                PropertySet properties =
+                        new PropertySet(new DocumentInputStream(entry));
+            });
+        }
+
+        [Test]
+        public void Test51262() 
+        {
+            HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("51262.xls");
+            ISheet sheet = wb.GetSheetAt(0);
+            IRow row = sheet.GetRow(2);
+
+            ICell cell = row.GetCell(1);
+            ICellStyle style = cell.CellStyle;
+            ClassicAssert.AreEqual(26, style.FontIndex);
+
+            row = sheet.GetRow(3);
+            cell = row.GetCell(1);
+            style = cell.CellStyle;
+            ClassicAssert.AreEqual(28, style.FontIndex);
+
+            // check the two fonts
+            HSSFFont font = wb.GetFontAt((short) 26) as HSSFFont;
+            ClassicAssert.IsTrue(font.IsBold);
+            ClassicAssert.AreEqual(10, font.FontHeightInPoints);
+            ClassicAssert.AreEqual("\uFF2D\uFF33 \uFF30\u30B4\u30B7\u30C3\u30AF", font.FontName);
+
+            font = wb.GetFontAt((short) 28) as HSSFFont;
+            ClassicAssert.IsTrue(font.IsBold);
+            ClassicAssert.AreEqual(10, font.FontHeightInPoints);
+            ClassicAssert.AreEqual("\uFF2D\uFF33 \uFF30\u30B4\u30B7\u30C3\u30AF", font.FontName);
         }
 
         // follow https://svn.apache.org/viewvc?view=revision&revision=1896552 to write a unit test for this fix.

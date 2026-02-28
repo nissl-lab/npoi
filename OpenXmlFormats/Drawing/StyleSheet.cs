@@ -102,7 +102,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<a:{0}", nodeName));
+            sw.WriteStart("a", nodeName);
             XmlHelper.WriteAttribute(sw, "bg1", this.bg1.ToString());
             XmlHelper.WriteAttribute(sw, "tx1", this.tx1.ToString());
             XmlHelper.WriteAttribute(sw, "bg2", this.bg2.ToString());
@@ -115,10 +115,10 @@ namespace NPOI.OpenXmlFormats.Dml
             XmlHelper.WriteAttribute(sw, "accent6", this.accent6.ToString());
             XmlHelper.WriteAttribute(sw, "hlink", this.hlink.ToString());
             XmlHelper.WriteAttribute(sw, "folHlink", this.folHlink.ToString());
-            sw.Write(">");
+            sw.Write('>');
             if (this.extLst != null)
                 this.extLst.Write(sw, "extLst");
-            sw.Write(string.Format("</a:{0}>", nodeName));
+            sw.WriteEndElement("a", nodeName);
         }
 
         public CT_ColorMapping()
@@ -354,13 +354,13 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<a:{0}", nodeName));
-            sw.Write(">");
+            sw.WriteStart("a", nodeName);
+            sw.Write('>');
             if (this.clrScheme != null)
                 this.clrScheme.Write(sw, "clrScheme");
             if (this.clrMap != null)
                 this.clrMap.Write(sw, "clrMap");
-            sw.Write(string.Format("</a:{0}>", nodeName));
+            sw.WriteEndElement("a", nodeName);
         }
 
         public CT_ColorSchemeAndMapping()
@@ -479,11 +479,11 @@ namespace NPOI.OpenXmlFormats.Dml
 
 
 
-        internal void Write(StreamWriter sw)
+        public void Write(StreamWriter sw)
         {
             sw.Write("<a:theme xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\"");
             XmlHelper.WriteAttribute(sw, "name", this.name);
-            sw.Write(">");
+            sw.Write('>');
             if (this.themeElements != null)
                 this.themeElements.Write(sw, "themeElements");
             if (this.objectDefaults != null)
@@ -504,7 +504,7 @@ namespace NPOI.OpenXmlFormats.Dml
                     x.Write(sw, "custClrLst");
                 }
             }
-            sw.Write(string.Format("</a:theme>"));
+            sw.Write("</a:theme>");
         }
 
         public void AddNewThemeElements()

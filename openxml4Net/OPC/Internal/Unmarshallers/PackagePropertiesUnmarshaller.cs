@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Xml;
+﻿using System.Collections;
 using System.IO;
-using System.Collections;
+using System.Xml;
+
 using NPOI.OpenXml4Net.Exceptions;
-using ICSharpCode.SharpZipLib.Zip;
 using NPOI.Util;
+
+using ICSharpCode.SharpZipLib.Zip;
+
 namespace NPOI.OpenXml4Net.OPC.Internal.Unmarshallers
 {
     /**
@@ -17,52 +17,51 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Unmarshallers
      */
     public class PackagePropertiesUnmarshaller : PartUnmarshaller
     {
+        private const string namespaceDC = "http://purl.org/dc/elements/1.1/";
+
+        private const string namespaceCP = PackageNamespaces.CORE_PROPERTIES;
+
+        private const string namespaceDcTerms = "http://purl.org/dc/terms/";
+
+        private const string namespaceXML = "http://www.w3.org/XML/1998/namespace";
+
+        private const string namespaceXSI = "http://www.w3.org/2001/XMLSchema-instance";
+
+        protected static string KEYWORD_CATEGORY = "category";
+
+        protected static string KEYWORD_CONTENT_STATUS = "contentStatus";
+
+        protected static string KEYWORD_CONTENT_TYPE = "contentType";
+
+        protected static string KEYWORD_CREATED = "created";
+
+        protected static string KEYWORD_CREATOR = "creator";
+
+        protected static string KEYWORD_DESCRIPTION = "description";
+
+        protected static string KEYWORD_IDENTIFIER = "identifier";
+
+        protected static string KEYWORD_KEYWORDS = "keywords";
+
+        protected static string KEYWORD_LANGUAGE = "language";
+
+        protected static string KEYWORD_LAST_MODIFIED_BY = "lastModifiedBy";
+
+        protected static string KEYWORD_LAST_PRINTED = "lastPrinted";
+
+        protected static string KEYWORD_MODIFIED = "modified";
+
+        protected static string KEYWORD_REVISION = "revision";
+
+        protected static string KEYWORD_SUBJECT = "subject";
+
+        protected static string KEYWORD_TITLE = "title";
+
+        protected static string KEYWORD_VERSION = "version";
 
 
+        protected XmlNamespaceManager nsmgr;
 
-        private static string namespaceDC = "http://purl.org/dc/elements/1.1/";
-
-        private static string namespaceCP = PackageNamespaces.CORE_PROPERTIES;
-        private static string namespaceDcTerms = "http://purl.org/dc/terms/";
-
-        private static string namespaceXML = "http://www.w3.org/XML/1998/namespace";
-
-        private static string namespaceXSI = "http://www.w3.org/2001/XMLSchema-instance";
-
-        protected static String KEYWORD_CATEGORY = "category";
-
-        protected static String KEYWORD_CONTENT_STATUS = "contentStatus";
-
-        protected static String KEYWORD_CONTENT_TYPE = "contentType";
-
-        protected static String KEYWORD_CREATED = "created";
-
-        protected static String KEYWORD_CREATOR = "creator";
-
-        protected static String KEYWORD_DESCRIPTION = "description";
-
-        protected static String KEYWORD_IDENTIFIER = "identifier";
-
-        protected static String KEYWORD_KEYWORDS = "keywords";
-
-        protected static String KEYWORD_LANGUAGE = "language";
-
-        protected static String KEYWORD_LAST_MODIFIED_BY = "lastModifiedBy";
-
-        protected static String KEYWORD_LAST_PRINTED = "lastPrinted";
-
-        protected static String KEYWORD_MODIFIED = "modified";
-
-        protected static String KEYWORD_REVISION = "revision";
-
-        protected static String KEYWORD_SUBJECT = "subject";
-
-        protected static String KEYWORD_TITLE = "title";
-
-        protected static String KEYWORD_VERSION = "version";
-
-
-        protected XmlNamespaceManager nsmgr = null;
         // TODO Load element with XMLBeans or dynamic table
         // TODO Check every element/namespace for compliance
         public PackagePart Unmarshall(UnmarshallContext context, Stream in1)
@@ -158,7 +157,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Unmarshallers
             return coreProps;
         }
 
-        private String LoadCategory(XmlDocument xmlDoc)
+        private string LoadCategory(XmlDocument xmlDoc)
         {
             XmlNode el = xmlDoc.DocumentElement.SelectNodes("cp:" + KEYWORD_CATEGORY, nsmgr)[0];
 
@@ -169,7 +168,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Unmarshallers
             return el.InnerText;
         }
 
-        private String LoadContentStatus(XmlDocument xmlDoc)
+        private string LoadContentStatus(XmlDocument xmlDoc)
         {
             XmlNode el = xmlDoc.DocumentElement.SelectNodes("cp:" + KEYWORD_CONTENT_STATUS, nsmgr)[0];
             if (el == null)
@@ -179,7 +178,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Unmarshallers
             return el.InnerText;
         }
 
-        private String LoadContentType(XmlDocument xmlDoc)
+        private string LoadContentType(XmlDocument xmlDoc)
         {
             //Element el = xmlDoc.getRootElement().element(
             //        new QName(KEYWORD_CONTENT_TYPE, namespaceCP));
@@ -191,7 +190,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Unmarshallers
             return el.InnerText;
         }
 
-        private String LoadCreated(XmlDocument xmlDoc)
+        private string LoadCreated(XmlDocument xmlDoc)
         {
             //Element el = xmlDoc.getRootElement().element(
             //        new QName(KEYWORD_CREATED, namespaceDcTerms));
@@ -203,7 +202,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Unmarshallers
             return el.InnerText;
         }
 
-        private String LoadCreator(XmlDocument xmlDoc)
+        private string LoadCreator(XmlDocument xmlDoc)
         {
             //Element el = xmlDoc.getRootElement().element(
             //        new QName(KEYWORD_CREATOR, namespaceDC));
@@ -215,7 +214,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Unmarshallers
             return el.InnerText;
         }
 
-        private String LoadDescription(XmlDocument xmlDoc)
+        private string LoadDescription(XmlDocument xmlDoc)
         {
             //Element el = xmlDoc.getRootElement().element(
             //        new QName(KEYWORD_DESCRIPTION, namespaceDC));
@@ -227,7 +226,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Unmarshallers
             return el.InnerText;
         }
 
-        private String LoadIdentifier(XmlDocument xmlDoc)
+        private string LoadIdentifier(XmlDocument xmlDoc)
         {
             //Element el = xmlDoc.getRootElement().element(
             //        new QName(KEYWORD_IDENTIFIER, namespaceDC));
@@ -239,7 +238,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Unmarshallers
             return el.InnerText;
         }
 
-        private String LoadKeywords(XmlDocument xmlDoc)
+        private string LoadKeywords(XmlDocument xmlDoc)
         {
             //Element el = xmlDoc.getRootElement().element(
             //        new QName(KEYWORD_KEYWORDS, namespaceCP));
@@ -252,7 +251,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Unmarshallers
             return el.InnerText;
         }
 
-        private String LoadLanguage(XmlDocument xmlDoc)
+        private string LoadLanguage(XmlDocument xmlDoc)
         {
             //Element el = xmlDoc.getRootElement().element(
             //        new QName(KEYWORD_LANGUAGE, namespaceDC));
@@ -264,7 +263,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Unmarshallers
             return el.InnerText;
         }
 
-        private String LoadLastModifiedBy(XmlDocument xmlDoc)
+        private string LoadLastModifiedBy(XmlDocument xmlDoc)
         {
             //Element el = xmlDoc.getRootElement().element(
             //        new QName(KEYWORD_LAST_MODIFIED_BY, namespaceCP));
@@ -276,7 +275,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Unmarshallers
             return el.InnerText;
         }
 
-        private String LoadLastPrinted(XmlDocument xmlDoc)
+        private string LoadLastPrinted(XmlDocument xmlDoc)
         {
             //Element el = xmlDoc.getRootElement().element(
             //        new QName(KEYWORD_LAST_PRINTED, namespaceCP));
@@ -288,7 +287,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Unmarshallers
             return el.InnerText;
         }
 
-        private String LoadModified(XmlDocument xmlDoc)
+        private string LoadModified(XmlDocument xmlDoc)
         {
             //Element el = xmlDoc.getRootElement().element(
             //        new QName(KEYWORD_MODIFIED, namespaceDcTerms));
@@ -300,7 +299,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Unmarshallers
             return el.InnerText;
         }
 
-        private String LoadRevision(XmlDocument xmlDoc)
+        private string LoadRevision(XmlDocument xmlDoc)
         {
             //Element el = xmlDoc.getRootElement().element(
             //        new QName(KEYWORD_REVISION, namespaceCP));
@@ -312,7 +311,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Unmarshallers
             return el.InnerText;
         }
 
-        private String LoadSubject(XmlDocument xmlDoc)
+        private string LoadSubject(XmlDocument xmlDoc)
         {
             //Element el = xmlDoc.getRootElement().element(
             //        new QName(KEYWORD_SUBJECT, namespaceDC));
@@ -324,7 +323,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Unmarshallers
             return el.InnerText;
         }
 
-        private String LoadTitle(XmlDocument xmlDoc)
+        private string LoadTitle(XmlDocument xmlDoc)
         {
             //Element el = xmlDoc.getRootElement().element(
             //        new QName(KEYWORD_TITLE, namespaceDC));
@@ -336,7 +335,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Unmarshallers
             return el.InnerText;
         }
 
-        private String LoadVersion(XmlDocument xmlDoc)
+        private string LoadVersion(XmlDocument xmlDoc)
         {
             //Element el = xmlDoc.getRootElement().element(
             //        new QName(KEYWORD_VERSION, namespaceCP));
@@ -415,7 +414,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Unmarshallers
                             + PackageNamespaces.NAMESPACE_DCTERMS);
 
                 // Check for the 'xsi:type' attribute
-                XmlNode typeAtt = el.Attributes["type", XMLConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI];// el.Attributes["xsi:type"];
+                XmlAttribute typeAtt = el.Attributes["type", XMLConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI];// el.Attributes["xsi:type"];
                 if (typeAtt == null)
                     throw new InvalidFormatException("The element '" + elName
                             + "' must have the '" + nsmgr.LookupPrefix(namespaceXSI)

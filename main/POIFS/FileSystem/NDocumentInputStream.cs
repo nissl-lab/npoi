@@ -69,6 +69,10 @@ namespace NPOI.POIFS.FileSystem
             _marked_offset_count = 0;
             _document_size = document.Size;
             _closed = false;
+            if (_document_size < 0)
+            {
+                // throw new RecordFormatException("document_size cannot be < 0");
+            }
 
             DocumentProperty property = (DocumentProperty)doc.Property;
             _document = new NPOIFSDocument(
@@ -244,7 +248,7 @@ namespace NPOI.POIFS.FileSystem
             long rval = new_offset - _current_offset;
 
             // TODO Do this better
-            byte[] Skip = new byte[(int)rval];
+            byte[] Skip = IOUtils.SafelyAllocate(rval, int.MaxValue);
             ReadFully(Skip);
             return rval;
         }
@@ -277,6 +281,10 @@ namespace NPOI.POIFS.FileSystem
 
         public override void ReadFully(byte[] buf, int off, int len)
         {
+            if (len < 0)
+            {
+               throw new RuntimeException("Can't read negative number of bytes");
+            }
             CheckAvaliable(len);
 
             int read = 0;

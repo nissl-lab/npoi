@@ -90,9 +90,9 @@ namespace NPOI.XSSF.UserModel.Helpers
             get
             {
                 using var localXPath = ZString.CreateStringBuilder();
-                int numberOfCommonXPathAxis = table.GetCommonXpath().Split(new char[] { '/' }).Length - 1;
+                int numberOfCommonXPathAxis = table.GetCommonXpath().Split('/').Length - 1;
 
-                String[] xPathTokens = ctXmlColumnPr.xpath.Split(new char[] { '/' });
+                String[] xPathTokens = ctXmlColumnPr.xpath.Split('/');
                 for (int i = numberOfCommonXPathAxis; i < xPathTokens.Length; i++)
                 {
                     localXPath.Append("/" + xPathTokens[i]);

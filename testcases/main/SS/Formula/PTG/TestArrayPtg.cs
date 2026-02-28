@@ -35,19 +35,19 @@ namespace TestCases.SS.Formula.PTG
     {
 
         private static byte[] ENCODED_PTG_DATA = {
-		0x40,
-		0, 0, 0, 0, 0, 0, 0,
-	};
+		    0x40,
+		    0, 0, 0, 0, 0, 0, 0,
+	    };
         private static byte[] ENCODED_CONSTANT_DATA = {
-		2,    // 3 columns
-		1, 0, // 2 rows
-		4, 1, 0, 0, 0, 0, 0, 0, 0, // TRUE
-		2, 4, 0, 0, 65, 66, 67, 68, // "ABCD"
-		2, 1, 0, 0, 69, // "E"
-		1, 0, 0, 0, 0, 0, 0, 0, 0, // 0
-		4, 0, 0, 0, 0, 0, 0, 0, 0, // FALSE
-		2, 2, 0, 0, 70, 71, // "FG"
-	};
+		    2,    // 3 columns
+		    1, 0, // 2 rows
+		    4, 1, 0, 0, 0, 0, 0, 0, 0, // TRUE
+		    2, 4, 0, 0, 65, 66, 67, 68, // "ABCD"
+		    2, 1, 0, 0, 69, // "E"
+		    1, 0, 0, 0, 0, 0, 0, 0, 0, // 0
+		    4, 0, 0, 0, 0, 0, 0, 0, 0, // FALSE
+		    2, 2, 0, 0, 70, 71, // "FG"
+	    };
 
         private static ArrayPtg Create(byte[] initialData, byte[] constantData)
         {
@@ -59,21 +59,20 @@ namespace TestCases.SS.Formula.PTG
          * Lots of problems with ArrayPtg's decoding and encoding of the element value data
          */
         [Test]
-        [Ignore("TODO FIX CI TESTS")]
         public void TestReadWriteTokenValueBytes()
         {
             ArrayPtg ptg = Create(ENCODED_PTG_DATA, ENCODED_CONSTANT_DATA);
             ClassicAssert.AreEqual(3, ptg.ColumnCount);
             ClassicAssert.AreEqual(2, ptg.RowCount);
-            Object[,] values = ptg.GetTokenArrayValues();
+            Object[][] values = ptg.GetTokenArrayValues();
             ClassicAssert.AreEqual(2, values.Length);
 
 
-            ClassicAssert.AreEqual(true, values[0,0]);
-            ClassicAssert.AreEqual("ABCD", values[0,1]);
-            ClassicAssert.AreEqual(0d, values[1,0]);
-            ClassicAssert.AreEqual(false, values[1,1]);
-            ClassicAssert.AreEqual("FG", values[1,2]);
+            ClassicAssert.AreEqual(true, values[0][0]);
+            ClassicAssert.AreEqual("ABCD", values[0][1]);
+            ClassicAssert.AreEqual(0d, values[1][0]);
+            ClassicAssert.AreEqual(false, values[1][1]);
+            ClassicAssert.AreEqual("FG", values[1][2]);
 
             byte[] outBuf = new byte[ENCODED_CONSTANT_DATA.Length];
             ptg.WriteTokenValueBytes(new LittleEndianByteArrayOutputStream(outBuf, 0));

@@ -71,6 +71,18 @@ namespace NPOI.XSSF.UserModel
             return new XSSFFormulaEvaluator(workbook, stabilityClassifier, udfFinder);
         }
         
+        public override void NotifySetFormula(ICell cell)
+        {
+            _bookEvaluator.NotifyUpdateCell(new XSSFEvaluationCell((XSSFCell)cell));
+        }
+        public override void NotifyDeleteCell(ICell cell)
+        {
+            _bookEvaluator.NotifyDeleteCell(new XSSFEvaluationCell((XSSFCell)cell));
+        }
+        public override void NotifyUpdateCell(ICell cell)
+        {
+            _bookEvaluator.NotifyUpdateCell(new XSSFEvaluationCell((XSSFCell)cell));
+        }
         /**
          * Loops over all cells in all sheets of the supplied
          *  workbook.

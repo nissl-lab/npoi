@@ -32,6 +32,9 @@ namespace NPOI.DDF
     /// </summary>
     public class EscherClientAnchorRecord : EscherRecord
     {
+        //arbitrarily selected; may need to increase
+        private static int MAX_RECORD_LENGTH = 100_000;
+
         public const short RECORD_ID = unchecked((short)0xF010);
         public const String RECORD_DESCRIPTION = "MsofbtClientAnchor";
         /**
@@ -94,7 +97,7 @@ namespace NPOI.DDF
                 }
             }
             bytesRemaining -= size;
-            remainingData = new byte[bytesRemaining];
+            remainingData = IOUtils.SafelyAllocate(bytesRemaining, MAX_RECORD_LENGTH);
             Array.Copy(data, pos + size, remainingData, 0, bytesRemaining);
             return 8 + size + bytesRemaining;
         }

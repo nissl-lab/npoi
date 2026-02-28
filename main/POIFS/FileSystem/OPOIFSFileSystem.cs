@@ -67,12 +67,12 @@ namespace NPOI.POIFS.FileSystem
         }
 
         private PropertyTable _property_table;
-        private IList<OPOIFSDocument>  _documents;
+        private List<OPOIFSDocument>  _documents;
         private DirectoryNode _root;
         /**
- * What big block size the file uses. Most files
- *  use 512 bytes, but a few use 4096
- */
+         * What big block size the file uses. Most files
+         *  use 512 bytes, but a few use 4096
+         */
         private POIFSBigBlockSize bigBlockSize =
            POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS;
 
@@ -177,36 +177,6 @@ namespace NPOI.POIFS.FileSystem
             }
         }
 
-        /// <summary>
-        /// Checks that the supplied Stream(which MUST
-        /// support mark and reset, or be a PushbackInputStream)
-        /// has a POIFS (OLE2) header at the start of it.
-        /// If your Streamdoes not support mark / reset,
-        /// then wrap it in a PushBackInputStream, then be
-        /// sure to always use that, and not the original!
-        /// </summary>
-        /// <param name="inp">An Streamwhich supports either mark/reset, or is a PushbackStream</param>
-        /// <returns>
-        /// 	<c>true</c> if [has POIFS header] [the specified inp]; otherwise, <c>false</c>.
-        /// </returns>
-        public static bool HasPOIFSHeader(InputStream inp)
-        {
-
-            // We want to peek at the first 8 bytes
-            byte[] header = IOUtils.PeekFirst8Bytes(inp);
-            return HasPOIFSHeader(header);
-        }
-        /**
-         * Checks if the supplied first 8 bytes of a stream / file
-         *  has a POIFS (OLE2) header.
-         */
-        public static bool HasPOIFSHeader(byte[] header8Bytes)
-        {
-            LongField signature = new LongField(HeaderBlockConstants._signature_offset, header8Bytes);
-
-            // Did it match the signature?
-            return (signature.Value == HeaderBlockConstants._signature);
-        }
         /// <summary>
         /// Create a new document to be Added to the root directory
         /// </summary>

@@ -37,6 +37,7 @@ using NPOI.OpenXml4Net.Exceptions;
 using NPOI.SS;
 using System.Globalization;
 using System.Linq;
+using NPOI.POIFS.FileSystem;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -210,12 +211,7 @@ namespace NPOI.XSSF.UserModel
             Load(XSSFFactory.GetInstance());
 
             // some broken Workbooks miss this...
-            if (!workbook.IsSetBookViews())
-            {
-                CT_BookViews bvs = workbook.AddNewBookViews();
-                CT_BookView bv = bvs.AddNewWorkbookView();
-                bv.activeTab = (0);
-            }
+            SetBookViewsIfMissing();
         }
         /**
          * Constructs a XSSFWorkbook object, by buffering the whole stream into memory
@@ -232,20 +228,8 @@ namespace NPOI.XSSF.UserModel
          *   </code></pre>     
          */
         public XSSFWorkbook(Stream fileStream, bool readOnly = false)
-            : base(PackageHelper.Open(fileStream, readOnly))
+            : this(PackageHelper.Open(fileStream, readOnly))
         {
-            BeforeDocumentRead();
-
-            //build a tree of POIXMLDocumentParts, this workbook being the root
-            Load(XSSFFactory.GetInstance());
-
-            // some broken Workbooks miss this...
-            if (!workbook.IsSetBookViews())
-            {
-                CT_BookViews bvs = workbook.AddNewBookViews();
-                CT_BookView bv = bvs.AddNewWorkbookView();
-                bv.activeTab = (0);
-            }
         }
 
         /**
@@ -366,7 +350,7 @@ namespace NPOI.XSSF.UserModel
                     }
                 }
                 stylesSource.SetWorkbook(this);
-                stylesSource.SetTheme(theme);
+                stylesSource.Theme = theme;
 
                 if (sharedStringSource == null)
                 {
@@ -446,9 +430,7 @@ namespace NPOI.XSSF.UserModel
             CT_WorkbookPr workbookPr = workbook.AddNewWorkbookPr();
             workbookPr.date1904 = (false);
 
-            CT_BookViews bvs = workbook.AddNewBookViews();
-            CT_BookView bv = bvs.AddNewWorkbookView();
-            bv.activeTab = 0;
+            SetBookViewsIfMissing();
             workbook.AddNewSheets();
 
             ExtendedProperties expProps = GetProperties().ExtendedProperties;
@@ -476,6 +458,15 @@ namespace NPOI.XSSF.UserModel
             pivotTables = new List<XSSFPivotTable>();
         }
 
+        private void SetBookViewsIfMissing()
+        {
+            if(!workbook.IsSetBookViews())
+            {
+                CT_BookViews bvs = workbook.AddNewBookViews();
+                CT_BookView bv = bvs.AddNewWorkbookView();
+                bv.activeTab = 0;
+            }
+        }
         /**
          * Create a new SpreadsheetML namespace and Setup the default minimal content
          */
@@ -960,14 +951,6 @@ namespace NPOI.XSSF.UserModel
         /**
          * Finds a font that matches the one with the supplied attributes
          */
-        [Obsolete("deprecated POI 3.15. Use {@link #findFont(boolean, short, short, String, boolean, boolean, short, byte)} instead.")]
-        public IFont FindFont(short boldWeight, short color, short fontHeight, String name, bool italic, bool strikeout, FontSuperScript typeOffset, FontUnderlineType underline)
-        {
-            return stylesSource.FindFont(boldWeight, color, fontHeight, name, italic, strikeout, typeOffset, underline);
-        }
-        /**
-         * Finds a font that matches the one with the supplied attributes
-         */
         public IFont FindFont(bool bold, short color, short fontHeight, String name, bool italic, bool strikeout, FontSuperScript typeOffset, FontUnderlineType underline)
         {
             return stylesSource.FindFont(bold, color, fontHeight, name, italic, strikeout, typeOffset, underline);
@@ -1129,7 +1112,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                return (short)stylesSource.GetFonts().Count;
+                return (short)stylesSource.Fonts.Count;
             }
         }
 
@@ -1396,6 +1379,11 @@ namespace NPOI.XSSF.UserModel
          */
         private void OnSheetDelete(int index)
         {
+            // remove all sheet relations
+            XSSFSheet sheet = GetSheetAt(index) as XSSFSheet;
+
+            sheet.OnSheetDelete();
+
             //delete the CT_Sheet reference from workbook.xml
             workbook.sheets.RemoveSheet(index);
 
@@ -1870,7 +1858,7 @@ namespace NPOI.XSSF.UserModel
         public ThemesTable GetTheme()
         {
             if (stylesSource == null) return null;
-            return stylesSource.GetTheme();
+            return stylesSource.Theme;
         }
 
         /**
@@ -2311,7 +2299,7 @@ namespace NPOI.XSSF.UserModel
          * @return wrapped instance of UDFFinder that allows seeking functions both by index and name
          */
         /*package*/
-        internal UDFFinder GetUDFFinder()
+        internal IndexedUDFFinder GetUDFFinder()
         {
             return _udfFinder;
         }
@@ -2590,6 +2578,54 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
+        /// <summary>
+        /// Adds an OLE package manager object with the given content to the sheet
+        /// </summary>
+        /// <param name="oleData">the payload</param>
+        /// <param name="label">the label of the payload</param>
+        /// <param name="fileName">the original filename</param>
+        /// <param name="command">the command to open the payload</param>
+        /// <return>the index of the added ole object, i.e. the storage id</return>
+        /// <exception cref="IOException">if the object can't be embedded</exception>
+        public int AddOlePackage(byte[] oleData, String label, String fileName, String command)
+        {
+            // find an unused part name
+            OPCPackage opc = Package;
+            PackagePartName pnOLE;
+            int oleId=0;
+            do
+            {
+                try
+                {
+                    pnOLE = PackagingUriHelper.CreatePartName("/xl/embeddings/oleObject"+(++oleId)+".bin");
+                }
+                catch(InvalidFormatException e)
+                {
+                    throw new IOException("ole object name not recognized", e);
+                }
+            } while(opc.ContainPart(pnOLE));
+
+            PackagePart pp = opc.CreatePart( pnOLE, "application/vnd.openxmlformats-officedocument.oleObject" );
+
+            Ole10Native ole10 = new Ole10Native(label, fileName, command, oleData);
+
+            ByteArrayOutputStream bos = new ByteArrayOutputStream(oleData.Length+500);
+            ole10.WriteOut(bos);
+
+            POIFSFileSystem poifs = new POIFSFileSystem();
+            DirectoryNode root = poifs.Root;
+            root.CreateDocument(Ole10Native.OLE10_NATIVE, new ByteArrayInputStream(bos.ToByteArray()));
+            root.StorageClsid = (HPSF.ClassID.OLE10_PACKAGE);
+
+            // TODO: generate CombObj stream
+
+            Stream os = pp.GetOutputStream();
+            poifs.WriteFileSystem(os);
+            os.Close();
+            poifs.Close();
+
+            return oleId;
+        }
         #endregion
 
         #region IList<XSSFSheet> Members

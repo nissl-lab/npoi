@@ -33,6 +33,9 @@ namespace NPOI.DDF
     /// </summary>
     public class EscherBSERecord : EscherRecord
     {
+        //arbitrarily selected; may need to increase
+        private static int MAX_RECORD_LENGTH = 100_000;
+
         public const short RECORD_ID = unchecked((short)0xF007);
         public const String RECORD_DESCRIPTION = "MsofbtBSE";
 
@@ -95,7 +98,7 @@ namespace NPOI.DDF
             pos += 36 + bytesRead;
             bytesRemaining -= bytesRead;
 
-            _remainingData = new byte[bytesRemaining];
+            _remainingData = IOUtils.SafelyAllocate(bytesRemaining, MAX_RECORD_LENGTH);
             Array.Copy(data, pos, _remainingData, 0, bytesRemaining);
             return bytesRemaining + 8 + 36 + (field_12_blipRecord == null ? 0 : field_12_blipRecord.RecordSize);
 

@@ -464,7 +464,7 @@ namespace NPOI.HSSF.UserModel
                 case MissingCellPolicy.CREATE_NULL_AS_BLANK:
                     return (cell == null) ? CreateCell(cellnum, CellType.Blank) : cell;
                 default:
-                    throw new ArgumentException("Illegal policy " + policy + " (" + policy + ")");
+                    throw new ArgumentException("Illegal policy " + policy);
             }
         }
 

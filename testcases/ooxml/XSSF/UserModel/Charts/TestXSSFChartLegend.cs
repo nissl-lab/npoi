@@ -33,7 +33,7 @@ namespace TestCases.XSSF.UserModel.Charts
         {
             IWorkbook wb = new XSSFWorkbook();
             ISheet sheet = wb.CreateSheet();
-            IDrawing Drawing = sheet.CreateDrawingPatriarch();
+            IDrawing<IShape> Drawing = sheet.CreateDrawingPatriarch();
             IClientAnchor anchor = Drawing.CreateAnchor(0, 0, 0, 0, 1, 1, 10, 30);
             IChart chart = Drawing.CreateChart(anchor);
             IChartLegend legend = chart.GetOrCreateLegend();
@@ -50,7 +50,7 @@ namespace TestCases.XSSF.UserModel.Charts
             // Arrange
             IWorkbook wb = new XSSFWorkbook();
             ISheet sheet = wb.CreateSheet();
-            IDrawing Drawing = sheet.CreateDrawingPatriarch();
+            IDrawing<IShape> Drawing = sheet.CreateDrawingPatriarch();
             IClientAnchor anchor = Drawing.CreateAnchor(0, 0, 0, 0, 1, 1, 10, 30);
             IChart chart = Drawing.CreateChart(anchor);
             IChartLegend legend = chart.GetOrCreateLegend();
@@ -69,7 +69,7 @@ namespace TestCases.XSSF.UserModel.Charts
             // Arrange
             IWorkbook wb = new XSSFWorkbook();
             ISheet sheet = wb.CreateSheet();
-            IDrawing Drawing = sheet.CreateDrawingPatriarch();
+            IDrawing<IShape> Drawing = sheet.CreateDrawingPatriarch();
             IClientAnchor anchor = Drawing.CreateAnchor(0, 0, 0, 0, 1, 1, 10, 30);
             IChart chart = Drawing.CreateChart(anchor);
             IChartLegend legend = chart.GetOrCreateLegend();

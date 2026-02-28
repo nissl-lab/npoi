@@ -20,6 +20,7 @@ using System.Text.RegularExpressions;
 using System.Text;
 using NPOI.SS.Util;
 using System.Globalization;
+using NPOI.Util;
 
 namespace NPOI.SS.Format
 {
@@ -33,15 +34,14 @@ namespace NPOI.SS.Format
         private bool amPmUpper;
         private bool ShowM;
         private bool ShowAmPm;
-        private readonly FormatBase dateFmt;
+        private readonly SimpleDateFormat dateFmt;
         private String sFmt;
         private int millisecondPartLength = 0;
 
         private static readonly TimeSpan EXCEL_EPOCH_TIME;
         private static readonly DateTime EXCEL_EPOCH_DATE;
 
-        private static readonly CellFormatter SIMPLE_DATE = new CellDateFormatter(
-                "mm/d/y");
+        private static readonly CellDateFormatter SIMPLE_DATE = new CellDateFormatter("mm/d/y");
 
         static CellDateFormatter()
         {
@@ -160,6 +160,18 @@ namespace NPOI.SS.Format
          * @param format The format.
          */
         public CellDateFormatter(String format)
+            : this(LocaleUtil.GetUserLocale(), format)
+        {
+
+        }
+
+        /**
+         * Creates a new date formatter with the given specification.
+         *
+         * @param locale The locale.
+         * @param format The format.
+         */
+        public CellDateFormatter(CultureInfo locale, String format)
             : base(format)
         {
             DatePartHandler partHandler = new DatePartHandler(this);
@@ -172,7 +184,7 @@ namespace NPOI.SS.Format
             // See https://issues.apache.org/bugzilla/show_bug.cgi?id=53369
 
             String ptrn = Regex.Replace(descBuf.ToString(), "((y)(?!y))(?<!yy)", "yy");
-            dateFmt = new SimpleDateFormat(ptrn);
+            dateFmt = new SimpleDateFormat(ptrn, locale);
         }
 
         /** {@inheritDoc} */

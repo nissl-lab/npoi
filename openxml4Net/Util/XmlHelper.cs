@@ -321,6 +321,7 @@ namespace NPOI.OpenXml4Net.Util
         }
 
         private static readonly char[] xmlEncodeCharsToReplace = { '&', '<', '>', '"' };
+        private static readonly char[] cdataEncodeCharsToReplace = { '&', '<', '>','\'' ,'"' };
 
         public static string EncodeXml(string xml)
         {
@@ -335,6 +336,22 @@ namespace NPOI.OpenXml4Net.Util
                 .Replace("<", "&lt;")
                 .Replace(">", "&gt;")
                 .Replace("\"", "&quot;");//.Replace("'", "&apos;");
+        }
+
+        public static string EncodeCDATAContent(string xml)
+        {
+            // quick check whether needed
+            if(xml.IndexOfAny(cdataEncodeCharsToReplace) == -1)
+            {
+                return xml;
+            }
+
+            return xml
+                .Replace("&", "&#38;")
+                .Replace("<", "&#60;")
+                .Replace(">", "&#62;")
+                .Replace("\"", "&#34;")
+                .Replace("'", "&#39;");
         }
 
         public static void WriteAttribute(StreamWriter sw, string attributeName, bool value)

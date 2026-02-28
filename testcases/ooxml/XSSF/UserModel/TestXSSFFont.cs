@@ -16,13 +16,15 @@
 ==================================================================== */
 
 using NPOI;
+using NPOI.OOXML.XSSF.UserModel;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using NPOI.Util;
 using NPOI.XSSF;
 using NPOI.XSSF.UserModel;
-using NUnit.Framework;using NUnit.Framework.Legacy;
+using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using System.Text;
 using TestCases.SS.UserModel;
 
@@ -239,7 +241,7 @@ namespace TestCases.XSSF.UserModel
             byte[] bytes = Encoding.ASCII.GetBytes(HexDump.ToHex(0xF1F1F1));
             color.rgb = (bytes);
 
-            XSSFColor newColor = new XSSFColor(color);
+            XSSFColor newColor = new XSSFColor(color, null);
             xssfFont.SetColor(newColor);
             ClassicAssert.AreEqual(ctFont.GetColorArray(0).GetRgb()[2], newColor.RGB[2]);
 
@@ -322,6 +324,113 @@ namespace TestCases.XSSF.UserModel
 
             // Even with invalid fonts we still get back useful data most of the time... 
             SheetUtil.CanComputeColumnWidth(font);
+        }
+
+        /// <summary>
+        /// Test that fonts Get added properly
+        /// </summary>
+        [Test]
+        public void TestFindFont()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            ClassicAssert.AreEqual(1, wb.NumberOfFonts);
+
+            XSSFSheet s = wb.CreateSheet() as XSSFSheet;
+            s.CreateRow(0);
+            s.CreateRow(1);
+            s.GetRow(0).CreateCell(0);
+            s.GetRow(1).CreateCell(0);
+
+            ClassicAssert.AreEqual(1, wb.NumberOfFonts);
+
+            XSSFFont f1 = wb.GetFontAt(0) as XSSFFont;
+            ClassicAssert.IsFalse(f1.IsBold);
+
+            // Check that asking for the same font
+            //  multiple times gives you the same thing.
+            // Otherwise, our tests wouldn't work!
+            ClassicAssert.AreSame(wb.GetFontAt(0), wb.GetFontAt(0));
+            ClassicAssert.AreEqual(
+                    wb.GetFontAt(0),
+                    wb.GetFontAt(0)
+            );
+
+            // Look for a new font we have
+            //  yet to add
+            ClassicAssert.IsNull(
+                    wb.FindFont(
+                            false, IndexedColors.Indigo.Index, (short) 22,
+                            "Thingy", false, true, (FontSuperScript) 2, (FontUnderlineType) 2
+                    )
+            );
+            ClassicAssert.IsNull(
+                    wb.GetStylesSource().FindFont(
+                            false, new XSSFColor(IndexedColors.Indigo, new DefaultIndexedColorMap()), (short) 22,
+                            "Thingy", false, true, (FontSuperScript) 2, (FontUnderlineType) 2
+                    )
+            );
+
+            XSSFFont nf = wb.CreateFont() as XSSFFont;
+            ClassicAssert.AreEqual(2, wb.NumberOfFonts);
+
+            ClassicAssert.AreEqual(1, nf.IndexAsInt);
+            ClassicAssert.AreEqual(nf, wb.GetFontAt(1));
+
+            nf.IsBold = false;
+            nf.Color = IndexedColors.Indigo.Index;
+            nf.FontHeight = 22;
+            nf.FontName = "Thingy";
+            nf.IsItalic = false;
+            nf.IsStrikeout = true;
+            nf.TypeOffset = (FontSuperScript) 2;
+            nf.Underline = (FontUnderlineType) 2;
+
+            ClassicAssert.AreEqual(2, wb.NumberOfFonts);
+            ClassicAssert.AreEqual(nf, wb.GetFontAt(1));
+
+            ClassicAssert.IsTrue(
+                    wb.GetFontAt(0)
+                            !=
+                            wb.GetFontAt(1)
+            );
+
+            // Find it now
+            ClassicAssert.IsNotNull(
+                    wb.FindFont(
+                            false, IndexedColors.Indigo.Index, (short) 22,
+                            "Thingy", false, true, (FontSuperScript) 2, (FontUnderlineType) 2
+                    )
+            );
+            ClassicAssert.IsNotNull(
+                    wb.GetStylesSource().FindFont(
+                            false, new XSSFColor(IndexedColors.Indigo, new DefaultIndexedColorMap()), (short) 22,
+                            "Thingy", false, true, (FontSuperScript) 2, (FontUnderlineType) 2
+                    )
+            );
+
+            XSSFFont font = wb.FindFont(
+                false, IndexedColors.Indigo.Index, (short) 22,
+                "Thingy", false, true, (FontSuperScript) 2, (FontUnderlineType) 2
+            ) as XSSFFont;
+            ClassicAssert.IsNotNull(font);
+            ClassicAssert.AreEqual(
+                    1,
+                    font.IndexAsInt
+            );
+            ClassicAssert.AreEqual(nf,
+                    wb.FindFont(
+                            false, IndexedColors.Indigo.Index, (short) 22,
+                            "Thingy", false, true, (FontSuperScript) 2, (FontUnderlineType) 2
+                    )
+            );
+            ClassicAssert.AreEqual(nf,
+                    wb.GetStylesSource().FindFont(
+                            false, new XSSFColor(IndexedColors.Indigo, new DefaultIndexedColorMap()), (short) 22,
+                            "Thingy", false, true, (FontSuperScript) 2, (FontUnderlineType) 2
+                    )
+            );
+
+            wb.Close();
         }
     }
 }

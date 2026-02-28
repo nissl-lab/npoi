@@ -471,7 +471,8 @@ namespace NPOI.XSSF.Streaming
                         zos.PutNextEntry(new ZipEntry(ze.Name));
                         var inputStream = zip.GetInputStream(ze);
                         XSSFSheet xSheet = GetSheetFromZipEntryName(ze.Name);
-                        if (xSheet != null)
+                        // See bug 56557, we should not inject data into the special ChartSheets
+                        if (xSheet != null && !(xSheet is XSSFChartSheet))
                         {
                             SXSSFSheet sxSheet = GetSXSSFSheet(xSheet);
                             var xis = sxSheet.GetWorksheetXMLInputStream();
@@ -715,12 +716,6 @@ namespace NPOI.XSSF.Streaming
         public IFont CreateFont()
         {
             return XssfWorkbook.CreateFont();
-        }
-
-        [Obsolete("deprecated in poi 3.16")]
-        public IFont FindFont(short boldWeight, short color, short fontHeight, string name, bool italic, bool strikeout, FontSuperScript typeOffset, FontUnderlineType underline)
-        {
-            return XssfWorkbook.FindFont(boldWeight, color, fontHeight, name, italic, strikeout, typeOffset, underline);
         }
 
         /**
@@ -984,6 +979,11 @@ namespace NPOI.XSSF.Streaming
             {
                 return SpreadsheetVersion.EXCEL2007;
             }
+        }
+
+        public int AddOlePackage(byte[] oleData, String label, String fileName, String command) 
+        {
+            return _wb.AddOlePackage(oleData, label, fileName, command);
         }
 
         /// <summary>

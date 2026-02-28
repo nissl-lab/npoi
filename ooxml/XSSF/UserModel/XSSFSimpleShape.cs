@@ -21,8 +21,8 @@ namespace NPOI.XSSF.UserModel
     using System.Collections.Generic;
     using NPOI.HSSF.Util;
     using NPOI.SS.UserModel;
-    using NPOI.OpenXmlFormats.Dml.Spreadsheet;
     using NPOI.OpenXmlFormats.Dml;
+    using OpenXmlFormats.Dml.Spreadsheet;
     using System.Text; 
 using Cysharp.Text;
     using NPOI.OpenXmlFormats.Spreadsheet;
@@ -96,12 +96,12 @@ using Cysharp.Text;
                 CT_Shape shape = new CT_Shape();
 
                 CT_ShapeNonVisual nv = shape.AddNewNvSpPr();
-                NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_NonVisualDrawingProps nvp = nv.AddNewCNvPr();
+                OpenXmlFormats.Dml.Spreadsheet.CT_NonVisualDrawingProps nvp = nv.AddNewCNvPr();
                 nvp.id = (/*setter*/1);
                 nvp.name = (/*setter*/"Shape 1");
                 nv.AddNewCNvSpPr();
 
-                NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_ShapeProperties sp = shape.AddNewSpPr();
+                OpenXmlFormats.Dml.Spreadsheet.CT_ShapeProperties sp = shape.AddNewSpPr();
                 CT_Transform2D t2d = sp.AddNewXfrm();
                 CT_PositiveSize2D p1 = t2d.AddNewExt();
                 p1.cx = (/*setter*/0);

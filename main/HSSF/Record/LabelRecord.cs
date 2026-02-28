@@ -59,9 +59,9 @@ namespace NPOI.HSSF.Record
             field_2_column = in1.ReadUShort();
             field_3_xf_index = in1.ReadShort();
             field_4_string_len = in1.ReadShort();
-            field_5_unicode_flag = (byte)in1.ReadByte();
             if (field_4_string_len > 0)
             {
+                field_5_unicode_flag = (byte)in1.ReadByte();
                 if (IsUncompressedUnicode)
                 {
                     field_6_value = in1.ReadUnicodeLEString(field_4_string_len);
@@ -73,6 +73,8 @@ namespace NPOI.HSSF.Record
             }
             else
             {
+                // Default to uncompressed unicode
+                field_5_unicode_flag = 1;
                 field_6_value = "";
             }
             if (in1.Remaining > 0)

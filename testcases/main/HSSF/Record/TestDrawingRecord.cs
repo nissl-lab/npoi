@@ -53,7 +53,7 @@ namespace TestCases.HSSF.Record
             dataX = cn.Serialize();
             out1.Write(dataX, 0, dataX.Length);
 
-            List<Record> rec = RecordFactory.CreateRecords(new MemoryStream(out1.ToArray()));
+            List<Record> rec = RecordFactory.CreateRecords(new ByteArrayInputStream(out1.ToArray()));
             ClassicAssert.AreEqual(2, rec.Count);
             ClassicAssert.IsTrue(rec[0] is DrawingRecord);
             ClassicAssert.IsTrue(rec[1] is ContinueRecord);

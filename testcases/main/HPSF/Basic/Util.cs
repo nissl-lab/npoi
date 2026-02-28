@@ -74,29 +74,6 @@ namespace TestCases.HPSF.Basic
         }
 
 
-
-        /**
-         * Reads all files from a POI filesystem and returns them as an
-         * array of {@link POIFile} instances. This method loads all files
-         * into memory and thus does not cope well with large POI
-         * filessystems.
-         * 
-         * @param poiFs The name of the POI filesystem as seen by the
-         * operating system. (This is the "filename".)
-         *
-         * @return The POI files. The elements are ordered in the same way
-         * as the files in the POI filesystem.
-         * 
-         * @exception FileNotFoundException if the file containing the POI 
-         * filesystem does not exist
-         * 
-         * @exception IOException if an I/O exception occurs
-         */
-        public static POIFile[] ReadPOIFiles(Stream poiFs)
-        {
-            return ReadPOIFiles(poiFs, null);
-        }
-
         /**
          * Reads a Set of files from a POI filesystem and returns them
          * as an array of {@link POIFile} instances. This method loads all
@@ -116,14 +93,13 @@ namespace TestCases.HPSF.Basic
          * 
          * @exception IOException if an I/O exception occurs
          */
-        public static POIFile[] ReadPOIFiles(Stream poiFs,
-                                             String[] poiFiles)
+        public static List<POIFile> ReadPOIFiles(Stream poiFs, params String[] poiFiles)
         {
             List<POIFile> files = new List<POIFile>();
             POIFSReader reader1 = new POIFSReader();
             //reader1.StreamReaded += new POIFSReaderEventHandler(reader1_StreamReaded);
             POIFSReaderListener pfl = new POIFSReaderListener0(files);
-            if (poiFiles == null)
+            if (poiFiles == null || poiFiles.Length == 0)
                 /* Register the listener for all POI files. */
                 reader1.RegisterListener(pfl);
             else
@@ -141,10 +117,8 @@ namespace TestCases.HPSF.Basic
             {
                 poiFs.Close();
             }
-            POIFile[] result = new POIFile[files.Count];
-            for (int i = 0; i < result.Length; i++)
-                result[i] = (POIFile)files[i];
-            return result;
+
+            return files;
         }
         private class POIFSReaderListener0 : POIFSReaderListener
         {
@@ -161,11 +135,7 @@ namespace TestCases.HPSF.Basic
                     POIFile f = new POIFile();
                     f.SetName(evt.Name);
                     f.SetPath(evt.Path);
-                    MemoryStream out1 =
-                        new MemoryStream();
-                    Util.Copy(evt.Stream, out1);
-                    out1.Close();
-                    f.SetBytes(out1.ToArray());
+                    f.SetBytes(IOUtils.ToByteArray(evt.Stream));
                     files.Add(f);
                 }
                 catch (IOException ex)
@@ -193,7 +163,7 @@ namespace TestCases.HPSF.Basic
          * 
          * @exception IOException if an I/O exception occurs
          */
-        public static POIFile[] ReadPropertySets(FileInfo poifs)
+        public static List<POIFile> ReadPropertySets(FileInfo poifs)
         {
             List<POIFile> files = new List<POIFile>(7);
             POIFSReader reader2 = new POIFSReader();
@@ -210,10 +180,8 @@ namespace TestCases.HPSF.Basic
             {
                 stream.Close();
             }
-            POIFile[] result = new POIFile[files.Count];
-            for (int i = 0; i < result.Length; i++)
-                result[i] = files[i];
-            return result;
+
+            return files;
         }
         private class POIFSReaderListener1:POIFSReaderListener
         {

@@ -29,8 +29,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         private byte[] rsidDelField;
 
         private byte[] rsidRField;
-        
-        Vml.CT_AlternateContent alternateContentField = null;
+
+        List<Vml.CT_AlternateContent> alternateContentFields;
 
         public CT_R()
         {
@@ -64,15 +64,15 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             return this.rPrField;
         }
 
-        public Vml.CT_AlternateContent alternateContent
+        public List<Vml.CT_AlternateContent> alternateContent
         {
             get
             {
-                return alternateContentField;
+                return alternateContentFields;
             }
             set
             {
-                this.alternateContentField = value;
+                this.alternateContentFields = value;
             }
         }
 
@@ -610,7 +610,17 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 }
                 else if (childNode.LocalName == "AlternateContent")
                 {
-                    ctObj.alternateContent = Vml.CT_AlternateContent.Parse(childNode, namespaceManager);
+                    var ctAlternateContent = Vml.CT_AlternateContent.Parse(childNode, namespaceManager);
+
+                    if (ctAlternateContent != null)
+                    {
+                        if (ctObj.alternateContent == null)
+                        {
+                            ctObj.alternateContent = new List<Vml.CT_AlternateContent>();
+                        }
+
+                        ctObj.alternateContent.Add(ctAlternateContent);
+                    }
                 }
                 else if (childNode.LocalName == "endnoteRef")
                 {
@@ -713,11 +723,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:rsidR", this.rsidR);
             XmlHelper.WriteAttribute(sw, "w:rsidRPr", this.rsidRPr);
             XmlHelper.WriteAttribute(sw, "w:rsidDel", this.rsidDel);
-            sw.Write(">");
+            sw.Write('>');
             if (this.rPr != null)
                 this.rPr.Write(sw, "rPr");
 
@@ -790,10 +800,15 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                     sw.Write("<w:yearShort/>");
                 i++;
             }
-            if (this.alternateContent != null)
+
+            if (this.alternateContent != null && this.alternateContent.Count > 0)
             {
-                this.alternateContent.Write(sw, "AlternateContent");
+                foreach (var ctAlternateContent in this.alternateContent)
+                {
+                    ctAlternateContent.Write(sw, "AlternateContent");
+                }
             }
+
             sw.WriteEndW(nodeName);
         }
     }
@@ -924,9 +939,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
-            sw.Write(">");
+            sw.Write('>');
             sw.WriteEndW(nodeName);
         }
 
@@ -1025,8 +1040,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
-            sw.Write(">");
+            sw.WriteStartW(nodeName);
+            sw.Write('>');
             if (this.rubyAlign != null)
                 this.rubyAlign.Write(sw, "rubyAlign");
             if (this.hps != null)
@@ -1335,8 +1350,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
-            sw.Write(">");
+            sw.WriteStartW(nodeName);
+            sw.Write('>');
             int i = 0;
             foreach (object o in this.Items)
             {
@@ -1527,8 +1542,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
-            sw.Write(">");
+            sw.WriteStartW(nodeName);
+            sw.Write('>');
             if (this.rubyPr != null)
                 this.rubyPr.Write(sw, "rubyPr");
             if (this.rt != null)
@@ -1598,7 +1613,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
             sw.Write("/>");
         }
@@ -1626,13 +1641,12 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
     public enum ST_Jc
     {
     
-        left,
+        start,
 
     
         center,
 
-    
-        right,
+        end,
 
     
         both,
@@ -1654,6 +1668,12 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
     
         thaiDistribute,
+
+        
+        left,
+
+        
+        right
     }
 
 
@@ -1677,7 +1697,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
             sw.Write("/>");
         }
@@ -1745,7 +1765,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
             sw.Write("/>");
         }
@@ -1810,9 +1830,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
-            sw.Write(">");
+            sw.Write('>');
             sw.WriteEndW(nodeName);
         }
 
@@ -1876,9 +1896,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:val", this.val.ToString());
-            sw.Write(">");
+            sw.Write('>');
             sw.WriteEndW(nodeName);
         }
 
@@ -2314,8 +2334,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal new void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
-            sw.Write(">");
+            sw.WriteStartW(nodeName);
+            sw.Write('>');
             foreach (object o in this.Items)
             {
                 if (o is CT_Func func)
@@ -2417,7 +2437,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 else if (o is CT_SmartTagRun tagRun)
                     tagRun.Write(sw, "smartTag");
             }
-            sw.Write(string.Format("</w:{0}", nodeName));
+            sw.WriteEndW(nodeName);
         }
 
         [XmlElement("acc", typeof(CT_Acc), Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", Order = 0)]

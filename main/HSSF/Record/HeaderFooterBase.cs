@@ -18,13 +18,13 @@
 namespace NPOI.HSSF.Record
 {
     using System;
-using NPOI.Util;
+    using NPOI.Util;
 
-/**
- * Common header/footer base class
- *
- * @author Josh Micich
- */
+    /**
+     * Common header/footer base class
+     *
+     * @author Josh Micich
+     */
     public abstract class HeaderFooterBase : StandardRecord
     {
         private bool field_2_hasMultibyte;
@@ -40,6 +40,15 @@ using NPOI.Util;
             if (in1.Remaining > 0)
             {
                 int field_1_footer_len = in1.ReadShort();
+                //61287 -- if the footer_len == 0, there may not be a multibyte flag
+			    if (field_1_footer_len == 0)
+                {
+				    field_3_text = "";
+				    if (in1.Remaining == 0)
+                    {
+					    return;
+				    }
+			    }
                 field_2_hasMultibyte = in1.ReadByte() != 0x00;
 
                 if (field_2_hasMultibyte)

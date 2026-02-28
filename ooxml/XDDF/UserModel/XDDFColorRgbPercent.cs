@@ -71,7 +71,7 @@ namespace NPOI.XDDF.UserModel
             }
         }
 
-        private int normalize(int value)
+        private static int normalize(int value)
         {
             if(value < 0)
             {
@@ -93,7 +93,7 @@ namespace NPOI.XDDF.UserModel
             return sb.ToString().ToUpper();
         }
 
-        private void appendHex(StringBuilder sb, int value)
+        private static void appendHex(StringBuilder sb, int value)
         {
             int b = value * 255 / 100_000;
             sb.Append(b.ToString("X2"));

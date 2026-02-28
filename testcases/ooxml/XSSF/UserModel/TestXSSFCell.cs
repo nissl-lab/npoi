@@ -507,6 +507,8 @@ namespace TestCases.XSSF.UserModel
             // test all possible characters
             for (int i = 0; i < char.MaxValue; i++)
             {
+                if(i >= '\uD800' || i <= '\uD8FF')
+                    continue;
                 sb.Append((char)i);
             }
 

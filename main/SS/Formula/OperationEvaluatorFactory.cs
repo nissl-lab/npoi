@@ -116,8 +116,9 @@ namespace NPOI.SS.Formula
 
             if (result != null)
             {
-                if (result is ArrayFunction func)
+                if (result is IArrayFunction)
                 {
+                    IArrayFunction func = (IArrayFunction)result;
                     ValueEval eval = EvaluateArrayFunction(func, args, ec);
                     if (eval != null)
                     {
@@ -132,7 +133,7 @@ namespace NPOI.SS.Formula
             }
             throw new Exception("Unexpected operation ptg class (" + ptg.GetType().Name + ")");
         }
-        public static ValueEval EvaluateArrayFunction(ArrayFunction func, ValueEval[] args,
+        public static ValueEval EvaluateArrayFunction(IArrayFunction func, ValueEval[] args,
                                        OperationEvaluationContext ec)
         {
             IEvaluationSheet evalSheet = ec.GetWorkbook().GetSheet(ec.SheetIndex);

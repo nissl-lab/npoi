@@ -6,6 +6,7 @@ using NPOI.OpenXmlFormats.Shared;
 using System.IO;
 using NPOI.OpenXml4Net.Util;
 using System.Collections;
+using System.CodeDom;
 
 namespace NPOI.OpenXmlFormats.Wordprocessing
 {
@@ -171,12 +172,16 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 }
                 else if (childNode.LocalName == "fldSimple")
                 {
-                    ctObj.Items.Add(CT_SimpleField.Parse(childNode, namespaceManager));
+                    var sf = CT_SimpleField.Parse(childNode, namespaceManager);
+                    sf.parent = ctObj;
+                    ctObj.Items.Add(sf);
                     ctObj.ItemsElementName.Add(ParagraphItemsChoiceType.fldSimple);
                 }
                 else if (childNode.LocalName == "hyperlink")
                 {
-                    ctObj.Items.Add(CT_Hyperlink1.Parse(childNode, namespaceManager));
+                    var hl=CT_Hyperlink1.Parse(childNode, namespaceManager);
+                    hl.parent = ctObj;
+                    ctObj.Items.Add(hl);
                     ctObj.ItemsElementName.Add(ParagraphItemsChoiceType.hyperlink);
                 }
                 else if (childNode.LocalName == "ins")
@@ -247,10 +252,43 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         {
             return this.rsidRField != null && rsidRField.Length > 0;
         }
-
+        public void RemoveHyperlink(CT_Hyperlink1 hl)
+        {
+            int index=-1;
+            for(int i = 0; i<Items.Count; i++)
+            {
+                if(Items[i].Equals(hl))
+                {
+                    index=i;
+                    break;
+                }
+            }
+            if(index>=0)
+            {
+                Items.RemoveAt(index);
+                ItemsElementName.RemoveAt(index);
+            }
+        }
+        public void RemoveSimpleField(CT_SimpleField sf)
+        {
+            int index=-1;
+            for(int i = 0; i<Items.Count; i++)
+            {
+                if(Items[i].Equals(sf))
+                {
+                    index=i;
+                    break;
+                }
+            }
+            if(index>=0)
+            {
+                Items.RemoveAt(index);
+                ItemsElementName.RemoveAt(index);
+            }
+        }
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w14:paraId", this.paraIdField);
             XmlHelper.WriteAttribute(sw, "w14:textId", this.textIdField);
             XmlHelper.WriteAttribute(sw, "w:rsidR", this.rsidR);
@@ -258,7 +296,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             XmlHelper.WriteAttribute(sw, "w:rsidRDefault", this.rsidRDefault);
             XmlHelper.WriteAttribute(sw, "w:rsidP", this.rsidP);
             XmlHelper.WriteAttribute(sw, "w:rsidDel", this.rsidDel);
-            sw.Write(">");
+            sw.Write('>');
             if (this.pPr != null&&!this.pPr.IsEmpty)
                 this.pPr.Write(sw, "pPr");
 
@@ -1033,8 +1071,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal new void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
-            sw.Write(">");
+            sw.WriteStartW(nodeName);
+            sw.Write('>');
             if (this.pPrChange != null)
                 this.pPrChange.Write(sw, "pPrChange");
             if (this.pStyle != null)
@@ -1173,10 +1211,33 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
                 this.numPr = new CT_NumPr();
             return this.numPr;
         }
+        public CT_SectPr AddNewSectPr()
+        {
+            if(this.sectPrField==null)
+            { 
+                this.sectPrField = new CT_SectPr();
+            }
+            return this.sectPrField;
+        }
 
         public bool IsSetSpacing()
         {
             return this.spacing != null;
+        }
+
+        public bool IsSetSectPr()
+        { 
+            return this.sectPr != null;
+        }
+
+        public void UnsetJc()
+        {
+            this.jc=null;
+        }
+
+        public bool IsSetKeepNext()
+        {
+            return this.keepNext!=null;
         }
     }
 
@@ -1963,8 +2024,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
-            sw.Write(">");
+            sw.WriteStartW(nodeName);
+            sw.Write('>');
             if (this.ins != null)
                 this.ins.Write(sw, "ins");
             if (this.del != null)
@@ -2095,11 +2156,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal new void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:author", this.author);
             XmlHelper.WriteAttribute(sw, "w:date", this.date);
             XmlHelper.WriteAttribute(sw, "r:id", this.id);
-            sw.Write(">");
+            sw.Write('>');
             if (this.sectPr != null)
                 this.sectPr.Write(sw, "sectPr");
             sw.WriteEndW(nodeName);
@@ -2233,12 +2294,12 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:rsidRPr", this.rsidRPr);
             XmlHelper.WriteAttribute(sw, "w:rsidDel", this.rsidDel);
             XmlHelper.WriteAttribute(sw, "w:rsidR", this.rsidR);
             XmlHelper.WriteAttribute(sw, "w:rsidSect", this.rsidSect);
-            sw.Write(">");
+            sw.Write('>');
             if (this.footnotePr != null)
                 this.footnotePr.Write(sw, "footnotePr");
             if (this.endnotePr != null)
@@ -2992,6 +3053,18 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             return this.titlePgField != null;
         }
 
+        public bool IsSetPgSz()
+        { 
+            return this.pgSzField != null;
+        }
+
+        public CT_PageSz AddNewPgSz()
+        {
+            if(this.pgSzField == null)
+                this.pgSzField = new CT_PageSz();
+            return this.pgSzField;
+        }
+
         public CT_OnOff AddNewTitlePg()
         {
             if (this.titlePgField == null)
@@ -3114,12 +3187,12 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:rsidR", this.rsidR);
             XmlHelper.WriteAttribute(sw, "w:rsidRPr", this.rsidRPr);
             XmlHelper.WriteAttribute(sw, "w:rsidSect", this.rsidSect);
             XmlHelper.WriteAttribute(sw, "w:rsidDel", this.rsidDel);
-            sw.Write(">");
+            sw.Write('>');
             if (this.headerReference != null)
             {
                 foreach (CT_HdrFtrRef x in this.headerReference)
@@ -3229,8 +3302,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
-            sw.Write(">");
+            sw.WriteStartW(nodeName);
+            sw.Write('>');
             if (this.top != null)
                 this.top.Write(sw, "top");
             if (this.left != null)
@@ -3465,7 +3538,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.WriteStartW(nodeName);
             if(this.beforeField != null)
                 XmlHelper.WriteAttribute(sw, "w:before", (ulong)this.before, true);
             XmlHelper.WriteAttribute(sw, "w:beforeLines", this.beforeLines);
@@ -3723,7 +3796,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:leftChars", this.leftChars);
             XmlHelper.WriteAttribute(sw, "w:left", this.left);
             XmlHelper.WriteAttribute(sw, "w:rightChars", this.rightChars);
@@ -3886,6 +3959,16 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         public bool IsSetFirstLine()
         {
             return !(this.firstLineField==0);
+        }
+
+        public bool IsSetLeftChars()
+        {
+            return this.leftChars!=null;
+        }
+
+        public bool IsSetRightChars()
+        {
+            return this.rightChars!=null;
         }
     }
 
@@ -4074,8 +4157,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
-            sw.Write(">");
+            sw.WriteStartW(nodeName);
+            sw.Write('>');
             if (this.rStyle != null)
                 this.rStyle.Write(sw, "rStyle");
             if (this.rFonts != null)
@@ -4967,14 +5050,14 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal new void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "author", this.author);
             XmlHelper.WriteAttribute(sw, "date", this.date);
             XmlHelper.WriteAttribute(sw, "id", this.id);
-            sw.Write(">");
+            sw.Write('>');
             if (this.rPr != null)
                 this.rPr.Write(sw, "rPr");
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.WriteEndElement(nodeName);
         }
 
 
@@ -5526,7 +5609,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}>", nodeName));
+            sw.WriteStartW(nodeName);
+            sw.Write('>');
             if (this.ins != null)
                 this.ins.Write(sw, "ins");
             if (this.del != null)
@@ -5971,11 +6055,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal new void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:author", this.author);
             XmlHelper.WriteAttribute(sw, "w:date", this.date);
             XmlHelper.WriteAttribute(sw, "r:id", this.id);
-            sw.Write(">");
+            sw.Write('>');
             if (this.pPr != null)
                 this.pPr.Write(sw, "pPr");
             sw.WriteEndW(nodeName);
@@ -6203,8 +6287,8 @@ cnfStyleField == null;
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
-            sw.Write(">");
+            sw.WriteStartW(nodeName);
+            sw.Write('>');
             if (this.pStyle != null)
                 this.pStyle.Write(sw, "pStyle");
             if (this.tabs != null && this.tabs.Count > 0)
@@ -6863,11 +6947,11 @@ cnfStyleField == null;
 
         internal new void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:author", this.author);
             XmlHelper.WriteAttribute(sw, "w:date", this.date);
             XmlHelper.WriteAttribute(sw, "r:id", this.id);
-            sw.Write(">");
+            sw.Write('>');
             if (this.rPr != null)
                 this.rPr.Write(sw, "rPr");
             sw.WriteEndW(nodeName);
@@ -7306,8 +7390,8 @@ cnfStyleField == null;
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
-            sw.Write(">");
+            sw.WriteStartW(nodeName);
+            sw.Write('>');
             if (this.spacing != null)
             {
                 foreach (CT_SignedTwipsMeasure x in this.spacing)
@@ -7627,11 +7711,11 @@ cnfStyleField == null;
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:type", this.type.ToString());
             if(this.clear!= ST_BrClear.none)
                 XmlHelper.WriteAttribute(sw, "w:clear", this.clear.ToString());
-            sw.Write(">");
+            sw.Write('>');
             sw.WriteEndW(nodeName);
         }
 
@@ -7771,9 +7855,9 @@ cnfStyleField == null;
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:type", this.type.ToString());
-            sw.Write(">");
+            sw.Write('>');
             if (this.pPr != null)
                 this.pPr.Write(sw, "pPr");
             if (this.rPr != null)

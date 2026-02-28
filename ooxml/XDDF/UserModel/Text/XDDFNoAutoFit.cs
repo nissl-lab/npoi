@@ -35,7 +35,7 @@ namespace NPOI.XDDF.UserModel.Text
         {
 
         }
-        internal XDDFNoAutoFit(CT_TextNoAutofit autofit)
+        public XDDFNoAutoFit(CT_TextNoAutofit autofit)
         {
             this.autofit = autofit;
         }

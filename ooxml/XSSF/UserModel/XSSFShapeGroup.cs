@@ -15,13 +15,14 @@
    limitations under the License.
 ==================================================================== */
 
-using System;
-using System.Collections.Generic;
 using NPOI.OpenXml4Net.OPC;
 using NPOI.OpenXmlFormats.Dml;
 using NPOI.OpenXmlFormats.Dml.Spreadsheet;
 using NPOI.SS.UserModel;
 using NPOI.Util;
+using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -33,7 +34,7 @@ namespace NPOI.XSSF.UserModel
      *
      * @author Yegor Kozlov
      */
-    public class XSSFShapeGroup : XSSFShape
+    public class XSSFShapeGroup : XSSFShape, IShapeContainer<XSSFShape>
     {
         private static CT_GroupShape prototype = null;
 
@@ -223,7 +224,7 @@ namespace NPOI.XSSF.UserModel
 
         public XSSFShapeGroup CreateGroup(XSSFChildGroupAnchor anchor)
         {
-            CT_GroupShape ctShape = ctGroup.AddNewGroup();
+            CT_GroupShape ctShape = ctGroup.AddNewGroupShape();
             ctShape.Set(XSSFShapeGroup.Prototype());
 
             XSSFShapeGroup group = new XSSFShapeGroup(GetDrawing(), ctShape)
@@ -234,6 +235,29 @@ namespace NPOI.XSSF.UserModel
             group.GetCTGroupShape().grpSpPr.xfrm = anchor.GetCTTransform2D();
 
             return group;
+        }
+
+        public XSSFShapeGroup CreateGroup(XSSFChildAnchor anchor)
+        {
+            CT_GroupShape ctShape = ctGroup.AddNewGroupShape();
+            ctShape.Set(Prototype());
+
+            XSSFShapeGroup shape = new XSSFShapeGroup(GetDrawing(), ctShape);
+            shape.parent = this;
+            shape.anchor = anchor;
+
+            // TODO: calculate bounding rectangle on anchor and set off/ext correctly
+
+            CT_GroupTransform2D xfrm = shape.GetCTGroupShape().grpSpPr.xfrm;
+            CT_Transform2D t2 = anchor.GetCTTransform2D();
+            xfrm.off = t2.off;
+            xfrm.ext = t2.ext;
+            // child offset is left to 0,0
+            xfrm.chExt = t2.ext;
+            xfrm.flipH = t2.flipH;
+            xfrm.flipV = t2.flipV;
+
+            return shape;
         }
 
         public CT_GroupShape GetCTGroupShape()
@@ -268,7 +292,8 @@ namespace NPOI.XSSF.UserModel
             throw new InvalidOperationException("Not supported for shape group");
         }
 
-        public void AutoFit(SS.UserModel.ISheet Sheet) {
+        public void AutoFit(SS.UserModel.ISheet Sheet)
+        {
             var min = new Coords(long.MaxValue, long.MaxValue);
             var max = new Coords(long.MinValue, long.MinValue);
 
@@ -335,6 +360,23 @@ namespace NPOI.XSSF.UserModel
 
                 Min.Min(min);
                 Max.Max(max);
+            }
+        }
+
+        public IEnumerator<XSSFShape> GetEnumerator()
+        {
+            return GetDrawing().GetShapes(this).GetEnumerator();
+        }
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetDrawing().GetShapes(this).GetEnumerator();
+        }
+
+        public override string ShapeName
+        {
+            get
+            {
+                return ctGroup.nvGrpSpPr.cNvPr.name;
             }
         }
     }

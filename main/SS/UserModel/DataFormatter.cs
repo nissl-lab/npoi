@@ -15,22 +15,20 @@
    limitations under the License.
 ==================================================================== */
 
+using Cysharp.Text;
+using ExtendedNumerics;
+using NPOI.SS.Format;
+using NPOI.SS.Formula;
+using NPOI.SS.Util;
+using NPOI.Util;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Text;
+using System.Text.RegularExpressions;
+
 namespace NPOI.SS.UserModel
 {
-    using System;
-    using System.Collections;
-    using System.Text; 
-using Cysharp.Text;
-    using System.Text.RegularExpressions;
-
-    using NPOI.SS.Util;
-    using System.Globalization;
-    using NPOI.SS.Format;
-    using NPOI.Util;
-    using System.Collections.Generic;
-
-
-
     /**
      * HSSFDataFormatter contains methods for Formatting the value stored in an
      * Cell. This can be useful for reports and GUI presentations when you
@@ -168,7 +166,7 @@ using Cysharp.Text;
         /**
          * A default date format, if no date format was given
          */
-        private readonly DateFormat defaultDateformat;
+        private readonly SimpleDateFormat defaultDateformat;
 
         /** <em>General</em> FormatBase for whole numbers. */
         //private static DecimalFormat generalWholeNumFormat = new DecimalFormat("0");
@@ -179,13 +177,13 @@ using Cysharp.Text;
 
         /** A default FormatBase to use when a number pattern cannot be Parsed. */
         private FormatBase defaultNumFormat;
-        private CultureInfo currentCulture;
+        private CultureInfo locale;
         
         /*
          * A map to cache formats.
          *  Map<String,FormatBase> Formats
          */
-        private readonly Hashtable formats;
+        private readonly Dictionary<string, FormatBase> formats;
 
         /** whether CSV friendly adjustments should be made to the formatted text **/
         private readonly bool emulateCSV = false;
@@ -248,7 +246,7 @@ using Cysharp.Text;
         public DataFormatter(CultureInfo culture, bool localeIsAdapting, bool emulateCSV)
         {
             this.localeIsAdapting = true;
-            this.currentCulture = culture;
+            this.locale = culture;
             //localeChangedObservable.addObserver(this);
             // localeIsAdapting must be true prior to this first checkForLocaleChange call.
             //localeChangedObservable.checkForLocaleChange(culture);
@@ -266,7 +264,7 @@ using Cysharp.Text;
             defaultDateformat = new SimpleDateFormat(dateSymbols.FullDateTimePattern, dateSymbols);
             defaultDateformat.TimeZone = TimeZoneInfo.Local;
 
-            formats = new Hashtable();
+            formats = new Dictionary<string, FormatBase>();
 
             // init built-in Formats
             FormatBase zipFormat = ZipPlusFourFormat.Instance;
@@ -298,24 +296,28 @@ using Cysharp.Text;
          * @param cell The cell to retrieve a FormatBase for
          * @return A FormatBase for the FormatBase String
          */
-        private FormatBase GetFormat(ICell cell)
+        private FormatBase GetFormat(ICell cell, ConditionalFormattingEvaluator cfEvaluator)
         {
-            if (cell.CellStyle == null)
+            if (cell == null) return null;
+
+            ExcelNumberFormat numFmt = ExcelNumberFormat.From(cell, cfEvaluator);
+
+            if (numFmt == null)
             {
                 return null;
             }
 
-            int formatIndex = cell.CellStyle.DataFormat;
-            string formatStr = cell.CellStyle.GetDataFormatString();
-            if (formatStr == null || formatStr.Trim().Length == 0)
-            {
-                return null;
-            }
-            return GetFormat(cell.NumericCellValue, formatIndex, formatStr);
-        }
+            int formatIndex = numFmt.Idx;
+            String formatStr = numFmt.Format;
+             if (formatStr == null || formatStr.Trim().Length == 0)
+             {
+                 return null;
+             }
+             return GetFormat(cell.NumericCellValue, formatIndex, formatStr);
+         }
 
-        private FormatBase GetFormat(double cellValue, int formatIndex, string formatStrIn)
-        {
+         private FormatBase GetFormat(double cellValue, int formatIndex, String formatStrIn)
+         {
             //      // Might be better to separate out the n p and z formats, falling back to p when n and z are not set.
             //      // That however would require other code to be re factored.
             //      String[] formatBits = formatStrIn.split(";");
@@ -323,7 +325,7 @@ using Cysharp.Text;
             //      string formatStr = (i < formatBits.length) ? formatBits[i] : formatBits[0];
 
             string formatStr = formatStrIn;
-
+            int firstAt = formatStr.IndexOf(';');
             // Excel supports 2+ part conditional data formats, eg positive/negative/zero,
             //  or (>1000),(>0),(0),(negative). As Java doesn't handle these kinds
             //  of different formats for different ranges, just +ve/-ve, we need to 
@@ -331,19 +333,19 @@ using Cysharp.Text;
             // For now, if we detect 2+ parts, we call out to CellFormat to handle it
             // TODO Going forward, we should really merge the logic between the two classes
 
-            if (formatStr.IndexOf(';') != -1 &&
-                (formatStr.IndexOf(';') != formatStr.LastIndexOf(';')
+            if (firstAt != -1 &&
+                (firstAt != formatStr.LastIndexOf(';')
                  || rangeConditionalPattern.IsMatch(formatStr)
                 ))
             {
                 try
                 {
                     // Ask CellFormat to get a formatter for it
-                    CellFormat cfmt = CellFormat.GetInstance(formatStr);
+                    CellFormat cfmt = CellFormat.GetInstance(locale, formatStr);
                     // CellFormat requires callers to identify date vs not, so do so
                     object cellValueO = (cellValue);
                     if (DateUtil.IsADateFormat(formatIndex, formatStr) &&
-                        // don't try to handle Date value 0, let a 3 or 4-part format take care of it 
+                        // don't try to handle Date value 0, let a 3 or 4-part format take care of it
                         (double)cellValueO != 0.0)
                     {
                         cellValueO = DateUtil.GetJavaDate(cellValue);
@@ -359,7 +361,7 @@ using Cysharp.Text;
 
             // Excel supports positive/negative/zero, but java
             // doesn't, so we need to do it specially
-            int firstAt = formatStr.IndexOf(';');
+            
             int lastAt = formatStr.LastIndexOf(';');
             // p and p;n are ok by default. p;n;z and p;n;z;s need to be fixed.
             if (firstAt != -1 && firstAt != lastAt)
@@ -390,11 +392,12 @@ using Cysharp.Text;
             }
 
             // Excel's # with value 0 will output empty where Java will output 0. This hack removes the # from the format.
-            if (emulateCSV && cellValue == 0.0 && formatStr.Contains("#") && !formatStr.Contains("0"))
+            if (emulateCSV && cellValue == 0.0 && formatStr.Contains('#') && !formatStr.Contains('0'))
             {
                 formatStr = formatStr.Replace("#", "");
             }
-            FormatBase format = (FormatBase)formats[formatStr];
+
+            formats.TryGetValue(formatStr, out FormatBase format);
             if (format != null)
             {
                 return format;
@@ -706,7 +709,7 @@ using Cysharp.Text;
             try
             {
                 //return new SimpleDateFormat(formatStr);
-                return new ExcelStyleDateFormatter(formatStr);
+                return new ExcelStyleDateFormatter(formatStr, dateSymbols);
             }
             catch (ArgumentException)
             {
@@ -814,6 +817,81 @@ using Cysharp.Text;
 
             return sb.ToString();
         }
+
+        private class InternalDecimalFormatWithScale : FormatBase
+        {
+
+            private static Regex endsWithCommas = new Regex("(,+)$", RegexOptions.Compiled);
+            private BigDecimal? divider;
+            private static BigDecimal ONE_THOUSAND = new BigDecimal(1000);
+            private DecimalFormat df;
+            private static string TrimTrailingCommas(string s)
+            {
+                return Regex.Replace(s, ",+$", "");
+            }
+
+            public InternalDecimalFormatWithScale(string pattern, NumberFormatInfo symbols)
+            {
+                df = new DecimalFormat(TrimTrailingCommas(pattern), symbols);
+                //SetExcelStyleRoundingMode(df);
+                Match endsWithCommasMatcher = endsWithCommas.Match(pattern);
+                if(endsWithCommasMatcher.Success)
+                {
+                    string commas = endsWithCommasMatcher.Groups[1].Value;
+                    BigDecimal temp = BigDecimal.One;
+                    for(int i = 0; i < commas.Length; ++i)
+                    {
+                        temp = BigDecimal.Multiply(temp, ONE_THOUSAND);
+                    }
+                    divider = temp;
+                }
+                else
+                {
+                    divider = null;
+                }
+            }
+
+            private object ScaleInput(object obj)
+            {
+                if(divider != null)
+                {
+                    if(obj is BigDecimal)
+                    {
+                        obj = BigDecimal.Divide((BigDecimal) obj, divider.Value);
+                    }
+                    else if(obj is double)
+                    {
+                        obj = (double) obj / ((double?) divider);
+                    }
+                    else if(obj is Int32 || obj is Int64 || obj is decimal)
+                    {
+                        obj = (BigDecimal) obj / divider;
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException();
+                    }
+                }
+                return obj;
+            }
+
+            public override string Format(object obj)
+            {
+                obj = ScaleInput(obj);
+                return df.Format(obj, CultureInfo.CurrentCulture);
+            }
+
+            public override StringBuilder Format(object obj, StringBuilder toAppendTo, CultureInfo culture)
+            {
+                obj = ScaleInput(obj);
+                return df.Format(obj, toAppendTo, culture);
+            }
+            public override object ParseObject(string source, int pos)
+            {
+                throw new InvalidOperationException();
+            }
+        }
+
         private FormatBase CreateNumberFormat(string formatStr, double cellValue)
         {
             string format = cleanFormatForNumber(formatStr);
@@ -830,7 +908,7 @@ using Cysharp.Text;
                 // correct grouping for non-US locales.
                 if (grouping != ',')
                 {
-                    symbols = currentCulture.NumberFormat.Clone() as NumberFormatInfo;
+                    symbols = locale.NumberFormat.Clone() as NumberFormatInfo;
                     symbols.NumberGroupSeparator = grouping.ToString();
                     string oldPart = agm.Groups[1].Value;
                     string newPart = oldPart.Replace(grouping, ',');
@@ -842,7 +920,7 @@ using Cysharp.Text;
             {
                 //DecimalFormat df = new DecimalFormat(format, symbols);
                 //setExcelStyleRoundingMode(df);
-                return new DecimalFormat(format, symbols);
+                return new InternalDecimalFormatWithScale(format, symbols);
             }
             catch (ArgumentException)
             {
@@ -875,16 +953,21 @@ using Cysharp.Text;
         }
 
         /**
-         * Returns the Formatted value of an Excel date as a <c>String</c> based
-         * on the cell's <c>DataFormat</c>. i.e. "Thursday, January 02, 2003"
+         * Returns the formatted value of an Excel date as a <tt>String</tt> based
+         * on the cell's <code>DataFormat</code>. i.e. "Thursday, January 02, 2003"
          * , "01/02/2003" , "02-Jan" , etc.
+         * <p/>
+         * If any conditional format rules apply, the highest priority with a number format is used.
+         * If no rules contain a number format, or no rules apply, the cell's style format is used.
+         * If the style does not have a format, the default date format is applied.
          *
-         * @param cell The cell
-         * @return a Formatted date string
+         * @param cell
+         * @param cfEvaluator ConditionalFormattingEvaluator (if available)
+         * @return
          */
-        private string GetFormattedDateString(ICell cell)
+        private String GetFormattedDateString(ICell cell, ConditionalFormattingEvaluator cfEvaluator)
         {
-            FormatBase dateFormat = GetFormat(cell);
+            FormatBase dateFormat = GetFormat(cell, cfEvaluator);
             if (dateFormat is ExcelStyleDateFormatter formatter) {
                 // Hint about the raw excel value
                 formatter.SetDateToBeFormatted(
@@ -898,22 +981,26 @@ using Cysharp.Text;
         }
 
         /**
-         * Returns the Formatted value of an Excel number as a <c>String</c>
-         * based on the cell's <c>DataFormat</c>. Supported Formats include
+         * Returns the formatted value of an Excel number as a <tt>String</tt>
+         * based on the cell's <code>DataFormat</code>. Supported formats include
          * currency, percents, decimals, phone number, SSN, etc.:
          * "61.54%", "$100.00", "(800) 555-1234".
+         * <p/>
+         * Format comes from either the highest priority conditional format rule with a
+         * specified format, or from the cell style.
          *
          * @param cell The cell
-         * @return a Formatted number string
+         * @param cfEvaluator if available, or null
+         * @return a formatted number string
          */
-        private string GetFormattedNumberString(ICell cell)
+        private String GetFormattedNumberString(ICell cell, ConditionalFormattingEvaluator cfEvaluator)
         {
 
-            FormatBase numberFormat = GetFormat(cell);
+            FormatBase numberFormat = GetFormat(cell, cfEvaluator);
             double d = cell.NumericCellValue;
             if (numberFormat == null)
             {
-                return d.ToString(currentCulture);
+                return d.ToString(locale);
             }
             //return numberFormat.Format(d, currentCulture);
             string formatted = numberFormat.Format(d);
@@ -980,7 +1067,7 @@ using Cysharp.Text;
             FormatBase numberFormat = GetFormat(value, formatIndex, formatString);
             if (numberFormat == null)
             {
-                return value.ToString(currentCulture);
+                return value.ToString(locale);
             }
             // When formatting 'value', double to text to BigDecimal produces more
             // accurate results than double to Double in JDK8 (as compared to
@@ -995,10 +1082,10 @@ using Cysharp.Text;
             }
             else
             {
-                result = numberFormat.Format(decimal.Parse(textValue));
+                result = numberFormat.Format(BigDecimal.Parse(textValue));
             }
             // Complete scientific notation by adding the missing +.
-            if (result.Contains("E") && !result.Contains("E-"))
+            if (result.Contains('E') && !result.Contains("E-"))
             {
                 result = result.Replace("E", "E+");
             }
@@ -1041,7 +1128,38 @@ using Cysharp.Text;
          */
         public string FormatCellValue(ICell cell, IFormulaEvaluator evaluator)
         {
+            return FormatCellValue(cell, evaluator, null);
+        }
 
+        /**
+         * <p>
+         * Returns the formatted value of a cell as a <tt>String</tt> regardless
+         * of the cell type. If the Excel number format pattern cannot be parsed then the
+         * cell value will be formatted using a default format.
+         * </p>
+         * <p>When passed a null or blank cell, this method will return an empty
+         * String (""). Formula cells will be evaluated using the given
+         * {@link FormulaEvaluator} if the evaluator is non-null. If the
+         * evaluator is null, then the formula String will be returned. The caller
+         * is responsible for setting the currentRow on the evaluator
+         *</p>
+         * <p>
+         * When a ConditionalFormattingEvaluator is present, it is checked first to see
+         * if there is a number format to apply.  If multiple rules apply, the last one is used.
+         * If no ConditionalFormattingEvaluator is present, no rules apply, or the applied
+         * rules do not define a format, the cell's style format is used.
+         * </p>
+         * <p>
+         * The two evaluators should be from the same context, to avoid inconsistencies in cached values.
+         *</p>
+         *
+         * @param cell The cell (can be null)
+         * @param evaluator The FormulaEvaluator (can be null)
+         * @param cfEvaluator ConditionalFormattingEvaluator (can be null)
+         * @return a string value of the cell
+         */
+        public String FormatCellValue(ICell cell, IFormulaEvaluator evaluator, ConditionalFormattingEvaluator cfEvaluator)
+        {
             if (cell == null)
             {
                 return "";
@@ -1082,11 +1200,11 @@ using Cysharp.Text;
 
                 case CellType.Numeric:
 
-                    if (DateUtil.IsCellDateFormatted(cell))
+                    if (DateUtil.IsCellDateFormatted(cell, cfEvaluator))
                     {
-                        return GetFormattedDateString(cell);
+                        return GetFormattedDateString(cell, cfEvaluator);
                     }
-                    return GetFormattedNumberString(cell);
+                    return GetFormattedNumberString(cell, cfEvaluator);
 
                 case CellType.String:
                     return cell.RichStringCellValue.String;
@@ -1121,10 +1239,8 @@ using Cysharp.Text;
          */
         public void SetDefaultNumberFormat(FormatBase format)
         {
-            IEnumerator itr = formats.Keys.GetEnumerator();
-            while (itr.MoveNext())
+            foreach (var key in formats.Keys)
             {
-                string key = (string)itr.Current;
                 if (formats[key] == generalNumberFormat)
                 {
                     formats[key] = format;
@@ -1160,13 +1276,13 @@ using Cysharp.Text;
         public void Update(IObservable<object> observable, object localeObj)
         {
             if (localeObj is not CultureInfo newLocale) return;
-            if (newLocale.Equals(currentCulture)) return;
+            if (newLocale.Equals(locale)) return;
 
-            currentCulture = newLocale;
+            locale = newLocale;
 
             //dateSymbols = DateFormatSymbols.getInstance(currentCulture);
             //decimalSymbols = DecimalFormatSymbols.getInstance(currentCulture);
-            generalNumberFormat = new ExcelGeneralNumberFormat(currentCulture);
+            generalNumberFormat = new ExcelGeneralNumberFormat(locale);
 
             // init built-in formats
 

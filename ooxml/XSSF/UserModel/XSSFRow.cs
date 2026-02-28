@@ -485,8 +485,8 @@ namespace NPOI.XSSF.UserModel
                 int srcRowNum = srcRow.RowNum;
                 int destRowNum = RowNum;
                 int rowDifference = destRowNum - srcRowNum;
-                FormulaShifter shifter = FormulaShifter.CreateForRowCopy(sheetIndex, sheetName, srcRowNum, srcRowNum, rowDifference, SpreadsheetVersion.EXCEL2007);
-                rowShifter.UpdateRowFormulas(this, shifter);
+                FormulaShifter formulaShifter = FormulaShifter.CreateForRowCopy(sheetIndex, sheetName, srcRowNum, srcRowNum, rowDifference, SpreadsheetVersion.EXCEL2007);
+                rowShifter.UpdateRowFormulas(this, formulaShifter);
                 // Copy merged regions that are fully contained on the row
                 // FIXME: is this something that rowShifter could be doing?
                 if (policy.IsCopyMergedRegions)
@@ -518,7 +518,7 @@ namespace NPOI.XSSF.UserModel
         /// <param name="style"></param>
         public void SetRowStyle(ICellStyle style)
         {
-
+            this.RowStyle = style;
         }
 
         /// <summary>

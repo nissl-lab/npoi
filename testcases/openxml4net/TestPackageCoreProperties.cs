@@ -66,7 +66,7 @@ namespace TestCases.OpenXml4Net.OPC
             SimpleDateFormat msdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.fff'Z'");
             msdf.TimeZone = TimeZoneInfo.Utc;
 
-            PackageProperties props = p.GetPackageProperties();
+            IPackageProperties props = p.GetPackageProperties();
 
             //test various date formats
             props.SetCreatedProperty("2007-05-12T08:00:00Z");
@@ -133,7 +133,7 @@ namespace TestCases.OpenXml4Net.OPC
             DateTime expectedDate = df.Parse("2007-05-12T08:00:00Z");
 
             // Gets the core properties
-            PackageProperties props = p.GetPackageProperties();
+            IPackageProperties props = p.GetPackageProperties();
             ClassicAssert.AreEqual("MyCategory", props.GetCategoryProperty());
             ClassicAssert.AreEqual("MyContentStatus", props.GetContentStatusProperty()
                     );
@@ -215,7 +215,7 @@ namespace TestCases.OpenXml4Net.OPC
         {
             // Open the namespace
             OPCPackage pkg1 = OPCPackage.Open(OpenXml4NetTestDataSamples.OpenSampleStream("51444.xlsx"));
-            PackageProperties props1 = pkg1.GetPackageProperties();
+            IPackageProperties props1 = pkg1.GetPackageProperties();
             ClassicAssert.AreEqual(null, props1.GetTitleProperty());
             props1.SetTitleProperty("Bug 51444 fixed");
             MemoryStream out1 = new MemoryStream();
@@ -224,7 +224,7 @@ namespace TestCases.OpenXml4Net.OPC
             pkg1.Close();
 
             OPCPackage pkg2 = OPCPackage.Open(new MemoryStream(out1.ToArray()));
-            PackageProperties props2 = pkg2.GetPackageProperties();
+            IPackageProperties props2 = pkg2.GetPackageProperties();
             props2.SetTitleProperty("Bug 51444 fixed");
             pkg2.Close();
         }

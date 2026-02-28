@@ -473,5 +473,65 @@ namespace TestCases.XSSF.UserModel
             sheet.ShiftRows(1, 2, 3);
             IOUtils.CloseQuietly(wb);
         }
+
+        [Test]
+        public void Test60384()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("60384.xlsx");
+            XSSFSheet sheet = wb.GetSheetAt(0) as XSSFSheet;
+
+            ClassicAssert.AreEqual(2, sheet.MergedRegions.Count);
+            ClassicAssert.AreEqual(7, sheet.GetMergedRegion(0).FirstRow);
+            ClassicAssert.AreEqual(7, sheet.GetMergedRegion(0).LastRow);
+            ClassicAssert.AreEqual(8, sheet.GetMergedRegion(1).FirstRow);
+            ClassicAssert.AreEqual(8, sheet.GetMergedRegion(1).LastRow);
+
+            sheet.ShiftRows(3, 8, 1);
+
+            // After shifting, the two named regions should still be there as they
+            // are fully inside the shifted area
+            ClassicAssert.AreEqual(2, sheet.MergedRegions.Count);
+            ClassicAssert.AreEqual(8, sheet.GetMergedRegion(0).FirstRow);
+            ClassicAssert.AreEqual(8, sheet.GetMergedRegion(0).LastRow);
+            ClassicAssert.AreEqual(9, sheet.GetMergedRegion(1).FirstRow);
+            ClassicAssert.AreEqual(9, sheet.GetMergedRegion(1).LastRow);
+
+            /*OutputStream out = new FileOutputStream("/tmp/60384.xlsx");
+            try {
+                wb.write(out);
+            } finally {
+                out.Close();
+            }*/
+
+            wb.Close();
+        }
+
+        [Test]
+        public void Test60709()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("60709.xlsx");
+            XSSFSheet sheet = wb.GetSheetAt(0) as XSSFSheet;
+
+            ClassicAssert.AreEqual(1, sheet.MergedRegions.Count);
+            ClassicAssert.AreEqual(2, sheet.GetMergedRegion(0).FirstRow);
+            ClassicAssert.AreEqual(2, sheet.GetMergedRegion(0).LastRow);
+
+            sheet.ShiftRows(1, sheet.LastRowNum+1, -1, true, false);
+
+            // After shifting, the two named regions should still be there as they
+            // are fully inside the shifted area
+            ClassicAssert.AreEqual(1, sheet.MergedRegions.Count);
+            ClassicAssert.AreEqual(1, sheet.GetMergedRegion(0).FirstRow);
+            ClassicAssert.AreEqual(1, sheet.GetMergedRegion(0).LastRow);
+
+            /*OutputStream out = new FileOutputStream("/tmp/60709.xlsx");
+            try {
+                wb.write(out);
+            } finally {
+                out.Close();
+            }*/
+
+            wb.Close();
+        }
     }
 }

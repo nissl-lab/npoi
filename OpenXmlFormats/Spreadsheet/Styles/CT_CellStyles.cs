@@ -81,9 +81,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "count", this.count);
-            sw.Write(">");
+            sw.Write('>');
             if (this.cellStyle != null)
             {
                 foreach (CT_CellStyle x in this.cellStyle)
@@ -91,7 +91,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                     x.Write(sw, "cellStyle");
                 }
             }
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.WriteEndElement(nodeName);
         }
 
     }

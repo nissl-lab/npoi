@@ -17,12 +17,15 @@
 using TestCases.SS.UserModel;
 using NPOI.SS.UserModel;
 using System.Collections.Generic;
-using NUnit.Framework;using NUnit.Framework.Legacy;
+using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using NPOI.SS.Util;
 using System;
 using System.Text;
 using NPOI.XSSF;
 using NPOI.XSSF.UserModel;
+using NPOI.SS.Formula;
+using NPOI.SS.Formula.Eval;
 
 namespace TestCases.XSSF.UserModel
 {
@@ -411,5 +414,14 @@ namespace TestCases.XSSF.UserModel
             return validation;
         }
 
+        [Test]
+        public void TestTableBasedValidationList()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("dataValidationTableRange.xlsx");
+            XSSFFormulaEvaluator fEval = wb.GetCreationHelper().CreateFormulaEvaluator() as XSSFFormulaEvaluator;
+            DataValidationEvaluator dve = new DataValidationEvaluator(wb, fEval);
+            List<ValueEval> values = dve.GetValidationValuesForCell(new CellReference("County Ranking", 8, 6, false, false));
+            ClassicAssert.AreEqual(32, values.Count, "wrong # of valid values");
+        }
     }
 }

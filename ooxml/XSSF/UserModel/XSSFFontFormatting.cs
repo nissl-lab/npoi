@@ -16,6 +16,7 @@
  *    limitations under the License.
  * ====================================================================
  */
+using NPOI.OOXML.XSSF.UserModel;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.SS.UserModel;
 using System;
@@ -29,12 +30,14 @@ namespace NPOI.XSSF.UserModel
      */
     public class XSSFFontFormatting : IFontFormatting
     {
-        CT_Font _font;
+        private IIndexedColorMap _colorMap;
+        private CT_Font _font;
 
         /*package*/
-        internal XSSFFontFormatting(CT_Font font)
+        internal XSSFFontFormatting(CT_Font font, IIndexedColorMap colorMap)
         {
             _font = font;
+            _colorMap = colorMap;
         }
 
         /**
@@ -97,7 +100,7 @@ namespace NPOI.XSSF.UserModel
             {
                 if (_font.sizeOfColorArray() == 0) return null;
 
-                return new XSSFColor(_font.GetColorArray(0));
+                return new XSSFColor(_font.GetColorArray(0), _colorMap);
             }
             set
             {

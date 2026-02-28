@@ -58,42 +58,36 @@ namespace NPOI.SS.Util
         public const string VERTICAL_ALIGNMENT = "verticalAlignment";
         public const string WRAP_TEXT = "wrapText";
 
-        private static ISet<String> shortValues = new HashSet<string>(new string[]{
-                    BOTTOM_BORDER_COLOR,
-                    LEFT_BORDER_COLOR,
-                    RIGHT_BORDER_COLOR,
-                    TOP_BORDER_COLOR,
-                    FILL_FOREGROUND_COLOR,
-                    FILL_BACKGROUND_COLOR,
-                    INDENTION,
-                    DATA_FORMAT,
-                    ROTATION
-            });
-        private static ISet<String> intValues = new HashSet<string>(new string[]{
-                        FONT
-        });
-        private static ISet<String> booleanValues = new HashSet<string>(new string[]{
-                        LOCKED,
-                        HIDDEN,
-                        WRAP_TEXT
-        });
-        private static ISet<String> borderTypeValues = new HashSet<string>(new string[]{
-                        BORDER_BOTTOM,
-                        BORDER_LEFT,
-                        BORDER_RIGHT,
-                        BORDER_TOP
-        });
+        private static readonly HashSet<string> shortValues =
+        [
+            BOTTOM_BORDER_COLOR,
+            LEFT_BORDER_COLOR,
+            RIGHT_BORDER_COLOR,
+            TOP_BORDER_COLOR,
+            FILL_FOREGROUND_COLOR,
+            FILL_BACKGROUND_COLOR,
+            INDENTION,
+            DATA_FORMAT,
+            ROTATION
+        ];
 
+        private static readonly HashSet<string> intValues = [FONT];
 
-        private static UnicodeMapping[] unicodeMappings;
+        private static readonly HashSet<string> booleanValues = [LOCKED, HIDDEN, WRAP_TEXT];
+
+        private static readonly HashSet<string> borderTypeValues =
+        [
+            BORDER_BOTTOM, BORDER_LEFT, BORDER_RIGHT, BORDER_TOP
+        ];
+
+        private static readonly UnicodeMapping[] unicodeMappings;
 
         private sealed class UnicodeMapping
         {
+            public readonly string entityName;
+            public readonly string resolvedValue;
 
-            public String entityName;
-            public String resolvedValue;
-
-            public UnicodeMapping(String pEntityName, String pResolvedValue)
+            public UnicodeMapping(string pEntityName, string pResolvedValue)
             {
                 entityName = "&" + pEntityName + ";";
                 resolvedValue = pResolvedValue;
@@ -275,20 +269,6 @@ namespace NPOI.SS.Util
 
         /**
          * Take a cell, and align it.
-         *
-         *@param cell the cell to set the alignment for
-         *@param workbook The workbook that is being worked with.
-         *@param align the column alignment to use.
-         *
-         * @see CellStyle for alignment options
-         */
-        [Obsolete("deprecated 3.15-beta2. Use {@link #SetAlignment(ICell, HorizontalAlignment)} instead.")]
-        public static void SetAlignment(ICell cell, IWorkbook workbook, short align)
-        {
-            SetCellStyleProperty(cell, workbook, ALIGNMENT, align);
-        }
-        /**
-         * Take a cell, and align it.
          * 
          * This is superior to cell.getCellStyle().setAlignment(align) because
          * this method will not modify the CellStyle object that may be referenced
@@ -327,28 +307,6 @@ namespace NPOI.SS.Util
             SetCellStyleProperty(cell, VERTICAL_ALIGNMENT, align);
         }
 
-        /**
-         * Take a cell, and apply a font to it
-         *
-         *@param cell the cell to set the alignment for
-         *@param workbook The workbook that is being worked with.
-         *@param font The Font that you want to set...
-         */
-        [Obsolete("deprecated 3.15-beta2. Use {@link #SetFont(ICell, IFont)} instead.")]
-        public static void SetFont(ICell cell, IWorkbook workbook, IFont font)
-        {
-            // Check if font belongs to workbook
-            short fontIndex = font.Index;
-            if (!workbook.GetFontAt(fontIndex).Equals(font))
-            {
-                throw new ArgumentException("Font does not belong to this workbook");
-            }
-
-            // Check if cell belongs to workbook
-            // (checked in setCellStyleProperty)
-
-            SetCellStyleProperty(cell, workbook, FONT, fontIndex);
-        }
         /**
          * Take a cell, and apply a font to it
          *
@@ -474,36 +432,7 @@ namespace NPOI.SS.Util
             Dictionary<String, Object> values = new Dictionary<string, object>() { { propertyName, propertyValue } };
             SetCellStyleProperties(cell, values);
         }
-        /**
-	     * <p>This method attempts to find an existing CellStyle that matches the <code>cell</code>'s
-	     * current style plus a single style property <code>propertyName</code> with value
-	     * <code>propertyValue</code>.
-	     * A new style is created if the workbook does not contain a matching style.</p>
-	     * 
-	     * <p>Modifies the cell style of <code>cell</code> without affecting other cells that use the
-	     * same style.</p>
-	     * 
-	     * <p>If setting more than one cell style property on a cell, use
-	     * {@link #setCellStyleProperties(Cell, Map)},
-	     * which is faster and does not add unnecessary intermediate CellStyles to the workbook.</p>
-	     * 
-	     * @param workbook The workbook that is being worked with.
-	     * @param propertyName The name of the property that is to be changed.
-	     * @param propertyValue The value of the property that is to be changed.
-	     * @param cell The cell that needs it's style changes
-	     */
-        [Obsolete("deprecated 3.15-beta2. Use {@link #setCellStyleProperty(Cell, String, Object)} instead.")]
-        public static void SetCellStyleProperty(ICell cell, IWorkbook workbook, String propertyName,
-               Object propertyValue)
-        {
-            if (cell.Sheet.Workbook != workbook)
-            {
-                throw new ArgumentException("Cannot set cell style property. Cell does not belong to workbook.");
-            }
 
-            Dictionary<String, Object> values = new Dictionary<string, object>() { { propertyName, propertyValue } };
-            SetCellStyleProperties(cell, values);
-        }
 
         /**
          * Copies the entries in src to dest, using the preferential data type
@@ -659,12 +588,12 @@ namespace NPOI.SS.Util
         }
 
         /**
-	     * Utility method that returns the named BorderStyle value form the given map.
-	     *
-	     * @param properties map of named properties (String -> Object)
-	     * @param name property name
-	     * @return Border style if set, otherwise {@link BorderStyle#NONE}
-	     */
+         * Utility method that returns the named BorderStyle value form the given map.
+         *
+         * @param properties map of named properties (String -> Object)
+         * @param name property name
+         * @return Border style if set, otherwise {@link BorderStyle#NONE}
+         */
         private static BorderStyle GetBorderStyle(Dictionary<String, Object> properties, String name)
         {
             Object value = properties[name];
@@ -833,39 +762,7 @@ namespace NPOI.SS.Util
         {
             properties[name] = value;
         }
-        /**
-         * Utility method that puts the named short value to the given map.
-         *
-         * @param properties map of properties (String -> Object)
-         * @param name property name
-         * @param value property value
-         */
-        private static void PutShort(Dictionary<String, Object> properties, String name, short value)
-        {
-            properties[name] = value;
-        }
-        /**
-       * Utility method that puts the named short value to the given map.
-       *
-       * @param properties map of properties (String -> Object)
-       * @param name property name
-       * @param value property value
-       */
-        private static void PutEnum(Dictionary<String, Object> properties, String name, Enum value)
-        {
-            properties[name] = value;
-        }
-        /**
-         * Utility method that puts the named boolean value to the given map.
-         *
-         * @param properties map of properties (String -> Object)
-         * @param name property name
-         * @param value property value
-         */
-        private static void PutBoolean(Dictionary<String, Object> properties, String name, bool value)
-        {
-            properties[name] = value;
-        }
+
 
         /**
          *  Looks for text in the cell that should be unicode, like an alpha and provides the

@@ -199,81 +199,81 @@ namespace TestCases.SS
         /**
          * Check that the overloaded stream methods which take passwords work properly
          */
-        //[Test]
-        //public void TestCreateWithPasswordFromStream()
-        //{
-        //    IWorkbook wb;
-        //    // Unprotected, no password given, opens normally
-        //    wb = WorkbookFactory.Create(
-        //            HSSFTestDataSamples.OpenSampleFileStream(xls), null
-        //    );
-        //    ClassicAssert.IsNotNull(wb);
-        //    ClassicAssert.IsTrue(wb is HSSFWorkbook);
-        //    AssertCloseDoesNotModifyFile(xls, wb);
+        [Test]
+        public void TestCreateWithPasswordFromStream()
+        {
+            IWorkbook wb;
+            // Unprotected, no password given, opens normally
+            wb = WorkbookFactory.Create(
+                    HSSFTestDataSamples.OpenSampleFileStream(xls), null
+            );
+            ClassicAssert.IsNotNull(wb);
+            ClassicAssert.IsTrue(wb is HSSFWorkbook);
+            AssertCloseDoesNotModifyFile(xls, wb);
 
-        //    wb = WorkbookFactory.Create(
-        //            HSSFTestDataSamples.OpenSampleFileStream(xlsx), null
-        //    );
-        //    ClassicAssert.IsNotNull(wb);
-        //    ClassicAssert.IsTrue(wb is XSSFWorkbook);
-        //    AssertCloseDoesNotModifyFile(xlsx, wb);
+            wb = WorkbookFactory.Create(
+                    HSSFTestDataSamples.OpenSampleFileStream(xlsx), null
+            );
+            ClassicAssert.IsNotNull(wb);
+            ClassicAssert.IsTrue(wb is XSSFWorkbook);
+            AssertCloseDoesNotModifyFile(xlsx, wb);
 
-        //    // Unprotected, wrong password, opens normally
-        //    wb = WorkbookFactory.Create(
-        //            HSSFTestDataSamples.OpenSampleFileStream(xls), "wrong"
-        //    );
-        //    ClassicAssert.IsNotNull(wb);
-        //    ClassicAssert.IsTrue(wb is HSSFWorkbook);
-        //    AssertCloseDoesNotModifyFile(xls, wb);
+            // Unprotected, wrong password, opens normally
+            wb = WorkbookFactory.Create(
+                    HSSFTestDataSamples.OpenSampleFileStream(xls), "wrong"
+            );
+            ClassicAssert.IsNotNull(wb);
+            ClassicAssert.IsTrue(wb is HSSFWorkbook);
+            AssertCloseDoesNotModifyFile(xls, wb);
 
 
-        //    wb = WorkbookFactory.Create(
-        //            HSSFTestDataSamples.OpenSampleFileStream(xlsx), "wrong"
-        //    );
-        //    ClassicAssert.IsNotNull(wb);
-        //    ClassicAssert.IsTrue(wb is XSSFWorkbook);
-        //    AssertCloseDoesNotModifyFile(xlsx, wb);
+            wb = WorkbookFactory.Create(
+                    HSSFTestDataSamples.OpenSampleFileStream(xlsx), "wrong"
+            );
+            ClassicAssert.IsNotNull(wb);
+            ClassicAssert.IsTrue(wb is XSSFWorkbook);
+            AssertCloseDoesNotModifyFile(xlsx, wb);
 
-        //    // Protected, correct password, opens fine
-        //    wb = WorkbookFactory.Create(
-        //            HSSFTestDataSamples.OpenSampleFileStream(xls_prot[0]), xls_prot[1]
-        //    );
-        //    ClassicAssert.IsNotNull(wb);
-        //    ClassicAssert.IsTrue(wb is HSSFWorkbook);
-        //    AssertCloseDoesNotModifyFile(xls_prot[0], wb);
+            // Protected, correct password, opens fine
+            wb = WorkbookFactory.Create(
+                    HSSFTestDataSamples.OpenSampleFileStream(xls_prot[0]), xls_prot[1]
+            );
+            ClassicAssert.IsNotNull(wb);
+            ClassicAssert.IsTrue(wb is HSSFWorkbook);
+            AssertCloseDoesNotModifyFile(xls_prot[0], wb);
 
-        //    wb = WorkbookFactory.Create(
-        //            HSSFTestDataSamples.OpenSampleFileStream(xlsx_prot[0]), xlsx_prot[1]
-        //    );
-        //    ClassicAssert.IsNotNull(wb);
-        //    ClassicAssert.IsTrue(wb is XSSFWorkbook);
-        //    AssertCloseDoesNotModifyFile(xlsx_prot[0], wb);
+            wb = WorkbookFactory.Create(
+                    HSSFTestDataSamples.OpenSampleFileStream(xlsx_prot[0]), xlsx_prot[1]
+            );
+            ClassicAssert.IsNotNull(wb);
+            ClassicAssert.IsTrue(wb is XSSFWorkbook);
+            AssertCloseDoesNotModifyFile(xlsx_prot[0], wb);
 
-        //    // Protected, wrong password, throws Exception
-        //    try
-        //    {
-        //        wb = WorkbookFactory.Create(
-        //                HSSFTestDataSamples.OpenSampleFileStream(xls_prot[0]), "wrong"
-        //        );
-        //        AssertCloseDoesNotModifyFile(xls_prot[0], wb);
-        //        Assert.Fail("Shouldn't be able to open with the wrong password");
-        //    }
-        //    catch (EncryptedDocumentException e) { }
-        //    try
-        //    {
-        //        wb = WorkbookFactory.Create(
-        //                HSSFTestDataSamples.OpenSampleFileStream(xlsx_prot[0]), "wrong"
-        //        );
-        //        AssertCloseDoesNotModifyFile(xlsx_prot[0], wb);
-        //        Assert.Fail("Shouldn't be able to open with the wrong password");
-        //    }
-        //    catch (EncryptedDocumentException e) { }
-        //}
+            // Protected, wrong password, throws Exception
+            try
+            {
+                wb = WorkbookFactory.Create(
+                        HSSFTestDataSamples.OpenSampleFileStream(xls_prot[0]), "wrong"
+                );
+                AssertCloseDoesNotModifyFile(xls_prot[0], wb);
+                Assert.Fail("Shouldn't be able to open with the wrong password");
+            }
+            catch(EncryptedDocumentException e) { }
+            try
+            {
+                wb = WorkbookFactory.Create(
+                        HSSFTestDataSamples.OpenSampleFileStream(xlsx_prot[0]), "wrong"
+                );
+                AssertCloseDoesNotModifyFile(xlsx_prot[0], wb);
+                Assert.Fail("Shouldn't be able to open with the wrong password");
+            }
+            catch(EncryptedDocumentException e) { }
+        }
+
         /**
          * Check that the overloaded file methods which take passwords work properly
          */
         [Test]
-        [Ignore("TODO NOT IMPLEMENTED")]
         public void TestCreateWithPasswordFromFile()
         {
             IWorkbook wb;
@@ -351,13 +351,14 @@ namespace TestCases.SS
                 // expected here
             }
         }
+
         [Test]
         public void TestEmptyInputStream()
         {
             InputStream emptyStream = new ByteArrayInputStream(new byte[0]);
             try
             {
-                WorkbookFactory.Create(emptyStream,true);
+                WorkbookFactory.Create(emptyStream);
                 Assert.Fail("Shouldn't be able to create for an empty stream");
             }
             catch (EmptyFileException )

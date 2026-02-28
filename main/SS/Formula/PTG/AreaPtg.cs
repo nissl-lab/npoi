@@ -41,8 +41,9 @@ namespace NPOI.SS.Formula.PTG
         {
 
         }
+        [Obsolete]
         public AreaPtg(String arearef)
-            : base(arearef)
+            : this(new AreaReference(arearef, SpreadsheetVersion.EXCEL97))
         {
 
         }
