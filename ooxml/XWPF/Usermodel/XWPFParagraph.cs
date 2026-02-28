@@ -1851,6 +1851,13 @@ namespace NPOI.XWPF.UserModel
             iRuns.Add(newRun);
             return newRun;
         }
+        public XWPFFieldRun CreateFieldRun(string instruction, string text)
+        {
+            var fieldrun = this.CreateFieldRun();
+            fieldrun.FieldInstruction= instruction;
+            fieldrun.SetText(text);
+            return fieldrun;
+        }
 
         public void ChangeOrientation(ST_PageOrientation orientation)
         {
