@@ -1,5 +1,7 @@
 ﻿using System.Net;
 using BenchmarkDotNet.Attributes;
+using NPOI.OpenXml4Net.OPC;
+using NPOI.XSSF.EventUserModel;
 using NPOI.XSSF.UserModel;
 
 namespace NPOI.Benchmarks;
@@ -15,16 +17,17 @@ public class LargeExcelFileBenchmark
     [GlobalSetup]
     public void GlobalSetup()
     {
+        _filePath = Path.Combine("data","test-performance.xlsx");
+
         // a 17MB Excel file is large so download it only when needed
-        _filePath = Path.Combine(Path.GetTempPath(), "test-performance.xlsx");
-        if (!File.Exists(_filePath))
+        /*if (!File.Exists(_filePath))
         {
             Console.WriteLine("Downloading file...");
             new WebClient().DownloadFile(
                 "https://github.com/GrapeCity/GcExcel-Java/raw/master/benchmark/files/test-performance.xlsx",
                 _filePath);
             Console.WriteLine("File downloaded");
-        }
+        }*/
 
         var copyPath = Path.Combine(Path.GetTempPath(), "test-performance-copy.xlsx");
         if (!File.Exists(copyPath))
@@ -37,10 +40,26 @@ public class LargeExcelFileBenchmark
     }
 
     [Benchmark]
-    public void Load()
+    public void XSSFWorkbookLoad()
     {
-        var workbook = new XSSFWorkbook(_filePath);
+        var workbook = new XSSFWorkbook(_filePath, true);
         workbook.Dispose();
+    }
+
+    [Benchmark]
+    public void XSSFReaderLoad()
+    {
+        using var pkg = OPCPackage.Open(_filePath, PackageAccess.READ);
+        var reader = new XSSFReader(pkg);
+
+        // Read shared strings table
+        var sst = reader.SharedStringsTable;
+
+        // Read styles table
+        var styles = reader.StylesTable;
+
+        // get streams of sheets data 
+        var sheets = reader.GetSheetsData();
     }
 
     [Benchmark]
