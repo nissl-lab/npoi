@@ -351,7 +351,6 @@ namespace TestCases.XSSF.EventUserModel
             pkg.Close();
         }
         [Test]
-        [Ignore("until we fix issue https://bz.apache.org/bugzilla/show_bug.cgi?id=61701")]
         public void Test61701()
         {
             XSSFWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook("simple-table-named-range.xlsx");
