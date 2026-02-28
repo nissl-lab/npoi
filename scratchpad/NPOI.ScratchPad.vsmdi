@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestLists xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <TestList name="NPOI.HSSF.Record.Formula" id="16938e8a-ed3b-4c94-b3fb-55cb6567f3ad" parentListId="8c43106b-9dc1-4907-a29f-aa66a61bf5b6" />
+  <TestList name="NPOI.HSSF.Record" id="184fc56e-013a-4757-9edb-26db62dbb75f" parentListId="8c43106b-9dc1-4907-a29f-aa66a61bf5b6" />
+  <TestList name="NPOI.HSSF.Record.Aggregates" id="2b961874-0ff5-466a-8fbc-13b0de4bb2e7" parentListId="184fc56e-013a-4757-9edb-26db62dbb75f" />
+  <TestList name="NPOI.POIFS.Storage" id="3270cf2b-0fd1-4f2b-a3fe-c908d0fdf25e" parentListId="8c43106b-9dc1-4907-a29f-aa66a61bf5b6" />
+  <TestList name="NPOI.POIFS.Properties" id="3490ae5d-51ae-456c-8fee-fae56ae9e3c8" parentListId="8c43106b-9dc1-4907-a29f-aa66a61bf5b6" />
+  <TestList name="NPOI.HSSF.Record.Formula.Functions" id="373d98df-984c-4b17-bedc-824966edb87d" parentListId="16938e8a-ed3b-4c94-b3fb-55cb6567f3ad" />
+  <TestList name="NPOI.HSSF.Model" id="3bc495dd-be4d-437d-8938-19b153e40c63" parentListId="8c43106b-9dc1-4907-a29f-aa66a61bf5b6" />
+  <TestList name="NPOI.HSSF.Record.Formula.Eval" id="41cc3e42-26f2-49ee-b4cf-7ba998261fbe" parentListId="16938e8a-ed3b-4c94-b3fb-55cb6567f3ad" />
+  <TestList name="NPOI.SS.Formula" id="4f5091d0-3631-4a95-b5ca-bc3a3683d7bb" parentListId="8c43106b-9dc1-4907-a29f-aa66a61bf5b6" />
+  <TestList name="NPOI.HPSF" id="5524df48-c214-4c3f-970a-65af0f241376" parentListId="8c43106b-9dc1-4907-a29f-aa66a61bf5b6" />
+  <TestList name="NPOI.HSSF.Record.Constant" id="7df3e2ac-93f4-4d4f-96d5-16c26b146869" parentListId="184fc56e-013a-4757-9edb-26db62dbb75f" />
+  <TestList name="NPOI.Util" id="8893046f-b0e0-4582-afde-c989484829b4" parentListId="8c43106b-9dc1-4907-a29f-aa66a61bf5b6" />
+  <TestList name="NPOI.EventModel" id="8b026996-eafc-48a8-ab4e-2a4285626032" parentListId="8c43106b-9dc1-4907-a29f-aa66a61bf5b6" />
+  <TestList name="Lists of Tests" id="8c43106b-9dc1-4907-a29f-aa66a61bf5b6">
+    <RunConfiguration id="4a292f4f-c1f1-4303-9c56-4d13a785be0e" name="Local Test Run" storage="..\testcases\scratchpad\localtestrun.testrunconfig" type="Microsoft.VisualStudio.TestTools.Common.TestRunConfiguration, Microsoft.VisualStudio.QualityTools.Common,   PublicKeyToken=b03f5f7f11d50a3a" />
+  </TestList>
+  <TestList name="NPOI.HSSF.Extractor" id="940eb42b-6f31-4676-b2eb-5e7a01a660dc" parentListId="8c43106b-9dc1-4907-a29f-aa66a61bf5b6" />
+  <TestList name="NPOI.HSSF.EventUserModel" id="95e84728-c367-4b43-b029-3b8413f549a0" parentListId="8c43106b-9dc1-4907-a29f-aa66a61bf5b6" />
+  <TestList name="NPOI.HSSF.UserModel" id="972b9a69-dc09-4ee5-a3ac-4eac39766217" parentListId="8c43106b-9dc1-4907-a29f-aa66a61bf5b6" />
+  <TestList name="NPOI.HSSF.Record.Formula.Function" id="9d3670cd-59b8-41f9-9ba2-78c6f6a5b8ce" parentListId="16938e8a-ed3b-4c94-b3fb-55cb6567f3ad" />
+  <TestList name="NPOI.DDF" id="ad7f0f27-c20a-4e71-81bd-bd55fbad0c8c" parentListId="8c43106b-9dc1-4907-a29f-aa66a61bf5b6" />
+  <TestList name="NPOI.HSSF.Record.Formula.ATP" id="b7c71cfa-c68f-4524-b09c-a994588e3700" parentListId="16938e8a-ed3b-4c94-b3fb-55cb6567f3ad" />
+  <TestList name="NPOI.POIFS.FileSystem" id="c099dfa7-b3da-4b6d-8de3-34de463cca2e" parentListId="8c43106b-9dc1-4907-a29f-aa66a61bf5b6" />
+  <TestList name="NPOI.HSSF.Util" id="c89e1326-d861-46ca-94c3-c5ad10894f93" parentListId="8c43106b-9dc1-4907-a29f-aa66a61bf5b6" />
+  <TestList name="NPOI.HSSF.Record.CF" id="cc91d40b-c7bc-4117-bc2c-ced6121acb4e" parentListId="184fc56e-013a-4757-9edb-26db62dbb75f" />
+</TestLists>

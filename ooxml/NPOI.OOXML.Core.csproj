@@ -1,0 +1,42 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net472;netstandard2.0;netstandard2.1;net8.0</TargetFrameworks>
+    <AssemblyName>NPOI.OOXML</AssemblyName>
+    <RootNamespace>NPOI</RootNamespace>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\npoi.snk</AssemblyOriginatorKeyFile>
+    <OutputPath>..\solution\$(Configuration)\</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="POIFS\Crypt\Dsig\KeyInfoKeySelector.cs" />
+    <Compile Remove="POIFS\Crypt\Dsig\Services\RelationshipTransformService.cs" />
+    <Compile Remove="Properties\AssemblyInfoDotnet2.cs" />
+    <Compile Remove="XSSF\UserModel\Charts\XSSFNumberCache.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="XSSF\UserModel\presetTableStyles.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\presetTableStyles.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NSax" />
+    <PackageReference Include="System.Security.Cryptography.Xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\main\NPOI.Core.csproj" />
+    <ProjectReference Include="..\openxml4Net\NPOI.OpenXml4Net.Core.csproj" />
+    <ProjectReference Include="..\OpenXmlFormats\NPOI.OpenXmlFormats.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\main\Polyfills.cs" Link="Polyfills.cs" />
+  </ItemGroup>
+
+</Project>

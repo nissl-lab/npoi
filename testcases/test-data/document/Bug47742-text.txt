@@ -1,0 +1,35 @@
+﻿{0>Der Aaa Satz.<}0{>The Aaa phrase.<0} {0>Der Bbb Satz.<}0{>The Bbb phrase.<0} {0>Der Ccc Satz.<}0{>The Ccc phrase.<0} {0>Der Ddd Satz.<}0{>The Ddd phrase.<0}
+{0>Der Eee Satz.<}0{>The Eee phrase.<0} {0>Der Fff Satz.<}0{>The Fff phrase.<0}
+{0>Der Ggg Satz .<}0{>The Ggg phrase .<0} 
+{0>Der Gggggg Satz .<}0{>The Gggggg phrase .<0} 
+{0>Ein Zeil
+enumbruch mittendrin.<}0{>A soft
+return in the center.<0}
+{0>Ein Satz
+mit soft return.<}0{>A sentence
+with soft return.<0}
+
+{0>Ein-Strich.<}0{>One-hyphen.<0}
+{0>Die G-20 Staaten.<}0{>The G-20 states.<0}
+{0>Ein—Geviertstrich hier.<}0{>An—EMdash here.<0}
+{0>Ein/Schrägstrich hier.<}0{>A/slash here.<0}
+{0>Senkrechter|Strich hier.<}0{>Vertical|line here.<0}
+{0>Umgekehrter\Schrägstrich hier.<}0{>A\backslash here.<0}
+{0>C'est la vie.<}0{>Such is life.<0}
+{0>Das sind 10'000 Euros.<}0{>These are 10'000 Euros.<0}
+{0>Eine Komma,Trennung hier.<}0{>A comma,separation here.<0}
+{0>Eine Semikolon;Trennung hier.<}0{>A semicolon;separation here.<0}
+{0>Das sind 77,mehr hier.<}0{>There are 77,more here.<0}
+{0>Das ist sein (Netto)Gehalt<}0{>This is his (net)salary.<0}
+{0>Das sind 50$ hier.<}0{>That is 50$ here.<0}
+{0>Das sind 3%Rabatt.<}0{>That is 3% discount.<0}
+{0>Es sind 25°C heute.<}0{>It is 25°C today.<0}
+{0>Es gilt Yen<Dollar.<}0{>It is Yen<Dollar.<0}
+{0>Keine Trennung® bei Sonderzeichen.<}0{>No separation® here..<0}
+{0>Ich zahle 7 Euro.<}0{>I pay 7 Euros.<0}
+{0>Die Disk ist 6 min lang.<}0{>The disk is 6 min long.<0}
+{0>Ein Satz, mit Komma.<}0{>A sentence, with comma.<0}
+{0>Ein Hochkomma hier.<}0{>An apostrophe here.<0}
+{0>Ein Satz mit  verschiedenen   Pausen.<}0{>A sentence with  different   blanks.<0}
+{0>Ein Satz mit geschützten Pausen.<}0{>A sentence with non-breaking blanks.<0}
+{0>Ein Satz mit speziellen  Pausen.<}0{>A sentence with special  blanks.<0}

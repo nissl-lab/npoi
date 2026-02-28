@@ -1,0 +1,393 @@
+..\..\..\TestCases\test-data\spreadsheet\12843-1.xls
+..\..\..\TestCases\test-data\spreadsheet\12843-2.xls
+..\..\..\TestCases\test-data\spreadsheet\15556.xls
+..\..\..\TestCases\test-data\spreadsheet\1900DateWindowing.xls
+..\..\..\TestCases\test-data\spreadsheet\1904DateWindowing.xls
+..\..\..\TestCases\test-data\spreadsheet\25695.xls
+..\..\..\TestCases\test-data\spreadsheet\37376.xls
+..\..\..\TestCases\test-data\spreadsheet\43493.xls
+..\..\..\TestCases\test-data\spreadsheet\46904.xls
+..\..\..\TestCases\test-data\spreadsheet\47034.xls
+..\..\..\TestCases\test-data\spreadsheet\48180.xls
+..\..\..\TestCases\test-data\spreadsheet\51461.xls
+..\..\..\TestCases\test-data\spreadsheet\51832.xls
+..\..\..\TestCases\test-data\spreadsheet\atp.xls
+..\..\..\TestCases\test-data\spreadsheet\duprich1.xls
+..\..\..\TestCases\test-data\spreadsheet\FormatChoiceTests.xls
+..\..\..\TestCases\test-data\spreadsheet\LookupFunctionsTestCaseData.xls
+..\..\..\TestCases\test-data\spreadsheet\password.xls
+..\..\..\TestCases\test-data\spreadsheet\SimpleWithImages-mac.xls
+**********************************************************
+..\..\..\TestCases\test-data\spreadsheet\12843-1.xls
+mscorlib
+'cp950' is not a supported encoding name.
+Parameter name: name
+   at System.Globalization.EncodingTable.internalGetCodePageFromName(String name)
+   at System.Globalization.EncodingTable.GetCodePageFromName(String name)
+   at System.Text.Encoding.GetEncoding(String name)
+   at NPOI.HPSF.CodePageString.GetJavaValue(Int32 codepage) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\CodePageString.cs:line 179
+   at NPOI.HPSF.VariantSupport.Read(Byte[] src, Int32 offset, Int32 length, Int64 type, Int32 codepage) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\VariantSupport.cs:line 192
+   at NPOI.HPSF.Property..ctor(Int64 id, Byte[] src, Int64 offset, Int32 Length, Int32 codepage) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\Property.cs:line 163
+   at NPOI.HPSF.Section..ctor(Byte[] src, Int32 offset) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\Section.cs:line 272
+   at NPOI.HPSF.PropertySet.init(Byte[] src, Int32 offset, Int32 Length) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\PropertySet.cs:line 427
+   at NPOI.HPSF.PropertySet..ctor(Stream stream) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\PropertySet.cs:line 239
+   at NPOI.HPSF.PropertySetFactory.Create(Stream stream) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\PropertySetFactory.cs:line 55
+   at NPOI.POIDocument.GetPropertySet(String setName) in f:\Gloria\项目\NPOI\src\github\npoi\main\POIDocument.cs:line 196
+   at NPOI.POIDocument.ReadProperties() in f:\Gloria\项目\NPOI\src\github\npoi\main\POIDocument.cs:line 145
+   at NPOI.POIDocument.get_SummaryInformation() in f:\Gloria\项目\NPOI\src\github\npoi\main\POIDocument.cs:line 125
+   at NPOI.HSSF.Converter.ExcelToHtmlConverter.ProcessWorkbook(HSSFWorkbook workbook) in f:\Gloria\项目\NPOI\src\github\npoi\main\HSSF\Converter\ExcelToHtmlConverter.cs:line 130
+   at TestCases.HSSF.Converter.TestExcelToHtmlConverterSuite.Test(String fileName) in f:\Gloria\项目\NPOI\src\github\npoi\testcases\main\HSSF\Converter\TestExcelToHtmlConverterSuite.cs:line 67
+   at TestCases.HSSF.Converter.TestExcelToHtmlConverterSuite.TestExcelToHtmlConverter() in f:\Gloria\项目\NPOI\src\github\npoi\testcases\main\HSSF\Converter\TestExcelToHtmlConverterSuite.cs:line 30
+**************************************
+..\..\..\TestCases\test-data\spreadsheet\12843-2.xls
+mscorlib
+'cp950' is not a supported encoding name.
+Parameter name: name
+   at System.Globalization.EncodingTable.internalGetCodePageFromName(String name)
+   at System.Globalization.EncodingTable.GetCodePageFromName(String name)
+   at System.Text.Encoding.GetEncoding(String name)
+   at NPOI.HPSF.CodePageString.GetJavaValue(Int32 codepage) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\CodePageString.cs:line 179
+   at NPOI.HPSF.VariantSupport.Read(Byte[] src, Int32 offset, Int32 length, Int64 type, Int32 codepage) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\VariantSupport.cs:line 192
+   at NPOI.HPSF.Property..ctor(Int64 id, Byte[] src, Int64 offset, Int32 Length, Int32 codepage) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\Property.cs:line 163
+   at NPOI.HPSF.Section..ctor(Byte[] src, Int32 offset) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\Section.cs:line 272
+   at NPOI.HPSF.PropertySet.init(Byte[] src, Int32 offset, Int32 Length) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\PropertySet.cs:line 427
+   at NPOI.HPSF.PropertySet..ctor(Stream stream) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\PropertySet.cs:line 239
+   at NPOI.HPSF.PropertySetFactory.Create(Stream stream) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\PropertySetFactory.cs:line 55
+   at NPOI.POIDocument.GetPropertySet(String setName) in f:\Gloria\项目\NPOI\src\github\npoi\main\POIDocument.cs:line 196
+   at NPOI.POIDocument.ReadProperties() in f:\Gloria\项目\NPOI\src\github\npoi\main\POIDocument.cs:line 145
+   at NPOI.POIDocument.get_SummaryInformation() in f:\Gloria\项目\NPOI\src\github\npoi\main\POIDocument.cs:line 125
+   at NPOI.HSSF.Converter.ExcelToHtmlConverter.ProcessWorkbook(HSSFWorkbook workbook) in f:\Gloria\项目\NPOI\src\github\npoi\main\HSSF\Converter\ExcelToHtmlConverter.cs:line 130
+   at TestCases.HSSF.Converter.TestExcelToHtmlConverterSuite.Test(String fileName) in f:\Gloria\项目\NPOI\src\github\npoi\testcases\main\HSSF\Converter\TestExcelToHtmlConverterSuite.cs:line 67
+   at TestCases.HSSF.Converter.TestExcelToHtmlConverterSuite.TestExcelToHtmlConverter() in f:\Gloria\项目\NPOI\src\github\npoi\testcases\main\HSSF\Converter\TestExcelToHtmlConverterSuite.cs:line 30
+**************************************
+..\..\..\TestCases\test-data\spreadsheet\15556.xls
+mscorlib
+'ms949' is not a supported encoding name.
+Parameter name: name
+   at System.Globalization.EncodingTable.internalGetCodePageFromName(String name)
+   at System.Globalization.EncodingTable.GetCodePageFromName(String name)
+   at System.Text.Encoding.GetEncoding(String name)
+   at NPOI.HPSF.CodePageString.GetJavaValue(Int32 codepage) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\CodePageString.cs:line 179
+   at NPOI.HPSF.VariantSupport.Read(Byte[] src, Int32 offset, Int32 length, Int64 type, Int32 codepage) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\VariantSupport.cs:line 192
+   at NPOI.HPSF.Property..ctor(Int64 id, Byte[] src, Int64 offset, Int32 Length, Int32 codepage) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\Property.cs:line 163
+   at NPOI.HPSF.Section..ctor(Byte[] src, Int32 offset) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\Section.cs:line 272
+   at NPOI.HPSF.PropertySet.init(Byte[] src, Int32 offset, Int32 Length) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\PropertySet.cs:line 427
+   at NPOI.HPSF.PropertySet..ctor(Stream stream) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\PropertySet.cs:line 239
+   at NPOI.HPSF.PropertySetFactory.Create(Stream stream) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\PropertySetFactory.cs:line 55
+   at NPOI.POIDocument.GetPropertySet(String setName) in f:\Gloria\项目\NPOI\src\github\npoi\main\POIDocument.cs:line 196
+   at NPOI.POIDocument.ReadProperties() in f:\Gloria\项目\NPOI\src\github\npoi\main\POIDocument.cs:line 145
+   at NPOI.POIDocument.get_SummaryInformation() in f:\Gloria\项目\NPOI\src\github\npoi\main\POIDocument.cs:line 125
+   at NPOI.HSSF.Converter.ExcelToHtmlConverter.ProcessWorkbook(HSSFWorkbook workbook) in f:\Gloria\项目\NPOI\src\github\npoi\main\HSSF\Converter\ExcelToHtmlConverter.cs:line 130
+   at TestCases.HSSF.Converter.TestExcelToHtmlConverterSuite.Test(String fileName) in f:\Gloria\项目\NPOI\src\github\npoi\testcases\main\HSSF\Converter\TestExcelToHtmlConverterSuite.cs:line 67
+   at TestCases.HSSF.Converter.TestExcelToHtmlConverterSuite.TestExcelToHtmlConverter() in f:\Gloria\项目\NPOI\src\github\npoi\testcases\main\HSSF\Converter\TestExcelToHtmlConverterSuite.cs:line 30
+**************************************
+..\..\..\TestCases\test-data\spreadsheet\1900DateWindowing.xls
+mscorlib
+'MacRoman' is not a supported encoding name.
+Parameter name: name
+   at System.Globalization.EncodingTable.internalGetCodePageFromName(String name)
+   at System.Globalization.EncodingTable.GetCodePageFromName(String name)
+   at System.Text.Encoding.GetEncoding(String name)
+   at NPOI.HPSF.CodePageString.GetJavaValue(Int32 codepage) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\CodePageString.cs:line 179
+   at NPOI.HPSF.VariantSupport.Read(Byte[] src, Int32 offset, Int32 length, Int64 type, Int32 codepage) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\VariantSupport.cs:line 192
+   at NPOI.HPSF.Property..ctor(Int64 id, Byte[] src, Int64 offset, Int32 Length, Int32 codepage) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\Property.cs:line 163
+   at NPOI.HPSF.Section..ctor(Byte[] src, Int32 offset) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\Section.cs:line 272
+   at NPOI.HPSF.PropertySet.init(Byte[] src, Int32 offset, Int32 Length) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\PropertySet.cs:line 427
+   at NPOI.HPSF.PropertySet..ctor(Stream stream) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\PropertySet.cs:line 239
+   at NPOI.HPSF.PropertySetFactory.Create(Stream stream) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\PropertySetFactory.cs:line 55
+   at NPOI.POIDocument.GetPropertySet(String setName) in f:\Gloria\项目\NPOI\src\github\npoi\main\POIDocument.cs:line 196
+   at NPOI.POIDocument.ReadProperties() in f:\Gloria\项目\NPOI\src\github\npoi\main\POIDocument.cs:line 145
+   at NPOI.POIDocument.get_SummaryInformation() in f:\Gloria\项目\NPOI\src\github\npoi\main\POIDocument.cs:line 125
+   at NPOI.HSSF.Converter.ExcelToHtmlConverter.ProcessWorkbook(HSSFWorkbook workbook) in f:\Gloria\项目\NPOI\src\github\npoi\main\HSSF\Converter\ExcelToHtmlConverter.cs:line 130
+   at TestCases.HSSF.Converter.TestExcelToHtmlConverterSuite.Test(String fileName) in f:\Gloria\项目\NPOI\src\github\npoi\testcases\main\HSSF\Converter\TestExcelToHtmlConverterSuite.cs:line 67
+   at TestCases.HSSF.Converter.TestExcelToHtmlConverterSuite.TestExcelToHtmlConverter() in f:\Gloria\项目\NPOI\src\github\npoi\testcases\main\HSSF\Converter\TestExcelToHtmlConverterSuite.cs:line 30
+**************************************
+..\..\..\TestCases\test-data\spreadsheet\1904DateWindowing.xls
+mscorlib
+'MacRoman' is not a supported encoding name.
+Parameter name: name
+   at System.Globalization.EncodingTable.internalGetCodePageFromName(String name)
+   at System.Globalization.EncodingTable.GetCodePageFromName(String name)
+   at System.Text.Encoding.GetEncoding(String name)
+   at NPOI.HPSF.CodePageString.GetJavaValue(Int32 codepage) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\CodePageString.cs:line 179
+   at NPOI.HPSF.VariantSupport.Read(Byte[] src, Int32 offset, Int32 length, Int64 type, Int32 codepage) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\VariantSupport.cs:line 192
+   at NPOI.HPSF.Property..ctor(Int64 id, Byte[] src, Int64 offset, Int32 Length, Int32 codepage) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\Property.cs:line 163
+   at NPOI.HPSF.Section..ctor(Byte[] src, Int32 offset) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\Section.cs:line 272
+   at NPOI.HPSF.PropertySet.init(Byte[] src, Int32 offset, Int32 Length) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\PropertySet.cs:line 427
+   at NPOI.HPSF.PropertySet..ctor(Stream stream) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\PropertySet.cs:line 239
+   at NPOI.HPSF.PropertySetFactory.Create(Stream stream) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\PropertySetFactory.cs:line 55
+   at NPOI.POIDocument.GetPropertySet(String setName) in f:\Gloria\项目\NPOI\src\github\npoi\main\POIDocument.cs:line 196
+   at NPOI.POIDocument.ReadProperties() in f:\Gloria\项目\NPOI\src\github\npoi\main\POIDocument.cs:line 145
+   at NPOI.POIDocument.get_SummaryInformation() in f:\Gloria\项目\NPOI\src\github\npoi\main\POIDocument.cs:line 125
+   at NPOI.HSSF.Converter.ExcelToHtmlConverter.ProcessWorkbook(HSSFWorkbook workbook) in f:\Gloria\项目\NPOI\src\github\npoi\main\HSSF\Converter\ExcelToHtmlConverter.cs:line 130
+   at TestCases.HSSF.Converter.TestExcelToHtmlConverterSuite.Test(String fileName) in f:\Gloria\项目\NPOI\src\github\npoi\testcases\main\HSSF\Converter\TestExcelToHtmlConverterSuite.cs:line 67
+   at TestCases.HSSF.Converter.TestExcelToHtmlConverterSuite.TestExcelToHtmlConverter() in f:\Gloria\项目\NPOI\src\github\npoi\testcases\main\HSSF\Converter\TestExcelToHtmlConverterSuite.cs:line 30
+**************************************
+..\..\..\TestCases\test-data\spreadsheet\25695.xls
+mscorlib
+'cp874' is not a supported encoding name.
+Parameter name: name
+   at System.Globalization.EncodingTable.internalGetCodePageFromName(String name)
+   at System.Globalization.EncodingTable.GetCodePageFromName(String name)
+   at System.Text.Encoding.GetEncoding(String name)
+   at NPOI.HPSF.CodePageString.GetJavaValue(Int32 codepage) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\CodePageString.cs:line 179
+   at NPOI.HPSF.VariantSupport.Read(Byte[] src, Int32 offset, Int32 length, Int64 type, Int32 codepage) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\VariantSupport.cs:line 192
+   at NPOI.HPSF.Property..ctor(Int64 id, Byte[] src, Int64 offset, Int32 Length, Int32 codepage) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\Property.cs:line 163
+   at NPOI.HPSF.Section..ctor(Byte[] src, Int32 offset) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\Section.cs:line 272
+   at NPOI.HPSF.PropertySet.init(Byte[] src, Int32 offset, Int32 Length) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\PropertySet.cs:line 427
+   at NPOI.HPSF.PropertySet..ctor(Stream stream) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\PropertySet.cs:line 239
+   at NPOI.HPSF.PropertySetFactory.Create(Stream stream) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\PropertySetFactory.cs:line 55
+   at NPOI.POIDocument.GetPropertySet(String setName) in f:\Gloria\项目\NPOI\src\github\npoi\main\POIDocument.cs:line 196
+   at NPOI.POIDocument.ReadProperties() in f:\Gloria\项目\NPOI\src\github\npoi\main\POIDocument.cs:line 145
+   at NPOI.POIDocument.get_SummaryInformation() in f:\Gloria\项目\NPOI\src\github\npoi\main\POIDocument.cs:line 125
+   at NPOI.HSSF.Converter.ExcelToHtmlConverter.ProcessWorkbook(HSSFWorkbook workbook) in f:\Gloria\项目\NPOI\src\github\npoi\main\HSSF\Converter\ExcelToHtmlConverter.cs:line 130
+   at TestCases.HSSF.Converter.TestExcelToHtmlConverterSuite.Test(String fileName) in f:\Gloria\项目\NPOI\src\github\npoi\testcases\main\HSSF\Converter\TestExcelToHtmlConverterSuite.cs:line 67
+   at TestCases.HSSF.Converter.TestExcelToHtmlConverterSuite.TestExcelToHtmlConverter() in f:\Gloria\项目\NPOI\src\github\npoi\testcases\main\HSSF\Converter\TestExcelToHtmlConverterSuite.cs:line 30
+**************************************
+..\..\..\TestCases\test-data\spreadsheet\37376.xls
+mscorlib
+'cp950' is not a supported encoding name.
+Parameter name: name
+   at System.Globalization.EncodingTable.internalGetCodePageFromName(String name)
+   at System.Globalization.EncodingTable.GetCodePageFromName(String name)
+   at System.Text.Encoding.GetEncoding(String name)
+   at NPOI.HPSF.CodePageString.GetJavaValue(Int32 codepage) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\CodePageString.cs:line 179
+   at NPOI.HPSF.VariantSupport.Read(Byte[] src, Int32 offset, Int32 length, Int64 type, Int32 codepage) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\VariantSupport.cs:line 192
+   at NPOI.HPSF.Property..ctor(Int64 id, Byte[] src, Int64 offset, Int32 Length, Int32 codepage) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\Property.cs:line 163
+   at NPOI.HPSF.Section..ctor(Byte[] src, Int32 offset) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\Section.cs:line 272
+   at NPOI.HPSF.PropertySet.init(Byte[] src, Int32 offset, Int32 Length) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\PropertySet.cs:line 427
+   at NPOI.HPSF.PropertySet..ctor(Stream stream) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\PropertySet.cs:line 239
+   at NPOI.HPSF.PropertySetFactory.Create(Stream stream) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\PropertySetFactory.cs:line 55
+   at NPOI.POIDocument.GetPropertySet(String setName) in f:\Gloria\项目\NPOI\src\github\npoi\main\POIDocument.cs:line 196
+   at NPOI.POIDocument.ReadProperties() in f:\Gloria\项目\NPOI\src\github\npoi\main\POIDocument.cs:line 145
+   at NPOI.POIDocument.get_SummaryInformation() in f:\Gloria\项目\NPOI\src\github\npoi\main\POIDocument.cs:line 125
+   at NPOI.HSSF.Converter.ExcelToHtmlConverter.ProcessWorkbook(HSSFWorkbook workbook) in f:\Gloria\项目\NPOI\src\github\npoi\main\HSSF\Converter\ExcelToHtmlConverter.cs:line 130
+   at TestCases.HSSF.Converter.TestExcelToHtmlConverterSuite.Test(String fileName) in f:\Gloria\项目\NPOI\src\github\npoi\testcases\main\HSSF\Converter\TestExcelToHtmlConverterSuite.cs:line 67
+   at TestCases.HSSF.Converter.TestExcelToHtmlConverterSuite.TestExcelToHtmlConverter() in f:\Gloria\项目\NPOI\src\github\npoi\testcases\main\HSSF\Converter\TestExcelToHtmlConverterSuite.cs:line 30
+**************************************
+..\..\..\TestCases\test-data\spreadsheet\43493.xls
+NPOI
+Initialisation of record 0x10 left 8 bytes remaining still to be read.
+   at NPOI.HSSF.Record.RecordInputStream.get_HasNextRecord() in f:\Gloria\项目\NPOI\src\github\npoi\main\HSSF\Record\RecordInputStream.cs:line 237
+   at NPOI.HSSF.Record.RecordFactoryInputStream.NextRecord() in f:\Gloria\项目\NPOI\src\github\npoi\main\HSSF\Record\RecordFactoryInputStream.cs:line 263
+   at NPOI.HSSF.Record.RecordFactory.CreateRecords(Stream in1) in f:\Gloria\项目\NPOI\src\github\npoi\main\HSSF\Record\RecordFactory.cs:line 459
+   at NPOI.HSSF.UserModel.HSSFWorkbook..ctor(DirectoryNode directory, Boolean preserveNodes) in f:\Gloria\项目\NPOI\src\github\npoi\main\HSSF\UserModel\HSSFWorkbook.cs:line 299
+   at NPOI.HSSF.UserModel.HSSFWorkbook..ctor(DirectoryNode directory, POIFSFileSystem fs, Boolean preserveNodes) in f:\Gloria\项目\NPOI\src\github\npoi\main\HSSF\UserModel\HSSFWorkbook.cs:line 260
+   at NPOI.HSSF.UserModel.HSSFWorkbook..ctor(POIFSFileSystem fs, Boolean preserveNodes) in f:\Gloria\项目\NPOI\src\github\npoi\main\HSSF\UserModel\HSSFWorkbook.cs:line 199
+   at NPOI.HSSF.UserModel.HSSFWorkbook..ctor(Stream s, Boolean preserveNodes) in f:\Gloria\项目\NPOI\src\github\npoi\main\HSSF\UserModel\HSSFWorkbook.cs:line 341
+   at NPOI.HSSF.UserModel.HSSFWorkbook..ctor(Stream s) in f:\Gloria\项目\NPOI\src\github\npoi\main\HSSF\UserModel\HSSFWorkbook.cs:line 322
+   at NPOI.HSSF.Converter.ExcelToHtmlUtils.LoadXls(String xlsFile) in f:\Gloria\项目\NPOI\src\github\npoi\main\HSSF\Converter\ExcelToHtmlUtils.cs:line 230
+   at TestCases.HSSF.Converter.TestExcelToHtmlConverterSuite.Test(String fileName) in f:\Gloria\项目\NPOI\src\github\npoi\testcases\main\HSSF\Converter\TestExcelToHtmlConverterSuite.cs:line 65
+   at TestCases.HSSF.Converter.TestExcelToHtmlConverterSuite.TestExcelToHtmlConverter() in f:\Gloria\项目\NPOI\src\github\npoi\testcases\main\HSSF\Converter\TestExcelToHtmlConverterSuite.cs:line 30
+**************************************
+..\..\..\TestCases\test-data\spreadsheet\46904.xls
+NPOI
+The supplied spreadsheet seems to be Excel 5.0/7.0 (BIFF5) format. POI only supports BIFF8 format (from Excel versions 97/2000/XP/2003)
+   at NPOI.HSSF.UserModel.HSSFWorkbook.GetWorkbookDirEntryName(DirectoryNode directory) in f:\Gloria\项目\NPOI\src\github\npoi\main\HSSF\UserModel\HSSFWorkbook.cs:line 237
+   at NPOI.HSSF.UserModel.HSSFWorkbook..ctor(DirectoryNode directory, Boolean preserveNodes) in f:\Gloria\项目\NPOI\src\github\npoi\main\HSSF\UserModel\HSSFWorkbook.cs:line 280
+   at NPOI.HSSF.UserModel.HSSFWorkbook..ctor(DirectoryNode directory, POIFSFileSystem fs, Boolean preserveNodes) in f:\Gloria\项目\NPOI\src\github\npoi\main\HSSF\UserModel\HSSFWorkbook.cs:line 260
+   at NPOI.HSSF.UserModel.HSSFWorkbook..ctor(POIFSFileSystem fs, Boolean preserveNodes) in f:\Gloria\项目\NPOI\src\github\npoi\main\HSSF\UserModel\HSSFWorkbook.cs:line 199
+   at NPOI.HSSF.UserModel.HSSFWorkbook..ctor(Stream s, Boolean preserveNodes) in f:\Gloria\项目\NPOI\src\github\npoi\main\HSSF\UserModel\HSSFWorkbook.cs:line 341
+   at NPOI.HSSF.UserModel.HSSFWorkbook..ctor(Stream s) in f:\Gloria\项目\NPOI\src\github\npoi\main\HSSF\UserModel\HSSFWorkbook.cs:line 322
+   at NPOI.HSSF.Converter.ExcelToHtmlUtils.LoadXls(String xlsFile) in f:\Gloria\项目\NPOI\src\github\npoi\main\HSSF\Converter\ExcelToHtmlUtils.cs:line 230
+   at TestCases.HSSF.Converter.TestExcelToHtmlConverterSuite.Test(String fileName) in f:\Gloria\项目\NPOI\src\github\npoi\testcases\main\HSSF\Converter\TestExcelToHtmlConverterSuite.cs:line 65
+   at TestCases.HSSF.Converter.TestExcelToHtmlConverterSuite.TestExcelToHtmlConverter() in f:\Gloria\项目\NPOI\src\github\npoi\testcases\main\HSSF\Converter\TestExcelToHtmlConverterSuite.cs:line 30
+**************************************
+..\..\..\TestCases\test-data\spreadsheet\47034.xls
+mscorlib
+'cp950' is not a supported encoding name.
+Parameter name: name
+   at System.Globalization.EncodingTable.internalGetCodePageFromName(String name)
+   at System.Globalization.EncodingTable.GetCodePageFromName(String name)
+   at System.Text.Encoding.GetEncoding(String name)
+   at NPOI.HPSF.CodePageString.GetJavaValue(Int32 codepage) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\CodePageString.cs:line 179
+   at NPOI.HPSF.VariantSupport.Read(Byte[] src, Int32 offset, Int32 length, Int64 type, Int32 codepage) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\VariantSupport.cs:line 192
+   at NPOI.HPSF.Property..ctor(Int64 id, Byte[] src, Int64 offset, Int32 Length, Int32 codepage) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\Property.cs:line 163
+   at NPOI.HPSF.Section..ctor(Byte[] src, Int32 offset) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\Section.cs:line 272
+   at NPOI.HPSF.PropertySet.init(Byte[] src, Int32 offset, Int32 Length) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\PropertySet.cs:line 427
+   at NPOI.HPSF.PropertySet..ctor(Stream stream) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\PropertySet.cs:line 239
+   at NPOI.HPSF.PropertySetFactory.Create(Stream stream) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\PropertySetFactory.cs:line 55
+   at NPOI.POIDocument.GetPropertySet(String setName) in f:\Gloria\项目\NPOI\src\github\npoi\main\POIDocument.cs:line 196
+   at NPOI.POIDocument.ReadProperties() in f:\Gloria\项目\NPOI\src\github\npoi\main\POIDocument.cs:line 145
+   at NPOI.POIDocument.get_SummaryInformation() in f:\Gloria\项目\NPOI\src\github\npoi\main\POIDocument.cs:line 125
+   at NPOI.HSSF.Converter.ExcelToHtmlConverter.ProcessWorkbook(HSSFWorkbook workbook) in f:\Gloria\项目\NPOI\src\github\npoi\main\HSSF\Converter\ExcelToHtmlConverter.cs:line 130
+   at TestCases.HSSF.Converter.TestExcelToHtmlConverterSuite.Test(String fileName) in f:\Gloria\项目\NPOI\src\github\npoi\testcases\main\HSSF\Converter\TestExcelToHtmlConverterSuite.cs:line 67
+   at TestCases.HSSF.Converter.TestExcelToHtmlConverterSuite.TestExcelToHtmlConverter() in f:\Gloria\项目\NPOI\src\github\npoi\testcases\main\HSSF\Converter\TestExcelToHtmlConverterSuite.cs:line 30
+**************************************
+..\..\..\TestCases\test-data\spreadsheet\48180.xls
+mscorlib
+'MacRoman' is not a supported encoding name.
+Parameter name: name
+   at System.Globalization.EncodingTable.internalGetCodePageFromName(String name)
+   at System.Globalization.EncodingTable.GetCodePageFromName(String name)
+   at System.Text.Encoding.GetEncoding(String name)
+   at NPOI.HPSF.CodePageString.GetJavaValue(Int32 codepage) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\CodePageString.cs:line 179
+   at NPOI.HPSF.VariantSupport.Read(Byte[] src, Int32 offset, Int32 length, Int64 type, Int32 codepage) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\VariantSupport.cs:line 192
+   at NPOI.HPSF.Property..ctor(Int64 id, Byte[] src, Int64 offset, Int32 Length, Int32 codepage) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\Property.cs:line 163
+   at NPOI.HPSF.Section..ctor(Byte[] src, Int32 offset) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\Section.cs:line 272
+   at NPOI.HPSF.PropertySet.init(Byte[] src, Int32 offset, Int32 Length) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\PropertySet.cs:line 427
+   at NPOI.HPSF.PropertySet..ctor(Stream stream) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\PropertySet.cs:line 239
+   at NPOI.HPSF.PropertySetFactory.Create(Stream stream) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\PropertySetFactory.cs:line 55
+   at NPOI.POIDocument.GetPropertySet(String setName) in f:\Gloria\项目\NPOI\src\github\npoi\main\POIDocument.cs:line 196
+   at NPOI.POIDocument.ReadProperties() in f:\Gloria\项目\NPOI\src\github\npoi\main\POIDocument.cs:line 145
+   at NPOI.POIDocument.get_SummaryInformation() in f:\Gloria\项目\NPOI\src\github\npoi\main\POIDocument.cs:line 125
+   at NPOI.HSSF.Converter.ExcelToHtmlConverter.ProcessWorkbook(HSSFWorkbook workbook) in f:\Gloria\项目\NPOI\src\github\npoi\main\HSSF\Converter\ExcelToHtmlConverter.cs:line 130
+   at TestCases.HSSF.Converter.TestExcelToHtmlConverterSuite.Test(String fileName) in f:\Gloria\项目\NPOI\src\github\npoi\testcases\main\HSSF\Converter\TestExcelToHtmlConverterSuite.cs:line 67
+   at TestCases.HSSF.Converter.TestExcelToHtmlConverterSuite.TestExcelToHtmlConverter() in f:\Gloria\项目\NPOI\src\github\npoi\testcases\main\HSSF\Converter\TestExcelToHtmlConverterSuite.cs:line 30
+**************************************
+..\..\..\TestCases\test-data\spreadsheet\51461.xls
+mscorlib
+'MacRoman' is not a supported encoding name.
+Parameter name: name
+   at System.Globalization.EncodingTable.internalGetCodePageFromName(String name)
+   at System.Globalization.EncodingTable.GetCodePageFromName(String name)
+   at System.Text.Encoding.GetEncoding(String name)
+   at NPOI.HPSF.CodePageString.GetJavaValue(Int32 codepage) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\CodePageString.cs:line 179
+   at NPOI.HPSF.VariantSupport.Read(Byte[] src, Int32 offset, Int32 length, Int64 type, Int32 codepage) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\VariantSupport.cs:line 192
+   at NPOI.HPSF.Property..ctor(Int64 id, Byte[] src, Int64 offset, Int32 Length, Int32 codepage) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\Property.cs:line 163
+   at NPOI.HPSF.Section..ctor(Byte[] src, Int32 offset) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\Section.cs:line 272
+   at NPOI.HPSF.PropertySet.init(Byte[] src, Int32 offset, Int32 Length) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\PropertySet.cs:line 427
+   at NPOI.HPSF.PropertySet..ctor(Stream stream) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\PropertySet.cs:line 239
+   at NPOI.HPSF.PropertySetFactory.Create(Stream stream) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\PropertySetFactory.cs:line 55
+   at NPOI.POIDocument.GetPropertySet(String setName) in f:\Gloria\项目\NPOI\src\github\npoi\main\POIDocument.cs:line 196
+   at NPOI.POIDocument.ReadProperties() in f:\Gloria\项目\NPOI\src\github\npoi\main\POIDocument.cs:line 145
+   at NPOI.POIDocument.get_SummaryInformation() in f:\Gloria\项目\NPOI\src\github\npoi\main\POIDocument.cs:line 125
+   at NPOI.HSSF.Converter.ExcelToHtmlConverter.ProcessWorkbook(HSSFWorkbook workbook) in f:\Gloria\项目\NPOI\src\github\npoi\main\HSSF\Converter\ExcelToHtmlConverter.cs:line 130
+   at TestCases.HSSF.Converter.TestExcelToHtmlConverterSuite.Test(String fileName) in f:\Gloria\项目\NPOI\src\github\npoi\testcases\main\HSSF\Converter\TestExcelToHtmlConverterSuite.cs:line 67
+   at TestCases.HSSF.Converter.TestExcelToHtmlConverterSuite.TestExcelToHtmlConverter() in f:\Gloria\项目\NPOI\src\github\npoi\testcases\main\HSSF\Converter\TestExcelToHtmlConverterSuite.cs:line 30
+**************************************
+..\..\..\TestCases\test-data\spreadsheet\51832.xls
+NPOI
+Default password is invalid for docId/saltData/saltHash
+   at NPOI.HSSF.Record.RecordFactoryInputStream.StreamEncryptionInfo.CreateDecryptingStream(Stream original) in f:\Gloria\项目\NPOI\src\github\npoi\main\HSSF\Record\RecordFactoryInputStream.cs:line 128
+   at NPOI.HSSF.Record.RecordFactoryInputStream..ctor(Stream in1, Boolean shouldIncludeContinueRecords) in f:\Gloria\项目\NPOI\src\github\npoi\main\HSSF\Record\RecordFactoryInputStream.cs:line 210
+   at NPOI.HSSF.Record.RecordFactory.CreateRecords(Stream in1) in f:\Gloria\项目\NPOI\src\github\npoi\main\HSSF\Record\RecordFactory.cs:line 456
+   at NPOI.HSSF.UserModel.HSSFWorkbook..ctor(DirectoryNode directory, Boolean preserveNodes) in f:\Gloria\项目\NPOI\src\github\npoi\main\HSSF\UserModel\HSSFWorkbook.cs:line 299
+   at NPOI.HSSF.UserModel.HSSFWorkbook..ctor(DirectoryNode directory, POIFSFileSystem fs, Boolean preserveNodes) in f:\Gloria\项目\NPOI\src\github\npoi\main\HSSF\UserModel\HSSFWorkbook.cs:line 260
+   at NPOI.HSSF.UserModel.HSSFWorkbook..ctor(POIFSFileSystem fs, Boolean preserveNodes) in f:\Gloria\项目\NPOI\src\github\npoi\main\HSSF\UserModel\HSSFWorkbook.cs:line 199
+   at NPOI.HSSF.UserModel.HSSFWorkbook..ctor(Stream s, Boolean preserveNodes) in f:\Gloria\项目\NPOI\src\github\npoi\main\HSSF\UserModel\HSSFWorkbook.cs:line 341
+   at NPOI.HSSF.UserModel.HSSFWorkbook..ctor(Stream s) in f:\Gloria\项目\NPOI\src\github\npoi\main\HSSF\UserModel\HSSFWorkbook.cs:line 322
+   at NPOI.HSSF.Converter.ExcelToHtmlUtils.LoadXls(String xlsFile) in f:\Gloria\项目\NPOI\src\github\npoi\main\HSSF\Converter\ExcelToHtmlUtils.cs:line 230
+   at TestCases.HSSF.Converter.TestExcelToHtmlConverterSuite.Test(String fileName) in f:\Gloria\项目\NPOI\src\github\npoi\testcases\main\HSSF\Converter\TestExcelToHtmlConverterSuite.cs:line 65
+   at TestCases.HSSF.Converter.TestExcelToHtmlConverterSuite.TestExcelToHtmlConverter() in f:\Gloria\项目\NPOI\src\github\npoi\testcases\main\HSSF\Converter\TestExcelToHtmlConverterSuite.cs:line 30
+**************************************
+..\..\..\TestCases\test-data\spreadsheet\atp.xls
+mscorlib
+'MacRoman' is not a supported encoding name.
+Parameter name: name
+   at System.Globalization.EncodingTable.internalGetCodePageFromName(String name)
+   at System.Globalization.EncodingTable.GetCodePageFromName(String name)
+   at System.Text.Encoding.GetEncoding(String name)
+   at NPOI.HPSF.CodePageString.GetJavaValue(Int32 codepage) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\CodePageString.cs:line 179
+   at NPOI.HPSF.VariantSupport.Read(Byte[] src, Int32 offset, Int32 length, Int64 type, Int32 codepage) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\VariantSupport.cs:line 192
+   at NPOI.HPSF.Property..ctor(Int64 id, Byte[] src, Int64 offset, Int32 Length, Int32 codepage) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\Property.cs:line 163
+   at NPOI.HPSF.Section..ctor(Byte[] src, Int32 offset) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\Section.cs:line 272
+   at NPOI.HPSF.PropertySet.init(Byte[] src, Int32 offset, Int32 Length) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\PropertySet.cs:line 427
+   at NPOI.HPSF.PropertySet..ctor(Stream stream) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\PropertySet.cs:line 239
+   at NPOI.HPSF.PropertySetFactory.Create(Stream stream) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\PropertySetFactory.cs:line 55
+   at NPOI.POIDocument.GetPropertySet(String setName) in f:\Gloria\项目\NPOI\src\github\npoi\main\POIDocument.cs:line 196
+   at NPOI.POIDocument.ReadProperties() in f:\Gloria\项目\NPOI\src\github\npoi\main\POIDocument.cs:line 145
+   at NPOI.POIDocument.get_SummaryInformation() in f:\Gloria\项目\NPOI\src\github\npoi\main\POIDocument.cs:line 125
+   at NPOI.HSSF.Converter.ExcelToHtmlConverter.ProcessWorkbook(HSSFWorkbook workbook) in f:\Gloria\项目\NPOI\src\github\npoi\main\HSSF\Converter\ExcelToHtmlConverter.cs:line 130
+   at TestCases.HSSF.Converter.TestExcelToHtmlConverterSuite.Test(String fileName) in f:\Gloria\项目\NPOI\src\github\npoi\testcases\main\HSSF\Converter\TestExcelToHtmlConverterSuite.cs:line 67
+   at TestCases.HSSF.Converter.TestExcelToHtmlConverterSuite.TestExcelToHtmlConverter() in f:\Gloria\项目\NPOI\src\github\npoi\testcases\main\HSSF\Converter\TestExcelToHtmlConverterSuite.cs:line 30
+**************************************
+..\..\..\TestCases\test-data\spreadsheet\duprich1.xls
+mscorlib
+'cp950' is not a supported encoding name.
+Parameter name: name
+   at System.Globalization.EncodingTable.internalGetCodePageFromName(String name)
+   at System.Globalization.EncodingTable.GetCodePageFromName(String name)
+   at System.Text.Encoding.GetEncoding(String name)
+   at NPOI.HPSF.CodePageString.GetJavaValue(Int32 codepage) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\CodePageString.cs:line 179
+   at NPOI.HPSF.VariantSupport.Read(Byte[] src, Int32 offset, Int32 length, Int64 type, Int32 codepage) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\VariantSupport.cs:line 192
+   at NPOI.HPSF.Property..ctor(Int64 id, Byte[] src, Int64 offset, Int32 Length, Int32 codepage) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\Property.cs:line 163
+   at NPOI.HPSF.Section..ctor(Byte[] src, Int32 offset) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\Section.cs:line 272
+   at NPOI.HPSF.PropertySet.init(Byte[] src, Int32 offset, Int32 Length) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\PropertySet.cs:line 427
+   at NPOI.HPSF.PropertySet..ctor(Stream stream) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\PropertySet.cs:line 239
+   at NPOI.HPSF.PropertySetFactory.Create(Stream stream) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\PropertySetFactory.cs:line 55
+   at NPOI.POIDocument.GetPropertySet(String setName) in f:\Gloria\项目\NPOI\src\github\npoi\main\POIDocument.cs:line 196
+   at NPOI.POIDocument.ReadProperties() in f:\Gloria\项目\NPOI\src\github\npoi\main\POIDocument.cs:line 156
+   at NPOI.POIDocument.get_SummaryInformation() in f:\Gloria\项目\NPOI\src\github\npoi\main\POIDocument.cs:line 125
+   at NPOI.HSSF.Converter.ExcelToHtmlConverter.ProcessWorkbook(HSSFWorkbook workbook) in f:\Gloria\项目\NPOI\src\github\npoi\main\HSSF\Converter\ExcelToHtmlConverter.cs:line 130
+   at TestCases.HSSF.Converter.TestExcelToHtmlConverterSuite.Test(String fileName) in f:\Gloria\项目\NPOI\src\github\npoi\testcases\main\HSSF\Converter\TestExcelToHtmlConverterSuite.cs:line 67
+   at TestCases.HSSF.Converter.TestExcelToHtmlConverterSuite.TestExcelToHtmlConverter() in f:\Gloria\项目\NPOI\src\github\npoi\testcases\main\HSSF\Converter\TestExcelToHtmlConverterSuite.cs:line 30
+**************************************
+..\..\..\TestCases\test-data\spreadsheet\FormatChoiceTests.xls
+mscorlib
+'MacRoman' is not a supported encoding name.
+Parameter name: name
+   at System.Globalization.EncodingTable.internalGetCodePageFromName(String name)
+   at System.Globalization.EncodingTable.GetCodePageFromName(String name)
+   at System.Text.Encoding.GetEncoding(String name)
+   at NPOI.HPSF.CodePageString.GetJavaValue(Int32 codepage) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\CodePageString.cs:line 179
+   at NPOI.HPSF.VariantSupport.Read(Byte[] src, Int32 offset, Int32 length, Int64 type, Int32 codepage) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\VariantSupport.cs:line 192
+   at NPOI.HPSF.Property..ctor(Int64 id, Byte[] src, Int64 offset, Int32 Length, Int32 codepage) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\Property.cs:line 163
+   at NPOI.HPSF.Section..ctor(Byte[] src, Int32 offset) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\Section.cs:line 272
+   at NPOI.HPSF.PropertySet.init(Byte[] src, Int32 offset, Int32 Length) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\PropertySet.cs:line 427
+   at NPOI.HPSF.PropertySet..ctor(Stream stream) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\PropertySet.cs:line 239
+   at NPOI.HPSF.PropertySetFactory.Create(Stream stream) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\PropertySetFactory.cs:line 55
+   at NPOI.POIDocument.GetPropertySet(String setName) in f:\Gloria\项目\NPOI\src\github\npoi\main\POIDocument.cs:line 196
+   at NPOI.POIDocument.ReadProperties() in f:\Gloria\项目\NPOI\src\github\npoi\main\POIDocument.cs:line 145
+   at NPOI.POIDocument.get_SummaryInformation() in f:\Gloria\项目\NPOI\src\github\npoi\main\POIDocument.cs:line 125
+   at NPOI.HSSF.Converter.ExcelToHtmlConverter.ProcessWorkbook(HSSFWorkbook workbook) in f:\Gloria\项目\NPOI\src\github\npoi\main\HSSF\Converter\ExcelToHtmlConverter.cs:line 130
+   at TestCases.HSSF.Converter.TestExcelToHtmlConverterSuite.Test(String fileName) in f:\Gloria\项目\NPOI\src\github\npoi\testcases\main\HSSF\Converter\TestExcelToHtmlConverterSuite.cs:line 67
+   at TestCases.HSSF.Converter.TestExcelToHtmlConverterSuite.TestExcelToHtmlConverter() in f:\Gloria\项目\NPOI\src\github\npoi\testcases\main\HSSF\Converter\TestExcelToHtmlConverterSuite.cs:line 30
+**************************************
+..\..\..\TestCases\test-data\spreadsheet\LookupFunctionsTestCaseData.xls
+mscorlib
+'MacRoman' is not a supported encoding name.
+Parameter name: name
+   at System.Globalization.EncodingTable.internalGetCodePageFromName(String name)
+   at System.Globalization.EncodingTable.GetCodePageFromName(String name)
+   at System.Text.Encoding.GetEncoding(String name)
+   at NPOI.HPSF.CodePageString.GetJavaValue(Int32 codepage) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\CodePageString.cs:line 179
+   at NPOI.HPSF.VariantSupport.Read(Byte[] src, Int32 offset, Int32 length, Int64 type, Int32 codepage) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\VariantSupport.cs:line 192
+   at NPOI.HPSF.Property..ctor(Int64 id, Byte[] src, Int64 offset, Int32 Length, Int32 codepage) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\Property.cs:line 163
+   at NPOI.HPSF.Section..ctor(Byte[] src, Int32 offset) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\Section.cs:line 272
+   at NPOI.HPSF.PropertySet.init(Byte[] src, Int32 offset, Int32 Length) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\PropertySet.cs:line 427
+   at NPOI.HPSF.PropertySet..ctor(Stream stream) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\PropertySet.cs:line 239
+   at NPOI.HPSF.PropertySetFactory.Create(Stream stream) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\PropertySetFactory.cs:line 55
+   at NPOI.POIDocument.GetPropertySet(String setName) in f:\Gloria\项目\NPOI\src\github\npoi\main\POIDocument.cs:line 196
+   at NPOI.POIDocument.ReadProperties() in f:\Gloria\项目\NPOI\src\github\npoi\main\POIDocument.cs:line 145
+   at NPOI.POIDocument.get_SummaryInformation() in f:\Gloria\项目\NPOI\src\github\npoi\main\POIDocument.cs:line 125
+   at NPOI.HSSF.Converter.ExcelToHtmlConverter.ProcessWorkbook(HSSFWorkbook workbook) in f:\Gloria\项目\NPOI\src\github\npoi\main\HSSF\Converter\ExcelToHtmlConverter.cs:line 130
+   at TestCases.HSSF.Converter.TestExcelToHtmlConverterSuite.Test(String fileName) in f:\Gloria\项目\NPOI\src\github\npoi\testcases\main\HSSF\Converter\TestExcelToHtmlConverterSuite.cs:line 67
+   at TestCases.HSSF.Converter.TestExcelToHtmlConverterSuite.TestExcelToHtmlConverter() in f:\Gloria\项目\NPOI\src\github\npoi\testcases\main\HSSF\Converter\TestExcelToHtmlConverterSuite.cs:line 30
+**************************************
+..\..\..\TestCases\test-data\spreadsheet\password.xls
+NPOI
+Default password is invalid for docId/saltData/saltHash
+   at NPOI.HSSF.Record.RecordFactoryInputStream.StreamEncryptionInfo.CreateDecryptingStream(Stream original) in f:\Gloria\项目\NPOI\src\github\npoi\main\HSSF\Record\RecordFactoryInputStream.cs:line 128
+   at NPOI.HSSF.Record.RecordFactoryInputStream..ctor(Stream in1, Boolean shouldIncludeContinueRecords) in f:\Gloria\项目\NPOI\src\github\npoi\main\HSSF\Record\RecordFactoryInputStream.cs:line 210
+   at NPOI.HSSF.Record.RecordFactory.CreateRecords(Stream in1) in f:\Gloria\项目\NPOI\src\github\npoi\main\HSSF\Record\RecordFactory.cs:line 456
+   at NPOI.HSSF.UserModel.HSSFWorkbook..ctor(DirectoryNode directory, Boolean preserveNodes) in f:\Gloria\项目\NPOI\src\github\npoi\main\HSSF\UserModel\HSSFWorkbook.cs:line 299
+   at NPOI.HSSF.UserModel.HSSFWorkbook..ctor(DirectoryNode directory, POIFSFileSystem fs, Boolean preserveNodes) in f:\Gloria\项目\NPOI\src\github\npoi\main\HSSF\UserModel\HSSFWorkbook.cs:line 260
+   at NPOI.HSSF.UserModel.HSSFWorkbook..ctor(POIFSFileSystem fs, Boolean preserveNodes) in f:\Gloria\项目\NPOI\src\github\npoi\main\HSSF\UserModel\HSSFWorkbook.cs:line 199
+   at NPOI.HSSF.UserModel.HSSFWorkbook..ctor(Stream s, Boolean preserveNodes) in f:\Gloria\项目\NPOI\src\github\npoi\main\HSSF\UserModel\HSSFWorkbook.cs:line 341
+   at NPOI.HSSF.UserModel.HSSFWorkbook..ctor(Stream s) in f:\Gloria\项目\NPOI\src\github\npoi\main\HSSF\UserModel\HSSFWorkbook.cs:line 322
+   at NPOI.HSSF.Converter.ExcelToHtmlUtils.LoadXls(String xlsFile) in f:\Gloria\项目\NPOI\src\github\npoi\main\HSSF\Converter\ExcelToHtmlUtils.cs:line 230
+   at TestCases.HSSF.Converter.TestExcelToHtmlConverterSuite.Test(String fileName) in f:\Gloria\项目\NPOI\src\github\npoi\testcases\main\HSSF\Converter\TestExcelToHtmlConverterSuite.cs:line 65
+   at TestCases.HSSF.Converter.TestExcelToHtmlConverterSuite.TestExcelToHtmlConverter() in f:\Gloria\项目\NPOI\src\github\npoi\testcases\main\HSSF\Converter\TestExcelToHtmlConverterSuite.cs:line 30
+**************************************
+..\..\..\TestCases\test-data\spreadsheet\SimpleWithImages-mac.xls
+mscorlib
+'MacRoman' is not a supported encoding name.
+Parameter name: name
+   at System.Globalization.EncodingTable.internalGetCodePageFromName(String name)
+   at System.Globalization.EncodingTable.GetCodePageFromName(String name)
+   at System.Text.Encoding.GetEncoding(String name)
+   at NPOI.HPSF.CodePageString.GetJavaValue(Int32 codepage) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\CodePageString.cs:line 179
+   at NPOI.HPSF.VariantSupport.Read(Byte[] src, Int32 offset, Int32 length, Int64 type, Int32 codepage) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\VariantSupport.cs:line 192
+   at NPOI.HPSF.Property..ctor(Int64 id, Byte[] src, Int64 offset, Int32 Length, Int32 codepage) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\Property.cs:line 163
+   at NPOI.HPSF.Section..ctor(Byte[] src, Int32 offset) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\Section.cs:line 272
+   at NPOI.HPSF.PropertySet.init(Byte[] src, Int32 offset, Int32 Length) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\PropertySet.cs:line 427
+   at NPOI.HPSF.PropertySet..ctor(Stream stream) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\PropertySet.cs:line 239
+   at NPOI.HPSF.PropertySetFactory.Create(Stream stream) in f:\Gloria\项目\NPOI\src\github\npoi\main\HPSF\PropertySetFactory.cs:line 55
+   at NPOI.POIDocument.GetPropertySet(String setName) in f:\Gloria\项目\NPOI\src\github\npoi\main\POIDocument.cs:line 196
+   at NPOI.POIDocument.ReadProperties() in f:\Gloria\项目\NPOI\src\github\npoi\main\POIDocument.cs:line 145
+   at NPOI.POIDocument.get_SummaryInformation() in f:\Gloria\项目\NPOI\src\github\npoi\main\POIDocument.cs:line 125
+   at NPOI.HSSF.Converter.ExcelToHtmlConverter.ProcessWorkbook(HSSFWorkbook workbook) in f:\Gloria\项目\NPOI\src\github\npoi\main\HSSF\Converter\ExcelToHtmlConverter.cs:line 130
+   at TestCases.HSSF.Converter.TestExcelToHtmlConverterSuite.Test(String fileName) in f:\Gloria\项目\NPOI\src\github\npoi\testcases\main\HSSF\Converter\TestExcelToHtmlConverterSuite.cs:line 67
+   at TestCases.HSSF.Converter.TestExcelToHtmlConverterSuite.TestExcelToHtmlConverter() in f:\Gloria\项目\NPOI\src\github\npoi\testcases\main\HSSF\Converter\TestExcelToHtmlConverterSuite.cs:line 30
+**************************************

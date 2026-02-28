@@ -1,0 +1,43 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net472;net8.0</TargetFrameworks>
+    <AssemblyName>NPOI.OOXML.TestCases</AssemblyName>
+    <RootNamespace>TestCases</RootNamespace>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\npoi.snk</AssemblyOriginatorKeyFile>
+    <OutputPath>..\..\solution\$(Configuration)\</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="OpenXmlFormats\**" />
+    <EmbeddedResource Remove="OpenXmlFormats\**" />
+    <None Remove="OpenXmlFormats\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="XSSF\TestWorkbookProtection.cs" />
+    <Compile Remove="XSSF\UserModel\Charts\TestXSSFNumberCache.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="GitHubActionsTestLogger" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="NSubstitute" />
+    <PackageReference Include="NUnit" />
+    <PackageReference Include="NUnit3TestAdapter" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\main\NPOI.Core.csproj" />
+    <ProjectReference Include="..\..\ooxml\NPOI.OOXML.Core.csproj" />
+    <ProjectReference Include="..\..\openxml4Net\NPOI.OpenXml4Net.Core.csproj" />
+    <ProjectReference Include="..\..\OpenXmlFormats\NPOI.OpenXmlFormats.Core.csproj" />
+    <ProjectReference Include="..\main\NPOI.TestCases.Core.csproj" />
+  </ItemGroup>
+
+  <Target Name="CopyCustomContent" AfterTargets="AfterBuild">
+    <Copy SourceFiles="App.config" DestinationFiles="$(OutDir)\testhost.dll.config" />
+  </Target>
+
+</Project>

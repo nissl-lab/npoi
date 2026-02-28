@@ -1,0 +1,175 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{81F02870-E6BA-42D9-8E8C-DD16699DCABE}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>TestCases</RootNamespace>
+    <AssemblyName>TestCases</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\..\npoi.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\..\build\Release\Net20\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI">
+      <HintPath>..\..\build\Release\Net20\NPOI.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\..\solution\Lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="HWPF\Converter\AbstractWordUtilsTest.cs" />
+    <Compile Include="HWPF\Converter\TestNumberFormatter.cs" />
+    <Compile Include="HWPF\Converter\TestWordToHtmlConverter.cs" />
+    <Compile Include="HWPF\Converter\TestWordToTextConverter.cs" />
+    <Compile Include="HWPF\Converter\TestWordToFoConverter.cs" />
+    <Compile Include="HWPF\Extractor\TestDifferentRoutes.cs" />
+    <Compile Include="HWPF\Extractor\TestWordExtractor.cs" />
+    <Compile Include="HWPF\Extractor\TestWordExtractorBugs.cs" />
+    <Compile Include="HWPF\HWPFDocFixture.cs" />
+    <Compile Include="HWPF\HWPFTestCase.cs" />
+    <Compile Include="HWPF\HWPFTestDataSamples.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="HWPF\Model\TestBookmarksTables.cs" />
+    <Compile Include="HWPF\Model\TestCHPBinTable.cs" />
+    <Compile Include="HWPF\Model\TestDocumentProperties.cs" />
+    <Compile Include="HWPF\Model\TestFileInformationBlock.cs" />
+    <Compile Include="HWPF\Model\TestFontTable.cs" />
+    <Compile Include="HWPF\Model\TestListTables.cs" />
+    <Compile Include="HWPF\Model\TestNotesTables.cs" />
+    <Compile Include="HWPF\Model\TestPAPBinTable.cs" />
+    <Compile Include="HWPF\Model\TestPlexOfCps.cs" />
+    <Compile Include="HWPF\Model\TestRevisionMarkAuthorTable.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="HWPF\Model\TestSavedByTable.cs" />
+    <Compile Include="HWPF\Model\TestSectionTable.cs" />
+    <Compile Include="HWPF\Model\TestStyleSheet.cs" />
+    <Compile Include="HWPF\Model\TestTextPieceTable.cs" />
+    <Compile Include="HWPF\SPRM\TestSprms.cs" />
+    <Compile Include="HWPF\TestFieldsTables.cs" />
+    <Compile Include="HWPF\TestHWPFPictures.cs" />
+    <Compile Include="HWPF\TestHWPFRangeParts.cs" />
+    <Compile Include="HWPF\UserModel\TestBorderCode.cs" />
+    <Compile Include="HWPF\UserModel\TestBug46610.cs" />
+    <Compile Include="HWPF\UserModel\TestBugs.cs" />
+    <Compile Include="HWPF\UserModel\TestHeaderStories.cs" />
+    <Compile Include="HWPF\UserModel\TestHWPFOldDocument.cs" />
+    <Compile Include="HWPF\UserModel\TestLists.cs" />
+    <Compile Include="HWPF\UserModel\TestPictures.cs" />
+    <Compile Include="HWPF\UserModel\TestProblems.cs" />
+    <Compile Include="HWPF\UserModel\TestRange.cs" />
+    <Compile Include="HWPF\UserModel\TestRangeDelete.cs" />
+    <Compile Include="HWPF\UserModel\TestRangeInsertion.cs" />
+    <Compile Include="HWPF\UserModel\TestRangeProperties.cs" />
+    <Compile Include="HWPF\UserModel\TestRangeReplacement.cs" />
+    <Compile Include="HWPF\UserModel\TestRangeSymbols.cs" />
+    <Compile Include="HWPF\UserModel\TestShapes.cs" />
+    <Compile Include="HWPF\UserModel\TestTableRow.cs" />
+    <Compile Include="POIDataSamples.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="bin\" />
+    <Folder Include="HSLF\Util\" />
+    <Folder Include="HSSF\Converter\" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.0">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.4.5">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 4.5</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\scratchpad\HSLF\HSLF.csproj">
+      <Project>{eb09bcca-0b45-4984-b4e6-bad8c0a9f8a9}</Project>
+      <Name>HSLF</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\scratchpad\HWPF\HWPF.csproj">
+      <Project>{f040162e-f6f3-4b09-809b-3095a07a6687}</Project>
+      <Name>HWPF</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,34 @@
+This is some text on the first page
+It’s in times new roman, font size 10, all normal
+
+We’ve added some more text in here, to push all the offsets about a bit.
+
+
+
+This is in bold and italic
+It’s Arial, 20 point font
+It’s in the second textbox on the first page
+
+Ditto with more text in here.
+
+
+This is the second page
+
+It is also times new roman, 10 point
+
+
+Table on page 2    Top right
+P2 table left      P2 table right
+Bottom Left        Bottom Right
+
+
+This text is on page two
+This is a link to Apache POI
+More normal text
+Link to a file
+
+
+More text, more hyperlinks
+email link
+Final hyperlink
+Within doc to page 1
