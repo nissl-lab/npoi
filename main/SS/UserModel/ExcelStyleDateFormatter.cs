@@ -129,6 +129,16 @@ namespace NPOI.SS.UserModel
 
         public StringBuilder Format(DateTime date, StringBuilder paramStringBuilder, CultureInfo culture)
         {
+            // If the pattern doesn't include milliseconds, round to the nearest second (Excel behavior)
+            bool hasMilliseconds = Pattern.Contains('f') ||
+                                   Pattern.Contains('F') ||
+                                   Pattern.Contains(L_BRACKET_SYMBOL) ||
+                                   Pattern.Contains(LL_BRACKET_SYMBOL);
+            if (!hasMilliseconds && date.Millisecond >= 500)
+            {
+                date = date.AddMilliseconds(1000 - date.Millisecond);
+            }
+
             // Do the normal format
             string s = string.Empty;
             if (Regex.IsMatch(Pattern, "[yYmMdDhHsS\\-/,. :\"\\\\]+0?[ampAMP/]*"))

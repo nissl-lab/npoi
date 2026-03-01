@@ -135,5 +135,38 @@ namespace TestCases.SS.UserModel
                     new SimpleDateFormat("yyyy-MM-dd", ROOT).Parse("2016-03-26"), ROOT);
             ClassicAssert.AreEqual("2016|M|", dateStr);
         }
+
+        /// <summary>
+        /// Tests that when no milliseconds are present in the format pattern,
+        /// seconds are rounded to nearest (Excel behavior).
+        /// Value 44736.1070318287 represents 24.06.2022 02:34:07.550 in Excel.
+        /// </summary>
+        [Test]
+        public void TestSecondsRoundingWithoutMilliseconds()
+        {
+            // 24.06.2022 02:34:07.550 - 550ms should round up the second when ms not in pattern
+            DateTime date = new DateTime(2022, 6, 24, 2, 34, 7, 550);
+            double excelDate = 44736.1070318287;
+
+            ExcelStyleDateFormatter fmtNoMs = new ExcelStyleDateFormatter("dd.MM.yyyy HH:mm:ss");
+            fmtNoMs.SetDateToBeFormatted(excelDate);
+            String resultNoMs = fmtNoMs.Format(date, new StringBuilder(), ROOT).ToString();
+            ClassicAssert.AreEqual("24.06.2022 02:34:08", resultNoMs);
+
+            ExcelStyleDateFormatter fmtWith1Ms = new ExcelStyleDateFormatter("dd.MM.yyyy HH:mm:ss.0");
+            fmtWith1Ms.SetDateToBeFormatted(excelDate);
+            String resultWith1Ms = fmtWith1Ms.Format(date, new StringBuilder(), ROOT).ToString();
+            ClassicAssert.AreEqual("24.06.2022 02:34:07.5", resultWith1Ms);
+
+            ExcelStyleDateFormatter fmtWith2Ms = new ExcelStyleDateFormatter("dd.MM.yyyy HH:mm:ss.00");
+            fmtWith2Ms.SetDateToBeFormatted(excelDate);
+            String resultWith2Ms = fmtWith2Ms.Format(date, new StringBuilder(), ROOT).ToString();
+            ClassicAssert.AreEqual("24.06.2022 02:34:07.55", resultWith2Ms);
+
+            ExcelStyleDateFormatter fmtWith3Ms = new ExcelStyleDateFormatter("dd.MM.yyyy HH:mm:ss.000");
+            fmtWith3Ms.SetDateToBeFormatted(excelDate);
+            String resultWith3Ms = fmtWith3Ms.Format(date, new StringBuilder(), ROOT).ToString();
+            ClassicAssert.AreEqual("24.06.2022 02:34:07.550", resultWith3Ms);
+        }
     }
 }
