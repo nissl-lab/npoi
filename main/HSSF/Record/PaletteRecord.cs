@@ -37,7 +37,7 @@ namespace NPOI.HSSF.Record
     {
         public const short sid = 0x92;
         /** The standard size of an XLS palette */
-        public const byte STANDARD_PALETTE_SIZE = (byte)56;
+        public const byte STANDARD_PALETTE_SIZE = (byte)64;
         /** The byte index of the first color */
         public const short FIRST_COLOR_INDEX = (short)0x8;
 
