@@ -257,15 +257,10 @@ namespace TestCases.HSSF.UserModel
         [Test]
         public void TestAddColor()
         {
-            try
-            {
-                HSSFColor hssfColor = hssfPalette.AddColor((byte)10, (byte)10, (byte)10);
-                Assert.Fail();
-            }
-            catch (Exception)
-            {
-                // Failing because by default there are no colours left in the palette.
-            }
+            // With STANDARD_PALETTE_SIZE = 64 and only 56 default colors,
+            // there are 8 free slots available to add custom colors.
+            HSSFColor hssfColor = hssfPalette.AddColor((byte)10, (byte)10, (byte)10);
+            ClassicAssert.IsNotNull(hssfColor);
         }
 
         private interface ColorComparator
@@ -289,7 +284,7 @@ namespace TestCases.HSSF.UserModel
                     (byte)color.B);
             hssfColor = palette.GetColor((short)(PaletteRecord.STANDARD_PALETTE_SIZE - 1));
             ClassicAssert.IsNotNull(hssfColor);
-            ClassicAssert.AreEqual(55, hssfColor.Indexed);
+            ClassicAssert.AreEqual(PaletteRecord.STANDARD_PALETTE_SIZE - 1, hssfColor.Indexed);
             CollectionAssert.AreEqual(new short[] { 0, 107, 107 }, hssfColor.GetTriplet());
 
             wb.Close();
