@@ -168,6 +168,30 @@ namespace TestCases.SS.UserModel
         }
 
         /**
+         * When shifting rows up, PhysicalNumberOfRows should decrease to match LastRowNum.
+         * Verifies that vacated rows are properly removed from the sheet.
+         */
+        [Test]
+        public void TestShiftRowsUpPhysicalRowCount()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet s = wb.CreateSheet();
+            for (int i = 0; i < 5; i++)
+            {
+                s.CreateRow(i).CreateCell(0).SetCellValue(i);
+            }
+            ClassicAssert.AreEqual(4, s.LastRowNum);
+            ClassicAssert.AreEqual(5, s.PhysicalNumberOfRows);
+
+            // Shift the last two rows up by 1 (rows 3 and 4 -> rows 2 and 3)
+            s.ShiftRows(3, 4, -1);
+
+            ClassicAssert.AreEqual(3, s.LastRowNum);
+            ClassicAssert.AreEqual(4, s.PhysicalNumberOfRows);
+            wb.Close();
+        }
+
+        /**
          * When Shifting rows, the page breaks should go with it
          */
         [Test]
