@@ -894,12 +894,15 @@ namespace NPOI.SS.UserModel
 
         private FormatBase CreateNumberFormat(string formatStr, double cellValue)
         {
+            // Check for alternate grouping BEFORE cleaning (backslash stripping) so that
+            // escaped literal characters like \- are not misidentified as grouping chars.
+            // eg for a format like #'##0 which wants 12'345 not 12,345
+            Match agm = alternateGrouping.Match(formatStr);
+
             string format = cleanFormatForNumber(formatStr);
             NumberFormatInfo symbols = decimalSymbols;
 
             // Do we need to change the grouping character?
-            // eg for a format like #'##0 which wants 12'345 not 12,345
-            Match agm = alternateGrouping.Match(format);
             if (agm.Success)
             {
                 char grouping = agm.Groups[2].Value[0];
