@@ -389,6 +389,28 @@ namespace TestCases.SS.UserModel
         }
 
         [Test]
+        public void TestMultiplePrintArea()
+        {
+            IWorkbook workbook = _testDataProvider.CreateWorkbook();
+            ISheet sheet1 = workbook.CreateSheet("Sheet1");
+            String sheetName1 = sheet1.SheetName;
+
+            // Set multiple print areas with comma-delimited references
+            String reference = "$A$1:$C$5,$E$6:$F$9";
+            workbook.SetPrintArea(0, reference);
+            String retrievedPrintArea = workbook.GetPrintArea(0);
+            ClassicAssert.IsNotNull(retrievedPrintArea, "Multiple print area should not be null");
+            // Both areas should be present with the sheet name prefix
+            ClassicAssert.IsTrue(retrievedPrintArea.Contains("$A$1:$C$5"), "First area should be present");
+            ClassicAssert.IsTrue(retrievedPrintArea.Contains("$E$6:$F$9"), "Second area should be present");
+            ClassicAssert.IsTrue(retrievedPrintArea.Contains(sheetName1), "Sheet name should be present");
+
+            workbook.RemovePrintArea(0);
+            ClassicAssert.IsNull(workbook.GetPrintArea(0));
+            workbook.Close();
+        }
+
+        [Test]
         public void TestGetSetActiveSheet()
         {
             IWorkbook workbook = _testDataProvider.CreateWorkbook();
