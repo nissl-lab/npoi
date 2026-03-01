@@ -203,6 +203,22 @@ namespace TestCases.HSSF.UserModel
             ClassicAssert.AreEqual(reference, workbook.GetPrintArea(0));
         }
 
+        /**
+         * Test that a file generated with multiple print areas (comma-delimited) can be read back
+         * and correctly reports both areas.  The demo file was produced by the fixed NPOI code.
+         */
+        [Test]
+        public void TestMultiplePrintAreaDemoFileRead()
+        {
+            HSSFWorkbook workbook = HSSFTestDataSamples.OpenSampleWorkbook("multiple_print_area_demo.xls");
+
+            String area = workbook.GetPrintArea(0);
+            ClassicAssert.IsNotNull(area, "Print area should not be null");
+            ClassicAssert.IsTrue(area.Contains("$A$1:$C$5"), "First print area ($A$1:$C$5) should be present");
+            ClassicAssert.IsTrue(area.Contains("$E$6:$F$9"), "Second print area ($E$6:$F$9) should be present");
+            ClassicAssert.IsTrue(area.Contains("Sheet1"), "Sheet name should be present");
+        }
+
         [Test]
         [Obsolete]
         public void TestDeletedReference()
