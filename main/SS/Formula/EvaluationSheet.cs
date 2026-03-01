@@ -39,5 +39,11 @@ namespace NPOI.SS.Formula
          * @see EvaluationWorkbook#clearAllCachedResultValues()
          */
         void ClearAllCachedResultValues();
+
+        /**
+         * @return last row index referenced on this sheet, for evaluation optimization
+         * @since POI 4.0.0
+         */
+        public int LastRowNum { get; }
     }
 }

@@ -31,7 +31,7 @@ namespace NPOI.XWPF.UserModel
 
         protected StringBuilder text = new StringBuilder();
         private CT_Tbl ctTbl;
-        protected internal List<XWPFTableRow> tableRows;
+        protected internal List<XWPFTableRow> tableRows = new List<XWPFTableRow>();
         //protected List<String> styleIDs;
 
         // Create a map from this XWPF-level enum to the STBorder.Enum values
@@ -105,7 +105,6 @@ namespace NPOI.XWPF.UserModel
             this.part = part;
             this.ctTbl = table;
 
-            tableRows = new List<XWPFTableRow>();
             // is an empty table: I add one row and one column as default
             if (table.SizeOfTrArray() == 0)
                 CreateEmptyTable(table);

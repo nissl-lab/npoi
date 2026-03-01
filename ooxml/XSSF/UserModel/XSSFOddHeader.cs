@@ -54,7 +54,14 @@ namespace NPOI.XSSF.UserModel
             }
             set
             {
-                GetHeaderFooter().oddHeader = value;
+                if(value == null)
+                {
+                    GetHeaderFooter().UnsetOddHeader();
+                }
+                else
+                {
+                    GetHeaderFooter().oddHeader = value;
+                }
             }
         }
     }

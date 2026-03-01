@@ -58,11 +58,15 @@ namespace NPOI.XSSF.UserModel
             {
                 if (value == null)
                 {
-                    GetHeaderFooter().firstFooter = null;
+                    GetHeaderFooter().UnsetFirstFooter();
+                    if(!GetHeaderFooter().IsSetFirstHeader())
+                    {
+                        GetHeaderFooter().UnsetDifferentFirst();
+                    }
                 }
                 else
                 {
-                    GetHeaderFooter().firstFooter = (value);
+                    GetHeaderFooter().firstFooter = value;
                 }
             }
         }

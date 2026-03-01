@@ -6626,11 +6626,20 @@ lblforbreak:
             }
         }
 
+        public XSSFHeaderFooterProperties HeaderFooterProperties
+        {
+            get
+            {
+                return new XSSFHeaderFooterProperties(GetSheetTypeHeaderFooter());
+            }
+        }
+
         public NCellRange Cells
         {
             get {
                 return new NCellRange(this, 0, 0, this.Workbook.SpreadsheetVersion.MaxRows, this.Workbook.SpreadsheetVersion.MaxColumns);
             }
+            
         }
 
         public NRowRange Rows

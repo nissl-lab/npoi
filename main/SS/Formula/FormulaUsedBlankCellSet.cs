@@ -62,15 +62,19 @@ namespace NPOI.SS.Formula
             private int _firstColumnIndex;
             private int _lastColumnIndex;
             private BlankCellRectangleGroup _currentRectangleGroup;
+            private int _lastDefinedRow;
 
-            public BlankCellSheetGroup()
+            public BlankCellSheetGroup(int lastDefinedRow)
             {
                 _rectangleGroups = [];
                 _currentRowIndex = -1;
+                _lastDefinedRow = lastDefinedRow;
             }
 
             public void AddCell(int rowIndex, int columnIndex)
             {
+                if(rowIndex > _lastDefinedRow)
+                    return;
                 if (_currentRowIndex == -1)
                 {
                     _currentRowIndex = rowIndex;
@@ -107,6 +111,8 @@ namespace NPOI.SS.Formula
 
             public bool ContainsCell(int rowIndex, int columnIndex)
             {
+                if(rowIndex > _lastDefinedRow)
+                    return true;
                 for (int i = _rectangleGroups.Count - 1; i >= 0; i--)
                 {
                     BlankCellRectangleGroup bcrg = (BlankCellRectangleGroup)_rectangleGroups[i];
@@ -203,20 +209,20 @@ namespace NPOI.SS.Formula
             _sheetGroupsByBookSheet = new Hashtable();
         }
 
-        public void AddCell(int bookIndex, int sheetIndex, int rowIndex, int columnIndex)
+        public void AddCell(IEvaluationWorkbook evalWorkbook, int bookIndex, int sheetIndex, int rowIndex, int columnIndex)
         {
-            BlankCellSheetGroup sbcg = GetSheetGroup(bookIndex, sheetIndex);
+            BlankCellSheetGroup sbcg = GetSheetGroup(evalWorkbook, bookIndex, sheetIndex);
             sbcg.AddCell(rowIndex, columnIndex);
         }
 
-        private BlankCellSheetGroup GetSheetGroup(int bookIndex, int sheetIndex)
+        private BlankCellSheetGroup GetSheetGroup(IEvaluationWorkbook evalWorkbook, int bookIndex, int sheetIndex)
         {
             BookSheetKey key = new BookSheetKey(bookIndex, sheetIndex);
 
             BlankCellSheetGroup result = (BlankCellSheetGroup)_sheetGroupsByBookSheet[key];
             if (result == null)
             {
-                result = new BlankCellSheetGroup();
+                result = new BlankCellSheetGroup(evalWorkbook.GetSheet(sheetIndex).LastRowNum);
                 _sheetGroupsByBookSheet[key]= result;
             }
             return result;
