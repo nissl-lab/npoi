@@ -26,6 +26,7 @@ namespace NPOI.SS.UserModel
     using NPOI.SS.Util;
     using System.Collections;
     using NPOI.Util;
+    using System.Data;
 
     /// <summary>
     /// Indicate the position of the margin. One of left, right, top and bottom.
@@ -933,5 +934,13 @@ namespace NPOI.SS.UserModel
 
         NCellRange Cells { get; }
         NRowRange Rows { get; }
+
+        /// <summary>
+        ///  Convert a sheet to a DataTable. Note that merged cells are not supported
+        /// </summary>
+        /// <param name="firstRowAsHeader">whether first row is column header</param>
+        /// <param name="showCalculatedValue">whether to show evaluated value of a formula in the cell</param>
+        /// <returns></returns>
+        DataTable ToDataTable(bool firstRowAsHeader = false, bool showCalculatedValue = false);
     }
 }

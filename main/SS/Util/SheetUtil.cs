@@ -17,14 +17,15 @@
 
 namespace NPOI.SS.Util
 {
-    using System;
-
+    using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
+    using SixLabors.Fonts;
+    using System;
     using System.Collections.Concurrent;
     using System.Collections.Generic;
-    using SixLabors.Fonts;
-    using System.Linq;
+    using System.Data;
     using System.Globalization;
+    using System.Linq;
 
     /**
      * Helper methods for when working with Usermodel sheets
@@ -913,6 +914,108 @@ namespace NPOI.SS.Util
             //  live within any merged regions
             return null;
         }
+        /// <summary>
+        /// Convert a sheet to a DataTable. Note that merged cells are not supported
+        /// </summary>
+        /// <param name="sheet">original sheet</param>
+        /// <param name="firstRowAsHeader">whether first row is column header</param>
+        /// <param name="showCalculatedFormulaValue">whether to show evaluated value of a formula in the cell</param>
+        /// <returns></returns>
+        public static DataTable ToDataTable(ISheet sheet, bool firstRowAsHeader, bool showCalculatedFormulaValue)
+        {
+            DataTable dt = new DataTable(sheet.SheetName);
 
+            HSSFDataFormatter formatter = new HSSFDataFormatter();
+            var formulaEvaluator=sheet.Workbook.GetCreationHelper().CreateFormulaEvaluator();
+            for(int i = 0; i <= sheet.LastRowNum; i++)
+            {
+                var row=sheet.GetRow(i);
+                if(row == null)
+                {
+                    continue;
+                }
+                if(i == 0) //don't support merged cell so far
+                {
+                    if(firstRowAsHeader)
+                    {
+                        for(int j = 0; j < row.LastCellNum; j++)
+                        {
+                            var c = row.GetCell(j);
+                            dt.Columns.Add(c == null ? "" : formatter.FormatCellValue(c));
+                        }
+                        continue;
+                    }
+                }
+
+                DataRow dr = null!;
+                for(int j = 0; j < row.LastCellNum; j++)
+                {
+                    if(j == 0)
+                    {
+                        for(int k = dt.Columns.Count; k < row.LastCellNum; k++)
+                        {
+                            dt.Columns.Add("Column " + k);
+                        }
+                        dr = dt.NewRow();
+                    }
+                    var c = row.GetCell(j);
+                    if(c == null)
+                    {
+                        dr[j] = "";
+                        continue;
+                    }
+                    switch(c.CellType)
+                    {
+                        case CellType.Numeric:
+                            dr[j] =  c.NumericCellValue;
+                            break;
+                        case CellType.String:
+                            dr[j] = formatter.FormatCellValue(c);
+                            break;
+                        case CellType.Blank:
+                            dr[j] = "";
+                            break;
+                        case CellType.Boolean:
+                            dr[j] = c.BooleanCellValue;
+                            break;
+                        case CellType.Formula:
+                            if(showCalculatedFormulaValue)
+                            {
+                                var cellValue = formulaEvaluator.Evaluate(c);
+                                switch(cellValue.CellType)
+                                {
+                                    case CellType.Numeric:
+                                        dr[j] = cellValue.NumberValue;
+                                        break;
+                                    case CellType.String:
+                                        dr[j] = cellValue.StringValue;
+                                        break;
+                                    case CellType.Boolean:
+                                        dr[j] = cellValue.BooleanValue;
+                                        break;
+                                    case CellType.Error:
+                                        if(c.ErrorCellValue== FormulaError.NULL.Code)
+                                            dr[j] = "#NULL!";
+                                        else if(c.ErrorCellValue == FormulaError.DIV0.Code)
+                                            dr[j] = "#DIV/0!";
+                                        else if(c.ErrorCellValue == FormulaError.NUM.Code)
+                                            dr[j] = "#NUM!";
+                                        else if(c.ErrorCellValue == FormulaError.NAME.Code)
+                                            dr[j] = "#NAME!";
+                                        break;
+                                    case CellType.Blank:
+                                        dr[j] = "";
+                                        break;
+                                }
+                            }
+                            else
+                                dr[j] = c.CellFormula;
+                            break;
+                    }
+                }
+                dt.Rows.Add(dr);
+            }
+            return dt;
+        }
     }
 }
