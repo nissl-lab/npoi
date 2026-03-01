@@ -35,9 +35,9 @@ using NPOI.OpenXmlFormats;
 using System.Collections;
 using NPOI.OpenXml4Net.Exceptions;
 using NPOI.SS;
-using System.Globalization;
 using System.Linq;
 using NPOI.POIFS.FileSystem;
+using System.Data;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -2717,6 +2717,11 @@ namespace NPOI.XSSF.UserModel
         public void Dispose()
         {
             this.Close();
+        }
+
+        public DataSet ToDataSet(bool firstRowAsHeader = false, bool showCalculatedValue = false)
+        {
+            return WorkbookUtil.ToDataSet(this, firstRowAsHeader, showCalculatedValue);
         }
     }
 }
