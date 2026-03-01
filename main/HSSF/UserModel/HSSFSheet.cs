@@ -37,6 +37,7 @@ namespace NPOI.HSSF.UserModel
     using NPOI.HSSF.UserModel.helpers;
 
     using SixLabors.Fonts;
+    using System.Data;
 
     /// <summary>
     /// High level representation of a worksheet.
@@ -3373,6 +3374,11 @@ namespace NPOI.HSSF.UserModel
         IEnumerator<IRow> IEnumerable<IRow>.GetEnumerator()
         {
             return rows.Values.GetEnumerator();
+        }
+
+        public DataTable ToDataTable(bool firstRowAsHeader = false, bool showCalculatedValue = false)
+        {
+            return SheetUtil.ToDataTable(this, firstRowAsHeader, showCalculatedValue);
         }
 
         public NCellRange Cells
