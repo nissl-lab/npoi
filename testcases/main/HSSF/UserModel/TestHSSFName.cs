@@ -204,6 +204,20 @@ namespace TestCases.HSSF.UserModel
         }
 
         /**
+         * Test that a file generated with a single print area can be read back
+         * and correctly reports that area.  The demo file was produced by the fixed NPOI code.
+         */
+        [Test]
+        public void TestSinglePrintAreaDemoFileRead()
+        {
+            HSSFWorkbook workbook = HSSFTestDataSamples.OpenSampleWorkbook("single_print_area_demo.xls");
+
+            String area = workbook.GetPrintArea(0);
+            ClassicAssert.IsNotNull(area, "Print area should not be null");
+            ClassicAssert.AreEqual("Sheet1!$A$1:$D$8", area);
+        }
+
+        /**
          * Test that a file generated with multiple print areas (comma-delimited) can be read back
          * and correctly reports both areas.  The demo file was produced by the fixed NPOI code.
          */
