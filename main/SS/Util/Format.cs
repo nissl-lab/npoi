@@ -58,7 +58,7 @@ namespace NPOI.SS.Util
         /** Format a number as an SSN */
         public override string Format(object obj, CultureInfo culture)
         {
-            var result = ((double)obj).ToString(df, culture);
+            var result = Convert.ToDouble(obj, CultureInfo.InvariantCulture).ToString(df, culture);
             var sb = new StringBuilder();
             sb.Append(result.Substring(0, 3)).Append('-');
             sb.Append(result.Substring(3, 2)).Append('-');
@@ -99,7 +99,7 @@ namespace NPOI.SS.Util
         /** Format a number as Zip + 4 */
         public override string Format(object obj, CultureInfo culture)
         {
-            var result = ((double)obj).ToString(df, culture);
+            var result = Convert.ToDouble(obj, CultureInfo.InvariantCulture).ToString(df, culture);
             return result.Substring(0, 5)+'-'+result.Substring(5, 4);
         }
 
@@ -137,7 +137,7 @@ namespace NPOI.SS.Util
         /** Format a number as a phone number */
         public override string Format(object obj, CultureInfo culture)
         {
-            var result = ((double)obj).ToString(df, culture);
+            var result = Convert.ToDouble(obj, CultureInfo.InvariantCulture).ToString(df, culture);
             var sb = new StringBuilder();
             String seg1, seg2, seg3;
             var len = result.Length;
