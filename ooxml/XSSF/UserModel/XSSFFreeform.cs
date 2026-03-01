@@ -133,7 +133,7 @@ namespace NPOI.XSSF.UserModel
             //-----
             ctShape.spPr.custGeom.avLst = new CT_GeomGuideList();
             //-----
-            ctShape.spPr.custGeom.ahLst = new List<object>();
+            ctShape.spPr.custGeom.ahLst = new CT_AdjustHandleList();
             //-----
             ctShape.spPr.custGeom.rect = new CT_GeomRect();
             ctShape.spPr.custGeom.rect.l = "l";

@@ -15,6 +15,7 @@
    limitations under the License.
 ==================================================================== */
 
+using NPOI.OpenXmlFormats.Dml;
 using NPOI.OpenXmlFormats.Dml.Chart;
 using NPOI.SS.UserModel.Charts;
 using System;
@@ -147,6 +148,6 @@ namespace NPOI.XSSF.UserModel.Charts
         public override bool HasNumberFormat()
         {
             return ctDateAx.IsSetNumFmt();
-        }
     }
+}
 }

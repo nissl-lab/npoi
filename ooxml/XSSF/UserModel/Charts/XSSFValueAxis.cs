@@ -18,6 +18,7 @@
 using NPOI.SS.UserModel.Charts;
 using NPOI.OpenXmlFormats.Dml.Chart;
 using System;
+using NPOI.OpenXmlFormats.Dml;
 namespace NPOI.XSSF.UserModel.Charts
 {
 
