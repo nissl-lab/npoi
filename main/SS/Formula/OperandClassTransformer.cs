@@ -114,11 +114,21 @@ namespace NPOI.SS.Formula
             // Note - the tAttrSum token (node.getToken()) is a base
             // token so does not need to have its operand class set
         }
-            if (token is ValueOperatorPtg || token is ControlPtg
-                || token is MemFuncPtg
+            if (token is MemFuncPtg
                 || token is MemAreaPtg
                 || token is UnionPtg
                 || token is IntersectionPtg)
+            {
+                // Reference-type operators: children preserve the desired operand class.
+                // This ensures that Area3DPtg tokens inside union/intersection expressions
+                // (e.g. multiple print areas) keep CLASS_REF when used in a named range context.
+                for (int i = 0; i < children.Length; i++)
+                {
+                    TransformNode(children[i], desiredOperandClass, callerForceArrayFlag);
+                }
+                return;
+            }
+            if (token is ValueOperatorPtg || token is ControlPtg)
             {
                 // Value Operator Ptgs and Control are base Tokens, so Token will be unchanged
                 // but any child nodes are processed according To desiredOperandClass and callerForceArrayFlag
