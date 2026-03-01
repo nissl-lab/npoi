@@ -34,10 +34,9 @@ namespace NPOI.XSSF.Extractor
     using NPOI.XSSF.Model;
     using NPOI.XSSF.UserModel;
     using System.Globalization;
-    using NSAX;
-    using NSAX.AElfred;
     using static NPOI.XSSF.EventUserModel.XSSFSheetXMLHandler;
     using NPOI.OpenXml4Net;
+    using System.Xml;
 
     /// <summary>
     /// Implementation of a text extractor from OOXML Excel
@@ -203,10 +202,7 @@ namespace NPOI.XSSF.Extractor
                 CommentsTable comments,
                 ReadOnlySharedStringsTable strings,
                 Stream sheetInputStream)
-
         {
-
-
             DataFormatter formatter;
             if(locale == null)
             {
@@ -217,18 +213,39 @@ namespace NPOI.XSSF.Extractor
                 formatter = new DataFormatter(locale);
             }
 
-            InputSource sheetSource = new InputSource(sheetInputStream);
             try
             {
-                SAXDriver sheetParser = new SAXDriver();
-                IContentHandler handler = new XSSFSheetXMLHandler(
-                styles, comments, strings, sheetContentsExtractor, formatter, formulasNotResults);
-                sheetParser.ContentHandler = (handler);
-                sheetParser.Parse(sheetSource);
+                var handler = new XSSFSheetXMLHandler(
+                    styles, comments, strings, sheetContentsExtractor, formatter, formulasNotResults);
+                XmlReaderSettings settings = new XmlReaderSettings();
+                settings.DtdProcessing = DtdProcessing.Ignore;
+                var reader = XmlReader.Create(sheetInputStream, settings);
+                while(reader.Read())
+                {
+                    if(reader.NodeType == XmlNodeType.Element)
+                    {
+                        handler.StartElement(reader);
+                        if(reader.IsEmptyElement) //empty tag, perhaps some special handling is needed
+                        {
+                            handler.EndElement(reader);
+                        }
+                    }
+                    else if(reader.NodeType == XmlNodeType.EndElement)
+                    {
+                        handler.EndElement(reader);
+                    }
+                    else if(reader.NodeType == XmlNodeType.Text ||
+                        reader.NodeType == XmlNodeType.SignificantWhitespace ||
+                        reader.NodeType == XmlNodeType.Whitespace)
+                    {
+                        var value = reader.Value;
+                        handler.TextNode(reader);
+                    }
+                }
             }
-            catch(SAXException e)
+            catch(XmlException e)
             {
-                throw new RuntimeException("SAX parser appears to be broken - " + e.Message);
+                throw new RuntimeException("XML parser appears to be broken - " + e.Message);
             }
         }
 
@@ -281,11 +298,6 @@ namespace NPOI.XSSF.Extractor
                 catch(IOException)
                 {
                     //LOGGER.log(POILogger.WARN, e);
-                    return null;
-                }
-                catch(SAXException)
-                {
-                    //LOGGER.log(POILogger.WARN, se);
                     return null;
                 }
                 catch(OpenXml4NetException)

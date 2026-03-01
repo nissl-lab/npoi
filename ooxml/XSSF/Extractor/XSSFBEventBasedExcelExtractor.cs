@@ -17,7 +17,6 @@
 
 using NPOI.OpenXml4Net;
 using NPOI.SS.Extractor;
-using NSAX;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -26,14 +25,12 @@ using System.Text;
 
 namespace NPOI.XSSF.Extractor
 {
-
-    using NPOI;
     using NPOI.OpenXml4Net.OPC;
     using NPOI.SS.UserModel;
-    using NPOI.Util;
     using NPOI.XSSF.Binary;
     using NPOI.XSSF.EventUserModel;
     using NPOI.XSSF.UserModel;
+    using System.Xml;
 
     /// <summary>
     /// Implementation of a text extractor or xlsb Excel
@@ -177,11 +174,11 @@ namespace NPOI.XSSF.Extractor
                 //LOGGER.log(POILogger.WARN, e);
                 return null;
             }
-            catch(SAXException)
-            {
-                //LOGGER.log(POILogger.WARN, se);
-                return null;
-            }
+            //catch(XmlException)
+            //{
+            //    //LOGGER.log(POILogger.WARN, se);
+            //    return null;
+            //}
             catch(OpenXml4NetException)
             {
                 //LOGGER.log(POILogger.WARN, o4je);

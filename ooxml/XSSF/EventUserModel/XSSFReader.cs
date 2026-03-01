@@ -19,19 +19,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 namespace NPOI.XSSF.EventUserModel
 {
-
     using NPOI;
     using NPOI.OpenXml4Net.Exceptions;
     using NPOI.OpenXml4Net.OPC;
     using NPOI.Util;
     using NPOI.XSSF.Model;
     using NPOI.XSSF.UserModel;
-    using NSAX;
-    using NSAX.Helpers;
     using System.Xml;
 
     /// <summary>
@@ -247,29 +243,27 @@ namespace NPOI.XSSF.EventUserModel
             public virtual List<XSSFSheetRef> CreateSheetIteratorFromWB(PackagePart wb)
             {
                 XMLSheetRefReader xmlSheetRefReader = new XMLSheetRefReader();
-                NSAX.AElfred.SAXDriver xmlReader;
                 try
                 {
-                    xmlReader = new NSAX.AElfred.SAXDriver();// SAXHelper.newXMLReader();
+                    XmlReaderSettings settings = new XmlReaderSettings();
+                    settings.DtdProcessing = DtdProcessing.Ignore;
+                    var reader = XmlReader.Create(wb.GetInputStream(), settings);
+                    while(reader.Read())
+                    {
+                        if(reader.NodeType == XmlNodeType.Element)
+                        {
+                            xmlSheetRefReader.StartElement(reader);
+                        }
+                    }
                 }
-                //catch (ParserConfigurationException e)
-                //{
-                //    throw new POIXMLException(e);
-                //}
-                catch (SAXException e)
+                catch(XmlException e)
                 {
                     throw new POIXMLException(e);
                 }
-                xmlReader.ContentHandler = (xmlSheetRefReader);
-                try
-                {
-                    xmlReader.Parse(new InputSource(wb.GetInputStream()));
-                }
-                catch (SAXException e)
+                catch(InvalidOperationException e)
                 {
                     throw new POIXMLException(e);
                 }
-
                 List<XSSFSheetRef> validSheets = new List<XSSFSheetRef>();
                 foreach (XSSFSheetRef xssfSheetRef in xmlSheetRefReader.GetSheetRefs())
                 {
@@ -456,39 +450,28 @@ namespace NPOI.XSSF.EventUserModel
         }
 
         //scrapes sheet reference info and order from workbook.xml
-        private class XMLSheetRefReader : DefaultHandler
+        private class XMLSheetRefReader
         {
             private static String SHEET = "sheet";
             private static String ID = "id";
             private static String NAME = "name";
-
+            
             private List<XSSFSheetRef> sheetRefs = new List<XSSFSheetRef>();
 
             // read <sheet name="Sheet6" sheetId="4" r:id="rId6"/>
             // and add XSSFSheetRef(id="rId6", name="Sheet6") to sheetRefs
-            public override void StartElement(String uri, String localName, String qName, IAttributes attrs)
+            public void StartElement(XmlReader reader)
             {
-
-                if (localName.Equals(SHEET, StringComparison.OrdinalIgnoreCase))
+                string uri = reader.NamespaceURI;
+                string localName = reader.LocalName;
+                if(localName.Equals(SHEET, StringComparison.OrdinalIgnoreCase))
                 {
-                    String name = null;
-                    String id = null;
-                    for (int i = 0; i < attrs.Length; i++)
+                    String name = reader.GetAttribute(NAME);
+                    String id = reader.GetAttribute(ID, PackageNamespaces.SCHEMA_RELATIONSHIPS);
+
+                    if(name != null && id != null)
                     {
-                        String attrName = attrs.GetLocalName(i);
-                        if (attrName.Equals(NAME, StringComparison.OrdinalIgnoreCase))
-                        {
-                            name = attrs.GetValue(i);
-                        }
-                        else if (attrName.Equals(ID, StringComparison.OrdinalIgnoreCase))
-                        {
-                            id = attrs.GetValue(i);
-                        }
-                        if (name != null && id != null)
-                        {
-                            sheetRefs.Add(new XSSFSheetRef(id, name));
-                            break;
-                        }
+                        sheetRefs.Add(new XSSFSheetRef(id, name));
                     }
                 }
             }
