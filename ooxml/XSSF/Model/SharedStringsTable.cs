@@ -24,9 +24,6 @@ namespace NPOI.XSSF.Model
     using System.IO;
     using NPOI.OpenXml4Net.OPC;
     using System.Xml;
-    using System.Security;
-    using System.Text.RegularExpressions;
-    using System.Text;
     using NPOI.Util;
     using NPOI.XSSF.UserModel;
     using NPOI.SS.UserModel;
@@ -134,26 +131,23 @@ namespace NPOI.XSSF.Model
             return st.XmlText;
         }
 
-        /**
-         * Return a string item by index
-         *
-         * @param idx index of item to return.
-         * @return the item at the specified position in this Shared String table.
-         */
-        [Obsolete("use <c>addSharedStringItem(RichTextString string)</c> instead")]
-        [Removal( Version = "4.2")]
+        /// <summary>
+        /// Return a string item by index
+        /// </summary>
+        /// <param name="idx">index of item to return.</param>
+        /// <returns>the item at the specified position in this Shared String table.</returns>
+        [Obsolete("use GetItemAt(int idx) instead. Removal at POI 4.2")]
         public CT_Rst GetEntryAt(int idx)
         {
             return strings[idx];
         }
 
-        /**
-         * Return a string item by index
-         *
-         * @param idx index of item to return.
-         * @return the item at the specified position in this Shared String table.
-         */
-        public IRichTextString getItemAt(int idx)
+        /// <summary>
+        /// Return a string item by index
+        /// </summary>
+        /// <param name="idx">index of item to return.</param>
+        /// <returns>the item at the specified position in this Shared String table.</returns>
+        public IRichTextString GetItemAt(int idx)
         {
             return new XSSFRichTextString(strings[idx]);
         }

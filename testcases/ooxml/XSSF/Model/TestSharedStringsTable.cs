@@ -174,9 +174,9 @@ namespace TestCases.XSSF.Model
 
             //OK. the sst table is filled, check the contents
             ClassicAssert.AreEqual(3, sst.SharedStringItems.Count);
-            ClassicAssert.AreEqual("Hello, World!", sst.getItemAt(0).ToString());
-            ClassicAssert.AreEqual("Second string", sst.getItemAt(1).ToString());
-            ClassicAssert.AreEqual("Second string", sst.getItemAt(2).ToString());
+            ClassicAssert.AreEqual("Hello, World!", sst.GetItemAt(0).ToString());
+            ClassicAssert.AreEqual("Second string", sst.GetItemAt(1).ToString());
+            ClassicAssert.AreEqual("Second string", sst.GetItemAt(2).ToString());
         }
 
         [Test]

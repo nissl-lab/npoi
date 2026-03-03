@@ -1557,10 +1557,6 @@ namespace NPOI.XSSF.UserModel
                     //worksheet.getHyperlinks().setHyperlinkArray([]);
                     worksheet.UnsetHyperlinks();
                 }
-                /*else
-                {
-                    // nothing to do
-                }*/
             }
 
             foreach(XSSFRow row in _rows.Values)
