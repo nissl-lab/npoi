@@ -4,6 +4,7 @@ using System.Text;
 using System.IO;
 using NPOI.OpenXml4Net.OPC.Internal;
 using NPOI.OpenXml4Net.Exceptions;
+using System.Threading.Tasks;
 
 
 namespace NPOI.OpenXml4Net.OPC
@@ -748,6 +749,16 @@ namespace NPOI.OpenXml4Net.OPC
          *             If any exception occur.
          */
         public abstract bool Save(Stream zos);
+
+        /**
+         * Save the content of this part asynchronously.
+         * 
+         * @param zos
+         *            Output stream to save this part.
+         * @throws OpenXml4NetException
+         *             If any exception occur.
+         */
+        public abstract Task<bool> SaveAsync(Stream zos);
 
         /**
          * Load the content of this part.

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
 {
@@ -488,6 +489,17 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
                 elem.InnerXml = "";// clear the old value
             }
             elem.InnerText = propsPart.GetVersionProperty();
+        }
+
+        /**
+         * Marshall package core properties to an XML document asynchronously. Always return
+         * <code>true</code>.
+         */
+        public virtual Task<bool> MarshallAsync(PackagePart part, Stream out1)
+        {
+            // The Marshall method only builds the XML document, it doesn't do any I/O
+            // So we can just call it synchronously and return a completed task
+            return Task.FromResult(Marshall(part, out1));
         }
     }
 }

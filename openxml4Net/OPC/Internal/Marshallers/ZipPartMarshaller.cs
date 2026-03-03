@@ -6,6 +6,7 @@ using NPOI.OpenXml4Net.OPC;
 using System.Xml;
 using ICSharpCode.SharpZipLib.Zip;
 using NPOI.Util;
+using System.Threading.Tasks;
 
 namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
 {
@@ -168,6 +169,143 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
                 zos.PutNextEntry(ctEntry);
 
                 StreamHelper.SaveXmlInStream(xmlOutDoc, zos);
+                zos.CloseEntry();
+            }
+            catch (IOException e)
+            {
+                logger.Log(POILogger.ERROR,"Cannot create zip entry " + relPartName, e);
+                return false;
+            }
+            return true; // success
+        }
+
+        /**
+         * Save the specified part asynchronously.
+         *
+         * @throws OpenXml4NetException
+         *             Throws if an internal exception is thrown.
+         */
+        public async Task<bool> MarshallAsync(PackagePart part, Stream os)
+        {
+            if (os is not ZipOutputStream zos)
+            {
+                logger.Log(POILogger.ERROR,"Unexpected class " + os.GetType().Name);
+                throw new OpenXml4NetException("ZipOutputStream expected !");
+            }
+
+            // check if there is anything to save for some parts
+            if (part.Size == 0 && part.PartName.Name.Equals("/xl/sharedStrings.xml"))
+            {
+                return true;
+            }
+
+            string name = ZipHelper
+                    .GetZipItemNameFromOPCName(part.PartName.URI
+                            .OriginalString);
+            ZipEntry partEntry = new ZipEntry(name);
+            try
+            {
+                // Create next zip entry
+                zos.PutNextEntry(partEntry);
+
+                // Saving data in the ZIP file
+                Stream ins = part.GetInputStream();
+                byte[] buff = new byte[ZipHelper.READ_WRITE_FILE_BUFFER_SIZE];
+                while (true)
+                {
+                    int resultRead = await ins.ReadAsync(buff, 0, buff.Length);
+                    if (resultRead == 0)
+                    {
+                        // End of file reached
+                        break;
+                    }
+                    await zos.WriteAsync(buff, 0, resultRead);
+                }
+                zos.CloseEntry();
+            }
+            catch (IOException ioe)
+            {
+                logger.Log(POILogger.ERROR, "Cannot write: " + part.PartName + ": in ZIP", ioe);
+                return false;
+            }
+
+            // Saving relationship part
+            if (part.HasRelationships)
+            {
+                PackagePartName relationshipPartName = PackagingUriHelper
+                        .GetRelationshipPartName(part.PartName);
+
+                await MarshallRelationshipPartAsync(part.Relationships,
+                        relationshipPartName, zos);
+
+            }
+            return true;
+        }
+
+        /**
+         * Save relationships into the part asynchronously.
+         *
+         * @param rels
+         *            The relationships collection to marshall.
+         * @param relPartName
+         *            Part name of the relationship part to marshall.
+         * @param zos
+         *            Zip output stream in which to save the XML content of the
+         *            relationships serialization.
+         */
+        public static async Task<bool> MarshallRelationshipPartAsync(
+                PackageRelationshipCollection rels, PackagePartName relPartName,
+                ZipOutputStream zos)
+        {
+            // Building xml
+            XmlDocument xmlOutDoc = new XmlDocument();
+            System.Xml.XmlNamespaceManager xmlnsManager = new System.Xml.XmlNamespaceManager(xmlOutDoc.NameTable);
+            xmlnsManager.AddNamespace("x", PackageNamespaces.RELATIONSHIPS);
+
+            XmlNode root = xmlOutDoc.AppendChild(xmlOutDoc.CreateElement(PackageRelationship.RELATIONSHIPS_TAG_NAME, PackageNamespaces.RELATIONSHIPS));
+
+            Uri sourcePartURI = PackagingUriHelper
+                    .GetSourcePartUriFromRelationshipPartUri(relPartName.URI);
+
+            foreach (PackageRelationship rel in rels)
+            {
+                XmlElement relElem = xmlOutDoc.CreateElement(PackageRelationship.RELATIONSHIP_TAG_NAME,PackageNamespaces.RELATIONSHIPS);
+
+                relElem.SetAttribute(PackageRelationship.ID_ATTRIBUTE_NAME, rel.Id);
+
+                relElem.SetAttribute(PackageRelationship.TYPE_ATTRIBUTE_NAME, rel
+                        .RelationshipType);
+
+                String targetValue;
+                Uri uri = rel.TargetUri;
+                if (rel.TargetMode == TargetMode.External)
+                {
+                    targetValue = uri.OriginalString;
+
+                    relElem.SetAttribute(
+                            PackageRelationship.TARGET_MODE_ATTRIBUTE_NAME,
+                            "External");
+                }
+                else
+                {
+                    targetValue = PackagingUriHelper.RelativizeUri(
+                            sourcePartURI, rel.TargetUri, true).ToString();
+                }
+                relElem.SetAttribute(PackageRelationship.TARGET_ATTRIBUTE_NAME,
+                        targetValue);
+                xmlOutDoc.DocumentElement.AppendChild(relElem);
+            }
+
+            xmlOutDoc.Normalize();
+
+            // Save part in zip
+            ZipEntry ctEntry = new ZipEntry(ZipHelper.GetZipURIFromOPCName(
+                    relPartName.URI.ToString()).OriginalString);
+            try
+            {
+                zos.PutNextEntry(ctEntry);
+
+                await StreamHelper.SaveXmlInStreamAsync(xmlOutDoc, zos);
                 zos.CloseEntry();
             }
             catch (IOException e)

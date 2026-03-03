@@ -6,6 +6,7 @@ using System.IO;
 using System.Xml;
 using System.Xml.XPath;
 using NPOI.Util;
+using System.Threading.Tasks;
 
 namespace NPOI.OpenXml4Net.OPC.Internal
 {
@@ -451,6 +452,47 @@ namespace NPOI.OpenXml4Net.OPC.Internal
         }
 
         /**
+         * Save the contents type part asynchronously.
+         * 
+         * @param outStream
+         *            The output stream use to save the XML content of the content
+         *            types part.
+         * @return <b>true</b> if the operation success, else <b>false</b>.
+         */
+        public async Task<bool> SaveAsync(Stream outStream)
+        {
+            XmlDocument xmlOutDoc = new XmlDocument();
+            XmlNamespaceManager xmlnm = new XmlNamespaceManager(xmlOutDoc.NameTable);
+            xmlnm.AddNamespace("x", TYPES_NAMESPACE_URI);
+            XmlElement typesElem = xmlOutDoc.CreateElement(TYPES_TAG_NAME, TYPES_NAMESPACE_URI);
+            xmlOutDoc.AppendChild(typesElem);
+
+            // Adding default types
+            IEnumerator<KeyValuePair<string, string>> contentTypes = defaultContentType.GetEnumerator();
+            while (contentTypes.MoveNext())
+            {
+                AppendDefaultType(xmlOutDoc, typesElem, contentTypes.Current);
+            }
+
+            // Adding specific types if any exist
+            if (overrideContentType != null)
+            {
+
+                IEnumerator<KeyValuePair<PackagePartName, string>> overrideContentTypes = overrideContentType.GetEnumerator();
+                while (overrideContentTypes.MoveNext())
+                {
+                    AppendSpecificTypes(xmlOutDoc, typesElem, overrideContentTypes.Current);
+                }
+            }
+
+            xmlOutDoc.Normalize();
+
+            // Save content in the specified output stream
+            return await this.SaveImplAsync(xmlOutDoc, outStream);
+
+        }
+
+        /**
          * Use to Append specific type XML elements, use by the save() method.
          * 
          * @param root
@@ -495,6 +537,14 @@ namespace NPOI.OpenXml4Net.OPC.Internal
          *            The output stream use to write the content type XML.
          */
         public abstract bool SaveImpl(XmlDocument content, Stream out1);
+
+        /**
+         * Save the content type XML document in the specified output stream asynchronously.
+         * 
+         * @param out
+         *            The output stream use to write the content type XML.
+         */
+        public abstract Task<bool> SaveImplAsync(XmlDocument content, Stream out1);
     }
 
 }
