@@ -31,6 +31,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: gh-pages # Checkout branch containing site files
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
