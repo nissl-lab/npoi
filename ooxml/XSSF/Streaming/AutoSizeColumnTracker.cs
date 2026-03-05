@@ -79,7 +79,7 @@ namespace NPOI.XSSF.Streaming
             public void SetMaxColumnWidths(double unmergedWidth, double mergedWidth)
             {
                 withUseMergedCells = Math.Max(withUseMergedCells, mergedWidth);
-                withSkipMergedCells = Math.Max(withUseMergedCells, unmergedWidth);
+                withSkipMergedCells = Math.Max(withSkipMergedCells, unmergedWidth);
             }
         }
 

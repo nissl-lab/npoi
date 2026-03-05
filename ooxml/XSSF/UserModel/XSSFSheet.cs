@@ -1799,7 +1799,11 @@ namespace NPOI.XSSF.UserModel
                     width = maxColumnWidth;
                 }
                 SetColumnWidth(column, width);
-                GetColumnHelper().SetColBestFit(column, true);
+                IColumn col = GetColumn(column);
+                if(col != null)
+                {
+                    col.IsBestFit = true;
+                }
             }
         }
 

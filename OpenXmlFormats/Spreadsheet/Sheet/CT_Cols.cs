@@ -128,8 +128,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         /// <param name="ctCol"></param>
         private static void BreakUpCtCol(CT_Cols ctObj, CT_Col ctCol, int lastColumn)
         {
+            // lastColumn is 0-based; ctCol.min/max are 1-based, so convert lastColumn to 1-based
             int max = ctCol.max >= SpreadsheetVersion.EXCEL2007.LastColumnIndex - 1
-                ? lastColumn
+                ? lastColumn + 1
                 : (int)ctCol.max;
 
             for (int i = (int)ctCol.min; i <= max; i++)
