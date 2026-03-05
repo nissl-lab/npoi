@@ -5805,6 +5805,97 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             return ctObj;
         }
 
+        public bool IsSetAlignWithMargins()
+        {
+            return !this.alignWithMargins;
+        }
+
+        public bool IsSetDifferentFirst()
+        {
+            return this.differentFirst;
+        }
+
+        public bool IsSetDifferentOddEven()
+        {
+            return this.differentOddEven;
+        }
+
+        public bool IsSetEvenFooter()
+        {
+            return this.evenFooter != null;
+        }
+
+        public bool IsSetEvenHeader()
+        {
+            return this.evenHeader != null;
+        }
+
+        public bool IsSetFirstFooter()
+        {
+            return this.firstFooter != null;
+        }
+
+        public bool IsSetFirstHeader()
+        {
+            return this.firstHeader != null;
+        }
+
+        public bool IsSetScaleWithDoc()
+        {
+            return !this.scaleWithDoc;
+        }
+
+        public void UnsetScaleWithDoc()
+        {
+            this.scaleWithDoc = true;
+        }
+
+        public void UnsetAlignWithMargins()
+        {
+            this.alignWithMargins = true;
+        }
+
+        public void UnsetDifferentFirst()
+        {
+            this.differentFirst = false;
+        }
+
+        public void UnsetDifferentOddEven()
+        {
+            this.differentOddEven = false;
+        }
+
+        public void UnsetEvenFooter()
+        {
+            this.evenFooter = null;
+        }
+
+        public void UnsetEvenHeader()
+        {
+            this.evenHeader = null;
+        }
+
+        public void UnsetFirstFooter()
+        {
+            this.firstFooter = null;
+        }
+
+        public void UnsetFirstHeader()
+        {
+            this.firstHeader = null;
+        }
+
+        public void UnsetOddFooter()
+        {
+            this.oddFooter = null;
+        }
+
+        public void UnsetOddHeader()
+        {
+            this.oddHeader = null;
+        }
+
+
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.WriteStart(nodeName);

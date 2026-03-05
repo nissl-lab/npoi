@@ -22,15 +22,29 @@ namespace NPOI.XSSF.Streaming
     public class SXSSFEvaluationSheet : IEvaluationSheet //XSSFEvaluationSheet
     {
         private readonly SXSSFSheet _xs;
+        private int _lastDefinedRow = -1;
 
         public SXSSFEvaluationSheet(SXSSFSheet sheet)
         {
             _xs = sheet;
+            _lastDefinedRow = _xs.LastRowNum;
         }
 
         public SXSSFSheet GetSXSSFSheet()
         {
             return _xs;
+        }
+
+        /* (non-Javadoc)
+         * @see org.apache.poi.ss.formula.EvaluationSheet#getlastRowNum()
+         * @since POI 4.0.0
+         */
+        public int LastRowNum
+        {
+            get
+            {
+                return _lastDefinedRow;
+            }
         }
 
         public IEvaluationCell GetCell(int rowIndex, int columnIndex)
@@ -58,7 +72,7 @@ namespace NPOI.XSSF.Streaming
 
         public void ClearAllCachedResultValues()
         {
-            // nothing to do
+            _lastDefinedRow = _xs.LastRowNum;
         }
     }
 }

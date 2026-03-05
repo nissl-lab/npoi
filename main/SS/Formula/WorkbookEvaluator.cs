@@ -407,7 +407,7 @@ namespace NPOI.SS.Formula
                 result = GetValueFromNonFormulaCell(srcCell);
                 if (shouldCellDependencyBeRecorded)
                 {
-                    tracker.AcceptPlainValueDependency(_workbookIx, sheetIndex, rowIndex, columnIndex, result);
+                    tracker.AcceptPlainValueDependency(_workbook, _workbookIx, sheetIndex, rowIndex, columnIndex, result);
                 }
                 return result;
             }

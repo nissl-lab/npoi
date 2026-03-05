@@ -354,6 +354,49 @@ namespace TestCases.XSSF.UserModel
             ClassicAssert.AreEqual(contents, cell.ToString(), "Did not have expected contents at rownum " + rowNum);
             //ClassicAssert.AreEqual(contents + ".0", cell.ToString(), "Did not have expected contents at rownum " + rowNum);
         }
+
+        [Test]
+        public void Bug57423_shiftRowsByLargeOffset()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            try
+            {
+                ISheet sh = wb.CreateSheet();
+                sh.CreateRow(0).CreateCell(0).SetCellValue("a");
+                sh.CreateRow(1).CreateCell(0).SetCellValue("b");
+                sh.CreateRow(2).CreateCell(0).SetCellValue("c");
+                sh.ShiftRows(0, 1, 3);
+
+                XSSFWorkbook wbBack = XSSFTestDataSamples.WriteOutAndReadBack(wb);
+
+                assertThatRowsInAscendingOrder(wb);
+                assertThatRowsInAscendingOrder(wbBack);
+
+                //wbBack.write(out);
+                // Excel reports that the workbook is corrupt because the rows are not in ascending order
+                // LibreOffice doesn't complain when rows are not in ascending order
+
+                wbBack.Close();
+            }
+            catch(Exception e)
+            {
+                wb.Close();
+            }
+        }
+
+        private void assertThatRowsInAscendingOrder(XSSFWorkbook wb)
+        {
+            // Check that CTRows are stored in ascending order of row index
+            long maxSeenRowNum = 0; //1-based
+            XSSFSheet sheet = wb.GetSheetAt(0) as XSSFSheet;
+            foreach(CT_Row ctRow in sheet.GetCTWorksheet().sheetData.GetRowArray())
+            {
+                long rowNum = ctRow.r; //1-based
+                ClassicAssert.IsTrue(rowNum > maxSeenRowNum, 
+                    "Row " + rowNum + " (1-based) is not in ascending order; previously saw " + maxSeenRowNum);
+                maxSeenRowNum = rowNum;
+            }
+        }
     }
 }
 

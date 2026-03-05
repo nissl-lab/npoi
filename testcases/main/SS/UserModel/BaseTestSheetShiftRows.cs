@@ -168,6 +168,30 @@ namespace TestCases.SS.UserModel
         }
 
         /**
+         * When shifting rows up, PhysicalNumberOfRows should decrease to match LastRowNum.
+         * Verifies that vacated rows are properly removed from the sheet.
+         */
+        [Test]
+        public void TestShiftRowsUpPhysicalRowCount()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet s = wb.CreateSheet();
+            for (int i = 0; i < 5; i++)
+            {
+                s.CreateRow(i).CreateCell(0).SetCellValue(i);
+            }
+            ClassicAssert.AreEqual(4, s.LastRowNum);
+            ClassicAssert.AreEqual(5, s.PhysicalNumberOfRows);
+
+            // Shift the last two rows up by 1 (rows 3 and 4 -> rows 2 and 3)
+            s.ShiftRows(3, 4, -1);
+
+            ClassicAssert.AreEqual(3, s.LastRowNum);
+            ClassicAssert.AreEqual(4, s.PhysicalNumberOfRows);
+            wb.Close();
+        }
+
+        /**
          * When Shifting rows, the page breaks should go with it
          */
         [Test]
@@ -793,6 +817,27 @@ namespace TestCases.SS.UserModel
             wb.Close();
         }
 
+        [Test]
+        public void Test61840_shifting_rows_up_does_not_produce_REF_errors()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb.CreateSheet();
+            ICell cell = sheet.CreateRow(4).CreateCell(0);
+
+            cell.SetCellFormula("(B5-C5)/B5");
+            sheet.ShiftRows(4, 4, -1);
+
+            // Cell objects created before a row shift are still valid.
+            // The row number of those cell references will be shifted if
+            // the cell is within the shift range.
+            ClassicAssert.AreEqual("(B4-C4)/B4", cell.CellFormula);
+
+            // New cell references are also valid.
+            ICell shiftedCell = sheet.GetRow(3).GetCell(0);
+            ClassicAssert.IsNotNull(shiftedCell);
+            ClassicAssert.AreEqual("(B4-C4)/B4", shiftedCell.CellFormula);
+            wb.Close();
+        }
 
         private void CreateHyperlink(ICreationHelper helper, ICell cell, HyperlinkType linkType, String ref1)
         {

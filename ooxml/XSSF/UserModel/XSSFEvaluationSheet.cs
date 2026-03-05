@@ -33,10 +33,12 @@ namespace NPOI.XSSF.UserModel
 
         private readonly XSSFSheet _xs;
         private Dictionary<CellKey, IEvaluationCell> _cellCache;
+        private int _lastDefinedRow = -1;
 
         public XSSFEvaluationSheet(ISheet sheet)
         {
             _xs = (XSSFSheet)sheet;
+            _lastDefinedRow = _xs.LastRowNum;
         }
 
         public XSSFEvaluationSheet()
@@ -44,15 +46,33 @@ namespace NPOI.XSSF.UserModel
 
         }
 
+        /* (non-Javadoc)
+         * @see org.apache.poi.ss.formula.EvaluationSheet#getlastRowNum()
+         * @since POI 4.0.0
+         */
+        public int LastRowNum
+        {
+            get
+            {
+                return _lastDefinedRow;
+            }
+        }
+
         public void ClearAllCachedResultValues()
         {
             _cellCache = null;
+            _lastDefinedRow = _xs.LastRowNum;
         }
 
         public XSSFSheet XSSFSheet => _xs;
         
         public IEvaluationCell GetCell(int rowIndex, int columnIndex)
         {
+            // shortcut evaluation if reference is outside the bounds of existing data
+            // see issue #61841 for impact on VLOOKUP in particular
+            if(rowIndex > _lastDefinedRow)
+                return null;
+
             // cache for performance: ~30% speedup due to caching
             if (_cellCache == null)
             {

@@ -133,7 +133,7 @@ namespace NPOI.SS.Formula
             }
         }
 
-        public void AcceptPlainValueDependency(int bookIndex, int sheetIndex,
+        public void AcceptPlainValueDependency(IEvaluationWorkbook evalWorkbook, int bookIndex, int sheetIndex,
                 int rowIndex, int columnIndex, ValueEval value)
         {
             // Tell the currently evaluating cell frame that it Has a dependency on the specified
@@ -147,7 +147,7 @@ namespace NPOI.SS.Formula
                 CellEvaluationFrame consumingFrame = (CellEvaluationFrame)_evaluationFrames[prevFrameIndex];
                 if (value == BlankEval.instance)
                 {
-                    consumingFrame.AddUsedBlankCell(bookIndex, sheetIndex, rowIndex, columnIndex);
+                    consumingFrame.AddUsedBlankCell(evalWorkbook, bookIndex, sheetIndex, rowIndex, columnIndex);
                 }
                 else
                 {
