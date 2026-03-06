@@ -434,7 +434,11 @@ namespace NPOI.SS.Util
 
                 return Math.Round(x1 + x2, 0, MidpointRounding.ToEven);
             }
-            catch (Exception ex) when (ex is FontException || ex is InvalidFontFileException)
+            catch (Exception ex) when (ex is FontException || ex is InvalidFontFileException
+                // NullReferenceException is a workaround for a bug in SixLabors.Fonts 1.0.1 where certain fonts
+                // (e.g. "B Nazanin") trigger a NullReferenceException inside the GSUB substitution engine.
+                // Fixed in SixLabors.Fonts 2.x, but that version dropped .NET Standard support.
+                || ex is NullReferenceException)
             {
                 // Fallback: use font size converted from points to pixels at the configured DPI
                 return Math.Round(windowsFont.Size * dpi / 72.0, 0, MidpointRounding.ToEven);
@@ -449,7 +453,11 @@ namespace NPOI.SS.Util
 
                 return Math.Round(measureResult.Height, 0, MidpointRounding.ToEven);
             }
-            catch (Exception ex) when (ex is FontException || ex is InvalidFontFileException)
+            catch (Exception ex) when (ex is FontException || ex is InvalidFontFileException
+                // NullReferenceException is a workaround for a bug in SixLabors.Fonts 1.0.1 where certain fonts
+                // (e.g. "B Nazanin") trigger a NullReferenceException inside the GSUB substitution engine.
+                // Fixed in SixLabors.Fonts 2.x, but that version dropped .NET Standard support.
+                || ex is NullReferenceException)
             {
                 // Fallback: use font size converted from points to pixels at the configured DPI
                 return Math.Round(windowsFont.Size * dpi / 72.0, 0, MidpointRounding.ToEven);
@@ -566,7 +574,11 @@ namespace NPOI.SS.Util
                 else
                     actualWidth = Math.Round(sf.Width, 0, MidpointRounding.ToEven);
             }
-            catch (Exception ex) when (ex is FontException || ex is InvalidFontFileException)
+            catch (Exception ex) when (ex is FontException || ex is InvalidFontFileException
+                // NullReferenceException is a workaround for a bug in SixLabors.Fonts 1.0.1 where certain fonts
+                // (e.g. "B Nazanin") trigger a NullReferenceException inside the GSUB substitution engine.
+                // Fixed in SixLabors.Fonts 2.x, but that version dropped .NET Standard support.
+                || ex is NullReferenceException)
             {
                 // Fallback for environments without complete font support (e.g., missing font tables).
                 // Estimate dimensions proportionally: characters are approximately half as wide as the
@@ -661,7 +673,11 @@ namespace NPOI.SS.Util
             {
                 return (int)Math.Ceiling(TextMeasurer.MeasureSize(new string(defaultChar, 1), new TextOptions(font) { Dpi = dpi }).Width);
             }
-            catch (Exception ex) when (ex is FontException || ex is InvalidFontFileException)
+            catch (Exception ex) when (ex is FontException || ex is InvalidFontFileException
+                // NullReferenceException is a workaround for a bug in SixLabors.Fonts 1.0.1 where certain fonts
+                // (e.g. "B Nazanin") trigger a NullReferenceException inside the GSUB substitution engine.
+                // Fixed in SixLabors.Fonts 2.x, but that version dropped .NET Standard support.
+                || ex is NullReferenceException)
             {
                 // Fallback for environments without complete font support (e.g., missing font tables).
                 // Returns 7, which is the approximate pixel width of character '0' for Calibri 11pt
