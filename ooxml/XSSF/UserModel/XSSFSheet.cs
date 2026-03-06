@@ -28,7 +28,7 @@ using NPOI.SS.Util;
 using NPOI.Util;
 using NPOI.XSSF.Model;
 using NPOI.XSSF.UserModel.Helpers;
-using SixLabors.Fonts;
+using SkiaSharp;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6472,9 +6472,9 @@ namespace NPOI.XSSF.UserModel
         public void SetDefaultColWidth(int Width)
         {
             IFont ift = GetWorkbook().GetStylesSource().GetFontAt(0);
-            Font ft = SheetUtil.IFont2Font(ift);
-            var rt = TextMeasurer.MeasureSize("0", new TextOptions(ft));
-            double MDW = rt.Width + 1; //MaximumDigitWidth
+            using SKFont ft = SheetUtil.IFont2Font(ift);
+            using var paint = new SKPaint { Typeface = ft.Typeface, TextSize = ft.Size };
+            double MDW = paint.MeasureText("0") + 1; //MaximumDigitWidth
 
             worksheet.sheetFormatPr.defaultColWidth = Width / Units.EMU_PER_PIXEL / MDW;
             worksheet.cols.Clear();

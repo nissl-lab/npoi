@@ -19,7 +19,6 @@ namespace TestCases.SS.UserModel
 {
     using NPOI.SS.UserModel;
     using NUnit.Framework;using NUnit.Framework.Legacy;
-    using SixLabors.Fonts;
     using System;
     using System.Collections.Generic;
 
