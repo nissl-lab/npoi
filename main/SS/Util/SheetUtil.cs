@@ -424,19 +424,35 @@ namespace NPOI.SS.Util
         private static double GetRotatedContentHeight(ICell cell, string stringValue, Font windowsFont)
         {
             var angle = cell.CellStyle.Rotation * 2.0 * Math.PI / 360.0;
-            var measureResult = TextMeasurer.MeasureAdvance(stringValue, new TextOptions(windowsFont) { Dpi = dpi });
+            try
+            {
+                var measureResult = TextMeasurer.MeasureAdvance(stringValue, new TextOptions(windowsFont) { Dpi = dpi });
 
-            var x1 = Math.Abs(measureResult.Height * Math.Cos(angle));
-            var x2 = Math.Abs(measureResult.Width * Math.Sin(angle));
+                var x1 = Math.Abs(measureResult.Height * Math.Cos(angle));
+                var x2 = Math.Abs(measureResult.Width * Math.Sin(angle));
 
-            return Math.Round(x1 + x2, 0, MidpointRounding.ToEven);
+                return Math.Round(x1 + x2, 0, MidpointRounding.ToEven);
+            }
+            catch (Exception ex) when (ex is FontException || ex is InvalidFontFileException)
+            {
+                // Fallback: use font size converted from points to pixels at the configured DPI
+                return Math.Round(windowsFont.Size * dpi / 72.0, 0, MidpointRounding.ToEven);
+            }
         }
 
         private static double GetContentHeight(string stringValue, Font windowsFont)
         {
-            var measureResult = TextMeasurer.MeasureAdvance(stringValue, new TextOptions(windowsFont) { Dpi = dpi });
+            try
+            {
+                var measureResult = TextMeasurer.MeasureAdvance(stringValue, new TextOptions(windowsFont) { Dpi = dpi });
 
-            return Math.Round(measureResult.Height, 0, MidpointRounding.ToEven);
+                return Math.Round(measureResult.Height, 0, MidpointRounding.ToEven);
+            }
+            catch (Exception ex) when (ex is FontException || ex is InvalidFontFileException)
+            {
+                // Fallback: use font size converted from points to pixels at the configured DPI
+                return Math.Round(windowsFont.Size * dpi / 72.0, 0, MidpointRounding.ToEven);
+            }
         }
 
         /**
@@ -535,18 +551,43 @@ namespace NPOI.SS.Util
         private static double GetCellWidth(int defaultCharWidth, int colspan,
             ICellStyle style, double width, string str, Font windowsFont, ICell cell)
         {
-            //Rectangle bounds;
             double actualWidth;
-            FontRectangle sf = TextMeasurer.MeasureSize(str, new TextOptions(windowsFont) { Dpi = dpi });
-            if (style.Rotation != 0)
+            try
             {
-                double angle = style.Rotation * 2.0 * Math.PI / 360.0;
-                double x1 = Math.Abs(sf.Height * Math.Sin(angle));
-                double x2 = Math.Abs(sf.Width * Math.Cos(angle));
-                actualWidth = Math.Round(x1 + x2, 0, MidpointRounding.ToEven);
+                FontRectangle sf = TextMeasurer.MeasureSize(str, new TextOptions(windowsFont) { Dpi = dpi });
+                if (style.Rotation != 0)
+                {
+                    double angle = style.Rotation * 2.0 * Math.PI / 360.0;
+                    double x1 = Math.Abs(sf.Height * Math.Sin(angle));
+                    double x2 = Math.Abs(sf.Width * Math.Cos(angle));
+                    actualWidth = Math.Round(x1 + x2, 0, MidpointRounding.ToEven);
+                }
+                else
+                    actualWidth = Math.Round(sf.Width, 0, MidpointRounding.ToEven);
             }
-            else
-                actualWidth = Math.Round(sf.Width, 0, MidpointRounding.ToEven);
+            catch (Exception ex) when (ex is FontException || ex is InvalidFontFileException)
+            {
+                // Fallback for environments without complete font support (e.g., missing font tables).
+                // Estimate dimensions proportionally: characters are approximately half as wide as the
+                // font height (an empirical approximation for proportional fonts that preserves relative
+                // width differences between fonts of different sizes and between rotated and non-rotated
+                // text).
+                double fontHeightPx = windowsFont.Size * dpi / 72.0;
+                double estimatedCharWidthPx = fontHeightPx * 0.5;
+                double estimatedTextWidthPx = str.Length * estimatedCharWidthPx;
+
+                if (style.Rotation != 0)
+                {
+                    double angle = style.Rotation * 2.0 * Math.PI / 360.0;
+                    double x1 = Math.Abs(fontHeightPx * Math.Sin(angle));
+                    double x2 = Math.Abs(estimatedTextWidthPx * Math.Cos(angle));
+                    actualWidth = Math.Round(x1 + x2, 0, MidpointRounding.ToEven);
+                }
+                else
+                {
+                    actualWidth = Math.Round(estimatedTextWidthPx, 0, MidpointRounding.ToEven);
+                }
+            }
 
             int padding = 5;
             double correction = 1.05;
@@ -615,7 +656,17 @@ namespace NPOI.SS.Util
             IFont defaultFont = wb.GetFontAt((short)0);
             Font font = IFont2Font(defaultFont);
 
-            return (int)Math.Ceiling(TextMeasurer.MeasureSize(new string(defaultChar, 1), new TextOptions(font) { Dpi = dpi }).Width);
+            try
+            {
+                return (int)Math.Ceiling(TextMeasurer.MeasureSize(new string(defaultChar, 1), new TextOptions(font) { Dpi = dpi }).Width);
+            }
+            catch (Exception ex) when (ex is FontException || ex is InvalidFontFileException)
+            {
+                // Fallback for environments without complete font support (e.g., missing font tables).
+                // Returns 7, which is the approximate pixel width of character '0' for Calibri 11pt
+                // at 96 DPI — the default Excel font — without full font rendering support.
+                return 7;
+            }
         }
 
         /**

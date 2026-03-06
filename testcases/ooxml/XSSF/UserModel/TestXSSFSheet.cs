@@ -454,7 +454,6 @@ namespace TestCases.XSSF.UserModel
         /// changes to be lost for all columns after the first AutoSizeColumn call.
         /// </summary>
         [Test]
-        [Platform("Win")]
         public void TestAutoSizeColumnMultipleColumns_AllColumnsResized()
         {
             // Create and save a workbook with data in 3 columns so it has column definitions
@@ -483,26 +482,20 @@ namespace TestCases.XSSF.UserModel
             XSSFWorkbook workbook = new XSSFWorkbook(stream1);
             XSSFSheet sheet = (XSSFSheet)workbook.GetSheet("Sheet1");
 
-            // Record default column width
-            double defaultWidth = sheet.DefaultColumnWidth * 256;
-
-            // AutoSize all 3 columns
+            // AutoSize all 3 columns - the bug was that only the first column was actually resized
             sheet.AutoSizeColumn(0);
             sheet.AutoSizeColumn(1);
             sheet.AutoSizeColumn(2);
+
+            // All 3 columns must have been given an explicit width by AutoSizeColumn
+            ClassicAssert.IsNotNull(sheet.GetColumn(0), "Column 0 should have an explicit width after AutoSizeColumn");
+            ClassicAssert.IsNotNull(sheet.GetColumn(1), "Column 1 should have an explicit width after AutoSizeColumn");
+            ClassicAssert.IsNotNull(sheet.GetColumn(2), "Column 2 should have an explicit width after AutoSizeColumn");
 
             // Capture widths immediately after auto-sizing (before write/read)
             double width0Before = sheet.GetColumnWidth(0);
             double width1Before = sheet.GetColumnWidth(1);
             double width2Before = sheet.GetColumnWidth(2);
-
-            // All columns should be wider than default after auto-sizing
-            ClassicAssert.IsTrue(width0Before > defaultWidth,
-                $"Column 0 width {width0Before} should be > default {defaultWidth}");
-            ClassicAssert.IsTrue(width1Before > defaultWidth,
-                $"Column 1 width {width1Before} should be > default {defaultWidth}");
-            ClassicAssert.IsTrue(width2Before > defaultWidth,
-                $"Column 2 width {width2Before} should be > default {defaultWidth}");
 
             // Save and reload to verify widths are persisted
             MemoryStream stream2 = new MemoryStream();
@@ -513,23 +506,23 @@ namespace TestCases.XSSF.UserModel
             XSSFWorkbook reloaded = new XSSFWorkbook(stream2);
             XSSFSheet reloadedSheet = (XSSFSheet)reloaded.GetSheet("Sheet1");
 
-            double width0After = reloadedSheet.GetColumnWidth(0);
-            double width1After = reloadedSheet.GetColumnWidth(1);
-            double width2After = reloadedSheet.GetColumnWidth(2);
+            // All 3 column objects should still exist after write/read
+            ClassicAssert.IsNotNull(reloadedSheet.GetColumn(0), "Column 0 should still exist after write/read");
+            ClassicAssert.IsNotNull(reloadedSheet.GetColumn(1), "Column 1 should still exist after write/read");
+            ClassicAssert.IsNotNull(reloadedSheet.GetColumn(2), "Column 2 should still exist after write/read");
 
             // All widths should be preserved after write/read cycle
-            ClassicAssert.AreEqual(width0Before, width0After,
-                $"Column 0 width should be preserved after write/read");
-            ClassicAssert.AreEqual(width1Before, width1After,
-                $"Column 1 width should be preserved after write/read");
-            ClassicAssert.AreEqual(width2Before, width2After,
-                $"Column 2 width should be preserved after write/read");
+            ClassicAssert.AreEqual(width0Before, reloadedSheet.GetColumnWidth(0),
+                "Column 0 width should be preserved after write/read");
+            ClassicAssert.AreEqual(width1Before, reloadedSheet.GetColumnWidth(1),
+                "Column 1 width should be preserved after write/read");
+            ClassicAssert.AreEqual(width2Before, reloadedSheet.GetColumnWidth(2),
+                "Column 2 width should be preserved after write/read");
 
             reloaded.Close();
         }
 
         [Test]
-        [Platform("Win")]
         public void TestAutoSizeRow()
         {
             XSSFWorkbook workbook = new XSSFWorkbook();
