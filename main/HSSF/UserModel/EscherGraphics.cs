@@ -323,7 +323,7 @@ namespace NPOI.HSSF.UserModel
                     .FindColor((byte)foreground.R, (byte)foreground.G, (byte)foreground.B);
             if (hssfColor == null)
                 hssfColor = workbook.GetCustomPalette().FindSimilarColor((byte)foreground.R, (byte)foreground.G, (byte)foreground.B);
-            bool bold = font.Typeface.FontStyle.Weight >= (int)SKFontStyleWeight.SemiBold;
+            bool bold = font.Typeface.FontStyle.Weight >= (int)SKFontStyleWeight.Bold;
             bool italic = font.Typeface.FontStyle.Slant != SKFontStyleSlant.Upright;
             // Convert pixel size back to points (multiply by 20 for Excel's half-point unit)
             float sizeInPoints = font.Size * 72f / dpi;
