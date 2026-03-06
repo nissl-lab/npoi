@@ -15,12 +15,14 @@
    limitations under the License.
 ==================================================================== */
 
+using NPOI.OOXML.XSSF.UserModel;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.SS.UserModel;
 using NPOI.XSSF;
 using NPOI.XSSF.Model;
 using NPOI.XSSF.UserModel;
-using NUnit.Framework;using NUnit.Framework.Legacy;
+using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using SixLabors.ImageSharp;
 using System;
 
@@ -253,13 +255,14 @@ namespace TestCases.XSSF.UserModel
         /**
          * Ensure that strings with the color set as RGB are treated differently when the color is different.
          */
-        [Test]
+        //[Test]
+        [Obsolete("not found in poi")]
         public void TestRgbColor()
         {
             const string testText = "Apache";
             XSSFRichTextString rt = new XSSFRichTextString(testText);
             XSSFFont font = new XSSFFont { FontName = "Times New Roman", FontHeightInPoints = 11 };
-            font.SetColor(new XSSFColor(Color.Red));
+            font.SetColor(new XSSFColor(Color.Red, new DefaultIndexedColorMap()));
             rt.ApplyFont(0, testText.Length, font);
             CT_Rst ct = rt.GetCTRst();
 

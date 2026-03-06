@@ -24,9 +24,9 @@ namespace NPOI.XSSF.Model
     using System.IO;
     using NPOI.OpenXml4Net.OPC;
     using System.Xml;
-    using System.Security;
-    using System.Text.RegularExpressions;
-    using System.Text;
+    using NPOI.Util;
+    using NPOI.XSSF.UserModel;
+    using NPOI.SS.UserModel;
 
     /**
      * Table of strings shared across all sheets in a workbook.
@@ -131,15 +131,25 @@ namespace NPOI.XSSF.Model
             return st.XmlText;
         }
 
-        /**
-         * Return a string item by index
-         *
-         * @param idx index of item to return.
-         * @return the item at the specified position in this Shared String table.
-         */
+        /// <summary>
+        /// Return a string item by index
+        /// </summary>
+        /// <param name="idx">index of item to return.</param>
+        /// <returns>the item at the specified position in this Shared String table.</returns>
+        [Obsolete("use GetItemAt(int idx) instead. Removal at POI 4.2")]
         public CT_Rst GetEntryAt(int idx)
         {
             return strings[idx];
+        }
+
+        /// <summary>
+        /// Return a string item by index
+        /// </summary>
+        /// <param name="idx">index of item to return.</param>
+        /// <returns>the item at the specified position in this Shared String table.</returns>
+        public IRichTextString GetItemAt(int idx)
+        {
+            return new XSSFRichTextString(strings[idx]);
         }
 
         /**
@@ -182,6 +192,8 @@ namespace NPOI.XSSF.Model
          * @param st the entry to add
          * @return index the index of Added entry
          */
+        [Obsolete("use <code>addSharedStringItem(RichTextString string)</code> instead")]
+        [Removal(Version = "4.2")]
         public int AddEntry(CT_Rst st)
         {
             String s = GetKey(st);
@@ -201,16 +213,57 @@ namespace NPOI.XSSF.Model
             strings.Add(newSt);
             return idx;
         }
+
+        /**
+         * Add an entry to this Shared String table (a new value is appended to the end).
+         *
+         * <p>
+         * If the Shared String table already contains this string entry, its index is returned.
+         * Otherwise a new entry is added.
+         * </p>
+         *
+         * @param string the entry to add
+         * @since POI 4.0.0
+         * @return index the index of added entry
+         */
+        public int AddSharedStringItem(IRichTextString str)
+        {
+            if(!(str is XSSFRichTextString)){
+                throw new ArgumentException("Only XSSFRichTextString argument is supported");
+            }
+            return AddEntry(((XSSFRichTextString) str).GetCTRst());
+        }
+
         /**
          * Provide low-level access to the underlying array of CT_Rst beans
          *
          * @return array of CT_Rst beans
          */
+        [Obsolete("use <code>getSharedStringItems</code> instead")]
+        [Removal(Version = "4.2")]
         public IList<CT_Rst> Items
         {
             get
             {
                 return strings.AsReadOnly();
+            }
+        }
+
+        /**
+         * Provide access to the strings in the SharedStringsTable
+         *
+         * @return list of shared string instances
+         */
+        public IList<IRichTextString> SharedStringItems
+        {
+            get
+            {
+                List<IRichTextString> items = new List<IRichTextString>();
+                foreach(CT_Rst rst in strings)
+                {
+                    items.Add(new XSSFRichTextString(rst));
+                }
+                return items.AsReadOnly();
             }
         }
 

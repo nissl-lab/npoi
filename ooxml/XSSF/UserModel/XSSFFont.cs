@@ -211,7 +211,7 @@ namespace NPOI.XSSF.UserModel
             Spreadsheet.CT_Color ctColor = _ctFont.sizeOfColorArray() == 0 ? null : _ctFont.GetColorArray(0);
             if (ctColor != null)
             {
-                XSSFColor color = new XSSFColor(ctColor, _indexedColorMap);
+                XSSFColor color = XSSFColor.From(ctColor, _indexedColorMap);
                 if (_themes != null)
                 {
                     _themes.InheritFromThemeAsRequired(color);

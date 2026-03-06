@@ -40,7 +40,7 @@ namespace TestCases.XSSF.UserModel
 
                 XSSFFont font = wb.CreateFont() as XSSFFont;
                 Rgb24 color =new Rgb24(0, 255, 255);
-                font.SetColor(new XSSFColor(color));
+                font.SetColor(new XSSFColor(color, wb.GetStylesSource().IndexedColors));
                 font.FontName = "Arial";
                 rt.ApplyFont(font);
 

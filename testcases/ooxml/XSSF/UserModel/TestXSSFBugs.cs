@@ -3285,7 +3285,7 @@ namespace TestCases.XSSF.UserModel
             XSSFWorkbook workbook = new XSSFWorkbook();
             XSSFCell cell = workbook.CreateSheet().CreateRow(0).CreateCell(0) as XSSFCell;
 
-            XSSFColor color = new XSSFColor(Color.Red);
+            XSSFColor color = new XSSFColor(Color.Red, workbook.GetStylesSource().IndexedColors);
             XSSFCellStyle style = workbook.CreateCellStyle() as XSSFCellStyle;
             style.FillForegroundColorColor = color;
             style.FillPattern = FillPattern.SolidForeground;
@@ -3305,7 +3305,7 @@ namespace TestCases.XSSF.UserModel
             XSSFWorkbook nwb = XSSFTestDataSamples.WriteOutAndReadBack(workbook);
             workbook.Close();
             XSSFCell ncell = nwb.GetSheetAt(0).GetRow(0).GetCell(0) as XSSFCell;
-            XSSFColor ncolor = new XSSFColor(Color.Red);
+            XSSFColor ncolor = new XSSFColor(Color.Red, workbook.GetStylesSource().IndexedColors);
 
             // Now the cell is all black
             XSSFColor nactual = ncell.CellStyle.FillBackgroundColorColor as XSSFColor;
@@ -3476,6 +3476,8 @@ namespace TestCases.XSSF.UserModel
             ICell cell = row.CreateCell(1);
             cell.SetCellValue("blabla");
 
+            //0 1 2 3 4 5 6 7
+            //A B C D E F G H
             row = sheet.CreateRow(4);
             cell = row.CreateCell(7);
             cell.SetCellValue("blabla");
@@ -3484,7 +3486,29 @@ namespace TestCases.XSSF.UserModel
             // to avoid having to iterate all rows/cells in each add/remove of a row or cell
             wb.Write(new NullOutputStream());
 
-            ClassicAssert.AreEqual("B2:I5", ((XSSFSheet)sheet).GetCTWorksheet().dimension.@ref);
+            ClassicAssert.AreEqual("B2:H5", ((XSSFSheet)sheet).GetCTWorksheet().dimension.@ref);
+
+            wb.Close();
+        }
+        [Test]
+        public void Test61798()
+        {
+            IWorkbook wb = new XSSFWorkbook();
+            ISheet sheet = wb.CreateSheet("test");
+            IRow row = sheet.CreateRow(1);
+            ICell cell = row.CreateCell(1);
+            cell.SetCellValue("blabla");
+
+            row = sheet.CreateRow(4);
+            // Allowable column range for EXCEL2007 is (0..16383) or ('A'..'XDF')
+            cell = row.CreateCell(16383);
+            cell.SetCellValue("blabla");
+
+            // we currently only populate the dimension during writing out
+            // to avoid having to iterate all rows/cells in each add/remove of a row or cell
+            wb.Write(new NullOutputStream());
+
+            ClassicAssert.AreEqual("B2:XFD5", ((XSSFSheet) sheet).GetCTWorksheet().dimension.@ref);
 
             wb.Close();
         }

@@ -38,6 +38,16 @@ namespace NPOI.XSSF.UserModel
         private IIndexedColorMap indexedColorMap;
 
         /**
+         * @param color
+         * @param map
+         * @return null if color is null, new instance otherwise
+         */
+        public static XSSFColor From(CT_Color color, IIndexedColorMap map)
+        {
+            return color == null ? null : new XSSFColor(color, map);
+        }
+
+        /**
          * Create an instance of XSSFColor from the supplied XML bean
          */
         [Obsolete("Remove it at NPOI 2.8.0")]
@@ -46,6 +56,9 @@ namespace NPOI.XSSF.UserModel
         {
 
         }
+
+        [Obsolete("we want to have the indexed map, and all calling contexts have access to it.")]
+        [Removal( Version = "4.2")]
         public XSSFColor(CT_Color color, IIndexedColorMap map)
         {
             this.ctColor = color;
@@ -54,20 +67,32 @@ namespace NPOI.XSSF.UserModel
         /**
          * Create an new instance of XSSFColor
          */
+        [Obsolete("we want to have the indexed map, and all calling contexts have access to it.")]
+        [Removal(Version = "4.2")]
         public XSSFColor()
-            : this(new CT_Color(), null)
+            : this(new CT_Color(), new DefaultIndexedColorMap())
         {
         }
 
-        public XSSFColor(Color clr)
-            : this()
+        /**
+         * new color with the given indexed color map
+         * @param colorMap
+         */
+        public XSSFColor(IIndexedColorMap colorMap)
+            : this(new CT_Color(), colorMap)
+        {
+            
+        }
+
+        public XSSFColor(Color clr, IIndexedColorMap map)
+            : this(map)
         {
             var c = clr.ToPixel<Rgb24>();
             ctColor.SetRgb(c.R, c.G, c.B);
         }
 
-        public XSSFColor(Rgb24 clr)
-            : this() {
+        public XSSFColor(Rgb24 clr, IIndexedColorMap map)
+            : this(map) {
 
             ctColor.SetRgb(clr.R, clr.G, clr.B);
         }
