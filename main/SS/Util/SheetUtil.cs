@@ -913,6 +913,5 @@ namespace NPOI.SS.Util
             //  live within any merged regions
             return null;
         }
-
     }
 }
