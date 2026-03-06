@@ -21,8 +21,7 @@ using System.Text;
 using NPOI.Util;
 using NPOI.SS.UserModel;
 using NPOI.OpenXmlFormats.Spreadsheet;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.PixelFormats;
+using SkiaSharp;
 using NPOI.OOXML.XSSF.UserModel;
 
 namespace NPOI.XSSF.UserModel
@@ -59,19 +58,11 @@ namespace NPOI.XSSF.UserModel
         {
         }
 
-        public XSSFColor(Color clr)
+        public XSSFColor(SKColor clr)
             : this()
         {
-            var c = clr.ToPixel<Rgb24>();
-            ctColor.SetRgb(c.R, c.G, c.B);
+            ctColor.SetRgb(clr.Red, clr.Green, clr.Blue);
         }
-
-        public XSSFColor(Rgb24 clr)
-            : this() {
-
-            ctColor.SetRgb(clr.R, clr.G, clr.B);
-        }
-
         public XSSFColor(byte[] rgb, IIndexedColorMap colorMap)
             : this(new CT_Color(), colorMap)
         {

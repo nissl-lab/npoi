@@ -18,7 +18,7 @@ namespace TestCases.SS.Format
 {
     using NPOI.SS.Format;
     using NUnit.Framework;using NUnit.Framework.Legacy;
-    using SixLabors.ImageSharp.PixelFormats;
+    using SkiaSharp;
     using System;
 
     [TestFixture]
@@ -32,7 +32,7 @@ namespace TestCases.SS.Format
             {
                 bool applies = true;
                 String text = null;
-                Rgb24 textColor = new Rgb24(0, 0, 0);
+                SKColor textColor = new SKColor(0, 0, 0);
                 CellFormatResult result = new CellFormatResult(applies, text, textColor);
                 Assert.Fail("Cannot Initialize CellFormatResult with null text parameter");
             }

@@ -20,8 +20,7 @@ namespace TestCases.XSSF.UserModel
     using NUnit.Framework;using NUnit.Framework.Legacy;
     using System.Collections.Generic;
     using NPOI.XSSF.UserModel;
-    using SixLabors.ImageSharp;
-    using SixLabors.ImageSharp.PixelFormats;
+    using SkiaSharp;
     using System.Threading;
 
     [TestFixture]
@@ -51,9 +50,9 @@ namespace TestCases.XSSF.UserModel
                 //ClassicAssert.IsNotNull(run.XmlObject);
                 ClassicAssert.IsNotNull(run.GetRPr());
 
-                ClassicAssert.AreEqual(new Rgb24(0, 0, 0), run.FontColor);
+                ClassicAssert.AreEqual(new SKColor(0, 0, 0), run.FontColor);
 
-                var color = new Rgb24(0, 255, 255);
+                var color = new SKColor(0, 255, 255);
                 run.FontColor = color;
                 ClassicAssert.AreEqual(color, run.FontColor);
 

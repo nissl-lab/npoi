@@ -22,8 +22,7 @@ namespace NPOI.POIFS.Crypt
     using NPOI.POIFS.FileSystem;
     using NPOI.Util;
     using Org.BouncyCastle.Crypto;
-    using SixLabors.ImageSharp.Memory;
-    using System.Security.Cryptography;
+        using System.Security.Cryptography;
 
     public abstract class ChunkedCipherOutputStream : LittleEndianOutputStream
     {

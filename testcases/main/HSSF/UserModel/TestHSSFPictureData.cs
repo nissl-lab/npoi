@@ -26,7 +26,7 @@ namespace TestCases.HSSF.UserModel
     using TestCases.HSSF;
     using NPOI.SS.UserModel;
     using System.Collections.Generic;
-    using SixLabors.ImageSharp;
+    using SkiaSharp;
 
 
     /**
@@ -56,7 +56,7 @@ namespace TestCases.HSSF.UserModel
                 if (ext.Equals("jpeg"))
                 {
                     //try to read image data using javax.imageio.* (JDK 1.4+)
-                    Image jpg = Image.Load(new MemoryStream(data));
+                    using SKBitmap jpg = SKBitmap.Decode(new MemoryStream(data));
                     ClassicAssert.IsNotNull(jpg);
                     ClassicAssert.AreEqual(192, jpg.Width);
                     ClassicAssert.AreEqual(176, jpg.Height);
@@ -64,7 +64,7 @@ namespace TestCases.HSSF.UserModel
                 else if (ext.Equals("png"))
                 {
                     //try to read image data using javax.imageio.* (JDK 1.4+)
-                    Image png = Image.Load(new MemoryStream(data));
+                    using SKBitmap png = SKBitmap.Decode(new MemoryStream(data));
                     ClassicAssert.IsNotNull(png);
                     ClassicAssert.AreEqual(300, png.Width);
                     ClassicAssert.AreEqual(300, png.Height);
@@ -94,7 +94,7 @@ namespace TestCases.HSSF.UserModel
             byte[] data = pict.Data;
             using (MemoryStream ms = new MemoryStream(data))
             {
-                Image png = Image.Load(ms);
+                using SKBitmap png = SKBitmap.Decode(ms);
                 ClassicAssert.IsNotNull(png);
                 ClassicAssert.AreEqual(78, png.Width);
                 ClassicAssert.AreEqual(76, png.Height);
