@@ -271,7 +271,22 @@ namespace NPOI.HSSF.UserModel
                 return family;
             if (SystemFonts.TryGet("Arial", out family))
                 return family;
-            return SystemFonts.Families.First();
+            // Fall back to the first successfully loadable system font
+            foreach (var f in SystemFonts.Families)
+            {
+                try
+                {
+                    // Validate the font can be loaded by accessing its metrics
+                    const int validationFontSize = 10;
+                    _ = f.CreateFont(validationFontSize).FontMetrics;
+                    return f;
+                }
+                catch (InvalidFontFileException)
+                {
+                    // Skip broken font files (e.g. NotoColorEmoji without required tables)
+                }
+            }
+            throw new FontException("Failed to find any valid system fonts for rendering. Ensure at least one valid font is installed on the system.");
         }
 
         public void DrawPolyline(int[] xPoints, int[] yPoints, int nPoints)
