@@ -41,7 +41,7 @@ namespace TestCases.HSSF.UserModel
     using NPOI.HSSF.Record.Crypto;
     using NPOI.HSSF;
     using System.Net;
-    using SixLabors.ImageSharp;
+    using SkiaSharp;
     using NPOI.HPSF;
 
     /**
@@ -3339,12 +3339,12 @@ namespace TestCases.HSSF.UserModel
             // Get structure from webservice
             String urlString = "http://poi.apache.org/resources/images/project-logo.jpg";
             Uri structURL = new Uri(urlString);
-            Image bimage;
+            SKBitmap bimage;
             try
             {
                 WebClient client = new WebClient();
                 MemoryStream ms = new MemoryStream(client.DownloadData(structURL));
-                bimage = Image.Load(ms);
+                bimage = SKBitmap.Decode(ms);
                 ms.Close();
             }
             catch (WebException)
@@ -3353,12 +3353,10 @@ namespace TestCases.HSSF.UserModel
                 return;
             }
             // Convert BufferedImage to byte[]
-            ByteArrayOutputStream imageBAOS = new ByteArrayOutputStream();
-            //ImageIO.write(bimage, "jpeg", imageBAOS);
-            bimage.SaveAsJpeg(imageBAOS);
-            imageBAOS.Flush();
-            byte[] imageBytes = imageBAOS.ToByteArray();
-            imageBAOS.Close();
+            MemoryStream imageBAOS = new MemoryStream();
+            bimage.Encode(imageBAOS, SKEncodedImageFormat.Jpeg, 100);
+            byte[] imageBytes = imageBAOS.ToArray();
+            imageBAOS.Dispose();
             // Pop structure into Structure HSSFSheet
             int pict = wb.AddPicture(imageBytes, PictureType.JPEG);
             ISheet sheet = wb.GetSheet("Structure");

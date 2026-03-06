@@ -17,7 +17,7 @@
 using System;
 using NPOI.OpenXmlFormats.Dml;
 using NPOI.Util;
-using SixLabors.ImageSharp.PixelFormats;
+using SkiaSharp;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -62,7 +62,7 @@ namespace NPOI.XSSF.UserModel
             return _r;
         }
 
-        public Rgb24 FontColor
+        public SKColor FontColor
         {
             get
             {
@@ -75,18 +75,18 @@ namespace NPOI.XSSF.UserModel
                     {
                         CT_SRgbColor clr = fill.srgbClr;
                         byte[] rgb = clr.val;
-                        return new Rgb24((byte)(0xFF & rgb[0]), (byte)(0xFF & rgb[1]), (byte)(0xFF & rgb[2]));
+                        return new SKColor((byte)(0xFF & rgb[0]), (byte)(0xFF & rgb[1]), (byte)(0xFF & rgb[2]));
                     }
                 }
 
-                return new Rgb24(0, 0, 0);
+                return new SKColor(0, 0, 0);
             }
             set
             {
                 CT_TextCharacterProperties rPr = GetRPr();
                 CT_SolidColorFillProperties fill = rPr.IsSetSolidFill() ? rPr.solidFill : rPr.AddNewSolidFill();
                 CT_SRgbColor clr = fill.IsSetSrgbClr() ? fill.srgbClr : fill.AddNewSrgbClr();
-                clr.val = (new byte[] { value.R, value.G, value.B });
+                clr.val = (new byte[] { value.Red, value.Green, value.Blue });
 
                 if (fill.IsSetHslClr()) fill.UnsetHslClr();
                 if (fill.IsSetPrstClr()) fill.UnsetPrstClr();

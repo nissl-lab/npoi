@@ -23,11 +23,8 @@ namespace TestCases.HSSF.UserModel
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
 
-
     using NUnit.Framework;using NUnit.Framework.Legacy;
     using SkiaSharp;
-    using SixLabors.ImageSharp;
-    using SixLabors.ImageSharp.PixelFormats;
 
 
     /**
@@ -62,7 +59,7 @@ namespace TestCases.HSSF.UserModel
             escherGroupA = patriarch.CreateGroup(new HSSFClientAnchor(0, 0, 1022, 255, (short)0, 0, (short)0, 0));
             escherGroupB = patriarch.CreateGroup(new HSSFClientAnchor(20, 30, 500, 200, (short)0, 0, (short)0, 0));
             //        escherGroup = new HSSFShapeGroup(null, new HSSFChildAnchor());
-            graphics = new EscherGraphics(this.escherGroupA, workbook, Color.Black, 1.0f);
+            graphics = new EscherGraphics(this.escherGroupA, workbook, SKColors.Black, 1.0f);
 
         }
 
@@ -102,8 +99,8 @@ namespace TestCases.HSSF.UserModel
         [Test]
         public void TestSetColor()
         {
-            graphics.SetColor(Color.Red);
-            ClassicAssert.AreEqual(Color.Red, graphics.Color);
+            graphics.SetColor(SKColors.Red);
+            ClassicAssert.AreEqual(SKColors.Red, graphics.Color);
         }
 
         [Test]
