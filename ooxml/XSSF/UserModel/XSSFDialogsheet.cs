@@ -604,7 +604,7 @@ namespace NPOI.XSSF.UserModel
             throw new System.NotImplementedException();
         }
 
-        void ISheet.AutoSizeColumn(int column, bool useMergedCells, int maxRows=0)
+        void ISheet.AutoSizeColumn(int column, bool useMergedCells, int maxRows)
         {
             throw new System.NotImplementedException();
         }
