@@ -446,8 +446,83 @@ namespace TestCases.XSSF.UserModel
             workbook.Close();
         }
 
+        /// <summary>
+        /// Regression test for GitHub issue: AutoSizeColumn only resizes one column
+        /// when called on multiple columns of an existing workbook (with pre-existing column
+        /// definitions). The root cause was that GetColumnHelper().SetColBestFit() triggered
+        /// CleanColumns() which orphaned CT_Col objects tracked in _columns, causing width
+        /// changes to be lost for all columns after the first AutoSizeColumn call.
+        /// </summary>
         [Test]
-        [Platform("Win")]
+        public void TestAutoSizeColumnMultipleColumns_AllColumnsResized()
+        {
+            // Create and save a workbook with data in 3 columns so it has column definitions
+            XSSFWorkbook initialWorkbook = new XSSFWorkbook();
+            XSSFSheet initialSheet = (XSSFSheet)initialWorkbook.CreateSheet("Sheet1");
+
+            IRow headerRow = initialSheet.CreateRow(0);
+            headerRow.CreateCell(0).SetCellValue("Name");
+            headerRow.CreateCell(1).SetCellValue("Quantity");
+            headerRow.CreateCell(2).SetCellValue("Price Date");
+
+            for (int r = 1; r <= 5; r++)
+            {
+                IRow row = initialSheet.CreateRow(r);
+                row.CreateCell(0).SetCellValue("Row " + r);
+                row.CreateCell(1).SetCellValue(r * 1.0);
+                row.CreateCell(2).SetCellValue(r * 1.5);
+            }
+
+            // Save and reload to simulate opening an existing workbook
+            MemoryStream stream1 = new MemoryStream();
+            initialWorkbook.Write(stream1, true);
+            initialWorkbook.Close();
+
+            stream1.Position = 0;
+            XSSFWorkbook workbook = new XSSFWorkbook(stream1);
+            XSSFSheet sheet = (XSSFSheet)workbook.GetSheet("Sheet1");
+
+            // AutoSize all 3 columns - the bug was that only the first column was actually resized
+            sheet.AutoSizeColumn(0);
+            sheet.AutoSizeColumn(1);
+            sheet.AutoSizeColumn(2);
+
+            // All 3 columns must have been given an explicit width by AutoSizeColumn
+            ClassicAssert.IsNotNull(sheet.GetColumn(0), "Column 0 should have an explicit width after AutoSizeColumn");
+            ClassicAssert.IsNotNull(sheet.GetColumn(1), "Column 1 should have an explicit width after AutoSizeColumn");
+            ClassicAssert.IsNotNull(sheet.GetColumn(2), "Column 2 should have an explicit width after AutoSizeColumn");
+
+            // Capture widths immediately after auto-sizing (before write/read)
+            double width0Before = sheet.GetColumnWidth(0);
+            double width1Before = sheet.GetColumnWidth(1);
+            double width2Before = sheet.GetColumnWidth(2);
+
+            // Save and reload to verify widths are persisted
+            MemoryStream stream2 = new MemoryStream();
+            workbook.Write(stream2, true);
+            workbook.Close();
+
+            stream2.Position = 0;
+            XSSFWorkbook reloaded = new XSSFWorkbook(stream2);
+            XSSFSheet reloadedSheet = (XSSFSheet)reloaded.GetSheet("Sheet1");
+
+            // All 3 column objects should still exist after write/read
+            ClassicAssert.IsNotNull(reloadedSheet.GetColumn(0), "Column 0 should still exist after write/read");
+            ClassicAssert.IsNotNull(reloadedSheet.GetColumn(1), "Column 1 should still exist after write/read");
+            ClassicAssert.IsNotNull(reloadedSheet.GetColumn(2), "Column 2 should still exist after write/read");
+
+            // All widths should be preserved after write/read cycle
+            ClassicAssert.AreEqual(width0Before, reloadedSheet.GetColumnWidth(0),
+                "Column 0 width should be preserved after write/read");
+            ClassicAssert.AreEqual(width1Before, reloadedSheet.GetColumnWidth(1),
+                "Column 1 width should be preserved after write/read");
+            ClassicAssert.AreEqual(width2Before, reloadedSheet.GetColumnWidth(2),
+                "Column 2 width should be preserved after write/read");
+
+            reloaded.Close();
+        }
+
+        [Test]
         public void TestAutoSizeRow()
         {
             XSSFWorkbook workbook = new XSSFWorkbook();

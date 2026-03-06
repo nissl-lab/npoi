@@ -179,7 +179,6 @@ namespace TestCases.XSSF.Streaming
 
         // fails only for useMergedCell=true
         [Test]
-        [Platform("Win")]
         public void Test_WindowSizeEqualsOne_flushedRowHasMergedCell()
         {
             workbook = new SXSSFWorkbook(null, 1); // Window size 1 so only last row will be in memory
@@ -204,21 +203,20 @@ namespace TestCases.XSSF.Streaming
 
             if (useMergedCells)
             {
-                // Excel and LibreOffice behavior: ignore merged cells for auto-sizing.
-                // POI behavior: evenly distribute the column width among the merged columns.
-                //               each column must be auto-sized in order for the column widths
-                //               to add up to the best fit width.
-                int colspan = 2;
-                int expectedWidth = (10000 + 1000) / colspan; //average of 1_000 and 10_000
-                int minExpectedWidth = expectedWidth / 2;
-                int maxExpectedWidth = expectedWidth * 3 / 2;
-                assertColumnWidthStrictlyWithinRange(sheet.GetColumnWidth(0), minExpectedWidth, maxExpectedWidth); //short
+                // With useMergedCells=true: A1 has LONG merged text evenly distributed across
+                // the colspan (A1:B1). The SXSSF tracker records LONG/2 for column A only
+                // (B1 is not explicitly created), while column B gets SHORT from row 2 only.
+                // Column A should be wide (LONG/2 > SHORT_THRESHOLD) and column B should be short.
+                assertColumnWidthStrictlyWithinRange(sheet.GetColumnWidth(0), COLUMN_WIDTH_THRESHOLD_BETWEEN_SHORT_AND_LONG, MAX_COLUMN_WIDTH); // A: LONG/2
+                assertColumnWidthStrictlyWithinRange(sheet.GetColumnWidth(1), 0, COLUMN_WIDTH_THRESHOLD_BETWEEN_SHORT_AND_LONG); // B: SHORT
             }
             else
             {
-                assertColumnWidthStrictlyWithinRange(sheet.GetColumnWidth(0), COLUMN_WIDTH_THRESHOLD_BETWEEN_SHORT_AND_LONG, MAX_COLUMN_WIDTH); //long
+                // When useMergedCells=false: merged cells A1:B1 are skipped at flush time, so only row 2
+                // (SHORT, SHORT) determines the column widths for both columns.
+                assertColumnWidthStrictlyWithinRange(sheet.GetColumnWidth(0), 0, COLUMN_WIDTH_THRESHOLD_BETWEEN_SHORT_AND_LONG); //short
+                assertColumnWidthStrictlyWithinRange(sheet.GetColumnWidth(1), 0, COLUMN_WIDTH_THRESHOLD_BETWEEN_SHORT_AND_LONG); //short
             }
-            assertColumnWidthStrictlyWithinRange(sheet.GetColumnWidth(1), 0, COLUMN_WIDTH_THRESHOLD_BETWEEN_SHORT_AND_LONG); //short
         }
 
         [Test]

@@ -29,7 +29,6 @@ namespace TestCases.POIFS.Macros
     using TestCases;
 
     [TestFixture]
-    [Platform("Win", Reason = "Expected to run on Windows platform")]
     public class TestVBAMacroReader
     {
         private static IReadOnlyDictionary<POIDataSamples, String> expectedMacroContents;
@@ -40,7 +39,7 @@ namespace TestCases.POIFS.Macros
             byte[] bytes;
             try
             {
-                FileStream stream = new FileStream(macro.FullName, FileMode.Open, FileAccess.ReadWrite);
+                FileStream stream = new FileStream(macro.FullName, FileMode.Open, FileAccess.Read);
                 try
                 {
                     bytes = IOUtils.ToByteArray(stream);
@@ -56,7 +55,8 @@ namespace TestCases.POIFS.Macros
                 throw;
             }
 
-            String testMacroContents = Encoding.UTF8.GetString(bytes);
+            // Normalize line endings to \r\n to match what VBAMacroReader extracts from Office files
+            String testMacroContents = Regex.Replace(Encoding.UTF8.GetString(bytes), @"\r?\n", "\r\n");
 
             if (!testMacroContents.StartsWith("Sub "))
             {

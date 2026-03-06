@@ -18,6 +18,7 @@
 namespace NPOI.HSSF.UserModel
 {
     using System;
+    using System.Linq;
     using NPOI.HSSF.Util;
     using NPOI.Util;
     using NPOI.SS.UserModel;
@@ -87,7 +88,7 @@ namespace NPOI.HSSF.UserModel
             this.workbook = workbook;
             this.verticalPointsPerPixel = verticalPointsPerPixel;
             this.verticalPixelsPerPoint = 1 / verticalPointsPerPixel;
-            this.font = new Font(SystemFonts.Get("Arial"), 10);
+            this.font = new Font(GetFontFamilyOrFallback("Arial"), 10);
             this.foreground = forecolor;
             //        background = backcolor;
         }
@@ -264,6 +265,30 @@ namespace NPOI.HSSF.UserModel
             return result;
         }
 
+        private static SixLabors.Fonts.FontFamily GetFontFamilyOrFallback(string fontName)
+        {
+            if (SystemFonts.TryGet(fontName, out SixLabors.Fonts.FontFamily family))
+                return family;
+            if (SystemFonts.TryGet("Arial", out family))
+                return family;
+            // Fall back to the first successfully loadable system font
+            foreach (var f in SystemFonts.Families)
+            {
+                try
+                {
+                    // Validate the font can be loaded by accessing its metrics
+                    const int validationFontSize = 10;
+                    _ = f.CreateFont(validationFontSize).FontMetrics;
+                    return f;
+                }
+                catch (InvalidFontFileException)
+                {
+                    // Skip broken font files (e.g. NotoColorEmoji without required tables)
+                }
+            }
+            throw new FontException("Failed to find any valid system fonts for rendering. Ensure at least one valid font is installed on the system.");
+        }
+
         public void DrawPolyline(int[] xPoints, int[] yPoints, int nPoints)
         {
             if (Logger.Check(POILogger.WARN))
@@ -288,7 +313,7 @@ namespace NPOI.HSSF.UserModel
             if (string.IsNullOrEmpty(str))
                 return;
             // TODO-Fonts: Fallback for missing font
-            Font excelFont = new Font(SystemFonts.Get(font.Name.Equals("SansSerif") ? "Arial" : font.Name),
+            Font excelFont = new Font(GetFontFamilyOrFallback(font.Name.Equals("SansSerif") ? "Arial" : font.Name),
                 (int)(font.Size / verticalPixelsPerPoint), font.FontMetrics.Description.Style);
             {
                 var textOptions = new TextOptions(excelFont) { Dpi = dpi };
