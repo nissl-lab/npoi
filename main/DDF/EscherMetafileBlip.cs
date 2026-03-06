@@ -276,8 +276,8 @@ namespace NPOI.DDF
             {
                 field_3_rcBounds_x1 = value.Left;
                 field_3_rcBounds_y1 = value.Top;
-                field_3_rcBounds_x2 = value.Left + value.Width;
-                field_3_rcBounds_y2 = value.Top + value.Height;
+                field_3_rcBounds_x2 = value.Right;
+                field_3_rcBounds_y2 = value.Bottom;
             }
         }
 
