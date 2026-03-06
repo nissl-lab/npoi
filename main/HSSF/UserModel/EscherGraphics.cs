@@ -18,6 +18,7 @@
 namespace NPOI.HSSF.UserModel
 {
     using System;
+    using System.Linq;
     using NPOI.HSSF.Util;
     using NPOI.Util;
     using NPOI.SS.UserModel;
@@ -87,7 +88,7 @@ namespace NPOI.HSSF.UserModel
             this.workbook = workbook;
             this.verticalPointsPerPixel = verticalPointsPerPixel;
             this.verticalPixelsPerPoint = 1 / verticalPointsPerPixel;
-            this.font = new Font(SystemFonts.Get("Arial"), 10);
+            this.font = new Font(GetFontFamilyOrFallback("Arial"), 10);
             this.foreground = forecolor;
             //        background = backcolor;
         }
@@ -264,6 +265,15 @@ namespace NPOI.HSSF.UserModel
             return result;
         }
 
+        private static SixLabors.Fonts.FontFamily GetFontFamilyOrFallback(string fontName)
+        {
+            if (SystemFonts.TryGet(fontName, out SixLabors.Fonts.FontFamily family))
+                return family;
+            if (SystemFonts.TryGet("Arial", out family))
+                return family;
+            return SystemFonts.Families.First();
+        }
+
         public void DrawPolyline(int[] xPoints, int[] yPoints, int nPoints)
         {
             if (Logger.Check(POILogger.WARN))
@@ -288,7 +298,7 @@ namespace NPOI.HSSF.UserModel
             if (string.IsNullOrEmpty(str))
                 return;
             // TODO-Fonts: Fallback for missing font
-            Font excelFont = new Font(SystemFonts.Get(font.Name.Equals("SansSerif") ? "Arial" : font.Name),
+            Font excelFont = new Font(GetFontFamilyOrFallback(font.Name.Equals("SansSerif") ? "Arial" : font.Name),
                 (int)(font.Size / verticalPixelsPerPoint), font.FontMetrics.Description.Style);
             {
                 var textOptions = new TextOptions(excelFont) { Dpi = dpi };
