@@ -22,7 +22,7 @@ using NPOI.SS;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using NPOI.Util;
-using SixLabors.Fonts;
+using SkiaSharp;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -192,9 +192,9 @@ namespace NPOI.XSSF.UserModel
             , int dy2
         ) : this() {
             IFont   ift = ((XSSFWorkbook)Sheet.Workbook).GetStylesSource().GetFontAt(0);
-            Font    ft  = SheetUtil.IFont2Font(ift);
-            var     rt  = TextMeasurer.MeasureSize("0", new TextOptions(ft));
-            double  MDW = rt.Width + 1;                                                     //MaximumDigitWidth
+            using SKFont ft  = SheetUtil.IFont2Font(ift);
+            using var paint = new SKPaint { Typeface = ft.Typeface, TextSize = ft.Size };
+            double  MDW = paint.MeasureText("0") + 1;                                               //MaximumDigitWidth
 
             double colwidth;                                                                //default or base column width (in pixel)
             var width = ((XSSFSheet)Sheet).worksheet.sheetFormatPr.defaultColWidth;         //string length with padding

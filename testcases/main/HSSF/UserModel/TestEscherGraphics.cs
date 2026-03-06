@@ -25,7 +25,7 @@ namespace TestCases.HSSF.UserModel
 
 
     using NUnit.Framework;using NUnit.Framework.Legacy;
-    using SixLabors.Fonts;
+    using SkiaSharp;
     using SixLabors.ImageSharp;
     using SixLabors.ImageSharp.PixelFormats;
 
@@ -48,6 +48,9 @@ namespace TestCases.HSSF.UserModel
         private HSSFShapeGroup escherGroupB;
         private EscherGraphics graphics;
 
+        // Default DPI used by EscherGraphics and SheetUtil
+        private const float dpi = 96f;
+
         [SetUp]
         public void SetUp()
         {
@@ -66,28 +69,32 @@ namespace TestCases.HSSF.UserModel
         [Test]
         public void TestGetFont()
         {
-            Font f = graphics.Font;
-            ClassicAssert.AreEqual(10, f.Size);
-            ClassicAssert.AreEqual(FontStyle.Regular, f.FontMetrics.Description.Style);
+            SKFont f = graphics.Font;
+            // Font was created at 10pt; stored as pixels at 96 DPI
+            float expectedSizePx = 10f * dpi / 72f;
+            ClassicAssert.AreEqual(expectedSizePx, f.Size, 0.01f);
+            ClassicAssert.IsFalse(f.Typeface.IsBold);
+            ClassicAssert.IsFalse(f.Typeface.IsItalic);
         }
 
         [Test]
         public void TestGetFontMetrics()
         {
-            Font f = graphics.Font;
-            float width = TextMeasurer.MeasureSize("X", new TextOptions(f)).Width;
+            SKFont f = graphics.Font;
+            using var paint = new SKPaint { Typeface = f.Typeface, TextSize = f.Size };
+            float width = paint.MeasureText("X");
             ClassicAssert.IsTrue(width > 0, "Expected font metrics width > 0, but got: " + width);
-            ClassicAssert.AreEqual(10, f.Size);
-            ClassicAssert.AreEqual(FontStyle.Regular, f.FontMetrics.Description.Style);
+            ClassicAssert.IsTrue(f.Size > 0);
+            ClassicAssert.IsFalse(f.Typeface.IsBold);
+            ClassicAssert.IsFalse(f.Typeface.IsItalic);
         }
 
         [Test]
         public void TestSetFont()
         {
-            FontCollection fonts = new FontCollection();
             var fi = POIDataSamples.GetSpreadSheetInstance().GetFileInfo("Helvetica.ttf");
-            SixLabors.Fonts.FontFamily font1 = fonts.Add(fi.FullName);
-            Font f = new Font(font1, 12, FontStyle.Regular);
+            var typeface = SKTypeface.FromFile(fi.FullName);
+            var f = new SKFont(typeface, 12f * dpi / 72f);
             graphics.SetFont(f);
             ClassicAssert.AreEqual(f, graphics.Font);
         }

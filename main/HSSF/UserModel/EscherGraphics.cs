@@ -24,7 +24,7 @@ namespace NPOI.HSSF.UserModel
     using NPOI.SS.UserModel;
     using SixLabors.ImageSharp;
     using SixLabors.ImageSharp.PixelFormats;
-    using SixLabors.Fonts;
+    using SkiaSharp;
 
     /**
      * Translates Graphics calls into escher calls.  The translation Is lossy so
@@ -68,7 +68,7 @@ namespace NPOI.HSSF.UserModel
         private float verticalPixelsPerPoint;
         private Rgb24 foreground;
         private Rgb24 background = new Rgb24(255, 255, 255);
-        private Font font;
+        private SKFont font;
         private static POILogger Logger = POILogFactory.GetLogger(typeof(EscherGraphics));
 
         // Default dpi
@@ -88,7 +88,7 @@ namespace NPOI.HSSF.UserModel
             this.workbook = workbook;
             this.verticalPointsPerPixel = verticalPointsPerPixel;
             this.verticalPixelsPerPoint = 1 / verticalPointsPerPixel;
-            this.font = new Font(GetFontFamilyOrFallback("Arial"), 10);
+            this.font = CreateFont("Arial", 10);
             this.foreground = forecolor;
             //        background = backcolor;
         }
@@ -102,7 +102,7 @@ namespace NPOI.HSSF.UserModel
          * @param verticalPointsPerPixel    The font multiplier.  (See class description for information on how this works.).
          * @param font                  The font to use.
          */
-        EscherGraphics(HSSFShapeGroup escherGroup, HSSFWorkbook workbook, Color foreground, Font font, float verticalPointsPerPixel)
+        EscherGraphics(HSSFShapeGroup escherGroup, HSSFWorkbook workbook, Color foreground, SKFont font, float verticalPointsPerPixel)
         {
             this.escherGroup = escherGroup;
             this.workbook = workbook;
@@ -265,28 +265,14 @@ namespace NPOI.HSSF.UserModel
             return result;
         }
 
-        private static SixLabors.Fonts.FontFamily GetFontFamilyOrFallback(string fontName)
+        private static SKFont CreateFont(string fontName, float sizeInPoints)
         {
-            if (SystemFonts.TryGet(fontName, out SixLabors.Fonts.FontFamily family))
-                return family;
-            if (SystemFonts.TryGet("Arial", out family))
-                return family;
-            // Fall back to the first successfully loadable system font
-            foreach (var f in SystemFonts.Families)
-            {
-                try
-                {
-                    // Validate the font can be loaded by accessing its metrics
-                    const int validationFontSize = 10;
-                    _ = f.CreateFont(validationFontSize).FontMetrics;
-                    return f;
-                }
-                catch (InvalidFontFileException)
-                {
-                    // Skip broken font files (e.g. NotoColorEmoji without required tables)
-                }
-            }
-            throw new FontException("Failed to find any valid system fonts for rendering. Ensure at least one valid font is installed on the system.");
+            var fontStyle = SKFontStyle.Normal;
+            var typeface = SKTypeface.FromFamilyName(fontName, fontStyle)
+                ?? SKTypeface.FromFamilyName("Arial", fontStyle)
+                ?? SKTypeface.Default;
+            float textSizePx = sizeInPoints * dpi / 72f;
+            return new SKFont(typeface, textSizePx);
         }
 
         public void DrawPolyline(int[] xPoints, int[] yPoints, int nPoints)
@@ -312,12 +298,13 @@ namespace NPOI.HSSF.UserModel
         {
             if (string.IsNullOrEmpty(str))
                 return;
-            // TODO-Fonts: Fallback for missing font
-            Font excelFont = new Font(GetFontFamilyOrFallback(font.Name.Equals("SansSerif") ? "Arial" : font.Name),
-                (int)(font.Size / verticalPixelsPerPoint), font.FontMetrics.Description.Style);
+            // Convert font size from pixels back to points for the HSSF font height
+            float fontSizeInPoints = font.Size * 72f / dpi;
+            string fontName = font.Typeface.FamilyName.Equals("SansSerif", StringComparison.OrdinalIgnoreCase) ? "Arial" : font.Typeface.FamilyName;
+            using SKFont excelFont = CreateFont(fontName, (int)(fontSizeInPoints / verticalPixelsPerPoint));
             {
-                var textOptions = new TextOptions(excelFont) { Dpi = dpi };
-                int width = (int)((TextMeasurer.MeasureSize(str, textOptions).Width * 8) + 12);
+                using var paint = new SKPaint { Typeface = excelFont.Typeface, TextSize = excelFont.Size };
+                int width = (int)((paint.MeasureText(str) * 8) + 12);
                 int height = (int)((font.Size / verticalPixelsPerPoint) + 6) * 2;
                 y -= Convert.ToInt32((font.Size / verticalPixelsPerPoint) + 2 * verticalPixelsPerPoint);    // we want to Draw the shape from the top-left
                 HSSFTextbox textbox = escherGroup.CreateTextbox(new HSSFChildAnchor(x, y, x + width, y + height));
@@ -330,18 +317,20 @@ namespace NPOI.HSSF.UserModel
             }
         }
 
-        private HSSFFont MatchFont(Font font)
+        private HSSFFont MatchFont(SKFont font)
         {
             HSSFColor hssfColor = workbook.GetCustomPalette()
                     .FindColor((byte)foreground.R, (byte)foreground.G, (byte)foreground.B);
             if (hssfColor == null)
                 hssfColor = workbook.GetCustomPalette().FindSimilarColor((byte)foreground.R, (byte)foreground.G, (byte)foreground.B);
-            bool bold = font.IsBold;
-            bool italic = font.IsItalic;
+            bool bold = font.Typeface.FontStyle.Weight >= (int)SKFontStyleWeight.Bold;
+            bool italic = font.Typeface.FontStyle.Slant != SKFontStyleSlant.Upright;
+            // Convert pixel size back to points (multiply by 20 for Excel's half-point unit)
+            float sizeInPoints = font.Size * 72f / dpi;
             HSSFFont hssfFont = (HSSFFont)workbook.FindFont(bold,
                         hssfColor.Indexed,
-                        (short)(font.Size * 20),
-                        font.Name,
+                        (short)(sizeInPoints * 20),
+                        font.Typeface.FamilyName,
                         italic,
                         false,
                         (short)NPOI.SS.UserModel.FontSuperScript.None,
@@ -352,8 +341,8 @@ namespace NPOI.HSSF.UserModel
                 hssfFont = (HSSFFont)workbook.CreateFont();
                 hssfFont.IsBold = bold;
                 hssfFont.Color = (hssfColor.Indexed);
-                hssfFont.FontHeight = ((short)(font.Size * 20));
-                hssfFont.FontName = font.Name;
+                hssfFont.FontHeight = ((short)(sizeInPoints * 20));
+                hssfFont.FontName = font.Typeface.FamilyName;
                 hssfFont.IsItalic = (italic);
                 hssfFont.IsStrikeout = (false);
                 hssfFont.TypeOffset = 0;
@@ -483,7 +472,7 @@ namespace NPOI.HSSF.UserModel
             }
         }
 
-        public Font Font
+        public SKFont Font
         {
             get
             {
@@ -512,7 +501,7 @@ namespace NPOI.HSSF.UserModel
             foreground = color;
         }
 
-        public void SetFont(Font f)
+        public void SetFont(SKFont f)
         {
             font = f;
         }

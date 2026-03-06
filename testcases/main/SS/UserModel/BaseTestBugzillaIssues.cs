@@ -23,7 +23,7 @@ namespace TestCases.SS.UserModel
     using NPOI.SS.Util;
     using NPOI.Util;
     using NUnit.Framework;using NUnit.Framework.Legacy;
-    using SixLabors.Fonts;
+    using SkiaSharp;
     using System;
     using System.Collections.Generic;
     using System.IO;
@@ -38,7 +38,6 @@ namespace TestCases.SS.UserModel
     {
 
         private ITestDataProvider _testDataProvider;
-        private static int dpi = 96;
         private static String TEST_32 = "Some text with 32 characters to ";
         private static String TEST_255 = "Some very long text that is exactly 255 characters, which are allowed here, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla.....";
         private static String TEST_256 = "Some very long text that is longer than the 255 characters allowed in HSSF here, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla1";
@@ -495,18 +494,18 @@ namespace TestCases.SS.UserModel
 
             //TextLayout layout = new TextLayout(str.getIterator(), fontRenderContext);
             //width = ((layout.getBounds().getWidth() / 1) / 8);
-            Font wfont = SheetUtil.IFont2Font(font);
-            var textOptions = new TextOptions(wfont) { Dpi = dpi };
-            width = (double)TextMeasurer.MeasureSize(txt, textOptions).Width;
+            using SKFont wfont = SheetUtil.IFont2Font(font);
+            using var paint = new SKPaint { Typeface = wfont.Typeface, TextSize = wfont.Size };
+            width = paint.MeasureText(txt);
             return width;
         }
 
         private double ComputeCellWidthFixed(IFont font, String txt)
         {
             double width;
-            Font wfont = SheetUtil.IFont2Font(font);
-            var textOptions = new TextOptions(wfont) { Dpi = dpi };
-            width = (double)TextMeasurer.MeasureSize(txt, textOptions).Width;
+            using SKFont wfont = SheetUtil.IFont2Font(font);
+            using var paint = new SKPaint { Typeface = wfont.Typeface, TextSize = wfont.Size };
+            width = paint.MeasureText(txt);
             return width;
         }
 

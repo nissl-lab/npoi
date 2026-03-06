@@ -36,7 +36,7 @@ namespace NPOI.HSSF.UserModel
     using NPOI.SS.UserModel.Helpers;
     using NPOI.HSSF.UserModel.helpers;
 
-    using SixLabors.Fonts;
+    using SkiaSharp;
     using System.Data;
 
     /// <summary>
@@ -2485,10 +2485,9 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="font1">The font.</param>
         /// <returns></returns>
-        public Font HSSFFont2Font(HSSFFont font1)
+        public SKFont HSSFFont2Font(HSSFFont font1)
         {
-            // TODO-Fonts: Fallback for missing font
-            return new Font(SystemFonts.Get(font1.FontName), (float)font1.FontHeightInPoints);
+            return SheetUtil.IFont2Font(font1);
         }
 
         /// <summary>

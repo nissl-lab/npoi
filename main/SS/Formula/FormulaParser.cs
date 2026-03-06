@@ -32,7 +32,6 @@ namespace NPOI.SS.Formula
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
     using NPOI.Util;
-    using SixLabors.Fonts.Unicode;
 
     /// <summary>
     /// Specific exception thrown when a supplied formula does not Parse properly.
@@ -221,18 +220,18 @@ namespace NPOI.SS.Formula
         /** Recognize an Alpha Character */
         private static bool IsAlpha(int c)
         {
-            return CodePoint.IsLetter(new CodePoint(c)) || c == '$' || c == '_';
+            return char.IsLetter(char.ConvertFromUtf32(c), 0) || c == '$' || c == '_';
         }
 
         private static bool IsLetter(int c)
         {
-            return CodePoint.IsLetter(new CodePoint(c));
+            return char.IsLetter(char.ConvertFromUtf32(c), 0);
         }
 
         /** Recognize a Decimal Digit */
         private static bool IsDigit(int c)
         {
-            return CodePoint.IsDigit(new CodePoint(c));
+            return char.IsDigit(char.ConvertFromUtf32(c), 0);
         }
 
         /** Recognize an Alphanumeric */
@@ -249,7 +248,7 @@ namespace NPOI.SS.Formula
 
         private static bool IsLetterOrDigit(int c)
         {
-            return CodePoint.IsLetterOrDigit(new CodePoint(c));
+            return char.IsLetterOrDigit(char.ConvertFromUtf32(c), 0);
         }
 
         /** Skip Over Leading White Space */
