@@ -507,7 +507,7 @@ namespace NPOI.OpenXmlFormats.Dml
                     string value = itemsValueField[i];
 
                     sw.WriteStart("a", x.ToString());
-                    if(value != null)
+                    if (value != null)
                         sw.WriteAttribute("val", value);
                     sw.Write("/>");
                 }
@@ -792,7 +792,7 @@ namespace NPOI.OpenXmlFormats.Dml
                     string value = itemsValueField[i];
 
                     sw.WriteStart("a", x.ToString());
-                    if(value != null)
+                    if (value != null)
                         sw.WriteAttribute("val", value);
                     sw.Write("/>");
                 }
@@ -1002,6 +1002,7 @@ namespace NPOI.OpenXmlFormats.Dml
         private ST_SystemColorVal valField;
 
         private byte[] lastClrField;
+        private bool lastClrFieldSpecified;
 
         public CT_SystemColor()
         {
@@ -1016,6 +1017,7 @@ namespace NPOI.OpenXmlFormats.Dml
             CT_SystemColor ctObj = new CT_SystemColor();
             if (node.Attributes["val"] != null)
                 ctObj.val = (ST_SystemColorVal)Enum.Parse(typeof(ST_SystemColorVal), node.Attributes["val"].Value);
+            ctObj.lastClrFieldSpecified = node.Attributes["lastClr"] != null;
             ctObj.lastClr = XmlHelper.ReadBytes(node.Attributes["lastClr"]);
 
             foreach (XmlNode childNode in node.ChildNodes)
@@ -1089,7 +1091,8 @@ namespace NPOI.OpenXmlFormats.Dml
         {
             sw.WriteStart("a", nodeName);
             XmlHelper.WriteAttribute(sw, "val", this.val.ToString());
-            XmlHelper.WriteAttribute(sw, "lastClr", this.lastClr);
+            if(lastClrFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "lastClr", this.lastClr);
             if (this.ItemsElementName.Count > 0)
             {
                 sw.Write('>');
@@ -1110,6 +1113,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 sw.Write("/>", nodeName);
             }
         }
+
         [XmlIgnore]
         public List<EG_ColorTransform> ItemsElementName
         {
@@ -1145,8 +1149,15 @@ namespace NPOI.OpenXmlFormats.Dml
             }
             set
             {
+                this.lastClrSpecified = true;
                 this.lastClrField = value;
             }
+        }
+
+        public bool lastClrSpecified
+        {
+            get { return this.lastClrFieldSpecified; }
+            set { this.lastClrFieldSpecified = value; }
         }
     }
 
@@ -1220,11 +1231,11 @@ namespace NPOI.OpenXmlFormats.Dml
 
         /// <remarks/>
         [XmlEnum("3dDkShadow")]
-        Item3dDkShadow,
+        x3dDkShadow,
 
         /// <remarks/>
         [XmlEnum("3dLight")]
-        Item3dLight,
+        x3dLight,
 
         /// <remarks/>
         infoText,
@@ -1377,7 +1388,7 @@ namespace NPOI.OpenXmlFormats.Dml
                     string value = itemsValueField[i];
 
                     sw.WriteStart("a", x.ToString());
-                    if(value != null)
+                    if (value != null)
                         sw.WriteAttribute("val", value);
                     sw.Write("/>");
                 }
@@ -1514,6 +1525,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
             set
             {
+                this.valFieldSpecified = true;
                 this.valField = value;
             }
         }
@@ -1536,6 +1548,7 @@ namespace NPOI.OpenXmlFormats.Dml
             if (node == null)
                 return null;
             CT_PresetColor ctObj = new CT_PresetColor();
+            ctObj.valSpecified = node.Attributes["val"] != null;
             if (node.Attributes["val"] != null)
                 ctObj.val = (ST_PresetColorVal)Enum.Parse(typeof(ST_PresetColorVal), node.Attributes["val"].Value);
             foreach (XmlNode childNode in node.ChildNodes)
@@ -1621,7 +1634,7 @@ namespace NPOI.OpenXmlFormats.Dml
                     string value = itemsValueField[i];
 
                     sw.WriteStart("a", x.ToString());
-                    if(value != null)
+                    if (value != null)
                         sw.WriteAttribute("val", value);
                     sw.Write("/>");
                 }
@@ -2120,7 +2133,7 @@ namespace NPOI.OpenXmlFormats.Dml
         {
             extField.Add(new CT_OfficeArtExtension());
             return extField[extField.Count - 1];
-        }
+    }
     }
 
     [Serializable]
@@ -2176,19 +2189,32 @@ namespace NPOI.OpenXmlFormats.Dml
 
         private CT_PositiveSize2D extField = null;
 
-        private int? rotField = null;
+        private int rotField;
+        private bool rotFieldSpecified;
 
-        private bool? flipHField = null;
+        private bool flipHField;
+        private bool flipHFieldSpecified;
 
-        private bool? flipVField = null;
+        private bool flipVField;
+        private bool flipVFieldSpecified;
         public static CT_Transform2D Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
                 return null;
             CT_Transform2D ctObj = new CT_Transform2D();
-            ctObj.rot = XmlHelper.ReadInt(node.Attributes["rot"]);
-            ctObj.flipH = XmlHelper.ReadBool(node.Attributes["flipH"]);
-            ctObj.flipV = XmlHelper.ReadBool(node.Attributes["flipV"]);
+            
+            ctObj.rotFieldSpecified = node.Attributes["rot"] != null;
+            if(ctObj.rotFieldSpecified)
+                ctObj.rotField = XmlHelper.ReadInt(node.Attributes["rot"]);
+
+            ctObj.flipHFieldSpecified = node.Attributes["flipH"] != null;
+            if(ctObj.flipHFieldSpecified)
+                ctObj.flipH = XmlHelper.ReadBool(node.Attributes["flipH"]);
+
+            ctObj.flipVFieldSpecified = node.Attributes["flipV"] != null;
+            if(ctObj.flipVFieldSpecified)
+                ctObj.flipV = XmlHelper.ReadBool(node.Attributes["flipV"]);
+
             foreach (XmlNode childNode in node.ChildNodes)
             {
                 if (childNode.LocalName == "off")
@@ -2203,9 +2229,12 @@ namespace NPOI.OpenXmlFormats.Dml
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.WriteStart(nodeName);
-            XmlHelper.WriteAttribute(sw, "rot", this.rot);
-            XmlHelper.WriteAttribute(sw, "flipH", this.flipH, false);
-            XmlHelper.WriteAttribute(sw, "flipV", this.flipV,false);
+            if(this.rotFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "rot", this.rot);
+            if(this.flipHFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "flipH", this.flipH, false);
+            if(this.flipVFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "flipV", this.flipV,false);
             sw.Write('>');
             if (this.off != null)
                 this.off.Write(sw, "a:off");
@@ -2224,6 +2253,26 @@ namespace NPOI.OpenXmlFormats.Dml
         {
             this.offField = new CT_Point2D();
             return this.offField;
+        }
+
+        public bool IsSetOff()
+        {
+            return this.offField != null;
+        }
+
+        public void UnsetOff()
+        {
+            this.offField = null;
+        }
+
+        public bool IsSetExt()
+        {
+            return this.ext != null;
+        }
+
+        public void UnsetExt()
+        {
+            this.ext = null;
         }
 
         [XmlElement(Order = 0)]
@@ -2258,11 +2307,24 @@ namespace NPOI.OpenXmlFormats.Dml
         {
             get
             {
-                return null == this.rotField ? 0 : (int)rotField;
+                return rotField;
             }
             set
             {
                 this.rotField = value;
+            }
+        }
+
+        [XmlIgnore]
+        public bool rotSpecified
+        {
+            get
+            {
+                return rotFieldSpecified;
+            }
+            set
+            {
+                this.rotFieldSpecified = value;
             }
         }
 
@@ -2272,24 +2334,51 @@ namespace NPOI.OpenXmlFormats.Dml
         {
             get
             {
-                return null == this.flipHField ? false : (bool)flipHField;
+                return flipHField;
             }
             set
             {
                 this.flipHField = value;
             }
         }
+
+        [XmlIgnore]
+        public bool flipHSpecified
+        {
+            get
+            {
+                return flipHFieldSpecified;
+            }
+            set
+            {
+                this.flipHFieldSpecified = value;
+            }
+        }
+
         [XmlAttribute]
         [DefaultValue(false)]
         public bool flipV
         {
             get
             {
-                return null == this.flipVField ? false : (bool)flipVField;
+                return flipVField;
             }
             set
             {
                 this.flipVField = value;
+            }
+        }
+
+        [XmlIgnore]
+        public bool flipVSpecified
+        {
+            get
+            {
+                return flipVFieldSpecified;
+            }
+            set
+            {
+                this.flipVFieldSpecified = value;
             }
         }
     }
@@ -2709,18 +2798,22 @@ namespace NPOI.OpenXmlFormats.Dml
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/main", IsNullable = true)]
     public class CT_RelativeRect
     {
-        private int? lField; // all attributes are percentage
-        private int? tField;
-        private int? rField;
-        private int? bField;
+        private int lField; // all attributes are percentage
+        private int tField;
+        private int rField;
+        private int bField;
         public static CT_RelativeRect Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
                 return null;
             CT_RelativeRect ctObj = new CT_RelativeRect();
+            ctObj.lSpecified = node.Attributes["l"]!=null;
             ctObj.l = XmlHelper.ReadInt(node.Attributes["l"]);
+            ctObj.tSpecified = node.Attributes["t"]!=null;
             ctObj.t = XmlHelper.ReadInt(node.Attributes["t"]);
+            ctObj.rSpecified = node.Attributes["r"]!=null;
             ctObj.r = XmlHelper.ReadInt(node.Attributes["r"]);
+            ctObj.bSpecified = node.Attributes["b"]!=null;
             ctObj.b = XmlHelper.ReadInt(node.Attributes["b"]);
             return ctObj;
         }
@@ -2730,10 +2823,14 @@ namespace NPOI.OpenXmlFormats.Dml
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.WriteStart("a", nodeName);
-            XmlHelper.WriteAttribute(sw, "l", this.l);
-            XmlHelper.WriteAttribute(sw, "t", this.t);
-            XmlHelper.WriteAttribute(sw, "r", this.r);
-            XmlHelper.WriteAttribute(sw, "b", this.b);
+            if(lSpecified)
+                XmlHelper.WriteAttribute(sw, "l", this.l);
+            if(tSpecified)
+                XmlHelper.WriteAttribute(sw, "t", this.t);
+            if(rSpecified)
+                XmlHelper.WriteAttribute(sw, "r", this.r);
+            if(bSpecified)
+                XmlHelper.WriteAttribute(sw, "b", this.b);
             sw.Write("/>");
         }
 
@@ -2741,66 +2838,49 @@ namespace NPOI.OpenXmlFormats.Dml
         [DefaultValue(0)]
         public int l
         {
-            get {
-                if (this.lField == null)
-                    return 0; 
-                return (int)this.lField; 
-            }
-            set { this.lField = value; }
+            get{ return lField; }
+            set{ lSpecified = true; lField = value; }
         }
         [XmlIgnore]
         public bool lSpecified
         {
-            get { return (null != lField); }
+            get; set;
         }
         [XmlAttribute]
         [DefaultValue(0)]
         public int t
         {
-            get {
-                if (this.tField == null)
-                    return 0; 
-                return (int)this.tField; 
-            }
-            set { this.tField = value; }
+            get{ return tField; }
+            set{ tSpecified = true; tField = value; }
         }
         [XmlIgnore]
         public bool tSpecified
         {
-            get { return (null != tField); }
+            get; set;
         }
         [XmlAttribute]
         [DefaultValue(0)]
         public int r
         {
-            get
-            {
-                if (this.rField == null)
-                    return 0; 
-                return (int)this.rField;
-            }
-            set { this.rField = value; }
+            get{ return rField; }
+            set{ rSpecified = true; rField = value; }
         }
         [XmlIgnore]
         public bool rSpecified
         {
-            get { return (null != rField); }
+            get; set;
         }
         [XmlAttribute]
         [DefaultValue(0)]
         public int b
         {
-            get {
-                if (this.bField == null)
-                    return 0;
-                return (int)this.bField; 
-            }
-            set { this.bField = value; }
+            get{ return bField; }
+            set{ bSpecified = true; bField = value; }
         }
         [XmlIgnore]
         public bool bSpecified
         {
-            get { return (null != bField); }
+            get; set;
         }
     }
 
@@ -2969,6 +3049,24 @@ namespace NPOI.OpenXmlFormats.Dml
             this.srgbClrField = new CT_SRgbColor();
             return this.srgbClrField;
         }
+
+        internal CT_ScRgbColor AddNewScRgbClr()
+        {
+            this.scrgbClrField = new CT_ScRgbColor();
+            return this.scrgbClrField;
+        }
+
+        internal CT_PresetColor AddNewPrstClr()
+        {
+            this.prstClrField = new CT_PresetColor();
+            return this.prstClrField;
+        }
+
+        internal CT_SystemColor AddNewSysClr()
+        {
+            this.sysClr = new CT_SystemColor();
+            return this.sysClr;
+        }
     }
 
     [Serializable]
@@ -3096,32 +3194,48 @@ namespace NPOI.OpenXmlFormats.Dml
         private CT_OfficeArtExtensionList extLstField;
 
         private string idField;
+        private bool idFieldSpecified;
 
         private string invalidUrlField;
+        private bool invalidUrlFieldSpecified;
 
         private string actionField;
+        private bool actionFieldSpecified;
 
         private string tgtFrameField;
+        private bool tgtFrameFieldSpecified;
 
         private string tooltipField;
+        private bool tooltipFieldSpecified;
 
         private bool historyField;
+        private bool historyFieldSpecified;
 
         private bool highlightClickField;
+        private bool highlightClickFieldSpecified;
 
         private bool endSndField;
+        private bool endSndFieldSpecified;
         public static CT_Hyperlink Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
                 return null;
             CT_Hyperlink ctObj = new CT_Hyperlink();
+            ctObj.idFieldSpecified = node.Attributes["r:id"]!=null;
             ctObj.id = XmlHelper.ReadString(node.Attributes["r:id"]);
-            ctObj.invalidUrl = XmlHelper.ReadString(node.Attributes["invalidUrl"]);
-            ctObj.action = XmlHelper.ReadString(node.Attributes["action"]);
-            ctObj.tgtFrame = XmlHelper.ReadString(node.Attributes["tgtFrame"]);
-            ctObj.tooltip = XmlHelper.ReadString(node.Attributes["tooltip"]);
-            ctObj.history = XmlHelper.ReadBool(node.Attributes["history"]);
+            ctObj.invalidUrlFieldSpecified = node.Attributes["invalidUrl"]!=null;
+            ctObj.invalidUrl = XmlHelper.ReadString(node.Attributes["invalidUrl"], "");
+            ctObj.actionFieldSpecified = node.Attributes["action"] != null;
+            ctObj.action = XmlHelper.ReadString(node.Attributes["action"], "");
+            ctObj.tgtFrameFieldSpecified = node.Attributes["tgtFrame"] != null;
+            ctObj.tgtFrame = XmlHelper.ReadString(node.Attributes["tgtFrame"], "");
+            ctObj.tooltipFieldSpecified = node.Attributes["tooltip"] != null;
+            ctObj.tooltip = XmlHelper.ReadString(node.Attributes["tooltip"], "");
+            ctObj.historyFieldSpecified = node.Attributes["history"] != null;
+            ctObj.history = XmlHelper.ReadBool(node.Attributes["history"], true);
+            ctObj.highlightClickFieldSpecified = node.Attributes["highlightClick"] != null;
             ctObj.highlightClick = XmlHelper.ReadBool(node.Attributes["highlightClick"]);
+            ctObj.endSndFieldSpecified = node.Attributes["endSnd"] != null;
             ctObj.endSnd = XmlHelper.ReadBool(node.Attributes["endSnd"]);
             foreach (XmlNode childNode in node.ChildNodes)
             {
@@ -3139,11 +3253,17 @@ namespace NPOI.OpenXmlFormats.Dml
         {
             sw.WriteStart("a", nodeName);
             XmlHelper.WriteAttribute(sw, "xmlns:r", "http://schemas.openxmlformats.org/officeDocument/2006/relationships");
-            XmlHelper.WriteAttribute(sw, "r:id", this.id);
-            XmlHelper.WriteAttribute(sw, "invalidUrl", this.invalidUrl);
-            XmlHelper.WriteAttribute(sw, "action", this.action);
-            XmlHelper.WriteAttribute(sw, "tgtFrame", this.tgtFrame);
-            XmlHelper.WriteAttribute(sw, "tooltip", this.tooltip);
+            if(idFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "r:id", this.id);
+            if(this.invalidUrlFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "invalidUrl", this.invalidUrl);
+            if(this.actionFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "action", this.action);
+            if(this.tgtFrameFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "tgtFrame", this.tgtFrame);
+            if(this.tooltipFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "tooltip", this.tooltip);
+
             XmlHelper.WriteAttribute(sw, "history", this.history, false, true);
             XmlHelper.WriteAttribute(sw, "highlightClick", this.highlightClick, false, false);
             XmlHelper.WriteAttribute(sw, "endSnd", this.endSnd, false, false);
@@ -3154,6 +3274,17 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.extLst.Write(sw, "extLst");
             sw.WriteEndElement("a", nodeName);
         }
+
+        public bool IsSetExtLst()
+        {
+            return this.extLst != null;
+        }
+
+        public void UnsetExtLst()
+        {
+            this.extLst = null;
+        }
+
         public CT_Hyperlink()
         {
             this.invalidUrlField = "";
@@ -3200,7 +3331,21 @@ namespace NPOI.OpenXmlFormats.Dml
             }
             set
             {
+                this.idFieldSpecified = true;
                 this.idField = value;
+            }
+        }
+
+        [XmlIgnore]
+        public bool idSpecified
+        {
+            get
+            {
+                return this.idFieldSpecified;
+            }
+            set
+            {
+                this.idFieldSpecified = value;
             }
         }
 
@@ -3214,7 +3359,21 @@ namespace NPOI.OpenXmlFormats.Dml
             }
             set
             {
+                this.invalidUrlFieldSpecified = true;
                 this.invalidUrlField = value;
+            }
+        }
+
+        [XmlIgnore]
+        public bool invalidUrlSpecified
+        {
+            get
+            {
+                return this.invalidUrlFieldSpecified;
+            }
+            set
+            {
+                this.invalidUrlFieldSpecified = value;
             }
         }
 
@@ -3228,7 +3387,21 @@ namespace NPOI.OpenXmlFormats.Dml
             }
             set
             {
+                this.actionFieldSpecified = true;
                 this.actionField = value;
+            }
+        }
+
+        [XmlIgnore]
+        public bool actionSpecified
+        {
+            get
+            {
+                return this.actionFieldSpecified;
+            }
+            set
+            {
+                this.actionFieldSpecified = value;
             }
         }
 
@@ -3242,7 +3415,21 @@ namespace NPOI.OpenXmlFormats.Dml
             }
             set
             {
+                this.tgtFrameFieldSpecified = true;
                 this.tgtFrameField = value;
+            }
+        }
+
+        [XmlIgnore]
+        public bool tgtFrameSpecified
+        {
+            get
+            {
+                return this.tgtFrameFieldSpecified;
+            }
+            set
+            {
+                this.tgtFrameFieldSpecified = value;
             }
         }
 
@@ -3256,7 +3443,21 @@ namespace NPOI.OpenXmlFormats.Dml
             }
             set
             {
+                this.tooltipFieldSpecified = true;
                 this.tooltipField = value;
+            }
+        }
+
+        [XmlIgnore]
+        public bool tooltipSpecified
+        {
+            get
+            {
+                return this.tooltipFieldSpecified;
+            }
+            set
+            {
+                this.tooltipFieldSpecified = value;
             }
         }
 
@@ -3270,7 +3471,21 @@ namespace NPOI.OpenXmlFormats.Dml
             }
             set
             {
+                this.historyFieldSpecified = true;
                 this.historyField = value;
+            }
+        }
+
+        [XmlIgnore]
+        public bool historySpecified
+        {
+            get
+            {
+                return this.historyFieldSpecified;
+            }
+            set
+            {
+                this.historyFieldSpecified = value;
             }
         }
 
@@ -3284,7 +3499,21 @@ namespace NPOI.OpenXmlFormats.Dml
             }
             set
             {
+                this.highlightClickFieldSpecified = true;
                 this.highlightClickField = value;
+            }
+        }
+
+        [XmlIgnore]
+        public bool highlightClickSpecified
+        {
+            get
+            {
+                return this.highlightClickFieldSpecified;
+            }
+            set
+            {
+                this.highlightClickFieldSpecified = value;
             }
         }
 
@@ -3298,7 +3527,21 @@ namespace NPOI.OpenXmlFormats.Dml
             }
             set
             {
+                this.endSndFieldSpecified = true;
                 this.endSndField = value;
+            }
+        }
+
+        [XmlIgnore]
+        public bool endSndSpecified
+        {
+            get
+            {
+                return this.endSndFieldSpecified;
+            }
+            set
+            {
+                this.endSndFieldSpecified = value;
             }
         }
     }

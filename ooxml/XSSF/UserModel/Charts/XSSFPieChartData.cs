@@ -80,7 +80,7 @@ namespace NPOI.XSSF.UserModel.Charts
                     var schemeColor = new CT_SchemeColor {val = colorVal};
                     schemeColor.AddNewLum(i);
                     var solidFill = new CT_SolidColorFillProperties {schemeClr = schemeColor};
-                    var shapeProperties = new NPOI.OpenXmlFormats.Dml.Chart.CT_ShapeProperties {solidFill = solidFill};
+                    var shapeProperties = new CT_ShapeProperties {solidFill = solidFill};
                     var dPt = new CT_DPt
                     {
                         spPr = shapeProperties,
