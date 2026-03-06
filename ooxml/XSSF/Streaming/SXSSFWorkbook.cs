@@ -15,20 +15,20 @@
    limitations under the License.
 ==================================================================== */
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.IO;
-using System.Text;
 using ICSharpCode.SharpZipLib.Zip;
-using NPOI.OpenXml4Net.Util;
 using NPOI.SS;
 using NPOI.SS.Formula.UDF;
 using NPOI.SS.UserModel;
+using NPOI.SS.Util;
 using NPOI.Util;
 using NPOI.XSSF.Model;
 using NPOI.XSSF.UserModel;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Data;
+using System.IO;
+using System.Text;
 
 namespace NPOI.XSSF.Streaming
 {
@@ -995,6 +995,11 @@ namespace NPOI.XSSF.Streaming
         public bool IsDate1904()
         {
             return XssfWorkbook.IsDate1904();
+        }
+
+        public DataSet ToDataSet(bool firstRowAsHeader = false, bool showCalculatedValue = false)
+        {
+            return WorkbookUtil.ToDataSet(this, firstRowAsHeader, showCalculatedValue);
         }
 
         void IDisposable.Dispose()

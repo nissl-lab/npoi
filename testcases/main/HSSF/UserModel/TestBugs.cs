@@ -2568,7 +2568,7 @@ namespace TestCases.HSSF.UserModel
             sheet.ShiftRows(1, 1, -1);
             ClassicAssert.AreEqual(3, sheet.LastRowNum);
             ClassicAssert.AreEqual("Cell A,2", sheet.GetRow(0).GetCell(0).StringCellValue);
-            ClassicAssert.AreEqual(-1, sheet.GetRow(1).LastCellNum);
+            ClassicAssert.IsNull(sheet.GetRow(1));
             ClassicAssert.AreEqual("Cell A,3", sheet.GetRow(2).GetCell(0).StringCellValue);
             ClassicAssert.AreEqual("Cell A,1", sheet.GetRow(3).GetCell(0).StringCellValue);
 
@@ -2578,12 +2578,7 @@ namespace TestCases.HSSF.UserModel
             ClassicAssert.AreEqual("Cell A,2", sheet.GetRow(0).GetCell(0).StringCellValue);
             ClassicAssert.AreEqual("Cell A,1", sheet.GetRow(1).GetCell(0).StringCellValue);
             ClassicAssert.AreEqual("Cell A,3", sheet.GetRow(2).GetCell(0).StringCellValue);
-            ClassicAssert.AreEqual(-1, sheet.GetRow(3).LastCellNum);
-
-            // Now zap the empty 4th row - won't do anything
-            sheet.RemoveRow(sheet.GetRow(3));
-
-            // Test again the last row number which should be 2
+            ClassicAssert.IsNull(sheet.GetRow(3));
             ClassicAssert.AreEqual(2, sheet.LastRowNum);
             ClassicAssert.AreEqual("Cell A,2", sheet.GetRow(0).GetCell(0).StringCellValue);
             ClassicAssert.AreEqual("Cell A,1", sheet.GetRow(1).GetCell(0).StringCellValue);

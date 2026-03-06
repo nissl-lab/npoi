@@ -305,7 +305,7 @@ namespace NPOI.SS.Formula
             if (ptg is Ref3DPxg rpxg)
             {
                 if (rpxg.ExternalWorkbookNumber > 0 ||
-                       !_sheetName.Equals(rpxg.SheetName))
+                       !_sheetName.Equals(rpxg.SheetName, StringComparison.OrdinalIgnoreCase))
                 {
                     // only move 3D refs that refer to the sheet with cells
                     // being moved
@@ -341,7 +341,7 @@ namespace NPOI.SS.Formula
             if (ptg is Area3DPxg apxg)
             {
                 if (apxg.ExternalWorkbookNumber > 0 ||
-                        !_sheetName.Equals(apxg.SheetName))
+                        !_sheetName.Equals(apxg.SheetName, StringComparison.OrdinalIgnoreCase))
                 {
                     // only move 3D refs that refer to the sheet with cells
                     // being moved
@@ -390,7 +390,7 @@ namespace NPOI.SS.Formula
             if (ptg is Ref3DPxg rpxg)
             {
                 if (rpxg.ExternalWorkbookNumber > 0 ||
-                       !_sheetName.Equals(rpxg.SheetName))
+                       !_sheetName.Equals(rpxg.SheetName, StringComparison.OrdinalIgnoreCase))
                 {
                     // only move 3D refs that refer to the sheet with cells
                     // being moved
@@ -426,7 +426,7 @@ namespace NPOI.SS.Formula
             if (ptg is Area3DPxg apxg)
             {
                 if (apxg.ExternalWorkbookNumber > 0 ||
-                        !_sheetName.Equals(apxg.SheetName))
+                        !_sheetName.Equals(apxg.SheetName, StringComparison.OrdinalIgnoreCase))
                 {
                     // only move 3D refs that refer to the sheet with cells
                     // being moved

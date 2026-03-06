@@ -41,6 +41,7 @@ using CT_Shape = NPOI.OpenXmlFormats.Vml.CT_Shape;
 using ST_EditAs = NPOI.OpenXmlFormats.Dml.Spreadsheet.ST_EditAs;
 using System.Xml.Linq;
 using System.Diagnostics;
+using System.Data;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -6628,11 +6629,25 @@ lblforbreak:
             }
         }
 
+        public DataTable ToDataTable(bool firstRowAsHeader = false, bool showCalculatedValue = false)
+        {
+            return SheetUtil.ToDataTable(this, firstRowAsHeader, showCalculatedValue);
+        }
+        
+        public XSSFHeaderFooterProperties HeaderFooterProperties
+        {
+            get
+            {
+                return new XSSFHeaderFooterProperties(GetSheetTypeHeaderFooter());
+            }
+        }
+
         public NCellRange Cells
         {
             get {
                 return new NCellRange(this, 0, 0, this.Workbook.SpreadsheetVersion.MaxRows, this.Workbook.SpreadsheetVersion.MaxColumns);
             }
+            
         }
 
         public NRowRange Rows

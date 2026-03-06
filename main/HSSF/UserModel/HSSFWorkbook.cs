@@ -17,14 +17,6 @@
 
 namespace NPOI.HSSF.UserModel
 {
-
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Globalization;
-    using System.IO;
-    using System.Security.Cryptography;
-    using System.Text;
     using NPOI.DDF;
     using NPOI.HPSF;
     using NPOI.HSSF.Model;
@@ -38,6 +30,14 @@ namespace NPOI.HSSF.UserModel
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
     using NPOI.Util;
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Data;
+    using System.Globalization;
+    using System.IO;
+    using System.Security.Cryptography;
+    using System.Text;
 
 
     /// <summary>
@@ -2497,6 +2497,11 @@ namespace NPOI.HSSF.UserModel
         public bool IsDate1904()
         {
             return Workbook.IsUsing1904DateWindowing;
+        }
+
+        public DataSet ToDataSet(bool firstRowAsHeader = false, bool showCalculatedValue = false)
+        {
+            return WorkbookUtil.ToDataSet(this, firstRowAsHeader, showCalculatedValue);
         }
 
         public void Dispose()

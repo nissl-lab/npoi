@@ -107,6 +107,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             return (null == rowField) ? null : rowField[index];
         }
+        public List<CT_Row> GetRowArray()
+        {
+            return row;
+        }
         [XmlElement("row")]
         public List<CT_Row> row
         {

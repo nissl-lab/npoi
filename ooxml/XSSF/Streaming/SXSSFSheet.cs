@@ -16,18 +16,19 @@
 ==================================================================== */
 
 using NPOI.HSSF.Util;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.IO;
-using System.Linq;
+using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.SS;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using NPOI.Util;
 using NPOI.XSSF.UserModel;
-using NPOI.OpenXmlFormats.Spreadsheet;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Data;
+using System.IO;
+using System.Linq;
 
 namespace NPOI.XSSF.Streaming
 {
@@ -1677,6 +1678,10 @@ namespace NPOI.XSSF.Streaming
             {
                 return new NRowRange(this, 0, this.Workbook.SpreadsheetVersion.MaxRows);
             }
+        }
+        public DataTable ToDataTable(bool firstRowAsHeader = false, bool showCalculatedValue = false)
+        {
+            return SheetUtil.ToDataTable(this, firstRowAsHeader, showCalculatedValue);
         }
     }
 }

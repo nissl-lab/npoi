@@ -37,6 +37,7 @@ namespace NPOI.HSSF.UserModel
     using NPOI.HSSF.UserModel.helpers;
 
     using SixLabors.Fonts;
+    using System.Data;
 
     /// <summary>
     /// High level representation of a worksheet.
@@ -1641,6 +1642,22 @@ namespace NPOI.HSSF.UserModel
             }
             // Re-compute the first and last rows of the sheet as needed
             recomputeFirstAndLastRowsForRowShift(startRow, endRow, n);
+
+            // When shifting rows up (n < 0), remove the vacated rows that fall outside the shifted range.
+            // After the shift, rows from (endRow + n + 1) to endRow have had their cells moved but
+            // the row objects remain in the dictionary, causing PhysicalNumberOfRows to be incorrect.
+            if (n < 0)
+            {
+                int firstVacatedRow = Math.Max(startRow, endRow + n + 1);
+                for (int i = firstVacatedRow; i <= endRow; i++)
+                {
+                    IRow row = GetRow(i);
+                    if (row != null)
+                    {
+                        RemoveRow(row);
+                    }
+                }
+            }
 
             //if (endRow == lastrow || endRow + n > lastrow) lastrow = Math.Min(endRow + n, SpreadsheetVersion.EXCEL97.LastRowIndex);
             //if (startRow == firstrow || startRow + n < firstrow) firstrow = Math.Max(startRow + n, 0);
@@ -3358,6 +3375,11 @@ namespace NPOI.HSSF.UserModel
         IEnumerator<IRow> IEnumerable<IRow>.GetEnumerator()
         {
             return rows.Values.GetEnumerator();
+        }
+
+        public DataTable ToDataTable(bool firstRowAsHeader = false, bool showCalculatedValue = false)
+        {
+            return SheetUtil.ToDataTable(this, firstRowAsHeader, showCalculatedValue);
         }
 
         public NCellRange Cells

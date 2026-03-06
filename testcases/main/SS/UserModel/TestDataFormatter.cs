@@ -895,6 +895,19 @@ namespace TestCases.SS.UserModel
          * Currently, this test only passes if you set LocaleUtil.setUserLocale(Locale.ROOT) or Locale.US.
          */
         [Test]
+        public void TestPhoneNumberFormat()
+        {
+            DataFormatter formatter = new DataFormatter(CultureInfo.GetCultureInfo("en-US"));
+
+            // Bug: alternateGrouping regex should not misidentify escaped literal '-' as a grouping character
+            ClassicAssert.AreEqual("(123) 456-7890", formatter.FormatRawCellContents(1234567890, -1, "[<=9999999]###\\-####;\\(###\\)\\ ###\\-####"));
+            ClassicAssert.AreEqual("123-456-7890", formatter.FormatRawCellContents(1234567890, -1, "###\\-###\\-####"));
+
+            // Bug: SSNFormat/ZipPlusFourFormat/PhoneFormat must handle decimal values passed by FormatRawCellContents
+            ClassicAssert.AreEqual("(123) 456-7890", formatter.FormatRawCellContents(1234567890, -1, "[<=9999999]###-####;(###) ###-####"));
+        }
+
+        [Test]
         public void TestBug60422()
         {
             //LocaleUtil.setUserLocale(Locale.ROOT);

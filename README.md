@@ -22,7 +22,7 @@ If you profits/benefits from NPOI, please [sponsor me via Github Sponsor](https:
 Documentation
 ============
 
-[NPOI Tutorials on Youtube](https://www.youtube.com/watch?v=H4FzMWkZNH8&list=PL7J6yRMWV1ot32hsgCZJ5sI4Fp2QKovCM&index=9)
+[NPOI Mastery Tutorial](https://nissl-lab.github.io/npoi/)
 
 [Getting Started with NPOI](https://github.com/nissl-lab/npoi/wiki/Getting-Started-with-NPOI)
 
@@ -31,8 +31,6 @@ Documentation
 [How to use NPOI on Linux](https://github.com/nissl-lab/npoi/wiki/How-to-use-NPOI-on-Linux)
 
 [Useful Packages based on NPOI](https://github.com/nissl-lab/npoi/wiki/ORM-on-NPOI)
-
-[NPOI code examples (This example repo is private. You can get access by sponsoring me)](https://github.com/sponsors/tonyqus)
 
 Advantage of NPOI
 =================

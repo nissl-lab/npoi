@@ -71,13 +71,13 @@ namespace NPOI.SS.Formula
             }
             return _sensitiveInputCells.ToArray();
         }
-        public void AddUsedBlankCell(int bookIndex, int sheetIndex, int rowIndex, int columnIndex)
+        public void AddUsedBlankCell(IEvaluationWorkbook evalWorkbook, int bookIndex, int sheetIndex, int rowIndex, int columnIndex)
         {
             if (_usedBlankCellGroup == null)
             {
                 _usedBlankCellGroup = new FormulaUsedBlankCellSet();
             }
-            _usedBlankCellGroup.AddCell(bookIndex, sheetIndex, rowIndex, columnIndex);
+            _usedBlankCellGroup.AddCell(evalWorkbook, bookIndex, sheetIndex, rowIndex, columnIndex);
         }
 
         public void UpdateFormulaResult(ValueEval result)

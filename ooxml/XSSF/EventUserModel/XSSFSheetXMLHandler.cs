@@ -23,24 +23,19 @@ using System.Text;
 
 namespace NPOI.XSSF.EventUserModel
 {
-    using static NPOI.XSSF.UserModel.XSSFRelation;
-
-
+    using NPOI.OpenXmlFormats.Spreadsheet;
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
-    using NPOI.Util;
     using NPOI.XSSF.Model;
     using NPOI.XSSF.UserModel;
-    using NSAX.Helpers;
-    using NPOI.OpenXmlFormats.Spreadsheet;
-    using NSAX;
+    using System.Xml;
 
     /// <summary>
     /// This class handles the processing of a sheet#.xml
     ///  sheet part of a XSSF .xlsx file, and generates
     ///  row and cell events for it.
     /// </summary>
-    public class XSSFSheetXMLHandler : DefaultHandler
+    public class XSSFSheetXMLHandler
     {
         //private static  POILogger logger = POILogFactory.GetLogger(XSSFSheetXMLHandler.class);
 
@@ -196,12 +191,11 @@ namespace NPOI.XSSF.EventUserModel
             // It isn't a text tag
             return false;
         }
-        public override void StartElement(String uri, String localName, String qName,
-                                 IAttributes attributes)
+        internal void StartElement(XmlReader reader)
         {
-
-
-            if(uri != null && !uri.Equals(NS_SPREADSHEETML))
+            string uri = reader.NamespaceURI;
+            string localName = reader.LocalName;
+            if(uri != null && !uri.Equals(XSSFRelation.NS_SPREADSHEETML))
             {
                 return;
             }
@@ -229,12 +223,12 @@ namespace NPOI.XSSF.EventUserModel
                 }
 
                 // Decide where to Get the formula string from
-                String type = attributes.GetValue("t");
+                String type = reader.GetAttribute("t");
                 if(type != null && type.Equals("shared"))
                 {
                     // Is it the one that defines the shared, or uses it?
-                    String ref1 = attributes.GetValue("ref");
-                    String si = attributes.GetValue("si");
+                    String ref1 = reader.GetAttribute("ref");
+                    String si = reader.GetAttribute("si");
 
                     if(ref1 != null)
                     {
@@ -272,7 +266,7 @@ namespace NPOI.XSSF.EventUserModel
             }
             else if("row".Equals(localName))
             {
-                String rowNumStr = attributes.GetValue("r");
+                String rowNumStr = reader.GetAttribute("r");
                 if(rowNumStr != null)
                 {
                     rowNum = Int32.Parse(rowNumStr) - 1;
@@ -290,9 +284,9 @@ namespace NPOI.XSSF.EventUserModel
                 this.nextDataType = XSSFDataType.Number;
                 this.formatIndex = -1;
                 this.formatString = null;
-                cellRef = attributes.GetValue("r");
-                String cellType = attributes.GetValue("t");
-                String cellStyleStr = attributes.GetValue("s");
+                cellRef = reader.GetAttribute("r");
+                String cellType = reader.GetAttribute("t");
+                String cellStyleStr = reader.GetAttribute("s");
                 if("b".Equals(cellType))
                     nextDataType = XSSFDataType.Boolean;
                 else if("e".Equals(cellType))
@@ -329,12 +323,12 @@ namespace NPOI.XSSF.EventUserModel
                 }
             }
         }
-        public override void EndElement(String uri, String localName, String qName)
-
+        internal void EndElement(XmlReader reader)
         {
+            string uri = reader.NamespaceURI;
+            string localName = reader.LocalName;
 
-
-            if(uri != null && !uri.Equals(NS_SPREADSHEETML))
+            if(uri != null && !uri.Equals(XSSFRelation.NS_SPREADSHEETML))
             {
                 return;
             }
@@ -469,28 +463,21 @@ namespace NPOI.XSSF.EventUserModel
             }
         }
 
-        /// <summary>
-        /// Captures characters only if a suitable element is open.
-        /// Originally was just "v"; extended for inlineStr also.
-        /// </summary>
-        public override void Characters(char[] ch, int start, int length)
-
+        internal void TextNode(XmlReader reader)
         {
-
             if(vIsOpen)
             {
-                value.Append(ch, start, length);
+                value.Append(reader.Value);
             }
             if(fIsOpen)
             {
-                formula.Append(ch, start, length);
+                formula.Append(reader.Value);
             }
             if(hfIsOpen)
             {
-                headerFooter.Append(ch, start, length);
+                headerFooter.Append(reader.Value);
             }
         }
-
         /// <summary>
         /// Do a check for, and output, comments in otherwise empty cells.
         /// </summary>
