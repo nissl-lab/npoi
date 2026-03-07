@@ -301,8 +301,7 @@ namespace NPOI.HSSF.UserModel
             string fontName = font.Typeface.FamilyName.Equals("SansSerif", StringComparison.OrdinalIgnoreCase) ? "Arial" : font.Typeface.FamilyName;
             using SKFont excelFont = CreateFont(fontName, (int)(fontSizeInPoints / verticalPixelsPerPoint));
             {
-                using var paint = new SKPaint { Typeface = excelFont.Typeface, TextSize = excelFont.Size };
-                int width = (int)((paint.MeasureText(str) * 8) + 12);
+                int width = (int)((excelFont.MeasureText(str) * 8) + 12);
                 int height = (int)((font.Size / verticalPixelsPerPoint) + 6) * 2;
                 y -= Convert.ToInt32((font.Size / verticalPixelsPerPoint) + 2 * verticalPixelsPerPoint);    // we want to Draw the shape from the top-left
                 HSSFTextbox textbox = escherGroup.CreateTextbox(new HSSFChildAnchor(x, y, x + width, y + height));

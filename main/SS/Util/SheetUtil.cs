@@ -430,8 +430,7 @@ namespace NPOI.SS.Util
             var angle = cell.CellStyle.Rotation * 2.0 * Math.PI / 360.0;
             try
             {
-                using var paint = new SKPaint { Typeface = windowsFont.Typeface, TextSize = windowsFont.Size };
-                float textWidth = paint.MeasureText(stringValue);
+                float textWidth = windowsFont.MeasureText(stringValue);
                 // Use the em-square height (font size in pixels) for the vertical component,
                 // consistent with GetContentHeight and SixLabors.Fonts MeasureAdvance.
                 float textHeight = windowsFont.Size;
@@ -558,9 +557,8 @@ namespace NPOI.SS.Util
             double actualWidth;
             try
             {
-                using var paint = new SKPaint { Typeface = windowsFont.Typeface, TextSize = windowsFont.Size };
-                float textWidth = paint.MeasureText(str);
-                paint.GetFontMetrics(out SKFontMetrics metrics);
+                float textWidth = windowsFont.MeasureText(str);
+                windowsFont.GetFontMetrics(out SKFontMetrics metrics);
                 float textHeight = metrics.Descent - metrics.Ascent;
 
                 if (style.Rotation != 0)
@@ -666,8 +664,7 @@ namespace NPOI.SS.Util
 
             try
             {
-                using var paint = new SKPaint { Typeface = font.Typeface, TextSize = font.Size };
-                return (int)Math.Ceiling(paint.MeasureText(new string(defaultChar, 1)));
+                return (int)Math.Ceiling(font.MeasureText(new string(defaultChar, 1)));
             }
             catch (Exception)
             {
