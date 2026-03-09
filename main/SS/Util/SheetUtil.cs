@@ -424,19 +424,32 @@ namespace NPOI.SS.Util
         private static double GetRotatedContentHeight(ICell cell, string stringValue, Font windowsFont)
         {
             var angle = cell.CellStyle.Rotation * 2.0 * Math.PI / 360.0;
-            var measureResult = TextMeasurer.MeasureAdvance(stringValue, new TextOptions(windowsFont) { Dpi = dpi });
-
-            var x1 = Math.Abs(measureResult.Height * Math.Cos(angle));
-            var x2 = Math.Abs(measureResult.Width * Math.Sin(angle));
-
-            return Math.Round(x1 + x2, 0, MidpointRounding.ToEven);
+            try
+            {
+                var measureResult = TextMeasurer.MeasureAdvance(stringValue, new TextOptions(windowsFont) { Dpi = dpi });
+                var x1 = Math.Abs(measureResult.Height * Math.Cos(angle));
+                var x2 = Math.Abs(measureResult.Width * Math.Sin(angle));
+                return Math.Round(x1 + x2, 0, MidpointRounding.ToEven);
+            }
+            catch (InvalidFontFileException)
+            {
+                // Broken system font; estimate height from font size in points converted to pixels
+                return Math.Round(windowsFont.Size * dpi / 72.0, 0, MidpointRounding.ToEven);
+            }
         }
 
         private static double GetContentHeight(string stringValue, Font windowsFont)
         {
-            var measureResult = TextMeasurer.MeasureAdvance(stringValue, new TextOptions(windowsFont) { Dpi = dpi });
-
-            return Math.Round(measureResult.Height, 0, MidpointRounding.ToEven);
+            try
+            {
+                var measureResult = TextMeasurer.MeasureAdvance(stringValue, new TextOptions(windowsFont) { Dpi = dpi });
+                return Math.Round(measureResult.Height, 0, MidpointRounding.ToEven);
+            }
+            catch (InvalidFontFileException)
+            {
+                // Broken system font; estimate height from font size in points converted to pixels
+                return Math.Round(windowsFont.Size * dpi / 72.0, 0, MidpointRounding.ToEven);
+            }
         }
 
         /**
@@ -537,16 +550,24 @@ namespace NPOI.SS.Util
         {
             //Rectangle bounds;
             double actualWidth;
-            FontRectangle sf = TextMeasurer.MeasureSize(str, new TextOptions(windowsFont) { Dpi = dpi });
-            if (style.Rotation != 0)
+            try
             {
-                double angle = style.Rotation * 2.0 * Math.PI / 360.0;
-                double x1 = Math.Abs(sf.Height * Math.Sin(angle));
-                double x2 = Math.Abs(sf.Width * Math.Cos(angle));
-                actualWidth = Math.Round(x1 + x2, 0, MidpointRounding.ToEven);
+                FontRectangle sf = TextMeasurer.MeasureSize(str, new TextOptions(windowsFont) { Dpi = dpi });
+                if (style.Rotation != 0)
+                {
+                    double angle = style.Rotation * 2.0 * Math.PI / 360.0;
+                    double x1 = Math.Abs(sf.Height * Math.Sin(angle));
+                    double x2 = Math.Abs(sf.Width * Math.Cos(angle));
+                    actualWidth = Math.Round(x1 + x2, 0, MidpointRounding.ToEven);
+                }
+                else
+                    actualWidth = Math.Round(sf.Width, 0, MidpointRounding.ToEven);
             }
-            else
-                actualWidth = Math.Round(sf.Width, 0, MidpointRounding.ToEven);
+            catch (InvalidFontFileException)
+            {
+                // Broken system font; use a rough estimate based on string length
+                actualWidth = str.Length * defaultCharWidth;
+            }
 
             int padding = 5;
             double correction = 1.05;
@@ -615,7 +636,16 @@ namespace NPOI.SS.Util
             IFont defaultFont = wb.GetFontAt((short)0);
             Font font = IFont2Font(defaultFont);
 
-            return (int)Math.Ceiling(TextMeasurer.MeasureSize(new string(defaultChar, 1), new TextOptions(font) { Dpi = dpi }).Width);
+            try
+            {
+                return (int)Math.Ceiling(TextMeasurer.MeasureSize(new string(defaultChar, 1), new TextOptions(font) { Dpi = dpi }).Width);
+            }
+            catch (InvalidFontFileException)
+            {
+                // Some system fonts (e.g. NotoColorEmoji on Linux) have missing tables.
+                // Fall back to a reasonable default character width.
+                return 8;
+            }
         }
 
         /**
@@ -799,7 +829,25 @@ namespace NPOI.SS.Util
                         throw new FontException("No fonts found installed on the machine.");
                     }
 
-                    fontFamily = SystemFonts.Families.First();
+                    // Pick the first system font that can be used for text measurement.
+                    // Some fonts (e.g. NotoColorEmoji on Linux) have missing tables and
+                    // will throw InvalidFontFileException when measuring text.
+                    bool foundWorkingFont = false;
+                    foreach (var candidate in SystemFonts.Families)
+                    {
+                        try
+                        {
+                            var testFont = new Font(candidate, 10);
+                            TextMeasurer.MeasureSize("a", new TextOptions(testFont) { Dpi = 96 });
+                            fontFamily = candidate;
+                            foundWorkingFont = true;
+                            break;
+                        }
+                        catch (InvalidFontFileException) { }
+                    }
+
+                    if (!foundWorkingFont)
+                        fontFamily = SystemFonts.Families.First();
                 }
             }
 

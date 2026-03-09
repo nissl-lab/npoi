@@ -874,7 +874,7 @@ namespace TestCases.SS.UserModel
             DataFormatter dfUS = new DataFormatter(CultureInfo.GetCultureInfo("en-US"));
             ClassicAssert.AreEqual("2016-23-08 08:51:01", dfUS.FormatRawCellContents(42605.368761574071, -1, "yyyy-dd-MM HH:mm:ss"));
             ClassicAssert.AreEqual("2016-23 08:51:01 08", dfUS.FormatRawCellContents(42605.368761574071, -1, "yyyy-dd HH:mm:ss MM"));
-            ClassicAssert.AreEqual("2017-12-01 January 09:54:33", dfUS.FormatRawCellContents(42747.412892397523, -1, "yyyy-dd-MM MMMM HH:mm:ss"));
+            ClassicAssert.AreEqual("2017-12-01 January 09:54:34", dfUS.FormatRawCellContents(42747.412892397523, -1, "yyyy-dd-MM MMMM HH:mm:ss"));
 
             ClassicAssert.AreEqual("08", dfUS.FormatRawCellContents(42605.368761574071, -1, "MM"));
             ClassicAssert.AreEqual("01", dfUS.FormatRawCellContents(42605.368761574071, -1, "ss"));

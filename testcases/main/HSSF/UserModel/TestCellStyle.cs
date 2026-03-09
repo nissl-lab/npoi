@@ -530,6 +530,9 @@ namespace TestCases.HSSF.UserModel
             const int dop = 2;
 
             var time = DateTime.UtcNow.AddYears(-1);
+            // Truncate to whole second so DateTime.ToString and DataFormatter agree:
+            // DataFormatter rounds to nearest second per Excel behavior, so ms != 0 could cause mismatch.
+            time = new DateTime(time.Ticks / TimeSpan.TicksPerSecond * TimeSpan.TicksPerSecond, time.Kind);
 
             Console.WriteLine($"Start time: {time:yyyy/MM/dd} {time:HH:mm:ss}");
 
