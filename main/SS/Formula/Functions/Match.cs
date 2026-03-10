@@ -172,6 +172,10 @@ namespace NPOI.SS.Formula.Functions
                 // else looks like a number
                 throw new EvaluationException(ErrorEval.NA);
             }
+            if (eval is ErrorEval errorEval)
+            {
+                throw new EvaluationException(errorEval);
+            }
             throw new Exception("Unexpected eval type (" + eval.ToString() + ")");
         }
 
