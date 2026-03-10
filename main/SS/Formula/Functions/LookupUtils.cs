@@ -251,6 +251,24 @@ namespace NPOI.SS.Formula.Functions
                 return CompareResult.ValueOf(String.Compare(_value, stringValue, true));
             }
 
+            /// <summary>
+            /// Coerce string lookup value to number for comparison against numeric table keys.
+            /// Matches Excel behavior: VLOOKUP("10", ...) finds numeric key 10.
+            /// Only succeeds when the string is parseable as a number; otherwise falls back to TypeMismatch.
+            /// </summary>
+            protected override CompareResult TryCoercedCompare(ValueEval other)
+            {
+                if (other is NumberEval ne)
+                {
+                    double d = OperandResolver.ParseDouble(_value);
+                    if (!double.IsNaN(d))
+                    {
+                        return CompareResult.ValueOf(d.CompareTo(ne.NumberValue));
+                    }
+                }
+                return CompareResult.TypeMismatch;
+            }
+
             protected override String GetValueAsString()
             {
                 return _value;
@@ -290,17 +308,36 @@ namespace NPOI.SS.Formula.Functions
 
                 _value = ne.NumberValue;
             }
+            
             protected override CompareResult CompareSameType(ValueEval other)
             {
                 NumberEval ne = (NumberEval)other;
                 return CompareResult.ValueOf(_value.CompareTo(ne.NumberValue));
             }
+            
+            /// <summary>
+            /// Coerce string table key to number for comparison against numeric lookup value.
+            /// Matches Excel behavior: VLOOKUP(10, ...) finds string key "10".
+            /// Only succeeds when the string is parseable as a number; otherwise falls back to TypeMismatch.
+            /// </summary>
+            protected override CompareResult TryCoercedCompare(ValueEval other)
+            {
+                if (other is StringEval se)
+                {
+                    double d = OperandResolver.ParseDouble(se.StringValue);
+                    if (!double.IsNaN(d))
+                    {
+                        return CompareResult.ValueOf(_value.CompareTo(d));
+                    }
+                }
+                return CompareResult.TypeMismatch;
+            }
+            
             protected override String GetValueAsString()
             {
                 return _value.ToString(CultureInfo.InvariantCulture);
             }
         }
-
 
         /**
          * Processes the third argument to VLOOKUP, or HLOOKUP (<b>col_index_num</b> 
@@ -906,6 +943,7 @@ namespace NPOI.SS.Formula.Functions
             }
         }
     }
+    
     /**
     * Encapsulates some standard binary search functionality so the Unusual Excel behaviour can
     * be clearly distinguished. 
@@ -955,6 +993,7 @@ namespace NPOI.SS.Formula.Functions
             }
         }
     }
+    
     internal sealed class BooleanLookupComparer : LookupValueComparerBase
     {
         private readonly bool _value;
@@ -965,6 +1004,7 @@ namespace NPOI.SS.Formula.Functions
 
             _value = be.BooleanValue;
         }
+        
         protected override CompareResult CompareSameType(ValueEval other)
         {
             BoolEval be = (BoolEval)other;
@@ -980,11 +1020,13 @@ namespace NPOI.SS.Formula.Functions
             }
             return CompareResult.LessThan;
         }
+        
         protected override String GetValueAsString()
         {
             return _value.ToString();
         }
     }
+    
     /**
     * Represents a single row or column within an <c>AreaEval</c>.
     */
@@ -993,7 +1035,6 @@ namespace NPOI.SS.Formula.Functions
         ValueEval GetItem(int index);
         int Size { get; }
     }
-
 
     public interface LookupValueComparer
     {
@@ -1004,12 +1045,10 @@ namespace NPOI.SS.Formula.Functions
         CompareResult CompareTo(ValueEval other);
     }
 
-
-
     internal abstract class LookupValueComparerBase : LookupValueComparer
     {
-
         private readonly Type _targetType;
+        
         protected LookupValueComparerBase(ValueEval targetValue)
         {
             if (targetValue == null)
@@ -1018,6 +1057,7 @@ namespace NPOI.SS.Formula.Functions
             }
             _targetType = targetValue.GetType();
         }
+        
         public CompareResult CompareTo(ValueEval other)
         {
             if (other == null)
@@ -1026,10 +1066,41 @@ namespace NPOI.SS.Formula.Functions
             }
             if (_targetType != other.GetType())
             {
-                return CompareResult.TypeMismatch;
+                // Match Excel's behavior: VLOOKUP/HLOOKUP/MATCH coerce types when
+                // comparing strings and numbers. For example, string "10" matches number 10.
+                // Previously NPOI returned TypeMismatch here, but Excel finds the match.
+                return TryCoercedCompare(other);
             }
             return CompareSameType(other);
         }
+
+        /// <summary>
+        /// Attempts to compare values of different types by coercing one to the other's type.
+        /// <para>
+        /// <b>Behavior change:</b> NPOI's original implementation returned TypeMismatch whenever
+        /// the lookup value and table key were different types (e.g., string vs number). However,
+        /// Excel itself coerces types during VLOOKUP/HLOOKUP/MATCH comparison — for example,
+        /// a cell containing the string "10" will match a table key containing the number 10,
+        /// and vice versa. This is easily verified in Excel by placing a text-formatted "10" in
+        /// a cell and running VLOOKUP against a column of numbers.
+        /// </para>
+        /// <para>
+        /// The old NPOI behavior caused lookups to return #N/A in situations where Excel would
+        /// successfully find a match. Since NPOI's formula evaluator aims to replicate Excel's
+        /// behavior, matching Excel's type coercion semantics is the correct fix.
+        /// </para>
+        /// <para>
+        /// Subclasses override this method to perform the actual coercion. The base implementation
+        /// still returns TypeMismatch for type pairs where coercion is not applicable (e.g.,
+        /// boolean vs string). Only string↔number coercion is implemented, and only when the
+        /// string is parseable as a number.
+        /// </para>
+        /// </summary>
+        protected virtual CompareResult TryCoercedCompare(ValueEval other)
+        {
+            return CompareResult.TypeMismatch;
+        }
+        
         public override String ToString()
         {
             StringBuilder sb = new StringBuilder(64);
@@ -1038,9 +1109,10 @@ namespace NPOI.SS.Formula.Functions
             sb.Append("]");
             return sb.ToString();
         }
+        
         protected abstract CompareResult CompareSameType(ValueEval other);
+        
         /** used only for debug purposes */
         protected abstract String GetValueAsString();
     }
-
 }
