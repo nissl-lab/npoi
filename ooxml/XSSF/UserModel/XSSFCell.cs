@@ -140,7 +140,7 @@ namespace NPOI.XSSF.UserModel
                             break;
                         case CellType.Numeric:
                             // DataFormat is not copied unless policy.isCopyCellStyle is true
-                            if (DateUtil.IsCellDateFormatted(srcCell))
+                            if (!policy.IsCopyCellStyle&& DateUtil.IsCellDateFormatted(srcCell))
                             {
                                 SetCellValue(srcCell.DateCellValue);
                             }
