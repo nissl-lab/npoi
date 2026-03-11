@@ -14,21 +14,24 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
+using NUnit.Framework;
+using System;
+
 namespace TestCases.XWPF.UserModel
 {
     using NPOI.OpenXmlFormats.Wordprocessing;
-    using CT_Blip = NPOI.OpenXmlFormats.Dml.CT_Blip;
-    using CT_BlipFillProperties = NPOI.OpenXmlFormats.Dml.CT_BlipFillProperties;
-    using CT_Picture = NPOI.OpenXmlFormats.Dml.Picture.CT_Picture;
     using NPOI.Util;
     using NPOI.WP.UserModel;
     using NPOI.XWPF.Model;
     using NPOI.XWPF.UserModel;
-    using NUnit.Framework;using NUnit.Framework.Legacy;
+    using NUnit.Framework;
+    using NUnit.Framework.Legacy;
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using System.Linq;
+    using CT_Blip = NPOI.OpenXmlFormats.Dml.CT_Blip;
+    using CT_BlipFillProperties = NPOI.OpenXmlFormats.Dml.CT_BlipFillProperties;
+    using CT_Picture = NPOI.OpenXmlFormats.Dml.Picture.CT_Picture;
 
     /**
      * Tests for XWPF Run
@@ -66,39 +69,6 @@ namespace TestCases.XWPF.UserModel
 
             //Run.Text=("xxx",14);
             //Assert.Fail("Position wrong");
-        }
-
-        /*
-         * bug 59208
-         * Purpose: test all valid boolean-like values
-         * exercise isCTOnOff(CTOnOff) through all valid permutations
-         */
-        [Ignore("stub testCTOnOff")]
-        public void TestCTOnOff()
-        {
-            //CTRPr rpr = ctRun.addNewRPr();
-            //CTOnOff bold = rpr.addNewB();
-            //XWPFRun run = new XWPFRun(ctRun, p);
-
-            //// True values: "true", "1", "on"
-            //bold.setVal(STOnOff.TRUE);
-            //assertEquals(true, run.isBold());
-
-            //bold.setVal(STOnOff.X_1);
-            //assertEquals(true, run.isBold());
-
-            //bold.setVal(STOnOff.ON);
-            //assertEquals(true, run.isBold());
-
-            //// False values: "false", "0", "off"
-            //bold.setVal(STOnOff.FALSE);
-            //assertEquals(false, run.isBold());
-
-            //bold.setVal(STOnOff.X_0);
-            //assertEquals(false, run.isBold());
-
-            //bold.setVal(STOnOff.OFF);
-            //assertEquals(false, run.isBold());
         }
 
         [Test]
@@ -158,20 +128,6 @@ namespace TestCases.XWPF.UserModel
 
 
         [Test]
-        public void TestSetGetVAlign()
-        {
-            CT_RPr rpr = ctRun.AddNewRPr();
-            rpr.AddNewVertAlign().val = (ST_VerticalAlignRun.subscript);
-
-            XWPFRun run = new XWPFRun(ctRun, p);
-            ClassicAssert.AreEqual(VerticalAlign.SUBSCRIPT, run.Subscript);
-
-            run.Subscript = (VerticalAlign.BASELINE);
-            ClassicAssert.AreEqual(ST_VerticalAlignRun.baseline, rpr.vertAlign.val);
-        }
-
-
-        [Test]
         public void TestSetGetFontFamily()
         {
             CT_RPr rpr = ctRun.AddNewRPr();
@@ -195,7 +151,7 @@ namespace TestCases.XWPF.UserModel
             ClassicAssert.AreEqual(7.0, run.FontSize);
 
             run.FontSize = 24;
-            ClassicAssert.AreEqual(48, (int)rpr.sz.val);
+            ClassicAssert.AreEqual(48, (int) rpr.sz.val);
 
             run.FontSize = 24.5;
             ClassicAssert.AreEqual(24.5, run.FontSize);
@@ -290,7 +246,7 @@ namespace TestCases.XWPF.UserModel
         /**
          * Test that on an existing document, we do the
          *  right thing with it
-         * @throws IOException 
+         * @ 
          */
         [Test]
         public void TestExisting()
@@ -435,13 +391,13 @@ namespace TestCases.XWPF.UserModel
 
             int count = 0;
 
-            foreach (XWPFParagraph p in header.Paragraphs)
+            foreach(XWPFParagraph p in header.Paragraphs)
             {
-                foreach (XWPFRun r in p.Runs)
+                foreach(XWPFRun r in p.Runs)
                 {
                     List<XWPFPicture> pictures = r.GetEmbeddedPictures();
 
-                    foreach (XWPFPicture pic in pictures)
+                    foreach(XWPFPicture pic in pictures)
                     {
                         ClassicAssert.IsNotNull(pic.GetPictureData());
                         ClassicAssert.AreEqual("DOZOR", pic.GetDescription());
@@ -454,20 +410,6 @@ namespace TestCases.XWPF.UserModel
             ClassicAssert.AreEqual(1, count);
         }
 
-        [Test]
-        public void testSetGetHighlight()
-        {
-            XWPFRun run = new XWPFRun(ctRun, p);
-            ClassicAssert.AreEqual(false, run.IsHighlighted);
-
-            // TODO Do this using XWPFRun methods
-            run.GetCTR().AddNewRPr().AddNewHighlight().val = (ST_HighlightColor.none);
-            ClassicAssert.AreEqual(false, run.IsHighlighted);
-            run.GetCTR().rPr.highlight.val = (ST_HighlightColor.cyan);
-            ClassicAssert.AreEqual(true, run.IsHighlighted);
-            run.GetCTR().rPr.highlight.val = (ST_HighlightColor.none);
-            ClassicAssert.AreEqual(false, run.IsHighlighted);
-        }
 
         [Test]
         public void TestAddPicture()
@@ -479,7 +421,7 @@ namespace TestCases.XWPF.UserModel
             ClassicAssert.AreEqual(0, doc.AllPictures.Count);
             ClassicAssert.AreEqual(0, r.GetEmbeddedPictures().Count);
 
-            r.AddPicture(new MemoryStream(new byte[0]), (int)PictureType.JPEG, "test.jpg", 21, 32);
+            r.AddPicture(new MemoryStream(new byte[0]), (int) PictureType.JPEG, "test.jpg", 21, 32);
 
             ClassicAssert.AreEqual(1, doc.AllPictures.Count);
             ClassicAssert.AreEqual(1, r.GetEmbeddedPictures().Count);
@@ -501,7 +443,7 @@ namespace TestCases.XWPF.UserModel
             ClassicAssert.AreEqual(0, hdr.AllPictures.Count);
             ClassicAssert.AreEqual(0, r.GetEmbeddedPictures().Count);
 
-            r.AddPicture(new ByteArrayInputStream(new byte[0]), (int)PictureType.JPEG, "test.jpg", 21, 32);
+            r.AddPicture(new ByteArrayInputStream(new byte[0]), (int) PictureType.JPEG, "test.jpg", 21, 32);
 
             ClassicAssert.AreEqual(1, hdr.AllPictures.Count);
             ClassicAssert.AreEqual(1, r.GetEmbeddedPictures().Count);
@@ -535,15 +477,15 @@ namespace TestCases.XWPF.UserModel
         {
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("52288.docx");
             IEnumerator<XWPFParagraph> paragraphs = doc.Paragraphs.GetEnumerator();
-            while (paragraphs.MoveNext())
+            while(paragraphs.MoveNext())
             {
                 XWPFParagraph paragraph = paragraphs.Current;
-                foreach (XWPFRun run in paragraph.Runs)
+                foreach(XWPFRun run in paragraph.Runs)
                 {
-                    if (run != null)
+                    if(run != null)
                     {
                         String text = run.GetText(0);
-                        if (text != null)
+                        if(text != null)
                         {
                             run.FontFamily = ("Times New Roman");
                         }
@@ -558,7 +500,7 @@ namespace TestCases.XWPF.UserModel
             byte[] image = XWPFTestDataSamples.GetImage("abstract1.jpg");
             XWPFDocument document = new XWPFDocument();
             document.CreateParagraph().CreateRun().AddPicture(
-                    new MemoryStream(image), (int)PictureType.JPEG, "test.jpg", Units.ToEMU(300), Units.ToEMU(100));
+                    new MemoryStream(image), (int) PictureType.JPEG, "test.jpg", Units.ToEMU(300), Units.ToEMU(100));
             XWPFDocument docBack = XWPFTestDataSamples.WriteOutAndReadBack(document);
             List<XWPFPicture> pictures = docBack.GetParagraphArray(0).Runs[0].GetEmbeddedPictures();
             ClassicAssert.AreEqual(1, pictures.Count);
@@ -573,7 +515,6 @@ namespace TestCases.XWPF.UserModel
         }
 
         [Test]
-        [Ignore("TODO FIX CI TESTS")]
         public void TestBug58922()
         {
             XWPFDocument document = new XWPFDocument();
@@ -622,7 +563,7 @@ namespace TestCases.XWPF.UserModel
             };
             MemoryStream bos = new MemoryStream();
             XWPFDocument doc = new XWPFDocument();
-            foreach (String s in text)
+            foreach(String s in text)
             {
                 XWPFParagraph p1 = doc.CreateParagraph();
                 XWPFRun r1 = p1.CreateRun();
@@ -635,7 +576,7 @@ namespace TestCases.XWPF.UserModel
 
             var paragraphs = doc2.Paragraphs;
             ClassicAssert.AreEqual(2, paragraphs.Count);
-            for (int i = 0; i < text.Length; i++)
+            for(int i = 0; i < text.Length; i++)
             {
                 XWPFParagraph p1 = paragraphs[i];
                 String expected = text[i];
@@ -653,7 +594,7 @@ namespace TestCases.XWPF.UserModel
         public void TestGetNumberOfTexts()
         {
             XWPFDocument doc = new XWPFDocument();
-            var p = doc.CreateParagraph(); 
+            var p = doc.CreateParagraph();
             XWPFRun run = p.CreateRun();
             ClassicAssert.AreEqual(0, run.NumberOfTexts);
             run.SetText("TEST STRING");
@@ -675,6 +616,114 @@ namespace TestCases.XWPF.UserModel
             ClassicAssert.AreEqual(styleId, run.GetStyle());
 
             document.Close();
+        }
+
+        [Test]
+        public void TestSetGetTextScale()
+        {
+            using(XWPFDocument document = new XWPFDocument())
+            {
+                XWPFRun run = document.CreateParagraph().CreateRun();
+                ClassicAssert.AreEqual(100, run.TextScale);
+                run.TextScale =200;
+                ClassicAssert.AreEqual(200, run.TextScale);
+            }
+        }
+
+        [Test]
+        public void TestSetGetTextHighlightColor()
+        {
+            using(XWPFDocument document = new XWPFDocument())
+            {
+                XWPFRun run = document.CreateParagraph().CreateRun();
+                ClassicAssert.AreEqual(ST_HighlightColor.none, run.TextHightlightColor);
+                ClassicAssert.AreEqual(false, run.IsHighlighted);
+                run.TextHighlightColor = ("darkGreen"); // See 17.18.40 ST_HighlightColor (Text Highlight Colors)
+                ClassicAssert.AreEqual(ST_HighlightColor.darkGreen, run.TextHightlightColor);
+                ClassicAssert.AreEqual(true, run.IsHighlighted);
+                run.TextHighlightColor = ("none");
+                ClassicAssert.AreEqual(false, run.IsHighlighted);   
+            }
+        }
+
+        [Test]
+        public void TestSetGetVanish()
+        {
+            using(XWPFDocument document = new XWPFDocument())
+            {
+                XWPFRun run = document.CreateParagraph().CreateRun();
+                ClassicAssert.AreEqual(false, run.IsVanish);
+                run.IsVanish = (true);
+                ClassicAssert.AreEqual(true, run.IsVanish);
+                run.IsVanish = (false);
+                ClassicAssert.AreEqual(false, run.IsVanish);
+            }
+        }
+
+        [Test]
+        public void TestSetVerticalAlignment()
+        {
+            using(XWPFDocument document = new XWPFDocument())
+            {
+                XWPFRun run = document.CreateParagraph().CreateRun();
+                ClassicAssert.AreEqual(ST_VerticalAlignRun.baseline, run.VerticalAlignment);
+                run.VerticalAlignment = ST_VerticalAlignRun.subscript;
+                ClassicAssert.AreEqual(ST_VerticalAlignRun.subscript, run.VerticalAlignment);
+                run.VerticalAlignment = ST_VerticalAlignRun.superscript;
+                ClassicAssert.AreEqual(ST_VerticalAlignRun.superscript, run.VerticalAlignment);
+            }
+        }
+
+        [Test]
+        public void TestSetGetVAlign()
+        {
+            var rpr = ctRun.AddNewRPr();
+            rpr.AddNewVertAlign().val = ST_VerticalAlignRun.subscript;
+
+            XWPFRun run = new XWPFRun(ctRun, p);
+            ClassicAssert.AreEqual(VerticalAlign.SUBSCRIPT, run.Subscript);
+
+            run.Subscript =VerticalAlign.BASELINE;
+            ClassicAssert.AreEqual(ST_VerticalAlignRun.baseline, rpr.vertAlign.val);
+        }
+
+
+        [Test]
+        public void TestSetGetEmphasisMark()
+        {
+            using(XWPFDocument document = new XWPFDocument())
+            {
+                XWPFRun run = document.CreateParagraph().CreateRun();
+                ClassicAssert.AreEqual(ST_Em.none, run.EmphasisMark);
+                run.EmphasisMark = ST_Em.dot;
+                ClassicAssert.AreEqual(ST_Em.dot, run.EmphasisMark);
+            }
+        }
+
+        [Test]
+        public void TestSetGetUnderlineColor()
+        {
+            XWPFDocument document = new XWPFDocument();
+            XWPFRun run = document.CreateParagraph().CreateRun();
+            ClassicAssert.AreEqual("auto", run.UnderlineColor);
+            String colorRgb = "C0F1a2";
+            run.UnderlineColor = (colorRgb);
+            ClassicAssert.AreEqual(colorRgb.ToLower(), run.UnderlineColor);
+            run.UnderlineColor = ("auto");
+            ClassicAssert.AreEqual("auto", run.UnderlineColor);
+        }
+
+        [Test]
+        public void TestSetGetUnderlineThemeColor()
+        {
+            XWPFDocument document = new XWPFDocument();
+            XWPFRun run = document.CreateParagraph().CreateRun();
+            ClassicAssert.AreEqual("none", run.UnderlineThemeColor);
+            String colorName = "accent4";
+            run.UnderlineThemeColor = (colorName);
+            ClassicAssert.AreEqual(colorName, run.UnderlineThemeColor);
+            run.UnderlineThemeColor =("none");
+            ClassicAssert.AreEqual("none", run.UnderlineThemeColor);        
         }
     }
 }
