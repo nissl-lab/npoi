@@ -22,6 +22,7 @@ using System.Text;
 using Cysharp.Text;
 using System.Globalization;
 using NPOI.SS.Format;
+using ExtendedNumerics;
 namespace NPOI.SS.UserModel
 {
 
@@ -109,39 +110,39 @@ namespace NPOI.SS.UserModel
 
         public String Format(string num)
         {
+            double originalValue = 0;
+            double.TryParse(num, out originalValue);
 
-            double doubleValue = 0;
-            double.TryParse(num, out doubleValue);
 
-            bool isNeg = (doubleValue < 0.0f) ? true : false;
-            double absDoubleValue = Math.Abs(doubleValue);
+            BigDecimal doubleValue = new BigDecimal(originalValue);
+            bool isNeg = doubleValue.CompareTo(BigDecimal.Zero)<0;
+            var absValue = BigDecimal.Abs(doubleValue);
 
-            double wholePart = Math.Floor(absDoubleValue);
-            double decPart = absDoubleValue - wholePart;
-            if (wholePart + decPart == 0)
+            var wholePart = absValue.GetWholePart();
+            var decPart = absValue.GetFractionalPart();
+            if ((wholePart + decPart).CompareTo(BigDecimal.Zero) == 0)
             {
                 return "0";
             }
 
             //if the absolute value is smaller than 1 over the exact or maxDenom
             //you can stop here and return "0"
-            if (absDoubleValue < (1 / Math.Max(exactDenom, maxDenom)))
+            if (absValue < (1 / Math.Max(exactDenom, maxDenom)))
             {
                 return "0";
             }
 
             //this is necessary to prevent overflow in the maxDenom calculation
             //stink1
-            if (wholePart + (int)decPart == wholePart + decPart)
+            if (decPart.CompareTo(BigDecimal.Zero) == 0)
             {
-
                 using var sb = ZString.CreateStringBuilder();
 
                 if(isNeg)
                 {
                     sb.Append("-");
                 }
-                sb.Append((int)wholePart);
+                sb.Append(wholePart);
                 return sb.ToString();
             }
 
@@ -151,11 +152,11 @@ namespace NPOI.SS.UserModel
                 //this should be the case because of the constructor
                 if (exactDenom > 0)
                 {
-                    fract = SimpleFraction.BuildFractionExactDenominator(decPart, exactDenom);
+                    fract = SimpleFraction.BuildFractionExactDenominator((double)decPart, exactDenom);
                 }
                 else
                 {
-                    fract = SimpleFraction.BuildFractionMaxDenominator(decPart, maxDenom);
+                    fract = SimpleFraction.BuildFractionMaxDenominator((double)decPart, maxDenom);
                 }
             }
             catch (SimpleFractionException)
@@ -163,9 +164,7 @@ namespace NPOI.SS.UserModel
                 return doubleValue.ToString();
             }
 
-            StringBuilder sb1 = new StringBuilder();
-
-
+            using var sb1 = ZString.CreateStringBuilder();
             //now format the results
             if(isNeg)
             {
@@ -175,8 +174,12 @@ namespace NPOI.SS.UserModel
             //if whole part has to go into the numerator
             if (string.IsNullOrEmpty(wholePartFormatString))
             {
-                int trueNum = (fract.Denominator * (int)wholePart) + fract.Numerator;
-                sb1.Append(trueNum).Append("/").Append(fract.Denominator);
+                int fden = fract.Denominator;
+                int fnum = fract.Numerator;
+                var trueNum =  wholePart* (new BigDecimal(fract.Denominator)) + (new BigDecimal(fract.Numerator));
+                sb1.Append(trueNum.WholeValue);
+                sb1.Append("/");
+                sb1.Append(fden);
                 return sb1.ToString();
             }
 
@@ -184,20 +187,23 @@ namespace NPOI.SS.UserModel
             //short circuit if fraction is 0 or 1
             if (fract.Numerator == 0)
             {
-                sb1.Append((int)wholePart);
+                sb1.Append(wholePart);
                 return sb1.ToString();
             }
             else if (fract.Numerator == fract.Denominator)
             {
-                sb1.Append((int)wholePart + 1);
+                sb1.Append(wholePart + BigDecimal.One);
                 return sb1.ToString();
             }
             //as mentioned above, this ignores the exact space formatting in Excel
-            if (wholePart > 0)
+            if (wholePart.CompareTo(BigDecimal.Zero.WholeValue) > 0)
             {
-                sb1.Append((int)wholePart).Append(" ");
+                sb1.Append(wholePart);
+                sb1.Append(" ");
             }
-            sb1.Append(fract.Numerator).Append("/").Append(fract.Denominator);
+            sb1.Append(fract.Numerator);
+            sb1.Append("/");
+            sb1.Append(fract.Denominator);
             return sb1.ToString();
         }
 
