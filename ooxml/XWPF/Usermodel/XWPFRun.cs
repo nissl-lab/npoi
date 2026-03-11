@@ -16,7 +16,7 @@
 ==================================================================== */
 namespace NPOI.XWPF.UserModel
 {
-using Cysharp.Text;
+    using Cysharp.Text;
     using EnumsNET;
     using NPOI.OpenXmlFormats.Dml;
     using NPOI.OpenXmlFormats.Dml.WordProcessing;
