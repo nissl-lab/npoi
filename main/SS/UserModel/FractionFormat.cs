@@ -23,6 +23,7 @@ using Cysharp.Text;
 using System.Globalization;
 using NPOI.SS.Format;
 using ExtendedNumerics;
+using System.Numerics;
 namespace NPOI.SS.UserModel
 {
 
@@ -91,7 +92,7 @@ namespace NPOI.SS.UserModel
                 else if (m.Groups[1] != null && m.Groups[1].Success)
                 {
                     int len = m.Groups[1].Value.Length;
-                    len = len > MAX_DENOM_POW ? MAX_DENOM_POW : len;
+                    len = Math.Min(len, MAX_DENOM_POW);
                     tmpMax = (int)Math.Pow(10, len);
                 }
                 else
@@ -115,12 +116,12 @@ namespace NPOI.SS.UserModel
 
 
             BigDecimal doubleValue = new BigDecimal(originalValue);
-            bool isNeg = doubleValue.CompareTo(BigDecimal.Zero)<0;
+            bool isNeg = doubleValue.IsNegative();
             var absValue = BigDecimal.Abs(doubleValue);
 
             var wholePart = absValue.GetWholePart();
             var decPart = absValue.GetFractionalPart();
-            if ((wholePart + decPart).CompareTo(BigDecimal.Zero) == 0)
+            if ((wholePart + decPart).IsZero())
             {
                 return "0";
             }
@@ -134,7 +135,7 @@ namespace NPOI.SS.UserModel
 
             //this is necessary to prevent overflow in the maxDenom calculation
             //stink1
-            if (decPart.CompareTo(BigDecimal.Zero) == 0)
+            if (decPart.IsZero())
             {
                 using var sb = ZString.CreateStringBuilder();
 
@@ -176,8 +177,8 @@ namespace NPOI.SS.UserModel
             {
                 int fden = fract.Denominator;
                 int fnum = fract.Numerator;
-                var trueNum =  wholePart* (new BigDecimal(fract.Denominator)) + (new BigDecimal(fract.Numerator));
-                sb1.Append(trueNum.WholeValue);
+                var trueNum =  wholePart * (new BigDecimal(fden)) + (new BigDecimal(fnum));
+                sb1.Append((BigInteger)trueNum);
                 sb1.Append("/");
                 sb1.Append(fden);
                 return sb1.ToString();
@@ -196,7 +197,7 @@ namespace NPOI.SS.UserModel
                 return sb1.ToString();
             }
             //as mentioned above, this ignores the exact space formatting in Excel
-            if (wholePart.CompareTo(BigDecimal.Zero.WholeValue) > 0)
+            if (wholePart.CompareTo(BigDecimal.Zero.GetWholePart()) > 0)
             {
                 sb1.Append(wholePart);
                 sb1.Append(" ");
