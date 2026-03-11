@@ -122,7 +122,96 @@ namespace NPOI.SS.Util
 
             return CopyCell(oldCell, newCell, sourceIndex, targetIndex);
         }
+        public static void CopyCell(ICell srcCell, ICell destCell, CellCopyPolicy policy)
+        {
+            // Copy cell value (cell type is updated implicitly)
+            if(policy.IsCopyCellValue)
+            {
+                if(srcCell != null)
+                {
+                    CellType copyCellType = srcCell.CellType;
+                    if(copyCellType == CellType.Formula && !policy.IsCopyCellFormula)
+                    {
+                        // Copy formula result as value
+                        // FIXME: Cached value may be stale
+                        copyCellType = srcCell.CachedFormulaResultType;
+                    }
+                    switch(copyCellType)
+                    {
+                        case CellType.Numeric:
+                            // DataFormat is not copied unless policy.isCopyCellStyle is true
+                            if(!policy.IsCopyCellStyle&& DateUtil.IsCellDateFormatted(srcCell))
+                            {
+                                destCell.SetCellValue((DateTime) srcCell.DateCellValue);
+                            }
+                            else
+                            {
+                                destCell.SetCellValue(srcCell.NumericCellValue);
+                            }
+                            break;
+                        case CellType.String:
+                            destCell.SetCellValue(srcCell.StringCellValue);
+                            break;
+                        case CellType.Formula:
+                            destCell.SetCellFormula(srcCell.CellFormula);
+                            break;
+                        case CellType.Blank:
+                            destCell.SetBlank();
+                            break;
+                        case CellType.Boolean:
+                            destCell.SetCellValue(srcCell.BooleanCellValue);
+                            break;
+                        case CellType.Error:
+                            destCell.SetCellErrorValue(srcCell.ErrorCellValue);
+                            break;
+                        default:
+                            throw new ArgumentException("Invalid cell type " + srcCell.CellType);
+                    }
+                }
+                else
+                { //srcCell is null
+                    destCell.SetBlank();
+                }
+            }
 
+            // Copy CellStyle
+            if(policy.IsCopyCellStyle)
+            {
+                if(srcCell != null)
+                {
+                    destCell.CellStyle = (srcCell.CellStyle);
+                }
+                else
+                {
+                    // clear cell style
+                    destCell.CellStyle = (null);
+                }
+            }
+
+
+            if(policy.IsMergeHyperlink)
+            {
+                // if srcCell doesn't have a hyperlink and destCell has a hyperlink, don't clear destCell's hyperlink
+                IHyperlink srcHyperlink = srcCell.Hyperlink;
+                if(srcHyperlink != null)
+                {
+                    destCell.Hyperlink = srcHyperlink.Copy();
+                }
+            }
+            else if(policy.IsCopyHyperlink)
+            {
+                // overwrite the hyperlink at dest cell with srcCell's hyperlink
+                // if srcCell doesn't have a hyperlink, clear the hyperlink (if one exists) at destCell
+                if(srcCell == null || srcCell.Hyperlink == null)
+                {
+                    destCell.Hyperlink = (null);
+                }
+                else
+                {
+                    destCell.Hyperlink = srcCell.Hyperlink.Copy();
+                }
+            }
+        }
         public static ICell CopyCell(IColumn column, int sourceIndex, int targetIndex)
         {
             // Grab a copy of the old/new cell
@@ -146,6 +235,7 @@ namespace NPOI.SS.Util
 
             return CopyCell(oldCell, newCell, sourceIndex, targetIndex);
         }
+
 
         private static ICell CopyCell(ICell oldCell, ICell newCell, int sourceIndex, int targetIndex)
         {
