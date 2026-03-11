@@ -899,7 +899,7 @@ using Cysharp.Text;
         {
             get
             {
-                var pr = GetRunProperties(true);
+                var pr = GetRunProperties(false);
                 return pr != null && pr.IsSetVanish() && IsCTOnOff(pr.vanish);
             }
             set {
@@ -1295,9 +1295,9 @@ using Cysharp.Text;
             run.AddNewTab();
         }
 
-        public void RemoveTab()
+        public void RemoveTab(int p)
         {
-            //TODO
+            run.RemoveTab(p);
         }
 
         /**
@@ -1319,7 +1319,7 @@ using Cysharp.Text;
 
         public void RemoveCarriageReturn(int i)
         {
-            throw new NotImplementedException();
+            run.RemoveCr(i);
         }
 
         XWPFPicture AddPicture(Stream pictureData, int pictureType, String filename, int width, int height, Action<XWPFDocument, CT_Blip> extAct)
