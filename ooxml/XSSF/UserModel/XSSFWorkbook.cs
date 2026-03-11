@@ -2444,7 +2444,7 @@ namespace NPOI.XSSF.UserModel
         public bool CellFormulaValidation
         {
             get { return this.cellFormulaValidation; }
-            set { this.cellFormulaValidation = false; }
+            set { this.cellFormulaValidation = value; }
         }
 
         #region IWorkbook Members
