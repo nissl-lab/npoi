@@ -274,17 +274,17 @@ namespace TestCases.XSSF.UserModel
 
                 // Try each cell individually
                 XSSFFormulaEvaluator eval = new XSSFFormulaEvaluator(wb);
-                for (int i = 0; i < wb.NumberOfSheets; i++)
+                for(int i = 0; i < wb.NumberOfSheets; i++)
                 {
                     ISheet s = wb.GetSheetAt(i);
-                    foreach (IRow r in s)
+                    foreach(IRow r in s)
                     {
-                        foreach (ICell c in r)
+                        foreach(ICell c in r)
                         {
-                            if (c.CellType == CellType.Formula)
+                            if(c.CellType == CellType.Formula)
                             {
                                 CellValue cv = eval.Evaluate(c);
-                                if (cv.CellType == CellType.Numeric)
+                                if(cv.CellType == CellType.Numeric)
                                 {
                                     // assert that the calculated value agrees with
                                     // the cached formula result calculated by Excel
@@ -365,7 +365,7 @@ namespace TestCases.XSSF.UserModel
                          new XSSFWorkbook()
                    };
             int[] InitialFonts = new int[] { 4, 1 };
-            for (int i = 0; i < wbs.Length; i++)
+            for(int i = 0; i < wbs.Length; i++)
             {
                 IWorkbook wb = wbs[i];
                 int startingFonts = InitialFonts[i];
@@ -375,7 +375,7 @@ namespace TestCases.XSSF.UserModel
                 // Get a font, and slightly change it
                 IFont a = wb.CreateFont();
                 ClassicAssert.AreEqual(startingFonts + 1, wb.NumberOfFonts);
-                a.FontHeightInPoints = ((short)23);
+                a.FontHeightInPoints = ((short) 23);
                 ClassicAssert.AreEqual(startingFonts + 1, wb.NumberOfFonts);
 
                 // Get two more, unChanged
@@ -436,7 +436,7 @@ namespace TestCases.XSSF.UserModel
                          new HSSFWorkbook(),
                          new XSSFWorkbook()
                    };
-            foreach (IWorkbook wb in wbs)
+            foreach(IWorkbook wb in wbs)
             {
                 ISheet s = wb.CreateSheet();
                 IRow r = s.CreateRow(0);
@@ -474,7 +474,7 @@ namespace TestCases.XSSF.UserModel
                     obj = cn.RichStringCellValue;
                     Assert.Fail();
                 }
-                catch (InvalidOperationException) { }
+                catch(InvalidOperationException) { }
 
                 ClassicAssert.AreEqual("Testing", cs.StringCellValue);
                 try
@@ -482,7 +482,7 @@ namespace TestCases.XSSF.UserModel
                     obj = cs.NumericCellValue;
                     Assert.Fail();
                 }
-                catch (InvalidOperationException) { }
+                catch(InvalidOperationException) { }
 
                 ClassicAssert.AreEqual(1.2, cfn.NumericCellValue);
                 try
@@ -490,7 +490,7 @@ namespace TestCases.XSSF.UserModel
                     obj = cfn.RichStringCellValue;
                     Assert.Fail();
                 }
-                catch (InvalidOperationException) { }
+                catch(InvalidOperationException) { }
 
                 ClassicAssert.AreEqual("Testing", cfs.StringCellValue);
                 try
@@ -498,7 +498,7 @@ namespace TestCases.XSSF.UserModel
                     obj = cfs.NumericCellValue;
                     Assert.Fail();
                 }
-                catch (InvalidOperationException) { }
+                catch(InvalidOperationException) { }
             }
         }
 
@@ -650,7 +650,7 @@ namespace TestCases.XSSF.UserModel
             wb.Write(b2);
             wb.Write(b3);
 
-            foreach (byte[] data in new byte[][] {
+            foreach(byte[] data in new byte[][] {
                          b1.ToArray(), b2.ToArray(), b3.ToArray()
                    })
             {
@@ -711,7 +711,7 @@ namespace TestCases.XSSF.UserModel
             sheet.GetRow(6).GetCell(0).SetCellType(CellType.Blank);  // go
 
             XSSFTestDataSamples.WriteOutAndReadBack(wb1).Close();
-            sheet.GetRow(7).GetCell(0).SetCellValue((String)null);  // go
+            sheet.GetRow(7).GetCell(0).SetCellValue((String) null);  // go
 
             XSSFTestDataSamples.WriteOutAndReadBack(wb1).Close();
 
@@ -742,10 +742,10 @@ namespace TestCases.XSSF.UserModel
 
         private void validateCells(XSSFSheet sheet)
         {
-            foreach (IRow row in sheet)
+            foreach(IRow row in sheet)
             {
                 // trigger handling
-                ((XSSFRow)row).OnDocumentWrite();
+                ((XSSFRow) row).OnDocumentWrite();
             }
         }
         [Test]
@@ -755,11 +755,11 @@ namespace TestCases.XSSF.UserModel
             IFormulaEvaluator formulaEvaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
 
             ISheet sheet = wb.GetSheetAt(0);
-            foreach (IRow row in sheet)
+            foreach(IRow row in sheet)
             {
-                foreach (ICell cell in row)
+                foreach(ICell cell in row)
                 {
-                    if (cell.CellType == CellType.Formula)
+                    if(cell.CellType == CellType.Formula)
                     {
                         formulaEvaluator.EvaluateInCell(cell); // caused NPE on some cells
                     }
@@ -867,15 +867,15 @@ namespace TestCases.XSSF.UserModel
             IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("50299.xlsx");
 
             // Check all the colours
-            for (int sn = 0; sn < wb.NumberOfSheets; sn++)
+            for(int sn = 0; sn < wb.NumberOfSheets; sn++)
             {
                 ISheet s1 = wb.GetSheetAt(sn);
-                foreach (IRow r in s1)
+                foreach(IRow r in s1)
                 {
-                    foreach (ICell c in r)
+                    foreach(ICell c in r)
                     {
                         ICellStyle cs = c.CellStyle;
-                        if (cs != null)
+                        if(cs != null)
                         {
                             short xx = cs.FillForegroundColor;
                             Console.WriteLine(xx);
@@ -998,9 +998,9 @@ namespace TestCases.XSSF.UserModel
             XSSFSheet sheet = wb1.CreateSheet() as XSSFSheet;
 
             IFont font1 = wb1.CreateFont();
-            font1.Color = ((short)20);
+            font1.Color = ((short) 20);
             IFont font2 = wb1.CreateFont();
-            font2.Color = (short)(FontColor.Red);
+            font2.Color = (short) (FontColor.Red);
             IFont font3 = wb1.GetFontAt((short)0);
 
             XSSFRow row = sheet.CreateRow(2) as XSSFRow;
@@ -1544,11 +1544,11 @@ namespace TestCases.XSSF.UserModel
 
 
             // go through all formula cells
-            for (int rInd = 2; rInd <= rowMax; rInd++)
+            for(int rInd = 2; rInd <= rowMax; rInd++)
             {
                 IRow row = sheet.GetRow(rInd);
 
-                for (int cInd = 1; cInd <= 12; cInd++)
+                for(int cInd = 1; cInd <= 12; cInd++)
                 {
                     ICell cell = row.GetCell(cInd);
                     String formula = cell.CellFormula;
@@ -1601,7 +1601,7 @@ namespace TestCases.XSSF.UserModel
         public void Test54436()
         {
             IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("54436.xlsx");
-            if (!WorkbookEvaluator.GetSupportedFunctionNames().Contains("GETPIVOTDATA"))
+            if(!WorkbookEvaluator.GetSupportedFunctionNames().Contains("GETPIVOTDATA"))
             {
                 Function func = new Function54436();
 
@@ -1644,7 +1644,7 @@ namespace TestCases.XSSF.UserModel
             wb.Close();
         }
         [Test]
-        public void Bug55692_npoifs() 
+        public void Bug55692_npoifs()
         {
             // Via a NPOIFSFileSystem, will spot it's actually a .xlsx file
             //  encrypted with the default password, and open
@@ -1668,7 +1668,7 @@ namespace TestCases.XSSF.UserModel
                 WorkbookFactory.Create(inpA);
                 Assert.Fail("Should've raised a EncryptedDocumentException error");
             }
-            catch (EncryptedDocumentException) { }
+            catch(EncryptedDocumentException) { }
 
             // Via a POIFSFileSystem
             POIFSFileSystem fsP = new POIFSFileSystem(inpB);
@@ -1677,7 +1677,7 @@ namespace TestCases.XSSF.UserModel
                 WorkbookFactory.Create(fsP);
                 Assert.Fail("Should've raised a EncryptedDocumentException error");
             }
-            catch (EncryptedDocumentException) { }
+            catch(EncryptedDocumentException) { }
 
             // Via a NPOIFSFileSystem
             POIFSFileSystem fsNP = new POIFSFileSystem(inpC);
@@ -1686,7 +1686,7 @@ namespace TestCases.XSSF.UserModel
                 WorkbookFactory.Create(fsNP);
                 Assert.Fail("Should've raised a EncryptedDocumentException error");
             }
-            catch (EncryptedDocumentException) { }
+            catch(EncryptedDocumentException) { }
         }
         [Test]
         public void Bug53282()
@@ -1946,7 +1946,7 @@ namespace TestCases.XSSF.UserModel
             // Try to Evaluate them
             IFormulaEvaluator eval = wb.GetCreationHelper().CreateFormulaEvaluator();
             ClassicAssert.AreEqual("Test A1", eval.Evaluate(cRefSName).StringValue);
-            ClassicAssert.AreEqual(142, (int)eval.Evaluate(cRefWName).NumberValue);
+            ClassicAssert.AreEqual(142, (int) eval.Evaluate(cRefWName).NumberValue);
 
             // Try to Evaluate everything
             eval.EvaluateAll();
@@ -1957,7 +1957,7 @@ namespace TestCases.XSSF.UserModel
         private void saveAndReloadReport(IWorkbook wb, FileInfo outFile)
         {
             IFont font = wb.GetFontAt((short)0);
-            if (font is XSSFFont)
+            if(font is XSSFFont)
             {
                 XSSFFont xfont = (XSSFFont)wb.GetFontAt((short)0);
                 CT_Font ctFont = (CT_Font)xfont.GetCTFont();
@@ -1972,11 +1972,11 @@ namespace TestCases.XSSF.UserModel
             using(FileStream fs = new FileStream(outFile.FullName, FileMode.Open, FileAccess.ReadWrite))
             {
                 IWorkbook newWB = null;
-                if (wb is XSSFWorkbook)
+                if(wb is XSSFWorkbook)
                 {
                     newWB = new XSSFWorkbook(fs);
                 }
-                else if (wb is HSSFWorkbook)
+                else if(wb is HSSFWorkbook)
                 {
                     newWB = new HSSFWorkbook(fs);
                     //} else if(wb is SXSSFWorkbook) {
@@ -2113,7 +2113,7 @@ namespace TestCases.XSSF.UserModel
                 new XSSFWorkbook(pkg).Close();
                 Assert.Fail("Should fail as too much expansion occurs");
             }
-            catch (POIXMLException)
+            catch(POIXMLException)
             {
                 //Expected
             }
@@ -2125,7 +2125,7 @@ namespace TestCases.XSSF.UserModel
                 XSSFTestDataSamples.OpenSamplePackage("54764-2.xlsx").Close();
                 Assert.Fail("Should fail as too much expansion occurs");
             }
-            catch (Exception)
+            catch(Exception)
             {
                 // Expected
             }
@@ -2147,7 +2147,7 @@ namespace TestCases.XSSF.UserModel
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("57176.xlsx");
             CT_DefinedNames definedNames = wb.GetCTWorkbook().definedNames;
             List<CT_DefinedName> definedNameList = definedNames.definedName;
-            foreach (CT_DefinedName defName in definedNameList)
+            foreach(CT_DefinedName defName in definedNameList)
             {
                 ClassicAssert.IsNotNull(defName.name);
                 ClassicAssert.IsNotNull(defName.Value);
@@ -2173,7 +2173,7 @@ namespace TestCases.XSSF.UserModel
                 new XSSFWorkbook(pkg).Close();
                 Assert.Fail(".xlsb files not supported");
             }
-            catch (XLSBUnsupportedException)
+            catch(XLSBUnsupportedException)
             {
                 // Good, detected and warned
             }
@@ -2184,7 +2184,7 @@ namespace TestCases.XSSF.UserModel
                 WorkbookFactory.Create(pkg).Close();
                 Assert.Fail(".xlsb files not supported");
             }
-            catch (XLSBUnsupportedException)
+            catch(XLSBUnsupportedException)
             {
                 // Good, detected and warned
             }
@@ -2196,7 +2196,7 @@ namespace TestCases.XSSF.UserModel
                 WorkbookFactory.Create(xlsbFile.FullName).Close();
                 Assert.Fail(".xlsb files not supported");
             }
-            catch (XLSBUnsupportedException)
+            catch(XLSBUnsupportedException)
             {
                 // Good, detected and warned
             }
@@ -2348,7 +2348,7 @@ namespace TestCases.XSSF.UserModel
         [Test]
         public void Bug57482()
         {
-            foreach (PackageAccess access in new PackageAccess[] {
+            foreach(PackageAccess access in new PackageAccess[] {
                 PackageAccess.READ_WRITE, PackageAccess.READ
         })
             {
@@ -2375,12 +2375,12 @@ namespace TestCases.XSSF.UserModel
                     try
                     {
                         wb = XSSFTestDataSamples.WriteOutAndReadBack(wb) as XSSFWorkbook;
-                        if (access == PackageAccess.READ)
+                        if(access == PackageAccess.READ)
                             Assert.Fail("Shouln't be able to write from Read-only mode");
                     }
-                    catch (InvalidOperationException e)
+                    catch(InvalidOperationException e)
                     {
-                        if (access == PackageAccess.READ)
+                        if(access == PackageAccess.READ)
                         {
                             // Expected
                         }
@@ -2476,7 +2476,7 @@ namespace TestCases.XSSF.UserModel
             int sheetNb = wb.NumberOfSheets;
             // Move this sheet at the first position
             wb.SetSheetOrder(wb.GetSheetName(sheetIndex), 0);
-            for (int sn = sheetNb - 1; sn > 0; sn--)
+            for(int sn = sheetNb - 1; sn > 0; sn--)
             {
                 wb.RemoveSheetAt(sn);
             }
@@ -2577,9 +2577,9 @@ namespace TestCases.XSSF.UserModel
 
                 ISheet sheet = wb.CloneSheet(0);
                 IDrawing<IShape> Drawing = sheet.CreateDrawingPatriarch();
-                foreach (XSSFShape shape in ((XSSFDrawing)Drawing).GetShapes())
+                foreach(XSSFShape shape in ((XSSFDrawing) Drawing).GetShapes())
                 {
-                    if (shape is XSSFPicture)
+                    if(shape is XSSFPicture)
                     {
                         XSSFPictureData pictureData = ((XSSFPicture)shape).PictureData as XSSFPictureData;
                         ClassicAssert.IsNotNull(pictureData);
@@ -2736,7 +2736,7 @@ namespace TestCases.XSSF.UserModel
             Console.WriteLine("long time test, run over 1 minute.");
             int numStyles = 33000;
             XSSFWorkbook wb = new XSSFWorkbook();
-            for (int i = 1; i < numStyles; i++)
+            for(int i = 1; i < numStyles; i++)
             {
                 // Create a style and use it
                 XSSFCellStyle style = wb.CreateCellStyle() as XSSFCellStyle;
@@ -2759,7 +2759,7 @@ namespace TestCases.XSSF.UserModel
             //If XSSFWorkbooks ever implicitly optimize/consolidate cell styles (such as when the workbook is written to disk)
             //then this unit test should be updated
             ClassicAssert.AreEqual(numStyles, wb.NumCellStyles);
-            for (int i = 1; i < numStyles; i++)
+            for(int i = 1; i < numStyles; i++)
             {
                 XSSFCellStyle style = wb.GetCellStyleAt((short)i) as XSSFCellStyle;
                 ClassicAssert.IsNotNull(style);
@@ -2794,10 +2794,10 @@ namespace TestCases.XSSF.UserModel
 
             var keyset = data.Keys;
             int rownum = 1;
-            foreach (String key in keyset)
+            foreach(String key in keyset)
             {
                 IRow row;
-                if (CreateRow)
+                if(CreateRow)
                 {
                     row = sheet.CreateRow(rownum++);
                 }
@@ -2809,38 +2809,38 @@ namespace TestCases.XSSF.UserModel
 
                 Object[] objArr = data[(key)];
                 int cellnum = 0;
-                foreach (Object obj in objArr)
+                foreach(Object obj in objArr)
                 {
                     ICell cell = row.GetCell(cellnum);
-                    if (cell == null)
+                    if(cell == null)
                     {
                         cell = row.CreateCell(cellnum);
                     }
                     else
                     {
-                        if (cell.CellType == CellType.Formula)
+                        if(cell.CellType == CellType.Formula)
                         {
                             cell.CellFormula = (/*setter*/null);
-                            cell.CellStyle.DataFormat = (/*setter*/(short)0);
+                            cell.CellStyle.DataFormat = (/*setter*/(short) 0);
                         }
                     }
-                    if (obj is String)
+                    if(obj is String)
                     {
-                        cell.SetCellValue((String)obj);
+                        cell.SetCellValue((String) obj);
                     }
-                    else if (obj is int)
+                    else if(obj is int)
                     {
-                        cell.SetCellValue((int)obj);
+                        cell.SetCellValue((int) obj);
                     }
                     cellnum++;
                 }
             }
 
-            XSSFFormulaEvaluator.EvaluateAllFormulaCells((XSSFWorkbook)wb);
+            XSSFFormulaEvaluator.EvaluateAllFormulaCells((XSSFWorkbook) wb);
             wb.GetCreationHelper().CreateFormulaEvaluator().EvaluateAll();
 
             CalculationChain chain = ((XSSFWorkbook)wb).GetCalculationChain();
-            foreach (CT_CalcCell calc in chain.GetCTCalcChain().c)
+            foreach(CT_CalcCell calc in chain.GetCTCalcChain().c)
             {
                 // A2 to A6 should be gone
                 ClassicAssert.IsFalse(calc.r.Equals("A2"));
@@ -2861,8 +2861,8 @@ namespace TestCases.XSSF.UserModel
             ISheet sheetBack = wbBack.GetSheet("Func");
             ClassicAssert.IsNotNull(sheetBack);
 
-            chain = ((XSSFWorkbook)wbBack).GetCalculationChain();
-            foreach (CT_CalcCell calc in chain.GetCTCalcChain().c)
+            chain = ((XSSFWorkbook) wbBack).GetCalculationChain();
+            foreach(CT_CalcCell calc in chain.GetCTCalcChain().c)
             {
                 // A2 to A6 should be gone
                 ClassicAssert.IsFalse(calc.r.Equals("A2"));
@@ -2901,7 +2901,7 @@ namespace TestCases.XSSF.UserModel
         private void assertFormula(IWorkbook wb, ICell intF, String expectedFormula, String expectedResultOrNull)
         {
             ClassicAssert.AreEqual(CellType.Formula, intF.CellType);
-            if (null == expectedResultOrNull)
+            if(null == expectedResultOrNull)
             {
                 ClassicAssert.AreEqual(CellType.Error, intF.CachedFormulaResultType);
                 expectedResultOrNull = "#VALUE!";
@@ -2949,10 +2949,10 @@ namespace TestCases.XSSF.UserModel
         {
             IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("50755_workday_formula_example.xlsx");
             ISheet sheet = wb.GetSheet("Sheet1");
-            foreach (IRow aRow in sheet)
+            foreach(IRow aRow in sheet)
             {
                 ICell cell = aRow.GetCell(1);
-                if (cell.CellType == CellType.Formula)
+                if(cell.CellType == CellType.Formula)
                 {
                     String formula = cell.CellFormula;
                     ClassicAssert.IsNotNull(formula);
@@ -3036,10 +3036,10 @@ namespace TestCases.XSSF.UserModel
             ClassicAssert.IsNotNull(cell);
             StringBuilder tmpCellContent = new StringBuilder(cell.StringCellValue);
             XSSFRichTextString richText = (XSSFRichTextString)cell.RichStringCellValue;
-            for (int i = richText.Length - 1; i >= 0; i--)
+            for(int i = richText.Length - 1; i >= 0; i--)
             {
                 IFont f = richText.GetFontAtIndex(i);
-                if (f != null && f.IsStrikeout)
+                if(f != null && f.IsStrikeout)
                 {
                     tmpCellContent.Remove(i, 1);
                 }
@@ -3058,20 +3058,20 @@ namespace TestCases.XSSF.UserModel
             ICell cellA2 = sheet.GetRow(1).GetCell(0);
 
             ClassicAssert.AreEqual(0, cellA1.CellStyle.FillForegroundColor);
-            ClassicAssert.AreEqual("FFFDFDFD", ((XSSFColor)cellA1.CellStyle.FillForegroundColorColor).ARGBHex);
+            ClassicAssert.AreEqual("FFFDFDFD", ((XSSFColor) cellA1.CellStyle.FillForegroundColorColor).ARGBHex);
             ClassicAssert.AreEqual(0, cellA2.CellStyle.FillForegroundColor);
-            ClassicAssert.AreEqual("FFFDFDFD", ((XSSFColor)cellA2.CellStyle.FillForegroundColorColor).ARGBHex);
+            ClassicAssert.AreEqual("FFFDFDFD", ((XSSFColor) cellA2.CellStyle.FillForegroundColorColor).ARGBHex);
 
             ISheetConditionalFormatting cond = sheet.SheetConditionalFormatting;
             ClassicAssert.AreEqual(2, cond.NumConditionalFormattings);
             ClassicAssert.AreEqual(1, cond.GetConditionalFormattingAt(0).NumberOfRules);
             ClassicAssert.AreEqual(64, cond.GetConditionalFormattingAt(0).GetRule(0).PatternFormatting.FillForegroundColor);
             ClassicAssert.AreEqual("ISEVEN(ROW())", cond.GetConditionalFormattingAt(0).GetRule(0).Formula1);
-            ClassicAssert.IsNull(((XSSFColor)cond.GetConditionalFormattingAt(0).GetRule(0).PatternFormatting.FillForegroundColorColor).ARGBHex);
+            ClassicAssert.IsNull(((XSSFColor) cond.GetConditionalFormattingAt(0).GetRule(0).PatternFormatting.FillForegroundColorColor).ARGBHex);
             ClassicAssert.AreEqual(1, cond.GetConditionalFormattingAt(1).NumberOfRules);
             ClassicAssert.AreEqual(64, cond.GetConditionalFormattingAt(1).GetRule(0).PatternFormatting.FillForegroundColor);
             ClassicAssert.AreEqual("ISEVEN(ROW())", cond.GetConditionalFormattingAt(1).GetRule(0).Formula1);
-            ClassicAssert.IsNull(((XSSFColor)cond.GetConditionalFormattingAt(1).GetRule(0).PatternFormatting.FillForegroundColorColor).ARGBHex);
+            ClassicAssert.IsNull(((XSSFColor) cond.GetConditionalFormattingAt(1).GetRule(0).PatternFormatting.FillForegroundColorColor).ARGBHex);
 
             wb.Close();
         }
@@ -3083,12 +3083,12 @@ namespace TestCases.XSSF.UserModel
 
             HashSet<String> sheetNames = new HashSet<String>();
 
-            for (int sheetNum = 0; sheetNum < wb.NumberOfSheets; sheetNum++)
+            for(int sheetNum = 0; sheetNum < wb.NumberOfSheets; sheetNum++)
             {
                 sheetNames.Add(wb.GetSheetName(sheetNum));
             }
 
-            foreach (String sheetName in sheetNames)
+            foreach(String sheetName in sheetNames)
             {
                 int sheetIndex = wb.GetSheetIndex(sheetName);
 
@@ -3123,21 +3123,21 @@ namespace TestCases.XSSF.UserModel
         };
 
             int rowCount = 0;
-            foreach (Object[] aBook in bookData)
+            foreach(Object[] aBook in bookData)
             {
                 IRow row = sheet.CreateRow(rowCount++);
 
                 int columnCount = 0;
-                foreach (Object field in aBook)
+                foreach(Object field in aBook)
                 {
                     ICell cell = row.CreateCell(columnCount++);
-                    if (field is String)
+                    if(field is String)
                     {
-                        cell.SetCellValue((String)field);
+                        cell.SetCellValue((String) field);
                     }
-                    else if (field is int)
+                    else if(field is int)
                     {
-                        cell.SetCellValue((int)field);
+                        cell.SetCellValue((int) field);
                     }
                 }
             }
@@ -3186,13 +3186,13 @@ namespace TestCases.XSSF.UserModel
             DataFormatter formatter = new DataFormatter(true);
 
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("57236.xlsx");
-            for (int sheetNum = 0; sheetNum < wb.NumberOfSheets; sheetNum++)
+            for(int sheetNum = 0; sheetNum < wb.NumberOfSheets; sheetNum++)
             {
                 ISheet sheet = wb.GetSheetAt(sheetNum);
-                for (int rowNum = sheet.FirstRowNum; rowNum < sheet.LastRowNum; rowNum++)
+                for(int rowNum = sheet.FirstRowNum; rowNum < sheet.LastRowNum; rowNum++)
                 {
                     IRow row = sheet.GetRow(rowNum);
-                    for (int cellNum = row.FirstCellNum; cellNum < row.LastCellNum; cellNum++)
+                    for(int cellNum = row.FirstCellNum; cellNum < row.LastCellNum; cellNum++)
                     {
                         ICell cell = row.GetCell(cellNum);
                         String fmtCellValue = formatter.FormatCellValue(cell);
@@ -3221,7 +3221,7 @@ namespace TestCases.XSSF.UserModel
             cell.SetCellValue("Unsuccessful rotated text.");
 
             ICellStyle style = workbook.CreateCellStyle();
-            style.Rotation = (short)-90;
+            style.Rotation = (short) -90;
 
             cell.CellStyle = style;
 
@@ -3246,7 +3246,7 @@ namespace TestCases.XSSF.UserModel
             // B3
             IRow row = worksheet.GetRow(2);
             ICell cell = row.GetCell(1);
-            cell.SetCellValue((String)null);
+            cell.SetCellValue((String) null);
             IFormulaEvaluator evaluator = workbook.GetCreationHelper().CreateFormulaEvaluator();
             // B3
             row = worksheet.GetRow(2);
@@ -3410,7 +3410,7 @@ namespace TestCases.XSSF.UserModel
 
             // none of the columns should be hidden
             // column group collapsing is a different concept
-            for (int c = 0; c < 5; c++)
+            for(int c = 0; c < 5; c++)
             {
                 ClassicAssert.IsFalse(sheet.IsColumnHidden(c), "Column " + c);
             }
@@ -3468,7 +3468,7 @@ namespace TestCases.XSSF.UserModel
         }
 
         [Test]
-        public void Test53611() 
+        public void Test53611()
         {
             IWorkbook wb = new XSSFWorkbook();
             ISheet sheet = wb.CreateSheet("test");
@@ -3484,7 +3484,7 @@ namespace TestCases.XSSF.UserModel
             // to avoid having to iterate all rows/cells in each add/remove of a row or cell
             wb.Write(new NullOutputStream());
 
-            ClassicAssert.AreEqual("B2:I5", ((XSSFSheet)sheet).GetCTWorksheet().dimension.@ref);
+            ClassicAssert.AreEqual("B2:I5", ((XSSFSheet) sheet).GetCTWorksheet().dimension.@ref);
 
             wb.Close();
         }
@@ -3563,7 +3563,7 @@ namespace TestCases.XSSF.UserModel
         [Test]
         public void TestBug690()
         {
-            using (var workbook = new XSSFWorkbook())
+            using(var workbook = new XSSFWorkbook())
             {
                 XSSFSheet sheet = workbook.CreateSheet() as XSSFSheet;
                 XSSFCreationHelper creationHelper = workbook.GetCreationHelper() as XSSFCreationHelper;
@@ -3592,7 +3592,7 @@ namespace TestCases.XSSF.UserModel
                 ClassicAssert.IsNotNull(comment);
                 ClassicAssert.IsTrue(comment.Address.Equals(address2));
 
-                using (var wbCopy = XSSFTestDataSamples.WriteOutAndReadBack(workbook))
+                using(var wbCopy = XSSFTestDataSamples.WriteOutAndReadBack(workbook))
                 {
                     sheet = wbCopy.GetSheetAt(0) as XSSFSheet;
                     var comment2 = sheet.GetHyperlink(cellAddressToRemoveHL);
@@ -3601,7 +3601,7 @@ namespace TestCases.XSSF.UserModel
 
                     sheet.RemoveHyperlink(cellAddressToRemoveHL.Row, cellAddressToRemoveHL.Column);
 
-                    using (var wbCopy2 = XSSFTestDataSamples.WriteOutAndReadBack(wbCopy))
+                    using(var wbCopy2 = XSSFTestDataSamples.WriteOutAndReadBack(wbCopy))
                     {
                         sheet = wbCopy2.GetSheetAt(0) as XSSFSheet;
                         var comment3 = sheet.GetHyperlink(cellAddressToRemoveHL);
@@ -3614,7 +3614,7 @@ namespace TestCases.XSSF.UserModel
         [Test]
         public void TestCopyEmptyRow()
         {
-            using (var wb = new XSSFWorkbook())
+            using(var wb = new XSSFWorkbook())
             {
                 var sheet = wb.CreateSheet();
                 var row = sheet.CreateRow(1);
@@ -3640,6 +3640,29 @@ namespace TestCases.XSSF.UserModel
             }
         }
 
+        [Test]
+        public void Test64986()
+        {
+            XSSFWorkbook w = new XSSFWorkbook();
+            var s = w.CreateSheet();
+            var r = s.CreateRow(0);
+            var c = r.CreateCell(0);
+            c.SetCellFormula("MATCH(\"VAL\",B1:B11,)");
 
+            var evaluator = w.GetCreationHelper().CreateFormulaEvaluator();
+            CellValue value = evaluator.Evaluate(c);
+            ClassicAssert.AreEqual(CellType.Error, value.CellType);
+            ClassicAssert.AreEqual(ErrorEval.NA.ErrorCode, value.ErrorValue);
+
+            // put a value in place so the match should find something
+            var val = r.CreateCell(1);
+            val.SetCellValue("VAL");
+
+            // clear and check that now we find a match
+            evaluator.ClearAllCachedResultValues();
+            value = evaluator.Evaluate(c);
+            ClassicAssert.AreEqual(CellType.Numeric, value.CellType);
+            ClassicAssert.AreEqual(1, value.NumberValue, 0.01);
+        }
     }
 }
