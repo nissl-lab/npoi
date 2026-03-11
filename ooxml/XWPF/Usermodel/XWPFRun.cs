@@ -16,7 +16,8 @@
 ==================================================================== */
 namespace NPOI.XWPF.UserModel
 {
-using Cysharp.Text;
+    using Cysharp.Text;
+    using EnumsNET;
     using NPOI.OpenXmlFormats.Dml;
     using NPOI.OpenXmlFormats.Dml.WordProcessing;
     using NPOI.OpenXmlFormats.Wordprocessing;
@@ -891,7 +892,22 @@ using Cysharp.Text;
                 ctValign.val = EnumConverter.ValueOf<ST_VerticalAlignRun, VerticalAlign>(value);
             }
         }
-
+        /// <summary>
+        /// Get the vanish (hidden text) value
+        /// </summary>
+        public bool IsVanish
+        {
+            get
+            {
+                var pr = GetRunProperties(false);
+                return pr != null && pr.IsSetVanish() && IsCTOnOff(pr.vanish);
+            }
+            set {
+                var pr = GetRunProperties(true);
+                CT_OnOff vanish = pr.IsSetVanish() ? pr.vanish : pr.AddNewVanish();
+                vanish.val = value;
+            }
+        }
         public int Kerning
         {
             get
@@ -913,7 +929,7 @@ using Cysharp.Text;
         {
             get
             {
-                CT_RPr pr = run.rPr;
+                CT_RPr pr = GetRunProperties(false);
                 if (pr == null || !pr.IsSetHighlight())
                     return false;
                 if (pr.highlight.val == ST_HighlightColor.none)
@@ -921,10 +937,115 @@ using Cysharp.Text;
                 return true;
             }
         }
-        // TODO Provide a wrapper round STHighlightColor, then expose getter/setter
-        //  for the highlight colour. Ideally also then add to CharacterRun interface
+        public string TextHighlightColor
+        {
+            get
+            {
+                var pr = GetRunProperties(false);
+                if (pr==null||!pr.IsSetHighlight())
+                    return null;
+                if (pr.highlight.val == ST_HighlightColor.none)
+                    return null;
+                return pr.highlight.val.ToString();
+            }
+            set
+            {
+                var pr = GetRunProperties(true);
+                CT_Highlight highlight = pr.IsSetHighlight() ? pr.highlight : pr.AddNewHighlight();
+                if (value == null)
+                {
+                    highlight.val = ST_HighlightColor.none;
+                }
+                else
+                {
+                    highlight.val = Enums.Parse<ST_HighlightColor>(value,true);
+                }
+            }
+        }
+        public string UnderlineColor
+        {
+            get {
+                var underline = GetCTUnderline(false);
+                if (underline?.color==null)
+                    return "auto";
+                return underline.color;
+            }
+            set {
+                var underline = GetCTUnderline(true);
+                underline.color = value.ToLower();
+            }
+        }
+        public ST_Em EmphasisMark
+        {
+            get {
+                CT_RPr pr = GetRunProperties(false);
+                if(pr==null || !pr.IsSetEm())
+                    return ST_Em.none;
+                return pr.em.val;
+            }
+            set
+            {
+                CT_RPr pr = GetRunProperties(true);
+                var em = pr.IsSetEm() ? pr.em : pr.AddNewEm();
+                em.val=value;
+            }
+        }
+        public int TextScale
+        {
+            get {
+                CT_RPr pr = GetRunProperties(false);
+                if(pr==null|| !pr.IsSetW())
+                {
+                    return 100;
+                }
+                return Int32.Parse(pr.w.val);
+            }
+            set {
+                CT_RPr pr = GetRunProperties(true);
+                var scale = pr.IsSetW() ? pr.w : pr.AddNewW();
+                scale.val = value.ToString();
+            }
+        }
 
+        /// <summary>
+        /// Get or set the vertical alignment of the run.
+        /// </summary>
+        public ST_VerticalAlignRun VerticalAlignment
+        {
+            get
+            {
+                CT_RPr pr = GetRunProperties(false);
+                if(pr==null || !pr.IsSetVertAlign())
+                    return ST_VerticalAlignRun.baseline;
+                return pr.vertAlign.val;
+            }
+            set 
+            {
+                CT_RPr pr = GetRunProperties(true);
+                CT_VerticalAlignRun vertAlign = pr.IsSetVertAlign() ? pr.vertAlign : pr.AddNewVertAlign();
+                vertAlign.val =value;
+            }
+        }
 
+        /// <summary>
+        /// Set or get the highlight color for the run
+        /// </summary>
+        public ST_HighlightColor TextHightlightColor
+        {
+            get
+            {
+                var pr = GetRunProperties(false);
+                if(pr==null||!pr.IsSetHighlight())
+                    return ST_HighlightColor.none;
+                return pr.highlight.val;
+            }
+            set 
+            {
+                var pr = GetRunProperties(true);
+                CT_Highlight highlight = pr.IsSetHighlight() ? pr.highlight : pr.AddNewHighlight();
+                highlight.val = value;
+            }
+        }
         public int CharacterSpacing
         {
             get
@@ -1174,9 +1295,9 @@ using Cysharp.Text;
             run.AddNewTab();
         }
 
-        public void RemoveTab()
+        public void RemoveTab(int p)
         {
-            //TODO
+            run.RemoveTab(p);
         }
 
         /**
@@ -1198,7 +1319,7 @@ using Cysharp.Text;
 
         public void RemoveCarriageReturn(int i)
         {
-            throw new NotImplementedException();
+            run.RemoveCr(i);
         }
 
         XWPFPicture AddPicture(Stream pictureData, int pictureType, String filename, int width, int height, Action<XWPFDocument, CT_Blip> extAct)
@@ -1439,6 +1560,24 @@ using Cysharp.Text;
                 ctLang.val = value;
             }
         }
+
+        public string UnderlineThemeColor
+        { 
+            get{
+                var underline = GetCTUnderline(false);
+                if(underline?.themeColor==null)
+                    return "none";
+                return underline.themeColor.ToString();
+            }
+            set{
+                var underline = GetCTUnderline(true);
+               if (value!=null)
+                {
+                    underline.themeColor = Enums.Parse<ST_ThemeColor>(value, true);
+                }
+            }
+        }
+
         protected CT_RPr GetRunProperties(bool create)
         {
             CT_RPr pr = run.IsSetRPr() ? run.rPr : null;
