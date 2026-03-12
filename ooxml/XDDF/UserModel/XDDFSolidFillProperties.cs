@@ -21,7 +21,6 @@ namespace NPOI.XDDF.UserModel
 
     using NPOI.OpenXmlFormats.Dml;
 
-
     public class XDDFSolidFillProperties : IXDDFFillProperties
     {
         private CT_SolidColorFillProperties props;

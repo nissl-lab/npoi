@@ -15,20 +15,9 @@
    limitations under the License.
 ==================================================================== */
 
-
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-
 namespace NPOI.XDDF.UserModel
 {
-    using NPOI.Util;
-
-
     using NPOI.OpenXmlFormats.Dml;
-    using System.Security.Policy;
 
     public class XDDFPresetLineDash
     {

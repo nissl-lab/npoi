@@ -17,9 +17,7 @@
 
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Text;
 
 namespace NPOI.XDDF.UserModel.Text
@@ -28,7 +26,6 @@ namespace NPOI.XDDF.UserModel.Text
     using NPOI.XDDF.UserModel;
     using NPOI.OpenXmlFormats.Dml;
     using NPOI.Util.Optional;
-    using SixLabors.Fonts;
 
     /// <summary>
     /// Represents a paragraph of text within the containing text body. The paragraph

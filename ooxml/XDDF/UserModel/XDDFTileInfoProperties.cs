@@ -15,13 +15,6 @@
    limitations under the License.
 ==================================================================== */
 
-
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-
 namespace NPOI.XDDF.UserModel
 {
     using NPOI.OpenXmlFormats.Dml;
