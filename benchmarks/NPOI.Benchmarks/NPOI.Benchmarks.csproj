@@ -8,11 +8,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\ooxml\NPOI.OOXML.Core.csproj" />
+        <PackageReference Include="BenchmarkDotNet" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="BenchmarkDotNet" />
+      <ProjectReference Include="..\..\ooxml\NPOI.OOXML.Core.csproj" />
     </ItemGroup>
 
     <ItemGroup>
