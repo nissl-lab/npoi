@@ -33,4 +33,8 @@
     <Reference Include="System.Configuration" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Util\Optional\" />
+  </ItemGroup>
+
 </Project>

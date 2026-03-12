@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.IO;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace NPOI.OpenXmlFormats.Dml.Picture
@@ -77,6 +78,22 @@ namespace NPOI.OpenXmlFormats.Dml.Picture
             sw.WriteEndElement(nodeName);
         }
 
+        public static CT_Picture Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if(node == null) return null;
+            CT_Picture ctObj = new CT_Picture();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if(childNode.LocalName == "nvPicPr")
+                    ctObj.nvPicPrField = CT_PictureNonVisual.Parse(childNode, namespaceManager);
+                else if(childNode.LocalName == "blipFill")
+                    ctObj.blipFillField = CT_BlipFillProperties.Parse(childNode, namespaceManager);
+                else if(childNode.LocalName == "spPr")
+                    ctObj.spPrField = CT_ShapeProperties.Parse(childNode, namespaceManager);
+            }
+
+            return ctObj;
+        }
     }
 
     // see same class in different name space in SpeedsheetDrawing.cs
@@ -129,6 +146,22 @@ namespace NPOI.OpenXmlFormats.Dml.Picture
                 this.cNvPicPr.Write(sw, "cNvPicPr");
             }
             sw.WriteEndElement(nodeName);
+        }
+
+        public static CT_PictureNonVisual Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if(node == null) return null;
+            CT_PictureNonVisual ctObj = new CT_PictureNonVisual();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if(childNode.LocalName == "cNvPr")
+                    ctObj.cNvPrField = CT_NonVisualDrawingProps.Parse(childNode, namespaceManager);
+                else if(childNode.LocalName == "cNvPicPr")
+                    ctObj.cNvPicPrField = CT_NonVisualPictureProperties.Parse(childNode, namespaceManager);
+
+            }
+
+            return ctObj;
         }
     }
 

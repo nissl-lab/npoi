@@ -1,4 +1,5 @@
-﻿using NPOI.OpenXmlFormats.Dml.Chart;
+﻿using NPOI.OpenXmlFormats.Dml;
+using NPOI.OpenXmlFormats.Dml.Chart;
 using NPOI.SS.UserModel.Charts;
 using System;
 using System.Collections.Generic;

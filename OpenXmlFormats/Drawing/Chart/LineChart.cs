@@ -335,6 +335,64 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             this.valField = new CT_NumDataSource();
             return this.valField;
         }
+
+        public bool IsSetTx()
+        {
+            return this.txField != null;
+        }
+
+        public CT_SerTx AddNewTx()
+        {
+            this.txField = new CT_SerTx();
+            return this.txField;
+        }
+
+        public bool IsSetDLbls()
+        {
+            return this.dLblsField != null;
+        }
+
+        public void AddNewDLbls()
+        {
+            this.dLblsField = new CT_DLbls();
+        }
+
+        public bool IsSetSpPr()
+        {
+            return this.spPrField != null;
+        }
+
+        public void UnsetSpPr()
+        {
+            this.spPrField = null;
+        }
+
+        public CT_ShapeProperties AddNewSpPr()
+        {
+            this.spPrField = new CT_ShapeProperties();
+            return this.spPrField;
+        }
+
+        public bool IsSetSmooth()
+        {
+            return this.smoothField != null;
+        }
+
+        public void UnsetSmooth()
+        {
+            this.smoothField = null;
+        }
+
+        public CT_Boolean AddNewSmooth()
+        {
+            this.smoothField = new CT_Boolean();
+            return this.smoothField;
+        }
+
+        public bool IsSetMarker()
+        {
+            return this.markerField != null;
+        }
     }
 
 
@@ -1201,6 +1259,21 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                 this.axIdField = new List<CT_UnsignedInt>();
             axIdField.Add(si);
             return si;
+        }
+
+        public bool IsSetVaryColors()
+        {
+            return this.varyColorsField != null;
+        }
+
+        public int SizeOfAxIdArray()
+        {
+            return this.axIdField.Count;
+        }
+
+        public CT_UnsignedInt[] GetAxIdArray()
+        {
+            return [.. this.axIdField];
         }
     }
 

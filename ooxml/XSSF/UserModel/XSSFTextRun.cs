@@ -334,7 +334,7 @@ namespace NPOI.XSSF.UserModel
             get
             {
                 CT_TextCharacterProperties rPr = GetRPr();
-                if (rPr.IsSetB())
+                if (rPr.bSpecified)
                 {
                     return rPr.b;
                 }
