@@ -24,13 +24,8 @@ using System.Text;
 
 namespace NPOI.XDDF.UserModel.Text
 {
-    using NPOI.Util;
-
-
     using NPOI.XDDF.UserModel;
-
     using NPOI.OpenXmlFormats.Dml;
-    using Org.BouncyCastle.Utilities.Collections;
 
     public class XDDFHyperlink
     {
@@ -45,7 +40,6 @@ namespace NPOI.XDDF.UserModel.Text
         public XDDFHyperlink(string id, string action)
             : this(id)
         {
-
             this.link.action = action;
         }
         internal XDDFHyperlink(CT_Hyperlink link)

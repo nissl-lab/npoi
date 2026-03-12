@@ -34,7 +34,7 @@ namespace NPOI.Common.UserModel.Fonts
     /// if the value is unset, a default value will be returned.
     /// </para>
     /// <para>
-    /// Setting a unsupported property results in an <see cref="UnsupportedOperationException"/>.
+    /// Setting a unsupported property results in an <see cref="InvalidOperationException"/>.
     /// </para>
     /// </summary>
     /// 
@@ -58,13 +58,14 @@ namespace NPOI.Common.UserModel.Fonts
         /// </summary>
         /// <param name="index">the index within the collection of Font objects</param>
         /// 
-        /// <exception cref="UnsupportedOperationException">if unsupported</exception>
+        /// <exception cref="InvalidOperationException">if unsupported</exception>
         void SetIndex(int index);
 
 
         /// <summary>
         /// </summary>
-        /// <returns>the full name of the font, i.e. font family + type face</returns>\1string GetTypeface();
+        /// <returns>the full name of the font, i.e. font family + type face</returns>
+        string GetTypeface();
 
         /// <summary>
         /// Sets the font name
@@ -106,7 +107,7 @@ namespace NPOI.Common.UserModel.Fonts
         /// </summary>
         /// <param name="pitch">the font pitch</param>
         /// 
-        /// <exception cref="UnsupportedOperationException">if unsupported</exception>
+        /// <exception cref="InvalidOperationException">if unsupported</exception>
         void SetPitch(FontPitch pitch);
     }
 }

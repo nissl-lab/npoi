@@ -14,11 +14,11 @@ namespace NPOI.OpenXmlFormats.Dml.Picture
     // draw-pic:pic
     public class CT_Picture
     {
-        private CT_PictureNonVisual nvPicPrField;        //  draw-pic 1..1 
+        private CT_PictureNonVisual nvPicPrField = new CT_PictureNonVisual();        //  draw-pic 1..1 
 
-        private CT_BlipFillProperties blipFillField;   //  draw-pic: 1..1 
+        private CT_BlipFillProperties blipFillField = new CT_BlipFillProperties();   //  draw-pic: 1..1 
 
-        private CT_ShapeProperties spPrField;             //  draw-pic: 1..1 
+        private CT_ShapeProperties spPrField = new CT_ShapeProperties();             //  draw-pic: 1..1 
 
         [XmlElement(Order = 0)]
         public CT_PictureNonVisual nvPicPr
@@ -88,7 +88,7 @@ namespace NPOI.OpenXmlFormats.Dml.Picture
                     ctObj.nvPicPrField = CT_PictureNonVisual.Parse(childNode, namespaceManager);
                 else if(childNode.LocalName == "blipFill")
                     ctObj.blipFillField = CT_BlipFillProperties.Parse(childNode, namespaceManager);
-                else if(childNode.LocalName == "spPrField")
+                else if(childNode.LocalName == "spPr")
                     ctObj.spPrField = CT_ShapeProperties.Parse(childNode, namespaceManager);
             }
 

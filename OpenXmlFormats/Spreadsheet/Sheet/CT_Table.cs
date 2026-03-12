@@ -721,9 +721,13 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_TableColumn GetTableColumnArray(int index)
         {
-            if(index < 0 || index >= this.tableColumn.Count)
+            if (this.tableColumnField == null)
             {
-                throw new IndexOutOfRangeException();
+                return null;
+            }
+            if (index < 0 || index >= this.tableColumnField.Count)
+            {
+                throw new ArgumentOutOfRangeException(nameof(index));
             }
             return this.tableColumnField[index];
         }

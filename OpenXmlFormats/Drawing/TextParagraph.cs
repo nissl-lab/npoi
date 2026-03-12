@@ -128,9 +128,18 @@ namespace NPOI.OpenXmlFormats.Dml
             if (node == null)
                 return null;
             CT_TextTabStop ctObj = new CT_TextTabStop();
-            ctObj.pos = XmlHelper.ReadInt(node.Attributes["pos"]);
-            if (node.Attributes["algn"] != null)
-                ctObj.algn = (ST_TextTabAlignType)Enum.Parse(typeof(ST_TextTabAlignType), node.Attributes["algn"].Value);
+            ctObj.posFieldSpecified = node.Attributes["pos"] != null;
+            if (ctObj.posFieldSpecified)
+            {
+                ctObj.pos = XmlHelper.ReadInt(node.Attributes["pos"]);
+            }
+
+            ctObj.algnFieldSpecified = node.Attributes["algn"] != null;
+            if (ctObj.algnFieldSpecified)
+            {
+                ctObj.algn = (ST_TextTabAlignType) Enum.Parse(typeof(ST_TextTabAlignType), node.Attributes["algn"].Value);
+            }
+                
             return ctObj;
         }
 
@@ -139,28 +148,31 @@ namespace NPOI.OpenXmlFormats.Dml
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.WriteStart("a", nodeName);
-            XmlHelper.WriteAttribute(sw, "pos", this.pos);
-            XmlHelper.WriteAttribute(sw, "algn", this.algn.ToString());
+            if(posFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "pos", this.pos);
+            if(algnFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "algn", this.algn.ToString());
             sw.Write("/>");
         }
 
         public bool IsSetAlgn()
         {
-            return this.algn == ST_TextTabAlignType.l;
+            return this.algnFieldSpecified;
         }
 
         public void UnsetAlgn()
         {
-            this.algn = ST_TextTabAlignType.l;
+            this.algnFieldSpecified = false;
         }
 
         public bool IsSetPos()
         {
-            return this.pos > 0;
+            return this.posFieldSpecified;
         }
 
         public void UnsetPos()
         {
+            this.posFieldSpecified = false;
             this.pos = 0;
         }
 
@@ -174,6 +186,7 @@ namespace NPOI.OpenXmlFormats.Dml
             set
             {
                 this.posField = value;
+                this.posFieldSpecified = true;
             }
         }
 
@@ -200,6 +213,7 @@ namespace NPOI.OpenXmlFormats.Dml
             set
             {
                 this.algnField = value;
+                this.algnSpecified = true;
             }
         }
 

@@ -45,15 +45,15 @@ namespace NPOI
         private PackagePart packagePart;
         private POIXMLDocumentPart parent;
         private readonly Dictionary<String, RelationPart> relations = new Dictionary<String, RelationPart>();
-        private bool isCommited = false;
+        private bool isCommitted = false;
 
         /// <summary>
         /// Get or set embedded part is committed
         /// </summary>
-        public bool Commited
+        public bool Committed
         {
-            get => isCommited;
-            set => isCommited = value;
+            get => isCommitted;
+            set => isCommitted = value;
         }
         /**
          * The RelationPart is a cached relationship between the document, which contains the RelationPart,
@@ -567,7 +567,7 @@ namespace NPOI
         protected internal void OnSave(List<PackagePart> alreadySaved)
         {
             //if part is already committed then return
-            if (this.isCommited) {
+            if (this.isCommitted) {
                 return;
             }
 

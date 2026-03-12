@@ -3263,10 +3263,12 @@ namespace NPOI.OpenXmlFormats.Dml
                 XmlHelper.WriteAttribute(sw, "tgtFrame", this.tgtFrame);
             if(this.tooltipFieldSpecified)
                 XmlHelper.WriteAttribute(sw, "tooltip", this.tooltip);
-
-            XmlHelper.WriteAttribute(sw, "history", this.history, false, true);
-            XmlHelper.WriteAttribute(sw, "highlightClick", this.highlightClick, false, false);
-            XmlHelper.WriteAttribute(sw, "endSnd", this.endSnd, false, false);
+            if(this.historyFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "history", this.history, false, true);
+            if(this.highlightClickFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "highlightClick", this.highlightClick, false, false);
+            if(this.endSndSpecified)
+                XmlHelper.WriteAttribute(sw, "endSnd", this.endSnd, false, false);
             sw.Write('>');
             if (this.snd != null)
                 this.snd.Write(sw, "snd");

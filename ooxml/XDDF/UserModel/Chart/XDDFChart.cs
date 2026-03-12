@@ -935,7 +935,7 @@ namespace NPOI.XDDF.UserModel.Chart
             {
                 if(POIXMLDocument.PACK_OBJECT_REL_TYPE.Equals(part.Relationship.RelationshipType))
                 {
-                    part.DocumentPart.Commited = true;
+                    part.DocumentPart.Committed = true;
                     break;
                 }
             }
