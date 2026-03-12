@@ -141,7 +141,7 @@ namespace NPOI.XDDF.UserModel.Chart
 
         public List<XDDFLegendEntry> GetEntries()
         {
-            return Enumerable.GetList(legend.legendEntry.Select(x => new XDDFLegendEntry(x)));
+            return Enumerable.ToList(legend.legendEntry.Select(x => new XDDFLegendEntry(x)));
         }
 
         public XDDFChartExtensionList ExtensionList
