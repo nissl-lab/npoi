@@ -19,6 +19,9 @@
       <None Update="data\test-performance.xlsx">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="data\Test1000000x10_SharingStrings.xlsx">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>
