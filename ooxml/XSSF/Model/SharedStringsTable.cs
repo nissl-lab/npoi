@@ -213,6 +213,8 @@ namespace NPOI.XSSF.Model
         /// DOM-based ConvertStreamToXml + SstDocument.Parse approach to reduce
         /// allocations. Uses ArrayPool&lt;char&gt; for text buffering.
         /// </summary>
+        private const int TextReadBufferSize = 1024;
+
         private void ReadFromStream(Stream stream)
         {
             _sstDoc = new SstDocument();
@@ -228,7 +230,7 @@ namespace NPOI.XSSF.Model
                 IgnoreProcessingInstructions = true,
             };
 
-            char[] readBuf = ArrayPool<char>.Shared.Rent(1024);
+            char[] readBuf = ArrayPool<char>.Shared.Rent(TextReadBufferSize);
             try
             {
                 using var reader = XmlReader.Create(stream, settings);
