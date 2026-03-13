@@ -17,14 +17,12 @@
 
 namespace TestCases.XSSF.UserModel.Charts
 {
-
-    using NPOI.SS.UserModel.Charts;
+    using NPOI.XDDF.UserModel.Chart;
     using NPOI.XSSF.UserModel;
-    using NPOI.XSSF.UserModel.Charts;
     using NUnit.Framework;using NUnit.Framework.Legacy;
 
     [TestFixture]
-    public class TestXSSFCategoryAxis
+    public class TestXDDFCategoryAxis
     {
 
         [Test]
@@ -35,9 +33,9 @@ namespace TestCases.XSSF.UserModel.Charts
             XSSFDrawing Drawing = sheet.CreateDrawingPatriarch() as XSSFDrawing;
             XSSFClientAnchor anchor = Drawing.CreateAnchor(0, 0, 0, 0, 1, 1, 10, 30) as XSSFClientAnchor;
             XSSFChart chart = Drawing.CreateChart(anchor) as XSSFChart;
-            XSSFCategoryAxis axis = chart.ChartAxisFactory.CreateCategoryAxis(AxisPosition.Bottom) as XSSFCategoryAxis;
+            var axis = chart.CreateCategoryAxis(AxisPosition.Bottom);
 
-            axis.Crosses=(AxisCrosses.AutoZero);
+            axis.Crosses=AxisCrosses.AutoZero;
             ClassicAssert.AreEqual(axis.Crosses, AxisCrosses.AutoZero);
 
             ClassicAssert.AreEqual(chart.GetAxis().Count, 1);

@@ -16,27 +16,28 @@
 ==================================================================== */
 
 using NPOI.SS.UserModel;
-using NPOI.SS.UserModel.Charts;
+using NPOI.XDDF.UserModel.Chart;
 using NPOI.XSSF.UserModel;
-using NUnit.Framework;using NUnit.Framework.Legacy;
+using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace TestCases.XSSF.UserModel.Charts
 {
     [TestFixture]
-    public class TestXSSFValueAxis
+    public class TestXDDFValueAxis
     {
         [Test]
         public void TestAccessMethods()
         {
             IWorkbook wb = new XSSFWorkbook();
             ISheet sheet = wb.CreateSheet();
-            IDrawing<IShape> Drawing = sheet.CreateDrawingPatriarch();
+            var Drawing = sheet.CreateDrawingPatriarch() as XSSFDrawing;
             IClientAnchor anchor = Drawing.CreateAnchor(0, 0, 0, 0, 1, 1, 10, 30);
-            IChart chart = Drawing.CreateChart(anchor);
-            IValueAxis axis = chart.ChartAxisFactory.CreateValueAxis(AxisPosition.Bottom);
+            var chart = Drawing.CreateChart(anchor);
+            var axis = chart.CreateValueAxis(AxisPosition.Bottom);
 
-            axis.SetCrossBetween(AxisCrossBetween.MidpointCategory);
-            ClassicAssert.AreEqual(axis.GetCrossBetween(), AxisCrossBetween.MidpointCategory);
+            axis.CrossBetween = (AxisCrossBetween.MidpointCategory);
+            ClassicAssert.AreEqual(axis.CrossBetween, AxisCrossBetween.MidpointCategory);
 
             axis.Crosses=(AxisCrosses.AutoZero);
             ClassicAssert.AreEqual(axis.Crosses, AxisCrosses.AutoZero);

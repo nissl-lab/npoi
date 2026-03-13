@@ -4,15 +4,15 @@
 
     using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.SS.UserModel;
-    using NPOI.SS.UserModel.Charts;
     using NPOI.SS.Util;
     using NPOI.XSSF.UserModel;
+    using NPOI.XDDF.UserModel.Chart;
 
     /**
      * Tests for XSSF Line Charts
      */
     [TestFixture]
-    public class TestXSSFLineChartData
+    public class TestXDDFLineChartData
     {
         private static readonly object[][] plotData = new object[2][]
         {
@@ -25,25 +25,25 @@
         {
             IWorkbook wb = new XSSFWorkbook();
             ISheet sheet = new SheetBuilder(wb, plotData).Build();
-            IDrawing<IShape> Drawing = sheet.CreateDrawingPatriarch();
+            var Drawing = sheet.CreateDrawingPatriarch() as XSSFDrawing;
             IClientAnchor anchor = Drawing.CreateAnchor(0, 0, 0, 0, 1, 1, 10, 30);
-            IChart chart = Drawing.CreateChart(anchor);
+            var chart = Drawing.CreateChart(anchor);
 
-            IChartAxis bottomAxis = chart.ChartAxisFactory.CreateCategoryAxis(AxisPosition.Bottom);
-            IChartAxis leftAxis = chart.ChartAxisFactory.CreateValueAxis(AxisPosition.Left);
+            var bottomAxis = chart.CreateCategoryAxis(AxisPosition.Bottom);
+            var leftAxis = chart.CreateValueAxis(AxisPosition.Left);
 
-            ILineChartData<string, double> lineChartData =
-                    chart.ChartDataFactory.CreateLineChartData<string, double>();
+            var lineChartData =
+                    chart.CreateData<string, double>(ChartTypes.LINE, bottomAxis, leftAxis);
 
-            IChartDataSource<String> xs = DataSources.FromStringCellRange(sheet, CellRangeAddress.ValueOf("A1:J1"));
-            IChartDataSource<double> ys = DataSources.FromNumericCellRange(sheet, CellRangeAddress.ValueOf("A2:J2"));
-            ILineChartSeries<string, double> series = lineChartData.AddSeries(xs, ys);
+            var xs = XDDFDataSourcesFactory.FromStringCellRange(sheet, CellRangeAddress.ValueOf("A1:J1"));
+            var ys = XDDFDataSourcesFactory.FromNumericCellRange(sheet, CellRangeAddress.ValueOf("A2:J2"));
+            var series = lineChartData.AddSeries(xs, ys);
 
             ClassicAssert.IsNotNull(series);
             ClassicAssert.AreEqual(1, lineChartData.GetSeries().Count);
             ClassicAssert.IsTrue(lineChartData.GetSeries().Contains(series));
 
-            chart.Plot(lineChartData, bottomAxis, leftAxis);
+            chart.Plot(lineChartData);
             wb.Close();
         }
     }

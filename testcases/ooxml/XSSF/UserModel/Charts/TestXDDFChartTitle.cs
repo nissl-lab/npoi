@@ -20,8 +20,8 @@ namespace TestCases.XSSF.UserModel.Charts
     using System;
     using System.Collections.Generic;
     using NPOI.SS.UserModel;
-    using NPOI.SS.UserModel.Charts;
     using NPOI.SS.Util;
+    using NPOI.XDDF.UserModel.Chart;
     using NPOI.XSSF;
     using NPOI.XSSF.UserModel;
     using NUnit.Framework;using NUnit.Framework.Legacy;
@@ -30,7 +30,7 @@ namespace TestCases.XSSF.UserModel.Charts
      * Test Get/set chart title.
      */
     [TestFixture]
-    public class TestXSSFChartTitle
+    public class TestXDDFChartTitle
     {
         private IWorkbook CreateWorkbookWithChart()
         {
@@ -52,28 +52,27 @@ namespace TestCases.XSSF.UserModel.Charts
                 }
             }
 
-            IDrawing<IShape> Drawing = sheet.CreateDrawingPatriarch();
-            IClientAnchor anchor = Drawing.CreateAnchor(0, 0, 0, 0, 0, 5, 10, 15);
+            var drawing = sheet.CreateDrawingPatriarch() as XSSFDrawing;
+            IClientAnchor anchor = drawing.CreateAnchor(0, 0, 0, 0, 0, 5, 10, 15);
 
-            IChart chart = Drawing.CreateChart(anchor);
-            IChartLegend legend = chart.GetOrCreateLegend();
-            legend.Position = (/*setter*/LegendPosition.TopRight);
-
-            ILineChartData<double,double> data = chart.ChartDataFactory.CreateLineChartData<double, double>();
+            var chart = drawing.CreateChart(anchor);
+            var legend = chart.GetOrAddLegend();
+            legend.Position = LegendPosition.TopRight;
 
             // Use a category axis for the bottom axis.
-            IChartAxis bottomAxis = chart.ChartAxisFactory.CreateCategoryAxis(AxisPosition.Bottom);
-            IValueAxis leftAxis = chart.ChartAxisFactory.CreateValueAxis(AxisPosition.Left);
-            leftAxis.Crosses = (/*setter*/AxisCrosses.AutoZero);
+            var bottomAxis = chart.CreateCategoryAxis(AxisPosition.Bottom);
+            var leftAxis = chart.CreateValueAxis(AxisPosition.Left);
+            leftAxis.Crosses = AxisCrosses.AutoZero;
 
-            IChartDataSource<double> xs = DataSources.FromNumericCellRange(sheet, new CellRangeAddress(0, 0, 0, NUM_OF_COLUMNS - 1));
-            IChartDataSource<double> ys1 = DataSources.FromNumericCellRange(sheet, new CellRangeAddress(1, 1, 0, NUM_OF_COLUMNS - 1));
-            IChartDataSource<double> ys2 = DataSources.FromNumericCellRange(sheet, new CellRangeAddress(2, 2, 0, NUM_OF_COLUMNS - 1));
+            var xs = XDDFDataSourcesFactory.FromNumericCellRange(sheet, new CellRangeAddress(0, 0, 0, NUM_OF_COLUMNS - 1));
+            var ys1 = XDDFDataSourcesFactory.FromNumericCellRange(sheet, new CellRangeAddress(1, 1, 0, NUM_OF_COLUMNS - 1));
+            var ys2 = XDDFDataSourcesFactory.FromNumericCellRange(sheet, new CellRangeAddress(2, 2, 0, NUM_OF_COLUMNS - 1));
 
+            var data = chart.CreateData<double, double>(ChartTypes.LINE, bottomAxis, leftAxis);
             data.AddSeries(xs, ys1);
             data.AddSeries(xs, ys2);
 
-            chart.Plot(data, bottomAxis, leftAxis);
+            chart.Plot(data);
 
             return wb;
         }

@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <Compile Remove="XSSF\TestWorkbookProtection.cs" />
+    <Compile Remove="XSSF\UserModel\Charts\TestXSSFColumnChartData.cs" />
     <Compile Remove="XSSF\UserModel\Charts\TestXSSFNumberCache.cs" />
   </ItemGroup>
 

@@ -2,6 +2,7 @@
 using NPOI.SS.UserModel;
 using NPOI.SS.UserModel.Charts;
 using NPOI.SS.Util;
+using NPOI.XDDF.UserModel.Chart;
 using NPOI.XSSF.UserModel;
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
@@ -25,10 +26,10 @@ namespace TestCases.XSSF.UserModel.Charts
             IClientAnchor anchor = drawing.CreateAnchor(0, 0, 0, 0, 1, 1, 10, 30);
             IChart chart = drawing.CreateChart(anchor);
 
-            IChartAxis bottomAxis = chart.ChartAxisFactory.CreateCategoryAxis(AxisPosition.Bottom);
-            IChartAxis leftAxis = chart.ChartAxisFactory.CreateValueAxis(AxisPosition.Left);
+            IChartAxis bottomAxis = chart.CreateCategoryAxis(AxisPosition.Bottom);
+            IChartAxis leftAxis = chart.CreateValueAxis(AxisPosition.Left);
 
-            IColumnChartData<string, double> columnChartData = chart.ChartDataFactory.CreateColumnChartData<string, double>();
+            IColumnChartData<string, double> columnChartData = chart.CreateColumnChartData<string, double>();
 
             IChartDataSource<string> xs = DataSources.FromStringCellRange(sheet, CellRangeAddress.ValueOf("A1:J1"));
             IChartDataSource<double> ys = DataSources.FromNumericCellRange(sheet, CellRangeAddress.ValueOf("A2:J2"));
@@ -50,14 +51,14 @@ namespace TestCases.XSSF.UserModel.Charts
         {
             using IWorkbook wb = new XSSFWorkbook();
             ISheet sheet = new SheetBuilder(wb, plotData).Build();
-            IDrawing<IShape> drawing = sheet.CreateDrawingPatriarch();
-            IClientAnchor anchor = drawing.CreateAnchor(0, 0, 0, 0, 1, 1, 10, 30);
-            IChart chart = drawing.CreateChart(anchor);
+            var drawing = sheet.CreateDrawingPatriarch() as XSSFDrawing;
+            var anchor = drawing.CreateAnchor(0, 0, 0, 0, 1, 1, 10, 30);
+            var chart = drawing.CreateChart(anchor);
 
-            IChartAxis bottomAxis = chart.ChartAxisFactory.CreateCategoryAxis(AxisPosition.Bottom);
-            IChartAxis leftAxis = chart.ChartAxisFactory.CreateValueAxis(AxisPosition.Left);
+            var bottomAxis = chart.CreateCategoryAxis(AxisPosition.Bottom);
+            var leftAxis = chart.CreateValueAxis(AxisPosition.Left);
 
-            IColumnChartData<string, double> columnChartData = chart.ChartDataFactory.CreateColumnChartData<string, double>();
+            IColumnChartData<string, double> columnChartData = chart.CreateData<string, double>();
 
             IChartDataSource<string> xs = DataSources.FromStringCellRange(sheet, CellRangeAddress.ValueOf("A1:J1"));
             IChartDataSource<double> ys = DataSources.FromNumericCellRange(sheet, CellRangeAddress.ValueOf("A2:J2"));

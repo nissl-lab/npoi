@@ -20,16 +20,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NPOI.XDDF.UserModel.Chart;
 using NPOI.XSSF.UserModel;
-using NPOI.SS.UserModel.Charts;
-using NPOI.XSSF.UserModel.Charts;
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
 
 namespace TestCases.XSSF.UserModel
 {
     [TestFixture]
-    internal class TestXSSFDateAxis
+    internal class TestXDDFDateAxis
     {
         [Test]
         public void TestAccessMethods()
@@ -38,8 +37,8 @@ namespace TestCases.XSSF.UserModel
             XSSFSheet sheet = wb.CreateSheet() as XSSFSheet;
             XSSFDrawing Drawing = sheet.CreateDrawingPatriarch() as XSSFDrawing;
             XSSFClientAnchor anchor = Drawing.CreateAnchor(0, 0, 0, 0, 1, 1, 10, 30) as XSSFClientAnchor;
-            XSSFChart chart = Drawing.CreateChart(anchor) as XSSFChart;
-            XSSFDateAxis axis = chart.ChartAxisFactory.CreateDateAxis(AxisPosition.Bottom) as XSSFDateAxis;
+            var chart = Drawing.CreateChart(anchor) as XSSFChart;
+            var axis = chart.CreateDateAxis(AxisPosition.Bottom);
 
             axis.Crosses = AxisCrosses.AutoZero;
             ClassicAssert.AreEqual(axis.Crosses, AxisCrosses.AutoZero);

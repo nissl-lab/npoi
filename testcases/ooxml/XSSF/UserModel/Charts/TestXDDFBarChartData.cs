@@ -1,7 +1,7 @@
 ﻿using NPOI.OpenXmlFormats.Dml.Chart;
 using NPOI.SS.UserModel;
-using NPOI.SS.UserModel.Charts;
 using NPOI.SS.Util;
+using NPOI.XDDF.UserModel.Chart;
 using NPOI.XSSF.UserModel;
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace TestCases.XSSF.UserModel.Charts
 {
-    public class TestXSSFBarChartData
+    public class TestXDDFBarChartData
     {
         private static readonly object[][] plotData = new object[][]
         {
@@ -27,20 +27,20 @@ namespace TestCases.XSSF.UserModel.Charts
             ISheet sheet = new SheetBuilder(wb, plotData).Build();
             IDrawing<IShape> drawing = sheet.CreateDrawingPatriarch();
             IClientAnchor anchor = drawing.CreateAnchor(0, 0, 0, 0, 1, 1, 10, 30);
-            IChart chart = drawing.CreateChart(anchor);
+            var chart = (drawing as XSSFDrawing).CreateChart(anchor);
 
-            IChartAxis bottomAxis = chart.ChartAxisFactory.CreateCategoryAxis(AxisPosition.Bottom);
-            IChartAxis leftAxis = chart.ChartAxisFactory.CreateValueAxis(AxisPosition.Left);
+            var bottomAxis = chart.CreateCategoryAxis(AxisPosition.Bottom);
+            var leftAxis = chart.CreateValueAxis(AxisPosition.Left);
 
-            IBarChartData<string, double> barChartData = chart.ChartDataFactory.CreateBarChartData<string, double>();
+            var barChartData = chart.CreateData<string, double>(ChartTypes.BAR, bottomAxis,leftAxis) as XDDFBarChartData<string,double>;
 
-            IChartDataSource<string> xs = DataSources.FromStringCellRange(sheet, CellRangeAddress.ValueOf("A1:J1"));
-            IChartDataSource<double> ys = DataSources.FromNumericCellRange(sheet, CellRangeAddress.ValueOf("A2:J2"));
+            var xs =XDDFDataSourcesFactory.FromStringCellRange(sheet, CellRangeAddress.ValueOf("A1:J1"));
+            var ys = XDDFDataSourcesFactory.FromNumericCellRange(sheet, CellRangeAddress.ValueOf("A2:J2"));
             barChartData.AddSeries(xs, ys);
             
             barChartData.SetBarGrouping(barGrouping);
             
-            chart.Plot(barChartData, bottomAxis, leftAxis);
+            chart.Plot(barChartData);
             
             ClassicAssert.IsInstanceOf<XSSFChart>(chart);
             XSSFChart xssfChart = (XSSFChart)chart;
@@ -54,20 +54,20 @@ namespace TestCases.XSSF.UserModel.Charts
         {
             using IWorkbook wb = new XSSFWorkbook();
             ISheet sheet = new SheetBuilder(wb, plotData).Build();
-            IDrawing<IShape> drawing = sheet.CreateDrawingPatriarch();
-            IClientAnchor anchor = drawing.CreateAnchor(0, 0, 0, 0, 1, 1, 10, 30);
-            IChart chart = drawing.CreateChart(anchor);
+            var drawing = sheet.CreateDrawingPatriarch() as XSSFDrawing;
+            var anchor = drawing.CreateAnchor(0, 0, 0, 0, 1, 1, 10, 30);
+            var chart = drawing.CreateChart(anchor);
 
-            IChartAxis bottomAxis = chart.ChartAxisFactory.CreateCategoryAxis(AxisPosition.Bottom);
-            IChartAxis leftAxis = chart.ChartAxisFactory.CreateValueAxis(AxisPosition.Left);
+            var bottomAxis = chart.CreateCategoryAxis(AxisPosition.Bottom);
+            var leftAxis = chart.CreateValueAxis(AxisPosition.Left);
 
-            IBarChartData<string, double> barChartData = chart.ChartDataFactory.CreateBarChartData<string, double>();
+            var barChartData = chart.CreateData<string, double>(ChartTypes.BAR, bottomAxis, leftAxis);
 
-            IChartDataSource<string> xs = DataSources.FromStringCellRange(sheet, CellRangeAddress.ValueOf("A1:J1"));
-            IChartDataSource<double> ys = DataSources.FromNumericCellRange(sheet, CellRangeAddress.ValueOf("A2:J2"));
+            var xs = XDDFDataSourcesFactory.FromStringCellRange(sheet, CellRangeAddress.ValueOf("A1:J1"));
+            var ys = XDDFDataSourcesFactory.FromNumericCellRange(sheet, CellRangeAddress.ValueOf("A2:J2"));
             barChartData.AddSeries(xs, ys);
             
-            chart.Plot(barChartData, bottomAxis, leftAxis);
+            chart.Plot(barChartData);
             
             ClassicAssert.IsInstanceOf<XSSFChart>(chart);
             XSSFChart xssfChart = (XSSFChart)chart;
