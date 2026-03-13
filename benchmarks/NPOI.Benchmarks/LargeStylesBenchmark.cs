@@ -18,9 +18,6 @@ public class LargeStylesBenchmark
     public void GlobalSetup()
     {
         _largeFileWithStylesPath = Path.Combine("data", "HugeStyles.xlsx");
-
-        // Generate the fixture only when missing or too small.
-        GenerateHugeStylesWorkbook.EnsureExists(_largeFileWithStylesPath);
     }
 
     /// <summary>

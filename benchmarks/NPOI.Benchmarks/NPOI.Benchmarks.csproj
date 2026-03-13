@@ -16,6 +16,9 @@
     </ItemGroup>
 
     <ItemGroup>
+      <None Update="data\HugeStyles.xlsx">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
       <None Update="data\test-performance.xlsx">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
