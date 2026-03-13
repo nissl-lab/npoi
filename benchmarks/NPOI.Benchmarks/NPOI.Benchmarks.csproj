@@ -22,6 +22,9 @@
       <None Update="data\Test1000000x10_SharingStrings.xlsx">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="data\HugeStyles.xlsx" Condition="Exists('data\HugeStyles.xlsx')">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>
