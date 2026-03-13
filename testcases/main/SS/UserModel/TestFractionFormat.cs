@@ -81,6 +81,22 @@ namespace TestCases.SS.UserModel
             wb.Close();
             reader.Close();
         }
+        [Test]
+        public void TestWithBigWholePart()
+        {
+            FractionFormat f = new FractionFormat("#", "???/???");
+
+            ClassicAssert.AreEqual("10100136259702", f.Format(10100136259702d));
+            ClassicAssert.AreEqual("-10100136259702", f.Format(-10100136259702d));
+
+            // Excel displays fraction: 51/512
+            ClassicAssert.AreEqual("10100136259702 10/100", f.Format(10100136259702.1d));
+            ClassicAssert.AreEqual("-10100136259702 10/100", f.Format(-10100136259702.1d));
+
+            // Excel displays fraction: 461/512
+            ClassicAssert.AreEqual("10100136259702 90/100", f.Format(10100136259702.9d));
+            ClassicAssert.AreEqual("-10100136259702 90/100", f.Format(-10100136259702.9d));
+        }
 
         private String Clean(String s)
         {
