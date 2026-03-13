@@ -19,42 +19,27 @@ using System.Xml;
 
 namespace NPOI.XSSF.UserModel
 {
-    using NPOI.SS.UserModel;
     using NPOI.OpenXmlFormats.Dml.Chart;
     using System.Collections.Generic;
     using NPOI.OpenXml4Net.OPC;
     using System;
-    using NPOI.OpenXmlFormats;
     using System.IO;
     using System.Text;
-    using NPOI.SS.UserModel.Charts;
-    using NPOI.XSSF.UserModel.Charts;
-    using System.Xml.Serialization;
     using NPOI.OpenXmlFormats.Dml;
+    using NPOI.XDDF.UserModel.Chart;
 
     /**
      * Represents a SpreadsheetML Chart
      * @author Nick Burch
      * @author Roman Kashitsyn
      */
-    public class XSSFChart : POIXMLDocumentPart, IChart, IChartAxisFactory
+    public class XSSFChart : XDDFChart
     {
 
         /**
          * Parent graphic frame.
          */
         private XSSFGraphicFrame frame;
-
-        /**
-         * Root element of the SpreadsheetML Chart part
-         */
-        private ChartSpaceDocument chartSpaceDocument;
-        /**
-         * The Chart within that
-         */
-        private CT_Chart chart;
-
-        List<IChartAxis> axis = new List<IChartAxis>();
 
         /**
          * Create a new SpreadsheetML chart
@@ -78,17 +63,6 @@ namespace NPOI.XSSF.UserModel
         protected XSSFChart(PackagePart part)
             : base(part)
         {
-
-            XmlDocument doc = ConvertStreamToXml(part.GetInputStream());
-            chartSpaceDocument = ChartSpaceDocument.Parse(doc, NamespaceManager);
-            chart = chartSpaceDocument.GetChartSpace().chart;
-        }
-
-        [Obsolete("deprecated in POI 3.14, scheduled for removal in POI 3.16")]
-        protected XSSFChart(PackagePart part, PackageRelationship rel)
-            : this(part)
-        {
-
         }
         /**
          * Construct a new CTChartSpace bean.
@@ -98,16 +72,14 @@ namespace NPOI.XSSF.UserModel
          */
         private void CreateChart()
         {
-            chartSpaceDocument = new ChartSpaceDocument();
-            chartSpaceDocument.GetChartSpace().roundedCorners = new CT_Boolean {val = 0};
-            chart = chartSpaceDocument.GetChartSpace().AddNewChart();
             CT_PlotArea plotArea = chart.AddNewPlotArea();
 
             plotArea.AddNewLayout();
             chart.AddNewPlotVisOnly().val = 1;
 
-            CT_PrintSettings printSettings = chartSpaceDocument.GetChartSpace().AddNewPrintSettings();
+            CT_PrintSettings printSettings = chartSpace.AddNewPrintSettings();
             printSettings.AddNewHeaderFooter();
+
             CT_PageMargins pageMargins = printSettings.AddNewPageMargins();
             pageMargins.b = 0.75;
             pageMargins.l = 0.70;
@@ -123,7 +95,7 @@ namespace NPOI.XSSF.UserModel
         /// <returns></returns>
         public CT_ChartSpace GetCTChartSpace()
         {
-            return chartSpaceDocument.GetChartSpace();
+            return chartSpace;
         }
 
         /// <summary>
@@ -147,8 +119,8 @@ namespace NPOI.XSSF.UserModel
                   xmlns:a="http://schemas.Openxmlformats.org/drawingml/2006/main"
                   xmlns:r="http://schemas.Openxmlformats.org/officeDocument/2006/relationships">
              */
-            PackagePart part = GetPackagePart();            
-            chartSpaceDocument.Save(part.GetOutputStream());            
+            PackagePart part = GetPackagePart();
+            chartSpace.Save(part.GetOutputStream());
         }
         /// <summary>
         /// Returns the parent graphic frame.
@@ -166,83 +138,6 @@ namespace NPOI.XSSF.UserModel
         {
             this.frame = frame;
         }
-
-        public IChartDataFactory ChartDataFactory
-        {
-            get
-            {
-                return XSSFChartDataFactory.GetInstance();
-            }
-        }
-
-        public IChartAxisFactory ChartAxisFactory
-        {
-            get
-            {
-                return this;
-            }
-        }
-
-        public void Plot(IChartData data, params IChartAxis[] axis)
-        {
-            data.FillChart(this, axis);
-        }
-
-        public IValueAxis CreateValueAxis(AxisPosition pos)
-        {
-            long id = axis.Count + 1;
-            XSSFValueAxis valueAxis = new XSSFValueAxis(this, id, pos);
-            if (axis.Count == 1)
-            {
-                IChartAxis ax = axis[0];
-                ax.CrossAxis(valueAxis);
-                valueAxis.CrossAxis(ax);
-            }
-            axis.Add(valueAxis);
-            return valueAxis;
-        }
-        public IChartAxis CreateCategoryAxis(AxisPosition pos)
-        {
-            long id = axis.Count + 1;
-            XSSFCategoryAxis categoryAxis = new XSSFCategoryAxis(this, id, pos);
-            if (axis.Count == 1)
-            {
-                IChartAxis ax = axis[0];
-                ax.CrossAxis(categoryAxis);
-                categoryAxis.CrossAxis(ax);
-            }
-            axis.Add(categoryAxis);
-            return categoryAxis;
-        }
-
-        public IChartAxis CreateDateAxis(AxisPosition pos)
-        {
-            long id = axis.Count + 1;
-            XSSFDateAxis dateAxis = new XSSFDateAxis(this, id, pos);
-            if (axis.Count == 1)
-            {
-                IChartAxis ax = axis[0];
-                ax.CrossAxis(dateAxis);
-                dateAxis.CrossAxis(ax);
-            }
-            axis.Add(dateAxis);
-            return dateAxis;
-        }
-
-        public List<IChartAxis> GetAxis()
-        {
-            if (axis.Count == 0 && HasAxis())
-            {
-                ParseAxis();
-            }
-            return axis;
-        }
-
-        public IManualLayout GetManualLayout()
-        {
-            return new XSSFManualLayout(this);
-        }
-
         /**
          * @return true if only visible cells will be present on the chart,
          *         false otherwise
@@ -351,11 +246,6 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        public IChartLegend GetOrCreateLegend()
-        {
-            return new XSSFChartLegend(this);
-        }
-
         public void DeleteLegend()
         {
             if (chart.IsSetLegend())
@@ -380,40 +270,19 @@ namespace NPOI.XSSF.UserModel
             return totalAxisCount > 0;
         }
 
-        private void ParseAxis()
+        protected override POIXMLRelation GetChartRelation()
         {
-            ParseCategoryAxis();
-            ParseDateAxis();
-            ParseValueAxis();
-        }
-        private void ParseCategoryAxis()
-        {
-            if (chart.plotArea.catAx == null)
-                return;
-            foreach (CT_CatAx catAx in chart.plotArea.catAx)
-            {
-                axis.Add(new XSSFCategoryAxis(this, catAx));
-            }
+            return null;
         }
 
-        private void ParseDateAxis()
+        protected override POIXMLRelation GetChartWorkbookRelation()
         {
-            if (chart.plotArea.dateAx == null)
-                return;
-            foreach (CT_DateAx dateAx in chart.plotArea.dateAx)
-            {
-                axis.Add(new XSSFDateAxis(this, dateAx));
-            }
+            return null;
         }
 
-        private void ParseValueAxis()
+        protected override POIXMLFactory GetChartFactory()
         {
-            if (chart.plotArea.valAx == null)
-                return;
-            foreach (CT_ValAx valAx in chart.plotArea.valAx)
-            {
-                axis.Add(new XSSFValueAxis(this, valAx));
-            }
+            return null;
         }
     }
 }

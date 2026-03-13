@@ -153,9 +153,9 @@ namespace NPOI.XDDF.UserModel.Chart
                 return Double.NaN;
             }
         }
-        public override void crossAxis(XDDFChartAxis axis)
+        public override void CrossAxis(XDDFChartAxis axis)
         {
-            ctValAx.crossAx.val = (uint)axis.GetId();
+            ctValAx.crossAx.val = (uint)axis.Id;
         }
         protected override CT_UnsignedInt GetCTAxId()
         {
@@ -206,14 +206,16 @@ namespace NPOI.XDDF.UserModel.Chart
             return ctValAx.minorTickMark;
         }
 
-        public AxisCrossBetween GetCrossBetween()
+        public AxisCrossBetween CrossBetween
         {
-            return AxisCrossBetweenExtensions.ValueOf(ctValAx.crossBetween.val);
-        }
-
-        public void SetCrossBetween(AxisCrossBetween crossBetween)
-        {
-            ctValAx.crossBetween.val = crossBetween.ToST_CrossBetween();
+            get
+            {
+                return AxisCrossBetweenExtensions.ValueOf(ctValAx.crossBetween.val);
+            }
+            set 
+            {
+                ctValAx.crossBetween.val = value.ToST_CrossBetween();
+            }
         }
 
         private void initializeAxis(CT_PlotArea plotArea, AxisPosition position)
@@ -231,13 +233,13 @@ namespace NPOI.XDDF.UserModel.Chart
             ctValAx.AddNewMajorTickMark();
             ctValAx.AddNewMinorTickMark();
 
-            SetPosition(position);
-            SetOrientation(AxisOrientation.MinMax);
-            SetCrossBetween(AxisCrossBetween.MidpointCategory);
-            SetCrosses(AxisCrosses.AutoZero);
-            SetVisible(true);
-            SetMajorTickMark(AxisTickMark.Cross);
-            SetMinorTickMark(AxisTickMark.None);
+            Position = (position);
+            Orientation = (AxisOrientation.MinMax);
+            CrossBetween =(AxisCrossBetween.MidpointCategory);
+            Crosses=(AxisCrosses.AutoZero);
+            IsVisible=(true);
+            MajorTickMark=(AxisTickMark.Cross);
+            MinorTickMark=(AxisTickMark.None);
         }
     }
 }

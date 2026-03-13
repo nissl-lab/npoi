@@ -445,8 +445,8 @@ namespace NPOI.XDDF.UserModel.Chart
             if(axes.Count == 1)
             {
                 XDDFChartAxis axis = axes[0];
-                axis.crossAxis(valueAxis);
-                valueAxis.crossAxis(axis);
+                axis.CrossAxis(valueAxis);
+                valueAxis.CrossAxis(axis);
             }
             axes.Add(valueAxis);
             return valueAxis;
@@ -458,8 +458,8 @@ namespace NPOI.XDDF.UserModel.Chart
             if(axes.Count == 1)
             {
                 XDDFChartAxis axis = axes[0];
-                axis.crossAxis(categoryAxis);
-                categoryAxis.crossAxis(axis);
+                axis.CrossAxis(categoryAxis);
+                categoryAxis.CrossAxis(axis);
             }
             axes.Add(categoryAxis);
             return categoryAxis;
@@ -471,8 +471,8 @@ namespace NPOI.XDDF.UserModel.Chart
             if(axes.Count == 1)
             {
                 XDDFChartAxis axis = axes[0];
-                axis.crossAxis(dateAxis);
-                dateAxis.crossAxis(axis);
+                axis.CrossAxis(dateAxis);
+                dateAxis.CrossAxis(axis);
             }
             axes.Add(dateAxis);
             return dateAxis;
@@ -481,11 +481,14 @@ namespace NPOI.XDDF.UserModel.Chart
         public XDDFChartData<T, V> CreateData<T, V>(ChartTypes type, 
             XDDFChartAxis category, XDDFValueAxis values)
         {
-            Dictionary<long, XDDFChartAxis> categories = 
-                new Dictionary<long, XDDFChartAxis>(){ { category.GetId(), category } } ;
+            Dictionary<long, XDDFChartAxis> categories = null;
+            Dictionary<long, XDDFValueAxis> mapValues = null;
 
-            Dictionary<long, XDDFValueAxis> mapValues =
-                new Dictionary<long, XDDFValueAxis>() { { values.GetId(), values } };
+            if(type!= ChartTypes.PIE)
+            {
+                categories =new Dictionary<long, XDDFChartAxis>() { { category.Id, category } };
+                mapValues= new Dictionary<long, XDDFValueAxis>() { { values.Id, values } };
+            }
 
             CT_PlotArea plotArea = GetCTPlotArea();
             switch(type)
@@ -505,16 +508,16 @@ namespace NPOI.XDDF.UserModel.Chart
             }
         }
 
-        public List<XDDFChartAxis> GetAxes()
+        public List<XDDFChartAxis> GetAxis()
         {
-            if(axes.Count == 0 && HasAxes())
+            if(axes.Count == 0 && HasAxis())
             {
-                ParseAxes();
+                ParseAxis();
             }
             return axes;
         }
 
-        private bool HasAxes()
+        private bool HasAxis()
         {
             CT_PlotArea ctPlotArea = chart.plotArea;
             int totalAxisCount = ctPlotArea.SizeOfValAxArray() + ctPlotArea.SizeOfCatAxArray() + ctPlotArea
@@ -522,7 +525,7 @@ namespace NPOI.XDDF.UserModel.Chart
             return totalAxisCount > 0;
         }
 
-        private void ParseAxes()
+        private void ParseAxis()
         {
             foreach(CT_CatAx catAx in chart.plotArea.catAx)
             {
@@ -564,18 +567,18 @@ namespace NPOI.XDDF.UserModel.Chart
             Double? minimum, Double? maximum,
             Double? majorUnit, Double? minorUnit)
         {
-            XDDFChartAxis axis = GetAxes()[axisIndex];
+            XDDFChartAxis axis = GetAxis()[axisIndex];
             if(axis == null)
             {
                 return;
             }
             if(minimum.HasValue)
             {
-                axis.SetMinimum(minimum.Value);
+                axis.Minimum = (minimum.Value);
             }
             if(maximum.HasValue)
             {
-                axis.SetMaximum(maximum.Value);
+                axis.Maximum = (maximum.Value);
             }
             if(majorUnit.HasValue)
             {
@@ -686,7 +689,7 @@ namespace NPOI.XDDF.UserModel.Chart
         /// <summary>
         /// </summary>
         /// <returns>the chart workbook relation in the implementing subclass.</returns>
-        /// <remarks>
+        /// <remarks
         /// @since POI 4.0.0
         /// </remarks>
         protected abstract POIXMLRelation GetChartWorkbookRelation();
@@ -795,7 +798,7 @@ namespace NPOI.XDDF.UserModel.Chart
         /// <summary>
         /// save chart xml
         /// </summary>
-        protected void Commit()
+        protected internal override void Commit()
         {
             
             //XmlOptions xmlOptions = new XmlOptions(DEFAULT_XML_OPTIONS);

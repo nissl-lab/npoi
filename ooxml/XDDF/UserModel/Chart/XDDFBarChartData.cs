@@ -39,9 +39,12 @@ namespace NPOI.XDDF.UserModel.Chart
             {
                 chart.AddNewBarDir().val = BarDirection.Bar.ToST_BarDir();
             }
-            foreach(CT_BarSer series in chart.ser)
+            if(chart.ser!=null)
             {
-                this.series.Add(new Series(series, series.cat, series.val));
+                foreach(CT_BarSer series in chart.ser)
+                {
+                    this.series.Add(new Series(series, series.cat, series.val));
+                }
             }
             DefineAxes(categories, values);
         }
@@ -60,7 +63,7 @@ namespace NPOI.XDDF.UserModel.Chart
                     chart.AddNewAxId().val = (uint) id;
                 }
             }
-            DefineAxes(chart.GetAxIdArray(), categories, values);
+            DefineAxis(chart.GetAxIdArray(), categories, values);
         }
         public override void SetVaryColors(bool varyColors)
         {

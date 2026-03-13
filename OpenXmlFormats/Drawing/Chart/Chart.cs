@@ -103,7 +103,10 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
         }
 
 
-
+        public void Save(Stream stream)
+        {
+            this.Write(stream);
+        }
         internal void Write(Stream stream)
         {
             using (StreamWriter sw = new StreamWriter(stream))
@@ -1751,7 +1754,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
         }
         public bool IsSetLegendPos()
         {
-            return legendPosSpecifiedField;
+            return this.legendPos!=null;
         }
         public CT_LegendPos AddNewLegendPos()
         {
@@ -4126,7 +4129,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
         {
             if(value== null)
             {
-                this.pt.Clear();
+                this.pt?.Clear();
                 this.ptCountField = null;
             }
             else
@@ -9418,7 +9421,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
         {
             if(value== null)
             {
-                this.pt.Clear();
+                this.pt?.Clear();
                 this.ptCountField = null;
             }
             else
@@ -11172,7 +11175,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                 return this.serAxField;
             }
             set
-            {
+            { 
                 this.serAxField = value;
             }
         }
@@ -11292,21 +11295,29 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         public int SizeOfValAxArray()
         {
+            if(this.valAxField==null)
+                return 0;
             return this.valAxField.Count;
         }
 
         public int SizeOfCatAxArray()
         {
+            if(this.catAxField==null)
+                return 0;
             return this.catAxField.Count;
         }
 
         public int SizeOfDateAxArray()
         {
+            if(this.dateAxField==null)
+                return 0;
             return this.dateAxField.Count;
         }
 
         public int SizeOfSerAxArray()
         {
+            if(this.serAxField==null)
+                return 0;
             return this.serAxField.Count;
         }
 

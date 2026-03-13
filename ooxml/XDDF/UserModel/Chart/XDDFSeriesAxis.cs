@@ -106,9 +106,9 @@ namespace NPOI.XDDF.UserModel.Chart
         {
             return Double.NaN;
         }
-        public override void crossAxis(XDDFChartAxis axis)
+        public override void CrossAxis(XDDFChartAxis axis)
         {
-            ctSerAx.crossAx.val = (uint)axis.GetId();
+            ctSerAx.crossAx.val = (uint)axis.Id;
         }
         protected override CT_UnsignedInt GetCTAxId()
         {
@@ -173,12 +173,12 @@ namespace NPOI.XDDF.UserModel.Chart
             ctSerAx.AddNewMajorTickMark();
             ctSerAx.AddNewMinorTickMark();
 
-            SetPosition(position);
-            SetOrientation(AxisOrientation.MinMax);
-            SetCrosses(AxisCrosses.AutoZero);
-            SetVisible(true);
-            SetMajorTickMark(AxisTickMark.Cross);
-            SetMinorTickMark(AxisTickMark.None);
+            Position =(position);
+            Orientation = (AxisOrientation.MinMax);
+            Crosses = (AxisCrosses.AutoZero);
+            IsVisible = (true);
+            MajorTickMark = (AxisTickMark.Cross);
+            MinorTickMark = (AxisTickMark.None);
         }
     }
 }
