@@ -1403,7 +1403,7 @@ namespace TestCases.XSSF.UserModel
             using (var wb2 = new XSSFWorkbook(new MemoryStream(savedBytes)))
             {
                 ClassicAssert.IsNotNull(wb2.GetStylesSource());
-                ClassicAssert.AreEqual(wb2.NumberOfFonts, wb2.GetStylesSource().Fonts.Count);
+                ClassicAssert.AreEqual(wb2.GetStylesSource().Fonts.Count, wb2.NumberOfFonts);
             }
         }
 

@@ -124,7 +124,8 @@ namespace NPOI.XSSF.Model
             : base(part)
         {
             // Lazy loading: defer XML parsing until the table is actually used.
-            // The part reference is kept via base(part) and will be read on demand.
+            // The part reference is kept via base(part) and retrieved using
+            // GetPackagePart() when EnsureLoaded() is called on first access.
             _isLoaded = false;
             _isTouched = false;
         }
@@ -245,8 +246,8 @@ namespace NPOI.XSSF.Model
          */
         public void EnsureThemesTable()
         {
-            if (theme != null) return;
             EnsureLoaded();
+            if (theme != null) return;
             MarkTouched();
             theme = (ThemesTable)workbook.CreateRelationship(XSSFRelation.THEME, XSSFFactory.GetInstance());
         }
