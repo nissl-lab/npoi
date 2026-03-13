@@ -109,17 +109,6 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         /// True
         /// </summary>
         on,
-        ///// <summary>
-        ///// False
-        ///// </summary>
-        //[XmlEnum("0")]
-        //Value0 = 0,
-
-        ///// <summary>
-        ///// True
-        ///// </summary>
-        //[XmlEnum("1")]
-        //Value1 = 1,
 
         /// <summary>
         /// True
@@ -131,7 +120,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         /// False
         /// </summary>
         [XmlEnum("false")]
-        False,
+        False
     }
     /// <summary>
     /// Long Hexadecimal Number

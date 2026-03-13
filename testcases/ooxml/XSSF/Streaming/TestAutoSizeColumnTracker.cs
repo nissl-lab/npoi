@@ -142,7 +142,6 @@ namespace TestCases.XSSF.Streaming
         }
 
         [Test]
-        [Platform("Win")]
         public void updateColumnWidths_and_getBestFitColumnWidth() {
             tracker.TrackAllColumns();
             IRow row1 = sheet.CreateRow(0);
@@ -164,9 +163,13 @@ namespace TestCases.XSSF.Streaming
              * 2       SHORT SHORT     SHORT
              */
 
-            // measured in Excel 2013. Sizes may vary.
-            int longMsgWidth = (int)(57.43 * 256);
-            int shortMsgWidth = (int)(4.86 * 256);
+            // Use dynamically-measured widths so the test is platform-independent.
+            // Column A (0) has LONG, no merge → reference for longMsgWidth.
+            // Column C (2) has SHORT, no merge → reference for shortMsgWidth.
+            int longMsgWidth = tracker.GetBestFitColumnWidth(0, false);
+            int shortMsgWidth = tracker.GetBestFitColumnWidth(2, false);
+            ClassicAssert.IsTrue(longMsgWidth > shortMsgWidth,
+                $"LONG message width ({longMsgWidth}) should be greater than SHORT message width ({shortMsgWidth})");
 
             CheckColumnWidth(longMsgWidth, 0, true);
             CheckColumnWidth(longMsgWidth, 0, false);

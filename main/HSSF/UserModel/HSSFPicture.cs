@@ -26,7 +26,7 @@ namespace NPOI.HSSF.UserModel
     using NPOI.HSSF.Model;
     using NPOI.HSSF.Record;
     using NPOI.SS.Util;
-    using SixLabors.ImageSharp;
+    using SkiaSharp;
 
 
     /// <summary>
@@ -189,18 +189,17 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="r">The image.</param>
         /// <returns>the resolution</returns>
-        protected Size GetResolution(Image r)
+        protected SKSizeI GetResolution(SKBitmap r)
         {
-            //int hdpi = 96, vdpi = 96;
-            //double mm2inch = 25.4;
-            return new Size((int) r.Metadata.HorizontalResolution, (int) r.Metadata.VerticalResolution);
+            // SKBitmap does not expose DPI metadata; return zeros so callers default to 96 DPI
+            return new SKSizeI(0, 0);
         }
 
         /// <summary>
         /// Return the dimension of the embedded image in pixel
         /// </summary>
         /// <returns>image dimension</returns>
-        public Size GetImageDimension()
+        public SKSizeI GetImageDimension()
         {
             InternalWorkbook iwb = (_patriarch.Sheet.Workbook as HSSFWorkbook).Workbook;
             EscherBSERecord bse = iwb.GetBSERecord(PictureIndex);
@@ -209,9 +208,10 @@ namespace NPOI.HSSF.UserModel
 
             using(MemoryStream ms = RecyclableMemory.GetStream(data))
             {
-                using(Image img = Image.Load(ms))
+                using(SKBitmap img = SKBitmap.Decode(ms))
                 {
-                    return img.Size();
+                    if (img == null) return new SKSizeI();
+                    return new SKSizeI(img.Width, img.Height);
                 }
             }
         }

@@ -23,7 +23,7 @@ using NPOI.XSSF.Model;
 using NPOI.XSSF.UserModel;
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
-using SixLabors.ImageSharp;
+using SkiaSharp;
 using System;
 
 namespace TestCases.XSSF.UserModel
@@ -262,7 +262,7 @@ namespace TestCases.XSSF.UserModel
             const string testText = "Apache";
             XSSFRichTextString rt = new XSSFRichTextString(testText);
             XSSFFont font = new XSSFFont { FontName = "Times New Roman", FontHeightInPoints = 11 };
-            font.SetColor(new XSSFColor(Color.Red, new DefaultIndexedColorMap()));
+            font.SetColor(new XSSFColor(SKColors.Red, new DefaultIndexedColorMap()));
             rt.ApplyFont(0, testText.Length, font);
             CT_Rst ct = rt.GetCTRst();
 

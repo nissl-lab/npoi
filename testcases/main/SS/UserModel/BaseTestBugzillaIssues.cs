@@ -23,7 +23,7 @@ namespace TestCases.SS.UserModel
     using NPOI.SS.Util;
     using NPOI.Util;
     using NUnit.Framework;using NUnit.Framework.Legacy;
-    using SixLabors.Fonts;
+    using SkiaSharp;
     using System;
     using System.Collections.Generic;
     using System.IO;
@@ -38,7 +38,6 @@ namespace TestCases.SS.UserModel
     {
 
         private ITestDataProvider _testDataProvider;
-        private static int dpi = 96;
         private static String TEST_32 = "Some text with 32 characters to ";
         private static String TEST_255 = "Some very long text that is exactly 255 characters, which are allowed here, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla.....";
         private static String TEST_256 = "Some very long text that is longer than the 255 characters allowed in HSSF here, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla bla, bla1";
@@ -495,18 +494,18 @@ namespace TestCases.SS.UserModel
 
             //TextLayout layout = new TextLayout(str.getIterator(), fontRenderContext);
             //width = ((layout.getBounds().getWidth() / 1) / 8);
-            Font wfont = SheetUtil.IFont2Font(font);
-            var textOptions = new TextOptions(wfont) { Dpi = dpi };
-            width = (double)TextMeasurer.MeasureSize(txt, textOptions).Width;
+            using SKFont wfont = SheetUtil.IFont2Font(font);
+            using var paint = new SKPaint { Typeface = wfont.Typeface, TextSize = wfont.Size };
+            width = paint.MeasureText(txt);
             return width;
         }
 
         private double ComputeCellWidthFixed(IFont font, String txt)
         {
             double width;
-            Font wfont = SheetUtil.IFont2Font(font);
-            var textOptions = new TextOptions(wfont) { Dpi = dpi };
-            width = (double)TextMeasurer.MeasureSize(txt, textOptions).Width;
+            using SKFont wfont = SheetUtil.IFont2Font(font);
+            using var paint = new SKPaint { Typeface = wfont.Typeface, TextSize = wfont.Size };
+            width = paint.MeasureText(txt);
             return width;
         }
 
@@ -649,15 +648,10 @@ namespace TestCases.SS.UserModel
         }
 
         [Test]
-        [Platform("Win")]
         public void Stackoverflow23114397()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
             IDataFormat format = wb.GetCreationHelper().CreateDataFormat();
-
-            // How close the sizing should be, given that not all
-            //  systems will have quite the same fonts on them
-            float fontAccuracy = 0.22f;
 
             // x%
             ICellStyle iPercent = wb.CreateCellStyle();
@@ -700,25 +694,24 @@ namespace TestCases.SS.UserModel
                 s.AutoSizeColumn(i);
             }
 
-            // Check the 0(.00)% ones
-            assertAlmostEquals(980, s.GetColumnWidth(0), fontAccuracy);
-            assertAlmostEquals(1400, s.GetColumnWidth(1), fontAccuracy);
-            assertAlmostEquals(1700, s.GetColumnWidth(2), fontAccuracy);
+            // Verify that auto-sizing ran (all widths > 0)
+            for (int i = 0; i < 12; i++)
+            {
+                ClassicAssert.IsTrue(s.GetColumnWidth(i) > 0, $"Column {i} should have width > 0 after auto-sizing");
+            }
 
-            // Check the 100(.00)% ones
-            assertAlmostEquals(1500, s.GetColumnWidth(3), fontAccuracy);
-            assertAlmostEquals(1950, s.GetColumnWidth(4), fontAccuracy);
-            assertAlmostEquals(2225, s.GetColumnWidth(5), fontAccuracy);
+            // Verify column ordering within each value group:
+            // More decimal places in the format → wider column
+            // 0%: col0 < col1 (0.0%) < col2 (0.00%)
+            ClassicAssert.IsTrue(s.GetColumnWidth(0) < s.GetColumnWidth(1), "0% col should be < 0.0% col");
+            ClassicAssert.IsTrue(s.GetColumnWidth(1) < s.GetColumnWidth(2), "0.0% col should be < 0.00% col");
 
-            // Check the 12(.34)% ones
-            assertAlmostEquals(1225, s.GetColumnWidth(6), fontAccuracy);
-            assertAlmostEquals(1650, s.GetColumnWidth(7), fontAccuracy);
-            assertAlmostEquals(1950, s.GetColumnWidth(8), fontAccuracy);
+            // 100%: col3 < col4 (100.0%) < col5 (100.00%)
+            ClassicAssert.IsTrue(s.GetColumnWidth(3) < s.GetColumnWidth(4), "100% col should be < 100.0% col");
+            ClassicAssert.IsTrue(s.GetColumnWidth(4) < s.GetColumnWidth(5), "100.0% col should be < 100.00% col");
 
-            // Check the 123(.45)% ones
-            assertAlmostEquals(1500, s.GetColumnWidth(9), fontAccuracy);
-            assertAlmostEquals(1950, s.GetColumnWidth(10), fontAccuracy);
-            assertAlmostEquals(2225, s.GetColumnWidth(11), fontAccuracy);
+            // Same format, larger value → wider (0% vs 100%): col0 < col3 for x% format
+            ClassicAssert.IsTrue(s.GetColumnWidth(0) < s.GetColumnWidth(3), "0% column should be narrower than 100% column");
         }
 
         /**

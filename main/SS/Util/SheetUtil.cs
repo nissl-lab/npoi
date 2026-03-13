@@ -17,14 +17,15 @@
 
 namespace NPOI.SS.Util
 {
-    using System;
-
+    using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
+    using SkiaSharp;
+    using System;
     using System.Collections.Concurrent;
     using System.Collections.Generic;
-    using SixLabors.Fonts;
-    using System.Linq;
+    using System.Data;
     using System.Globalization;
+    using System.Linq;
 
     /**
      * Helper methods for when working with Usermodel sheets
@@ -350,7 +351,7 @@ namespace NPOI.SS.Util
         private static double GetActualHeight(ICell cell)
         {
             string stringValue = GetCellStringValue(cell);
-            Font windowsFont = GetWindowsFont(cell);
+            using SKFont windowsFont = GetWindowsFont(cell);
 
             if (cell.CellStyle.Rotation != 0)
             {
@@ -412,7 +413,7 @@ namespace NPOI.SS.Util
             return null;
         }
 
-        private static Font GetWindowsFont(ICell cell)
+        private static SKFont GetWindowsFont(ICell cell)
         {
             var wb = cell.Sheet.Workbook;
             var style = cell.CellStyle;
@@ -421,22 +422,40 @@ namespace NPOI.SS.Util
             return IFont2Font(font);
         }
 
-        private static double GetRotatedContentHeight(ICell cell, string stringValue, Font windowsFont)
+        private static double GetRotatedContentHeight(ICell cell, string stringValue, SKFont windowsFont)
         {
+            if (string.IsNullOrEmpty(stringValue))
+                return 0;
+
             var angle = cell.CellStyle.Rotation * 2.0 * Math.PI / 360.0;
-            var measureResult = TextMeasurer.MeasureAdvance(stringValue, new TextOptions(windowsFont) { Dpi = dpi });
+            try
+            {
+                float textWidth = windowsFont.MeasureText(stringValue);
+                // Use the em-square height (font size in pixels) for the vertical component,
+                // consistent with GetContentHeight and SixLabors.Fonts MeasureAdvance.
+                float textHeight = windowsFont.Size;
 
-            var x1 = Math.Abs(measureResult.Height * Math.Cos(angle));
-            var x2 = Math.Abs(measureResult.Width * Math.Sin(angle));
+                var x1 = Math.Abs(textHeight * Math.Cos(angle));
+                var x2 = Math.Abs(textWidth * Math.Sin(angle));
 
-            return Math.Round(x1 + x2, 0, MidpointRounding.ToEven);
+                return Math.Round(x1 + x2, 0, MidpointRounding.ToEven);
+            }
+            catch (Exception)
+            {
+                // Fallback: use font size (in pixels at the configured DPI)
+                return Math.Round(windowsFont.Size, 0, MidpointRounding.ToEven);
+            }
         }
 
-        private static double GetContentHeight(string stringValue, Font windowsFont)
+        private static double GetContentHeight(string stringValue, SKFont windowsFont)
         {
-            var measureResult = TextMeasurer.MeasureAdvance(stringValue, new TextOptions(windowsFont) { Dpi = dpi });
+            if (string.IsNullOrEmpty(stringValue))
+                return 0;
 
-            return Math.Round(measureResult.Height, 0, MidpointRounding.ToEven);
+            // The height corresponds to the font's em-square (i.e. the configured point size
+            // converted to pixels at the target DPI), which matches what SixLabors.Fonts
+            // TextMeasurer.MeasureAdvance returned for line height.
+            return Math.Round(windowsFont.Size, 0, MidpointRounding.ToEven);
         }
 
         /**
@@ -479,7 +498,7 @@ namespace NPOI.SS.Util
                 cellType = cell.CachedFormulaResultType;
 
             IFont font = wb.GetFontAt(style.FontIndex);
-            Font windowsFont = IFont2Font(font);
+            using SKFont windowsFont = IFont2Font(font);
 
             double width = -1;
 
@@ -533,20 +552,48 @@ namespace NPOI.SS.Util
         }
 
         private static double GetCellWidth(int defaultCharWidth, int colspan,
-            ICellStyle style, double width, string str, Font windowsFont, ICell cell)
+            ICellStyle style, double width, string str, SKFont windowsFont, ICell cell)
         {
-            //Rectangle bounds;
             double actualWidth;
-            FontRectangle sf = TextMeasurer.MeasureSize(str, new TextOptions(windowsFont) { Dpi = dpi });
-            if (style.Rotation != 0)
+            try
             {
-                double angle = style.Rotation * 2.0 * Math.PI / 360.0;
-                double x1 = Math.Abs(sf.Height * Math.Sin(angle));
-                double x2 = Math.Abs(sf.Width * Math.Cos(angle));
-                actualWidth = Math.Round(x1 + x2, 0, MidpointRounding.ToEven);
+                float textWidth = windowsFont.MeasureText(str);
+                windowsFont.GetFontMetrics(out SKFontMetrics metrics);
+                float textHeight = metrics.Descent - metrics.Ascent;
+
+                if (style.Rotation != 0)
+                {
+                    double angle = style.Rotation * 2.0 * Math.PI / 360.0;
+                    double x1 = Math.Abs(textHeight * Math.Sin(angle));
+                    double x2 = Math.Abs(textWidth * Math.Cos(angle));
+                    actualWidth = Math.Round(x1 + x2, 0, MidpointRounding.ToEven);
+                }
+                else
+                    actualWidth = Math.Round(textWidth, 0, MidpointRounding.ToEven);
             }
-            else
-                actualWidth = Math.Round(sf.Width, 0, MidpointRounding.ToEven);
+            catch (Exception)
+            {
+                // Fallback for environments without complete font support (e.g., missing font tables).
+                // Estimate dimensions proportionally: characters are approximately half as wide as the
+                // font height (an empirical approximation for proportional fonts that preserves relative
+                // width differences between fonts of different sizes and between rotated and non-rotated
+                // text).
+                double fontHeightPx = windowsFont.Size;  // already in pixels at the configured DPI
+                double estimatedCharWidthPx = fontHeightPx * 0.5;
+                double estimatedTextWidthPx = str.Length * estimatedCharWidthPx;
+
+                if (style.Rotation != 0)
+                {
+                    double angle = style.Rotation * 2.0 * Math.PI / 360.0;
+                    double x1 = Math.Abs(fontHeightPx * Math.Sin(angle));
+                    double x2 = Math.Abs(estimatedTextWidthPx * Math.Cos(angle));
+                    actualWidth = Math.Round(x1 + x2, 0, MidpointRounding.ToEven);
+                }
+                else
+                {
+                    actualWidth = Math.Round(estimatedTextWidthPx, 0, MidpointRounding.ToEven);
+                }
+            }
 
             int padding = 5;
             double correction = 1.05;
@@ -613,9 +660,19 @@ namespace NPOI.SS.Util
         public static int GetDefaultCharWidth(IWorkbook wb)
         {
             IFont defaultFont = wb.GetFontAt((short)0);
-            Font font = IFont2Font(defaultFont);
+            using SKFont font = IFont2Font(defaultFont);
 
-            return (int)Math.Ceiling(TextMeasurer.MeasureSize(new string(defaultChar, 1), new TextOptions(font) { Dpi = dpi }).Width);
+            try
+            {
+                return (int)Math.Ceiling(font.MeasureText(new string(defaultChar, 1)));
+            }
+            catch (Exception)
+            {
+                // Fallback for environments without complete font support (e.g., missing font tables).
+                // Returns 7, which is the approximate pixel width of character '0' for Calibri 11pt
+                // at 96 DPI — the default Excel font — without full font rendering support.
+                return 7;
+            }
         }
 
         /**
@@ -713,20 +770,20 @@ namespace NPOI.SS.Util
         private readonly struct FontCacheKey : IEquatable<FontCacheKey>
 #pragma warning restore CA2231
         {
-            public FontCacheKey(string fontName, float fontHeightInPoints, FontStyle style)
+            public FontCacheKey(string fontName, bool bold, bool italic)
             {
                 FontName = fontName;
-                FontHeightInPoints = fontHeightInPoints;
-                Style = style;
+                IsBold = bold;
+                IsItalic = italic;
             }
 
             public readonly string FontName;
-            public readonly float FontHeightInPoints;
-            public readonly FontStyle Style;
+            public readonly bool IsBold;
+            public readonly bool IsItalic;
 
             public bool Equals(FontCacheKey other)
             {
-                return FontName == other.FontName && FontHeightInPoints.Equals(other.FontHeightInPoints) && Style == other.Style;
+                return FontName == other.FontName && IsBold == other.IsBold && IsItalic == other.IsItalic;
             }
 
             public override bool Equals(object obj)
@@ -739,71 +796,44 @@ namespace NPOI.SS.Util
                 unchecked
                 {
                     var hashCode = FontName != null ? FontName.GetHashCode() : 0;
-                    hashCode = (hashCode * 397) ^ FontHeightInPoints.GetHashCode();
-                    hashCode = (hashCode * 397) ^ (int)Style;
+                    hashCode = (hashCode * 397) ^ IsBold.GetHashCode();
+                    hashCode = (hashCode * 397) ^ IsItalic.GetHashCode();
                     return hashCode;
                 }
             }
         }
 
-        private static readonly CultureInfo StartupCulture = CultureInfo.CurrentCulture;
-        private static readonly ConcurrentDictionary<FontCacheKey, Font> FontCache = new();
+        // Cache SKTypeface objects (expensive) keyed by font name + style.
+        // SKFont (typeface + size) is cheap and created on demand from the cached typeface.
+        private static readonly ConcurrentDictionary<FontCacheKey, SKTypeface> TypefaceCache = new();
 
         /// <summary>
-        /// Convert HSSFFont to Font.
+        /// Convert an NPOI IFont to an SkiaSharp SKFont for text measurement.
+        /// The returned SKFont has its size set in pixels at 96 DPI (i.e. pointSize * 96 / 72).
+        /// Callers are responsible for disposing the returned SKFont.
         /// </summary>
-        /// <param name="font1">The font.</param>
-        /// <returns></returns>
-        /// <exception cref="FontException">Will throw this if no font are 
-        /// found by SixLabors in the current environment.</exception>
-        public static Font IFont2Font(IFont font1)
+        /// <param name="font1">The NPOI font descriptor.</param>
+        /// <returns>An <see cref="SKFont"/> ready for text measurement.</returns>
+        public static SKFont IFont2Font(IFont font1)
         {
-            FontStyle style = FontStyle.Regular;
-            if (font1.IsBold)
-            {
-                style |= FontStyle.Bold;
-            }
-            if (font1.IsItalic)
-                style |= FontStyle.Italic;
-
-            /* TODO-Fonts: not supported
-            if (font1.Underline == FontUnderlineType.Single)
-            {
-                style |= FontStyle.Underline;
-            }
-            */
-
-            var key = new FontCacheKey(font1.FontName, (float)font1.FontHeightInPoints, style);
-
-            // only use cache if font size is an integer and culture is original to prevent cache size explosion
-            if (font1.FontHeightInPoints == (int)font1.FontHeightInPoints && CultureInfo.CurrentCulture.Equals(StartupCulture))
-            {
-                return FontCache.GetOrAdd(key, IFont2FontImpl);
-            }
-
-            // skip cache
-            return IFont2FontImpl(key);
+            var key = new FontCacheKey(font1.FontName, font1.IsBold, font1.IsItalic);
+            SKTypeface typeface = TypefaceCache.GetOrAdd(key, IFont2TypefaceImpl);
+            // Convert point size to pixels at the configured DPI so that MeasureText returns pixel values.
+            float textSizePx = (float)font1.FontHeightInPoints * dpi / 72f;
+            return new SKFont(typeface, textSizePx);
         }
 
-        private static Font IFont2FontImpl(FontCacheKey cacheKey)
+        private static SKTypeface IFont2TypefaceImpl(FontCacheKey cacheKey)
         {
-            // Try to find font in system fonts. If we can not find out,
-            // use "Arial". TODO-Fonts: More fallbacks.
+            var fontStyle = new SKFontStyle(
+                cacheKey.IsBold ? SKFontStyleWeight.Bold : SKFontStyleWeight.Normal,
+                SKFontStyleWidth.Normal,
+                cacheKey.IsItalic ? SKFontStyleSlant.Italic : SKFontStyleSlant.Upright);
 
-            if (!SystemFonts.TryGet(cacheKey.FontName, CultureInfo.CurrentCulture, out var fontFamily))
-            {
-                if (!SystemFonts.TryGet("Arial", CultureInfo.CurrentCulture, out fontFamily))
-                {
-                    if (!SystemFonts.Families.Any())
-                    {
-                        throw new FontException("No fonts found installed on the machine.");
-                    }
-
-                    fontFamily = SystemFonts.Families.First();
-                }
-            }
-
-            return new Font(fontFamily, cacheKey.FontHeightInPoints, cacheKey.Style);
+            // Try to find font in system fonts; fall back to Arial, then the default typeface.
+            return SKTypeface.FromFamilyName(cacheKey.FontName, fontStyle)
+                ?? SKTypeface.FromFamilyName("Arial", fontStyle)
+                ?? SKTypeface.Default;
         }
 
         /// <summary>
@@ -913,6 +943,108 @@ namespace NPOI.SS.Util
             //  live within any merged regions
             return null;
         }
+        /// <summary>
+        /// Convert a sheet to a DataTable. Note that merged cells are not supported
+        /// </summary>
+        /// <param name="sheet">original sheet</param>
+        /// <param name="firstRowAsHeader">whether first row is column header</param>
+        /// <param name="showCalculatedFormulaValue">whether to show evaluated value of a formula in the cell</param>
+        /// <returns></returns>
+        public static DataTable ToDataTable(ISheet sheet, bool firstRowAsHeader, bool showCalculatedFormulaValue)
+        {
+            DataTable dt = new DataTable(sheet.SheetName);
 
+            HSSFDataFormatter formatter = new HSSFDataFormatter();
+            var formulaEvaluator=sheet.Workbook.GetCreationHelper().CreateFormulaEvaluator();
+            for(int i = 0; i <= sheet.LastRowNum; i++)
+            {
+                var row=sheet.GetRow(i);
+                if(row == null)
+                {
+                    continue;
+                }
+                if(i == 0) //don't support merged cell so far
+                {
+                    if(firstRowAsHeader)
+                    {
+                        for(int j = 0; j < row.LastCellNum; j++)
+                        {
+                            var c = row.GetCell(j);
+                            dt.Columns.Add(c == null ? "" : formatter.FormatCellValue(c));
+                        }
+                        continue;
+                    }
+                }
+
+                DataRow dr = null!;
+                for(int j = 0; j < row.LastCellNum; j++)
+                {
+                    if(j == 0)
+                    {
+                        for(int k = dt.Columns.Count; k < row.LastCellNum; k++)
+                        {
+                            dt.Columns.Add("Column " + k);
+                        }
+                        dr = dt.NewRow();
+                    }
+                    var c = row.GetCell(j);
+                    if(c == null)
+                    {
+                        dr[j] = "";
+                        continue;
+                    }
+                    switch(c.CellType)
+                    {
+                        case CellType.Numeric:
+                            dr[j] =  c.NumericCellValue;
+                            break;
+                        case CellType.String:
+                            dr[j] = formatter.FormatCellValue(c);
+                            break;
+                        case CellType.Blank:
+                            dr[j] = "";
+                            break;
+                        case CellType.Boolean:
+                            dr[j] = c.BooleanCellValue;
+                            break;
+                        case CellType.Formula:
+                            if(showCalculatedFormulaValue)
+                            {
+                                var cellValue = formulaEvaluator.Evaluate(c);
+                                switch(cellValue.CellType)
+                                {
+                                    case CellType.Numeric:
+                                        dr[j] = cellValue.NumberValue;
+                                        break;
+                                    case CellType.String:
+                                        dr[j] = cellValue.StringValue;
+                                        break;
+                                    case CellType.Boolean:
+                                        dr[j] = cellValue.BooleanValue;
+                                        break;
+                                    case CellType.Error:
+                                        if(c.ErrorCellValue== FormulaError.NULL.Code)
+                                            dr[j] = "#NULL!";
+                                        else if(c.ErrorCellValue == FormulaError.DIV0.Code)
+                                            dr[j] = "#DIV/0!";
+                                        else if(c.ErrorCellValue == FormulaError.NUM.Code)
+                                            dr[j] = "#NUM!";
+                                        else if(c.ErrorCellValue == FormulaError.NAME.Code)
+                                            dr[j] = "#NAME!";
+                                        break;
+                                    case CellType.Blank:
+                                        dr[j] = "";
+                                        break;
+                                }
+                            }
+                            else
+                                dr[j] = c.CellFormula;
+                            break;
+                    }
+                }
+                dt.Rows.Add(dr);
+            }
+            return dt;
+        }
     }
 }

@@ -14,6 +14,8 @@ public class LargeExcelFileBenchmark
     private static MemoryStream _memoryStream;
     private string _filePath;
 
+
+
     [GlobalSetup]
     public void GlobalSetup()
     {
@@ -49,7 +51,7 @@ public class LargeExcelFileBenchmark
     [Benchmark]
     public void XSSFReaderLoad()
     {
-        using var pkg = OPCPackage.Open(_filePath, PackageAccess.READ);
+        var pkg = OPCPackage.Open(_filePath, PackageAccess.READ);
         var reader = new XSSFReader(pkg);
 
         // Read shared strings table

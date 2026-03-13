@@ -172,6 +172,10 @@ namespace NPOI.SS.Formula.Functions
                 // else looks like a number
                 throw new EvaluationException(ErrorEval.NA);
             }
+            if (eval is ErrorEval errorEval)
+            {
+                throw new EvaluationException(errorEval);
+            }
             throw new Exception("Unexpected eval type (" + eval.ToString() + ")");
         }
 
@@ -197,12 +201,13 @@ namespace NPOI.SS.Formula.Functions
                     // plain string
                     throw new EvaluationException(ErrorEval.VALUE_INVALID);
                 }
-                // if the string Parses as a number, it Is OK
+                // if the string parses as a number, it is OK
                 return d;
             }
-            //if the 3rd argument is missing, use the default value
-            if (match_type is MissingArgEval)
+            if (match_type is MissingArgEval || match_type is BlankEval)
             {
+                // Excel-Online ignores a missing match-type and
+                // uses the default-value instead
                 return 1d;
             }
             throw new Exception("Unexpected match_type type (" + match_type.GetType().Name + ")");

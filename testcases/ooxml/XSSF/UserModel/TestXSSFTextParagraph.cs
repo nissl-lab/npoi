@@ -19,8 +19,7 @@ namespace TestCases.XSSF.UserModel
     using NPOI.Util;
     using NPOI.XSSF.UserModel;
     using NUnit.Framework;using NUnit.Framework.Legacy;
-    using SixLabors.ImageSharp;
-    using SixLabors.ImageSharp.PixelFormats;
+    using SkiaSharp;
     using System.Collections.Generic;
 
     [TestFixture]
@@ -39,7 +38,7 @@ namespace TestCases.XSSF.UserModel
                 XSSFRichTextString rt = new XSSFRichTextString("Test String");
 
                 XSSFFont font = wb.CreateFont() as XSSFFont;
-                Rgb24 color =new Rgb24(0, 255, 255);
+                SKColor color =new SKColor(0, 255, 255);
                 font.SetColor(new XSSFColor(color, wb.GetStylesSource().IndexedColors));
                 font.FontName = "Arial";
                 rt.ApplyFont(font);

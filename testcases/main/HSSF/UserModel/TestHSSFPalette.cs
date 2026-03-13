@@ -27,7 +27,7 @@ namespace TestCases.HSSF.UserModel
     using TestCases.HSSF;
     using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.SS.UserModel;
-    using SixLabors.ImageSharp.PixelFormats;
+    using SkiaSharp;
 
     /**
      * @author Brian Sanders (bsanders at risklabs dot com)
@@ -277,16 +277,16 @@ namespace TestCases.HSSF.UserModel
         {
             HSSFWorkbook wb = new HSSFWorkbook();
 
-            var color = new Rgb24(0, 0x6B, 0x6B); //decode("#006B6B");
+            var color = new SKColor(0, 0x6B, 0x6B); //decode("#006B6B");
             HSSFPalette palette = wb.GetCustomPalette();
 
-            HSSFColor hssfColor = palette.FindColor(color.R, color.G, color.B);
+            HSSFColor hssfColor = palette.FindColor(color.Red, color.Green, color.Blue);
             ClassicAssert.IsNull(hssfColor);
 
             palette.SetColorAtIndex(
                     (short)(PaletteRecord.STANDARD_PALETTE_SIZE - 1),
-                    (byte)color.R, (byte)color.G,
-                    (byte)color.B);
+                    (byte)color.Red, (byte)color.Green,
+                    (byte)color.Blue);
             hssfColor = palette.GetColor((short)(PaletteRecord.STANDARD_PALETTE_SIZE - 1));
             ClassicAssert.IsNotNull(hssfColor);
             ClassicAssert.AreEqual(55, hssfColor.Indexed);

@@ -28,7 +28,7 @@ using NPOI.SS.Util;
 using NPOI.Util;
 using NPOI.XSSF.Model;
 using NPOI.XSSF.UserModel.Helpers;
-using SixLabors.Fonts;
+using SkiaSharp;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -41,6 +41,7 @@ using CT_Shape = NPOI.OpenXmlFormats.Vml.CT_Shape;
 using ST_EditAs = NPOI.OpenXmlFormats.Dml.Spreadsheet.ST_EditAs;
 using System.Xml.Linq;
 using System.Diagnostics;
+using System.Data;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -1774,16 +1775,18 @@ namespace NPOI.XSSF.UserModel
 
         /// <summary>
         /// Adjusts the column width to fit the contents.
-        /// This process can be relatively slow on large sheets, so this should
+        /// This Process can be relatively slow on large sheets, so this should
         /// normally only be called once per column, at the end of your
         /// Processing.
+        /// You can specify whether the content of merged cells should be considered or ignored.
+        /// Default is to ignore merged cells.
         /// </summary>
         /// <param name="column">the column index</param>
-        /// <param name="useMergedCells">whether to use the contents of merged cells
-        /// when calculating the width of the column</param>
-        public void AutoSizeColumn(int column, bool useMergedCells)
+        /// <param name="useMergedCells">whether to use the contents of merged cells when calculating the width of the column</param>
+        /// <param name="maxRows">limit the scope to maxRows rows to speed up the function, or leave 0 (optional)</param>
+        public void AutoSizeColumn(int column, bool useMergedCells, int maxRows = 0)
         {
-            double width = SheetUtil.GetColumnWidth(this, column, useMergedCells);
+            double width = SheetUtil.GetColumnWidth(this, column, useMergedCells, maxRows);
 
             if(width != -1)
             {
@@ -1795,7 +1798,11 @@ namespace NPOI.XSSF.UserModel
                     width = maxColumnWidth;
                 }
                 SetColumnWidth(column, width);
-                GetColumnHelper().SetColBestFit(column, true);
+                IColumn col = GetColumn(column);
+                if(col != null)
+                {
+                    col.IsBestFit = true;
+                }
             }
         }
 
@@ -6461,9 +6468,9 @@ namespace NPOI.XSSF.UserModel
         public void SetDefaultColWidth(int Width)
         {
             IFont ift = GetWorkbook().GetStylesSource().GetFontAt(0);
-            Font ft = SheetUtil.IFont2Font(ift);
-            var rt = TextMeasurer.MeasureSize("0", new TextOptions(ft));
-            double MDW = rt.Width + 1; //MaximumDigitWidth
+            using SKFont ft = SheetUtil.IFont2Font(ift);
+            using var paint = new SKPaint { Typeface = ft.Typeface, TextSize = ft.Size };
+            double MDW = paint.MeasureText("0") + 1; //MaximumDigitWidth
 
             worksheet.sheetFormatPr.defaultColWidth = Width / Units.EMU_PER_PIXEL / MDW;
             worksheet.cols.Clear();
@@ -6622,6 +6629,11 @@ lblforbreak:
             }
         }
 
+        public DataTable ToDataTable(bool firstRowAsHeader = false, bool showCalculatedValue = false)
+        {
+            return SheetUtil.ToDataTable(this, firstRowAsHeader, showCalculatedValue);
+        }
+        
         public XSSFHeaderFooterProperties HeaderFooterProperties
         {
             get

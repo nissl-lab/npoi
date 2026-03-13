@@ -21,7 +21,7 @@ using NPOI.Util;
 using NPOI.SS.Util;
 using System.IO;
 using TestCases.HSSF;
-using SixLabors.ImageSharp;
+using SkiaSharp;
 
 namespace TestCases.SS.UserModel
 {
@@ -48,8 +48,8 @@ namespace TestCases.SS.UserModel
             IClientAnchor inpCA = input.ClientAnchor;
             IClientAnchor cmpCA = Compare.ClientAnchor;
 
-            Size inpDim = ImageUtils.GetDimensionFromAnchor(input);
-            Size cmpDim = ImageUtils.GetDimensionFromAnchor(Compare);
+            SKSizeI inpDim = ImageUtils.GetDimensionFromAnchor(input);
+            SKSizeI cmpDim = ImageUtils.GetDimensionFromAnchor(Compare);
 
             double emuPX = Units.EMU_PER_PIXEL;
 
@@ -64,7 +64,7 @@ namespace TestCases.SS.UserModel
             input.Resize();
             inpDim = ImageUtils.GetDimensionFromAnchor(input);
 
-            Size imgDim = input.GetImageDimension();
+            SKSizeI imgDim = input.GetImageDimension();
 
             ClassicAssert.AreEqual(imgDim.Height, inpDim.Height / emuPX, 1, "the image height differs");
             ClassicAssert.AreEqual(imgDim.Width, inpDim.Width / emuPX, 1, "the image width differs");
@@ -132,13 +132,13 @@ namespace TestCases.SS.UserModel
             pict.Resize();
         }
 
-        private static Point GetImageSize(byte[] image)
+        private static SKPointI GetImageSize(byte[] image)
         {
-            Image img = Image.Load(new MemoryStream(image));
+            using SKBitmap img = SKBitmap.Decode(new MemoryStream(image));
 
             ClassicAssert.IsNotNull(img);
 
-            return new Point(img.Width, img.Height);
+            return new SKPointI(img.Width, img.Height);
         }
 
     }

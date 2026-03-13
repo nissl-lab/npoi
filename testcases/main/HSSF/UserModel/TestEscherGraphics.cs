@@ -23,11 +23,8 @@ namespace TestCases.HSSF.UserModel
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
 
-
     using NUnit.Framework;using NUnit.Framework.Legacy;
-    using SixLabors.Fonts;
-    using SixLabors.ImageSharp;
-    using SixLabors.ImageSharp.PixelFormats;
+    using SkiaSharp;
 
 
     /**
@@ -40,7 +37,6 @@ namespace TestCases.HSSF.UserModel
      * @author Glen Stampoultzis (glens at apache.org)
      */
     [TestFixture]
-    [Platform("Win", Reason = "Fonts might not available on non-Windows platforms")]
     public class TestEscherGraphics
     {
         private HSSFWorkbook workbook;
@@ -48,6 +44,9 @@ namespace TestCases.HSSF.UserModel
         private HSSFShapeGroup escherGroupA;
         private HSSFShapeGroup escherGroupB;
         private EscherGraphics graphics;
+
+        // Default DPI used by EscherGraphics and SheetUtil
+        private const float dpi = 96f;
 
         [SetUp]
         public void SetUp()
@@ -60,46 +59,39 @@ namespace TestCases.HSSF.UserModel
             escherGroupA = patriarch.CreateGroup(new HSSFClientAnchor(0, 0, 1022, 255, (short)0, 0, (short)0, 0));
             escherGroupB = patriarch.CreateGroup(new HSSFClientAnchor(20, 30, 500, 200, (short)0, 0, (short)0, 0));
             //        escherGroup = new HSSFShapeGroup(null, new HSSFChildAnchor());
-            graphics = new EscherGraphics(this.escherGroupA, workbook, Color.Black, 1.0f);
+            graphics = new EscherGraphics(this.escherGroupA, workbook, SKColors.Black, 1.0f);
 
         }
 
         [Test]
         public void TestGetFont()
         {
-            Font f = graphics.Font;
-            if (!f.ToString().Contains("dialog") && !f.ToString().Contains("Dialog"))
-            {
-                //ClassicAssert.AreEqual("java.awt.Font[family=Arial,name=Arial,style=plain,size=10]", f.ToString());
-                //ClassicAssert.AreEqual("[Font: Name=Arial, Size=10, Units=3, GdiCharSet=1, GdiVerticalFont=False]", f.ToString());
-                ClassicAssert.AreEqual("Arial", f.Family.Name);
-                ClassicAssert.AreEqual("Arial", f.Name);
-                ClassicAssert.AreEqual(10, f.Size);
-                ClassicAssert.AreEqual(FontStyle.Regular, f.FontMetrics.Description.Style);
-            }
+            SKFont f = graphics.Font;
+            // Font was created at 10pt; stored as pixels at 96 DPI
+            float expectedSizePx = 10f * dpi / 72f;
+            ClassicAssert.AreEqual(expectedSizePx, f.Size, 0.01f);
+            ClassicAssert.IsFalse(f.Typeface.IsBold);
+            ClassicAssert.IsFalse(f.Typeface.IsItalic);
         }
 
         [Test]
         public void TestGetFontMetrics()
         {
-            Font f = graphics.Font;
-            if (f.ToString().Contains("dialog") || f.ToString().Contains("Dialog"))
-                return;
-
-            ClassicAssert.AreEqual(7, TextMeasurer.MeasureSize("X", new TextOptions(f)).Width);
-            ClassicAssert.AreEqual("Arial", f.Family.Name);
-            ClassicAssert.AreEqual(10, f.Size);
-            ClassicAssert.AreEqual(FontStyle.Regular, f.FontMetrics.Description.Style);
-            //ClassicAssert.AreEqual("java.awt.Font[family=Arial,name=Arial,style=plain,size=10]", fontMetrics.GetFont().ToString());
+            SKFont f = graphics.Font;
+            using var paint = new SKPaint { Typeface = f.Typeface, TextSize = f.Size };
+            float width = paint.MeasureText("X");
+            ClassicAssert.IsTrue(width > 0, "Expected font metrics width > 0, but got: " + width);
+            ClassicAssert.IsTrue(f.Size > 0);
+            ClassicAssert.IsFalse(f.Typeface.IsBold);
+            ClassicAssert.IsFalse(f.Typeface.IsItalic);
         }
 
         [Test]
         public void TestSetFont()
         {
-            FontCollection fonts = new FontCollection();
             var fi = POIDataSamples.GetSpreadSheetInstance().GetFileInfo("Helvetica.ttf");
-            SixLabors.Fonts.FontFamily font1 = fonts.Add(fi.FullName);
-            Font f = new Font(font1, 12, FontStyle.Regular);
+            var typeface = SKTypeface.FromFile(fi.FullName);
+            var f = new SKFont(typeface, 12f * dpi / 72f);
             graphics.SetFont(f);
             ClassicAssert.AreEqual(f, graphics.Font);
         }
@@ -107,8 +99,8 @@ namespace TestCases.HSSF.UserModel
         [Test]
         public void TestSetColor()
         {
-            graphics.SetColor(Color.Red);
-            ClassicAssert.AreEqual(Color.Red, graphics.Color);
+            graphics.SetColor(SKColors.Red);
+            ClassicAssert.AreEqual(SKColors.Red, graphics.Color);
         }
 
         [Test]

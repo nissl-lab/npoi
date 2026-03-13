@@ -8,16 +8,22 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\ooxml\NPOI.OOXML.Core.csproj" />
+        <PackageReference Include="BenchmarkDotNet" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="BenchmarkDotNet" />
+      <ProjectReference Include="..\..\ooxml\NPOI.OOXML.Core.csproj" />
     </ItemGroup>
 
     <ItemGroup>
       <None Update="data\test-performance.xlsx">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="data\Test1000000x10_SharingStrings.xlsx">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="data\HugeStyles.xlsx" Condition="Exists('data\HugeStyles.xlsx')">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
     </ItemGroup>
 

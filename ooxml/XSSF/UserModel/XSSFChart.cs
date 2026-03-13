@@ -313,7 +313,7 @@ namespace NPOI.XSSF.UserModel
                 tx.UnsetStrRef();
             }
 
-            OpenXmlFormats.Dml.Chart.CT_TextBody rich;
+            CT_TextBody rich;
             if (tx.IsSetRich())
             {
                 rich = tx.rich;
@@ -360,7 +360,7 @@ namespace NPOI.XSSF.UserModel
         {
             if (chart.IsSetLegend())
             {
-                chart.unsetLegend();
+                chart.UnsetLegend();
             }
         }
 

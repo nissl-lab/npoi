@@ -22,7 +22,7 @@ namespace NPOI.DDF
     using NPOI.Util;
     using ICSharpCode.SharpZipLib.Zip.Compression;
     using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
-    using SixLabors.ImageSharp;
+    using SkiaSharp;
 
     /// <summary>
     /// @author Daniel Noll
@@ -203,21 +203,21 @@ namespace NPOI.DDF
         /// Gets or sets the bounds.
         /// </summary>
         /// <value>The bounds.</value>
-        public Rectangle Bounds
+        public SKRectI Bounds
         {
             get
             {
-                return new Rectangle(field_3_rcBounds_x1,
+                return SKRectI.Create(field_3_rcBounds_x1,
                                      field_3_rcBounds_y1,
                                      field_3_rcBounds_x2 - field_3_rcBounds_x1,
                                      field_3_rcBounds_y2 - field_3_rcBounds_y1);
             }
             set
             {
-                field_3_rcBounds_x1 = value.X;
-                field_3_rcBounds_y1 = value.Y;
-                field_3_rcBounds_x2 = value.X + value.Width;
-                field_3_rcBounds_y2 = value.Y + value.Height;
+                field_3_rcBounds_x1 = value.Left;
+                field_3_rcBounds_y1 = value.Top;
+                field_3_rcBounds_x2 = value.Right;
+                field_3_rcBounds_y2 = value.Bottom;
             }
         }
 
@@ -225,9 +225,9 @@ namespace NPOI.DDF
         /// Gets or sets the size EMU.
         /// </summary>
         /// <value>The size EMU.</value>
-        public Size SizeEMU
+        public SKSizeI SizeEMU
         {
-            get { return new Size(field_4_ptSize_w, field_4_ptSize_h); }
+            get { return new SKSizeI(field_4_ptSize_w, field_4_ptSize_h); }
             set
             {
                 field_4_ptSize_w = value.Width;

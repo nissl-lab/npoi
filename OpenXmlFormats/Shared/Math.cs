@@ -617,12 +617,10 @@ namespace NPOI.OpenXmlFormats.Shared
             return ctObj;
         }
 
-
-
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.WriteStart("m", nodeName);
-            if(this.val== ST_OnOff.off||this.val== ST_OnOff.Value0)
+            if(this.val== ST_OnOff.off||this.val== ST_OnOff.False)
                 XmlHelper.WriteAttribute(sw, "m:val", "0");
             else
                 XmlHelper.WriteAttribute(sw, "m:val", "1");
@@ -655,30 +653,6 @@ namespace NPOI.OpenXmlFormats.Shared
             }
         }
     }
-
-    
-    [Serializable]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math")]
-    public enum ST_OnOff
-    {
-        /// <summary>
-        /// False
-        /// </summary>
-        [XmlEnum("0")]
-        Value0 = 0,
-
-        /// <summary>
-        /// True
-        /// </summary>
-        [XmlEnum("1")]
-        Value1 = 1,
-    
-        on,
-
-    
-        off,
-    }
-
     
     [Serializable]
     
@@ -686,7 +660,6 @@ namespace NPOI.OpenXmlFormats.Shared
     [XmlRoot(Namespace = "http://schemas.openxmlformats.org/officeDocument/2006/math", IsNullable = true)]
     public class CT_BreakBinSub
     {
-
         private ST_BreakBinSub valField;
 
         private bool valFieldSpecified;
