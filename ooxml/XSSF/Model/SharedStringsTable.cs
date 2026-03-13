@@ -384,10 +384,16 @@ namespace NPOI.XSSF.Model
             string fontId = reader.GetAttribute("fontId");
             if (fontId != null && uint.TryParse(fontId, out uint fid)) pr.fontId = fid;
             string type = reader.GetAttribute("type");
-            if (type != null && Enum.TryParse(type, out ST_PhoneticType pt)) pr.type = pt;
+            if(type != null && Enum.TryParse(type, out ST_PhoneticType pt))
+                pr.type = pt;
+            else
+                pr.type= ST_PhoneticType.fullwidthKatakana;
             string alignment = reader.GetAttribute("alignment");
-            if (alignment != null && Enum.TryParse(alignment, out ST_PhoneticAlignment pa)) pr.alignment = pa;
-            return pr;
+            if(alignment != null && Enum.TryParse(alignment, out ST_PhoneticAlignment pa))
+                pr.alignment = pa;
+            else
+                pr.alignment = ST_PhoneticAlignment.left;
+                return pr;
         }
 
         private static void ParseRPrChild(XmlReader reader, string localName, CT_RPrElt rPr)
