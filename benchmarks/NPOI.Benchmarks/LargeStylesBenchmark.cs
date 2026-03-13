@@ -6,7 +6,7 @@ namespace NPOI.Benchmarks;
 /// <summary>
 /// Benchmarks for workbooks that contain a large <c>xl/styles.xml</c>.
 /// The fixture file is generated automatically on first run and reused on
-/// subsequent runs as long as its uncompressed styles.xml is &gt;= 30 MB.
+/// subsequent runs as long as its uncompressed styles.xml is &gt;= 20 MB.
 /// </summary>
 [ShortRunJob]
 [MemoryDiagnoser]
