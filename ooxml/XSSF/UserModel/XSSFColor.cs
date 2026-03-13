@@ -47,18 +47,7 @@ namespace NPOI.XSSF.UserModel
             return color == null ? null : new XSSFColor(color, map);
         }
 
-        /**
-         * Create an instance of XSSFColor from the supplied XML bean
-         */
-        [Obsolete("Remove it at NPOI 2.8.0")]
-        public XSSFColor(CT_Color color)
-            : this(color, new DefaultIndexedColorMap())
-        {
-
-        }
-
-        [Obsolete("we want to have the indexed map, and all calling contexts have access to it.")]
-        [Removal( Version = "4.2")]
+        [Obsolete("we want to have the indexed map, and all calling contexts have access to it. Remove it at POI 4.2.")]
         public XSSFColor(CT_Color color, IIndexedColorMap map)
         {
             this.ctColor = color;
@@ -67,8 +56,7 @@ namespace NPOI.XSSF.UserModel
         /**
          * Create an new instance of XSSFColor
          */
-        [Obsolete("we want to have the indexed map, and all calling contexts have access to it.")]
-        [Removal(Version = "4.2")]
+        [Obsolete("we want to have the indexed map, and all calling contexts have access to it.  Remove it at POI 4.2.")]
         public XSSFColor()
             : this(new CT_Color(), new DefaultIndexedColorMap())
         {
