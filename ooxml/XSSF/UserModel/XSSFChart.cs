@@ -121,6 +121,102 @@ namespace NPOI.XSSF.UserModel
             this.frame = frame;
         }
 
+        /// <summary>
+        /// Returns the title, or null if none is Set
+        /// </summary>
+        public XSSFRichTextString TitleText
+        {
+            get
+            {
+                if(!chart.IsSetTitle())
+                {
+                    return null;
+                }
+
+                CT_Title title = chart.title;
+
+                if(title.tx==null)
+                    return null;
+                if(title.tx.rich!=null)
+                    return new XSSFRichTextString(title.tx.rich.ToString());
+                else
+                    return new XSSFRichTextString("");
+            }
+        }
+
+        /// <summary>
+        /// Get the chart title formula expression if there is one
+        /// </summary>
+        public String TitleFormula
+        {
+            get
+            {
+                if(!GetCTChart().IsSetTitle())
+                {
+                    return null;
+                }
+
+                var title = GetCTChart().title;
+
+                if(!title.IsSetTx())
+                {
+                    return null;
+                }
+
+                var tx = title.tx;
+
+                if(!tx.IsSetStrRef())
+                {
+                    return null;
+                }
+
+                return tx.strRef.f;
+            }
+        }
+        /// <summary>
+        /// Set the formula expression to use for the chart title
+        /// </summary>
+        /// <param name="formula"></param>
+        public void SetTitleFormula(String formula)
+        {
+            CT_Title ctTitle;
+            if(GetCTChart().IsSetTitle())
+            {
+                ctTitle = GetCTChart().title;
+            }
+            else
+            {
+                ctTitle = GetCTChart().AddNewTitle();
+            }
+
+            CT_Tx tx;
+            if(ctTitle.IsSetTx())
+            {
+                tx = ctTitle.tx;
+            }
+            else
+            {
+                tx = ctTitle.AddNewTx();
+            }
+
+            if(tx.IsSetRich())
+            {
+                tx.UnsetRich();
+            }
+
+            CT_StrRef strRef;
+            if(tx.IsSetStrRef())
+            {
+                strRef = tx.strRef;
+            }
+            else
+            {
+                strRef = tx.AddNewStrRef();
+            }
+
+            strRef.f = formula;
+        }
+
         public void SetCTDispBlanksAs(CT_DispBlanksAs disp)
         {
             chart.dispBlanksAs = disp;

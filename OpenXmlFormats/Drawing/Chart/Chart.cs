@@ -3879,6 +3879,17 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             this.richField = new CT_TextBody();
             return this.richField;
         }
+
+        public void UnsetRich()
+        {
+            this.richField=null;
+        }
+
+        public CT_StrRef AddNewStrRef()
+        {
+            this.strRefField = new CT_StrRef();
+            return this.strRefField;
+        }
     }
 
 
@@ -12207,6 +12218,11 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             this.sideWallField = other.sideWallField;
             this.titleField = other.titleField;
             this.view3DField = other.view3DField;
+        }
+
+        public void UnsetTitle()
+        {
+            this.titleField=null;
         }
 
         [XmlElement(Order = 0)]
