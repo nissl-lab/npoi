@@ -241,7 +241,7 @@ namespace TestCases.XSSF.UserModel
             byte[] bytes = Encoding.ASCII.GetBytes(HexDump.ToHex(0xF1F1F1));
             color.rgb = (bytes);
 
-            XSSFColor newColor = new XSSFColor(color, null);
+            XSSFColor newColor = XSSFColor.From(color, null);
             xssfFont.SetColor(newColor);
             ClassicAssert.AreEqual(ctFont.GetColorArray(0).GetRgb()[2], newColor.RGB[2]);
 

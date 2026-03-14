@@ -183,7 +183,7 @@ namespace NPOI.SS.Formula.Eval
                 // multi-column, multi-row area
                 if (ae.ContainsRow(srcCellRow) && ae.ContainsColumn(srcCellCol))
                 {
-                    return ae.GetAbsoluteValue(ae.FirstRow, ae.FirstColumn);
+                    return ae.GetAbsoluteValue(srcCellRow, srcCellCol);
                 }
                 throw EvaluationException.InvalidValue();
             }

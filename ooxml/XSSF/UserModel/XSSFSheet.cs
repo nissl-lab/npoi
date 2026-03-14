@@ -1195,7 +1195,7 @@ namespace NPOI.XSSF.UserModel
                     return null;
                 }
 
-                return new XSSFColor(pr.tabColor, (Workbook as XSSFWorkbook).GetStylesSource().IndexedColors);
+                return XSSFColor.From(pr.tabColor, (Workbook as XSSFWorkbook).GetStylesSource().IndexedColors);
             }
             set
             {
@@ -1559,10 +1559,6 @@ namespace NPOI.XSSF.UserModel
                     //worksheet.getHyperlinks().setHyperlinkArray([]);
                     worksheet.UnsetHyperlinks();
                 }
-                else
-                {
-                    // nothing to do
-                }
             }
 
             foreach(XSSFRow row in _rows.Values)
@@ -1584,7 +1580,7 @@ namespace NPOI.XSSF.UserModel
 
                 if(row.LastCellNum != -1)
                 {
-                    maxCell = Math.Max(maxCell, row.LastCellNum);
+                    maxCell = Math.Max(maxCell, row.LastCellNum - 1);
                 }
             }
 

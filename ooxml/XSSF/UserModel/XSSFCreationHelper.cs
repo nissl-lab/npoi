@@ -74,7 +74,7 @@ namespace NPOI.XSSF.UserModel
 
         public ExtendedColor CreateExtendedColor()
         {
-            return new XSSFColor(new CT_Color(),
+            return XSSFColor.From(new CT_Color(),
                 (workbook as XSSFWorkbook).GetStylesSource().IndexedColors);
         }
 

@@ -82,31 +82,44 @@ namespace NPOI.HSSF.UserModel
             }
             Function result = _instancesByPtgClass[ptg];
 
+            FreeRefFunction udfFunc = null;
+            if(result == null)
+            {
+                if(ptg is AbstractFunctionPtg) {
+                    AbstractFunctionPtg fptg = (AbstractFunctionPtg)ptg;
+                    int functionIndex = fptg.FunctionIndex;
+                    switch(functionIndex)
+                    {
+                        case FunctionMetadataRegistry.FUNCTION_INDEX_INDIRECT:
+                            udfFunc = Indirect.instance;
+                            break;
+                        case FunctionMetadataRegistry.FUNCTION_INDEX_EXTERNAL:
+                            udfFunc = UserDefinedFunction.instance;
+                            break;
+                        default:
+                            result = FunctionEval.GetBasicFunction(functionIndex);
+                            break;
+                    }
+                }
+            }
+
             if(result != null)
             {
                 IEvaluationSheet evalSheet = ec.GetWorkbook().GetSheet(ec.SheetIndex);
                 IEvaluationCell evalCell = evalSheet.GetCell(ec.RowIndex, ec.ColumnIndex);
 
-                if(evalCell.IsPartOfArrayFormulaGroup && result is IArrayFunction)
-                    return ((IArrayFunction) result).EvaluateArray(args, ec.RowIndex, ec.ColumnIndex);
+                if(evalCell != null && (evalCell.IsPartOfArrayFormulaGroup || ec.IsArraymode) 
+                    && result is ArrayFunction)
 
-                return result.Evaluate(args, ec.RowIndex, (short) ec.ColumnIndex);
+                return ((IArrayFunction) result).EvaluateArray(args, ec.RowIndex, ec.ColumnIndex);
+
+                return result.Evaluate(args, ec.RowIndex, ec.ColumnIndex);
             }
-
-            if(ptg is AbstractFunctionPtg)
+            else if(udfFunc != null)
             {
-                AbstractFunctionPtg fptg = (AbstractFunctionPtg)ptg;
-                int functionIndex = fptg.FunctionIndex;
-                switch(functionIndex)
-                {
-                    case FunctionMetadataRegistry.FUNCTION_INDEX_INDIRECT:
-                        return Indirect.instance.Evaluate(args, ec);
-                    case FunctionMetadataRegistry.FUNCTION_INDEX_EXTERNAL:
-                        return UserDefinedFunction.instance.Evaluate(args, ec);
-                }
-
-                return FunctionEval.GetBasicFunction(functionIndex).Evaluate(args, ec.RowIndex, (short) ec.ColumnIndex);
+                return udfFunc.Evaluate(args, ec);
             }
+
             throw new RuntimeException("Unexpected operation ptg class (" + ptg.GetType().Name + ")");
         }
     }

@@ -42,7 +42,7 @@ namespace NPOI.XSSF.UserModel
             get
             {
                 if (!_fill.IsSetPatternFill()) return null;
-                return new XSSFColor(_fill.GetPatternFill().bgColor, _colorMap);
+                return XSSFColor.From(_fill.GetPatternFill().bgColor, _colorMap);
             }
             set
             {
@@ -70,7 +70,7 @@ namespace NPOI.XSSF.UserModel
             {
                 if (!_fill.IsSetPatternFill() || !_fill.GetPatternFill().IsSetFgColor())
                     return null;
-                return new XSSFColor(_fill.GetPatternFill().fgColor, _colorMap);
+                return XSSFColor.From(_fill.GetPatternFill().fgColor, _colorMap);
             }
             set
             {

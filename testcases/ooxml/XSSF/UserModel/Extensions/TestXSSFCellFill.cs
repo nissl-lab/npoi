@@ -91,6 +91,17 @@ namespace TestCases.XSSF.UserModel.Extensions
             ClassicAssert.AreEqual((sbyte)rgbWithTint[2], -80);
 
         }
+
+        [Test]
+        public void TestFillWithoutColors()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("FillWithoutColor.xlsx");
+            XSSFCell cellWithFill = wb.GetSheetAt(0).GetRow(5).GetCell(1) as XSSFCell;
+            XSSFCellStyle style = cellWithFill.CellStyle as XSSFCellStyle;
+            ClassicAssert.IsNotNull(style);
+            ClassicAssert.IsNull(style.FillBackgroundColorColor, "had an empty background color");
+            ClassicAssert.IsNull(style.FillBackgroundXSSFColor, "had an empty background color");
+        }
     }
 
 }

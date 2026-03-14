@@ -71,7 +71,7 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Get the number of the first cell Contained in this row.
+        /// Get the 0-based number of the first cell contained in this row.
         /// </summary>
         /// <returns>short representing the first logical cell in the row,
         /// or -1 if the row does not contain any cells.</returns>

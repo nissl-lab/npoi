@@ -422,7 +422,7 @@ namespace NPOI.XSSF.UserModel
                         _cell.t = ST_CellType.s;
                         XSSFRichTextString rt = (XSSFRichTextString)str;
                         rt.SetStylesTableReference(_stylesSource);
-                        int sRef = _sharedStringSource.AddEntry(rt.GetCTRst());
+                        int sRef = _sharedStringSource.AddSharedStringItem(rt);
                         _cell.v=sRef.ToString();
                     }
                     break;
@@ -588,8 +588,25 @@ namespace NPOI.XSSF.UserModel
                 //validate through the FormulaParser
                 FormulaParser.Parse(formula, fpb, formulaType, wb.GetSheetIndex(this.Sheet), RowIndex);
             }
-            CT_CellFormula f = new CT_CellFormula { Value = formula };
-            _cell.f= f;
+
+            CT_CellFormula f;
+            if(_cell.IsSetF())
+            {
+                f = _cell.f;
+                f.Value = formula;
+                if(f.t == ST_CellFormulaType.shared)
+                {
+                    (Row.Sheet as XSSFSheet).OnReadCell(this);
+                }
+            }
+            else
+            {
+                f = new CT_CellFormula {
+                    Value = formula
+                };
+                _cell.f = f;
+            }
+
             if (_cell.IsSetV()) _cell.unsetV();
             return this;
         }
@@ -972,7 +989,7 @@ namespace NPOI.XSSF.UserModel
                         String str = ConvertCellValueToString();
                         XSSFRichTextString rt = new XSSFRichTextString(str);
                         rt.SetStylesTableReference(_stylesSource);
-                        int sRef = _sharedStringSource.AddEntry(rt.GetCTRst());
+                        int sRef = _sharedStringSource.AddSharedStringItem(rt);
                         _cell.v= sRef.ToString();
                     }
                     _cell.t= (ST_CellType.s);

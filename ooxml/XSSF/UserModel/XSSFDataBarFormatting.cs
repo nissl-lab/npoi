@@ -95,7 +95,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                return new XSSFColor(_databar.color, _colorMap);
+                return XSSFColor.From(_databar.color, _colorMap);
             }
             set
             {

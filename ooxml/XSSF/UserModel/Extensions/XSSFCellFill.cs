@@ -59,7 +59,7 @@ namespace NPOI.XSSF.UserModel.Extensions
             if (ptrn == null) return null;
 
             CT_Color CT_Color = ptrn.bgColor;
-            return CT_Color == null ? null : new XSSFColor(CT_Color, _indexedColorMap);
+            return XSSFColor.From(CT_Color, _indexedColorMap);
         }
 
         /**
@@ -84,7 +84,15 @@ namespace NPOI.XSSF.UserModel.Extensions
         public void SetFillBackgroundColor(XSSFColor color)
         {
             CT_PatternFill ptrn = EnsureCTPatternFill();
-            ptrn.bgColor = (color.GetCTColor());
+            
+            if(color == null)
+            {
+                ptrn.UnsetBgColor();
+            }
+            else
+            {
+                ptrn.bgColor = (color.GetCTColor());
+            }
         }
 
         /**
@@ -98,7 +106,7 @@ namespace NPOI.XSSF.UserModel.Extensions
             if (ptrn == null) return null;
 
             CT_Color ctColor = ptrn.fgColor;
-            return ctColor == null ? null : new XSSFColor(ctColor, _indexedColorMap);
+            return XSSFColor.From(ctColor, _indexedColorMap);
         }
 
         /**
@@ -121,7 +129,15 @@ namespace NPOI.XSSF.UserModel.Extensions
         public void SetFillForegroundColor(XSSFColor color)
         {
             CT_PatternFill ptrn = EnsureCTPatternFill();
-            ptrn.fgColor = color.GetCTColor();
+            
+            if(color == null)
+            {
+                ptrn.UnsetFgColor();
+            }
+            else
+            {
+                ptrn.fgColor = color.GetCTColor();
+            }
         }
 
         /**
