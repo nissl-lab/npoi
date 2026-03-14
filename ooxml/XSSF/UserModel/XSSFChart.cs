@@ -128,17 +128,17 @@ namespace NPOI.XSSF.UserModel
 
         protected override POIXMLRelation GetChartRelation()
         {
-            return null;
+            return XSSFRelation.CHART;
         }
 
         protected override POIXMLRelation GetChartWorkbookRelation()
         {
-            return null;
+            return XSSFRelation.CHART;
         }
 
         protected override POIXMLFactory GetChartFactory()
         {
-            return null;
+            return XSSFFactory.GetInstance();
         }
     }
 }

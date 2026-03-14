@@ -609,7 +609,7 @@ namespace NPOI.XDDF.UserModel.Chart
         /// <remarks>
         /// @since POI 4.0.0
         /// </remarks>
-        public PackageRelationship createRelationshipInChart(POIXMLRelation chartRelation, POIXMLFactory chartFactory,
+        public PackageRelationship CreateRelationshipInChart(POIXMLRelation chartRelation, POIXMLFactory chartFactory,
             int chartIndex)
         {
             documentPart = CreateRelationship(chartRelation, chartFactory, chartIndex, true).DocumentPart;
@@ -633,11 +633,11 @@ namespace NPOI.XDDF.UserModel.Chart
         /// <remarks>
         /// @since POI 4.0.0
         /// </remarks>
-        private PackagePart createWorksheetPart(POIXMLRelation chartRelation, POIXMLRelation chartWorkbookRelation,
+        private PackagePart CreateWorksheetPart(POIXMLRelation chartRelation, POIXMLRelation chartWorkbookRelation,
             POIXMLFactory chartFactory)
         {
 
-            PackageRelationship xlsx = createRelationshipInChart(chartWorkbookRelation, chartFactory, chartIndex);
+            PackageRelationship xlsx = CreateRelationshipInChart(chartWorkbookRelation, chartFactory, chartIndex);
             this.SetExternalId(xlsx.Id);
             return GetTargetPart(xlsx);
         }
@@ -664,7 +664,7 @@ namespace NPOI.XDDF.UserModel.Chart
                 POIXMLFactory chartFactory = GetChartFactory();
                 if(chartRelation != null && chartWorkbookRelation != null && chartFactory != null)
                 {
-                    worksheetPart = createWorksheetPart(chartRelation, chartWorkbookRelation, chartFactory);
+                    worksheetPart = CreateWorksheetPart(chartRelation, chartWorkbookRelation, chartFactory);
                 }
                 else
                 {
@@ -689,7 +689,7 @@ namespace NPOI.XDDF.UserModel.Chart
         /// <summary>
         /// </summary>
         /// <returns>the chart workbook relation in the implementing subclass.</returns>
-        /// <remarks
+        /// <remarks>
         /// @since POI 4.0.0
         /// </remarks>
         protected abstract POIXMLRelation GetChartWorkbookRelation();
@@ -843,7 +843,7 @@ namespace NPOI.XDDF.UserModel.Chart
             XSSFRow row = GetRow(sheet, 0);
             XSSFCell cell = GetCell(row, column);
             cell.SetCellValue(title);
-            updateSheetTable(sheet.GetTables()[0].GetCTTable(), title, column);
+            UpdateSheetTable(sheet.GetTables()[0].GetCTTable(), title, column);
             return new CellReference(sheet.SheetName, 0, column, true, true);
         }
 
@@ -859,7 +859,7 @@ namespace NPOI.XDDF.UserModel.Chart
         /// <param name="index">
         /// index of column
         /// </param>
-        private static void updateSheetTable(OpenXmlFormats.Spreadsheet.CT_Table ctTable,
+        private static void UpdateSheetTable(OpenXmlFormats.Spreadsheet.CT_Table ctTable,
             string title, int index)
         {
             CT_TableColumns tableColumnList = ctTable.tableColumns;
