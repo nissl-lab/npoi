@@ -24,7 +24,8 @@ namespace TestCases.XSSF.UserModel.Charts
     using NPOI.XDDF.UserModel.Chart;
     using NPOI.XSSF;
     using NPOI.XSSF.UserModel;
-    using NUnit.Framework;using NUnit.Framework.Legacy;
+    using NUnit.Framework;
+    using NUnit.Framework.Legacy;
 
     /**
      * Test Get/set chart title.
@@ -42,12 +43,12 @@ namespace TestCases.XSSF.UserModel.Charts
             // Create a row and Put some cells in it. Rows are 0 based.
             IRow row;
             ICell cell;
-            for (int rowIndex = 0; rowIndex < NUM_OF_ROWS; rowIndex++)
+            for(int rowIndex = 0; rowIndex < NUM_OF_ROWS; rowIndex++)
             {
-                row = sheet.CreateRow((short)rowIndex);
-                for (int colIndex = 0; colIndex < NUM_OF_COLUMNS; colIndex++)
+                row = sheet.CreateRow((short) rowIndex);
+                for(int colIndex = 0; colIndex < NUM_OF_COLUMNS; colIndex++)
                 {
-                    cell = row.CreateCell((short)colIndex);
+                    cell = row.CreateCell((short) colIndex);
                     cell.SetCellValue(colIndex * (rowIndex + 1));
                 }
             }
@@ -83,14 +84,14 @@ namespace TestCases.XSSF.UserModel.Charts
         private XSSFChart GetChartFromWorkbook(IWorkbook wb, String sheetName)
         {
             ISheet sheet = wb.GetSheet(sheetName);
-            if (sheet is XSSFSheet)
+            if(sheet is XSSFSheet)
             {
                 XSSFSheet xsheet = (XSSFSheet)sheet;
                 XSSFDrawing drawing = xsheet.CreateDrawingPatriarch() as XSSFDrawing;
-                if (drawing != null)
+                if(drawing != null)
                 {
                     List<XSSFChart> charts = drawing.GetCharts();
-                    if (charts != null && charts.Count > 0)
+                    if(charts != null && charts.Count > 0)
                     {
                         return charts[0];
                     }
@@ -102,16 +103,21 @@ namespace TestCases.XSSF.UserModel.Charts
         [Test]
         public void TestNewChart()
         {
-            IWorkbook wb = CreateWorkbookWithChart();
+            using IWorkbook wb = CreateWorkbookWithChart();
             XSSFChart chart = GetChartFromWorkbook(wb, "linechart");
             ClassicAssert.IsNotNull(chart);
-            ClassicAssert.IsNull(chart.Title);
+            ClassicAssert.IsNull(chart.GetTitle());
             String myTitle = "My chart title";
-            chart.SetTitle(myTitle);
-            XSSFRichTextString queryTitle = chart.Title;
-            ClassicAssert.IsNotNull(queryTitle);
-            ClassicAssert.AreEqual(myTitle, queryTitle.ToString());
-            wb.Close();
+            chart.SetTitleText(myTitle);
+            ClassicAssert.AreEqual(myTitle, chart.TitleText.String);
+
+            String myTitleFormula = "1 & \" and \" & 2";
+            chart.SetTitleFormula(myTitleFormula);
+            // setting formula should unset text, but since there is a formula, returns an empty string
+            ClassicAssert.AreEqual("", chart.TitleText.ToString());
+            String titleFormula = chart.TitleFormula;
+            ClassicAssert.NotNull(titleFormula);
+            ClassicAssert.AreEqual(myTitleFormula, titleFormula);
         }
 
         [Test]
@@ -120,14 +126,14 @@ namespace TestCases.XSSF.UserModel.Charts
             IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("chartTitle_withTitle.xlsx");
             XSSFChart chart = GetChartFromWorkbook(wb, "Sheet1");
             ClassicAssert.IsNotNull(chart);
-            XSSFRichTextString originalTitle = chart.Title;
+            XSSFRichTextString originalTitle = chart.TitleText;
             ClassicAssert.IsNotNull(originalTitle);
             String myTitle = "My chart title";
-            ClassicAssert.IsFalse(myTitle.Equals(originalTitle.ToString()));
-            chart.SetTitle(myTitle);
-            XSSFRichTextString queryTitle = chart.Title;
+            ClassicAssert.IsFalse(myTitle.Equals(originalTitle.String));
+            chart.SetTitleText(myTitle);
+            XSSFRichTextString queryTitle = chart.TitleText;
             ClassicAssert.IsNotNull(queryTitle);
-            ClassicAssert.AreEqual(myTitle, queryTitle.ToString());
+            ClassicAssert.AreEqual(myTitle, queryTitle.String);
             wb.Close();
         }
 
@@ -137,13 +143,54 @@ namespace TestCases.XSSF.UserModel.Charts
             IWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("chartTitle_noTitle.xlsx");
             XSSFChart chart = GetChartFromWorkbook(wb, "Sheet1");
             ClassicAssert.IsNotNull(chart);
-            ClassicAssert.IsNull(chart.Title);
+            ClassicAssert.IsNull(chart.TitleText);
+            ClassicAssert.IsNull(chart.GetTitle());
             String myTitle = "My chart title";
-            chart.SetTitle(myTitle);
-            XSSFRichTextString queryTitle = chart.Title;
+            chart.SetTitleText(myTitle);
+            XSSFRichTextString queryTitle = chart.TitleText;
             ClassicAssert.IsNotNull(queryTitle);
             ClassicAssert.AreEqual(myTitle, queryTitle.ToString());
             wb.Close();
+        }
+
+        [Test]
+        public void TestExistingChartWithFormulaTitle()
+        {
+            using var wb = XSSFTestDataSamples.OpenSampleWorkbook("chartTitle_withTitleFormula.xlsx");
+            XSSFChart chart = GetChartFromWorkbook(wb, "Sheet1");
+            ClassicAssert.IsNotNull(chart);
+            XSSFRichTextString originalTitle = chart.TitleText;
+            ClassicAssert.IsNotNull(originalTitle);
+            ClassicAssert.AreEqual("", originalTitle.ToString());
+            String formula = chart.TitleFormula;
+            ClassicAssert.IsNotNull(formula);
+            ClassicAssert.AreEqual("Sheet1!$E$1", formula);
+        }
+
+        [Test]
+        public void TestRemovingFromExistingChartNoTitle()
+        {
+            using XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("chartTitle_noTitle.xlsx");
+            XSSFChart chart = GetChartFromWorkbook(wb, "Sheet1");
+            ClassicAssert.IsNotNull(chart);
+            ClassicAssert.IsNull(chart.TitleText);
+            ClassicAssert.IsNull(chart.GetTitle());
+            chart.RemoveTitle();
+            ClassicAssert.IsNull(chart.TitleText);
+            ClassicAssert.IsNull(chart.GetTitle());
+        }
+
+        [Test]
+        public void TestRemovingFromExistingChartWithTitle()
+        {
+            using var wb = XSSFTestDataSamples.OpenSampleWorkbook("chartTitle_withTitle.xlsx");
+            XSSFChart chart = GetChartFromWorkbook(wb, "Sheet1");
+            ClassicAssert.IsNotNull(chart);
+            ClassicAssert.IsNotNull(chart.TitleText);
+            ClassicAssert.IsNotNull(chart.GetTitle());
+            chart.RemoveTitle();
+            ClassicAssert.IsNull(chart.TitleText);
+            ClassicAssert.IsNull(chart.GetTitle());
         }
     }
 }

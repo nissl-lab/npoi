@@ -22,22 +22,20 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
+using NPOI.Openxml4Net.Exceptions;
+using NPOI.OpenXml4Net.Exceptions;
+using NPOI.OpenXml4Net.OPC;
+using NPOI.OpenXmlFormats.Dml;
+using NPOI.OpenXmlFormats.Dml.Chart;
+using NPOI.OpenXmlFormats.Spreadsheet;
+using NPOI.SS.Util;
+using NPOI.Util.Optional;
+using NPOI.XDDF.UserModel.Text;
+using NPOI.XSSF.UserModel;
+using System.Xml;
+
 namespace NPOI.XDDF.UserModel.Chart
 {
-    using NPOI.Openxml4Net.Exceptions;
-    using NPOI.OpenXml4Net.Exceptions;
-    using NPOI.OpenXml4Net.OPC;
-    using NPOI.OpenXmlFormats.Dml;
-    using NPOI.OpenXmlFormats.Dml.Chart;
-    using NPOI.OpenXmlFormats.Spreadsheet;
-    using NPOI.SS.Util;
-    using NPOI.Util;
-    using NPOI.Util.Optional;
-    using NPOI.XDDF.UserModel;
-    using NPOI.XDDF.UserModel.Text;
-    using NPOI.XSSF.UserModel;
-    using System.Xml;
-
     public abstract class XDDFChart : POIXMLDocumentPart, ITextContainer
     {
         /// <summary>
@@ -179,6 +177,14 @@ namespace NPOI.XDDF.UserModel.Chart
             chart.sideWall.thickness.val = (uint) thickness;
         }
 
+        /// <summary>
+        /// Remove the chart title.
+        /// </summary>
+        public void RemoveTitle()
+        {
+            SetAutoTitleDeleted(true);
+        }
+
         public void SetAutoTitleDeleted(bool deleted)
         {
             if(!chart.IsSetAutoTitleDeleted())
@@ -186,6 +192,10 @@ namespace NPOI.XDDF.UserModel.Chart
                 chart.autoTitleDeleted = new OpenXmlFormats.Dml.Chart.CT_Boolean();
             }
             chart.autoTitleDeleted.val = deleted ? 1 : 0;
+            if(deleted && chart.IsSetTitle())
+            {
+                chart.UnsetTitle();
+            }
         }
 
         /// <summary>
