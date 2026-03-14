@@ -18,6 +18,7 @@
 namespace NPOI.XSSF.Streaming
 {
     using NPOI.SS.UserModel;
+    using NPOI.XDDF.UserModel.Chart;
     using NPOI.XSSF.UserModel;
     using System.Collections;
     using System.Collections.Generic;
@@ -46,7 +47,7 @@ namespace NPOI.XSSF.Streaming
         {
             return _drawing.CreateCellComment(anchor);
         }
-        public IChart CreateChart(IClientAnchor anchor)
+        public XDDFChart CreateChart(IClientAnchor anchor)
         {
             return _drawing.CreateChart(anchor);
         }

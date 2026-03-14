@@ -18,9 +18,10 @@
 using NPOI.SS.Util;
 using NPOI.SS.UserModel;
 using System;
-using NUnit.Framework;using NUnit.Framework.Legacy;
-using NPOI.SS.UserModel.Charts;
+using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using NPOI.XSSF.UserModel;
+using NPOI.XDDF.UserModel.Chart;
 
 namespace TestCases.XSSF.UserModel.Charts
 {
@@ -28,7 +29,7 @@ namespace TestCases.XSSF.UserModel.Charts
      * Tests for XSSFScatterChartData.
      */
     [TestFixture]
-    public class TestXSSFScatterChartData
+    public class TestXDDFScatterChartData
     {
         private static Object[][] plotData = new Object[][]
         {
@@ -41,26 +42,26 @@ namespace TestCases.XSSF.UserModel.Charts
         {
             IWorkbook wb = new XSSFWorkbook();
             ISheet sheet = new SheetBuilder(wb, plotData).Build();
-            IDrawing<IShape> Drawing = sheet.CreateDrawingPatriarch();
+            var Drawing = sheet.CreateDrawingPatriarch() as XSSFDrawing;
             IClientAnchor anchor = Drawing.CreateAnchor(0, 0, 0, 0, 1, 1, 10, 30);
-            IChart chart = Drawing.CreateChart(anchor);
+            var chart = Drawing.CreateChart(anchor);
 
-            IChartAxis bottomAxis = chart.ChartAxisFactory.CreateValueAxis(AxisPosition.Bottom);
-            IChartAxis leftAxis = chart.ChartAxisFactory.CreateValueAxis(AxisPosition.Left);
+            var bottomAxis = chart.CreateValueAxis(AxisPosition.Bottom);
+            var leftAxis = chart.CreateValueAxis(AxisPosition.Left);
 
-            IScatterChartData<string, double> scatterChartData =
-                chart.ChartDataFactory.CreateScatterChartData<string, double>();
+            var scatterChartData =
+                chart.CreateData<string, double>(ChartTypes.SCATTER,bottomAxis, leftAxis);
 
-            IChartDataSource<String> xs = DataSources.FromStringCellRange(sheet, CellRangeAddress.ValueOf("A1:J1"));
-            IChartDataSource<double> ys = DataSources.FromNumericCellRange(sheet, CellRangeAddress.ValueOf("A2:J2"));
-            IScatterChartSeries<string, double> series = scatterChartData.AddSeries(xs, ys);
+            var xs = XDDFDataSourcesFactory.FromStringCellRange(sheet, CellRangeAddress.ValueOf("A1:J1"));
+            var ys = XDDFDataSourcesFactory.FromNumericCellRange(sheet, CellRangeAddress.ValueOf("A2:J2"));
+            var series = scatterChartData.AddSeries(xs, ys);
 
             ClassicAssert.IsNotNull(series);
 
             ClassicAssert.AreEqual(1, scatterChartData.GetSeries().Count);
             ClassicAssert.IsTrue(scatterChartData.GetSeries().Contains(series));
 
-            chart.Plot(scatterChartData, bottomAxis, leftAxis);
+            chart.Plot(scatterChartData);
             wb.Close();
         }
     }

@@ -15,10 +15,11 @@
    limitations under the License.
 ==================================================================== */
 
-using NUnit.Framework;using NUnit.Framework.Legacy;
+using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using NPOI.SS.UserModel;
-using NPOI.SS.UserModel.Charts;
 using NPOI.XSSF.UserModel;
+using NPOI.XDDF.UserModel.Chart;
 
 namespace TestCases.XSSF.UserModel.Charts
 {
@@ -26,17 +27,17 @@ namespace TestCases.XSSF.UserModel.Charts
      * Tests ChartLegend
      */
     [TestFixture]
-    public class TestXSSFChartLegend
+    public class TestXDDFChartLegend
     {
         [Test]
         public void TestLegendPositionAccessMethods()
         {
             IWorkbook wb = new XSSFWorkbook();
             ISheet sheet = wb.CreateSheet();
-            IDrawing<IShape> Drawing = sheet.CreateDrawingPatriarch();
-            IClientAnchor anchor = Drawing.CreateAnchor(0, 0, 0, 0, 1, 1, 10, 30);
-            IChart chart = Drawing.CreateChart(anchor);
-            IChartLegend legend = chart.GetOrCreateLegend();
+            var drawing = sheet.CreateDrawingPatriarch();
+            var anchor = drawing.CreateAnchor(0, 0, 0, 0, 1, 1, 10, 30);
+            var chart = (drawing as XSSFDrawing).CreateChart(anchor);
+            var legend = chart.GetOrAddLegend();
 
             legend.Position = LegendPosition.TopRight;
             ClassicAssert.AreEqual(LegendPosition.TopRight, legend.Position);
@@ -50,10 +51,10 @@ namespace TestCases.XSSF.UserModel.Charts
             // Arrange
             IWorkbook wb = new XSSFWorkbook();
             ISheet sheet = wb.CreateSheet();
-            IDrawing<IShape> Drawing = sheet.CreateDrawingPatriarch();
-            IClientAnchor anchor = Drawing.CreateAnchor(0, 0, 0, 0, 1, 1, 10, 30);
-            IChart chart = Drawing.CreateChart(anchor);
-            IChartLegend legend = chart.GetOrCreateLegend();
+            var Drawing = sheet.CreateDrawingPatriarch();
+            var anchor = Drawing.CreateAnchor(0, 0, 0, 0, 1, 1, 10, 30);
+            var chart = (Drawing as XSSFDrawing).CreateChart(anchor);
+            var legend = chart.GetOrAddLegend();
 
             // Act
 
@@ -69,10 +70,10 @@ namespace TestCases.XSSF.UserModel.Charts
             // Arrange
             IWorkbook wb = new XSSFWorkbook();
             ISheet sheet = wb.CreateSheet();
-            IDrawing<IShape> Drawing = sheet.CreateDrawingPatriarch();
-            IClientAnchor anchor = Drawing.CreateAnchor(0, 0, 0, 0, 1, 1, 10, 30);
-            IChart chart = Drawing.CreateChart(anchor);
-            IChartLegend legend = chart.GetOrCreateLegend();
+            var Drawing = sheet.CreateDrawingPatriarch();
+            var anchor = Drawing.CreateAnchor(0, 0, 0, 0, 1, 1, 10, 30);
+            var chart = (Drawing as XSSFDrawing).CreateChart(anchor);
+            var legend = chart.GetOrAddLegend();
 
             // Act
             legend.IsOverlay = (/*setter*/true);

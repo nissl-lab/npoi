@@ -65,7 +65,7 @@ namespace NPOI.XDDF.UserModel.Chart
                     chart.AddNewAxId().val = (uint) id;
                 }
             }
-            DefineAxes(chart.GetAxIdArray(), categories, values);
+            DefineAxis(chart.GetAxIdArray(), categories, values);
         }
         public override void SetVaryColors(bool varyColors)
         {

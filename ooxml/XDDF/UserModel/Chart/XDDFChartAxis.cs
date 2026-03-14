@@ -91,27 +91,27 @@ namespace NPOI.XDDF.UserModel.Chart
         /// <summary>
         /// </summary>
         /// <returns>axis id</returns>
-        public long GetId()
+        public long Id
         {
-            return GetCTAxId().val;
+            get
+            {
+                return GetCTAxId().val;
+            }
         }
 
         /// <summary>
+        /// axis position
         /// </summary>
-        /// <returns>axis position</returns>
-        public AxisPosition GetPosition()
+        public AxisPosition Position
         {
-            return AxisPositionExtensions.ValueOf(GetCTAxPos().val);
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="position">
-        /// new axis position
-        /// </param>
-        public void SetPosition(AxisPosition position)
-        {
-            GetCTAxPos().val = position.ToST_AxPos();
+            get
+            {
+                return AxisPositionExtensions.ValueOf(GetCTAxPos().val);
+            }
+            set 
+            {
+                GetCTAxPos().val = value.ToST_AxPos();
+            }
         }
 
         /// <summary>
@@ -122,22 +122,19 @@ namespace NPOI.XDDF.UserModel.Chart
         public abstract bool HasNumberFormat();
 
         /// <summary>
-        /// </summary>
-        /// <param name="format">
         /// axis number format
-        /// </param>
-        public void SetNumberFormat(string format)
-        {
-            GetCTNumFmt().formatCode = format;
-            GetCTNumFmt().sourceLinked = true;
-        }
-
-        /// <summary>
         /// </summary>
-        /// <returns>axis number format</returns>
-        public string GetNumberFormat()
+        public string NumberFormat
         {
-            return GetCTNumFmt().formatCode;
+            get
+            {
+                return GetCTNumFmt().formatCode;
+            }
+            set 
+            {
+                GetCTNumFmt().formatCode = value;
+                GetCTNumFmt().sourceLinked = true;
+            }
         }
 
         /// <summary>
@@ -152,41 +149,35 @@ namespace NPOI.XDDF.UserModel.Chart
         private static  double MAX_LOG_BASE = 1000.0;
 
         /// <summary>
+        /// axis log base or Double.NaN if not set,  a number between 2 and 1000 (inclusive)
         /// </summary>
-        /// <param name="logBase">
-        /// a number between 2 and 1000 (inclusive)
-        /// </param>
-        /// <exception cref="ArgumentException">
-        /// if log base not within allowed range
-        /// </exception>
-        public void SetLogBase(double logBase)
+        public double LogBase
         {
-            if(logBase < MIN_LOG_BASE || MAX_LOG_BASE < logBase)
+            get
             {
-                throw new ArgumentException("Axis log base must be between 2 and 1000 (inclusive), got: " + logBase);
+                CT_Scaling scaling = GetCTScaling();
+                if(scaling.IsSetLogBase())
+                {
+                    return scaling.logBase.val;
+                }
+                return Double.NaN;
             }
-            CT_Scaling scaling = GetCTScaling();
-            if(scaling.IsSetLogBase())
+            set 
             {
-                scaling.logBase.val = logBase;
+                if(value < MIN_LOG_BASE || MAX_LOG_BASE < value)
+                {
+                    throw new ArgumentException("Axis log base must be between 2 and 1000 (inclusive), got: " + value);
+                }
+                CT_Scaling scaling = GetCTScaling();
+                if(scaling.IsSetLogBase())
+                {
+                    scaling.logBase.val = value;
+                }
+                else
+                {
+                    scaling.AddNewLogBase().val = value;
+                }
             }
-            else
-            {
-                scaling.AddNewLogBase().val = logBase;
-            }
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <returns>axis log base or NaN if not Set</returns>
-        public double GetLogBase()
-        {
-            CT_Scaling scaling = GetCTScaling();
-            if(scaling.IsSetLogBase())
-            {
-                return scaling.logBase.val;
-            }
-            return Double.NaN;
         }
 
         /// <summary>
@@ -198,46 +189,43 @@ namespace NPOI.XDDF.UserModel.Chart
         }
 
         /// <summary>
+        /// axis minimum or NaN if not set
         /// </summary>
-        /// <param name="min">
-        /// axis minimum
-        /// </param>
-        public void SetMinimum(double min)
+        public double Minimum
         {
-            CT_Scaling scaling = GetCTScaling();
-            if(Double.IsNaN(min))
+            get
             {
+                CT_Scaling scaling = GetCTScaling();
                 if(scaling.IsSetMin())
                 {
-                    scaling.UnsetMin();
-                }
-            }
-            else
-            {
-                if(scaling.IsSetMin())
-                {
-                    scaling.min.val = min;
+                    return scaling.min.val;
                 }
                 else
                 {
-                    scaling.AddNewMin().val = min;
+                    return Double.NaN;
                 }
             }
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <returns>axis minimum or NaN if not Set</returns>
-        public double GetMinimum()
-        {
-            CT_Scaling scaling = GetCTScaling();
-            if(scaling.IsSetMin())
+            set 
             {
-                return scaling.min.val;
-            }
-            else
-            {
-                return Double.NaN;
+                CT_Scaling scaling = GetCTScaling();
+                if(Double.IsNaN(value))
+                {
+                    if(scaling.IsSetMin())
+                    {
+                        scaling.UnsetMin();
+                    }
+                }
+                else
+                {
+                    if(scaling.IsSetMin())
+                    {
+                        scaling.min.val = value;
+                    }
+                    else
+                    {
+                        scaling.AddNewMin().val = value;
+                    }
+                }
             }
         }
 
@@ -250,91 +238,82 @@ namespace NPOI.XDDF.UserModel.Chart
         }
 
         /// <summary>
+        /// axis maximum or double.NaN if not set
         /// </summary>
-        /// <param name="max">
-        /// axis maximum
-        /// </param>
-        public void SetMaximum(double max)
+        public double Maximum
         {
-            CT_Scaling scaling = GetCTScaling();
-            if(Double.IsNaN(max))
+            get
             {
+                CT_Scaling scaling = GetCTScaling();
                 if(scaling.IsSetMax())
                 {
-                    scaling.UnsetMax();
-                }
-            }
-            else
-            {
-                if(scaling.IsSetMax())
-                {
-                    scaling.max.val = max;
+                    return scaling.max.val;
                 }
                 else
                 {
-                    scaling.AddNewMax().val = max;
+                    return Double.NaN;
+                }
+            }
+            set 
+            {
+                CT_Scaling scaling = GetCTScaling();
+                if(Double.IsNaN(value))
+                {
+                    if(scaling.IsSetMax())
+                    {
+                        scaling.UnsetMax();
+                    }
+                }
+                else
+                {
+                    if(scaling.IsSetMax())
+                    {
+                        scaling.max.val = value;
+                    }
+                    else
+                    {
+                        scaling.AddNewMax().val = value;
+                    }
                 }
             }
         }
 
         /// <summary>
-        /// </summary>
-        /// <returns>axis maximum or NaN if not Set</returns>
-        public double GetMaximum()
-        {
-            CT_Scaling scaling = GetCTScaling();
-            if(scaling.IsSetMax())
-            {
-                return scaling.max.val;
-            }
-            else
-            {
-                return Double.NaN;
-            }
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <returns>axis orientation</returns>
-        public AxisOrientation GetOrientation()
-        {
-            return AxisOrientationExtensions.ValueOf(GetCTScaling().orientation.val);
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="orientation">
         /// axis orientation
-        /// </param>
-        public void SetOrientation(AxisOrientation orientation)
+        /// </summary>
+        public AxisOrientation Orientation
         {
-            CT_Scaling scaling = GetCTScaling();
-            if(scaling.IsSetOrientation())
+            get
             {
-                scaling.orientation.val = orientation.ToST_Orientation();
+                return AxisOrientationExtensions.ValueOf(GetCTScaling().orientation.val);
             }
-            else
+            set
             {
-                scaling.AddNewOrientation().val = orientation.ToST_Orientation();
+                CT_Scaling scaling = GetCTScaling();
+                if(scaling.IsSetOrientation())
+                {
+                    scaling.orientation.val = value.ToST_Orientation();
+                }
+                else
+                {
+                    scaling.AddNewOrientation().val = value.ToST_Orientation();
+                }
             }
         }
 
         /// <summary>
-        /// </summary>
-        /// <returns>axis cross type</returns>
-        public AxisCrosses GetCrosses()
-        {
-            return AxisCrossesExtensions.ValueOf(GetCTCrosses().val);
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="crosses">
         /// axis cross type
-        /// </param>
-        public void SetCrosses(AxisCrosses crosses)
+        /// </summary>
+        public AxisCrosses Crosses
         {
-            GetCTCrosses().val = crosses.ToST_Crosses();
+            get
+            {
+                return AxisCrossesExtensions.ValueOf(GetCTCrosses().val);
+            }
+            set 
+            {
+                GetCTCrosses().val = value.ToST_Crosses();
+            }
         }
 
         /// <summary>
@@ -343,60 +322,52 @@ namespace NPOI.XDDF.UserModel.Chart
         /// <param name="axis">
         /// that this axis should cross
         /// </param>
-        public abstract void crossAxis(XDDFChartAxis axis);
+        public abstract void CrossAxis(XDDFChartAxis axis);
+
 
         /// <summary>
-        /// </summary>
-        /// <returns>visibility of the axis.</returns>
-        public bool IsVisible()
-        {
-            return !(GetDelete().val > 0);
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="value">
         /// visibility of the axis.
-        /// </param>
-        public void SetVisible(bool value)
+        /// </summary>
+        public bool IsVisible
         {
-            GetDelete().val = value ? 0 : 1;
+            get
+            {
+                return !(GetDelete().val > 0);
+            }
+            set
+            {
+                GetDelete().val = value ? 0 : 1;
+            }
         }
 
         /// <summary>
+        /// major tick mark.
         /// </summary>
-        /// <returns>major tick mark.</returns>
-        public AxisTickMark GetMajorTickMark()
+        public AxisTickMark MajorTickMark
         {
-            return AxisTickMarkExtensions.ValueOf(GetMajorCTTickMark().val);
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="tickMark">
-        /// major tick mark type.
-        /// </param>
-        public void SetMajorTickMark(AxisTickMark tickMark)
-        {
-            GetMajorCTTickMark().val = tickMark.ToST_TickMark();
+            get
+            {
+                return AxisTickMarkExtensions.ValueOf(GetMajorCTTickMark().val);
+            }
+            set 
+            {
+                GetMajorCTTickMark().val = value.ToST_TickMark();
+            }
         }
 
         /// <summary>
         /// </summary>
         /// <returns>minor tick mark.</returns>
-        public AxisTickMark GetMinorTickMark()
+        public AxisTickMark MinorTickMark
         {
-            return AxisTickMarkExtensions.ValueOf(GetMinorCTTickMark().val);
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="tickMark">
-        /// minor tick mark type.
-        /// </param>
-        public void SetMinorTickMark(AxisTickMark tickMark)
-        {
-            GetMinorCTTickMark().val =tickMark.ToST_TickMark();
+            get
+            {
+                return AxisTickMarkExtensions.ValueOf(GetMinorCTTickMark().val);
+            }
+            set 
+            {
+                GetMinorCTTickMark().val =value.ToST_TickMark();
+            }
         }
 
         protected CT_ShapeProperties GetOrAddLinesProperties(CT_ChartLines gridlines)

@@ -79,7 +79,7 @@ namespace TestCases.XSSF.UserModel
             ClassicAssert.AreEqual(1, (cs.CreateDrawingPatriarch() as XSSFDrawing).GetCharts().Count);
 
             XSSFChart chart = (cs.CreateDrawingPatriarch() as XSSFDrawing).GetCharts()[0];
-            ClassicAssert.IsNull(chart.Title);
+            ClassicAssert.IsNull(chart.GetTitle());
         }
     }
 }

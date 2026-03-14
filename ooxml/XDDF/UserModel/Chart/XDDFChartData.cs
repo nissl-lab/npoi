@@ -41,15 +41,15 @@ namespace NPOI.XDDF.UserModel.Chart
             this.series = [];
         }
 
-        protected void DefineAxes(CT_UnsignedInt[] axes, Dictionary<long, XDDFChartAxis> categories,
+        protected void DefineAxis(CT_UnsignedInt[] axes, Dictionary<long, XDDFChartAxis> categories,
                 Dictionary<long, XDDFValueAxis> values)
         {
             List<XDDFValueAxis> list = new List<XDDFValueAxis>(axes.Length);
             foreach(CT_UnsignedInt axe in axes)
             {
                 long axisId = axe.val;
-                XDDFChartAxis category = categories[axisId];
-                if(category == null)
+                XDDFChartAxis category = null;
+                if(!categories.TryGetValue(axisId, out category))
                 {
                     XDDFValueAxis axis = values[axisId];
                     if(axis != null)
@@ -70,7 +70,7 @@ namespace NPOI.XDDF.UserModel.Chart
             return categoryAxis;
         }
 
-        public List<XDDFValueAxis> GetValueAxes()
+        public List<XDDFValueAxis> GetValueAxis()
         {
             return valueAxes;
         }
@@ -119,7 +119,10 @@ namespace NPOI.XDDF.UserModel.Chart
                 this.categoryData = category;
                 this.valuesData = values;
             }
-
+            public void SetTitle(string title)
+            {
+                this.SetTitle(title, null);
+            }
             public void SetTitle(string title, CellReference titleRef)
             {
                 if(titleRef == null)

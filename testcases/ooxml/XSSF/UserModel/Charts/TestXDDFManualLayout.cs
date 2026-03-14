@@ -15,29 +15,30 @@
    limitations under the License.
 ==================================================================== */
 
-using NUnit.Framework;using NUnit.Framework.Legacy;
+using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using NPOI.SS.UserModel;
-using NPOI.SS.UserModel.Charts;
 using NPOI.XSSF.UserModel;
+using NPOI.XDDF.UserModel.Chart;
 
 namespace TestCases.XSSF.UserModel.Charts
 {
     [TestFixture]
-    public class TestXSSFManualLayout
+    public class TestXDDFManualLayout
     {
         private IWorkbook wb;
-        private IManualLayout layout;
+        private XDDFManualLayout layout;
 
         [SetUp]
         public void CreateEmptyLayout()
         {
             wb = new XSSFWorkbook();
             ISheet sheet = wb.CreateSheet();
-            IDrawing<IShape> drawing = sheet.CreateDrawingPatriarch();
+            var drawing = sheet.CreateDrawingPatriarch() as XSSFDrawing;
             IClientAnchor anchor = drawing.CreateAnchor(0, 0, 0, 0, 1, 1, 10, 30);
-            IChart chart = drawing.CreateChart(anchor);
-            IChartLegend legend = chart.GetOrCreateLegend();
-            layout = legend.GetManualLayout();
+            var chart = drawing.CreateChart(anchor);
+            var legend = chart.GetOrAddLegend();
+            layout = legend.GetOrAddManualLayout();
         }
 
         [TearDown]
@@ -58,32 +59,32 @@ namespace TestCases.XSSF.UserModel.Charts
             LayoutMode nonDefaultMode = LayoutMode.Factor;
             LayoutTarget nonDefaultTarget = LayoutTarget.Outer;
 
-            layout.SetWidthRatio(newRatio);
-            ClassicAssert.IsTrue(layout.GetWidthRatio() == newRatio);
+            layout.WidthRatio = (newRatio);
+            ClassicAssert.IsTrue(layout.WidthRatio == newRatio);
 
-            layout.SetHeightRatio(newRatio);
-            ClassicAssert.IsTrue(layout.GetHeightRatio() == newRatio);
+            layout.HeightRatio = (newRatio);
+            ClassicAssert.IsTrue(layout.HeightRatio == newRatio);
 
-            layout.SetX(newCoordinate);
-            ClassicAssert.IsTrue(layout.GetX() == newCoordinate);
+            layout.X= (newCoordinate);
+            ClassicAssert.IsTrue(layout.X == newCoordinate);
 
-            layout.SetY(newCoordinate);
-            ClassicAssert.IsTrue(layout.GetY() == newCoordinate);
+            layout.Y= (newCoordinate);
+            ClassicAssert.IsTrue(layout.Y == newCoordinate);
 
-            layout.SetXMode(nonDefaultMode);
-            ClassicAssert.IsTrue(layout.GetXMode() == nonDefaultMode);
+            layout.XMode= (nonDefaultMode);
+            ClassicAssert.IsTrue(layout.XMode == nonDefaultMode);
 
-            layout.SetYMode(nonDefaultMode);
-            ClassicAssert.IsTrue(layout.GetYMode() == nonDefaultMode);
+            layout.YMode=(nonDefaultMode);
+            ClassicAssert.IsTrue(layout.YMode == nonDefaultMode);
 
-            layout.SetWidthMode(nonDefaultMode);
-            ClassicAssert.IsTrue(layout.GetWidthMode() == nonDefaultMode);
+            layout.WidthMode=(nonDefaultMode);
+            ClassicAssert.IsTrue(layout.WidthMode == nonDefaultMode);
 
-            layout.SetHeightMode(nonDefaultMode);
-            ClassicAssert.IsTrue(layout.GetHeightMode() == nonDefaultMode);
+            layout.HeightMode=(nonDefaultMode);
+            ClassicAssert.IsTrue(layout.HeightMode == nonDefaultMode);
 
-            layout.SetTarget(nonDefaultTarget);
-            ClassicAssert.IsTrue(layout.GetTarget() == nonDefaultTarget);
+            layout.Target=(nonDefaultTarget);
+            ClassicAssert.IsTrue(layout.Target == nonDefaultTarget);
         }
 
         /*
@@ -93,19 +94,19 @@ namespace TestCases.XSSF.UserModel.Charts
         [Test]
         public void TestDefaultValues()
         {
-            ClassicAssert.IsNotNull(layout.GetTarget());
-            ClassicAssert.IsNotNull(layout.GetXMode());
-            ClassicAssert.IsNotNull(layout.GetYMode());
-            ClassicAssert.IsNotNull(layout.GetHeightMode());
-            ClassicAssert.IsNotNull(layout.GetWidthMode());
+            ClassicAssert.IsNotNull(layout.Target);
+            ClassicAssert.IsNotNull(layout.XMode);
+            ClassicAssert.IsNotNull(layout.YMode);
+            ClassicAssert.IsNotNull(layout.HeightMode);
+            ClassicAssert.IsNotNull(layout.WidthMode);
             /*
              * According to interface, 0.0 should be returned for
              * unInitialized double properties.
              */
-            ClassicAssert.IsTrue(layout.GetX() == 0.0);
-            ClassicAssert.IsTrue(layout.GetY() == 0.0);
-            ClassicAssert.IsTrue(layout.GetWidthRatio() == 0.0);
-            ClassicAssert.IsTrue(layout.GetHeightRatio() == 0.0);
+            ClassicAssert.IsTrue(layout.X == 0.0);
+            ClassicAssert.IsTrue(layout.Y == 0.0);
+            ClassicAssert.IsTrue(layout.WidthRatio == 0.0);
+            ClassicAssert.IsTrue(layout.HeightRatio == 0.0);
         }
     }
 }

@@ -42,6 +42,7 @@ using ST_EditAs = NPOI.OpenXmlFormats.Dml.Spreadsheet.ST_EditAs;
 using System.Xml.Linq;
 using System.Diagnostics;
 using System.Data;
+using NPOI.XDDF.UserModel.Chart;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -4296,14 +4297,14 @@ namespace NPOI.XSSF.UserModel
                     continue;
                 }
                 
-                var newXSSFChart = newSheetDrawing.CreateChart(newAnchor) as XSSFChart;
+                var newXSSFChart = (newSheetDrawing as XSSFDrawing).CreateChart(newAnchor) as XSSFChart;
                 var linkedChart = sourceCharts.FirstOrDefault(x=>x.GetPackageRelationship().Id == id);
                 if(linkedChart == null)
                     continue;
                 var newXSSFChartAxis = newXSSFChart.GetAxis();
                 foreach(var axis in linkedChart.GetAxis())
                 {
-                    newXSSFChartAxis.Add(axis);   
+                    newXSSFChartAxis.Add(axis);
                 }
 
                 var linkedCTChart = linkedChart.GetCTChart();

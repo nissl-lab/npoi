@@ -16,28 +16,29 @@
 ==================================================================== */
 
 using System;
-using NUnit.Framework;using NUnit.Framework.Legacy;
+using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using NPOI.SS.UserModel;
-using NPOI.SS.UserModel.Charts;
 using NPOI.XSSF.UserModel;
+using NPOI.XDDF.UserModel.Chart;
 
 namespace TestCases.XSSF.UserModel.Charts
 {
     [TestFixture]
-    public class TestXSSFChartAxis
+    public class TestXDDFChartAxis
     {
 
         private static double EPSILON = 1E-7;
-        private IChartAxis axis;
+        private XDDFValueAxis axis;
 
-        public TestXSSFChartAxis()
+        public TestXDDFChartAxis()
         {
             IWorkbook wb = new XSSFWorkbook();
             ISheet sheet = wb.CreateSheet();
-            IDrawing<IShape> Drawing = sheet.CreateDrawingPatriarch();
-            IClientAnchor anchor = Drawing.CreateAnchor(0, 0, 0, 0, 1, 1, 10, 30);
-            IChart chart = Drawing.CreateChart(anchor);
-            axis = chart.ChartAxisFactory.CreateValueAxis(AxisPosition.Bottom);
+            var drawing = sheet.CreateDrawingPatriarch() as XSSFDrawing;
+            IClientAnchor anchor = drawing.CreateAnchor(0, 0, 0, 0, 1, 1, 10, 30);
+            var chart = drawing.CreateChart(anchor);
+            axis = chart.CreateValueAxis(AxisPosition.Bottom);
         }
         [Test]
         public void TestLogBaseIllegalArgument()
@@ -45,7 +46,7 @@ namespace TestCases.XSSF.UserModel.Charts
             ArgumentException iae = null;
             try
             {
-                axis.LogBase=(0.0);
+                axis.LogBase= 0.0;
             }
             catch (ArgumentException e)
             {
@@ -56,7 +57,7 @@ namespace TestCases.XSSF.UserModel.Charts
             iae = null;
             try
             {
-                axis.LogBase=(30000.0);
+                axis.LogBase=30000.0;
             }
             catch (ArgumentException e)
             {

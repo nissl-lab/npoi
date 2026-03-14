@@ -159,13 +159,13 @@ namespace NPOI.XDDF.UserModel.Chart
             return new StringArrayDataSource(elements, dataRange, col);
         }
 
-        public static IXDDFNumericalDataSource<Double> FromNumericCellRange(XSSFSheet sheet,
+        public static IXDDFNumericalDataSource<Double> FromNumericCellRange(ISheet sheet,
                 CellRangeAddress cellRangeAddress)
         {
             return new NumericalCellRangeDataSource(sheet, cellRangeAddress);
         }
 
-        public static XDDFCategoryDataSource FromStringCellRange(XSSFSheet sheet, CellRangeAddress cellRangeAddress)
+        public static XDDFCategoryDataSource FromStringCellRange(ISheet sheet, CellRangeAddress cellRangeAddress)
         {
             return new StringCellRangeDataSource(sheet, cellRangeAddress);
         }
@@ -297,12 +297,12 @@ namespace NPOI.XDDF.UserModel.Chart
 
         private abstract class AbstractCellRangeDataSource<T> : IXDDFDataSource<T>
         {
-            private  XSSFSheet sheet;
+            private  ISheet sheet;
             private  CellRangeAddress cellRangeAddress;
             private  int numOfCells;
             private XSSFFormulaEvaluator evaluator;
 
-            internal AbstractCellRangeDataSource(XSSFSheet sheet, CellRangeAddress cellRangeAddress)
+            internal AbstractCellRangeDataSource(ISheet sheet, CellRangeAddress cellRangeAddress)
             {
                 this.sheet = sheet;
                 // Make copy since CellRangeAddress is mutable.
@@ -357,7 +357,7 @@ namespace NPOI.XDDF.UserModel.Chart
         private class NumericalCellRangeDataSource : AbstractCellRangeDataSource<Double>
                 , IXDDFNumericalDataSource<Double>
         {
-            internal NumericalCellRangeDataSource(XSSFSheet sheet, CellRangeAddress cellRangeAddress)
+            internal NumericalCellRangeDataSource(ISheet sheet, CellRangeAddress cellRangeAddress)
                     : base(sheet, cellRangeAddress)
             {
 
@@ -398,7 +398,7 @@ namespace NPOI.XDDF.UserModel.Chart
         private class StringCellRangeDataSource : AbstractCellRangeDataSource<String>
                 , XDDFCategoryDataSource
         {
-            internal StringCellRangeDataSource(XSSFSheet sheet, CellRangeAddress cellRangeAddress)
+            internal StringCellRangeDataSource(ISheet sheet, CellRangeAddress cellRangeAddress)
                     : base(sheet, cellRangeAddress)
             {
 

@@ -13,6 +13,8 @@
     <Compile Remove="POIFS\Crypt\Dsig\KeyInfoKeySelector.cs" />
     <Compile Remove="POIFS\Crypt\Dsig\Services\RelationshipTransformService.cs" />
     <Compile Remove="Properties\AssemblyInfoDotnet2.cs" />
+    <Compile Remove="XSSF\UserModel\Charts\XSSFAreaChartData.cs" />
+    <Compile Remove="XSSF\UserModel\Charts\XSSFColumnChartData.cs" />
     <Compile Remove="XSSF\UserModel\Charts\XSSFNumberCache.cs" />
   </ItemGroup>
 
@@ -32,6 +34,10 @@
 
   <ItemGroup>
     <Compile Include="..\main\Polyfills.cs" Link="Polyfills.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="XSSF\UserModel\Charts\" />
   </ItemGroup>
 
 </Project>

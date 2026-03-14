@@ -34,9 +34,12 @@ namespace NPOI.XDDF.UserModel.Chart
         public XDDFPieChartData(CT_PieChart chart)
         {
             this.chart = chart;
-            foreach(CT_PieSer series in chart.ser)
+            if(chart.ser!=null)
             {
-                this.series.Add(new Series(series, series.cat, series.val));
+                foreach(CT_PieSer series in chart.ser)
+                {
+                    this.series.Add(new Series(series, series.cat, series.val));
+                }
             }
         }
         public override void SetVaryColors(bool varyColors)

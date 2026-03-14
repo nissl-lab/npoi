@@ -41,6 +41,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         public CT_BarChart()
         {
+            groupingField = new CT_BarGrouping();
         }
         public static CT_BarChart Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
@@ -301,6 +302,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         public int SizeOfAxIdArray()
         {
+            if(axIdField==null)
+                return 0;
             return axIdField.Count;
         }
 

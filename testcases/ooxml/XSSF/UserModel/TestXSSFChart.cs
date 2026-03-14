@@ -18,7 +18,6 @@
 using NUnit.Framework;using NUnit.Framework.Legacy;
 using NPOI.SS.UserModel;
 using System.Collections.Generic;
-using NPOI.SS.UserModel.Charts;
 using NPOI.XSSF.UserModel;
 using NPOI.XSSF;
 using NPOI.OpenXmlFormats.Dml.Spreadsheet;
@@ -58,13 +57,13 @@ namespace TestCases.XSSF.UserModel
 
             // Check the titles
             XSSFChart chart = (s2.CreateDrawingPatriarch() as XSSFDrawing).GetCharts()[(0)];
-            ClassicAssert.AreEqual(null, chart.Title);
+            ClassicAssert.IsNull(chart.TitleText);
 
             chart = (s2.CreateDrawingPatriarch() as XSSFDrawing).GetCharts()[(1)];
-            ClassicAssert.AreEqual("Pie Chart Title Thingy", chart.Title.String);
+            ClassicAssert.AreEqual("Pie Chart Title Thingy", chart.TitleText.String);
 
             chart = (s3.CreateDrawingPatriarch() as XSSFDrawing).GetCharts()[(0)];
-            ClassicAssert.AreEqual("Sheet 3 Chart with Title", chart.Title.String);
+            ClassicAssert.AreEqual("Sheet 3 Chart with Title", chart.TitleText.String);
 
             ClassicAssert.IsNotNull(XSSFTestDataSamples.WriteOutAndReadBack(wb));
         }
@@ -81,7 +80,7 @@ namespace TestCases.XSSF.UserModel
             ClassicAssert.AreEqual(1, d1.GetCharts().Count);
             
             ClassicAssert.IsNotNull(c1.GetGraphicFrame());
-            ClassicAssert.IsNotNull(c1.GetOrCreateLegend());
+            ClassicAssert.IsNotNull(c1.GetOrAddLegend());
 
             XSSFClientAnchor a2 = new XSSFClientAnchor(0, 0, 0, 0, 1, 11, 10, 60);
             XSSFChart c2 = (XSSFChart)d1.CreateChart(a2);
@@ -142,7 +141,7 @@ namespace TestCases.XSSF.UserModel
             XSSFDrawing Drawing = xsh.CreateDrawingPatriarch() as XSSFDrawing;
             XSSFChart chart = Drawing.GetCharts()[(0)];
 
-            List<IChartAxis> axisList = chart.GetAxis();
+            var axisList = chart.GetAxis();
 
             ClassicAssert.AreEqual(4, axisList.Count);
             ClassicAssert.IsNotNull(axisList[(0)]);

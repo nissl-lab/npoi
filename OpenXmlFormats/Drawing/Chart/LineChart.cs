@@ -1268,6 +1268,8 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         public int SizeOfAxIdArray()
         {
+            if(this.axIdField==null)
+                return 0;
             return this.axIdField.Count;
         }
 
