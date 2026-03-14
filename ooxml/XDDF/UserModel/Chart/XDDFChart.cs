@@ -349,7 +349,7 @@ namespace NPOI.XDDF.UserModel.Chart
             return new XDDFChartLegend(chart);
         }
 
-        public void deleteLegend()
+        public void DeleteLegend()
         {
             if(chart.IsSetLegend())
             {

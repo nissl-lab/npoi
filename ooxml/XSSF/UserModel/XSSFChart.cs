@@ -89,24 +89,6 @@ namespace NPOI.XSSF.UserModel
             pageMargins.footer = 0.30;
             printSettings.AddNewPageSetup();
         }
-        /// <summary>
-        /// Return the underlying CTChartSpace bean, the root element of the SpreadsheetML Chart part.
-        /// </summary>
-        /// <returns></returns>
-        public CT_ChartSpace GetCTChartSpace()
-        {
-            return chartSpace;
-        }
-
-        /// <summary>
-        /// Return the underlying CTChart bean, within the Chart Space
-        /// </summary>
-        /// <returns></returns>
-        public CT_Chart GetCTChart()
-        {
-            return chart;
-        }
-
 
         protected internal override void Commit()
         {
@@ -138,136 +120,10 @@ namespace NPOI.XSSF.UserModel
         {
             this.frame = frame;
         }
-        /**
-         * @return true if only visible cells will be present on the chart,
-         *         false otherwise
-         */
-        public bool IsPlotOnlyVisibleCells()
-        {
-            return chart.plotVisOnly.val==1?true:false;
-        }
-
-        /**
-         * @param plotVisOnly a flag specifying if only visible cells should be
-         *        present on the chart
-         */
-        public void SetPlotOnlyVisibleCells(bool plotVisOnly)
-        {
-            chart.plotVisOnly.val = plotVisOnly?1:0;
-        }
-
-        /**
-         * Returns the title, or null if none is Set
-         */
-        public XSSFRichTextString Title
-        {
-            get
-            {
-                if (!chart.IsSetTitle())
-                {
-                    return null;
-                }
-
-                CT_Title title = chart.title;
-
-                if (title.tx==null)
-                    return null;
-                if(title.tx.rich==null)
-                    return null;
-                return new XSSFRichTextString(title.tx.rich.ToString());
-            }
-        }
-
-        /**
-         * Sets the title text.
-         */
-        public void SetTitle(string newTitle)
-        {
-            CT_Title ctTitle;
-            if (chart.IsSetTitle())
-            {
-                ctTitle = chart.title;
-            }
-            else
-            {
-                ctTitle = chart.AddNewTitle();
-            }
-
-            CT_Tx tx;
-            if (ctTitle.IsSetTx())
-            {
-                tx = ctTitle.tx;
-            }
-            else
-            {
-                tx = ctTitle.AddNewTx();
-            }
-
-            if (tx.IsSetStrRef())
-            {
-                tx.UnsetStrRef();
-            }
-
-            CT_TextBody rich;
-            if (tx.IsSetRich())
-            {
-                rich = tx.rich;
-            }
-            else
-            {
-                rich = tx.AddNewRich();
-                rich.AddNewBodyPr();  // body properties must exist (but can be empty)
-            }
-
-            CT_TextParagraph para;
-            if (rich.SizeOfPArray() > 0)
-            {
-                para = rich.GetPArray(0);
-            }
-            else
-            {
-                para = rich.AddNewP();
-            }
-
-            if (para.SizeOfRArray() > 0)
-            {
-                CT_RegularTextRun run = para.GetRArray(0);
-                run.t = (newTitle);
-            }
-            else if (para.SizeOfFldArray() > 0)
-            {
-                OpenXmlFormats.Dml.CT_TextField fld = para.GetFldArray(0);
-                fld.t = (newTitle);
-            }
-            else
-            {
-                CT_RegularTextRun run = para.AddNewR();
-                run.t = (newTitle);
-            }
-        }
-
-        public void DeleteLegend()
-        {
-            if (chart.IsSetLegend())
-            {
-                chart.UnsetLegend();
-            }
-        }
 
         public void SetCTDispBlanksAs(CT_DispBlanksAs disp)
         {
             chart.dispBlanksAs = disp;
-        }
-
-        private bool HasAxis()
-        {
-            CT_PlotArea ctPlotArea = chart.plotArea;
-            int totalAxisCount =
-                (ctPlotArea.valAx == null ? 0 : ctPlotArea.valAx.Count) +
-                (ctPlotArea.catAx == null ? 0 : ctPlotArea.catAx.Count) +
-                (ctPlotArea.dateAx == null ? 0 : ctPlotArea.dateAx.Count) +
-                (ctPlotArea.serAx == null ? 0 : ctPlotArea.serAx.Count);
-            return totalAxisCount > 0;
         }
 
         protected override POIXMLRelation GetChartRelation()
