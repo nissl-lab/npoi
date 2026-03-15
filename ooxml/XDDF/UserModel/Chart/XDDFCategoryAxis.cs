@@ -190,6 +190,17 @@ namespace NPOI.XDDF.UserModel.Chart
             MajorTickMark = AxisTickMark.Cross;
             MinorTickMark = AxisTickMark.None;
         }
+
+        public override void SetTitle(string text)
+        {
+            if(!ctCatAx.IsSetTitle())
+            {
+                ctCatAx.AddNewTitle();
+            }
+            XDDFTitle title = new XDDFTitle(null, ctCatAx.title);
+            title.SetOverlay(false);
+            title.SetText(text);
+        }
     }
 }
 

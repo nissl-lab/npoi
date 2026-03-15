@@ -3215,6 +3215,17 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                 this.extLstField = value;
             }
         }
+
+        public bool IsSetTitle()
+        {
+            return this.titleField!=null;
+        }
+
+        public CT_Title AddNewTitle()
+        {
+            this.titleField= new CT_Title();
+            return this.titleField;
+        }
     }
 
 
@@ -4129,13 +4140,19 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         public int SizeOfPtArray()
         {
+            if(pt==null)
+                return 0;
             return pt.Count;
         }
 
         public CT_StrVal GetPtArray(int index)
         {
+            if(this.pt==null)
+                return null;
+
             if(index < 0 || index >= this.pt.Count)
                 throw new IndexOutOfRangeException();
+
             return pt[index];
         }
 
@@ -4646,57 +4663,57 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
         }
         public static CT_DateAx Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
-            if (node == null)
+            if(node == null)
                 return null;
             CT_DateAx ctObj = new CT_DateAx();
             ctObj.extLst = new List<CT_Extension>();
-            foreach (XmlNode childNode in node.ChildNodes)
+            foreach(XmlNode childNode in node.ChildNodes)
             {
-                if (childNode.LocalName == "axId")
+                if(childNode.LocalName == "axId")
                     ctObj.axId = CT_UnsignedInt.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "scaling")
+                else if(childNode.LocalName == "scaling")
                     ctObj.scaling = CT_Scaling.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "delete")
+                else if(childNode.LocalName == "delete")
                     ctObj.delete = CT_Boolean.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "axPos")
+                else if(childNode.LocalName == "axPos")
                     ctObj.axPos = CT_AxPos.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "majorGridlines")
+                else if(childNode.LocalName == "majorGridlines")
                     ctObj.majorGridlines = CT_ChartLines.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "minorGridlines")
+                else if(childNode.LocalName == "minorGridlines")
                     ctObj.minorGridlines = CT_ChartLines.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "title")
+                else if(childNode.LocalName == "title")
                     ctObj.title = CT_Title.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "numFmt")
+                else if(childNode.LocalName == "numFmt")
                     ctObj.numFmt = CT_NumFmt.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "majorTickMark")
+                else if(childNode.LocalName == "majorTickMark")
                     ctObj.majorTickMark = CT_TickMark.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "minorTickMark")
+                else if(childNode.LocalName == "minorTickMark")
                     ctObj.minorTickMark = CT_TickMark.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "tickLblPos")
+                else if(childNode.LocalName == "tickLblPos")
                     ctObj.tickLblPos = CT_TickLblPos.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "spPr")
+                else if(childNode.LocalName == "spPr")
                     ctObj.spPr = CT_ShapeProperties.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "txPr")
+                else if(childNode.LocalName == "txPr")
                     ctObj.txPr = CT_TextBody.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "crossAx")
+                else if(childNode.LocalName == "crossAx")
                     ctObj.crossAx = CT_UnsignedInt.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "crosses")
+                else if(childNode.LocalName == "crosses")
                     ctObj.crosses = CT_Crosses.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "auto")
+                else if(childNode.LocalName == "auto")
                     ctObj.auto = CT_Boolean.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "lblOffset")
+                else if(childNode.LocalName == "lblOffset")
                     ctObj.lblOffset = CT_LblOffset.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "baseTimeUnit")
+                else if(childNode.LocalName == "baseTimeUnit")
                     ctObj.baseTimeUnit = CT_TimeUnit.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "majorUnit")
+                else if(childNode.LocalName == "majorUnit")
                     ctObj.majorUnit = CT_AxisUnit.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "majorTimeUnit")
+                else if(childNode.LocalName == "majorTimeUnit")
                     ctObj.majorTimeUnit = CT_TimeUnit.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "minorUnit")
+                else if(childNode.LocalName == "minorUnit")
                     ctObj.minorUnit = CT_AxisUnit.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "minorTimeUnit")
+                else if(childNode.LocalName == "minorTimeUnit")
                     ctObj.minorTimeUnit = CT_TimeUnit.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "extLst")
+                else if(childNode.LocalName == "extLst")
                     ctObj.extLst.Add(CT_Extension.Parse(childNode, namespaceManager));
             }
             return ctObj;
@@ -4708,53 +4725,53 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
         {
             sw.WriteStart("c", nodeName);
             sw.Write('>');
-            if (this.axId != null)
+            if(this.axId != null)
                 this.axId.Write(sw, "axId");
-            if (this.scaling != null)
+            if(this.scaling != null)
                 this.scaling.Write(sw, "scaling");
-            if (this.delete != null)
+            if(this.delete != null)
                 this.delete.Write(sw, "delete");
-            if (this.axPos != null)
+            if(this.axPos != null)
                 this.axPos.Write(sw, "axPos");
-            if (this.majorGridlines != null)
+            if(this.majorGridlines != null)
                 this.majorGridlines.Write(sw, "majorGridlines");
-            if (this.minorGridlines != null)
+            if(this.minorGridlines != null)
                 this.minorGridlines.Write(sw, "minorGridlines");
-            if (this.title != null)
+            if(this.title != null)
                 this.title.Write(sw, "title");
-            if (this.numFmt != null)
+            if(this.numFmt != null)
                 this.numFmt.Write(sw, "numFmt");
-            if (this.majorTickMark != null)
+            if(this.majorTickMark != null)
                 this.majorTickMark.Write(sw, "majorTickMark");
-            if (this.minorTickMark != null)
+            if(this.minorTickMark != null)
                 this.minorTickMark.Write(sw, "minorTickMark");
-            if (this.tickLblPos != null)
+            if(this.tickLblPos != null)
                 this.tickLblPos.Write(sw, "tickLblPos");
-            if (this.spPr != null)
+            if(this.spPr != null)
                 this.spPr.Write(sw, "spPr");
-            if (this.txPr != null)
+            if(this.txPr != null)
                 this.txPr.Write(sw, "txPr");
-            if (this.crossAx != null)
+            if(this.crossAx != null)
                 this.crossAx.Write(sw, "crossAx");
-            if (this.crosses != null)
+            if(this.crosses != null)
                 this.crosses.Write(sw, "crosses");
-            if (this.auto != null)
+            if(this.auto != null)
                 this.auto.Write(sw, "auto");
-            if (this.lblOffset != null)
+            if(this.lblOffset != null)
                 this.lblOffset.Write(sw, "lblOffset");
-            if (this.baseTimeUnit != null)
+            if(this.baseTimeUnit != null)
                 this.baseTimeUnit.Write(sw, "baseTimeUnit");
-            if (this.majorUnit != null)
+            if(this.majorUnit != null)
                 this.majorUnit.Write(sw, "majorUnit");
-            if (this.majorTimeUnit != null)
+            if(this.majorTimeUnit != null)
                 this.majorTimeUnit.Write(sw, "majorTimeUnit");
-            if (this.minorUnit != null)
+            if(this.minorUnit != null)
                 this.minorUnit.Write(sw, "minorUnit");
-            if (this.minorTimeUnit != null)
+            if(this.minorTimeUnit != null)
                 this.minorTimeUnit.Write(sw, "minorTimeUnit");
-            if (this.extLst != null)
+            if(this.extLst != null)
             {
-                foreach (CT_Extension x in this.extLst)
+                foreach(CT_Extension x in this.extLst)
                 {
                     x.Write(sw, "extLst");
                 }
@@ -5194,10 +5211,21 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             this.majorUnitField = new CT_AxisUnit();
             return this.majorUnitField;
         }
+
+        public bool IsSetTitle()
+        {
+            return this.titleField!=null;
+        }
+
+        public CT_Title AddNewTitle()
+        {
+            this.titleField= new CT_Title();
+            return this.titleField;
+        }
     }
 
 
-    [Serializable]
+     [Serializable]
 
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
@@ -5902,6 +5930,17 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
         {
             this.spPrField = new CT_ShapeProperties();
             return this.spPrField;
+        }
+
+        public bool IsSetTitle()
+        {
+            return this.titleField!=null;
+        }
+
+        public CT_Title AddNewTitle()
+        {
+            this.titleField= new CT_Title();
+            return this.titleField;
         }
     }
 
@@ -6767,6 +6806,17 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
         {
             this.majorUnitField = new CT_AxisUnit();
             return this.majorUnitField;
+        }
+
+        public bool IsSetTitle()
+        {
+            return this.titleField!=null;
+        }
+
+        public CT_Title AddNewTitle()
+        {
+            this.titleField= new CT_Title();
+            return this.titleField;
         }
     }
 
@@ -9451,7 +9501,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         public CT_NumVal GetPtArray(int index)
         {
-            if(index<= 0 || index>=this.pt.Count)
+            if(index< 0 || index>=this.pt.Count)
                 throw new IndexOutOfRangeException();
             return ptField[index];
         }
