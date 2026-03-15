@@ -48,8 +48,8 @@ namespace TestCases.XWPF.UserModel
             List<XWPFChart> charts = sampleDoc.GetCharts();
             XWPFChart chart=charts[0];
             ClassicAssert.AreEqual(XWPFRelation.CHART.ContentType, chart.GetPackagePart().ContentType);
-            ClassicAssert.AreEqual("/word/document.xml", chart.GetParent().GetPackagePart().PartName);
-            ClassicAssert.AreEqual("/word/charts/chart1.xml", chart.GetPackagePart().PartName);
+            ClassicAssert.AreEqual("/word/document.xml", chart.GetParent().GetPackagePart().PartName.ToString());
+            ClassicAssert.AreEqual("/word/charts/chart1.xml", chart.GetPackagePart().PartName.ToString());
         }
     }
 }
