@@ -96,9 +96,13 @@ namespace NPOI.XWPF.UserModel
             using var text = ZString.CreateStringBuilder();
             List<object> pictTextObjs = new List<object>();
             foreach(CT_Picture pic in r.GetPictList())
+            {
                 pictTextObjs.Add(pic);
+            }
             foreach(CT_Drawing draw in drawingList)
+            {
                 pictTextObjs.Add(draw);
+            }
             //foreach (object o in pictTextObjs)
             //{
             //todo:: imlement this
@@ -125,12 +129,24 @@ namespace NPOI.XWPF.UserModel
             charts = new List<XWPFChart>();
             foreach(object o in pictTextObjs)
             {
-                foreach(OpenXmlFormats.Dml.Picture.CT_Picture pict in GetCTPictures(o))
+                List<OpenXmlFormats.Dml.Picture.CT_Picture> ctPics = new List<OpenXmlFormats.Dml.Picture.CT_Picture>();
+                List<CT_RelId> chartRels = new List<CT_RelId>();
+                HandleCTPicturesAndCharts(o, ctPics, chartRels);
+                foreach(var pict in ctPics)
                 {
                     XWPFPicture picture = new XWPFPicture(pict, this);
                     pictures.Add(picture);
                 }
-            }
+                foreach(var chartRel in chartRels)
+                {
+                    POIXMLDocumentPart chart = Document.GetRelationById(chartRel.id);
+                    if(chart is XWPFChart)
+                    {
+                        charts.Add((XWPFChart) chart);
+                    }
+                }
+            }   
+        
 
         }
 
@@ -143,53 +159,41 @@ namespace NPOI.XWPF.UserModel
         {
         }
 
-        private static List<NPOI.OpenXmlFormats.Dml.Picture.CT_Picture> GetCTPictures(object o)
+        private static void HandleCTPicturesAndCharts(object o, List<NPOI.OpenXmlFormats.Dml.Picture.CT_Picture> pictures, List<CT_RelId> chartsRels )
         {
-            List<NPOI.OpenXmlFormats.Dml.Picture.CT_Picture> pictures = new List<NPOI.OpenXmlFormats.Dml.Picture.CT_Picture>();
-            //XmlObject[] picts = o.SelectPath("declare namespace pic='"+CT_Picture.type.Name.NamespaceURI+"' .//pic:pic");
-            //XmlElement[] picts = o.Any;
-            //foreach (XmlElement pict in picts)
-            //{
-            //if(pict is XmlAnyTypeImpl) {
-            //    // Pesky XmlBeans bug - see Bugzilla #49934
-            //    try {
-            //        pict = CT_Picture.Factory.Parse( pict.ToString() );
-            //    } catch(XmlException e) {
-            //        throw new POIXMLException(e);
-            //    }
-            //}
-            //if (pict is NPOI.OpenXmlFormats.Dml.CT_Picture)
-            //{
-            //    pictures.Add((NPOI.OpenXmlFormats.Dml.CT_Picture)pict);
-            //}
-            //}
             if(o is CT_Drawing drawing)
             {
                 if(drawing.inline != null)
                 {
                     foreach(CT_Inline inline in drawing.inline)
                     {
-                        GetPictures(inline.graphic.graphicData, pictures);
+                        HandlePicturesAndCharts(inline.graphic.graphicData, pictures, chartsRels);
                     }
                 }
             }
             else if(o is CT_GraphicalObjectData data)
             {
-                GetPictures(data, pictures);
+                HandlePicturesAndCharts(data, pictures, chartsRels);
             }
-            return pictures;
         }
 
-        private static void GetPictures(CT_GraphicalObjectData god, List<NPOI.OpenXmlFormats.Dml.Picture.CT_Picture> pictures)
+        private static void HandlePicturesAndCharts(CT_GraphicalObjectData god, List<NPOI.OpenXmlFormats.Dml.Picture.CT_Picture> pictures, List<CT_RelId> chartsRels)
         {
             foreach(string el in god.Any)
             {
                 XmlDocument xmlDoc = new XmlDocument();
                 xmlDoc.LoadXml(el);
-
-                XmlNode node = xmlDoc.DocumentElement;
-                var pict = NPOI.OpenXmlFormats.Dml.Picture.CT_Picture.Parse(node, POIXMLDocumentPart.NamespaceManager);
-                pictures.Add(pict);
+                var node = xmlDoc.DocumentElement;
+                if(node.LocalName=="pic")
+                {
+                    var pict = NPOI.OpenXmlFormats.Dml.Picture.CT_Picture.Parse(node, POIXMLDocumentPart.NamespaceManager);
+                    pictures.Add(pict);
+                }
+                else if(node.LocalName=="chart")
+                {
+                    var rel = CT_RelId.Parse(node, POIXMLDocumentPart.NamespaceManager);
+                    chartsRels.Add(rel);
+                }
             }
         }
 
@@ -487,7 +491,7 @@ namespace NPOI.XWPF.UserModel
         {
             get
             {
-                StringBuilder text = new StringBuilder();
+                var text = new StringBuilder();
                 HandleRun(run, text);
                 return text.ToString();
             }
@@ -499,26 +503,35 @@ namespace NPOI.XWPF.UserModel
         public override string ToString()
         {
             string phonetic = GetPhonetic();
-            StringBuilder text = new StringBuilder();
+            var text = new StringBuilder();
             if(phonetic.Length > 0)
             {
-                return HandleRun(run, text) +" ("+phonetic+")";
+                HandleRun(run, text);
+                text.Append(" ("+phonetic+")");
             }
             else
             {
-                return HandleRun(run, text);
+                HandleRun(run, text);
             }
+            // Any picture text?
+            if(pictureText != null && pictureText.Length > 0)
+            {
+                text.Append("\n");
+                text.Append(pictureText);
+            }
+            return text.ToString();
         }
         public string GetText()
         {
-            StringBuilder text = new StringBuilder();
-            return HandleRun(run, text);
+            var text = new StringBuilder();
+            HandleRun(run, text);
+            return text.ToString();
         }
         /// <summary>
         /// Returns the string version of the text, with tabs and
         /// carriage returns in place of their xml equivalents.
         /// </summary>
-        private string HandleRun(CT_R run, StringBuilder text)
+        private void HandleRun(CT_R run, StringBuilder text)
         {
             // Grab the text and tabs of the text run
             // Do so in a way that preserves the ordering
@@ -534,8 +547,6 @@ namespace NPOI.XWPF.UserModel
                 _getText(o, text, run.ItemsElementName[i]);
             }
 
-            return text.ToString();
-
         }
 
         /// <summary>
@@ -543,7 +554,7 @@ namespace NPOI.XWPF.UserModel
         /// <returns>the phonetic (ruby) string associated with this run or an empty string if none exists</returns>
         public string GetPhonetic()
         {
-            StringBuilder text = new StringBuilder();
+            var text = new StringBuilder();
 
             // Grab the text and tabs of the text run
             // Do so in a way that preserves the ordering
@@ -558,7 +569,9 @@ namespace NPOI.XWPF.UserModel
             // Any picture text?
             if(pictureText != null && pictureText.Length > 0)
             {
-                text.Append("\n").Append(pictureText).Append("\n");
+                text.Append("\n");
+                text.Append(pictureText);
+                text.Append("\n");
             }
 
             return text.ToString();
