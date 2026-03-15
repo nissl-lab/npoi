@@ -113,6 +113,12 @@ namespace NPOI.XWPF.UserModel
             "/word/theme/theme#.xml",
             typeof(XWPFTheme)
         );
+        public static XWPFRelation CHART = new XWPFRelation(
+            "application/vnd.openxmlformats-officedocument.drawingml.chart+xml",
+            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/chart",
+            "/word/charts/chart#.xml",
+           typeof(XWPFChart)
+        );
         public static XWPFRelation HYPERLINK = new XWPFRelation(
                 null,
                 "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink",
