@@ -234,6 +234,18 @@ namespace NPOI.XWPF.UserModel
               typeof(XWPFPictureData)
         );
 
+        public static XWPFRelation WORKBOOK = new XWPFRelation(
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            POIXMLDocument.PACK_OBJECT_REL_TYPE,
+            "/word/embeddings/Microsoft_Excel_Worksheet#.xlsx",
+            typeof(XSSF.UserModel.XSSFWorkbook)
+        );
+        public static XWPFRelation CHART_SHEET = new XWPFRelation(
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+           POIXMLDocument.PACK_OBJECT_REL_TYPE,
+            "/word/embeddings/Microsoft_Excel_Worksheet#.xlsx",
+           typeof(XWPFChartData)
+        );
 
         private XWPFRelation(String type, String rel, String defaultName, Type cls)
             : base(type, rel, defaultName, cls)

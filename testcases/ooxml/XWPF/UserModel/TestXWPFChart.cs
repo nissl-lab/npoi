@@ -5,6 +5,8 @@ using NUnit.Framework;
 using NUnit.Framework.Legacy;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Reflection.Metadata;
 
 namespace TestCases.XWPF.UserModel
 {
@@ -50,6 +52,29 @@ namespace TestCases.XWPF.UserModel
             ClassicAssert.AreEqual(XWPFRelation.CHART.ContentType, chart.GetPackagePart().ContentType);
             ClassicAssert.AreEqual("/word/document.xml", chart.GetParent().GetPackagePart().PartName.ToString());
             ClassicAssert.AreEqual("/word/charts/chart1.xml", chart.GetPackagePart().PartName.ToString());
+        }
+        [Test(Description ="test method to check adding chart in document")]
+        public void TestAddChartsToNewDocument()
+        {
+            XWPFDocument document = new XWPFDocument();
+
+            XWPFChart chart = document.CreateChart();
+            ClassicAssert.AreEqual(1, document.GetCharts().Count);
+            ClassicAssert.IsNotNull(chart);
+            ClassicAssert.IsNotNull(chart.GetCTChartSpace());
+            ClassicAssert.IsNotNull(chart.GetCTChart());
+            ClassicAssert.AreEqual(XWPFChart.DEFAULT_WIDTH, chart.ChartHeight);
+            ClassicAssert.AreEqual(XWPFChart.DEFAULT_HEIGHT, chart.ChartWidth);
+
+            XWPFChart chart2 = document.CreateChart();
+            ClassicAssert.AreEqual(2, document.GetCharts().Count);
+            ClassicAssert.IsNotNull(chart2);
+            ClassicAssert.IsNotNull(chart2.GetCTChartSpace());
+            ClassicAssert.IsNotNull(chart2.GetCTChart());
+            chart.ChartHeight = (500500);
+            ClassicAssert.AreEqual(500500, chart.ChartHeight);
+
+            ClassicAssert.IsNotNull(XWPFTestDataSamples.WriteOutAndReadBack(document));
         }
     }
 }
