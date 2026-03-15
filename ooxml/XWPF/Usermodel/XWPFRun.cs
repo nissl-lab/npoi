@@ -181,18 +181,24 @@ namespace NPOI.XWPF.UserModel
         {
             foreach(string el in god.Any)
             {
-                XmlDocument xmlDoc = new XmlDocument();
-                xmlDoc.LoadXml(el);
-                var node = xmlDoc.DocumentElement;
-                if(node.LocalName=="pic")
+                using var reader = XmlReader.Create(new StringReader(el));
+                if(!reader.Read())
+                    return;
+                if(reader.LocalName=="pic")
                 {
+                    reader.Close();
+                    //only picture will use XmlDocument
+                    XmlDocument xmlDoc = new XmlDocument();
+                    xmlDoc.LoadXml(el);
+                    var node = xmlDoc.DocumentElement;
                     var pict = NPOI.OpenXmlFormats.Dml.Picture.CT_Picture.Parse(node, POIXMLDocumentPart.NamespaceManager);
                     pictures.Add(pict);
                 }
-                else if(node.LocalName=="chart")
+                else if(reader.LocalName=="chart")
                 {
-                    var rel = CT_RelId.Parse(node, POIXMLDocumentPart.NamespaceManager);
+                    var rel = CT_RelId.Parse(reader);
                     chartsRels.Add(rel);
+                    reader.Close();
                 }
             }
         }

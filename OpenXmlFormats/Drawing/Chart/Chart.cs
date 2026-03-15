@@ -440,6 +440,14 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                 this.idField = value;
             }
         }
+        public static CT_RelId Parse(XmlReader reader)
+        {
+            if(reader==null)
+                return null;
+            CT_RelId ctObj = new CT_RelId();
+            ctObj.id = reader.GetAttribute("id", "http://schemas.openxmlformats.org/officeDocument/2006/relationships");
+            return ctObj;
+        }
         public static CT_RelId Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)

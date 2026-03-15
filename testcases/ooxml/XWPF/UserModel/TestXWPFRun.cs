@@ -495,26 +495,18 @@ namespace TestCases.XWPF.UserModel
         public void TestBug55476()
         {
             byte[] image = XWPFTestDataSamples.GetImage("abstract1.jpg");
-            XWPFDocument document = new XWPFDocument();
+            using var document = new XWPFDocument();
             document.CreateParagraph().CreateRun().AddPicture(
                     new MemoryStream(image), (int) PictureType.JPEG, "test.jpg", Units.ToEMU(300), Units.ToEMU(100));
-            XWPFDocument docBack = XWPFTestDataSamples.WriteOutAndReadBack(document);
+            using var docBack = XWPFTestDataSamples.WriteOutAndReadBack(document);
             List<XWPFPicture> pictures = docBack.GetParagraphArray(0).Runs[0].GetEmbeddedPictures();
             ClassicAssert.AreEqual(1, pictures.Count);
-            docBack.Close();
-            /*OutputStream stream = new FileOutputStream("c:\\temp\\55476.docx");
-            try {
-                document.write(stream);
-            } finally {
-                stream.close();
-            }*/
-            document.Close();
         }
 
         [Test]
         public void TestBug58922()
         {
-            XWPFDocument document = new XWPFDocument();
+            using XWPFDocument document = new XWPFDocument();
             XWPFRun run = document.CreateParagraph().CreateRun();
             ClassicAssert.AreEqual(-1, run.FontSize);
             run.FontSize = 10;
@@ -558,8 +550,8 @@ namespace TestCases.XWPF.UserModel
                 "  The quick brown fox",
                 "\t\tjumped over the lazy dog"
             };
-            MemoryStream bos = new MemoryStream();
-            XWPFDocument doc = new XWPFDocument();
+            using MemoryStream bos = new MemoryStream();
+            using XWPFDocument doc = new XWPFDocument();
             foreach(String s in text)
             {
                 XWPFParagraph p1 = doc.CreateParagraph();
@@ -568,7 +560,7 @@ namespace TestCases.XWPF.UserModel
             }
             doc.Write(bos);
 
-            MemoryStream bis = new MemoryStream(bos.ToArray());
+            using MemoryStream bis = new MemoryStream(bos.ToArray());
             var doc2 = new XWPFDocument(bis);
 
             var paragraphs = doc2.Paragraphs;
@@ -590,7 +582,7 @@ namespace TestCases.XWPF.UserModel
         [Test]
         public void TestGetNumberOfTexts()
         {
-            XWPFDocument doc = new XWPFDocument();
+            using XWPFDocument doc = new XWPFDocument();
             var p = doc.CreateParagraph();
             XWPFRun run = p.CreateRun();
             ClassicAssert.AreEqual(0, run.NumberOfTexts);
@@ -600,7 +592,7 @@ namespace TestCases.XWPF.UserModel
         [Test]
         public void TestSetStyleId()
         {
-            XWPFDocument document = XWPFTestDataSamples.OpenSampleDocument("SampleDoc.docx");
+            using var document = XWPFTestDataSamples.OpenSampleDocument("SampleDoc.docx");
 
             XWPFRun run = document.CreateParagraph().CreateRun();
 
@@ -700,7 +692,7 @@ namespace TestCases.XWPF.UserModel
         [Test]
         public void TestSetGetUnderlineColor()
         {
-            XWPFDocument document = new XWPFDocument();
+            using XWPFDocument document = new XWPFDocument();
             XWPFRun run = document.CreateParagraph().CreateRun();
             ClassicAssert.AreEqual("auto", run.UnderlineColor);
             String colorRgb = "C0F1a2";
@@ -713,7 +705,7 @@ namespace TestCases.XWPF.UserModel
         [Test]
         public void TestSetGetUnderlineThemeColor()
         {
-            XWPFDocument document = new XWPFDocument();
+            using XWPFDocument document = new XWPFDocument();
             XWPFRun run = document.CreateParagraph().CreateRun();
             ClassicAssert.AreEqual("none", run.UnderlineThemeColor);
             String colorName = "accent4";
