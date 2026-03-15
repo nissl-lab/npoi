@@ -68,6 +68,7 @@ namespace NPOI.XWPF.UserModel
         protected XWPFFootnotes footnotes;
         protected XWPFComments comments;
         protected XWPFTheme theme;
+        protected List<XWPFChart> charts = new List<XWPFChart>();
 
         /** Handles the joy of different headers/footers for different pages */
         private XWPFHeaderFooterPolicy headerFooterPolicy;
@@ -145,7 +146,7 @@ namespace NPOI.XWPF.UserModel
                         this.styles.OnDocumentRead();
                     }
                     else if(relation.Equals(XWPFRelation.THEME.Relation))
-                    { 
+                    {
                         this.theme = (XWPFTheme) p;
                         this.theme.OnDocumentRead();
                     }
@@ -183,6 +184,13 @@ namespace NPOI.XWPF.UserModel
                         RegisterPackagePictureData(picData);
                         pictures.Add(picData);
                     }
+                    else if(relation.Equals(XWPFRelation.CHART.Relation))
+                    {
+                        //now we can use all methods to modify charts in XWPFDocument
+                        XWPFChart chartData = (XWPFChart) p;
+                        chartData.OnDocumentRead();
+                        charts.Add(chartData);
+                    }
                     else if(relation.Equals(XWPFRelation.GLOSSARY_DOCUMENT.Relation))
                     {
                         // We don't currently process the glossary itself
@@ -213,7 +221,14 @@ namespace NPOI.XWPF.UserModel
             }
             
         }
-
+        /// <summary>
+        /// list of XWPFCharts in this document
+        /// </summary>
+        /// <returns></returns>
+        public List<XWPFChart> GetCharts()
+        {
+            return charts;
+        }
         private void InitHyperlinks()
         {
             // Get the hyperlinks
