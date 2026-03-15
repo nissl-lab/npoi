@@ -38,7 +38,7 @@ namespace TestCases.XSSF.UserModel.Charts
             var ys = XDDFDataSourcesFactory.FromNumericCellRange(sheet, CellRangeAddress.ValueOf("A2:J2"));
             barChartData.AddSeries(xs, ys);
             
-            barChartData.SetBarGrouping(barGrouping);
+            barChartData.BarGrouping = barGrouping;
             
             chart.Plot(barChartData);
             

@@ -311,11 +311,8 @@ namespace NPOI.XWPF.UserModel
         {
             ctDocument = new CT_Document();
             ctDocument.AddNewBody();
-
-
+            
             settings = (XWPFSettings) CreateRelationship(XWPFRelation.SETTINGS, XWPFFactory.GetInstance());
-            CreateStyles();
-
             ExtendedProperties expProps = GetProperties().ExtendedProperties;
             expProps.GetUnderlyingProperties().Application = (DOCUMENT_CREATOR);
         }

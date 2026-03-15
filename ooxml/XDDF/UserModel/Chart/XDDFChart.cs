@@ -662,10 +662,9 @@ namespace NPOI.XDDF.UserModel.Chart
         /// <remarks>
         /// @since POI 4.0.0
         /// </remarks>
-        private PackagePart CreateWorksheetPart(POIXMLRelation chartRelation, POIXMLRelation chartWorkbookRelation,
+        private PackagePart CreateWorksheetPart(POIXMLRelation chartWorkbookRelation,
             POIXMLFactory chartFactory)
         {
-
             PackageRelationship xlsx = CreateRelationshipInChart(chartWorkbookRelation, chartFactory, chartIndex);
             this.SetExternalId(xlsx.Id);
             return GetTargetPart(xlsx);
@@ -688,22 +687,25 @@ namespace NPOI.XDDF.UserModel.Chart
             PackagePart worksheetPart = GetWorksheetPart();
             if(worksheetPart == null)
             {
-                POIXMLRelation chartRelation = GetChartRelation();
                 POIXMLRelation chartWorkbookRelation = GetChartWorkbookRelation();
                 POIXMLFactory chartFactory = GetChartFactory();
-                if(chartRelation != null && chartWorkbookRelation != null && chartFactory != null)
+                if(chartWorkbookRelation != null && chartFactory != null)
                 {
-                    worksheetPart = CreateWorksheetPart(chartRelation, chartWorkbookRelation, chartFactory);
+                    worksheetPart = CreateWorksheetPart(chartWorkbookRelation, chartFactory);
                 }
                 else
                 {
                     throw new InvalidFormatException("unable to determine chart relations");
                 }
             }
-            using(Stream xlsOut = worksheetPart.GetOutputStream())
+            using(Stream xlsxOut = worksheetPart.GetOutputStream())
             {
                 SetWorksheetPartCommitted();
-                workbook.Write(xlsOut);
+                workbook.Write(xlsxOut);
+                using(Stream testOutput = File.Create("C:\\playground\\files\\workbook1.xlsx"))
+                {
+                    workbook.Write(testOutput);
+                }
             }
         }
 
@@ -842,9 +844,9 @@ namespace NPOI.XDDF.UserModel.Chart
             }
             
             PackagePart part = GetPackagePart();
-            using(Stream out1 = part.GetOutputStream())
+            using(Stream outputStream = part.GetOutputStream())
             {
-                new ChartSpaceDocument().Save(out1);
+                chartSpace.Save(outputStream);
             }
         }
 
