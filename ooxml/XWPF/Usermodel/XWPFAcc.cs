@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NPOI.OpenXmlFormats.Shared;;
+using NPOI.OpenXmlFormats.Shared;
 
 namespace NPOI.XWPF.UserModel
 {
