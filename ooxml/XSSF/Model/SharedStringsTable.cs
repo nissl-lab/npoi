@@ -227,20 +227,11 @@ namespace NPOI.XSSF.Model
         {
             try
             {
-                int cnt = 0;
                 XmlDocument xml = ConvertStreamToXml(is1);
                 _sstDoc = SstDocument.Parse(xml, NamespaceManager);
                 CT_Sst sst = _sstDoc.GetSst();
-                count = (int)sst.count;
-                uniqueCount = (int)sst.uniqueCount;
-                foreach (CT_Rst st in sst.si)
-                {
-                    string key = GetKey(st);
-                    if (key != null && !stmap.ContainsKey(key))
-                        stmap.Add(key, cnt);
-                    strings.Add(st);
-                    cnt++;
-                }
+                count = sst.count;
+                uniqueCount = sst.uniqueCount;
             }
             catch (XmlException e)
             {
