@@ -176,7 +176,10 @@ namespace NPOI.XSSF.Model
                     {
                         try
                         {
-                            ReadFromStream(stream);
+                            if(UseXmlReader)
+                                ReadFromStreamViaXmlReader(stream);
+                            else
+                                ReadFromStreamViaXmlDocument(stream);
                         }
                         catch (XmlException e)
                         {
@@ -218,7 +221,33 @@ namespace NPOI.XSSF.Model
         /// </summary>
         private const int TextReadBufferSize = 1024;
 
-        private void ReadFromStream(Stream stream)
+        public static bool UseXmlReader = false;
+
+        public void ReadFromStreamViaXmlDocument(Stream is1)
+        {
+            try
+            {
+                int cnt = 0;
+                XmlDocument xml = ConvertStreamToXml(is1);
+                _sstDoc = SstDocument.Parse(xml, NamespaceManager);
+                CT_Sst sst = _sstDoc.GetSst();
+                count = (int)sst.count;
+                uniqueCount = (int)sst.uniqueCount;
+                foreach (CT_Rst st in sst.si)
+                {
+                    string key = GetKey(st);
+                    if (key != null && !stmap.ContainsKey(key))
+                        stmap.Add(key, cnt);
+                    strings.Add(st);
+                    cnt++;
+                }
+            }
+            catch (XmlException e)
+            {
+                throw new IOException("unable to parse shared strings table", e);
+            }
+        }
+        private void ReadFromStreamViaXmlReader(Stream stream)
         {
             _sstDoc = new SstDocument();
             _sstDoc.AddNewSst();
@@ -507,24 +536,6 @@ namespace NPOI.XSSF.Model
             string tint = reader.GetAttribute("tint");
             if (tint != null && double.TryParse(tint, NumberStyles.Any, CultureInfo.InvariantCulture, out double t)) color.tint = t;
             return color;
-        }
-
-        /// <summary>
-        /// Read shared strings from a stream. Kept for backward compatibility; internally
-        /// delegates to the streaming parser.
-        /// </summary>
-        public void ReadFrom(Stream is1)
-        {
-            try
-            {
-                ReadFromStream(is1);
-                _loaded = true;
-                _stmapBuilt = false;
-            }
-            catch (XmlException e)
-            {
-                throw new IOException("unable to parse shared strings table", e);
-            }
         }
 
         private static String GetKey(CT_Rst st)
