@@ -315,6 +315,11 @@ namespace TestCases.XWPF
                 ClassicAssert.AreEqual("FooBar", cell.GetText());
             }
         }
+        [Test]
+        public void Bug1712()
+        {
+            using XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("smallFracOnlyOffice.docx");
+        }
     }
 }
 
