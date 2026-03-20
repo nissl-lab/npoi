@@ -1434,15 +1434,23 @@ namespace NPOI.XSSF.UserModel
             lock (_loadLock)
             {
                 if (_worksheetLoaded) return;
+                // Set true before Read() so re-entrant calls during loading (e.g. via
+                // XSSFRow constructor -> OnReadCell / LastRowNum) don't recurse infinitely
+                _worksheetLoaded = true;
                 try
                 {
                     Read(GetPackagePart().GetInputStream());
                 }
                 catch (IOException e)
                 {
+                    _worksheetLoaded = false;
                     throw new POIXMLException(e);
                 }
-                _worksheetLoaded = true;
+                catch
+                {
+                    _worksheetLoaded = false;
+                    throw;
+                }
                 _parseCount++;
             }
         }
