@@ -80,24 +80,28 @@ namespace NPOI.XSSF.UserModel
          */
         public CT_Chartsheet GetCTChartsheet()
         {
+            EnsureWorksheetLoaded();
             return chartsheet;
         }
 
 
         protected override NPOI.OpenXmlFormats.Spreadsheet.CT_Drawing GetCTDrawing()
         {
+            EnsureWorksheetLoaded();
             return chartsheet.drawing;
         }
 
 
         protected override NPOI.OpenXmlFormats.Spreadsheet.CT_LegacyDrawing GetCTLegacyDrawing()
         {
+            EnsureWorksheetLoaded();
             return chartsheet.legacyDrawing;
         }
 
 
         internal override void Write(Stream out1, bool leaveOpen=false)
         {
+            EnsureWorksheetLoaded();
             new ChartsheetDocument(this.chartsheet).Save(out1);
         }
 

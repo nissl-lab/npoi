@@ -1372,7 +1372,16 @@ namespace NPOI.XSSF.UserModel
         /// <exception cref="POIXMLException"></exception>
         internal override void OnDocumentRead()
         {
-            // Lazy loading: sheet.xml is not parsed here; deferred to first content access
+            // Lazy loading: worksheet XML is not parsed here; deferred to first content access.
+            // However, pivot table relationships are registered immediately because workbook
+            // pivot table indexing relies on them being present at open time.
+            foreach(RelationPart rp in RelationParts)
+            {
+                if(rp.DocumentPart is XSSFPivotTable pivotTable)
+                {
+                    GetWorkbook().PivotTables.Add(pivotTable);
+                }
+            }
         }
 
         internal virtual void Read(Stream is1)
@@ -1407,7 +1416,10 @@ namespace NPOI.XSSF.UserModel
 
                 if(p is XSSFPivotTable pivotTable)
                 {
-                    GetWorkbook().PivotTables.Add(pivotTable);
+                    if(!GetWorkbook().PivotTables.Contains(pivotTable))
+                    {
+                        GetWorkbook().PivotTables.Add(pivotTable);
+                    }
                 }
             }
 
@@ -1434,24 +1446,26 @@ namespace NPOI.XSSF.UserModel
             lock (_loadLock)
             {
                 if (_worksheetLoaded) return;
-                // Set true before Read() so re-entrant calls during loading (e.g. via
-                // XSSFRow constructor -> OnReadCell / LastRowNum) don't recurse infinitely
+                // Set _worksheetLoaded = true before calling Read() to prevent infinite
+                // recursion: code paths inside Read() (e.g. XSSFRow/XSSFCell construction)
+                // may call sheet properties that trigger EnsureWorksheetLoaded again.
+                // On failure, reset the flag so callers can retry.
                 _worksheetLoaded = true;
+                bool success = false;
                 try
                 {
                     Read(GetPackagePart().GetInputStream());
+                    _parseCount++;
+                    success = true;
                 }
                 catch (IOException e)
                 {
-                    _worksheetLoaded = false;
                     throw new POIXMLException(e);
                 }
-                catch
+                finally
                 {
-                    _worksheetLoaded = false;
-                    throw;
+                    if (!success) _worksheetLoaded = false;
                 }
-                _parseCount++;
             }
         }
 
@@ -1633,6 +1647,7 @@ namespace NPOI.XSSF.UserModel
 
         internal virtual void Write(Stream stream, bool leaveOpen = false)
         {
+            EnsureWorksheetLoaded();
             bool setToNull = false;
             if(worksheet.sizeOfColsArray() == 1)
             {
@@ -3808,6 +3823,7 @@ namespace NPOI.XSSF.UserModel
         //YK: GetXYZArray() array accessors are deprecated in xmlbeans with JDK 1.5 support
         public List<IDataValidation> GetDataValidations()
         {
+            EnsureWorksheetLoaded();
             List<IDataValidation> xssfValidations = new List<IDataValidation>();
             CT_DataValidations dataValidations = worksheet.dataValidations;
             if(dataValidations != null && dataValidations.count > 0)
@@ -3953,6 +3969,7 @@ namespace NPOI.XSSF.UserModel
         /// <returns></returns>
         public List<XSSFTable> GetTables()
         {
+            EnsureWorksheetLoaded();
             List<XSSFTable> tableList = new List<XSSFTable>(
                 tables.Values
             );
