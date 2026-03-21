@@ -34,8 +34,6 @@ jobs:
           dotnet-version: |
             10.0
       - uses: actions/checkout@v4
-      - name: Disable Windows Defender real-time monitoring
-        run: Set-MpPreference -DisableRealtimeMonitoring $true
       - name: 'Run: Clean, Test, Pack'
         run: ./build.cmd Clean Test Pack
       - name: 'Publish: publish'
