@@ -2479,8 +2479,13 @@ namespace TestCases.XSSF.UserModel
         [Test]
         public void TestReadFails()
         {
+            // With lazy loading, OnDocumentRead() is a no-op and does not parse
+            // sheet.xml immediately. Parsing is deferred to first content access.
+            // A newly created sheet already has _worksheetLoaded=true, so
+            // OnDocumentRead() on it is simply a no-op (no exception thrown).
             XSSFWorkbook wb = new XSSFWorkbook();
             XSSFSheet sheet = wb.CreateSheet() as XSSFSheet;
+            XSSFSheet.EnableLazyLoading = false;
 
             Assert.Throws<POIXMLException>(() => { sheet.OnDocumentRead(); });
 
