@@ -847,6 +847,48 @@ namespace TestCases.SS.Formula
             ClassicAssert.AreEqual(8394753.0, summaryCell.NumericCellValue);
         }
 
+        /// <summary>
+        /// Verifies that FormulaCellCache.Remove() actually evicts entries.
+        /// Regression test for bug where Remove() used cell instead of cell.IdentityKey,
+        /// causing entries to never be removed from the cache.
+        /// </summary>
+        [Test]
+        public void TestFormulaCellCacheRemoveActuallyEvicts()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+            ISheet sheet = wb.CreateSheet();
+            IRow row = sheet.CreateRow(0);
+
+            ICell cellA1 = row.CreateCell(0);
+            cellA1.SetCellFormula("1+1");
+            ICell cellB1 = row.CreateCell(1);
+            cellB1.SetCellFormula("2+2");
+
+            IEvaluationCell evalCellA1 = HSSFEvaluationTestHelper.WrapCell(cellA1);
+            IEvaluationCell evalCellB1 = HSSFEvaluationTestHelper.WrapCell(cellB1);
+
+            FormulaCellCache cache = new FormulaCellCache();
+            FormulaCellCacheEntry entryA1 = new FormulaCellCacheEntry();
+            FormulaCellCacheEntry entryB1 = new FormulaCellCacheEntry();
+
+            cache.Put(evalCellA1, entryA1);
+            cache.Put(evalCellB1, entryB1);
+
+            // Both entries should be retrievable
+            ClassicAssert.AreSame(entryA1, cache.Get(evalCellA1));
+            ClassicAssert.AreSame(entryB1, cache.Get(evalCellB1));
+            ClassicAssert.AreEqual(2, cache.GetCacheEntries().Length);
+
+            // Remove A1 and verify it's actually evicted
+            FormulaCellCacheEntry removed = cache.Remove(evalCellA1);
+            ClassicAssert.AreSame(entryA1, removed, "Remove should return the evicted entry");
+            ClassicAssert.IsNull(cache.Get(evalCellA1), "Entry should be evicted after Remove");
+            ClassicAssert.AreSame(entryB1, cache.Get(evalCellB1), "Other entries should be unaffected");
+            ClassicAssert.AreEqual(1, cache.GetCacheEntries().Length);
+
+            wb.Close();
+        }
+
     }
 
 }
