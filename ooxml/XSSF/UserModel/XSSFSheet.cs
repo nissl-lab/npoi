@@ -15,7 +15,6 @@
    limitations under the License.
 ==================================================================== */
 
-using NPOI.HSSF.Util;
 using NPOI.OpenXml4Net.Exceptions;
 using NPOI.OpenXml4Net.OPC;
 using NPOI.OpenXmlFormats.Dml.Spreadsheet;
@@ -34,7 +33,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using Cysharp.Text;
 using System.Xml;
 using CT_Shape = NPOI.OpenXmlFormats.Vml.CT_Shape;
@@ -42,7 +40,6 @@ using ST_EditAs = NPOI.OpenXmlFormats.Dml.Spreadsheet.ST_EditAs;
 using System.Xml.Linq;
 using System.Diagnostics;
 using System.Data;
-using NPOI.XDDF.UserModel.Chart;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -65,6 +62,8 @@ namespace NPOI.XSSF.UserModel
         private static readonly double DEFAULT_MARGIN_LEFT = 0.7;
         private static readonly double DEFAULT_MARGIN_RIGHT = 0.7;
         public static int TWIPS_PER_POINT = 20;
+
+        internal static bool EnableLazyLoading { get; set; } = true;
 
         //TODO make the two variable below private!
         internal CT_Sheet sheet;
@@ -1280,13 +1279,31 @@ namespace NPOI.XSSF.UserModel
         /// <exception cref="POIXMLException"></exception>
         internal override void OnDocumentRead()
         {
-            try
+            if(!EnableLazyLoading)
             {
-                Read(GetPackagePart().GetInputStream());
+                try
+                {
+                    Read(GetPackagePart().GetInputStream());
+                    _parseCount++;
+                    _worksheetLoaded=true;
+                }
+                catch(IOException e)
+                {
+                    throw new POIXMLException(e);
+                }
             }
-            catch(IOException e)
+            else
             {
-                throw new POIXMLException(e);
+                // Lazy loading: worksheet XML is not parsed here; deferred to first content access.
+                // However, pivot table relationships are registered immediately because workbook
+                // pivot table indexing relies on them being present at open time.
+                foreach(RelationPart rp in RelationParts)
+                {
+                    if(rp.DocumentPart is XSSFPivotTable pivotTable)
+                    {
+                        GetWorkbook().PivotTables.Add(pivotTable);
+                    }
+                }
             }
         }
 

@@ -42,8 +42,18 @@ public class LargeExcelFileBenchmark
     }
 
     [Benchmark]
-    public void XSSFWorkbookLoad()
+    public void XSSFWorkbookLoad_DisableSheetLazyLoading()
     {
+        XSSFSheet.EnableLazyLoading = false;
+        var workbook = new XSSFWorkbook(_filePath, true);
+        workbook.Dispose();
+    }
+
+
+    [Benchmark]
+    public void XSSFWorkbookLoad_EnableSheetLazyLoading()
+    {
+        XSSFSheet.EnableLazyLoading = true;
         var workbook = new XSSFWorkbook(_filePath, true);
         workbook.Dispose();
     }
