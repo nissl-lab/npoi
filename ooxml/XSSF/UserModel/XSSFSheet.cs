@@ -507,7 +507,7 @@ namespace NPOI.XSSF.UserModel
                 EnsureWorksheetLoaded();
                 if(_cachedMergedRegions != null)
                 {
-                    return _cachedMergedRegions;
+                    return new List<CellRangeAddress>(_cachedMergedRegions);
                 }
 
                 List<CellRangeAddress> addresses = new List<CellRangeAddress>();
@@ -2843,6 +2843,7 @@ namespace NPOI.XSSF.UserModel
             EnsureWorksheetLoaded();
             if(!worksheet.IsSetMergeCells())
             {
+                InvalidateMergedRegionsCache();
                 return;
             }
 
