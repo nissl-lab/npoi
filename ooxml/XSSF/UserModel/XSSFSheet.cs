@@ -505,27 +505,23 @@ namespace NPOI.XSSF.UserModel
             get
             {
                 EnsureWorksheetLoaded();
-                if(_cachedMergedRegions != null)
+                if(_cachedMergedRegions == null)
                 {
-                    return new List<CellRangeAddress>(_cachedMergedRegions);
-                }
+                    var addresses = new List<CellRangeAddress>();
+                    CT_MergeCells ctMergeCells = worksheet.mergeCells;
+                    if(ctMergeCells != null)
+                    {
+                        foreach(CT_MergeCell ctMergeCell in ctMergeCells.mergeCell)
+                        {
+                            string ref1 = ctMergeCell.@ref;
+                            addresses.Add(CellRangeAddress.ValueOf(ref1));
+                        }
+                    }
 
-                List<CellRangeAddress> addresses = new List<CellRangeAddress>();
-                CT_MergeCells ctMergeCells = worksheet.mergeCells;
-                if(ctMergeCells == null)
-                {
                     _cachedMergedRegions = addresses;
-                    return addresses;
                 }
 
-                foreach(CT_MergeCell ctMergeCell in ctMergeCells.mergeCell)
-                {
-                    string ref1 = ctMergeCell.@ref;
-                    addresses.Add(CellRangeAddress.ValueOf(ref1));
-                }
-
-                _cachedMergedRegions = addresses;
-                return addresses;
+                return new List<CellRangeAddress>(_cachedMergedRegions);
             }
         }
 
