@@ -56,6 +56,18 @@ namespace NPOI.XSSF.UserModel
         private readonly XSSFSheet _sheet;
 
         private readonly StylesTable _stylesSource;
+
+        /// <summary>
+        /// Cached first (minimum) column index, or -1 if unknown/dirty.
+        /// Avoids O(n) LINQ Min() scan on every FirstCellNum access.
+        /// </summary>
+        private int _cachedFirstCellNum = -1;
+
+        /// <summary>
+        /// Cached last (maximum) column index, or -1 if unknown/dirty.
+        /// Avoids O(n) LINQ Max() scan on every LastCellNum access.
+        /// </summary>
+        private int _cachedLastCellNum = -1;
         #endregion
 
         #region Public properties
@@ -79,7 +91,12 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                return (short)(_cells.Count == 0 ? -1 : GetFirstKey());
+                if (_cells.Count == 0) return -1;
+                if (_cachedFirstCellNum < 0)
+                {
+                    _cachedFirstCellNum = GetFirstKey();
+                }
+                return (short)_cachedFirstCellNum;
             }
         }
 
@@ -94,7 +111,12 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                return (short)(_cells.Count == 0 ? -1 : (GetLastKey() + 1));
+                if (_cells.Count == 0) return -1;
+                if (_cachedLastCellNum < 0)
+                {
+                    _cachedLastCellNum = GetLastKey();
+                }
+                return (short)(_cachedLastCellNum + 1);
             }
         }
 
@@ -284,6 +306,7 @@ namespace NPOI.XSSF.UserModel
                 {
                     XSSFCell cell = new XSSFCell(this, c);
                     _cells.Add(cell.ColumnIndex, cell);
+                    UpdateCacheOnAdd(cell.ColumnIndex);
                     sheet.OnReadCell(cell);
                 }
             }
@@ -355,6 +378,7 @@ namespace NPOI.XSSF.UserModel
             }
 
             _cells[columnIndex] = xcell;
+            UpdateCacheOnAdd(columnIndex);
             return xcell;
         }
 
@@ -421,7 +445,9 @@ namespace NPOI.XSSF.UserModel
                 ((XSSFWorkbook)_sheet.Workbook).OnDeleteFormula(xcell);
             }
 
-            _cells.Remove(cell.ColumnIndex);
+            int removedIndex = cell.ColumnIndex;
+            _cells.Remove(removedIndex);
+            InvalidateCacheOnRemove(removedIndex);
         }
 
         /// <summary>
@@ -625,6 +651,10 @@ namespace NPOI.XSSF.UserModel
 
             // Sort CT_Cols by index asc.
             _row.c.Sort((col1, col2) => col1.r.CompareTo(col2.r));
+
+            // Cache is invalid after rebuild — keys may have changed
+            _cachedFirstCellNum = -1;
+            _cachedLastCellNum = -1;
         }
         #endregion
 
@@ -804,6 +834,45 @@ namespace NPOI.XSSF.UserModel
         private int GetLastKey()
         {
             return _cells.Keys.Max();
+        }
+
+        /// <summary>
+        /// Update cached min/max on cell addition. O(1) — just compare with current bounds.
+        /// </summary>
+        private void UpdateCacheOnAdd(int columnIndex)
+        {
+            if (_cachedFirstCellNum < 0 || columnIndex < _cachedFirstCellNum)
+            {
+                _cachedFirstCellNum = columnIndex;
+            }
+            if (_cachedLastCellNum < 0 || columnIndex > _cachedLastCellNum)
+            {
+                _cachedLastCellNum = columnIndex;
+            }
+        }
+
+        /// <summary>
+        /// Invalidate cached min/max when a cell at a boundary is removed.
+        /// Only forces re-scan when the removed cell was at an edge.
+        /// </summary>
+        private void InvalidateCacheOnRemove(int removedIndex)
+        {
+            if (_cells.Count == 0)
+            {
+                _cachedFirstCellNum = -1;
+                _cachedLastCellNum = -1;
+            }
+            else
+            {
+                if (removedIndex == _cachedFirstCellNum)
+                {
+                    _cachedFirstCellNum = -1; // will re-scan on next access
+                }
+                if (removedIndex == _cachedLastCellNum)
+                {
+                    _cachedLastCellNum = -1; // will re-scan on next access
+                }
+            }
         }
         #endregion
     }
