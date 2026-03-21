@@ -63,7 +63,7 @@ Contributors
 ![Contributors](https://contrib.rocks/image?repo=nissl-lab/npoi)
 
 ### Sponsored By
-<img src="https://github.com/user-attachments/assets/88dd41a5-9c25-43dd-ba6b-2f4f82b60ecc" alt="drawing" width="200"/>
+[<img alt="Swyfft Insurance" src="https://github.com/user-attachments/assets/2f043f1f-9d56-4cf5-b46f-71868567b2d3" width="180" />](https://www.swyfft.com/)
 
 
 <a href="https://info.flagcounter.com/bndt"><img src="https://s01.flagcounter.com/count/bndt/bg_FFFFFF/txt_000000/border_CCCCCC/columns_3/maxflags_20/viewers_0/labels_1/pageviews_1/flags_0/percent_0/" alt="Flag Counter" border="0"></a>
