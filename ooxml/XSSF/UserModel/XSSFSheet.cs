@@ -89,6 +89,7 @@ namespace NPOI.XSSF.UserModel
         private bool _worksheetLoaded = false;
         private readonly object _loadLock = new object();
         internal int _parseCount = 0;
+        private List<CellRangeAddress> _cachedMergedRegions;
 
         private CT_Pane Pane
         {
@@ -504,10 +505,16 @@ namespace NPOI.XSSF.UserModel
             get
             {
                 EnsureWorksheetLoaded();
+                if(_cachedMergedRegions != null)
+                {
+                    return _cachedMergedRegions;
+                }
+
                 List<CellRangeAddress> addresses = new List<CellRangeAddress>();
                 CT_MergeCells ctMergeCells = worksheet.mergeCells;
                 if(ctMergeCells == null)
                 {
+                    _cachedMergedRegions = addresses;
                     return addresses;
                 }
 
@@ -517,6 +524,7 @@ namespace NPOI.XSSF.UserModel
                     addresses.Add(CellRangeAddress.ValueOf(ref1));
                 }
 
+                _cachedMergedRegions = addresses;
                 return addresses;
             }
         }
@@ -2819,6 +2827,8 @@ namespace NPOI.XSSF.UserModel
             {
                 worksheet.UnsetMergeCells();
             }
+
+            InvalidateMergedRegionsCache();
         }
 
         /// <summary>
@@ -2860,6 +2870,8 @@ namespace NPOI.XSSF.UserModel
             {
                 ctMergeCells.SetMergeCellArray(newMergeCells.ToArray());
             }
+
+            InvalidateMergedRegionsCache();
         }
 
         /// <summary>
@@ -4951,6 +4963,7 @@ namespace NPOI.XSSF.UserModel
                 : worksheet.AddNewMergeCells();
             CT_MergeCell ctMergeCell = ctMergeCells.AddNewMergeCell();
             ctMergeCell.@ref = region.FormatAsString();
+            InvalidateMergedRegionsCache();
             return ctMergeCells.sizeOfMergeCellArray() - 1;
         }
 
@@ -5013,6 +5026,11 @@ namespace NPOI.XSSF.UserModel
             {
                 ValidateArrayFormulas(region);
             }
+        }
+
+        private void InvalidateMergedRegionsCache()
+        {
+            _cachedMergedRegions = null;
         }
 
         /// <summary>
