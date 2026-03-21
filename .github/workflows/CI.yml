@@ -36,6 +36,10 @@ jobs:
           dotnet-version: |
             10.0
       - uses: actions/checkout@v4
+      - name: Exclude paths from Windows Defender scanning
+        run: |
+          Add-MpPreference -ExclusionPath "$env:TEMP"
+          Add-MpPreference -ExclusionPath "${{ github.workspace }}"
       - name: 'Run: Clean, Test, Pack'
         run: ./build.cmd Clean Test Pack
       - name: 'Publish: publish'
