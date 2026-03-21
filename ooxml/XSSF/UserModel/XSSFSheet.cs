@@ -1023,10 +1023,11 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        internal int NumberOfComments
+        public int NumberOfComments
         {
             get
             {
+                EnsureWorksheetLoaded();
                 if(sheetComments == null)
                 {
                     return 0;
@@ -1239,12 +1240,13 @@ namespace NPOI.XSSF.UserModel
             EnsureWorksheetLoaded();
             long id = t.GetCTTable().id;
             KeyValuePair<String, XSSFTable>? toDelete = null;
-        
-            foreach (KeyValuePair<String, XSSFTable> entry in tables) {
-                if (entry.Value.GetCTTable().id == id) 
+
+            foreach(KeyValuePair<String, XSSFTable> entry in tables)
+            {
+                if(entry.Value.GetCTTable().id == id)
                     toDelete = entry;
             }
-            if (toDelete != null)
+            if(toDelete != null)
             {
                 RemoveRelation(GetRelationById(toDelete.Value.Key), true);
                 tables.Remove(toDelete.Value.Key);

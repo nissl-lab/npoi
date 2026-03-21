@@ -18,12 +18,9 @@
 using NPOI.OpenXmlFormats.Spreadsheet;
 using System.IO;
 using System.Xml;
-using System.Collections.Generic;
 using System;
-using NPOI.OpenXmlFormats;
 using NPOI.Util;
 using NPOI.OpenXml4Net.OPC;
-using NPOI.OpenXmlFormats.Dml;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -99,10 +96,10 @@ namespace NPOI.XSSF.UserModel
         }
 
 
-        internal override void Write(Stream out1, bool leaveOpen=false)
+        internal override void Write(Stream output, bool leaveOpen=false)
         {
             EnsureWorksheetLoaded();
-            new ChartsheetDocument(this.chartsheet).Save(out1);
+            new ChartsheetDocument(this.chartsheet).Save(output);
         }
 
         private static byte[] blankWorksheet()
