@@ -19,7 +19,6 @@ namespace NPOI.SS.Formula
 {
 
     using System;
-    using System.Collections;
     using System.Collections.Generic;
     using System.Globalization;
     using System.Text; 
@@ -1798,7 +1797,7 @@ namespace NPOI.SS.Formula
         private ParseNode[] Arguments()
         {
             //average 2 args per Function
-            ArrayList temp = new ArrayList(2);
+            List<ParseNode> temp = new List<ParseNode>(2);
             SkipWhite();
             if (look == ')')
             {
@@ -1834,7 +1833,7 @@ namespace NPOI.SS.Formula
                     throw expected("',' or ')'");
                 }
             }
-            ParseNode[] result = (ParseNode[])temp.ToArray(typeof(ParseNode));
+            ParseNode[] result = temp.ToArray();
             return result;
         }
 
@@ -1989,7 +1988,7 @@ namespace NPOI.SS.Formula
 
         private Object[] ParseArrayRow()
         {
-            ArrayList temp = new ArrayList();
+            List<object> temp = new List<object>();
             while (true)
             {
                 temp.Add(ParseArrayItem());
@@ -2009,9 +2008,7 @@ namespace NPOI.SS.Formula
                 break;
             }
 
-            Object[] result = new Object[temp.Count];
-            result = temp.ToArray();
-            return result;
+            return temp.ToArray();
         }
 
         private Object ParseArrayItem()
