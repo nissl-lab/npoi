@@ -221,7 +221,7 @@ namespace NPOI.XSSF.Model
         /// </summary>
         private const int TextReadBufferSize = 1024;
 
-        public static bool UseXmlReader = false;
+        internal static bool UseXmlReader { get; set; } = true;
 
         public void ReadFromStreamViaXmlDocument(Stream is1)
         {
