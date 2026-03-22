@@ -1,4 +1,5 @@
 ﻿using BenchmarkDotNet.Attributes;
+using NPOI.XSSF.Model;
 using NPOI.XSSF.UserModel;
 using System;
 using System.Collections.Generic;
@@ -46,8 +47,17 @@ public class LargeSSTBenchmark
     /// reduced in allocation compared to the old DOM path.
     /// </summary>
     [Benchmark]
-    public void XSSFWorkbookLargeSstLoadStrings()
+    public void XSSFWorkbookLargeSstLoadStringsViaXmlReader()
     {
+        SharedStringsTable.UseXmlReader = true;
+        using var workbook = new XSSFWorkbook(_largeFileWithSstPath, true);
+        // Force SST parse
+        _ = workbook.GetSharedStringSource().Count;
+    }
+    [Benchmark]
+    public void XSSFWorkbookLargeSstLoadStringsViaXmlDocument()
+    {
+        SharedStringsTable.UseXmlReader = false;
         using var workbook = new XSSFWorkbook(_largeFileWithSstPath, true);
         // Force SST parse
         _ = workbook.GetSharedStringSource().Count;
