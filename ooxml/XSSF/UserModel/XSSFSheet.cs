@@ -86,7 +86,7 @@ namespace NPOI.XSSF.UserModel
         private List<CellRangeAddress> arrayFormulas;
         private readonly XSSFDataValidationHelper dataValidationHelper;
         private XSSFDrawing drawing = null;
-        private bool _worksheetLoaded = false;
+        private volatile bool _worksheetLoaded = false;
         private readonly object _loadLock = new object();
         internal int _parseCount = 0;
         private List<CellRangeAddress> _cachedMergedRegions;
