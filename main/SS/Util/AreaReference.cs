@@ -21,6 +21,9 @@ namespace NPOI.SS.Util
     using System;
     using System.Text;
     using System.Collections;
+    using NPOI.SS.Formula;
+    using NPOI.SS.Formula.PTG;
+    using NPOI.SS.UserModel;
 
     public class AreaReference
     {
@@ -243,6 +246,60 @@ namespace NPOI.SS.Util
                 _lastCell = botRight;
             }
             _isSingleCell = false;
+        }
+
+        /// <summary>
+        /// Returns <c>true</c> if the given reference string uses Excel structured table reference
+        /// syntax (e.g., <c>Table1[#Headers]</c>, <c>Table1[[#Data],[Column1]]</c>).
+        /// </summary>
+        /// <param name="reference">The reference string to test.</param>
+        /// <returns><c>true</c> if the reference is a structured table reference; otherwise <c>false</c>.</returns>
+        public static bool IsStructuredReference(String reference)
+        {
+            return Table.IsStructuredReference.IsMatch(reference);
+        }
+
+        /// <summary>
+        /// Creates an <see cref="AreaReference"/> from a structured table reference string
+        /// (e.g., <c>Table1[#Headers]</c>, <c>Table1[[#Data],[Column1]]</c>) by resolving
+        /// the table name and specifiers against the workbook's table definitions.
+        /// </summary>
+        /// <param name="reference">The structured reference string to resolve.</param>
+        /// <param name="version">The spreadsheet version for cell reference validation.</param>
+        /// <param name="workbook">
+        /// The formula parsing workbook used to look up table definitions.
+        /// Use <c>XSSFEvaluationWorkbook.Create(workbook)</c> to obtain this from an <c>XSSFWorkbook</c>.
+        /// </param>
+        /// <param name="rowIndex">
+        /// The 0-based row index of the cell containing the reference.
+        /// Only needed for <c>[#This Row]</c> or <c>@</c> specifiers; pass 0 otherwise.
+        /// </param>
+        /// <returns>An <see cref="AreaReference"/> representing the resolved cell range.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="workbook"/> is <c>null</c>.</exception>
+        /// <exception cref="InvalidOperationException">If the structured reference cannot be resolved.</exception>
+        public static AreaReference CreateFromStructuredReference(
+            String reference,
+            SpreadsheetVersion version,
+            IFormulaParsingWorkbook workbook,
+            int rowIndex = 0)
+        {
+            if (workbook == null)
+                throw new ArgumentNullException(nameof(workbook));
+
+            Area3DPxg area = FormulaParser.ParseStructuredReference(reference, workbook, rowIndex);
+            var firstCell = new CellReference(
+                area.SheetName,
+                area.FirstRow,
+                area.FirstColumn,
+                !area.IsFirstRowRelative,
+                !area.IsFirstColRelative);
+            var lastCell = new CellReference(
+                area.SheetName,
+                area.LastRow,
+                area.LastColumn,
+                !area.IsLastRowRelative,
+                !area.IsLastColRelative);
+            return new AreaReference(firstCell, lastCell, version);
         }
 
         /**
