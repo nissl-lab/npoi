@@ -20,6 +20,7 @@ namespace NPOI.HSSF.UserModel
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Linq;
 
     using NPOI.HSSF.Record;
     using NPOI.SS.UserModel;
@@ -40,7 +41,7 @@ namespace NPOI.HSSF.UserModel
         public const int INITIAL_CAPACITY = 5;
 
         private int rowNum;
-        private SortedDictionary<int, ICell> cells = new SortedDictionary<int, ICell>();
+        private Dictionary<int, ICell> cells = new Dictionary<int, ICell>();
          
         /**
          * reference to low level representation

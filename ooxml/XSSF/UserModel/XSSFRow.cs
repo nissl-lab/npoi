@@ -46,9 +46,8 @@ namespace NPOI.XSSF.UserModel
 
         /// <summary>
         /// Cells of this row keyed by their column indexes.
-        /// The SortedDictionary ensures that the cells are ordered by columnIndex in the ascending order.
         /// </summary>
-        private readonly SortedDictionary<int, ICell> _cells;
+        private readonly Dictionary<int, ICell> _cells;
 
         /// <summary>
         /// the parent sheet
@@ -277,7 +276,7 @@ namespace NPOI.XSSF.UserModel
         {
             _row = row;
             _sheet = sheet;
-            _cells = new SortedDictionary<int, ICell>();
+            _cells = new Dictionary<int, ICell>();
             if (0 < row.SizeOfCArray())
             {
                 foreach (CT_Cell c in row.c)
@@ -536,7 +535,8 @@ namespace NPOI.XSSF.UserModel
         /// </summary>
         internal void OnDocumentWrite()
         {
-            // check if cells in the CT_Row are ordered
+            var orderedCells = _cells.OrderBy(kv => kv.Key).Select(kv => (XSSFCell)kv.Value).ToList();
+            
             bool isOrdered = true;
             if (_row.SizeOfCArray() != _cells.Count)
             {
@@ -545,7 +545,7 @@ namespace NPOI.XSSF.UserModel
             else
             {
                 int i = 0;
-                foreach (XSSFCell cell in _cells.Values.Cast<XSSFCell>())
+                foreach (XSSFCell cell in orderedCells)
                 {
                     CT_Cell c1 = cell.GetCTCell();
                     CT_Cell c2 = _row.GetCArray(i++);
@@ -564,7 +564,7 @@ namespace NPOI.XSSF.UserModel
             {
                 CT_Cell[] cArray = new CT_Cell[_cells.Count];
                 int i = 0;
-                foreach (XSSFCell c in _cells.Values.Cast<XSSFCell>())
+                foreach (XSSFCell c in orderedCells)
                 {
                     cArray[i++] = c.GetCTCell();
                 }
@@ -633,7 +633,7 @@ namespace NPOI.XSSF.UserModel
         /// Cell iterator over the physically defined cell
         /// </summary>
         /// <returns>an iterator over cells in this row.</returns>
-        public SortedDictionary<int, ICell>.ValueCollection.Enumerator CellIterator()
+        public Dictionary<int, ICell>.ValueCollection.Enumerator CellIterator()
         {
             return _cells.Values.GetEnumerator();
         }
@@ -644,7 +644,7 @@ namespace NPOI.XSSF.UserModel
         /// <returns>an iterator over cells in this row.</returns>
         public IEnumerator<ICell> GetEnumerator()
         {
-            return CellIterator();
+            return _cells.Values.GetEnumerator();
         }
 
         /// <summary>
