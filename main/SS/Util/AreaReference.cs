@@ -43,12 +43,59 @@ namespace NPOI.SS.Util
 
         /**
          * Create an area ref from a string representation.  Sheet names containing special Chars should be
-         * delimited and escaped as per normal syntax rules for formulas.<br/> 
+         * delimited and escaped as per normal syntax rules for formulas.<br/>
          * The area reference must be contiguous (i.e. represent a single rectangle, not a Union of rectangles)
          */
         public AreaReference(String reference, SpreadsheetVersion version)
+            : this(reference, version, null, 0)
+        {
+        }
+
+        /// <summary>
+        /// Creates an area reference from a string that may be either a standard cell reference
+        /// (e.g., <c>Sheet1!A1:B5</c>) or a structured table reference (e.g., <c>Table1[#Headers]</c>).
+        /// When <paramref name="workbook"/> is provided, structured table references are resolved
+        /// automatically against the workbook's table definitions.
+        /// </summary>
+        /// <param name="reference">The reference string to parse.</param>
+        /// <param name="version">The spreadsheet version for cell reference validation.</param>
+        /// <param name="workbook">
+        /// The formula parsing workbook used to resolve structured table references.
+        /// Use <c>XSSFEvaluationWorkbook.Create(workbook)</c> to obtain this from an <c>XSSFWorkbook</c>.
+        /// Pass <c>null</c> if structured references are not expected.
+        /// </param>
+        /// <param name="rowIndex">
+        /// The 0-based row index of the cell containing the reference.
+        /// Only needed for <c>[#This Row]</c> or <c>@</c> specifiers; pass 0 otherwise.
+        /// </param>
+        public AreaReference(String reference, SpreadsheetVersion version,
+            IFormulaParsingWorkbook workbook, int rowIndex = 0)
         {
             _version = (null != version) ? version : DEFAULT_SPREADSHEET_VERSION;
+
+            // When a workbook is provided, detect and resolve structured table references
+            // (e.g., "Table1[#Headers]", "Table1[[#Data],[Column1]]") that would otherwise
+            // fail in the A1-style parser below. This delegates to FormulaParser which
+            // already has full structured reference support.
+            if (workbook != null && IsStructuredReference(reference))
+            {
+                Area3DPxg area = FormulaParser.ParseStructuredReference(reference, workbook, rowIndex);
+                _firstCell = new CellReference(
+                    area.SheetName,
+                    area.FirstRow,
+                    area.FirstColumn,
+                    !area.IsFirstRowRelative,
+                    !area.IsFirstColRelative);
+                _lastCell = new CellReference(
+                    area.SheetName,
+                    area.LastRow,
+                    area.LastColumn,
+                    !area.IsLastRowRelative,
+                    !area.IsLastColRelative);
+                _isSingleCell = area.FirstRow == area.LastRow && area.FirstColumn == area.LastColumn;
+                return;
+            }
+
             if (!IsContiguous(reference))
             {
                 throw new ArgumentException(
@@ -257,49 +304,6 @@ namespace NPOI.SS.Util
         public static bool IsStructuredReference(String reference)
         {
             return Table.IsStructuredReference.IsMatch(reference);
-        }
-
-        /// <summary>
-        /// Creates an <see cref="AreaReference"/> from a structured table reference string
-        /// (e.g., <c>Table1[#Headers]</c>, <c>Table1[[#Data],[Column1]]</c>) by resolving
-        /// the table name and specifiers against the workbook's table definitions.
-        /// </summary>
-        /// <param name="reference">The structured reference string to resolve.</param>
-        /// <param name="version">The spreadsheet version for cell reference validation.</param>
-        /// <param name="workbook">
-        /// The formula parsing workbook used to look up table definitions.
-        /// Use <c>XSSFEvaluationWorkbook.Create(workbook)</c> to obtain this from an <c>XSSFWorkbook</c>.
-        /// </param>
-        /// <param name="rowIndex">
-        /// The 0-based row index of the cell containing the reference.
-        /// Only needed for <c>[#This Row]</c> or <c>@</c> specifiers; pass 0 otherwise.
-        /// </param>
-        /// <returns>An <see cref="AreaReference"/> representing the resolved cell range.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="workbook"/> is <c>null</c>.</exception>
-        /// <exception cref="InvalidOperationException">If the structured reference cannot be resolved.</exception>
-        public static AreaReference CreateFromStructuredReference(
-            String reference,
-            SpreadsheetVersion version,
-            IFormulaParsingWorkbook workbook,
-            int rowIndex = 0)
-        {
-            if (workbook == null)
-                throw new ArgumentNullException(nameof(workbook));
-
-            Area3DPxg area = FormulaParser.ParseStructuredReference(reference, workbook, rowIndex);
-            var firstCell = new CellReference(
-                area.SheetName,
-                area.FirstRow,
-                area.FirstColumn,
-                !area.IsFirstRowRelative,
-                !area.IsFirstColRelative);
-            var lastCell = new CellReference(
-                area.SheetName,
-                area.LastRow,
-                area.LastColumn,
-                !area.IsLastRowRelative,
-                !area.IsLastColRelative);
-            return new AreaReference(firstCell, lastCell, version);
         }
 
         /**
