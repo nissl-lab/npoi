@@ -178,10 +178,13 @@ namespace TestCases.SS.Util
         [Test]
         public void Constructor_WithWorkbook_InvalidTableName_Throws()
         {
+            // The constructor can throw several exception types for invalid structured references:
+            // - KeyNotFoundException: table name not found in workbook (from GetTable())
+            // - FormulaParseException: malformed structured reference syntax
+            // - InvalidOperationException: reference resolves to something other than a single area
             using XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("StructuredReferences.xlsx");
             var fpb = XSSFEvaluationWorkbook.Create(wb);
 
-            // BaseXSSFEvaluationWorkbook.GetTable() throws KeyNotFoundException for unknown tables
             Assert.Throws<KeyNotFoundException>(() =>
                 new AreaReference("NonExistentTable[#Headers]", SpreadsheetVersion.EXCEL2007, fpb));
         }

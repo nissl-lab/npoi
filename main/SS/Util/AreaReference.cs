@@ -57,6 +57,11 @@ namespace NPOI.SS.Util
         /// When <paramref name="workbook"/> is provided, structured table references are resolved
         /// automatically against the workbook's table definitions.
         /// </summary>
+        /// <remarks>
+        /// Structured reference resolution creates a <see cref="FormulaParser"/> instance internally.
+        /// This is fine for typical named-range resolution, but callers resolving thousands of
+        /// references in a tight loop may want to cache results.
+        /// </remarks>
         /// <param name="reference">The reference string to parse.</param>
         /// <param name="version">The spreadsheet version for cell reference validation.</param>
         /// <param name="workbook">
@@ -68,6 +73,15 @@ namespace NPOI.SS.Util
         /// The 0-based row index of the cell containing the reference.
         /// Only needed for <c>[#This Row]</c> or <c>@</c> specifiers; pass 0 otherwise.
         /// </param>
+        /// <exception cref="KeyNotFoundException">
+        /// The structured reference names a table that does not exist in the workbook.
+        /// </exception>
+        /// <exception cref="FormulaParseException">
+        /// The structured reference syntax is malformed.
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// The structured reference resolved to something other than a single area.
+        /// </exception>
         public AreaReference(String reference, SpreadsheetVersion version,
             IFormulaParsingWorkbook workbook, int rowIndex = 0)
         {
@@ -75,11 +89,13 @@ namespace NPOI.SS.Util
 
             // When a workbook is provided, detect and resolve structured table references
             // (e.g., "Table1[#Headers]", "Table1[[#Data],[Column1]]") that would otherwise
-            // fail in the A1-style parser below. This delegates to FormulaParser which
-            // already has full structured reference support.
+            // fail in the A1-style parser below. Detection uses Table.IsStructuredReference
+            // (an unanchored regex that may false-positive on unusual bracket-containing strings,
+            // but FormulaParser.Parse will throw in that case — same as the old A1-style path).
             if (workbook != null && IsStructuredReference(reference))
             {
                 Area3DPxg area = FormulaParser.ParseStructuredReference(reference, workbook, rowIndex);
+                // CellReference takes isAbsolute flags; AreaPtgBase stores isRelative — invert.
                 _firstCell = new CellReference(
                     area.SheetName,
                     area.FirstRow,
