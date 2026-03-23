@@ -44,7 +44,7 @@ namespace NPOI.XSSF.Streaming
         
         public CellIterator AllCellsIterator()
         {
-            return new CellIterator(LastCellNum,  new SortedDictionary<int, SXSSFCell>(_cells));
+            return new CellIterator(LastCellNum, _cells);
         }
         public virtual bool HasCustomHeight()
         {
@@ -299,7 +299,7 @@ namespace NPOI.XSSF.Streaming
         }
         public IEnumerator<ICell> GetEnumerator()
         {
-            return new FilledCellIterator(new SortedDictionary<int, SXSSFCell>(_cells));
+            return _cells.Values.GetEnumerator();
         }
 
         public void MoveCell(ICell cell, int newColumn)
@@ -383,11 +383,9 @@ namespace NPOI.XSSF.Streaming
         */
         public class FilledCellIterator : IEnumerator<ICell>
         {
-            //private SortedDictionary<int, SXSSFCell> _cells;
             private readonly IEnumerator<SXSSFCell> enumerator;
-            public FilledCellIterator(SortedDictionary<int, SXSSFCell> cells)
+            public FilledCellIterator(Dictionary<int, SXSSFCell> cells)
             {
-                //_cells = cells;
                 enumerator = cells.Values.GetEnumerator();
             }
 

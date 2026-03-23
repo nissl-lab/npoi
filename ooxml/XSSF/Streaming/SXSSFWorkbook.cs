@@ -505,8 +505,9 @@ namespace NPOI.XSSF.Streaming
 
         private static void CopyStreamAndInjectWorksheet(Stream inputStream, Stream outputStream, Stream worksheetData)
         {
-            StreamReader inReader = new StreamReader(inputStream, Encoding.UTF8);
-            StreamWriter outWriter = new StreamWriter(outputStream, Encoding.UTF8);
+            const int BufferSize = 131072;
+            StreamReader inReader = new StreamReader(inputStream, Encoding.UTF8, true, BufferSize);
+            StreamWriter outWriter = new StreamWriter(outputStream, Encoding.UTF8, BufferSize);
             bool needsStartTag = true;
             int c;
             int pos = 0;
