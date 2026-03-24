@@ -46,9 +46,8 @@ namespace NPOI.XSSF.UserModel
 
         /// <summary>
         /// Cells of this row keyed by their column indexes.
-        /// The SortedDictionary ensures that the cells are ordered by columnIndex in the ascending order.
         /// </summary>
-        private readonly SortedDictionary<int, ICell> _cells;
+        private readonly Dictionary<int, ICell> _cells;
 
         /// <summary>
         /// the parent sheet
@@ -56,6 +55,18 @@ namespace NPOI.XSSF.UserModel
         private readonly XSSFSheet _sheet;
 
         private readonly StylesTable _stylesSource;
+
+        /// <summary>
+        /// Cached first (minimum) column index, or -1 if unknown/dirty.
+        /// Avoids O(n) LINQ Min() scan on every FirstCellNum access.
+        /// </summary>
+        private int _cachedFirstCellNum = -1;
+
+        /// <summary>
+        /// Cached last (maximum) column index, or -1 if unknown/dirty.
+        /// Avoids O(n) LINQ Max() scan on every LastCellNum access.
+        /// </summary>
+        private int _cachedLastCellNum = -1;
         #endregion
 
         #region Public properties
@@ -79,7 +90,12 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                return (short)(_cells.Count == 0 ? -1 : GetFirstKey());
+                if (_cells.Count == 0) return -1;
+                if (_cachedFirstCellNum < 0)
+                {
+                    _cachedFirstCellNum = GetFirstKey();
+                }
+                return (short)_cachedFirstCellNum;
             }
         }
 
@@ -94,7 +110,12 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                return (short)(_cells.Count == 0 ? -1 : (GetLastKey() + 1));
+                if (_cells.Count == 0) return -1;
+                if (_cachedLastCellNum < 0)
+                {
+                    _cachedLastCellNum = GetLastKey();
+                }
+                return (short)(_cachedLastCellNum + 1);
             }
         }
 
@@ -277,13 +298,14 @@ namespace NPOI.XSSF.UserModel
         {
             _row = row;
             _sheet = sheet;
-            _cells = new SortedDictionary<int, ICell>();
+            _cells = new Dictionary<int, ICell>();
             if (0 < row.SizeOfCArray())
             {
                 foreach (CT_Cell c in row.c)
                 {
                     XSSFCell cell = new XSSFCell(this, c);
                     _cells.Add(cell.ColumnIndex, cell);
+                    UpdateCacheOnAdd(cell.ColumnIndex);
                     sheet.OnReadCell(cell);
                 }
             }
@@ -355,6 +377,7 @@ namespace NPOI.XSSF.UserModel
             }
 
             _cells[columnIndex] = xcell;
+            UpdateCacheOnAdd(columnIndex);
             return xcell;
         }
 
@@ -421,7 +444,9 @@ namespace NPOI.XSSF.UserModel
                 ((XSSFWorkbook)_sheet.Workbook).OnDeleteFormula(xcell);
             }
 
-            _cells.Remove(cell.ColumnIndex);
+            int removedIndex = cell.ColumnIndex;
+            _cells.Remove(removedIndex);
+            InvalidateCacheOnRemove(removedIndex);
         }
 
         /// <summary>
@@ -536,7 +561,8 @@ namespace NPOI.XSSF.UserModel
         /// </summary>
         internal void OnDocumentWrite()
         {
-            // check if cells in the CT_Row are ordered
+            var orderedCells = _cells.OrderBy(kv => kv.Key).Select(kv => (XSSFCell)kv.Value).ToList();
+            
             bool isOrdered = true;
             if (_row.SizeOfCArray() != _cells.Count)
             {
@@ -545,7 +571,7 @@ namespace NPOI.XSSF.UserModel
             else
             {
                 int i = 0;
-                foreach (XSSFCell cell in _cells.Values.Cast<XSSFCell>())
+                foreach (XSSFCell cell in orderedCells)
                 {
                     CT_Cell c1 = cell.GetCTCell();
                     CT_Cell c2 = _row.GetCArray(i++);
@@ -564,7 +590,7 @@ namespace NPOI.XSSF.UserModel
             {
                 CT_Cell[] cArray = new CT_Cell[_cells.Count];
                 int i = 0;
-                foreach (XSSFCell c in _cells.Values.Cast<XSSFCell>())
+                foreach (XSSFCell c in orderedCells)
                 {
                     cArray[i++] = c.GetCTCell();
                 }
@@ -625,6 +651,10 @@ namespace NPOI.XSSF.UserModel
 
             // Sort CT_Cols by index asc.
             _row.c.Sort((col1, col2) => col1.r.CompareTo(col2.r));
+
+            // Cache is invalid after rebuild — keys may have changed
+            _cachedFirstCellNum = -1;
+            _cachedLastCellNum = -1;
         }
         #endregion
 
@@ -633,7 +663,7 @@ namespace NPOI.XSSF.UserModel
         /// Cell iterator over the physically defined cell
         /// </summary>
         /// <returns>an iterator over cells in this row.</returns>
-        public SortedDictionary<int, ICell>.ValueCollection.Enumerator CellIterator()
+        public Dictionary<int, ICell>.ValueCollection.Enumerator CellIterator()
         {
             return _cells.Values.GetEnumerator();
         }
@@ -644,7 +674,7 @@ namespace NPOI.XSSF.UserModel
         /// <returns>an iterator over cells in this row.</returns>
         public IEnumerator<ICell> GetEnumerator()
         {
-            return CellIterator();
+            return _cells.Values.GetEnumerator();
         }
 
         /// <summary>
@@ -804,6 +834,45 @@ namespace NPOI.XSSF.UserModel
         private int GetLastKey()
         {
             return _cells.Keys.Max();
+        }
+
+        /// <summary>
+        /// Update cached min/max on cell addition. O(1) — just compare with current bounds.
+        /// </summary>
+        private void UpdateCacheOnAdd(int columnIndex)
+        {
+            if (_cachedFirstCellNum < 0 || columnIndex < _cachedFirstCellNum)
+            {
+                _cachedFirstCellNum = columnIndex;
+            }
+            if (_cachedLastCellNum < 0 || columnIndex > _cachedLastCellNum)
+            {
+                _cachedLastCellNum = columnIndex;
+            }
+        }
+
+        /// <summary>
+        /// Invalidate cached min/max when a cell at a boundary is removed.
+        /// Only forces re-scan when the removed cell was at an edge.
+        /// </summary>
+        private void InvalidateCacheOnRemove(int removedIndex)
+        {
+            if (_cells.Count == 0)
+            {
+                _cachedFirstCellNum = -1;
+                _cachedLastCellNum = -1;
+            }
+            else
+            {
+                if (removedIndex == _cachedFirstCellNum)
+                {
+                    _cachedFirstCellNum = -1; // will re-scan on next access
+                }
+                if (removedIndex == _cachedLastCellNum)
+                {
+                    _cachedLastCellNum = -1; // will re-scan on next access
+                }
+            }
         }
         #endregion
     }

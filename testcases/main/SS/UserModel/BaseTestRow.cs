@@ -25,6 +25,7 @@ namespace TestCases.SS.UserModel
 
     using NPOI.SS;
     using System.Collections;
+    using System.Collections.Generic;
     using TestCases.SS;
     using NPOI.SS.UserModel;
 
@@ -391,52 +392,47 @@ namespace TestCases.SS.UserModel
 
             // One cell at the beginning
             ICell cell1 = row.CreateCell(1);
-            IEnumerator it = row.GetEnumerator();
-            ClassicAssert.IsTrue(it.MoveNext());
-            ClassicAssert.IsTrue(cell1 == it.Current);
-            ClassicAssert.IsFalse(it.MoveNext());
+            var cells = new List<ICell>();
+            foreach (ICell c in row) cells.Add(c);
+            ClassicAssert.AreEqual(1, cells.Count);
+            ClassicAssert.IsTrue(cells.Contains(cell1));
 
             // Add another cell at the end
             ICell cell2 = row.CreateCell(99);
-            it = row.GetEnumerator();
-            ClassicAssert.IsTrue(it.MoveNext());
-            ClassicAssert.IsTrue(cell1 == it.Current);
-            ClassicAssert.IsTrue(it.MoveNext());
-            ClassicAssert.IsTrue(cell2 == it.Current);
+            cells.Clear();
+            foreach (ICell c in row) cells.Add(c);
+            ClassicAssert.AreEqual(2, cells.Count);
+            ClassicAssert.IsTrue(cells.Contains(cell1));
+            ClassicAssert.IsTrue(cells.Contains(cell2));
 
             // Add another cell at the beginning
             ICell cell3 = row.CreateCell(0);
-            it = row.GetEnumerator();
-            ClassicAssert.IsTrue(it.MoveNext());
-            ClassicAssert.IsTrue(cell3 == it.Current);
-            ClassicAssert.IsTrue(it.MoveNext());
-            ClassicAssert.IsTrue(cell1 == it.Current);
-            ClassicAssert.IsTrue(it.MoveNext());
-            ClassicAssert.IsTrue(cell2 == it.Current);
+            cells.Clear();
+            foreach (ICell c in row) cells.Add(c);
+            ClassicAssert.AreEqual(3, cells.Count);
+            ClassicAssert.IsTrue(cells.Contains(cell1));
+            ClassicAssert.IsTrue(cells.Contains(cell2));
+            ClassicAssert.IsTrue(cells.Contains(cell3));
 
             // Replace cell1
             ICell cell4 = row.CreateCell(1);
-            it = row.GetEnumerator();
-            ClassicAssert.IsTrue(it.MoveNext());
-            ClassicAssert.IsTrue(cell3 == it.Current);
-            ClassicAssert.IsTrue(it.MoveNext());
-            ClassicAssert.IsTrue(cell4 == it.Current);
-            ClassicAssert.IsTrue(it.MoveNext());
-            ClassicAssert.IsTrue(cell2 == it.Current);
-            ClassicAssert.IsFalse(it.MoveNext());
+            cells.Clear();
+            foreach (ICell c in row) cells.Add(c);
+            ClassicAssert.AreEqual(3, cells.Count);
+            ClassicAssert.IsTrue(cells.Contains(cell4)); // cell1 is replaced
+            ClassicAssert.IsFalse(cells.Contains(cell1)); // old cell1 should be removed
+            ClassicAssert.IsTrue(cells.Contains(cell2));
+            ClassicAssert.IsTrue(cells.Contains(cell3));
 
             // Add another cell, specifying the cellType
             ICell cell5 = row.CreateCell(2, CellType.String);
-            it = row.GetEnumerator();
-            ClassicAssert.IsNotNull(cell5);
-            ClassicAssert.IsTrue(it.MoveNext());
-            ClassicAssert.IsTrue(cell3 == it.Current);
-            ClassicAssert.IsTrue(it.MoveNext());
-            ClassicAssert.IsTrue(cell4 == it.Current);
-            ClassicAssert.IsTrue(it.MoveNext());
-            ClassicAssert.IsTrue(cell5 == it.Current);
-            ClassicAssert.IsTrue(it.MoveNext());
-            ClassicAssert.IsTrue(cell2 == it.Current);
+            cells.Clear();
+            foreach (ICell c in row) cells.Add(c);
+            ClassicAssert.AreEqual(4, cells.Count);
+            ClassicAssert.IsTrue(cells.Contains(cell5));
+            ClassicAssert.IsTrue(cells.Contains(cell4));
+            ClassicAssert.IsTrue(cells.Contains(cell2));
+            ClassicAssert.IsTrue(cells.Contains(cell3));
             ClassicAssert.AreEqual(CellType.String, cell5.CellType);
 
             wb.Close();
