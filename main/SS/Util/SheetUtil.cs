@@ -638,17 +638,46 @@ namespace NPOI.SS.Util
             // No need to explore the whole sheet: explore only the first maxRows lines
             if (maxRows > 0 && lastRow - firstRow > maxRows) lastRow = firstRow + maxRows;
 
-            double width = -1;
-            for (int rowIdx = firstRow; rowIdx <= lastRow; ++rowIdx)
+            // Build a spatial index: row → CellRangeAddress for merged regions that
+            // overlap this column. Turns O(mergedRegions) per cell into O(1) lookup.
+            Dictionary<int, CellRangeAddress> mergedRegionIndex = null;
+            if (sheet.NumMergedRegions > 0)
             {
-                IRow row = sheet.GetRow(rowIdx);
-                if (row != null)
+                mergedRegionIndex = new Dictionary<int, CellRangeAddress>();
+                foreach (CellRangeAddress region in sheet.MergedRegions)
                 {
-                    double cellWidth = GetColumnWidthForRow(row, column, defaultCharWidth, formatter, useMergedCells);
-                    width = Math.Max(width, cellWidth);
+                    if (region.FirstColumn <= column && column <= region.LastColumn)
+                    {
+                        for (int r = region.FirstRow; r <= region.LastRow; r++)
+                        {
+                            mergedRegionIndex[r] = region;
+                        }
+                    }
                 }
             }
-            return width;
+
+            // Cache SKFont objects by font index to avoid repeated allocation/disposal
+            var fontCache = new Dictionary<int, SKFont>();
+            try
+            {
+                double width = -1;
+                for (int rowIdx = firstRow; rowIdx <= lastRow; ++rowIdx)
+                {
+                    IRow row = sheet.GetRow(rowIdx);
+                    if (row != null)
+                    {
+                        double cellWidth = GetColumnWidthForRow(
+                            row, column, defaultCharWidth, formatter, useMergedCells, mergedRegionIndex, fontCache);
+                        width = Math.Max(width, cellWidth);
+                    }
+                }
+                return width;
+            }
+            finally
+            {
+                foreach (SKFont cached in fontCache.Values)
+                    cached.Dispose();
+            }
         }
 
         /**
@@ -702,6 +731,112 @@ namespace NPOI.SS.Util
             }
 
             return GetCellWidth(cell, defaultCharWidth, formatter, useMergedCells);
+        }
+
+        /// <summary>
+        /// Optimized overload that uses a merged region spatial index and font cache
+        /// to avoid per-cell overhead when iterating many rows.
+        /// </summary>
+        private static double GetColumnWidthForRow(
+                IRow row, int column, int defaultCharWidth, DataFormatter formatter, bool useMergedCells,
+                Dictionary<int, CellRangeAddress> mergedRegionIndex, Dictionary<int, SKFont> fontCache)
+        {
+            if (row == null)
+            {
+                return -1;
+            }
+
+            ICell cell = row.GetCell(column);
+
+            if (cell == null)
+            {
+                return -1;
+            }
+
+            return GetCellWidth(cell, defaultCharWidth, formatter, useMergedCells, mergedRegionIndex, fontCache);
+        }
+
+        /// <summary>
+        /// Optimized overload that uses a spatial index for O(1) merged region lookup
+        /// and cached SKFont objects. Called from GetColumnWidth to avoid per-cell overhead.
+        /// </summary>
+        private static double GetCellWidth(ICell cell, int defaultCharWidth, DataFormatter formatter, bool useMergedCells,
+            Dictionary<int, CellRangeAddress> mergedRegionIndex, Dictionary<int, SKFont> fontCache)
+        {
+            IWorkbook wb = cell.Sheet.Workbook;
+            IRow row = cell.Row;
+
+            int colspan = 1;
+            if (mergedRegionIndex != null && mergedRegionIndex.TryGetValue(row.RowNum, out CellRangeAddress region))
+            {
+                if (!useMergedCells)
+                {
+                    // If we're not using merged cells, skip this one and move on to the next.
+                    return -1;
+                }
+                cell = row.GetCell(region.FirstColumn);
+                colspan = 1 + region.LastColumn - region.FirstColumn;
+            }
+
+            ICellStyle style = cell.CellStyle;
+            CellType cellType = cell.CellType;
+
+            // for formula cells we compute the cell width for the cached formula result
+            if (cellType == CellType.Formula)
+                cellType = cell.CachedFormulaResultType;
+
+            IFont font = wb.GetFontAt(style.FontIndex);
+            if (!fontCache.TryGetValue(style.FontIndex, out SKFont windowsFont))
+            {
+                windowsFont = IFont2Font(font);
+                fontCache[style.FontIndex] = windowsFont;
+            }
+
+            double width = -1;
+
+            if (cellType == CellType.String)
+            {
+                IRichTextString rt = cell.RichStringCellValue;
+                String[] lines = rt.String.Split("\n".ToCharArray());
+                for (int i = 0; i < lines.Length; i++)
+                {
+                    String txt = lines[i];
+
+                    if (rt.NumFormattingRuns > 0)
+                    {
+                        // TODO: support rich text fragments
+                    }
+
+                    width = GetCellWidth(defaultCharWidth, colspan, style, width, txt, windowsFont, cell);
+                }
+            }
+            else
+            {
+                String sval = null;
+                if (cellType == CellType.Numeric)
+                {
+                    // Try to get it formatted to look the same as excel
+                    try
+                    {
+                        sval = formatter.FormatCellValue(cell, dummyEvaluator);
+                    }
+                    catch
+                    {
+                        sval = cell.NumericCellValue.ToString();
+                    }
+                }
+                else if (cellType == CellType.Boolean)
+                {
+                    sval = cell.BooleanCellValue.ToString().ToUpper();
+                }
+                if (sval != null)
+                {
+                    String txt = sval;
+                    width = GetCellWidth(defaultCharWidth, colspan, style, width, txt, windowsFont, cell);
+                }
+            }
+
+            return width;
         }
 
         /**
