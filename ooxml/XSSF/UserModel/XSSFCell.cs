@@ -78,6 +78,11 @@ namespace NPOI.XSSF.UserModel
          */
         private readonly StylesTable _stylesSource;
 
+        private double? _cachedNumericValue;
+        private string _cachedNumericValueSource;
+        private IRichTextString _cachedRichTextValue;
+        private string _cachedRichTextValueSource;
+
         /**
          * Construct a XSSFCell.
          *
@@ -126,11 +131,39 @@ namespace NPOI.XSSF.UserModel
         }
 
         /**
-         * @return table of cell styles shared across this workbook
+         * @return table of cell styles shared across all cells in a workbook.
          */
         protected StylesTable GetStylesSource()
         {
             return _stylesSource;
+        }
+
+        private bool IsNumericCacheValid()
+        {
+            return _cachedNumericValue.HasValue && _cachedNumericValueSource == _cell.v;
+        }
+
+        private void InvalidateNumericCache()
+        {
+            _cachedNumericValue = null;
+            _cachedNumericValueSource = null;
+        }
+
+        private bool IsRichTextCacheValid()
+        {
+            return _cachedRichTextValue != null && _cachedRichTextValueSource == _cell.v;
+        }
+
+        private void InvalidateRichTextCache()
+        {
+            _cachedRichTextValue = null;
+            _cachedRichTextValueSource = null;
+        }
+
+        private void InvalidateAllCaches()
+        {
+            InvalidateNumericCache();
+            InvalidateRichTextCache();
         }
 
         /**
@@ -199,6 +232,7 @@ namespace NPOI.XSSF.UserModel
         {
             _cell.t = (ST_CellType.b);
             _cell.v = (value ? TRUE_AS_STRING : FALSE_AS_STRING);
+            InvalidateAllCaches();
             return this;
         }
 
@@ -228,9 +262,13 @@ namespace NPOI.XSSF.UserModel
                         {
                             if (string.IsNullOrEmpty(_cell.v))
                                 return 0.0;
+                            if (IsNumericCacheValid())
+                                return _cachedNumericValue.Value;
                             try
                             {
-                                return Double.Parse(_cell.v, CultureInfo.InvariantCulture);
+                                _cachedNumericValue = Double.Parse(_cell.v, CultureInfo.InvariantCulture);
+                                _cachedNumericValueSource = _cell.v;
+                                return _cachedNumericValue.Value;
                             }
                             catch (FormatException)
                             {
@@ -259,15 +297,11 @@ namespace NPOI.XSSF.UserModel
         {
             if (Double.IsInfinity(value))
             {
-                // Excel does not support positive/negative infInities,
-                // rather, it gives a #DIV/0! error in these cases.
                 _cell.t = (ST_CellType.e);
                 _cell.v = (FormulaError.DIV0.String);
             }
             else if (Double.IsNaN(value))
             {
-                // Excel does not support Not-a-Number (NaN),
-                // instead it immediately generates an #NUM! error.
                 _cell.t = (ST_CellType.e);
                 _cell.v = (FormulaError.NUM.String);
             }
@@ -277,6 +311,7 @@ namespace NPOI.XSSF.UserModel
                 _cell.v = (value.ToString(CultureInfo.InvariantCulture));
             }
 
+            InvalidateAllCaches();
             return this;
         }
 
@@ -308,35 +343,41 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
+                if (IsRichTextCacheValid())
+                    return _cachedRichTextValue;
+
                 CellType cellType = CellType;
                 XSSFRichTextString rt;
+                string cacheKey = null;
                 switch (cellType)
                 {
                     case CellType.Blank:
                         rt = new XSSFRichTextString("");
+                        cacheKey = "<blank>";
                         break;
                     case CellType.String:
                         if (_cell.t == ST_CellType.inlineStr)
                         {
                             if (_cell.IsSetIs())
                             {
-                                //string is expressed directly in the cell defInition instead of implementing the shared string table.
                                 rt = new XSSFRichTextString(_cell.@is);
+                                cacheKey = "is:" + (_cell.@is?.ToString() ?? "");
                             }
                             else if (_cell.IsSetV())
                             {
-                                //cached result of a formula
                                 rt = new XSSFRichTextString(_cell.v);
+                                cacheKey = "fv:" + _cell.v;
                             }
                             else
                             {
                                 rt = new XSSFRichTextString("");
+                                cacheKey = "<empty>";
                             }
                         }
                         else if (_cell.t == ST_CellType.str)
                         {
-                            //cached formula value
                             rt = new XSSFRichTextString(_cell.IsSetV() ? _cell.v : "");
+                            cacheKey = "str:" + (_cell.IsSetV() ? _cell.v : "");
                         }
                         else
                         {
@@ -344,21 +385,26 @@ namespace NPOI.XSSF.UserModel
                             {
                                 int idx = Int32.Parse(_cell.v);
                                 rt = new XSSFRichTextString(_sharedStringSource.GetEntryAt(idx));
+                                cacheKey = "sst:" + _cell.v;
                             }
                             else
                             {
                                 rt = new XSSFRichTextString("");
+                                cacheKey = "<empty>";
                             }
                         }
                         break;
                     case CellType.Formula:
                         CheckFormulaCachedValueType(CellType.String, GetBaseCellType(false));
                         rt = new XSSFRichTextString(_cell.IsSetV() ? _cell.v : "");
+                        cacheKey = "formula:" + (_cell.IsSetV() ? _cell.v : "");
                         break;
                     default:
                         throw TypeMismatch(CellType.String, cellType, false);
                 }
                 rt.SetStylesTableReference(_stylesSource);
+                _cachedRichTextValue = rt;
+                _cachedRichTextValueSource = cacheKey;
                 return rt;
             }
         }
@@ -428,6 +474,7 @@ namespace NPOI.XSSF.UserModel
                     break;
             }
 
+            InvalidateAllCaches();
             return this;
         }
 
@@ -608,6 +655,7 @@ namespace NPOI.XSSF.UserModel
             }
 
             if (_cell.IsSetV()) _cell.unsetV();
+            InvalidateAllCaches();
             return this;
         }
 
@@ -912,6 +960,7 @@ namespace NPOI.XSSF.UserModel
         {
             _cell.t = ST_CellType.e;
             _cell.v = error.String;
+            InvalidateAllCaches();
             return this;
         }
 
@@ -1011,6 +1060,7 @@ namespace NPOI.XSSF.UserModel
                 _cell.unsetF();
             }
 
+            InvalidateAllCaches();
             return this;
         }
         /// <summary>
