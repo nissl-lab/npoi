@@ -490,65 +490,10 @@ namespace NPOI.SS.Util
                 }
             }
 
-            ICellStyle style = cell.CellStyle;
-            CellType cellType = cell.CellType;
-
-            // for formula cells we compute the cell width for the cached formula result
-            if (cellType == CellType.Formula)
-                cellType = cell.CachedFormulaResultType;
-
-            IFont font = wb.GetFontAt(style.FontIndex);
+            IFont font = wb.GetFontAt(cell.CellStyle.FontIndex);
             using SKFont windowsFont = IFont2Font(font);
 
-            double width = -1;
-
-            if (cellType == CellType.String)
-            {
-                IRichTextString rt = cell.RichStringCellValue;
-                String[] lines = rt.String.Split("\n".ToCharArray());
-                for (int i = 0; i < lines.Length; i++)
-                {
-                    String txt = lines[i];
-
-                    //AttributedString str = new AttributedString(txt);
-                    //copyAttributes(font, str, 0, txt.length());
-                    if (rt.NumFormattingRuns > 0)
-                    {
-                        // TODO: support rich text fragments
-                    }
-
-                    width = GetCellWidth(defaultCharWidth, colspan, style, width, txt, windowsFont, cell);
-                }
-            }
-            else
-            {
-                String sval = null;
-                if (cellType == CellType.Numeric)
-                {
-                    // Try to get it formatted to look the same as excel
-                    try
-                    {
-                        sval = formatter.FormatCellValue(cell, dummyEvaluator);
-                    }
-                    catch
-                    {
-                        sval = cell.NumericCellValue.ToString();
-                    }
-                }
-                else if (cellType == CellType.Boolean)
-                {
-                    sval = cell.BooleanCellValue.ToString().ToUpper();
-                }
-                if (sval != null)
-                {
-                    String txt = sval;
-                    //str = new AttributedString(txt);
-                    //copyAttributes(font, str, 0, txt.length());
-                    width = GetCellWidth(defaultCharWidth, colspan, style, width, txt, windowsFont, cell);
-                }
-            }
-
-            return width;
+            return MeasureCellWidth(cell, defaultCharWidth, formatter, colspan, windowsFont);
         }
 
         private static double GetCellWidth(int defaultCharWidth, int colspan,
@@ -598,6 +543,71 @@ namespace NPOI.SS.Util
             int padding = 5;
             double correction = 1.05;
             width = Math.Max(width, ((actualWidth + padding) / colspan / defaultCharWidth * correction) + cell.CellStyle.Indention);
+            return width;
+        }
+
+        /// <summary>
+        /// Shared cell measurement logic used by both the public GetCellWidth and the
+        /// optimized internal overload. Handles cell type resolution, text extraction,
+        /// and width calculation via the provided SKFont.
+        /// </summary>
+        private static double MeasureCellWidth(ICell cell, int defaultCharWidth, DataFormatter formatter,
+            int colspan, SKFont windowsFont)
+        {
+            CellType cellType = cell.CellType;
+
+            // for formula cells we compute the cell width for the cached formula result
+            if (cellType == CellType.Formula)
+                cellType = cell.CachedFormulaResultType;
+
+            double width = -1;
+
+            if (cellType == CellType.String)
+            {
+                IRichTextString rt = cell.RichStringCellValue;
+                String[] lines = rt.String.Split("\n".ToCharArray());
+                for (int i = 0; i < lines.Length; i++)
+                {
+                    String txt = lines[i];
+
+                    //AttributedString str = new AttributedString(txt);
+                    //copyAttributes(font, str, 0, txt.length());
+                    if (rt.NumFormattingRuns > 0)
+                    {
+                        // TODO: support rich text fragments
+                    }
+
+                    width = GetCellWidth(defaultCharWidth, colspan, cell.CellStyle, width, txt, windowsFont, cell);
+                }
+            }
+            else
+            {
+                String sval = null;
+                if (cellType == CellType.Numeric)
+                {
+                    // Try to get it formatted to look the same as excel
+                    try
+                    {
+                        sval = formatter.FormatCellValue(cell, dummyEvaluator);
+                    }
+                    catch
+                    {
+                        sval = cell.NumericCellValue.ToString();
+                    }
+                }
+                else if (cellType == CellType.Boolean)
+                {
+                    sval = cell.BooleanCellValue.ToString().ToUpper();
+                }
+                if (sval != null)
+                {
+                    String txt = sval;
+                    //str = new AttributedString(txt);
+                    //copyAttributes(font, str, 0, txt.length());
+                    width = GetCellWidth(defaultCharWidth, colspan, cell.CellStyle, width, txt, windowsFont, cell);
+                }
+            }
+
             return width;
         }
 
@@ -778,65 +788,14 @@ namespace NPOI.SS.Util
                 colspan = 1 + region.LastColumn - region.FirstColumn;
             }
 
-            ICellStyle style = cell.CellStyle;
-            CellType cellType = cell.CellType;
-
-            // for formula cells we compute the cell width for the cached formula result
-            if (cellType == CellType.Formula)
-                cellType = cell.CachedFormulaResultType;
-
-            IFont font = wb.GetFontAt(style.FontIndex);
-            if (!fontCache.TryGetValue(style.FontIndex, out SKFont windowsFont))
+            IFont font = wb.GetFontAt(cell.CellStyle.FontIndex);
+            if (!fontCache.TryGetValue(cell.CellStyle.FontIndex, out SKFont windowsFont))
             {
                 windowsFont = IFont2Font(font);
-                fontCache[style.FontIndex] = windowsFont;
+                fontCache[cell.CellStyle.FontIndex] = windowsFont;
             }
 
-            double width = -1;
-
-            if (cellType == CellType.String)
-            {
-                IRichTextString rt = cell.RichStringCellValue;
-                String[] lines = rt.String.Split("\n".ToCharArray());
-                for (int i = 0; i < lines.Length; i++)
-                {
-                    String txt = lines[i];
-
-                    if (rt.NumFormattingRuns > 0)
-                    {
-                        // TODO: support rich text fragments
-                    }
-
-                    width = GetCellWidth(defaultCharWidth, colspan, style, width, txt, windowsFont, cell);
-                }
-            }
-            else
-            {
-                String sval = null;
-                if (cellType == CellType.Numeric)
-                {
-                    // Try to get it formatted to look the same as excel
-                    try
-                    {
-                        sval = formatter.FormatCellValue(cell, dummyEvaluator);
-                    }
-                    catch
-                    {
-                        sval = cell.NumericCellValue.ToString();
-                    }
-                }
-                else if (cellType == CellType.Boolean)
-                {
-                    sval = cell.BooleanCellValue.ToString().ToUpper();
-                }
-                if (sval != null)
-                {
-                    String txt = sval;
-                    width = GetCellWidth(defaultCharWidth, colspan, style, width, txt, windowsFont, cell);
-                }
-            }
-
-            return width;
+            return MeasureCellWidth(cell, defaultCharWidth, formatter, colspan, windowsFont);
         }
 
         /**

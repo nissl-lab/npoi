@@ -23,7 +23,7 @@ est laborum.".Split(' ', '\r', '\n');
     [Params(5)]
     public int ColumnCount { get; set; }
 
-    [IterationSetup]
+    [GlobalSetup]
     public void Setup()
     {
         var ipsum = 0;
@@ -50,7 +50,7 @@ est laborum.".Split(' ', '\r', '\n');
         }
     }
 
-    [IterationCleanup]
+    [GlobalCleanup]
     public void Cleanup()
     {
         workbook.Dispose();
@@ -75,7 +75,7 @@ labore et dolore magna aliqua.".Split(' ', '\r', '\n');
     [Params(0, 100)]
     public int MergedRegionCount { get; set; }
 
-    [IterationSetup]
+    [GlobalSetup]
     public void Setup()
     {
         var ipsum = 0;
@@ -113,7 +113,7 @@ labore et dolore magna aliqua.".Split(' ', '\r', '\n');
         }
     }
 
-    [IterationCleanup]
+    [GlobalCleanup]
     public void Cleanup()
     {
         workbook.Dispose();
