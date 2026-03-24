@@ -22,8 +22,6 @@ using System.Text;
 using Cysharp.Text;
 using System.Globalization;
 using NPOI.SS.Format;
-using ExtendedNumerics;
-using System.Numerics;
 namespace NPOI.SS.UserModel
 {
 
@@ -114,37 +112,34 @@ namespace NPOI.SS.UserModel
             double originalValue = 0;
             double.TryParse(num, out originalValue);
 
+            bool isNeg = originalValue < 0;
+            double absValue = Math.Abs(originalValue);
 
-            BigDecimal doubleValue = new BigDecimal(originalValue);
-            bool isNeg = doubleValue.IsNegative();
-            var absValue = BigDecimal.Abs(doubleValue);
+            long wholePart = (long)Math.Truncate(absValue);
+            double decPart = absValue - wholePart;
 
-            var wholePart = absValue.GetWholePart();
-            var decPart = absValue.GetFractionalPart();
-            if ((wholePart + decPart).IsZero())
+            if (wholePart == 0 && decPart == 0)
             {
                 return "0";
             }
 
-            //if the absolute value is smaller than 1 over the exact or maxDenom
-            //you can stop here and return "0"
-            if (absValue < (1 / Math.Max(exactDenom, maxDenom)))
+            //if the absolute value is smaller than half the smallest representable fraction
+            //round to zero instead of to the nearest fraction
+            int effectiveDenom = Math.Max(exactDenom, maxDenom);
+            if (effectiveDenom > 0 && absValue < (0.5 / effectiveDenom))
             {
-                return "0";
+                return isNeg ? "-0" : "0";
             }
 
             //this is necessary to prevent overflow in the maxDenom calculation
             //stink1
-            if (decPart.IsZero())
+            if (decPart == 0)
             {
-                using var sb = ZString.CreateStringBuilder();
-
-                if(isNeg)
+                if (isNeg)
                 {
-                    sb.Append("-");
+                    return "-" + wholePart;
                 }
-                sb.Append(wholePart);
-                return sb.ToString();
+                return wholePart.ToString();
             }
 
             SimpleFraction fract = null;
@@ -153,59 +148,63 @@ namespace NPOI.SS.UserModel
                 //this should be the case because of the constructor
                 if (exactDenom > 0)
                 {
-                    fract = SimpleFraction.BuildFractionExactDenominator((double)decPart, exactDenom);
+                    fract = SimpleFraction.BuildFractionExactDenominator(decPart, exactDenom);
                 }
                 else
                 {
-                    fract = SimpleFraction.BuildFractionMaxDenominator((double)decPart, maxDenom);
+                    fract = SimpleFraction.BuildFractionMaxDenominator(decPart, maxDenom);
                 }
             }
             catch (SimpleFractionException)
             {
-                return doubleValue.ToString();
+                return originalValue.ToString();
             }
 
-            using var sb1 = ZString.CreateStringBuilder();
             //now format the results
-            if(isNeg)
+            if (isNeg)
             {
-                sb1.Append("-");
+                return "-" + FormatInternal(wholePart, fract);
             }
+            return FormatInternal(wholePart, fract);
+        }
+
+        private string FormatInternal(long wholePart, SimpleFraction fract)
+        {
+            StringBuilder sb = new StringBuilder();
 
             //if whole part has to go into the numerator
             if (string.IsNullOrEmpty(wholePartFormatString))
             {
                 int fden = fract.Denominator;
-                int fnum = fract.Numerator;
-                var trueNum =  wholePart * (new BigDecimal(fden)) + (new BigDecimal(fnum));
-                sb1.Append((BigInteger)trueNum);
-                sb1.Append("/");
-                sb1.Append(fden);
-                return sb1.ToString();
+                long fnum = (long)fract.Numerator;
+                long trueNum = wholePart * fden + fnum;
+                sb.Append(trueNum);
+                sb.Append("/");
+                sb.Append(fden);
+                return sb.ToString();
             }
-
 
             //short circuit if fraction is 0 or 1
             if (fract.Numerator == 0)
             {
-                sb1.Append(wholePart);
-                return sb1.ToString();
+                sb.Append(wholePart);
+                return sb.ToString();
             }
             else if (fract.Numerator == fract.Denominator)
             {
-                sb1.Append(wholePart + BigDecimal.One);
-                return sb1.ToString();
+                sb.Append(wholePart + 1);
+                return sb.ToString();
             }
             //as mentioned above, this ignores the exact space formatting in Excel
-            if (wholePart.CompareTo(BigDecimal.Zero.GetWholePart()) > 0)
+            if (wholePart > 0)
             {
-                sb1.Append(wholePart);
-                sb1.Append(" ");
+                sb.Append(wholePart);
+                sb.Append(" ");
             }
-            sb1.Append(fract.Numerator);
-            sb1.Append("/");
-            sb1.Append(fract.Denominator);
-            return sb1.ToString();
+            sb.Append(fract.Numerator);
+            sb.Append("/");
+            sb.Append(fract.Denominator);
+            return sb.ToString();
         }
 
         protected override StringBuilder Format(object obj, StringBuilder toAppendTo, int pos)

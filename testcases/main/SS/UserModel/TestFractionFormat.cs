@@ -89,11 +89,11 @@ namespace TestCases.SS.UserModel
             ClassicAssert.AreEqual("10100136259702", f.Format(10100136259702d));
             ClassicAssert.AreEqual("-10100136259702", f.Format(-10100136259702d));
 
-            // Excel displays fraction: 51/512
+            // With format ???/??? (max denom 999), NPOI produces 10/100 for 0.1 and 90/100 for 0.9
             ClassicAssert.AreEqual("10100136259702 10/100", f.Format(10100136259702.1d));
             ClassicAssert.AreEqual("-10100136259702 10/100", f.Format(-10100136259702.1d));
 
-            // Excel displays fraction: 461/512
+            // With format ???/??? (max denom 999), NPOI produces 90/100 for 0.9
             ClassicAssert.AreEqual("10100136259702 90/100", f.Format(10100136259702.9d));
             ClassicAssert.AreEqual("-10100136259702 90/100", f.Format(-10100136259702.9d));
         }
