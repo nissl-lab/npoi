@@ -599,6 +599,14 @@ namespace NPOI.XSSF.UserModel
             }
         }
         #endregion
+        /// <summary>
+        /// Gets cells sorted by column index
+        /// </summary>
+        /// <returns>List of cells sorted by column index</returns>
+        private List<ICell> GetSortedCells()
+        {
+            return _cells.OrderBy(kv => kv.Key).Select(kv => kv.Value).ToList();
+        }
 
         #region Internal methods
         /// <summary>
@@ -674,7 +682,7 @@ namespace NPOI.XSSF.UserModel
         /// <returns>an iterator over cells in this row.</returns>
         public IEnumerator<ICell> GetEnumerator()
         {
-            return _cells.Values.GetEnumerator();
+            return GetSortedCells().GetEnumerator();
         }
 
         /// <summary>
@@ -723,13 +731,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                List<ICell> cells = new List<ICell>();
-                foreach (ICell cell in _cells.Values)
-                {
-                    cells.Add(cell);
-                }
-
-                return cells;
+                return GetSortedCells();
             }
         }
 
