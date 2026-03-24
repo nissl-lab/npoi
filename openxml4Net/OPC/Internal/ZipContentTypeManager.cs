@@ -38,7 +38,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal
             else
                 zos = new ZipOutputStream(out1);
 
-            ZipEntry partEntry = new ZipEntry(CONTENT_TYPES_PART_NAME);
+            ZipEntry partEntry = new ZipEntry(CONTENT_TYPES_PART_NAME) { DateTime = ZipHelper.ZipEntryTimestamp };
             try
             {
                 // Referenced in ZIP

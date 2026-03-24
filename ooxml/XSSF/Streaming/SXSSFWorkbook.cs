@@ -20,6 +20,7 @@ using NPOI.SS;
 using NPOI.SS.Formula.UDF;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
+using NPOI.OpenXml4Net.OPC.Internal;
 using NPOI.Util;
 using NPOI.XSSF.Model;
 using NPOI.XSSF.UserModel;
@@ -468,7 +469,7 @@ namespace NPOI.XSSF.Streaming
                     while (en.MoveNext())
                     {
                         var ze = (ZipEntry)en.Current;
-                        zos.PutNextEntry(new ZipEntry(ze.Name));
+                        zos.PutNextEntry(new ZipEntry(ze.Name) { DateTime = ZipHelper.ZipEntryTimestamp });
                         var inputStream = zip.GetInputStream(ze);
                         XSSFSheet xSheet = GetSheetFromZipEntryName(ze.Name);
                         // See bug 56557, we should not inject data into the special ChartSheets

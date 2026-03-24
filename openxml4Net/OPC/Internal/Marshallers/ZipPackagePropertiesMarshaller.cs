@@ -22,7 +22,7 @@ public class ZipPackagePropertiesMarshaller:PackagePropertiesMarshaller
         // Saving the part in the zip file
 		string name = ZipHelper
 				.GetZipItemNameFromOPCName(part.PartName.URI.ToString());
-        ZipEntry ctEntry = new ZipEntry(name);
+        ZipEntry ctEntry = new ZipEntry(name) { DateTime = ZipHelper.ZipEntryTimestamp };
 
         try
         {
