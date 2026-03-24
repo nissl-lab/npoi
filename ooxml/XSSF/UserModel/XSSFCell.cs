@@ -82,6 +82,7 @@ namespace NPOI.XSSF.UserModel
         private string _cachedNumericValueSource;
         private IRichTextString _cachedRichTextValue;
         private string _cachedRichTextValueSource;
+        private ST_CellType _cachedRichTextCellType;
 
         /**
          * Construct a XSSFCell.
@@ -151,13 +152,14 @@ namespace NPOI.XSSF.UserModel
 
         private bool IsRichTextCacheValid()
         {
-            return _cachedRichTextValue != null && _cachedRichTextValueSource == _cell.v;
+            return _cachedRichTextValue != null && _cachedRichTextValueSource == _cell.v && _cachedRichTextCellType == _cell.t;
         }
 
         private void InvalidateRichTextCache()
         {
             _cachedRichTextValue = null;
             _cachedRichTextValueSource = null;
+            _cachedRichTextCellType = default(ST_CellType);
         }
 
         private void InvalidateAllCaches()
@@ -348,12 +350,10 @@ namespace NPOI.XSSF.UserModel
 
                 CellType cellType = CellType;
                 XSSFRichTextString rt;
-                string cacheKey = null;
                 switch (cellType)
                 {
                     case CellType.Blank:
                         rt = new XSSFRichTextString("");
-                        cacheKey = "<blank>";
                         break;
                     case CellType.String:
                         if (_cell.t == ST_CellType.inlineStr)
@@ -361,23 +361,19 @@ namespace NPOI.XSSF.UserModel
                             if (_cell.IsSetIs())
                             {
                                 rt = new XSSFRichTextString(_cell.@is);
-                                cacheKey = "is:" + (_cell.@is?.ToString() ?? "");
                             }
                             else if (_cell.IsSetV())
                             {
                                 rt = new XSSFRichTextString(_cell.v);
-                                cacheKey = "fv:" + _cell.v;
                             }
                             else
                             {
                                 rt = new XSSFRichTextString("");
-                                cacheKey = "<empty>";
                             }
                         }
                         else if (_cell.t == ST_CellType.str)
                         {
                             rt = new XSSFRichTextString(_cell.IsSetV() ? _cell.v : "");
-                            cacheKey = "str:" + (_cell.IsSetV() ? _cell.v : "");
                         }
                         else
                         {
@@ -385,26 +381,24 @@ namespace NPOI.XSSF.UserModel
                             {
                                 int idx = Int32.Parse(_cell.v);
                                 rt = new XSSFRichTextString(_sharedStringSource.GetEntryAt(idx));
-                                cacheKey = "sst:" + _cell.v;
                             }
                             else
                             {
                                 rt = new XSSFRichTextString("");
-                                cacheKey = "<empty>";
                             }
                         }
                         break;
                     case CellType.Formula:
                         CheckFormulaCachedValueType(CellType.String, GetBaseCellType(false));
                         rt = new XSSFRichTextString(_cell.IsSetV() ? _cell.v : "");
-                        cacheKey = "formula:" + (_cell.IsSetV() ? _cell.v : "");
                         break;
                     default:
                         throw TypeMismatch(CellType.String, cellType, false);
                 }
                 rt.SetStylesTableReference(_stylesSource);
                 _cachedRichTextValue = rt;
-                _cachedRichTextValueSource = cacheKey;
+                _cachedRichTextValueSource = _cell.v;
+                _cachedRichTextCellType = _cell.t;
                 return rt;
             }
         }
