@@ -67,6 +67,12 @@ namespace NPOI.XSSF.UserModel
         /// Avoids O(n) LINQ Max() scan on every LastCellNum access.
         /// </summary>
         private int _cachedLastCellNum = -1;
+
+        /// <summary>
+        /// Lazily-built list of cells sorted by column index.
+        /// Null when invalidated; rebuilt on first read access.
+        /// </summary>
+        private List<ICell> _sortedCellCache;
         #endregion
 
         #region Public properties
@@ -561,8 +567,8 @@ namespace NPOI.XSSF.UserModel
         /// </summary>
         internal void OnDocumentWrite()
         {
-            var orderedCells = _cells.OrderBy(kv => kv.Key).Select(kv => (XSSFCell)kv.Value).ToList();
-            
+            var sortedCells = GetSortedCells();
+
             bool isOrdered = true;
             if (_row.SizeOfCArray() != _cells.Count)
             {
@@ -571,9 +577,9 @@ namespace NPOI.XSSF.UserModel
             else
             {
                 int i = 0;
-                foreach (XSSFCell cell in orderedCells)
+                foreach (ICell cell in sortedCells)
                 {
-                    CT_Cell c1 = cell.GetCTCell();
+                    CT_Cell c1 = ((XSSFCell)cell).GetCTCell();
                     CT_Cell c2 = _row.GetCArray(i++);
 
                     string r1 = c1.r;
@@ -590,7 +596,7 @@ namespace NPOI.XSSF.UserModel
             {
                 CT_Cell[] cArray = new CT_Cell[_cells.Count];
                 int i = 0;
-                foreach (XSSFCell c in orderedCells)
+                foreach (XSSFCell c in sortedCells.Cast<XSSFCell>())
                 {
                     cArray[i++] = c.GetCTCell();
                 }
@@ -661,6 +667,7 @@ namespace NPOI.XSSF.UserModel
             _row.c.Sort((col1, col2) => col1.r.CompareTo(col2.r));
 
             // Cache is invalid after rebuild — keys may have changed
+            _sortedCellCache = null;
             _cachedFirstCellNum = -1;
             _cachedLastCellNum = -1;
         }
@@ -668,18 +675,18 @@ namespace NPOI.XSSF.UserModel
 
         #region IEnumerable and IComparable members
         /// <summary>
-        /// Cell iterator over the physically defined cell
+        /// Cell iterator over the physically defined cells, sorted by column index.
         /// </summary>
-        /// <returns>an iterator over cells in this row.</returns>
-        public Dictionary<int, ICell>.ValueCollection.Enumerator CellIterator()
+        /// <returns>an iterator over cells in this row in ascending column order.</returns>
+        public IEnumerator<ICell> CellIterator()
         {
-            return _cells.Values.GetEnumerator();
+            return GetSortedCells().GetEnumerator();
         }
 
         /// <summary>
         /// Alias for <see cref="CellIterator"/> to allow  foreach loops
         /// </summary>
-        /// <returns>an iterator over cells in this row.</returns>
+        /// <returns>an iterator over cells in this row in ascending column order.</returns>
         public IEnumerator<ICell> GetEnumerator()
         {
             return GetSortedCells().GetEnumerator();
@@ -839,10 +846,24 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
+        /// Returns cells sorted by column index, using a lazily-built cache.
+        /// The cache is invalidated on any cell mutation (add/remove/rebuild).
+        /// </summary>
+        private List<ICell> GetSortedCells()
+        {
+            if (_sortedCellCache == null)
+            {
+                _sortedCellCache = _cells.OrderBy(kv => kv.Key).Select(kv => kv.Value).ToList();
+            }
+            return _sortedCellCache;
+        }
+
+        /// <summary>
         /// Update cached min/max on cell addition. O(1) — just compare with current bounds.
         /// </summary>
         private void UpdateCacheOnAdd(int columnIndex)
         {
+            _sortedCellCache = null;
             if (_cachedFirstCellNum < 0 || columnIndex < _cachedFirstCellNum)
             {
                 _cachedFirstCellNum = columnIndex;
@@ -859,6 +880,7 @@ namespace NPOI.XSSF.UserModel
         /// </summary>
         private void InvalidateCacheOnRemove(int removedIndex)
         {
+            _sortedCellCache = null;
             if (_cells.Count == 0)
             {
                 _cachedFirstCellNum = -1;
