@@ -605,15 +605,7 @@ namespace NPOI.XSSF.UserModel
             }
         }
         #endregion
-        /// <summary>
-        /// Gets cells sorted by column index
-        /// </summary>
-        /// <returns>List of cells sorted by column index</returns>
-        private List<ICell> GetSortedCells()
-        {
-            return _cells.OrderBy(kv => kv.Key).Select(kv => kv.Value).ToList();
-        }
-
+        
         #region Internal methods
         /// <summary>
         /// update cell references when Shifting rows
