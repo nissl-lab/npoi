@@ -41,7 +41,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 return null;
             CT_Cell ctObj = new CT_Cell();
             ctObj.r = XmlHelper.ReadString(node.Attributes["r"]);
-            ctObj.s = XmlHelper.ReadUInt(node.Attributes["s"]);
+            ctObj.sField = XmlHelper.ReadUInt(node.Attributes["s"]);
             if (node.Attributes["t"] != null)
                 ctObj.t = (ST_CellType)Enum.Parse(typeof(ST_CellType), node.Attributes["t"].Value);
             ctObj.cm = XmlHelper.ReadUInt(node.Attributes["cm"]);

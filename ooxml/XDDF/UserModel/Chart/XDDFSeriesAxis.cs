@@ -17,17 +17,11 @@
 
 
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
+using NPOI.OpenXmlFormats.Dml.Chart;
+using NPOI.OpenXmlFormats.Dml;
 
 namespace NPOI.XDDF.UserModel.Chart
 {
-    using NPOI.Util;
-    using NPOI.XDDF.UserModel;
-    using NPOI.OpenXmlFormats.Dml.Chart;
-    using NPOI.OpenXmlFormats.Dml;
     public class XDDFSeriesAxis : XDDFChartAxis
     {
 
@@ -163,7 +157,7 @@ namespace NPOI.XDDF.UserModel.Chart
         {
             long id = GetNextAxId(plotArea);
             ctSerAx = plotArea.AddNewSerAx();
-            ctSerAx.AddNewAxId().val = (uint)id;
+            ctSerAx.AddNewAxId().val = (uint) id;
             ctSerAx.AddNewAxPos();
             ctSerAx.AddNewScaling();
             ctSerAx.AddNewCrosses();
@@ -179,6 +173,17 @@ namespace NPOI.XDDF.UserModel.Chart
             IsVisible = (true);
             MajorTickMark = (AxisTickMark.Cross);
             MinorTickMark = (AxisTickMark.None);
+        }
+
+        public override void SetTitle(String text)
+        {
+            if(!ctSerAx.IsSetTitle())
+            {
+                ctSerAx.AddNewTitle();
+            }
+            XDDFTitle title = new XDDFTitle(null, ctSerAx.title);
+            title.SetOverlay(false);
+            title.SetText(text);
         }
     }
 }

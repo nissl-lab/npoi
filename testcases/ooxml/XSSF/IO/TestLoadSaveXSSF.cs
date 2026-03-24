@@ -51,7 +51,7 @@ namespace TestCases.XSSF.IO
             IRow row = sheet.GetRow(0);
             ICell cell = row.GetCell((short)0);
             ICellStyle style = cell.CellStyle;
-            // assertNotNull(style);
+            ClassicAssert.IsNotNull(style);
         }
 
         // TODO filename string hard coded in XSSFWorkbook constructor in order to make ant Test-ooxml target be successful.
