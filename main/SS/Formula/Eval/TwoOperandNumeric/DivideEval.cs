@@ -29,7 +29,9 @@ namespace NPOI.SS.Formula.Eval
             {
                 throw new EvaluationException(ErrorEval.DIV_ZERO);
             }
-            return d0 / d1;
+            decimal dec0 = (decimal)d0;
+            decimal dec1 = (decimal)d1;
+            return decimal.ToDouble(dec0 / dec1);
         }
     }
 }
