@@ -20,11 +20,9 @@ namespace NPOI.SS.Formula.PTG
 
     using System;
     using System.IO;
-    using System.Runtime.Serialization.Formatters.Binary;
-    using System.Collections;
+    using System.Collections.Generic;
 
     using NPOI.Util;
-    using System.Collections.Generic;
 
 
     /**
@@ -54,7 +52,7 @@ namespace NPOI.SS.Formula.PTG
          */
         public static Ptg[] ReadTokens(int size, ILittleEndianInput in1)
         {
-            ArrayList temp = new ArrayList(4 + size / 2);
+            List<Ptg> temp = new List<Ptg>(4 + size / 2);
             int pos = 0;
             bool hasArrayPtgs = false;
             while (pos < size)
@@ -180,15 +178,14 @@ namespace NPOI.SS.Formula.PTG
             }
             throw new Exception("Unexpected base token id (" + id + ")");
         }
-        private static Ptg[] ToPtgArray(ArrayList l)
+        private static Ptg[] ToPtgArray(List<Ptg> l)
         {
             if (l.Count == 0)
             {
                 return EMPTY_PTG_ARRAY;
             }
 
-            Ptg[] result = (Ptg[])l.ToArray(typeof(Ptg));
-            return result;
+            return l.ToArray();
         }
         /**
          * @return a distinct copy of this <c>Ptg</c> if the class is mutable, or the same instance

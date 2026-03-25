@@ -19,7 +19,7 @@ namespace NPOI.SS.Formula
 {
 
     using System;
-    using System.Collections;
+    using System.Collections.Generic;
     using NPOI.Util;
 
     public class Loc
@@ -93,11 +93,11 @@ namespace NPOI.SS.Formula
     public class PlainCellCache
     {
 
-        private readonly Hashtable _plainValueEntriesByLoc;
+        private readonly Dictionary<Loc, PlainValueCellCacheEntry> _plainValueEntriesByLoc;
 
         public PlainCellCache()
         {
-            _plainValueEntriesByLoc = new Hashtable();
+            _plainValueEntriesByLoc = new Dictionary<Loc, PlainValueCellCacheEntry>();
         }
         public void Put(Loc key, PlainValueCellCacheEntry cce)
         {
@@ -109,7 +109,8 @@ namespace NPOI.SS.Formula
         }
         public PlainValueCellCacheEntry Get(Loc key)
         {
-            return (PlainValueCellCacheEntry)_plainValueEntriesByLoc[key];
+            _plainValueEntriesByLoc.TryGetValue(key, out PlainValueCellCacheEntry entry);
+            return entry;
         }
         public void Remove(Loc key)
         {
