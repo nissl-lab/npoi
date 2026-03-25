@@ -70,9 +70,18 @@ These names come from Apache POI and appear throughout the codebase:
   by `.xlsx`, `.docx`, and `.pptx` files. Format-specific layers read and write
   individual XML parts through this packaging layer.
 
-- **Design patterns** — NPOI uses Strategy (format-specific implementations behind
-  interfaces), Factory (`RecordFactory` creates records from streams), and
-  Wrapper (SXSSF wraps XSSF) patterns.
+- **Design patterns** — NPOI uses:
+  - **Strategy**: format-specific implementations behind interfaces
+  - **Factory**: `CreateSheet()`, `CreateRow()`, `CreateCell()` maintain parent-child consistency
+  - **Decorator**: SXSSF wraps XSSF, intercepting writes for streaming
+  - **Flyweight**: `StylesTable` and `SharedStringsTable` deduplicate formatting and strings
+  - **Template Method**: interface methods with HSSF/XSSF format-specific implementations
+
+- **HSSF uses records** — `InternalWorkbook`/`InternalSheet` aggregate BIFF8 records
+  (`SSTRecord`, `ExtendedFormatRecord`, `RowRecord`, etc.)
+
+- **XSSF uses XML beans** — OpenXmlFormats classes (`CT_Workbook`, `CT_Worksheet`,
+  `CT_Row`, `CT_Cell`) map to OOXML XML elements
 
 ## Building and Testing
 
