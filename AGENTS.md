@@ -45,6 +45,14 @@ These names come from Apache POI and appear throughout the codebase:
 - **SS** — Common spreadsheet interfaces (`ISheet`, `IRow`, `ICell`) shared by HSSF and XSSF
 - **DDF** — Dreadful Drawing Format (shapes/drawing records in binary formats)
 
+## Format Selection Guide
+
+| Format | Use When | Memory | Limitations |
+|--------|----------|--------|-------------|
+| **HSSF** | Reading/writing `.xls` (Excel 97-2003) | Medium | 65,536 row limit |
+| **XSSF** | Reading/writing `.xlsx`, full features needed | High | Memory scales with file size |
+| **SXSSF** | Writing large `.xlsx` files (>100K rows) | Low (constant) | Write-only, limited random access |
+
 ## Key Architecture Patterns
 
 - **SS.UserModel interfaces** (`IWorkbook`, `ISheet`, `IRow`, `ICell`) abstract
@@ -61,6 +69,10 @@ These names come from Apache POI and appear throughout the codebase:
 - **OPC packaging** (`openxml4Net/`) handles the zip container structure shared
   by `.xlsx`, `.docx`, and `.pptx` files. Format-specific layers read and write
   individual XML parts through this packaging layer.
+
+- **Design patterns** — NPOI uses Strategy (format-specific implementations behind
+  interfaces), Factory (`RecordFactory` creates records from streams), and
+  Wrapper (SXSSF wraps XSSF) patterns.
 
 ## Building and Testing
 
