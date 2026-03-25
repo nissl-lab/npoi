@@ -53,14 +53,7 @@ namespace NPOI.OpenXml4Net.OPC
          */
         public static void CopyStream(Stream inStream, Stream outStream)
         {
-            byte[] buffer = new byte[1024];
-            int bytesRead = 0;
-            int totalRead = 0;
-            while ((bytesRead = inStream.Read(buffer, 0, buffer.Length)) > 0)
-            {
-                outStream.Write(buffer, 0, bytesRead);
-                totalRead += bytesRead;
-            }
+            inStream.CopyTo(outStream);
         }
     }
 

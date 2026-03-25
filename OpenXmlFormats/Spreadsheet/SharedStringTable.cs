@@ -153,8 +153,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             ctObj.fontId = XmlHelper.ReadUInt(node.Attributes["fontId"]);
             if (node.Attributes["type"] != null)
                 ctObj.type = (ST_PhoneticType)Enum.Parse(typeof(ST_PhoneticType), node.Attributes["type"].Value);
-            if (node.Attributes["alignment"] != null)
-                ctObj.alignment = (ST_PhoneticAlignment)Enum.Parse(typeof(ST_PhoneticAlignment), node.Attributes["alignment"].Value);
+            else
+                ctObj.type = ST_PhoneticType.fullwidthKatakana;
+            if(node.Attributes["alignment"] != null)
+                ctObj.alignment = (ST_PhoneticAlignment) Enum.Parse(typeof(ST_PhoneticAlignment), node.Attributes["alignment"].Value);
+            else
+                ctObj.alignment = ST_PhoneticAlignment.left;
             return ctObj;
         }
 
@@ -164,7 +168,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "fontId", this.fontId,true);
-            XmlHelper.WriteAttribute(sw, "type", this.type.ToString());
+            if(this.type != ST_PhoneticType.fullwidthKatakana)
+                XmlHelper.WriteAttribute(sw, "type", this.type.ToString());
             if(this.alignment!= ST_PhoneticAlignment.left)
                 XmlHelper.WriteAttribute(sw, "alignment", this.alignment.ToString());
             sw.Write("/>");

@@ -41,6 +41,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         public CT_BarChart()
         {
+            groupingField = new CT_BarGrouping();
         }
         public static CT_BarChart Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
@@ -297,6 +298,39 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
         {
             this.barDirField = new CT_BarDir();
             return this.barDirField;
+        }
+
+        public int SizeOfAxIdArray()
+        {
+            if(axIdField==null)
+                return 0;
+            return axIdField.Count;
+        }
+
+        public bool IsSetVaryColors()
+        {
+            return this.varyColorsField != null;
+        }
+
+        public bool IsSetGrouping()
+        {
+            return this.groupingField != null;
+        }
+
+        public bool IsSetGapWidth()
+        {
+            return this.gapWidthField != null;
+        }
+
+        public CT_GapAmount AddNewGapWidth()
+        {
+            this.gapWidthField = new CT_GapAmount();
+            return this.gapWidthField;
+        }
+
+        public CT_UnsignedInt[] GetAxIdArray()
+        {
+            return [.. this.axIdField];
         }
     }
 
@@ -771,6 +805,43 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
         {
             this.valField = new CT_NumDataSource();
             return this.valField;
+        }
+
+        public CT_SerTx AddNewTx()
+        {
+            this.tx = new CT_SerTx();
+            return this.tx;
+        }
+
+        public bool IsSetTx()
+        {
+            return this.txField != null;
+        }
+
+        public bool IsSetDLbls()
+        {
+            return this.dLblsField != null;
+        }
+
+        public void AddNewDLbls()
+        {
+            this.dLblsField = new CT_DLbls();
+        }
+
+        public bool IsSetSpPr()
+        {
+            return this.spPrField != null;
+        }
+
+        public void UnsetSpPr()
+        {
+            this.spPrField = null;
+        }
+
+        public CT_ShapeProperties AddNewSpPr()
+        {
+            this.spPrField = new CT_ShapeProperties();
+            return this.spPrField;
         }
     }
 

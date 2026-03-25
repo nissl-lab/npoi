@@ -1,0 +1,74 @@
+# AGENTS.md
+
+Guidance for AI agents and new contributors working in this codebase.
+
+## Project Overview
+
+NPOI is a .NET port of [Apache POI](https://poi.apache.org/) for reading and
+writing Microsoft Office file formats without requiring COM or an Office
+installation. Targets net472, netstandard2.0, netstandard2.1, and net8.0.
+
+## Directory → Project Map
+
+| Directory         | Project                      | Purpose                                                        |
+|-------------------|------------------------------|----------------------------------------------------------------|
+| `main/`           | NPOI.Core                    | HSSF (.xls), HPSF (doc properties), SS model, DDF, utilities  |
+| `ooxml/`          | NPOI.OOXML                   | XSSF (.xlsx), SXSSF (streaming), XWPF (.docx), XSLF (.pptx)  |
+| `OpenXmlFormats/` | NPOI.OpenXmlFormats          | C# classes mapping to OOXML XML schemas (data-only, no logic)  |
+| `openxml4Net/`    | NPOI.OpenXml4Net             | OPC packaging: zip I/O, content types, part relationships      |
+| `scratchpad/`     | (various)                    | HWPF (.doc binary), HSLF (.ppt binary), other legacy formats   |
+| `testcases/`      | Test project                 | Mirrors source structure; test data in `testcases/test-data/`  |
+| `build/`          | _build (Nuke)                | Build automation                                               |
+| `benchmarks/`     | NPOI.Benchmarks              | BenchmarkDotNet performance tests                              |
+| `solution/`       | Solution/packaging files     | `.sln` files and NuGet pack project                            |
+
+## Format Acronyms
+
+These names come from Apache POI and appear throughout the codebase:
+
+- **HSSF** — Horrible SpreadSheet Format (binary `.xls`)
+- **XSSF** — XML SpreadSheet Format (`.xlsx`)
+- **SXSSF** — Streaming XSSF (write-only sliding window over XSSF)
+- **HWPF** — Horrible Word Processor Format (binary `.doc`)
+- **XWPF** — XML Word Processor Format (`.docx`)
+- **HSLF** — Horrible SLide Format (binary `.ppt`)
+- **XSLF** — XML SLide Format (`.pptx`)
+- **HPSF** — Horrible Property Set Format (document metadata)
+- **SS** — Common spreadsheet interfaces (`ISheet`, `IRow`, `ICell`) shared by HSSF and XSSF
+- **DDF** — Dreadful Drawing Format (shapes/drawing records in binary formats)
+
+## Key Architecture Patterns
+
+- **SS.UserModel interfaces** (`IWorkbook`, `ISheet`, `IRow`, `ICell`) abstract
+  over both HSSF and XSSF. Prefer these when writing format-agnostic code.
+
+- **SXSSF streaming layer** — classes in `ooxml/XSSF/Streaming/` wrap the
+  corresponding XSSF classes with a configurable row window for low-memory
+  streaming writes.
+
+- **OpenXmlFormats are POCOs** — the classes in `OpenXmlFormats/` map directly
+  to the ECMA-376 (OOXML) XML schemas. Business logic that operates on these
+  types lives in `ooxml/` or `main/`, not alongside the schema classes.
+
+- **OPC packaging** (`openxml4Net/`) handles the zip container structure shared
+  by `.xlsx`, `.docx`, and `.pptx` files. Format-specific layers read and write
+  individual XML parts through this packaging layer.
+
+## Building and Testing
+
+```bash
+# Build
+dotnet build solution/NPOI.Core.sln
+
+# Run tests
+dotnet test solution/NPOI.Core.Test.sln
+
+# Run benchmarks
+dotnet run -c Release --project benchmarks/NPOI.Benchmarks/
+```
+
+## Test Data
+
+Test fixture files (`.xls`, `.xlsx`, `.docx`, etc.) live under
+`testcases/test-data/` organized by format. Tests reference these files via
+relative paths from the test project root.

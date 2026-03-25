@@ -37,7 +37,7 @@ namespace NPOI.SS.Formula.Functions
      *
      * @author Josh Micich
      */
-    public class Index : Function2Arg, Function3Arg, Function4Arg
+    public class Index : Function2Arg, Function3Arg, Function4Arg, IArrayMode
     {
 
         public ValueEval Evaluate(int srcRowIndex, int srcColumnIndex, ValueEval arg0, ValueEval arg1)

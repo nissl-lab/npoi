@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text; 
 using Cysharp.Text;
 using NPOI.OpenXmlFormats.Shared;
 using NPOI.WP.UserModel;
-using NPOI.XWPF.UserModel;
 using W = NPOI.OpenXmlFormats.Wordprocessing;
 
-namespace NPOI.XWPF.Usermodel
+namespace NPOI.XWPF.UserModel
 {
     public class XWPFSharedRun : ICharacterRun
     {

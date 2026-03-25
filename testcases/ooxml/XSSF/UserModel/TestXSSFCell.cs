@@ -714,6 +714,42 @@ namespace TestCases.XSSF.UserModel
             destCell.SetCellValue(true);
         }
 
+        /// <summary>
+        /// Bug 61869: updating a shared formula produces an unreadable file
+        /// </summary>
+        [Test]
+        public void Test61869()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("61869.xlsx");
+            try
+            {
+                XSSFSheet sheet = wb.GetSheetAt(0) as XSSFSheet;
+                XSSFCell c2 = sheet.GetRow(1).GetCell(2) as XSSFCell;
+                ClassicAssert.AreEqual("SUM(A2,B2)", c2.CellFormula);
+                ClassicAssert.AreEqual(ST_CellFormulaType.shared, c2.GetCTCell().f.t);
+                ClassicAssert.AreEqual(0, c2.GetCTCell().f.si);
+                XSSFCell c3 = sheet.GetRow(2).GetCell(2) as XSSFCell;
+                ClassicAssert.AreEqual(ST_CellFormulaType.shared, c3.GetCTCell().f.t);
+                ClassicAssert.AreEqual(0, c3.GetCTCell().f.si);
+                ClassicAssert.AreEqual("SUM(A3,B3)", c3.CellFormula);
+
+                ClassicAssert.AreEqual("SUM(A2,B2)", sheet.GetSharedFormula(0).Value);
+
+                c2.SetCellFormula("SUM(A2:B2)");
+                ClassicAssert.AreEqual(ST_CellFormulaType.shared, c2.GetCTCell().f.t); // c2 remains the master formula
+
+                ClassicAssert.AreEqual("SUM(A2:B2)", sheet.GetSharedFormula(0).Value);
+                ClassicAssert.AreEqual(ST_CellFormulaType.shared, c3.GetCTCell().f.t);
+                ClassicAssert.AreEqual(0, c3.GetCTCell().f.si);
+                ClassicAssert.AreEqual("SUM(A3:B3)", c3.CellFormula);  // formula in the follower cell is rebuilt
+
+            }
+            catch (Exception)
+            {
+                //Assert.Fail(e.Message);
+                wb.Close();
+            }
+        }
     }
 
 }

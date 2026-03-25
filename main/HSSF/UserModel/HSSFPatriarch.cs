@@ -540,11 +540,6 @@ namespace NPOI.HSSF.UserModel
         {
             return new HSSFClientAnchor(dx1, dy1, dx2, dy2, (short)col1, row1, (short)col2, row2);
         }
-
-        public IChart CreateChart(IClientAnchor anchor)
-        {
-            throw new RuntimeException("NotImplemented");
-        }
         /**
      * create shape tree from existing escher records tree
      */

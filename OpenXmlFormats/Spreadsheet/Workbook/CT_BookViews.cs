@@ -86,8 +86,16 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             ctObj.showHorizontalScroll = XmlHelper.ReadBool(node.Attributes["showHorizontalScroll"], true);
             ctObj.showVerticalScroll = XmlHelper.ReadBool(node.Attributes["showVerticalScroll"], true);
             ctObj.showSheetTabs = XmlHelper.ReadBool(node.Attributes["showSheetTabs"], true);
-            ctObj.xWindow = XmlHelper.ReadInt(node.Attributes["xWindow"]);
-            ctObj.yWindow = XmlHelper.ReadInt(node.Attributes["yWindow"]);
+            if(node.Attributes["xWindow"]!=null)
+            {
+                ctObj.xWindowField = XmlHelper.ReadInt(node.Attributes["xWindow"]);
+                ctObj.xWindowFieldSpecified = true;
+            }
+            if(node.Attributes["yWindow"]!=null)
+            {
+                ctObj.yWindowField = XmlHelper.ReadInt(node.Attributes["yWindow"]);
+                ctObj.yWindowFieldSpecified = true;
+            }
             ctObj.windowWidth = XmlHelper.ReadUInt(node.Attributes["windowWidth"]);
             ctObj.windowHeight = XmlHelper.ReadUInt(node.Attributes["windowHeight"]);
             ctObj.tabRatio = XmlHelper.ReadUInt(node.Attributes["tabRatio"]);
@@ -116,8 +124,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 XmlHelper.WriteAttribute(sw, "showVerticalScroll", this.showVerticalScroll);
             if(!this.showSheetTabs)
                 XmlHelper.WriteAttribute(sw, "showSheetTabs", this.showSheetTabs);
-            XmlHelper.WriteAttribute(sw, "xWindow", this.xWindow);
-            XmlHelper.WriteAttribute(sw, "yWindow", this.yWindow);
+            if(this.xWindowSpecified)
+                XmlHelper.WriteAttribute(sw, "xWindow", this.xWindow, true);
+            if(this.yWindowSpecified)
+                XmlHelper.WriteAttribute(sw, "yWindow", this.yWindow, true);
             XmlHelper.WriteAttribute(sw, "windowWidth", this.windowWidth);
             XmlHelper.WriteAttribute(sw, "windowHeight", this.windowHeight);
             XmlHelper.WriteAttribute(sw, "tabRatio", this.tabRatio);

@@ -6,23 +6,23 @@
 // ------------------------------------------------------------------------------
 namespace NPOI.OpenXmlFormats.Dml.Chart
 {
+    using Cysharp.Text;
+    using NPOI.OpenXml4Net.Util;
+    using NPOI.Util;
     using System;
-    using System.Diagnostics;
-    using System.Xml.Serialization;
     using System.Collections;
-    using System.Xml.Schema;
-    using System.ComponentModel;
     using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Diagnostics;
+    using System.Globalization;
     using System.IO;
     using System.Linq;
-    using System.Xml;
-    using NPOI.OpenXml4Net.Util;
     using System.Text; 
-    using System.Globalization;
-    using Cysharp.Text;
+    using System.Xml;
+    using System.Xml.Schema;
+    using System.Xml.Serialization;
 
     [Serializable]
-
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
     [XmlRoot("chartSpace", Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = false)]
@@ -103,7 +103,10 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
         }
 
 
-
+        public void Save(Stream stream)
+        {
+            this.Write(stream);
+        }
         internal void Write(Stream stream)
         {
             using (StreamWriter sw = new StreamWriter(stream))
@@ -162,6 +165,13 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             this.printSettingsField = new CT_PrintSettings();
             return this.printSettingsField;
         }
+
+        public CT_ExternalData AddNewExternalData()
+        {
+            this.externalDataField = new CT_ExternalData();
+            return this.externalDataField;
+        }
+
         [XmlElement(Order = 0)]
         public CT_Boolean date1904
         {
@@ -429,6 +439,14 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             {
                 this.idField = value;
             }
+        }
+        public static CT_RelId Parse(XmlReader reader)
+        {
+            if(reader==null)
+                return null;
+            CT_RelId ctObj = new CT_RelId();
+            ctObj.id = reader.GetAttribute("id", "http://schemas.openxmlformats.org/officeDocument/2006/relationships");
+            return ctObj;
         }
         public static CT_RelId Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
@@ -1294,8 +1312,11 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
         private CT_UnsignedInt idxField;
 
         private object itemField;
+        private CT_Boolean deleteField;
 
-        private List<CT_Extension> extLstField;
+        private CT_TextBody txPrField;
+
+        private CT_ExtensionList extLstField;
 
         public CT_LegendEntry()
         {
@@ -1307,15 +1328,36 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             if (node == null)
                 return null;
             CT_LegendEntry ctObj = new CT_LegendEntry();
-            ctObj.extLst = new List<CT_Extension>();
+            ctObj.extLst = new CT_ExtensionList();
             foreach (XmlNode childNode in node.ChildNodes)
             {
                 if (childNode.LocalName == "idx")
                     ctObj.idx = CT_UnsignedInt.Parse(childNode, namespaceManager);
                 else if (childNode.LocalName == "Item")
+                {
+                    //TODO: parse CT_LegendEntry 
                     ctObj.Item = new Object();
+                    throw new NotImplementedException();
+                    /**
+                     * element of CT_LegendEntry
+                     * 
+                     * <xsd:choice>
+                     *   <xsd:element name="delete" type="CT_Boolean" minOccurs="1" maxOccurs="1"/>
+                     *   <xsd:group ref="EG_LegendEntryData" minOccurs="1" maxOccurs="1"/>
+                     * </xsd:choice>
+                     * 
+                     * EG_LegendEntryData is defined as:
+                     * <xsd:group name="EG_LegendEntryData">
+                     *   <xsd:sequence>
+                     *     <xsd:element name="txPr" type="a:CT_TextBody" minOccurs="0" maxOccurs="1"/>
+                     *   </xsd:sequence>
+                     * </xsd:group>
+                     */
+                }
                 else if (childNode.LocalName == "extLst")
-                    ctObj.extLst.Add(CT_Extension.Parse(childNode, namespaceManager));
+                    ctObj.extLst = CT_ExtensionList.Parse(childNode, namespaceManager);
+                else
+                    throw new NotImplementedException();
             }
             return ctObj;
         }
@@ -1329,15 +1371,52 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             if (this.idx != null)
                 this.idx.Write(sw, "idx");
             if (this.Item != null)
+            {
                 sw.Write("<Item/>");
+                throw new NotImplementedException();
+            }
+
             if (this.extLst != null)
             {
-                foreach (CT_Extension x in this.extLst)
-                {
-                    x.Write(sw, "extLst");
-                }
+                this.extLst.Write(sw, "extLst");
             }
-            sw.WriteEndElement("c", nodeName);
+            sw.Write(string.Format("</c:{0}>", nodeName));
+        }
+
+        public bool IsSetTxPr()
+        {
+            return this.txPrField != null;
+        }
+
+        public void UnsetTxPr()
+        {
+            this.txPrField = null;
+        }
+
+        public bool IsSetDelete()
+        {
+            return this.deleteField != null;
+        }
+
+        public void UnsetDelete()
+        {
+            this.deleteField = null;
+        }
+
+        public CT_Boolean AddNewDelete()
+        {
+            this.deleteField = new CT_Boolean();
+            return this.deleteField;
+        }
+
+        public bool IsSetExtLst()
+        {
+            return this.extLstField != null;
+        }
+
+        public void UnsetExtLst()
+        {
+            this.extLstField = null;
         }
 
         [XmlElement(Order = 0)]
@@ -1367,9 +1446,33 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
         }
 
+        public CT_Boolean delete
+        {
+            get
+            {
+                return deleteField;
+            }
+            set
+            {
+                deleteField = value;
+            }
+        }
+
+        public CT_TextBody txPr
+        {
+            get
+            {
+                return txPrField;
+            }
+            set
+            {
+                txPrField = value;
+            }
+        }
+
         [XmlArray(Order = 2)]
         [XmlArrayItem("ext", IsNullable = false)]
-        public List<CT_Extension> extLst
+        public CT_ExtensionList extLst
         {
             get
             {
@@ -1582,7 +1685,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         private CT_TextBody txPrField;
 
-        private List<CT_Extension> extLstField;
+        private CT_ExtensionList extLstField;
 
         public CT_Legend()
         {
@@ -1594,13 +1697,20 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                 return null;
             CT_Legend ctObj = new CT_Legend();
             ctObj.legendEntry = new List<CT_LegendEntry>();
-            ctObj.extLst = new List<CT_Extension>();
+            ctObj.extLst = new CT_ExtensionList();
             foreach (XmlNode childNode in node.ChildNodes)
             {
                 if (childNode.LocalName == "legendPos")
+                {
                     ctObj.legendPos = CT_LegendPos.Parse(childNode, namespaceManager);
+                    ctObj.legendPosSpecifiedField = true;
+                }
                 else if (childNode.LocalName == "layout")
+                {
                     ctObj.layout = CT_Layout.Parse(childNode, namespaceManager);
+                    ctObj.layoutSpecifiedField = true;
+                }
+                    
                 else if (childNode.LocalName == "overlay")
                     ctObj.overlay = CT_Boolean.Parse(childNode, namespaceManager);
                 else if (childNode.LocalName == "spPr")
@@ -1610,7 +1720,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                 else if (childNode.LocalName == "legendEntry")
                     ctObj.legendEntry.Add(CT_LegendEntry.Parse(childNode, namespaceManager));
                 else if (childNode.LocalName == "extLst")
-                    ctObj.extLst.Add(CT_Extension.Parse(childNode, namespaceManager));
+                    ctObj.extLst = CT_ExtensionList.Parse(childNode, namespaceManager);
             }
             return ctObj;
         }
@@ -1640,10 +1750,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
             if (this.extLst != null)
             {
-                foreach (CT_Extension x in this.extLst)
-                {
-                    x.Write(sw, "extLst");
-                }
+                this.extLst.Write(sw, "extLst");
             }
             sw.WriteEndElement("c", nodeName);
         }
@@ -1655,7 +1762,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
         }
         public bool IsSetLegendPos()
         {
-            return legendPosSpecifiedField;
+            return this.legendPos!=null;
         }
         public CT_LegendPos AddNewLegendPos()
         {
@@ -1760,8 +1867,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
         }
 
         [XmlArray(Order = 6)]
-        [XmlArrayItem("ext", IsNullable = false)]
-        public List<CT_Extension> extLst
+        public CT_ExtensionList extLst
         {
             get
             {
@@ -1783,6 +1889,60 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             this.overlayField = new CT_Boolean();
             //return this.overlayField;
         }
+
+        public bool IsSetSpPr()
+        {
+            return this.spPrField != null;
+        }
+
+        public void UnsetSpPr()
+        {
+            this.spPrField = null;
+        }
+
+        public bool IsSetTxPr()
+        {
+            return this.txPr != null;
+        }
+
+        public void UnsetTxPr()
+        {
+            this.txPr = null;
+        }
+
+        public bool IsSetExtLst()
+        {
+            return this.extLst != null;
+        }
+
+        public void UnsetExtLst()
+        {
+            this.extLst = null;
+        }
+
+        public void UnsetLayout()
+        {
+            this.layout = null;
+            this.layoutSpecifiedField = false;
+        }
+
+        public CT_LegendEntry AddNewLegendEntry()
+        {
+            if(this.legendEntryField == null)
+                this.legendEntryField = new List<CT_LegendEntry>();
+            CT_LegendEntry le = new CT_LegendEntry();
+            this.legendEntryField.Add(le);
+            return le;
+        }
+
+        public CT_LegendEntry GetLegendEntryArray(int index)
+        {
+            if(this.legendEntryField==null)
+                return null;
+            if(index<0 || index>=this.legendEntryField.Count)
+                throw new IndexOutOfRangeException();
+            return this.legendEntryField[index];
+        }
     }
 
 
@@ -1796,7 +1956,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         private CT_ManualLayout manualLayoutField;
 
-        private List<CT_Extension> extLstField;
+        private CT_ExtensionList extLstField;
 
         public CT_Layout()
         {
@@ -1808,13 +1968,12 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             if (node == null)
                 return null;
             CT_Layout ctObj = new CT_Layout();
-            ctObj.extLst = new List<CT_Extension>();
             foreach (XmlNode childNode in node.ChildNodes)
             {
                 if (childNode.LocalName == "manualLayout")
                     ctObj.manualLayout = CT_ManualLayout.Parse(childNode, namespaceManager);
                 else if (childNode.LocalName == "extLst")
-                    ctObj.extLst.Add(CT_Extension.Parse(childNode, namespaceManager));
+                    ctObj.extLst = CT_ExtensionList.Parse(childNode, namespaceManager);
             }
             return ctObj;
         }
@@ -1829,10 +1988,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                 this.manualLayout.Write(sw, "manualLayout");
             if (this.extLst != null)
             {
-                foreach (CT_Extension x in this.extLst)
-                {
-                    x.Write(sw, "extLst");
-                }
+                this.extLst.Write(sw, "extLst");
             }
             sw.WriteEndElement("c", nodeName);
         }
@@ -1846,6 +2002,22 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             this.manualLayoutField = new CT_ManualLayout();
             return this.manualLayoutField;
         }
+
+        public bool IsSetExtLst()
+        {
+            return this.extLstField != null;
+        }
+
+        public void UnsetExtLst()
+        {
+            this.extLstField = null;
+        }
+
+        public void UnsetManualLayout()
+        {
+            this.manualLayoutField = null;
+        }
+
         [XmlElement(Order = 0)]
         public CT_ManualLayout manualLayout
         {
@@ -1860,7 +2032,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
         }
 
         [XmlElement(Order = 1)]
-        public List<CT_Extension> extLst
+        public CT_ExtensionList extLst
         {
             get
             {
@@ -1900,13 +2072,12 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         private CT_Double hField;
 
-        private List<CT_Extension> extLstField;
+        private CT_ExtensionList extLstField;
         public static CT_ManualLayout Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
                 return null;
             CT_ManualLayout ctObj = new CT_ManualLayout();
-            ctObj.extLst = new List<CT_Extension>();
             foreach (XmlNode childNode in node.ChildNodes)
             {
                 if (childNode.LocalName == "layoutTarget")
@@ -1928,7 +2099,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                 else if (childNode.LocalName == "h")
                     ctObj.h = CT_Double.Parse(childNode, namespaceManager);
                 else if (childNode.LocalName == "extLst")
-                    ctObj.extLst.Add(CT_Extension.Parse(childNode, namespaceManager));
+                    ctObj.extLst = CT_ExtensionList.Parse(childNode, namespaceManager);
             }
             return ctObj;
         }
@@ -1959,10 +2130,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                 this.h.Write(sw, "h");
             if (this.extLst != null)
             {
-                foreach (CT_Extension x in this.extLst)
-                {
-                    x.Write(sw, "extLst");
-                }
+                this.extLst.Write(sw, "extLst");
             }
             sw.WriteEndElement("c", nodeName);
         }
@@ -2069,6 +2237,17 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                 this.xField = new CT_Double();
             return xField;
         }
+
+        public bool IsSetExtLst()
+        {
+            return this.extLstField != null;
+        }
+
+        public void UnsetExtLst()
+        {
+            this.extLstField = null;
+        }
+
         [XmlElement(Order = 0)]
         public CT_LayoutTarget layoutTarget
         {
@@ -2187,7 +2366,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
         }
 
         [XmlElement(Order = 9)]
-        public List<CT_Extension> extLst
+        public CT_ExtensionList extLst
         {
             get
             {
@@ -2692,6 +2871,104 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             sw.WriteEndElement("c", nodeName);
         }
 
+        public bool IsSetMajorGridlines()
+        {
+            return this.majorGridlinesField != null;
+        }
+
+        public CT_ChartLines AddNewMajorGridlines()
+        {
+            this.majorGridlinesField = new CT_ChartLines();
+            return this.majorGridlinesField;
+        }
+
+        public bool IsSetMinorGridlines()
+        {
+            return this.minorGridlinesField != null;
+        }
+
+        public CT_ChartLines AddNewMinorGridlines()
+        {
+            this.minorGridlinesField = new CT_ChartLines();
+            return this.minorGridlinesField;
+        }
+
+        public bool IsSetSpPr()
+        {
+            return this.spPrField != null;
+        }
+
+        public CT_ShapeProperties AddNewSpPr()
+        {
+            this.spPrField = new CT_ShapeProperties();
+            return this.spPrField;
+        }
+
+        public bool IsSetNumFmt()
+        {
+            return this.numFmtField != null;
+        }
+
+        public CT_NumFmt AddNewNumFmt()
+        {
+            this.numFmtField = new CT_NumFmt();
+            return this.numFmtField;
+        }
+
+        public CT_Crosses AddNewCrosses()
+        {
+            this.crossesField = new CT_Crosses();
+            return this.crossesField;
+        }
+
+        public CT_UnsignedInt AddNewAxId()
+        {
+            this.axIdField = new CT_UnsignedInt();
+            return this.axIdField;
+        }
+
+        public CT_AxPos AddNewAxPos()
+        {
+            this.axPosField = new CT_AxPos();
+            return this.axPosField;
+        }
+
+        public CT_Scaling AddNewScaling()
+        {
+            this.scalingField = new CT_Scaling();
+            return this.scalingField;
+        }
+
+        public CT_UnsignedInt AddNewCrossAx()
+        {
+            this.crossAxField = new CT_UnsignedInt();
+            return this.crossAxField;
+        }
+
+        public CT_TickLblPos AddNewTickLblPos()
+        {
+            this.tickLblPosField = new CT_TickLblPos();
+            return this.tickLblPosField;
+        }
+
+        public CT_Boolean AddNewDelete()
+        {
+            this.deleteField = new CT_Boolean();
+            return this.deleteField;
+        }
+
+        public CT_TickMark AddNewMajorTickMark()
+        {
+            this.majorTickMarkField = new CT_TickMark();
+            return this.majorTickMarkField;
+        }
+
+        public CT_TickMark AddNewMinorTickMark()
+        {
+            this.minorTickMarkField = new CT_TickMark();
+            return this.minorTickMarkField;
+        }
+
         [XmlElement(Order = 0)]
         public CT_UnsignedInt axId
         {
@@ -2938,6 +3215,17 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                 this.extLstField = value;
             }
         }
+
+        public bool IsSetTitle()
+        {
+            return this.titleField!=null;
+        }
+
+        public CT_Title AddNewTitle()
+        {
+            this.titleField= new CT_Title();
+            return this.titleField;
+        }
     }
 
 
@@ -3030,6 +3318,12 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
         {
             return maxField != null;
         }
+
+        public void UnsetMax()
+        {
+            this.maxField = null;
+        }
+
         public CT_Double AddNewMax()
         {
             this.maxField = new CT_Double();
@@ -3039,6 +3333,11 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
         {
             return minField != null;
         }
+        public void UnsetMin()
+        {
+            this.minField = null;
+        }
+
         public CT_Double AddNewMin()
         {
             this.minField = new CT_Double();
@@ -3308,6 +3607,17 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             sw.WriteEndElement("c", nodeName);
         }
 
+        public bool IsSetSpPr()
+        {
+            return this.spPr != null;
+        }
+
+        public CT_ShapeProperties AddNewSpPr()
+        {
+            this.spPrField = new CT_ShapeProperties();
+            return this.spPrField;
+        }
+
         private CT_ShapeProperties spPrField;
 
         [XmlElement(Order = 0)]
@@ -3411,6 +3721,32 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
         {
             this.txField = new CT_Tx();
             return this.txField;
+        }
+
+        public bool IsSetLayout()
+        {
+            return this.layoutField != null;
+        }
+
+        public void AddNewLayout()
+        {
+            this.layoutField = new CT_Layout();
+        }
+
+        public bool IsSetOverlay()
+        {
+            return this.overlayField != null;
+        }
+
+        public void UnsetOverlay()
+        {
+            this.overlayField = null;
+        }
+
+        public CT_Boolean AddNewOverlay()
+        {
+            this.overlayField = new CT_Boolean();
+            return this.overlayField;
         }
 
         [XmlElement(Order = 0)]
@@ -3562,6 +3898,17 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             this.richField = new CT_TextBody();
             return this.richField;
         }
+
+        public void UnsetRich()
+        {
+            this.richField=null;
+        }
+
+        public CT_StrRef AddNewStrRef()
+        {
+            this.strRefField = new CT_StrRef();
+            return this.strRefField;
+        }
     }
 
 
@@ -3664,6 +4011,11 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
         {
             strCache = new CT_StrData();
             return strCache;
+        }
+
+        public bool IsSetStrCache()
+        {
+            return this.strCache != null;
         }
     }
 
@@ -3784,6 +4136,42 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             CT_StrVal strVal = new CT_StrVal();
             pt.Add(strVal);
             return strVal;
+        }
+
+        public int SizeOfPtArray()
+        {
+            if(pt==null)
+                return 0;
+            return pt.Count;
+        }
+
+        public CT_StrVal GetPtArray(int index)
+        {
+            if(this.pt==null)
+                return null;
+
+            if(index < 0 || index >= this.pt.Count)
+                throw new IndexOutOfRangeException();
+
+            return pt[index];
+        }
+
+        public bool IsSetPtCount()
+        {
+            return this.ptCount!=null;
+        }
+
+        public void SetPtArray(object value)
+        {
+            if(value== null)
+            {
+                this.pt?.Clear();
+                this.ptCountField = null;
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
         }
     }
 
@@ -4275,57 +4663,57 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
         }
         public static CT_DateAx Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
-            if (node == null)
+            if(node == null)
                 return null;
             CT_DateAx ctObj = new CT_DateAx();
             ctObj.extLst = new List<CT_Extension>();
-            foreach (XmlNode childNode in node.ChildNodes)
+            foreach(XmlNode childNode in node.ChildNodes)
             {
-                if (childNode.LocalName == "axId")
+                if(childNode.LocalName == "axId")
                     ctObj.axId = CT_UnsignedInt.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "scaling")
+                else if(childNode.LocalName == "scaling")
                     ctObj.scaling = CT_Scaling.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "delete")
+                else if(childNode.LocalName == "delete")
                     ctObj.delete = CT_Boolean.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "axPos")
+                else if(childNode.LocalName == "axPos")
                     ctObj.axPos = CT_AxPos.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "majorGridlines")
+                else if(childNode.LocalName == "majorGridlines")
                     ctObj.majorGridlines = CT_ChartLines.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "minorGridlines")
+                else if(childNode.LocalName == "minorGridlines")
                     ctObj.minorGridlines = CT_ChartLines.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "title")
+                else if(childNode.LocalName == "title")
                     ctObj.title = CT_Title.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "numFmt")
+                else if(childNode.LocalName == "numFmt")
                     ctObj.numFmt = CT_NumFmt.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "majorTickMark")
+                else if(childNode.LocalName == "majorTickMark")
                     ctObj.majorTickMark = CT_TickMark.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "minorTickMark")
+                else if(childNode.LocalName == "minorTickMark")
                     ctObj.minorTickMark = CT_TickMark.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "tickLblPos")
+                else if(childNode.LocalName == "tickLblPos")
                     ctObj.tickLblPos = CT_TickLblPos.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "spPr")
+                else if(childNode.LocalName == "spPr")
                     ctObj.spPr = CT_ShapeProperties.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "txPr")
+                else if(childNode.LocalName == "txPr")
                     ctObj.txPr = CT_TextBody.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "crossAx")
+                else if(childNode.LocalName == "crossAx")
                     ctObj.crossAx = CT_UnsignedInt.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "crosses")
+                else if(childNode.LocalName == "crosses")
                     ctObj.crosses = CT_Crosses.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "auto")
+                else if(childNode.LocalName == "auto")
                     ctObj.auto = CT_Boolean.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "lblOffset")
+                else if(childNode.LocalName == "lblOffset")
                     ctObj.lblOffset = CT_LblOffset.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "baseTimeUnit")
+                else if(childNode.LocalName == "baseTimeUnit")
                     ctObj.baseTimeUnit = CT_TimeUnit.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "majorUnit")
+                else if(childNode.LocalName == "majorUnit")
                     ctObj.majorUnit = CT_AxisUnit.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "majorTimeUnit")
+                else if(childNode.LocalName == "majorTimeUnit")
                     ctObj.majorTimeUnit = CT_TimeUnit.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "minorUnit")
+                else if(childNode.LocalName == "minorUnit")
                     ctObj.minorUnit = CT_AxisUnit.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "minorTimeUnit")
+                else if(childNode.LocalName == "minorTimeUnit")
                     ctObj.minorTimeUnit = CT_TimeUnit.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "extLst")
+                else if(childNode.LocalName == "extLst")
                     ctObj.extLst.Add(CT_Extension.Parse(childNode, namespaceManager));
             }
             return ctObj;
@@ -4337,53 +4725,53 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
         {
             sw.WriteStart("c", nodeName);
             sw.Write('>');
-            if (this.axId != null)
+            if(this.axId != null)
                 this.axId.Write(sw, "axId");
-            if (this.scaling != null)
+            if(this.scaling != null)
                 this.scaling.Write(sw, "scaling");
-            if (this.delete != null)
+            if(this.delete != null)
                 this.delete.Write(sw, "delete");
-            if (this.axPos != null)
+            if(this.axPos != null)
                 this.axPos.Write(sw, "axPos");
-            if (this.majorGridlines != null)
+            if(this.majorGridlines != null)
                 this.majorGridlines.Write(sw, "majorGridlines");
-            if (this.minorGridlines != null)
+            if(this.minorGridlines != null)
                 this.minorGridlines.Write(sw, "minorGridlines");
-            if (this.title != null)
+            if(this.title != null)
                 this.title.Write(sw, "title");
-            if (this.numFmt != null)
+            if(this.numFmt != null)
                 this.numFmt.Write(sw, "numFmt");
-            if (this.majorTickMark != null)
+            if(this.majorTickMark != null)
                 this.majorTickMark.Write(sw, "majorTickMark");
-            if (this.minorTickMark != null)
+            if(this.minorTickMark != null)
                 this.minorTickMark.Write(sw, "minorTickMark");
-            if (this.tickLblPos != null)
+            if(this.tickLblPos != null)
                 this.tickLblPos.Write(sw, "tickLblPos");
-            if (this.spPr != null)
+            if(this.spPr != null)
                 this.spPr.Write(sw, "spPr");
-            if (this.txPr != null)
+            if(this.txPr != null)
                 this.txPr.Write(sw, "txPr");
-            if (this.crossAx != null)
+            if(this.crossAx != null)
                 this.crossAx.Write(sw, "crossAx");
-            if (this.crosses != null)
+            if(this.crosses != null)
                 this.crosses.Write(sw, "crosses");
-            if (this.auto != null)
+            if(this.auto != null)
                 this.auto.Write(sw, "auto");
-            if (this.lblOffset != null)
+            if(this.lblOffset != null)
                 this.lblOffset.Write(sw, "lblOffset");
-            if (this.baseTimeUnit != null)
+            if(this.baseTimeUnit != null)
                 this.baseTimeUnit.Write(sw, "baseTimeUnit");
-            if (this.majorUnit != null)
+            if(this.majorUnit != null)
                 this.majorUnit.Write(sw, "majorUnit");
-            if (this.majorTimeUnit != null)
+            if(this.majorTimeUnit != null)
                 this.majorTimeUnit.Write(sw, "majorTimeUnit");
-            if (this.minorUnit != null)
+            if(this.minorUnit != null)
                 this.minorUnit.Write(sw, "minorUnit");
-            if (this.minorTimeUnit != null)
+            if(this.minorTimeUnit != null)
                 this.minorTimeUnit.Write(sw, "minorTimeUnit");
-            if (this.extLst != null)
+            if(this.extLst != null)
             {
-                foreach (CT_Extension x in this.extLst)
+                foreach(CT_Extension x in this.extLst)
                 {
                     x.Write(sw, "extLst");
                 }
@@ -4758,10 +5146,86 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             this.minorTickMarkField = new CT_TickMark();
             return this.minorTickMarkField;
         }
+
+        public bool IsSetMajorGridlines()
+        {
+            return this.majorGridlinesField != null;
+        }
+
+        public CT_ChartLines AddNewMajorGridlines()
+        {
+            this.majorGridlinesField = new CT_ChartLines();
+            return this.majorGridlinesField;
+        }
+
+        public bool IsSetMinorGridlines()
+        {
+            return this.minorGridlinesField != null;
+        }
+
+        public CT_ChartLines AddNewMinorGridlines()
+        {
+            this.minorGridlinesField = new CT_ChartLines();
+            return this.minorGridlinesField;
+        }
+
+        public bool IsSetSpPr()
+        {
+            return this.spPrField != null;
+        }
+
+        public CT_ShapeProperties AddNewSpPr()
+        {
+            this.spPrField = new CT_ShapeProperties();
+            return this.spPrField;
+        }
+
+        public bool IsSetMinorUnit()
+        {
+            return this.minorUnitField != null;
+        }
+
+        public void UnsetMinorUnit()
+        {
+            this.minorUnitField = null;
+        }
+
+        public CT_AxisUnit AddNewMinorUnit()
+        {
+            this.minorUnitField = new CT_AxisUnit();
+            return this.minorUnitField;
+        }
+
+        public bool IsSetMajorUnit()
+        {
+            return this.majorUnitField != null;
+        }
+
+        public void UnsetMajorUnit()
+        {
+            this.majorUnitField = null;
+        }
+
+        public CT_AxisUnit AddNewMajorUnit()
+        {
+            this.majorUnitField = new CT_AxisUnit();
+            return this.majorUnitField;
+        }
+
+        public bool IsSetTitle()
+        {
+            return this.titleField!=null;
+        }
+
+        public CT_Title AddNewTitle()
+        {
+            this.titleField= new CT_Title();
+            return this.titleField;
+        }
     }
 
 
-    [Serializable]
+     [Serializable]
 
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
@@ -5445,6 +5909,38 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
         {
             this.minorTickMarkField = new CT_TickMark();
             return this.minorTickMarkField;
+        }
+
+        public bool IsSetMajorGridlines()
+        {
+            return this.majorGridlinesField != null;
+        }
+
+        public bool IsSetMinorGridlines()
+        {
+            return this.minorGridlinesField != null;
+        }
+
+        public bool IsSetSpPr()
+        {
+            return this.spPrField == null;
+        }
+
+        public CT_ShapeProperties AddNewSpPr()
+        {
+            this.spPrField = new CT_ShapeProperties();
+            return this.spPrField;
+        }
+
+        public bool IsSetTitle()
+        {
+            return this.titleField!=null;
+        }
+
+        public CT_Title AddNewTitle()
+        {
+            this.titleField= new CT_Title();
+            return this.titleField;
         }
     }
 
@@ -6257,6 +6753,71 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             this.minorGridlinesField = new CT_ChartLines();
             return this.minorGridlinesField;
         }
+
+        public bool IsSetMajorGridlines()
+        {
+            return this.majorGridlinesField != null;
+        }
+
+        public bool IsSetMinorGridlines()
+        {
+            return this.minorGridlinesField != null;
+        }
+
+
+        public bool IsSetSpPr()
+        {
+            return this.spPrField != null;
+        }
+
+        public CT_ShapeProperties AddNewSpPr()
+        {
+            this.spPrField = new CT_ShapeProperties();
+            return this.spPrField;
+        }
+
+        public bool IsSetMinorUnit()
+        {
+            return this.minorUnitField != null;
+        }
+
+        public void UnsetMinorUnit()
+        {
+            this.minorUnitField = null;
+        }
+
+        public CT_AxisUnit AddNewMinorUnit()
+        {
+            this.minorUnitField = new CT_AxisUnit();
+            return this.minorUnitField;
+        }
+
+        public bool IsSetMajorUnit()
+        {
+            return this.majorUnitField != null;
+        }
+
+        public void UnsetMajorUnit()
+        {
+            this.majorUnitField = null;
+        }
+
+        public CT_AxisUnit AddNewMajorUnit()
+        {
+            this.majorUnitField = new CT_AxisUnit();
+            return this.majorUnitField;
+        }
+
+        public bool IsSetTitle()
+        {
+            return this.titleField!=null;
+        }
+
+        public CT_Title AddNewTitle()
+        {
+            this.titleField= new CT_Title();
+            return this.titleField;
+        }
     }
 
 
@@ -6315,6 +6876,11 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
         {
             this.strRefField = new CT_StrRef();
             return this.strRefField;
+        }
+
+        public bool IsSetStrRef()
+        {
+            return this.strRefField != null;
         }
     }
 
@@ -6637,6 +7203,22 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
         {
             this.symbolField = new CT_MarkerStyle();
             return this.symbolField;
+        }
+
+        public bool IsSetSymbol()
+        {
+            return this.symbolField != null;
+        }
+
+        public bool IsSetSize()
+        {
+            return this.sizeField != null;
+        }
+
+        public CT_MarkerSize AddNewSize()
+        {
+            this.sizeField = new CT_MarkerSize();
+            return this.sizeField;
         }
     }
 
@@ -7128,6 +7710,17 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                 }
             }
             sw.WriteEndElement("c", nodeName);
+        }
+
+        public bool IsSetShowLeaderLines()
+        {
+            return this.showLeaderLinesField != null;
+        }
+
+        public CT_Boolean AddNewShowLeaderLines()
+        {
+            this.showLeaderLinesField = new CT_Boolean();
+            return this.showLeaderLinesField;
         }
 
         [XmlElement("dLbl", Order = 0)]
@@ -8772,6 +9365,26 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             numLit = new CT_NumData();
             return numLit;
         }
+
+        public bool IsSetNumRef()
+        {
+            return this.numRefField != null;
+        }
+
+        public bool IsSetNumLit()
+        {
+            return this.numLitField != null;
+        }
+
+        public void UnsetNumLit()
+        {
+            this.numLitField = null;
+        }
+
+        public void UnsetNumRef()
+        {
+            this.numRefField = null;
+        }
     }
 
 
@@ -8857,6 +9470,42 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             this.ptCountField = new CT_UnsignedInt();
             return ptCountField;
         }
+
+        public bool IsSetFormatCode()
+        {
+            return this.formatCodeField != null;
+        }
+
+        public void UnsetFormatCode()
+        {
+            this.formatCodeField = null;
+        }
+
+        public bool IsSetPtCount()
+        {
+            return this.ptCount!=null;
+        }
+
+        public void SetPtArray(object value)
+        {
+            if(value== null)
+            {
+                this.pt?.Clear();
+                this.ptCountField = null;
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public CT_NumVal GetPtArray(int index)
+        {
+            if(index< 0 || index>=this.pt.Count)
+                throw new IndexOutOfRangeException();
+            return ptField[index];
+        }
+
         [XmlElement(Order = 0)]
         public string formatCode
         {
@@ -9054,6 +9703,12 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             this.numCacheField = new CT_NumData();
             return this.numCacheField;
         }
+
+        public bool IsSetNumCache()
+        {
+            return this.numCacheField != null;
+        }
+
         [XmlElement(Order = 0)]
         public string f
         {
@@ -9243,6 +9898,46 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
         {
             strLit = new CT_StrData();
             return strLit;
+        }
+
+        public bool IsSetNumRef()
+        {
+            return this.numRefField != null;
+        }
+
+        public void UnsetNumRef()
+        {
+            this.numRefField = null;
+        }
+
+        public bool IsSetNumLit()
+        {
+            return this.numLitField != null;
+        }
+
+        public void UnsetNumLit()
+        {
+            this.numLitField = null;
+        }
+
+        public bool IsSetStrRef()
+        {
+            return this.strRefField != null;
+        }
+
+        public bool IsSetStrLit()
+        {
+            return this.strLitField != null;
+        }
+
+        public void UnsetStrLit()
+        {
+            strLitField = null;
+        }
+
+        public void UnsetStrRef()
+        {
+            strRefField = null;
         }
     }
 
@@ -10549,7 +11244,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                 return this.serAxField;
             }
             set
-            {
+            { 
                 this.serAxField = value;
             }
         }
@@ -10665,6 +11360,133 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
             this.dateAxField.Add(newax);
             return newax;
+        }
+
+        public int SizeOfValAxArray()
+        {
+            if(this.valAxField==null)
+                return 0;
+            return this.valAxField.Count;
+        }
+
+        public int SizeOfCatAxArray()
+        {
+            if(this.catAxField==null)
+                return 0;
+            return this.catAxField.Count;
+        }
+
+        public int SizeOfDateAxArray()
+        {
+            if(this.dateAxField==null)
+                return 0;
+            return this.dateAxField.Count;
+        }
+
+        public int SizeOfSerAxArray()
+        {
+            if(this.serAxField==null)
+                return 0;
+            return this.serAxField.Count;
+        }
+
+        public bool IsSetSpPr()
+        {
+            return spPrField != null;
+        }
+
+        public CT_ShapeProperties AddNewSpPr()
+        {
+            this.spPrField = new CT_ShapeProperties();
+            return this.spPrField;
+        }
+
+        public void UnsetSpPr()
+        {
+            this.spPrField = null;
+        }
+
+        public CT_RadarChart AddNewRadarChart()
+        {
+            if(this.radarChartField == null)
+                this.radarChart = new List<CT_RadarChart>();
+            var rc = new CT_RadarChart();
+            this.radarChartField.Add(rc);
+            return rc;
+        }
+
+        public int SizeOfBarChartArray()
+        {
+            return this.barChartField == null ? 0 : this.barChartField.Count;
+        }
+
+        public CT_BarChart GetBarChartArray(int index)
+        {
+            if(index<0 || index >= this.barChartField.Count)
+                throw new ArgumentOutOfRangeException("index");
+            return this.barChartField[index];
+        }
+
+        public int SizeOfLineChartArray()
+        {
+            return this.lineChartField == null ? 0 : this.lineChartField.Count;
+        }
+
+        public CT_LineChart GetLineChartArray(int index)
+        {
+            if(index<0 || index >= this.lineChartField.Count)
+                throw new ArgumentOutOfRangeException("index");
+            return this.lineChartField[index];
+        }
+
+        public int SizeOfPieChartArray()
+        {
+            return this.pieChartField == null ? 0 : this.pieChartField.Count;
+        }
+
+        public CT_PieChart GetPieChartArray(int index)
+        {
+            if(index<0 || index >= this.pieChartField.Count)
+                throw new ArgumentOutOfRangeException("index");
+            return this.pieChartField[index];
+        }
+
+        public int SizeOfRadarChartArray()
+        {
+            return this.radarChartField == null ? 0 : this.radarChartField.Count;
+        }
+
+        public CT_RadarChart GetRadarChartArray(int index)
+        {
+            if(index<0 || index >= this.radarChartField.Count)
+                throw new ArgumentOutOfRangeException("index");
+            return this.radarChartField[index];
+        }
+
+        public int SizeOfScatterChartArray()
+        {
+            return this.scatterChartField == null ? 0 : this.scatterChartField.Count;
+        }
+
+        public CT_ScatterChart GetScatterChartArray(int index)
+        {
+            if(index<0 || index >= this.scatterChartField.Count)
+                throw new ArgumentOutOfRangeException("index");
+            return this.scatterChartField[index];
+        }
+
+        public CT_CatAx GetCatAxArray(int index)
+        {
+            if(index<0 || index >= this.catAxField.Count)
+                throw new ArgumentOutOfRangeException("index");
+            return this.catAxField[index];
+        }
+
+        public CT_ValAx GetValAxArray(int index)
+        {
+            if(index<0 || index >= this.valAxField.Count)
+                throw new ArgumentOutOfRangeException("index");
+            return this.valAxField[index];
         }
     }
 
@@ -11381,7 +12203,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
         {
             return legendField != null;
         }
-        public void unsetLegend()
+        public void UnsetLegend()
         {
             legendField = null;
         }
@@ -11396,6 +12218,69 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
         {
             this.titleField = new CT_Title();
             return this.titleField;
+        }
+
+        public bool IsSetPlotVisOnly()
+        {
+            return this.plotVisOnlyField != null;
+        }
+
+        public bool IsSetFloor()
+        {
+            return floorField != null;
+        }
+
+        public bool IsSetBackWall()
+        {
+            return backWallField != null;
+        }
+
+        public bool IsSetSideWall()
+        {
+            return sideWallField != null;
+        }
+
+        public bool IsSetAutoTitleDeleted()
+        {
+            return autoTitleDeletedField != null;
+        }
+
+        public bool IsSetDispBlanksAs()
+        {
+            return dispBlanksAsField != null;
+        }
+
+        public void UnsetDispBlanksAs()
+        {
+            dispBlanksAsField = null;
+        }
+
+        public CT_DispBlanksAs AddNewDispBlanksAs()
+        {
+            dispBlanksAsField = new CT_DispBlanksAs();
+            return this.dispBlanksAsField;
+        }
+
+        public void Set(CT_Chart other)
+        {
+            this.autoTitleDeletedField = other.autoTitleDeletedField;
+            this.backWallField = other.backWallField;
+            this.dispBlanksAsField = other.dispBlanksAsField;
+            this.extLstField = other.extLstField;
+            this.floorField = other.floorField;
+            this.legendField = other.legendField;
+            this.pivotFmtsField = other.pivotFmtsField;
+            this.plotAreaField = other.plotAreaField;
+            this.plotVisOnlyField = other.plotVisOnlyField;
+            this.showDLblsOverMaxField = other.showDLblsOverMaxField;
+            this.sideWallField = other.sideWallField;
+            this.titleField = other.titleField;
+            this.view3DField = other.view3DField;
+        }
+
+        public void UnsetTitle()
+        {
+            this.titleField=null;
         }
 
         [XmlElement(Order = 0)]
@@ -11896,7 +12781,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         public CT_ExtensionList()
         {
-            //this.extField = new List<CT_Extension>();
+            this.extField = new List<CT_Extension>();
         }
 
         [XmlElement("ext", Order = 0)]
@@ -11910,6 +12795,28 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             {
                 this.extField = value;
             }
+        }
+
+        internal static CT_ExtensionList Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if (node == null)
+                return null;
+            CT_ExtensionList ctObj = new CT_ExtensionList();
+            foreach(XmlNode childNode in  node.ChildNodes) 
+            {
+                ctObj.ext.Add(CT_Extension.Parse(childNode, namespaceManager));
+            }
+            return ctObj;
+        }
+
+        internal void Write(StreamWriter sw, string nodeName)
+        {
+            sw.Write(string.Format("<c:{0}>", nodeName));
+            foreach (CT_Extension x in this.ext)
+            {
+                x.Write(sw, "ext");
+            }
+            sw.Write(string.Format("</c:{0}>", nodeName));
         }
     }
 
@@ -12039,13 +12946,13 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         public static CT_PivotFmts Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
-            if (node == null)
+            if(node == null)
                 return null;
             CT_PivotFmts ctObj = new CT_PivotFmts();
             ctObj.pivotFmt = new List<CT_PivotFmt>();
-            foreach (XmlNode childNode in node.ChildNodes)
+            foreach(XmlNode childNode in node.ChildNodes)
             {
-                if (childNode.LocalName == "pivotFmt")
+                if(childNode.LocalName == "pivotFmt")
                     ctObj.pivotFmt.Add(CT_PivotFmt.Parse(childNode, namespaceManager));
             }
             return ctObj;
@@ -12053,16 +12960,19 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            if (this.pivotFmt.Count == 0)
+            if(this.pivotFmt.Count == 0)
             {
                 return;
             }
+
+            sw.Write(string.Format("<c:{0}>", nodeName));
             sw.WriteStart("c", nodeName);
             sw.Write('>');
-            foreach (CT_PivotFmt x in this.pivotFmt)
+            foreach(CT_PivotFmt x in this.pivotFmt)
             {
                 x.Write(sw, "pivotFmt");
             }
+            sw.Write(string.Format("</c:{0}>", nodeName));
             sw.WriteEndElement("c", nodeName);
         }
 
@@ -12083,524 +12993,5 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                 this.pivotFmtField = value;
             }
         }
-    }
-
-    [Serializable]
-
-    [System.ComponentModel.DesignerCategory("code")]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public class CT_TextBody
-    {
-
-        private CT_TextBodyProperties bodyPrField;
-
-        private CT_TextListStyle lstStyleField;
-
-        private List<CT_TextParagraph> pField;
-
-        public static CT_TextBody Parse(XmlNode node, XmlNamespaceManager namespaceManager)
-        {
-            if (node == null)
-                return null;
-            CT_TextBody ctObj = new CT_TextBody();
-            ctObj.p = new List<CT_TextParagraph>();
-            foreach (XmlNode childNode in node.ChildNodes)
-            {
-                if (childNode.LocalName == "bodyPr")
-                    ctObj.bodyPr = CT_TextBodyProperties.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "lstStyle")
-                    ctObj.lstStyle = CT_TextListStyle.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "p")
-                    ctObj.p.Add(CT_TextParagraph.Parse(childNode, namespaceManager));
-            }
-            return ctObj;
-        }
-
-
-
-        internal void Write(StreamWriter sw, string nodeName)
-        {
-            sw.WriteStart("c", nodeName);
-            sw.Write('>');
-            if (this.bodyPr != null)
-                this.bodyPr.Write(sw, "bodyPr");
-            if (this.lstStyle != null)
-                this.lstStyle.Write(sw, "lstStyle");
-            foreach (CT_TextParagraph x in this.p)
-            {
-                x.Write(sw, "p");
-            }
-            sw.WriteEndElement("c", nodeName);
-        }
-
-        public void SetPArray(CT_TextParagraph[] array)
-        {
-            pField = new List<CT_TextParagraph>(array);
-        }
-        public CT_TextParagraph AddNewP()
-        {
-            if (this.pField == null)
-                pField = new List<CT_TextParagraph>();
-            CT_TextParagraph tp = new CT_TextParagraph();
-            pField.Add(tp);
-            return tp;
-        }
-        public CT_TextBodyProperties AddNewBodyPr()
-        {
-            this.bodyPrField = new CT_TextBodyProperties();
-            return this.bodyPrField;
-        }
-        public CT_TextListStyle AddNewLstStyle()
-        {
-            this.lstStyleField = new CT_TextListStyle();
-            return this.lstStyleField;
-        }
-
-        public CT_TextBodyProperties bodyPr
-        {
-            get
-            {
-                return this.bodyPrField;
-            }
-            set
-            {
-                this.bodyPrField = value;
-            }
-        }
-
-
-        public CT_TextListStyle lstStyle
-        {
-            get
-            {
-                return this.lstStyleField;
-            }
-            set
-            {
-                this.lstStyleField = value;
-            }
-        }
-        public override string ToString()
-        {
-            if (p == null || p.Count == 0)
-                return string.Empty;
-            
-            using(var sb = ZString.CreateStringBuilder())
-            {
-                foreach(CT_TextParagraph tp in p)
-                {
-                    foreach(CT_RegularTextRun tr in tp.r)
-                    {
-                        sb.Append(tr.t);
-                    }
-                }
-                return sb.ToString();
-            }
-                
-        }
-
-        public int SizeOfPArray()
-        {
-            if (this.pField == null)
-                pField = new List<CT_TextParagraph>();
-            return this.pField.Count;
-        }
-
-        public CT_TextParagraph GetPArray(int v)
-        {
-            return this.pField[v];
-        }
-
-        [XmlElement("p")]
-        public List<CT_TextParagraph> p
-        {
-            get
-            {
-                return this.pField;
-            }
-            set
-            {
-                this.pField = value;
-            }
-        }
-    }
-    [Serializable]
-    [XmlType(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart")]
-    [XmlRoot(Namespace = "http://schemas.openxmlformats.org/drawingml/2006/chart", IsNullable = true)]
-    public class CT_ShapeProperties
-    {
-
-        private CT_Transform2D xfrmField = null;
-
-        private CT_CustomGeometry2D custGeomField = null;
-
-        private CT_PresetGeometry2D prstGeomField = null;
-
-        private CT_NoFillProperties noFillField = null;
-
-        private CT_SolidColorFillProperties solidFillField = null;
-
-        private CT_GradientFillProperties gradFillField = null;
-
-        private CT_BlipFillProperties blipFillField = null;
-
-        private CT_PatternFillProperties pattFillField = null;
-
-        private CT_GroupFillProperties grpFillField = null;
-
-        private CT_LineProperties lnField = null;
-
-        private CT_EffectList effectLstField = null;
-
-        private CT_EffectContainer effectDagField = null;
-
-        private CT_Scene3D scene3dField = null;
-
-        private CT_Shape3D sp3dField = null;
-
-        private CT_OfficeArtExtensionList extLstField = null;
-
-        private ST_BlackWhiteMode bwModeField = ST_BlackWhiteMode.none;
-
-
-        public CT_PresetGeometry2D AddNewPrstGeom()
-        {
-            this.prstGeomField = new CT_PresetGeometry2D();
-            return this.prstGeomField;
-        }
-        public CT_Transform2D AddNewXfrm()
-        {
-            this.xfrmField = new CT_Transform2D();
-            return this.xfrmField;
-        }
-        public CT_SolidColorFillProperties AddNewSolidFill()
-        {
-            this.solidFillField = new CT_SolidColorFillProperties();
-            return this.solidFillField;
-        }
-        public bool IsSetPattFill()
-        {
-            return this.pattFillField != null;
-        }
-        public bool IsSetSolidFill()
-        {
-            return this.solidFillField != null;
-        }
-        public bool IsSetLn()
-        {
-            return this.lnField != null;
-        }
-        public CT_LineProperties AddNewLn()
-        {
-            this.lnField = new CT_LineProperties();
-            return lnField;
-        }
-        public void unsetPattFill()
-        {
-            this.pattFill = null;
-        }
-        public void unsetSolidFill()
-        {
-            this.solidFill = null;
-        }
-
-        [XmlElement(Order = 0)]
-        public CT_Transform2D xfrm
-        {
-            get
-            {
-                return this.xfrmField;
-            }
-            set
-            {
-                this.xfrmField = value;
-            }
-        }
-
-        [XmlElement(Order = 1)]
-        public CT_CustomGeometry2D custGeom
-        {
-            get
-            {
-                return this.custGeomField;
-            }
-            set
-            {
-                this.custGeomField = value;
-            }
-        }
-
-        [XmlElement(Order = 2)]
-        public CT_PresetGeometry2D prstGeom
-        {
-            get
-            {
-                return this.prstGeomField;
-            }
-            set
-            {
-                this.prstGeomField = value;
-            }
-        }
-
-        [XmlElement(Order = 3)]
-        public CT_NoFillProperties noFill
-        {
-            get
-            {
-                return this.noFillField;
-            }
-            set
-            {
-                this.noFillField = value;
-            }
-        }
-
-        [XmlElement(Order = 4)]
-        public CT_SolidColorFillProperties solidFill
-        {
-            get
-            {
-                return this.solidFillField;
-            }
-            set
-            {
-                this.solidFillField = value;
-            }
-        }
-
-        [XmlElement(Order = 5)]
-        public CT_GradientFillProperties gradFill
-        {
-            get
-            {
-                return this.gradFillField;
-            }
-            set
-            {
-                this.gradFillField = value;
-            }
-        }
-
-        [XmlElement(Order = 6)]
-        public CT_BlipFillProperties blipFill
-        {
-            get
-            {
-                return this.blipFillField;
-            }
-            set
-            {
-                this.blipFillField = value;
-            }
-        }
-
-        [XmlElement(Order = 7)]
-        public CT_PatternFillProperties pattFill
-        {
-            get
-            {
-                return this.pattFillField;
-            }
-            set
-            {
-                this.pattFillField = value;
-            }
-        }
-
-        [XmlElement(Order = 8)]
-        public CT_GroupFillProperties grpFill
-        {
-            get
-            {
-                return this.grpFillField;
-            }
-            set
-            {
-                this.grpFillField = value;
-            }
-        }
-
-        [XmlElement(Order = 9)]
-        public CT_LineProperties ln
-        {
-            get
-            {
-                return this.lnField;
-            }
-            set
-            {
-                this.lnField = value;
-            }
-        }
-
-        [XmlElement(Order = 10)]
-        public CT_EffectList effectLst
-        {
-            get
-            {
-                return this.effectLstField;
-            }
-            set
-            {
-                this.effectLstField = value;
-            }
-        }
-
-        [XmlElement(Order = 11)]
-        public CT_EffectContainer effectDag
-        {
-            get
-            {
-                return this.effectDagField;
-            }
-            set
-            {
-                this.effectDagField = value;
-            }
-        }
-
-        [XmlElement(Order = 12)]
-        public CT_Scene3D scene3d
-        {
-            get
-            {
-                return this.scene3dField;
-            }
-            set
-            {
-                this.scene3dField = value;
-            }
-        }
-
-        [XmlElement(Order = 13)]
-        public CT_Shape3D sp3d
-        {
-            get
-            {
-                return this.sp3dField;
-            }
-            set
-            {
-                this.sp3dField = value;
-            }
-        }
-
-        [XmlElement(Order = 14)]
-        public CT_OfficeArtExtensionList extLst
-        {
-            get
-            {
-                return this.extLstField;
-            }
-            set
-            {
-                this.extLstField = value;
-            }
-        }
-
-        [XmlAttribute]
-        public ST_BlackWhiteMode bwMode
-        {
-            get
-            {
-                return this.bwModeField;
-            }
-            set
-            {
-                this.bwModeField = value;
-            }
-        }
-        [XmlIgnore]
-        public bool bwModeSpecified
-        {
-            get { return ST_BlackWhiteMode.none != this.bwModeField; }
-        }
-
-        public static CT_ShapeProperties Parse(XmlNode node, XmlNamespaceManager namespaceManager)
-        {
-            if (node == null)
-                return null;
-            CT_ShapeProperties ctObj = new CT_ShapeProperties();
-            if (node.Attributes["bwMode"] != null)
-                ctObj.bwMode = (ST_BlackWhiteMode)Enum.Parse(typeof(ST_BlackWhiteMode), node.Attributes["bwMode"].Value);
-            foreach (XmlNode childNode in node.ChildNodes)
-            {
-                if (childNode.LocalName == "xfrm")
-                    ctObj.xfrm = CT_Transform2D.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "custGeom")
-                    ctObj.custGeom = CT_CustomGeometry2D.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "prstGeom")
-                    ctObj.prstGeom = CT_PresetGeometry2D.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "noFill")
-                    ctObj.noFill = new CT_NoFillProperties();
-                else if (childNode.LocalName == "solidFill")
-                    ctObj.solidFill = CT_SolidColorFillProperties.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "gradFill")
-                    ctObj.gradFill = CT_GradientFillProperties.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "blipFill")
-                    ctObj.blipFill = CT_BlipFillProperties.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "pattFill")
-                    ctObj.pattFill = CT_PatternFillProperties.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "grpFill")
-                    ctObj.grpFill = new CT_GroupFillProperties();
-                else if (childNode.LocalName == "ln")
-                    ctObj.ln = CT_LineProperties.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "effectLst")
-                    ctObj.effectLst = CT_EffectList.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "effectDag")
-                    ctObj.effectDag = CT_EffectContainer.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "scene3d")
-                    ctObj.scene3d = CT_Scene3D.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "sp3d")
-                    ctObj.sp3d = CT_Shape3D.Parse(childNode, namespaceManager);
-                else if (childNode.LocalName == "extLst")
-                    ctObj.extLst = CT_OfficeArtExtensionList.Parse(childNode, namespaceManager);
-            }
-            return ctObj;
-        }
-
-
-
-        internal void Write(StreamWriter sw, string nodeName)
-        {
-            sw.WriteStart("c", nodeName);
-            if(this.bwMode!= ST_BlackWhiteMode.none)
-                XmlHelper.WriteAttribute(sw, "bwMode", this.bwMode.ToString());
-            sw.Write('>');
-            if (this.xfrm != null)
-                this.xfrm.Write(sw, "a:xfrm");
-            if (this.custGeom != null)
-                this.custGeom.Write(sw, "custGeom");
-            if (this.prstGeom != null)
-                this.prstGeom.Write(sw, "prstGeom");
-            if (this.noFill != null)
-                sw.Write("<a:noFill/>");
-            if (this.solidFill != null)
-                this.solidFill.Write(sw, "solidFill");
-            if (this.gradFill != null)
-                this.gradFill.Write(sw, "gradFill");
-            if (this.blipFill != null)
-                this.blipFill.Write(sw, "a:blipFill");
-            if (this.pattFill != null)
-                this.pattFill.Write(sw, "pattFill");
-            if (this.grpFill != null)
-                sw.Write("<a:grpFill/>");
-            if (this.ln != null)
-                this.ln.Write(sw, "ln");
-            if (this.effectLst != null)
-                this.effectLst.Write(sw, "effectLst");
-            if (this.effectDag != null)
-                this.effectDag.Write(sw, "effectDag");
-            if (this.scene3d != null)
-                this.scene3d.Write(sw, "scene3d");
-            if (this.sp3d != null)
-                this.sp3d.Write(sw, "sp3d");
-            if (this.extLst != null)
-                this.extLst.Write(sw, "extLst");
-            sw.WriteEndElement("c", nodeName);
-        }
-
     }
 }

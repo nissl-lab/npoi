@@ -44,15 +44,6 @@ namespace NPOI.SS.UserModel
         IComment CreateCellComment(IClientAnchor anchor);
 
         /// <summary>
-        /// Creates a chart.
-        /// </summary>
-        /// <param name="anchor">the client anchor describes how this chart is attached to
-        /// the sheet.
-        /// </param>
-        /// <return>the newly created chart</return>
-        IChart CreateChart(IClientAnchor anchor);
-
-        /// <summary>
         /// Creates a new client anchor and Sets the top-left and bottom-right
         /// coordinates of the anchor.
         /// </summary>

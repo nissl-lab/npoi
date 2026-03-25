@@ -100,7 +100,7 @@ namespace NPOI.XSSF.UserModel
             {
                 if (_font.sizeOfColorArray() == 0) return null;
 
-                return new XSSFColor(_font.GetColorArray(0), _colorMap);
+                return XSSFColor.From(_font.GetColorArray(0), _colorMap);
             }
             set
             {

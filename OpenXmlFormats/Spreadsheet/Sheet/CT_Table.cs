@@ -168,13 +168,18 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "displayName", this.displayName);
             XmlHelper.WriteAttribute(sw, "comment", this.comment);
             XmlHelper.WriteAttribute(sw, "ref", this.@ref);
-            XmlHelper.WriteAttribute(sw, "tableType", this.tableType.ToString());
-            XmlHelper.WriteAttribute(sw, "headerRowCount", this.headerRowCount);
-            XmlHelper.WriteAttribute(sw, "insertRow", this.insertRow);
-            XmlHelper.WriteAttribute(sw, "insertRowShift", this.insertRowShift);
+            if(this.tableType!= ST_TableType.worksheet)
+                XmlHelper.WriteAttribute(sw, "tableType", this.tableType.ToString());
+            if(this.headerRowCount!=1)
+                XmlHelper.WriteAttribute(sw, "headerRowCount", this.headerRowCount);
+            if(this.insertRow)
+                XmlHelper.WriteAttribute(sw, "insertRow", this.insertRow);
+            if(this.insertRowShift)
+                XmlHelper.WriteAttribute(sw, "insertRowShift", this.insertRowShift);
             XmlHelper.WriteAttribute(sw, "totalsRowCount", this.totalsRowCount);
             XmlHelper.WriteAttribute(sw, "totalsRowShown", this.totalsRowShown);
-            XmlHelper.WriteAttribute(sw, "published", this.published);
+            if(this.published)
+                XmlHelper.WriteAttribute(sw, "published", this.published);
             XmlHelper.WriteAttribute(sw, "headerRowDxfId", this.headerRowDxfId);
             XmlHelper.WriteAttribute(sw, "dataDxfId", this.dataDxfId);
             XmlHelper.WriteAttribute(sw, "totalsRowDxfId", this.totalsRowDxfId);
@@ -653,7 +658,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_TableColumns()
         {
-            //this.tableColumnField = new List<CT_TableColumn>();
+            this.tableColumnField = new List<CT_TableColumn>();
         }
         public static CT_TableColumns Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
@@ -687,6 +692,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         public CT_TableColumn InsertNewTableColumn(int columnIndex)
         {
+            if (this.tableColumnField == null)
+            {
+                this.tableColumnField = new List<CT_TableColumn>();
+            }
             var newTableColumn = new CT_TableColumn();
             this.tableColumn.Insert(columnIndex,newTableColumn);
             return newTableColumn;
@@ -704,22 +713,28 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             this.tableColumn.RemoveAt(columnIndex);
         }
 
-        internal CT_TableColumn GetTableColumnArray(int v)
-        {
-            if (this.tableColumnField == null)
-                return null;
-            if (v < 0 || v >= this.tableColumn.Count)
-                throw new ArgumentOutOfRangeException();
-            return tableColumnField[v];
-        }
-
         public CT_TableColumn AddNewTableColumn()
         {
-            if(this.tableColumnField==null)
-                this.tableColumnField = new List<CT_TableColumn> ();
-            var c = new CT_TableColumn();
-            this.tableColumnField.Add(c);
-            return c;
+            if (this.tableColumnField == null)
+            {
+                this.tableColumnField = new List<CT_TableColumn>();
+            }
+            var col = new CT_TableColumn();
+            tableColumn.Add(col);
+            return col;
+        }
+
+        public CT_TableColumn GetTableColumnArray(int index)
+        {
+            if (this.tableColumnField == null)
+            {
+                return null;
+            }
+            if (index < 0 || index >= this.tableColumnField.Count)
+            {
+                throw new ArgumentOutOfRangeException(nameof(index));
+            }
+            return this.tableColumnField[index];
         }
 
         [XmlElement]
@@ -858,7 +873,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "id", this.id);
             XmlHelper.WriteAttribute(sw, "uniqueName", this.uniqueName);
             XmlHelper.WriteAttribute(sw, "name", this.name);
-            XmlHelper.WriteAttribute(sw, "totalsRowFunction", this.totalsRowFunction.ToString());
+            if(this.totalsRowFunction!= ST_TotalsRowFunction.none)
+                XmlHelper.WriteAttribute(sw, "totalsRowFunction", this.totalsRowFunction.ToString());
             XmlHelper.WriteAttribute(sw, "totalsRowLabel", this.totalsRowLabel);
             XmlHelper.WriteAttribute(sw, "queryTableFieldId", this.queryTableFieldId);
             XmlHelper.WriteAttribute(sw, "headerRowDxfId", this.headerRowDxfId);

@@ -14,6 +14,8 @@ public class LargeExcelFileBenchmark
     private static MemoryStream _memoryStream;
     private string _filePath;
 
+
+
     [GlobalSetup]
     public void GlobalSetup()
     {
@@ -40,8 +42,18 @@ public class LargeExcelFileBenchmark
     }
 
     [Benchmark]
-    public void XSSFWorkbookLoad()
+    public void XSSFWorkbookLoad_DisableSheetLazyLoading()
     {
+        XSSFSheet.EnableLazyLoading = false;
+        var workbook = new XSSFWorkbook(_filePath, true);
+        workbook.Dispose();
+    }
+
+
+    [Benchmark]
+    public void XSSFWorkbookLoad_EnableSheetLazyLoading()
+    {
+        XSSFSheet.EnableLazyLoading = true;
         var workbook = new XSSFWorkbook(_filePath, true);
         workbook.Dispose();
     }
@@ -49,7 +61,7 @@ public class LargeExcelFileBenchmark
     [Benchmark]
     public void XSSFReaderLoad()
     {
-        using var pkg = OPCPackage.Open(_filePath, PackageAccess.READ);
+        var pkg = OPCPackage.Open(_filePath, PackageAccess.READ);
         var reader = new XSSFReader(pkg);
 
         // Read shared strings table

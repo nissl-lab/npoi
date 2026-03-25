@@ -436,7 +436,7 @@ namespace NPOI.XSSF.UserModel
 
         private XSSFColor GetColor(CT_BorderPr pr)
         {
-            return pr == null ? null : new XSSFColor(pr.color, _colorMap);
+            return pr == null ? null : XSSFColor.From(pr.color, _colorMap);
         }
         #endregion
     }

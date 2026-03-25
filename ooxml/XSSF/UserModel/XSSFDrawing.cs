@@ -30,6 +30,7 @@ using System.Text.RegularExpressions;
 using System.Linq;
 using System.Collections;
 using NPOI.OpenXml4Net.Exceptions;
+using NPOI.XDDF.UserModel.Chart;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -181,7 +182,7 @@ namespace NPOI.XSSF.UserModel
         /// </summary>
         /// <param name="anchor">the client anchor describes how this chart is attached to</param>
         /// <returns>the newly created chart</returns>
-        public IChart CreateChart(IClientAnchor anchor)
+        public XDDFChart CreateChart(IClientAnchor anchor)
         {
             int chartNumber = GetNewChartNumber();
 

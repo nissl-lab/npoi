@@ -19,42 +19,27 @@ using System.Xml;
 
 namespace NPOI.XSSF.UserModel
 {
-    using NPOI.SS.UserModel;
     using NPOI.OpenXmlFormats.Dml.Chart;
     using System.Collections.Generic;
     using NPOI.OpenXml4Net.OPC;
     using System;
-    using NPOI.OpenXmlFormats;
     using System.IO;
     using System.Text;
-    using NPOI.SS.UserModel.Charts;
-    using NPOI.XSSF.UserModel.Charts;
-    using System.Xml.Serialization;
     using NPOI.OpenXmlFormats.Dml;
+    using NPOI.XDDF.UserModel.Chart;
 
     /**
      * Represents a SpreadsheetML Chart
      * @author Nick Burch
      * @author Roman Kashitsyn
      */
-    public class XSSFChart : POIXMLDocumentPart, IChart, IChartAxisFactory
+    public class XSSFChart : XDDFChart
     {
 
         /**
          * Parent graphic frame.
          */
         private XSSFGraphicFrame frame;
-
-        /**
-         * Root element of the SpreadsheetML Chart part
-         */
-        private ChartSpaceDocument chartSpaceDocument;
-        /**
-         * The Chart within that
-         */
-        private CT_Chart chart;
-
-        List<IChartAxis> axis = new List<IChartAxis>();
 
         /**
          * Create a new SpreadsheetML chart
@@ -78,17 +63,6 @@ namespace NPOI.XSSF.UserModel
         protected XSSFChart(PackagePart part)
             : base(part)
         {
-
-            XmlDocument doc = ConvertStreamToXml(part.GetInputStream());
-            chartSpaceDocument = ChartSpaceDocument.Parse(doc, NamespaceManager);
-            chart = chartSpaceDocument.GetChartSpace().chart;
-        }
-
-        [Obsolete("deprecated in POI 3.14, scheduled for removal in POI 3.16")]
-        protected XSSFChart(PackagePart part, PackageRelationship rel)
-            : this(part)
-        {
-
         }
         /**
          * Construct a new CTChartSpace bean.
@@ -98,16 +72,14 @@ namespace NPOI.XSSF.UserModel
          */
         private void CreateChart()
         {
-            chartSpaceDocument = new ChartSpaceDocument();
-            chartSpaceDocument.GetChartSpace().roundedCorners = new CT_Boolean {val = 0};
-            chart = chartSpaceDocument.GetChartSpace().AddNewChart();
             CT_PlotArea plotArea = chart.AddNewPlotArea();
 
             plotArea.AddNewLayout();
             chart.AddNewPlotVisOnly().val = 1;
 
-            CT_PrintSettings printSettings = chartSpaceDocument.GetChartSpace().AddNewPrintSettings();
+            CT_PrintSettings printSettings = chartSpace.AddNewPrintSettings();
             printSettings.AddNewHeaderFooter();
+
             CT_PageMargins pageMargins = printSettings.AddNewPageMargins();
             pageMargins.b = 0.75;
             pageMargins.l = 0.70;
@@ -117,24 +89,6 @@ namespace NPOI.XSSF.UserModel
             pageMargins.footer = 0.30;
             printSettings.AddNewPageSetup();
         }
-        /// <summary>
-        /// Return the underlying CTChartSpace bean, the root element of the SpreadsheetML Chart part.
-        /// </summary>
-        /// <returns></returns>
-        public CT_ChartSpace GetCTChartSpace()
-        {
-            return chartSpaceDocument.GetChartSpace();
-        }
-
-        /// <summary>
-        /// Return the underlying CTChart bean, within the Chart Space
-        /// </summary>
-        /// <returns></returns>
-        public CT_Chart GetCTChart()
-        {
-            return chart;
-        }
-
 
         protected internal override void Commit()
         {
@@ -147,8 +101,8 @@ namespace NPOI.XSSF.UserModel
                   xmlns:a="http://schemas.Openxmlformats.org/drawingml/2006/main"
                   xmlns:r="http://schemas.Openxmlformats.org/officeDocument/2006/relationships">
              */
-            PackagePart part = GetPackagePart();            
-            chartSpaceDocument.Save(part.GetOutputStream());            
+            PackagePart part = GetPackagePart();
+            chartSpace.Save(part.GetOutputStream());
         }
         /// <summary>
         /// Returns the parent graphic frame.
@@ -167,139 +121,76 @@ namespace NPOI.XSSF.UserModel
             this.frame = frame;
         }
 
-        public IChartDataFactory ChartDataFactory
+        /// <summary>
+        /// Returns the title, or null if none is Set
+        /// </summary>
+        public XSSFRichTextString TitleText
         {
             get
             {
-                return XSSFChartDataFactory.GetInstance();
-            }
-        }
-
-        public IChartAxisFactory ChartAxisFactory
-        {
-            get
-            {
-                return this;
-            }
-        }
-
-        public void Plot(IChartData data, params IChartAxis[] axis)
-        {
-            data.FillChart(this, axis);
-        }
-
-        public IValueAxis CreateValueAxis(AxisPosition pos)
-        {
-            long id = axis.Count + 1;
-            XSSFValueAxis valueAxis = new XSSFValueAxis(this, id, pos);
-            if (axis.Count == 1)
-            {
-                IChartAxis ax = axis[0];
-                ax.CrossAxis(valueAxis);
-                valueAxis.CrossAxis(ax);
-            }
-            axis.Add(valueAxis);
-            return valueAxis;
-        }
-        public IChartAxis CreateCategoryAxis(AxisPosition pos)
-        {
-            long id = axis.Count + 1;
-            XSSFCategoryAxis categoryAxis = new XSSFCategoryAxis(this, id, pos);
-            if (axis.Count == 1)
-            {
-                IChartAxis ax = axis[0];
-                ax.CrossAxis(categoryAxis);
-                categoryAxis.CrossAxis(ax);
-            }
-            axis.Add(categoryAxis);
-            return categoryAxis;
-        }
-
-        public IChartAxis CreateDateAxis(AxisPosition pos)
-        {
-            long id = axis.Count + 1;
-            XSSFDateAxis dateAxis = new XSSFDateAxis(this, id, pos);
-            if (axis.Count == 1)
-            {
-                IChartAxis ax = axis[0];
-                ax.CrossAxis(dateAxis);
-                dateAxis.CrossAxis(ax);
-            }
-            axis.Add(dateAxis);
-            return dateAxis;
-        }
-
-        public List<IChartAxis> GetAxis()
-        {
-            if (axis.Count == 0 && HasAxis())
-            {
-                ParseAxis();
-            }
-            return axis;
-        }
-
-        public IManualLayout GetManualLayout()
-        {
-            return new XSSFManualLayout(this);
-        }
-
-        /**
-         * @return true if only visible cells will be present on the chart,
-         *         false otherwise
-         */
-        public bool IsPlotOnlyVisibleCells()
-        {
-            return chart.plotVisOnly.val==1?true:false;
-        }
-
-        /**
-         * @param plotVisOnly a flag specifying if only visible cells should be
-         *        present on the chart
-         */
-        public void SetPlotOnlyVisibleCells(bool plotVisOnly)
-        {
-            chart.plotVisOnly.val = plotVisOnly?1:0;
-        }
-
-        /**
-         * Returns the title, or null if none is Set
-         */
-        public XSSFRichTextString Title
-        {
-            get
-            {
-                if (!chart.IsSetTitle())
+                if(!chart.IsSetTitle())
                 {
                     return null;
                 }
 
                 CT_Title title = chart.title;
 
-                if (title.tx==null)
+                if(title.tx==null)
                     return null;
-                if(title.tx.rich==null)
-                    return null;
-                return new XSSFRichTextString(title.tx.rich.ToString());
+                if(title.tx.rich!=null)
+                    return new XSSFRichTextString(title.tx.rich.ToString());
+                else
+                    return new XSSFRichTextString("");
             }
         }
 
-        /**
-         * Sets the title text.
-         */
-        public void SetTitle(string newTitle)
+        /// <summary>
+        /// Get the chart title formula expression if there is one
+        /// </summary>
+        public String TitleFormula
+        {
+            get
+            {
+                if(!GetCTChart().IsSetTitle())
+                {
+                    return null;
+                }
+
+                var title = GetCTChart().title;
+
+                if(!title.IsSetTx())
+                {
+                    return null;
+                }
+
+                var tx = title.tx;
+
+                if(!tx.IsSetStrRef())
+                {
+                    return null;
+                }
+
+                return tx.strRef.f;
+            }
+        }
+        /// <summary>
+        /// Set the formula expression to use for the chart title
+        /// </summary>
+        /// <param name="formula"></param>
+        public void SetTitleFormula(String formula)
         {
             CT_Title ctTitle;
-            if (chart.IsSetTitle())
+            if(GetCTChart().IsSetTitle())
             {
-                ctTitle = chart.title;
+                ctTitle = GetCTChart().title;
             }
             else
             {
-                ctTitle = chart.AddNewTitle();
+                ctTitle = GetCTChart().AddNewTitle();
             }
 
             CT_Tx tx;
-            if (ctTitle.IsSetTx())
+            if(ctTitle.IsSetTx())
             {
                 tx = ctTitle.tx;
             }
@@ -308,60 +199,22 @@ namespace NPOI.XSSF.UserModel
                 tx = ctTitle.AddNewTx();
             }
 
-            if (tx.IsSetStrRef())
+            if(tx.IsSetRich())
             {
-                tx.UnsetStrRef();
+                tx.UnsetRich();
             }
 
-            OpenXmlFormats.Dml.Chart.CT_TextBody rich;
-            if (tx.IsSetRich())
+            CT_StrRef strRef;
+            if(tx.IsSetStrRef())
             {
-                rich = tx.rich;
+                strRef = tx.strRef;
             }
             else
             {
-                rich = tx.AddNewRich();
-                rich.AddNewBodyPr();  // body properties must exist (but can be empty)
+                strRef = tx.AddNewStrRef();
             }
 
-            CT_TextParagraph para;
-            if (rich.SizeOfPArray() > 0)
-            {
-                para = rich.GetPArray(0);
-            }
-            else
-            {
-                para = rich.AddNewP();
-            }
-
-            if (para.SizeOfRArray() > 0)
-            {
-                CT_RegularTextRun run = para.GetRArray(0);
-                run.t = (newTitle);
-            }
-            else if (para.SizeOfFldArray() > 0)
-            {
-                OpenXmlFormats.Dml.CT_TextField fld = para.GetFldArray(0);
-                fld.t = (newTitle);
-            }
-            else
-            {
-                CT_RegularTextRun run = para.AddNewR();
-                run.t = (newTitle);
-            }
-        }
-
-        public IChartLegend GetOrCreateLegend()
-        {
-            return new XSSFChartLegend(this);
-        }
-
-        public void DeleteLegend()
-        {
-            if (chart.IsSetLegend())
-            {
-                chart.unsetLegend();
-            }
+            strRef.f = formula;
         }
 
         public void SetCTDispBlanksAs(CT_DispBlanksAs disp)
@@ -369,51 +222,19 @@ namespace NPOI.XSSF.UserModel
             chart.dispBlanksAs = disp;
         }
 
-        private bool HasAxis()
+        protected override POIXMLRelation GetChartRelation()
         {
-            CT_PlotArea ctPlotArea = chart.plotArea;
-            int totalAxisCount =
-                (ctPlotArea.valAx == null ? 0 : ctPlotArea.valAx.Count) +
-                (ctPlotArea.catAx == null ? 0 : ctPlotArea.catAx.Count) +
-                (ctPlotArea.dateAx == null ? 0 : ctPlotArea.dateAx.Count) +
-                (ctPlotArea.serAx == null ? 0 : ctPlotArea.serAx.Count);
-            return totalAxisCount > 0;
+            return XSSFRelation.CHART;
         }
 
-        private void ParseAxis()
+        protected override POIXMLRelation GetChartWorkbookRelation()
         {
-            ParseCategoryAxis();
-            ParseDateAxis();
-            ParseValueAxis();
-        }
-        private void ParseCategoryAxis()
-        {
-            if (chart.plotArea.catAx == null)
-                return;
-            foreach (CT_CatAx catAx in chart.plotArea.catAx)
-            {
-                axis.Add(new XSSFCategoryAxis(this, catAx));
-            }
+            return XSSFRelation.CHART;
         }
 
-        private void ParseDateAxis()
+        protected override POIXMLFactory GetChartFactory()
         {
-            if (chart.plotArea.dateAx == null)
-                return;
-            foreach (CT_DateAx dateAx in chart.plotArea.dateAx)
-            {
-                axis.Add(new XSSFDateAxis(this, dateAx));
-            }
-        }
-
-        private void ParseValueAxis()
-        {
-            if (chart.plotArea.valAx == null)
-                return;
-            foreach (CT_ValAx valAx in chart.plotArea.valAx)
-            {
-                axis.Add(new XSSFValueAxis(this, valAx));
-            }
+            return XSSFFactory.GetInstance();
         }
     }
 }

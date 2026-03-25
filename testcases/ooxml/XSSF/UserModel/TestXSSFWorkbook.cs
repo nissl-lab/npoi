@@ -1305,5 +1305,136 @@ namespace TestCases.XSSF.UserModel
 
             return bmpData;
         }
+        /// <summary>
+        /// Tests that when an existing workbook is opened and styles are never touched,
+        /// the saved output preserves the original xl/styles.xml bytes unchanged.
+        /// </summary>
+        [Test]
+        public void LazyStyles_UntouchedStylesPreservedOnSave()
+        {
+            // Read the original styles.xml bytes from the fixture using OPCPackage
+            byte[] originalStylesBytes;
+            using (OPCPackage pkg = OPCPackage.Open(HSSFTestDataSamples.OpenSampleFileStream("Formatting.xlsx")))
+            {
+                PackagePart stylesPart = pkg.GetPart(
+                    PackagingUriHelper.CreatePartName("/xl/styles.xml"));
+                ClassicAssert.IsNotNull(stylesPart, "xl/styles.xml not found in fixture");
+                originalStylesBytes = IOUtils.ToByteArray(stylesPart.GetInputStream());
+            }
+
+            // Open the workbook and save without touching styles
+            byte[] savedBytes;
+            using (var wb = XSSFTestDataSamples.OpenSampleWorkbook("Formatting.xlsx"))
+            {
+                // Do NOT touch styles - just read sheet names and row count
+                ISheet sheet = wb.GetSheetAt(0);
+                ClassicAssert.IsNotNull(sheet);
+
+                using (var ms = new MemoryStream())
+                {
+                    wb.Write(ms);
+                    savedBytes = ms.ToArray();
+                }
+            }
+
+            // Extract the styles.xml from the saved workbook
+            byte[] savedStylesBytes;
+            using (OPCPackage savedPkg = OPCPackage.Open(new MemoryStream(savedBytes)))
+            {
+                PackagePart stylesPart = savedPkg.GetPart(
+                    PackagingUriHelper.CreatePartName("/xl/styles.xml"));
+                ClassicAssert.IsNotNull(stylesPart, "xl/styles.xml not found in saved workbook");
+                savedStylesBytes = IOUtils.ToByteArray(stylesPart.GetInputStream());
+            }
+
+            // The styles.xml must be byte-identical to the original
+            CollectionAssert.AreEqual(originalStylesBytes, savedStylesBytes,
+                "styles.xml was modified even though styles were never touched");
+        }
+
+        /// <summary>
+        /// Tests that when styles are touched (a font is created), the saved
+        /// output has a different (regenerated) xl/styles.xml.
+        /// </summary>
+        [Test]
+        public void LazyStyles_TouchedStylesModifiedOnSave()
+        {
+            // Read the original styles.xml bytes from the fixture
+            byte[] originalStylesBytes;
+            using (OPCPackage pkg = OPCPackage.Open(HSSFTestDataSamples.OpenSampleFileStream("Formatting.xlsx")))
+            {
+                PackagePart stylesPart = pkg.GetPart(
+                    PackagingUriHelper.CreatePartName("/xl/styles.xml"));
+                originalStylesBytes = IOUtils.ToByteArray(stylesPart.GetInputStream());
+            }
+
+            // Open and create a new font (marks styles as touched)
+            byte[] savedBytes;
+            using (var wb = XSSFTestDataSamples.OpenSampleWorkbook("Formatting.xlsx"))
+            {
+                // Touch styles: create a new bold font
+                IFont font = wb.CreateFont();
+                font.IsBold = true;
+                font.FontName = "Arial";
+
+                using (var ms = new MemoryStream())
+                {
+                    wb.Write(ms);
+                    savedBytes = ms.ToArray();
+                }
+            }
+
+            // Extract styles.xml from saved workbook
+            byte[] savedStylesBytes;
+            using (OPCPackage savedPkg = OPCPackage.Open(new MemoryStream(savedBytes)))
+            {
+                PackagePart stylesPart = savedPkg.GetPart(
+                    PackagingUriHelper.CreatePartName("/xl/styles.xml"));
+                ClassicAssert.IsNotNull(stylesPart, "xl/styles.xml not found in saved workbook");
+                savedStylesBytes = IOUtils.ToByteArray(stylesPart.GetInputStream());
+            }
+
+            // Styles should have been regenerated (bytes differ because a new font was added)
+            ClassicAssert.IsFalse(
+                savedStylesBytes.SequenceEqual(originalStylesBytes),
+                "styles.xml was not modified even though styles were touched");
+
+            // The saved workbook should still be valid and loadable
+            using (var wb2 = new XSSFWorkbook(new MemoryStream(savedBytes)))
+            {
+                ClassicAssert.IsNotNull(wb2.GetStylesSource());
+                ClassicAssert.AreEqual(wb2.GetStylesSource().Fonts.Count, wb2.NumberOfFonts);
+            }
+        }
+
+        /// <summary>
+        /// Tests that basic workbook operations (reading sheets, cell values) work
+        /// correctly with lazy-loaded styles.
+        /// </summary>
+        [Test]
+        public void LazyStyles_BasicOperationsWorkWithoutForcingStylesLoad()
+        {
+            using (var wb = XSSFTestDataSamples.OpenSampleWorkbook("Formatting.xlsx"))
+            {
+                // Reading sheet count and names should work
+                ClassicAssert.IsTrue(wb.NumberOfSheets > 0);
+                for (int i = 0; i < wb.NumberOfSheets; i++)
+                {
+                    ClassicAssert.IsNotNull(wb.GetSheetName(i));
+                }
+
+                // Reading a sheet should work
+                ISheet sheet = wb.GetSheetAt(0);
+                ClassicAssert.IsNotNull(sheet);
+
+                // GetStylesSource() must always return a non-null object
+                StylesTable styles = wb.GetStylesSource();
+                ClassicAssert.IsNotNull(styles);
+
+                // Getting a cell style should trigger lazy load and work correctly
+                ICellStyle defaultStyle = wb.GetCellStyleAt(0);
+                ClassicAssert.IsNotNull(defaultStyle);
+            }
+        }
     }
 }

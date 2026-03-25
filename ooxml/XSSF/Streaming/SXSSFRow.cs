@@ -27,6 +27,7 @@ namespace NPOI.XSSF.Streaming
     {
         private readonly SXSSFSheet _sheet; // parent sheet
         private readonly Dictionary<int, SXSSFCell> _cells = new Dictionary<int, SXSSFCell>();
+        private List<ICell> _sortedCellCache;
         private short _style = -1; // index of cell style in style table
         private bool _zHeight; // row zero-height (this is somehow different than being hidden)
         private float _height = -1;
@@ -44,7 +45,7 @@ namespace NPOI.XSSF.Streaming
         
         public CellIterator AllCellsIterator()
         {
-            return new CellIterator(LastCellNum,  new SortedDictionary<int, SXSSFCell>(_cells));
+            return new CellIterator(LastCellNum, _cells);
         }
         public virtual bool HasCustomHeight()
         {
@@ -53,7 +54,7 @@ namespace NPOI.XSSF.Streaming
 
         public List<ICell> Cells
         {
-            get { return _cells.Values.Select(cell => (ICell) cell).ToList(); }
+            get { return new List<ICell>(GetSortedCells()); }
         }
 
         public short FirstCellNum
@@ -235,6 +236,7 @@ namespace NPOI.XSSF.Streaming
             CheckBounds(column);
             SXSSFCell cell = new SXSSFCell(this, type);
             _cells[column] = cell;
+            _sortedCellCache = null;
             UpdateIndexWhenAdd(column);
             return cell;
         }
@@ -299,7 +301,7 @@ namespace NPOI.XSSF.Streaming
         }
         public IEnumerator<ICell> GetEnumerator()
         {
-            return new FilledCellIterator(new SortedDictionary<int, SXSSFCell>(_cells));
+            return GetSortedCells().GetEnumerator();
         }
 
         public void MoveCell(ICell cell, int newColumn)
@@ -311,6 +313,7 @@ namespace NPOI.XSSF.Streaming
         {
             int index = GetCellIndex((SXSSFCell)cell);
             _cells.Remove(index);
+            _sortedCellCache = null;
             if (index == _firstCellNum)
             {
                 InvalidateFirstCellNum();
@@ -373,6 +376,15 @@ namespace NPOI.XSSF.Streaming
             return this.GetEnumerator();
         }
 
+        private List<ICell> GetSortedCells()
+        {
+            if (_sortedCellCache == null)
+            {
+                _sortedCellCache = _cells.OrderBy(kv => kv.Key).Select(kv => (ICell)kv.Value).ToList();
+            }
+            return _sortedCellCache;
+        }
+
         /**
         * Create an iterator over the cells from [0, getLastCellNum()).
         * Includes blank cells, excludes empty cells
@@ -383,11 +395,9 @@ namespace NPOI.XSSF.Streaming
         */
         public class FilledCellIterator : IEnumerator<ICell>
         {
-            //private SortedDictionary<int, SXSSFCell> _cells;
             private readonly IEnumerator<SXSSFCell> enumerator;
-            public FilledCellIterator(SortedDictionary<int, SXSSFCell> cells)
+            public FilledCellIterator(Dictionary<int, SXSSFCell> cells)
             {
-                //_cells = cells;
                 enumerator = cells.Values.GetEnumerator();
             }
 

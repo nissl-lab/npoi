@@ -1,0 +1,79 @@
+﻿using NPOI.OpenXmlFormats.Dml.Chart;
+using NPOI.SS.UserModel;
+using NPOI.SS.Util;
+using NPOI.XDDF.UserModel.Chart;
+using NPOI.XSSF.UserModel;
+using NUnit.Framework;
+using NUnit.Framework.Legacy;
+using System.Linq;
+
+namespace TestCases.XSSF.UserModel.Charts
+{
+    public class TestXDDFBarChartData
+    {
+        private static readonly object[][] plotData = new object[][]
+        {
+            ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"], 
+            [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+        };
+        
+        [TestCase(BarGrouping.Stacked, ST_BarGrouping.stacked)]
+        [TestCase(BarGrouping.Clustered, ST_BarGrouping.clustered)]
+        [TestCase(BarGrouping.Standard, ST_BarGrouping.standard)]
+        [TestCase(BarGrouping.PercentStacked, ST_BarGrouping.percentStacked)]
+        public void TestSettingBarGrouping(BarGrouping barGrouping, ST_BarGrouping expectedBarGrouping)
+        {
+            using IWorkbook wb = new XSSFWorkbook();
+            ISheet sheet = new SheetBuilder(wb, plotData).Build();
+            IDrawing<IShape> drawing = sheet.CreateDrawingPatriarch();
+            IClientAnchor anchor = drawing.CreateAnchor(0, 0, 0, 0, 1, 1, 10, 30);
+            var chart = (drawing as XSSFDrawing).CreateChart(anchor);
+
+            var bottomAxis = chart.CreateCategoryAxis(AxisPosition.Bottom);
+            var leftAxis = chart.CreateValueAxis(AxisPosition.Left);
+
+            var barChartData = chart.CreateData<string, double>(ChartTypes.BAR, bottomAxis,leftAxis) as XDDFBarChartData<string,double>;
+
+            var xs =XDDFDataSourcesFactory.FromStringCellRange(sheet, CellRangeAddress.ValueOf("A1:J1"));
+            var ys = XDDFDataSourcesFactory.FromNumericCellRange(sheet, CellRangeAddress.ValueOf("A2:J2"));
+            barChartData.AddSeries(xs, ys);
+            
+            barChartData.BarGrouping = barGrouping;
+            
+            chart.Plot(barChartData);
+            
+            ClassicAssert.IsInstanceOf<XSSFChart>(chart);
+            XSSFChart xssfChart = (XSSFChart)chart;
+            CT_BarChart ctBarChart = xssfChart.GetCTChart().plotArea.barChart.FirstOrDefault();
+            ClassicAssert.NotNull(ctBarChart);
+            ClassicAssert.AreEqual(expectedBarGrouping, ctBarChart!.grouping.val);
+        }
+        
+        [Test]
+        public void TestBarGroupingBeClusteredWhenNoBarGroupingIsSet()
+        {
+            using IWorkbook wb = new XSSFWorkbook();
+            ISheet sheet = new SheetBuilder(wb, plotData).Build();
+            var drawing = sheet.CreateDrawingPatriarch() as XSSFDrawing;
+            var anchor = drawing.CreateAnchor(0, 0, 0, 0, 1, 1, 10, 30);
+            var chart = drawing.CreateChart(anchor);
+
+            var bottomAxis = chart.CreateCategoryAxis(AxisPosition.Bottom);
+            var leftAxis = chart.CreateValueAxis(AxisPosition.Left);
+
+            var barChartData = chart.CreateData<string, double>(ChartTypes.BAR, bottomAxis, leftAxis);
+
+            var xs = XDDFDataSourcesFactory.FromStringCellRange(sheet, CellRangeAddress.ValueOf("A1:J1"));
+            var ys = XDDFDataSourcesFactory.FromNumericCellRange(sheet, CellRangeAddress.ValueOf("A2:J2"));
+            barChartData.AddSeries(xs, ys);
+            
+            chart.Plot(barChartData);
+            
+            ClassicAssert.IsInstanceOf<XSSFChart>(chart);
+            XSSFChart xssfChart = (XSSFChart)chart;
+            CT_BarChart ctBarChart = xssfChart.GetCTChart().plotArea.barChart.FirstOrDefault();
+            ClassicAssert.NotNull(ctBarChart);
+            ClassicAssert.AreEqual(ST_BarGrouping.clustered, ctBarChart!.grouping.val);
+        }
+    }
+}

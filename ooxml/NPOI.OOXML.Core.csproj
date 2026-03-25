@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net472;netstandard2.0;netstandard2.1;net8.0</TargetFrameworks>
+    <TargetFrameworks>net472;netstandard2.0;netstandard2.1;net8.0;net10.0</TargetFrameworks>
     <AssemblyName>NPOI.OOXML</AssemblyName>
     <RootNamespace>NPOI</RootNamespace>
     <SignAssembly>true</SignAssembly>
@@ -13,11 +13,9 @@
     <Compile Remove="POIFS\Crypt\Dsig\KeyInfoKeySelector.cs" />
     <Compile Remove="POIFS\Crypt\Dsig\Services\RelationshipTransformService.cs" />
     <Compile Remove="Properties\AssemblyInfoDotnet2.cs" />
+    <Compile Remove="XSSF\UserModel\Charts\XSSFAreaChartData.cs" />
+    <Compile Remove="XSSF\UserModel\Charts\XSSFColumnChartData.cs" />
     <Compile Remove="XSSF\UserModel\Charts\XSSFNumberCache.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="XSSF\UserModel\presetTableStyles.xml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,6 +34,10 @@
 
   <ItemGroup>
     <Compile Include="..\main\Polyfills.cs" Link="Polyfills.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="XSSF\UserModel\Charts\" />
   </ItemGroup>
 
 </Project>

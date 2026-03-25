@@ -137,7 +137,7 @@ namespace NPOI.XSSF.UserModel.Extensions
 
             if (borderPr != null && borderPr.IsSetColor())
             {
-                XSSFColor clr = new XSSFColor(borderPr.color, _indexedColorMap);
+                XSSFColor clr = XSSFColor.From(borderPr.color, _indexedColorMap);
                 if (_theme != null)
                 {
                     _theme.InheritFromThemeAsRequired(clr);

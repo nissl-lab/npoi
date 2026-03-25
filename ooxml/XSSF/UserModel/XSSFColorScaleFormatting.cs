@@ -66,7 +66,7 @@ namespace NPOI.XSSF.UserModel
                 XSSFColor[] c = new XSSFColor[ctcols.Length];
                 for(int i = 0; i < ctcols.Length; i++)
                 {
-                    c[i] = new XSSFColor(ctcols[i], _indexedColorMap);
+                    c[i] = XSSFColor.From(ctcols[i], _indexedColorMap);
                 }
                 return c;
             }
@@ -107,7 +107,7 @@ namespace NPOI.XSSF.UserModel
 
         public XSSFColor CreateColor()
         {
-            return new XSSFColor(_scale.AddNewColor(), _indexedColorMap);
+            return XSSFColor.From(_scale.AddNewColor(), _indexedColorMap);
         }
         public IConditionalFormattingThreshold CreateThreshold()
         {

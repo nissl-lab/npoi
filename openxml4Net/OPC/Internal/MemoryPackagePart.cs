@@ -64,11 +64,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal
             {
                 return new MemoryStream();
             }
-            MemoryStream newMs = new MemoryStream((int)data.Length);
-            data.Position = 0;
-            StreamHelper.CopyStream(data, newMs);
-            newMs.Position = 0;
-            return newMs;
+            return new MemoryStream(data.GetBuffer(), 0, (int)data.Length, writable: false);
         }
 
         protected override Stream GetOutputStreamImpl()

@@ -625,6 +625,50 @@ namespace TestCases.XSSF.UserModel
         }
 
         [Test]
+        public void TestMergedRegionsCacheReturnsFreshList()
+        {
+            // Verify that mutating the returned list does not corrupt the cache
+            XSSFWorkbook workbook = new XSSFWorkbook();
+            XSSFSheet sheet = (XSSFSheet)workbook.CreateSheet();
+            sheet.AddMergedRegion(new CellRangeAddress(0, 1, 0, 1));
+            sheet.AddMergedRegion(new CellRangeAddress(2, 3, 2, 3));
+
+            var regions1 = sheet.MergedRegions;
+            ClassicAssert.AreEqual(2, regions1.Count);
+
+            // Mutate the returned list — this should NOT affect subsequent calls
+            regions1.Add(new CellRangeAddress(10, 11, 10, 11));
+            regions1.Clear();
+
+            var regions2 = sheet.MergedRegions;
+            ClassicAssert.AreEqual(2, regions2.Count, "Cache should not be corrupted by mutating a previously returned list");
+            ClassicAssert.AreEqual("A1:B2", regions2[0].FormatAsString());
+            ClassicAssert.AreEqual("C3:D4", regions2[1].FormatAsString());
+
+            workbook.Close();
+        }
+
+        [Test]
+        public void TestRemoveMergedRegionsOnEmptySheet()
+        {
+            // Verify RemoveMergedRegions on a sheet with no merge cells does not throw
+            // and does not leave stale cache state
+            XSSFWorkbook workbook = new XSSFWorkbook();
+            XSSFSheet sheet = (XSSFSheet)workbook.CreateSheet();
+
+            // Call RemoveMergedRegions when there are no merged regions at all
+            sheet.RemoveMergedRegions(new List<int> { 0, 1 });
+            ClassicAssert.AreEqual(0, sheet.NumMergedRegions);
+
+            // Now add some regions and verify the cache works correctly after the no-op remove
+            sheet.AddMergedRegion(new CellRangeAddress(0, 1, 0, 1));
+            ClassicAssert.AreEqual(1, sheet.NumMergedRegions);
+            ClassicAssert.AreEqual("A1:B2", sheet.MergedRegions[0].FormatAsString());
+
+            workbook.Close();
+        }
+
+        [Test]
         public void TestSetDefaultColumnStyle()
         {
             XSSFWorkbook workbook = new XSSFWorkbook();
@@ -2479,8 +2523,13 @@ namespace TestCases.XSSF.UserModel
         [Test]
         public void TestReadFails()
         {
+            // With lazy loading, OnDocumentRead() is a no-op and does not parse
+            // sheet.xml immediately. Parsing is deferred to first content access.
+            // A newly created sheet already has _worksheetLoaded=true, so
+            // OnDocumentRead() on it is simply a no-op (no exception thrown).
             XSSFWorkbook wb = new XSSFWorkbook();
             XSSFSheet sheet = wb.CreateSheet() as XSSFSheet;
+            XSSFSheet.EnableLazyLoading = false;
 
             Assert.Throws<POIXMLException>(() => { sheet.OnDocumentRead(); });
 
@@ -3001,10 +3050,8 @@ namespace TestCases.XSSF.UserModel
                 ClassicAssert.AreEqual(expected, (wb.GetSheet("indexedRed") as XSSFSheet).TabColor);
 
                 // test regular-colored (non-indexed, ARGB) sheet
-                expected = new XSSFColor
-                {
-                    ARGBHex = "FF7F2700"
-                };
+                expected = XSSFColor.From(new CT_Color(), wb.GetStylesSource().IndexedColors);
+                expected.ARGBHex = "FF7F2700";
                 ClassicAssert.AreEqual(expected, (wb.GetSheet("customOrange") as XSSFSheet).TabColor);
             }
             finally
