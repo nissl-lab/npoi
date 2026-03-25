@@ -8,6 +8,14 @@ NPOI is a .NET port of [Apache POI](https://poi.apache.org/) for reading and
 writing Microsoft Office file formats without requiring COM or an Office
 installation. Targets net472, netstandard2.0, netstandard2.1, and net8.0.
 
+## Code Style
+
+- Use 4 spaces for indentation (default for .NET projects)
+- No comments unless explaining non-obvious business logic
+- Prefer `var` for local variables when type is clear from right-hand side
+- Follow existing patterns for nullable reference types (`string?` vs `string`)
+- Use XML documentation (`/// <summary>`) for public APIs only
+
 ## Directory → Project Map
 
 | Directory         | Project                      | Purpose                                                        |
@@ -66,6 +74,25 @@ dotnet test solution/NPOI.Core.Test.sln
 # Run benchmarks
 dotnet run -c Release --project benchmarks/NPOI.Benchmarks/
 ```
+
+## Code Verification
+
+After making changes:
+1. Build the solution to catch compilation errors
+2. Run relevant tests to verify functionality
+3. Check for style violations if present (look for editorconfig or style guidelines)
+
+## Common Tasks
+
+### Adding a new format/feature
+1. Check existing implementations in `main/` or `ooxml/` for patterns
+2. Add tests in `testcases/` with sample files in `testcases/test-data/`
+3. Follow the SS.UserModel interface pattern for format-agnostic features
+
+### Working with OOXML formats
+1. Schema classes live in `OpenXmlFormats/` (do not add logic here)
+2. Business logic goes in `ooxml/` using the schema classes
+3. Use the OPC packaging layer (`openxml4Net/`) for zip operations
 
 ## Test Data
 
