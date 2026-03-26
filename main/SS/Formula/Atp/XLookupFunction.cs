@@ -108,16 +108,25 @@ namespace NPOI.SS.Formula.Atp
             {
                 ValueEval lookupValue = OperandResolver.GetSingleValue(lookupEval, srcRowIndex, srcColumnIndex);
                 TwoDEval tableArray = LookupUtils.ResolveTableArrayArg(indexEval);
-                int matchedRow;
+                ValueVector vector;
+                if(tableArray.IsRow)
+                {
+                    vector = LookupUtils.CreateRowVector(tableArray, 0);
+                }
+                else
+                {
+                    vector = LookupUtils.CreateColumnVector(tableArray, 0);
+                }
+                int matchedRowOrColumn;
                 try
                 {
-                    matchedRow = LookupUtils.XlookupIndexOfValue(lookupValue, LookupUtils.CreateColumnVector(tableArray, 0), matchMode, searchMode);
+                    matchedRowOrColumn = LookupUtils.XlookupIndexOfValue(lookupValue, vector, matchMode, searchMode);
                 }
                 catch (EvaluationException e)
                 {
                     if (ErrorEval.NA.Equals(e.GetErrorEval()))
                     {
-                        if (string.IsNullOrEmpty(notFound))
+                        if (!string.IsNullOrEmpty(notFound))
                         {
                             if (returnEval is AreaEval area) {
                                 int width = area.Width;
@@ -138,12 +147,22 @@ namespace NPOI.SS.Formula.Atp
                         return e.GetErrorEval();
                     }
                 }
-                if (returnEval is AreaEval eval) {
+                if (returnEval is AreaEval area) {
                     if (isSingleValue)
                     {
-                        return eval.GetRelativeValue(matchedRow, 0);
+                        if(tableArray.IsRow)
+                            return area.GetRelativeValue(0, matchedRowOrColumn);
+                        else
+                            return area.GetRelativeValue(matchedRowOrColumn, 0);
                     }
-                    return eval.Offset(matchedRow, matchedRow, 0, eval.Width - 1);
+                    if (tableArray.IsRow)
+                    {
+                        return area.Offset(0, area.Height - 1, matchedRowOrColumn, matchedRowOrColumn);
+                    }
+                    else
+                    {
+                        return area.Offset(matchedRowOrColumn, matchedRowOrColumn, 0, area.Width - 1);
+                    }
                 } else
                 {
                     return returnEval;
