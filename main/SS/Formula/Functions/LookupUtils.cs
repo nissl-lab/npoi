@@ -17,14 +17,15 @@
 
 namespace NPOI.SS.Formula.Functions
 {
-    using System;
-    using System.Text;
+    using EnumsNET;
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.Eval;
-    using System.Globalization;
-    using System.Text.RegularExpressions;
+    using System;
     using System.Collections.Generic;
-    using EnumsNET;
+    using System.Globalization;
+    using System.Linq;
+    using System.Text;
+    using System.Text.RegularExpressions;
 
     /**
      * Common functionality used by VLOOKUP, HLOOKUP, LOOKUP and MATCH
@@ -461,6 +462,82 @@ namespace NPOI.SS.Formula.Functions
             }
             return result;
         }
+        private static int BinarySearchIndexOfValue(LookupValueComparer lookupComparer, ValueVector vector,
+                                            MatchMode matchMode, bool reverse)
+        {
+            int bestMatchIdx = -1;
+            ValueEval bestMatchEval = null;
+            List<int> alreadySearched = new List<int>();
+            BinarySearchIndexes bsi = new BinarySearchIndexes(vector.Size);
+            while(true)
+            {
+                int i = bsi.GetMidIx();
+                if(i < 0 || alreadySearched.Contains(i))
+                {
+                    return bestMatchIdx;
+                }
+                alreadySearched.Add(i);
+                ValueEval valueEval = vector.GetItem(i);
+                CompareResult result = lookupComparer.CompareTo(valueEval);
+                if(result.IsEqual)
+                {
+                    return i;
+                }
+                switch(matchMode)
+                {
+                    case MatchMode.ExactMatchFallbackToLargerValue:
+                        if(result.IsLessThan)
+                        {
+                            if(bestMatchEval == null)
+                            {
+                                bestMatchIdx = i;
+                                bestMatchEval = valueEval;
+                            }
+                            else
+                            {
+                                LookupValueComparer matchComparer = CreateTolerantLookupComparer(valueEval, true, true);
+                                if(matchComparer.CompareTo(bestMatchEval).IsLessThan)
+                                {
+                                    bestMatchIdx = i;
+                                    bestMatchEval = valueEval;
+                                }
+                            }
+                        }
+                        break;
+                    case MatchMode.ExactMatchFallbackToSmallerValue:
+                        if(result.IsGreaterThan)
+                        {
+                            if(bestMatchEval == null)
+                            {
+                                bestMatchIdx = i;
+                                bestMatchEval = valueEval;
+                            }
+                            else
+                            {
+                                LookupValueComparer matchComparer = CreateTolerantLookupComparer(valueEval, true, true);
+                                if(matchComparer.CompareTo(bestMatchEval).IsGreaterThan)
+                                {
+                                    bestMatchIdx = i;
+                                    bestMatchEval = valueEval;
+                                }
+                            }
+                        }
+                        break;
+                }
+                if(result.IsTypeMismatch)
+                {
+                    HandleMidValueTypeMismatch(lookupComparer, vector, bsi, i, reverse);
+                }
+                else if(reverse)
+                {
+                    bsi.NarrowSearch(i, result.IsGreaterThan);
+                }
+                else
+                {
+                    bsi.NarrowSearch(i, result.IsLessThan);
+                }
+            }
+        }
 
         /// <summary>
         /// Finds first (lowest index) exact occurrence of specified value.
@@ -505,10 +582,18 @@ namespace NPOI.SS.Formula.Functions
         public static int XlookupIndexOfValue(ValueEval lookupValue, ValueVector vector, MatchMode matchMode, SearchMode searchMode)
         {
             LookupValueComparer lookupComparer = CreateTolerantLookupComparer(lookupValue, true, true);
-            int result;
-            if (searchMode == SearchMode.IterateBackward || searchMode == SearchMode.BinarySearchBackward)
+            int result=0;
+            if(searchMode == SearchMode.BinarySearchForward)
             {
-                result = lookupLastIndexOfValue(lookupComparer, vector, matchMode);
+                result = BinarySearchIndexOfValue(lookupComparer, vector, matchMode, false);
+            }
+            else if(searchMode == SearchMode.BinarySearchBackward)
+            {
+                result = BinarySearchIndexOfValue(lookupComparer, vector, matchMode, true);
+            }
+            else if(searchMode == SearchMode.IterateBackward)
+            {
+                result = LookupLastIndexOfValue(lookupComparer, vector, matchMode);
             }
             else
             {
@@ -596,7 +681,7 @@ namespace NPOI.SS.Formula.Functions
  * @param matchMode
  * @return zero based index into the vector, -1 if value cannot be found
  */
-        private static int lookupLastIndexOfValue(LookupValueComparer lookupComparer, ValueVector vector,
+        private static int LookupLastIndexOfValue(LookupValueComparer lookupComparer, ValueVector vector,
                                                   MatchMode matchMode)
         {
             // find last occurrence of lookup value
@@ -676,7 +761,7 @@ namespace NPOI.SS.Formula.Functions
                 CompareResult cr = lookupComparer.CompareTo(vector.GetItem(midIx));
                 if (cr.IsTypeMismatch)
                 {
-                    int newMidIx = HandleMidValueTypeMismatch(lookupComparer, vector, bsi, midIx);
+                    int newMidIx = HandleMidValueTypeMismatch(lookupComparer, vector, bsi, midIx,false);
                     if (newMidIx < 0)
                     {
                         continue;
@@ -699,7 +784,7 @@ namespace NPOI.SS.Formula.Functions
          * index.  Zero or greater signifies that an exact match for the lookup value was found
          */
         private static int HandleMidValueTypeMismatch(LookupValueComparer lookupComparer, ValueVector vector,
-                BinarySearchIndexes bsi, int midIx)
+                BinarySearchIndexes bsi, int midIx, bool reverse)
         {
             int newMid = midIx;
             int highIx = bsi.GetHighIx();
@@ -715,7 +800,15 @@ namespace NPOI.SS.Formula.Functions
                     return -1;
                 }
                 CompareResult cr = lookupComparer.CompareTo(vector.GetItem(newMid));
-                if (cr.IsLessThan && newMid == highIx - 1)
+                if(cr.IsLessThan && !reverse && newMid == highIx-1)
+                {
+                    // move highIx down to the low end of the mid values
+                    bsi.NarrowSearch(midIx, true);
+                    return -1;
+                    // but only when "newMid == highIx-1"? slightly weird.
+                    // It would seem more efficient to always do this.
+                }
+                else if(cr.IsGreaterThan && reverse && newMid == highIx-1)
                 {
                     // move highIx down to the low end of the mid values
                     bsi.NarrowSearch(midIx, true);
@@ -735,7 +828,14 @@ namespace NPOI.SS.Formula.Functions
                 // Note - if moving highIx down (due to lookup<vector[newMid]),
                 // this execution path only moves highIx it down as far as newMid, not midIx,
                 // which would be more efficient.
-                bsi.NarrowSearch(newMid, cr.IsLessThan);
+                if(reverse)
+                {
+                    bsi.NarrowSearch(newMid, cr.IsGreaterThan);
+                }
+                else
+                {
+                    bsi.NarrowSearch(newMid, cr.IsLessThan);
+                }
                 return -1;
             }
         }
