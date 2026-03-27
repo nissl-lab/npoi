@@ -107,7 +107,7 @@ namespace NPOI.SS.Formula.Atp
                 if (tableArray.IsColumn) {
                     vector = LookupUtils.CreateColumnVector(tableArray, 0);
                 } else {
-                    vector = LookupUtils.CreateColumnVector(tableArray, 0);
+                    vector = LookupUtils.CreateRowVector(tableArray, 0);
                 }
                 int matchedIdx;
                 try
