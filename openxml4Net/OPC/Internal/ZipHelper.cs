@@ -29,6 +29,13 @@ namespace NPOI.OpenXml4Net.OPC.Internal
         public static int READ_WRITE_FILE_BUFFER_SIZE = 8192;
 
         /**
+         * Fixed timestamp used for all zip entries, matching Excel's behavior.
+         * Excel sets all zip entry timestamps to the DOS epoch minimum (1980-01-01 00:00:00),
+         * which makes output deterministic for identical content.
+         */
+        public static readonly DateTime ZipEntryTimestamp = new DateTime(1980, 1, 1, 0, 0, 0);
+
+        /**
          * Prevent this class to be instancied.
          */
         private ZipHelper()
@@ -50,7 +57,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal
             if (corePropsRel == null)
                 return null;
 
-            ZipEntry ze = new ZipEntry(corePropsRel.TargetUri.OriginalString);
+            ZipEntry ze = new ZipEntry(corePropsRel.TargetUri.OriginalString) { DateTime = ZipEntryTimestamp };
             return ze;
         }
 
