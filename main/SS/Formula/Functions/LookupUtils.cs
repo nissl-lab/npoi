@@ -554,7 +554,10 @@ namespace NPOI.SS.Formula.Functions
                 }
                 if(result.IsTypeMismatch)
                 {
-                    HandleMidValueTypeMismatch(lookupComparer, vector, bsi, i, reverse);
+                    int newIdx = HandleMidValueTypeMismatch(lookupComparer, vector, bsi, i, reverse);
+                    if (newIdx >= 0) {
+                        return newIdx;
+                    }
                 }
                 else if(reverse)
                 {
