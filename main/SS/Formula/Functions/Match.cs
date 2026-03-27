@@ -34,7 +34,7 @@ namespace NPOI.SS.Formula.Functions
             _value = value;
         }
 
-        public ValueEval GetItem(int index)
+        public override ValueEval GetItem(int index)
         {
             if (index != 0)
             {
@@ -44,7 +44,7 @@ namespace NPOI.SS.Formula.Functions
             return _value;
         }
 
-        public int Size
+        public override int Size
         {
             get
             {
