@@ -137,8 +137,8 @@ namespace TestCases.SS.Formula.Atp
                 HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
                 var cell = wb.GetSheetAt(0).GetRow(1).CreateCell(6);
                 SS.Util.Utils.AssertDouble(fe, cell, "XLOOKUP(E2,C2:C7,B2:B7,0,1,-2)", 0.37);
-                SS.Util.Utils.AssertDouble(fe, cell, "XLOOKUP(9700,C2:C7,B2:B7,0,0,-2)", 0.1);
                 SS.Util.Utils.AssertDouble(fe, cell, "XLOOKUP(39474,C2:C7,B2:B7,0,0,-2)", 0);
+                SS.Util.Utils.AssertDouble(fe, cell, "XLOOKUP(9700,C2:C7,B2:B7,0,0,-2)", 0.1);
             }
         }
 
