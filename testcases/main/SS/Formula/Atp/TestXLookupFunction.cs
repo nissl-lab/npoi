@@ -47,7 +47,7 @@ namespace TestCases.SS.Formula.Atp
                 var row1 = sheet.GetRow(1);
                 string col1 = CellReference.ConvertNumToColString(2);
                 string col2 = CellReference.ConvertNumToColString(3);
-                string cellRef = $"{col1}:{col2}";
+                string cellRef = $"{col1}2:{col2}2";
                 sheet.SetArrayFormula(formulaText, CellRangeAddress.ValueOf(cellRef));
                 fe.EvaluateAll();
                 ClassicAssert.AreEqual("Dianne Pugh", row1.GetCell(2).StringCellValue);
@@ -71,7 +71,7 @@ namespace TestCases.SS.Formula.Atp
                 var row1 = sheet.GetRow(1);
                 string col1 = CellReference.ConvertNumToColString(2);
                 string col2 = CellReference.ConvertNumToColString(3);
-                string cellRef = $"{col1}:{col2}";
+                string cellRef = $"{col1}2:{col2}2";
                 sheet.SetArrayFormula(formulaText, CellRangeAddress.ValueOf(cellRef));
                 fe.EvaluateAll();
                 ClassicAssert.AreEqual("not found", row1.GetCell(2).StringCellValue);
