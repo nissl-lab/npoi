@@ -449,7 +449,9 @@ namespace NPOI.SS.Formula
             if (tkn is AbstractFunctionPtg afp)
             {
                 byte returnClass = afp.DefaultOperandClass;
-                return Ptg.CLASS_REF == returnClass;
+                //CLASS_VALUE was added as valid to support example 6 in
+                //https://support.microsoft.com/en-us/office/xlookup-function-b7fd680e-6d10-43e6-84f9-88eae8bf5929
+                return Ptg.CLASS_REF == returnClass || Ptg.CLASS_VALUE == returnClass;
             }
             if (tkn is ValueOperatorPtg)
             {
