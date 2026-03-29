@@ -8,6 +8,14 @@ NPOI is a .NET port of [Apache POI](https://poi.apache.org/) for reading and
 writing Microsoft Office file formats without requiring COM or an Office
 installation. Targets net472, netstandard2.0, netstandard2.1, and net8.0.
 
+## Code Style
+
+- Use 4 spaces for indentation (default for .NET projects)
+- No comments unless explaining non-obvious business logic
+- Prefer `var` for local variables when type is clear from right-hand side
+- Follow existing patterns for nullable reference types (`string?` vs `string`)
+- Use XML documentation (`/// <summary>`) for public APIs only
+
 ## Directory → Project Map
 
 | Directory         | Project                      | Purpose                                                        |
@@ -37,6 +45,14 @@ These names come from Apache POI and appear throughout the codebase:
 - **SS** — Common spreadsheet interfaces (`ISheet`, `IRow`, `ICell`) shared by HSSF and XSSF
 - **DDF** — Dreadful Drawing Format (shapes/drawing records in binary formats)
 
+## Format Selection Guide
+
+| Format | Use When | Memory | Limitations |
+|--------|----------|--------|-------------|
+| **HSSF** | Reading/writing `.xls` (Excel 97-2003) | Medium | 65,536 row limit |
+| **XSSF** | Reading/writing `.xlsx`, full features needed | High | Memory scales with file size |
+| **SXSSF** | Writing large `.xlsx` files (>100K rows) | Low (constant) | Write-only, limited random access |
+
 ## Key Architecture Patterns
 
 - **SS.UserModel interfaces** (`IWorkbook`, `ISheet`, `IRow`, `ICell`) abstract
@@ -54,6 +70,19 @@ These names come from Apache POI and appear throughout the codebase:
   by `.xlsx`, `.docx`, and `.pptx` files. Format-specific layers read and write
   individual XML parts through this packaging layer.
 
+- **Design patterns** — NPOI uses:
+  - **Strategy**: format-specific implementations behind interfaces
+  - **Factory**: `CreateSheet()`, `CreateRow()`, `CreateCell()` maintain parent-child consistency
+  - **Decorator**: SXSSF wraps XSSF, intercepting writes for streaming
+  - **Flyweight**: `StylesTable` and `SharedStringsTable` deduplicate formatting and strings
+  - **Template Method**: interface methods with HSSF/XSSF format-specific implementations
+
+- **HSSF uses records** — `InternalWorkbook`/`InternalSheet` aggregate BIFF8 records
+  (`SSTRecord`, `ExtendedFormatRecord`, `RowRecord`, etc.)
+
+- **XSSF uses XML beans** — OpenXmlFormats classes (`CT_Workbook`, `CT_Worksheet`,
+  `CT_Row`, `CT_Cell`) map to OOXML XML elements
+
 ## Building and Testing
 
 ```bash
@@ -66,6 +95,25 @@ dotnet test solution/NPOI.Core.Test.sln
 # Run benchmarks
 dotnet run -c Release --project benchmarks/NPOI.Benchmarks/
 ```
+
+## Code Verification
+
+After making changes:
+1. Build the solution to catch compilation errors
+2. Run relevant tests to verify functionality
+3. Check for style violations if present (look for editorconfig or style guidelines)
+
+## Common Tasks
+
+### Adding a new format/feature
+1. Check existing implementations in `main/` or `ooxml/` for patterns
+2. Add tests in `testcases/` with sample files in `testcases/test-data/`
+3. Follow the SS.UserModel interface pattern for format-agnostic features
+
+### Working with OOXML formats
+1. Schema classes live in `OpenXmlFormats/` (do not add logic here)
+2. Business logic goes in `ooxml/` using the schema classes
+3. Use the OPC packaging layer (`openxml4Net/`) for zip operations
 
 ## Test Data
 
