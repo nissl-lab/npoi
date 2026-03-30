@@ -12,6 +12,7 @@ What's NPOI
 [![Nuget Ranking!](https://img.shields.io/badge/Nuget%20Ranking-268-red.svg)](https://github.com/nissl-lab/npoi/issues/1532)
 [![Discord](https://img.shields.io/badge/Chat-Discord-d82679.svg?logo=discord&logoColor=white)](https://discord.gg/rABUseUHme)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=flat-square&logo=Apache)](LICENSE)
+[![EULA](https://img.shields.io/badge/EULA-OSMF-blue?labelColor=black&color=C9FF30)](https://github.com/nissl-lab/npoi/blob/master/OSMFEULA.txt)
 [![traffic](https://api.segment.io/v1/pixel/track?data=ewogICJ3cml0ZUtleSI6ICJBV2NjaWd1UkhKODBuNkJ4WlI4cHRaRzBINzY0RmJObCIsCiAgInVzZXJJZCI6ICJ0b255cXVzIiwKICAiZXZlbnQiOiAiTlBPSSBIb21lcGFnZSIKfQ==
 )](#)
 <a href="https://github.com/nissl-lab/npoi/graphs/contributors">
