@@ -303,6 +303,8 @@ namespace NPOI.XSSF.UserModel
         {
             if (Double.IsInfinity(value))
             {
+                // Excel does not support positive/negative infInities,
+                // rather, it gives a #DIV/0! error in these case
                 _cell.t = (ST_CellType.e);
                 _cell.v = (FormulaError.DIV0.String);
             }
