@@ -4,6 +4,7 @@ $tempDir = [System.IO.Path]::Combine([System.IO.Path]::GetTempPath(), [System.Gu
 [System.IO.Directory]::CreateDirectory($tempDir) | Out-Null
 
 try {
+    Add-Type -AssemblyName System.IO.Compression.FileSystem
     [System.IO.Compression.ZipFile]::ExtractToDirectory($NupkgPath, $tempDir)
     
     Get-ChildItem -Path $tempDir -Recurse -File | Where-Object { $_.Name -match '^NPOI\.Pack\.' } | Remove-Item -Force
