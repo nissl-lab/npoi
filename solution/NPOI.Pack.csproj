@@ -10,10 +10,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\main\NPOI.Core.csproj" />
-    <ProjectReference Include="..\ooxml\NPOI.OOXML.Core.csproj" />
-    <ProjectReference Include="..\openxml4Net\NPOI.OpenXml4Net.Core.csproj" />
-    <ProjectReference Include="..\OpenXmlFormats\NPOI.OpenXmlFormats.Core.csproj" />
+    <ProjectReference Include="..\main\NPOI.Core.csproj" PrivateAssets="all"/>
+    <ProjectReference Include="..\ooxml\NPOI.OOXML.Core.csproj" PrivateAssets="all"/>
+    <ProjectReference Include="..\openxml4Net\NPOI.OpenXml4Net.Core.csproj" PrivateAssets="all"/>
+    <ProjectReference Include="..\OpenXmlFormats\NPOI.OpenXmlFormats.Core.csproj" PrivateAssets="all"/>
   </ItemGroup>
 
 </Project>
