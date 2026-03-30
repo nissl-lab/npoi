@@ -188,8 +188,8 @@ partial class Build : NukeBuild
             });
         });
 
-    Target RemoveNpoiPackFromPackage => _ => _
-        .After(Pack)
+    Target RemoveNpoiPackFromPackage => _ => 
+        _.DependsOn(Pack)
         .Executes(() =>
         {
             var nupkg = ArtifactsDirectory.GlobFiles("*.nupkg").FirstOrDefault();
