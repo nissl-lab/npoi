@@ -22,6 +22,7 @@
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageLicenseFile>OSMFEULA.txt</PackageLicenseFile>
     <PackageIcon>logo\60_60.jpg</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageProjectUrl>http://nissl-lab.github.io/npoi/</PackageProjectUrl>
     <PackageReleaseNotes>https://github.com/nissl-lab/npoi/discussions/1751</PackageReleaseNotes>
     <Copyright>Nissl LLC</Copyright>
