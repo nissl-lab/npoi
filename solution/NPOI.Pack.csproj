@@ -81,9 +81,10 @@
   <Target Name="RemovePackFromPackage" AfterTargets="Pack">
     <PropertyGroup>
       <NupkgFile>$(OutputPath)$(PackageId).$(Version).nupkg</NupkgFile>
+      <PowerShell Condition="'$(OS)' == 'Windows_NT'">powershell</PowerShell>
+      <PowerShell Condition="'$(OS)' != 'Windows_NT'">pwsh</PowerShell>
     </PropertyGroup>
-    <Exec Command="pwsh -ExecutionPolicy Bypass -File &quot;$(MSBuildThisFileDirectory)RemovePackFromNupkg.ps1&quot; -NupkgPath &quot;$(NupkgFile)&quot;" Condition="Exists('/usr/bin/pwsh')" />
-    <Exec Command="powershell -ExecutionPolicy Bypass -File &quot;$(MSBuildThisFileDirectory)RemovePackFromNupkg.ps1&quot; -NupkgPath &quot;$(NupkgFile)&quot;" Condition="!Exists('/usr/bin/pwsh')" />
+    <Exec Command="$(PowerShell) -ExecutionPolicy Bypass -File &quot;$(MSBuildThisFileDirectory)RemovePackFromNupkg.ps1&quot; -NupkgPath &quot;$(NupkgFile)&quot;" />
   </Target>
 
 </Project>
