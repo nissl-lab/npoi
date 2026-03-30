@@ -5,7 +5,7 @@
     <AssemblyName>NPOI.OpenXmlFormats</AssemblyName>
     <RootNamespace>NPOI.OpenXmlFormats</RootNamespace>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\npoi.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>../npoi.snk</AssemblyOriginatorKeyFile>
     <OutputPath>..\solution\$(Configuration)\</OutputPath>
   </PropertyGroup>
 

@@ -5,7 +5,7 @@
     <AssemblyName>NPOI.OpenXml4Net</AssemblyName>
     <RootNamespace>NPOI.OpenXml4Net</RootNamespace>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\npoi.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>../npoi.snk</AssemblyOriginatorKeyFile>
     <OutputPath>..\solution\$(Configuration)\</OutputPath>
   </PropertyGroup>
 
