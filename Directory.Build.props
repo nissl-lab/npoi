@@ -1,13 +1,14 @@
 <Project>
   <PropertyGroup>
     <LangVersion>latest</LangVersion>
-
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <IncludeSymbols>true</IncludeSymbols>
     <DebugType>portable</DebugType>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+  </PropertyGroup>
 
+  <PropertyGroup>
     <VersionPrefix>2.8.0</VersionPrefix>
     <Title>NPOI</Title>
     <Authors>Tony Qu,NPOI Contributors</Authors>
@@ -111,13 +112,6 @@
     <None Include="..\build\README.md" Pack="true" Visible="false" PackagePath="" />
     <None Include="..\logo\*.png" Pack="true" Visible="false" PackagePath="logo\" />
     <None Include="..\logo\*.jpg" Pack="true" Visible="false" PackagePath="logo\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="NuGetizer">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
   </ItemGroup>
 
 </Project>
