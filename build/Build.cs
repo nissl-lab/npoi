@@ -46,9 +46,7 @@ partial class Build : NukeBuild
 
     string VersionSuffix;
 
-    [Secret]
-    [Parameter("GitHub API token")]
-    readonly string GitHubToken;
+    [Secret] [Parameter("GitHub API token")] readonly string GitHubToken;
 
     protected override void OnBuildInitialized()
     {
@@ -56,7 +54,7 @@ partial class Build : NukeBuild
             ? $"preview-{DateTime.UtcNow:yyyyMMdd-HHmm}"
             : "";
 
-        if (IsLocalBuild)
+        if(IsLocalBuild)
         {
             VersionSuffix = $"dev-{DateTime.UtcNow:yyyyMMdd-HHmm}";
         }
@@ -167,7 +165,8 @@ partial class Build : NukeBuild
                     .SetContinuousIntegrationBuild(IsServerBuild)
                     // obsolete missing XML documentation comment, XML comment on not valid language element, XML comment has badly formed XML, no matching tag in XML comment
                     // need to use escaped separator in order for this to work
-                    .AddProperty("NoWarn", string.Join("%3B", new[] { 169, 612, 618, 1591, 1587, 1570, 1572, 1573, 1574 }))
+                    .AddProperty("NoWarn",
+                        string.Join("%3B", new[] { 169, 612, 618, 1591, 1587, 1570, 1572, 1573, 1574 }))
                     .SetProperty("EnablePackageValidation", "false")
                     // ensure we don't generate too much output in CI run
                     // 0  Turns off emission of all warning messages
@@ -208,5 +207,4 @@ partial class Build : NukeBuild
                 .SetFile(scriptPath)
                 .AddProcessAdditionalArguments($"-NupkgPath \"{nupkg}\""));
         });
-    }
 }
