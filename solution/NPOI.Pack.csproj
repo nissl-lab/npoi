@@ -6,6 +6,7 @@
     <TargetFrameworks>net472;netstandard2.0;netstandard2.1;net8.0;net10.0</TargetFrameworks>
     <PackageId>NPOI</PackageId>
     <OutputPath>..\solution\$(Configuration)\</OutputPath>
+    <PublishPath>..\publish\</PublishPath>  
     <IncludeAllProjectOutputsInPackage>false</IncludeAllProjectOutputsInPackage>
   </PropertyGroup>
 
@@ -80,11 +81,11 @@
 
   <Target Name="RemovePackFromPackage" AfterTargets="Pack">
     <PropertyGroup>
-      <NupkgFile>$(OutputPath)$(PackageId).$(Version).nupkg</NupkgFile>
+      <NupkgFile>$(PublishPath)$(PackageId).$(Version).nupkg</NupkgFile>
       <PowerShell Condition="'$(OS)' == 'Windows_NT'">powershell</PowerShell>
       <PowerShell Condition="'$(OS)' != 'Windows_NT'">pwsh</PowerShell>
     </PropertyGroup>
-    <Exec Command="$(PowerShell) -ExecutionPolicy Bypass -File &quot;$(MSBuildThisFileDirectory)RemovePackFromNupkg.ps1&quot; -NupkgPath &quot;$(NupkgFile)&quot;" />
+      <Exec Command="$(PowerShell) -ExecutionPolicy Bypass -File &quot;$(MSBuildThisFileDirectory)RemovePackFromNupkg.ps1&quot; -NupkgPath &quot;$(NupkgFile)&quot;" />
   </Target>
 
 </Project>
