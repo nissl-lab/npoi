@@ -79,13 +79,4 @@
     <BuildOutputInPackage Include="@(_MainAssembly)" TargetFramework="$(TargetFramework)" />
   </ItemGroup>
 
-  <Target Name="RemovePackFromPackage" AfterTargets="Pack">
-    <PropertyGroup>
-      <NupkgFile>$(PublishPath)$(PackageId).$(Version).nupkg</NupkgFile>
-      <PowerShell Condition="'$(OS)' == 'Windows_NT'">powershell</PowerShell>
-      <PowerShell Condition="'$(OS)' != 'Windows_NT'">pwsh</PowerShell>
-    </PropertyGroup>
-      <Exec Command="$(PowerShell) -ExecutionPolicy Bypass -File &quot;$(MSBuildThisFileDirectory)RemovePackFromNupkg.ps1&quot; -NupkgPath &quot;$(NupkgFile)&quot;" />
-  </Target>
-
 </Project>

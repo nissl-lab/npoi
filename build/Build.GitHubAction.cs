@@ -10,7 +10,7 @@ using System.Collections.Generic;
     GitHubActionsImage.WindowsLatest,
     GitHubActionsImage.UbuntuLatest,
     OnPushBranches = ["main", "master", "release*", "poi/*"],
-    InvokedTargets = [nameof(Clean), nameof(Test), nameof(Pack)],
+    InvokedTargets = [nameof(Clean), nameof(Test), nameof(Pack), nameof(RemoveNpoiPackFromPackage)],
     TimeoutMinutes = 20,
     CacheKeyFiles = [],
     PublishCondition = "runner.os == 'Linux'"
@@ -19,7 +19,7 @@ using System.Collections.Generic;
     GitHubActionsImage.WindowsLatest,
     GitHubActionsImage.UbuntuLatest,
     On = [GitHubActionsTrigger.PullRequest],
-    InvokedTargets = [nameof(Clean), nameof(Test), nameof(Pack)],
+    InvokedTargets = [nameof(Clean), nameof(Test), nameof(Pack), nameof(RemoveNpoiPackFromPackage)],
     TimeoutMinutes = 20,
     CacheKeyFiles = [],
     ConcurrencyCancelInProgress = true,
