@@ -1,9 +1,9 @@
 End User License Agreement
 
 This Open Source Maintenance Fee Agreement ("Agreement") is a legal agreement
-between you ("User") and <PROJECTNAME> ("Project") for the use of
-<SOFTWARENAME> ("Software"), an open source software project licensed under
-the <OSILICENSE> ("OSI License"), an OSI-approved open source license.
+between you ("User") and NPOI ("Project") for the use of
+NPOI ("Software"), an open source software project licensed under
+the Apache License 2.0 ("OSI License"), an OSI-approved open source license.
 Project offers a Binary Release of the Software to Users in exchange for a
 maintenance fee ("Fee"). "Binary Release" refers to pre-compiled executable
 versions of the Software provided by Project. By accessing or using the
