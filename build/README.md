@@ -1,7 +1,7 @@
 Hi NPOI users,  
 
-NPOI has been maintained by Tony Qu and its contributors for 16 years. Developers are welcomed to join us to maintain this library. 
+To ensure the long-term sustainability of this project, a monthly maintenance fee has been introduced.  This fee is required to be paid by all organizations or users of any library from this project who generate revenue. You can pay the fee via [GitHub Sponsors](https://github.com/sponsors/tonyqus).
 
-To learn more about how NPOI library succeeds, you can read [this post](https://tonyqus.medium.com/how-npoi-succeeds-67ceb7333eb). 
+To enact this, an EULA on binary releases is added to the repo and nuget packages that requires payment of the maintenance fee.
 
-[Don't forget to donate if you benefit from NPOI library](https://github.com/nissl-lab/npoi/discussions/923)
+For more information on who must pay the fee and other frequently asked questions, please see the [Open Source Maintenance Fee](https://opensourcemaintenancefee.org/consumers/) organisation page.

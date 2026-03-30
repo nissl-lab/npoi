@@ -4,8 +4,13 @@
     <TargetFrameworks>net472;netstandard2.0;netstandard2.1;net8.0;net10.0</TargetFrameworks>
     <RootNamespace>NPOI</RootNamespace>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\npoi.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>../npoi.snk</AssemblyOriginatorKeyFile>
     <OutputPath>..\solution\$(Configuration)\</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DocumentationFile>..\solution\Release\NPOI.Core.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,10 +23,11 @@
     <PackageReference Include="ExtendedNumerics.BigDecimal" />
     <PackageReference Include="MathNet.Numerics.Signed" />
     <PackageReference Include="Microsoft.IO.RecyclableMemoryStream" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" />
     <PackageReference Include="BouncyCastle.Cryptography" />
     <PackageReference Include="SharpZipLib" />
-    <PackageReference Include="SkiaSharp" />
-    <PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" />
+    <PackageReference Include="SkiaSharp" PrivateAssets="all" Pack="false" />
+    <PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" PrivateAssets="all" Pack="false" />
     <PackageReference Include="ZString" />
   </ItemGroup>
 

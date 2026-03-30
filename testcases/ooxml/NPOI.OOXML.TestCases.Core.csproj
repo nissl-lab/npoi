@@ -24,6 +24,7 @@
   <ItemGroup>
     <PackageReference Include="GitHubActionsTestLogger" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="SkiaSharp" PrivateAssets="all" />
     <PackageReference Include="NSubstitute" />
     <PackageReference Include="NUnit" />
     <PackageReference Include="NUnit3TestAdapter" />
