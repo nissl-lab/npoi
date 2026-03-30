@@ -605,7 +605,7 @@ namespace NPOI.XSSF.UserModel
             }
         }
         #endregion
-
+        
         #region Internal methods
         /// <summary>
         /// update cell references when Shifting rows
@@ -730,7 +730,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                return new List<ICell>(GetSortedCells());
+                return GetSortedCells();
             }
         }
 
