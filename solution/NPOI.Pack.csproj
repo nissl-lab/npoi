@@ -82,7 +82,8 @@
     <PropertyGroup>
       <NupkgFile>$(OutputPath)$(PackageId).$(Version).nupkg</NupkgFile>
     </PropertyGroup>
-    <Exec Command="powershell -ExecutionPolicy Bypass -File &quot;$(MSBuildThisFileDirectory)RemovePackFromNupkg.ps1&quot; -NupkgPath &quot;$(NupkgFile)&quot;" />
+    <Exec Command="pwsh -ExecutionPolicy Bypass -File &quot;$(MSBuildThisFileDirectory)RemovePackFromNupkg.ps1&quot; -NupkgPath &quot;$(NupkgFile)&quot;" Condition="Exists('/usr/bin/pwsh')" />
+    <Exec Command="powershell -ExecutionPolicy Bypass -File &quot;$(MSBuildThisFileDirectory)RemovePackFromNupkg.ps1&quot; -NupkgPath &quot;$(NupkgFile)&quot;" Condition="!Exists('/usr/bin/pwsh')" />
   </Target>
 
 </Project>
