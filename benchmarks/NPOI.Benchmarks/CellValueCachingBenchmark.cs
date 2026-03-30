@@ -51,13 +51,13 @@ public class CellValueCachingBenchmark
     [Benchmark]
     public string RepeatedStringAccess()
     {
-        string result = "";
+        var sb = new System.Text.StringBuilder();
         // Access the same cell's string value 1000 times
         for (int i = 0; i < 1000; i++)
         {
-            result += _stringCell.StringCellValue;
+            sb.Append(_stringCell.StringCellValue);
         }
-        return result;
+        return sb.ToString();
     }
     
     [Benchmark]

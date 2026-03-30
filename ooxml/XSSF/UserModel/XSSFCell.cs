@@ -152,7 +152,11 @@ namespace NPOI.XSSF.UserModel
 
         private bool IsRichTextCacheValid()
         {
-            return _cachedRichTextValue != null && _cachedRichTextValueSource == _cell.v && _cachedRichTextCellType == _cell.t;
+            ST_CellType? cellType = _cell.t;
+            return _cachedRichTextValue != null 
+                && _cachedRichTextValueSource == _cell.v 
+                && (_cachedRichTextCellType == cellType 
+                    || (cellType == null && _cachedRichTextCellType == default(ST_CellType)));
         }
 
         private void InvalidateRichTextCache()
