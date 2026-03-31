@@ -64,6 +64,7 @@ namespace NPOI.HSSF.UserModel
         private HSSFSheet _sheet;
         private CellValueRecordInterface _record;
         private IComment comment;
+        private ICellStyle _cachedStyle;
 
 
         private const string FILE_FORMAT_NAME = "BIFF8";
@@ -1101,8 +1102,23 @@ namespace NPOI.HSSF.UserModel
 
         public ICellStyle Style
         {
-            get { return CellStyle; }
-            set { CellStyle = value; }
+            get
+            {
+                if (_cachedStyle == null)
+                {
+                    _cachedStyle = CellStyle;
+                    if (_cachedStyle == null)
+                    {
+                        _cachedStyle = book.CreateCellStyle();
+                    }
+                }
+                return _cachedStyle;
+            }
+            set
+            {
+                _cachedStyle = value;
+                CellStyle = value;
+            }
         }
 
         /**
