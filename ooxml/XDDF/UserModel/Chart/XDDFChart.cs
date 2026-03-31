@@ -522,6 +522,8 @@ namespace NPOI.XDDF.UserModel.Chart
             CT_PlotArea plotArea = GetCTPlotArea();
             switch(type)
             {
+                case ChartTypes.AREA:
+                    return new XDDFAreaChartData<T, V>(plotArea.AddNewAreaChart(), categories, mapValues);
                 case ChartTypes.BAR:
                     return new XDDFBarChartData<T, V>(plotArea.AddNewBarChart(), categories, mapValues);
                 case ChartTypes.LINE:
