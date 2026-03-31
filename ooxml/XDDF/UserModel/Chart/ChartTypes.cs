@@ -25,6 +25,7 @@ namespace NPOI.XDDF.UserModel.Chart
 {
     public enum ChartTypes
     {
+        AREA,
         BAR,
         LINE,
         PIE,
