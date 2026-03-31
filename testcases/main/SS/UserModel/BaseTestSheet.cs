@@ -1745,5 +1745,31 @@ namespace TestCases.SS.UserModel
             var filtered = allCells.Where(c => c.NumericCellValue > 15).ToList();
             ClassicAssert.AreEqual(2, filtered.Count);
         }
+
+        [Test]
+        public void TestCellStyle_LazyCreation()
+        {
+            var wb = _testDataProvider.CreateWorkbook();
+            var sheet = wb.CreateSheet();
+            var cell = sheet.CreateRow(0).CreateCell(0);
+
+            var style1 = cell.Style;
+            var style2 = cell.Style;
+            var style3 = cell.Style;
+
+            ClassicAssert.AreSame(style1, style2, "Style should return same instance on multiple accesses");
+            ClassicAssert.AreSame(style2, style3, "Style should return same instance on third access");
+
+            style1.Alignment = HorizontalAlignment.Center;
+            ClassicAssert.AreEqual(HorizontalAlignment.Center, style2.Alignment, "All references should point to same style");
+
+            style1.FillPattern = FillPattern.SolidForeground;
+            ClassicAssert.AreEqual(FillPattern.SolidForeground, style2.FillPattern, "Style modifications should persist");
+
+            var font = style1.GetFont(wb);
+            font.IsBold = true;
+            var font2 = style2.GetFont(wb);
+            ClassicAssert.AreEqual(true, font2.IsBold, "Font modifications should persist");
+        }
     }
 }
