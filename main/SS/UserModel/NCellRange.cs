@@ -24,6 +24,36 @@ namespace NPOI.SS.UserModel
         public ICell TopLeftCell => GetCell(0,0);
         public ISheet Sheet => _sheet;
 
+        public double Sum(Func<ICell, double> selector)
+        {
+            return Cells.Sum(selector);
+        }
+
+        public double Min(Func<ICell, double> selector)
+        {
+            return Cells.Min(selector);
+        }
+
+        public double Max(Func<ICell, double> selector)
+        {
+            return Cells.Max(selector);
+        }
+
+        public double Average(Func<ICell, double> selector)
+        {
+            return Cells.Average(selector);
+        }
+
+        public T Max<T>(Func<ICell, T> selector) where T : IComparable<T>
+        {
+            return Cells.Max(selector);
+        }
+
+        public T Min<T>(Func<ICell, T> selector) where T : IComparable<T>
+        {
+            return Cells.Min(selector);
+        }
+
         /// <summary>
         /// Set this cell range as active
         /// </summary>
@@ -460,6 +490,7 @@ namespace NPOI.SS.UserModel
                 return texts;
             }
         }
+
         public object Value { 
             set {
                 if(value is double || value is Double)

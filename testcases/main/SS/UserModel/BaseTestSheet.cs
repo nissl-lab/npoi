@@ -1724,5 +1724,26 @@ namespace TestCases.SS.UserModel
 
             ClassicAssert.AreEqual(30.0, range.Sum());
         }
+        [Test]
+        public void TestGetCells_LinqExtensions()
+        {
+            var wb1 = _testDataProvider.CreateWorkbook();
+            var sheet = wb1.CreateSheet();
+            sheet.CreateRow(0).CreateCell(0).SetCellValue(10.0);
+            sheet.CreateRow(1).CreateCell(0).SetCellValue(20.0);
+            sheet.CreateRow(2).CreateCell(0).SetCellValue(30.0);
+
+            var range = sheet.Cells["A1:A3"];
+            var allCells = range.ToList();
+            ClassicAssert.AreEqual(3, allCells.Count);
+
+            ClassicAssert.AreEqual(60.0, allCells.Sum(c => c.NumericCellValue));
+            ClassicAssert.AreEqual(10.0, allCells.Min(c => c.NumericCellValue));
+            ClassicAssert.AreEqual(30.0, allCells.Max(c => c.NumericCellValue));
+            ClassicAssert.AreEqual(20.0, allCells.Average(c => c.NumericCellValue));
+
+            var filtered = allCells.Where(c => c.NumericCellValue > 15).ToList();
+            ClassicAssert.AreEqual(2, filtered.Count);
+        }
     }
 }
