@@ -1888,15 +1888,21 @@ namespace TestCases.SS.UserModel
             var cell = sheet.CreateRow(0).CreateCell(0);
             cell.SetCellValue(1234.56);
 
-            cell.Style.FormatString = "#,##0";
+            cell.Style.FormatString = BuiltinFormats.Names.Thousands;
             ClassicAssert.AreEqual("#,##0", cell.Style.FormatString);
 
-            cell.Style.FormatString = "#,##0.00";
+            cell.Style.FormatString = BuiltinFormats.Names.Currency;
             ClassicAssert.AreEqual("#,##0.00", cell.Style.FormatString);
 
             cell.SetCellValue(99);
-            cell.Style.FormatString = "0.00%";
+            cell.Style.FormatString = BuiltinFormats.Names.Percent2;
             ClassicAssert.AreEqual("0.00%", cell.Style.FormatString);
+
+            cell.Style.FormatString = BuiltinFormats.Names.ShortDate;
+            ClassicAssert.AreEqual("m/d/yy", cell.Style.FormatString);
+
+            cell.Style.FormatString = BuiltinFormats.Names.Accounting;
+            ClassicAssert.AreEqual(BuiltinFormats.Names.Accounting, cell.Style.FormatString);
         }
     }
 }
