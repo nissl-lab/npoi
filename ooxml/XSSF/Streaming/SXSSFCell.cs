@@ -189,6 +189,13 @@ namespace NPOI.XSSF.Streaming
                 _style = value;
             }
         }
+
+        public ICellStyle Style
+        {
+            get { return CellStyle; }
+            set { CellStyle = value; }
+        }
+
         private bool IsFormulaCell()
         {
             return _value is FormulaValue;

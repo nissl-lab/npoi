@@ -1098,6 +1098,13 @@ namespace NPOI.HSSF.UserModel
                 _record.XFIndex = styleIndex;
             }
         }
+
+        public ICellStyle Style
+        {
+            get { return CellStyle; }
+            set { CellStyle = value; }
+        }
+
         /**
  * Applying a user-defined style (UDS) is special. Excel does not directly reference user-defined styles, but
  * instead create a 'proxy' ExtendedFormatRecord referencing the UDS as parent.

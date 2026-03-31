@@ -736,6 +736,13 @@ namespace NPOI.XSSF.UserModel
                 }
             }
         }
+
+        public ICellStyle Style
+        {
+            get { return CellStyle; }
+            set { CellStyle = value; }
+        }
+
         /// <summary>
         /// POI currently supports these formula types:
         /// <list type="bullet">
