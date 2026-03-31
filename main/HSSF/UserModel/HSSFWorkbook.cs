@@ -1005,6 +1005,8 @@ namespace NPOI.HSSF.UserModel
             return retval;
         }
 
+        public NPOI.SS.UserModel.ISheet this[string name] => GetSheet(name);
+
         /// <summary>
         /// Removes sheet at the given index.
         /// </summary>

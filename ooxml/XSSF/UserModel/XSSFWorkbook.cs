@@ -1178,6 +1178,8 @@ namespace NPOI.XSSF.UserModel
             return null;
         }
 
+        public ISheet this[string name] => GetSheet(name);
+
         /**
          * Get the XSSFSheet object at the given index.
          *
