@@ -545,6 +545,30 @@ namespace TestCases.XSSF.UserModel
         }
 
         [Test]
+        public void TestAutoSizeRowWithWrapText()
+        {
+            XSSFWorkbook workbook = new XSSFWorkbook();
+            XSSFSheet sheet = (XSSFSheet)workbook.CreateSheet("Sheet 1");
+
+            IRow row = sheet.CreateRow(0);
+            ICell cell = row.CreateCell(0);
+            cell.SetCellValue("This is a very long text that should wrap to multiple lines when auto-sized");
+            ICellStyle style = workbook.CreateCellStyle();
+            style.WrapText = true;
+            cell.CellStyle = style;
+            sheet.SetColumnWidth(0, 10 * 256);
+
+            short originalHeight = (short)(12 * 20);
+            row.Height = originalHeight;
+
+            sheet.AutoSizeRow(row.RowNum);
+
+            ClassicAssert.Greater(row.Height, originalHeight, "Row height should increase for wrapped text");
+
+            workbook.Close();
+        }
+
+        [Test]
         public void TestSetCellComment()
         {
             XSSFWorkbook workbook = new XSSFWorkbook();
