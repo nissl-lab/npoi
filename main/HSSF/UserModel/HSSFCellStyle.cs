@@ -145,6 +145,16 @@ namespace NPOI.HSSF.UserModel
             return getDataFormatStringCache.Value;
         }
 
+        public string FormatString
+        {
+            get { return GetDataFormatString(); }
+            set
+            {
+                short formatIndex = _workbook.GetFormat(value, true);
+                DataFormat = formatIndex;
+            }
+        }
+
         /// <summary>
         /// Get the contents of the format string, by looking up the DataFormat against the supplied workbook
         /// </summary>

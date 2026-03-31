@@ -1879,5 +1879,24 @@ namespace TestCases.SS.UserModel
             var filtered = allCells.Where(c => c.NumericCellValue > 15).ToList();
             ClassicAssert.AreEqual(2, filtered.Count);
         }
+
+        [Test]
+        public void TestCellStyleFormatString()
+        {
+            var wb = _testDataProvider.CreateWorkbook();
+            var sheet = wb.CreateSheet();
+            var cell = sheet.CreateRow(0).CreateCell(0);
+            cell.SetCellValue(1234.56);
+
+            cell.Style.FormatString = "#,##0";
+            ClassicAssert.AreEqual("#,##0", cell.Style.FormatString);
+
+            cell.Style.FormatString = "#,##0.00";
+            ClassicAssert.AreEqual("#,##0.00", cell.Style.FormatString);
+
+            cell.SetCellValue(99);
+            cell.Style.FormatString = "0.00%";
+            ClassicAssert.AreEqual("0.00%", cell.Style.FormatString);
+        }
     }
 }
