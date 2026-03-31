@@ -1703,5 +1703,26 @@ namespace TestCases.SS.UserModel
             ClassicAssert.IsNaN(range.Max());
             ClassicAssert.IsNaN(range.Avg());
         }
+        [Test]
+        public void TestGetCells_StringIndexer()
+        {
+            var wb1 = _testDataProvider.CreateWorkbook();
+            var sheet = wb1.CreateSheet();
+            sheet.CreateRow(0).CreateCell(0).SetCellValue(10.0);
+            sheet.CreateRow(1).CreateCell(1).SetCellValue(20.0);
+
+            var cellA1 = sheet["A1"];
+            ClassicAssert.AreEqual(1, cellA1.Size);
+            ClassicAssert.AreEqual(10.0, cellA1.TopLeftCell.NumericCellValue);
+
+            var rangeB2 = sheet["B2"];
+            ClassicAssert.AreEqual(1, rangeB2.Size);
+            ClassicAssert.AreEqual(20.0, rangeB2.TopLeftCell.NumericCellValue);
+
+            var range = sheet["A1:B2"];
+            ClassicAssert.AreEqual(4, range.Size);
+
+            ClassicAssert.AreEqual(30.0, range.Sum());
+        }
     }
 }

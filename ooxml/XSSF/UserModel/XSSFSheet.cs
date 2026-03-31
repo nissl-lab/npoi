@@ -6923,6 +6923,8 @@ lblforbreak:
             
         }
 
+        public NCellRange this[string address] => Cells[address];
+
         public NRowRange Rows
         {
             get {
