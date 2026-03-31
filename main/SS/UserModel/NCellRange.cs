@@ -490,6 +490,63 @@ namespace NPOI.SS.UserModel
                 throw new InvalidOperationException("invalid value type for cell value");
             } 
         }
+
+        public double Sum()
+        {
+            double sum = 0;
+            foreach (var cell in Cells)
+            {
+                if (cell.CellType == CellType.Numeric)
+                    sum += cell.NumericCellValue;
+            }
+            return sum;
+        }
+
+        public double Min()
+        {
+            double? min = null;
+            foreach (var cell in Cells)
+            {
+                if (cell.CellType == CellType.Numeric)
+                {
+                    double val = cell.NumericCellValue;
+                    if (!min.HasValue || val < min.Value)
+                        min = val;
+                }
+            }
+            return min ?? double.NaN;
+        }
+
+        public double Max()
+        {
+            double? max = null;
+            foreach (var cell in Cells)
+            {
+                if (cell.CellType == CellType.Numeric)
+                {
+                    double val = cell.NumericCellValue;
+                    if (!max.HasValue || val > max.Value)
+                        max = val;
+                }
+            }
+            return max ?? double.NaN;
+        }
+
+        public double Avg()
+        {
+            double sum = 0;
+            int count = 0;
+            foreach (var cell in Cells)
+            {
+                if (cell.CellType == CellType.Numeric)
+                {
+                    sum += cell.NumericCellValue;
+                    count++;
+                }
+            }
+            return count > 0 ? sum / count : double.NaN;
+        }
+
         public NCellRange RemoveCellComment()
         {
             for(int i = _address.FirstRow; i<=_address.LastRow; i++)

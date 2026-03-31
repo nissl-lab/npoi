@@ -1644,5 +1644,64 @@ namespace TestCases.SS.UserModel
             var rowRange=sheet.Rows[1, 3];  //Rows[1,3] will not create rows
             ClassicAssert.AreEqual(2, rowRange.Rows.Count);
         }
+        [Test]
+        public void TestGetCells_Sum()
+        {
+            var wb1 = _testDataProvider.CreateWorkbook();
+            var sheet = wb1.CreateSheet();
+            sheet.CreateRow(0).CreateCell(0).SetCellValue(10.0);
+            sheet.CreateRow(1).CreateCell(0).SetCellValue(20.0);
+            sheet.CreateRow(2).CreateCell(0).SetCellValue(30.0);
+
+            var range = sheet.Cells["A1:A3"];
+            ClassicAssert.AreEqual(60.0, range.Sum());
+        }
+        [Test]
+        public void TestGetCells_Min()
+        {
+            var wb1 = _testDataProvider.CreateWorkbook();
+            var sheet = wb1.CreateSheet();
+            sheet.CreateRow(0).CreateCell(0).SetCellValue(30.0);
+            sheet.CreateRow(1).CreateCell(0).SetCellValue(10.0);
+            sheet.CreateRow(2).CreateCell(0).SetCellValue(20.0);
+
+            var range = sheet.Cells["A1:A3"];
+            ClassicAssert.AreEqual(10.0, range.Min());
+        }
+        [Test]
+        public void TestGetCells_Max()
+        {
+            var wb1 = _testDataProvider.CreateWorkbook();
+            var sheet = wb1.CreateSheet();
+            sheet.CreateRow(0).CreateCell(0).SetCellValue(10.0);
+            sheet.CreateRow(1).CreateCell(0).SetCellValue(30.0);
+            sheet.CreateRow(2).CreateCell(0).SetCellValue(20.0);
+
+            var range = sheet.Cells["A1:A3"];
+            ClassicAssert.AreEqual(30.0, range.Max());
+        }
+        [Test]
+        public void TestGetCells_Avg()
+        {
+            var wb1 = _testDataProvider.CreateWorkbook();
+            var sheet = wb1.CreateSheet();
+            sheet.CreateRow(0).CreateCell(0).SetCellValue(10.0);
+            sheet.CreateRow(1).CreateCell(0).SetCellValue(20.0);
+            sheet.CreateRow(2).CreateCell(0).SetCellValue(30.0);
+
+            var range = sheet.Cells["A1:A3"];
+            ClassicAssert.AreEqual(20.0, range.Avg());
+        }
+        [Test]
+        public void TestGetCells_Aggregates_EmptyRange()
+        {
+            var wb1 = _testDataProvider.CreateWorkbook();
+            var sheet = wb1.CreateSheet();
+            var range = sheet.Cells["A1:A3"];
+            ClassicAssert.AreEqual(0.0, range.Sum());
+            ClassicAssert.IsNaN(range.Min());
+            ClassicAssert.IsNaN(range.Max());
+            ClassicAssert.IsNaN(range.Avg());
+        }
     }
 }
