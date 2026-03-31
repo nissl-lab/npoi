@@ -4,7 +4,6 @@
     "Host": {
       "type": "string",
       "enum": [
-        "AppVeyor",
         "AzurePipelines",
         "Bamboo",
         "Bitbucket",
