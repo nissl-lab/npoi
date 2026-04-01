@@ -722,8 +722,8 @@ namespace TestCases.SS.UserModel
 
             wb.Close();
         }
-        [Ignore("not sure why style not match")]
-        /** Test that new default column styles Get applied */
+        [Test]
+        /** Test that new default column styles get applied */
         public virtual void DefaultColumnStyle()
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
@@ -737,9 +737,21 @@ namespace TestCases.SS.UserModel
             ICell cell = row.CreateCell(0);
             ICellStyle style2 = cell.CellStyle;
             ClassicAssert.IsNotNull(style2);
-            ClassicAssert.AreEqual(style.Index, style2.Index, "style should match");
+            ClassicAssert.AreEqual(style.Index, style2.Index, "style2 should match");
 
+            IWorkbook wb2 = _testDataProvider.WriteOutAndReadBack(wb);
             wb.Close();
+            ISheet wb2Sheet = wb2.GetSheetAt(0);
+            ClassicAssert.IsNotNull(wb2Sheet.GetColumnStyle(0));
+            ClassicAssert.AreEqual(style.Index, wb2Sheet.GetColumnStyle(0).Index);
+
+            IRow wb2R0 = wb2Sheet.GetRow(0);
+            ICell wb2Cell = wb2R0.GetCell(0);
+            ICellStyle style3 = wb2Cell.CellStyle;
+            ClassicAssert.IsNotNull(style3);
+            ClassicAssert.AreEqual(style.Index, style3.Index, "style3 should match");
+
+            wb2.Close();
         }
         [Test]
         public void TestOutlineProperties()
