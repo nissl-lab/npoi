@@ -448,5 +448,12 @@ namespace NPOI.SS.UserModel
         int AddOlePackage(byte[] oleData, String label, String fileName, String command);
 
         DataSet ToDataSet(bool firstRowAsHeader = false, bool showCalculatedValue = false);
+
+        /// <summary>
+        /// Gets a sheet by name
+        /// </summary>
+        /// <param name="name">The sheet name</param>
+        /// <returns>The sheet or null if not found</returns>
+        ISheet this[string name] { get; }
     }
 }

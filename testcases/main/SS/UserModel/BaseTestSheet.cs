@@ -1656,5 +1656,265 @@ namespace TestCases.SS.UserModel
             var rowRange=sheet.Rows[1, 3];  //Rows[1,3] will not create rows
             ClassicAssert.AreEqual(2, rowRange.Rows.Count);
         }
+        [Test]
+        public void TestGetCells_Sum()
+        {
+            var wb1 = _testDataProvider.CreateWorkbook();
+            var sheet = wb1.CreateSheet();
+            sheet.CreateRow(0).CreateCell(0).SetCellValue(10.0);
+            sheet.CreateRow(1).CreateCell(0).SetCellValue(20.0);
+            sheet.CreateRow(2).CreateCell(0).SetCellValue(30.0);
+
+            var range = sheet.Cells["A1:A3"];
+            ClassicAssert.AreEqual(60.0, range.Sum());
+        }
+        [Test]
+        public void TestGetCells_Min()
+        {
+            var wb1 = _testDataProvider.CreateWorkbook();
+            var sheet = wb1.CreateSheet();
+            sheet.CreateRow(0).CreateCell(0).SetCellValue(30.0);
+            sheet.CreateRow(1).CreateCell(0).SetCellValue(10.0);
+            sheet.CreateRow(2).CreateCell(0).SetCellValue(20.0);
+
+            var range = sheet.Cells["A1:A3"];
+            ClassicAssert.AreEqual(10.0, range.Min());
+        }
+        [Test]
+        public void TestGetCells_Max()
+        {
+            var wb1 = _testDataProvider.CreateWorkbook();
+            var sheet = wb1.CreateSheet();
+            sheet.CreateRow(0).CreateCell(0).SetCellValue(10.0);
+            sheet.CreateRow(1).CreateCell(0).SetCellValue(30.0);
+            sheet.CreateRow(2).CreateCell(0).SetCellValue(20.0);
+
+            var range = sheet.Cells["A1:A3"];
+            ClassicAssert.AreEqual(30.0, range.Max());
+        }
+        [Test]
+        public void TestGetCells_Avg()
+        {
+            var wb1 = _testDataProvider.CreateWorkbook();
+            var sheet = wb1.CreateSheet();
+            sheet.CreateRow(0).CreateCell(0).SetCellValue(10.0);
+            sheet.CreateRow(1).CreateCell(0).SetCellValue(20.0);
+            sheet.CreateRow(2).CreateCell(0).SetCellValue(30.0);
+
+            var range = sheet.Cells["A1:A3"];
+            ClassicAssert.AreEqual(20.0, range.Avg());
+        }
+        [Test]
+        public void TestGetCells_Aggregates_EmptyRange()
+        {
+            var wb1 = _testDataProvider.CreateWorkbook();
+            var sheet = wb1.CreateSheet();
+            var range = sheet.Cells["A1:A3"];
+            ClassicAssert.AreEqual(0.0, range.Sum());
+            ClassicAssert.IsNaN(range.Min());
+            ClassicAssert.IsNaN(range.Max());
+            ClassicAssert.IsNaN(range.Avg());
+        }
+        [Test]
+        public void TestGetCells_StringIndexer()
+        {
+            var wb1 = _testDataProvider.CreateWorkbook();
+            var sheet = wb1.CreateSheet();
+            sheet.CreateRow(0).CreateCell(0).SetCellValue(10.0);
+            sheet.CreateRow(1).CreateCell(1).SetCellValue(20.0);
+
+            var cellA1 = sheet["A1"];
+            ClassicAssert.AreEqual(1, cellA1.Size);
+            ClassicAssert.AreEqual(10.0, cellA1.TopLeftCell.NumericCellValue);
+
+            var rangeB2 = sheet["B2"];
+            ClassicAssert.AreEqual(1, rangeB2.Size);
+            ClassicAssert.AreEqual(20.0, rangeB2.TopLeftCell.NumericCellValue);
+
+            var range = sheet["A1:B2"];
+            ClassicAssert.AreEqual(4, range.Size);
+
+            ClassicAssert.AreEqual(30.0, range.Sum());
+        }
+        [Test]
+        public void TestGetCells_LinqExtensions()
+        {
+            var wb1 = _testDataProvider.CreateWorkbook();
+            var sheet = wb1.CreateSheet();
+            sheet.CreateRow(0).CreateCell(0).SetCellValue(10.0);
+            sheet.CreateRow(1).CreateCell(0).SetCellValue(20.0);
+            sheet.CreateRow(2).CreateCell(0).SetCellValue(30.0);
+
+            var range = sheet.Cells["A1:A3"];
+            var allCells = range.ToList();
+            ClassicAssert.AreEqual(3, allCells.Count);
+
+            ClassicAssert.AreEqual(60.0, allCells.Sum(c => c.NumericCellValue));
+            ClassicAssert.AreEqual(10.0, allCells.Min(c => c.NumericCellValue));
+            ClassicAssert.AreEqual(30.0, allCells.Max(c => c.NumericCellValue));
+            ClassicAssert.AreEqual(20.0, allCells.Average(c => c.NumericCellValue));
+
+            var filtered = allCells.Where(c => c.NumericCellValue > 15).ToList();
+            ClassicAssert.AreEqual(2, filtered.Count);
+        }
+
+        [Test]
+        public void TestCellStyle_LazyCreation()
+        {
+            var wb = _testDataProvider.CreateWorkbook();
+            var sheet = wb.CreateSheet();
+            var cell = sheet.CreateRow(0).CreateCell(0);
+
+            var style1 = cell.Style;
+            var style2 = cell.Style;
+            var style3 = cell.Style;
+
+            ClassicAssert.AreSame(style1, style2, "Style should return same instance on multiple accesses");
+            ClassicAssert.AreSame(style2, style3, "Style should return same instance on third access");
+
+            style1.Alignment = HorizontalAlignment.Center;
+            ClassicAssert.AreEqual(HorizontalAlignment.Center, style2.Alignment, "All references should point to same style");
+
+            style1.FillPattern = FillPattern.SolidForeground;
+            ClassicAssert.AreEqual(FillPattern.SolidForeground, style2.FillPattern, "Style modifications should persist");
+
+            var font = style1.GetFont(wb);
+            font.IsBold = true;
+            var font2 = style2.GetFont(wb);
+            ClassicAssert.AreEqual(true, font2.IsBold, "Font modifications should persist");
+        }
+
+        [Test]
+        public void TestSheetStringIndexer_SingleCell()
+        {
+            var wb = _testDataProvider.CreateWorkbook();
+            var sheet = wb.CreateSheet();
+            sheet.CreateRow(0).CreateCell(0).SetCellValue(10.0);
+
+            var cellA1 = sheet["A1"];
+            ClassicAssert.IsNotNull(cellA1);
+            ClassicAssert.AreEqual(10.0, cellA1.TopLeftCell.NumericCellValue);
+        }
+
+        [Test]
+        public void TestSheetStringIndexer_Range()
+        {
+            var wb = _testDataProvider.CreateWorkbook();
+            var sheet = wb.CreateSheet();
+            sheet.CreateRow(0).CreateCell(0).SetCellValue(10.0);
+            sheet.CreateRow(1).CreateCell(1).SetCellValue(20.0);
+
+            var range = sheet["A1:B2"];
+            ClassicAssert.AreEqual(4, range.Size);
+            ClassicAssert.AreEqual(30.0, range.Sum());
+        }
+
+        [Test]
+        public void TestWorkbookSheetIndexer()
+        {
+            var wb = _testDataProvider.CreateWorkbook();
+            wb.CreateSheet("Sheet1");
+            wb.CreateSheet("Sheet2");
+            wb.CreateSheet("Sheet3");
+
+            var sheet1 = wb["Sheet1"];
+            ClassicAssert.IsNotNull(sheet1);
+            ClassicAssert.AreEqual("Sheet1", sheet1.SheetName);
+
+            var sheet2 = wb["Sheet2"];
+            ClassicAssert.IsNotNull(sheet2);
+
+            var notFound = wb["NotExist"];
+            ClassicAssert.IsNull(notFound);
+
+            var sheet3 = wb["SHEET3"];
+            ClassicAssert.IsNotNull(sheet3);
+            ClassicAssert.AreEqual("Sheet3", sheet3.SheetName);
+        }
+
+        [Test]
+        public void TestRangeAggregates()
+        {
+            var wb = _testDataProvider.CreateWorkbook();
+            var sheet = wb.CreateSheet();
+            sheet.CreateRow(0).CreateCell(0).SetCellValue(10.0);
+            sheet.CreateRow(1).CreateCell(0).SetCellValue(20.0);
+            sheet.CreateRow(2).CreateCell(0).SetCellValue(30.0);
+
+            var range = sheet.Cells["A1:A3"];
+
+            ClassicAssert.AreEqual(60.0, range.Sum());
+            ClassicAssert.AreEqual(10.0, range.Min());
+            ClassicAssert.AreEqual(30.0, range.Max());
+            ClassicAssert.AreEqual(20.0, range.Avg());
+        }
+
+        [Test]
+        public void TestRangeAggregates_EmptyRange()
+        {
+            var wb = _testDataProvider.CreateWorkbook();
+            var sheet = wb.CreateSheet();
+            var range = sheet.Cells["A1:A3"];
+
+            ClassicAssert.AreEqual(0.0, range.Sum());
+            ClassicAssert.IsNaN(range.Min());
+            ClassicAssert.IsNaN(range.Max());
+            ClassicAssert.IsNaN(range.Avg());
+        }
+
+        [Test]
+        public void TestRangeLinqExtensions()
+        {
+            var wb = _testDataProvider.CreateWorkbook();
+            var sheet = wb.CreateSheet();
+            sheet.CreateRow(0).CreateCell(0).SetCellValue(10.0);
+            sheet.CreateRow(1).CreateCell(0).SetCellValue(20.0);
+            sheet.CreateRow(2).CreateCell(0).SetCellValue(30.0);
+
+            var range = sheet.Cells["A1:A3"];
+            var allCells = range.ToList();
+            ClassicAssert.AreEqual(3, allCells.Count);
+
+            double sum = 0;
+            foreach (var c in allCells)
+            {
+                sum += c.NumericCellValue;
+            }
+            ClassicAssert.AreEqual(60.0, sum);
+
+            var numericCells = allCells.ToList();
+            ClassicAssert.AreEqual(60.0, numericCells.Sum(c => c.NumericCellValue));
+            ClassicAssert.AreEqual(10.0, numericCells.Min(c => c.NumericCellValue));
+            ClassicAssert.AreEqual(30.0, numericCells.Max(c => c.NumericCellValue));
+            ClassicAssert.AreEqual(20.0, numericCells.Average(c => c.NumericCellValue));
+
+            var filtered = allCells.Where(c => c.NumericCellValue > 15).ToList();
+            ClassicAssert.AreEqual(2, filtered.Count);
+        }
+
+        [Test]
+        public void TestCellStyleFormatString()
+        {
+            var wb = _testDataProvider.CreateWorkbook();
+            var sheet = wb.CreateSheet();
+            var cell = sheet.CreateRow(0).CreateCell(0);
+            cell.SetCellValue(1234.56);
+
+            cell.Style.FormatString = BuiltinFormats.Thousands;
+            ClassicAssert.AreEqual("#,##0", cell.Style.FormatString);
+
+            cell.Style.FormatString = BuiltinFormats.Currency;
+            ClassicAssert.AreEqual("#,##0.00", cell.Style.FormatString);
+
+            cell.SetCellValue(99);
+            cell.Style.FormatString = BuiltinFormats.Percent2;
+            ClassicAssert.AreEqual("0.00%", cell.Style.FormatString);
+
+            cell.Style.FormatString = BuiltinFormats.ShortDate;
+            ClassicAssert.AreEqual("m/d/yy", cell.Style.FormatString);
+
+            cell.Style.FormatString = BuiltinFormats.Accounting;
+            ClassicAssert.AreEqual(BuiltinFormats.Accounting, cell.Style.FormatString);
+        }
     }
 }

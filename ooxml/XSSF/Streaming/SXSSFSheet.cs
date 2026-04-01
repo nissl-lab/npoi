@@ -1672,6 +1672,9 @@ namespace NPOI.XSSF.Streaming
                 return new NCellRange(this, 0, 0, this.Workbook.SpreadsheetVersion.MaxRows, this.Workbook.SpreadsheetVersion.MaxColumns);
             }
         }
+
+        public NCellRange this[string address] => Cells[address];
+
         public NRowRange Rows
         {
             get

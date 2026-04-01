@@ -205,6 +205,28 @@ namespace NPOI.XSSF.Streaming
             }
             return style;
         }
+        public ICellStyle Style
+        {
+            get
+            {
+                if (_style == null)
+                {
+                    _style = CellStyle;
+                    if (_style == null)
+                    {
+                        var wb = (SXSSFWorkbook)Row.Sheet.Workbook;
+                        _style = wb.CreateCellStyle();
+                    }
+                }
+                return _style;
+            }
+            set
+            {
+                _style = value;
+                CellStyle = value;
+            }
+        }
+
         private bool IsFormulaCell()
         {
             return _value is FormulaValue;

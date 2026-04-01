@@ -1403,5 +1403,29 @@ namespace TestCases.HSSF.UserModel
         {
             Assert.DoesNotThrow(() => HSSFTestDataSamples.OpenSampleWorkbook("optional_label_options.xls"));
         }
+
+        [Test]
+        public void TestWorkbookSheetIndexer()
+        {
+            var wb = new HSSFWorkbook();
+            wb.CreateSheet("Sheet1");
+            wb.CreateSheet("Sheet2");
+            wb.CreateSheet("Sheet3");
+
+            var sheet1 = wb["Sheet1"];
+            ClassicAssert.IsNotNull(sheet1);
+            ClassicAssert.AreEqual("Sheet1", sheet1.SheetName);
+
+            var sheet2 = wb["Sheet2"];
+            ClassicAssert.IsNotNull(sheet2);
+            ClassicAssert.AreEqual("Sheet2", sheet2.SheetName);
+
+            var notFound = wb["NotExist"];
+            ClassicAssert.IsNull(notFound);
+
+            var sheet3 = wb["SHEET3"];
+            ClassicAssert.IsNotNull(sheet3);
+            ClassicAssert.AreEqual("Sheet3", sheet3.SheetName);
+        }
     }
 }

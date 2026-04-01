@@ -477,6 +477,16 @@ namespace NPOI.XSSF.UserModel
             return new XSSFDataFormat(_stylesSource).GetFormat((short)idx);
         }
 
+        public string FormatString
+        {
+            get { return GetDataFormatString(); }
+            set
+            {
+                short formatIndex = (short)_stylesSource.PutNumberFormat(value);
+                DataFormat = formatIndex;
+            }
+        }
+
         /// <summary>
         /// Get the background fill color.
         /// Note - many cells are actually filled with a foreground fill, not a background fill
