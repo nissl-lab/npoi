@@ -715,8 +715,22 @@ namespace NPOI.XSSF.UserModel
                 XSSFCellStyle style = null;
                 if ((null != _stylesSource) && (_stylesSource.NumCellStyles > 0))
                 {
-                    long idx = _cell.IsSetS() ? _cell.s : 0;
-                    style = _stylesSource.GetStyleAt((int)idx);
+                    if (_cell.IsSetS())
+                    {
+                        style = _stylesSource.GetStyleAt((int)_cell.s);
+                    }
+                    else
+                    {
+                        ICellStyle columnStyle = ((XSSFSheet)_row.Sheet).GetColumnStyle(_cellNum);
+                        if (columnStyle != null)
+                        {
+                            style = (XSSFCellStyle)columnStyle;
+                        }
+                        else
+                        {
+                            style = _stylesSource.GetStyleAt(0);
+                        }
+                    }
                 }
                 return style;
             }
