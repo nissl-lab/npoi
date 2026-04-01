@@ -743,16 +743,17 @@ namespace NPOI.XSSF.UserModel
 
         private XSSFCellStyle GetExplicitCellStyle()
         {
-            XSSFCellStyle style = null;
-            if (_stylesSource != null && _stylesSource.NumCellStyles > 0)
+            if (_stylesSource == null || !_cell.IsSetS())
             {
-                if (_cell.IsSetS())
-                {
-                    long idx = _cell.s;
-                    style = _stylesSource.GetStyleAt((int)idx);
-                }
+                return null;
             }
-            return style;
+            int numCellStyles = _stylesSource.NumCellStyles;
+            if (numCellStyles == 0)
+            {
+                return null;
+            }
+            long idx = _cell.s;
+            return _stylesSource.GetStyleAt((int)idx);
         }
 
         private XSSFCellStyle GetDefaultCellStyleFromColumn()
