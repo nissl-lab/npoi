@@ -983,7 +983,6 @@ namespace NPOI.XSSF.Model
             XSSFFont xssfFont = new XSSFFont(ctFont, 0, null);
             xssfFont.FontHeightInPoints = (XSSFFont.DEFAULT_FONT_SIZE);
             xssfFont.Color = (XSSFFont.DEFAULT_FONT_COLOR);//SetTheme
-            xssfFont.FontName = (XSSFFont.DEFAULT_FONT_NAME);
             xssfFont.SetFamily(FontFamily.SWISS);
             xssfFont.SetScheme(FontScheme.MINOR);
             return xssfFont;
