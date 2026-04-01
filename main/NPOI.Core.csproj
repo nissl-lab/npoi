@@ -28,6 +28,7 @@
     <PackageReference Include="SharpZipLib" />
     <PackageReference Include="SkiaSharp" PrivateAssets="all" Pack="false" />
     <PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" PrivateAssets="all" Pack="false" />
+    <PackageReference Include="SkiaSharp.NativeAssets.Win32" PrivateAssets="all" Pack="false" />
     <PackageReference Include="ZString" />
   </ItemGroup>
 
