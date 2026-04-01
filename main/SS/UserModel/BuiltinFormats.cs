@@ -183,75 +183,69 @@ namespace NPOI.SS.UserModel
             return -1;
         }
 
-        /// <summary>
-        /// Provides developer-friendly access to built-in number formats.
-        /// </summary>
-        public static class Names
-        {
-            /// <summary>General format (index 0) - "General"</summary>
-            public static string General => _formats[0];
-            /// <summary>Integer with no decimal places (index 1) - "0"</summary>
-            public static string Integer => _formats[1];
-            /// <summary>Decimal with two decimal places (index 2) - "0.00"</summary>
-            public static string Decimal2 => _formats[2];
-            /// <summary>Integer with thousands separator (index 3) - "#,##0"</summary>
-            public static string Thousands => _formats[3];
-            /// <summary>Decimal with thousands separator (index 4) - "#,##0.00"</summary>
-            public static string Currency => _formats[4];
-            /// <summary>Currency with parentheses for negatives (index 5) - "$#,##0_);($#,##0)"</summary>
-            public static string Accounting => _formats[5];
-            /// <summary>Currency red (index 6) - "$#,##0_);[Red]($#,##0)"</summary>
-            public static string AccountingRed => _formats[6];
-            /// <summary>Currency decimal (index 7) - "$#,##0.00_);($#,##0.00)"</summary>
-            public static string AccountingDecimal => _formats[7];
-            /// <summary>Currency decimal red (index 8) - "$#,##0.00_);[Red]($#,##0.00)"</summary>
-            public static string AccountingDecimalRed => _formats[8];
-            /// <summary>Percentage no decimals (index 9) - "0%"</summary>
-            public static string Percent => _formats[9];
-            /// <summary>Percentage with two decimals (index 10) - "0.00%"</summary>
-            public static string Percent2 => _formats[10];
-            /// <summary>Scientific notation (index 11) - "0.00E+00"</summary>
-            public static string Scientific => _formats[11];
-            /// <summary>Fraction one digit (index 12) - "# ?/?"</summary>
-            public static string Fraction1 => _formats[12];
-            /// <summary>Fraction two digits (index 13) - "# ??/??"</summary>
-            public static string Fraction2 => _formats[13];
-            /// <summary>Short date (index 14) - "m/d/yy"</summary>
-            public static string ShortDate => _formats[14];
-            /// <summary>Long date (index 15) - "d-mmm-yy"</summary>
-            public static string LongDate => _formats[15];
-            /// <summary>Date (index 16) - "d-mmm"</summary>
-            public static string Date2 => _formats[16];
-            /// <summary>Month year (index 17) - "mmm-yy"</summary>
-            public static string MonthYear => _formats[17];
-            /// <summary>Time 12-hour (index 18) - "h:mm AM/PM"</summary>
-            public static string Time12 => _formats[18];
-            /// <summary>Time 12-hour with seconds (index 19) - "h:mm:ss AM/PM"</summary>
-            public static string Time12Sec => _formats[19];
-            /// <summary>Time 24-hour (index 20) - "h:mm"</summary>
-            public static string Time24 => _formats[20];
-            /// <summary>Time 24-hour with seconds (index 21) - "h:mm:ss"</summary>
-            public static string Time24Sec => _formats[21];
-            /// <summary>Date and time (index 22) - "m/d/yy h:mm"</summary>
-            public static string DateTime => _formats[22];
-            /// <summary>Thousands with parentheses (index 37) - "#,##0_);(#,##0)"</summary>
-            public static string ThousandsParens => _formats[37];
-            /// <summary>Thousands red (index 38) - "#,##0_);[Red](#,##0)"</summary>
-            public static string ThousandsParensRed => _formats[38];
-            /// <summary>Decimal thousands parentheses (index 39) - "#,##0.00_);(#,##0.00)"</summary>
-            public static string DecimalThousandsParens => _formats[39];
-            /// <summary>Decimal thousands red (index 40) - "#,##0.00_);[Red](#,##0.00)"</summary>
-            public static string DecimalThousandsParensRed => _formats[40];
-            /// <summary>Minutes seconds (index 41) - "mm:ss"</summary>
-            public static string MinutesSeconds => _formats[41];
-            /// <summary>Hours (index 42) - "[h]:mm:ss"</summary>
-            public static string Hours => _formats[42];
-            /// <summary>Minutes seconds tenths (index 43) - "mm:ss.0"</summary>
-            public static string MinutesSecondsTenths => _formats[43];
-            /// <summary>Scientific (index 44) - "##0.0E+0"</summary>
-            public static string Scientific1 => _formats[44];
-            /// <summary>Text format (index 45) - "@"</summary>
-            public static string Text => _formats[45];
-        }
+        /// <summary>General format (index 0) - "General"</summary>
+        public static string General => _formats[0];
+        /// <summary>Integer with no decimal places (index 1) - "0"</summary>
+        public static string Integer => _formats[1];
+        /// <summary>Decimal with two decimal places (index 2) - "0.00"</summary>
+        public static string Decimal2 => _formats[2];
+        /// <summary>Integer with thousands separator (index 3) - "#,##0"</summary>
+        public static string Thousands => _formats[3];
+        /// <summary>Decimal with thousands separator (index 4) - "#,##0.00"</summary>
+        public static string Currency => _formats[4];
+        /// <summary>Currency with parentheses for negatives (index 5) - "$#,##0_);($#,##0)"</summary>
+        public static string Accounting => _formats[5];
+        /// <summary>Currency red (index 6) - "$#,##0_);[Red]($#,##0)"</summary>
+        public static string AccountingRed => _formats[6];
+        /// <summary>Currency decimal (index 7) - "$#,##0.00_);($#,##0.00)"</summary>
+        public static string AccountingDecimal => _formats[7];
+        /// <summary>Currency decimal red (index 8) - "$#,##0.00_);[Red]($#,##0.00)"</summary>
+        public static string AccountingDecimalRed => _formats[8];
+        /// <summary>Percentage no decimals (index 9) - "0%"</summary>
+        public static string Percent => _formats[9];
+        /// <summary>Percentage with two decimals (index 10) - "0.00%"</summary>
+        public static string Percent2 => _formats[10];
+        /// <summary>Scientific notation (index 11) - "0.00E+00"</summary>
+        public static string Scientific => _formats[11];
+        /// <summary>Fraction one digit (index 12) - "# ?/?"</summary>
+        public static string Fraction1 => _formats[12];
+        /// <summary>Fraction two digits (index 13) - "# ??/??"</summary>
+        public static string Fraction2 => _formats[13];
+        /// <summary>Short date (index 14) - "m/d/yy"</summary>
+        public static string ShortDate => _formats[14];
+        /// <summary>Long date (index 15) - "d-mmm-yy"</summary>
+        public static string LongDate => _formats[15];
+        /// <summary>Date (index 16) - "d-mmm"</summary>
+        public static string Date2 => _formats[16];
+        /// <summary>Month year (index 17) - "mmm-yy"</summary>
+        public static string MonthYear => _formats[17];
+        /// <summary>Time 12-hour (index 18) - "h:mm AM/PM"</summary>
+        public static string Time12 => _formats[18];
+        /// <summary>Time 12-hour with seconds (index 19) - "h:mm:ss AM/PM"</summary>
+        public static string Time12Sec => _formats[19];
+        /// <summary>Time 24-hour (index 20) - "h:mm"</summary>
+        public static string Time24 => _formats[20];
+        /// <summary>Time 24-hour with seconds (index 21) - "h:mm:ss"</summary>
+        public static string Time24Sec => _formats[21];
+        /// <summary>Date and time (index 22) - "m/d/yy h:mm"</summary>
+        public static string DateTime => _formats[22];
+        /// <summary>Thousands with parentheses (index 37) - "#,##0_);(#,##0)"</summary>
+        public static string ThousandsParens => _formats[37];
+        /// <summary>Thousands red (index 38) - "#,##0_);[Red](#,##0)"</summary>
+        public static string ThousandsParensRed => _formats[38];
+        /// <summary>Decimal thousands parentheses (index 39) - "#,##0.00_);(#,##0.00)"</summary>
+        public static string DecimalThousandsParens => _formats[39];
+        /// <summary>Decimal thousands red (index 40) - "#,##0.00_);[Red](#,##0.00)"</summary>
+        public static string DecimalThousandsParensRed => _formats[40];
+        /// <summary>Minutes seconds (index 41) - "mm:ss"</summary>
+        public static string MinutesSeconds => _formats[41];
+        /// <summary>Hours (index 42) - "[h]:mm:ss"</summary>
+        public static string Hours => _formats[42];
+        /// <summary>Minutes seconds tenths (index 43) - "mm:ss.0"</summary>
+        public static string MinutesSecondsTenths => _formats[43];
+        /// <summary>Scientific (index 44) - "##0.0E+0"</summary>
+        public static string Scientific1 => _formats[44];
+        /// <summary>Text format (index 45) - "@"</summary>
+        public static string Text => _formats[45];
     }
 }
