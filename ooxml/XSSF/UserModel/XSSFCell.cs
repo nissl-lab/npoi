@@ -83,6 +83,7 @@ namespace NPOI.XSSF.UserModel
         private IRichTextString _cachedRichTextValue;
         private string _cachedRichTextValueSource;
         private ST_CellType _cachedRichTextCellType;
+        private ICellStyle _cachedStyle;
 
         /**
          * Construct a XSSFCell.
@@ -736,6 +737,28 @@ namespace NPOI.XSSF.UserModel
                 }
             }
         }
+
+        public ICellStyle Style
+        {
+            get
+            {
+                if (_cachedStyle == null)
+                {
+                    _cachedStyle = CellStyle;
+                    if (_cachedStyle == null)
+                    {
+                        _cachedStyle = _stylesSource.CreateCellStyle();
+                    }
+                }
+                return _cachedStyle;
+            }
+            set
+            {
+                _cachedStyle = value;
+                CellStyle = value;
+            }
+        }
+
         /// <summary>
         /// POI currently supports these formula types:
         /// <list type="bullet">

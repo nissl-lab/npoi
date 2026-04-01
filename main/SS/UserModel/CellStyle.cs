@@ -44,6 +44,12 @@ namespace NPOI.SS.UserModel
         String GetDataFormatString();
 
         /// <summary>
+        /// Gets or sets the number format string for this style.
+        /// Uses built-in formats like "Accounting0" or custom formats like "#,##0.00"
+        /// </summary>
+        String FormatString { get; set; }
+
+        /// <summary>
         /// set the font for this style
         /// </summary>
         /// <param name="font">a font object created or retreived from the Workbook object</param>

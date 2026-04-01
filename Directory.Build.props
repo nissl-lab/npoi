@@ -56,6 +56,7 @@
     <NoWarn>$(NoWarn);CS0628</NoWarn> <!-- new protected member declared in sealed type -->
     <NoWarn>$(NoWarn);CS0649</NoWarn> <!-- Field XXX is never assigned to -->
     <NoWarn>$(NoWarn);CS0659</NoWarn> <!-- XXX overrides Object.Equals(object o) but does not override Object.GetHashCode() -->
+    <NoWarn>$(NoWarn);NU1900</NoWarn> <!-- NuGet vulnerability warning access denied -->
 
     <NoWarn>$(NoWarn);CS0612</NoWarn> <!-- XXX is obsolete -->
     <NoWarn>$(NoWarn);CS0618</NoWarn> <!-- XXX is obsolete: deprecated POI XYZ -->
