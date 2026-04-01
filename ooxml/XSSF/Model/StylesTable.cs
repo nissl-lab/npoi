@@ -982,8 +982,7 @@ namespace NPOI.XSSF.Model
             CT_Font ctFont = new CT_Font();
             XSSFFont xssfFont = new XSSFFont(ctFont, 0, null);
             xssfFont.FontHeightInPoints = (XSSFFont.DEFAULT_FONT_SIZE);
-            xssfFont.Color = (XSSFFont.DEFAULT_FONT_COLOR);//SetTheme
-            xssfFont.FontName = (XSSFFont.DEFAULT_FONT_NAME);
+            xssfFont.Color = (XSSFFont.DEFAULT_FONT_COLOR);
             xssfFont.SetFamily(FontFamily.SWISS);
             xssfFont.SetScheme(FontScheme.MINOR);
             return xssfFont;
