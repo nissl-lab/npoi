@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using Nuke.Common;
@@ -132,16 +133,56 @@ partial class Build : NukeBuild
         });
 
     Target InstallFonts => _ => _
-        .OnlyWhenDynamic(() => RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && Host is GitHubActions)
+        .OnlyWhenDynamic(() => (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) && Host is GitHubActions)
         .Executes(() =>
         {
-            static void StartSudoProcess(string arguments) =>
-                ProcessTasks.StartProcess("sudo", arguments).WaitForExit();
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                static void StartSudoProcess(string arguments) =>
+                    ProcessTasks.StartProcess("sudo", arguments).WaitForExit();
 
-            // replace broken font - the one coming from APT doesn't contain all expected tables
-            StartSudoProcess("rm /usr/share/fonts/truetype/noto/NotoColorEmoji.ttf");
-            StartSudoProcess(
-                "curl -sS -L -o /usr/share/fonts/truetype/noto/NotoColorEmoji-Regular.ttf https://fonts.gstatic.com/s/notocoloremoji/v25/Yq6P-KqIXTD0t4D9z1ESnKM3-HpFab5s79iz64w.ttf");
+                // replace broken font - the one coming from APT doesn't contain all expected tables
+                StartSudoProcess("rm /usr/share/fonts/truetype/noto/NotoColorEmoji.ttf");
+                StartSudoProcess(
+                    "curl -sS -L -o /usr/share/fonts/truetype/noto/NotoColorEmoji-Regular.ttf https://fonts.gstatic.com/s/notocoloremoji/v25/Yq6P-KqIXTD0t4D9z1ESnKM3-HpFab5s79iz64w.ttf");
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                // Install fonts needed for font-measurement tests on Windows CI runners.
+                // Tests call FixFonts() which substitutes Calibri → Lucida Sans and Cambria → Lucida Bright.
+                // We install Noto fonts (freely available from Google) so that reliable metric sources are present.
+                var userFontsDir = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                    "Microsoft", "Windows", "Fonts");
+
+                Directory.CreateDirectory(userFontsDir);
+
+                void DownloadFont(string url, string fileName)
+                {
+                    var destPath = Path.Combine(userFontsDir, fileName);
+                    ProcessTasks.StartProcess("curl", $"-sS -L -o \"{destPath}\" {url}").WaitForExit();
+                }
+
+                void RegisterFont(string fileName, string fontName)
+                {
+                    var fontPath = Path.Combine(userFontsDir, fileName);
+                    ProcessTasks.StartProcess("reg",
+                        $"add \"HKCU\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Fonts\" /v \"{fontName} (TrueType)\" /t REG_SZ /d \"{fontPath}\" /f")
+                        .WaitForExit();
+                }
+
+                // Noto Sans — general-purpose text font for column-width measurement tests
+                DownloadFont(
+                    "https://fonts.gstatic.com/s/notosans/v36/o-0IIpQlx3QUlC5A4PNb4j5Ba_2c7A.ttf",
+                    "NotoSans-Regular.ttf");
+                RegisterFont("NotoSans-Regular.ttf", "Noto Sans Regular");
+
+                // Noto Color Emoji — consistent with the Linux font fix
+                DownloadFont(
+                    "https://fonts.gstatic.com/s/notocoloremoji/v25/Yq6P-KqIXTD0t4D9z1ESnKM3-HpFab5s79iz64w.ttf",
+                    "NotoColorEmoji-Regular.ttf");
+                RegisterFont("NotoColorEmoji-Regular.ttf", "Noto Color Emoji Regular");
+            }
         });
 
     Target Pack => _ => _
