@@ -3724,16 +3724,12 @@ namespace TestCases.XSSF.UserModel
                 ClassicAssert.AreEqual(blueStyle.Index, r3.GetCell(4).CellStyle.Index);
                 ClassicAssert.AreEqual(pinkStyle.Index, r3.GetCell(6).CellStyle.Index);
 
-                using (MemoryStream bos = new MemoryStream())
+                using (XSSFWorkbook wb2 = XSSFTestDataSamples.WriteOutAndReadBack(wb))
                 {
-                    wb.Write(bos);
-                    using (XSSFWorkbook wb2 = new XSSFWorkbook(new MemoryStream(bos.ToArray())))
-                    {
-                        XSSFSheet wb2Sheet = (XSSFSheet)wb2.GetSheetAt(0);
-                        XSSFRow wb2R3 = (XSSFRow)wb2Sheet.GetRow(3);
-                        ClassicAssert.AreEqual(blueStyle.Index, wb2R3.GetCell(4).CellStyle.Index);
-                        ClassicAssert.AreEqual(pinkStyle.Index, wb2R3.GetCell(6).CellStyle.Index);
-                    }
+                    XSSFSheet wb2Sheet = (XSSFSheet)wb2.GetSheetAt(0);
+                    XSSFRow wb2R3 = (XSSFRow)wb2Sheet.GetRow(3);
+                    ClassicAssert.AreEqual(blueStyle.Index, wb2R3.GetCell(4).CellStyle.Index);
+                    ClassicAssert.AreEqual(pinkStyle.Index, wb2R3.GetCell(6).CellStyle.Index);
                 }
             }
         }
