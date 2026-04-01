@@ -3459,7 +3459,7 @@ namespace NPOI.XSSF.UserModel
                 return col.ColumnStyle;
             }
 
-            return Workbook.GetCellStyleAt(0);
+            return null;
         }
 
         /// <summary>
