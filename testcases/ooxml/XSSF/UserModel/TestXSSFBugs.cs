@@ -3688,5 +3688,54 @@ namespace TestCases.XSSF.UserModel
             ClassicAssert.AreEqual(CellType.Numeric, value.CellType);
             ClassicAssert.AreEqual(1, value.NumberValue, 0.01);
         }
+
+        [Test]
+        public void Test51037()
+        {
+            using (XSSFWorkbook wb = new XSSFWorkbook())
+            {
+                XSSFCellStyle blueStyle = (XSSFCellStyle)wb.CreateCellStyle();
+                blueStyle.FillForegroundColor = IndexedColors.Aqua.Index;
+                blueStyle.FillPattern = FillPattern.SolidForeground;
+
+                XSSFCellStyle pinkStyle = (XSSFCellStyle)wb.CreateCellStyle();
+                pinkStyle.FillForegroundColor = IndexedColors.Pink.Index;
+                pinkStyle.FillPattern = FillPattern.SolidForeground;
+
+                ISheet s1 = wb.CreateSheet("Pretty columns");
+
+                s1.SetDefaultColumnStyle(4, blueStyle);
+                s1.SetDefaultColumnStyle(6, pinkStyle);
+
+                IRow r3 = s1.CreateRow(3);
+                r3.CreateCell(0).SetCellValue("The");
+                r3.CreateCell(1).SetCellValue("quick");
+                r3.CreateCell(2).SetCellValue("brown");
+                r3.CreateCell(3).SetCellValue("fox");
+                r3.CreateCell(4).SetCellValue("jumps");
+                r3.CreateCell(5).SetCellValue("over");
+                r3.CreateCell(6).SetCellValue("the");
+                r3.CreateCell(7).SetCellValue("lazy");
+                r3.CreateCell(8).SetCellValue("dog");
+                IRow r7 = s1.CreateRow(7);
+                r7.CreateCell(1).CellStyle = pinkStyle;
+                r7.CreateCell(8).CellStyle = blueStyle;
+
+                ClassicAssert.AreEqual(blueStyle.Index, r3.GetCell(4).CellStyle.Index);
+                ClassicAssert.AreEqual(pinkStyle.Index, r3.GetCell(6).CellStyle.Index);
+
+                using (MemoryStream bos = new MemoryStream())
+                {
+                    wb.Write(bos);
+                    using (XSSFWorkbook wb2 = new XSSFWorkbook(new MemoryStream(bos.ToArray())))
+                    {
+                        XSSFSheet wb2Sheet = (XSSFSheet)wb2.GetSheetAt(0);
+                        XSSFRow wb2R3 = (XSSFRow)wb2Sheet.GetRow(3);
+                        ClassicAssert.AreEqual(blueStyle.Index, wb2R3.GetCell(4).CellStyle.Index);
+                        ClassicAssert.AreEqual(pinkStyle.Index, wb2R3.GetCell(6).CellStyle.Index);
+                    }
+                }
+            }
+        }
     }
 }

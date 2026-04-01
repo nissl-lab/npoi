@@ -569,6 +569,11 @@ namespace NPOI.XSSF.UserModel
         {
             var sortedCells = GetSortedCells();
 
+            foreach (XSSFCell cell in sortedCells.Cast<XSSFCell>())
+            {
+                cell.ApplyDefaultCellStyleIfNecessary();
+            }
+
             bool isOrdered = true;
             if (_row.SizeOfCArray() != _cells.Count)
             {

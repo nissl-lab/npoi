@@ -707,16 +707,19 @@ namespace NPOI.XSSF.UserModel
         }
         /// <summary>
         /// Return the cell's style.
+        /// Since POI v5.2.3, this returns the column style if the
+        /// cell has no style of its own. If no column default style is set, the row default style is checked.
+        /// This method has always fallen back to return the default style
+        /// if there is no other style to return.
         /// </summary>
         public ICellStyle CellStyle
         {
             get
             {
-                XSSFCellStyle style = null;
-                if ((null != _stylesSource) && (_stylesSource.NumCellStyles > 0))
+                XSSFCellStyle style = GetExplicitCellStyle();
+                if (style == null)
                 {
-                    long idx = _cell.IsSetS() ? _cell.s : 0;
-                    style = _stylesSource.GetStyleAt((int)idx);
+                    style = GetDefaultCellStyleFromColumn();
                 }
                 return style;
             }
@@ -733,6 +736,48 @@ namespace NPOI.XSSF.UserModel
 
                     long idx = _stylesSource.PutStyle(xStyle);
                     _cell.s = (uint)idx;
+                }
+            }
+        }
+
+        private XSSFCellStyle GetExplicitCellStyle()
+        {
+            XSSFCellStyle style = null;
+            if (_stylesSource != null && _stylesSource.NumCellStyles > 0)
+            {
+                if (_cell.IsSetS())
+                {
+                    long idx = _cell.s;
+                    style = _stylesSource.GetStyleAt((int)idx);
+                }
+            }
+            return style;
+        }
+
+        private XSSFCellStyle GetDefaultCellStyleFromColumn()
+        {
+            XSSFCellStyle style = null;
+            XSSFSheet sheet = (XSSFSheet)Sheet;
+            if (sheet != null)
+            {
+                style = (XSSFCellStyle)sheet.GetColumnStyle(ColumnIndex);
+            }
+            return style;
+        }
+
+        internal void ApplyDefaultCellStyleIfNecessary()
+        {
+            XSSFCellStyle style = GetExplicitCellStyle();
+            if (style == null)
+            {
+                XSSFSheet sheet = (XSSFSheet)Sheet;
+                if (sheet != null)
+                {
+                    XSSFCellStyle defaultStyle = GetDefaultCellStyleFromColumn();
+                    if (defaultStyle != null)
+                    {
+                        CellStyle = defaultStyle;
+                    }
                 }
             }
         }
