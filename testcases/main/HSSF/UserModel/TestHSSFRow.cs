@@ -171,5 +171,30 @@ namespace TestCases.HSSF.UserModel
 
             workbook.Close();
         }
+
+        [Test]
+        public void TestCreateCellInheritsColumnStyle()
+        {
+            HSSFWorkbook workbook = new HSSFWorkbook();
+            HSSFSheet sheet = workbook.CreateSheet() as HSSFSheet;
+
+            ICellStyle redStyle = workbook.CreateCellStyle();
+            redStyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Red.Index;
+            redStyle.FillPattern = FillPattern.SolidForeground;
+
+            // Set default column style before creating cells
+            sheet.SetDefaultColumnStyle(1, redStyle);
+
+            HSSFRow row = sheet.CreateRow(0) as HSSFRow;
+            ICell c0 = row.CreateCell(0); // no column style
+            ICell c1 = row.CreateCell(1); // column 1 has redStyle
+
+            // c0 should have the default cell style (no column style set for column 0)
+            ClassicAssert.IsNull(sheet.GetColumnStyle(0), "No column style set for column 0");
+            // c1 should have redStyle because column 1 has that style set
+            ClassicAssert.AreEqual(redStyle.Index, c1.CellStyle.Index, "Cell in styled column should inherit column style");
+
+            workbook.Close();
+        }
     }
 }

@@ -381,6 +381,14 @@ namespace NPOI.XSSF.UserModel
             {
                 xcell.CellStyle = RowStyle;
             }
+            else
+            {
+                IColumn col = _sheet.GetColumn(columnIndex);
+                if (col != null && col.IsFormatted)
+                {
+                    xcell.CellStyle = col.ColumnStyle;
+                }
+            }
 
             _cells[columnIndex] = xcell;
             UpdateCacheOnAdd(columnIndex);

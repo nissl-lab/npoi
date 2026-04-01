@@ -1313,6 +1313,32 @@ namespace TestCases.XSSF.UserModel
         }
 
         /**
+         * Cells created after SetDefaultColumnStyle should inherit the column style.
+         */
+        [Test]
+        public void Bug51037_NewCellsInheritColumnStyle()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            XSSFSheet s = wb.CreateSheet() as XSSFSheet;
+
+            ICellStyle blueStyle = wb.CreateCellStyle();
+            blueStyle.FillForegroundColor = IndexedColors.Aqua.Index;
+            blueStyle.FillPattern = FillPattern.SolidForeground;
+
+            // Set default column style before creating cells
+            s.SetDefaultColumnStyle(1, blueStyle);
+
+            XSSFRow r1 = s.CreateRow(0) as XSSFRow;
+            ICell c0 = r1.CreateCell(0); // no column style
+            ICell c1 = r1.CreateCell(1); // column 1 has blueStyle
+
+            ClassicAssert.AreEqual(0, c0.CellStyle.Index, "Cell in unstyled column should have default style");
+            ClassicAssert.AreEqual(blueStyle.Index, c1.CellStyle.Index, "Cell in styled column should inherit column style");
+
+            wb.Close();
+        }
+
+        /**
          * Repeatedly writing a file.
          * Something with the SharedStringsTable currently breaks...
          */

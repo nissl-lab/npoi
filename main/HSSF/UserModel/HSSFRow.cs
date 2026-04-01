@@ -130,9 +130,21 @@ namespace NPOI.HSSF.UserModel
                 shortCellNum = (short)(0xffff - columnIndex);
             }
 
-            ICell cell = new HSSFCell(book, sheet, RowNum, (short)columnIndex, type);
+            HSSFCell cell = new HSSFCell(book, sheet, RowNum, (short)columnIndex, type);
             AddCell(cell);
-            sheet.Sheet.AddValueRecord(RowNum, ((HSSFCell)cell).CellValueRecord);
+            sheet.Sheet.AddValueRecord(RowNum, cell.CellValueRecord);
+            if (IsFormatted)
+            {
+                cell.CellStyle = RowStyle;
+            }
+            else
+            {
+                ICellStyle columnStyle = sheet.GetColumnStyle(columnIndex);
+                if (columnStyle != null)
+                {
+                    cell.CellStyle = columnStyle;
+                }
+            }
             return cell;
         }
         public IRow CopyRowTo(int targetIndex)
