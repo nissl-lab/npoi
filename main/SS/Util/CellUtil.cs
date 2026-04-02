@@ -585,6 +585,11 @@ namespace NPOI.SS.Util
          */
         private static Dictionary<String, Object> GetFormatProperties(ICellStyle style)
         {
+            if (style == null)
+            {
+                return new Dictionary<String, Object>();
+            }
+
             Dictionary<String, Object> properties = new Dictionary<String, Object>();
             Put(properties, ALIGNMENT, style.Alignment);
             Put(properties, VERTICAL_ALIGNMENT, style.VerticalAlignment);
@@ -652,7 +657,10 @@ namespace NPOI.SS.Util
          */
         private static short GetShort(Dictionary<String, Object> properties, String name)
         {
-            Object value = properties[name];
+            if (!properties.TryGetValue(name, out var value) || value == null)
+            {
+                return 0;
+            }
             short result = 0;
             if (short.TryParse(value.ToString(), out result))
                 return result;
@@ -669,7 +677,10 @@ namespace NPOI.SS.Util
          */
         private static int GetInt(Dictionary<String, Object> properties, String name)
         {
-            Object value = properties[name];
+            if (!properties.TryGetValue(name, out var value))
+            {
+                return 0;
+            }
             if (Number.IsNumber(value))
             {
                 return int.Parse(value.ToString());
@@ -686,7 +697,10 @@ namespace NPOI.SS.Util
          */
         private static BorderStyle GetBorderStyle(Dictionary<String, Object> properties, String name)
         {
-            Object value = properties[name];
+            if (!properties.TryGetValue(name, out var value))
+            {
+                return BorderStyle.None;
+            }
             BorderStyle border;
             if (value is BorderStyle style)
             {
@@ -724,7 +738,10 @@ namespace NPOI.SS.Util
          */
         private static FillPattern GetFillPattern(Dictionary<String, Object> properties, String name)
         {
-            Object value = properties[name];
+            if (!properties.TryGetValue(name, out var value))
+            {
+                return FillPattern.NoFill;
+            }
             FillPattern pattern;
             if (value is FillPattern fillPattern)
             {
@@ -761,7 +778,10 @@ namespace NPOI.SS.Util
          */
         private static HorizontalAlignment GetHorizontalAlignment(Dictionary<String, Object> properties, String name)
         {
-            Object value = properties[name];
+            if (!properties.TryGetValue(name, out var value))
+            {
+                return HorizontalAlignment.General;
+            }
             HorizontalAlignment align;
             if (value is HorizontalAlignment alignment)
             {
@@ -798,7 +818,10 @@ namespace NPOI.SS.Util
          */
         private static VerticalAlignment GetVerticalAlignment(Dictionary<String, Object> properties, String name)
         {
-            Object value = properties[name];
+            if (!properties.TryGetValue(name, out var value))
+            {
+                return VerticalAlignment.Bottom;
+            }
             VerticalAlignment align;
             if (value is VerticalAlignment alignment)
             {
@@ -834,7 +857,10 @@ namespace NPOI.SS.Util
          */
         private static bool GetBoolean(Dictionary<String, Object> properties, String name)
         {
-            Object value = properties[name];
+            if (!properties.TryGetValue(name, out var value) || value == null)
+            {
+                return false;
+            }
             bool result = false;
             if (bool.TryParse(value.ToString(), out result))
                 return result;

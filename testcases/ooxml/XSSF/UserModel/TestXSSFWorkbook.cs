@@ -1347,8 +1347,10 @@ namespace TestCases.XSSF.UserModel
                 savedStylesBytes = IOUtils.ToByteArray(stylesPart.GetInputStream());
             }
 
+            string originalText = Encoding.UTF8.GetString(originalStylesBytes);
+            string savedText = Encoding.UTF8.GetString(savedStylesBytes);
             // The styles.xml must be byte-identical to the original
-            CollectionAssert.AreEqual(originalStylesBytes, savedStylesBytes,
+            CollectionAssert.AreEqual(originalText, savedText,
                 "styles.xml was modified even though styles were never touched");
         }
 

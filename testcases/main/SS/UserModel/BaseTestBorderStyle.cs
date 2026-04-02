@@ -75,7 +75,10 @@ namespace TestCases.SS.UserModel
 
         protected void AssertBorderStyleEquals(BorderStyle expected, ICell cell)
         {
+            System.Diagnostics.Debug.WriteLine($"DEBUG: cell.CellStyle called for row={cell.RowIndex}, col={cell.ColumnIndex}");
             ICellStyle style = cell.CellStyle;
+            System.Diagnostics.Debug.WriteLine($"DEBUG: cell.CellStyle returned: {(style == null ? "null" : style.GetType().Name)}");
+            ClassicAssert.IsNotNull(style, "CellStyle should not be null");
             ClassicAssert.AreEqual(expected, style.BorderTop);
             ClassicAssert.AreEqual(expected, style.BorderBottom);
             ClassicAssert.AreEqual(expected, style.BorderLeft);

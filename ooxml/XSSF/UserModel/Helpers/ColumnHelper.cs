@@ -125,6 +125,10 @@ namespace NPOI.XSSF.UserModel.Helpers
         /// <returns></returns>
         public CT_Col GetColumn1Based(long index1, bool splitColumns)
         {
+            if (worksheet.sizeOfColsArray() == 0)
+            {
+                return null;
+            }
             CT_Cols colsArray = worksheet.GetColsArray(0);
 
             // Fetching the array is quicker than working on the new style

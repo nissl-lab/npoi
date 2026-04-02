@@ -707,21 +707,30 @@ namespace NPOI.XSSF.UserModel
             }
         }
         /// <summary>
-        /// Return the cell's style.
+        /// Get the cell style. This is a reference to a cell style contained in the workbook
+        /// object. If there is no explicit cell style, the default style is returned.
+        /// cell has no style of its own. If no column default style is set, the row default style is checked.
+        /// This method has always fallen back to return the default style
+        /// if there is no other style to return.
         /// </summary>
         public ICellStyle CellStyle
         {
             get
             {
-                XSSFCellStyle style = null;
-                if ((null != _stylesSource) && (_stylesSource.NumCellStyles > 0))
+                XSSFCellStyle style = GetExplicitCellStyle();
+                if (style == null)
                 {
-                    long idx = _cell.IsSetS() ? _cell.s : 0;
-                    style = _stylesSource.GetStyleAt((int)idx);
+                    style = GetDefaultCellStyleFromColumn();
+                }
+                // Return default style at index 0 if no explicit or column style exists
+                // This matches HSSFCell behavior which always returns a non-null style
+                if (style == null && _stylesSource != null)
+                {
+                    style = _stylesSource.GetStyleAt(0);
                 }
                 return style;
             }
-            set 
+            set
             {
                 if (value == null)
                 {
@@ -738,6 +747,47 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
+        private XSSFCellStyle GetExplicitCellStyle()
+        {
+            XSSFCellStyle style = null;
+            if (_stylesSource != null && _stylesSource.NumCellStyles > 0)
+            {
+                if (_cell.IsSetS())
+                {
+                    long idx = _cell.s;
+                    style = _stylesSource.GetStyleAt((int)idx);
+                }
+            }
+            return style;
+        }
+
+        private XSSFCellStyle GetDefaultCellStyleFromColumn()
+        {
+            XSSFCellStyle style = null;
+            XSSFSheet sheet = (XSSFSheet)Sheet;
+            if (sheet != null)
+            {
+                style = (XSSFCellStyle)sheet.GetColumnStyle(ColumnIndex);
+            }
+            return style;
+        }
+
+        internal void ApplyDefaultCellStyleIfNecessary()
+        {
+            XSSFCellStyle style = GetExplicitCellStyle();
+            if (style == null)
+            {
+                XSSFSheet sheet = (XSSFSheet)Sheet;
+                if (sheet != null)
+                {
+                    XSSFCellStyle defaultStyle = GetDefaultCellStyleFromColumn();
+                    if (defaultStyle != null)
+                    {
+                        CellStyle = defaultStyle;
+                    }
+                }
+            }
+        }
         public ICellStyle Style
         {
             get
