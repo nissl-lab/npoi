@@ -3456,10 +3456,14 @@ namespace NPOI.XSSF.UserModel
 
             if(col != null)
             {
-                return col.ColumnStyle;
+                ICellStyle style = col.ColumnStyle;
+                if (style != null)
+                {
+                    return style;
+                }
             }
 
-            return null;
+            return ((XSSFWorkbook)Workbook).GetCellStyleAt(0);
         }
 
         /// <summary>
