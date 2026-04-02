@@ -25,8 +25,9 @@ namespace NPOI.HSSF.Record.AutoFilter
         private bool rgch2_multibyte;
 
         public AutoFilterRecord()
-        { 
-        
+        {
+            field_3_doper1 = new DOPERRecord();
+            field_4_doper2 = new DOPERRecord();
         }
 
         public AutoFilterRecord(RecordInputStream in1)

@@ -88,5 +88,48 @@ namespace TestCases.HSSF.Record
             ClassicAssert.AreEqual(record.RecordSize, Cloned.RecordSize);
             ClassicAssert.IsTrue(Arrays.Equals(src, cln));
         }
+
+        [Test]
+        public void TestMultibyteDataSize()
+        {
+            AutoFilterRecord record = new AutoFilterRecord();
+            record.Doper1RGCH = "日本語テスト"; // Japanese multibyte characters
+            record.Doper2RGCH = "中文测试"; // Chinese multibyte characters
+
+            int expectedSize = 2 + 2 + 10 + 10;
+            expectedSize += 1 + (6 * 2); // doper1: multibyte flag + 6 chars * 2 bytes
+            expectedSize += 1 + (4 * 2); // doper2: multibyte flag + 4 chars * 2 bytes
+
+            ClassicAssert.AreEqual(expectedSize, record.RecordSize - 4);
+
+            byte[] ser = record.Serialize();
+            ClassicAssert.AreEqual(4 + expectedSize, ser.Length);
+
+            AutoFilterRecord deserialized = new AutoFilterRecord(TestcaseRecordInputStream.Create(ser));
+            ClassicAssert.AreEqual("日本語テスト", deserialized.Doper1RGCH);
+            ClassicAssert.AreEqual("中文测试", deserialized.Doper2RGCH);
+        }
+
+        [Test]
+        public void TestMixedMultibyteDataSize()
+        {
+            AutoFilterRecord record = new AutoFilterRecord();
+            record.Doper1RGCH = "test";
+            record.Doper2RGCH = "データ";
+
+            int baseSize = 2 + 2 + 10 + 10;
+            int doper1Size = 1 + record.Doper1RGCH.Length * (StringUtil.HasMultibyte(record.Doper1RGCH) ? 2 : 1);
+            int doper2Size = 1 + record.Doper2RGCH.Length * (StringUtil.HasMultibyte(record.Doper2RGCH) ? 2 : 1);
+
+            int expectedSize = baseSize + doper1Size + doper2Size;
+            ClassicAssert.AreEqual(expectedSize, record.RecordSize - 4);
+
+            byte[] ser = record.Serialize();
+            ClassicAssert.AreEqual(4 + expectedSize, ser.Length);
+
+            AutoFilterRecord deserialized = new AutoFilterRecord(TestcaseRecordInputStream.Create(ser));
+            ClassicAssert.AreEqual("test", deserialized.Doper1RGCH);
+            ClassicAssert.AreEqual("データ", deserialized.Doper2RGCH);
+        }
     }
 }
