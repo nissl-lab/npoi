@@ -707,8 +707,8 @@ namespace NPOI.XSSF.UserModel
             }
         }
         /// <summary>
-        /// Return the cell's style.
-        /// Since POI v5.2.3, this returns the column style if the
+        /// Get the cell style. This is a reference to a cell style contained in the workbook
+        /// object. If there is no explicit cell style, the default style is returned.
         /// cell has no style of its own. If no column default style is set, the row default style is checked.
         /// This method has always fallen back to return the default style
         /// if there is no other style to return.
@@ -722,9 +722,15 @@ namespace NPOI.XSSF.UserModel
                 {
                     style = GetDefaultCellStyleFromColumn();
                 }
+                // Return default style at index 0 if no explicit or column style exists
+                // This matches HSSFCell behavior which always returns a non-null style
+                if (style == null && _stylesSource != null)
+                {
+                    style = _stylesSource.GetStyleAt(0);
+                }
                 return style;
             }
-            set 
+            set
             {
                 if (value == null)
                 {
