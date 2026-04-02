@@ -224,11 +224,9 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                if (!IsFormatted || _stylesSource == null)
-                {
-                    return null;
-                }
-                return _stylesSource.NumCellStyles > 0
+                return IsFormatted
+                    && _stylesSource != null
+                    && _stylesSource.NumCellStyles > 0
                     ? _stylesSource.GetStyleAt((int)_column.style)
                     : (ICellStyle)null;
             }
