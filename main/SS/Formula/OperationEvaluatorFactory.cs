@@ -19,7 +19,7 @@ namespace NPOI.SS.Formula
 {
 
     using System;
-    using System.Collections;
+    using System.Collections.Generic;
     using System.Reflection;
 
     using NPOI.SS.Formula.Eval;
@@ -36,16 +36,16 @@ namespace NPOI.SS.Formula
     {
         private static Type[] OPERATION_CONSTRUCTOR_CLASS_ARRAY = new Type[] { typeof(Ptg) };
 
-        private static readonly Hashtable _instancesByPtgClass = InitialiseInstancesMap();
+        private static readonly Dictionary<OperationPtg, Functions.Function> _instancesByPtgClass = InitialiseInstancesMap();
 
         private OperationEvaluatorFactory()
         {
             // no instances of this class
         }
 
-        private static Hashtable InitialiseInstancesMap()
+        private static Dictionary<OperationPtg, Functions.Function> InitialiseInstancesMap()
         {
-            Hashtable m = new Hashtable(32);
+            Dictionary<OperationPtg, Functions.Function> m = new Dictionary<OperationPtg, Functions.Function>(32);
             Add(m, EqualPtg.instance, RelationalOperationEval.EqualEval);
             Add(m, GreaterEqualPtg.instance, RelationalOperationEval.GreaterEqualEval);
             Add(m, GreaterThanPtg.instance, RelationalOperationEval.GreaterThanEval);
@@ -67,7 +67,7 @@ namespace NPOI.SS.Formula
             return m;
         }
 
-        private static void Add(Hashtable m, OperationPtg ptgKey, Functions.Function instance)
+        private static void Add(Dictionary<OperationPtg, Functions.Function> m, OperationPtg ptgKey, Functions.Function instance)
         {
             // make sure ptg has single private constructor because map lookups assume singleton keys
             ConstructorInfo[] cc = ptgKey.GetType().GetConstructors();
@@ -91,7 +91,7 @@ namespace NPOI.SS.Formula
             {
                 throw new ArgumentException("ptg must not be null");
             }
-            NPOI.SS.Formula.Functions.Function result = _instancesByPtgClass[ptg] as NPOI.SS.Formula.Functions.Function;
+            _instancesByPtgClass.TryGetValue(ptg, out NPOI.SS.Formula.Functions.Function result);
 
             FreeRefFunction udfFunc = null;
             if (result == null)

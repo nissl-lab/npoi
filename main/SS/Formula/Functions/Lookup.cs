@@ -31,11 +31,11 @@ namespace NPOI.SS.Formula.Functions
         {
             _values = values;
         }
-        public ValueEval GetItem(int index)
+        public override ValueEval GetItem(int index)
         {
             return _values[index];
         }
-        public int Size
+        public override int Size
         {
             get
             {
@@ -93,7 +93,7 @@ namespace NPOI.SS.Formula.Functions
                 // if a rectangular area reference was passed in as arg1, lookupVector and resultVector should be the same size
                 //assert(lookupVector.getSize() == resultVector.getSize());
 
-                int index = LookupUtils.LookupIndexOfValue(lookupValue, lookupVector, true);
+                int index = LookupUtils.LookupFirstIndexOfValue(lookupValue, lookupVector, true);
                 return resultVector.GetItem(index);
             }
             catch (EvaluationException e) {
@@ -118,7 +118,7 @@ namespace NPOI.SS.Formula.Functions
                     // Excel seems to handle this by accessing past the end of the result vector.
                     throw new NPOI.Util.RuntimeException("Lookup vector and result vector of differing sizes not supported yet");
                 }
-                int index = LookupUtils.LookupIndexOfValue(lookupValue, lookupVector, true);
+                int index = LookupUtils.LookupFirstIndexOfValue(lookupValue, lookupVector, true);
 
                 return resultVector.GetItem(index);
             }

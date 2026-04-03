@@ -41,7 +41,7 @@ namespace NPOI.SS.Formula.Functions
             {
                 _size = size;
             }
-            public ValueEval GetItem(int index)
+            public override ValueEval GetItem(int index)
             {
                 if (index < 0 || index > _size)
                 {
@@ -51,7 +51,7 @@ namespace NPOI.SS.Formula.Functions
                 return GetItemInternal(index);
             }
             protected abstract ValueEval GetItemInternal(int index);
-            public int Size
+            public override int Size
             {
                 get
                 {

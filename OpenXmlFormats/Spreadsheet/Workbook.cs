@@ -314,7 +314,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             if (node == null)
                 return null;
             CT_CalcPr ctObj = new CT_CalcPr();
-            ctObj.calcId = XmlHelper.ReadUInt(node.Attributes["calcId"]);
+            if(node.Attributes["calcId"]!=null)
+            {
+                ctObj.calcIdField = XmlHelper.ReadUInt(node.Attributes["calcId"]);
+                ctObj.calcIdFieldSpecified = true;
+            }
             if (node.Attributes["calcMode"] != null)
                 ctObj.calcMode = (ST_CalcMode)Enum.Parse(typeof(ST_CalcMode), node.Attributes["calcMode"].Value);
             ctObj.fullCalcOnLoad = XmlHelper.ReadBool(node.Attributes["fullCalcOnLoad"]);
@@ -337,7 +341,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.WriteStart(nodeName);
-            XmlHelper.WriteAttribute(sw, "calcId", this.calcId);
+            if(this.calcIdSpecified)
+                XmlHelper.WriteAttribute(sw, "calcId", this.calcId, true);
             if(this.calcMode!= ST_CalcMode.auto)
                 XmlHelper.WriteAttribute(sw, "calcMode", this.calcMode.ToString());
             if(this.fullCalcOnLoad)
@@ -383,6 +388,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
             set
             {
+                this.calcIdFieldSpecified=true;
                 this.calcIdField = value;
             }
         }

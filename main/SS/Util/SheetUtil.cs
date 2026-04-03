@@ -358,7 +358,42 @@ namespace NPOI.SS.Util
                 return GetRotatedContentHeight(cell, stringValue, windowsFont);
             }
 
-            return GetContentHeight(stringValue, windowsFont);
+            double height = GetContentHeight(stringValue, windowsFont);
+
+            if (cell.CellStyle.WrapText && height > 0)
+            {
+                int column = cell.ColumnIndex;
+                ISheet sheet = cell.Sheet;
+                double columnWidth = GetColumnWidth(sheet, column, false);
+                if (columnWidth > 0)
+                {
+                    int defaultCharWidth = GetDefaultCharWidth(sheet.Workbook);
+                    double cellWidthPx = columnWidth * defaultCharWidth;
+                    double textWidth = GetTextWidth(stringValue, windowsFont);
+                    if (textWidth > cellWidthPx)
+                    {
+                        double wrappedLines = Math.Ceiling(textWidth / cellWidthPx);
+                        height *= wrappedLines;
+                    }
+                }
+            }
+
+            return height;
+        }
+
+        private static double GetTextWidth(string stringValue, SKFont windowsFont)
+        {
+            if (string.IsNullOrEmpty(stringValue))
+                return 0;
+
+            try
+            {
+                return windowsFont.MeasureText(stringValue);
+            }
+            catch
+            {
+                return stringValue.Length * windowsFont.Size * 0.5;
+            }
         }
 
         private static int GetNumberOfRowsInMergedRegion(ICell cell)

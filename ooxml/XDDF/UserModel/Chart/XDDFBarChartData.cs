@@ -17,15 +17,11 @@
 
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.IO;
-using System.Text;
+using NPOI.OpenXmlFormats.Dml.Chart;
 
 namespace NPOI.XDDF.UserModel.Chart
 {
-    using NPOI.XDDF.UserModel;
-    using NPOI.OpenXmlFormats.Dml.Chart;
 
     public class XDDFBarChartData<T, V> : XDDFChartData<T, V>
     {
@@ -65,6 +61,7 @@ namespace NPOI.XDDF.UserModel.Chart
             }
             DefineAxis(chart.GetAxIdArray(), categories, values);
         }
+        
         public override void SetVaryColors(bool varyColors)
         {
             if(chart.IsSetVaryColors())
@@ -77,61 +74,65 @@ namespace NPOI.XDDF.UserModel.Chart
             }
         }
 
-        public BarDirection GetBarDirection()
+        public BarDirection BarDirection
         {
-            return BarDirectionExtensions.ValueOf(chart.barDir.val);
-        }
-
-        public void SetBarDirection(BarDirection direction)
-        {
-            chart.barDir.val = direction.ToST_BarDir();
-        }
-
-        public BarGrouping GetBarGrouping()
-        {
-            if(chart.IsSetGrouping())
+            get
             {
-                return BarGroupingExtensions.ValueOf(chart.grouping.val);
+                return BarDirectionExtensions.ValueOf(chart.barDir.val);
             }
-            else
-            {
-                return BarGrouping.Standard;
+            set { 
+                chart.barDir.val = value.ToST_BarDir(); 
             }
         }
 
-        public void SetBarGrouping(BarGrouping grouping)
+        public BarGrouping BarGrouping
         {
-            if(chart.IsSetGrouping())
+            get
             {
-                chart.grouping.val = grouping.ToST_BarGrouping();
+                if(chart.IsSetGrouping())
+                {
+                    return BarGroupingExtensions.ValueOf(chart.grouping.val);
+                }
+                else
+                {
+                    return BarGrouping.Standard;
+                }
             }
-            else
+            set 
             {
-                chart.AddNewGrouping().val = grouping.ToST_BarGrouping();
+                if(chart.IsSetGrouping())
+                {
+                    chart.grouping.val = value.ToST_BarGrouping();
+                }
+                else
+                {
+                    chart.AddNewGrouping().val = value.ToST_BarGrouping();
+                }
             }
         }
 
-        public int GetGapWidth()
+        public int GapWidth
         {
-            if(chart.IsSetGapWidth())
+            get
             {
-                return chart.gapWidth.val;
+                if(chart.IsSetGapWidth())
+                {
+                    return chart.gapWidth.val;
+                }
+                else
+                {
+                    return 0;
+                }
             }
-            else
-            {
-                return 0;
-            }
-        }
-
-        public void SetGapWidth(int width)
-        {
-            if(chart.IsSetGapWidth())
-            {
-                chart.gapWidth.val = (ushort) width;
-            }
-            else
-            {
-                chart.AddNewGapWidth().val = (ushort) width;
+            set {
+                if(chart.IsSetGapWidth())
+                {
+                    chart.gapWidth.val = (ushort) value;
+                }
+                else
+                {
+                    chart.AddNewGapWidth().val = (ushort) value;
+                }
             }
         }
         public override XDDFChartData<T, V>.Series AddSeries(IXDDFDataSource<T> category,
@@ -234,6 +235,7 @@ namespace NPOI.XDDF.UserModel.Chart
             {
                 return series.val;
             }
+            
         }
     }
 }

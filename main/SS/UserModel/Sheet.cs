@@ -945,6 +945,13 @@ namespace NPOI.SS.UserModel
         NRowRange Rows { get; }
 
         /// <summary>
+        /// Gets a cell or range of cells by address string (e.g., "A1" or "A1:C10")
+        /// </summary>
+        /// <param name="address">Cell address (e.g., "A1" or "A1:C10")</param>
+        /// <returns>NCellRange containing the specified cell(s)</returns>
+        NCellRange this[string address] { get; }
+
+        /// <summary>
         ///  Convert a sheet to a DataTable. Note that merged cells are not supported
         /// </summary>
         /// <param name="firstRowAsHeader">whether first row is column header</param>

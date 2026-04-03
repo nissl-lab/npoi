@@ -3463,10 +3463,14 @@ namespace NPOI.XSSF.UserModel
 
             if(col != null)
             {
-                return col.ColumnStyle;
+                ICellStyle style = col.ColumnStyle;
+                if (style != null)
+                {
+                    return style;
+                }
             }
 
-            return Workbook.GetCellStyleAt(0);
+            return ((XSSFWorkbook)Workbook).GetCellStyleAt(0);
         }
 
         /// <summary>
@@ -6929,6 +6933,8 @@ lblforbreak:
             }
             
         }
+
+        public NCellRange this[string address] => Cells[address];
 
         public NRowRange Rows
         {

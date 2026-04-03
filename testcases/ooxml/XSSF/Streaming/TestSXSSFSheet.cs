@@ -111,10 +111,6 @@ namespace TestCases.XSSF.Streaming
             // properties on Cells...
         }
 
-        public override void DefaultColumnStyle() {
-            //TODO column styles are not yet supported by XSSF
-        }
-
         [Test]
         public void OverrideFlushedRows() {
             IWorkbook wb = new SXSSFWorkbook(3);

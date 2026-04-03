@@ -246,8 +246,10 @@ namespace NPOI.SS.UserModel
         ICellStyle CellStyle { get; set; }
 
         /// <summary>
-        /// Sets this cell as the active cell for the worksheet
+        /// Gets or sets the cell style. Same as <see cref="CellStyle"/>. Provided for API consistency with IronXL.
         /// </summary>
+        ICellStyle Style { get; set; }
+
         void SetAsActiveCell();
 
         /**

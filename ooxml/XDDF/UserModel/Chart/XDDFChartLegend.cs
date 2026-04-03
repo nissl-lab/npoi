@@ -19,13 +19,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using NPOI.OpenXmlFormats.Dml;
+using NPOI.OpenXmlFormats.Dml.Chart;
+using NPOI.Util.Optional;
+using NPOI.XDDF.UserModel.Text;
 
 namespace NPOI.XDDF.UserModel.Chart
 {
-    using NPOI.OpenXmlFormats.Dml;
-    using NPOI.OpenXmlFormats.Dml.Chart;
-    using NPOI.Util.Optional;
-    using NPOI.XDDF.UserModel.Text;
 
 
     /// <summary>
@@ -65,7 +65,7 @@ namespace NPOI.XDDF.UserModel.Chart
         /// Return the underlying CTLegend bean.
         /// </summary>
         /// <returns>the underlying CTLegend bean</returns>
-        protected CT_Legend GetXmlobject()
+        internal CT_Legend GetCTLegend()
         {
             return legend;
         }
@@ -200,11 +200,6 @@ namespace NPOI.XDDF.UserModel.Chart
                     legend.layout = value.GetXmlObject();
                 }
             }
-        }
-
-        public void SetPosition(LegendPosition position)
-        {
-
         }
 
         /*

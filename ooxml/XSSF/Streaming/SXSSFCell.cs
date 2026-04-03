@@ -175,8 +175,13 @@ namespace NPOI.XSSF.Streaming
             {
                 if (_style == null)
                 {
-                    SXSSFWorkbook wb = (SXSSFWorkbook)Row.Sheet.Workbook;
-                    return wb.GetCellStyleAt(0);
+                    ICellStyle style = GetDefaultCellStyleFromColumn();
+                    if (style == null)
+                    {
+                        SXSSFWorkbook wb = (SXSSFWorkbook)Sheet.Workbook;
+                        style = wb.GetCellStyleAt(0);
+                    }
+                    return style;
                 }
                 else
                 {
@@ -189,6 +194,39 @@ namespace NPOI.XSSF.Streaming
                 _style = value;
             }
         }
+
+        private ICellStyle GetDefaultCellStyleFromColumn()
+        {
+            ICellStyle style = null;
+            SXSSFSheet sheet = (SXSSFSheet)Sheet;
+            if (sheet != null)
+            {
+                style = sheet.GetColumnStyle(ColumnIndex);
+            }
+            return style;
+        }
+        public ICellStyle Style
+        {
+            get
+            {
+                if (_style == null)
+                {
+                    _style = CellStyle;
+                    if (_style == null)
+                    {
+                        var wb = (SXSSFWorkbook)Row.Sheet.Workbook;
+                        _style = wb.CreateCellStyle();
+                    }
+                }
+                return _style;
+            }
+            set
+            {
+                _style = value;
+                CellStyle = value;
+            }
+        }
+
         private bool IsFormulaCell()
         {
             return _value is FormulaValue;
