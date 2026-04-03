@@ -17,17 +17,11 @@
 
 
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
+using NPOI.OpenXmlFormats.Dml.Chart;
+using NPOI.OpenXmlFormats.Dml;
 
 namespace NPOI.XDDF.UserModel.Chart
 {
-    using NPOI.Util;
-    using NPOI.XDDF.UserModel;
-    using NPOI.OpenXmlFormats.Dml.Chart;
-    using NPOI.OpenXmlFormats.Dml;
 
     /// <summary>
     /// Base class for all axis types.
@@ -54,6 +48,7 @@ namespace NPOI.XDDF.UserModel.Chart
 
         public abstract XDDFShapeProperties GetOrAddMinorGridProperties();
 
+        public abstract void SetTitle(String text);
         /// <summary>
         /// </summary>
         /// <returns>true if minor unit value is defined, false otherwise</returns>

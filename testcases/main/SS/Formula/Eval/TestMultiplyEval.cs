@@ -47,9 +47,23 @@ namespace TestCases.SS.Formula.Eval
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
 
             // issue #1055, use decimal to handle precision issue like (20000 * 0.000027 = 0.539999 in double)
-            Confirm(new NumberEval(20000), new NumberEval(0.000027), 0.54);            
+            Confirm(new NumberEval(20000), new NumberEval(0.000027), 0.54);
         }
-        
+
+        [Test]
+        public void TestLargeValuesOverflowDecimal()
+        {
+            // Values > ~7.9e28 overflow decimal; should fall back to double arithmetic
+            // Use direct assertions with relative tolerance since Confirm uses delta=0
+            ValueEval[] args1 = { new NumberEval(1e29), new NumberEval(1e29) };
+            double result1 = NumericFunctionInvoker.Invoke(EvalInstances.Multiply, args1, 0, 0);
+            ClassicAssert.AreEqual(1e58, result1, 1e58 * 1e-10, "Large positive multiply");
+
+            ValueEval[] args2 = { new NumberEval(-1e30), new NumberEval(1e30) };
+            double result2 = NumericFunctionInvoker.Invoke(EvalInstances.Multiply, args2, 0, 0);
+            ClassicAssert.AreEqual(-1e60, result2, 1e60 * 1e-10, "Mixed sign large multiply");
+        }
+
     }
 
 }

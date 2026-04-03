@@ -689,6 +689,8 @@ namespace NPOI.XSSF.Streaming
             return GetSXSSFSheet((XSSFSheet)XssfWorkbook.GetSheet(name));
         }
 
+        public ISheet this[string name] => GetSheet(name);
+
         public void RemoveSheetAt(int index)
         {
             // Get the sheet to be removed

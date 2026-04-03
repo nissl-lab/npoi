@@ -78,6 +78,13 @@ namespace NPOI.XSSF.UserModel
          */
         private readonly StylesTable _stylesSource;
 
+        private double? _cachedNumericValue;
+        private string _cachedNumericValueSource;
+        private IRichTextString _cachedRichTextValue;
+        private string _cachedRichTextValueSource;
+        private ST_CellType _cachedRichTextCellType;
+        private ICellStyle _cachedStyle;
+
         /**
          * Construct a XSSFCell.
          *
@@ -126,11 +133,44 @@ namespace NPOI.XSSF.UserModel
         }
 
         /**
-         * @return table of cell styles shared across this workbook
+         * @return table of cell styles shared across all cells in a workbook.
          */
         protected StylesTable GetStylesSource()
         {
             return _stylesSource;
+        }
+
+        private bool IsNumericCacheValid()
+        {
+            return _cachedNumericValue.HasValue && _cachedNumericValueSource == _cell.v;
+        }
+
+        private void InvalidateNumericCache()
+        {
+            _cachedNumericValue = null;
+            _cachedNumericValueSource = null;
+        }
+
+        private bool IsRichTextCacheValid()
+        {
+            ST_CellType? cellType = _cell.t;
+            return _cachedRichTextValue != null 
+                && _cachedRichTextValueSource == _cell.v 
+                && (_cachedRichTextCellType == cellType 
+                    || (cellType == null && _cachedRichTextCellType == default(ST_CellType)));
+        }
+
+        private void InvalidateRichTextCache()
+        {
+            _cachedRichTextValue = null;
+            _cachedRichTextValueSource = null;
+            _cachedRichTextCellType = default(ST_CellType);
+        }
+
+        private void InvalidateAllCaches()
+        {
+            InvalidateNumericCache();
+            InvalidateRichTextCache();
         }
 
         /**
@@ -199,6 +239,7 @@ namespace NPOI.XSSF.UserModel
         {
             _cell.t = (ST_CellType.b);
             _cell.v = (value ? TRUE_AS_STRING : FALSE_AS_STRING);
+            InvalidateAllCaches();
             return this;
         }
 
@@ -228,9 +269,13 @@ namespace NPOI.XSSF.UserModel
                         {
                             if (string.IsNullOrEmpty(_cell.v))
                                 return 0.0;
+                            if (IsNumericCacheValid())
+                                return _cachedNumericValue.Value;
                             try
                             {
-                                return Double.Parse(_cell.v, CultureInfo.InvariantCulture);
+                                _cachedNumericValue = Double.Parse(_cell.v, CultureInfo.InvariantCulture);
+                                _cachedNumericValueSource = _cell.v;
+                                return _cachedNumericValue.Value;
                             }
                             catch (FormatException)
                             {
@@ -260,14 +305,12 @@ namespace NPOI.XSSF.UserModel
             if (Double.IsInfinity(value))
             {
                 // Excel does not support positive/negative infInities,
-                // rather, it gives a #DIV/0! error in these cases.
+                // rather, it gives a #DIV/0! error in these case
                 _cell.t = (ST_CellType.e);
                 _cell.v = (FormulaError.DIV0.String);
             }
             else if (Double.IsNaN(value))
             {
-                // Excel does not support Not-a-Number (NaN),
-                // instead it immediately generates an #NUM! error.
                 _cell.t = (ST_CellType.e);
                 _cell.v = (FormulaError.NUM.String);
             }
@@ -277,6 +320,7 @@ namespace NPOI.XSSF.UserModel
                 _cell.v = (value.ToString(CultureInfo.InvariantCulture));
             }
 
+            InvalidateAllCaches();
             return this;
         }
 
@@ -308,6 +352,9 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
+                if (IsRichTextCacheValid())
+                    return _cachedRichTextValue;
+
                 CellType cellType = CellType;
                 XSSFRichTextString rt;
                 switch (cellType)
@@ -320,12 +367,10 @@ namespace NPOI.XSSF.UserModel
                         {
                             if (_cell.IsSetIs())
                             {
-                                //string is expressed directly in the cell defInition instead of implementing the shared string table.
                                 rt = new XSSFRichTextString(_cell.@is);
                             }
                             else if (_cell.IsSetV())
                             {
-                                //cached result of a formula
                                 rt = new XSSFRichTextString(_cell.v);
                             }
                             else
@@ -335,7 +380,6 @@ namespace NPOI.XSSF.UserModel
                         }
                         else if (_cell.t == ST_CellType.str)
                         {
-                            //cached formula value
                             rt = new XSSFRichTextString(_cell.IsSetV() ? _cell.v : "");
                         }
                         else
@@ -359,6 +403,9 @@ namespace NPOI.XSSF.UserModel
                         throw TypeMismatch(CellType.String, cellType, false);
                 }
                 rt.SetStylesTableReference(_stylesSource);
+                _cachedRichTextValue = rt;
+                _cachedRichTextValueSource = _cell.v;
+                _cachedRichTextCellType = _cell.t;
                 return rt;
             }
         }
@@ -428,6 +475,7 @@ namespace NPOI.XSSF.UserModel
                     break;
             }
 
+            InvalidateAllCaches();
             return this;
         }
 
@@ -608,6 +656,7 @@ namespace NPOI.XSSF.UserModel
             }
 
             if (_cell.IsSetV()) _cell.unsetV();
+            InvalidateAllCaches();
             return this;
         }
 
@@ -658,21 +707,30 @@ namespace NPOI.XSSF.UserModel
             }
         }
         /// <summary>
-        /// Return the cell's style.
+        /// Get the cell style. This is a reference to a cell style contained in the workbook
+        /// object. If there is no explicit cell style, the default style is returned.
+        /// cell has no style of its own. If no column default style is set, the row default style is checked.
+        /// This method has always fallen back to return the default style
+        /// if there is no other style to return.
         /// </summary>
         public ICellStyle CellStyle
         {
             get
             {
-                XSSFCellStyle style = null;
-                if ((null != _stylesSource) && (_stylesSource.NumCellStyles > 0))
+                XSSFCellStyle style = GetExplicitCellStyle();
+                if (style == null)
                 {
-                    long idx = _cell.IsSetS() ? _cell.s : 0;
-                    style = _stylesSource.GetStyleAt((int)idx);
+                    style = GetDefaultCellStyleFromColumn();
+                }
+                // Return default style at index 0 if no explicit or column style exists
+                // This matches HSSFCell behavior which always returns a non-null style
+                if (style == null && _stylesSource != null)
+                {
+                    style = _stylesSource.GetStyleAt(0);
                 }
                 return style;
             }
-            set 
+            set
             {
                 if (value == null)
                 {
@@ -688,6 +746,69 @@ namespace NPOI.XSSF.UserModel
                 }
             }
         }
+
+        private XSSFCellStyle GetExplicitCellStyle()
+        {
+            XSSFCellStyle style = null;
+            if (_stylesSource != null && _stylesSource.NumCellStyles > 0)
+            {
+                if (_cell.IsSetS())
+                {
+                    long idx = _cell.s;
+                    style = _stylesSource.GetStyleAt((int)idx);
+                }
+            }
+            return style;
+        }
+
+        private XSSFCellStyle GetDefaultCellStyleFromColumn()
+        {
+            XSSFCellStyle style = null;
+            XSSFSheet sheet = (XSSFSheet)Sheet;
+            if (sheet != null)
+            {
+                style = (XSSFCellStyle)sheet.GetColumnStyle(ColumnIndex);
+            }
+            return style;
+        }
+
+        internal void ApplyDefaultCellStyleIfNecessary()
+        {
+            XSSFCellStyle style = GetExplicitCellStyle();
+            if (style == null)
+            {
+                XSSFSheet sheet = (XSSFSheet)Sheet;
+                if (sheet != null)
+                {
+                    XSSFCellStyle defaultStyle = GetDefaultCellStyleFromColumn();
+                    if (defaultStyle != null)
+                    {
+                        CellStyle = defaultStyle;
+                    }
+                }
+            }
+        }
+        public ICellStyle Style
+        {
+            get
+            {
+                if (_cachedStyle == null)
+                {
+                    _cachedStyle = CellStyle;
+                    if (_cachedStyle == null)
+                    {
+                        _cachedStyle = _stylesSource.CreateCellStyle();
+                    }
+                }
+                return _cachedStyle;
+            }
+            set
+            {
+                _cachedStyle = value;
+                CellStyle = value;
+            }
+        }
+
         /// <summary>
         /// POI currently supports these formula types:
         /// <list type="bullet">
@@ -912,6 +1033,7 @@ namespace NPOI.XSSF.UserModel
         {
             _cell.t = ST_CellType.e;
             _cell.v = error.String;
+            InvalidateAllCaches();
             return this;
         }
 
@@ -1011,6 +1133,7 @@ namespace NPOI.XSSF.UserModel
                 _cell.unsetF();
             }
 
+            InvalidateAllCaches();
             return this;
         }
         /// <summary>

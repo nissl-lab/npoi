@@ -113,6 +113,12 @@ namespace NPOI.XWPF.UserModel
             "/word/theme/theme#.xml",
             typeof(XWPFTheme)
         );
+        public static XWPFRelation CHART = new XWPFRelation(
+            "application/vnd.openxmlformats-officedocument.drawingml.chart+xml",
+            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/chart",
+            "/word/charts/chart#.xml",
+           typeof(XWPFChart)
+        );
         public static XWPFRelation HYPERLINK = new XWPFRelation(
                 null,
                 "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink",
@@ -228,6 +234,18 @@ namespace NPOI.XWPF.UserModel
               typeof(XWPFPictureData)
         );
 
+        public static XWPFRelation WORKBOOK = new XWPFRelation(
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            POIXMLDocument.PACK_OBJECT_REL_TYPE,
+            "/word/embeddings/Microsoft_Excel_Worksheet#.xlsx",
+            typeof(XSSF.UserModel.XSSFWorkbook)
+        );
+        public static XWPFRelation CHART_SHEET = new XWPFRelation(
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+           POIXMLDocument.PACK_OBJECT_REL_TYPE,
+            "/word/embeddings/Microsoft_Excel_Worksheet#.xlsx",
+           typeof(XWPFChartData)
+        );
 
         private XWPFRelation(String type, String rel, String defaultName, Type cls)
             : base(type, rel, defaultName, cls)

@@ -38,6 +38,25 @@ namespace NPOI.XDDF.UserModel.Chart
 {
     public abstract class XDDFChart : POIXMLDocumentPart, ITextContainer
     {
+        /**
+        * default width of chart in emu
+        */
+        public const int DEFAULT_WIDTH = 500000;
+
+        /**
+         * default height of chart in emu
+         */
+        public const int DEFAULT_HEIGHT = 500000;
+
+        /**
+         * default x-coordinate  of chart in emu
+         */
+        public const int DEFAULT_X = 10;
+
+        /**
+         * default y-coordinate value of chart in emu
+         */
+        public const int DEFAULT_Y = 10;
         /// <summary>
         /// Underlying workbook
         /// </summary>
@@ -503,6 +522,8 @@ namespace NPOI.XDDF.UserModel.Chart
             CT_PlotArea plotArea = GetCTPlotArea();
             switch(type)
             {
+                case ChartTypes.AREA:
+                    return new XDDFAreaChartData<T, V>(plotArea.AddNewAreaChart(), categories, mapValues);
                 case ChartTypes.BAR:
                     return new XDDFBarChartData<T, V>(plotArea.AddNewBarChart(), categories, mapValues);
                 case ChartTypes.LINE:
@@ -643,10 +664,9 @@ namespace NPOI.XDDF.UserModel.Chart
         /// <remarks>
         /// @since POI 4.0.0
         /// </remarks>
-        private PackagePart CreateWorksheetPart(POIXMLRelation chartRelation, POIXMLRelation chartWorkbookRelation,
+        private PackagePart CreateWorksheetPart(POIXMLRelation chartWorkbookRelation,
             POIXMLFactory chartFactory)
         {
-
             PackageRelationship xlsx = CreateRelationshipInChart(chartWorkbookRelation, chartFactory, chartIndex);
             this.SetExternalId(xlsx.Id);
             return GetTargetPart(xlsx);
@@ -669,22 +689,25 @@ namespace NPOI.XDDF.UserModel.Chart
             PackagePart worksheetPart = GetWorksheetPart();
             if(worksheetPart == null)
             {
-                POIXMLRelation chartRelation = GetChartRelation();
                 POIXMLRelation chartWorkbookRelation = GetChartWorkbookRelation();
                 POIXMLFactory chartFactory = GetChartFactory();
-                if(chartRelation != null && chartWorkbookRelation != null && chartFactory != null)
+                if(chartWorkbookRelation != null && chartFactory != null)
                 {
-                    worksheetPart = CreateWorksheetPart(chartRelation, chartWorkbookRelation, chartFactory);
+                    worksheetPart = CreateWorksheetPart(chartWorkbookRelation, chartFactory);
                 }
                 else
                 {
                     throw new InvalidFormatException("unable to determine chart relations");
                 }
             }
-            using(Stream xlsOut = worksheetPart.GetOutputStream())
+            using(Stream xlsxOut = worksheetPart.GetOutputStream())
             {
                 SetWorksheetPartCommitted();
-                workbook.Write(xlsOut);
+                workbook.Write(xlsxOut);
+                using(Stream testOutput = File.Create("C:\\playground\\files\\workbook1.xlsx"))
+                {
+                    workbook.Write(testOutput);
+                }
             }
         }
 
@@ -810,11 +833,6 @@ namespace NPOI.XDDF.UserModel.Chart
         /// </summary>
         protected internal override void Commit()
         {
-            
-            //XmlOptions xmlOptions = new XmlOptions(DEFAULT_XML_OPTIONS);
-            //xmlOptions.SetSaveSyntheticDocumentElement(
-            //    new QName(CTChartSpace.type.Name.NamespaceURI, "chartSpace", "c"));
-
             if(workbook != null)
             {
                 try
@@ -828,9 +846,9 @@ namespace NPOI.XDDF.UserModel.Chart
             }
             
             PackagePart part = GetPackagePart();
-            using(Stream out1 = part.GetOutputStream())
+            using(Stream outputStream = part.GetOutputStream())
             {
-                new ChartSpaceDocument().Save(out1);
+                chartSpace.Save(outputStream);
             }
         }
 
@@ -853,8 +871,19 @@ namespace NPOI.XDDF.UserModel.Chart
             XSSFRow row = GetRow(sheet, 0);
             XSSFCell cell = GetCell(row, column);
             cell.SetCellValue(title);
-            UpdateSheetTable(sheet.GetTables()[0].GetCTTable(), title, column);
+            UpdateSheetTable(GetSheetTable(sheet), title, column);
             return new CellReference(sheet.SheetName, 0, column, true, true);
+        }
+
+        private static OpenXmlFormats.Spreadsheet.CT_Table GetSheetTable(XSSFSheet sheet)
+        {
+            if(sheet.GetTables().Count == 0)
+            {
+                XSSFTable newTable = sheet.CreateTable();
+                newTable.GetCTTable().AddNewTableColumns();
+                sheet.GetTables().Add(newTable);
+            }
+            return sheet.GetTables()[0].GetCTTable();
         }
 
         /// <summary>
@@ -874,7 +903,8 @@ namespace NPOI.XDDF.UserModel.Chart
         {
             CT_TableColumns tableColumnList = ctTable.tableColumns;
             CT_TableColumn column = null;
-            for(int i = 0; tableColumnList.count < index; i++)
+            int columnCount  = tableColumnList.tableColumn.Count-1;
+            for(int i = columnCount; i< index; i++)
             {
                 column = tableColumnList.AddNewTableColumn();
                 column.id = (uint) i;

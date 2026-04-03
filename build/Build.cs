@@ -8,9 +8,11 @@ using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tooling;
 using Nuke.Common.Tools.DotNet;
+using Nuke.Common.Tools.PowerShell;
 using Nuke.Common.Utilities.Collections;
 
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
+using static Nuke.Common.Tools.PowerShell.PowerShellTasks;
 
 partial class Build : NukeBuild
 {
@@ -20,7 +22,7 @@ partial class Build : NukeBuild
     ///   - Microsoft VisualStudio     https://nuke.build/visualstudio
     ///   - Microsoft VSCode           https://nuke.build/vscode
 
-    public static int Main () => Execute<Build>(x => x.Compile);
+    public static int Main() => Execute<Build>(x => x.Compile);
 
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
     readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
@@ -43,9 +45,7 @@ partial class Build : NukeBuild
 
     string VersionSuffix;
 
-    [Secret]
-    [Parameter("GitHub API token")]
-    readonly string GitHubToken;
+    [Secret] [Parameter("GitHub API token")] readonly string GitHubToken;
 
     protected override void OnBuildInitialized()
     {
@@ -53,7 +53,7 @@ partial class Build : NukeBuild
             ? $"preview-{DateTime.UtcNow:yyyyMMdd-HHmm}"
             : "";
 
-        if (IsLocalBuild)
+        if(IsLocalBuild)
         {
             VersionSuffix = $"dev-{DateTime.UtcNow:yyyyMMdd-HHmm}";
         }
@@ -96,7 +96,7 @@ partial class Build : NukeBuild
         .DependsOn(Restore)
         .Executes(() =>
         {
-            DotNetBuild(_ =>_
+            DotNetBuild(_ => _
                 .SetNoRestore(SucceededTargets.Contains(Restore))
                 .SetConfiguration(Configuration)
                 .SetDeterministic(IsServerBuild)
@@ -104,7 +104,7 @@ partial class Build : NukeBuild
                 .SetVerbosity(DotNetVerbosity.minimal)
                 // obsolete missing XML documentation comment, XML comment on not valid language element, XML comment has badly formed XML, no matching tag in XML comment
                 // need to use escaped separator in order for this to work
-                .AddProperty("NoWarn", string.Join("%3B", new [] { 169, 612, 618, 1591, 1587, 1570, 1572, 1573, 1574 }))
+                .AddProperty("NoWarn", string.Join("%3B", new[] { 169, 612, 618, 1591, 1587, 1570, 1572, 1573, 1574 }))
                 .SetProjectFile(Solution)
                 // ensure we don't generate too much output in CI run
                 // 0  Turns off emission of all warning messages
@@ -120,13 +120,14 @@ partial class Build : NukeBuild
         .DependsOn(Compile, InstallFonts)
         .Executes(() =>
         {
-            DotNetTest(_ =>_
+            DotNetTest(_ => _
                 .EnableNoBuild()
                 .EnableNoRestore()
                 .SetConfiguration(Configuration)
                 .SetProjectFile(Solution)
                 .When(_ => Host is GitHubActions, settings => settings.SetLoggers("GitHubActions"))
-                .When(_ => !RuntimeInformation.IsOSPlatform(OSPlatform.Windows), settings => settings.SetFramework("net8.0"))
+                .When(_ => !RuntimeInformation.IsOSPlatform(OSPlatform.Windows),
+                    settings => settings.SetFramework("net8.0"))
             );
         });
 
@@ -134,11 +135,13 @@ partial class Build : NukeBuild
         .OnlyWhenDynamic(() => RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && Host is GitHubActions)
         .Executes(() =>
         {
-            static void StartSudoProcess(string arguments) => ProcessTasks.StartProcess("sudo", arguments).WaitForExit();
+            static void StartSudoProcess(string arguments) =>
+                ProcessTasks.StartProcess("sudo", arguments).WaitForExit();
 
             // replace broken font - the one coming from APT doesn't contain all expected tables
             StartSudoProcess("rm /usr/share/fonts/truetype/noto/NotoColorEmoji.ttf");
-            StartSudoProcess("curl -sS -L -o /usr/share/fonts/truetype/noto/NotoColorEmoji-Regular.ttf https://fonts.gstatic.com/s/notocoloremoji/v25/Yq6P-KqIXTD0t4D9z1ESnKM3-HpFab5s79iz64w.ttf");
+            StartSudoProcess(
+                "curl -sS -L -o /usr/share/fonts/truetype/noto/NotoColorEmoji-Regular.ttf https://fonts.gstatic.com/s/notocoloremoji/v25/Yq6P-KqIXTD0t4D9z1ESnKM3-HpFab5s79iz64w.ttf");
         });
 
     Target Pack => _ => _
@@ -161,14 +164,15 @@ partial class Build : NukeBuild
                     .SetContinuousIntegrationBuild(IsServerBuild)
                     // obsolete missing XML documentation comment, XML comment on not valid language element, XML comment has badly formed XML, no matching tag in XML comment
                     // need to use escaped separator in order for this to work
-                    .AddProperty("NoWarn", string.Join("%3B", new[] { 169, 612, 618, 1591, 1587, 1570, 1572, 1573, 1574 }))
+                    .AddProperty("NoWarn",
+                        string.Join("%3B", new[] { 169, 612, 618, 1591, 1587, 1570, 1572, 1573, 1574 }))
                     .SetProperty("EnablePackageValidation", "false")
                     // ensure we don't generate too much output in CI run
                     // 0  Turns off emission of all warning messages
                     // 1  Displays severe warning messages
                     .SetWarningLevel(IsServerBuild ? 0 : 1);
 
-                if (IsPublishBuild)
+                if(IsPublishBuild)
                 {
                     // force version from tag/branch
                     packSettings = packSettings
@@ -181,5 +185,25 @@ partial class Build : NukeBuild
 
                 return packSettings;
             });
+        });
+
+    Target RemoveNpoiPackFromPackage => _ => 
+        _.DependsOn(Pack)
+        .Executes(() =>
+        {
+            var nupkg = ArtifactsDirectory.GlobFiles("*.nupkg").FirstOrDefault();
+            if(nupkg == null)
+            {
+                Serilog.Log.Warning("No nupkg found in {Dir}", ArtifactsDirectory);
+                return;
+            }
+
+            var scriptPath = RootDirectory / "build" / "RemovePackFromNupkg.ps1";
+
+            Serilog.Log.Information("Running {Script} on {Package}", scriptPath, nupkg);
+
+            PowerShell(settings => settings.SetExecutionPolicy("Bypass")
+                .SetFile(scriptPath)
+                .AddProcessAdditionalArguments($"-NupkgPath \"{nupkg}\""));
         });
 }

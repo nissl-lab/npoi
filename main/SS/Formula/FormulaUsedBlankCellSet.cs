@@ -15,14 +15,12 @@
    limitations under the License.
 ==================================================================== */
 
-using System.Collections.Generic;
-
 namespace NPOI.SS.Formula
 {
 
     using System;
     using System.Text;
-    using System.Collections;
+    using System.Collections.Generic;
     using NPOI.SS.Util;
 
     public class BookSheetKey
@@ -202,11 +200,11 @@ namespace NPOI.SS.Formula
             }
         }
 
-        private readonly Hashtable _sheetGroupsByBookSheet;
+        private readonly Dictionary<BookSheetKey, BlankCellSheetGroup> _sheetGroupsByBookSheet;
 
         public FormulaUsedBlankCellSet()
         {
-            _sheetGroupsByBookSheet = new Hashtable();
+            _sheetGroupsByBookSheet = new Dictionary<BookSheetKey, BlankCellSheetGroup>();
         }
 
         public void AddCell(IEvaluationWorkbook evalWorkbook, int bookIndex, int sheetIndex, int rowIndex, int columnIndex)
@@ -219,19 +217,17 @@ namespace NPOI.SS.Formula
         {
             BookSheetKey key = new BookSheetKey(bookIndex, sheetIndex);
 
-            BlankCellSheetGroup result = (BlankCellSheetGroup)_sheetGroupsByBookSheet[key];
-            if (result == null)
+            if (!_sheetGroupsByBookSheet.TryGetValue(key, out BlankCellSheetGroup result))
             {
                 result = new BlankCellSheetGroup(evalWorkbook.GetSheet(sheetIndex).LastRowNum);
-                _sheetGroupsByBookSheet[key]= result;
+                _sheetGroupsByBookSheet[key] = result;
             }
             return result;
         }
 
         public bool ContainsCell(BookSheetKey key, int rowIndex, int columnIndex)
         {
-            BlankCellSheetGroup bcsg = (BlankCellSheetGroup)_sheetGroupsByBookSheet[key];
-            if (bcsg == null)
+            if (!_sheetGroupsByBookSheet.TryGetValue(key, out BlankCellSheetGroup bcsg))
             {
                 return false;
             }

@@ -101,7 +101,7 @@ namespace NPOI.SS.Formula.Functions
 
         private abstract class ValueArray(int size) : ValueVector
         {
-            public ValueEval GetItem(int index)
+            public override ValueEval GetItem(int index)
             {
                 if(index < 0 || index > size)
                 {
@@ -113,7 +113,7 @@ namespace NPOI.SS.Formula.Functions
 
             protected abstract ValueEval GetItemInternal(int index);
 
-            public int Size => size;
+            public override int Size => size;
         }
 
         private sealed class SingleCellValueArray(ValueEval value) : ValueArray(1)

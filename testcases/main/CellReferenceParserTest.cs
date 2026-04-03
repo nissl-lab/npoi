@@ -1,10 +1,12 @@
 ﻿using System;
 using NPOI;
 using NPOI.SS.Util;
-using NUnit.Framework;using NUnit.Framework.Legacy;
+using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace TestCases;
 
+[TestFixture]
 public class CellReferenceParserTest
 {
     [TestCase("A", char.MinValue, "A", char.MinValue, "")]

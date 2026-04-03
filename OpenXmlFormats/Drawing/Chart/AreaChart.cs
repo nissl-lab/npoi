@@ -534,6 +534,44 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             this.valField = new CT_NumDataSource();
             return this.valField;
         }
+
+        public CT_SerTx AddNewTx()
+        {
+            this.txField = new CT_SerTx();
+            return txField;
+        }
+
+        public bool IsSetTx()
+        {
+            return this.txField != null;
+        }
+
+        public bool IsSetSpPr()
+        {
+            return this.spPrField != null;
+        }
+
+        public void UnsetSpPr()
+        {
+            this.spPrField = null;
+        }
+
+        public CT_ShapeProperties AddNewSpPr()
+        {
+            this.spPrField = new CT_ShapeProperties();
+            return this.spPrField;
+        }
+
+        public bool IsSetDLbls()
+        {
+            return this.dLblsField != null;
+        }
+
+        public CT_DLbls AddNewDLbls()
+        {
+            this.dLblsField = new CT_DLbls();
+            return this.dLblsField;
+        }
     }
 
     [Serializable]
@@ -560,7 +598,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
 
         public CT_AreaChart()
         {
-
+            this.varyColorsField = new CT_Boolean();
         }
         public static CT_AreaChart Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
@@ -748,6 +786,29 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             }
             this.serField.Add(newSer);
             return newSer;
+        }
+
+        public int SizeOfAxIdArray()
+        {
+            if(axIdField == null)
+                return 0;
+            return this.axIdField.Count;
+        }
+
+        public bool IsSetVaryColors()
+        {
+            return this.varyColorsField != null;
+        }
+
+        public CT_Grouping AddNewGrouping()
+        {
+            this.groupingField = new CT_Grouping();
+            return this.groupingField;
+        }
+        
+        public CT_UnsignedInt[] GetAxIdArray()
+        {
+            return [.. this.axIdField];
         }
     }
 }

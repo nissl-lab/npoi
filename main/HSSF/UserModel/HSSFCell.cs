@@ -64,6 +64,7 @@ namespace NPOI.HSSF.UserModel
         private HSSFSheet _sheet;
         private CellValueRecordInterface _record;
         private IComment comment;
+        private ICellStyle _cachedStyle;
 
 
         private const string FILE_FORMAT_NAME = "BIFF8";
@@ -1098,6 +1099,28 @@ namespace NPOI.HSSF.UserModel
                 _record.XFIndex = styleIndex;
             }
         }
+
+        public ICellStyle Style
+        {
+            get
+            {
+                if (_cachedStyle == null)
+                {
+                    _cachedStyle = CellStyle;
+                    if (_cachedStyle == null)
+                    {
+                        _cachedStyle = book.CreateCellStyle();
+                    }
+                }
+                return _cachedStyle;
+            }
+            set
+            {
+                _cachedStyle = value;
+                CellStyle = value;
+            }
+        }
+
         /**
  * Applying a user-defined style (UDS) is special. Excel does not directly reference user-defined styles, but
  * instead create a 'proxy' ExtendedFormatRecord referencing the UDS as parent.
