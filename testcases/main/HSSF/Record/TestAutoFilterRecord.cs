@@ -1,14 +1,26 @@
 ﻿using NUnit.Framework;
 using NPOI.HSSF.Record;
 using NPOI.HSSF.Record.AutoFilter;
+using NPOI.HSSF.UserModel;
+using NPOI.SS.UserModel;
 using NPOI.Util;
 using NUnit.Framework.Legacy;
+using System.IO;
 
 namespace TestCases.HSSF.Record
 {
     [TestFixture]
     public class TestAutoFilterRecord
     {
+        [Test]
+        public void TestCloneSheetWithMultibyteAutofilter()
+        {
+            using var wb = HSSFTestDataSamples.OpenSampleWorkbook("Book1.xls");
+            ISheet sheet = wb.CloneSheet(0);
+            using var ms = new MemoryStream();
+            wb.Write(ms);
+            Assert.Pass();
+        }
         private readonly byte[] recordData =
         [
             0x01, 0x00, // iEntry
