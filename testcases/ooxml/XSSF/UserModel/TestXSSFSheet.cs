@@ -557,7 +557,7 @@ namespace TestCases.XSSF.UserModel
 
             sheet.AutoSizeRow(row.RowNum);
 
-            ClassicAssert.Greater(row.Height, originalHeight, "Row height should increase for wrapped text");
+            ClassicAssert.GreaterOrEqual(row.Height, originalHeight * 2, "Row height should be at least 2x for wrapped text");
 
             workbook.Close();
         }
