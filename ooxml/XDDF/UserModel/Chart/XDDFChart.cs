@@ -391,6 +391,60 @@ namespace NPOI.XDDF.UserModel.Chart
             return new XDDFManualLayout(chart.plotArea);
         }
 
+        public XDDFView3D GetOrAddView3D()
+        {
+            if (chart.view3D == null)
+            {
+                chart.view3D = new CT_View3D();
+            }
+            return new XDDFView3D(chart.view3D);
+        }
+
+        private static CT_Area3DChart AddNewArea3DChart(CT_PlotArea plotArea)
+        {
+            CT_Area3DChart newChart = new CT_Area3DChart();
+            if (plotArea.area3DChart == null)
+                plotArea.area3DChart = [];
+            plotArea.area3DChart.Add(newChart);
+            return newChart;
+        }
+
+        private static CT_Bar3DChart AddNewBar3DChart(CT_PlotArea plotArea)
+        {
+            CT_Bar3DChart newChart = new CT_Bar3DChart();
+            if (plotArea.bar3DChart == null)
+                plotArea.bar3DChart = [];
+            plotArea.bar3DChart.Add(newChart);
+            return newChart;
+        }
+
+        private static CT_Line3DChart AddNewLine3DChart(CT_PlotArea plotArea)
+        {
+            CT_Line3DChart newChart = new CT_Line3DChart();
+            if (plotArea.line3DChart == null)
+                plotArea.line3DChart = [];
+            plotArea.line3DChart.Add(newChart);
+            return newChart;
+        }
+
+        private static CT_SurfaceChart AddNewSurfaceChart(CT_PlotArea plotArea)
+        {
+            CT_SurfaceChart newChart = new CT_SurfaceChart();
+            if (plotArea.surfaceChart == null)
+                plotArea.surfaceChart = [];
+            plotArea.surfaceChart.Add(newChart);
+            return newChart;
+        }
+
+        private static CT_Surface3DChart AddNewSurface3DChart(CT_PlotArea plotArea)
+        {
+            CT_Surface3DChart newChart = new CT_Surface3DChart();
+            if (plotArea.surface3DChart == null)
+                plotArea.surface3DChart = [];
+            plotArea.surface3DChart.Add(newChart);
+            return newChart;
+        }
+
         public void Plot<T, V>(XDDFChartData<T, V> data)
         {
             XSSFSheet sheet = GetSheet();
@@ -513,7 +567,7 @@ namespace NPOI.XDDF.UserModel.Chart
             Dictionary<long, XDDFChartAxis> categories = null;
             Dictionary<long, XDDFValueAxis> mapValues = null;
 
-            if(type!= ChartTypes.PIE)
+            if(type != ChartTypes.PIE && type != ChartTypes.PIE3D)
             {
                 categories =new Dictionary<long, XDDFChartAxis>() { { category.Id, category } };
                 mapValues= new Dictionary<long, XDDFValueAxis>() { { values.Id, values } };
@@ -524,16 +578,28 @@ namespace NPOI.XDDF.UserModel.Chart
             {
                 case ChartTypes.AREA:
                     return new XDDFAreaChartData<T, V>(plotArea.AddNewAreaChart(), categories, mapValues);
+                case ChartTypes.AREA3D:
+                    return new XDDFArea3DChartData<T, V>(AddNewArea3DChart(plotArea), categories, mapValues);
                 case ChartTypes.BAR:
                     return new XDDFBarChartData<T, V>(plotArea.AddNewBarChart(), categories, mapValues);
+                case ChartTypes.BAR3D:
+                    return new XDDFBar3DChartData<T, V>(AddNewBar3DChart(plotArea), categories, mapValues);
                 case ChartTypes.LINE:
                     return new XDDFLineChartData<T, V>(plotArea.AddNewLineChart(), categories, mapValues);
+                case ChartTypes.LINE3D:
+                    return new XDDFLine3DChartData<T, V>(AddNewLine3DChart(plotArea), categories, mapValues);
                 case ChartTypes.PIE:
                     return new XDDFPieChartData<T, V>(plotArea.AddNewPieChart());
+                case ChartTypes.PIE3D:
+                    return new XDDFPie3DChartData<T, V>(plotArea.AddNewPie3DChart());
                 case ChartTypes.RADAR:
                     return new XDDFRadarChartData<T, V>(plotArea.AddNewRadarChart(), categories, mapValues);
                 case ChartTypes.SCATTER:
                     return new XDDFScatterChartData<T, V>(plotArea.AddNewScatterChart(), categories, mapValues);
+                case ChartTypes.SURFACE:
+                    return new XDDFSurfaceChartData<T, V>(AddNewSurfaceChart(plotArea), categories, mapValues);
+                case ChartTypes.SURFACE3D:
+                    return new XDDFSurface3DChartData<T, V>(AddNewSurface3DChart(plotArea), categories, mapValues);
                 default:
                     return null;
             }

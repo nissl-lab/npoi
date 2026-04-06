@@ -273,6 +273,16 @@ namespace NPOI.XDDF.UserModel.Chart
             {
                 return series.val;
             }
+
+            public void UpdateIdXVal(long val)
+            {
+                series.idx.val = (uint)val;
+            }
+
+            public void UpdateOrderVal(long val)
+            {
+                series.order.val = (uint)val;
+            }
         }
     }
 }
