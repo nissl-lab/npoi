@@ -368,7 +368,7 @@ namespace NPOI.SS.Util
                 if (columnWidth > 0)
                 {
                     int defaultCharWidth = GetDefaultCharWidth(sheet.Workbook);
-                    double cellWidthPx = columnWidth * defaultCharWidth;
+                    double cellWidthPx = (columnWidth / 256.0) * defaultCharWidth;
                     double textWidth = GetTextWidth(stringValue, windowsFont);
                     if (textWidth > cellWidthPx)
                     {
