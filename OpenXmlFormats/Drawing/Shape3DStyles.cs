@@ -51,8 +51,7 @@ namespace NPOI.OpenXmlFormats.Dml {
             XmlHelper.WriteAttribute(sw, "h", this.h, true);
             if(this.prst != ST_BevelPresetType.circle)
                 XmlHelper.WriteAttribute(sw, "prst", this.prst.ToString());
-            sw.Write('>');
-            sw.WriteEndElement("a", nodeName);
+            sw.Write("/>");;
         }
 
         public CT_Bevel() {
@@ -196,7 +195,8 @@ namespace NPOI.OpenXmlFormats.Dml {
             XmlHelper.WriteAttribute(sw, "z", this.z);
             XmlHelper.WriteAttribute(sw, "extrusionH", this.extrusionH);
             XmlHelper.WriteAttribute(sw, "contourW", this.contourW);
-            XmlHelper.WriteAttribute(sw, "prstMaterial", this.prstMaterial.ToString());
+            if(this.prstMaterialField!= ST_PresetMaterialType.warmMatte)
+                XmlHelper.WriteAttribute(sw, "prstMaterial", this.prstMaterial.ToString());
             sw.Write('>');
             if (this.bevelT != null)
                 this.bevelT.Write(sw, "bevelT");

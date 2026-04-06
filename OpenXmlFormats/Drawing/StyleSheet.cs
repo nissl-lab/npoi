@@ -481,6 +481,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         public void Write(StreamWriter sw)
         {
+            sw.WriteLine("<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?>");
             sw.Write("<a:theme xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\"");
             XmlHelper.WriteAttribute(sw, "name", this.name);
             sw.Write('>');

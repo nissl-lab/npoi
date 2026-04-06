@@ -1,5 +1,6 @@
 ﻿using NPOI.OpenXmlFormats.Vml.Spreadsheet;
 using NPOI.OpenXmlFormats.Vml.Wordprocessing;
+using NPOI.OpenXmlFormats.Wordprocessing;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,6 +11,19 @@ namespace NPOI.OpenXmlFormats.Util
 {
     public static class XmlHelper
     {
+        public static bool ConvertSTOnOffToBoolean(ST_OnOff value)
+        {
+            if (value == ST_OnOff.True || value == ST_OnOff.on/* || value == ST_OnOff.X_1*/)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public static ST_OnOff ConvertBooleanToSTOnOff(bool value)
+        {
+            return (value ? ST_OnOff.True : ST_OnOff.False);
+        }
         public static ST_TrueFalseBlank ReadTrueFalseBlank(string attrValue)
         {
             if (string.IsNullOrEmpty(attrValue))
