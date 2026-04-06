@@ -240,10 +240,6 @@ namespace NPOI.XSSF.Model
         }
         private void ReadFromStreamViaXmlReader(Stream stream)
         {
-            _sstDoc = new SstDocument();
-            _sstDoc.AddNewSst();
-            CT_Sst sst = _sstDoc.GetSst();
-
             var settings = new XmlReaderSettings
             {
                 DtdProcessing = DtdProcessing.Prohibit,
@@ -366,7 +362,6 @@ namespace NPOI.XSSF.Model
                                 case "si":
                                     if (currentSi != null)
                                     {
-                                        sst.si.Add(currentSi);
                                         strings.Add(currentSi);
                                     }
                                     currentSi = null;
@@ -612,9 +607,8 @@ namespace NPOI.XSSF.Model
             }
 
             uniqueCount++;
-            //create a CT_Rst bean attached to this SstDocument and copy the argument CT_Rst into it
+            //create a CT_Rst bean and copy the argument CT_Rst into it
             CT_Rst newSt = new CT_Rst();
-            _sstDoc.GetSst().si.Add(newSt);
             newSt.Set(st);
             int idx = strings.Count;
             stmap[s] = idx;
@@ -687,10 +681,17 @@ namespace NPOI.XSSF.Model
         public void WriteTo(Stream out1)
         {
             EnsureLoaded();
-            CT_Sst sst = _sstDoc.GetSst();
-            sst.count = count;
-            sst.uniqueCount = uniqueCount;
-            _sstDoc.Save(out1);
+            var sw = new StreamWriter(out1, Encoding.UTF8);
+            sw.Write("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\" ?><sst xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\"");
+            sw.Write(" count=\"");
+            sw.Write(count);
+            sw.Write("\" uniqueCount=\"");
+            sw.Write(uniqueCount);
+            sw.Write("\">");
+            foreach (CT_Rst si in strings)
+                si.Write(sw, "si");
+            sw.Write("</sst>");
+            sw.Flush();
         }
 
         /// <summary>
