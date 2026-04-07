@@ -17,13 +17,24 @@ namespace NPOI.SS.Formula.Functions
         public static DataFormatter Formatter = new DataFormatter();
         public override ValueEval Evaluate(int srcRowIndex, int srcColumnIndex, ValueEval arg0, ValueEval arg1)
         {
-            if (arg0 is StringEval) return arg0;
-	    
-	    double s0;
+            ValueEval resolved;
+            try
+            {
+                resolved = OperandResolver.GetSingleValue(arg0, srcRowIndex, srcColumnIndex);
+            }
+            catch (EvaluationException e)
+            {
+                return e.GetErrorEval();
+            }
+
+            if (resolved is StringEval)
+                return resolved;
+
+            double s0;
             String s1;
             try
             {
-                s0 = TextFunction.EvaluateDoubleArg(arg0, srcRowIndex, srcColumnIndex);
+                s0 = OperandResolver.CoerceValueToDouble(resolved);
                 s1 = TextFunction.EvaluateStringArg(arg1, srcRowIndex, srcColumnIndex);
             }
             catch (EvaluationException e)
