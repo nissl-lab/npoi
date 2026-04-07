@@ -223,6 +223,14 @@ namespace NPOI.XSSF.Model
 
         internal static bool UseXmlReader { get; set; } = true;
 
+        /// <summary>
+        /// When <c>true</c> (default), <see cref="WriteTo"/> streams XML directly from the
+        /// <c>strings</c> list, bypassing <c>_sstDoc.Save()</c>.
+        /// Set to <c>false</c> to exercise the legacy write path (rebuild <c>sst.si</c> from
+        /// <c>strings</c> and delegate to <c>_sstDoc.Save()</c>) for performance comparison.
+        /// </summary>
+        internal static bool UseDirectWrite { get; set; } = true;
+
         public void ReadFromStreamViaXmlDocument(Stream is1)
         {
             try
@@ -681,17 +689,36 @@ namespace NPOI.XSSF.Model
         public void WriteTo(Stream out1)
         {
             EnsureLoaded();
-            var sw = new StreamWriter(out1, Encoding.UTF8);
-            sw.Write("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\" ?><sst xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\"");
-            sw.Write(" count=\"");
-            sw.Write(count);
-            sw.Write("\" uniqueCount=\"");
-            sw.Write(uniqueCount);
-            sw.Write("\">");
-            foreach (CT_Rst si in strings)
-                si.Write(sw, "si");
-            sw.Write("</sst>");
-            sw.Flush();
+            if (UseDirectWrite)
+            {
+                var sw = new StreamWriter(out1, Encoding.UTF8);
+                sw.Write("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\" ?><sst xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\"");
+                sw.Write(" count=\"");
+                sw.Write(count);
+                sw.Write("\" uniqueCount=\"");
+                sw.Write(uniqueCount);
+                sw.Write("\">");
+                foreach (CT_Rst si in strings)
+                    si.Write(sw, "si");
+                sw.Write("</sst>");
+                sw.Flush();
+            }
+            else
+            {
+                // Legacy path: rebuild sst.si from strings, then delegate to _sstDoc.Save()
+                if (_sstDoc == null)
+                {
+                    _sstDoc = new SstDocument();
+                    _sstDoc.AddNewSst();
+                }
+                CT_Sst sst = _sstDoc.GetSst();
+                sst.si.Clear();
+                foreach (CT_Rst s in strings)
+                    sst.si.Add(s);
+                sst.count = count;
+                sst.uniqueCount = uniqueCount;
+                _sstDoc.Save(out1);
+            }
         }
 
         /// <summary>
