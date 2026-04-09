@@ -94,6 +94,13 @@ namespace NPOI.SS.Util
             }
         }
 
+        /// <summary>
+        /// Controls whether the per-workbook style cache is used in
+        /// <see cref="SetCellStyleProperties"/>.  Defaults to <c>true</c>.
+        /// Set to <c>false</c> for benchmarking or diagnostic purposes only.
+        /// </summary>
+        public static bool UseStyleCache { get; set; } = true;
+
         private CellUtil()
         {
             // no instances of this class
@@ -449,36 +456,58 @@ namespace NPOI.SS.Util
         {
             IWorkbook workbook = cell.Sheet.Workbook;
             ICellStyle originalStyle = cell.CellStyle;
-            ICellStyle newStyle = null;
+
             Dictionary<string, object> values = GetFormatProperties(originalStyle);
             PutAll(properties, values);
 
-            // index seems like what index the cellstyle is in the list of styles for a workbook.
-            // not good to compare on!
-            int numberCellStyles = workbook.NumCellStyles;
+            ICellStyle newStyle;
 
-            for (int i = 0; i < numberCellStyles; i++)
+            if (UseStyleCache)
             {
-                ICellStyle wbStyle = workbook.GetCellStyleAt(i);
-                Dictionary<string, object> wbStyleMap = GetFormatProperties(wbStyle);
+                // O(1) cache-backed path.
+                StyleKey desiredKey = StyleKey.FromPropertyMap(values);
+                StyleCache cache = StyleCache.ForWorkbook(workbook);
 
-                // the desired style already exists in the workbook. Use the existing style.
-                if (DictionaryEqual(wbStyleMap, values, null))
+                if (cache.TryGet(in desiredKey, out newStyle))
                 {
-                    newStyle = wbStyle;
-                    break;
+                    cell.CellStyle = newStyle;   // cache hit — no allocation
+                    return;
                 }
-            }
 
-            // the desired style does not exist in the workbook. Create a new style with desired properties.
-            if (newStyle == null)
-            {
+                // Cache miss: materialise the ICellStyle only now.
                 newStyle = workbook.CreateCellStyle();
                 if (cloneExistingStyles)
                 {
                     newStyle.CloneStyleFrom(originalStyle);
                 }
                 SetFormatProperties(newStyle, workbook, values);
+                cache.Register(in desiredKey, newStyle);
+            }
+            else
+            {
+                // Legacy O(n) path: linear scan over all workbook styles.
+                newStyle = null;
+                int numberCellStyles = workbook.NumCellStyles;
+                for (int i = 0; i < numberCellStyles; i++)
+                {
+                    ICellStyle wbStyle = workbook.GetCellStyleAt(i);
+                    Dictionary<string, object> wbStyleMap = GetFormatProperties(wbStyle);
+                    if (DictionaryEqual(wbStyleMap, values, null))
+                    {
+                        newStyle = wbStyle;
+                        break;
+                    }
+                }
+
+                if (newStyle == null)
+                {
+                    newStyle = workbook.CreateCellStyle();
+                    if (cloneExistingStyles)
+                    {
+                        newStyle.CloneStyleFrom(originalStyle);
+                    }
+                    SetFormatProperties(newStyle, workbook, values);
+                }
             }
 
             cell.CellStyle = newStyle;
@@ -655,7 +684,7 @@ namespace NPOI.SS.Util
          * @param name property name
          * @return zero if the property does not exist, or is not a {@link Short}.
          */
-        private static short GetShort(Dictionary<String, Object> properties, String name)
+        internal static short GetShort(Dictionary<String, Object> properties, String name)
         {
             if (!properties.TryGetValue(name, out var value) || value == null)
             {
@@ -675,7 +704,7 @@ namespace NPOI.SS.Util
          * @return zero if the property does not exist, or is not a {@link Integer}
          *         otherwise the property value
          */
-        private static int GetInt(Dictionary<String, Object> properties, String name)
+        internal static int GetInt(Dictionary<String, Object> properties, String name)
         {
             if (!properties.TryGetValue(name, out var value))
             {
@@ -695,7 +724,7 @@ namespace NPOI.SS.Util
          * @param name property name
          * @return Border style if set, otherwise {@link BorderStyle#NONE}
          */
-        private static BorderStyle GetBorderStyle(Dictionary<String, Object> properties, String name)
+        internal static BorderStyle GetBorderStyle(Dictionary<String, Object> properties, String name)
         {
             if (!properties.TryGetValue(name, out var value))
             {
@@ -736,7 +765,7 @@ namespace NPOI.SS.Util
          * @return FillPattern style if set, otherwise {@link FillPattern#NO_FILL}
          * @since POI 3.15 beta 3
          */
-        private static FillPattern GetFillPattern(Dictionary<String, Object> properties, String name)
+        internal static FillPattern GetFillPattern(Dictionary<String, Object> properties, String name)
         {
             if (!properties.TryGetValue(name, out var value))
             {
@@ -776,7 +805,7 @@ namespace NPOI.SS.Util
          * @return HorizontalAlignment style if set, otherwise {@link HorizontalAlignment#GENERAL}
          * @since POI 3.15 beta 3
          */
-        private static HorizontalAlignment GetHorizontalAlignment(Dictionary<String, Object> properties, String name)
+        internal static HorizontalAlignment GetHorizontalAlignment(Dictionary<String, Object> properties, String name)
         {
             if (!properties.TryGetValue(name, out var value))
             {
@@ -816,7 +845,7 @@ namespace NPOI.SS.Util
          * @return VerticalAlignment style if set, otherwise {@link VerticalAlignment#BOTTOM}
          * @since POI 3.15 beta 3
          */
-        private static VerticalAlignment GetVerticalAlignment(Dictionary<String, Object> properties, String name)
+        internal static VerticalAlignment GetVerticalAlignment(Dictionary<String, Object> properties, String name)
         {
             if (!properties.TryGetValue(name, out var value))
             {
@@ -855,7 +884,7 @@ namespace NPOI.SS.Util
          * @param name property name
          * @return false if the property does not exist, or is not a {@link Boolean}.
          */
-        private static bool GetBoolean(Dictionary<String, Object> properties, String name)
+        internal static bool GetBoolean(Dictionary<String, Object> properties, String name)
         {
             if (!properties.TryGetValue(name, out var value) || value == null)
             {
