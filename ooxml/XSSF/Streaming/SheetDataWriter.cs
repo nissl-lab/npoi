@@ -48,12 +48,12 @@ namespace NPOI.XSSF.Streaming
          */
         private readonly SharedStringsTable _sharedStringSource;
         private readonly StreamWriter _out;
-
+        private static readonly Encoding Utf8WithoutBom = new UTF8Encoding(false);
         public SheetDataWriter()
         {
             TemporaryFileInfo = CreateTempFile();
             OutputStream = CreateWriter(TemporaryFileInfo);
-            _out = new StreamWriter(OutputStream, Encoding.UTF8, DefaultBufferSize);
+            _out = new StreamWriter(OutputStream, Utf8WithoutBom, DefaultBufferSize);
         }
         public SheetDataWriter(SharedStringsTable sharedStringsTable) : this()
         {
