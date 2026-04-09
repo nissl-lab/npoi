@@ -1047,7 +1047,7 @@ namespace NPOI.XSSF.Model
                 if ((font.IsBold == bold)
                         && font.Color == color
                         && font.FontHeight == fontHeight
-                        && font.FontName.Equals(name)
+                        && string.Equals(font.FontName, name, StringComparison.Ordinal)
                         && font.IsItalic == italic
                         && font.IsStrikeout == strikeout
                         && font.TypeOffset == typeOffset
@@ -1072,7 +1072,7 @@ namespace NPOI.XSSF.Model
                 if((font.IsBold == bold)
                         && font.GetXSSFColor().Equals(color)
                         && font.FontHeight == fontHeight
-                        && font.FontName.Equals(name)
+                        && string.Equals(font.FontName, name, StringComparison.Ordinal)
                         && font.IsItalic == italic
                         && font.IsStrikeout == strikeout
                         && font.TypeOffset == typeOffset
