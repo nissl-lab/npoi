@@ -470,7 +470,7 @@ namespace NPOI.SS.Util
 
                 if (cache.TryGet(in desiredKey, out newStyle))
                 {
-                    cell.CellStyle = newStyle;   // cache hit — no alloc
+                    cell.CellStyle = newStyle;   // cache hit — no allocation
                     return;
                 }
 
