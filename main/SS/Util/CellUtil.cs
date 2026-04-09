@@ -94,6 +94,13 @@ namespace NPOI.SS.Util
             }
         }
 
+        /// <summary>
+        /// Controls whether the per-workbook style cache is used in
+        /// <see cref="SetCellStyleProperties"/>.  Defaults to <c>true</c>.
+        /// Set to <c>false</c> for benchmarking or diagnostic purposes only.
+        /// </summary>
+        public static bool UseStyleCache { get; set; } = true;
+
         private CellUtil()
         {
             // no instances of this class
@@ -453,24 +460,56 @@ namespace NPOI.SS.Util
             Dictionary<string, object> values = GetFormatProperties(originalStyle);
             PutAll(properties, values);
 
-            // Zero-alloc key: no ICellStyle created yet.
-            StyleKey desiredKey = StyleKey.FromPropertyMap(values);
-            StyleCache cache = StyleCache.ForWorkbook(workbook);
+            ICellStyle newStyle;
 
-            if (cache.TryGet(in desiredKey, out ICellStyle newStyle))
+            if (UseStyleCache)
             {
-                cell.CellStyle = newStyle;   // O(1), no alloc
-                return;
+                // O(1) cache-backed path.
+                StyleKey desiredKey = StyleKey.FromPropertyMap(values);
+                StyleCache cache = StyleCache.ForWorkbook(workbook);
+
+                if (cache.TryGet(in desiredKey, out newStyle))
+                {
+                    cell.CellStyle = newStyle;   // cache hit — no alloc
+                    return;
+                }
+
+                // Cache miss: materialise the ICellStyle only now.
+                newStyle = workbook.CreateCellStyle();
+                if (cloneExistingStyles)
+                {
+                    newStyle.CloneStyleFrom(originalStyle);
+                }
+                SetFormatProperties(newStyle, workbook, values);
+                cache.Register(in desiredKey, newStyle);
+            }
+            else
+            {
+                // Legacy O(n) path: linear scan over all workbook styles.
+                newStyle = null;
+                int numberCellStyles = workbook.NumCellStyles;
+                for (int i = 0; i < numberCellStyles; i++)
+                {
+                    ICellStyle wbStyle = workbook.GetCellStyleAt(i);
+                    Dictionary<string, object> wbStyleMap = GetFormatProperties(wbStyle);
+                    if (DictionaryEqual(wbStyleMap, values, null))
+                    {
+                        newStyle = wbStyle;
+                        break;
+                    }
+                }
+
+                if (newStyle == null)
+                {
+                    newStyle = workbook.CreateCellStyle();
+                    if (cloneExistingStyles)
+                    {
+                        newStyle.CloneStyleFrom(originalStyle);
+                    }
+                    SetFormatProperties(newStyle, workbook, values);
+                }
             }
 
-            // Cache miss: materialise the ICellStyle only now.
-            newStyle = workbook.CreateCellStyle();
-            if (cloneExistingStyles)
-            {
-                newStyle.CloneStyleFrom(originalStyle);
-            }
-            SetFormatProperties(newStyle, workbook, values);
-            cache.Register(in desiredKey, newStyle);
             cell.CellStyle = newStyle;
         }
         public static bool DictionaryEqual<TKey, TValue>(IDictionary<TKey, TValue> first, 
