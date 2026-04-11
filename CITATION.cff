@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: "Qu"
+  given-names: "Jie"
+  orcid: "https://orcid.org/0009-0007-4740-9734" 
+title: "NPOI: A .NET library that can read/write Office formats"
+version: 2.8.0
+date-released: 2008-09
+url: "https://github.com/nissl-lab/npoi"
