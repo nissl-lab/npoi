@@ -5,6 +5,6 @@ authors:
   given-names: "Tony"
   orcid: "https://orcid.org/0009-0007-4740-9734" 
 title: "NPOI: A .NET library that can read/write Office formats"
-version: 2.8.0
-date-released: 2008-09
+version: 2.7.6
+date-released: 2026-02-27
 url: "https://github.com/nissl-lab/npoi"
