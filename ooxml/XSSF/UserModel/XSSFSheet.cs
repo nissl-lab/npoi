@@ -1950,6 +1950,13 @@ namespace NPOI.XSSF.UserModel
             AutoSizeColumn(column, false);
         }
 
+        /// <inheritdoc />
+        public void AutoSizeColumn(int column, int maxRows)
+        {
+            EnsureWorksheetLoaded();
+            AutoSizeColumn(column, false, maxRows);
+        }
+
         /// <summary>
         /// Adjusts the column width to fit the contents.
         /// This Process can be relatively slow on large sheets, so this should

@@ -718,6 +718,15 @@ namespace NPOI.SS.UserModel
         void AutoSizeColumn(int column, bool useMergedCells, int maxRows = 0);
 
         /// <summary>
+        /// Adjusts the column width to fit the contents, sampling only the first <paramref name="maxRows"/> rows.
+        /// This is significantly faster than scanning the entire sheet on large datasets.
+        /// Merged cells are ignored. Use <see cref="AutoSizeColumn(int, bool, int)"/> to include them.
+        /// </summary>
+        /// <param name="column">the column index</param>
+        /// <param name="maxRows">maximum number of rows to sample (0 = all rows)</param>
+        void AutoSizeColumn(int column, int maxRows);
+
+        /// <summary>
         /// Adjusts the row height to fit the contents.
         /// </summary>
         /// <param name="row">the row index</param>
