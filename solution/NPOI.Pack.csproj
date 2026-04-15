@@ -27,7 +27,8 @@
     <PackageReference Include="SharpZipLib" />
     <PackageReference Include="SkiaSharp" ExcludeAssets="runtime" />
     <PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" ExcludeAssets="runtime" />
-    <PackageReference Include="System.Security.Cryptography.Xml" />
+    <PackageReference Include="System.Security.Cryptography.Xml" Condition="'$(TargetFramework)' != 'net10.0'" />
+    <PackageReference Include="System.Security.Cryptography.Xml" VersionOverride="10.0.6" Condition="'$(TargetFramework)' == 'net10.0'" />
     <PackageReference Include="System.Text.Encoding.CodePages" />
     <PackageReference Include="ZString" />
   </ItemGroup>

@@ -30,7 +30,8 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" />
     <PackageReference Include="SkiaSharp" PrivateAssets="all" Pack="false"/>
-    <PackageReference Include="System.Security.Cryptography.Xml" />
+    <PackageReference Include="System.Security.Cryptography.Xml" Condition="'$(TargetFramework)' != 'net10.0'" />
+    <PackageReference Include="System.Security.Cryptography.Xml" VersionOverride="10.0.6" Condition="'$(TargetFramework)' == 'net10.0'" />
   </ItemGroup>
 
   <ItemGroup>
