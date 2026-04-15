@@ -2548,8 +2548,14 @@ namespace TestCases.XSSF.UserModel
             XSSFWorkbook wb = new XSSFWorkbook();
             XSSFSheet sheet = wb.CreateSheet() as XSSFSheet;
             XSSFSheet.EnableLazyLoading = false;
-
-            Assert.Throws<POIXMLException>(() => { sheet.OnDocumentRead(); });
+            try
+            {
+                Assert.Throws<POIXMLException>(() => { sheet.OnDocumentRead(); });
+            }
+            finally
+            {
+                XSSFSheet.EnableLazyLoading = true;
+            }
 
             wb.Close();
         }

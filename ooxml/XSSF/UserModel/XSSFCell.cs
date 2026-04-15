@@ -750,9 +750,9 @@ namespace NPOI.XSSF.UserModel
         private XSSFCellStyle GetExplicitCellStyle()
         {
             XSSFCellStyle style = null;
-            if (_stylesSource != null && _stylesSource.NumCellStyles > 0)
+            if (_stylesSource != null && _cell.IsSetS())
             {
-                if (_cell.IsSetS())
+                if (_stylesSource.NumCellStyles > 0)
                 {
                     long idx = _cell.s;
                     style = _stylesSource.GetStyleAt((int)idx);
@@ -781,7 +781,7 @@ namespace NPOI.XSSF.UserModel
                 if (sheet != null)
                 {
                     XSSFCellStyle defaultStyle = GetDefaultCellStyleFromColumn();
-                    if (defaultStyle != null)
+                    if (defaultStyle != null && defaultStyle.Index != 0)
                     {
                         CellStyle = defaultStyle;
                     }
