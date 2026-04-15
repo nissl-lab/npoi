@@ -33,13 +33,13 @@ namespace NPOI.XDDF.UserModel
             return props;
         }
 
-        public int? Angle
+        public double? Angle
         {
             get
             {
                 if(props.angSpecified)
                 {
-                    return props.ang;
+                    return Angles.AttributeToDegrees(props.ang);
                 }
                 else
                 {
@@ -54,7 +54,11 @@ namespace NPOI.XDDF.UserModel
                 }
                 else
                 {
-                    props.ang = value.Value;
+                    if(value < 0.0 || 360.0 <= value)
+                    {
+                        throw new System.ArgumentException("angle must be in the range [0, 360).");
+                    }
+                    props.ang = Angles.DegreesToAttribute(value.Value);
                 }
             }
         }
