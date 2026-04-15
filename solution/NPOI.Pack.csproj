@@ -8,7 +8,6 @@
     <OutputPath>..\solution\$(Configuration)\</OutputPath>
     <PublishPath>..\publish\</PublishPath>  
     <IncludeAllProjectOutputsInPackage>false</IncludeAllProjectOutputsInPackage>
-    <Version>$(VersionPrefix)</Version>
   </PropertyGroup>
 
   <ItemGroup>
