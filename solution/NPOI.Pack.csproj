@@ -27,6 +27,7 @@
     <PackageReference Include="SharpZipLib" />
     <PackageReference Include="SkiaSharp" ExcludeAssets="runtime" />
     <PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" ExcludeAssets="runtime" />
+    <PackageReference Include="System.Security.Cryptography.Xml" />
     <PackageReference Include="System.Text.Encoding.CodePages" />
     <PackageReference Include="ZString" />
   </ItemGroup>
