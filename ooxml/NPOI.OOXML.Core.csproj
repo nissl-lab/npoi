@@ -7,6 +7,7 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>../npoi.snk</AssemblyOriginatorKeyFile>
     <OutputPath>..\solution\$(Configuration)\</OutputPath>
+    <Version>$(VersionPrefix)</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
