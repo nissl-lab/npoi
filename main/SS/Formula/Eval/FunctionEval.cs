@@ -238,9 +238,9 @@ namespace NPOI.SS.Formula.Eval
             retval[139] = new NotImplementedFunction("FPOS"); // FPOS
             retval[140] = new DateValue(); // DATEVALUE
             retval[141] = new NotImplementedFunction("TIMEVALUE"); // TIMEVALUE
-            retval[142] = new NotImplementedFunction("SLN"); // SLN
-            retval[143] = new NotImplementedFunction("SYD"); // SYD
-            retval[144] = new NotImplementedFunction("DDB"); // DDB
+            retval[142] = new Sln(); // SLN
+            retval[143] = new Syd(); // SYD
+            retval[144] = new Ddb(); // DDB
             retval[145] = new NotImplementedFunction("GetDEF"); // GetDEF
             retval[146] = new NotImplementedFunction("REFTEXT"); // REFTEXT
             retval[147] = new NotImplementedFunction("TEXTREF"); // TEXTREF
@@ -310,7 +310,7 @@ namespace NPOI.SS.Formula.Eval
             retval[219] = new Address(); // AddRESS
             retval[220] = new Days360(); // DAYS360
             retval[221] = new Today(); // TODAY
-            retval[222] = new NotImplementedFunction("VDB"); // VDB-
+            retval[222] = new Vdb(); // VDB
             retval[227] = AggregateFunction.MEDIAN; // MEDIAN
             retval[228] = new Sumproduct(); // SUMPRODUCT
             retval[229] = NumericFunction.SINH; // SINH
@@ -331,7 +331,7 @@ namespace NPOI.SS.Formula.Eval
             retval[244] = new NotImplementedFunction("INFO"); // INFO
             retval[245] = new NotImplementedFunction("GROUP"); // GROUP
             retval[246] = new NotImplementedFunction("GetOBJECT"); // GetOBJECT
-            retval[247] = new NotImplementedFunction("DB"); // DB
+            retval[247] = new Db(); // DB
             retval[248] = new NotImplementedFunction("PAUSE"); // PAUSE
             retval[250] = new NotImplementedFunction("RESUME"); // RESUME
             retval[252] = Frequency.Instance; // FREQUENCY

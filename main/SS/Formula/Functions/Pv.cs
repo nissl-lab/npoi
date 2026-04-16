@@ -20,13 +20,13 @@
  */
 namespace NPOI.SS.Formula.Functions
 {
+    using EFF = Excel.FinancialFunctions;
 
     public class Pv : FinanceFunction
     {
-
-        public override double Evaluate(double rate, double arg1, double arg2, double arg3, bool type)
+        public override double Evaluate(double rate, double nper, double pmt, double fv, bool type)
         {
-            return FinanceLib.pv(rate, arg1, arg2, arg3, type);
+            return EFF.Financial.Pv(rate, nper, pmt, fv, FinancialHelper.ToPaymentDue(type ? 1.0 : 0.0));
         }
     }
 }
