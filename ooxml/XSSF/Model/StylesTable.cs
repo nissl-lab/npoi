@@ -569,11 +569,11 @@ namespace NPOI.XSSF.Model
         public int PutStyle(XSSFCellStyle style)
         {
             EnsureLoaded();
-            MarkTouched();
             CT_Xf mainXF = style.GetCoreXf();
 
             if (!xfs.Contains(mainXF))
             {
+                MarkTouched();
                 xfs.Add(mainXF);
             }
             return xfs.IndexOf(mainXF);

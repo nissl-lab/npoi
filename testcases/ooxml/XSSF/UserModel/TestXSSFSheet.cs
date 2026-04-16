@@ -2547,11 +2547,17 @@ namespace TestCases.XSSF.UserModel
             // OnDocumentRead() on it is simply a no-op (no exception thrown).
             XSSFWorkbook wb = new XSSFWorkbook();
             XSSFSheet sheet = wb.CreateSheet() as XSSFSheet;
+            bool originalLazy = XSSFSheet.EnableLazyLoading;
             XSSFSheet.EnableLazyLoading = false;
-
-            Assert.Throws<POIXMLException>(() => { sheet.OnDocumentRead(); });
-
-            wb.Close();
+            try
+            {
+                Assert.Throws<POIXMLException>(() => { sheet.OnDocumentRead(); });
+            }
+            finally
+            {
+                XSSFSheet.EnableLazyLoading = originalLazy;
+                wb.Close();
+            }
         }
         /** 
          * This would be better off as a testable example rather than a simple unit test
