@@ -19,32 +19,25 @@
 
 namespace NPOI.SS.Formula.Functions
 {
+    using EFF = Excel.FinancialFunctions;
     using NPOI.SS.Formula.Eval;
 
     public class IPMT : NumericFunction
     {
         protected override double Eval(ValueEval[] args, int srcCellRow, int srcCellCol)
         {
-
-            if (args.Length != 4)
+            if (args.Length < 4 || args.Length > 6)
                 throw new EvaluationException(ErrorEval.VALUE_INVALID);
 
-            double result;
+            double rate = FinancialHelper.GetDoubleArg(args, 0, srcCellRow, srcCellCol);
+            double per = FinancialHelper.GetDoubleArg(args, 1, srcCellRow, srcCellCol);
+            double nper = FinancialHelper.GetDoubleArg(args, 2, srcCellRow, srcCellCol);
+            double pv = FinancialHelper.GetDoubleArg(args, 3, srcCellRow, srcCellCol);
+            double fv = FinancialHelper.GetDoubleArg(args, 4, srcCellRow, srcCellCol, 0.0);
+            double type = FinancialHelper.GetDoubleArg(args, 5, srcCellRow, srcCellCol, 0.0);
 
-            ValueEval v1 = OperandResolver.GetSingleValue(args[0], srcCellRow, srcCellCol);
-            ValueEval v2 = OperandResolver.GetSingleValue(args[1], srcCellRow, srcCellCol);
-            ValueEval v3 = OperandResolver.GetSingleValue(args[2], srcCellRow, srcCellCol);
-            ValueEval v4 = OperandResolver.GetSingleValue(args[3], srcCellRow, srcCellCol);
-
-            double interestRate = OperandResolver.CoerceValueToDouble(v1);
-            int period = OperandResolver.CoerceValueToInt(v2);
-            int numberPayments = OperandResolver.CoerceValueToInt(v3);
-            double PV = OperandResolver.CoerceValueToDouble(v4);
-
-            result = Finance.IPMT(interestRate, period, numberPayments, PV);
-
+            double result = EFF.Financial.IPmt(rate, per, nper, pv, fv, FinancialHelper.ToPaymentDue(type));
             CheckValue(result);
-
             return result;
         }
     }

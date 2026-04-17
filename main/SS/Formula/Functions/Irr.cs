@@ -18,6 +18,7 @@
 namespace NPOI.SS.Formula.Functions
 {
     using System;
+    using EFF = Excel.FinancialFunctions;
     using NPOI.SS.Formula.Eval;
 
     /// <summary>
@@ -61,79 +62,21 @@ namespace NPOI.SS.Formula.Functions
             }
         }
 
-        /**
-         * Computes the internal rate of return using an estimated irr of 10 percent.
-         *
-         * @param income the income values.
-         * @return the irr.
-         */
         public static double irr(double[] income)
         {
             return irr(income, 0.1d);
         }
 
-
-        /**
-         * Calculates IRR using the Newton-Raphson Method.
-         * <p>
-         * Starting with the guess, the method cycles through the calculation until the result
-         * is accurate within 0.00001 percent. If IRR can't find a result that works
-         * after 20 tries, the Double.NaN is returned.
-         * </p>
-         * <p>
-         *   The implementation is inspired by the NewtonSolver from the Apache Commons-Math library,
-         *   @see <a href="http://commons.apache.org">http://commons.apache.org</a>
-         * </p>
-         *
-         * @param values        the income values.
-         * @param guess         the initial guess of irr.
-         * @return the irr value. The method returns <code>Double.NaN</code>
-         *  if the maximum iteration count is exceeded
-         *
-         * @see <a href="http://en.wikipedia.org/wiki/Internal_rate_of_return#Numerical_solution">
-         *     http://en.wikipedia.org/wiki/Internal_rate_of_return#Numerical_solution</a>
-         * @see <a href="http://en.wikipedia.org/wiki/Newton%27s_method">
-         *     http://en.wikipedia.org/wiki/Newton%27s_method</a>
-         */
         public static double irr(double[] values, double guess)
         {
-            int maxIterationCount = 20;
-            double absoluteAccuracy = 1E-7;
-
-            double x0 = guess;
-            double x1;
-
-            int i = 0;
-            while (i < maxIterationCount)
+            try
             {
-
-                // the value of the function (NPV) and its derivate can be calculated in the same loop
-                double factor = 1.0 + x0;
-                int k = 0;
-                double fValue = values[k];
-
-                double fDerivative = 0;
-                for (double denominator = factor; ++k < values.Length;)
-                {
-                    double value = values[k];
-                    fValue += value / denominator;
-                    denominator *= factor;
-                    fDerivative -= k * value / denominator;
-                }
-
-                // the essense of the Newton-Raphson Method
-                x1 = x0 - fValue / fDerivative;
-
-                if (Math.Abs(x1 - x0) <= absoluteAccuracy)
-                {
-                    return x1;
-                }
-
-                x0 = x1;
-                ++i;
+                return EFF.Financial.Irr(values, guess);
             }
-            // maximum number of iterations is exceeded
-            return Double.NaN;
+            catch
+            {
+                return double.NaN;
+            }
         }
     }
 }
