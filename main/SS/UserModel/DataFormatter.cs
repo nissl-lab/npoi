@@ -1085,7 +1085,7 @@ namespace NPOI.SS.UserModel
             }
             else
             {
-                result = numberFormat.Format(BigDecimal.Parse(textValue));
+                result = numberFormat.Format(BigDecimal.Parse(textValue, System.Globalization.CultureInfo.InvariantCulture));
             }
             // Complete scientific notation by adding the missing +.
             if (result.Contains('E') && !result.Contains("E-"))
