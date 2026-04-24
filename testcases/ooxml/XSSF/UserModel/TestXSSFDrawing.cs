@@ -447,7 +447,7 @@ namespace TestCases.XSSF.UserModel
 
             // second run properties        
             ClassicAssert.AreEqual("Rich Text", runs[1].Text);
-            ClassicAssert.AreEqual(XSSFFont.DEFAULT_FONT_NAME, runs[1].FontFamily);
+            ClassicAssert.IsNull(runs[1].FontFamily);
 
             clr = runs[1].FontColor;
             ClassicAssert.IsTrue(Arrays.Equals(
