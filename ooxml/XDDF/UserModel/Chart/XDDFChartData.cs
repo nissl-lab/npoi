@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using NPOI.SS.Util;
 using NPOI.OpenXmlFormats.Dml.Chart;
 
@@ -342,9 +343,12 @@ namespace NPOI.XDDF.UserModel.Chart
                 }
                 for(int i = 0; i < numOfPoints; ++i)
                 {
-                    string value = data.GetPointAt(i).ToString();
-                    if(value != null)
+                    object val = data.GetPointAt(i);
+                    if (val != null)
                     {
+                        // OpenXML numeric values must be culture-invariant (using '.' as decimal separator).
+                        // Since val is object, we check for IConvertible to use the culture-aware ToString overload.
+                        string value = (val is IConvertible convertible) ? convertible.ToString(CultureInfo.InvariantCulture) : val.ToString();
                         CT_StrVal ctStrVal = cache.AddNewPt();
                         ctStrVal.idx = (uint)i;
                         ctStrVal.v = value;
@@ -382,7 +386,9 @@ namespace NPOI.XDDF.UserModel.Chart
                     {
                         CT_NumVal ctNumVal = cache.AddNewPt();
                         ctNumVal.idx = (uint)i;
-                        ctNumVal.v = value.ToString();
+                        // OpenXML numeric values must be culture-invariant (using '.' as decimal separator).
+                        // Since value is object, we check for IConvertible to use the culture-aware ToString overload.
+                        ctNumVal.v = (value is IConvertible convertible) ? convertible.ToString(CultureInfo.InvariantCulture) : value.ToString();
                     }
                 }
             }

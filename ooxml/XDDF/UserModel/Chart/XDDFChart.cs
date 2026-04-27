@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 
 using NPOI.Openxml4Net.Exceptions;
@@ -824,7 +825,11 @@ namespace NPOI.XDDF.UserModel.Chart
             for(int i = 0; i < numOfPoints; i++)
             {
                 XSSFRow row = GetRow(sheet, i + 1); // first row is for title
-                GetCell(row, categoryData.ColIndex).SetCellValue(categoryData.GetPointAt(i).ToString());
+                object val = categoryData.GetPointAt(i);
+                // OpenXML numeric values must be culture-invariant (using '.' as decimal separator).
+                // Since val is object, we check for IConvertible to use the culture-aware ToString overload.
+                string value = (val is IConvertible convertible) ? convertible.ToString(CultureInfo.InvariantCulture) : val?.ToString();
+                GetCell(row, categoryData.ColIndex).SetCellValue(value);
                 GetCell(row, valuesData.ColIndex).SetCellValue(Convert.ToDouble(valuesData.GetPointAt(i)));
             }
         }
