@@ -826,10 +826,21 @@ namespace NPOI.XDDF.UserModel.Chart
             {
                 XSSFRow row = GetRow(sheet, i + 1); // first row is for title
                 object val = categoryData.GetPointAt(i);
-                // OpenXML numeric values must be culture-invariant (using '.' as decimal separator).
-                // Since val is object, we check for IConvertible to use the culture-aware ToString overload.
-                string value = (val is IConvertible convertible) ? convertible.ToString(CultureInfo.InvariantCulture) : val?.ToString();
-                GetCell(row, categoryData.ColIndex).SetCellValue(value);
+                var categoryCell = GetCell(row, categoryData.ColIndex);
+
+                // If the value is numeric, write it as a numeric cell (double).
+                // This lets Excel handle the culture-sensitive display while 
+                // keeping the underlying data numeric.
+                // TypeCode 5 (SByte) through 15 (Decimal) are the numeric types.
+                if (val is IConvertible conv && conv.GetTypeCode() >= TypeCode.SByte && conv.GetTypeCode() <= TypeCode.Decimal)
+                {
+                    categoryCell.SetCellValue(conv.ToDouble(CultureInfo.InvariantCulture));
+                }
+                else
+                {
+                    categoryCell.SetCellValue(val?.ToString());
+                }
+
                 GetCell(row, valuesData.ColIndex).SetCellValue(Convert.ToDouble(valuesData.GetPointAt(i)));
             }
         }

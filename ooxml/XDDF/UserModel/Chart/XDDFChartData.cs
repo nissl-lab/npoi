@@ -343,12 +343,9 @@ namespace NPOI.XDDF.UserModel.Chart
                 }
                 for(int i = 0; i < numOfPoints; ++i)
                 {
-                    object val = data.GetPointAt(i);
-                    if (val != null)
+                    string value = data.GetPointAt(i).ToString();
+                    if(value != null)
                     {
-                        // OpenXML numeric values must be culture-invariant (using '.' as decimal separator).
-                        // Since val is object, we check for IConvertible to use the culture-aware ToString overload.
-                        string value = (val is IConvertible convertible) ? convertible.ToString(CultureInfo.InvariantCulture) : val.ToString();
                         CT_StrVal ctStrVal = cache.AddNewPt();
                         ctStrVal.idx = (uint)i;
                         ctStrVal.v = value;
@@ -388,7 +385,10 @@ namespace NPOI.XDDF.UserModel.Chart
                         ctNumVal.idx = (uint)i;
                         // OpenXML numeric values must be culture-invariant (using '.' as decimal separator).
                         // Since value is object, we check for IConvertible to use the culture-aware ToString overload.
-                        ctNumVal.v = (value is IConvertible convertible) ? convertible.ToString(CultureInfo.InvariantCulture) : value.ToString();
+                        // TypeCode 5 (SByte) through 15 (Decimal) are the numeric types.
+                        ctNumVal.v = (value is IConvertible conv && conv.GetTypeCode() >= TypeCode.SByte && conv.GetTypeCode() <= TypeCode.Decimal) 
+                            ? conv.ToString(CultureInfo.InvariantCulture) 
+                            : value.ToString();
                     }
                 }
             }
