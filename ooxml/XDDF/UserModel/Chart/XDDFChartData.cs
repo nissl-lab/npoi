@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using NPOI.SS.Util;
 using NPOI.OpenXmlFormats.Dml.Chart;
 
@@ -382,7 +383,12 @@ namespace NPOI.XDDF.UserModel.Chart
                     {
                         CT_NumVal ctNumVal = cache.AddNewPt();
                         ctNumVal.idx = (uint)i;
-                        ctNumVal.v = value.ToString();
+                        // OpenXML numeric values must be culture-invariant (using '.' as decimal separator).
+                        // Since value is object, we check for IConvertible to use the culture-aware ToString overload.
+                        // TypeCode 5 (SByte) through 15 (Decimal) are the numeric types.
+                        ctNumVal.v = (value is IConvertible conv && conv.GetTypeCode() >= TypeCode.SByte && conv.GetTypeCode() <= TypeCode.Decimal) 
+                            ? conv.ToString(CultureInfo.InvariantCulture) 
+                            : value.ToString();
                     }
                 }
             }

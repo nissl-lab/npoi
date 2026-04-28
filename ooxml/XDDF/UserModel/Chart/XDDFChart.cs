@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 
 using NPOI.Openxml4Net.Exceptions;
@@ -824,7 +825,22 @@ namespace NPOI.XDDF.UserModel.Chart
             for(int i = 0; i < numOfPoints; i++)
             {
                 XSSFRow row = GetRow(sheet, i + 1); // first row is for title
-                GetCell(row, categoryData.ColIndex).SetCellValue(categoryData.GetPointAt(i).ToString());
+                object val = categoryData.GetPointAt(i);
+                var categoryCell = GetCell(row, categoryData.ColIndex);
+
+                // If the value is numeric, write it as a numeric cell (double).
+                // This lets Excel handle the culture-sensitive display while 
+                // keeping the underlying data numeric.
+                // TypeCode 5 (SByte) through 15 (Decimal) are the numeric types.
+                if (val is IConvertible conv && conv.GetTypeCode() >= TypeCode.SByte && conv.GetTypeCode() <= TypeCode.Decimal)
+                {
+                    categoryCell.SetCellValue(conv.ToDouble(CultureInfo.InvariantCulture));
+                }
+                else
+                {
+                    categoryCell.SetCellValue(val?.ToString());
+                }
+
                 GetCell(row, valuesData.ColIndex).SetCellValue(Convert.ToDouble(valuesData.GetPointAt(i)));
             }
         }
