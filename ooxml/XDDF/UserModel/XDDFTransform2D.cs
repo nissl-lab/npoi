@@ -159,13 +159,13 @@ namespace NPOI.XDDF.UserModel
             }
         }
 
-        public int? Rotation
+        public double? Rotation
         {
             get
             {
                 if(transform.rotSpecified)
                 {
-                    return transform.rot;
+                    return Angles.AttributeToDegrees(transform.rot);
                 }
                 else
                 {
@@ -180,7 +180,7 @@ namespace NPOI.XDDF.UserModel
                 }
                 else
                 {
-                    transform.rot = value.Value;
+                    transform.rot = Angles.DegreesToAttribute(value.Value);
                 }
             }
         }

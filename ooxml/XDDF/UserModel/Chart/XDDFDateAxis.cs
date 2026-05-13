@@ -17,17 +17,11 @@
 
 
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
+using NPOI.OpenXmlFormats.Dml.Chart;
+using NPOI.OpenXmlFormats.Dml;
 
 namespace NPOI.XDDF.UserModel.Chart
 {
-    using NPOI.Util;
-    using NPOI.XDDF.UserModel;
-    using NPOI.OpenXmlFormats.Dml.Chart;
-    using NPOI.OpenXmlFormats.Dml;
 
     /// <summary>
     /// Date axis type. Currently only : the same values as
@@ -231,6 +225,16 @@ namespace NPOI.XDDF.UserModel.Chart
             IsVisible=(true);
             MajorTickMark=(AxisTickMark.Cross);
             MinorTickMark=(AxisTickMark.None);
+        }
+        public override void SetTitle(String text)
+        {
+            if(!ctDateAx.IsSetTitle())
+            {
+                ctDateAx.AddNewTitle();
+            }
+            XDDFTitle title = new XDDFTitle(null, ctDateAx.title);
+            title.SetOverlay(false);
+            title.SetText(text);
         }
     }
 }

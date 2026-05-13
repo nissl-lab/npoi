@@ -17,7 +17,7 @@
 
 namespace NPOI.SS.Formula
 {
-    using System.Collections;
+    using System.Collections.Generic;
 
     public interface IEntryOperation
     {
@@ -31,19 +31,18 @@ namespace NPOI.SS.Formula
     public class FormulaCellCache
     {
 
-        private readonly Hashtable _formulaEntriesByCell;
+        private readonly Dictionary<object, FormulaCellCacheEntry> _formulaEntriesByCell;
 
         public FormulaCellCache()
         {
             // assumes HSSFCell does not override HashCode or Equals, otherwise we need IdentityHashMap
-            _formulaEntriesByCell = new Hashtable();
+            _formulaEntriesByCell = new Dictionary<object, FormulaCellCacheEntry>();
         }
 
         public CellCacheEntry[] GetCacheEntries()
         {
-
             FormulaCellCacheEntry[] result = new FormulaCellCacheEntry[_formulaEntriesByCell.Count];
-            _formulaEntriesByCell.Values.CopyTo(result,0);
+            _formulaEntriesByCell.Values.CopyTo(result, 0);
             return result;
         }
 
@@ -57,10 +56,8 @@ namespace NPOI.SS.Formula
          */
         public FormulaCellCacheEntry Get(IEvaluationCell cell)
         {
-            if (_formulaEntriesByCell.ContainsKey(cell.IdentityKey))
-                return (FormulaCellCacheEntry)_formulaEntriesByCell[cell.IdentityKey];
-            else
-                return null;
+            _formulaEntriesByCell.TryGetValue(cell.IdentityKey, out FormulaCellCacheEntry entry);
+            return entry;
         }
 
         public void Put(IEvaluationCell cell, FormulaCellCacheEntry entry)
@@ -70,17 +67,16 @@ namespace NPOI.SS.Formula
 
         public FormulaCellCacheEntry Remove(IEvaluationCell cell)
         {
-            FormulaCellCacheEntry tmp = (FormulaCellCacheEntry)_formulaEntriesByCell[cell.IdentityKey];
-            _formulaEntriesByCell.Remove(cell);
+            _formulaEntriesByCell.TryGetValue(cell.IdentityKey, out FormulaCellCacheEntry tmp);
+            _formulaEntriesByCell.Remove(cell.IdentityKey);
             return tmp;
         }
 
         public void ApplyOperation(IEntryOperation operation)
         {
-            IEnumerator i = _formulaEntriesByCell.Values.GetEnumerator();
-            while (i.MoveNext())
+            foreach (FormulaCellCacheEntry entry in _formulaEntriesByCell.Values)
             {
-                operation.ProcessEntry((FormulaCellCacheEntry)i.Current);
+                operation.ProcessEntry(entry);
             }
         }
     }

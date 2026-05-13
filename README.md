@@ -1,28 +1,30 @@
-What's NPOI
-===================
 [![NuGet](https://img.shields.io/nuget/dt/npoi)](https://www.nuget.org/packages/NPOI)
-[![Nuget Ranking!](https://img.shields.io/badge/Nuget%20Ranking-268-red.svg)](https://github.com/nissl-lab/npoi/issues/1532)
+[![Nuget Ranking!](https://img.shields.io/badge/Nuget%20Ranking-282-red.svg)](https://github.com/nissl-lab/npoi/issues/1532)
 [![Discord](https://img.shields.io/badge/Chat-Discord-d82679.svg?logo=discord&logoColor=white)](https://discord.gg/rABUseUHme)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=flat-square&logo=Apache)](LICENSE)
+[![EULA](https://img.shields.io/badge/EULA-OSMF-blue?labelColor=black&color=C9FF30)](https://github.com/nissl-lab/npoi/blob/master/OSMFEULA.txt)
 [![traffic](https://api.segment.io/v1/pixel/track?data=ewogICJ3cml0ZUtleSI6ICJBV2NjaWd1UkhKODBuNkJ4WlI4cHRaRzBINzY0RmJObCIsCiAgInVzZXJJZCI6ICJ0b255cXVzIiwKICAiZXZlbnQiOiAiTlBPSSBIb21lcGFnZSIKfQ==
 )](#)
-<a href="https://github.com/nissl-lab/npoi/graphs/contributors">
-    <img
-      src="https://img.shields.io/github/contributors/nissl-lab/npoi?logo=github&label=contributors"
-      alt="GitHub contributors"
-    />
-  </a>
+[![Github contributors](https://img.shields.io/github/contributors/nissl-lab/npoi?logo=github&label=contributors)](https://github.com/nissl-lab/npoi/graphs/contributors)
 <br />
+
+> [!IMPORTANT]
+> To ensure the long-term sustainability of this project, a monthly maintenance fee has been introduced.  This fee is required to be paid by all organizations or users of any library from this project who generate revenue. You can pay the fee via [GitHub Sponsors](https://github.com/sponsors/tonyqus).
+>
+> To enact this, an EULA on binary releases is added to the repo and nuget packages since 2.8.0 that requires payment of the maintenance fee.
+>
+> For more information on who must pay the fee and other frequently asked questions, please see the [Open Source Maintenance Fee](https://opensourcemaintenancefee.org/consumers/) organisation page.
+
+
+What's NPOI
+===================
 This project is the .NET version of Apache POI project. With NPOI, you can read/write Office 2003/2007 files very easily.<br />
 
-Donation 
-=========
-If you profits/benefits from NPOI, please [sponsor me via Github Sponsor](https://github.com/sponsors/tonyqus) or [donate this project](https://github.com/nissl-lab/npoi/discussions/923). Thank you!
+# NPOI Official Tutorials
+[![Official NPOI Video Tutorials by Creator Tony Qu](https://github.com/user-attachments/assets/c7974d88-f693-4228-889e-c28f61257851)](https://www.youtube.com/@codingwithtonyqus)
 
 Documentation
 ============
-
-[NPOI Mastery Tutorial](https://nissl-lab.github.io/npoi/)
 
 [Getting Started with NPOI](https://github.com/nissl-lab/npoi/wiki/Getting-Started-with-NPOI)
 

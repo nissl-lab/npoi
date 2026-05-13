@@ -86,7 +86,7 @@ namespace NPOI.XSSF.UserModel
         private List<CellRangeAddress> arrayFormulas;
         private readonly XSSFDataValidationHelper dataValidationHelper;
         private XSSFDrawing drawing = null;
-        private bool _worksheetLoaded = false;
+        private volatile bool _worksheetLoaded = false;
         private readonly object _loadLock = new object();
         internal int _parseCount = 0;
         private List<CellRangeAddress> _cachedMergedRegions;
@@ -1950,6 +1950,13 @@ namespace NPOI.XSSF.UserModel
             AutoSizeColumn(column, false);
         }
 
+        /// <inheritdoc />
+        public void AutoSizeColumn(int column, int maxRows)
+        {
+            EnsureWorksheetLoaded();
+            AutoSizeColumn(column, false, maxRows);
+        }
+
         /// <summary>
         /// Adjusts the column width to fit the contents.
         /// This Process can be relatively slow on large sheets, so this should
@@ -3456,10 +3463,14 @@ namespace NPOI.XSSF.UserModel
 
             if(col != null)
             {
-                return col.ColumnStyle;
+                ICellStyle style = col.ColumnStyle;
+                if (style != null)
+                {
+                    return style;
+                }
             }
 
-            return Workbook.GetCellStyleAt(0);
+            return ((XSSFWorkbook)Workbook).GetCellStyleAt(0);
         }
 
         /// <summary>
@@ -6922,6 +6933,8 @@ lblforbreak:
             }
             
         }
+
+        public NCellRange this[string address] => Cells[address];
 
         public NRowRange Rows
         {

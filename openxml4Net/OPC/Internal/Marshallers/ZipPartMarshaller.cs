@@ -44,7 +44,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
             string name = ZipHelper
                     .GetZipItemNameFromOPCName(part.PartName.URI
                             .OriginalString);
-            ZipEntry partEntry = new ZipEntry(name);
+            ZipEntry partEntry = new ZipEntry(name) { DateTime = ZipHelper.ZipEntryTimestamp };
             try
             {
                 // Create next zip entry
@@ -162,7 +162,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal.Marshallers
 
             // Save part in zip
             ZipEntry ctEntry = new ZipEntry(ZipHelper.GetZipURIFromOPCName(
-                    relPartName.URI.ToString()).OriginalString);
+                    relPartName.URI.ToString()).OriginalString) { DateTime = ZipHelper.ZipEntryTimestamp };
             try
             {
                 zos.PutNextEntry(ctEntry);

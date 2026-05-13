@@ -1,19 +1,82 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <!-- This is an umbrella project that gathers dependencies for dotnet pack -->
   
   <PropertyGroup>
-    <TargetFrameworks>net472;netstandard2.0;netstandard2.1;net8.0</TargetFrameworks>
-    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <TargetFrameworks>net472;netstandard2.0;netstandard2.1;net8.0;net10.0</TargetFrameworks>
     <PackageId>NPOI</PackageId>
     <OutputPath>..\solution\$(Configuration)\</OutputPath>
+    <PublishPath>..\publish\</PublishPath>  
+    <IncludeAllProjectOutputsInPackage>false</IncludeAllProjectOutputsInPackage>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\main\NPOI.Core.csproj" />
-    <ProjectReference Include="..\ooxml\NPOI.OOXML.Core.csproj" />
-    <ProjectReference Include="..\openxml4Net\NPOI.OpenXml4Net.Core.csproj" />
-    <ProjectReference Include="..\OpenXmlFormats\NPOI.OpenXmlFormats.Core.csproj" />
+    <ProjectReference Include="..\main\NPOI.Core.csproj" PrivateAssets="all" />
+    <ProjectReference Include="..\ooxml\NPOI.OOXML.Core.csproj" PrivateAssets="all" />
+    <ProjectReference Include="..\openxml4Net\NPOI.OpenXml4Net.Core.csproj" PrivateAssets="all" />
+    <ProjectReference Include="..\OpenXmlFormats\NPOI.OpenXmlFormats.Core.csproj" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BouncyCastle.Cryptography" />
+    <PackageReference Include="Enums.NET" />
+    <PackageReference Include="ExtendedNumerics.BigDecimal" />
+    <PackageReference Include="MathNet.Numerics.Signed" />
+    <PackageReference Include="Microsoft.IO.RecyclableMemoryStream" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" />
+    <PackageReference Include="SharpZipLib" />
+    <PackageReference Include="SkiaSharp" ExcludeAssets="runtime" />
+    <PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" ExcludeAssets="runtime" />
+    <PackageReference Include="System.Security.Cryptography.Xml" />
+    <PackageReference Include="System.Text.Encoding.CodePages" />
+    <PackageReference Include="ZString" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <EnableDefaultItems>false</EnableDefaultItems>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <_MainAssembly Include="..\solution\$(Configuration)\$(TargetFramework)\NPOI.Core.dll">
+      <TargetPath>NPOI.Core.dll</TargetPath>
+    </_MainAssembly>
+    <_MainAssembly Include="..\solution\$(Configuration)\$(TargetFramework)\NPOI.OOXML.dll">
+      <TargetPath>NPOI.OOXML.dll</TargetPath>
+    </_MainAssembly>
+    <_MainAssembly Include="..\solution\$(Configuration)\$(TargetFramework)\NPOI.OpenXml4Net.dll">
+      <TargetPath>NPOI.OpenXml4Net.dll</TargetPath>
+    </_MainAssembly>
+    <_MainAssembly Include="..\solution\$(Configuration)\$(TargetFramework)\NPOI.OpenXmlFormats.dll">
+      <TargetPath>NPOI.OpenXmlFormats.dll</TargetPath>
+    </_MainAssembly>
+    <_MainAssembly Include="..\solution\$(Configuration)\$(TargetFramework)\NPOI.Core.pdb">
+      <TargetPath>NPOI.Core.pdb</TargetPath>
+    </_MainAssembly>
+    <_MainAssembly Include="..\solution\$(Configuration)\$(TargetFramework)\NPOI.OOXML.pdb">
+      <TargetPath>NPOI.OOXML.pdb</TargetPath>
+    </_MainAssembly>
+    <_MainAssembly Include="..\solution\$(Configuration)\$(TargetFramework)\NPOI.OpenXml4Net.pdb">
+      <TargetPath>NPOI.OpenXml4Net.pdb</TargetPath>
+    </_MainAssembly>
+    <_MainAssembly Include="..\solution\$(Configuration)\$(TargetFramework)\NPOI.OpenXmlFormats.pdb">
+      <TargetPath>NPOI.OpenXmlFormats.pdb</TargetPath>
+    </_MainAssembly>
+    <_MainAssembly Include="..\solution\$(Configuration)\$(TargetFramework)\NPOI.Core.xml">
+      <TargetPath>NPOI.Core.xml</TargetPath>
+    </_MainAssembly>
+    <_MainAssembly Include="..\solution\$(Configuration)\$(TargetFramework)\NPOI.OOXML.Core.xml">
+      <TargetPath>NPOI.OOXML.xml</TargetPath>
+    </_MainAssembly>
+    <_MainAssembly Include="..\solution\$(Configuration)\$(TargetFramework)\NPOI.OpenXml4Net.Core.xml">
+      <TargetPath>NPOI.OpenXml4Net.xml</TargetPath>
+    </_MainAssembly>
+    <_MainAssembly Include="..\solution\$(Configuration)\$(TargetFramework)\NPOI.OpenXmlFormats.Core.xml">
+      <TargetPath>NPOI.OpenXmlFormats.xml</TargetPath>
+    </_MainAssembly>
+  </ItemGroup>
+
+  <ItemGroup>
+    <BuildOutputInPackage Include="@(_MainAssembly)" TargetFramework="$(TargetFramework)" />
   </ItemGroup>
 
 </Project>

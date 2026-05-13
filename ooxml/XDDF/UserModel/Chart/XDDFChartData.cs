@@ -17,16 +17,13 @@
 
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.IO;
-using System.Text;
+using System.Globalization;
+using NPOI.SS.Util;
+using NPOI.OpenXmlFormats.Dml.Chart;
 
 namespace NPOI.XDDF.UserModel.Chart
 {
-    using NPOI.SS.Util;
-    using NPOI.XDDF.UserModel;
-    using NPOI.OpenXmlFormats.Dml.Chart;
     /// <summary>
     /// Base of all XDDF Chart Data
     /// </summary>
@@ -75,11 +72,18 @@ namespace NPOI.XDDF.UserModel.Chart
             return valueAxes;
         }
 
+        public Series GetSeries(int index)
+        {
+            return series[index];
+        }
+        public int GetSeriesCount() 
+        {
+            return series.Count;
+        }
         public List<Series> GetSeries()
         {
             return series;
         }
-
         public abstract void SetVaryColors(bool varyColors);
 
         public abstract Series AddSeries(IXDDFDataSource<T> category,
@@ -379,7 +383,12 @@ namespace NPOI.XDDF.UserModel.Chart
                     {
                         CT_NumVal ctNumVal = cache.AddNewPt();
                         ctNumVal.idx = (uint)i;
-                        ctNumVal.v = value.ToString();
+                        // OpenXML numeric values must be culture-invariant (using '.' as decimal separator).
+                        // Since value is object, we check for IConvertible to use the culture-aware ToString overload.
+                        // TypeCode 5 (SByte) through 15 (Decimal) are the numeric types.
+                        ctNumVal.v = (value is IConvertible conv && conv.GetTypeCode() >= TypeCode.SByte && conv.GetTypeCode() <= TypeCode.Decimal) 
+                            ? conv.ToString(CultureInfo.InvariantCulture) 
+                            : value.ToString();
                     }
                 }
             }

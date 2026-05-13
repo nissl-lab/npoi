@@ -762,6 +762,30 @@ namespace TestCases.HSSF.UserModel
             workbook.Close();
         }
 
+        [Test]
+        public void TestAutoSizeRowWithWrapText()
+        {
+            HSSFWorkbook workbook = new HSSFWorkbook();
+            ISheet sheet = workbook.CreateSheet("Sheet 1");
+
+            IRow row = sheet.CreateRow(0);
+            ICell cell = row.CreateCell(0);
+            cell.SetCellValue("This is a very long text that should wrap to multiple lines when auto-sized");
+            ICellStyle style = workbook.CreateCellStyle();
+            style.WrapText = true;
+            cell.CellStyle = style;
+            sheet.SetColumnWidth(0, 10 * 256);
+
+            short originalHeight = (short)(12 * 20);
+            row.Height = originalHeight;
+
+            sheet.AutoSizeRow(row.RowNum);
+
+            ClassicAssert.GreaterOrEqual(row.Height, originalHeight * 2, "Row height should be at least 2x for wrapped text");
+
+            workbook.Close();
+        }
+
 
         ///**
         // * Setting ForceFormulaRecalculation on sheets

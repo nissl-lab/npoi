@@ -160,4 +160,7 @@ examples/packages
 examples/.vs/
 /artifacts
 
+# Superpowers
+docs/superpowers/
+
 BenchmarkDotNet.Artifacts

@@ -214,5 +214,71 @@ namespace NPOI.OOXML.Tests.XSSF.UserModel
             Assert.That(sheet1._parseCount, Is.EqualTo(1), "sheet1 was accessed, should be parsed once");
             Assert.That(sheet2._parseCount, Is.EqualTo(0), "sheet2 was not accessed, should not be parsed");
         }
+
+        [Test]
+        public void SaveWithoutAccessPreservesUntouchedSheets()
+        {
+            // Create a 3-sheet workbook with distinct data
+            byte[] originalBytes;
+            using (var wb = new XSSFWorkbook())
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    var s = wb.CreateSheet($"Sheet{i}");
+                    s.CreateRow(0).CreateCell(0).SetCellValue($"Original{i}");
+                    s.CreateRow(1).CreateCell(0).SetCellValue(i * 100.0);
+                }
+                using var ms = new MemoryStream();
+                wb.Write(ms);
+                originalBytes = ms.ToArray();
+            }
+
+            // Open, touch only Sheet1, modify it, and save
+            byte[] savedBytes;
+            using (var ms = new MemoryStream(originalBytes))
+            using (var wb = new XSSFWorkbook(ms))
+            {
+                var sheet0 = (XSSFSheet)wb.GetSheetAt(0);
+                var sheet1 = (XSSFSheet)wb.GetSheetAt(1);
+                var sheet2 = (XSSFSheet)wb.GetSheetAt(2);
+
+                // Only access sheet1 — sheets 0 and 2 should never be parsed
+                sheet1.GetRow(0).GetCell(0).SetCellValue("Modified1");
+
+                Assert.That(sheet0._parseCount, Is.EqualTo(0), "sheet0 should not be parsed");
+                Assert.That(sheet1._parseCount, Is.EqualTo(1), "sheet1 should be parsed once");
+                Assert.That(sheet2._parseCount, Is.EqualTo(0), "sheet2 should not be parsed");
+
+                using var outMs = new MemoryStream();
+                wb.Write(outMs);
+                savedBytes = outMs.ToArray();
+            }
+
+            // Re-open and verify all sheets survived the roundtrip
+            using (var ms = new MemoryStream(savedBytes))
+            using (var wb = new XSSFWorkbook(ms))
+            {
+                // Sheet0: untouched — should have original data
+                var s0 = wb.GetSheetAt(0);
+                Assert.That(s0.GetRow(0).GetCell(0).StringCellValue, Is.EqualTo("Original0"),
+                    "Untouched sheet0 should preserve original data");
+                Assert.That(s0.GetRow(1).GetCell(0).NumericCellValue, Is.EqualTo(0.0),
+                    "Untouched sheet0 row 1 should preserve original data");
+
+                // Sheet1: modified
+                var s1 = wb.GetSheetAt(1);
+                Assert.That(s1.GetRow(0).GetCell(0).StringCellValue, Is.EqualTo("Modified1"),
+                    "Modified sheet1 should have new value");
+                Assert.That(s1.GetRow(1).GetCell(0).NumericCellValue, Is.EqualTo(100.0),
+                    "Unmodified row in sheet1 should preserve original data");
+
+                // Sheet2: untouched — should have original data
+                var s2 = wb.GetSheetAt(2);
+                Assert.That(s2.GetRow(0).GetCell(0).StringCellValue, Is.EqualTo("Original2"),
+                    "Untouched sheet2 should preserve original data");
+                Assert.That(s2.GetRow(1).GetCell(0).NumericCellValue, Is.EqualTo(200.0),
+                    "Untouched sheet2 row 1 should preserve original data");
+            }
+        }
     }
 }

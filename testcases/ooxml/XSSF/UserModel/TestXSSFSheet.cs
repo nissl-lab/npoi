@@ -51,12 +51,6 @@ namespace TestCases.XSSF.UserModel
 
         }
 
-        //[Test]
-        //TODO column styles are not yet supported by XSSF
-        public override void DefaultColumnStyle()
-        {
-            base.DefaultColumnStyle();
-        }
         [Test]
         public void TestTestGetSetMargin()
         {
@@ -540,6 +534,30 @@ namespace TestCases.XSSF.UserModel
 
             ClassicAssert.AreNotEqual(100, row.Height);
             ClassicAssert.AreEqual(540, row.Height);
+
+            workbook.Close();
+        }
+
+        [Test]
+        public void TestAutoSizeRowWithWrapText()
+        {
+            XSSFWorkbook workbook = new XSSFWorkbook();
+            XSSFSheet sheet = (XSSFSheet)workbook.CreateSheet("Sheet 1");
+
+            IRow row = sheet.CreateRow(0);
+            ICell cell = row.CreateCell(0);
+            cell.SetCellValue("This is a very long text that should wrap to multiple lines when auto-sized");
+            ICellStyle style = workbook.CreateCellStyle();
+            style.WrapText = true;
+            cell.CellStyle = style;
+            sheet.SetColumnWidth(0, 10 * 256);
+
+            short originalHeight = (short)(12 * 20);
+            row.Height = originalHeight;
+
+            sheet.AutoSizeRow(row.RowNum);
+
+            ClassicAssert.GreaterOrEqual(row.Height, originalHeight * 2, "Row height should be at least 2x for wrapped text");
 
             workbook.Close();
         }
@@ -2529,9 +2547,17 @@ namespace TestCases.XSSF.UserModel
             // OnDocumentRead() on it is simply a no-op (no exception thrown).
             XSSFWorkbook wb = new XSSFWorkbook();
             XSSFSheet sheet = wb.CreateSheet() as XSSFSheet;
-            XSSFSheet.EnableLazyLoading = false;
+            var originalValue = XSSFSheet.EnableLazyLoading;
+            try
+            {
+                XSSFSheet.EnableLazyLoading = false;
 
-            Assert.Throws<POIXMLException>(() => { sheet.OnDocumentRead(); });
+                Assert.Throws<POIXMLException>(() => { sheet.OnDocumentRead(); });
+            }
+            finally
+            {
+                XSSFSheet.EnableLazyLoading = originalValue;
+            }
 
             wb.Close();
         }

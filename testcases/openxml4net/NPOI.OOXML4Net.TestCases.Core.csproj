@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net472;net8.0</TargetFrameworks>
+    <TargetFrameworks>net472;net10.0</TargetFrameworks>
     <AssemblyName>NPOI.OOXML4Net.TestCases</AssemblyName>
     <RootNamespace>TestCases</RootNamespace>
     <SignAssembly>true</SignAssembly>
@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <Target Name="CopyCustomContent" AfterTargets="AfterBuild">
-    <Copy SourceFiles="App.config" DestinationFiles="$(OutDir)\testhost.dll.config" />
+    <Copy SourceFiles="$(OutDir)$(AssemblyName).dll.config" DestinationFiles="$(OutDir)\testhost.dll.config" />
   </Target>
 
 

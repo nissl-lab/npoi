@@ -547,7 +547,6 @@ namespace NPOI.OpenXmlFormats.Dml
             ctObj.algnFieldSpecified = node.Attributes["algn"] != null;
             if (ctObj.algnFieldSpecified)
                 ctObj.algn = (ST_PenAlignment)Enum.Parse(typeof(ST_PenAlignment), node.Attributes["algn"].Value);
-            ctObj.custDash = new CT_DashStopList();
             foreach (XmlNode childNode in node.ChildNodes)
             {
                 if (childNode.LocalName == "noFill")
@@ -604,10 +603,6 @@ namespace NPOI.OpenXmlFormats.Dml
             if (this.custDash != null)
             {
                 this.custDash.Write(sw, "custDash");
-                //foreach (CT_DashStop x in this.custDash)
-                //{
-                //    x.Write(sw, "custDash");
-                //}
             }
             if (this.round != null)
                 sw.Write("<a:round/>");

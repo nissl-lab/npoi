@@ -24,6 +24,36 @@ namespace NPOI.SS.UserModel
         public ICell TopLeftCell => GetCell(0,0);
         public ISheet Sheet => _sheet;
 
+        public double Sum(Func<ICell, double> selector)
+        {
+            return Cells.Sum(selector);
+        }
+
+        public double Min(Func<ICell, double> selector)
+        {
+            return Cells.Min(selector);
+        }
+
+        public double Max(Func<ICell, double> selector)
+        {
+            return Cells.Max(selector);
+        }
+
+        public double Average(Func<ICell, double> selector)
+        {
+            return Cells.Average(selector);
+        }
+
+        public T Max<T>(Func<ICell, T> selector) where T : IComparable<T>
+        {
+            return Cells.Max(selector);
+        }
+
+        public T Min<T>(Func<ICell, T> selector) where T : IComparable<T>
+        {
+            return Cells.Min(selector);
+        }
+
         /// <summary>
         /// Set this cell range as active
         /// </summary>
@@ -460,6 +490,7 @@ namespace NPOI.SS.UserModel
                 return texts;
             }
         }
+
         public object Value { 
             set {
                 if(value is double || value is Double)
@@ -490,6 +521,63 @@ namespace NPOI.SS.UserModel
                 throw new InvalidOperationException("invalid value type for cell value");
             } 
         }
+
+        public double Sum()
+        {
+            double sum = 0;
+            foreach (var cell in Cells)
+            {
+                if (cell.CellType == CellType.Numeric)
+                    sum += cell.NumericCellValue;
+            }
+            return sum;
+        }
+
+        public double Min()
+        {
+            double? min = null;
+            foreach (var cell in Cells)
+            {
+                if (cell.CellType == CellType.Numeric)
+                {
+                    double val = cell.NumericCellValue;
+                    if (!min.HasValue || val < min.Value)
+                        min = val;
+                }
+            }
+            return min ?? double.NaN;
+        }
+
+        public double Max()
+        {
+            double? max = null;
+            foreach (var cell in Cells)
+            {
+                if (cell.CellType == CellType.Numeric)
+                {
+                    double val = cell.NumericCellValue;
+                    if (!max.HasValue || val > max.Value)
+                        max = val;
+                }
+            }
+            return max ?? double.NaN;
+        }
+
+        public double Avg()
+        {
+            double sum = 0;
+            int count = 0;
+            foreach (var cell in Cells)
+            {
+                if (cell.CellType == CellType.Numeric)
+                {
+                    sum += cell.NumericCellValue;
+                    count++;
+                }
+            }
+            return count > 0 ? sum / count : double.NaN;
+        }
+
         public NCellRange RemoveCellComment()
         {
             for(int i = _address.FirstRow; i<=_address.LastRow; i++)

@@ -149,5 +149,18 @@ namespace TestCases.SS.Util
             }
             ClassicAssert.AreEqual("0.06", actualText);
         }
+
+        [Test]
+        public void TestToTextWithLocale()
+        {
+            var ruRU = System.Globalization.CultureInfo.GetCultureInfo("ru-RU");
+            ClassicAssert.AreEqual("1234,56", NumberToTextConverter.ToText(1234.56, ruRU));
+            ClassicAssert.AreEqual("0,06", NumberToTextConverter.ToText(0.06, ruRU));
+            ClassicAssert.AreEqual("1,23456789012346E-05", NumberToTextConverter.ToText(1.23456789012346E-5, ruRU));
+
+            var enUS = System.Globalization.CultureInfo.GetCultureInfo("en-US");
+            ClassicAssert.AreEqual("1234.56", NumberToTextConverter.ToText(1234.56, enUS));
+            ClassicAssert.AreEqual("0.06", NumberToTextConverter.ToText(0.06, enUS));
+        }
     }
 }

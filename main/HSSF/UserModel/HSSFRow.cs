@@ -20,6 +20,7 @@ namespace NPOI.HSSF.UserModel
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Linq;
 
     using NPOI.HSSF.Record;
     using NPOI.SS.UserModel;
@@ -40,7 +41,8 @@ namespace NPOI.HSSF.UserModel
         public const int INITIAL_CAPACITY = 5;
 
         private int rowNum;
-        private SortedDictionary<int, ICell> cells = new SortedDictionary<int, ICell>();
+        private Dictionary<int, ICell> cells = new Dictionary<int, ICell>();
+        private List<ICell> _sortedCellCache;
          
         /**
          * reference to low level representation
@@ -176,7 +178,7 @@ namespace NPOI.HSSF.UserModel
                 ((HSSFCell)cell).NotifyArrayFormulaChanging();
             }
             cells.Remove(column);
-
+            _sortedCellCache = null;
 
             if (alsoRemoveRecords)
             {
@@ -401,6 +403,7 @@ namespace NPOI.HSSF.UserModel
             //    Array.Copy(oldCells, 0, cells, 0, oldCells.Length);
             //}
             cells[column] = cell;
+            _sortedCellCache = null;
 
             // fix up firstCol and lastCol indexes
             if (row.IsEmpty|| column < row.FirstCol)
@@ -679,7 +682,7 @@ namespace NPOI.HSSF.UserModel
         public List<ICell> Cells
         {
             get {
-                return new List<ICell>(this.cells.Values);
+                return new List<ICell>(GetSortedCells());
             }
         }
 
@@ -719,7 +722,7 @@ namespace NPOI.HSSF.UserModel
         /// </remarks>
         public IEnumerator<ICell> GetEnumerator()
         {
-            return this.cells.Values.GetEnumerator();
+            return GetSortedCells().GetEnumerator();
         }
  
         /// <summary>
@@ -787,6 +790,15 @@ namespace NPOI.HSSF.UserModel
         public bool HasCustomHeight()
         {
             throw new NotImplementedException();
+        }
+
+        private List<ICell> GetSortedCells()
+        {
+            if (_sortedCellCache == null)
+            {
+                _sortedCellCache = cells.OrderBy(kv => kv.Key).Select(kv => kv.Value).ToList();
+            }
+            return _sortedCellCache;
         }
     }
 }

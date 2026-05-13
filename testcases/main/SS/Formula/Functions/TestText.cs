@@ -44,6 +44,22 @@ namespace TestCases.SS.Formula.Functions
             ValueEval result = TextFunction.TEXT.Evaluate(args, -1, (short)-1);
             ClassicAssert.AreEqual(strArg, result);
         }
+
+        [Test]
+        public void TestTextWithRefEvalStringFirstArg()
+        {
+            // Simulate a cell reference (RefEval) that resolves to a string cell value,
+            // e.g. TEXT(L2, "dd/mm/yyyy") where L2 is a text cell.
+            // Previously this incorrectly returned ErrorCode 15 (#VALUE!) because the
+            // StringEval check was done before resolving the RefEval.
+            ValueEval strArg = new StringEval("07/04/2026");
+            ValueEval refArg = new RefEvalImplementation(strArg);
+            ValueEval formatArg = new StringEval("dd/mm/yyyy");
+            ValueEval[] args = { refArg, formatArg };
+            ValueEval result = TextFunction.TEXT.Evaluate(args, -1, (short)-1);
+            ClassicAssert.AreEqual(typeof(StringEval), result.GetType());
+            ClassicAssert.AreEqual("07/04/2026", ((StringEval)result).StringValue);
+        }
         [Test]
         public void TestTextWithDeciamlFormatSecondArg()
         {

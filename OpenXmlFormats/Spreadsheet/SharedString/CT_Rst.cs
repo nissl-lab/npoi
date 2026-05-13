@@ -34,7 +34,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
 
 
-        internal void Write(StreamWriter sw, string nodeName)
+        public void Write(StreamWriter sw, string nodeName)
         {
             sw.WriteStart(nodeName);
             sw.Write('>');

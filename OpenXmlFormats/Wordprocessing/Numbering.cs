@@ -1289,7 +1289,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public CT_Lvl()
         {
-            this.rPrField = new CT_RPr();
+            //this.rPrField = new CT_RPr();
             this.pPrField = new CT_PPr();
             this.lvlJcField = new CT_Jc();
             //this.legacyField = new CT_LvlLegacy();
@@ -1352,8 +1352,8 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:ilvl", this.ilvl);
             XmlHelper.WriteAttribute(sw, "w:tplc", this.tplc);
-            if(this.tentative!= ST_OnOff.off|| this.tentativeFieldSpecified)
-                XmlHelper.WriteAttribute(sw, "w:tentative", this.tentative.ToString());
+            if(Util.XmlHelper.ConvertSTOnOffToBoolean(this.tentative) || this.tentativeFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "w:tentative", Util.XmlHelper.ConvertSTOnOffToBoolean(this.tentative)?1:0);
             sw.Write('>');
             if (this.start != null)
                 this.start.Write(sw, "start");

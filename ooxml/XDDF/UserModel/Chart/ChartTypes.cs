@@ -25,11 +25,18 @@ namespace NPOI.XDDF.UserModel.Chart
 {
     public enum ChartTypes
     {
+        AREA,
+        AREA3D,
         BAR,
+        BAR3D,
         LINE,
+        LINE3D,
         PIE,
+        PIE3D,
         RADAR,
-        SCATTER
+        SCATTER,
+        SURFACE,
+        SURFACE3D
     }
 }
 

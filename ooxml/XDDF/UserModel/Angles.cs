@@ -1,4 +1,4 @@
-﻿/* ====================================================================
+/* ====================================================================
    Licensed to the Apache Software Foundation (ASF) under one or more
    contributor license agreements.  See the NOTICE file distributed with
    this work for additional information regarding copyright ownership.
@@ -15,24 +15,20 @@
    limitations under the License.
 ==================================================================== */
 
-namespace NPOI.XWPF.Model
+namespace NPOI.XDDF.UserModel
 {
-    using NPOI.OpenXmlFormats.Wordprocessing;
-
-    public sealed class WMLHelper
+    public static class Angles
     {
-        public static bool ConvertSTOnOffToBoolean(ST_OnOff value)
+        public const int OOXML_DEGREE = 60000;
+
+        public static int DegreesToAttribute(double angle)
         {
-            if (value == ST_OnOff.True || value == ST_OnOff.on/* || value == ST_OnOff.X_1*/)
-            {
-                return true;
-            }
-            return false;
+            return (int)(OOXML_DEGREE * angle);
         }
 
-        public static ST_OnOff ConvertBooleanToSTOnOff(bool value)
+        public static double AttributeToDegrees(int angle)
         {
-            return (value ? ST_OnOff.True : ST_OnOff.False);
+            return angle / (double)OOXML_DEGREE;
         }
     }
 }

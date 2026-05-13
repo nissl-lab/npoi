@@ -213,6 +213,10 @@ namespace NPOI.XSSF.UserModel
             // some broken Workbooks miss this...
             SetBookViewsIfMissing();
         }
+        public XSSFWorkbook(PackagePart part): this(part.GetInputStream(), true)
+        {
+            
+        }
         /**
          * Constructs a XSSFWorkbook object, by buffering the whole stream into memory
          *  and then opening an {@link OPCPackage} object for it.
@@ -1173,6 +1177,8 @@ namespace NPOI.XSSF.UserModel
             }
             return null;
         }
+
+        public ISheet this[string name] => GetSheet(name);
 
         /**
          * Get the XSSFSheet object at the given index.

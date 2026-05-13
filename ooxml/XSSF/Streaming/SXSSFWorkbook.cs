@@ -20,6 +20,7 @@ using NPOI.SS;
 using NPOI.SS.Formula.UDF;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
+using NPOI.OpenXml4Net.OPC.Internal;
 using NPOI.Util;
 using NPOI.XSSF.Model;
 using NPOI.XSSF.UserModel;
@@ -468,7 +469,7 @@ namespace NPOI.XSSF.Streaming
                     while (en.MoveNext())
                     {
                         var ze = (ZipEntry)en.Current;
-                        zos.PutNextEntry(new ZipEntry(ze.Name));
+                        zos.PutNextEntry(new ZipEntry(ze.Name) { DateTime = ZipHelper.ZipEntryTimestamp });
                         var inputStream = zip.GetInputStream(ze);
                         XSSFSheet xSheet = GetSheetFromZipEntryName(ze.Name);
                         // See bug 56557, we should not inject data into the special ChartSheets
@@ -505,8 +506,9 @@ namespace NPOI.XSSF.Streaming
 
         private static void CopyStreamAndInjectWorksheet(Stream inputStream, Stream outputStream, Stream worksheetData)
         {
-            StreamReader inReader = new StreamReader(inputStream, Encoding.UTF8);
-            StreamWriter outWriter = new StreamWriter(outputStream, Encoding.UTF8);
+            const int BufferSize = 131072;
+            StreamReader inReader = new StreamReader(inputStream, Encoding.UTF8, true, BufferSize);
+            StreamWriter outWriter = new StreamWriter(outputStream, Encoding.UTF8, BufferSize);
             bool needsStartTag = true;
             int c;
             int pos = 0;
@@ -686,6 +688,8 @@ namespace NPOI.XSSF.Streaming
         {
             return GetSXSSFSheet((XSSFSheet)XssfWorkbook.GetSheet(name));
         }
+
+        public ISheet this[string name] => GetSheet(name);
 
         public void RemoveSheetAt(int index)
         {

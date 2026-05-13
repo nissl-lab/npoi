@@ -2749,8 +2749,7 @@ namespace NPOI.OpenXmlFormats.Dml
             XmlHelper.WriteAttribute(sw, "lat", this.lat, true);
             XmlHelper.WriteAttribute(sw, "lon", this.lon, true);
             XmlHelper.WriteAttribute(sw, "rev", this.rev, true);
-            sw.Write('>');
-            sw.WriteEndElement("a", nodeName);
+            sw.Write("/>");
         }
 
         [XmlAttribute]
