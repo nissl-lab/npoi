@@ -73,7 +73,7 @@ namespace NPOI.SS.Util
         /// The 0-based row index of the cell containing the reference.
         /// Only needed for <c>[#This Row]</c> or <c>@</c> specifiers; pass 0 otherwise.
         /// </param>
-        /// <exception cref="KeyNotFoundException">
+        /// <exception cref="System.Collections.Generic.KeyNotFoundException">
         /// The structured reference names a table that does not exist in the workbook.
         /// </exception>
         /// <exception cref="FormulaParseException">
@@ -319,7 +319,16 @@ namespace NPOI.SS.Util
         /// <returns><c>true</c> if the reference is a structured table reference; otherwise <c>false</c>.</returns>
         public static bool IsStructuredReference(String reference)
         {
-            return Table.IsStructuredReference.IsMatch(reference);
+            if (reference == null)
+            {
+                return false;
+            }
+
+            // Require the regex to span the entire input — the underlying pattern is
+            // unanchored, so without this check a bracketed substring inside a larger
+            // value would false-positive.
+            var match = Table.IsStructuredReference.Match(reference);
+            return match.Success && match.Index == 0 && match.Length == reference.Length;
         }
 
         /**

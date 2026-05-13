@@ -65,6 +65,22 @@ namespace TestCases.SS.Util
             ClassicAssert.IsFalse(AreaReference.IsStructuredReference("$A$1:$C$7"));
         }
 
+        [Test]
+        public void IsStructuredReference_NullReturnsFalse()
+        {
+            ClassicAssert.IsFalse(AreaReference.IsStructuredReference(null));
+        }
+
+        [Test]
+        public void IsStructuredReference_RequiresWholeStringMatch()
+        {
+            // Substring that happens to look like a structured reference embedded in
+            // surrounding text must not match — IsStructuredReference is a whole-input check.
+            ClassicAssert.IsFalse(AreaReference.IsStructuredReference("prefix Table1[#Headers]"));
+            ClassicAssert.IsFalse(AreaReference.IsStructuredReference("Table1[#Headers] suffix"));
+            ClassicAssert.IsFalse(AreaReference.IsStructuredReference(""));
+        }
+
         // ---- Constructor with workbook: structured reference specifiers ----
 
         [Test]
