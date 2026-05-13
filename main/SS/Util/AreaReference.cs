@@ -21,6 +21,9 @@ namespace NPOI.SS.Util
     using System;
     using System.Text;
     using System.Collections;
+    using NPOI.SS.Formula;
+    using NPOI.SS.Formula.PTG;
+    using NPOI.SS.UserModel;
 
     public class AreaReference
     {
@@ -40,12 +43,75 @@ namespace NPOI.SS.Util
 
         /**
          * Create an area ref from a string representation.  Sheet names containing special Chars should be
-         * delimited and escaped as per normal syntax rules for formulas.<br/> 
+         * delimited and escaped as per normal syntax rules for formulas.<br/>
          * The area reference must be contiguous (i.e. represent a single rectangle, not a Union of rectangles)
          */
         public AreaReference(String reference, SpreadsheetVersion version)
+            : this(reference, version, null, 0)
+        {
+        }
+
+        /// <summary>
+        /// Creates an area reference from a string that may be either a standard cell reference
+        /// (e.g., <c>Sheet1!A1:B5</c>) or a structured table reference (e.g., <c>Table1[#Headers]</c>).
+        /// When <paramref name="workbook"/> is provided, structured table references are resolved
+        /// automatically against the workbook's table definitions.
+        /// </summary>
+        /// <remarks>
+        /// Structured reference resolution creates a <see cref="FormulaParser"/> instance internally.
+        /// This is fine for typical named-range resolution, but callers resolving thousands of
+        /// references in a tight loop may want to cache results.
+        /// </remarks>
+        /// <param name="reference">The reference string to parse.</param>
+        /// <param name="version">The spreadsheet version for cell reference validation.</param>
+        /// <param name="workbook">
+        /// The formula parsing workbook used to resolve structured table references.
+        /// Use <c>XSSFEvaluationWorkbook.Create(workbook)</c> to obtain this from an <c>XSSFWorkbook</c>.
+        /// Pass <c>null</c> if structured references are not expected.
+        /// </param>
+        /// <param name="rowIndex">
+        /// The 0-based row index of the cell containing the reference.
+        /// Only needed for <c>[#This Row]</c> or <c>@</c> specifiers; pass 0 otherwise.
+        /// </param>
+        /// <exception cref="System.Collections.Generic.KeyNotFoundException">
+        /// The structured reference names a table that does not exist in the workbook.
+        /// </exception>
+        /// <exception cref="FormulaParseException">
+        /// The structured reference syntax is malformed.
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// The structured reference resolved to something other than a single area.
+        /// </exception>
+        public AreaReference(String reference, SpreadsheetVersion version,
+            IFormulaParsingWorkbook workbook, int rowIndex = 0)
         {
             _version = (null != version) ? version : DEFAULT_SPREADSHEET_VERSION;
+
+            // When a workbook is provided, detect and resolve structured table references
+            // (e.g., "Table1[#Headers]", "Table1[[#Data],[Column1]]") that would otherwise
+            // fail in the A1-style parser below. Detection uses Table.IsStructuredReference
+            // (an unanchored regex that may false-positive on unusual bracket-containing strings,
+            // but FormulaParser.Parse will throw in that case — same as the old A1-style path).
+            if (workbook != null && IsStructuredReference(reference))
+            {
+                Area3DPxg area = FormulaParser.ParseStructuredReference(reference, workbook, rowIndex);
+                // CellReference takes isAbsolute flags; AreaPtgBase stores isRelative — invert.
+                _firstCell = new CellReference(
+                    area.SheetName,
+                    area.FirstRow,
+                    area.FirstColumn,
+                    !area.IsFirstRowRelative,
+                    !area.IsFirstColRelative);
+                _lastCell = new CellReference(
+                    area.SheetName,
+                    area.LastRow,
+                    area.LastColumn,
+                    !area.IsLastRowRelative,
+                    !area.IsLastColRelative);
+                _isSingleCell = area.FirstRow == area.LastRow && area.FirstColumn == area.LastColumn;
+                return;
+            }
+
             if (!IsContiguous(reference))
             {
                 throw new ArgumentException(
@@ -243,6 +309,26 @@ namespace NPOI.SS.Util
                 _lastCell = botRight;
             }
             _isSingleCell = false;
+        }
+
+        /// <summary>
+        /// Returns <c>true</c> if the given reference string uses Excel structured table reference
+        /// syntax (e.g., <c>Table1[#Headers]</c>, <c>Table1[[#Data],[Column1]]</c>).
+        /// </summary>
+        /// <param name="reference">The reference string to test.</param>
+        /// <returns><c>true</c> if the reference is a structured table reference; otherwise <c>false</c>.</returns>
+        public static bool IsStructuredReference(String reference)
+        {
+            if (reference == null)
+            {
+                return false;
+            }
+
+            // Require the regex to span the entire input — the underlying pattern is
+            // unanchored, so without this check a bracketed substring inside a larger
+            // value would false-positive.
+            var match = Table.IsStructuredReference.Match(reference);
+            return match.Success && match.Index == 0 && match.Length == reference.Length;
         }
 
         /**
