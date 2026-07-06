@@ -65,6 +65,7 @@ namespace NPOI.XSSF.UserModel
         private static XmlQualifiedName QNAME_SHAPE_TYPE = new XmlQualifiedName("shapetype", "urn:schemas-microsoft-com:vml");
         private static XmlQualifiedName QNAME_SHAPE = new XmlQualifiedName("shape", "urn:schemas-microsoft-com:vml");
         private static string COMMENT_SHAPE_TYPE_ID = "_x0000_t202"; // this ID value seems to have significance to Excel >= 2010; see https://issues.apache.org/bugzilla/show_bug.cgi?id=55409
+        private static string OLE_SHAPE_TYPE_ID = "_x0000_t75";  // shapetype for embedded OLE objects / pictures
         /**
          * regexp to parse shape ids, in VML they have weird form of id="_x0000_s1026"
          */
@@ -278,6 +279,70 @@ namespace NPOI.XSSF.UserModel
             cldata.AddNewAutoFill(ST_TrueFalseBlank.@false);
             cldata.AddNewRow(0);
             cldata.AddNewColumn(0);
+            _items.Add(shape);
+
+            return shape;
+        }
+
+        private void EnsureOleShapetype()
+        {
+            // Check if _x0000_t75 already exists
+            foreach (object item in _items)
+            {
+                if (item is CT_Shapetype st && OLE_SHAPE_TYPE_ID == st.id)
+                    return;
+            }
+
+            // Create the standard picture/OLE shapetype _x0000_t75
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(
+                "<v:shapetype id=\"" + OLE_SHAPE_TYPE_ID + "\" coordsize=\"21600,21600\" o:spt=\"75\"" +
+                " o:preferrelative=\"t\" path=\"m@4@5l@4@11@9@11@9@5xe\" filled=\"f\" stroked=\"f\"" +
+                " xmlns:v=\"urn:schemas-microsoft-com:vml\" xmlns:o=\"urn:schemas-microsoft-com:office:office\">" +
+                "<v:stroke joinstyle=\"miter\"/>" +
+                "<v:formulas>" +
+                "<v:f eqn=\"if lineDrawn pixelLineWidth 0\"/>" +
+                "<v:f eqn=\"sum @0 1 0\"/>" +
+                "<v:f eqn=\"sum 0 0 @1\"/>" +
+                "<v:f eqn=\"prod @2 1 2\"/>" +
+                "<v:f eqn=\"prod @3 21600 pixelWidth\"/>" +
+                "<v:f eqn=\"prod @3 21600 pixelHeight\"/>" +
+                "<v:f eqn=\"sum @0 0 1\"/>" +
+                "<v:f eqn=\"prod @6 1 2\"/>" +
+                "<v:f eqn=\"prod @7 21600 pixelWidth\"/>" +
+                "<v:f eqn=\"sum @8 21600 0\"/>" +
+                "<v:f eqn=\"prod @7 21600 pixelHeight\"/>" +
+                "<v:f eqn=\"sum @10 21600 0\"/>" +
+                "</v:formulas>" +
+                "<v:path o:extrusionok=\"f\" gradientshapeok=\"t\" o:connecttype=\"rect\"/>" +
+                "<o:lock v:ext=\"edit\" aspectratio=\"t\"/>" +
+                "</v:shapetype>");
+            _items.Insert(1, doc.DocumentElement); // insert after shapelayout, before comment shapetype
+        }
+
+        internal CT_Shape newOleShape(int row, int col, string imageRelId)
+        {
+            EnsureOleShapetype();
+
+            CT_Shape shape = new CT_Shape();
+
+            shape.id = "_x0000_s" + (++_shapeId);
+            shape.type = "#" + OLE_SHAPE_TYPE_ID;
+            shape.style = "position:absolute;margin-left:0;margin-top:0;width:72pt;height:72pt;z-index:1";
+            shape.ole = "";
+            shape.fillcolor = ("window [65]");
+            shape.AddNewFill().color2 = ("window [65]");
+            shape.imagedata = new CT_ImageData();
+            shape.imagedata.relid = imageRelId;
+            shape.imagedata.title = "";
+            CT_ClientData cldata = shape.AddNewClientData();
+            cldata.ObjectType = ST_ObjectType.Pict;
+            cldata.FmlaPict = "=EMBED(\"Packager Shell Object\",\"\")";
+            // VML Anchor format: col1, dx1, row1, dy1, col2, dx2, row2, dy2
+            cldata.AddNewAnchor(col + ", 0, " + row + ", 0, " + (col + 2) + ", 0, " + (row + 3) + ", 0");
+            cldata.AddNewSizeWithCells();
+            cldata.AddNewMoveWithCells();
+            cldata.AddNewAutoFill(ST_TrueFalseBlank.@false);
             _items.Add(shape);
 
             return shape;
