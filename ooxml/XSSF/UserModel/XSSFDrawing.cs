@@ -532,7 +532,7 @@ namespace NPOI.XSSF.UserModel
             ctShape.Set(XSSFObjectData.Prototype());
             ctShape.spPr.xfrm = (CreateXfrm((XSSFClientAnchor) anchor));
 
-            // workaround for not having the vmlDrawing filled
+            // add image fill to drawingML shape for preview icon in Excel
             NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_BlipFillProperties blipFill = ctShape.spPr.AddNewBlipFill();
             blipFill.AddNewBlip().embed = imgDrawPR.Id;
             blipFill.AddNewStretch().AddNewFillRect();
@@ -563,7 +563,7 @@ namespace NPOI.XSSF.UserModel
             {
                 vmlImgRel = vmlPart.AddRelationship(imgPN, TargetMode.Internal, PackageRelationshipTypes.IMAGE_PART);
             }
-            vml.newOleShape(anchor.Row1, anchor.Col1, vmlImgRel?.Id);
+            vml.newOleShape(anchor.Row1, anchor.Col1, anchor.Row2, anchor.Col2, vmlImgRel?.Id, "_x0000_s" + shapeId);
 
             return shape;
         }

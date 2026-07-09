@@ -320,13 +320,13 @@ namespace NPOI.XSSF.UserModel
             _items.Insert(1, doc.DocumentElement); // insert after shapelayout, before comment shapetype
         }
 
-        internal CT_Shape newOleShape(int row, int col, string imageRelId)
+        internal CT_Shape newOleShape(int row1, int col1, int row2, int col2, string imageRelId, string shapeId)
         {
             EnsureOleShapetype();
 
             CT_Shape shape = new CT_Shape();
 
-            shape.id = "_x0000_s" + (++_shapeId);
+            shape.id = shapeId;
             shape.type = "#" + OLE_SHAPE_TYPE_ID;
             shape.style = "position:absolute;margin-left:0;margin-top:0;width:72pt;height:72pt;z-index:1";
             shape.ole = "";
@@ -339,7 +339,7 @@ namespace NPOI.XSSF.UserModel
             cldata.ObjectType = ST_ObjectType.Pict;
             cldata.FmlaPict = "=EMBED(\"Packager Shell Object\",\"\")";
             // VML Anchor format: col1, dx1, row1, dy1, col2, dx2, row2, dy2
-            cldata.AddNewAnchor(col + ", 0, " + row + ", 0, " + (col + 2) + ", 0, " + (row + 3) + ", 0");
+            cldata.AddNewAnchor(col1 + ", 0, " + row1 + ", 0, " + col2 + ", 0, " + row2 + ", 0");
             cldata.AddNewSizeWithCells();
             cldata.AddNewMoveWithCells();
             cldata.AddNewAutoFill(ST_TrueFalseBlank.@false);
