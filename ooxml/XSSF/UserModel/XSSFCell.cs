@@ -1222,7 +1222,7 @@ namespace NPOI.XSSF.UserModel
         /**
          * @throws RuntimeException if the bounds are exceeded.
          */
-        private static void CheckBounds(int cellIndex)
+        internal static void CheckBounds(int cellIndex)
         {
             SpreadsheetVersion v = SpreadsheetVersion.EXCEL2007;
             int maxcol = SpreadsheetVersion.EXCEL2007.LastColumnIndex;
