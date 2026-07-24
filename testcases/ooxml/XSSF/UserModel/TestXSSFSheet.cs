@@ -3358,7 +3358,7 @@ namespace TestCases.XSSF.UserModel
         {
             using var workbook = new XSSFWorkbook();
             var sheet = (XSSFSheet)workbook.CreateSheet("Input");
-            for(int r = 0; r < 3; r++)
+            for (int r = 0; r < 3; r++)
             {
                 sheet.CreateRow(r).CreateCell(0).SetCellValue(r);
             }
@@ -3366,7 +3366,7 @@ namespace TestCases.XSSF.UserModel
             sheet.CreateColumn(0);
 
             // Repeated failed probes, each one caught by the caller and shrugged off.
-            for(int i = 0; i < 3; i++)
+            for (int i = 0; i < 3; i++)
             {
                 Assert.Throws<ArgumentException>(() => sheet.CreateRow(-1));
                 Assert.Throws<ArgumentException>(() => sheet.GetRow(0).CreateCell(-1));
@@ -3407,13 +3407,12 @@ namespace TestCases.XSSF.UserModel
          */
         private static string GetWrittenSheetXml(XSSFWorkbook workbook, string partName)
         {
-            var stream = new MemoryStream();
+            using var stream = new MemoryStream();
             workbook.Write(stream, true);
             stream.Position = 0;
 
-            using OPCPackage package = OPCPackage.Open(stream);
-            List<PackagePart> parts = package.GetPartsByName(
-                new Regex(Regex.Escape(partName), RegexOptions.Compiled));
+            using OPCPackage package = OPCPackage.Open(stream, true);
+            List<PackagePart> parts = package.GetPartsByName(new Regex(Regex.Escape(partName)));
             ClassicAssert.AreEqual(1, parts.Count, "Written workbook has no " + partName);
 
             using var reader = new StreamReader(parts[0].GetInputStream());

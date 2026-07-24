@@ -1220,7 +1220,7 @@ namespace NPOI.XSSF.UserModel
         }
 
         /**
-         * @throws RuntimeException if the bounds are exceeded.
+         * @throws ArgumentException if the bounds are exceeded.
          */
         internal static void CheckBounds(int cellIndex)
         {
