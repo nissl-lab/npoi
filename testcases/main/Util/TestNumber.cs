@@ -3,7 +3,8 @@ using NUnit.Framework;
 
 namespace TestCases.Util
 {
-    internal class TestNumber
+    [TestFixture]
+    internal static class TestNumber
     {
         [TestCase(0, ExpectedResult = 0)]
         [TestCase(1, ExpectedResult = 1)]
