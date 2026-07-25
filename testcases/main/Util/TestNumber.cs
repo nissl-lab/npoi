@@ -5,6 +5,7 @@ namespace TestCases.Util
 {
     internal class TestNumber
     {
+        [TestCase(0, ExpectedResult = 0)]
         [TestCase(1, ExpectedResult = 1)]
         [TestCase(16, ExpectedResult = 1)]
         [TestCase(31, ExpectedResult = 5)]
