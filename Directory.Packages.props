@@ -23,8 +23,8 @@
     <PackageVersion Include="System.Memory" Version="4.6.3" />
     <PackageVersion Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="3.119.2" />
     <PackageVersion Include="System.Configuration.ConfigurationManager" Version="8.0.1" />
-    <PackageVersion Include="System.Formats.Asn1" Version="10.0.6" />
-    <PackageVersion Include="System.Security.Cryptography.Xml" Version="10.0.6" />
+    <PackageVersion Include="System.Formats.Asn1" Version="10.0.10" />
+    <PackageVersion Include="System.Security.Cryptography.Xml" Version="10.0.10" />
     <PackageVersion Include="System.Text.Encoding.CodePages" Version="8.0.0" />
     <PackageVersion Include="ZString" Version="2.6.0" />
   </ItemGroup>
