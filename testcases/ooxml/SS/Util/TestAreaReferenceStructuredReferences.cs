@@ -18,8 +18,8 @@
 namespace TestCases.SS.Util
 {
     using System;
-    using System.Collections.Generic;
     using NPOI.SS;
+    using NPOI.SS.Formula;
     using NPOI.SS.Util;
     using NPOI.SS.UserModel;
     using NPOI.XSSF;
@@ -28,14 +28,16 @@ namespace TestCases.SS.Util
     using NUnit.Framework.Legacy;
 
     /// <summary>
-    /// Tests the <see cref="AreaReference"/> constructor overload that accepts an
-    /// <see cref="NPOI.SS.Formula.IFormulaParsingWorkbook"/> for resolving Excel
-    /// structured table references to concrete cell ranges.
+    /// Tests the <see cref="AreaReference"/> constructor overload and the
+    /// <see cref="AreaReference.FromStructuredReference(string, NPOI.SS.Formula.IFormulaParsingWorkbook, int)"/>
+    /// factory, both of which take an <see cref="NPOI.SS.Formula.IFormulaParsingWorkbook"/> to
+    /// resolve Excel structured table references to concrete cell ranges.
     /// </summary>
     /// <remarks>
-    /// Uses the <c>StructuredReferences.xlsx</c> sample workbook which contains
-    /// a table named <c>\_Prime.1</c> on the "Table" sheet at A1:C7 with columns:
-    /// <c>calc='#*'#</c>, <c>Name</c>, <c>Number</c>. No totals row. 6 data rows (rows 2-7).
+    /// Uses the <c>StructuredReferences.xlsx</c> sample workbook, which contains a single table
+    /// named <c>\_Prime.1</c> on the "Table" sheet at A1:C7 with columns <c>calc=#*#</c>,
+    /// <c>Name</c> and <c>Number</c>. It has no totals row (<c>totalsRowShown="0"</c>) and 6 data
+    /// rows (rows 1-6, 0-based).
     /// </remarks>
     [TestFixture]
     public class TestAreaReferenceStructuredReferences
@@ -194,15 +196,66 @@ namespace TestCases.SS.Util
         [Test]
         public void Constructor_WithWorkbook_InvalidTableName_Throws()
         {
-            // The constructor can throw several exception types for invalid structured references:
-            // - KeyNotFoundException: table name not found in workbook (from GetTable())
-            // - FormulaParseException: malformed structured reference syntax
-            // - InvalidOperationException: reference resolves to something other than a single area
+            // Two exception types are possible for an invalid structured reference:
+            // - FormulaParseException: malformed syntax, unknown table, unknown column, or a
+            //   row-relative specifier with no row index
+            // - InvalidOperationException: valid syntax that designates no single area (see the
+            //   [#Totals] and [#This Row] out-of-range tests below)
             using XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("StructuredReferences.xlsx");
             var fpb = XSSFEvaluationWorkbook.Create(wb);
 
-            Assert.Throws<KeyNotFoundException>(() =>
+            var ex = Assert.Throws<FormulaParseException>(() =>
                 new AreaReference("NonExistentTable[#Headers]", SpreadsheetVersion.EXCEL2007, fpb));
+            StringAssert.Contains("NonExistentTable", ex.Message,
+                "The error should name the table that could not be found");
+        }
+
+        [Test]
+        public void Constructor_WithWorkbook_UnknownColumn_Throws()
+        {
+            using XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("StructuredReferences.xlsx");
+            var fpb = XSSFEvaluationWorkbook.Create(wb);
+
+            Assert.Throws<FormulaParseException>(() =>
+                new AreaReference("\\_Prime.1[NoSuchColumn]", SpreadsheetVersion.EXCEL2007, fpb));
+        }
+
+        [Test]
+        public void Constructor_WithWorkbook_TotalsSpecifier_OnTableWithoutTotalsRow_Throws()
+        {
+            // \_Prime.1 has totalsRowShown="0", so [#Totals] designates no range. During formula
+            // evaluation this becomes #REF!; a constructor has no error-value channel, so it throws.
+            using XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("StructuredReferences.xlsx");
+            var fpb = XSSFEvaluationWorkbook.Create(wb);
+
+            Assert.Throws<InvalidOperationException>(() =>
+                new AreaReference("\\_Prime.1[#Totals]", SpreadsheetVersion.EXCEL2007, fpb));
+        }
+
+        [Test]
+        public void Constructor_WithWorkbook_ThisRow_WithoutRowIndex_ThrowsExplicitly()
+        {
+            // rowIndex defaults to "not specified" (-1) rather than 0, so a [#This Row] reference
+            // with no row index fails loudly instead of silently resolving against the wrong row.
+            using XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("StructuredReferences.xlsx");
+            var fpb = XSSFEvaluationWorkbook.Create(wb);
+
+            var ex = Assert.Throws<FormulaParseException>(() =>
+                new AreaReference("\\_Prime.1[#This Row]", SpreadsheetVersion.EXCEL2007, fpb));
+            StringAssert.Contains("Row index must be specified", ex.Message,
+                "The error should tell the caller to supply a row index");
+        }
+
+        [Test]
+        public void Constructor_WithWorkbook_ThisRow_RowIndexOutsideTable_Throws()
+        {
+            // \_Prime.1 spans rows 0-6; row 99 is outside it, which evaluates to #VALUE! in a
+            // formula and so designates no range here.
+            using XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("StructuredReferences.xlsx");
+            var fpb = XSSFEvaluationWorkbook.Create(wb);
+
+            Assert.Throws<InvalidOperationException>(() =>
+                new AreaReference("\\_Prime.1[#This Row]", SpreadsheetVersion.EXCEL2007, fpb, 99));
         }
 
         // ---- Constructor without workbook: backward compatibility ----
@@ -315,6 +368,75 @@ namespace TestCases.SS.Util
             ClassicAssert.AreEqual(0, area.FirstCell.Col);
             ClassicAssert.AreEqual(6, area.LastCell.Row);
             ClassicAssert.AreEqual(2, area.LastCell.Col);
+        }
+
+        // ---- FromStructuredReference factory ----
+
+        [Test]
+        public void FromStructuredReference_ResolvesWithoutCallerSuppliedVersion()
+        {
+            // The factory derives the spreadsheet version from the workbook, so callers cannot
+            // pass one that would be silently ignored.
+            using XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("StructuredReferences.xlsx");
+            var fpb = XSSFEvaluationWorkbook.Create(wb);
+
+            var area = AreaReference.FromStructuredReference("\\_Prime.1[#Data]", fpb);
+
+            ClassicAssert.AreEqual("Table", area.FirstCell.SheetName);
+            ClassicAssert.AreEqual(1, area.FirstCell.Row);
+            ClassicAssert.AreEqual(0, area.FirstCell.Col);
+            ClassicAssert.AreEqual(6, area.LastCell.Row);
+            ClassicAssert.AreEqual(2, area.LastCell.Col);
+        }
+
+        [Test]
+        public void FromStructuredReference_HonorsRowIndex()
+        {
+            using XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("StructuredReferences.xlsx");
+            var fpb = XSSFEvaluationWorkbook.Create(wb);
+
+            var area = AreaReference.FromStructuredReference("\\_Prime.1[#This Row]", fpb, 3);
+
+            ClassicAssert.AreEqual(3, area.FirstCell.Row);
+            ClassicAssert.AreEqual(3, area.LastCell.Row);
+        }
+
+        [Test]
+        public void FromStructuredReference_RejectsRegularReference()
+        {
+            // Unlike the constructor, the factory does not quietly fall back to A1-style parsing:
+            // the caller asked for a structured reference, so a regular one is a programming error.
+            using XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("StructuredReferences.xlsx");
+            var fpb = XSSFEvaluationWorkbook.Create(wb);
+
+            Assert.Throws<ArgumentException>(() =>
+                AreaReference.FromStructuredReference("Sheet1!A1:C7", fpb));
+        }
+
+        [Test]
+        public void FromStructuredReference_RejectsNullArguments()
+        {
+            using XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("StructuredReferences.xlsx");
+            var fpb = XSSFEvaluationWorkbook.Create(wb);
+
+            Assert.Throws<ArgumentNullException>(() =>
+                AreaReference.FromStructuredReference(null, fpb));
+            Assert.Throws<ArgumentNullException>(() =>
+                AreaReference.FromStructuredReference("\\_Prime.1[#Data]", null));
+        }
+
+        [Test]
+        public void FromStructuredReference_MatchesConstructorResult()
+        {
+            using XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("StructuredReferences.xlsx");
+            var fpb = XSSFEvaluationWorkbook.Create(wb);
+
+            var viaFactory = AreaReference.FromStructuredReference("\\_Prime.1[[#Headers],[Number]]", fpb);
+            var viaConstructor = new AreaReference(
+                "\\_Prime.1[[#Headers],[Number]]", SpreadsheetVersion.EXCEL2007, fpb);
+
+            ClassicAssert.AreEqual(viaConstructor.FormatAsString(), viaFactory.FormatAsString());
+            ClassicAssert.AreEqual(viaConstructor.IsSingleCell, viaFactory.IsSingleCell);
         }
     }
 }

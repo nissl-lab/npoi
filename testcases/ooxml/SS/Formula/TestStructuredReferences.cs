@@ -105,6 +105,36 @@ namespace TestCases.SS.Formula
             }
         }
 
+        /**
+         * INDIRECT() with a structured reference to a table that does not exist must evaluate to
+         * #REF!, not fail evaluation outright. Indirect only handles FormulaParseException, so this
+         * depends on the workbook's table lookup returning null for an unknown name (as it
+         * documents) rather than throwing KeyNotFoundException past Indirect's handler.
+         */
+        [Test]
+        public void TestIndirectWithUnknownTableName()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("StructuredReferences.xlsx");
+            try
+            {
+                IFormulaEvaluator eval = new XSSFFormulaEvaluator(wb);
+                XSSFSheet formulaSheet = wb.GetSheet("Formulas") as XSSFSheet;
+
+                ICell cell = formulaSheet.CreateRow(10).CreateCell(0, CellType.Formula);
+                cell.CellFormula = (/*setter*/"INDIRECT(\"NoSuchTable[#Data]\")");
+
+                CellValue cv = eval.Evaluate(cell);
+
+                ClassicAssert.AreEqual(CellType.Error, cv.CellType,
+                    "An unknown table name should evaluate to an error, not throw");
+                ClassicAssert.AreEqual(FormulaError.REF.Code, cv.ErrorValue);
+            }
+            finally
+            {
+                wb.Close();
+            }
+        }
+
         private static void Confirm(IFormulaEvaluator fe, ICell cell, double expectedResult)
         {
             fe.ClearAllCachedResultValues();
