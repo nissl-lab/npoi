@@ -1066,11 +1066,25 @@ namespace NPOI.XSSF.Streaming
         {
             get
             {
-                throw new NotImplementedException();
+                bool forcerecalc=true;
+                for(int i = 0; i < this.NumberOfSheets; i++)
+                {
+                    var sheet = this.GetSheetAt(i);
+                    if(!sheet.ForceFormulaRecalculation)
+                    {
+                        forcerecalc = false;
+                        break;
+                    }
+                }
+                return forcerecalc;
             }
             set
             {
-                throw new NotImplementedException();
+                for(int i = 0; i < this.NumberOfSheets; i++)
+                {
+                    var sheet = this.GetSheetAt(i);
+                    sheet.ForceFormulaRecalculation = value;
+                }
             }
         }
     }
