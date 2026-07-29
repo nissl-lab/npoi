@@ -1062,5 +1062,16 @@ namespace NPOI.XSSF.Streaming
                 it.Reset();
             }
         }
+        public bool ForceFormulaRecalculation
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
     }
-}
+ }
