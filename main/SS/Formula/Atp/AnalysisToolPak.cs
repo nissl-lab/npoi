@@ -178,6 +178,7 @@ namespace NPOI.SS.Formula.Atp
             r(m, "RECEIVED", ReceivedFunction.instance);
             r(m, "RTD", null);
             r(m, "SERIESSUM", null);
+            r(m, "SHEET", Sheet.instance);
             r(m, "SQRTPI", null);
             r(m, "SUMIFS", Sumifs.instance);
             r(m, "SWITCH", Switch.instance);
