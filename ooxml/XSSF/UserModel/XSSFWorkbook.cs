@@ -2729,6 +2729,12 @@ namespace NPOI.XSSF.UserModel
         {
             return WorkbookUtil.ToDataSet(this, firstRowAsHeader, showCalculatedValue);
         }
+
+        public bool ForceFormulaRecalculation
+        {
+            get => GetForceFormulaRecalculation();
+            set => SetForceFormulaRecalculation(value);
+        }
     }
 }
 

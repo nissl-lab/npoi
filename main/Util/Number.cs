@@ -1,6 +1,9 @@
 ﻿using ExtendedNumerics;
 using System;
 using System.Collections;
+#if NET8_0_OR_GREATER
+using System.Numerics;
+#endif
 
 namespace NPOI.Util
 {
@@ -8,6 +11,9 @@ namespace NPOI.Util
     {
         public static int BitCount(int i)
         {
+#if NET8_0_OR_GREATER
+            return BitOperations.PopCount((uint)i);
+#else
             BitArray bitArray = new BitArray(BitConverter.GetBytes(i));
             int count = 0;
             for (int idx = 0; idx < bitArray.Count; idx++)
@@ -22,13 +28,15 @@ namespace NPOI.Util
             //i = i + (i >>> 8);
             //i = i + (i >>> 16);
             //return i & 0x3f;
+#endif
+
         }
-        private static Type BoolType = typeof(bool);
-        private static Type CharType = typeof(char);
-        private static Type IntPtrType = typeof(IntPtr);
-        private static Type UIntPtrType = typeof(UIntPtr);
-        private static Type DecimalType = typeof(decimal);
-        private static Type BigDecimalType = typeof(BigDecimal);
+        private static readonly Type BoolType = typeof(bool);
+        private static readonly Type CharType = typeof(char);
+        private static readonly Type IntPtrType = typeof(IntPtr);
+        private static readonly Type UIntPtrType = typeof(UIntPtr);
+        private static readonly Type DecimalType = typeof(decimal);
+        private static readonly Type BigDecimalType = typeof(BigDecimal);
         public static bool IsNumber(object value)
         {
             if (value == null)
