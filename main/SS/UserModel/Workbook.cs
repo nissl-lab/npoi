@@ -455,5 +455,7 @@ namespace NPOI.SS.UserModel
         /// <param name="name">The sheet name</param>
         /// <returns>The sheet or null if not found</returns>
         ISheet this[string name] { get; }
+
+        bool ForceFormulaRecalculation { get; set; }
     }
 }

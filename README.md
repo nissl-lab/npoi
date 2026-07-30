@@ -20,11 +20,10 @@ What's NPOI
 ===================
 This project is the .NET version of Apache POI project. With NPOI, you can read/write Office 2003/2007 files very easily.<br />
 
-# NPOI Official Tutorials
-[![Official NPOI Video Tutorials by Creator Tony Qu](https://github.com/user-attachments/assets/c7974d88-f693-4228-889e-c28f61257851)](https://www.youtube.com/@codingwithtonyqus)
-
 Documentation
 ============
+
+[NPOI Official Tutorials](https://www.youtube.com/@codingwithtonyqus)
 
 [Getting Started with NPOI](https://github.com/nissl-lab/npoi/wiki/Getting-Started-with-NPOI)
 
@@ -65,7 +64,8 @@ Contributors
 ![Contributors](https://contrib.rocks/image?repo=nissl-lab/npoi)
 
 ### Sponsored By
-[<img alt="Swyfft Insurance" src="https://github.com/user-attachments/assets/2f043f1f-9d56-4cf5-b46f-71868567b2d3" width="180" />](https://www.swyfft.com/)
+[<img alt="Swyfft Insurance" src="https://github.com/user-attachments/assets/2f043f1f-9d56-4cf5-b46f-71868567b2d3" width="180" />](https://www.swyfft.com/) <br>
+[<img alt="Baramundi" src="https://avatars.githubusercontent.com/u/171809088?s=200&v=4" width="100" />](https://www.baramundi.com/)
 
 
 <a href="https://info.flagcounter.com/bndt"><img src="https://s01.flagcounter.com/count/bndt/bg_FFFFFF/txt_000000/border_CCCCCC/columns_3/maxflags_20/viewers_0/labels_1/pageviews_1/flags_0/percent_0/" alt="Flag Counter" border="0"></a>
