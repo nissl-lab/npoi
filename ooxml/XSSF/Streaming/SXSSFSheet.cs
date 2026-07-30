@@ -41,7 +41,7 @@ namespace NPOI.XSSF.Streaming
         private readonly Dictionary<int, SXSSFRow> _rows = new Dictionary<int, SXSSFRow>();
         private readonly SheetDataWriter _writer;
         private int _randomAccessWindowSize = SXSSFWorkbook.DEFAULT_WINDOW_SIZE;
-        private readonly Lazy<AutoSizeColumnTracker> _autoSizeColumnTracker;
+        private AutoSizeColumnTracker _autoSizeColumnTracker;
         private int outlineLevelRow = 0;
         private int lastFlushedRowNumber = -1;
         private bool allFlushed = false;
@@ -56,8 +56,15 @@ namespace NPOI.XSSF.Streaming
             _sh = xSheet;
             _writer = workbook.CreateSheetDataWriter();
             SetRandomAccessWindowSize(_workbook.RandomAccessWindowSize);
-            _autoSizeColumnTracker = new Lazy<AutoSizeColumnTracker>(
-                () => new AutoSizeColumnTracker(this));
+        }
+
+        private AutoSizeColumnTracker GetOrCreateAutoSizeColumnTracker()
+        {
+            if (_autoSizeColumnTracker == null)
+            {
+                _autoSizeColumnTracker = new AutoSizeColumnTracker(this);
+            }
+            return _autoSizeColumnTracker;
         }
 
         public void SetRandomAccessWindowSize(int value)
@@ -582,7 +589,7 @@ namespace NPOI.XSSF.Streaming
             try
             {
                 // get the best fit width of rows already flushed to disk
-                flushedWidth = _autoSizeColumnTracker.Value.GetBestFitColumnWidth(column, useMergedCells);
+                flushedWidth = GetOrCreateAutoSizeColumnTracker().GetBestFitColumnWidth(column, useMergedCells);
             }
             catch (Exception e)
             {
@@ -1070,7 +1077,7 @@ namespace NPOI.XSSF.Streaming
          */
         public void TrackColumnForAutoSizing(int column)
         {
-            _autoSizeColumnTracker.Value.TrackColumn(column);
+            GetOrCreateAutoSizeColumnTracker().TrackColumn(column);
         }
 
         /**
@@ -1083,7 +1090,7 @@ namespace NPOI.XSSF.Streaming
          */
         public void TrackColumnsForAutoSizing(ICollection<int> columns)
         {
-            _autoSizeColumnTracker.Value.TrackColumns(columns);
+            GetOrCreateAutoSizeColumnTracker().TrackColumns(columns);
         }
 
         /**
@@ -1093,7 +1100,7 @@ namespace NPOI.XSSF.Streaming
          */
         public void TrackAllColumnsForAutoSizing()
         {
-            _autoSizeColumnTracker.Value.TrackAllColumns();
+            GetOrCreateAutoSizeColumnTracker().TrackAllColumns();
         }
 
         /**
@@ -1109,7 +1116,7 @@ namespace NPOI.XSSF.Streaming
          */
         public bool UntrackColumnForAutoSizing(int column)
         {
-            return _autoSizeColumnTracker.Value.UntrackColumn(column);
+            return GetOrCreateAutoSizeColumnTracker().UntrackColumn(column);
         }
 
         /**
@@ -1125,7 +1132,7 @@ namespace NPOI.XSSF.Streaming
          */
         public bool UntrackColumnsForAutoSizing(ICollection<int> columns)
         {
-            return _autoSizeColumnTracker.Value.UntrackColumns(columns);
+            return GetOrCreateAutoSizeColumnTracker().UntrackColumns(columns);
         }
 
         /**
@@ -1135,7 +1142,7 @@ namespace NPOI.XSSF.Streaming
          */
         public void UntrackAllColumnsForAutoSizing()
         {
-            _autoSizeColumnTracker.Value.UntrackAllColumns();
+            GetOrCreateAutoSizeColumnTracker().UntrackAllColumns();
         }
 
         /**
@@ -1147,7 +1154,7 @@ namespace NPOI.XSSF.Streaming
          */
         public bool IsColumnTrackedForAutoSizing(int column)
         {
-            return _autoSizeColumnTracker.Value.IsColumnTracked(column);
+            return GetOrCreateAutoSizeColumnTracker().IsColumnTracked(column);
         }
 
         /**
@@ -1162,7 +1169,7 @@ namespace NPOI.XSSF.Streaming
         {
             get
             {
-                return _autoSizeColumnTracker.Value.TrackedColumns;
+                return GetOrCreateAutoSizeColumnTracker().TrackedColumns;
             }
         }
 
@@ -1400,7 +1407,7 @@ namespace NPOI.XSSF.Streaming
             var firstRowNum = _rows.Keys.Min();
             // Update the best fit column widths for auto-sizing just before the rows are flushed
             var firstRow = _rows[firstRowNum];
-            _autoSizeColumnTracker.Value?.UpdateColumnWidths(firstRow);
+            _autoSizeColumnTracker?.UpdateColumnWidths(firstRow);
             _writer.WriteRow(firstRowNum, firstRow);
             _rows.Remove(firstRowNum);
             lastFlushedRowNumber = firstRowNum;
