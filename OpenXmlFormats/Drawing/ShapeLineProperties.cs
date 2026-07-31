@@ -435,7 +435,6 @@ namespace NPOI.OpenXmlFormats.Dml
         internal static CT_DashStopList Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             CT_DashStopList ctObj = new CT_DashStopList();
-            //ctObj.dsField = new List<CT_DashStop>();
             foreach(XmlNode childNode in node.ChildNodes)
             {
                 ctObj.ds.Add(CT_DashStop.Parse(childNode, namespaceManager));
@@ -473,12 +472,15 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<a:{0}>", nodeName));
-            foreach(var child in this.ds)
+            if(this.ds.Count != 0)
             {
-                child.Write(sw, "ds");
+                sw.Write(string.Format("<a:{0}>", nodeName));
+                foreach(var child in this.ds)
+                {
+                    child.Write(sw, "ds");
+                }
+                sw.Write(string.Format("</a:{0}>", nodeName));
             }
-            sw.Write(string.Format("</a:{0}>", nodeName));
         }
     }
 
