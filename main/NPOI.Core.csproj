@@ -14,10 +14,6 @@
     <DocumentationFile>..\solution\Release\NPOI.Core.xml</DocumentationFile>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'net472' ">
-    <SignAssembly>false</SignAssembly>
-  </PropertyGroup>
-
   <ItemGroup>
     <EmbeddedResource Include="Resources\font_metrics.properties" />
     <EmbeddedResource Include="Resources\functionMetadata.txt" />
