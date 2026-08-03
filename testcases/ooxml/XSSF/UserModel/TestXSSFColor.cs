@@ -180,6 +180,24 @@ namespace TestCases.XSSF.UserModel
         }
 
         [Test]
+        public void TestRgbWithTintDoesNotMutateStoredRgb()
+        {
+            XSSFColor color = new XSSFColor(new byte[] { 100, 150, 200 }, new NPOI.OOXML.XSSF.UserModel.DefaultIndexedColorMap());
+            color.Tint = 0.5;
+
+            byte[] expected = (byte[])color.RGBWithTint.Clone();
+            ClassicAssert.AreEqual(100, color.RGB[0]);
+            ClassicAssert.AreEqual(150, color.RGB[1]);
+            ClassicAssert.AreEqual(200, color.RGB[2]);
+
+            CollectionAssert.AreEqual(expected, color.RGBWithTint);
+            CollectionAssert.AreEqual(expected, color.RGBWithTint);
+            ClassicAssert.AreEqual(100, color.RGB[0]);
+            ClassicAssert.AreEqual(150, color.RGB[1]);
+            ClassicAssert.AreEqual(200, color.RGB[2]);
+        }
+
+        [Test]
         public void TestCustomIndexedColour()
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("customIndexedColors.xlsx");
