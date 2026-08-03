@@ -51,6 +51,8 @@ namespace NPOI.SS.UserModel
         private static DecimalFormat format3digit = new DecimalFormat("0");
         private static DecimalFormat format4digits = new DecimalFormat("00");
 
+        private static readonly Regex quotedLiteralRegex = new Regex("'[^']*'|\\ue009[^\\ue009]*\\ue009", RegexOptions.Compiled);
+
         static ExcelStyleDateFormatter()
         {
             //DataFormatter.SetExcelStyleRoundingMode(format1digit, RoundingMode.DOWN);
@@ -129,6 +131,14 @@ namespace NPOI.SS.UserModel
 
         public StringBuilder Format(DateTime date, StringBuilder paramStringBuilder, CultureInfo culture)
         {
+            // Excel rounds the seconds to the nearest whole second when the
+            // format string displays seconds but no fractional part,
+            // e.g. "dd.mm.yyyy hh:mm:ss" instead of "dd.mm.yyyy hh:mm:ss.000"
+            if (ShouldRoundToNearestSecond())
+            {
+                date = RoundToNearestSecond(date);
+            }
+
             // Do the normal format
             string s = string.Empty;
             if (Regex.IsMatch(Pattern, "[yYmMdDhHsS\\-/,. :\"\\\\]+0?[ampAMP/]*"))
@@ -210,6 +220,25 @@ namespace NPOI.SS.UserModel
             }
 
             return new StringBuilder(s);
+        }
+
+        private static DateTime RoundToNearestSecond(DateTime date)
+        {
+            date = date.AddMilliseconds(500);
+            long ticks = date.Ticks - (date.Ticks % TimeSpan.TicksPerSecond);
+            return new DateTime(ticks, date.Kind);
+        }
+
+        private bool ShouldRoundToNearestSecond()
+        {
+            if (Pattern.Contains(L_BRACKET_SYMBOL) || Pattern.Contains(LL_BRACKET_SYMBOL))
+            {
+                return false;
+            }
+            string pattern = quotedLiteralRegex.Replace(Pattern, string.Empty);
+            bool hasSeconds = pattern.Contains('s') || pattern.Contains('S');
+            bool hasFraction = pattern.Contains('f') || pattern.Contains('F');
+            return hasSeconds && !hasFraction;
         }
 
         public override bool Equals(Object o)
