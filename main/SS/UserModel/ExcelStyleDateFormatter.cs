@@ -129,6 +129,17 @@ namespace NPOI.SS.UserModel
 
         public StringBuilder Format(DateTime date, StringBuilder paramStringBuilder, CultureInfo culture)
         {
+            // Excel rounds the value to the nearest second when the format
+            // displays seconds but no fractional seconds, e.g. "hh:mm:ss"
+            if (Pattern.Contains('s') &&
+                !Pattern.Contains("fff") &&
+                !Pattern.Contains(L_BRACKET_SYMBOL) &&
+                !Pattern.Contains(LL_BRACKET_SYMBOL))
+            {
+                date = date.AddMilliseconds(500);
+                date = date.AddMilliseconds(-date.Millisecond);
+            }
+
             // Do the normal format
             string s = string.Empty;
             if (Regex.IsMatch(Pattern, "[yYmMdDhHsS\\-/,. :\"\\\\]+0?[ampAMP/]*"))

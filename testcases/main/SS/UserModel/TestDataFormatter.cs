@@ -504,12 +504,12 @@ namespace TestCases.SS.UserModel
            // It is not so JDK 1.5 where the default rounding mode is HALV_EVEN and cannot be changed.
 
 
-            ClassicAssert.AreEqual("27:18:08", dfUS.FormatRawCellContents(1.1376, -1, "[h]:mm:ss"));
+            ClassicAssert.AreEqual("27:18:09", dfUS.FormatRawCellContents(1.1376, -1, "[h]:mm:ss"));
             ClassicAssert.AreEqual("28:48:00", dfUS.FormatRawCellContents(1.2, -1, "[h]:mm:ss"));
             ClassicAssert.AreEqual("29:31:12", dfUS.FormatRawCellContents(1.23, -1, "[h]:mm:ss"));
             ClassicAssert.AreEqual("31:26:24", dfUS.FormatRawCellContents(1.31, -1, "[h]:mm:ss"));
 
-            ClassicAssert.AreEqual("27:18:08", dfUS.FormatRawCellContents(1.1376, -1, "[hh]:mm:ss"));
+            ClassicAssert.AreEqual("27:18:09", dfUS.FormatRawCellContents(1.1376, -1, "[hh]:mm:ss"));
             ClassicAssert.AreEqual("28:48:00", dfUS.FormatRawCellContents(1.2, -1, "[hh]:mm:ss"));
             ClassicAssert.AreEqual("29:31:12", dfUS.FormatRawCellContents(1.23, -1, "[hh]:mm:ss"));
             ClassicAssert.AreEqual("31:26:24", dfUS.FormatRawCellContents(1.31, -1, "[hh]:mm:ss"));
@@ -711,6 +711,54 @@ namespace TestCases.SS.UserModel
             DataFormatter dfUS = new DataFormatter(culture, true);
             ClassicAssert.AreEqual("01.010", dfUS.FormatRawCellContents(0.0000116898, -1, "ss.000"));
         }
+        /**
+         * Excel rounds to the nearest second when the format
+         * displays seconds but no fractional seconds.
+         */
+        [Test]
+        public void TestRoundToNearestSecond()
+        {
+            double value = 44736.1070318287; // 24.06.2022 02:34:07.550
+            DataFormatter dfUS = new DataFormatter(CultureInfo.GetCultureInfo("en-US"), true);
+
+            // Fractional seconds are displayed as-is
+            ClassicAssert.AreEqual("24.06.2022 02:34:07.550", dfUS.FormatRawCellContents(value, -1, "dd.mm.yyyy hh:mm:ss.000"));
+            ClassicAssert.AreEqual("24.06.2022 02:34:07.55", dfUS.FormatRawCellContents(value, -1, "dd.mm.yyyy hh:mm:ss.00"));
+            ClassicAssert.AreEqual("24.06.2022 02:34:07.5", dfUS.FormatRawCellContents(value, -1, "dd.mm.yyyy hh:mm:ss.0"));
+
+            // Without fractional seconds the value is rounded to the nearest second
+            ClassicAssert.AreEqual("24.06.2022 02:34:08", dfUS.FormatRawCellContents(value, -1, "dd.mm.yyyy hh:mm:ss"));
+
+            // Values below 500 ms must not round up
+            ClassicAssert.AreEqual("24.06.2022 02:34:07", dfUS.FormatRawCellContents(44736.1070300000, -1, "dd.mm.yyyy hh:mm:ss"));
+
+            // Formats without seconds are never rounded
+            ClassicAssert.AreEqual("24.06.2022", dfUS.FormatRawCellContents(44736.99999999, -1, "dd.mm.yyyy"));
+            ClassicAssert.AreEqual("24.06.2022 02:34", dfUS.FormatRawCellContents(value, -1, "dd.mm.yyyy hh:mm"));
+        }
+        [Test]
+        public void TestFormatCellValueRoundsToNearestSecond()
+        {
+            IWorkbook wb = new HSSFWorkbook();
+            try
+            {
+                ISheet s1 = wb.CreateSheet();
+                IRow row = s1.CreateRow(0);
+                ICell cell = row.CreateCell(0);
+                cell.SetCellValue(44736.1070318287);
+                ICellStyle newStyle = wb.CreateCellStyle();
+                IDataFormat dataFormat = wb.CreateDataFormat();
+                newStyle.DataFormat = dataFormat.GetFormat("dd.mm.yyyy hh:mm:ss");
+                cell.CellStyle = newStyle;
+
+                String actual = new DataFormatter().FormatCellValue(cell);
+                ClassicAssert.AreEqual("24.06.2022 02:34:08", actual);
+            }
+            finally
+            {
+                wb.Close();
+            }
+        }
         [Test]
         public void TestBug54786()
         {
@@ -874,7 +922,7 @@ namespace TestCases.SS.UserModel
             DataFormatter dfUS = new DataFormatter(CultureInfo.GetCultureInfo("en-US"));
             ClassicAssert.AreEqual("2016-23-08 08:51:01", dfUS.FormatRawCellContents(42605.368761574071, -1, "yyyy-dd-MM HH:mm:ss"));
             ClassicAssert.AreEqual("2016-23 08:51:01 08", dfUS.FormatRawCellContents(42605.368761574071, -1, "yyyy-dd HH:mm:ss MM"));
-            ClassicAssert.AreEqual("2017-12-01 January 09:54:33", dfUS.FormatRawCellContents(42747.412892397523, -1, "yyyy-dd-MM MMMM HH:mm:ss"));
+            ClassicAssert.AreEqual("2017-12-01 January 09:54:34", dfUS.FormatRawCellContents(42747.412892397523, -1, "yyyy-dd-MM MMMM HH:mm:ss"));
 
             ClassicAssert.AreEqual("08", dfUS.FormatRawCellContents(42605.368761574071, -1, "MM"));
             ClassicAssert.AreEqual("01", dfUS.FormatRawCellContents(42605.368761574071, -1, "ss"));
