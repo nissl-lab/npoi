@@ -116,6 +116,7 @@ using Cysharp.Text;
                 byte[] rgb = StoredRGB;
                 if (rgb != null)
                 {
+                    rgb = (byte[])rgb.Clone();
                     if (rgb.Length == 4)
                     {
                         byte[] tmp = new byte[3];
