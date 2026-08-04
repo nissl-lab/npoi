@@ -1610,6 +1610,72 @@ namespace TestCases.SS.UserModel
         }
 
         [Test]
+        public void TestGetCells_MultiCellRange()
+        {
+            var wb1 = _testDataProvider.CreateWorkbook();
+            var sheet = wb1.CreateSheet();
+            var cellRanges = sheet.Cells["A1:B3,D1:E57"];
+            ClassicAssert.AreEqual(2, cellRanges.Ranges.CountRanges());
+            ClassicAssert.AreEqual(120, cellRanges.Size);
+            ClassicAssert.AreEqual("A1:B3,D1:E57", cellRanges.Address);
+            ClassicAssert.AreEqual(5, cellRanges.Width);
+            ClassicAssert.AreEqual(57, cellRanges.Height);
+            ClassicAssert.AreEqual("A1", cellRanges.TopLeftCell.Address.FormatAsString());
+
+            cellRanges.SetCellValue("Hello");
+            ClassicAssert.AreEqual(120, cellRanges.Cells.Count);
+            foreach(var cell in cellRanges)
+            {
+                ClassicAssert.AreEqual("Hello", cell.StringCellValue);
+            }
+        }
+
+        [Test]
+        public void TestGetCells_MultiCellRange_SpaceAfterComma()
+        {
+            var wb1 = _testDataProvider.CreateWorkbook();
+            var sheet = wb1.CreateSheet();
+            var cellRanges = sheet.Cells["A1:B3, D1:E57"];
+            ClassicAssert.AreEqual(120, cellRanges.Size);
+            ClassicAssert.AreEqual("A1:B3,D1:E57", cellRanges.Address);
+        }
+
+        [Test]
+        public void TestGetCells_MultiCellRange_GetCellNotSupported()
+        {
+            var wb1 = _testDataProvider.CreateWorkbook();
+            var sheet = wb1.CreateSheet();
+            var cellRanges = sheet.Cells["A1:B3,D1:E57"];
+            Assert.Throws<NotSupportedException>(() => cellRanges.GetCell(0, 0));
+        }
+
+        [Test]
+        public void TestGetCells_MultiCellRange_OverlappingRanges()
+        {
+            var wb1 = _testDataProvider.CreateWorkbook();
+            var sheet = wb1.CreateSheet();
+            var cellRanges = sheet.Cells["A1:B2,A2:B3"];
+            cellRanges.SetCellValue(1.0);
+            ClassicAssert.AreEqual(8, cellRanges.Size);
+            ClassicAssert.AreEqual(6, cellRanges.Cells.Count);
+        }
+
+        [Test]
+        public void TestGetCells_MultiCellRange_SetCellStyle()
+        {
+            var wb1 = _testDataProvider.CreateWorkbook();
+            var sheet = wb1.CreateSheet();
+            var cellRanges = sheet.Cells["A1:B2,D1:E57"];
+            var style = wb1.CreateCellStyle();
+            style.Alignment = HorizontalAlignment.Center;
+            cellRanges.SetCellStyle(style, true);
+            foreach(var cell in cellRanges)
+            {
+                ClassicAssert.AreEqual(HorizontalAlignment.Center, cell.CellStyle.Alignment);
+            }
+        }
+
+        [Test]
         public void TestGetRows_BasicTest()
         {
             var wb1 = _testDataProvider.CreateWorkbook();
