@@ -1550,7 +1550,12 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.WriteStart("a", nodeName);
+            Write(sw, "a", nodeName);
+        }
+
+        internal void Write(StreamWriter sw, string ns, string nodeName)
+        {
+            sw.WriteStart(ns, nodeName);
             sw.Write('>');
             if (this.bodyPr != null)
                 this.bodyPr.Write(sw, "bodyPr");
@@ -1560,7 +1565,7 @@ namespace NPOI.OpenXmlFormats.Dml
             {
                 x.Write(sw, "p");
             }
-            sw.WriteEndElement("a", nodeName);
+            sw.WriteEndElement(ns, nodeName);
         }
 
         public void SetPArray(CT_TextParagraph[] array)

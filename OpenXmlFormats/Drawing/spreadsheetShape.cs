@@ -84,7 +84,7 @@ namespace NPOI.OpenXmlFormats.Dml.Spreadsheet
             if (this.style != null)
                 this.style.Write(sw, "style");
             if (this.txBody != null)
-                this.txBody.Write(sw, "txBody");
+                this.txBody.Write(sw, "xdr", "txBody");
             sw.WriteEndElement("xdr", nodeName);
         }
 

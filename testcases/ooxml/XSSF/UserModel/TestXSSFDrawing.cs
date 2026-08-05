@@ -17,6 +17,7 @@
 using System.Collections.Generic;
 using NUnit.Framework;using NUnit.Framework.Legacy;
 using System;
+using System.IO;
 using NPOI.OpenXml4Net.OPC;
 using NPOI.SS.UserModel;
 using NPOI.OpenXmlFormats.Dml;
@@ -252,6 +253,45 @@ namespace TestCases.XSSF.UserModel
                     rPr.solidFill.srgbClr.val));
 
             checkRewrite(wb);
+            wb.Close();
+        }
+
+        /**
+         * Regression test: the txBody element of a spreadsheet shape must be written
+         * in the "xdr" namespace, not "a", otherwise Excel stops rendering the text.
+         */
+        [Test]
+        public void TestTextShapeTxBodyNamespace()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            XSSFSheet sheet = wb.CreateSheet() as XSSFSheet;
+            XSSFDrawing drawing = sheet.CreateDrawingPatriarch() as XSSFDrawing;
+            XSSFSimpleShape shape = drawing.CreateSimpleShape(new XSSFClientAnchor(0, 0, 0, 0, 2, 2, 3, 4));
+            shape.SetText(new XSSFRichTextString("Test"));
+
+            string tmpFile = Path.GetTempFileName();
+            try
+            {
+                using (FileStream fs = new FileStream(tmpFile, FileMode.Create, FileAccess.Write))
+                    wb.Write(fs);
+                using (OPCPackage pkg = OPCPackage.Open(tmpFile))
+                {
+                    foreach (var part in pkg.GetPartsByContentType(XSSFRelation.DRAWINGS.ContentType))
+                    {
+                        using (Stream s = part.GetInputStream())
+                        using (StreamReader reader = new StreamReader(s, Encoding.UTF8))
+                        {
+                            string xml = reader.ReadToEnd();
+                            ClassicAssert.IsTrue(xml.Contains("<xdr:txBody>"), "expected <xdr:txBody> in drawing.xml but got: " + xml);
+                            ClassicAssert.IsFalse(xml.Contains("<a:txBody>"), "found <a:txBody> with wrong namespace in drawing.xml: " + xml);
+                        }
+                    }
+                }
+            }
+            finally
+            {
+                File.Delete(tmpFile);
+            }
             wb.Close();
         }
 
