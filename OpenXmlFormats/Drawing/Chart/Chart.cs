@@ -2530,7 +2530,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
         internal void Write(StreamWriter sw, string nodeName)
         {
             sw.WriteStart("c", nodeName);
-            XmlHelper.WriteAttribute(sw, "val", this.val);
+            XmlHelper.WriteAttribute(sw, "val", this.val, true);
             sw.Write("/>");
         }
 
