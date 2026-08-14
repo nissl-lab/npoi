@@ -422,7 +422,11 @@ namespace NPOI.XSSF.UserModel
         {
             if (name == null) return null;
             String lname = name.ToLower(CultureInfo.CurrentCulture);
-            return GetTableCache()[lname];
+            // Deliberately a lookup-or-null rather than an indexer: this method is documented to
+            // return null for an unknown name, and callers depend on that to report the bad name
+            // themselves (FormulaParser raises FormulaParseException, which INDIRECT() turns into
+            // #REF!). An indexer throws KeyNotFoundException straight past them instead.
+            return GetTableCache().TryGetValue(lname, out XSSFTable table) ? table : null;
         }
 
         public UDFFinder GetUDFFinder()

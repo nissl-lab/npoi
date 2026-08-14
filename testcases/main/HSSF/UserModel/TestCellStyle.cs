@@ -529,7 +529,10 @@ namespace TestCases.HSSF.UserModel
             const int rows = 1_000;
             const int dop = 2;
 
-            var time = DateTime.UtcNow.AddYears(-1);
+            // Truncate to whole seconds so that ToString("HH:mm:ss") (which truncates)
+            // and DataFormatter (which rounds the Excel OLE date double) agree.
+            var raw = DateTime.UtcNow.AddYears(-1);
+            var time = new DateTime(raw.Ticks - raw.Ticks % TimeSpan.TicksPerSecond, raw.Kind);
 
             Console.WriteLine($"Start time: {time:yyyy/MM/dd} {time:HH:mm:ss}");
 

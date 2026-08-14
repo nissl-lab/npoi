@@ -105,6 +105,67 @@ namespace TestCases.SS.Formula
             }
         }
 
+        /**
+         * INDIRECT() with a structured reference to a table that does not exist must evaluate to
+         * #REF!, not fail evaluation outright. Indirect only handles FormulaParseException, so this
+         * depends on the workbook's table lookup returning null for an unknown name (as it
+         * documents) rather than throwing KeyNotFoundException past Indirect's handler.
+         */
+        [Test]
+        public void TestIndirectWithUnknownTableName()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("StructuredReferences.xlsx");
+            try
+            {
+                IFormulaEvaluator eval = new XSSFFormulaEvaluator(wb);
+                XSSFSheet formulaSheet = wb.GetSheet("Formulas") as XSSFSheet;
+
+                ICell cell = formulaSheet.CreateRow(10).CreateCell(0, CellType.Formula);
+                cell.CellFormula = (/*setter*/"INDIRECT(\"NoSuchTable[#Data]\")");
+
+                CellValue cv = eval.Evaluate(cell);
+
+                ClassicAssert.AreEqual(CellType.Error, cv.CellType,
+                    "An unknown table name should evaluate to an error, not throw");
+                ClassicAssert.AreEqual(FormulaError.REF.Code, cv.ErrorValue);
+            }
+            finally
+            {
+                wb.Close();
+            }
+        }
+
+        /**
+         * INDIRECT() with a structured reference that is syntactically valid but designates no
+         * range must evaluate to #REF! rather than failing evaluation. These parse to an error Ptg,
+         * which ParseStructuredReference surfaces as InvalidOperationException.
+         */
+        [TestCase("\\_Prime.1[#Totals]", TestName = "TestIndirectUnresolvable_TotalsOnTableWithNoTotalsRow")]
+        [TestCase("\\_Prime.1[#This Row]", TestName = "TestIndirectUnresolvable_ThisRowOutsideTable")]
+        public void TestIndirectWithUnresolvableStructuredReference(String reference)
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("StructuredReferences.xlsx");
+            try
+            {
+                IFormulaEvaluator eval = new XSSFFormulaEvaluator(wb);
+                XSSFSheet formulaSheet = wb.GetSheet("Formulas") as XSSFSheet;
+
+                // Row 20 is well outside \_Prime.1 (A1:C7), so [#This Row] cannot resolve either.
+                ICell cell = formulaSheet.CreateRow(20).CreateCell(0, CellType.Formula);
+                cell.CellFormula = (/*setter*/"INDIRECT(\"" + reference + "\")");
+
+                CellValue cv = eval.Evaluate(cell);
+
+                ClassicAssert.AreEqual(CellType.Error, cv.CellType,
+                    "An unresolvable structured reference should evaluate to an error, not throw");
+                ClassicAssert.AreEqual(FormulaError.REF.Code, cv.ErrorValue);
+            }
+            finally
+            {
+                wb.Close();
+            }
+        }
+
         private static void Confirm(IFormulaEvaluator fe, ICell cell, double expectedResult)
         {
             fe.ClearAllCachedResultValues();
