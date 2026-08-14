@@ -242,6 +242,34 @@ namespace TestCases.XSSF.Model
 
 
         [Test]
+        public void TestSetThemeFromAnotherWorkbook()
+        {
+            // Setting a theme obtained from another workbook on a newly created
+            // workbook used to do nothing: the theme part belongs to the source
+            // workbook's package, so it was never written out when saving.
+            XSSFWorkbook oldWb = XSSFTestDataSamples.OpenSampleWorkbook(testFileSimple);
+
+            XSSFWorkbook newWb = new XSSFWorkbook();
+            newWb.CreateSheet();
+
+            newWb.GetStylesSource().SetTheme(oldWb.GetStylesSource().GetTheme());
+            ClassicAssert.IsNotNull(newWb.GetTheme());
+            // The theme must now be owned by the new workbook's package
+            ClassicAssert.AreSame(newWb, newWb.GetTheme().GetParent());
+
+            XSSFWorkbook readBack = XSSFTestDataSamples.WriteOutAndReadBack(newWb) as XSSFWorkbook;
+            ClassicAssert.IsNotNull(readBack.GetTheme());
+
+            // The theme colours should survive the round trip untouched
+            for (int i = 0; i < rgbExpected.Length; i++)
+            {
+                XSSFColor c = readBack.GetTheme().GetThemeColor(i);
+                ClassicAssert.AreEqual(rgbExpected[i], HexDump.EncodeHexString(c.RGB),
+                    "Wrong theme colour " + ThemeElement.ById(i).name);
+            }
+        }
+
+        [Test]
         public void TestAddNew()
         {
             XSSFWorkbook wb = new XSSFWorkbook();

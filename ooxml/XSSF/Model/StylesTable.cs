@@ -149,6 +149,17 @@ namespace NPOI.XSSF.Model
             }
             set
             {
+                // A theme is a package part owned by exactly one workbook. If the
+                // assigned theme does not already belong to this workbook's package
+                // (e.g. it was obtained from another workbook via GetTheme()), just
+                // holding a reference would never be written out when this workbook
+                // is saved. Clone it into a new theme part of this workbook instead.
+                if (value != null && workbook != null && !ReferenceEquals(value.GetParent(), workbook))
+                {
+                    ThemesTable newTheme = (ThemesTable)workbook.CreateRelationship(XSSFRelation.THEME, XSSFFactory.GetInstance());
+                    newTheme.CopyThemeFrom(value);
+                    value = newTheme;
+                }
                 this.theme = value;
 
                 // Pass the themes table along to things which need to
@@ -167,6 +178,27 @@ namespace NPOI.XSSF.Model
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Assigns the theme to this workbook's styles table, mirroring
+        /// <see cref="Theme"/>. If the given theme belongs to a different workbook
+        /// it is copied into this workbook so it is written out on save.
+        /// </summary>
+        /// <param name="theme">the theme to assign</param>
+        public void SetTheme(ThemesTable theme)
+        {
+            Theme = theme;
+        }
+
+        /// <summary>
+        /// Gets the theme of the current workbook, or null if the workbook
+        /// has no theme.
+        /// </summary>
+        /// <returns>the theme table, or null</returns>
+        public ThemesTable GetTheme()
+        {
+            return theme;
         }
 
         /**
