@@ -35,7 +35,7 @@ Documentation
 
 Advantage of NPOI
 =================
-a. It's totally free to use
+a. It's totally free to startups, freelancers, and hobbyists (whose annual revenue is less than $10,000 USD)
 
 b. Cover most features of Excel (cell style, data format, formula and so on)
 
