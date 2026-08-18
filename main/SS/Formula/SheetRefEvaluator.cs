@@ -55,6 +55,14 @@ namespace NPOI.SS.Formula
             }
         }
 
+        public int LastRowNum
+        {
+            get
+            {
+                return Sheet.LastRowNum;
+            }
+        }
+
         public ValueEval GetEvalForCell(int rowIndex, int columnIndex)
         {
             return _bookEvaluator.EvaluateReference(this.Sheet, _sheetIndex, rowIndex, columnIndex, _tracker);
