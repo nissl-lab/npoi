@@ -51,6 +51,12 @@ namespace NPOI.SS.Formula
         {
             return GetRelativeValue(FirstSheetIndex, relativeRowIndex, relativeColumnIndex);
         }
+
+        public int GetSheetLastRowNum(int sheetIndex)
+        {
+            return _evaluator.GetSheetEvaluator(sheetIndex).LastRowNum;
+        }
+        
         public override ValueEval GetRelativeValue(int sheetIndex, int relativeRowIndex, int relativeColumnIndex)
         {
             int rowIx = (relativeRowIndex + FirstRow);
