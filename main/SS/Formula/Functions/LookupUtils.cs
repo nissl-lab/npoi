@@ -134,7 +134,14 @@ namespace NPOI.SS.Formula.Functions
                             + ") is outside the allowed range (0.." + lastColIx + ")");
                 }
                 _tableArray = tableArray;
-                _size = _tableArray.Height;
+
+                int height = tableArray.Height;
+                if (tableArray is LazyAreaEval lazyArea)
+                {
+                    int lastRowNum = lazyArea.GetSheetLastRowNum(lazyArea.FirstSheetIndex);
+                    height = Math.Min(height, Math.Max(0, lastRowNum - tableArray.FirstRow + 1));
+                }
+                _size = height;
             }
 
             public override ValueEval GetItem(int index)
