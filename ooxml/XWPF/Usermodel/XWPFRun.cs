@@ -936,6 +936,24 @@ namespace NPOI.XWPF.UserModel
                 vanish.val = value;
             }
         }
+
+        /// <summary>
+        /// Gets or sets whether this run contains right-to-left text (OOXML §17.3.2.30).
+        /// </summary>
+        public bool IsRtl
+        {
+            get
+            {
+                var pr = GetRunProperties(false);
+                return pr != null && pr.IsSetRtl() && IsCTOnOff(pr.rtl);
+            }
+            set
+            {
+                var pr = GetRunProperties(true);
+                CT_OnOff rtl = pr.IsSetRtl() ? pr.rtl : pr.AddNewRtl();
+                rtl.val = value;
+            }
+        }
         public int Kerning
         {
             get
