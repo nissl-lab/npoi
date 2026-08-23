@@ -362,6 +362,28 @@ namespace TestCases.XSSF.Streaming
             wb2.Close();
         }
 
+        [Test]
+        public void WorkbookTempFilesAreDisposedWhenClosingWorkbook()
+        {
+            SXSSFWorkbook wb = new SXSSFWorkbook();
+            ISheet sh = wb.CreateSheet("sheet1");
+            for (int i = 0; i < 1000; i++)
+            {
+                IRow row = sh.CreateRow(i);
+                ICell cell = row.CreateCell(0);
+                cell.SetCellValue(new CellReference(cell).FormatAsString());
+            }
+
+            SXSSFSheet sxSheet = (SXSSFSheet)sh;
+            ClassicAssert.IsTrue(sxSheet.SheetDataWriter.TempFileInfo.Exists,
+                "Temporary file should exist before Close()");
+
+            wb.Close();
+
+            ClassicAssert.IsFalse(sxSheet.SheetDataWriter.TempFileInfo.Exists,
+                "Temporary file should be deleted after Close()");
+        }
+
         [Ignore("currently writing the same sheet multiple times is not supported...")]
         [Test]
         public void Bug53515()

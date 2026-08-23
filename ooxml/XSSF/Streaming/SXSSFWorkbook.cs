@@ -748,8 +748,16 @@ namespace NPOI.XSSF.Streaming
         }
 
 
+        /// <summary>
+        /// Closes the workbook, flushing and closing all sheet data writers, and
+        /// disposes of all temporary files backing this workbook on disk.
+        /// After this call the workbook should no longer be used.
+        /// </summary>
         public void Close()
         {
+            // Flush remaining rows and dispose of temporary files before closing writers
+            DisposeTempFiles();
+
             // ensure that any lingering writer is closed
             foreach (SXSSFSheet sheet in _xFromSxHash.Values)
             {
@@ -810,12 +818,22 @@ namespace NPOI.XSSF.Streaming
             }
         }
 
-        /**
-        * Dispose of temporary files backing this workbook on disk.
-        * Calling this method will render the workbook unusable.
-        * @return true if all temporary files were deleted successfully.
-        */
+        /// <summary>
+        /// Dispose of temporary files backing this workbook on disk.
+        /// Calling this method will render the workbook unusable.
+        /// Note: <see cref="Close"/> now automatically calls this method, so explicit
+        /// calls to <see cref="Dispose()"/> are no longer necessary when using a
+        /// <c>using</c> statement or calling <see cref="Close"/>.
+        /// </summary>
+        /// <returns>true if all temporary files were deleted successfully.</returns>
+        [Obsolete("Deprecated. Temporary files are now automatically disposed when Close() is called. " +
+                  "Prefer using a 'using' statement or calling Close() instead.")]
         public bool Dispose()
+        {
+            return DisposeTempFiles();
+        }
+
+        private bool DisposeTempFiles()
         {
             var success = true;
             foreach (SXSSFSheet sheet in _sxFromXHash.Keys)
@@ -1008,7 +1026,7 @@ namespace NPOI.XSSF.Streaming
 
         void IDisposable.Dispose()
         {
-            this.Dispose();
+            Close();
         }
 
 
