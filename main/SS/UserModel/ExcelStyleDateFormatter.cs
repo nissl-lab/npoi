@@ -132,9 +132,7 @@ namespace NPOI.SS.UserModel
             // Excel rounds the value to the nearest second when the format
             // displays seconds but no fractional seconds, e.g. "hh:mm:ss"
             if (Pattern.Contains('s') &&
-                !Pattern.Contains("fff") &&
-                !Pattern.Contains(L_BRACKET_SYMBOL) &&
-                !Pattern.Contains(LL_BRACKET_SYMBOL))
+                Pattern.IndexOfAny(new[] { 'f', 'F', L_BRACKET_SYMBOL, LL_BRACKET_SYMBOL }) < 0)
             {
                 date = date.AddMilliseconds(500);
                 date = date.AddMilliseconds(-date.Millisecond);
