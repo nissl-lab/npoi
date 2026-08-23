@@ -5033,6 +5033,17 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
             return this.vanishField;
         }
 
+        public bool IsSetRtl()
+        {
+            return this.rtlField != null;
+        }
+
+        public CT_OnOff AddNewRtl()
+        {
+            this.rtlField = new CT_OnOff();
+            return this.rtlField;
+        }
+
         public bool IsSetW()
         {
             return this.w!=null;

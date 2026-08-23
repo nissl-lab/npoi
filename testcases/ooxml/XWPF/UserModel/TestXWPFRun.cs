@@ -100,6 +100,21 @@ namespace TestCases.XWPF.UserModel
         }
 
         [Test]
+        public void TestSetGetRtl()
+        {
+            XWPFRun run = new XWPFRun(ctRun, irb);
+            // default: no rPr, IsRtl should be false
+            ClassicAssert.AreEqual(false, run.IsRtl);
+
+            CT_RPr rpr = ctRun.AddNewRPr();
+            rpr.AddNewRtl().val = true;
+            ClassicAssert.AreEqual(true, run.IsRtl);
+
+            run.IsRtl = false;
+            ClassicAssert.AreEqual(false, rpr.rtl.val);
+        }
+
+        [Test]
         public void TestSetGetStrike()
         {
             CT_RPr rpr = ctRun.AddNewRPr();
