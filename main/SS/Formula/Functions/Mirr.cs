@@ -64,8 +64,8 @@ namespace NPOI.SS.Formula.Functions
         protected internal override double Evaluate(double[] values)
         {
 
-            double financeRate = values[values.Length - 1];
-            double reinvestRate = values[values.Length - 2];
+            double financeRate = values[values.Length - 2];
+            double reinvestRate = values[values.Length - 1];
 
             double[] mirrValues = new double[values.Length - 2];
             Array.Copy(values, 0, mirrValues, 0, mirrValues.Length);
@@ -105,16 +105,13 @@ namespace NPOI.SS.Formula.Functions
             {
                 if (anIn < 0)
                 {
-                    pv += anIn / Math.Pow(1 + financeRate + reinvestRate, indexN++);
+                    pv += anIn / Math.Pow(1 + financeRate, indexN);
                 }
-            }
-
-            foreach (double anIn in in1)
-            {
                 if (anIn > 0)
                 {
-                    fv += anIn * Math.Pow(1 + financeRate, numOfYears - indexN++);
+                    fv += anIn * Math.Pow(1 + reinvestRate, numOfYears - indexN);
                 }
+                indexN++;
             }
 
             if (fv != 0 && pv != 0)
