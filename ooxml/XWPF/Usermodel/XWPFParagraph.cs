@@ -1352,7 +1352,7 @@ namespace NPOI.XWPF.UserModel
             CT_PPr pr = GetCTPPr(create);
             if (pr == null)
                 return null;
-            CT_Ind ct = pr.ind == null ? null : pr.ind;
+            CT_Ind ct = pr.ind;
             if (create && ct == null)
                 ct = pr.AddNewInd();
             return ct;
