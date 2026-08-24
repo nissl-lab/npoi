@@ -85,7 +85,7 @@ namespace NPOI.SS.Formula.Functions
      *  
      * @author Josh Micich
      */
-    public class Match : Function
+    public class Match : Function, IArrayMode
     {
 
 
