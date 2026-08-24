@@ -46,7 +46,7 @@ namespace TestCases.SS.Formula.Functions
 
             double financeRate = 0.12;
             double reinvestRate = 0.1;
-            double[] values = { -120000d, 39000d, 30000d, 21000d, 37000d, 46000d, reinvestRate, financeRate };
+            double[] values = { -120000d, 39000d, 30000d, 21000d, 37000d, 46000d, financeRate, reinvestRate };
             try
             {
                 mirrValue = mirr.Evaluate(values);
@@ -55,11 +55,11 @@ namespace TestCases.SS.Formula.Functions
             {
                 throw new AssertFailedException("MIRR should not failed with these parameters" + e);
             }
-            ClassicAssert.AreEqual(0.126094130366, mirrValue, 0.0000000001, "mirr");
+            ClassicAssert.AreEqual(0.117509258685, mirrValue, 0.0000000001, "mirr");
 
             reinvestRate = 0.05;
             financeRate = 0.08;
-            values = new double[] { -7500d, 3000d, 5000d, 1200d, 4000d, reinvestRate, financeRate };
+            values = new double[] { -7500d, 3000d, 5000d, 1200d, 4000d, financeRate, reinvestRate };
             try
             {
                 mirrValue = mirr.Evaluate(values);
@@ -68,11 +68,11 @@ namespace TestCases.SS.Formula.Functions
             {
                 throw new AssertFailedException("MIRR should not failed with these parameters" + e);
             }
-            ClassicAssert.AreEqual(0.18736225093, mirrValue, 0.0000000001, "mirr");
+            ClassicAssert.AreEqual(0.173959611122, mirrValue, 0.0000000001, "mirr");
 
             reinvestRate = 0.065;
             financeRate = 0.1;
-            values = new double[] { -10000, 3400d, 6500d, 1000d, reinvestRate, financeRate };
+            values = new double[] { -10000, 3400d, 6500d, 1000d, financeRate, reinvestRate };
             try
             {
                 mirrValue = mirr.Evaluate(values);
@@ -81,11 +81,11 @@ namespace TestCases.SS.Formula.Functions
             {
                 throw new AssertFailedException("MIRR should not failed with these parameters" + e);
             }
-            ClassicAssert.AreEqual(0.07039493966, mirrValue, 0.0000000001, "mirr");
+            ClassicAssert.AreEqual(0.056090529477, mirrValue, 0.0000000001, "mirr");
 
             reinvestRate = 0.07;
             financeRate = 0.01;
-            values = new double[] { -10000d, -3400d, -6500d, -1000d, reinvestRate, financeRate };
+            values = new double[] { -10000d, -3400d, -6500d, -1000d, financeRate, reinvestRate };
             try
             {
                 mirrValue = mirr.Evaluate(values);
@@ -96,6 +96,19 @@ namespace TestCases.SS.Formula.Functions
             }
             ClassicAssert.AreEqual(-1, mirrValue, 0.0, "mirr");
 
+            financeRate = 0.1;
+            reinvestRate = 0.12;
+            values = new double[] { -1000d, -4000d, 5000d, 2000d, financeRate, reinvestRate };
+            try
+            {
+                mirrValue = mirr.Evaluate(values);
+            }
+            catch (EvaluationException e)
+            {
+                throw new AssertFailedException("MIRR should not failed with these parameters" + e);
+            }
+            ClassicAssert.AreEqual(0.179085686035, mirrValue, 0.0000000001, "mirr");
+
         }
 
         [Test]
@@ -105,7 +118,7 @@ namespace TestCases.SS.Formula.Functions
 
             double reinvestRate = 0.05;
             double financeRate = 0.08;
-            double[] incomes = { 120000d, 39000d, 30000d, 21000d, 37000d, 46000d, reinvestRate, financeRate };
+            double[] incomes = { 120000d, 39000d, 30000d, 21000d, 37000d, 46000d, financeRate, reinvestRate };
             try
             {
                 mirr.Evaluate(incomes);
@@ -132,8 +145,8 @@ namespace TestCases.SS.Formula.Functions
             row.CreateCell(3).SetCellValue(1200d);
             row.CreateCell(4).SetCellValue(4000d);
 
-            row.CreateCell(5).SetCellValue(0.05d);
-            row.CreateCell(6).SetCellValue(0.08d);
+            row.CreateCell(5).SetCellValue(0.08d);
+            row.CreateCell(6).SetCellValue(0.05d);
 
             ICell cell = row.CreateCell(7);
             cell.CellFormula = (/*setter*/"MIRR(A1:E1, F1, G1)");
@@ -142,7 +155,7 @@ namespace TestCases.SS.Formula.Functions
             fe.ClearAllCachedResultValues();
             fe.EvaluateFormulaCell(cell);
             double res = cell.NumericCellValue;
-            ClassicAssert.AreEqual(0.18736225093, res, 0.00000001);
+            ClassicAssert.AreEqual(0.173959611122, res, 0.00000001);
         }
 
         [Test]
