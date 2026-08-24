@@ -26,8 +26,8 @@
     <PackageReference Include="Microsoft.SourceLink.GitHub" />
     <PackageReference Include="BouncyCastle.Cryptography" />
     <PackageReference Include="SharpZipLib" />
-    <PackageReference Include="SkiaSharp" PrivateAssets="all" Pack="false" />
-    <PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" PrivateAssets="all" Pack="false" />
+    <PackageReference Include="SkiaSharp"/>
+    <PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies"/>
     <PackageReference Include="ZString" />
   </ItemGroup>
 
