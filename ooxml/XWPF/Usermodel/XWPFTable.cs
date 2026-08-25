@@ -249,6 +249,33 @@ namespace NPOI.XWPF.UserModel
             }
         }
 
+        public TableWidthType WidthType
+        {
+            get
+            {
+                CT_TblPr pr = GetTblPr(false);
+                return pr != null && GetTblPr().IsSetTblW() ? GetWidthType(pr.tblW) : TableWidthType.AUTO;
+            }
+        }
+
+        protected TableWidthType GetWidthType(CT_TblWidth ctWidth)
+        {
+            var typeValue = ctWidth.type;
+
+            switch(typeValue)
+            {
+                case ST_TblWidth.nil:
+                    return TableWidthType.NIL;
+                case ST_TblWidth.dxa:
+                    return TableWidthType.DXA;
+                case ST_TblWidth.pct:
+                    return TableWidthType.PCT;
+                default:
+                case ST_TblWidth.auto:
+                    return TableWidthType.AUTO;
+            }
+        }
+
         /**
          * @return number of rows in table
          */
