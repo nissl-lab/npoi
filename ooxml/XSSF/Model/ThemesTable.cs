@@ -101,6 +101,30 @@ namespace NPOI.XSSF.Model
         {
             this.colorMap = colorMap;
         }
+
+        /// <summary>
+        /// Copies the theme content from another ThemesTable into this one.
+        /// Used when a theme belonging to a different workbook/package is set on this
+        /// workbook, so the theme is actually written out when this workbook is saved.
+        /// The theme is deep-copied through XML so the two workbooks never share
+        /// mutable theme state.
+        /// </summary>
+        /// <param name="source">the ThemesTable to copy from</param>
+        internal void CopyThemeFrom(ThemesTable source)
+        {
+            if (source == null || source.theme == null)
+            {
+                theme = new ThemeDocument();
+                theme.AddNewTheme().AddNewThemeElements();
+                return;
+            }
+            using (MemoryStream ms = new MemoryStream())
+            {
+                source.WriteTo(ms);
+                XmlDocument xmldoc = ConvertStreamToXml(new MemoryStream(ms.ToArray()));
+                theme = ThemeDocument.Parse(xmldoc, NamespaceManager);
+            }
+        }
         /**
          * Convert a theme "index" into a color.
          * @param idx A theme "index"
