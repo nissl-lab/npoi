@@ -369,7 +369,20 @@ namespace TestCases.XSSF.Model
             wb.Close();
             wb2.Close();
         }
-
+        /// <summary>
+        /// Fix #1860 
+        /// </summary>
+        [Test]
+        public void TestSelfClosingSiElement()
+        {
+            using var wb = XSSFTestDataSamples.OpenSampleWorkbook("si_sc.xlsx");
+            var A1 = wb.GetSheetAt(0).GetRow(0).GetCell(0)?.StringCellValue;
+            var A2 = wb.GetSheetAt(0).GetRow(1).GetCell(0)?.StringCellValue;
+            var A3 = wb.GetSheetAt(0).GetRow(2).GetCell(0)?.StringCellValue;
+            ClassicAssert.AreEqual("A", A1);
+            ClassicAssert.AreEqual(null, A2);
+            ClassicAssert.AreEqual("B", A3);
+        }
     }
 }
 
