@@ -294,10 +294,13 @@ namespace NPOI.POIFS.FileSystem
                 if (_buffer == null || _buffer.Remain == 0)
                 {
                     _current_block_count++;
-                    //_buffer = _data.next();
-                    _data.MoveNext();
+                    if (!_data.MoveNext())
+                    {
+                        throw new IOException(
+                            "Block chain ended prematurely: read " + read +
+                            " bytes but document property claims " + _document_size + " bytes");
+                    }
                     _buffer = _data.Current;
-
                 }
 
                 int limit = Math.Min(len - read, _buffer.Remain);
