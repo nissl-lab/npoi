@@ -108,6 +108,57 @@ namespace NPOI.OpenXml4Net.Util
         public static long GetMaxTextSize() {
             return MAX_TEXT_SIZE;
         }
+        /// <summary>
+        /// Validates the running decompressed byte count of a single zip entry against
+        /// the configured zip-bomb thresholds. Call this incrementally while a zip entry
+        /// is being decompressed.
+        /// </summary>
+        /// <param name="decompressedCounter">
+        /// Total number of decompressed bytes produced so far for the current entry.
+        /// </param>
+        /// <param name="compressedCounter">
+        /// Number of raw compressed bytes consumed so far for the current entry. Pass a
+        /// value &lt;= 0 when the compressed size is unknown (e.g. streamed / data-descriptor
+        /// entries); in that case only the absolute <see cref="GetMaxEntrySize"/> limit is
+        /// enforced.
+        /// </param>
+        /// <exception cref="IOException">Thrown when a zip-bomb is detected.</exception>
+        public static void CheckThreshold(long decompressedCounter, long compressedCounter)
+        {
+            // Absolute cap first, so it also protects uncompressed / unknown-size entries.
+            if (decompressedCounter > MAX_ENTRY_SIZE)
+            {
+                throw new IOException("Zip bomb detected! The uncompressed size of a single zip entry ("
+                        + decompressedCounter + " bytes) exceeds the maximum allowed size of " + MAX_ENTRY_SIZE + " bytes.\n"
+                        + "This may indicate that the file is crafted to inflate memory usage and thus could pose a security risk.\n"
+                        + "You can adjust this limit via ZipSecureFile.SetMaxEntrySize() if you need to work with very large files.");
+            }
+
+            // Don't alert for small expanded sizes - avoids false positives on tiny, well-compressed parts.
+            if (decompressedCounter <= GRACE_ENTRY_SIZE)
+            {
+                return;
+            }
+
+            // No reliable compressed size (streamed / data-descriptor entry): the absolute cap above is the backstop.
+            if (compressedCounter <= 0)
+            {
+                return;
+            }
+
+            double ratio = (double)compressedCounter / (double)decompressedCounter;
+            if (ratio >= MIN_INFLATE_RATIO)
+            {
+                return;
+            }
+
+            throw new IOException("Zip bomb detected! The compression ratio of a zip entry (" + ratio + ") is lower than the "
+                    + "allowed minimum ratio of " + MIN_INFLATE_RATIO + " (compressed: " + compressedCounter
+                    + " bytes, uncompressed: " + decompressedCounter + " bytes).\n"
+                    + "This may indicate that the file is crafted to inflate memory usage and thus could pose a security risk.\n"
+                    + "You can adjust this limit via ZipSecureFile.SetMinInflateRatio() if you need to work with files which exceed this limit.");
+        }
+
         public ZipSecureFile(FileStream file, int mode)
             : base(file)
         {
