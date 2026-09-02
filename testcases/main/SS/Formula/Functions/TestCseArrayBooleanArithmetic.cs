@@ -256,5 +256,68 @@ namespace TestCases.SS.Formula.Functions
             // Row 4: (4=4)*(40=40) = TRUE*TRUE = 1
             ClassicAssert.AreEqual(1.0, evaluator.Evaluate(arrayFormula.FlattenedCells[3]).NumberValue, 0.0001);
         }
+
+        /// <summary>
+        /// Reproduces a bug where a single error cell anywhere in one of the
+        /// criteria ranges poisons the *entire* array-multiplication result,
+        /// causing MATCH to fail to find a match that exists at a different,
+        /// unrelated row.
+        ///
+        /// Layout:
+        ///   A1:A5 = criteria column 1 ("cat","dog","cat","bird","dog")
+        ///   B1:B5 = criteria column 2 ("red","blue","blue","red","red")
+        ///   C1:C5 = criteria column 3 ("small","medium","large","small","medium")
+        ///           C2 is deliberately #DIV/0!, on a row that does NOT match
+        ///   D1:D5 = result column (10,20,30,40,50)
+        ///   F1/G1/H1 = lookup values "cat"/"blue"/"large" -> should match row 3
+        ///   I1    = {INDEX(D1:D5,MATCH(1,(A1:A5=F1)*(B1:B5=G1)*(C1:C5=H1),0))}
+        ///           should return 30, ignoring the unrelated error in C2
+        /// </summary>
+        [Test]
+        public void TestBooleanArrayMultiplicationIgnoresUnrelatedError()
+        {
+            IWorkbook wb = new HSSFWorkbook();
+            ISheet sheet = wb.CreateSheet("Test");
+            IFormulaEvaluator evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
+
+            string[] col1 = { "cat", "dog", "cat", "bird", "dog" };
+            string[] col2 = { "red", "blue", "blue", "red", "red" };
+            double[] results = { 10, 20, 30, 40, 50 };
+
+            for (int i = 0; i < 5; i++)
+            {
+                IRow row = sheet.CreateRow(i);
+                row.CreateCell(0).SetCellValue(col1[i]); // A
+                row.CreateCell(1).SetCellValue(col2[i]); // B
+                row.CreateCell(3).SetCellValue(results[i]); // D
+            }
+
+            // C column (3rd criteria): row 2 (index 1) is a genuine error cell,
+            // on a row that isn't the one we're trying to match
+            sheet.GetRow(0).CreateCell(2).SetCellValue("small");
+            sheet.GetRow(1).CreateCell(2).SetCellFormula("1/0"); // #DIV/0!, unrelated row
+            sheet.GetRow(2).CreateCell(2).SetCellValue("large"); // the row we're matching
+            sheet.GetRow(3).CreateCell(2).SetCellValue("small");
+            sheet.GetRow(4).CreateCell(2).SetCellValue("medium");
+
+            // Lookup values: F1="cat", G1="blue", H1="large" -> row 3 (index 2), value 30
+            sheet.GetRow(0).CreateCell(5).SetCellValue("cat");
+            sheet.GetRow(0).CreateCell(6).SetCellValue("blue");
+            sheet.GetRow(0).CreateCell(7).SetCellValue("large");
+
+            ICell resultCell = sheet.GetRow(0).CreateCell(8);
+            resultCell.SetCellFormula("INDEX(D1:D5,MATCH(1,(A1:A5=F1)*(B1:B5=G1)*(C1:C5=H1),0))");
+
+            CellValue result = evaluator.Evaluate(resultCell);
+
+            ClassicAssert.AreEqual(CellType.Numeric, result.CellType,
+                "An unrelated error cell in one criteria range should not stop " +
+                "MATCH from finding a match at a different row - expected a " +
+                "number, got: " + result);
+            ClassicAssert.AreEqual(30.0, result.NumberValue, 0.0001,
+                "Should still find row 3 (cat+blue+large) and return 30, despite " +
+                "the #DIV/0! error in C2 which belongs to an unrelated, " +
+                "non-matching row");
+        }
     }
 }
