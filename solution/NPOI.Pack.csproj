@@ -23,7 +23,8 @@
     <PackageReference Include="ExtendedNumerics.BigDecimal" />
     <PackageReference Include="MathNet.Numerics.Signed" />
     <PackageReference Include="Microsoft.IO.RecyclableMemoryStream" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" />
+    <!-- Build-time only. Without PrivateAssets it is written into the nuspec as a consumer dependency. -->
+    <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="all" />
     <PackageReference Include="SharpZipLib" />
     <PackageReference Include="SkiaSharp" ExcludeAssets="runtime" />
     <PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" ExcludeAssets="runtime" />
