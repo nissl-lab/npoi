@@ -502,6 +502,17 @@ namespace NPOI.XSSF.UserModel
             ole1.objectPr.defaultSize = false;
             ole1.objectPr.anchor.moveWithCells = true;
 
+            // Set oleObject anchor coordinates from the client anchor
+            XSSFClientAnchor ca = (XSSFClientAnchor)anchor;
+            ole1.objectPr.anchor.from.col = ca.Col1;
+            ole1.objectPr.anchor.from.colOff = ca.Dx1;
+            ole1.objectPr.anchor.from.row = ca.Row1;
+            ole1.objectPr.anchor.from.rowOff = ca.Dy1;
+            ole1.objectPr.anchor.to.col = ca.Col2;
+            ole1.objectPr.anchor.to.colOff = ca.Dx2;
+            ole1.objectPr.anchor.to.row = ca.Row2;
+            ole1.objectPr.anchor.to.rowOff = ca.Dy2;
+
             CT_TwoCellAnchor ctAnchor = CreateTwoCellAnchor((XSSFClientAnchor)anchor);
 
             //XmlCursor cur2 = ctAnchor.newCursor();
@@ -521,7 +532,7 @@ namespace NPOI.XSSF.UserModel
             ctShape.Set(XSSFObjectData.Prototype());
             ctShape.spPr.xfrm = (CreateXfrm((XSSFClientAnchor) anchor));
 
-            // workaround for not having the vmlDrawing filled
+            // add image fill to drawingML shape for preview icon in Excel
             NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_BlipFillProperties blipFill = ctShape.spPr.AddNewBlipFill();
             blipFill.AddNewBlip().embed = imgDrawPR.Id;
             blipFill.AddNewStretch().AddNewFillRect();
@@ -543,6 +554,16 @@ namespace NPOI.XSSF.UserModel
 
             XSSFObjectData shape = new XSSFObjectData(this, ctShape);
             shape.anchor = (XSSFClientAnchor) anchor;
+
+            // create VML shape for OLE object visibility in Excel
+            XSSFVMLDrawing vml = sheet.GetVMLDrawing(true);
+            PackagePart vmlPart = vml.GetPackagePart();
+            PackageRelationship vmlImgRel = null;
+            if (vmlPart != null)
+            {
+                vmlImgRel = vmlPart.AddRelationship(imgPN, TargetMode.Internal, PackageRelationshipTypes.IMAGE_PART);
+            }
+            vml.newOleShape(anchor.Row1, anchor.Col1, anchor.Row2, anchor.Col2, vmlImgRel?.Id, "_x0000_s" + shapeId);
 
             return shape;
         }
