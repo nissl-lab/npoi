@@ -1350,7 +1350,9 @@ namespace NPOI.XWPF.UserModel
         private CT_Ind GetCTInd(bool create)
         {
             CT_PPr pr = GetCTPPr(create);
-            CT_Ind ct = pr.ind == null ? null : pr.ind;
+            if (pr == null)
+                return null;
+            CT_Ind ct = pr.ind;
             if (create && ct == null)
                 ct = pr.AddNewInd();
             return ct;
@@ -1365,9 +1367,10 @@ namespace NPOI.XWPF.UserModel
          */
         internal CT_PPr GetCTPPr(bool create)
         {
-            CT_PPr pr = (paragraph.pPr == null||!create) ? paragraph.AddNewPPr()
-                    : paragraph.pPr;
-            return pr;
+            if (create && paragraph.pPr == null)
+                paragraph.AddNewPPr();
+
+            return paragraph.pPr;
         }
 
 
