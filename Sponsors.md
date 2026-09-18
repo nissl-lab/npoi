@@ -98,6 +98,30 @@ directly.
       <br />
       Silex
 </td>
+<td align="center">
+      <a href="https://inia.ai/">
+        <img width="100" alt="image" src="https://github.com/user-attachments/assets/5d01c03a-af17-44ad-9ffd-3580d6fadd42" />
+      </a>
+      <br />
+      INIA AI
+</td>
+
+<td align="center">
+      <a href="https://wem.io/">
+        <img width="100 alt="image" src="https://github.com/user-attachments/assets/1c349370-946b-4d96-81fa-17743f11bbcf" />
+      </a>
+      <br />
+      WEM
+</td>
+
+<td align="center">
+        <img width="100" alt="image" src="https://github.com/user-attachments/assets/40a1bbd8-59be-48c5-a250-1d85d7ee2982" />
+      <br />
+      Equin Limited
+</td>
+
+
+
   </tr>
 </table>
 
@@ -106,13 +130,15 @@ directly.
 Thank you to all individual sponsors supporting NPOI through GitHub Sponsors
 and other approved channels.
 
-[@maelstraggiotti](https://github.com/maelstraggiotti)
-
 [@kenjiuno](https://github.com/kenjiuno)
+
+[AnneLazar](https://github.com/AnneLazar)
 
 [@AlessandroMartinelli](https://github.com/AlessandroMartinelli)
 
 [@masloan](https://github.com/masloan)
+
+[@maelstraggiotti](https://github.com/maelstraggiotti)
 
 ## Recognition Policy
 
@@ -126,4 +152,4 @@ and other approved channels.
 - OSMF / maintenance fee obligations are separate from public sponsor
   recognition and are governed by the project's applicable licensing policy.
 
-_Last updated: September 2026._
+_Last updated: September 2026.9_
