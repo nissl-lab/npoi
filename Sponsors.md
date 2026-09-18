@@ -62,8 +62,17 @@ directly.
         />
       </a>
       <br />
-      <a href="https://www.baramundi.com/">baramundi</a>
+      <a href="https://www.baramundi.com/">Baramundi</a>
     </td>
+<td align="center">
+      <a href="https://www.baramundi.com/">
+        <img width="100" alt="image" src="https://github.com/user-attachments/assets/57927b26-4322-4d74-b5dd-14a492c5ed03" />
+      </a>
+      <br />
+      <a href="https://www.baramundi.com/">PWC Germany</a>
+    </td>
+    
+
   </tr>
 </table>
 
