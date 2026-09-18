@@ -133,9 +133,6 @@ directly.
 
 ## Individual Sponsors
 
-Thank you to all individual sponsors supporting NPOI through GitHub Sponsors
-and other approved channels.
-
 [@kenjiuno](https://github.com/kenjiuno)
 
 [AnneLazar](https://github.com/AnneLazar)
@@ -148,9 +145,13 @@ and other approved channels.
 
 [@maelstraggiotti](https://github.com/maelstraggiotti)
 
+Thank you to all individual sponsors supporting NPOI through GitHub Sponsors
+and other approved channels.
+
 ## Recognition Policy
 
 - Sponsor names, logos, and links are displayed with the sponsor's permission.
+- Private sponsors will not be listed here. 
 - Logo placement and size may be adjusted to keep project documentation clear
   and consistent.
 - Sponsorship helps sustain NPOI but does not grant control over project
