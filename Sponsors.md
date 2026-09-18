@@ -101,8 +101,13 @@ directly.
 Thank you to all individual sponsors supporting NPOI through GitHub Sponsors
 and other approved channels.
 
-To respect sponsor privacy, individual supporters are listed only when they
-have explicitly agreed to public recognition.
+[@maelstraggiotti](https://github.com/maelstraggiotti)
+
+[@kenjiuno](https://github.com/kenjiuno)
+
+[@AlessandroMartinelli](https://github.com/AlessandroMartinelli)
+
+[@masloan](https://github.com/masloan)
 
 ## Recognition Policy
 
