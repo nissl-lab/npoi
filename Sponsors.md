@@ -76,7 +76,23 @@ directly.
       <br />
       Devolis
 </td>
+<td align="center">
+      <a href="https://easylaser.com/">
+     <img width="100" alt="image" src="https://github.com/user-attachments/assets/5e3fb6ab-93c3-49b3-89ea-eb0851763d68" />
+      </a>
+      <br />
+      Easy-Laser-AB
+</td>
+<td align="center">
+      <a href="https://homie.io/">
+        <img width="100" alt="image" src="https://github.com/user-attachments/assets/80555e34-d82b-43e7-9965-5b43b33c4b74" />
+      </a>
+      <br />
+      Homie AG
+</td>
 
+    
+    
   </tr>
 </table>
 
