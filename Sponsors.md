@@ -91,8 +91,13 @@ directly.
       Homie AG
 </td>
 
-    
-    
+<td align="center">
+      <a href="https://www.silex-partners.com/">
+        <img width="100" alt="image" src="https://github.com/user-attachments/assets/fc4aa3ee-9340-4272-b425-07c91aabceea" />
+      </a>
+      <br />
+      Silex
+</td>
   </tr>
 </table>
 
