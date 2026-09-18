@@ -119,10 +119,16 @@ directly.
       <br />
       Equin Limited
 </td>
-
-
-
   </tr>
+   <tr>
+  <td align="center">
+     <a href="https://www.lifehelp.com/">
+     <img width="100" alt="image" src="https://github.com/user-attachments/assets/aa9d7ffb-bbe2-4da1-8c82-16daff20202a" />
+     </a>
+    <br/>
+     Life Help
+   </td>
+   </tr>
 </table>
 
 ## Individual Sponsors
@@ -137,6 +143,8 @@ and other approved channels.
 [@AlessandroMartinelli](https://github.com/AlessandroMartinelli)
 
 [@masloan](https://github.com/masloan)
+
+[@SanjeevElement](https://github.com/SanjeevElement)
 
 [@maelstraggiotti](https://github.com/maelstraggiotti)
 
