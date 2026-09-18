@@ -71,7 +71,7 @@ directly.
     </td>
 <td align="center">
       <a href="https://www.devolis.com/">
-        <img width="962" height="231" alt="image" src="https://github.com/user-attachments/assets/286f43fb-7aee-474c-a02a-20f1ff29f35c" />
+        <img width="100" alt="image" src="https://github.com/user-attachments/assets/286f43fb-7aee-474c-a02a-20f1ff29f35c" />
       </a>
       <br />
       Devolis
