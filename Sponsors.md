@@ -135,7 +135,7 @@ directly.
 
 [@kenjiuno](https://github.com/kenjiuno)
 
-[AnneLazar](https://github.com/AnneLazar)
+[@AnneLazar](https://github.com/AnneLazar)
 
 [@AlessandroMartinelli](https://github.com/AlessandroMartinelli)
 
