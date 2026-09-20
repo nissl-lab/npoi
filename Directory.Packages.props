@@ -11,6 +11,7 @@
     <PackageVersion Include="GitHubActionsTestLogger" Version="2.4.1" />
     <PackageVersion Include="ICSharpCode.TextEditor" Version="3.2.1.6466" />
     <PackageVersion Include="MathNet.Numerics.Signed" Version="5.0.0" />
+    <PackageVersion Include="Microsoft.Build.Tasks.Git" Version="10.0.401" />
     <PackageVersion Include="Microsoft.IO.RecyclableMemoryStream" Version="3.0.1" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="10.0.401" />
