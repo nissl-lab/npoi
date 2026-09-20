@@ -31,6 +31,40 @@ namespace TestCases.POIFS.Crypt
     [TestFixture]
     public class TestEncryptor
     {
+        [TestCaseSource(nameof(ConfirmPasswordModes))]
+        public void ConfirmPasswordGeneratesVerifiableMaterial(EncryptionMode encryptionMode)
+        {
+            const string password = "pass";
+
+            var info = new EncryptionInfo(encryptionMode);
+            var encryptor = info.Encryptor;
+            encryptor.ConfirmPassword(password);
+
+            ClassicAssert.IsNotNull(info.Verifier.Salt);
+            ClassicAssert.IsNotNull(info.Verifier.EncryptedVerifier);
+            ClassicAssert.IsNotNull(info.Verifier.EncryptedVerifierHash);
+            ClassicAssert.IsNotNull(encryptor.GetSecretKey());
+
+            if(encryptionMode == EncryptionMode.Agile)
+            {
+                ClassicAssert.IsNotNull(info.Header.KeySalt);
+                ClassicAssert.IsNotNull(info.Verifier.EncryptedKey);
+            }
+            else if(encryptionMode == EncryptionMode.BinaryRC4 || encryptionMode == EncryptionMode.CryptoAPI)
+            {
+                ClassicAssert.IsTrue(info.Decryptor.VerifyPassword(password));
+                ClassicAssert.IsNotNull(info.Decryptor.GetVerifier());
+            }
+        }
+
+        private static readonly object[] ConfirmPasswordModes =
+        {
+            EncryptionMode.Agile,
+            EncryptionMode.Standard,
+            EncryptionMode.CryptoAPI,
+            EncryptionMode.BinaryRC4
+        };
+
         [Test]
         public void BinaryRC4Encryption()
         {
