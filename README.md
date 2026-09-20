@@ -35,7 +35,7 @@ Documentation
 
 Sponsors
 =================
-Thank you for all the sponsors. [Here is a the sponsor list](Sponsors.md) 
+Thank you for all the sponsors. [Here is the sponsors list](Sponsors.md) 
 
 Advantage of NPOI
 =================
