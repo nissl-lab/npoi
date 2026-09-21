@@ -19,7 +19,6 @@ namespace TestCases.OpenXml4Net.OPC
 {
     using System;
     using System.IO;
-    using SysZip = System.IO.Compression;
     using ICSharpCode.SharpZipLib.Zip;
     using NPOI.OpenXml4Net.Util;
     using NUnit.Framework;
@@ -177,11 +176,22 @@ namespace TestCases.OpenXml4Net.OPC
             // A non-seekable wrapper forces System.IO.Compression to emit data descriptors
             // (general-purpose bit 3), leaving the local-header sizes unknown (Size == -1).
             Stream sink = dataDescriptor ? new WriteOnlyNonSeekableStream(backing) : (Stream)backing;
-            using (SysZip.ZipArchive zip = new SysZip.ZipArchive(sink, SysZip.ZipArchiveMode.Create, leaveOpen: true))
+            
+            using (ZipOutputStream zipStream = new ZipOutputStream(sink))
             {
-                SysZip.ZipArchiveEntry e = zip.CreateEntry(entryName, SysZip.CompressionLevel.Optimal);
-                using Stream es = e.Open();
-                writeEntry(es);
+                // leaveOpen: true means SharpZipLib should NOT close the underlying sink stream on dispose
+                zipStream.IsStreamOwner = false;
+    
+                // CompressionLevel.Optimal corresponds to level 9 in SharpZipLib
+                zipStream.SetLevel(9); 
+
+                ZipEntry entry = new ZipEntry(entryName);
+                zipStream.PutNextEntry(entry);
+
+                // ZipOutputStream inherits from Stream, so you can pass it directly to your writer
+                writeEntry(zipStream);
+
+                zipStream.CloseEntry();
             }
             return backing.ToArray();
         }
