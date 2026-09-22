@@ -19,10 +19,15 @@ namespace TestCases.POIFS.Crypt
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Reflection;
+    using System.Reflection.Emit;
     using NPOI.OpenXml4Net.OPC;
     using NPOI.POIFS.Crypt;
     using NPOI.POIFS.Crypt.Agile;
+    using NPOI.POIFS.Crypt.BinaryRC4;
+    using NPOI.POIFS.Crypt.CryptoAPI;
     using NPOI.POIFS.FileSystem;
+    using NPOI.POIFS.Crypt.Standard;
     using NPOI.Util;
     using NPOI.XWPF.UserModel;
     using NUnit.Framework;using NUnit.Framework.Legacy;
@@ -31,6 +36,27 @@ namespace TestCases.POIFS.Crypt
     [TestFixture]
     public class TestEncryptor
     {
+        [TestCase(typeof(AgileEncryptor))]
+        [TestCase(typeof(StandardEncryptor))]
+        [TestCase(typeof(CryptoAPIEncryptor))]
+        [TestCase(typeof(BinaryRC4Encryptor))]
+        public void ConfirmPasswordStringDoesNotReferenceSystemRandom(Type encryptorType)
+        {
+            var method = encryptorType.GetMethod(nameof(Encryptor.ConfirmPassword), new[] { typeof(string) });
+            ClassicAssert.IsNotNull(method);
+
+            var randomReferences = new List<string>();
+            foreach(var referencedMethod in GetReferencedMethods(method))
+            {
+                if(referencedMethod.DeclaringType == typeof(Random))
+                {
+                    randomReferences.Add(referencedMethod.ToString());
+                }
+            }
+
+            ClassicAssert.IsEmpty(randomReferences, $"{encryptorType.FullName}.ConfirmPassword(string) should not reference System.Random members, but found: {string.Join(", ", randomReferences)}");
+        }
+
         [Test]
         public void BinaryRC4Encryption()
         {
@@ -365,6 +391,92 @@ namespace TestCases.POIFS.Crypt
                 }
             }
         }
+
+        private static IEnumerable<MethodBase> GetReferencedMethods(MethodInfo method)
+        {
+            var methodBody = method.GetMethodBody();
+            ClassicAssert.IsNotNull(methodBody);
+
+            var il = methodBody.GetILAsByteArray();
+            var position = 0;
+            while(position < il.Length)
+            {
+                var opCode = ReadOpCode(il, ref position);
+                if(opCode.OperandType == OperandType.InlineMethod)
+                {
+                    var metadataToken = BitConverter.ToInt32(il, position);
+                    position += sizeof(int);
+                    yield return method.Module.ResolveMethod(metadataToken);
+                    continue;
+                }
+
+                position += GetOperandSize(opCode.OperandType, il, position);
+            }
+        }
+
+        private static OpCode ReadOpCode(byte[] il, ref int position)
+        {
+            var opCodeValue = il[position++];
+            if(opCodeValue != 0xfe)
+            {
+                return SingleByteOpCodes[opCodeValue];
+            }
+
+            return MultiByteOpCodes[(short)(0xfe00 | il[position++])];
+        }
+
+        private static int GetOperandSize(OperandType operandType, byte[] il, int position)
+        {
+            switch(operandType)
+            {
+                case OperandType.InlineNone:
+                    return 0;
+                case OperandType.ShortInlineBrTarget:
+                case OperandType.ShortInlineI:
+                case OperandType.ShortInlineVar:
+                    return 1;
+                case OperandType.InlineVar:
+                    return 2;
+                case OperandType.InlineI:
+                case OperandType.InlineBrTarget:
+                case OperandType.InlineField:
+                case OperandType.InlineSig:
+                case OperandType.InlineString:
+                case OperandType.InlineTok:
+                case OperandType.InlineType:
+                case OperandType.ShortInlineR:
+                    return 4;
+                case OperandType.InlineI8:
+                case OperandType.InlineR:
+                    return 8;
+                case OperandType.InlineSwitch:
+                    return sizeof(int) * (BitConverter.ToInt32(il, position) + 1);
+                default:
+                    throw new NotSupportedException($"Unsupported operand type {operandType}.");
+            }
+        }
+
+        private static Dictionary<short, OpCode> CreateOpCodeLookup(short prefix)
+        {
+            var opCodes = new Dictionary<short, OpCode>();
+            foreach(var field in typeof(OpCodes).GetFields(BindingFlags.Public | BindingFlags.Static))
+            {
+                if(field.GetValue(null) is not OpCode opCode)
+                {
+                    continue;
+                }
+
+                if((short)(opCode.Value & unchecked((short)0xff00)) == prefix)
+                {
+                    opCodes[opCode.Value] = opCode;
+                }
+            }
+
+            return opCodes;
+        }
+
+        private static readonly Dictionary<short, OpCode> SingleByteOpCodes = CreateOpCodeLookup(0x0000);
+        private static readonly Dictionary<short, OpCode> MultiByteOpCodes = CreateOpCodeLookup(unchecked((short)0xfe00));
     }
 
 }
