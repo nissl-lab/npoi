@@ -273,7 +273,13 @@ namespace NPOI.POIFS.FileSystem
 
         public override ChainLoopDetector GetChainLoopDetector()
         {
-            return new ChainLoopDetector(_root.Size, this);
+            // Use the physical mini-stream size (number of SBAT blocks × entries × mini-block size)
+            // rather than _root.Size, which is an application-level byte count that can be 0
+            // in a malformed file and would disable cycle detection entirely.
+            long miniStreamSize = (long)_sbat_blocks.Count
+                * _filesystem.GetBigBlockSizeDetails().GetBATEntriesPerBlock()
+                * POIFSConstants.SMALL_BLOCK_SIZE;
+            return new ChainLoopDetector(miniStreamSize, this);
         }
 
         public override int GetBlockStoreBlockSize()
