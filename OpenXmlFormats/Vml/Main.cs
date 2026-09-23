@@ -653,6 +653,8 @@ namespace NPOI.OpenXmlFormats.Vml
             ctObj.adj = XmlHelper.ReadString(node.Attributes["adj"]);
             ctObj.equationxml = XmlHelper.ReadString(node.Attributes["equationxml"]);
             ctObj.style = XmlHelper.ReadString(node.Attributes["style"]);
+            if (node.Attributes["o:ole"] != null)
+                ctObj.ole = node.Attributes["o:ole"].Value;
             ctObj.ClientData = new List<CT_ClientData>();
             foreach (XmlNode childNode in node.ChildNodes)
             {
@@ -730,6 +732,7 @@ namespace NPOI.OpenXmlFormats.Vml
             XmlHelper.WriteAttribute(sw, "o:insetmode", this.insetmode.ToString());
             XmlHelper.WriteAttribute(sw, "adj", this.adj);
             XmlHelper.WriteAttribute(sw, "equationxml", this.equationxml);
+            XmlHelper.WriteAttribute(sw, "o:ole", this.ole, true);
             sw.Write('>');
 
             if (this.iscomment != null)
@@ -840,6 +843,15 @@ namespace NPOI.OpenXmlFormats.Vml
         private CT_Fill fillField;
         private CT_Formulas formulasField;
         private CT_Handles handlesField;
+        private string oleField;
+
+        [XmlAttribute(Namespace = "urn:schemas-microsoft-com:office:office")]
+        public string ole
+        {
+            get { return this.oleField; }
+            set { this.oleField = value; }
+        }
+
         private CT_ImageData imagedataField;
         private CT_Stroke strokeField;
         private CT_Shadow shadowField;
