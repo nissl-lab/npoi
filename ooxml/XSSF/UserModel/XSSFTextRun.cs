@@ -216,7 +216,7 @@ namespace NPOI.XSSF.UserModel
                 {
                     return font.typeface;
                 }
-                return XSSFFont.DEFAULT_FONT_NAME;
+                return null;
             }
         }
 
