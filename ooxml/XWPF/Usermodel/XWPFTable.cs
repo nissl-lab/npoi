@@ -235,8 +235,10 @@ namespace NPOI.XWPF.UserModel
         {
             get
             {
-                CT_TblPr tblPr = GetTrPr();
-                return tblPr.IsSetTblW() ? int.Parse(tblPr.tblW.w) : -1;
+                CT_TblPr tblPr = GetTblPr(false);
+                return tblPr != null && tblPr.IsSetTblW() && !string.IsNullOrEmpty(tblPr.tblW.w)
+                    ? int.Parse(tblPr.tblW.w)
+                    : -1;
             }
             set 
             {
