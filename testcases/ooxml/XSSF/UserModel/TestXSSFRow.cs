@@ -15,9 +15,11 @@
    limitations under the License.
 ==================================================================== */
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using NPOI.SS;
 using NPOI.SS.UserModel;
 using NPOI.XSSF;
 using NPOI.XSSF.UserModel;
@@ -379,6 +381,30 @@ namespace TestCases.XSSF.UserModel
             ClassicAssert.AreEqual(2, cells.Count);
             ClassicAssert.AreEqual(0, cells[0].ColumnIndex);
             ClassicAssert.AreEqual(16383, cells[1].ColumnIndex);
+        }
+
+        /**
+         * CreateCell used to add the c element to the row before the column index was validated,
+         * so a rejected index left an orphaned cell behind: absent from the object model, but
+         * still written to the file. Excel reports such a workbook as corrupt.
+         */
+        [Test]
+        public void TestCreateCellWithInvalidIndexDoesNotLeakCellElement()
+        {
+            using var workbook = new XSSFWorkbook();
+            var sheet = workbook.CreateSheet("test");
+            var row = (XSSFRow)sheet.CreateRow(0);
+            row.CreateCell(0).SetCellValue("kept");
+
+            int cellsBefore = row.GetCTRow().SizeOfCArray();
+
+            Assert.Throws<ArgumentException>(() => row.CreateCell(-1));
+            Assert.Throws<ArgumentException>(
+                () => row.CreateCell(SpreadsheetVersion.EXCEL2007.LastColumnIndex + 1));
+
+            // The raw element count is what leaked; PhysicalNumberOfCells cannot see it.
+            ClassicAssert.AreEqual(cellsBefore, row.GetCTRow().SizeOfCArray());
+            ClassicAssert.AreEqual(1, row.PhysicalNumberOfCells);
         }
 
     }
