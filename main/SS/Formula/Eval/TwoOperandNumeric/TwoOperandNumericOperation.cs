@@ -6,29 +6,95 @@ namespace NPOI.SS.Formula.Eval
 
     public abstract class TwoOperandNumericOperation : Fixed2ArgFunction, IArrayFunction
     {
-        protected double SingleOperandEvaluate(ValueEval arg, int srcCellRow, int srcCellCol)
-        {
-            ValueEval ve = OperandResolver.GetSingleValue(arg, srcCellRow, srcCellCol);
-            return OperandResolver.CoerceValueToDouble(ve);
-        }
-
         public ValueEval EvaluateArray(ValueEval[] args, int srcRowIndex, int srcColumnIndex)
         {
             if (args.Length != 2)
             {
                 return ErrorEval.VALUE_INVALID;
             }
-            Func<double, double, double> func = this.Evaluate;
-            return new ArrayEval(func).Evaluate(srcRowIndex, srcColumnIndex, args[0], args[1]);
+            ValueEval arg0 = args[0];
+            ValueEval arg1 = args[1];
+
+            int w1, h1, a1FirstCol = 0, a1FirstRow = 0;
+            if (arg0 is AreaEval area0)
+            {
+                w1 = area0.Width;
+                h1 = area0.Height;
+                a1FirstCol = area0.FirstColumn;
+                a1FirstRow = area0.FirstRow;
+            }
+            else if (arg0 is RefEval ref0)
+            {
+                w1 = 1; h1 = 1;
+                a1FirstCol = ref0.Column;
+                a1FirstRow = ref0.Row;
+            }
+            else
+            {
+                w1 = 1; h1 = 1;
+            }
+
+            int w2, h2, a2FirstCol = 0, a2FirstRow = 0;
+            if (arg1 is AreaEval area1)
+            {
+                w2 = area1.Width;
+                h2 = area1.Height;
+                a2FirstCol = area1.FirstColumn;
+                a2FirstRow = area1.FirstRow;
+            }
+            else if (arg1 is RefEval ref1)
+            {
+                w2 = 1; h2 = 1;
+                a2FirstCol = ref1.Column;
+                a2FirstRow = ref1.Row;
+            }
+            else
+            {
+                w2 = 1; h2 = 1;
+            }
+
+            int width = Math.Max(w1, w2);
+            int height = Math.Max(h1, h2);
+
+            ValueEval[] vals = new ValueEval[height * width];
+            int idx = 0;
+            for (int i = 0; i < height; i++)
+            {
+                for (int j = 0; j < width; j++)
+                {
+                    vals[idx++] = EvaluateOneArrayElement(
+                        a1FirstRow + i, a1FirstCol + j,
+                        a2FirstRow + i, a2FirstCol + j,
+                        arg0, arg1);
+                }
+            }
+
+            if (vals.Length == 1)
+            {
+                return vals[0];
+            }
+
+            return new CacheAreaEval(srcRowIndex, srcColumnIndex,
+                    srcRowIndex + height - 1, srcColumnIndex + width - 1, vals);
         }
 
         public override ValueEval Evaluate(int srcRowIndex, int srcColumnIndex, ValueEval arg0, ValueEval arg1)
         {
+            return EvaluateOneArrayElement(srcRowIndex, srcColumnIndex, srcRowIndex, srcColumnIndex, arg0, arg1);
+        }
+
+        // Evaluates a single element of an array operation independently, so that an error
+        // produced by one element (e.g. an ErrorEval elsewhere in an array operand) cannot
+        // poison the result of unrelated elements.
+        private ValueEval EvaluateOneArrayElement(int row0, int col0, int row1, int col1, ValueEval arg0, ValueEval arg1)
+        {
             double result;
             try
             {
-                double d0 = SingleOperandEvaluate(arg0, srcRowIndex, srcColumnIndex);
-                double d1 = SingleOperandEvaluate(arg1, srcRowIndex, srcColumnIndex);
+                ValueEval ve0 = OperandResolver.GetSingleValue(arg0, row0, col0);
+                ValueEval ve1 = OperandResolver.GetSingleValue(arg1, row1, col1);
+                double d0 = OperandResolver.CoerceValueToDouble(ve0);
+                double d1 = OperandResolver.CoerceValueToDouble(ve1);
                 result = Evaluate(d0, d1);
                 if (result == 0.0)
                 { // this '==' matches +0.0 and -0.0
@@ -57,37 +123,5 @@ namespace NPOI.SS.Formula.Eval
         public static NPOI.SS.Formula.Functions.Function MultiplyEval = new MultiplyEval();
         public static NPOI.SS.Formula.Functions.Function PowerEval = new PowerEval();
         public static NPOI.SS.Formula.Functions.Function SubtractEval = new SubtractEval();
-
-        private sealed class ArrayEval : MatrixFunction.TwoArrayArg
-        {
-            readonly Func<double, double, double> _evaluateFunc = null;
-            public ArrayEval(Func<double, double, double> evalFunc)
-            {
-                _evaluateFunc = evalFunc;
-            }
-
-            private readonly MatrixFunction.MutableValueCollector instance = new MatrixFunction.MutableValueCollector(true, true);
-
-            protected override double[] CollectValues(ValueEval arg)
-            {
-                return instance.collectValues(arg);
-            }
-
-            protected override double[,] Evaluate(double[,] d1, double[,] d2)
-            {
-                int width = d1.GetLength(1) < d2.GetLength(1) ? d1.GetLength(1) : d2.GetLength(1);
-                int height = (d1.GetLength(0) < d2.GetLength(0)) ? d1.GetLength(0) : d2.GetLength(0);
-
-                double[,] result = new double[height, width];
-
-                for (int j = 0; j < height; j++) {
-                    for (int i = 0; i < width; i++) {
-                        result[j, i] = _evaluateFunc(d1[j, i], d2[j, i]);
-
-                    }
-                }
-                return result;
-            }
-        }
     }
 }
