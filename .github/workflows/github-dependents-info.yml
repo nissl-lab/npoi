@@ -45,7 +45,7 @@ jobs:
           markdownfile: docs/github-dependents-info.md
           badgemarkdownfile: README.md
           sort: stars
-          no-pagination: "true"
+          pagination: "false"
           # minstars: "0"
           # llm-summary: "true" # set to "false" to disable AI usage summary
           # llm-model: "" # optional: override LiteLLM model (example: gpt-4o-mini, gemini-3-flash-preview)
