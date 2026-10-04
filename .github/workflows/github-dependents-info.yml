@@ -37,12 +37,12 @@ jobs:
 
       # Collect data & generate markdown
       - name: GitHub Dependents Info
-        uses: nvuillam/github-dependents-info@fa4a7bc373174a9060ad9935ee32557eef05ea89 # v1.6.3
+        uses: nvuillam/github-dependents-info@74aece1119163a7e1c86ea58d5baf01d2bcd703e # v4.0.0
         # See documentation for variables details: https://github.com/nvuillam/github-dependents-info?tab=readme-ov-file#%EF%B8%8F-usage
         with:
           repo: ${{ github.repository }}
           outputrepo: ${{ github.repository }}
-          markdownfile: github-dependents-info.md
+          markdownfile: docs/github-dependents-info.md
           badgemarkdownfile: README.md
           sort: stars
           # minstars: "0"
