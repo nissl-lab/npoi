@@ -42,11 +42,11 @@ jobs:
         with:
           repo: ${{ github.repository }}
           outputrepo: ${{ github.repository }}
-          markdownfile: docs/github-dependents-info.md
+          markdownfile: docs/github-dependents-info-min5.md
           badgemarkdownfile: README.md
           sort: stars
           pagination: "false"
-          # minstars: "0"
+          minstars: "5"
           # llm-summary: "true" # set to "false" to disable AI usage summary
           # llm-model: "" # optional: override LiteLLM model (example: gpt-4o-mini, gemini-3-flash-preview)
           # llm-max-repos: "500" # optional: cap repos sent to the summary prompt
