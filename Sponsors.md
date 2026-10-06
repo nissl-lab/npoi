@@ -63,13 +63,6 @@ directly.
       Baramundi
     </td>
 <td align="center">
-      <a href="https://www.pwc.de/">
-        <img width="100" alt="image" src="https://github.com/user-attachments/assets/57927b26-4322-4d74-b5dd-14a492c5ed03" />
-      </a>
-      <br />
-      PWC Germany
-    </td>
-<td align="center">
       <a href="https://www.devolis.com/">
         <img width="100" alt="image" src="https://github.com/user-attachments/assets/286f43fb-7aee-474c-a02a-20f1ff29f35c" />
       </a>
