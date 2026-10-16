@@ -85,7 +85,6 @@ namespace NPOI.XSSF.UserModel
         public XSSFFont()
         {
             this._ctFont = new CT_Font();
-            FontName = DEFAULT_FONT_NAME;
             FontHeightInPoints =DEFAULT_FONT_SIZE;
         }
 
@@ -292,12 +291,19 @@ namespace NPOI.XSSF.UserModel
             get
             {
                 CT_FontName name = _ctFont.name;
-                return name == null ? DEFAULT_FONT_NAME : name.val;
+                return name?.val;
             }
             set 
             {
-                CT_FontName fontName = _ctFont.name==null?_ctFont.AddNewName():_ctFont.name;
-                fontName.val = value == null ? DEFAULT_FONT_NAME : value;
+                if (value == null)
+                {
+                    _ctFont.name = null;
+                }
+                else
+                {
+                    CT_FontName fontName = _ctFont.name==null?_ctFont.AddNewName():_ctFont.name;
+                    fontName.val = value;
+                }
             }
         }
 
