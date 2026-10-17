@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Runtime.CompilerServices;
+using NPOI.OpenXml4Net.Util;
 
 namespace NPOI.OpenXmlFormats;
 
@@ -11,7 +12,7 @@ internal static class StreamWriterExtensions
         sw.Write(" ");
         sw.Write(name);
         sw.Write("=\"");
-        sw.Write(value);
+        sw.WriteXmlEncoded(value);
         sw.Write("\"");
     }
 
@@ -41,10 +42,31 @@ internal static class StreamWriterExtensions
         sw.Write("<");
         sw.Write(name);
         sw.Write('>');
-        sw.Write(value);
+        sw.WriteXmlEncoded(value);
         sw.Write("</");
         sw.Write(name);
         sw.Write('>');
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void WriteXmlEncoded(this StreamWriter sw, string value)
+    {
+        if (value != null)
+        {
+            sw.Write(XmlHelper.EncodeXml(value));
+        }
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void WriteCDATA(this StreamWriter sw, string text)
+    {
+        sw.Write("<![CDATA[");
+        if (text != null)
+        {
+            // closes the section between "]]" and ">" and opens a new one, so no "]]>" is left inside it
+            sw.Write(text.Replace("]]>", "]]]]><![CDATA[>"));
+        }
+        sw.Write("]]>");
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

@@ -55,7 +55,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.rPr.Write(sw, "rPr");
             if(this.t !=null)
             {
-                sw.WriteElementAndContent("a:t", XmlHelper.EncodeXml(t));
+                sw.WriteElementAndContent("a:t", t);
             }
             sw.WriteEndElement("a", nodeName);
         }
