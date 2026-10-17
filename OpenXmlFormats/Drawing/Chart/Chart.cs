@@ -135,7 +135,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                 if (this.chart != null)
                     this.chart.Write(sw, "chart");
                 if (this.spPr != null)
-                    this.spPr.Write(sw, "spPr");
+                    this.spPr.Write(sw, "c:spPr");
                 if (this.txPr != null)
                     this.txPr.Write(sw, "txPr");
                 if (this.externalData != null)
@@ -903,17 +903,17 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                 XmlHelper.WriteAttribute(sw, "differentFirst", this.differentFirst);
             sw.Write('>');
             if (this.oddHeader != null)
-                sw.WriteElementAndContent("oddHeader", this.oddHeader);
+                sw.WriteElementAndContent("c:oddHeader", this.oddHeader);
             if (this.oddFooter != null)
-                sw.WriteElementAndContent("oddFooter", this.oddFooter);
+                sw.WriteElementAndContent("c:oddFooter", this.oddFooter);
             if (this.evenHeader != null)
-                sw.WriteElementAndContent("evenHeader", this.evenHeader);
+                sw.WriteElementAndContent("c:evenHeader", this.evenHeader);
             if (this.evenFooter != null)
-                sw.WriteElementAndContent("evenFooter", this.evenFooter);
+                sw.WriteElementAndContent("c:evenFooter", this.evenFooter);
             if (this.firstHeader != null)
-                sw.WriteElementAndContent("firstHeader", this.firstHeader);
+                sw.WriteElementAndContent("c:firstHeader", this.firstHeader);
             if (this.firstFooter != null)
-                sw.WriteElementAndContent("firstFooter", this.firstFooter);
+                sw.WriteElementAndContent("c:firstFooter", this.firstFooter);
             sw.WriteEndElement("c", nodeName);
         }
 
@@ -1738,7 +1738,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             if (this.overlay != null)
                 this.overlay.Write(sw, "overlay");
             if (this.spPr != null)
-                this.spPr.Write(sw, "spPr");
+                this.spPr.Write(sw, "c:spPr");
             if (this.txPr != null)
                 this.txPr.Write(sw, "txPr");
             if (this.legendEntry != null)
@@ -2615,7 +2615,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             if (this.showKeys != null)
                 this.showKeys.Write(sw, "showKeys");
             if (this.spPr != null)
-                this.spPr.Write(sw, "spPr");
+                this.spPr.Write(sw, "c:spPr");
             if (this.txPr != null)
                 this.txPr.Write(sw, "txPr");
             if (this.extLst != null)
@@ -2848,7 +2848,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             if (this.tickLblPos != null)
                 this.tickLblPos.Write(sw, "tickLblPos");
             if (this.spPr != null)
-                this.spPr.Write(sw, "spPr");
+                this.spPr.Write(sw, "c:spPr");
             if (this.txPr != null)
                 this.txPr.Write(sw, "txPr");
             if (this.crossAx != null)
@@ -3603,7 +3603,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             sw.WriteStart("c", nodeName);
             sw.Write('>');
             if (this.spPr != null)
-                this.spPr.Write(sw, "spPr");
+                this.spPr.Write(sw, "c:spPr");
             sw.WriteEndElement("c", nodeName);
         }
 
@@ -3699,7 +3699,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             if (this.overlay != null)
                 this.overlay.Write(sw, "overlay");
             if (this.spPr != null)
-                this.spPr.Write(sw, "spPr");
+                this.spPr.Write(sw, "c:spPr");
             if (this.txPr != null)
                 this.txPr.Write(sw, "txPr");
             if (this.extLst != null)
@@ -4748,7 +4748,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             if(this.tickLblPos != null)
                 this.tickLblPos.Write(sw, "tickLblPos");
             if(this.spPr != null)
-                this.spPr.Write(sw, "spPr");
+                this.spPr.Write(sw, "c:spPr");
             if(this.txPr != null)
                 this.txPr.Write(sw, "txPr");
             if(this.crossAx != null)
@@ -5516,7 +5516,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             if (this.tickLblPos != null)
                 this.tickLblPos.Write(sw, "tickLblPos");
             if (this.spPr != null)
-                this.spPr.Write(sw, "spPr");
+                this.spPr.Write(sw, "c:spPr");
             if (this.txPr != null)
                 this.txPr.Write(sw, "txPr");
             if (this.crossAx != null)
@@ -5994,7 +5994,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             if (this.tx != null)
                 this.tx.Write(sw, "tx");
             if (this.spPr != null)
-                this.spPr.Write(sw, "spPr");
+                this.spPr.Write(sw, "c:spPr");
             if (this.txPr != null)
                 this.txPr.Write(sw, "txPr");
             sw.WriteEndElement("c", nodeName);
@@ -6382,7 +6382,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             if (this.tickLblPos != null)
                 this.tickLblPos.Write(sw, "tickLblPos");
             if (this.spPr != null)
-                this.spPr.Write(sw, "spPr");
+                this.spPr.Write(sw, "c:spPr");
             if (this.txPr != null)
                 this.txPr.Write(sw, "txPr");
             if (this.crossAx != null)
@@ -6953,7 +6953,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             if (this.explosion != null)
                 this.explosion.Write(sw, "explosion");
             if (this.spPr != null)
-                this.spPr.Write(sw, "spPr");
+                this.spPr.Write(sw, "c:spPr");
             if (this.pictureOptions != null)
                 this.pictureOptions.Write(sw, "pictureOptions");
             if (this.extLst != null)
@@ -7136,7 +7136,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             if (this.size != null)
                 this.size.Write(sw, "size");
             if (this.spPr != null)
-                this.spPr.Write(sw, "spPr");
+                this.spPr.Write(sw, "c:spPr");
             if (this.extLst != null)
             {
                 foreach (CT_Extension x in this.extLst)
@@ -7672,7 +7672,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             if (this.numFmt != null)
                 this.numFmt.Write(sw, "numFmt");
             if (this.spPr != null)
-                this.spPr.Write(sw, "spPr");
+                this.spPr.Write(sw, "c:spPr");
             if (this.txPr != null)
                 this.txPr.Write(sw, "txPr");
             if (this.showLegendKey != null)
@@ -7995,7 +7995,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             if (this.numFmt != null)
                 this.numFmt.Write(sw, "numFmt");
             if (this.spPr != null)
-                this.spPr.Write(sw, "spPr");
+                this.spPr.Write(sw, "c:spPr");
             if (this.txPr != null)
                 this.txPr.Write(sw, "txPr");
             if (this.delete != null)
@@ -8373,9 +8373,9 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             sw.WriteStart("c", nodeName);
             sw.Write('>');
             if (this.name != null)
-                sw.WriteElementAndContent("name", this.name);
+                sw.WriteElementAndContent("c:name", this.name);
             if (this.spPr != null)
-                this.spPr.Write(sw, "spPr");
+                this.spPr.Write(sw, "c:spPr");
             if (this.trendlineType != null)
                 this.trendlineType.Write(sw, "trendlineType");
             if (this.order != null)
@@ -8799,7 +8799,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             if (this.numFmt != null)
                 this.numFmt.Write(sw, "numFmt");
             if (this.spPr != null)
-                this.spPr.Write(sw, "spPr");
+                this.spPr.Write(sw, "c:spPr");
             if (this.txPr != null)
                 this.txPr.Write(sw, "txPr");
             if (this.extLst != null)
@@ -8972,7 +8972,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             if (this.val != null)
                 this.val.Write(sw, "val");
             if (this.spPr != null)
-                this.spPr.Write(sw, "spPr");
+                this.spPr.Write(sw, "c:spPr");
             if (this.extLst != null)
             {
                 foreach (CT_Extension x in this.extLst)
@@ -10181,7 +10181,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             if (this.idx != null)
                 this.idx.Write(sw, "idx");
             if (this.spPr != null)
-                this.spPr.Write(sw, "spPr");
+                this.spPr.Write(sw, "c:spPr");
             sw.WriteEndElement("c", nodeName);
         }
 
@@ -10973,7 +10973,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                 }
             }
             if (this.spPr != null)
-                this.spPr.Write(sw, "spPr");
+                this.spPr.Write(sw, "c:spPr");
             if (this.extLst != null)
             {
                 foreach (CT_Extension x in this.extLst)
@@ -12019,7 +12019,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             if (this.idx != null)
                 this.idx.Write(sw, "idx");
             if (this.spPr != null)
-                this.spPr.Write(sw, "spPr");
+                this.spPr.Write(sw, "c:spPr");
             if (this.txPr != null)
                 this.txPr.Write(sw, "txPr");
             if (this.marker != null)

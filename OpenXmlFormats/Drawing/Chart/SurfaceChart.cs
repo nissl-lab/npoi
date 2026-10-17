@@ -58,7 +58,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             if (this.thickness != null)
                 this.thickness.Write(sw, "thickness");
             if (this.spPr != null)
-                this.spPr.Write(sw, "spPr");
+                this.spPr.Write(sw, "c:spPr");
             if (this.pictureOptions != null)
                 this.pictureOptions.Write(sw, "pictureOptions");
             if (this.extLst != null)
@@ -351,7 +351,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             if (this.tx != null)
                 this.tx.Write(sw, "tx");
             if (this.spPr != null)
-                this.spPr.Write(sw, "spPr");
+                this.spPr.Write(sw, "c:spPr");
             if (this.cat != null)
                 this.cat.Write(sw, "cat");
             if (this.val != null)
