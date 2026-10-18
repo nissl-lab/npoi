@@ -94,6 +94,15 @@ namespace NPOI.XSLF.UserModel
                         case "grpSp":
                             shapes.Add(new XSLFGroupShape(element, sheet, parent));
                             continue;
+                        case "pic":
+                            var fill = Child(element, "blipFill", PresentationNamespace);
+                            if (fill != null && Child(fill, "blip", XSLFXmlHelper.DrawingNamespace) != null &&
+                                Child(element, "spPr", PresentationNamespace) != null)
+                            {
+                                shapes.Add(new XSLFPictureShape(element, sheet, parent));
+                                continue;
+                            }
+                            break;
                     }
                 }
                 shapes.Add(new XSLFUnsupportedShape(element, sheet, parent));
@@ -239,7 +248,7 @@ namespace NPOI.XSLF.UserModel
             return (long)value;
         }
 
-        private static uint NextId(XSLFSheet sheet)
+        internal static uint NextId(XSLFSheet sheet)
         {
             var ids = new HashSet<uint>();
             foreach (XmlElement properties in sheet.GetShapeTree().GetElementsByTagName("cNvPr", PresentationNamespace))
@@ -258,7 +267,7 @@ namespace NPOI.XSLF.UserModel
             return id;
         }
 
-        private static XmlElement Append(XmlElement tree, XmlElement xml)
+        internal static XmlElement Append(XmlElement tree, XmlElement xml)
         {
             ValidateContainer(tree);
             var extension = Child(tree, "extLst", PresentationNamespace);
@@ -267,7 +276,7 @@ namespace NPOI.XSLF.UserModel
             return element;
         }
 
-        private static void ValidateContainer(XmlElement tree)
+        internal static void ValidateContainer(XmlElement tree)
         {
             var nonvisual = RequiredChild(tree, "nvGrpSpPr", PresentationNamespace);
             ReadId(RequiredChild(nonvisual, "cNvPr", PresentationNamespace));

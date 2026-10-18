@@ -6,6 +6,7 @@ using System.Linq;
 using System.Xml;
 using NPOI.OpenXml4Net.OPC;
 using NPOI.OpenXmlFormats.Presentation;
+using NPOI.SS.UserModel;
 using NPOI.Util;
 using SkiaSharp;
 
@@ -22,6 +23,8 @@ namespace NPOI.XSLF.UserModel
         private const string SectionNamespace = "http://schemas.microsoft.com/office/powerpoint/2010/main";
 
         private readonly List<XSLFSlide> slides = new List<XSLFSlide>();
+        private readonly Dictionary<PackagePart, XSLFPictureData> pictures =
+            new Dictionary<PackagePart, XSLFPictureData>();
         private CT_Presentation presentation;
 
         /// <summary>
@@ -69,6 +72,88 @@ namespace NPOI.XSLF.UserModel
         public CT_Presentation GetCTPresentation()
         {
             return presentation;
+        }
+
+        /// <summary>
+        /// Returns a read-only snapshot of embedded image parts, including unreferenced images.
+        /// Unsupported image formats remain byte-preserving, read-only data.
+        /// </summary>
+        public IReadOnlyList<XSLFPictureData> GetPictureData()
+        {
+            EnsureOpen();
+            return Package.GetParts().Where(part => !part.IsRelationshipPart &&
+                    XSLFPictureData.IsImageContentType(part.ContentType))
+                .Select(GetPictureData).ToList().AsReadOnly();
+        }
+
+        /// <summary>
+        /// Adds a complete PNG or JPEG without conversion, reusing identical bytes of the same MIME type.
+        /// </summary>
+        public XSLFPictureData AddPicture(byte[] data, PictureType format)
+        {
+            EnsureWritable();
+            var descriptor = XSLFPictureData.GetDescriptor(format);
+            XSLFPictureData.ValidateImage(data, format);
+            foreach (var picture in GetPictureData())
+            {
+                if (string.Equals(picture.MimeType, descriptor.ContentType, StringComparison.OrdinalIgnoreCase) &&
+                    picture.Data.SequenceEqual(data))
+                {
+                    return picture;
+                }
+            }
+            var number = GetNextPartNumber(descriptor, 1);
+            if (number < 0)
+            {
+                throw new InvalidOperationException("No free image part name is available.");
+            }
+            var result = (XSLFPictureData)CreateRelationship(
+                descriptor, XSLFFactory.GetInstance(), number, true).DocumentPart;
+            using (var output = result.GetPackagePart().GetOutputStream())
+            {
+                output.Write(data, 0, data.Length);
+            }
+            pictures.Add(result.GetPackagePart(), result);
+            return result;
+        }
+
+        /// <summary>
+        /// Adds a PNG or JPEG from the stream's current position through its end.
+        /// The caller retains ownership of the input stream.
+        /// </summary>
+        public XSLFPictureData AddPicture(Stream stream, PictureType format)
+        {
+            EnsureWritable();
+            XSLFPictureData.GetDescriptor(format);
+            if (stream == null)
+            {
+                throw new ArgumentNullException(nameof(stream));
+            }
+            if (!stream.CanRead)
+            {
+                throw new ArgumentException("A readable image stream is required.", nameof(stream));
+            }
+            return AddPicture(IOUtils.ToByteArray(stream), format);
+        }
+
+        internal XSLFPictureData GetPictureData(PackagePart part)
+        {
+            EnsureOpen();
+            if (!ReferenceEquals(part.Package, Package) ||
+                !ReferenceEquals(Package.GetPart(part.PartName), part))
+            {
+                throw new ArgumentException("The image part must belong to this presentation.", nameof(part));
+            }
+            if (!XSLFPictureData.IsImageContentType(part.ContentType))
+            {
+                throw new NotSupportedException("The referenced part has no supported image MIME type.");
+            }
+            if (!pictures.TryGetValue(part, out var picture))
+            {
+                picture = new XSLFPictureData(this, part);
+                pictures.Add(part, picture);
+            }
+            return picture;
         }
 
         /// <summary>
@@ -300,7 +385,7 @@ namespace NPOI.XSLF.UserModel
             Close();
         }
 
-        internal void EnsureWritable()
+        internal void EnsureOpen()
         {
 #if NET8_0_OR_GREATER
             ObjectDisposedException.ThrowIf(Package == null, this);
@@ -310,6 +395,11 @@ namespace NPOI.XSLF.UserModel
                 throw new ObjectDisposedException(nameof(XMLSlideShow));
             }
 #endif
+        }
+
+        internal void EnsureWritable()
+        {
+            EnsureOpen();
             if (Package.GetPackageAccess() == PackageAccess.READ)
             {
                 throw new InvalidOperationException("Cannot modify a read-only presentation.");

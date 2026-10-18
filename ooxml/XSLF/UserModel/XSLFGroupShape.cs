@@ -40,6 +40,12 @@ namespace NPOI.XSLF.UserModel
         }
 
         /// <inheritdoc/>
+        public XSLFPictureShape CreatePicture(XSLFPictureData pictureData)
+        {
+            return XSLFPictureShape.Create(GetSheet(), this, GetXmlObject(), pictureData);
+        }
+
+        /// <inheritdoc/>
         public override SKRect GetAnchor()
         {
             return XSLFShapeHelper.ReadAnchor(Properties, false);

@@ -35,10 +35,19 @@ namespace NPOI.XSLF.UserModel
             "application/vnd.openxmlformats-officedocument.theme+xml",
             CT_Presentation.RelationshipsNamespace + "/theme", "/ppt/theme/theme#.xml", typeof(XSLFTheme));
 
+        public static readonly XSLFRelation IMAGE_PNG = new XSLFRelation(
+            "image/png", PackageRelationshipTypes.IMAGE_PART, "/ppt/media/image#.png", typeof(XSLFPictureData));
+
+        public static readonly XSLFRelation IMAGE_JPEG = new XSLFRelation(
+            "image/jpeg", PackageRelationshipTypes.IMAGE_PART, "/ppt/media/image#.jpeg", typeof(XSLFPictureData));
+
         private XSLFRelation(string contentType, string relationship, string defaultName, Type type)
             : base(contentType, relationship, defaultName, type)
         {
-            Relations.Add(relationship, this);
+            if (!Relations.ContainsKey(relationship))
+            {
+                Relations.Add(relationship, this);
+            }
         }
 
         /// <summary>

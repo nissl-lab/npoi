@@ -172,7 +172,7 @@ than returning guessed coordinates. An explicit anchor can be set when absent.
 geometry is retained, not interpreted. The existing enum's non-schema `none`
 and `lineInv` values are not accepted for preset creation.
 
-Pictures, tables, connectors, alternate content, and unfamiliar drawing
+Unsupported pictures, tables, connectors, alternate content, and unfamiliar drawing
 elements are exposed as `XSLFUnsupportedShape` and preserved without mutation.
 Their common ID/name can be read only when directly identifiable; anchor and
 name edits are not supported. Supported edits retain existing text, styles,
@@ -245,11 +245,52 @@ formatting interpretation, full inheritance, and placeholder materialization
 remain outside this stage. Existing unsupported formatting/relationships remain
 intact during supported run/property edits.
 
+Embedded pictures
+-----------------
+Slides, layouts, masters and groups support `CreatePicture(XSLFPictureData)`.
+PNG and JPEG are accepted from bytes or a stream without conversion:
+
+```csharp
+using var imageStream = System.IO.File.OpenRead("picture.png");
+var image = presentation.AddPicture(imageStream, NPOI.SS.UserModel.PictureType.PNG);
+var picture = slide.CreatePicture(image);
+picture.SetAnchor(SkiaSharp.SKRect.Create(36, 300, 180, 120));
+var pixels = image.GetImageDimensionInPixels();
+```
+
+The stream overload reads from the current position and leaves the stream open.
+Invalid, incomplete or mismatched PNG/JPEG data is rejected before adding a part.
+Images with identical bytes and MIME types reuse one media part, even across
+slides, layouts, masters and groups. Each sheet reuses its image relationship;
+each picture still has its own sheet-wide unique shape ID. Data from another
+presentation, removed parts and detached/readonly containers cannot be inserted.
+
+New pictures have an **empty anchor**: callers explicitly set point-based size
+and position. `GetImageDimensionInPixels()` reports encoded PNG/JPEG pixel
+dimensions, not a guessed physical size; it does not apply DPI or EXIF rotation.
+`XSLFPictureData` implements `IPictureData` with original `Data`, `MimeType`,
+`PictureType` and `SuggestFileExtension()`. Each `Data` call returns a new array.
+`GetPictureData()` on the presentation returns a read-only snapshot of all
+`image/*` parts, including unreferenced images, without downloading anything.
+
+Existing recognizable `p:pic` elements are exposed as `XSLFPictureShape`.
+`GetPictureData()` on a picture returns its primary embedded blip, or null for a
+validated external-only picture. It does not resolve SVG alternatives/effects.
+`GetPictureLink()` returns the external URI, including when an embedded cache
+also exists; `IsExternalLinkedPicture` is true whenever a link is declared.
+External links are never fetched. Linked pictures and unsupported image formats
+are read-only; their XML, relationships and bytes remain intact. Supported
+embedded PNG/JPEG anchor/name edits preserve crop, effects, flips, rotation,
+group transforms and other existing drawing content. Malformed supported
+references fail explicitly. Unrecognized/incomplete picture XML stays opaque.
+Replacement, removal, crop/effect editing, conversion, SVG/metafile insertion,
+audio/video and rendering remain outside this stage.
+
 This is a foundation, not full PowerPoint support. Parameterless slide creation
 requires an existing blank layout (included in newly created presentations).
 The layout overload can select other layout types. Existing slide
 content and unsupported related parts are retained, but high-level
-pictures, tables, charts, notes, rendering, and animation APIs are not yet
+tables, charts, notes, rendering, and animation APIs are not yet
 implemented. Strict OOXML and macro-enabled presentation formats are not supported.
 
 System Requirement

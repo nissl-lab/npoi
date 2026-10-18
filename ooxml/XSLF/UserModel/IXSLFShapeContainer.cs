@@ -25,6 +25,11 @@ namespace NPOI.XSLF.UserModel
         XSLFTextBox CreateTextBox();
 
         /// <summary>
+        /// Appends an embedded PNG/JPEG picture from this presentation with an empty point-based anchor.
+        /// </summary>
+        XSLFPictureShape CreatePicture(XSLFPictureData pictureData);
+
+        /// <summary>
         /// Appends an empty group with a sheet-wide unique identifier.
         /// Exterior and interior anchors are initially empty and can be set independently.
         /// </summary>

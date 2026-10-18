@@ -41,6 +41,10 @@ namespace NPOI.XSLF.UserModel
             {
                 return new XSLFTheme(parent, part);
             }
+            if (XSLFPictureData.IsImageContentType(part.ContentType))
+            {
+                return new XSLFPictureData(parent, part);
+            }
 
             // The default POIXML save traversal clears parts before committing them.
             // Unmodeled parts have no serializer and must keep their original bytes.
@@ -57,6 +61,10 @@ namespace NPOI.XSLF.UserModel
             if (cls == typeof(XSLFSlide) && classes == null)
             {
                 return new XSLFSlide();
+            }
+            if (cls == typeof(XSLFPictureData) && classes == null)
+            {
+                return new XSLFPictureData();
             }
             throw new NotSupportedException("The XSLF factory cannot create this document part.");
         }
