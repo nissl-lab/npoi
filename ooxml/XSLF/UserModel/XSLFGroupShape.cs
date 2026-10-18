@@ -34,6 +34,12 @@ namespace NPOI.XSLF.UserModel
         }
 
         /// <inheritdoc/>
+        public XSLFTextBox CreateTextBox()
+        {
+            return XSLFShapeHelper.CreateTextBox(GetSheet(), this, GetXmlObject());
+        }
+
+        /// <inheritdoc/>
         public override SKRect GetAnchor()
         {
             return XSLFShapeHelper.ReadAnchor(Properties, false);

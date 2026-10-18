@@ -87,7 +87,9 @@ namespace NPOI.XSLF.UserModel
                         case "extLst":
                             continue;
                         case "sp":
-                            shapes.Add(new XSLFSimpleShape(element, sheet, parent));
+                            shapes.Add(XSLFTextHelper.IsTextBox(element)
+                                ? new XSLFTextBox(element, sheet, parent)
+                                : new XSLFSimpleShape(element, sheet, parent));
                             continue;
                         case "grpSp":
                             shapes.Add(new XSLFGroupShape(element, sheet, parent));
@@ -136,6 +138,23 @@ namespace NPOI.XSLF.UserModel
                 "<a:xfrm><a:off x=\"0\" y=\"0\"/><a:ext cx=\"0\" cy=\"0\"/>" +
                 "<a:chOff x=\"0\" y=\"0\"/><a:chExt cx=\"0\" cy=\"0\"/></a:xfrm></p:grpSpPr></p:grpSp>");
             return new XSLFGroupShape(Append(tree, xml), sheet, parent);
+        }
+
+        internal static XSLFTextBox CreateTextBox(XSLFSheet sheet, IXSLFShapeContainer parent, XmlElement tree)
+        {
+            var shape = CreateAutoShape(sheet, parent, tree, ST_ShapeType.rect);
+            var xml = shape.GetXmlObject();
+            RequiredChild(RequiredChild(xml, "nvSpPr", PresentationNamespace), "cNvSpPr", PresentationNamespace)
+                .SetAttribute("txBox", "1");
+            shape.Name = "TextBox " + shape.ID.ToString(CultureInfo.InvariantCulture);
+            var properties = RequiredChild(xml, "spPr", PresentationNamespace);
+            properties.AppendChild(xml.OwnerDocument.CreateElement("a", "noFill", XSLFXmlHelper.DrawingNamespace));
+            var line = xml.OwnerDocument.CreateElement("a", "ln", XSLFXmlHelper.DrawingNamespace);
+            line.AppendChild(xml.OwnerDocument.CreateElement("a", "noFill", XSLFXmlHelper.DrawingNamespace));
+            properties.AppendChild(line);
+            var textBox = new XSLFTextBox(xml, sheet, parent);
+            textBox.AddNewTextParagraph();
+            return textBox;
         }
 
         internal static SKRect ReadAnchor(XmlElement properties, bool interior)
