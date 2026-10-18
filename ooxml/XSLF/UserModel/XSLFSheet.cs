@@ -84,6 +84,12 @@ namespace NPOI.XSLF.UserModel
             return XSLFPictureShape.Create(this, this, GetShapeTree(), pictureData);
         }
 
+        /// <inheritdoc/>
+        public XSLFTable CreateTable(int rows, int columns)
+        {
+            return XSLFTable.Create(this, this, GetShapeTree(), rows, columns);
+        }
+
         protected abstract XmlElement GetCommonSlideData();
 
         internal XmlElement GetShapeTree()

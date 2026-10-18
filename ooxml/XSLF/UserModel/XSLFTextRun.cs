@@ -9,6 +9,7 @@ namespace NPOI.XSLF.UserModel
     /// <summary>
     /// A regular text run, explicit break, displayed field, or opaque inline element.
     /// Field and opaque mutation is not supported.
+    /// Table cells resolve explicit paragraph/run and cell list-style defaults, not table-style inheritance.
     /// </summary>
     public class XSLFTextRun
     {
@@ -104,7 +105,7 @@ namespace NPOI.XSLF.UserModel
                         continue;
                     if (!latin.HasAttribute("typeface"))
                         throw new POIXMLException("Latin text font has no typeface.");
-                    return XSLFTextStyles.ResolveFont(latin.GetAttribute("typeface"), ParentParagraph.ParentShape);
+                    return XSLFTextStyles.ResolveFont(latin.GetAttribute("typeface"), ParentParagraph.Owner);
                 }
                 return null;
             }

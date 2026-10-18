@@ -14,7 +14,7 @@ namespace NPOI.XSLF.UserModel
 {
     /// <summary>
     /// Reads, writes, and creates transitional PPTX presentations and layout-based slides.
-    /// Simple/group shapes, text and embedded PNG/JPEG pictures are supported; rendering is not supported.
+    /// Simple/group shapes, text, PNG/JPEG pictures and fixed-grid tables are supported; rendering is not supported.
     /// </summary>
     public class XMLSlideShow : POIXMLDocument, IDisposable
     {

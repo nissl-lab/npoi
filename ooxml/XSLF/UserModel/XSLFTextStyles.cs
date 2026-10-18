@@ -30,9 +30,11 @@ namespace NPOI.XSLF.UserModel
             if (local != null)
                 yield return local;
             var level = paragraph.IndentLevel;
-            var shape = paragraph.ParentShape;
-            foreach (var properties in ShapeListProperties(shape, level))
+            foreach (var properties in ShapeListProperties(paragraph.Owner, level))
                 yield return properties;
+            if (paragraph.ParentCell != null)
+                yield break;
+            var shape = paragraph.ParentShape;
             var sheet = shape.GetSheet();
             var placeholder = Placeholder(shape);
             if (placeholder != null)
@@ -72,7 +74,7 @@ namespace NPOI.XSLF.UserModel
                 yield return properties;
         }
 
-        internal static string ResolveFont(string font, XSLFSimpleShape shape)
+        internal static string ResolveFont(string font, IXSLFTextContainer shape)
         {
             if (font == "+mj-lt" || font == "+mn-lt")
             {
@@ -87,7 +89,7 @@ namespace NPOI.XSLF.UserModel
             return font;
         }
 
-        private static IEnumerable<XmlElement> ShapeListProperties(XSLFSimpleShape shape, int level)
+        private static IEnumerable<XmlElement> ShapeListProperties(IXSLFTextContainer shape, int level)
         {
             var body = XSLFTextHelper.GetBody(shape, false);
             var style = body == null ? null : XSLFShapeHelper.Child(body, "lstStyle", A);

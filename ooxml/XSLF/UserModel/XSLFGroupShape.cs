@@ -46,6 +46,12 @@ namespace NPOI.XSLF.UserModel
         }
 
         /// <inheritdoc/>
+        public XSLFTable CreateTable(int rows, int columns)
+        {
+            return XSLFTable.Create(GetSheet(), this, GetXmlObject(), rows, columns);
+        }
+
+        /// <inheritdoc/>
         public override SKRect GetAnchor()
         {
             return XSLFShapeHelper.ReadAnchor(Properties, false);

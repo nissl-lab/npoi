@@ -10,21 +10,31 @@ namespace NPOI.XSLF.UserModel
 {
     /// <summary>
     /// A text paragraph with explicit content and individually inherited supported properties.
+    /// Table-cell properties resolve only explicit paragraph/run and cell list-style defaults.
     /// </summary>
     public class XSLFTextParagraph
     {
         private readonly XmlElement xml;
 
-        internal XSLFTextParagraph(XmlElement xml, XSLFSimpleShape shape)
+        internal XSLFTextParagraph(XmlElement xml, IXSLFTextContainer owner)
         {
             this.xml = xml;
-            ParentShape = shape;
+            Owner = owner;
+            ParentShape = owner as XSLFSimpleShape;
+            ParentCell = owner as XSLFTableCell;
         }
 
         /// <summary>
-        /// Gets the containing simple shape.
+        /// Gets the containing simple shape, or null for a table-cell paragraph.
         /// </summary>
         public XSLFSimpleShape ParentShape { get; }
+
+        /// <summary>
+        /// Gets the containing table cell, or null for a simple-shape paragraph.
+        /// </summary>
+        public XSLFTableCell ParentCell { get; }
+
+        internal IXSLFTextContainer Owner { get; }
 
         /// <summary>
         /// Gets actual paragraph text, including displayed field text and explicit LF line breaks.
@@ -127,9 +137,9 @@ namespace NPOI.XSLF.UserModel
 
         internal void EnsureEditable()
         {
-            ParentShape.EnsureEditable();
-            if (!ReferenceEquals(xml.ParentNode, XSLFTextHelper.GetBody(ParentShape, false)))
-                throw new InvalidOperationException("The text paragraph is detached from its shape.");
+            Owner.EnsureTextEditable();
+            if (!ReferenceEquals(xml.ParentNode, XSLFTextHelper.GetBody(Owner, false)))
+                throw new InvalidOperationException("The text paragraph is detached from its text container.");
         }
     }
 }

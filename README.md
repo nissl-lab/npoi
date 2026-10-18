@@ -172,7 +172,7 @@ than returning guessed coordinates. An explicit anchor can be set when absent.
 geometry is retained, not interpreted. The existing enum's non-schema `none`
 and `lineInv` values are not accepted for preset creation.
 
-Unsupported pictures, tables, connectors, alternate content, and unfamiliar drawing
+Unsupported pictures/graphic frames, connectors, alternate content, and unfamiliar drawing
 elements are exposed as `XSLFUnsupportedShape` and preserved without mutation.
 Their common ID/name can be read only when directly identifiable; anchor and
 name edits are not supported. Supported edits retain existing text, styles,
@@ -286,11 +286,62 @@ references fail explicitly. Unrecognized/incomplete picture XML stays opaque.
 Replacement, removal, crop/effect editing, conversion, SVG/metafile insertion,
 audio/video and rendering remain outside this stage.
 
+Fixed-grid tables
+-----------------
+Slides, layouts, masters and groups support `CreateTable(rows, columns)` with
+positive fixed counts. Recognizable DrawingML table graphic frames are exposed
+as `XSLFTable`; other graphic frames remain opaque. New tables contain a complete
+grid, one empty paragraph per cell, and **zero frame, column and row dimensions**:
+
+```csharp
+var table = slide.CreateTable(2, 3);
+table.SetAnchor(SkiaSharp.SKRect.Create(36, 36, 360, 60));
+for (var column = 0; column < table.NumberOfColumns; column++)
+    table.SetColumnWidth(column, 120);
+for (var row = 0; row < table.NumberOfRows; row++)
+    table.SetRowHeight(row, 30);
+table.GetCell(0, 0).SetText("Header");
+var run = table.GetCell(1, 0).TextParagraphs[0].AddNewTextRun();
+run.Text = "Value";
+run.FontSize = 18;
+run.IsBold = true;
+```
+
+Frame anchors, column widths and row heights are **independent** point-based
+values. Changing the frame does not resize the grid, and changing the grid does
+not resize the frame; there is no automatic layout, scaling or text fitting.
+Grid widths/heights use DrawingML coordinate limits (0 through 27273042316900
+EMUs), not the narrower frame extent limit. They round to the nearest EMU.
+`GetRows()` and each row's `GetCells()` return read-only snapshots over live XML.
+`GetCell(row, column)` uses zero-based **physical** indexes; merged visual layout
+and inherited cell text are not synthesized.
+
+Cells are not independent shapes. They share the existing text, paragraph, run,
+whitespace and lossless-replacement behavior. A paragraph's `ParentCell` identifies
+its cell and `ParentShape` is null; existing simple-shape paragraphs retain their
+original `ParentShape` and have a null `ParentCell`. Cell formatting resolves only
+local run/paragraph properties and explicit cell list-style defaults, including
+explicit Latin theme-font tokens. Unset cell properties return null within that
+bounded scope; presentation/master defaults and table-style inheritance are not
+guessed. Existing styles, borders, fills, relationships and unknown formatting
+remain intact during supported edits. Whole-text replacement retains body/list
+styles and cell properties, but rejects potentially lossy fields/hyperlinks and
+unsupported local formatting just as shape text does.
+
+Existing merge spans and continuation flags are readable and preserved, but
+**any merged table is read-only**, including its unmerged cells, name, anchor
+and grid dimensions. Irregular or opaque grids reject high-level editing;
+malformed supported structure fails explicitly instead of inventing dimensions
+or missing content. Readonly/disposed presentations, removed sheets and detached
+table/row/cell/paragraph/run wrappers cannot be edited. Merge/split editing,
+dynamic row/column insertion/removal, border/fill editing, automatic layout,
+table-style inheritance and rendering remain outside this stage.
+
 This is a foundation, not full PowerPoint support. Parameterless slide creation
 requires an existing blank layout (included in newly created presentations).
 The layout overload can select other layout types. Existing slide
 content and unsupported related parts are retained, but high-level
-tables, charts, notes, rendering, and animation APIs are not yet
+charts, notes, rendering, and animation APIs are not yet
 implemented. Strict OOXML and macro-enabled presentation formats are not supported.
 
 System Requirement

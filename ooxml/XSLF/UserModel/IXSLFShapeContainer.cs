@@ -30,6 +30,12 @@ namespace NPOI.XSLF.UserModel
         XSLFPictureShape CreatePicture(XSLFPictureData pictureData);
 
         /// <summary>
+        /// Appends a fixed positive row/column grid with zero frame, column and row dimensions.
+        /// Frame and grid sizes are set independently in points; no automatic layout is performed.
+        /// </summary>
+        XSLFTable CreateTable(int rows, int columns);
+
+        /// <summary>
         /// Appends an empty group with a sheet-wide unique identifier.
         /// Exterior and interior anchors are initially empty and can be set independently.
         /// </summary>

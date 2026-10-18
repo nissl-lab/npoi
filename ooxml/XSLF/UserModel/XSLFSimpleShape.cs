@@ -9,7 +9,7 @@ namespace NPOI.XSLF.UserModel
     /// <summary>
     /// A PresentationML simple shape with text support and preserved unsupported content.
     /// </summary>
-    public class XSLFSimpleShape : XSLFShape
+    public class XSLFSimpleShape : XSLFShape, IXSLFTextContainer
     {
         internal XSLFSimpleShape(XmlElement xml, XSLFSheet sheet, IXSLFShapeContainer parent)
             : base(xml, sheet, parent)
@@ -49,6 +49,16 @@ namespace NPOI.XSLF.UserModel
         public XSLFTextParagraph AddNewTextParagraph()
         {
             return XSLFTextHelper.AddParagraph(this);
+        }
+
+        XmlElement IXSLFTextContainer.GetTextBody(bool create)
+        {
+            return XSLFTextHelper.GetBody(GetXmlObject(), XSLFShapeHelper.PresentationNamespace, create);
+        }
+
+        void IXSLFTextContainer.EnsureTextEditable()
+        {
+            EnsureEditable();
         }
 
         /// <summary>

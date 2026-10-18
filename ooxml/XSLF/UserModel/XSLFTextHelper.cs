@@ -48,10 +48,14 @@ namespace NPOI.XSLF.UserModel
             XmlConvert.VerifyXmlChars(text);
         }
 
-        internal static XmlElement GetBody(XSLFSimpleShape shape, bool create)
+        internal static XmlElement GetBody(IXSLFTextContainer owner, bool create)
         {
-            var xml = shape.GetXmlObject();
-            var body = XSLFShapeHelper.Child(xml, "txBody", P);
+            return owner.GetTextBody(create);
+        }
+
+        internal static XmlElement GetBody(XmlElement xml, string ns, bool create)
+        {
+            var body = XSLFShapeHelper.Child(xml, "txBody", ns);
             if (body != null)
             {
                 XSLFShapeHelper.RequiredChild(body, "bodyPr", A);
@@ -59,8 +63,10 @@ namespace NPOI.XSLF.UserModel
             }
             else if (create)
             {
-                var following = XSLFShapeHelper.Child(xml, "extLst", P);
-                body = xml.OwnerDocument.CreateElement("p", "txBody", P);
+                var following = XSLFShapeHelper.Child(xml, "extLst", ns);
+                if (ns == A)
+                    following = XSLFShapeHelper.Child(xml, "tcPr", A) ?? following;
+                body = xml.OwnerDocument.CreateElement(ns == P ? "p" : "a", "txBody", ns);
                 body.AppendChild(xml.OwnerDocument.CreateElement("a", "bodyPr", A));
                 body.AppendChild(xml.OwnerDocument.CreateElement("a", "lstStyle", A));
                 xml.InsertBefore(body, following);
@@ -68,7 +74,7 @@ namespace NPOI.XSLF.UserModel
             return body;
         }
 
-        internal static ReadOnlyCollection<XSLFTextParagraph> GetParagraphs(XSLFSimpleShape shape)
+        internal static ReadOnlyCollection<XSLFTextParagraph> GetParagraphs(IXSLFTextContainer shape)
         {
             var body = GetBody(shape, false);
             return (body == null ? Enumerable.Empty<XmlElement>() :
@@ -85,7 +91,7 @@ namespace NPOI.XSLF.UserModel
                 .Select(node => new XSLFTextRun(node, paragraph)).ToList().AsReadOnly();
         }
 
-        internal static string GetText(XSLFSimpleShape shape)
+        internal static string GetText(IXSLFTextContainer shape)
         {
             var body = GetBody(shape, false);
             if (body == null)
@@ -94,9 +100,9 @@ namespace NPOI.XSLF.UserModel
             return string.Join("\n", GetParagraphs(shape).Select(paragraph => paragraph.Text));
         }
 
-        internal static XSLFTextParagraph AddParagraph(XSLFSimpleShape shape)
+        internal static XSLFTextParagraph AddParagraph(IXSLFTextContainer shape)
         {
-            shape.EnsureEditable();
+            shape.EnsureTextEditable();
             var body = GetBody(shape, false);
             if (body != null)
                 CheckBodyChildren(body);
@@ -122,9 +128,9 @@ namespace NPOI.XSLF.UserModel
             return new XSLFTextRun(run, paragraph);
         }
 
-        internal static void SetText(XSLFSimpleShape shape, string text)
+        internal static void SetText(IXSLFTextContainer shape, string text)
         {
-            shape.EnsureEditable();
+            shape.EnsureTextEditable();
             VerifyText(text);
             var body = GetBody(shape, false);
             if (body != null)

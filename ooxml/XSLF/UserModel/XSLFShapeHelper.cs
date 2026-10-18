@@ -103,6 +103,13 @@ namespace NPOI.XSLF.UserModel
                                 continue;
                             }
                             break;
+                        case "graphicFrame":
+                            if (XSLFTable.IsTable(element))
+                            {
+                                shapes.Add(new XSLFTable(element, sheet, parent));
+                                continue;
+                            }
+                            break;
                     }
                 }
                 shapes.Add(new XSLFUnsupportedShape(element, sheet, parent));
@@ -166,9 +173,10 @@ namespace NPOI.XSLF.UserModel
             return textBox;
         }
 
-        internal static SKRect ReadAnchor(XmlElement properties, bool interior)
+        internal static SKRect ReadAnchor(XmlElement properties, bool interior,
+            string transformNamespace = XSLFXmlHelper.DrawingNamespace)
         {
-            var transform = Child(properties, "xfrm", XSLFXmlHelper.DrawingNamespace);
+            var transform = Child(properties, "xfrm", transformNamespace);
             var off = transform == null ? null : Child(transform, interior ? "chOff" : "off", XSLFXmlHelper.DrawingNamespace);
             var ext = transform == null ? null : Child(transform, interior ? "chExt" : "ext", XSLFXmlHelper.DrawingNamespace);
             if (off == null || ext == null)
@@ -183,19 +191,22 @@ namespace NPOI.XSLF.UserModel
                 (float)Units.ToPoints(width), (float)Units.ToPoints(height));
         }
 
-        internal static void SetAnchor(XmlElement properties, SKRect anchor, bool interior)
+        internal static void SetAnchor(XmlElement properties, SKRect anchor, bool interior,
+            string transformNamespace = XSLFXmlHelper.DrawingNamespace)
         {
             var x = ToCoordinate(anchor.Left, false);
             var y = ToCoordinate(anchor.Top, false);
             var width = ToCoordinate(anchor.Width, true);
             var height = ToCoordinate(anchor.Height, true);
-            var transform = Child(properties, "xfrm", XSLFXmlHelper.DrawingNamespace);
+            var transform = Child(properties, "xfrm", transformNamespace);
             var offName = interior ? "chOff" : "off";
             var extName = interior ? "chExt" : "ext";
             var off = transform == null ? null : Child(transform, offName, XSLFXmlHelper.DrawingNamespace);
             var ext = transform == null ? null : Child(transform, extName, XSLFXmlHelper.DrawingNamespace);
             if (transform == null)
             {
+                if (transformNamespace != XSLFXmlHelper.DrawingNamespace)
+                    throw new POIXMLException("Missing graphic frame transform.");
                 transform = properties.OwnerDocument.CreateElement("a", "xfrm", XSLFXmlHelper.DrawingNamespace);
                 properties.PrependChild(transform);
             }
