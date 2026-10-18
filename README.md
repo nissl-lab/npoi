@@ -100,6 +100,37 @@ by a referenced master in the same presentation. Attaching a layout does not
 yet copy placeholder shapes or resolve inherited text formatting. Theme editing
 is not supported.
 
+Slide lifecycle and page size
+----------------------------
+`SetSlideOrder(slide, newIndex)` moves a slide to a zero-based position.
+`RemoveSlide(index)` removes it from the presentation and returns its wrapper.
+Remaining slide IDs and relationship IDs are preserved; the extended-properties
+slide count is refreshed when saving. Direct low-level slide-list edits must not
+leave the user model out of sync before calling these operations.
+
+Removal does not recursively delete layouts, masters, themes, notes, charts,
+media, or other dependencies. The removed slide part is also retained if another
+package relationship still references it, including a notes back-reference or
+an internal link. Changes made through the removed wrapper are not saved.
+This conservative behavior can leave orphan parts and does not reclaim space.
+
+Removal is rejected if a custom show or section references the target slide.
+Reordering sectioned presentations is not supported yet. Opaque presentation
+extensions or alternate content can also block ordering/removal rather than
+risking invalid references. Custom-show order is independent of normal slide
+order and is not changed by `SetSlideOrder`.
+
+`GetPageSize()` and `SetPageSize(SkiaSharp.SKSize)` use points (1/72 inch), not
+pixels. Each dimension must be finite and between 72 and 4032 points inclusive
+(914400 through 51206400 EMUs). Setting dimensions selects the `custom` size
+type, without scaling shapes or changing notes dimensions:
+
+```csharp
+presentation.SetPageSize(new SkiaSharp.SKSize(960, 540));
+presentation.SetSlideOrder(presentation.GetSlides()[1], 0);
+presentation.RemoveSlide(1);
+```
+
 This is a foundation, not full PowerPoint support. Parameterless slide creation
 requires an existing blank layout (included in newly created presentations).
 The layout overload can select other layout types. Existing slide
