@@ -454,7 +454,7 @@ namespace NPOI
         /// </summary>
         /// <param name="pr">the relationship of the child</param>
         /// <param name="part">the child to add</param>
-        private void AddRelation(PackageRelationship pr, POIXMLDocumentPart part)
+        internal void AddRelation(PackageRelationship pr, POIXMLDocumentPart part)
         {
             if (relations.ContainsKey(pr.Id))
                 relations[pr.Id] = new RelationPart(pr, part);
