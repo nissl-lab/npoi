@@ -71,6 +71,13 @@ namespace NPOI.XSLF.UserModel
             return XSLFShapeHelper.CreateGroup(this, this, GetShapeTree());
         }
 
+        /// <inheritdoc/>
+        public XSLFTextBox CreateTextBox()
+        {
+            EnsureShapesWritable();
+            return XSLFShapeHelper.CreateTextBox(this, this, GetShapeTree());
+        }
+
         protected abstract XmlElement GetCommonSlideData();
 
         internal XmlElement GetShapeTree()

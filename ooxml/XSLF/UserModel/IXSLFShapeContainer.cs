@@ -20,6 +20,11 @@ namespace NPOI.XSLF.UserModel
         XSLFSimpleShape CreateAutoShape(ST_ShapeType shapeType = ST_ShapeType.rect);
 
         /// <summary>
+        /// Appends a text box with one empty paragraph and a sheet-wide unique identifier.
+        /// </summary>
+        XSLFTextBox CreateTextBox();
+
+        /// <summary>
         /// Appends an empty group with a sheet-wide unique identifier.
         /// Exterior and interior anchors are initially empty and can be set independently.
         /// </summary>

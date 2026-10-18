@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Xml;
 using NPOI.OpenXmlFormats.Dml;
 using SkiaSharp;
@@ -6,7 +7,7 @@ using SkiaSharp;
 namespace NPOI.XSLF.UserModel
 {
     /// <summary>
-    /// A PresentationML simple shape. Existing geometry, text, styles and extensions are retained.
+    /// A PresentationML simple shape with text support and preserved unsupported content.
     /// </summary>
     public class XSLFSimpleShape : XSLFShape
     {
@@ -16,8 +17,43 @@ namespace NPOI.XSLF.UserModel
         }
 
         /// <summary>
+        /// Gets actual text, joining paragraphs and explicit line breaks with LF.
+        /// Placeholder prompts are not inherited. Unsupported text content fails explicitly.
+        /// </summary>
+        public string Text
+        {
+            get { return XSLFTextHelper.GetText(this); }
+        }
+
+        /// <summary>
+        /// Gets a read-only snapshot of this shape's explicit paragraphs.
+        /// </summary>
+        public IReadOnlyList<XSLFTextParagraph> TextParagraphs
+        {
+            get { return XSLFTextHelper.GetParagraphs(this); }
+        }
+
+        /// <summary>
+        /// Replaces all paragraphs with unformatted text, splitting CR/LF into paragraphs.
+        /// Body properties/list styles are retained. Unsupported content/formatting blocks replacement.
+        /// Edit individual runs to retain paragraph/run formatting.
+        /// </summary>
+        public void SetText(string text)
+        {
+            XSLFTextHelper.SetText(this, text);
+        }
+
+        /// <summary>
+        /// Appends an empty paragraph, creating a text body when absent.
+        /// </summary>
+        public XSLFTextParagraph AddNewTextParagraph()
+        {
+            return XSLFTextHelper.AddParagraph(this);
+        }
+
+        /// <summary>
         /// Gets the preset geometry, or null when the shape has no preset geometry.
-        /// Custom geometry and text formatting are not interpreted.
+        /// Custom geometry is not interpreted.
         /// </summary>
         public ST_ShapeType? ShapeType
         {

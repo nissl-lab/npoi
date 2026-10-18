@@ -179,13 +179,76 @@ name edits are not supported. Supported edits retain existing text, styles,
 unknown drawing XML, and relationship parts. Live XML is available through
 `GetXmlObject()`, but low-level callers remain responsible for consistency.
 Read-only/disposed presentations, detached wrappers, and ambiguous supported
-XML reject high-level edits. Shape removal, copying, placeholder inheritance,
-text editing, fill/line editing, and rendering are not included in this stage.
+XML reject high-level edits. Shape removal, copying, fill/line editing, and rendering are not supported.
+
+Text boxes, paragraphs, and runs
+-------------------------------
+`CreateTextBox()` is available on sheets and groups and returns `XSLFTextBox`,
+a text-box-marked `XSLFSimpleShape`. Simple preset shapes also expose the same
+text APIs. New text boxes contain one empty paragraph. `TextParagraphs` and
+each paragraph's `TextRuns` are read-only snapshots over live XML:
+
+```csharp
+var box = slide.CreateTextBox();
+box.SetAnchor(SkiaSharp.SKRect.Create(36, 150, 360, 120));
+var paragraph = box.TextParagraphs[0];
+paragraph.TextAlign = NPOI.XDDF.UserModel.Text.TextAlignment.Center;
+var run = paragraph.AddNewTextRun();
+run.Text = "Hello, world!";
+run.FontFamily = "Calibri";
+run.FontSize = 24;
+run.IsBold = true;
+paragraph.AddLineBreak();
+paragraph.AddNewTextRun().Text = "Second line";
+```
+
+`Text` reads actual content, joining paragraphs and explicit breaks with LF;
+layout/master prompt text is never substituted for slide text. Displayed field
+text is readable but is not recalculated. Unknown inline/body content fails
+explicitly when text cannot be interpreted. Unicode, XML escaping, tabs, and
+leading/trailing/whitespace-only runs survive saving. Regular run `Text` edits
+preserve its formatting and metadata; use `AddLineBreak()` for a line break or
+`AddNewTextParagraph()` for a paragraph rather than putting CR/LF inside a run.
+
+`SetText(string)` explicitly replaces **all paragraphs and their local
+paragraph/run formatting**. CRLF and CR normalize to LF and split into
+paragraphs, including trailing empty paragraphs. Body properties and list styles
+are retained. Replacement accepts only supported plain/basic-formatted content;
+fields, hyperlinks, bullets, unknown formatting/elements/attributes, and other
+potentially lossy cases reject replacement before changing XML. Edit regular
+runs instead to retain those structures. Field/opaque mutation is unsupported.
+Replacing text detaches old paragraph/run wrappers, which reject later edits.
+
+Supported formatting is Latin `FontFamily`, nullable point-based `FontSize`,
+`IsBold`, `IsItalic`, `IsUnderline`, nullable paragraph `TextAlign`, and
+`IndentLevel` (zero through eight). Font size is 1 through 4000 points inclusive,
+rounded to hundredths. Explicit false overrides inherited true; setting a
+nullable property or font family to null removes only its local override.
+Unset effective properties return null, not invented fonts, sizes, or alignment.
+Underline true writes single underline, false writes none; other existing
+underline variants remain untouched unless explicitly overridden.
+
+Each supported property resolves independently: local run properties, paragraph
+defaults, the current level then default properties of the shape's list style,
+and supported inherited defaults. Slide placeholders match layout placeholders
+by their index (default zero); layout/master inheritance matches normalized
+placeholder types (title/center-title, body-like types, or specific header/footer
+types). Ambiguous matches and opaque placeholder content fail explicitly.
+Matched placeholders contribute **list styles**, not prompt paragraphs/runs.
+Applicable master title/body/other text styles follow. Non-placeholder text
+uses presentation default text styles before master other-style defaults.
+Only the requested list level and `defPPr` are inspected, not guessed lower-level
+styles. Latin `+mj-lt` / `+mn-lt` tokens resolve through the inherited theme;
+missing theme fonts and unsupported automatic/script tokens fail explicitly.
+Colors, effects, bullets/numbering editing, complex-script fonts, end-paragraph
+formatting interpretation, full inheritance, and placeholder materialization
+remain outside this stage. Existing unsupported formatting/relationships remain
+intact during supported run/property edits.
 
 This is a foundation, not full PowerPoint support. Parameterless slide creation
 requires an existing blank layout (included in newly created presentations).
 The layout overload can select other layout types. Existing slide
-content and unsupported related parts are retained, but high-level text boxes,
+content and unsupported related parts are retained, but high-level
 pictures, tables, charts, notes, rendering, and animation APIs are not yet
 implemented. Strict OOXML and macro-enabled presentation formats are not supported.
 
