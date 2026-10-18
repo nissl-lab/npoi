@@ -133,6 +133,57 @@ presentation.SetSlideOrder(presentation.GetSlides()[1], 0);
 presentation.RemoveSlide(1);
 ```
 
+Shape containers
+----------------
+Slides, layouts, and masters implement `IXSLFShapeContainer`. `GetShapes()`
+returns a read-only snapshot of immediate children in XML drawing order.
+`XSLFSimpleShape` wraps existing `p:sp` elements, including text-bearing shapes;
+`XSLFGroupShape` exposes nested children through the same container API.
+Existing identifiers remain unchanged. New IDs reserve the sheet's existing
+PresentationML nonvisual identifiers, including nested and alternate content.
+Repeated IDs already present in unsupported alternatives are not rewritten.
+
+```csharp
+var slide = presentation.CreateSlide();
+var shape = slide.CreateAutoShape(NPOI.OpenXmlFormats.Dml.ST_ShapeType.rect);
+shape.Name = "Rectangle";
+shape.SetAnchor(SkiaSharp.SKRect.Create(36, 36, 180, 90));
+
+var group = slide.CreateGroup();
+group.SetAnchor(SkiaSharp.SKRect.Create(300, 36, 240, 180));
+group.SetInteriorAnchor(SkiaSharp.SKRect.Create(0, 0, 120, 90));
+var child = group.CreateAutoShape(NPOI.OpenXmlFormats.Dml.ST_ShapeType.ellipse);
+child.SetAnchor(SkiaSharp.SKRect.Create(12, 12, 60, 45));
+```
+
+`GetAnchor()` / `SetAnchor(SKRect)` and the group's `GetInteriorAnchor()` /
+`SetInteriorAnchor(SKRect)` use points (1/72 inch), not pixels. A group's child
+anchors are in its local coordinate system, not absolute slide coordinates.
+Exterior and interior anchors are independent: neither setter changes child
+coordinates, scales shapes, nor normalizes rotation/flips. New shapes/groups
+start with empty anchors; set both group rectangles explicitly for scaling.
+Positions may be negative, but extents must be nonnegative and every component
+must be finite and fit the DrawingML coordinate range. Conversion rounds to the
+nearest EMU using 64-bit values; `SKRect` itself has single-precision coordinates.
+Positions must fit -27273042329600 through 27273042316900 EMUs; each extent
+must fit 0 through 2147483647 EMUs. Position and extent ranges are not identical.
+Only explicit numeric EMU transforms are read. Missing/inherited transforms
+and universal-measure strings are not resolved and fail explicitly rather
+than returning guessed coordinates. An explicit anchor can be set when absent.
+`ShapeType` returns null for a simple shape without preset geometry; custom
+geometry is retained, not interpreted. The existing enum's non-schema `none`
+and `lineInv` values are not accepted for preset creation.
+
+Pictures, tables, connectors, alternate content, and unfamiliar drawing
+elements are exposed as `XSLFUnsupportedShape` and preserved without mutation.
+Their common ID/name can be read only when directly identifiable; anchor and
+name edits are not supported. Supported edits retain existing text, styles,
+unknown drawing XML, and relationship parts. Live XML is available through
+`GetXmlObject()`, but low-level callers remain responsible for consistency.
+Read-only/disposed presentations, detached wrappers, and ambiguous supported
+XML reject high-level edits. Shape removal, copying, placeholder inheritance,
+text editing, fill/line editing, and rendering are not included in this stage.
+
 This is a foundation, not full PowerPoint support. Parameterless slide creation
 requires an existing blank layout (included in newly created presentations).
 The layout overload can select other layout types. Existing slide

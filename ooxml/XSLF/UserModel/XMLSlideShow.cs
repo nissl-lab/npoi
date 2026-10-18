@@ -13,7 +13,7 @@ namespace NPOI.XSLF.UserModel
 {
     /// <summary>
     /// Reads, writes, and creates transitional PPTX presentations and layout-based slides.
-    /// High-level shape editing and rendering are not yet supported.
+    /// Simple/group shape editing is supported; rendering and other drawing APIs are not yet supported.
     /// </summary>
     public class XMLSlideShow : POIXMLDocument, IDisposable
     {
@@ -335,7 +335,7 @@ namespace NPOI.XSLF.UserModel
             Close();
         }
 
-        private void EnsureWritable()
+        internal void EnsureWritable()
         {
 #if NET8_0_OR_GREATER
             ObjectDisposedException.ThrowIf(Package == null, this);
