@@ -1,11 +1,12 @@
 using System.IO;
+using System.Xml;
 using NPOI.OpenXml4Net.OPC;
 using NPOI.OpenXmlFormats.Presentation;
 
 namespace NPOI.XSLF.UserModel
 {
     /// <summary>
-    /// A PresentationML slide. Existing drawing XML is retained without interpretation.
+    /// A PresentationML slide with shape containers and preserved unsupported drawing content.
     /// </summary>
     public class XSLFSlide : XSLFSheet
     {
@@ -43,6 +44,11 @@ namespace NPOI.XSLF.UserModel
         public CT_Slide GetXmlObject()
         {
             return slide;
+        }
+
+        protected override XmlElement GetCommonSlideData()
+        {
+            return slide.cSld;
         }
 
         /// <summary>

@@ -4,7 +4,7 @@ using System.Xml.Serialization;
 namespace NPOI.OpenXmlFormats.Presentation
 {
     /// <summary>
-    /// A slide whose drawing content is preserved until high-level shape APIs are available.
+    /// A partial slide model retaining drawing XML for surgical shape edits and unsupported content.
     /// </summary>
     [XmlRoot("sld", Namespace = CT_Presentation.Namespace)]
     public class CT_Slide
