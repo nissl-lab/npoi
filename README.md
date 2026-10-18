@@ -53,6 +53,91 @@ f. Real successful cases all over the world
 
 g. Works on both Windows and Linux 
 
+PPTX foundation (XSLF)
+======================
+The initial `NPOI.XSLF.UserModel` API supports creating an empty transitional
+`.pptx` presentation, adding blank slides, and saving and reopening the package:
+
+```csharp
+using NPOI.XSLF.UserModel;
+using System.IO;
+
+using var presentation = new XMLSlideShow();
+presentation.CreateSlide();
+presentation.CreateSlide();
+using var output = File.Create("blank-slides.pptx");
+presentation.Write(output);
+```
+
+Use `new XMLSlideShow(inputStream)` or `new XMLSlideShow(opcPackage)` to open an
+existing presentation, and `GetSlides()` to access slides in presentation order.
+Closing the presentation closes its underlying OPC package. As with the other
+OOXML APIs, save to a different file when opening a package from a file path.
+
+The foundation follows the existing OOXML layering: partial PresentationML data
+models live in `OpenXmlFormats/Presentation`, while `XMLSlideShow`, `XSLFSlide`,
+`XSLFRelation`, and `XSLFFactory` live in `ooxml/XSLF/UserModel`. Packaging uses the
+existing OPC implementation. Slides, masters, and layouts share `XSLFSheet`.
+`GetSlideMasters()` and `GetSlideLayouts()` follow their XML reference-list order.
+`XSLFTheme` exposes read-only theme metadata using the existing DrawingML model.
+Unchanged master, layout, and theme parts retain their original bytes; unmodeled
+content remains intact when supported sheet models are saved.
+
+Use a layout from the same presentation to create a slide explicitly:
+
+```csharp
+var master = presentation.GetSlideMasters()[0];
+var layout = master.GetLayout("Blank");
+if (layout == null)
+    throw new InvalidOperationException("This master has no layout named Blank.");
+var slide = presentation.CreateSlide(layout);
+var theme = slide.GetTheme(); // May be null when the master has no theme.
+```
+
+Layouts expose `Name` and the PresentationML `Type` string. Slides expose
+`GetSlideLayout()`, `GetSlideMaster()`, and `GetTheme()`. The layout must be listed
+by a referenced master in the same presentation. Attaching a layout does not
+yet copy placeholder shapes or resolve inherited text formatting. Theme editing
+is not supported.
+
+Slide lifecycle and page size
+----------------------------
+`SetSlideOrder(slide, newIndex)` moves a slide to a zero-based position.
+`RemoveSlide(index)` removes it from the presentation and returns its wrapper.
+Remaining slide IDs and relationship IDs are preserved; the extended-properties
+slide count is refreshed when saving. Direct low-level slide-list edits must not
+leave the user model out of sync before calling these operations.
+
+Removal does not recursively delete layouts, masters, themes, notes, charts,
+media, or other dependencies. The removed slide part is also retained if another
+package relationship still references it, including a notes back-reference or
+an internal link. Changes made through the removed wrapper are not saved.
+This conservative behavior can leave orphan parts and does not reclaim space.
+
+Removal is rejected if a custom show or section references the target slide.
+Reordering sectioned presentations is not supported yet. Opaque presentation
+extensions or alternate content can also block ordering/removal rather than
+risking invalid references. Custom-show order is independent of normal slide
+order and is not changed by `SetSlideOrder`.
+
+`GetPageSize()` and `SetPageSize(SkiaSharp.SKSize)` use points (1/72 inch), not
+pixels. Each dimension must be finite and between 72 and 4032 points inclusive
+(914400 through 51206400 EMUs). Setting dimensions selects the `custom` size
+type, without scaling shapes or changing notes dimensions:
+
+```csharp
+presentation.SetPageSize(new SkiaSharp.SKSize(960, 540));
+presentation.SetSlideOrder(presentation.GetSlides()[1], 0);
+presentation.RemoveSlide(1);
+```
+
+This is a foundation, not full PowerPoint support. Parameterless slide creation
+requires an existing blank layout (included in newly created presentations).
+The layout overload can select other layout types. Existing slide
+content and unsupported related parts are retained, but high-level text boxes,
+pictures, tables, charts, notes, rendering, and animation APIs are not yet
+implemented. Strict OOXML and macro-enabled presentation formats are not supported.
+
 System Requirement
 ===================
 .NET 8
