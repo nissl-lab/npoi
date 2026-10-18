@@ -77,12 +77,32 @@ OOXML APIs, save to a different file when opening a package from a file path.
 The foundation follows the existing OOXML layering: partial PresentationML data
 models live in `OpenXmlFormats/Presentation`, while `XMLSlideShow`, `XSLFSlide`,
 `XSLFRelation`, and `XSLFFactory` live in `ooxml/XSLF/UserModel`. Packaging uses the
-existing OPC implementation. Masters, layouts, themes, and other unmodeled parts
-remain opaque package parts so future APIs can be added without discarding
-existing document content.
+existing OPC implementation. Slides, masters, and layouts share `XSLFSheet`.
+`GetSlideMasters()` and `GetSlideLayouts()` follow their XML reference-list order.
+`XSLFTheme` exposes read-only theme metadata using the existing DrawingML model.
+Unchanged master, layout, and theme parts retain their original bytes; unmodeled
+content remains intact when supported sheet models are saved.
 
-This is a foundation, not full PowerPoint support. Slide creation requires an
-existing blank layout (included in newly created presentations). Existing slide
+Use a layout from the same presentation to create a slide explicitly:
+
+```csharp
+var master = presentation.GetSlideMasters()[0];
+var layout = master.GetLayout("Blank");
+if (layout == null)
+    throw new InvalidOperationException("This master has no layout named Blank.");
+var slide = presentation.CreateSlide(layout);
+var theme = slide.GetTheme(); // May be null when the master has no theme.
+```
+
+Layouts expose `Name` and the PresentationML `Type` string. Slides expose
+`GetSlideLayout()`, `GetSlideMaster()`, and `GetTheme()`. The layout must be listed
+by a referenced master in the same presentation. Attaching a layout does not
+yet copy placeholder shapes or resolve inherited text formatting. Theme editing
+is not supported.
+
+This is a foundation, not full PowerPoint support. Parameterless slide creation
+requires an existing blank layout (included in newly created presentations).
+The layout overload can select other layout types. Existing slide
 content and unsupported related parts are retained, but high-level text boxes,
 pictures, tables, charts, notes, rendering, and animation APIs are not yet
 implemented. Strict OOXML and macro-enabled presentation formats are not supported.

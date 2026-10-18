@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Xml;
@@ -34,12 +36,69 @@ namespace NPOI.XSLF.UserModel
         internal static void Write<T>(PackagePart part, T value)
         {
             using var stream = part.GetOutputStream();
+            Write(stream, value);
+        }
+
+        internal static void Write<T>(Stream stream, T value)
+        {
             using var writer = XmlWriter.Create(stream, new XmlWriterSettings
             {
                 Encoding = new UTF8Encoding(false),
                 CloseOutput = false
             });
             new XmlSerializer(typeof(T)).Serialize(writer, value);
+        }
+
+        internal static T GetReferencedPart<T>(POIXMLDocumentPart owner, string id, XSLFRelation descriptor)
+            where T : POIXMLDocumentPart
+        {
+            var relationship = string.IsNullOrEmpty(id) ? null : owner.GetPackagePart().GetRelationship(id);
+            if (relationship == null || relationship.TargetMode != TargetMode.Internal ||
+                relationship.RelationshipType != descriptor.Relation ||
+                !(owner.GetRelationById(id) is T part) ||
+                part.GetPackagePart().ContentType != descriptor.ContentType ||
+                !ReferenceEquals(owner.GetPackagePart().GetRelatedPart(relationship), part.GetPackagePart()))
+            {
+                throw new POIXMLException("Invalid " + descriptor.Relation + " reference '" + id +
+                    "' in " + owner.GetPackagePart().PartName.Name);
+            }
+            return part;
+        }
+
+        internal static List<T> GetReferencedParts<T>(
+            POIXMLDocumentPart owner, XmlElement list, string entryName, XSLFRelation descriptor)
+            where T : POIXMLDocumentPart
+        {
+            var parts = new List<T>();
+            if (list == null)
+            {
+                return parts;
+            }
+            var identifiers = new HashSet<uint>();
+            var referencedParts = new HashSet<T>();
+            foreach (XmlNode node in list.ChildNodes)
+            {
+                if (!(node is XmlElement entry) || entry.LocalName != entryName ||
+                    entry.NamespaceURI != CT_Presentation.Namespace)
+                {
+                    continue;
+                }
+                if (!uint.TryParse(entry.GetAttribute("id"), NumberStyles.Integer, CultureInfo.InvariantCulture,
+                    out var identifier) || identifier < 2147483648U || !identifiers.Add(identifier))
+                {
+                    throw new POIXMLException("Invalid or duplicate " + entryName + " identifier in " +
+                        owner.GetPackagePart().PartName.Name);
+                }
+                var part = GetReferencedPart<T>(owner,
+                    entry.GetAttribute("id", CT_Presentation.RelationshipsNamespace), descriptor);
+                if (!referencedParts.Add(part))
+                {
+                    throw new POIXMLException("Duplicate " + entryName + " part reference in " +
+                        owner.GetPackagePart().PartName.Name);
+                }
+                parts.Add(part);
+            }
+            return parts;
         }
 
         internal static XmlSerializerNamespaces CreateNamespaces()
