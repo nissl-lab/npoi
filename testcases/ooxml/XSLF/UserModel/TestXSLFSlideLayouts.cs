@@ -1,0 +1,403 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Xml;
+using NPOI;
+using NPOI.OpenXml4Net.OPC;
+using NPOI.OpenXmlFormats.Presentation;
+using NPOI.XSLF.UserModel;
+using NUnit.Framework;
+
+namespace TestCases.XSLF.UserModel
+{
+    [TestFixture]
+    public class TestXSLFSlideLayouts
+    {
+        [Test]
+        public void NewPresentationExposesTypedMasterLayoutAndTheme()
+        {
+            using var presentation = new XMLSlideShow();
+            var masters = presentation.GetSlideMasters();
+            Assert.That(masters.Count, Is.EqualTo(1));
+            Assert.That(((ICollection<XSLFSlideMaster>)masters).IsReadOnly, Is.True);
+            var master = masters[0];
+            var layout = master.GetSlideLayouts()[0];
+            Assert.That(master.Name, Is.EqualTo("Blank Master"));
+            Assert.That(layout.Name, Is.EqualTo("Blank"));
+            Assert.That(layout.Type, Is.EqualTo("blank"));
+            Assert.That(master.GetLayout("bLaNk"), Is.SameAs(layout));
+            Assert.That(master.GetLayout("missing"), Is.Null);
+            Assert.Throws<ArgumentNullException>(() => master.GetLayout(null));
+            Assert.That(master.GetSlideShow(), Is.SameAs(presentation));
+            Assert.That(layout.GetSlideShow(), Is.SameAs(presentation));
+            Assert.That(master.GetMasterSheet(), Is.Null);
+            Assert.That(layout.GetMasterSheet(), Is.SameAs(master));
+            var theme = master.GetTheme();
+            Assert.That(theme, Is.SameAs(layout.GetTheme()));
+            Assert.That(theme.Name, Is.EqualTo("NPOI"));
+            Assert.That(theme.MajorFont, Is.EqualTo("Arial"));
+            Assert.That(theme.MinorFont, Is.EqualTo("Arial"));
+            Assert.That(XSLFRelation.SLIDE_LAYOUT.RelationClass, Is.EqualTo(typeof(XSLFSlideLayout)));
+            Assert.That(XSLFRelation.SLIDE_MASTER.RelationClass, Is.EqualTo(typeof(XSLFSlideMaster)));
+            Assert.That(XSLFRelation.THEME.RelationClass, Is.EqualTo(typeof(XSLFTheme)));
+        }
+
+        [Test]
+        public void SelectedLayoutAndInheritedNavigationSurviveReopening()
+        {
+            using var input = POIDataSamples.GetSlideShowInstance().OpenResourceAsStream("layouts.pptx");
+            using var presentation = new XMLSlideShow(input);
+            var master = presentation.GetSlideMasters()[0];
+            var layout = master.GetSlideLayouts().First(item => item.Type == "title");
+            var slide = presentation.CreateSlide(layout);
+            Assert.That(slide.GetSlideLayout(), Is.SameAs(layout));
+            Assert.That(slide.GetMasterSheet(), Is.SameAs(layout));
+            Assert.That(slide.GetSlideMaster(), Is.SameAs(master));
+            Assert.That(slide.GetTheme(), Is.SameAs(master.GetTheme()));
+            Assert.That(slide.GetSlideShow(), Is.SameAs(presentation));
+            Assert.That(slide.GetXmlObject().cSld["spTree", CT_Presentation.Namespace].ChildNodes.Count,
+                Is.EqualTo(2), "Attaching a layout must not imply that placeholders have been copied.");
+
+            using var reopened = Open(Save(presentation));
+            var savedSlide = reopened.GetSlides().Last();
+            Assert.That(savedSlide.GetSlideLayout().GetPackagePart().PartName.Name,
+                Is.EqualTo(layout.GetPackagePart().PartName.Name));
+            Assert.That(savedSlide.GetSlideLayout().Type, Is.EqualTo("title"));
+            Assert.That(savedSlide.GetSlideMaster(), Is.SameAs(reopened.GetSlideMasters()[0]));
+            Assert.That(savedSlide.GetTheme().Name, Is.EqualTo(master.GetTheme().Name));
+        }
+
+        [Test]
+        public void MasterAndLayoutEnumerationUsesIdentifierListOrder()
+        {
+            using var input = POIDataSamples.GetSlideShowInstance().OpenResourceAsStream("themes.pptx");
+            using var presentation = new XMLSlideShow(input);
+            var masters = presentation.GetSlideMasters().ToArray();
+            Assert.That(masters.Length, Is.GreaterThan(1));
+            var layouts = masters[0].GetSlideLayouts();
+            Assert.That(layouts.Length, Is.GreaterThan(1));
+            var masterList = presentation.GetCTPresentation().sldMasterIdLst;
+            masterList.PrependChild(masterList.LastChild);
+            var layoutList = masters[0].GetXmlObject().sldLayoutIdLst;
+            layoutList.PrependChild(layoutList.LastChild);
+            Assert.That(presentation.GetSlideMasters()[0], Is.SameAs(masters.Last()));
+            Assert.That(masters[0].GetSlideLayouts()[0], Is.SameAs(layouts.Last()));
+
+            using var reopened = Open(Save(presentation));
+            Assert.That(reopened.GetSlideMasters().Select(master => master.GetPackagePart().PartName.Name),
+                Is.EqualTo(new[] { masters.Last() }.Concat(masters.Take(masters.Length - 1))
+                    .Select(master => master.GetPackagePart().PartName.Name)));
+            var savedMaster = reopened.GetSlideMasters().Single(master =>
+                master.GetPackagePart().PartName.Equals(masters[0].GetPackagePart().PartName));
+            Assert.That(savedMaster.GetSlideLayouts()[0].GetPackagePart().PartName.Name,
+                Is.EqualTo(layouts.Last().GetPackagePart().PartName.Name));
+        }
+
+        [Test]
+        public void LayoutFromAnotherReferencedMasterCanBeSelected()
+        {
+            using var input = POIDataSamples.GetSlideShowInstance().OpenResourceAsStream("themes.pptx");
+            using var presentation = new XMLSlideShow(input);
+            var master = presentation.GetSlideMasters().Last();
+            var layout = master.GetSlideLayouts()[0];
+            var slide = presentation.CreateSlide(layout);
+            Assert.That(slide.GetSlideMaster(), Is.SameAs(master));
+            using var reopened = Open(Save(presentation));
+            Assert.That(reopened.GetSlides().Last().GetSlideMaster(), Is.SameAs(reopened.GetSlideMasters().Last()));
+        }
+
+        [Test]
+        public void ModifiedLayoutAndMasterRetainTheirUnmodeledXml()
+        {
+            using var presentation = new XMLSlideShow();
+            var master = presentation.GetSlideMasters()[0];
+            var layout = master.GetSlideLayouts()[0];
+            master.GetXmlObject().cSld.SetAttribute("name", "Changed Master");
+            layout.GetXmlObject().cSld.SetAttribute("name", "Changed Layout");
+            layout.GetXmlObject().type = "cust";
+            var extension = new XmlDocument { XmlResolver = null };
+            extension.LoadXml("<extra:content xmlns:extra=\"urn:npoi:xslf:test\" value=\"preserve\"/>");
+            layout.GetXmlObject().AnyElements =
+                layout.GetXmlObject().AnyElements.Concat(new[] { extension.DocumentElement }).ToArray();
+            presentation.CreateSlide(layout);
+            using var reopened = Open(Save(presentation));
+            var savedMaster = reopened.GetSlideMasters()[0];
+            var savedLayout = savedMaster.GetSlideLayouts()[0];
+            Assert.That(savedMaster.Name, Is.EqualTo("Changed Master"));
+            Assert.That(savedLayout.Name, Is.EqualTo("Changed Layout"));
+            Assert.That(savedLayout.Type, Is.EqualTo("cust"));
+            Assert.That(savedLayout.GetXmlObject().AnyElements.Last().GetAttribute("value"), Is.EqualTo("preserve"));
+            using var again = Open(Save(reopened));
+            Assert.That(again.GetSlideMasters()[0].GetSlideLayouts()[0].Name, Is.EqualTo("Changed Layout"));
+        }
+
+        [Test]
+        public void UntouchedMasterLayoutAndThemeBytesSurviveRepeatedSaves()
+        {
+            using var input = POIDataSamples.GetSlideShowInstance().OpenResourceAsStream("themes.pptx");
+            using var presentation = new XMLSlideShow(input);
+            var originals = presentation.Package.GetParts().Where(part =>
+                part.ContentType == XSLFRelation.SLIDE_MASTER.ContentType ||
+                part.ContentType == XSLFRelation.SLIDE_LAYOUT.ContentType ||
+                part.ContentType == XSLFRelation.THEME.ContentType)
+                .ToDictionary(part => part.PartName.Name, ReadBytes);
+            foreach (var master in presentation.GetSlideMasters())
+            {
+                Assert.That(master.GetTheme().MajorFont, Is.Not.Empty);
+                foreach (var layout in master.GetSlideLayouts())
+                {
+                    Assert.That(layout.GetTheme(), Is.SameAs(master.GetTheme()));
+                    Assert.That(layout.GetSlideMaster(), Is.SameAs(master));
+                }
+            }
+            presentation.CreateSlide(presentation.GetSlideMasters().Last().GetSlideLayouts().Last());
+            Save(presentation);
+            using var reopened = Open(Save(presentation));
+            using var again = Open(Save(reopened));
+            foreach (var original in originals)
+            {
+                Assert.That(ReadBytes(again.Package.GetPart(PackagingUriHelper.CreatePartName(original.Key))),
+                    Is.EqualTo(original.Value), original.Key);
+            }
+        }
+
+        [Test]
+        public void NullAndForeignLayoutsAreRejectedWithoutMutation()
+        {
+            using var presentation = new XMLSlideShow();
+            using var other = new XMLSlideShow();
+            var foreignLayout = other.GetSlideMasters()[0].GetSlideLayouts()[0];
+            AssertNoMutation<ArgumentNullException>(presentation, () => presentation.CreateSlide(null));
+            AssertNoMutation<ArgumentException>(presentation, () => presentation.CreateSlide(foreignLayout));
+        }
+
+        [Test]
+        public void AnUnregisteredWrapperForTheSamePackageIsRejected()
+        {
+            using var presentation = new XMLSlideShow();
+            var part = presentation.GetSlideMasters()[0].GetSlideLayouts()[0].GetPackagePart();
+            var layout = (XSLFSlideLayout)XSLFFactory.GetInstance().CreateDocumentPart(presentation, part);
+            AssertNoMutation<POIXMLException>(presentation, () => presentation.CreateSlide(layout));
+        }
+
+        [TestCase(true)]
+        [TestCase(false)]
+        public void UnlistedMasterOrLayoutCannotBeUsedToCreateASlide(bool removeMaster)
+        {
+            using var presentation = new XMLSlideShow();
+            var master = presentation.GetSlideMasters()[0];
+            var layout = master.GetSlideLayouts()[0];
+            var list = removeMaster ? presentation.GetCTPresentation().sldMasterIdLst :
+                master.GetXmlObject().sldLayoutIdLst;
+            list.RemoveChild(list.FirstChild);
+            AssertNoMutation<ArgumentException>(presentation, () => presentation.CreateSlide(layout));
+            AssertNoMutation<NotSupportedException>(presentation, () => presentation.CreateSlide());
+        }
+
+        [Test]
+        public void LayoutWithoutAMasterBackReferenceCannotBeUsedToCreateASlide()
+        {
+            using var presentation = new XMLSlideShow();
+            var layout = presentation.GetSlideMasters()[0].GetSlideLayouts()[0];
+            var relationships = layout.GetPackagePart().GetRelationshipsByType(XSLFRelation.SLIDE_MASTER.Relation);
+            layout.GetPackagePart().RemoveRelationship(relationships.GetRelationship(0).Id);
+            AssertNoMutation<POIXMLException>(presentation, () => presentation.CreateSlide(layout));
+        }
+
+        [Test]
+        public void LayoutPointingToADifferentMasterIsRejected()
+        {
+            using var input = POIDataSamples.GetSlideShowInstance().OpenResourceAsStream("themes.pptx");
+            using var presentation = new XMLSlideShow(input);
+            var masters = presentation.GetSlideMasters();
+            var layout = masters[0].GetSlideLayouts()[0];
+            var part = layout.GetPackagePart();
+            var id = part.GetRelationshipsByType(XSLFRelation.SLIDE_MASTER.Relation).GetRelationship(0).Id;
+            part.RemoveRelationship(id);
+            part.AddRelationship(masters[1].GetPackagePart().PartName, TargetMode.Internal,
+                XSLFRelation.SLIDE_MASTER.Relation, id);
+            AssertNoMutation<POIXMLException>(presentation, () => presentation.CreateSlide(layout));
+            AssertInvalid(Save(presentation));
+        }
+
+        [TestCase(true, "missing")]
+        [TestCase(false, "missing")]
+        [TestCase(true, "0")]
+        [TestCase(false, "2147483647")]
+        public void InvalidMasterAndLayoutReferencesFailExplicitly(bool masterReference, string value)
+        {
+            using var presentation = new XMLSlideShow();
+            var master = presentation.GetSlideMasters()[0];
+            var list = masterReference ? presentation.GetCTPresentation().sldMasterIdLst :
+                master.GetXmlObject().sldLayoutIdLst;
+            var entry = (XmlElement)list.FirstChild;
+            if (value == "missing")
+            {
+                entry.SetAttribute("id", CT_Presentation.RelationshipsNamespace, value);
+            }
+            else
+            {
+                entry.SetAttribute("id", value);
+            }
+            AssertInvalid(Save(presentation));
+        }
+
+        [TestCase(true, false)]
+        [TestCase(false, false)]
+        [TestCase(true, true)]
+        [TestCase(false, true)]
+        public void DuplicateMasterAndLayoutIdsOrPartsFailExplicitly(bool masterReference, bool uniqueId)
+        {
+            using var presentation = new XMLSlideShow();
+            var list = masterReference ? presentation.GetCTPresentation().sldMasterIdLst :
+                presentation.GetSlideMasters()[0].GetXmlObject().sldLayoutIdLst;
+            var duplicate = (XmlElement)list.FirstChild.CloneNode(true);
+            if (uniqueId)
+            {
+                duplicate.SetAttribute("id", "2147483650");
+            }
+            list.AppendChild(duplicate);
+            AssertInvalid(Save(presentation));
+        }
+
+        [TestCase(true)]
+        [TestCase(false)]
+        public void ExternalMasterAndLayoutReferencesAreRejected(bool masterReference)
+        {
+            using var presentation = new XMLSlideShow();
+            var master = presentation.GetSlideMasters()[0];
+            var owner = masterReference ? presentation.GetPackagePart() : master.GetPackagePart();
+            var descriptor = masterReference ? XSLFRelation.SLIDE_MASTER : XSLFRelation.SLIDE_LAYOUT;
+            var id = owner.GetRelationshipsByType(descriptor.Relation).GetRelationship(0).Id;
+            owner.RemoveRelationship(id);
+            owner.AddExternalRelationship("https://example.com/part.xml", descriptor.Relation, id);
+            AssertInvalid(Save(presentation));
+        }
+
+        [TestCase(true)]
+        [TestCase(false)]
+        public void IncorrectMasterOrLayoutRelationshipTypesAreRejected(bool masterReference)
+        {
+            using var presentation = new XMLSlideShow();
+            var master = presentation.GetSlideMasters()[0];
+            var owner = masterReference ? presentation.GetPackagePart() : master.GetPackagePart();
+            var descriptor = masterReference ? XSLFRelation.SLIDE_MASTER : XSLFRelation.SLIDE_LAYOUT;
+            var relationship = owner.GetRelationshipsByType(descriptor.Relation).GetRelationship(0);
+            var target = owner.GetRelatedPart(relationship);
+            owner.RemoveRelationship(relationship.Id);
+            owner.AddRelationship(target.PartName, TargetMode.Internal, XSLFRelation.THEME.Relation, relationship.Id);
+            AssertInvalid(Save(presentation));
+        }
+
+        [TestCase(true)]
+        [TestCase(false)]
+        public void MissingMasterOrLayoutPartIsRejected(bool masterPart)
+        {
+            using var presentation = new XMLSlideShow();
+            var master = presentation.GetSlideMasters()[0];
+            var part = masterPart ? master.GetPackagePart() : master.GetSlideLayouts()[0].GetPackagePart();
+            using var package = OPCPackage.Open(new MemoryStream(Save(presentation)));
+            package.RemovePart(part.PartName);
+            Assert.Throws<POIXMLException>(() => new XMLSlideShow(package));
+        }
+
+        [Test]
+        public void MissingThemeIsReportedAsAbsentRatherThanInvented()
+        {
+            using var presentation = new XMLSlideShow();
+            var master = presentation.GetSlideMasters()[0];
+            var part = master.GetPackagePart();
+            part.RemoveRelationship(part.GetRelationshipsByType(XSLFRelation.THEME.Relation).GetRelationship(0).Id);
+            Assert.That(master.GetTheme(), Is.Null);
+            Assert.That(master.GetSlideLayouts()[0].GetTheme(), Is.Null);
+            using var reopened = Open(Save(presentation));
+            Assert.That(reopened.GetSlideMasters()[0].GetTheme(), Is.Null);
+        }
+
+        [Test]
+        public void DuplicateThemeRelationshipsFailExplicitly()
+        {
+            using var presentation = new XMLSlideShow();
+            var master = presentation.GetSlideMasters()[0];
+            master.GetPackagePart().AddRelationship(master.GetTheme().GetPackagePart().PartName,
+                TargetMode.Internal, XSLFRelation.THEME.Relation, "duplicateTheme");
+            Assert.Throws<POIXMLException>(() => master.GetTheme());
+            AssertInvalid(Save(presentation));
+        }
+
+        [TestCase(true)]
+        [TestCase(false)]
+        public void MissingMasterOrLayoutCommonSlideDataFailsExplicitly(bool masterPart)
+        {
+            using var presentation = new XMLSlideShow();
+            var master = presentation.GetSlideMasters()[0];
+            if (masterPart)
+            {
+                master.GetXmlObject().cSld = null;
+            }
+            else
+            {
+                master.GetSlideLayouts()[0].GetXmlObject().cSld = null;
+            }
+            AssertInvalid(Save(presentation));
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void InvalidThemeRootOrDocumentTypeDeclarationIsRejected(bool dtd)
+        {
+            using var presentation = new XMLSlideShow();
+            var themeName = presentation.GetSlideMasters()[0].GetTheme().GetPackagePart().PartName;
+            using var package = OPCPackage.Open(new MemoryStream(Save(presentation)));
+            var theme = package.GetPart(themeName);
+            theme.Clear();
+            using (var output = theme.GetOutputStream())
+            {
+                var xml = Encoding.UTF8.GetBytes(dtd
+                    ? "<!DOCTYPE theme [<!ENTITY text 'test'>]><a:theme xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\"/>"
+                    : "<notATheme/>");
+                output.Write(xml, 0, xml.Length);
+            }
+            Assert.Throws<POIXMLException>(() => new XMLSlideShow(package));
+        }
+
+        private static void AssertNoMutation<T>(XMLSlideShow presentation, Action action) where T : Exception
+        {
+            var parts = presentation.Package.GetParts().Count;
+            var relations = presentation.GetPackagePart().Relationships.Size;
+            var slides = presentation.GetSlides().Count;
+            Assert.Throws<T>(action);
+            Assert.That(presentation.Package.GetParts().Count, Is.EqualTo(parts));
+            Assert.That(presentation.GetPackagePart().Relationships.Size, Is.EqualTo(relations));
+            Assert.That(presentation.GetSlides().Count, Is.EqualTo(slides));
+        }
+
+        private static void AssertInvalid(byte[] bytes)
+        {
+            using var package = OPCPackage.Open(new MemoryStream(bytes));
+            Assert.Throws<POIXMLException>(() => new XMLSlideShow(package));
+        }
+
+        private static XMLSlideShow Open(byte[] bytes)
+        {
+            return new XMLSlideShow(new MemoryStream(bytes));
+        }
+
+        private static byte[] Save(XMLSlideShow presentation)
+        {
+            using var output = new MemoryStream();
+            presentation.Write(output);
+            return output.ToArray();
+        }
+
+        private static byte[] ReadBytes(PackagePart part)
+        {
+            using var input = part.GetInputStream();
+            using var output = new MemoryStream();
+            input.CopyTo(output);
+            return output.ToArray();
+        }
+    }
+}
