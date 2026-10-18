@@ -4,7 +4,7 @@ using NPOI.OpenXml4Net.OPC;
 namespace NPOI.XSLF.UserModel
 {
     /// <summary>
-    /// Creates slide, master, layout, and theme wrappers while preserving unmodeled parts.
+    /// Creates supported sheet, theme, image and read-only chart wrappers while preserving unmodeled parts.
     /// </summary>
     public class XSLFFactory : POIXMLFactory
     {
@@ -40,6 +40,10 @@ namespace NPOI.XSLF.UserModel
             if (part.ContentType == XSLFRelation.THEME.ContentType)
             {
                 return new XSLFTheme(parent, part);
+            }
+            if (string.Equals(part.ContentType, XSLFRelation.CHART.ContentType, StringComparison.OrdinalIgnoreCase))
+            {
+                return new XSLFChart(parent, part);
             }
             if (XSLFPictureData.IsImageContentType(part.ContentType))
             {

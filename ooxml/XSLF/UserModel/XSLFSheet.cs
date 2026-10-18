@@ -90,6 +90,12 @@ namespace NPOI.XSLF.UserModel
             return XSLFTable.Create(this, this, GetShapeTree(), rows, columns);
         }
 
+        /// <inheritdoc/>
+        public XSLFChartShape CreateChart(XSLFChart chart)
+        {
+            return XSLFChartShape.Create(this, this, GetShapeTree(), chart);
+        }
+
         protected abstract XmlElement GetCommonSlideData();
 
         internal XmlElement GetShapeTree()
@@ -107,6 +113,37 @@ namespace NPOI.XSLF.UserModel
             {
                 throw new InvalidOperationException("Shape changes to a detached or committed sheet would not be saved.");
             }
+        }
+
+        internal PackageRelationship GetOrAddRelation(POIXMLDocumentPart child, XSLFRelation descriptor)
+        {
+            EnsureShapesWritable();
+            var source = GetPackagePart();
+            var target = child.GetPackagePart();
+            if (!ReferenceEquals(target.Package, source.Package) ||
+                !ReferenceEquals(source.Package.GetPart(target.PartName), target))
+                throw new ArgumentException("The related part must belong to this presentation.", nameof(child));
+            PackageRelationship relationship = null;
+            foreach (var candidate in source.GetRelationshipsByType(descriptor.Relation))
+            {
+                if (candidate.TargetMode == TargetMode.Internal &&
+                    string.Equals(candidate.TargetUri.OriginalString, target.PartName.Name, StringComparison.OrdinalIgnoreCase))
+                {
+                    relationship = candidate;
+                    break;
+                }
+            }
+            if (relationship != null)
+            {
+                var cached = GetRelationById(relationship.Id);
+                if (cached != null && !ReferenceEquals(cached.GetPackagePart(), target))
+                    throw new POIXMLException("The cached document relation does not match its package target.");
+            }
+            // AddRelation's target-only lookup can reuse a relationship of the wrong type.
+            relationship ??= source.AddRelationship(target.PartName, TargetMode.Internal, descriptor.Relation);
+            if (GetRelationById(relationship.Id) == null)
+                AddRelation(relationship, child);
+            return relationship;
         }
 
         protected void InitializeXml()

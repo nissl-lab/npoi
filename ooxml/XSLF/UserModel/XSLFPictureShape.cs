@@ -105,25 +105,7 @@ namespace NPOI.XSLF.UserModel
                 "<p:blipFill><a:blip r:embed=\"\"/><a:stretch><a:fillRect/></a:stretch></p:blipFill><p:spPr>" +
                 "<a:xfrm><a:off x=\"0\" y=\"0\"/><a:ext cx=\"0\" cy=\"0\"/></a:xfrm>" +
                 "<a:prstGeom prst=\"rect\"><a:avLst/></a:prstGeom></p:spPr></p:pic>");
-            var source = sheet.GetPackagePart();
-            PackageRelationship relationship = null;
-            foreach (var candidate in source.GetRelationshipsByType(PackageRelationshipTypes.IMAGE_PART))
-            {
-                if (candidate.TargetMode == TargetMode.Internal &&
-                    string.Equals(candidate.TargetUri.OriginalString, data.GetPackagePart().PartName.Name,
-                        StringComparison.OrdinalIgnoreCase))
-                {
-                    relationship = candidate;
-                    break;
-                }
-            }
-            // AddRelation can reuse a non-image relationship to the same part; match type and target explicitly.
-            relationship ??= source.AddRelationship(
-                data.GetPackagePart().PartName, TargetMode.Internal, PackageRelationshipTypes.IMAGE_PART);
-            if (sheet.GetRelationById(relationship.Id) == null)
-            {
-                sheet.AddRelation(relationship, data);
-            }
+            var relationship = sheet.GetOrAddRelation(data, XSLFPictureData.GetDescriptor(data.PictureType));
             xml["blipFill", P]["blip", XSLFXmlHelper.DrawingNamespace].SetAttribute("embed", R, relationship.Id);
             return new XSLFPictureShape(XSLFShapeHelper.Append(tree, xml), sheet, parent);
         }

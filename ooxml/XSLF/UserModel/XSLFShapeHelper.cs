@@ -109,6 +109,11 @@ namespace NPOI.XSLF.UserModel
                                 shapes.Add(new XSLFTable(element, sheet, parent));
                                 continue;
                             }
+                            if (XSLFChartShape.IsChart(element))
+                            {
+                                shapes.Add(new XSLFChartShape(element, sheet, parent));
+                                continue;
+                            }
                             break;
                     }
                 }

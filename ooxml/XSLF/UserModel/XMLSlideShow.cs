@@ -15,6 +15,7 @@ namespace NPOI.XSLF.UserModel
     /// <summary>
     /// Reads, writes, and creates transitional PPTX presentations and layout-based slides.
     /// Simple/group shapes, text, PNG/JPEG pictures and fixed-grid tables are supported; rendering is not supported.
+    /// Existing classic DrawingML charts are read-only and can be reused through editable chart frames.
     /// </summary>
     public class XMLSlideShow : POIXMLDocument, IDisposable
     {
@@ -25,6 +26,8 @@ namespace NPOI.XSLF.UserModel
         private readonly List<XSLFSlide> slides = new List<XSLFSlide>();
         private readonly Dictionary<PackagePart, XSLFPictureData> pictures =
             new Dictionary<PackagePart, XSLFPictureData>();
+        private readonly Dictionary<PackagePart, XSLFChart> charts =
+            new Dictionary<PackagePart, XSLFChart>();
         private CT_Presentation presentation;
 
         /// <summary>
@@ -84,6 +87,34 @@ namespace NPOI.XSLF.UserModel
             return Package.GetParts().Where(part => !part.IsRelationshipPart &&
                     XSLFPictureData.IsImageContentType(part.ContentType))
                 .Select(GetPictureData).ToList().AsReadOnly();
+        }
+
+        /// <summary>
+        /// Returns a read-only snapshot of classic DrawingML chart parts, including unreferenced charts.
+        /// Chart contents, embedded workbooks and external data are not edited or loaded.
+        /// </summary>
+        public IReadOnlyList<XSLFChart> GetCharts()
+        {
+            EnsureOpen();
+            return Package.GetParts().Where(part => !part.IsRelationshipPart &&
+                    string.Equals(part.ContentType, XSLFRelation.CHART.ContentType, StringComparison.OrdinalIgnoreCase))
+                .Select(GetChart).ToList().AsReadOnly();
+        }
+
+        internal XSLFChart GetChart(PackagePart part)
+        {
+            EnsureOpen();
+            if (!ReferenceEquals(part.Package, Package) ||
+                !ReferenceEquals(Package.GetPart(part.PartName), part))
+                throw new ArgumentException("The chart part must belong to this presentation.", nameof(part));
+            if (!string.Equals(part.ContentType, XSLFRelation.CHART.ContentType, StringComparison.OrdinalIgnoreCase))
+                throw new POIXMLException("The referenced part is not a classic DrawingML chart.");
+            if (!charts.TryGetValue(part, out var chart))
+            {
+                chart = new XSLFChart(this, part);
+                charts.Add(part, chart);
+            }
+            return chart;
         }
 
         /// <summary>

@@ -52,6 +52,12 @@ namespace NPOI.XSLF.UserModel
         }
 
         /// <inheritdoc/>
+        public XSLFChartShape CreateChart(XSLFChart chart)
+        {
+            return XSLFChartShape.Create(GetSheet(), this, GetXmlObject(), chart);
+        }
+
+        /// <inheritdoc/>
         public override SKRect GetAnchor()
         {
             return XSLFShapeHelper.ReadAnchor(Properties, false);

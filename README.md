@@ -337,11 +337,52 @@ table/row/cell/paragraph/run wrappers cannot be edited. Merge/split editing,
 dynamic row/column insertion/removal, border/fill editing, automatic layout,
 table-style inheritance and rendering remain outside this stage.
 
+Existing chart foundation
+-------------------------
+`GetCharts()` returns a read-only snapshot of classic DrawingML chart parts,
+including unreferenced parts. Recognizable chart graphic frames are exposed as
+`XSLFChartShape`. Slides, layouts, masters and groups can create another frame
+referencing an **existing chart in the same presentation**:
+
+```csharp
+var chart = presentation.GetCharts()[0];
+var frame = slide.CreateChart(chart);
+frame.Name = "Reused chart";
+frame.SetAnchor(SkiaSharp.SKRect.Create(36, 36, 360, 240));
+var originalBytes = chart.Data;
+var fullXmlSnapshot = chart.GetXmlSnapshot();
+var partialModelSnapshot = chart.GetChartSpaceSnapshot();
+```
+
+New frames have an empty anchor; no layout is guessed. Only the frame's name
+and point-based anchor are editable. Reuse shares the chart part and its
+existing relationships, rather than copying chart contents or workbooks.
+Chart bytes, embedded workbooks, styles and unsupported chart extensions are
+preserved during supported frame edits and repeated saves.
+
+`Data` returns a fresh byte array. Both snapshot APIs return independent,
+detached objects: **snapshot changes are never written back**.
+`GetXmlSnapshot()` retains the complete XML and checks the classic chart root
+and required chart/plot-area structure, not full chart schema or data semantics.
+DTDs and external entity resolution are prohibited. `GetChartSpaceSnapshot()`
+uses the existing partial chart schema model, which may omit unsupported XML.
+Neither snapshot loads, recalculates or synchronizes related workbooks or
+fetches external data.
+
+`XSLFChart` deliberately does not inherit the editable `XDDFChart` APIs in this
+preservation-focused stage: serializing the partial model could lose unsupported
+chart content. New chart authoring, series/data/title/style editing, workbook
+synchronization, cross-presentation import, chartEx interpretation and rendering
+are not implemented. Unrecognized graphic frames remain opaque. Invalid,
+ambiguous, external or unsupported chart references reject high-level frame
+edits explicitly; readonly/disposed presentations, removed sheets and detached
+frames cannot be edited.
+
 This is a foundation, not full PowerPoint support. Parameterless slide creation
 requires an existing blank layout (included in newly created presentations).
 The layout overload can select other layout types. Existing slide
-content and unsupported related parts are retained, but high-level
-charts, notes, rendering, and animation APIs are not yet
+content and unsupported related parts are retained, but chart authoring,
+notes, rendering, and animation APIs are not yet
 implemented. Strict OOXML and macro-enabled presentation formats are not supported.
 
 System Requirement

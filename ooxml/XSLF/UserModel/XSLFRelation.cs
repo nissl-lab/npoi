@@ -41,6 +41,10 @@ namespace NPOI.XSLF.UserModel
         public static readonly XSLFRelation IMAGE_JPEG = new XSLFRelation(
             "image/jpeg", PackageRelationshipTypes.IMAGE_PART, "/ppt/media/image#.jpeg", typeof(XSLFPictureData));
 
+        public static readonly XSLFRelation CHART = new XSLFRelation(
+            "application/vnd.openxmlformats-officedocument.drawingml.chart+xml",
+            CT_Presentation.RelationshipsNamespace + "/chart", "/ppt/charts/chart#.xml", typeof(XSLFChart));
+
         private XSLFRelation(string contentType, string relationship, string defaultName, Type type)
             : base(contentType, relationship, defaultName, type)
         {

@@ -36,6 +36,12 @@ namespace NPOI.XSLF.UserModel
         XSLFTable CreateTable(int rows, int columns);
 
         /// <summary>
+        /// Appends an empty-anchor frame referencing an existing chart in this presentation.
+        /// Does not create or modify chart contents, workbooks or external data.
+        /// </summary>
+        XSLFChartShape CreateChart(XSLFChart chart);
+
+        /// <summary>
         /// Appends an empty group with a sheet-wide unique identifier.
         /// Exterior and interior anchors are initially empty and can be set independently.
         /// </summary>
