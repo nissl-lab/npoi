@@ -53,6 +53,40 @@ f. Real successful cases all over the world
 
 g. Works on both Windows and Linux 
 
+PPTX foundation (XSLF)
+======================
+The initial `NPOI.XSLF.UserModel` API supports creating an empty transitional
+`.pptx` presentation, adding blank slides, and saving and reopening the package:
+
+```csharp
+using NPOI.XSLF.UserModel;
+using System.IO;
+
+using var presentation = new XMLSlideShow();
+presentation.CreateSlide();
+presentation.CreateSlide();
+using var output = File.Create("blank-slides.pptx");
+presentation.Write(output);
+```
+
+Use `new XMLSlideShow(inputStream)` or `new XMLSlideShow(opcPackage)` to open an
+existing presentation, and `GetSlides()` to access slides in presentation order.
+Closing the presentation closes its underlying OPC package. As with the other
+OOXML APIs, save to a different file when opening a package from a file path.
+
+The foundation follows the existing OOXML layering: partial PresentationML data
+models live in `OpenXmlFormats/Presentation`, while `XMLSlideShow`, `XSLFSlide`,
+`XSLFRelation`, and `XSLFFactory` live in `ooxml/XSLF/UserModel`. Packaging uses the
+existing OPC implementation. Masters, layouts, themes, and other unmodeled parts
+remain opaque package parts so future APIs can be added without discarding
+existing document content.
+
+This is a foundation, not full PowerPoint support. Slide creation requires an
+existing blank layout (included in newly created presentations). Existing slide
+content and unsupported related parts are retained, but high-level text boxes,
+pictures, tables, charts, notes, rendering, and animation APIs are not yet
+implemented. Strict OOXML and macro-enabled presentation formats are not supported.
+
 System Requirement
 ===================
 .NET 8

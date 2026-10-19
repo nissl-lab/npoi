@@ -127,7 +127,7 @@ partial class Build : NukeBuild
                 .SetProjectFile(Solution)
                 .When(_ => Host is GitHubActions, settings => settings.SetLoggers("GitHubActions"))
                 .When(_ => !RuntimeInformation.IsOSPlatform(OSPlatform.Windows),
-                    settings => settings.SetFramework("net8.0"))
+                    settings => settings.SetFramework("net10.0"))
             );
         });
 
