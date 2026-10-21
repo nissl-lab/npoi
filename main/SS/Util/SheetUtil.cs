@@ -932,10 +932,6 @@ namespace NPOI.SS.Util
             }
         }
 
-        // Cache SKTypeface objects (expensive) keyed by font name + style.
-        // SKFont (typeface + size) is cheap and created on demand from the cached typeface.
-        private static readonly ConcurrentDictionary<FontCacheKey, SKTypeface> TypefaceCache = new();
-
         /// <summary>
         /// Convert an NPOI IFont to an SkiaSharp SKFont for text measurement.
         /// The returned SKFont has its size set in pixels at 96 DPI (i.e. pointSize * 96 / 72).
@@ -946,7 +942,7 @@ namespace NPOI.SS.Util
         public static SKFont IFont2Font(IFont font1)
         {
             var key = new FontCacheKey(font1.FontName, font1.IsBold, font1.IsItalic);
-            SKTypeface typeface = TypefaceCache.GetOrAdd(key, IFont2TypefaceImpl);
+            using SKTypeface typeface = IFont2TypefaceImpl(key);
             // Convert point size to pixels at the configured DPI so that MeasureText returns pixel values.
             float textSizePx = (float)font1.FontHeightInPoints * dpi / 72f;
             return new SKFont(typeface, textSizePx);
