@@ -10,15 +10,15 @@ PR total for listed contributors: **667 submitted**. Commit counts reflect GitHu
 
 | Contributor | Public name | Public location | Submitted PRs | Commits | PR source |
 | --- | --- | --- | ---: | ---: | --- |
-| [antony-liu](https://github.com/antony-liu) | antony liu | mainland China | 125 | 1500 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3Aantony-liu) |
-| [tonyqus](https://github.com/tonyqus) | Tony Q. | mainland China | 100 | 1704 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3Atonyqus) |
+| [antony-liu](https://github.com/antony-liu) | antony liu | Beijing, China | 125 | 1500 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3Aantony-liu) |
+| [tonyqus](https://github.com/tonyqus) | Tony Q. | Shanghai, China | 100 | 1704 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3Atonyqus) |
 | [lahma](https://github.com/lahma) | Marko Lahma | Finland | 45 | 31 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3Alahma) |
 | [Bykiev](https://github.com/Bykiev) | Andrey Bykiev | Russia | 30 | 103 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3ABykiev) |
 | [artemkoloskov-admin](https://github.com/artemkoloskov-admin) | Artem Koloskov | Russia | 23 | 4 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3Aartemkoloskov-admin) |
 | [ken-swyfft](https://github.com/ken-swyfft) | Kenneth Smith | Woodinville, WA | 21 | 48 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3Aken-swyfft) |
 | [karakasa](https://github.com/karakasa) |  | Not disclosed | 11 | 16 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3Akarakasa) |
 | [9rnsr](https://github.com/9rnsr) | Hara Kenji | Not disclosed | 9 | 50 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3A9rnsr) |
-| [shps951023](https://github.com/shps951023) | Wei Lin | Guangdong ↔ Kaohsiung | 9 | 0 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3Ashps951023) |
+| [shps951023](https://github.com/shps951023) | Wei Lin | Guangdong, China | 9 | 0 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3Ashps951023) |
 | [superrnovae](https://github.com/superrnovae) | Vladislav | France | 8 | 16 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3Asuperrnovae) |
 | [EmilienDup](https://github.com/EmilienDup) |  | Not disclosed | 6 | 11 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3AEmilienDup) |
 | [jsakamoto](https://github.com/jsakamoto) |  | Japan | 6 | 9 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3Ajsakamoto) |
@@ -27,8 +27,8 @@ PR total for listed contributors: **667 submitted**. Commit counts reflect GitHu
 | [gtbuchanan](https://github.com/gtbuchanan) | Taylor Buchanan | Texas, US | 5 | 4 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3Agtbuchanan) |
 | [PBrunot](https://github.com/PBrunot) | Pascal Brunot | Italy | 5 | 0 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3APBrunot) |
 | [tohidemyname](https://github.com/tohidemyname) |  | Not disclosed | 5 | 0 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3Atohidemyname) |
-| [Yvees](https://github.com/Yvees) | YvesShen | Not disclosed | 5 | 6 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3AYvees) |
-| [deleteJ](https://github.com/deleteJ) | JY | Shanghai | 4 | 7 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3AdeleteJ) |
+| [Yvees](https://github.com/Yvees) | YvesShen | Shanghai, China | 5 | 6 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3AYvees) |
+| [deleteJ](https://github.com/deleteJ) | JY | Shanghai, China | 4 | 7 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3AdeleteJ) |
 | [gltide](https://github.com/gltide) |  | Not disclosed | 4 | 0 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3Agltide) |
 | [KnyazSh](https://github.com/KnyazSh) | Yuriy | Russia | 4 | 8 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3AKnyazSh) |
 | [mino-alpha](https://github.com/mino-alpha) |  | Not disclosed | 4 | 20 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3Amino-alpha) |
