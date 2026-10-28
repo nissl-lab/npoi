@@ -92,7 +92,7 @@ PR total for listed contributors: **667 submitted**. Commit counts reflect GitHu
 | [cg-zhou](https://github.com/cg-zhou) | Chunguang Zhou | Not disclosed | 1 | 0 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3Acg-zhou) |
 | [chen1tian](https://github.com/chen1tian) |  | Not disclosed | 1 | 0 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3Achen1tian) |
 | [Cherepoc](https://github.com/Cherepoc) | Alexander Sharovatov | Not disclosed | 1 | 0 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3ACherepoc) |
-| [chucklu](https://github.com/chucklu) | Chuck LU | ShangHai,China | 1 | 0 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3Achucklu) |
+| [chucklu](https://github.com/chucklu) | Chuck LU | Shanghai,China | 1 | 0 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3Achucklu) |
 | [ckaeslin](https://github.com/ckaeslin) | Christian Käslin | Not disclosed | 1 | 1 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3Ackaeslin) |
 | [CollinAlpert](https://github.com/CollinAlpert) | Collin Alpert | Hamburg | 1 | 2 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3ACollinAlpert) |
 | [crabouif](https://github.com/crabouif) | Pascal Fluck | Switzerland | 1 | 0 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3Acrabouif) |
@@ -115,7 +115,7 @@ PR total for listed contributors: **667 submitted**. Commit counts reflect GitHu
 | [Fr1z2r](https://github.com/Fr1z2r) | Andrey | Not disclosed | 1 | 1 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3AFr1z2r) |
 | [FrozDark](https://github.com/FrozDark) | Bakhadyr Chapayev | Kazakhstan, Shymkent | 1 | 0 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3AFrozDark) |
 | [gas162](https://github.com/gas162) |  | Not disclosed | 1 | 1 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3Agas162) |
-| [gdols](https://github.com/gdols) | Guillermo Dols | Mallorca (Spain) | 1 | 1 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3Agdols) |
+| [gdols](https://github.com/gdols) | Guillermo Dols | Mallorca, Spain | 1 | 1 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3Agdols) |
 | [gitter-badger](https://github.com/gitter-badger) | The Gitter Badger | Safe in the Gitter den | 1 | 1 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3Agitter-badger) |
 | [guangyu2002](https://github.com/guangyu2002) |  | Not disclosed | 1 | 1 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3Aguangyu2002) |
 | [hahschaa](https://github.com/hahschaa) | Harm | Not disclosed | 1 | 1 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3Ahahschaa) |
@@ -123,7 +123,7 @@ PR total for listed contributors: **667 submitted**. Commit counts reflect GitHu
 | [iain-mcandrew](https://github.com/iain-mcandrew) |  | Not disclosed | 1 | 0 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3Aiain-mcandrew) |
 | [igitur](https://github.com/igitur) | Francois Botha | Cape Town, South Africa | 1 | 2 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3Aigitur) |
 | [Itamaram](https://github.com/Itamaram) | Itamar Amith | Melbourne, Australia | 1 | 1 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3AItamaram) |
-| [itsvse](https://github.com/itsvse) | 他大舅他二舅都是他舅 | ShangHai | 1 | 1 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3Aitsvse) |
+| [itsvse](https://github.com/itsvse) | 他大舅他二舅都是他舅 | Shanghai, China | 1 | 1 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3Aitsvse) |
 | [jacobmalliet](https://github.com/jacobmalliet) | Jacob Malliet | Chicago, IL | 1 | 1 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3Ajacobmalliet) |
 | [jahav](https://github.com/jahav) | Jan Havlíček | Czech Republic | 1 | 0 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3Ajahav) |
 | [jas88](https://github.com/jas88) | James A Sutherland | Perth, UK / Des Moines, IA, USA | 1 | 0 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3Ajas88) |
@@ -135,7 +135,7 @@ PR total for listed contributors: **667 submitted**. Commit counts reflect GitHu
 | [kekekeks](https://github.com/kekekeks) | Nikita Tsukanov | Kazakhstan, Astana | 1 | 1 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3Akekekeks) |
 | [kennethahn](https://github.com/kennethahn) |  | Not disclosed | 1 | 2 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3Akennethahn) |
 | [kmvi](https://github.com/kmvi) |  | Not disclosed | 1 | 0 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3Akmvi) |
-| [kondoujp](https://github.com/kondoujp) | KONDOU, Kazuhiro | 02:23   (UTC +09:00) | 1 | 0 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3Akondoujp) |
+| [kondoujp](https://github.com/kondoujp) | KONDOU, Kazuhiro | Japan | 1 | 0 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3Akondoujp) |
 | [LarsKemmann](https://github.com/LarsKemmann) | Lars Kemmann | Charlotte, North Carolina, USA | 1 | 0 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3ALarsKemmann) |
 | [lechu445](https://github.com/lechu445) | lechu445 | Not disclosed | 1 | 0 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3Alechu445) |
 | [lethnie](https://github.com/lethnie) |  | Not disclosed | 1 | 1 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3Alethnie) |
