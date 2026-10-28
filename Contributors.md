@@ -111,12 +111,10 @@ PR total for listed contributors: **667 submitted**. Commit counts reflect GitHu
 | [En3Tho](https://github.com/En3Tho) | Igor Bagdamyan | Not disclosed | 1 | 1 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3AEn3Tho) |
 | [evlon](https://github.com/evlon) |  | Not disclosed | 1 | 0 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3Aevlon) |
 | [Fantasy-Dash](https://github.com/Fantasy-Dash) |  | Not disclosed | 1 | 1 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3AFantasy-Dash) |
-| [fossabot](https://github.com/fossabot) | fossabot | Dependency Heaven | 1 | 1 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3Afossabot) |
 | [Fr1z2r](https://github.com/Fr1z2r) | Andrey | Not disclosed | 1 | 1 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3AFr1z2r) |
 | [FrozDark](https://github.com/FrozDark) | Bakhadyr Chapayev | Kazakhstan, Shymkent | 1 | 0 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3AFrozDark) |
 | [gas162](https://github.com/gas162) |  | Not disclosed | 1 | 1 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3Agas162) |
 | [gdols](https://github.com/gdols) | Guillermo Dols | Mallorca, Spain | 1 | 1 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3Agdols) |
-| [gitter-badger](https://github.com/gitter-badger) | The Gitter Badger | Safe in the Gitter den | 1 | 1 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3Agitter-badger) |
 | [guangyu2002](https://github.com/guangyu2002) |  | Not disclosed | 1 | 1 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3Aguangyu2002) |
 | [hahschaa](https://github.com/hahschaa) | Harm | Not disclosed | 1 | 1 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3Ahahschaa) |
 | [hbrowser](https://github.com/hbrowser) |  | Not disclosed | 1 | 1 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3Ahbrowser) |
