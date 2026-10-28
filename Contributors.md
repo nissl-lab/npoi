@@ -10,8 +10,8 @@ PR total for listed contributors: **667 submitted**. Commit counts reflect GitHu
 
 | Contributor | Public name | Public location | Submitted PRs | Commits | PR source |
 | --- | --- | --- | ---: | ---: | --- |
-| [antony-liu](https://github.com/antony-liu) | antony liu | China (provided by project maintainer) | 125 | 1500 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3Aantony-liu) |
-| [tonyqus](https://github.com/tonyqus) | Tony Q. | China (provided by project maintainer) | 100 | 1704 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3Atonyqus) |
+| [antony-liu](https://github.com/antony-liu) | antony liu | mainland China | 125 | 1500 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3Aantony-liu) |
+| [tonyqus](https://github.com/tonyqus) | Tony Q. | mainland China | 100 | 1704 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3Atonyqus) |
 | [lahma](https://github.com/lahma) | Marko Lahma | Finland | 45 | 31 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3Alahma) |
 | [Bykiev](https://github.com/Bykiev) | Andrey Bykiev | Russia | 30 | 103 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3ABykiev) |
 | [artemkoloskov-admin](https://github.com/artemkoloskov-admin) | Artem Koloskov | Not disclosed | 23 | 4 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3Aartemkoloskov-admin) |
