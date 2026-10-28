@@ -14,7 +14,7 @@ PR total for listed contributors: **667 submitted**. Commit counts reflect GitHu
 | [tonyqus](https://github.com/tonyqus) | Tony Q. | mainland China | 100 | 1704 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3Atonyqus) |
 | [lahma](https://github.com/lahma) | Marko Lahma | Finland | 45 | 31 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3Alahma) |
 | [Bykiev](https://github.com/Bykiev) | Andrey Bykiev | Russia | 30 | 103 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3ABykiev) |
-| [artemkoloskov-admin](https://github.com/artemkoloskov-admin) | Artem Koloskov | Not disclosed | 23 | 4 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3Aartemkoloskov-admin) |
+| [artemkoloskov-admin](https://github.com/artemkoloskov-admin) | Artem Koloskov | Russia | 23 | 4 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3Aartemkoloskov-admin) |
 | [ken-swyfft](https://github.com/ken-swyfft) | Kenneth Smith | Woodinville, WA | 21 | 48 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3Aken-swyfft) |
 | [karakasa](https://github.com/karakasa) |  | Not disclosed | 11 | 16 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3Akarakasa) |
 | [9rnsr](https://github.com/9rnsr) | Hara Kenji | Not disclosed | 9 | 50 | [PRs](https://github.com/nissl-lab/npoi/pulls?q=is%3Apr+author%3A9rnsr) |
