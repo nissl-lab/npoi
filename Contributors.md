@@ -1,7 +1,6 @@
 # NPOI contributors
 
-Repository: [nissl-lab/npoi](https://github.com/nissl-lab/npoi)  
-Snapshot: 28 October 2026
+Updated Date: 28 Oct, 2026
 
 Includes human PR authors and accounts listed by GitHub’s contributors API, including direct commit contributors with no PRs. Identified AI and bot accounts are excluded. Sorted by submitted PRs.
 
