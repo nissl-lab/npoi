@@ -97,6 +97,8 @@ namespace NPOI.XSSF.Model
             _sstDoc.AddNewSst();
             _loaded = true;
             _stmapBuilt = true;
+            // A new table has no original part to keep, so it is written even when empty
+            _dirty = true;
         }
 
         public SharedStringsTable(PackagePart part)
