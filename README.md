@@ -55,7 +55,7 @@ g. Works on both Windows and Linux
 
 System Requirement
 ===================
-.NET 8
+.NET 8, .NET 10
 
 .NET Standard 2.1 (.NET Core 3.x, .NET 5, .NET 6)
 
