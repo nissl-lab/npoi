@@ -17,7 +17,7 @@ namespace NPOI.OpenXml4Net.OPC
          *
          *  <p>
          *  The standard specifies a source relations ship for the Core File Properties part as follows:
-         *  <code>http://schemas.openxmlformats.org/officedocument/2006/relationships/metadata/core-properties.</code>
+         *  <code>http://schemas.openxmlformats.org/officeDocument/2006/relationships/metadata/core-properties.</code>
          *  </p>
          *  <p>
          *   Office uses the following source relationship for the Core File Properties part:
@@ -28,9 +28,9 @@ namespace NPOI.OpenXml4Net.OPC
         public const string CORE_PROPERTIES = "http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties";
 
         /**
-         * Core properties relationship type as defiend in ECMA 376.
+         * Core properties relationship type as defined in ECMA 376.
          */
-        public const string CORE_PROPERTIES_ECMA376 = "http://schemas.openxmlformats.org/officedocument/2006/relationships/metadata/core-properties";
+        public const string CORE_PROPERTIES_ECMA376 = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/metadata/core-properties";
 
         /**
          * Namespace of Core properties relationship type as defiend in ECMA 376
