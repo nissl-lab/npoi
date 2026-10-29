@@ -693,15 +693,14 @@ namespace NPOI.OpenXml4Net.OPC
             return retArr;
         }
 
-        /**
-         * Retrieve parts by relationship type.
-         * 
-         * @param relationshipType
-         *            Relationship type.
-         * @return All parts which are the target of a relationship with the
-         *         specified type, if the method can't retrieve relationships from
-         *         the package, then return <code>null</code>.
-         */
+        /// <summary>
+        /// Retrieve parts by relationship type.
+        /// </summary>
+        /// <param name="relationshipType">Relationship type. Must not be <c>null</c>.</param>
+        /// <returns>All parts which are the target of a relationship with the
+        /// specified type. If no such parts are found, the list is empty.</returns>
+        /// <exception cref="InvalidOperationException">If called on a write-only package.</exception>
+        /// <exception cref="ArgumentException">If <paramref name="relationshipType"/> is null.</exception>
         public List<PackagePart> GetPartsByRelationshipType(
                 String relationshipType)
         {

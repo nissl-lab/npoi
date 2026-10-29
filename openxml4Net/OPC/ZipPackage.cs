@@ -47,13 +47,11 @@ namespace NPOI.OpenXml4Net.OPC
             }
         }
 
-        /**
-         * Constructor. <b>Operation not supported.</b>
-         *
-         * @param in
-         *            Zip input stream to load.
-         * @param access
-         */
+        /// <summary>
+        /// Opens a Zip based Open XML document from a Stream.
+        /// </summary>
+        /// <param name="in1">Zip input stream to load.</param>
+        /// <param name="access">The package access mode.</param>
         public ZipPackage(Stream in1, PackageAccess access)
             : base(access)
         {

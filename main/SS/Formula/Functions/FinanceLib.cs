@@ -77,8 +77,8 @@ namespace NPOI.SS.Formula.Functions
          * @param r rate
          * @param n num of periods
          * @param y pmt per period
-         * @param p future value
-         * @param t type (true=pmt at end of period, false=pmt at begining of period)
+         * @param p present value
+         * @param t type (true=pmt at beginning of period, false=pmt at end of period)
          */
         public static double fv(double r, double n, double y, double p, bool t)
         {
@@ -102,11 +102,11 @@ namespace NPOI.SS.Formula.Functions
          * of individual payment, future value and bool value indicating whether
          * payments are due at the beginning of period 
          * (false => payments are due at end of period) 
-         * @param r
-         * @param n
-         * @param y
-         * @param f
-         * @param t
+         * @param r rate
+         * @param n num of periods
+         * @param y pmt per period
+         * @param f future value
+         * @param t type (true=pmt at beginning of period, false=pmt at end of period)
          */
         public static double pv(double r, double n, double y, double f, bool t)
         {
@@ -131,7 +131,7 @@ namespace NPOI.SS.Formula.Functions
          * (supplied as an array). If the amounts are income the value should 
          * be positive, else if they are payments and not income, the 
          * value should be negative.
-         * @param r
+         * @param r rate
          * @param cfs cashflow amounts
          */
         public static double npv(double r, double[] cfs)
@@ -149,11 +149,11 @@ namespace NPOI.SS.Formula.Functions
 
         /**
          * 
-         * @param r
-         * @param n
-         * @param p
-         * @param f
-         * @param t
+         * @param r rate
+         * @param n num of periods
+         * @param p present value
+         * @param f future value
+         * @param t type (true=pmt at beginning of period, false=pmt at end of period)
          */
         public static double pmt(double r, double n, double p, double f, bool t)
         {
@@ -174,11 +174,11 @@ namespace NPOI.SS.Formula.Functions
 
         /**
          * 
-         * @param r
-         * @param y
-         * @param p
-         * @param f
-         * @param t
+         * @param r rate
+         * @param y pmt per period
+         * @param p present value
+         * @param f future value
+         * @param t type (true=pmt at beginning of period, false=pmt at end of period)
          */
         public static double nper(double r, double y, double p, double f, bool t)
         {
