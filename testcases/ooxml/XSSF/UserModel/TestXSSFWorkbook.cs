@@ -532,14 +532,39 @@ namespace TestCases.XSSF.UserModel
             calcPr.calcId = 100;
             ClassicAssert.IsTrue(wb.GetForceFormulaRecalculation());
 
-            wb.SetForceFormulaRecalculation(true); // resets the EngineId flag to zero
-            ClassicAssert.AreEqual(0, (int)calcPr.calcId);
+            wb.SetForceFormulaRecalculation(false);
             ClassicAssert.IsFalse(wb.GetForceFormulaRecalculation());
 
             // calcMode="manual" is unset when forceFormulaRecalculation=true
             calcPr.calcMode = (ST_CalcMode.manual);
             wb.SetForceFormulaRecalculation(true);
             ClassicAssert.AreEqual(ST_CalcMode.auto, calcPr.calcMode);
+            ClassicAssert.IsTrue(wb.GetForceFormulaRecalculation());
+
+            wb.SetForceFormulaRecalculation(false);
+            ClassicAssert.IsFalse(wb.GetForceFormulaRecalculation());
+
+            wb.ForceFormulaRecalculation = true;
+            ClassicAssert.IsTrue(wb.ForceFormulaRecalculation);
+        }
+        [Test]
+        public void ForceFormulaRecalculationIsSaved()
+        {
+            XSSFWorkbook wb1 = new XSSFWorkbook();
+            wb1.CreateSheet("Sheet1");
+            wb1.ForceFormulaRecalculation = true;
+
+            XSSFWorkbook wb2 = XSSFTestDataSamples.WriteOutAndReadBack(wb1);
+            ClassicAssert.IsTrue(wb2.GetCTWorkbook().calcPr.fullCalcOnLoad);
+            ClassicAssert.IsTrue(wb2.ForceFormulaRecalculation);
+
+            wb2.ForceFormulaRecalculation = false;
+            XSSFWorkbook wb3 = XSSFTestDataSamples.WriteOutAndReadBack(wb2);
+            ClassicAssert.IsFalse(wb3.ForceFormulaRecalculation);
+
+            wb3.Close();
+            wb2.Close();
+            wb1.Close();
         }
         [Test]
         public void ChangeSheetNameWithSharedFormulas()
