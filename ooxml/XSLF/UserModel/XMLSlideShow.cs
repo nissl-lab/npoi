@@ -105,13 +105,29 @@ namespace NPOI.XSLF.UserModel
         }
 
         /// <summary>
-        /// Returns package parts stored in the presentation's embeddings directory.
+        /// Returns embedded objects referenced by internal OLE object or package relationships.
         /// </summary>
         public override List<PackagePart> GetAllEmbedds()
         {
-            return Package.GetParts()
-                .Where(part => part.PartName.Name.StartsWith("/ppt/embeddings/", StringComparison.Ordinal))
-                .ToList();
+            var embeddings = new List<PackagePart>();
+            foreach (var part in Package.GetParts().Where(part => !part.IsRelationshipPart))
+            {
+                foreach (var relationshipType in new[] { OLE_OBJECT_REL_TYPE, PACK_OBJECT_REL_TYPE })
+                {
+                    foreach (var relationship in part.GetRelationshipsByType(relationshipType))
+                    {
+                        if (relationship.TargetMode == TargetMode.Internal)
+                        {
+                            var embedded = part.GetRelatedPart(relationship);
+                            if (!embeddings.Contains(embedded))
+                            {
+                                embeddings.Add(embedded);
+                            }
+                        }
+                    }
+                }
+            }
+            return embeddings;
         }
 
         internal override void OnDocumentRead()
