@@ -188,14 +188,15 @@ namespace TestCases.XSLF.UserModel
             AssertXmlEquivalent(slideXml.OuterXml, ReadXml(again.GetSlides()[0].GetPackagePart()).OuterXml);
         }
 
-        [Test]
-        public void SlideReferencesRetainInterleavedCompatibilityMarkup()
+        [TestCase(258U)]
+        [TestCase(1024U)]
+        public void SlideReferencesRetainInterleavedCompatibilityMarkup(uint alternateId)
         {
             using var original = new XMLSlideShow();
             original.CreateSlide();
             original.CreateSlide();
             var alternateSlide = original.CreateSlide();
-            original.GetCTPresentation().sldIdLst.sldId[2].id = 1024;
+            original.GetCTPresentation().sldIdLst.sldId[2].id = alternateId;
             using var package = OPCPackage.Open(new MemoryStream(Save(original)));
             var main = package.GetPart(PackagingUriHelper.CreatePartName(XSLFRelation.MAIN.DefaultFileName));
             var document = ReadXml(main);
@@ -224,12 +225,74 @@ namespace TestCases.XSLF.UserModel
             again.CreateSlide();
             using var extended = Open(Save(again));
             Assert.That(extended.GetSlides().Count, Is.EqualTo(3));
+            Assert.That(extended.GetCTPresentation().sldIdLst.sldId.Select(entry => entry.id),
+                Is.EqualTo(new uint[] { 256, 257, alternateId + 1 }));
             var savedList = ReadXml(extended.GetPackagePart()).DocumentElement["sldIdLst", CT_Presentation.Namespace];
             Assert.That(savedList.ChildNodes.OfType<XmlElement>().Select(element => element.LocalName),
                 Is.EqualTo(new[] { "before", "sldId", "AlternateContent", "sldId", "sldId", "after" }));
             AssertXmlEquivalent(alternate.OuterXml,
                 savedList["AlternateContent", compatibilityNamespace].OuterXml);
             Assert.That(extended.Package.GetPart(alternateSlide.GetPackagePart().PartName), Is.Not.Null);
+        }
+
+        [Test]
+        public void SlideAllocationReservesIdsInAllNestedCompatibilityBranches()
+        {
+            using var presentation = new XMLSlideShow();
+            presentation.CreateSlide();
+            var document = new XmlDocument { XmlResolver = null };
+            document.LoadXml("<mc:AlternateContent xmlns:mc=\"http://schemas.openxmlformats.org/markup-compatibility/2006\"" +
+                " xmlns:p=\"" + CT_Presentation.Namespace + "\"><mc:Choice Requires=\"p\">" +
+                "<p:sldId id=\"258\"/></mc:Choice><mc:Fallback><mc:AlternateContent>" +
+                "<mc:Choice Requires=\"p\"><p:sldId id=\"260\"/></mc:Choice>" +
+                "<mc:Fallback><p:sldId id=\"259\"/></mc:Fallback></mc:AlternateContent>" +
+                "</mc:Fallback></mc:AlternateContent>");
+            presentation.GetCTPresentation().sldIdLst.AnyElements = new[] { document.DocumentElement };
+
+            presentation.CreateSlide();
+            presentation.CreateSlide();
+
+            using var reopened = Open(Save(presentation));
+            Assert.That(reopened.GetCTPresentation().sldIdLst.sldId.Select(entry => entry.id),
+                Is.EqualTo(new uint[] { 256, 261, 262 }));
+            AssertXmlEquivalent(document.OuterXml,
+                reopened.GetCTPresentation().sldIdLst.AnyElements[0].OuterXml);
+        }
+
+        [TestCase("2147483647", true)]
+        [TestCase("2147483648", false)]
+        [TestCase("4294967296", false)]
+        [TestCase("255", false)]
+        [TestCase("invalid", false)]
+        [TestCase("", false)]
+        public void UnallocatablePreservedSlideIdsFailWithoutChangingThePackage(string id, bool exhausted)
+        {
+            using var presentation = new XMLSlideShow();
+            presentation.CreateSlide();
+            var document = new XmlDocument { XmlResolver = null };
+            document.LoadXml("<mc:AlternateContent xmlns:mc=\"http://schemas.openxmlformats.org/markup-compatibility/2006\">" +
+                "<mc:Fallback><p:sldId xmlns:p=\"" + CT_Presentation.Namespace + "\" id=\"" + id +
+                "\"/></mc:Fallback></mc:AlternateContent>");
+            presentation.GetCTPresentation().sldIdLst.AnyElements = new[] { document.DocumentElement };
+            var count = presentation.Package.GetParts().Count;
+            var relationshipCount = presentation.GetPackagePart().GetRelationshipsByType(XSLFRelation.SLIDE.Relation).Size;
+            var originalXml = presentation.GetCTPresentation().sldIdLst.AnyElements[0].OuterXml;
+
+            if (exhausted)
+            {
+                Assert.Throws<InvalidOperationException>(() => presentation.CreateSlide());
+            }
+            else
+            {
+                Assert.Throws<POIXMLException>(() => presentation.CreateSlide());
+            }
+            Assert.That(presentation.Package.GetParts().Count, Is.EqualTo(count));
+            Assert.That(presentation.GetPackagePart().GetRelationshipsByType(XSLFRelation.SLIDE.Relation).Size,
+                Is.EqualTo(relationshipCount));
+            Assert.That(presentation.GetSlides().Count, Is.EqualTo(1));
+            Assert.That(presentation.GetCTPresentation().sldIdLst.sldId.Select(entry => entry.id),
+                Is.EqualTo(new uint[] { 256 }));
+            Assert.That(presentation.GetCTPresentation().sldIdLst.AnyElements[0].OuterXml, Is.EqualTo(originalXml));
         }
 
         [TestCase("oleObject")]

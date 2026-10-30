@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Xml;
@@ -58,9 +59,11 @@ namespace NPOI.XSLF.UserModel
         }
 
         /// <summary>
-        /// Appends a blank slide using an existing blank layout.
+        /// Appends a blank slide using an existing blank layout, reserving IDs in all preserved compatibility branches.
         /// </summary>
         /// <exception cref="NotSupportedException">The presentation has no blank layout.</exception>
+        /// <exception cref="POIXMLException">A preserved slide identifier is invalid.</exception>
+        /// <exception cref="InvalidOperationException">The presentation is read-only or no slide identifier or part name is available.</exception>
         public XSLFSlide CreateSlide()
         {
 #if NET8_0_OR_GREATER
@@ -79,6 +82,20 @@ namespace NPOI.XSLF.UserModel
             var layout = FindBlankLayout();
             var entries = presentation.sldIdLst?.sldId;
             var maxId = entries == null || entries.Count == 0 ? 255U : entries.Max(entry => entry.id);
+            foreach (var element in presentation.sldIdLst?.AnyElements ?? Array.Empty<XmlElement>())
+            {
+                // Every compatibility branch must remain collision-free, not just the selected branch.
+                foreach (XmlElement reference in element.GetElementsByTagName("sldId", CT_Presentation.Namespace))
+                {
+                    var value = reference.GetAttribute("id");
+                    if (!uint.TryParse(value, NumberStyles.Integer, CultureInfo.InvariantCulture, out var id) ||
+                        id < 256 || id > int.MaxValue)
+                    {
+                        throw new POIXMLException("Invalid preserved presentation slide identifier: " + value);
+                    }
+                    maxId = Math.Max(maxId, id);
+                }
+            }
             if (maxId >= int.MaxValue)
             {
                 throw new InvalidOperationException("No more PresentationML slide identifiers are available.");
