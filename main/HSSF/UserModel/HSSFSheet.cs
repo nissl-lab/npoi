@@ -563,10 +563,10 @@ namespace NPOI.HSSF.UserModel
         }
 
         /// <summary>
-        /// Get the visibility state for a given column.F:\Gloria\�о�\�ļ���ʽ\NPOI\src\NPOI\HSSF\Util\HSSFDataValidation.cs
+        /// Set the visibility state for a given column.
         /// </summary>
-        /// <param name="column">the column to Get (0-based).</param>
-        /// <param name="hidden">the visiblity state of the column.</param>
+        /// <param name="column">the column to set (0-based).</param>
+        /// <param name="hidden">the visibility state of the column.</param>
         public void SetColumnHidden(int column, bool hidden)
         {
             _sheet.SetColumnHidden(column, hidden);
@@ -1805,8 +1805,8 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="colSplit">Horizonatal position of split.</param>
         /// <param name="rowSplit">Vertical position of split.</param>
-        /// <param name="leftmostColumn">Top row visible in bottom pane</param>
-        /// <param name="topRow">Left column visible in right pane.</param>
+        /// <param name="leftmostColumn">Left column visible in right pane.</param>
+        /// <param name="topRow">Top row visible in bottom pane</param>
         public void CreateFreezePane(int colSplit, int rowSplit, int leftmostColumn, int topRow)
         {
             ValidateColumn(colSplit);
