@@ -5,14 +5,13 @@ using System.IO;
 using System.Linq;
 using System.Xml;
 using NPOI.OpenXml4Net.OPC;
-using NPOI.OpenXml4Net.Util;
 using NPOI.OpenXmlFormats.Presentation;
 using NPOI.Util;
 
 namespace NPOI.XSLF.UserModel
 {
     /// <summary>
-    /// Reads, writes, and creates transitional PPTX presentations and blank slides.
+    /// Reads, writes, and creates transitional PPTX presentations and layout-based slides.
     /// High-level shape editing and rendering are not yet supported.
     /// </summary>
     public class XMLSlideShow : POIXMLDocument, IDisposable
@@ -51,6 +50,15 @@ namespace NPOI.XSLF.UserModel
         }
 
         /// <summary>
+        /// Returns referenced slide masters in presentation order as a read-only collection.
+        /// </summary>
+        public IReadOnlyList<XSLFSlideMaster> GetSlideMasters()
+        {
+            return XSLFXmlHelper.GetReferencedParts<XSLFSlideMaster>(
+                this, presentation.sldMasterIdLst, "sldMasterId", XSLFRelation.SLIDE_MASTER).AsReadOnly();
+        }
+
+        /// <summary>
         /// Returns the underlying partial PresentationML model.
         /// </summary>
         public CT_Presentation GetCTPresentation()
@@ -66,25 +74,34 @@ namespace NPOI.XSLF.UserModel
         /// <exception cref="InvalidOperationException">The presentation is read-only or no slide identifier or part name is available.</exception>
         public XSLFSlide CreateSlide()
         {
-#if NET8_0_OR_GREATER
-            ObjectDisposedException.ThrowIf(Package == null, this);
-#else
-            if (Package == null)
-            {
-                throw new ObjectDisposedException(nameof(XMLSlideShow));
-            }
-#endif
-            if (Package.GetPackageAccess() == PackageAccess.READ)
-            {
-                throw new InvalidOperationException("Cannot create slides in a read-only presentation.");
-            }
+            EnsureCanCreateSlide();
+            return CreateSlide(FindBlankLayout());
+        }
 
-            if (presentation.AnyElements?.Any(element =>
-                element.GetElementsByTagName("sldIdLst", CT_Presentation.Namespace).Count > 0) == true)
+        /// <summary>
+        /// Appends a slide referencing a layout in this presentation.
+        /// Placeholder shapes are not copied from the layout in this implementation.
+        /// </summary>
+        /// <exception cref="NotSupportedException">The presentation has an opaque wrapped slide list.</exception>
+        /// <exception cref="POIXMLException">A referenced part or preserved slide identifier is invalid.</exception>
+        /// <exception cref="InvalidOperationException">The presentation is read-only or no slide identifier or part name is available.</exception>
+        public XSLFSlide CreateSlide(XSLFSlideLayout layout)
+        {
+            EnsureCanCreateSlide();
+            if (layout == null)
             {
-                throw new NotSupportedException("Creating slides with opaque wrapped slide lists is not supported.");
+                throw new ArgumentNullException(nameof(layout));
             }
-            var layout = FindBlankLayout();
+            if (!ReferenceEquals(layout.GetPackagePart().Package, Package) ||
+                !ReferenceEquals(layout.GetSlideShow(), this))
+            {
+                throw new ArgumentException("The slide layout must belong to this presentation.", nameof(layout));
+            }
+            var master = layout.GetSlideMaster();
+            if (!GetSlideMasters().Contains(master) || !master.GetSlideLayouts().Contains(layout))
+            {
+                throw new ArgumentException("The layout must be listed by a referenced slide master.", nameof(layout));
+            }
             var entries = presentation.sldIdLst?.sldId;
             var maxId = entries == null || entries.Count == 0 ? 255U : entries.Max(entry => entry.id);
             foreach (var element in presentation.sldIdLst?.AnyElements ?? Array.Empty<XmlElement>())
@@ -155,6 +172,18 @@ namespace NPOI.XSLF.UserModel
         internal override void OnDocumentRead()
         {
             presentation = XSLFXmlHelper.Read<CT_Presentation>(GetPackagePart());
+            foreach (var master in GetSlideMasters())
+            {
+                foreach (var layout in master.GetSlideLayouts())
+                {
+                    if (!ReferenceEquals(layout.GetSlideMaster(), master))
+                    {
+                        throw new POIXMLException("Slide layout references a different master: " +
+                            layout.GetPackagePart().PartName.Name);
+                    }
+                }
+                master.GetTheme();
+            }
             var identifiers = new HashSet<uint>();
             var slideParts = new HashSet<XSLFSlide>();
             foreach (var entry in presentation.sldIdLst?.sldId ?? new List<CT_SlideIdListEntry>())
@@ -192,20 +221,34 @@ namespace NPOI.XSLF.UserModel
             Close();
         }
 
-        private POIXMLDocumentPart FindBlankLayout()
+        private void EnsureCanCreateSlide()
         {
-            foreach (var master in GetRelations().Where(part =>
-                part.GetPackagePart().ContentType == XSLFRelation.SLIDE_MASTER.ContentType))
+#if NET8_0_OR_GREATER
+            ObjectDisposedException.ThrowIf(Package == null, this);
+#else
+            if (Package == null)
             {
-                foreach (var layout in master.GetRelations().Where(part =>
-                    part.GetPackagePart().ContentType == XSLFRelation.SLIDE_LAYOUT.ContentType))
+                throw new ObjectDisposedException(nameof(XMLSlideShow));
+            }
+#endif
+            if (Package.GetPackageAccess() == PackageAccess.READ)
+            {
+                throw new InvalidOperationException("Cannot create slides in a read-only presentation.");
+            }
+            if (presentation.AnyElements?.Any(element =>
+                element.GetElementsByTagName("sldIdLst", CT_Presentation.Namespace).Count > 0) == true)
+            {
+                throw new NotSupportedException("Creating slides with opaque wrapped slide lists is not supported.");
+            }
+        }
+
+        private XSLFSlideLayout FindBlankLayout()
+        {
+            foreach (var master in GetSlideMasters())
+            {
+                foreach (var layout in master.GetSlideLayouts())
                 {
-                    var document = new XmlDocument { XmlResolver = null };
-                    using var stream = layout.GetPackagePart().GetInputStream();
-                    XmlHelper.LoadXmlSafe(document, stream);
-                    var root = document.DocumentElement;
-                    if (root != null && root.LocalName == "sldLayout" &&
-                        root.NamespaceURI == CT_Presentation.Namespace && root.GetAttribute("type") == "blank")
+                    if (layout.Type == "blank")
                     {
                         return layout;
                     }

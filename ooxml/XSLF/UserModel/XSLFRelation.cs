@@ -23,15 +23,17 @@ namespace NPOI.XSLF.UserModel
 
         public static readonly XSLFRelation SLIDE_LAYOUT = new XSLFRelation(
             "application/vnd.openxmlformats-officedocument.presentationml.slideLayout+xml",
-            CT_Presentation.RelationshipsNamespace + "/slideLayout", "/ppt/slideLayouts/slideLayout#.xml", null);
+            CT_Presentation.RelationshipsNamespace + "/slideLayout", "/ppt/slideLayouts/slideLayout#.xml",
+            typeof(XSLFSlideLayout));
 
         public static readonly XSLFRelation SLIDE_MASTER = new XSLFRelation(
             "application/vnd.openxmlformats-officedocument.presentationml.slideMaster+xml",
-            CT_Presentation.RelationshipsNamespace + "/slideMaster", "/ppt/slideMasters/slideMaster#.xml", null);
+            CT_Presentation.RelationshipsNamespace + "/slideMaster", "/ppt/slideMasters/slideMaster#.xml",
+            typeof(XSLFSlideMaster));
 
         public static readonly XSLFRelation THEME = new XSLFRelation(
             "application/vnd.openxmlformats-officedocument.theme+xml",
-            CT_Presentation.RelationshipsNamespace + "/theme", "/ppt/theme/theme#.xml", null);
+            CT_Presentation.RelationshipsNamespace + "/theme", "/ppt/theme/theme#.xml", typeof(XSLFTheme));
 
         private XSLFRelation(string contentType, string relationship, string defaultName, Type type)
             : base(contentType, relationship, defaultName, type)

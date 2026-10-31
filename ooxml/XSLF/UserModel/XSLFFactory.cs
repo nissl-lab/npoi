@@ -4,7 +4,7 @@ using NPOI.OpenXml4Net.OPC;
 namespace NPOI.XSLF.UserModel
 {
     /// <summary>
-    /// Creates slide wrappers while preserving parts not yet modeled by XSLF.
+    /// Creates slide, master, layout, and theme wrappers while preserving unmodeled parts.
     /// </summary>
     public class XSLFFactory : POIXMLFactory
     {
@@ -28,6 +28,18 @@ namespace NPOI.XSLF.UserModel
             if (part.ContentType == XSLFRelation.SLIDE.ContentType)
             {
                 return new XSLFSlide(parent, part);
+            }
+            if (part.ContentType == XSLFRelation.SLIDE_MASTER.ContentType)
+            {
+                return new XSLFSlideMaster(parent, part);
+            }
+            if (part.ContentType == XSLFRelation.SLIDE_LAYOUT.ContentType)
+            {
+                return new XSLFSlideLayout(parent, part);
+            }
+            if (part.ContentType == XSLFRelation.THEME.ContentType)
+            {
+                return new XSLFTheme(parent, part);
             }
 
             // The default POIXML save traversal clears parts before committing them.

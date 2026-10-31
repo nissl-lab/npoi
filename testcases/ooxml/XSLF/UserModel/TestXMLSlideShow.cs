@@ -538,15 +538,7 @@ namespace TestCases.XSLF.UserModel
         public void MissingBlankLayoutFailsWithoutAddingASlide()
         {
             using var presentation = new XMLSlideShow();
-            var layout = RelatedPart(RelatedPart(presentation.GetPackagePart(), XSLFRelation.SLIDE_MASTER),
-                XSLFRelation.SLIDE_LAYOUT);
-            var document = ReadXml(layout);
-            document.DocumentElement.SetAttribute("type", "title");
-            layout.Clear();
-            using (var output = layout.GetOutputStream())
-            {
-                document.Save(output);
-            }
+            presentation.GetSlideMasters()[0].GetSlideLayouts()[0].GetXmlObject().type = "title";
             var count = presentation.Package.GetParts().Count;
             Assert.Throws<NotSupportedException>(() => presentation.CreateSlide());
             Assert.That(presentation.GetSlides(), Is.Empty);
@@ -572,15 +564,19 @@ namespace TestCases.XSLF.UserModel
             using var readOnly = new XMLSlideShow(package);
             Assert.That(readOnly.GetSlides().Count, Is.EqualTo(1));
             Assert.Throws<InvalidOperationException>(() => readOnly.CreateSlide());
+            Assert.Throws<InvalidOperationException>(() =>
+                readOnly.CreateSlide(readOnly.GetSlideMasters()[0].GetSlideLayouts()[0]));
         }
 
         [Test]
         public void ClosedPresentationsCannotCreateSlidesOrWrite()
         {
             var presentation = new XMLSlideShow();
+            var layout = presentation.GetSlideMasters()[0].GetSlideLayouts()[0];
             presentation.Dispose();
             presentation.Dispose();
             Assert.Throws<ObjectDisposedException>(() => presentation.CreateSlide());
+            Assert.Throws<ObjectDisposedException>(() => presentation.CreateSlide(layout));
             using var output = new MemoryStream();
             Assert.Throws<IOException>(() => presentation.Write(output));
         }
