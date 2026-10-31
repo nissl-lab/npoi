@@ -155,6 +155,266 @@ namespace TestCases.XSLF.UserModel
         }
 
         [Test]
+        public void OpaqueChildrenBeforeModeledChildrenPreserveSlideAccessAndXmlOrder()
+        {
+            using var original = new XMLSlideShow();
+            original.CreateSlide();
+            using var package = OPCPackage.Open(new MemoryStream(Save(original)));
+            var main = package.GetPart(PackagingUriHelper.CreatePartName(XSLFRelation.MAIN.DefaultFileName));
+            var slide = RelatedPart(main, XSLFRelation.SLIDE);
+            var mainXml = ReadXml(main);
+            var slideXml = ReadXml(slide);
+            var slideList = mainXml.DocumentElement["sldIdLst", CT_Presentation.Namespace];
+            mainXml.DocumentElement.InsertBefore(
+                mainXml.CreateElement("future", "presentationExtension", "urn:npoi:test"), slideList);
+            slideXml.DocumentElement.PrependChild(
+                slideXml.CreateElement("future", "slideExtension", "urn:npoi:test"));
+            WriteXml(main, mainXml);
+            WriteXml(slide, slideXml);
+
+            using var presentation = new XMLSlideShow(package);
+            Assert.That(presentation.GetSlides().Count, Is.EqualTo(1));
+            Assert.That(presentation.GetSlides()[0].GetXmlObject().cSld, Is.Not.Null);
+            using var reopened = Open(Save(presentation));
+            AssertXmlEquivalent(mainXml.OuterXml, ReadXml(reopened.GetPackagePart()).OuterXml);
+            AssertXmlEquivalent(slideXml.OuterXml, ReadXml(reopened.GetSlides()[0].GetPackagePart()).OuterXml);
+
+            reopened.CreateSlide();
+            using var again = Open(Save(reopened));
+            Assert.That(again.GetSlides().Count, Is.EqualTo(2));
+            Assert.That(ReadXml(again.GetPackagePart()).DocumentElement.ChildNodes
+                .OfType<XmlElement>().Count(element => element.LocalName == "sldIdLst" &&
+                    element.NamespaceURI == CT_Presentation.Namespace), Is.EqualTo(1));
+            AssertXmlEquivalent(slideXml.OuterXml, ReadXml(again.GetSlides()[0].GetPackagePart()).OuterXml);
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void SlideReferenceLocalNamespaceDeclarationsSurviveRepeatedSaves(bool entryScope)
+        {
+            using var original = new XMLSlideShow();
+            original.CreateSlide();
+            using var package = OPCPackage.Open(new MemoryStream(Save(original)));
+            var main = package.GetPart(PackagingUriHelper.CreatePartName(XSLFRelation.MAIN.DefaultFileName));
+            var document = ReadXml(main);
+            var list = document.DocumentElement["sldIdLst", CT_Presentation.Namespace];
+            var scope = entryScope ? list["sldId", CT_Presentation.Namespace] : list;
+            const string compatibilityNamespace = "http://schemas.openxmlformats.org/markup-compatibility/2006";
+            scope.SetAttribute("xmlns:future", "urn:npoi:test");
+            scope.SetAttribute("Ignorable", compatibilityNamespace, "future");
+            if (!entryScope)
+            {
+                var alternate = document.CreateElement("mc", "AlternateContent", compatibilityNamespace);
+                alternate.InnerXml = "<mc:Choice xmlns:mc=\"" + compatibilityNamespace +
+                    "\" Requires=\"future\"/><mc:Fallback xmlns:mc=\"" + compatibilityNamespace + "\"/>";
+                list.AppendChild(alternate);
+            }
+            WriteXml(main, document);
+
+            using var presentation = new XMLSlideShow(package);
+            using var reopened = Open(Save(presentation));
+            using var again = Open(Save(reopened));
+            var savedList = ReadXml(again.GetPackagePart()).DocumentElement["sldIdLst", CT_Presentation.Namespace];
+            var savedScope = entryScope ? savedList["sldId", CT_Presentation.Namespace] : savedList;
+            Assert.That(savedScope.GetNamespaceOfPrefix("future"), Is.EqualTo("urn:npoi:test"));
+            Assert.That(savedScope.GetAttribute("Ignorable", compatibilityNamespace), Is.EqualTo("future"));
+        }
+
+        [TestCase("A&#xD;B", "A\rB")]
+        [TestCase("A&#xD;&#xA;B", "A\r\nB")]
+        [TestCase("A&#xA;B", "A\nB")]
+        public void PreservedSlideTextRetainsNewlineCharacters(string xmlText, string expected)
+        {
+            using var original = new XMLSlideShow();
+            original.CreateSlide();
+            using var package = OPCPackage.Open(new MemoryStream(Save(original)));
+            var main = package.GetPart(PackagingUriHelper.CreatePartName(XSLFRelation.MAIN.DefaultFileName));
+            var slide = RelatedPart(main, XSLFRelation.SLIDE);
+            var document = ReadXml(slide);
+            var common = document.DocumentElement["cSld", CT_Presentation.Namespace];
+            common.InnerXml = "<p:spTree xmlns:p=\"" + CT_Presentation.Namespace +
+                "\" xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\">" +
+                "<p:sp><p:txBody><a:p><a:r><a:t>" + xmlText + "</a:t></a:r></a:p></p:txBody></p:sp></p:spTree>";
+            slide.Clear();
+            using (var stream = slide.GetOutputStream())
+            using (var writer = XmlWriter.Create(stream, new XmlWriterSettings { NewLineHandling = NewLineHandling.Entitize }))
+            {
+                document.Save(writer);
+            }
+
+            using var presentation = new XMLSlideShow(package);
+            Assert.That(presentation.GetSlides()[0].GetXmlObject().cSld.InnerText, Is.EqualTo(expected));
+            using var reopened = Open(Save(presentation));
+            using var again = Open(Save(reopened));
+            Assert.That(again.GetSlides()[0].GetXmlObject().cSld.InnerText, Is.EqualTo(expected));
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void WrappedSlideListsCannotBeAppendedWithoutChangingThePackage(bool directList)
+        {
+            using var original = new XMLSlideShow();
+            original.CreateSlide();
+            using var package = OPCPackage.Open(new MemoryStream(Save(original)));
+            var main = package.GetPart(PackagingUriHelper.CreatePartName(XSLFRelation.MAIN.DefaultFileName));
+            var document = ReadXml(main);
+            var list = document.DocumentElement["sldIdLst", CT_Presentation.Namespace];
+            const string compatibilityNamespace = "http://schemas.openxmlformats.org/markup-compatibility/2006";
+            var alternate = document.CreateElement("mc", "AlternateContent", compatibilityNamespace);
+            var fallback = document.CreateElement("mc", "Fallback", compatibilityNamespace);
+            alternate.AppendChild(fallback);
+            document.DocumentElement.InsertBefore(alternate, list);
+            fallback.AppendChild(directList ? list.CloneNode(true) : list);
+            WriteXml(main, document);
+
+            using var presentation = new XMLSlideShow(package);
+            using var reopened = Open(Save(presentation));
+            AssertXmlEquivalent(document.OuterXml, ReadXml(reopened.GetPackagePart()).OuterXml);
+            var partCount = reopened.Package.GetParts().Count;
+            var slideCount = reopened.GetSlides().Count;
+            var referenceCount = reopened.GetPackagePart().GetRelationshipsByType(XSLFRelation.SLIDE.Relation).Size;
+            Assert.Throws<NotSupportedException>(() => reopened.CreateSlide());
+            Assert.That(reopened.Package.GetParts().Count, Is.EqualTo(partCount));
+            Assert.That(reopened.GetSlides().Count, Is.EqualTo(slideCount));
+            Assert.That(reopened.GetPackagePart().GetRelationshipsByType(XSLFRelation.SLIDE.Relation).Size,
+                Is.EqualTo(referenceCount));
+            using var again = Open(Save(reopened));
+            AssertXmlEquivalent(document.OuterXml, ReadXml(again.GetPackagePart()).OuterXml);
+        }
+
+        [TestCase(258U)]
+        [TestCase(1024U)]
+        public void SlideReferencesRetainInterleavedCompatibilityMarkup(uint alternateId)
+        {
+            using var original = new XMLSlideShow();
+            original.CreateSlide();
+            original.CreateSlide();
+            var alternateSlide = original.CreateSlide();
+            original.GetCTPresentation().sldIdLst.sldId[2].id = alternateId;
+            using var package = OPCPackage.Open(new MemoryStream(Save(original)));
+            var main = package.GetPart(PackagingUriHelper.CreatePartName(XSLFRelation.MAIN.DefaultFileName));
+            var document = ReadXml(main);
+            var list = document.DocumentElement["sldIdLst", CT_Presentation.Namespace];
+            var alternateReference = list.RemoveChild(list.LastChild);
+            const string compatibilityNamespace = "http://schemas.openxmlformats.org/markup-compatibility/2006";
+            document.DocumentElement.SetAttribute("xmlns:future", "urn:npoi:test");
+            document.DocumentElement.SetAttribute("Ignorable", compatibilityNamespace, "future");
+            list.SetAttribute("metadata", "urn:npoi:test", "preserved");
+            list.PrependChild(document.CreateElement("future", "before", "urn:npoi:test"));
+            var alternate = document.CreateElement("mc", "AlternateContent", compatibilityNamespace);
+            alternate.InnerXml = "<mc:Choice xmlns:mc=\"" + compatibilityNamespace + "\" Requires=\"future\">" +
+                "</mc:Choice><mc:Fallback xmlns:mc=\"" + compatibilityNamespace + "\"/>";
+            alternate.FirstChild.AppendChild(alternateReference);
+            list.InsertBefore(alternate, list.ChildNodes[2]);
+            list.AppendChild(document.CreateElement("future", "after", "urn:npoi:test"));
+            WriteXml(main, document);
+
+            using var presentation = new XMLSlideShow(package);
+            Assert.That(presentation.GetSlides().Count, Is.EqualTo(2));
+            Assert.That(presentation.GetCTPresentation().sldIdLst.AnyElements.Length, Is.EqualTo(3));
+            using var reopened = Open(Save(presentation));
+            AssertXmlEquivalent(document.OuterXml, ReadXml(reopened.GetPackagePart()).OuterXml);
+            using var again = Open(Save(reopened));
+            AssertXmlEquivalent(document.OuterXml, ReadXml(again.GetPackagePart()).OuterXml);
+            again.CreateSlide();
+            using var extended = Open(Save(again));
+            Assert.That(extended.GetSlides().Count, Is.EqualTo(3));
+            Assert.That(extended.GetCTPresentation().sldIdLst.sldId.Select(entry => entry.id),
+                Is.EqualTo(new uint[] { 256, 257, alternateId + 1 }));
+            var savedList = ReadXml(extended.GetPackagePart()).DocumentElement["sldIdLst", CT_Presentation.Namespace];
+            Assert.That(savedList.ChildNodes.OfType<XmlElement>().Select(element => element.LocalName),
+                Is.EqualTo(new[] { "before", "sldId", "AlternateContent", "sldId", "sldId", "after" }));
+            AssertXmlEquivalent(alternate.OuterXml,
+                savedList["AlternateContent", compatibilityNamespace].OuterXml);
+            Assert.That(extended.Package.GetPart(alternateSlide.GetPackagePart().PartName), Is.Not.Null);
+        }
+
+        [Test]
+        public void SlideAllocationReservesIdsInAllNestedCompatibilityBranches()
+        {
+            using var presentation = new XMLSlideShow();
+            presentation.CreateSlide();
+            var document = new XmlDocument { XmlResolver = null };
+            document.LoadXml("<mc:AlternateContent xmlns:mc=\"http://schemas.openxmlformats.org/markup-compatibility/2006\"" +
+                " xmlns:p=\"" + CT_Presentation.Namespace + "\"><mc:Choice Requires=\"p\">" +
+                "<p:sldId id=\"258\"/></mc:Choice><mc:Fallback><mc:AlternateContent>" +
+                "<mc:Choice Requires=\"p\"><p:sldId id=\"260\"/></mc:Choice>" +
+                "<mc:Fallback><p:sldId id=\"259\"/></mc:Fallback></mc:AlternateContent>" +
+                "</mc:Fallback></mc:AlternateContent>");
+            presentation.GetCTPresentation().sldIdLst.AnyElements = new[] { document.DocumentElement };
+
+            presentation.CreateSlide();
+            presentation.CreateSlide();
+
+            using var reopened = Open(Save(presentation));
+            Assert.That(reopened.GetCTPresentation().sldIdLst.sldId.Select(entry => entry.id),
+                Is.EqualTo(new uint[] { 256, 261, 262 }));
+            AssertXmlEquivalent(document.OuterXml,
+                reopened.GetCTPresentation().sldIdLst.AnyElements[0].OuterXml);
+        }
+
+        [TestCase("2147483647", true)]
+        [TestCase("2147483648", false)]
+        [TestCase("4294967296", false)]
+        [TestCase("255", false)]
+        [TestCase("invalid", false)]
+        [TestCase("", false)]
+        public void UnallocatablePreservedSlideIdsFailWithoutChangingThePackage(string id, bool exhausted)
+        {
+            using var presentation = new XMLSlideShow();
+            presentation.CreateSlide();
+            var document = new XmlDocument { XmlResolver = null };
+            document.LoadXml("<mc:AlternateContent xmlns:mc=\"http://schemas.openxmlformats.org/markup-compatibility/2006\">" +
+                "<mc:Fallback><p:sldId xmlns:p=\"" + CT_Presentation.Namespace + "\" id=\"" + id +
+                "\"/></mc:Fallback></mc:AlternateContent>");
+            presentation.GetCTPresentation().sldIdLst.AnyElements = new[] { document.DocumentElement };
+            var count = presentation.Package.GetParts().Count;
+            var relationshipCount = presentation.GetPackagePart().GetRelationshipsByType(XSLFRelation.SLIDE.Relation).Size;
+            var originalXml = presentation.GetCTPresentation().sldIdLst.AnyElements[0].OuterXml;
+
+            if (exhausted)
+            {
+                Assert.Throws<InvalidOperationException>(() => presentation.CreateSlide());
+            }
+            else
+            {
+                Assert.Throws<POIXMLException>(() => presentation.CreateSlide());
+            }
+            Assert.That(presentation.Package.GetParts().Count, Is.EqualTo(count));
+            Assert.That(presentation.GetPackagePart().GetRelationshipsByType(XSLFRelation.SLIDE.Relation).Size,
+                Is.EqualTo(relationshipCount));
+            Assert.That(presentation.GetSlides().Count, Is.EqualTo(1));
+            Assert.That(presentation.GetCTPresentation().sldIdLst.sldId.Select(entry => entry.id),
+                Is.EqualTo(new uint[] { 256 }));
+            Assert.That(presentation.GetCTPresentation().sldIdLst.AnyElements[0].OuterXml, Is.EqualTo(originalXml));
+        }
+
+        [TestCase("oleObject")]
+        [TestCase("package")]
+        public void EmbeddedObjectsAreFoundByInternalRelationshipsRatherThanDirectory(string relationshipType)
+        {
+            using var presentation = new XMLSlideShow();
+            var slide = presentation.CreateSlide().GetPackagePart();
+            var embedded = presentation.Package.CreatePart(
+                PackagingUriHelper.CreatePartName("/custom/object.bin"), "application/octet-stream");
+            var nested = presentation.Package.CreatePart(
+                PackagingUriHelper.CreatePartName("/custom/nested.bin"), "application/octet-stream");
+            var unrelated = presentation.Package.CreatePart(
+                PackagingUriHelper.CreatePartName("/ppt/embeddings/unrelated.bin"), "application/octet-stream");
+            var relation = CT_Presentation.RelationshipsNamespace + "/" + relationshipType;
+            slide.AddRelationship(embedded.PartName, TargetMode.Internal, relation);
+            presentation.GetPackagePart().AddRelationship(embedded.PartName, TargetMode.Internal, relation);
+            embedded.AddRelationship(nested.PartName, TargetMode.Internal, relation);
+            unrelated.AddRelationship(embedded.PartName, TargetMode.Internal, XSLFRelation.THEME.Relation);
+            slide.AddExternalRelationship("https://example.com/object.bin", relation, "externalEmbedding");
+
+            Assert.That(presentation.GetAllEmbedds(), Is.EquivalentTo(new[] { embedded, nested }));
+            using var reopened = Open(Save(presentation));
+            Assert.That(reopened.GetAllEmbedds().Select(part => part.PartName.Name),
+                Is.EquivalentTo(new[] { "/custom/object.bin", "/custom/nested.bin" }));
+        }
+
+        [Test]
         public void UnknownPartsAndExternalRelationshipsSurviveMultipleSaves()
         {
             using var presentation = new XMLSlideShow();
@@ -382,6 +642,13 @@ namespace TestCases.XSLF.UserModel
             using var output = new MemoryStream();
             input.CopyTo(output);
             return output.ToArray();
+        }
+
+        private static void WriteXml(PackagePart part, XmlDocument document)
+        {
+            part.Clear();
+            using var output = part.GetOutputStream();
+            document.Save(output);
         }
 
         private static void AssertXmlEquivalent(string expected, string actual)

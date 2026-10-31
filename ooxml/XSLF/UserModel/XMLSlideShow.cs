@@ -72,12 +72,14 @@ namespace NPOI.XSLF.UserModel
         }
 
         /// <summary>
-        /// Appends a blank slide using an existing blank layout.
+        /// Appends a blank slide using an existing blank layout, reserving IDs in all preserved compatibility branches.
         /// </summary>
-        /// <exception cref="NotSupportedException">The presentation has no blank layout.</exception>
+        /// <exception cref="NotSupportedException">The presentation has no blank layout or has an opaque wrapped slide list.</exception>
+        /// <exception cref="POIXMLException">A preserved slide identifier is invalid.</exception>
+        /// <exception cref="InvalidOperationException">The presentation is read-only or no slide identifier or part name is available.</exception>
         public XSLFSlide CreateSlide()
         {
-            EnsureWritable();
+            EnsureCanCreateSlide();
             return CreateSlide(FindBlankLayout());
         }
 
@@ -85,9 +87,12 @@ namespace NPOI.XSLF.UserModel
         /// Appends a slide referencing a layout in this presentation.
         /// Placeholder shapes are not copied from the layout in this implementation.
         /// </summary>
+        /// <exception cref="NotSupportedException">The presentation has an opaque wrapped slide list.</exception>
+        /// <exception cref="POIXMLException">A referenced part or preserved slide identifier is invalid.</exception>
+        /// <exception cref="InvalidOperationException">The presentation is read-only or no slide identifier or part name is available.</exception>
         public XSLFSlide CreateSlide(XSLFSlideLayout layout)
         {
-            EnsureWritable();
+            EnsureCanCreateSlide();
             if (layout == null)
             {
                 throw new ArgumentNullException(nameof(layout));
@@ -104,6 +109,20 @@ namespace NPOI.XSLF.UserModel
             }
             var entries = presentation.sldIdLst?.sldId;
             var maxId = entries == null || entries.Count == 0 ? 255U : entries.Max(entry => entry.id);
+            foreach (var element in presentation.sldIdLst?.AnyElements ?? Array.Empty<XmlElement>())
+            {
+                // Every compatibility branch must remain collision-free, not just the selected branch.
+                foreach (XmlElement reference in element.GetElementsByTagName("sldId", CT_Presentation.Namespace))
+                {
+                    var value = reference.GetAttribute("id");
+                    if (!uint.TryParse(value, NumberStyles.Integer, CultureInfo.InvariantCulture, out var id) ||
+                        id < 256 || id > int.MaxValue)
+                    {
+                        throw new POIXMLException("Invalid preserved presentation slide identifier: " + value);
+                    }
+                    maxId = Math.Max(maxId, id);
+                }
+            }
             if (maxId >= int.MaxValue)
             {
                 throw new InvalidOperationException("No more PresentationML slide identifiers are available.");
@@ -238,13 +257,29 @@ namespace NPOI.XSLF.UserModel
         }
 
         /// <summary>
-        /// Returns package parts stored in the presentation's embeddings directory.
+        /// Returns embedded objects referenced by internal OLE object or package relationships.
         /// </summary>
         public override List<PackagePart> GetAllEmbedds()
         {
-            return Package.GetParts()
-                .Where(part => part.PartName.Name.StartsWith("/ppt/embeddings/", StringComparison.Ordinal))
-                .ToList();
+            var embeddings = new List<PackagePart>();
+            foreach (var part in Package.GetParts().Where(part => !part.IsRelationshipPart))
+            {
+                foreach (var relationshipType in new[] { OLE_OBJECT_REL_TYPE, PACK_OBJECT_REL_TYPE })
+                {
+                    foreach (var relationship in part.GetRelationshipsByType(relationshipType))
+                    {
+                        if (relationship.TargetMode == TargetMode.Internal)
+                        {
+                            var embedded = part.GetRelatedPart(relationship);
+                            if (!embeddings.Contains(embedded))
+                            {
+                                embeddings.Add(embedded);
+                            }
+                        }
+                    }
+                }
+            }
+            return embeddings;
         }
 
         internal override void OnDocumentRead()
@@ -451,6 +486,16 @@ namespace NPOI.XSLF.UserModel
                     "Slide dimensions must be finite and between 72 and 4032 points.");
             }
             return Units.ToEMU(points);
+        }
+
+        private void EnsureCanCreateSlide()
+        {
+            EnsureWritable();
+            if (presentation.AnyElements?.Any(element =>
+                element.GetElementsByTagName("sldIdLst", CT_Presentation.Namespace).Count > 0) == true)
+            {
+                throw new NotSupportedException("Creating slides with opaque wrapped slide lists is not supported.");
+            }
         }
 
         private XSLFSlideLayout FindBlankLayout()

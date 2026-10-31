@@ -91,13 +91,6 @@ directly.
       <br />
       Silex
 </td>
-<td align="center">
-      <a href="https://inia.ai/">
-        <img width="100" alt="image" src="https://github.com/user-attachments/assets/5d01c03a-af17-44ad-9ffd-3580d6fadd42" />
-      </a>
-      <br />
-      INIA AI
-</td>
 
 <td align="center">
       <a href="https://wem.io/">

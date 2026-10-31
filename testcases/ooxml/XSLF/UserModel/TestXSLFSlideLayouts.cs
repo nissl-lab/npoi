@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml;
+using System.Xml.Linq;
 using NPOI;
 using NPOI.OpenXml4Net.OPC;
 using NPOI.OpenXmlFormats.Presentation;
@@ -15,6 +16,91 @@ namespace TestCases.XSLF.UserModel
     [TestFixture]
     public class TestXSLFSlideLayouts
     {
+        [Test]
+        public void MasterAndLayoutExtensionsRetainOrderAfterReadingAndEditing()
+        {
+            using var original = new XMLSlideShow();
+            var masterName = original.GetSlideMasters()[0].GetPackagePart().PartName;
+            var layoutName = original.GetSlideMasters()[0].GetSlideLayouts()[0].GetPackagePart().PartName;
+            using var package = OPCPackage.Open(new MemoryStream(Save(original)));
+            var masterXml = AddInterleavedExtensions(package.GetPart(masterName));
+            var layoutXml = AddInterleavedExtensions(package.GetPart(layoutName));
+
+            using var presentation = new XMLSlideShow(package);
+            var master = presentation.GetSlideMasters()[0];
+            var layout = master.GetSlideLayouts()[0];
+            Assert.That(master.GetXmlObject().cSld, Is.Not.Null);
+            Assert.That(master.GetXmlObject().clrMap, Is.Not.Null);
+            Assert.That(master.GetXmlObject().sldLayoutIdLst, Is.Not.Null);
+            Assert.That(layout.GetXmlObject().cSld, Is.Not.Null);
+            Assert.That(master.GetXmlObject().AnyElements.Count(element => element.NamespaceURI == "urn:npoi:test"),
+                Is.EqualTo(5));
+            Assert.That(layout.GetXmlObject().AnyElements.Count(element => element.NamespaceURI == "urn:npoi:test"),
+                Is.EqualTo(3));
+            using (var unchanged = Open(Save(presentation)))
+            {
+                Assert.That(ReadBytes(unchanged.Package.GetPart(masterName)), Is.EqualTo(masterXml));
+                Assert.That(ReadBytes(unchanged.Package.GetPart(layoutName)), Is.EqualTo(layoutXml));
+            }
+
+            master.GetXmlObject().cSld.SetAttribute("name", "Changed Master");
+            layout.GetXmlObject().cSld.SetAttribute("name", "Changed Layout");
+            presentation.CreateSlide(layout);
+            using var reopened = Open(Save(presentation));
+            var savedMaster = reopened.GetSlideMasters()[0];
+            var savedLayout = savedMaster.GetSlideLayouts()[0];
+            Assert.That(savedMaster.Name, Is.EqualTo("Changed Master"));
+            Assert.That(savedLayout.Name, Is.EqualTo("Changed Layout"));
+            AssertEditedXmlEquivalent(masterXml, savedMaster.GetPackagePart(), "Changed Master");
+            AssertEditedXmlEquivalent(layoutXml, savedLayout.GetPackagePart(), "Changed Layout");
+            using var again = Open(Save(reopened));
+            AssertEditedXmlEquivalent(masterXml, again.Package.GetPart(masterName), "Changed Master");
+            AssertEditedXmlEquivalent(layoutXml, again.Package.GetPart(layoutName), "Changed Layout");
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void BothCreationOverloadsReserveCompatibilitySlideIdentifiers(bool selectedLayout)
+        {
+            using var presentation = new XMLSlideShow();
+            presentation.CreateSlide();
+            var extension = new XmlDocument { XmlResolver = null };
+            extension.LoadXml("<mc:AlternateContent xmlns:mc=\"http://schemas.openxmlformats.org/markup-compatibility/2006\">" +
+                "<mc:Fallback><p:sldId xmlns:p=\"" + CT_Presentation.Namespace +
+                "\" id=\"258\"/></mc:Fallback></mc:AlternateContent>");
+            presentation.GetCTPresentation().sldIdLst.AnyElements = new[] { extension.DocumentElement };
+            var slide = selectedLayout
+                ? presentation.CreateSlide(presentation.GetSlideMasters()[0].GetSlideLayouts()[0])
+                : presentation.CreateSlide();
+            Assert.That(presentation.GetCTPresentation().sldIdLst.sldId.Last().id, Is.EqualTo(259U));
+            using var reopened = Open(Save(presentation));
+            Assert.That(reopened.GetSlides().Last().GetPackagePart().PartName, Is.EqualTo(slide.GetPackagePart().PartName));
+            Assert.That(reopened.GetCTPresentation().sldIdLst.sldId.Last().id, Is.EqualTo(259U));
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void BothCreationOverloadsRejectWrappedSlideListsBeforeMutation(bool selectedLayout)
+        {
+            using var presentation = new XMLSlideShow();
+            var extension = new XmlDocument { XmlResolver = null };
+            extension.LoadXml("<mc:AlternateContent xmlns:mc=\"http://schemas.openxmlformats.org/markup-compatibility/2006\">" +
+                "<mc:Fallback><p:sldIdLst xmlns:p=\"" + CT_Presentation.Namespace +
+                "\"/></mc:Fallback></mc:AlternateContent>");
+            presentation.GetCTPresentation().AnyElements = new[] { extension.DocumentElement };
+            AssertNoMutation<NotSupportedException>(presentation, () =>
+            {
+                if (selectedLayout)
+                {
+                    presentation.CreateSlide(presentation.GetSlideMasters()[0].GetSlideLayouts()[0]);
+                }
+                else
+                {
+                    presentation.CreateSlide();
+                }
+            });
+        }
+
         [Test]
         public void NewPresentationExposesTypedMasterLayoutAndTheme()
         {
@@ -372,6 +458,54 @@ namespace TestCases.XSLF.UserModel
             Assert.That(presentation.Package.GetParts().Count, Is.EqualTo(parts));
             Assert.That(presentation.GetPackagePart().Relationships.Size, Is.EqualTo(relations));
             Assert.That(presentation.GetSlides().Count, Is.EqualTo(slides));
+        }
+
+        private static byte[] AddInterleavedExtensions(PackagePart part)
+        {
+            var document = new XmlDocument { XmlResolver = null };
+            using (var stream = part.GetInputStream())
+            {
+                document.Load(stream);
+            }
+            var root = document.DocumentElement;
+            var children = root.ChildNodes.OfType<XmlElement>().ToArray();
+            root.SetAttribute("xmlns:future", "urn:npoi:test");
+            root.SetAttribute("Ignorable", "http://schemas.openxmlformats.org/markup-compatibility/2006", "future");
+            for (var i = 0; i < children.Length; i++)
+            {
+                var extension = document.CreateElement("future", "extension", "urn:npoi:test");
+                extension.SetAttribute("position", i.ToString(System.Globalization.CultureInfo.InvariantCulture));
+                extension.InnerText = "A\r\nB";
+                root.InsertBefore(extension, children[i]);
+            }
+            root.AppendChild(document.CreateElement("future", "trailing", "urn:npoi:test"));
+            using var output = new MemoryStream();
+            using (var writer = XmlWriter.Create(output, new XmlWriterSettings
+            {
+                Encoding = new UTF8Encoding(false),
+                NewLineHandling = NewLineHandling.Entitize
+            }))
+            {
+                document.Save(writer);
+            }
+            var xml = output.ToArray();
+            part.Clear();
+            using (var stream = part.GetOutputStream())
+            {
+                stream.Write(xml, 0, xml.Length);
+            }
+            return xml;
+        }
+
+        private static void AssertEditedXmlEquivalent(byte[] original, PackagePart saved, string name)
+        {
+            var expected = XElement.Parse(Encoding.UTF8.GetString(original));
+            var actual = XElement.Parse(Encoding.UTF8.GetString(ReadBytes(saved)));
+            Assert.That(actual.GetNamespaceOfPrefix("future")?.NamespaceName, Is.EqualTo("urn:npoi:test"));
+            expected.Element(XName.Get("cSld", CT_Presentation.Namespace)).SetAttributeValue("name", name);
+            expected.DescendantsAndSelf().Attributes().Where(attribute => attribute.IsNamespaceDeclaration).Remove();
+            actual.DescendantsAndSelf().Attributes().Where(attribute => attribute.IsNamespaceDeclaration).Remove();
+            Assert.That(XNode.DeepEquals(expected, actual), Is.True);
         }
 
         private static void AssertInvalid(byte[] bytes)

@@ -48,6 +48,18 @@ internal static class StreamWriterExtensions
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void WriteCDATA(this StreamWriter sw, string text)
+    {
+        sw.Write("<![CDATA[");
+        if (text != null)
+        {
+            // closes the section between "]]" and ">" and opens a new one, so no "]]>" is left inside it
+            sw.Write(text.Replace("]]>", "]]]]><![CDATA[>"));
+        }
+        sw.Write("]]>");
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void WriteStart(this StreamWriter sw, string nodeName)
     {
         sw.Write('<');

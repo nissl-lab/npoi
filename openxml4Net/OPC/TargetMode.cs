@@ -13,9 +13,9 @@ namespace NPOI.OpenXml4Net.OPC
      */
     public enum TargetMode
     {
-        /** The relationship references a resource that is external to the package. */
+        /// <summary>The relationship references a part that is inside the package.</summary>
         Internal,
-        /** The relationship references a part that is inside the package. */
+        /// <summary>The relationship references a resource that is external to the package.</summary>
         External
     }
 }
