@@ -53,7 +53,9 @@ namespace NPOI.SS.UserModel
     public static class WorkbookFactory
     {
         /// <summary>
-        /// Creates an HSSFWorkbook from the given POIFSFileSystem
+        /// Creates a Workbook from the given POIFSFileSystem. This is usually an
+        /// HSSFWorkbook, but an encrypted OOXML file stored in the OLE2 container
+        /// is decrypted and returned as an XSSFWorkbook.
         /// </summary>
         public static IWorkbook Create(POIFSFileSystem fs)
         {
