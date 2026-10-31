@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Resources\presetTableStyles.xml" />
+    <EmbeddedResource Include="XSLF\Resources\*.xml" />
   </ItemGroup>
 
   <ItemGroup>
