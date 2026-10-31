@@ -61,7 +61,7 @@ namespace NPOI.XSLF.UserModel
         /// <summary>
         /// Appends a blank slide using an existing blank layout, reserving IDs in all preserved compatibility branches.
         /// </summary>
-        /// <exception cref="NotSupportedException">The presentation has no blank layout.</exception>
+        /// <exception cref="NotSupportedException">The presentation has no blank layout or has an opaque wrapped slide list.</exception>
         /// <exception cref="POIXMLException">A preserved slide identifier is invalid.</exception>
         /// <exception cref="InvalidOperationException">The presentation is read-only or no slide identifier or part name is available.</exception>
         public XSLFSlide CreateSlide()
@@ -79,6 +79,11 @@ namespace NPOI.XSLF.UserModel
                 throw new InvalidOperationException("Cannot create slides in a read-only presentation.");
             }
 
+            if (presentation.AnyElements?.Any(element =>
+                element.GetElementsByTagName("sldIdLst", CT_Presentation.Namespace).Count > 0) == true)
+            {
+                throw new NotSupportedException("Creating slides with opaque wrapped slide lists is not supported.");
+            }
             var layout = FindBlankLayout();
             var entries = presentation.sldIdLst?.sldId;
             var maxId = entries == null || entries.Count == 0 ? 255U : entries.Max(entry => entry.id);

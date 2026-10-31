@@ -98,6 +98,9 @@ namespace NPOI.OpenXmlFormats.Presentation
     {
         private int[] elementOrder = Array.Empty<int>();
 
+        [XmlNamespaceDeclarations]
+        public XmlSerializerNamespaces Namespaces { get; set; }
+
         [XmlIgnore]
         public List<CT_SlideIdListEntry> sldId { get; set; } = new List<CT_SlideIdListEntry>();
 
@@ -131,6 +134,9 @@ namespace NPOI.OpenXmlFormats.Presentation
     [XmlType(Namespace = CT_Presentation.Namespace)]
     public class CT_SlideIdListEntry
     {
+        [XmlNamespaceDeclarations]
+        public XmlSerializerNamespaces Namespaces { get; set; }
+
         [XmlAttribute]
         public uint id { get; set; }
 

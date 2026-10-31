@@ -188,6 +188,100 @@ namespace TestCases.XSLF.UserModel
             AssertXmlEquivalent(slideXml.OuterXml, ReadXml(again.GetSlides()[0].GetPackagePart()).OuterXml);
         }
 
+        [TestCase(false)]
+        [TestCase(true)]
+        public void SlideReferenceLocalNamespaceDeclarationsSurviveRepeatedSaves(bool entryScope)
+        {
+            using var original = new XMLSlideShow();
+            original.CreateSlide();
+            using var package = OPCPackage.Open(new MemoryStream(Save(original)));
+            var main = package.GetPart(PackagingUriHelper.CreatePartName(XSLFRelation.MAIN.DefaultFileName));
+            var document = ReadXml(main);
+            var list = document.DocumentElement["sldIdLst", CT_Presentation.Namespace];
+            var scope = entryScope ? list["sldId", CT_Presentation.Namespace] : list;
+            const string compatibilityNamespace = "http://schemas.openxmlformats.org/markup-compatibility/2006";
+            scope.SetAttribute("xmlns:future", "urn:npoi:test");
+            scope.SetAttribute("Ignorable", compatibilityNamespace, "future");
+            if (!entryScope)
+            {
+                var alternate = document.CreateElement("mc", "AlternateContent", compatibilityNamespace);
+                alternate.InnerXml = "<mc:Choice xmlns:mc=\"" + compatibilityNamespace +
+                    "\" Requires=\"future\"/><mc:Fallback xmlns:mc=\"" + compatibilityNamespace + "\"/>";
+                list.AppendChild(alternate);
+            }
+            WriteXml(main, document);
+
+            using var presentation = new XMLSlideShow(package);
+            using var reopened = Open(Save(presentation));
+            using var again = Open(Save(reopened));
+            var savedList = ReadXml(again.GetPackagePart()).DocumentElement["sldIdLst", CT_Presentation.Namespace];
+            var savedScope = entryScope ? savedList["sldId", CT_Presentation.Namespace] : savedList;
+            Assert.That(savedScope.GetNamespaceOfPrefix("future"), Is.EqualTo("urn:npoi:test"));
+            Assert.That(savedScope.GetAttribute("Ignorable", compatibilityNamespace), Is.EqualTo("future"));
+        }
+
+        [TestCase("A&#xD;B", "A\rB")]
+        [TestCase("A&#xD;&#xA;B", "A\r\nB")]
+        [TestCase("A&#xA;B", "A\nB")]
+        public void PreservedSlideTextRetainsNewlineCharacters(string xmlText, string expected)
+        {
+            using var original = new XMLSlideShow();
+            original.CreateSlide();
+            using var package = OPCPackage.Open(new MemoryStream(Save(original)));
+            var main = package.GetPart(PackagingUriHelper.CreatePartName(XSLFRelation.MAIN.DefaultFileName));
+            var slide = RelatedPart(main, XSLFRelation.SLIDE);
+            var document = ReadXml(slide);
+            var common = document.DocumentElement["cSld", CT_Presentation.Namespace];
+            common.InnerXml = "<p:spTree xmlns:p=\"" + CT_Presentation.Namespace +
+                "\" xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\">" +
+                "<p:sp><p:txBody><a:p><a:r><a:t>" + xmlText + "</a:t></a:r></a:p></p:txBody></p:sp></p:spTree>";
+            slide.Clear();
+            using (var stream = slide.GetOutputStream())
+            using (var writer = XmlWriter.Create(stream, new XmlWriterSettings { NewLineHandling = NewLineHandling.Entitize }))
+            {
+                document.Save(writer);
+            }
+
+            using var presentation = new XMLSlideShow(package);
+            Assert.That(presentation.GetSlides()[0].GetXmlObject().cSld.InnerText, Is.EqualTo(expected));
+            using var reopened = Open(Save(presentation));
+            using var again = Open(Save(reopened));
+            Assert.That(again.GetSlides()[0].GetXmlObject().cSld.InnerText, Is.EqualTo(expected));
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void WrappedSlideListsCannotBeAppendedWithoutChangingThePackage(bool directList)
+        {
+            using var original = new XMLSlideShow();
+            original.CreateSlide();
+            using var package = OPCPackage.Open(new MemoryStream(Save(original)));
+            var main = package.GetPart(PackagingUriHelper.CreatePartName(XSLFRelation.MAIN.DefaultFileName));
+            var document = ReadXml(main);
+            var list = document.DocumentElement["sldIdLst", CT_Presentation.Namespace];
+            const string compatibilityNamespace = "http://schemas.openxmlformats.org/markup-compatibility/2006";
+            var alternate = document.CreateElement("mc", "AlternateContent", compatibilityNamespace);
+            var fallback = document.CreateElement("mc", "Fallback", compatibilityNamespace);
+            alternate.AppendChild(fallback);
+            document.DocumentElement.InsertBefore(alternate, list);
+            fallback.AppendChild(directList ? list.CloneNode(true) : list);
+            WriteXml(main, document);
+
+            using var presentation = new XMLSlideShow(package);
+            using var reopened = Open(Save(presentation));
+            AssertXmlEquivalent(document.OuterXml, ReadXml(reopened.GetPackagePart()).OuterXml);
+            var partCount = reopened.Package.GetParts().Count;
+            var slideCount = reopened.GetSlides().Count;
+            var referenceCount = reopened.GetPackagePart().GetRelationshipsByType(XSLFRelation.SLIDE.Relation).Size;
+            Assert.Throws<NotSupportedException>(() => reopened.CreateSlide());
+            Assert.That(reopened.Package.GetParts().Count, Is.EqualTo(partCount));
+            Assert.That(reopened.GetSlides().Count, Is.EqualTo(slideCount));
+            Assert.That(reopened.GetPackagePart().GetRelationshipsByType(XSLFRelation.SLIDE.Relation).Size,
+                Is.EqualTo(referenceCount));
+            using var again = Open(Save(reopened));
+            AssertXmlEquivalent(document.OuterXml, ReadXml(again.GetPackagePart()).OuterXml);
+        }
+
         [TestCase(258U)]
         [TestCase(1024U)]
         public void SlideReferencesRetainInterleavedCompatibilityMarkup(uint alternateId)

@@ -37,6 +37,7 @@ namespace NPOI.XSLF.UserModel
             using var writer = XmlWriter.Create(stream, new XmlWriterSettings
             {
                 Encoding = new UTF8Encoding(false),
+                NewLineHandling = NewLineHandling.Entitize,
                 CloseOutput = false
             });
             new XmlSerializer(typeof(T)).Serialize(writer, value);
