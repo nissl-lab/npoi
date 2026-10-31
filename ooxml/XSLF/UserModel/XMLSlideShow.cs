@@ -7,15 +7,20 @@ using System.Xml;
 using NPOI.OpenXml4Net.OPC;
 using NPOI.OpenXmlFormats.Presentation;
 using NPOI.Util;
+using SkiaSharp;
 
 namespace NPOI.XSLF.UserModel
 {
     /// <summary>
     /// Reads, writes, and creates transitional PPTX presentations and layout-based slides.
-    /// High-level shape editing and rendering are not yet supported.
+    /// Simple/group shape editing is supported; rendering and other drawing APIs are not yet supported.
     /// </summary>
     public class XMLSlideShow : POIXMLDocument, IDisposable
     {
+        private const int MinSlideSize = 914400;
+        private const int MaxSlideSize = 51206400;
+        private const string SectionNamespace = "http://schemas.microsoft.com/office/powerpoint/2010/main";
+
         private readonly List<XSLFSlide> slides = new List<XSLFSlide>();
         private CT_Presentation presentation;
 
@@ -144,6 +149,114 @@ namespace NPOI.XSLF.UserModel
         }
 
         /// <summary>
+        /// Moves a slide to a zero-based position, preserving slide and relationship identifiers.
+        /// Presentations with sections or opaque presentation extensions cannot be reordered yet.
+        /// </summary>
+        public void SetSlideOrder(XSLFSlide slide, int newIndex)
+        {
+            EnsureWritable();
+            if (slide == null)
+            {
+                throw new ArgumentNullException(nameof(slide));
+            }
+            var oldIndex = slides.IndexOf(slide);
+            if (oldIndex < 0)
+            {
+                throw new ArgumentException("The slide must belong to this presentation.", nameof(slide));
+            }
+            if (newIndex < 0 || newIndex >= slides.Count)
+            {
+                throw new ArgumentOutOfRangeException(nameof(newIndex));
+            }
+            var entries = GetConsistentSlideEntries();
+            if (oldIndex == newIndex)
+            {
+                return;
+            }
+            if ((presentation.AnyElements ?? Array.Empty<XmlElement>()).Any(root =>
+                    root.NamespaceURI != CT_Presentation.Namespace) ||
+                GetPresentationElements().Any(element =>
+                (element.LocalName == "ext" && element.NamespaceURI == CT_Presentation.Namespace &&
+                    element.ChildNodes.OfType<XmlElement>().Any()) ||
+                (element.LocalName == "sectionLst" && element.NamespaceURI == SectionNamespace)))
+            {
+                throw new NotSupportedException("Reordering slides with presentation extensions or sections is not supported.");
+            }
+            var entry = entries[oldIndex];
+            entries.RemoveAt(oldIndex);
+            entries.Insert(newIndex, entry);
+            slides.RemoveAt(oldIndex);
+            slides.Insert(newIndex, slide);
+        }
+
+        /// <summary>
+        /// Removes a slide at a zero-based position and returns its wrapper.
+        /// Dependency parts are retained; the slide part is retained if another relationship targets it.
+        /// Unsupported ancillary references are rejected before the document is changed.
+        /// Further changes through the removed wrapper are not saved.
+        /// </summary>
+        public XSLFSlide RemoveSlide(int index)
+        {
+            EnsureWritable();
+            if (index < 0 || index >= slides.Count)
+            {
+                throw new ArgumentOutOfRangeException(nameof(index));
+            }
+            var entries = GetConsistentSlideEntries();
+            var entry = entries[index];
+            EnsureCanRemoveSlide(entry);
+            var slide = slides[index];
+            var part = slide.GetPackagePart();
+            var retainPart = HasOtherIncomingRelationships(part, entry.relationshipId);
+            if (retainPart)
+            {
+                // A newly created slide may not have been serialized before it is detached.
+                slide.Commit();
+            }
+            RemoveRelation(slide, false);
+            if (!retainPart)
+            {
+                Package.RemovePart(part.PartName);
+                var relationshipsName = PackagingUriHelper.GetRelationshipPartName(part.PartName);
+                if (Package.ContainPart(relationshipsName))
+                {
+                    Package.RemovePart(relationshipsName);
+                }
+            }
+            slide.Committed = true;
+            entries.RemoveAt(index);
+            slides.RemoveAt(index);
+            return slide;
+        }
+
+        /// <summary>
+        /// Returns the slide dimensions in points (1/72 inch).
+        /// </summary>
+        public SKSize GetPageSize()
+        {
+            return new SKSize(
+                (float)Units.ToPoints(ReadSlideSize("cx")),
+                (float)Units.ToPoints(ReadSlideSize("cy")));
+        }
+
+        /// <summary>
+        /// Sets custom slide dimensions in points, from 72 through 4032 points per axis.
+        /// Shapes are not scaled and notes dimensions are not changed.
+        /// </summary>
+        public void SetPageSize(SKSize size)
+        {
+            EnsureWritable();
+            var width = ToSlideSize(size.Width, nameof(size));
+            var height = ToSlideSize(size.Height, nameof(size));
+            var element = presentation.sldSz ?? XSLFXmlHelper.CreateElement(
+                "<p:sldSz xmlns:p=\"" + CT_Presentation.Namespace + "\"/>");
+            element.SetAttribute("cx", width.ToString(CultureInfo.InvariantCulture));
+            element.SetAttribute("cy", height.ToString(CultureInfo.InvariantCulture));
+            element.SetAttribute("type", "custom");
+            presentation.sldSz = element;
+        }
+
+        /// <summary>
         /// Returns embedded objects referenced by internal OLE object or package relationships.
         /// </summary>
         public override List<PackagePart> GetAllEmbedds()
@@ -210,6 +323,7 @@ namespace NPOI.XSLF.UserModel
 
         protected internal override void Commit()
         {
+            GetProperties().ExtendedProperties.GetUnderlyingProperties().Slides = slides.Count;
             XSLFXmlHelper.Write(GetPackagePart(), presentation);
         }
 
@@ -221,7 +335,7 @@ namespace NPOI.XSLF.UserModel
             Close();
         }
 
-        private void EnsureCanCreateSlide()
+        internal void EnsureWritable()
         {
 #if NET8_0_OR_GREATER
             ObjectDisposedException.ThrowIf(Package == null, this);
@@ -233,8 +347,154 @@ namespace NPOI.XSLF.UserModel
 #endif
             if (Package.GetPackageAccess() == PackageAccess.READ)
             {
-                throw new InvalidOperationException("Cannot create slides in a read-only presentation.");
+                throw new InvalidOperationException("Cannot modify a read-only presentation.");
             }
+        }
+
+        private List<CT_SlideIdListEntry> GetConsistentSlideEntries()
+        {
+            var entries = presentation.sldIdLst?.sldId;
+            if (entries == null || entries.Count != slides.Count)
+            {
+                throw new POIXMLException("The presentation slide list is inconsistent with the user model.");
+            }
+            if (presentation.sldIdLst.AnyElements?.Length > 0)
+            {
+                throw new NotSupportedException("Slide lifecycle edits with opaque slide-list content are not supported.");
+            }
+            var identifiers = new HashSet<uint>();
+            var relationCounts = RelationParts.GroupBy(relation => relation.DocumentPart)
+                .ToDictionary(group => group.Key, group => group.Count());
+            for (var i = 0; i < entries.Count; i++)
+            {
+                var entry = entries[i];
+                if (entry == null || entry.id < 256 || entry.id > int.MaxValue || !identifiers.Add(entry.id) ||
+                    !ReferenceEquals(XSLFXmlHelper.GetReferencedPart<XSLFSlide>(
+                        this, entry.relationshipId, XSLFRelation.SLIDE), slides[i]) ||
+                    !relationCounts.TryGetValue(slides[i], out var count) || count != 1)
+                {
+                    throw new POIXMLException("The presentation slide list is inconsistent with the user model.");
+                }
+            }
+            return entries;
+        }
+
+        private IEnumerable<XmlElement> GetPresentationElements()
+        {
+            foreach (var root in presentation.AnyElements ?? Array.Empty<XmlElement>())
+            {
+                foreach (XmlElement element in root.SelectNodes("descendant-or-self::*"))
+                {
+                    yield return element;
+                }
+            }
+        }
+
+        private void EnsureCanRemoveSlide(CT_SlideIdListEntry entry)
+        {
+            if ((presentation.AnyElements ?? Array.Empty<XmlElement>()).Any(root =>
+                root.NamespaceURI != CT_Presentation.Namespace))
+            {
+                throw new NotSupportedException("Removing slides with opaque presentation content is not supported.");
+            }
+            if ((presentation.AnyAttributes ?? Array.Empty<XmlAttribute>()).Any(attribute =>
+                attribute.NamespaceURI == CT_Presentation.RelationshipsNamespace &&
+                attribute.Value == entry.relationshipId))
+            {
+                throw new NotSupportedException("An additional presentation attribute references this slide.");
+            }
+            foreach (var element in GetPresentationElements())
+            {
+                if (element.LocalName == "ext" && element.NamespaceURI == CT_Presentation.Namespace &&
+                    element.ChildNodes.OfType<XmlElement>().Any(child =>
+                        child.LocalName != "sectionLst" || child.NamespaceURI != SectionNamespace))
+                {
+                    throw new NotSupportedException("Removing slides with opaque presentation extensions is not supported.");
+                }
+                if ((element.LocalName == "sldId" && element.NamespaceURI == SectionNamespace &&
+                    MatchesSlideId(element.GetAttribute("id"), entry.id)) ||
+                    element.Attributes.Cast<XmlAttribute>().Any(attribute =>
+                        (attribute.NamespaceURI == CT_Presentation.RelationshipsNamespace &&
+                            attribute.Value == entry.relationshipId) ||
+                        ((attribute.LocalName == "sldId" || attribute.LocalName == "slideId") &&
+                            MatchesSlideId(attribute.Value, entry.id))))
+                {
+                    throw new NotSupportedException("A custom show, section, or presentation extension references this slide.");
+                }
+            }
+        }
+
+        private bool HasOtherIncomingRelationships(PackagePart slide, string relationshipId)
+        {
+            foreach (var relationship in Package.Relationships)
+            {
+                if (TargetsPart(relationship, slide.PartName))
+                {
+                    return true;
+                }
+            }
+            foreach (var source in Package.GetParts().Where(part => !part.IsRelationshipPart && part != slide))
+            {
+                foreach (var relationship in source.Relationships)
+                {
+                    if (source == GetPackagePart() && relationship.Id == relationshipId)
+                    {
+                        continue;
+                    }
+                    if (TargetsPart(relationship, slide.PartName))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        private static bool MatchesSlideId(string value, uint slideId)
+        {
+            return uint.TryParse(value, NumberStyles.Integer, CultureInfo.InvariantCulture, out var id) && id == slideId;
+        }
+
+        private static bool TargetsPart(PackageRelationship relationship, PackagePartName partName)
+        {
+            if (relationship.TargetMode != TargetMode.Internal)
+            {
+                return false;
+            }
+            var target = relationship.TargetUri.OriginalString;
+            var fragment = target.IndexOf('#');
+            if (fragment >= 0)
+            {
+                target = target.Substring(0, fragment);
+            }
+            return PackagingUriHelper.CreatePartName(target).Equals(partName);
+        }
+
+        private int ReadSlideSize(string attribute)
+        {
+            if (presentation.sldSz == null ||
+                !int.TryParse(presentation.sldSz.GetAttribute(attribute), NumberStyles.Integer,
+                    CultureInfo.InvariantCulture, out var value) || value < MinSlideSize || value > MaxSlideSize)
+            {
+                throw new POIXMLException("Missing or invalid presentation slide size: " + attribute);
+            }
+            return value;
+        }
+
+        private static int ToSlideSize(float points, string parameterName)
+        {
+            if (float.IsNaN(points) || float.IsInfinity(points) ||
+                points < Units.ToPoints(MinSlideSize) || points > Units.ToPoints(MaxSlideSize))
+            {
+                throw new ArgumentOutOfRangeException(parameterName,
+                    "Slide dimensions must be finite and between 72 and 4032 points.");
+            }
+            return Units.ToEMU(points);
+        }
+
+        private void EnsureCanCreateSlide()
+        {
+            EnsureWritable();
             if (presentation.AnyElements?.Any(element =>
                 element.GetElementsByTagName("sldIdLst", CT_Presentation.Namespace).Count > 0) == true)
             {
