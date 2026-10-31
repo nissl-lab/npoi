@@ -358,6 +358,10 @@ namespace NPOI.XSLF.UserModel
             {
                 throw new POIXMLException("The presentation slide list is inconsistent with the user model.");
             }
+            if (presentation.sldIdLst.AnyElements?.Length > 0)
+            {
+                throw new NotSupportedException("Slide lifecycle edits with opaque slide-list content are not supported.");
+            }
             var identifiers = new HashSet<uint>();
             var relationCounts = RelationParts.GroupBy(relation => relation.DocumentPart)
                 .ToDictionary(group => group.Key, group => group.Count());

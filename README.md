@@ -106,6 +106,8 @@ Slide lifecycle and page size
 ----------------------------
 `SetSlideOrder(slide, newIndex)` moves a slide to a zero-based position.
 `RemoveSlide(index)` removes it from the presentation and returns its wrapper.
+Both operations reject opaque children inside the slide-reference list, including
+compatibility branches, before mutation; unsupported references are not rewritten.
 Remaining slide IDs and relationship IDs are preserved; the extended-properties
 slide count is refreshed when saving. Direct low-level slide-list edits must not
 leave the user model out of sync before calling these operations.

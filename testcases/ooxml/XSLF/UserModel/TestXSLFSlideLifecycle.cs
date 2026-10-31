@@ -8,12 +8,112 @@ using NPOI.OpenXml4Net.OPC;
 using NPOI.OpenXmlFormats.Presentation;
 using NPOI.XSLF.UserModel;
 using NUnit.Framework;
+using SkiaSharp;
 
 namespace TestCases.XSLF.UserModel
 {
     [TestFixture]
     public class TestXSLFSlideLifecycle
     {
+        [TestCase(false, false)]
+        [TestCase(false, true)]
+        [TestCase(true, false)]
+        [TestCase(true, true)]
+        public void OpaqueSlideListChildrenBlockLifecycleEditsWithoutMutation(bool alternateContent, bool remove)
+        {
+            using var presentation = CreatePresentation();
+            var document = new XmlDocument { XmlResolver = null };
+            document.LoadXml(alternateContent
+                ? "<mc:AlternateContent xmlns:mc=\"http://schemas.openxmlformats.org/markup-compatibility/2006\">" +
+                    "<mc:Fallback><p:sldId xmlns:p=\"" + CT_Presentation.Namespace +
+                    "\" xmlns:r=\"" + CT_Presentation.RelationshipsNamespace +
+                    "\" id=\"258\" r:id=\"" + presentation.GetRelationId(presentation.GetSlides()[2]) +
+                    "\"/></mc:Fallback></mc:AlternateContent>"
+                : "<future:metadata xmlns:future=\"urn:npoi:test\" slideId=\"258\"/>");
+            presentation.GetCTPresentation().sldIdLst.AnyElements = new[] { document.DocumentElement };
+            var xml = document.OuterXml;
+            if (remove)
+            {
+                AssertNoMutation<NotSupportedException>(presentation, () => presentation.RemoveSlide(2));
+            }
+            else
+            {
+                AssertNoMutation<NotSupportedException>(presentation, () =>
+                    presentation.SetSlideOrder(presentation.GetSlides()[2], 0));
+            }
+            using var reopened = Open(Save(presentation));
+            Assert.That(reopened.GetCTPresentation().sldIdLst.AnyElements[0].OuterXml, Is.EqualTo(xml));
+            Assert.That(reopened.GetSlides().Count, Is.EqualTo(3));
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void FormattedGroupedTextSurvivesResizeReorderAndRemoval(bool retainRemovedPart)
+        {
+            using var presentation = new XMLSlideShow();
+            var removed = presentation.CreateSlide();
+            var removedBox = removed.CreateTextBox();
+            removedBox.SetText("Removed text");
+            var removedRun = removedBox.TextParagraphs[0].TextRuns[0];
+            removedRun.IsItalic = true;
+            var kept = presentation.CreateSlide();
+            var group = kept.CreateGroup();
+            var groupAnchor = SKRect.Create(10, 20, 300, 200);
+            var interiorAnchor = SKRect.Create(0, 0, 600, 400);
+            var textAnchor = SKRect.Create(40, 50, 200, 80);
+            group.SetAnchor(groupAnchor);
+            group.SetInteriorAnchor(interiorAnchor);
+            var box = group.CreateTextBox();
+            box.SetAnchor(textAnchor);
+            box.SetText("Hello \u4e2d\u6587\nsecond");
+            var run = box.TextParagraphs[0].TextRuns[0];
+            run.IsBold = true;
+            run.FontSize = 18;
+            run.FontFamily = "+mj-lt";
+            var ids = new[] { group.ID, box.ID };
+            if (retainRemovedPart)
+            {
+                kept.GetPackagePart().AddRelationship(removed.GetPackagePart().PartName,
+                    TargetMode.Internal, XSLFRelation.SLIDE.Relation, "linkedSlide");
+            }
+
+            presentation.SetPageSize(new SKSize(960, 540));
+            presentation.SetSlideOrder(kept, 0);
+            presentation.RemoveSlide(1);
+            Assert.Throws<InvalidOperationException>(() => removedBox.SetText("Must not be saved"));
+            Assert.Throws<InvalidOperationException>(() => removedRun.IsItalic = false);
+            using var reopened = Open(Save(presentation));
+            using var again = Open(Save(reopened));
+            Assert.That(again.GetPageSize(), Is.EqualTo(new SKSize(960, 540)));
+            Assert.That(again.GetSlides().Count, Is.EqualTo(1));
+            Assert.That(again.GetProperties().ExtendedProperties.Slides, Is.EqualTo(1));
+            var savedGroup = (XSLFGroupShape)again.GetSlides()[0].GetShapes().Single();
+            var savedBox = (XSLFTextBox)savedGroup.GetShapes().Single();
+            var savedRun = savedBox.TextParagraphs[0].TextRuns[0];
+            Assert.That(new[] { savedGroup.ID, savedBox.ID }, Is.EqualTo(ids));
+            Assert.That(savedGroup.GetAnchor(), Is.EqualTo(groupAnchor));
+            Assert.That(savedGroup.GetInteriorAnchor(), Is.EqualTo(interiorAnchor));
+            Assert.That(savedBox.GetAnchor(), Is.EqualTo(textAnchor));
+            Assert.That(savedBox.Text, Is.EqualTo("Hello \u4e2d\u6587\nsecond"));
+            Assert.That(savedRun.IsBold, Is.True);
+            Assert.That(savedRun.FontSize, Is.EqualTo(18));
+            Assert.That(savedRun.FontFamily, Is.EqualTo("Arial"));
+            var removedPart = again.Package.GetPart(removed.GetPackagePart().PartName);
+            if (retainRemovedPart)
+            {
+                Assert.That(removedPart, Is.Not.Null);
+                var removedXml = ReadXml(removedPart);
+                Assert.That(removedXml.GetElementsByTagName("t",
+                    "http://schemas.openxmlformats.org/drawingml/2006/main")[0].InnerText,
+                    Is.EqualTo("Removed text"));
+            }
+            else
+            {
+                Assert.That(removedPart, Is.Null);
+            }
+            AssertInternalRelationshipsResolve(again.Package);
+        }
+
         [TestCase(0, 2)]
         [TestCase(2, 0)]
         [TestCase(1, 2)]
