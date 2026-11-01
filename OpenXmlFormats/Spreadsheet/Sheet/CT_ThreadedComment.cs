@@ -55,7 +55,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             sw.Write('>');
             if (this.text != null)
             {
-                sw.Write("<text>");
+                sw.Write("<text xml:space=\"preserve\">");
                 sw.Write(XmlHelper.EncodeXml(this.text));
                 sw.Write("</text>");
             }
