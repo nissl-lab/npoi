@@ -1227,6 +1227,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
             set
             {
+                this.gdRefYFieldSpecified = true;
                 this.gdRefYField = value;
             }
         }
@@ -1254,6 +1255,7 @@ namespace NPOI.OpenXmlFormats.Dml
             }
             set
             {
+                this.minYFieldSpecified = true;
                 this.minYField = value;
             }
         }
@@ -1331,7 +1333,7 @@ namespace NPOI.OpenXmlFormats.Dml
             foreach (XmlNode childNode in node.ChildNodes)
             {
                 if(childNode.LocalName == "pos")
-                    ctObj.posField = CT_AdjPoint2D.Parse(node, namespaceManager);
+                    ctObj.posField = CT_AdjPoint2D.Parse(childNode, namespaceManager);
             }
             
             return ctObj;
@@ -1344,19 +1346,19 @@ namespace NPOI.OpenXmlFormats.Dml
                 XmlHelper.WriteAttribute(sw, "gdRefX", this.gdRefXField);
 
             if(this.minXFieldSpecified)
-                XmlHelper.WriteAttribute(sw, "minX", this.minXFieldSpecified);
+                XmlHelper.WriteAttribute(sw, "minX", this.minXField);
 
             if(this.maxXFieldSpecified)
-                XmlHelper.WriteAttribute(sw, "maxX", this.maxXFieldSpecified);
+                XmlHelper.WriteAttribute(sw, "maxX", this.maxXField);
             
             if(this.gdRefYFieldSpecified)
                 XmlHelper.WriteAttribute(sw, "gdRefY", this.gdRefYField);
 
             if(this.minYFieldSpecified)
-                XmlHelper.WriteAttribute(sw, "minY", this.minYFieldSpecified);
+                XmlHelper.WriteAttribute(sw, "minY", this.minYField);
 
             if(this.maxYFieldSpecified)
-                XmlHelper.WriteAttribute(sw, "maxY", this.maxYFieldSpecified);
+                XmlHelper.WriteAttribute(sw, "maxY", this.maxYField);
 
             if(this.posField == null)
             {
@@ -1366,7 +1368,7 @@ namespace NPOI.OpenXmlFormats.Dml
             {
                 sw.Write(">");
                 posField.Write(sw, "pos");
-                sw.Write("</a:{0}", nodeName);
+                sw.WriteEndElement("a", nodeName);
             }
         }
     }
@@ -1611,7 +1613,7 @@ namespace NPOI.OpenXmlFormats.Dml
             foreach (XmlNode childNode in node.ChildNodes)
             {
                 if(childNode.LocalName == "pos")
-                    ctObj.posField = CT_AdjPoint2D.Parse(node, namespaceManager);
+                    ctObj.posField = CT_AdjPoint2D.Parse(childNode, namespaceManager);
             }
             
             return ctObj;
@@ -1624,19 +1626,19 @@ namespace NPOI.OpenXmlFormats.Dml
                 XmlHelper.WriteAttribute(sw, "gdRefR", this.gdRefRField);
 
             if(this.minRFieldSpecified)
-                XmlHelper.WriteAttribute(sw, "minR", this.minRFieldSpecified);
+                XmlHelper.WriteAttribute(sw, "minR", this.minRField);
 
             if(this.maxRFieldSpecified)
-                XmlHelper.WriteAttribute(sw, "maxX", this.maxRFieldSpecified);
+                XmlHelper.WriteAttribute(sw, "maxR", this.maxRField);
             
             if(this.gdRefAngFieldSpecified)
                 XmlHelper.WriteAttribute(sw, "gdRefAng", this.gdRefAngField);
 
             if(this.minAngFieldSpecified)
-                XmlHelper.WriteAttribute(sw, "minAng", this.minAngFieldSpecified);
+                XmlHelper.WriteAttribute(sw, "minAng", this.minAngField);
 
             if(this.maxAngFieldSpecified)
-                XmlHelper.WriteAttribute(sw, "maxAng", this.maxAngFieldSpecified);
+                XmlHelper.WriteAttribute(sw, "maxAng", this.maxAngField);
 
             if(this.posField == null)
             {
@@ -1646,7 +1648,7 @@ namespace NPOI.OpenXmlFormats.Dml
             {
                 sw.Write(">");
                 posField.Write(sw, "pos");
-                sw.Write("</a:{0}", nodeName);
+                sw.WriteEndElement("a", nodeName);
             }
         }
     }

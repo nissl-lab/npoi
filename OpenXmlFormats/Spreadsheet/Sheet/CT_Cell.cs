@@ -87,7 +87,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 if (this.f != null)
                     this.f.Write(sw, "f");
                 if (!string.IsNullOrEmpty(this.v))
-                    sw.WriteElementAndContent("v", XmlHelper.EncodeXml(this.v));
+                    sw.WriteElementAndContent("v", this.v);
                 else
                     sw.Write("<v/>");
                 if (this.@is != null)
