@@ -2342,9 +2342,14 @@ namespace NPOI.XSSF.UserModel
             CT_Workbook ctWorkbook = GetCTWorkbook();
 
             CT_CalcPr calcPr = ctWorkbook.IsSetCalcPr() ? ctWorkbook.calcPr : ctWorkbook.AddNewCalcPr();
-            // when Set to 0, will tell Excel that it needs to recalculate all formulas
+            // when Set to true, will tell Excel that it needs to recalculate all formulas
             // in the workbook the next time the file is opened.
-            calcPr.calcId = 0;
+            calcPr.fullCalcOnLoad = value;
+            if (value)
+            {
+                // a calcId older than Excel's engine also triggers a full recalculation
+                calcPr.calcId = 0;
+            }
             if (value && calcPr.calcMode == ST_CalcMode.manual)
             {
                 calcPr.calcMode = (ST_CalcMode.auto);
@@ -2360,7 +2365,7 @@ namespace NPOI.XSSF.UserModel
         {
             CT_Workbook ctWorkbook = GetCTWorkbook();
             CT_CalcPr calcPr = ctWorkbook.calcPr;
-            return calcPr != null && calcPr.calcId != 0;
+            return calcPr != null && calcPr.fullCalcOnLoad;
         }
 
         /// <summary>
