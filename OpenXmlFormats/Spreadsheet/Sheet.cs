@@ -3447,7 +3447,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "name", this.name);
             XmlHelper.WriteAttribute(sw, "securityDescriptor", this.securityDescriptor);
             if (this.sqref != null)
-                XmlHelper.WriteAttribute(sw, "sqref", XmlHelper.EncodeXml(this.sqref));
+                XmlHelper.WriteAttribute(sw, "sqref", this.sqref);
             sw.Write("/>");
         }
 
@@ -5915,39 +5915,39 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             sw.Write('>');
             if (this.oddHeader != null)
             {
-                sw.Write("<oddHeader><![CDATA[");
-                sw.Write(this.oddHeader);
-                sw.Write("]]></oddHeader>");
+                sw.Write("<oddHeader>");
+                sw.WriteCDATA(this.oddHeader);
+                sw.Write("</oddHeader>");
             }
             if (this.oddFooter != null)
             {
-                sw.Write("<oddFooter><![CDATA[");
-                sw.Write(this.oddFooter);
-                sw.Write("]]></oddFooter>");
+                sw.Write("<oddFooter>");
+                sw.WriteCDATA(this.oddFooter);
+                sw.Write("</oddFooter>");
             }
             if (this.evenHeader != null)
             {
-                sw.Write("<evenHeader><![CDATA[");
-                sw.Write(this.evenHeader);
-                sw.Write("]]></evenHeader>");
+                sw.Write("<evenHeader>");
+                sw.WriteCDATA(this.evenHeader);
+                sw.Write("</evenHeader>");
             }
             if (this.evenFooter != null)
             {
-                sw.Write("<evenFooter><![CDATA[");
-                sw.Write(this.evenFooter);
-                sw.Write("]]></evenFooter>", this.evenFooter);
+                sw.Write("<evenFooter>");
+                sw.WriteCDATA(this.evenFooter);
+                sw.Write("</evenFooter>");
             }
             if (this.firstHeader != null)
             {
-                sw.Write("<firstHeader><![CDATA[", this.firstHeader);
-                sw.Write(this.firstHeader);
-                sw.Write("]]></firstHeader>", this.firstHeader);
+                sw.Write("<firstHeader>");
+                sw.WriteCDATA(this.firstHeader);
+                sw.Write("</firstHeader>");
             }
             if (this.firstFooter != null)
             {
-                sw.Write("<firstFooter><![CDATA[");
-                sw.Write(this.firstFooter);
-                sw.Write("]]></firstFooter>", this.firstFooter);
+                sw.Write("<firstFooter>");
+                sw.WriteCDATA(this.firstFooter);
+                sw.Write("</firstFooter>");
             }
             sw.WriteEndElement(nodeName);
         }
@@ -6235,7 +6235,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             {
                 foreach (String x in this.formula)
                 {
-                    sw.WriteElementAndContent("formula", XmlHelper.EncodeXml(x));
+                    sw.WriteElementAndContent("formula", x);
                 }
             }
             sw.WriteEndElement(nodeName);

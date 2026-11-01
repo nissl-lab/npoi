@@ -4209,7 +4209,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             XmlHelper.WriteAttribute(sw, "idx", this.idx, true);
             sw.Write('>');
             if (this.v != null)
-                sw.WriteElementAndContent("c:v", XmlHelper.EncodeXml(this.v));
+                sw.WriteElementAndContent("c:v", this.v);
             sw.WriteEndElement("c", nodeName);
         }
 
@@ -6867,7 +6867,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             if (this.strRef != null)
                 this.strRef.Write(sw, "strRef");
             if (this.v != null)
-                sw.WriteElementAndContent("c:v", XmlHelper.EncodeXml(this.v));
+                sw.WriteElementAndContent("c:v", this.v);
             sw.WriteEndElement("c", nodeName);
         }
 
