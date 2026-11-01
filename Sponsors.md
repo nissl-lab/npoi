@@ -70,6 +70,13 @@ directly.
       Devolis
 </td>
 <td align="center">
+      <a href="https://github.com/ISS-Switzerland">
+        <img width="181" height="181" alt="image" src="https://github.com/user-attachments/assets/3f8c46c4-203a-4fa6-b25f-227f6c7e86b7" />
+      </a>
+      <br />
+      ISS-Switzerland
+</td>
+<td align="center">
       <a href="https://easylaser.com/">
      <img width="100" alt="image" src="https://github.com/user-attachments/assets/5e3fb6ab-93c3-49b3-89ea-eb0851763d68" />
       </a>
