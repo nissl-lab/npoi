@@ -159,6 +159,27 @@ namespace TestCases.XWPF.UserModel
             xtab.Width = 100;
             ClassicAssert.AreEqual(100, int.Parse(table.tblPr.tblW.w));
         }
+
+        [Test]
+        public void TestGetWidthIfNotPresent()
+        {
+            XWPFDocument doc = new XWPFDocument();
+
+            CT_Tbl tableWithoutWidth = new CT_Tbl();
+            tableWithoutWidth.AddNewTblPr();
+            tableWithoutWidth.AddNewTr().AddNewTc().AddNewP();
+
+            XWPFTable table = new XWPFTable(tableWithoutWidth, doc);
+            ClassicAssert.AreEqual(-1, table.Width);
+
+            CT_Tbl tableWithEmptyWidth = new CT_Tbl();
+            tableWithEmptyWidth.AddNewTblPr().AddNewTblW();
+            tableWithEmptyWidth.AddNewTr().AddNewTc().AddNewP();
+
+            table = new XWPFTable(tableWithEmptyWidth, doc);
+            ClassicAssert.AreEqual(-1, table.Width);
+        }
+
         [Test]
         public void TestSetGetHeight()
         {
