@@ -77,6 +77,20 @@ directly.
       Easy-Laser-AB
 </td>
 <td align="center">
+      <a href="https://cepres.com/">
+     <img width="192" height="192" alt="image" src="https://github.com/user-attachments/assets/ebc391a8-ac9c-45c6-aa09-3360fc5d6bfe" />
+      </a>
+      <br />
+      CEPRES GmbH
+</td>
+<td align="center">
+      <a href="https://github.com/Piro-AB">
+     <img width="200" height="200" alt="image" src="https://github.com/user-attachments/assets/dcfc66af-bf7d-49d0-99ae-0d4b34c821aa" />
+      </a>
+      <br />
+      Piro AB
+</td>
+<td align="center">
       <a href="https://homie.io/">
         <img width="100" alt="image" src="https://github.com/user-attachments/assets/80555e34-d82b-43e7-9965-5b43b33c4b74" />
       </a>
