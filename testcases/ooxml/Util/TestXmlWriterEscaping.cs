@@ -67,7 +67,7 @@ namespace TestCases.Util
             return typeof(CT_Worksheet).Assembly.GetTypes()
                 .Where(t => t.IsClass && !t.IsAbstract && !t.ContainsGenericParameters)
                 .Where(t => GetWrite(t) != null && GetParse(t) != null && t.GetConstructor(Type.EmptyTypes) != null)
-                .Where(t => GetStringProperties(t).Any())
+                .Where(t => GetStringProperties(t).Any() || IsChartType(t))
                 .OrderBy(t => t.FullName, StringComparer.Ordinal)
                 .Select(t => new TestCaseData(t).SetName(t.FullName));
         }
@@ -121,9 +121,24 @@ namespace TestCases.Util
                 .ToList();
             Assert.Multiple(() =>
             {
+                if (IsChartType(type))
+                {
+                    // The chart part declares no default namespace, so an element without a prefix is in no namespace
+                    var unprefixed = written.SelectNodes("descendant-or-self::*").Cast<XmlNode>()
+                        .Where(n => n.Prefix.Length == 0)
+                        .Select(n => n.Name)
+                        .Distinct()
+                        .ToList();
+                    Assert.That(unprefixed, Is.Empty, "elements without a prefix");
+                }
                 Assert.That(notReadBack, Is.Empty, xml);
                 Assert.That(listedButReadBack, Is.Empty, "listed in PropertiesNotReadBack but read back");
             });
+        }
+
+        private static bool IsChartType(Type type)
+        {
+            return type.Namespace == "NPOI.OpenXmlFormats.Dml.Chart";
         }
 
         private static MethodInfo GetWrite(Type type)
