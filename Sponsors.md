@@ -163,8 +163,6 @@ directly.
 
 [@AlessandroMartinelli](https://github.com/AlessandroMartinelli)
 
-[@masloan](https://github.com/masloan)
-
 [@SanjeevElement](https://github.com/SanjeevElement)
 
 [@maelstraggiotti](https://github.com/maelstraggiotti)
