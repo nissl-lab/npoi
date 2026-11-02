@@ -732,7 +732,8 @@ namespace NPOI.OpenXmlFormats.Vml
             XmlHelper.WriteAttribute(sw, "o:insetmode", this.insetmode.ToString());
             XmlHelper.WriteAttribute(sw, "adj", this.adj);
             XmlHelper.WriteAttribute(sw, "equationxml", this.equationxml);
-            XmlHelper.WriteAttribute(sw, "o:ole", this.ole, true);
+            if (this.ole != null)
+                XmlHelper.WriteAttribute(sw, "o:ole", this.ole, true);
             sw.Write('>');
 
             if (this.iscomment != null)
@@ -3783,8 +3784,9 @@ namespace NPOI.OpenXmlFormats.Vml
             if (node.Attributes["o:preferrelative"] != null)
                 ctObj.preferrelative = NPOI.OpenXmlFormats.Util.XmlHelper.ReadTrueFalse2(node.Attributes["o:preferrelative"]);
             ctObj.coordsize = XmlHelper.ReadString(node.Attributes["coordsize"]);
+            ctObj.id = XmlHelper.ReadString(node.Attributes["id"]);
             if (node.Attributes["o:spt"] != null)
-                ctObj.id = XmlHelper.ReadString(node.Attributes["o:spt"]);
+                ctObj.spt = XmlHelper.ReadInt(node.Attributes["o:spt"]);
             ctObj.adj = XmlHelper.ReadString(node.Attributes["adj"]);
             ctObj.path2 = XmlHelper.ReadString(node.Attributes["path"]);
             ctObj.formulas = new List<CT_Formulas>();

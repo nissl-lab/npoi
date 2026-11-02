@@ -139,7 +139,8 @@ namespace NPOI.XSSF.UserModel
                 {
                     CT_Shapetype st = CT_Shapetype.Parse(nd, nsmgr);
                     _items.Add(st);
-                    _shapeTypeId = st.id;
+                    if (st.spt == 202)
+                        _shapeTypeId = st.id;
                 }
                 else if (nd.LocalName == QNAME_SHAPE.Name)
                 {
@@ -259,7 +260,7 @@ namespace NPOI.XSSF.UserModel
         {
             CT_Shape shape = new CT_Shape();
 
-            shape.id = "_x0000_s" + (++_shapeId);
+            shape.id = "_x0000_s" + AllocateShapeId(1025);
             shape.type ="#" + _shapeTypeId;
             shape.style="position:absolute; visibility:hidden";
             shape.fillcolor = ("#ffffe1");
@@ -317,10 +318,17 @@ namespace NPOI.XSSF.UserModel
                 "<v:path o:extrusionok=\"f\" gradientshapeok=\"t\" o:connecttype=\"rect\"/>" +
                 "<o:lock v:ext=\"edit\" aspectratio=\"t\"/>" +
                 "</v:shapetype>");
-            _items.Insert(1, doc.DocumentElement); // insert after shapelayout, before comment shapetype
+            var namespaces = new XmlNamespaceManager(doc.NameTable);
+            _items.Insert(1, CT_Shapetype.Parse(doc.DocumentElement, namespaces));
         }
 
-        internal CT_Shape newOleShape(int row1, int col1, int row2, int col2, string imageRelId, string shapeId)
+        internal int AllocateShapeId(int minimum)
+        {
+            _shapeId = Math.Max(_shapeId + 1, minimum);
+            return _shapeId;
+        }
+
+        internal CT_Shape newOleShape(XSSFClientAnchor anchor, string imageRelId, string shapeId)
         {
             EnsureOleShapetype();
 
@@ -339,9 +347,14 @@ namespace NPOI.XSSF.UserModel
             cldata.ObjectType = ST_ObjectType.Pict;
             cldata.FmlaPict = "=EMBED(\"Packager Shell Object\",\"\")";
             // VML Anchor format: col1, dx1, row1, dy1, col2, dx2, row2, dy2
-            cldata.AddNewAnchor(col1 + ", 0, " + row1 + ", 0, " + col2 + ", 0, " + row2 + ", 0");
-            cldata.AddNewSizeWithCells();
-            cldata.AddNewMoveWithCells();
+            cldata.AddNewAnchor(anchor.Col1 + ", " + anchor.Dx1 / Units.EMU_PER_PIXEL + ", " +
+                anchor.Row1 + ", " + anchor.Dy1 / Units.EMU_PER_PIXEL + ", " +
+                anchor.Col2 + ", " + anchor.Dx2 / Units.EMU_PER_PIXEL + ", " +
+                anchor.Row2 + ", " + anchor.Dy2 / Units.EMU_PER_PIXEL);
+            if (anchor.AnchorType == NPOI.SS.UserModel.AnchorType.MoveAndResize)
+                cldata.AddNewSizeWithCells();
+            if (anchor.AnchorType != NPOI.SS.UserModel.AnchorType.DontMoveAndResize)
+                cldata.AddNewMoveWithCells();
             cldata.AddNewAutoFill(ST_TrueFalseBlank.@false);
             _items.Add(shape);
 

@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Xml;
 
 namespace TestCases.SS.UserModel
 {
@@ -195,6 +196,129 @@ namespace TestCases.SS.UserModel
 
             wb2.Close();
             wb1.Close();
+        }
+
+        private static XmlDocument ReadVml(XSSFSheet sheet)
+        {
+            using var stream = new MemoryStream();
+            sheet.GetVMLDrawing(false).Write(stream);
+            var document = new XmlDocument();
+            using var input = new MemoryStream(stream.ToArray());
+            document.Load(input);
+            return document;
+        }
+
+        [Test]
+        public void EmbedXSSF_RepeatedSavePreservesVml()
+        {
+            using var workbook = new XSSFWorkbook();
+            var sheet = (XSSFSheet)workbook.CreateSheet();
+            var drawing = sheet.CreateDrawingPatriarch();
+            var picture = workbook.AddPicture(GetSamplePng(), PictureType.PNG);
+            var package = workbook.AddOlePackage(Encoding.UTF8.GetBytes("payload"), "a.txt", "a.txt", "a.txt");
+            for (var i = 0; i < 2; i++)
+                drawing.CreateObjectData(drawing.CreateAnchor(0, 0, 0, 0, i * 3, 0, i * 3 + 2, 3), package, picture);
+            var comment = drawing.CreateCellComment(drawing.CreateAnchor(0, 0, 0, 0, 8, 8, 10, 10));
+            comment.String = workbook.GetCreationHelper().CreateRichTextString("comment");
+            sheet.CreateRow(8).CreateCell(8).CellComment = comment;
+            var shapes = sheet.GetVMLDrawing(false).GetItems().OfType<CT_Shape>().ToList();
+            var formula = "'R&D <sample>'!$B$7:$K$13";
+            shapes.First(s => s.GetClientDataArray(0).ObjectType == ST_ObjectType.Pict)
+                .GetClientDataArray(0).FmlaPict = formula;
+
+            var current = workbook;
+            try
+            {
+                for (var pass = 0; pass < 3; pass++)
+                {
+                    var xml = ReadVml((XSSFSheet)current.GetSheetAt(0));
+                    var types = xml.DocumentElement.ChildNodes.OfType<XmlElement>()
+                        .Where(n => n.LocalName == "shapetype").ToList();
+                    ClassicAssert.AreEqual(1, types.Count(n => n.GetAttribute("id") == "_x0000_t75"));
+                    ClassicAssert.AreEqual("75", types.Single(n => n.GetAttribute("id") == "_x0000_t75")
+                        .GetAttribute("spt", "urn:schemas-microsoft-com:office:office"));
+                    var nodes = xml.DocumentElement.ChildNodes.OfType<XmlElement>()
+                        .Where(n => n.LocalName == "shape").ToList();
+                    foreach (var node in nodes)
+                    {
+                        ClassicAssert.IsTrue(types.Any(t => "#" + t.GetAttribute("id") == node.GetAttribute("type")));
+                        ClassicAssert.AreEqual(node.GetAttribute("type") == "#_x0000_t75",
+                            node.HasAttribute("ole", "urn:schemas-microsoft-com:office:office"));
+                    }
+                    ClassicAssert.AreEqual(formula, ((XSSFSheet)current.GetSheetAt(0)).GetVMLDrawing(false)
+                        .GetItems().OfType<CT_Shape>().First(s => s.GetClientDataArray(0).ObjectType == ST_ObjectType.Pict)
+                        .GetClientDataArray(0).FmlaPict);
+                    var next = (XSSFWorkbook)XSSFTestDataSamples.WriteOutAndReadBack(current);
+                    if (current != workbook) current.Close();
+                    current = next;
+                }
+            }
+            finally
+            {
+                if (current != workbook) current.Close();
+            }
+        }
+
+        [TestCase(true)]
+        [TestCase(false)]
+        public void EmbedXSSF_CommentsAndOleUseDistinctIds(bool commentFirst)
+        {
+            using var workbook = new XSSFWorkbook();
+            var sheet = (XSSFSheet)workbook.CreateSheet();
+            var drawing = sheet.CreateDrawingPatriarch();
+            var picture = workbook.AddPicture(GetSamplePng(), PictureType.PNG);
+            var package = workbook.AddOlePackage(Encoding.UTF8.GetBytes("payload"), "a.txt", "a.txt", "a.txt");
+            void AddComment()
+            {
+                var comment = drawing.CreateCellComment(drawing.CreateAnchor(0, 0, 0, 0, 2, 5, 4, 7));
+                comment.String = workbook.GetCreationHelper().CreateRichTextString("comment");
+                sheet.CreateRow(5).CreateCell(2).CellComment = comment;
+            }
+            if (commentFirst) AddComment();
+            drawing.CreateObjectData(drawing.CreateAnchor(0, 0, 0, 0, 0, 0, 2, 3), package, picture);
+            if (!commentFirst) AddComment();
+            using var reopened = (XSSFWorkbook)XSSFTestDataSamples.WriteOutAndReadBack(workbook);
+            var reopenedSheet = (XSSFSheet)reopened.GetSheetAt(0);
+            var shapes = reopenedSheet.GetVMLDrawing(false).GetItems().OfType<CT_Shape>().ToList();
+            ClassicAssert.AreEqual(shapes.Count, shapes.Select(s => s.id).Distinct().Count());
+            var ole = reopenedSheet.GetCTWorksheet().oleObjects.oleObject[0];
+            ClassicAssert.IsTrue(shapes.Any(s => s.id == "_x0000_s" + ole.shapeId &&
+                s.GetClientDataArray(0).ObjectType == ST_ObjectType.Pict));
+            ClassicAssert.DoesNotThrow(() => reopenedSheet.ShiftRows(5, 5, 1));
+            ClassicAssert.IsNotNull(reopenedSheet.GetRow(6).GetCell(2).CellComment);
+            var newComment = reopenedSheet.CreateDrawingPatriarch()
+                .CreateCellComment(drawing.CreateAnchor(0, 0, 0, 0, 8, 8, 10, 10));
+            var allShapes = reopenedSheet.GetVMLDrawing(false).GetItems().OfType<CT_Shape>().ToList();
+            ClassicAssert.AreEqual(allShapes.Count, allShapes.Select(s => s.id).Distinct().Count());
+            ClassicAssert.AreEqual("#_x0000_t202", allShapes.Last().type);
+        }
+
+        [TestCase(AnchorType.MoveAndResize, true, true)]
+        [TestCase(AnchorType.MoveDontResize, true, false)]
+        [TestCase(AnchorType.DontMoveAndResize, false, false)]
+        public void EmbedXSSF_PreservesOffsetsAndAnchorType(AnchorType type, bool move, bool size)
+        {
+            using var workbook = new XSSFWorkbook();
+            var sheet = (XSSFSheet)workbook.CreateSheet();
+            var drawing = sheet.CreateDrawingPatriarch();
+            var picture = workbook.AddPicture(GetSamplePng(), PictureType.PNG);
+            var package = workbook.AddOlePackage(Encoding.UTF8.GetBytes("payload"), "a.txt", "a.txt", "a.txt");
+            var anchor = drawing.CreateAnchor(Units.EMU_PER_PIXEL, 2 * Units.EMU_PER_PIXEL,
+                30 * Units.EMU_PER_PIXEL, 15 * Units.EMU_PER_PIXEL, 2, 3, 2, 3);
+            anchor.AnchorType = type;
+            drawing.CreateObjectData(anchor, package, picture);
+            using var reopened = (XSSFWorkbook)XSSFTestDataSamples.WriteOutAndReadBack(workbook);
+            var reopenedSheet = (XSSFSheet)reopened.GetSheetAt(0);
+            var data = reopenedSheet.GetVMLDrawing(false).GetItems().OfType<CT_Shape>().Single()
+                .GetClientDataArray(0);
+            ClassicAssert.AreEqual("2, 1, 3, 2, 2, 30, 3, 15", data.anchor);
+            ClassicAssert.AreEqual(move, data.moveWithCells == ST_TrueFalseBlank.t || data.moveWithCells == ST_TrueFalseBlank.@true);
+            ClassicAssert.AreEqual(size, data.sizeWithCells == ST_TrueFalseBlank.t || data.sizeWithCells == ST_TrueFalseBlank.@true);
+            var objectAnchor = reopenedSheet.GetCTWorksheet().oleObjects.oleObject[0].objectPr.anchor;
+            ClassicAssert.AreEqual(move, objectAnchor.moveWithCells);
+            ClassicAssert.AreEqual(size, objectAnchor.sizeWithCells);
+            ClassicAssert.AreEqual(anchor.Dx1, objectAnchor.from.colOff);
+            ClassicAssert.AreEqual(anchor.Dy2, objectAnchor.to.rowOff);
         }
 
         static byte[] GetSamplePng()

@@ -460,7 +460,8 @@ namespace NPOI.XSSF.UserModel
             XSSFSheet sheet = Sheet;
             XSSFWorkbook wb = sheet.Workbook as XSSFWorkbook;
             int sheetIndex = wb.GetSheetIndex(sheet);
-            long shapeId = (sheetIndex+1)*1024 + NewShapeId();
+            var vml = sheet.GetVMLDrawing(true);
+            long shapeId = vml.AllocateShapeId(checked((int)((sheetIndex + 1) * 1024 + NewShapeId())));
 
             // add reference to OLE part
             PackagePartName olePN;
@@ -500,7 +501,8 @@ namespace NPOI.XSSF.UserModel
 
             ole1.objectPr.id = imgSheetPR.Id;
             ole1.objectPr.defaultSize = false;
-            ole1.objectPr.anchor.moveWithCells = true;
+            ole1.objectPr.anchor.moveWithCells = anchor.AnchorType != AnchorType.DontMoveAndResize;
+            ole1.objectPr.anchor.sizeWithCells = anchor.AnchorType == AnchorType.MoveAndResize;
 
             // Set oleObject anchor coordinates from the client anchor
             XSSFClientAnchor ca = (XSSFClientAnchor)anchor;
@@ -556,14 +558,13 @@ namespace NPOI.XSSF.UserModel
             shape.anchor = (XSSFClientAnchor) anchor;
 
             // create VML shape for OLE object visibility in Excel
-            XSSFVMLDrawing vml = sheet.GetVMLDrawing(true);
             PackagePart vmlPart = vml.GetPackagePart();
             PackageRelationship vmlImgRel = null;
             if (vmlPart != null)
             {
                 vmlImgRel = vmlPart.AddRelationship(imgPN, TargetMode.Internal, PackageRelationshipTypes.IMAGE_PART);
             }
-            vml.newOleShape(anchor.Row1, anchor.Col1, anchor.Row2, anchor.Col2, vmlImgRel?.Id, "_x0000_s" + shapeId);
+            vml.newOleShape((XSSFClientAnchor)anchor, vmlImgRel?.Id, "_x0000_s" + shapeId);
 
             return shape;
         }
