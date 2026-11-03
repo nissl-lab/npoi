@@ -23,6 +23,7 @@ using System;
 using System.Collections;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Xml;
 
 namespace TestCases.XSSF.UserModel
 {
@@ -138,6 +139,40 @@ namespace TestCases.XSSF.UserModel
 
             // Assert
             Assert.DoesNotThrow(testDelegate);
+        }
+
+        [Test]
+        public void TestOfficeAttributesUseNamespaceAndPreserveFloatingPointShapeType()
+        {
+            const string officeNamespace = "urn:schemas-microsoft-com:office:office";
+            const string xml = "<xml xmlns:v=\"urn:schemas-microsoft-com:vml\" " +
+                "xmlns:office=\"urn:schemas-microsoft-com:office:office\">" +
+                "<v:shapetype id=\"_x0000_t75\" office:spt=\"75.5\"/>" +
+                "<v:shape id=\"_x0000_s1025\" type=\"#_x0000_t75\" office:ole=\"\"/>" +
+                "</xml>";
+            var vml = new XSSFVMLDrawing();
+            using (var input = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(xml)))
+            {
+                vml.Read(input);
+            }
+
+            var items = vml.GetItems();
+            var shapeType = (CT_Shapetype)items[0];
+            var shape = (CT_Shape)items[1];
+            ClassicAssert.AreEqual(75.5f, shapeType.spt);
+            ClassicAssert.AreEqual(string.Empty, shape.ole);
+
+            using var output = new MemoryStream();
+            vml.Write(output);
+            var document = new XmlDocument();
+            using var writtenVml = new MemoryStream(output.ToArray());
+            document.Load(writtenVml);
+            var namespaceManager = new XmlNamespaceManager(document.NameTable);
+            namespaceManager.AddNamespace("v", "urn:schemas-microsoft-com:vml");
+            var writtenShapeType = document.SelectSingleNode("/xml/v:shapetype", namespaceManager);
+            var writtenShape = document.SelectSingleNode("/xml/v:shape", namespaceManager);
+            ClassicAssert.AreEqual("75.5", writtenShapeType.Attributes["spt", officeNamespace].Value);
+            ClassicAssert.IsNotNull(writtenShape.Attributes["ole", officeNamespace]);
         }
         [Test]
         public void TestRemoveCommentShape()

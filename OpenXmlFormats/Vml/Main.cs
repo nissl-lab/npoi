@@ -653,8 +653,9 @@ namespace NPOI.OpenXmlFormats.Vml
             ctObj.adj = XmlHelper.ReadString(node.Attributes["adj"]);
             ctObj.equationxml = XmlHelper.ReadString(node.Attributes["equationxml"]);
             ctObj.style = XmlHelper.ReadString(node.Attributes["style"]);
-            if (node.Attributes["o:ole"] != null)
-                ctObj.ole = node.Attributes["o:ole"].Value;
+            var ole = node.Attributes["ole", "urn:schemas-microsoft-com:office:office"];
+            if (ole != null)
+                ctObj.ole = ole.Value;
             ctObj.ClientData = new List<CT_ClientData>();
             foreach (XmlNode childNode in node.ChildNodes)
             {
@@ -3785,8 +3786,9 @@ namespace NPOI.OpenXmlFormats.Vml
                 ctObj.preferrelative = NPOI.OpenXmlFormats.Util.XmlHelper.ReadTrueFalse2(node.Attributes["o:preferrelative"]);
             ctObj.coordsize = XmlHelper.ReadString(node.Attributes["coordsize"]);
             ctObj.id = XmlHelper.ReadString(node.Attributes["id"]);
-            if (node.Attributes["o:spt"] != null)
-                ctObj.spt = XmlHelper.ReadInt(node.Attributes["o:spt"]);
+            var spt = node.Attributes["spt", "urn:schemas-microsoft-com:office:office"];
+            if (spt != null)
+                ctObj.spt = XmlConvert.ToSingle(spt.Value);
             ctObj.adj = XmlHelper.ReadString(node.Attributes["adj"]);
             ctObj.path2 = XmlHelper.ReadString(node.Attributes["path"]);
             ctObj.formulas = new List<CT_Formulas>();
