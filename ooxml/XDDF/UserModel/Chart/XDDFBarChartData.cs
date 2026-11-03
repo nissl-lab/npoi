@@ -140,7 +140,6 @@ namespace NPOI.XDDF.UserModel.Chart
         {
             int index = this.series.Count;
             CT_BarSer ctSer = this.chart.AddNewSer();
-            ctSer.AddNewTx();
             ctSer.AddNewCat();
             ctSer.AddNewVal();
             ctSer.AddNewIdx().val = (uint) index;

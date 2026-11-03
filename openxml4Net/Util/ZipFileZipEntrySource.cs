@@ -50,7 +50,10 @@ namespace NPOI.OpenXml4Net.Util
             if (zipArchive == null)
                 throw new InvalidDataException("Zip File is closed");
             Stream s = zipArchive.GetInputStream(entry);
-            return s;
+            // Guard against decompression bombs: the central-directory compressed size is
+            // reliable on this seekable path, so enforce both the absolute per-entry size
+            // cap and the inflate-ratio limit as the decompressed data is read.
+            return new ZipEntrySizeGuardStream(s, entry.CompressedSize);
         }
     }
 }

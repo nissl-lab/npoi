@@ -541,5 +541,32 @@ namespace TestCases.XWPF.UserModel
                 }
             }
         }
+
+        [Test]
+        public void CreateTOCOnADocumentWithoutAStylesPart()
+        {
+            XWPFDocument doc = new XWPFDocument();
+            doc.CreateParagraph().CreateRun().SetText("Heading 1");
+
+            doc.CreateTOC();
+
+            XWPFDocument back = XWPFTestDataSamples.WriteOutAndReadBack(doc);
+            ClassicAssert.IsNotNull(back.GetStyles());
+            ClassicAssert.IsTrue(back.GetStyles().StyleExist("TOC1"));
+            ClassicAssert.AreEqual(1, back.BodyElements.Count(e => e is XWPFSDT));
+        }
+
+        [Test]
+        public void CreateTOCReusesAnExistingStylesPart()
+        {
+            XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("heading123.docx");
+
+            doc.CreateTOC();
+
+            XWPFDocument back = XWPFTestDataSamples.WriteOutAndReadBack(doc);
+            ClassicAssert.AreEqual(1, back.RelationParts.Count(
+                rp => rp.Relationship.RelationshipType == XWPFRelation.STYLES.Relation));
+            ClassicAssert.IsTrue(back.GetStyles().StyleExist("TOC1"));
+        }
     }
 }

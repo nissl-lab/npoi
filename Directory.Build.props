@@ -11,7 +11,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <VersionPrefix>2.8.0</VersionPrefix>
+    <VersionPrefix>2.8.1</VersionPrefix>
     <Title>NPOI</Title>
     <Authors>Tony Qu,NPOI Contributors</Authors>
     <Owners>Nissl Lab</Owners>
@@ -24,7 +24,7 @@
     <PackageIcon>logo\60_60.jpg</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageProjectUrl>http://nissl-lab.github.io/npoi/</PackageProjectUrl>
-    <PackageReleaseNotes>https://github.com/nissl-lab/npoi/discussions/1751</PackageReleaseNotes>
+    <PackageReleaseNotes>https://github.com/nissl-lab/npoi/discussions/1864</PackageReleaseNotes>
     <Copyright>Nissl LLC</Copyright>
     <PackageTags>xlsx xls Excel Word docx office ole</PackageTags>
 

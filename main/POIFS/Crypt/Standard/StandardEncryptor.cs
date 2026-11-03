@@ -36,11 +36,8 @@ namespace NPOI.POIFS.Crypt.Standard
         public override void ConfirmPassword(String password)
         {
             // see [MS-OFFCRYPTO] - 2.3.3 EncryptionVerifier
-            //Random r = new SecureRandom();
-            Random r = new Random();
             byte[] salt = new byte[16], verifier = new byte[16];
-            r.NextBytes(salt);
-            r.NextBytes(verifier);
+            FillRandomBytes(salt, verifier);
 
             ConfirmPassword(password, null, null, salt, verifier, null);
         }

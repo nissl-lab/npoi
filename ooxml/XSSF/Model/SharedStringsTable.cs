@@ -298,7 +298,14 @@ namespace NPOI.XSSF.Model
                                     break;
                                 }
                                 case "si":
-                                    currentSi = new CT_Rst();
+                                    if (reader.IsEmptyElement)
+                                    {
+                                        strings.Add(new CT_Rst());
+                                    }
+                                    else
+                                    {
+                                        currentSi = new CT_Rst();
+                                    }
                                     break;
                                 case "t":
                                     if (isEmpty)

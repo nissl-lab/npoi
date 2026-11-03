@@ -133,10 +133,10 @@ namespace NPOI.SS.UserModel
         bool ForceFormulaRecalculation { get; set; }
 
         /// <summary>
-        /// Get the visibility state for a given column
+        /// Set the visibility state for a given column
         /// </summary>
-        /// <param name="columnIndex">the column to get (0-based)</param>
-        /// <param name="hidden">the visiblity state of the column</param>
+        /// <param name="columnIndex">the column to set (0-based)</param>
+        /// <param name="hidden">the visibility state of the column</param>
         void SetColumnHidden(int columnIndex, bool hidden);
 
         /// <summary>
@@ -520,8 +520,8 @@ namespace NPOI.SS.UserModel
         /// </summary>
         /// <param name="colSplit">Horizonatal position of split</param>
         /// <param name="rowSplit">Vertical position of split</param>
-        /// <param name="leftmostColumn">Top row visible in bottom pane</param>
-        /// <param name="topRow">Left column visible in right pane</param>
+        /// <param name="leftmostColumn">Left column visible in right pane</param>
+        /// <param name="topRow">Top row visible in bottom pane</param>
         void CreateFreezePane(int colSplit, int rowSplit, int leftmostColumn, int topRow);
 
         /// <summary>
