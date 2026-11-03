@@ -2205,8 +2205,20 @@ namespace NPOI.XSSF.UserModel
         /// <param name="rownum">row number</param>
         /// <returns>High level <see cref="XSSFRow"/> object representing a
         /// row in the sheet</returns>
+        /// <exception cref="ArgumentException">if <paramref name="rownum"/> is
+        /// outside the allowable range for the spreadsheet version</exception>
         public virtual IRow CreateRow(int rownum)
         {
+            // Validate before touching the sheet: the row element is added to sheetData below,
+            // so a later rejection would leave an orphaned row in the XML that the object model
+            // never tracks but the file still carries. Matches SXSSFSheet.CreateRow.
+            int maxrow = SpreadsheetVersion.EXCEL2007.LastRowIndex;
+            if(rownum < 0 || rownum > maxrow)
+            {
+                throw new ArgumentException("Invalid row number (" + rownum
+                        + ") outside allowable range (0.." + maxrow + ")");
+            }
+
             EnsureWorksheetLoaded();
             CT_Row ctRow;
             XSSFRow prev = _rows.TryGetValue(rownum, out XSSFRow row) ? row : null;
@@ -2254,8 +2266,19 @@ namespace NPOI.XSSF.UserModel
         /// <param name="columnnum">column number</param>
         /// <returns>High level <see cref="XSSFColumn"/> object representing a
         /// column in the sheet</returns>
+        /// <exception cref="ArgumentException">if <paramref name="columnnum"/> is
+        /// outside the allowable range for the spreadsheet version</exception>
         public virtual IColumn CreateColumn(int columnnum)
         {
+            // Validate before touching the sheet — see CreateRow. The col element is added to
+            // the cols group below, so a later rejection would orphan it in the XML.
+            int maxColumn = SpreadsheetVersion.EXCEL2007.LastColumnIndex;
+            if(columnnum < 0 || columnnum > maxColumn)
+            {
+                throw new ArgumentException("Invalid column number (" + columnnum
+                        + ") outside allowable range (0.." + maxColumn + ")");
+            }
+
             EnsureWorksheetLoaded();
             CT_Col ctCol;
             XSSFColumn prev = _columns.TryGetValue(columnnum, out XSSFColumn column) ? column : null;

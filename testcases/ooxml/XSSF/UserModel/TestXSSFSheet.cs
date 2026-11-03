@@ -16,6 +16,7 @@
 ==================================================================== */
 
 using NPOI;
+using NPOI.OpenXml4Net.OPC;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.POIFS.Crypt;
 using NPOI.SS;
@@ -35,6 +36,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using TestCases.HSSF;
 using TestCases.SS.UserModel;
@@ -3282,6 +3284,139 @@ namespace TestCases.XSSF.UserModel
                 ClassicAssert.IsNull(texts2[0][i]);
                 ClassicAssert.IsNotNull(texts2[1][i]);
             }
+        }
+
+        /**
+         * CreateRow used to add the row element to sheetData before the index was validated, so a
+         * rejected index left an orphaned row behind: absent from the object model (_rows is only
+         * updated after validation), but still written to the file. Excel rejects a workbook whose
+         * rows are out of order or share a number, and strips the sheet's data when repairing it.
+         */
+        [Test]
+        public void TestCreateRowWithInvalidIndexDoesNotLeakRowElement()
+        {
+            using var workbook = new XSSFWorkbook();
+            var sheet = (XSSFSheet)workbook.CreateSheet("test");
+            sheet.CreateRow(0).CreateCell(0).SetCellValue("kept");
+
+            int rowsBefore = sheet.GetCTWorksheet().sheetData.SizeOfRowArray();
+
+            Assert.Throws<ArgumentException>(() => sheet.CreateRow(-1));
+            Assert.Throws<ArgumentException>(
+                () => sheet.CreateRow(SpreadsheetVersion.EXCEL2007.LastRowIndex + 1));
+
+            // The raw element count is what leaked; PhysicalNumberOfRows cannot see it.
+            ClassicAssert.AreEqual(rowsBefore, sheet.GetCTWorksheet().sheetData.SizeOfRowArray());
+            ClassicAssert.AreEqual(1, sheet.PhysicalNumberOfRows);
+        }
+
+        /**
+         * CreateColumn has the same shape as CreateRow — the col element was added to the cols
+         * group before XSSFColumn.ColumnNum validated the index.
+         */
+        [Test]
+        public void TestCreateColumnWithInvalidIndexDoesNotLeakColElement()
+        {
+            using var workbook = new XSSFWorkbook();
+            var sheet = (XSSFSheet)workbook.CreateSheet("test");
+            sheet.CreateColumn(0);
+
+            int colsBefore = sheet.GetCTWorksheet().cols.First().sizeOfColArray();
+
+            Assert.Throws<ArgumentException>(() => sheet.CreateColumn(-1));
+            Assert.Throws<ArgumentException>(
+                () => sheet.CreateColumn(SpreadsheetVersion.EXCEL2007.LastColumnIndex + 1));
+
+            ClassicAssert.AreEqual(colsBefore, sheet.GetCTWorksheet().cols.First().sizeOfColArray());
+            ClassicAssert.AreEqual(1, sheet.PhysicalNumberOfColumns);
+        }
+
+        /**
+         * End-to-end guard for the leaks above, asserted against the bytes that get written rather
+         * than the in-memory model — this is the damage a user sees. A caller that probes with an
+         * unresolvable index and catches the exception (the common "does this optional cell exist?"
+         * pattern) used to save a file Excel refuses to open:
+         *
+         *   &lt;sheetData&gt;&lt;row r="4"/&gt;&lt;row r="4"/&gt;&lt;row r="4"/&gt;
+         *   &lt;row r="1"&gt;...&lt;/row&gt;&lt;row r="2"&gt;...&lt;/row&gt;&lt;row r="3"&gt;...&lt;/row&gt;&lt;/sheetData&gt;
+         *
+         * Each leaked row carries the same r — the XSSFRow constructor fills in LastRowNum + 2 for
+         * an unset r before the RowNum setter rejects the index — so the rows are both duplicated
+         * and out of the required ascending order. Excel reports "We found a problem with some
+         * content" and strips the sheet's data when repairing it. CreateColumn leaks the same way,
+         * leaving a col definition for a column the caller never created.
+         *
+         * Two things worth knowing about this test. It cannot be written as a write-out /
+         * read-back: NPOI re-reads the malformed file without complaint, which is why the corruption
+         * went unnoticed — only the raw sheet XML shows it. And the leaked cell element does not
+         * reach the file today, because XSSFRow.OnDocumentWrite rebuilds the row's cell array from
+         * the tracked cells when the counts disagree; the cell assertion below states the invariant
+         * so a change to that write path cannot quietly start writing them out.
+         */
+        [Test]
+        public void TestFailedCreateDoesNotWriteSheetXmlThatExcelRejects()
+        {
+            using var workbook = new XSSFWorkbook();
+            var sheet = (XSSFSheet)workbook.CreateSheet("Input");
+            for (int r = 0; r < 3; r++)
+            {
+                sheet.CreateRow(r).CreateCell(0).SetCellValue(r);
+            }
+
+            sheet.CreateColumn(0);
+
+            // Repeated failed probes, each one caught by the caller and shrugged off.
+            for (int i = 0; i < 3; i++)
+            {
+                Assert.Throws<ArgumentException>(() => sheet.CreateRow(-1));
+                Assert.Throws<ArgumentException>(() => sheet.GetRow(0).CreateCell(-1));
+                Assert.Throws<ArgumentException>(() => sheet.CreateColumn(-1));
+            }
+
+            string sheetXml = GetWrittenSheetXml(workbook, "xl/worksheets/sheet1.xml");
+            XDocument document = XDocument.Parse(sheetXml);
+            List<XElement> rows = document.Descendants()
+                .Where(e => e.Name.LocalName == "row").ToList();
+
+            Assert.Multiple(() =>
+            {
+                // Every row must carry a reference, and they must be unique and ascending.
+                string rowRefs = string.Join(",", rows.Select(e => (string)e.Attribute("r") ?? "(none)"));
+                ClassicAssert.AreEqual("1,2,3", rowRefs,
+                    "sheetData rows must be unique and ascending. Sheet XML was: " + sheetXml);
+
+                // Same for the cells within each row.
+                string cellRefs = string.Join(",", rows.SelectMany(r => r.Elements())
+                    .Where(e => e.Name.LocalName == "c")
+                    .Select(e => (string)e.Attribute("r") ?? "(none)"));
+                ClassicAssert.AreEqual("A1,A2,A3", cellRefs,
+                    "cell references must be unique and ascending. Sheet XML was: " + sheetXml);
+
+                // And only the one column definition that was actually asked for.
+                string colRefs = string.Join(",", document.Descendants()
+                    .Where(e => e.Name.LocalName == "col")
+                    .Select(e => ((string)e.Attribute("min") ?? "(none)")
+                        + ":" + ((string)e.Attribute("max") ?? "(none)")));
+                ClassicAssert.AreEqual("1:1", colRefs,
+                    "no phantom column definitions may be written. Sheet XML was: " + sheetXml);
+            });
+        }
+
+        /**
+         * Writes the workbook to memory and returns one part's XML exactly as it was persisted.
+         */
+        private static string GetWrittenSheetXml(XSSFWorkbook workbook, string partName)
+        {
+            using var stream = new MemoryStream();
+            workbook.Write(stream, true);
+            stream.Position = 0;
+
+            using OPCPackage package = OPCPackage.Open(stream, true);
+            List<PackagePart> parts = package.GetPartsByName(new Regex(Regex.Escape(partName)));
+            ClassicAssert.AreEqual(1, parts.Count, "Written workbook has no " + partName);
+
+            using var reader = new StreamReader(parts[0].GetInputStream());
+            return reader.ReadToEnd();
         }
     }
 }
