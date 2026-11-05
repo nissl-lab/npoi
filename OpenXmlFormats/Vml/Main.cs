@@ -653,6 +653,9 @@ namespace NPOI.OpenXmlFormats.Vml
             ctObj.adj = XmlHelper.ReadString(node.Attributes["adj"]);
             ctObj.equationxml = XmlHelper.ReadString(node.Attributes["equationxml"]);
             ctObj.style = XmlHelper.ReadString(node.Attributes["style"]);
+            var ole = node.Attributes["ole", "urn:schemas-microsoft-com:office:office"];
+            if (ole != null)
+                ctObj.ole = ole.Value;
             ctObj.ClientData = new List<CT_ClientData>();
             foreach (XmlNode childNode in node.ChildNodes)
             {
@@ -730,6 +733,8 @@ namespace NPOI.OpenXmlFormats.Vml
             XmlHelper.WriteAttribute(sw, "o:insetmode", this.insetmode.ToString());
             XmlHelper.WriteAttribute(sw, "adj", this.adj);
             XmlHelper.WriteAttribute(sw, "equationxml", this.equationxml);
+            if (this.ole != null)
+                XmlHelper.WriteAttribute(sw, "o:ole", this.ole, true);
             sw.Write('>');
 
             if (this.iscomment != null)
@@ -840,6 +845,15 @@ namespace NPOI.OpenXmlFormats.Vml
         private CT_Fill fillField;
         private CT_Formulas formulasField;
         private CT_Handles handlesField;
+        private string oleField;
+
+        [XmlAttribute(Namespace = "urn:schemas-microsoft-com:office:office")]
+        public string ole
+        {
+            get { return this.oleField; }
+            set { this.oleField = value; }
+        }
+
         private CT_ImageData imagedataField;
         private CT_Stroke strokeField;
         private CT_Shadow shadowField;
@@ -3771,8 +3785,10 @@ namespace NPOI.OpenXmlFormats.Vml
             if (node.Attributes["o:preferrelative"] != null)
                 ctObj.preferrelative = NPOI.OpenXmlFormats.Util.XmlHelper.ReadTrueFalse2(node.Attributes["o:preferrelative"]);
             ctObj.coordsize = XmlHelper.ReadString(node.Attributes["coordsize"]);
-            if (node.Attributes["o:spt"] != null)
-                ctObj.id = XmlHelper.ReadString(node.Attributes["o:spt"]);
+            ctObj.id = XmlHelper.ReadString(node.Attributes["id"]);
+            var spt = node.Attributes["spt", "urn:schemas-microsoft-com:office:office"];
+            if (spt != null)
+                ctObj.spt = XmlConvert.ToSingle(spt.Value);
             ctObj.adj = XmlHelper.ReadString(node.Attributes["adj"]);
             ctObj.path2 = XmlHelper.ReadString(node.Attributes["path"]);
             ctObj.formulas = new List<CT_Formulas>();

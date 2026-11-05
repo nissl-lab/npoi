@@ -5678,6 +5678,9 @@ namespace NPOI.XSSF.UserModel
                                     {
                                         ctShape = ctShapes.FirstOrDefault
                                         (x =>
+                                            x.ClientData.Count > 0 &&
+                                            x.ClientData[0].ObjectType == NPOI.OpenXmlFormats.Vml.Spreadsheet.ST_ObjectType.Note &&
+                                            x.ClientData[0].row.Count > 0 && x.ClientData[0].column.Count > 0 &&
                                             x.ClientData[0].row[0] == cellAddress.Row &&
                                             x.ClientData[0].column[0] == cellAddress.Column
                                         );
