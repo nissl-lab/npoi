@@ -23,6 +23,7 @@ namespace TestCases.XWPF.UserModel
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Xml;
 
 
     /**
@@ -31,6 +32,94 @@ namespace TestCases.XWPF.UserModel
     [TestFixture]
     public class TestXWPFTable
     {
+        [TestCase(false)]
+        [TestCase(true)]
+        public void TestTableMarkupPreservesElementNamesAndAttributes(bool rowContent)
+        {
+            const string wordprocessingNamespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main";
+            var source = new XmlDocument();
+            source.LoadXml("""
+                <w:tbl xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+                  <w:bookmarkStart w:id="1" w:name="marker"/>
+                  <w:bookmarkEnd w:id="1"/>
+                  <w:commentRangeStart w:id="2"/>
+                  <w:commentRangeEnd w:id="2"/>
+                  <w:customXmlDelRangeStart w:id="3" w:author="editor"/>
+                  <w:customXmlDelRangeEnd w:id="3"/>
+                  <w:customXmlInsRangeStart w:id="4" w:author="editor"/>
+                  <w:customXmlInsRangeEnd w:id="4"/>
+                  <w:customXmlMoveFromRangeStart w:id="5" w:author="editor"/>
+                  <w:customXmlMoveFromRangeEnd w:id="5"/>
+                  <w:customXmlMoveToRangeStart w:id="6" w:author="editor"/>
+                  <w:customXmlMoveToRangeEnd w:id="6"/>
+                  <w:moveFromRangeStart w:id="7" w:name="movedFrom" w:author="editor"/>
+                  <w:moveFromRangeEnd w:id="7"/>
+                  <w:moveToRangeStart w:id="8" w:name="movedTo" w:author="editor"/>
+                  <w:moveToRangeEnd w:id="8"/>
+                </w:tbl>
+                """);
+            var namespaceManager = new XmlNamespaceManager(source.NameTable);
+            namespaceManager.AddNamespace("w", wordprocessingNamespace);
+            var table = CT_Tbl.Parse(source.DocumentElement, namespaceManager);
+            if (rowContent)
+            {
+                table.Items1.AddRange(table.Items);
+                foreach (var name in table.ItemsElementName)
+                {
+                    table.Items1ElementName.Add((Items1ChoiceType)Enum.Parse(typeof(Items1ChoiceType), name.ToString()));
+                }
+                table.Items.Clear();
+                table.ItemsElementName.Clear();
+            }
+
+            var saved = SerializeTable(table);
+            var actual = saved.GetElementsByTagName("tbl", wordprocessingNamespace)[0].ChildNodes;
+            var expected = source.DocumentElement.ChildNodes;
+            ClassicAssert.AreEqual(expected.Count, actual.Count);
+            for (var i = 0; i < expected.Count; i++)
+            {
+                ClassicAssert.AreEqual(expected[i].LocalName, actual[i].LocalName);
+                for (var j = 0; j < expected[i].Attributes.Count; j++)
+                {
+                    var attribute = expected[i].Attributes[j];
+                    ClassicAssert.AreEqual(attribute.Value, actual[i].Attributes[attribute.LocalName, attribute.NamespaceURI]?.Value);
+                }
+            }
+        }
+
+        [TestCase("del")]
+        [TestCase("ins")]
+        [TestCase("moveFrom")]
+        [TestCase("moveTo")]
+        public void TestTableRunTrackChangePreservesElementName(string elementName)
+        {
+            const string wordprocessingNamespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main";
+            var table = new CT_Tbl();
+            table.Items1.Add(new CT_RunTrackChange { id = "42", author = "editor", date = "2026-01-01T00:00:00Z" });
+            table.Items1ElementName.Add((Items1ChoiceType)Enum.Parse(typeof(Items1ChoiceType), elementName));
+
+            var saved = SerializeTable(table);
+            var actual = saved.GetElementsByTagName("tbl", wordprocessingNamespace)[0].FirstChild;
+            ClassicAssert.AreEqual(elementName, actual.LocalName);
+            ClassicAssert.AreEqual("42", actual.Attributes["id", wordprocessingNamespace].Value);
+            ClassicAssert.AreEqual("editor", actual.Attributes["author", wordprocessingNamespace].Value);
+            ClassicAssert.AreEqual("2026-01-01T00:00:00Z", actual.Attributes["date", wordprocessingNamespace].Value);
+        }
+
+        private static XmlDocument SerializeTable(CT_Tbl table)
+        {
+            var document = new CT_Document();
+            document.AddNewBody();
+            document.body.Items.Add(table);
+            document.body.ItemsElementName.Add(DocumentBodyItemChoiceType.tbl);
+            using var stream = new MemoryStream();
+            new DocumentDocument(document).Save(stream);
+            var result = new XmlDocument();
+            using var saved = new MemoryStream(stream.ToArray());
+            result.Load(saved);
+            return result;
+        }
+
         [Test]
         public void TestConstructor()
         {
