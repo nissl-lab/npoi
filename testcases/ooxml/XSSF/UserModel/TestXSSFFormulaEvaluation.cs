@@ -91,7 +91,7 @@ namespace TestCases.XSSF.UserModel
                 ICell cell_formula = wb.GetSheetAt(0).GetRow(1).GetCell(i);
 
                 CellReference ref_noformula = new CellReference(cell_noformula.RowIndex, cell_noformula.ColumnIndex);
-                CellReference ref_formula = new CellReference(cell_noformula.RowIndex, cell_noformula.ColumnIndex);
+                var ref_formula = new CellReference(cell_formula.RowIndex, cell_formula.ColumnIndex);
                 String fmla = cell_formula.CellFormula;
                 // assure that the formula refers to the cell above.
                 // the check below is 'deep' and involves conversion of the shared formula:
