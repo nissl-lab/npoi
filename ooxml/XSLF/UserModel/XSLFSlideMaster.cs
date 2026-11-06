@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Xml;
 using NPOI.OpenXml4Net.OPC;
 using NPOI.OpenXmlFormats.Presentation;
 
@@ -39,6 +40,11 @@ namespace NPOI.XSLF.UserModel
         public CT_SlideMaster GetXmlObject()
         {
             return master;
+        }
+
+        protected override XmlElement GetCommonSlideData()
+        {
+            return master.cSld;
         }
 
         /// <summary>
