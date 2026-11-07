@@ -36,7 +36,7 @@ namespace NPOI.SS.Formula
      * Evaluates formula cells.<p/>
      *
      * For performance reasons, this class keeps a cache of all previously calculated intermediate
-     * cell values.  Be sure To call {@link #ClearCache()} if any workbook cells are Changed between
+     * cell values.  Be sure To call {@link #ClearAllCachedResultValues()} if any workbook cells are Changed between
      * calls To evaluate~ methods on this class.<br/>
      *
      * For POI internal use only
