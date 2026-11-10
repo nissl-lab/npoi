@@ -338,6 +338,7 @@ namespace NPOI.OpenXml4Net.Util
                 .Replace("\"", "&quot;");//.Replace("'", "&apos;");
         }
 
+        [Obsolete("CDATA content is not entity-decoded, so readers get the encoded text. Write CDATA content as it is and split \"]]>\" across two sections.", true)]
         public static string EncodeCDATAContent(string xml)
         {
             // quick check whether needed

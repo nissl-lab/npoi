@@ -84,13 +84,10 @@ namespace NPOI.HSSF.Record
             _isAddInFunctions = false;
         }
 
-        /**
-         * Constructs a Extern Sheet record and Sets its fields appropriately.
-         *
-         * @param id     id must be 0x16 or an exception will be throw upon validation
-         * @param size  the size of the data area of the record
-         * @param data  data of the record (should not contain sid/len)
-         */
+        /// <summary>
+        /// Constructs a SupBook record (sid 0x1AE) and sets its fields from the stream.
+        /// </summary>
+        /// <param name="in1">the stream to read the record data from</param>
         public SupBookRecord(RecordInputStream in1)
         {
             int recLen = in1.Remaining;

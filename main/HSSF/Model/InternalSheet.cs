@@ -1321,11 +1321,11 @@ namespace NPOI.HSSF.Model
             return cir.IsHidden;
         }
 
-        /**
-         * Get the hidden property for a given column.
-         * @param column - the column number
-         * @param hidden - whether the column is hidden or not
-         */
+        /// <summary>
+        /// Set the hidden property for a given column.
+        /// </summary>
+        /// <param name="column">the column number</param>
+        /// <param name="hidden">whether the column is hidden or not</param>
         public void SetColumnHidden(int column, bool hidden)
         {
             SetColumn(column, null, null, null, hidden, null);

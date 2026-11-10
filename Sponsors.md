@@ -70,11 +70,39 @@ directly.
       Devolis
 </td>
 <td align="center">
+      <a href="https://github.com/ISS-Switzerland">
+        <img width="181" height="181" alt="image" src="https://github.com/user-attachments/assets/3f8c46c4-203a-4fa6-b25f-227f6c7e86b7" />
+      </a>
+      <br />
+      ISS-Switzerland
+</td>
+<td align="center">
       <a href="https://easylaser.com/">
      <img width="100" alt="image" src="https://github.com/user-attachments/assets/5e3fb6ab-93c3-49b3-89ea-eb0851763d68" />
       </a>
       <br />
       Easy-Laser-AB
+</td>
+<td align="center">
+      <a href="https://cepres.com/">
+     <img width="192" height="192" alt="image" src="https://github.com/user-attachments/assets/ebc391a8-ac9c-45c6-aa09-3360fc5d6bfe" />
+      </a>
+      <br />
+      CEPRES GmbH
+</td>
+<td align="center">
+      <a href="https://github.com/Porky-Products">
+     <img width="200" height="200" alt="image" src="https://github.com/user-attachments/assets/2ef3191a-2ac9-4f1c-9421-3bd9b0ac5296" />
+      </a>
+      <br />
+      Porky Products
+</td>
+<td align="center">
+      <a href="https://github.com/Piro-AB">
+     <img width="200" height="200" alt="image" src="https://github.com/user-attachments/assets/dcfc66af-bf7d-49d0-99ae-0d4b34c821aa" />
+      </a>
+      <br />
+      Piro AB
 </td>
 <td align="center">
       <a href="https://homie.io/">
@@ -90,13 +118,6 @@ directly.
       </a>
       <br />
       Silex
-</td>
-<td align="center">
-      <a href="https://inia.ai/">
-        <img width="100" alt="image" src="https://github.com/user-attachments/assets/5d01c03a-af17-44ad-9ffd-3580d6fadd42" />
-      </a>
-      <br />
-      INIA AI
 </td>
 
 <td align="center">
@@ -121,6 +142,16 @@ directly.
     <br/>
      Life Help
    </td>
+  <td align="center">
+     <a href="https://keysys.io/">
+    <img width="200" height="200" alt="image" src="https://github.com/user-attachments/assets/60d09e70-d394-4834-8677-b89bffc2af05" />
+     </a>
+    <br/>
+     KEYSYS
+   </td>
+
+     
+
    </tr>
 </table>
 
@@ -131,8 +162,6 @@ directly.
 [@AnneLazar](https://github.com/AnneLazar)
 
 [@AlessandroMartinelli](https://github.com/AlessandroMartinelli)
-
-[@masloan](https://github.com/masloan)
 
 [@SanjeevElement](https://github.com/SanjeevElement)
 

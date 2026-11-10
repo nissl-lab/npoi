@@ -3059,10 +3059,10 @@ namespace NPOI.XSSF.UserModel
         }
 
         /// <summary>
-        /// Get the visibility state for a given column.
+        /// Set the visibility state for a given column.
         /// </summary>
-        /// <param name="columnIndex">the column to get (0-based)</param>
-        /// <param name="hidden">the visiblity state of the column</param>
+        /// <param name="columnIndex">the column to set (0-based)</param>
+        /// <param name="hidden">the visibility state of the column</param>
         public void SetColumnHidden(int columnIndex, bool hidden)
         {
             EnsureWorksheetLoaded();

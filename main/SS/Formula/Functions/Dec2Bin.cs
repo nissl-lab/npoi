@@ -22,9 +22,9 @@ namespace NPOI.SS.Formula.Functions
     using NPOI.SS.Formula.Eval;
 
     /**
-     * Implementation for Excel Bin2Dec() function.<p/>
+     * Implementation for Excel DEC2BIN() function.<p/>
      * <p/>
-     * <b>Syntax</b>:<br/> <b>Bin2Dec  </b>(<b>number</b>,<b>[places]</b> )<br/>
+     * <b>Syntax</b>:<br/> <b>DEC2BIN  </b>(<b>number</b>,<b>[places]</b> )<br/>
      * <p/>
      * Converts a decimal number to binary.
      * <p/>

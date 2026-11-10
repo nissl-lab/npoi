@@ -20,7 +20,6 @@ using System.Text;
 using NPOI.Util;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using System.Text.RegularExpressions;
-using NPOI.OpenXml4Net.Util;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -103,7 +102,7 @@ namespace NPOI.XSSF.UserModel
                     && this.formula1 != null
                     && IsQuoted(this.formula1))
             {
-                explicitListOfValues = LIST_SPLIT_REGEX.Split(Unquote(this.formula1));
+                explicitListOfValues = Array.ConvertAll(LIST_SPLIT_REGEX.Split(Unquote(this.formula1)), UnescapeQuotes);
             }
         }
 
@@ -128,7 +127,7 @@ namespace NPOI.XSSF.UserModel
                         {
                             builder.Append(LIST_SEPARATOR);
                         }
-                        builder.Append(XmlHelper.EncodeCDATAContent(string1));
+                        builder.Append(EscapeQuotes(string1));
                     }
                     builder.Append(QUOTE);
                     Formula1 = builder.ToString();
@@ -198,6 +197,23 @@ namespace NPOI.XSSF.UserModel
         {
             return s.StartsWith(QUOTE) && s.EndsWith(QUOTE);
         }
+
+        /// <summary>
+        /// Writes a list value as part of an Excel string literal, where a double quote is written as two.
+        /// </summary>
+        private static string EscapeQuotes(string value)
+        {
+            return value.Replace(QUOTE, QUOTE + QUOTE);
+        }
+
+        /// <summary>
+        /// Reads a list value back from an Excel string literal.
+        /// </summary>
+        private static string UnescapeQuotes(string value)
+        {
+            return value.Replace(QUOTE + QUOTE, QUOTE);
+        }
+
         private static String Unquote(string s)
         {
             // removes leading and trailing quotes from a quoted string
