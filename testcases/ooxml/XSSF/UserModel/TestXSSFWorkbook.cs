@@ -550,21 +550,17 @@ namespace TestCases.XSSF.UserModel
         [Test]
         public void ForceFormulaRecalculationIsSaved()
         {
-            XSSFWorkbook wb1 = new XSSFWorkbook();
+            using XSSFWorkbook wb1 = new XSSFWorkbook();
             wb1.CreateSheet("Sheet1");
             wb1.ForceFormulaRecalculation = true;
 
-            XSSFWorkbook wb2 = XSSFTestDataSamples.WriteOutAndReadBack(wb1);
+            using XSSFWorkbook wb2 = XSSFTestDataSamples.WriteOutAndReadBack(wb1);
             ClassicAssert.IsTrue(wb2.GetCTWorkbook().calcPr.fullCalcOnLoad);
             ClassicAssert.IsTrue(wb2.ForceFormulaRecalculation);
 
             wb2.ForceFormulaRecalculation = false;
-            XSSFWorkbook wb3 = XSSFTestDataSamples.WriteOutAndReadBack(wb2);
+            using XSSFWorkbook wb3 = XSSFTestDataSamples.WriteOutAndReadBack(wb2);
             ClassicAssert.IsFalse(wb3.ForceFormulaRecalculation);
-
-            wb3.Close();
-            wb2.Close();
-            wb1.Close();
         }
         [Test]
         public void ChangeSheetNameWithSharedFormulas()
