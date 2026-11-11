@@ -185,13 +185,25 @@ namespace NPOI.OpenXmlFormats.Vml.Spreadsheet
                 else if (childNode.LocalName == "Visible")
                     ctObj.visible = NPOI.OpenXmlFormats.Util.XmlHelper.ReadTrueFalseBlank(childNode.InnerText);
                 else if (childNode.LocalName == "MoveWithCells")
-                    ctObj.moveWithCells = NPOI.OpenXmlFormats.Util.XmlHelper.ReadTrueFalseBlank(childNode.InnerText);
+                {
+                    ctObj.moveWithCells = string.IsNullOrEmpty(childNode.InnerText)
+                        ? ST_TrueFalseBlank.t
+                        : NPOI.OpenXmlFormats.Util.XmlHelper.ReadTrueFalseBlank(childNode.InnerText);
+                    ctObj.moveWithCellsSpecified = true;
+                }
                 else if (childNode.LocalName == "SizeWithCells")
-                    ctObj.sizeWithCells = NPOI.OpenXmlFormats.Util.XmlHelper.ReadTrueFalseBlank(childNode.InnerText);
+                {
+                    ctObj.sizeWithCells = string.IsNullOrEmpty(childNode.InnerText)
+                        ? ST_TrueFalseBlank.t
+                        : NPOI.OpenXmlFormats.Util.XmlHelper.ReadTrueFalseBlank(childNode.InnerText);
+                    ctObj.sizeWithCellsSpecified = true;
+                }
                 else if (childNode.LocalName == "Column")
                     ctObj.column.Add(Int32.Parse(childNode.InnerText));
                 else if (childNode.LocalName == "Row")
                     ctObj.row.Add(Int32.Parse(childNode.InnerText));
+                else if (childNode.LocalName == "FmlaPict")
+                    ctObj.fmlaPictField = childNode.InnerText;
             }
             return ctObj;
         }
@@ -231,6 +243,8 @@ namespace NPOI.OpenXmlFormats.Vml.Spreadsheet
                     sw.Write("</x:Column>");
                 }
             }
+            if (this.fmlaPictField != null)
+                sw.WriteElementAndContent("x:FmlaPict", XmlHelper.EncodeXml(this.fmlaPictField));
             sw.WriteEndElement("x", nodeName);
         }
 
@@ -337,6 +351,15 @@ namespace NPOI.OpenXmlFormats.Vml.Spreadsheet
         {
             return sizeWithCellsFieldSpecified ? 1 : 0;
         }
+        private string fmlaPictField;
+
+        [XmlElement(ElementName = "FmlaPict")]
+        public string FmlaPict
+        {
+            get { return this.fmlaPictField; }
+            set { this.fmlaPictField = value; }
+        }
+
         ST_TrueFalseBlank sizeWithCellsField = ST_TrueFalseBlank.NONE;
         bool sizeWithCellsFieldSpecified = false;
 
