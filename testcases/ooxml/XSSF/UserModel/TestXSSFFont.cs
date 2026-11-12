@@ -16,6 +16,7 @@
 ==================================================================== */
 
 using NPOI;
+using NPOI.HSSF.UserModel;
 using NPOI.OOXML.XSSF.UserModel;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.SS.UserModel;
@@ -25,6 +26,7 @@ using NPOI.XSSF;
 using NPOI.XSSF.UserModel;
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
+using System.IO;
 using System.Text;
 using TestCases.SS.UserModel;
 
@@ -126,6 +128,31 @@ namespace TestCases.XSSF.UserModel
             xssfFont.FontName = "Courier";
             ClassicAssert.AreEqual("Courier", ctFont.name.val);
         }
+
+        [Test]
+        public void TestCloneUnnamedFontToHSSF()
+        {
+            XSSFWorkbook xssfWorkbook = new XSSFWorkbook();
+            IFont xssfFont = xssfWorkbook.CreateFont();
+            ClassicAssert.IsNull(xssfFont.FontName);
+
+            HSSFWorkbook hssfWorkbook = new HSSFWorkbook();
+            IFont hssfFont = hssfWorkbook.CreateFont();
+            hssfFont.CloneStyleFrom(xssfFont);
+            ClassicAssert.AreEqual(HSSFFont.FONT_ARIAL, hssfFont.FontName);
+
+            using (MemoryStream stream = new MemoryStream())
+            {
+                hssfWorkbook.Write(stream);
+                HSSFWorkbook reloadedWorkbook = new HSSFWorkbook(new MemoryStream(stream.ToArray()));
+                ClassicAssert.AreEqual(HSSFFont.FONT_ARIAL, reloadedWorkbook.GetFontAt(hssfFont.Index).FontName);
+                reloadedWorkbook.Close();
+            }
+
+            hssfWorkbook.Close();
+            xssfWorkbook.Close();
+        }
+
         [Test]
         public void TestItalic()
         {
