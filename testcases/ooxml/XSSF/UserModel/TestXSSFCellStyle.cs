@@ -631,6 +631,40 @@ namespace TestCases.XSSF.UserModel
         }
 
         [Test]
+        public void TestCustomRgbFillForegroundColor()
+        {
+            foreach (var template in new[] { false, true })
+            {
+                IWorkbook wb = new XSSFWorkbook();
+                if (template)
+                {
+                    wb = XSSFTestDataSamples.OpenSampleWorkbook("Formatting.xlsx");
+                }
+                var sheet = wb.CreateSheet("t" + template);
+                var center = (XSSFCellStyle)wb.CreateCellStyle();
+                center.Alignment = HorizontalAlignment.Center;
+                center.FillForegroundColor = 0;
+                center.FillBackgroundColor = 64;
+                center.FillPattern = FillPattern.SolidForeground;
+                var font = wb.CreateFont();
+                font.FontHeightInPoints = 14;
+                var style = (XSSFCellStyle)wb.CreateCellStyle();
+                style.CloneStyleFrom(center);
+                style.SetFont(font);
+                style.SetFillForegroundColor(new XSSFColor(new byte[] { 146, 208, 80 }, ((XSSFWorkbook)wb).GetStylesSource().IndexedColors));
+                style.FillPattern = FillPattern.SolidForeground;
+                var cell = sheet.CreateRow(0).CreateCell(0);
+                cell.SetCellValue("x");
+                cell.CellStyle = style;
+
+                var wb2 = XSSFTestDataSamples.WriteOutAndReadBack(wb);
+                var s2 = (XSSFCellStyle)wb2.GetSheet("t" + template).GetRow(0).GetCell(0).CellStyle;
+                ClassicAssert.AreEqual(FillPattern.SolidForeground, s2.FillPattern);
+                ClassicAssert.AreEqual(new byte[] { 146, 208, 80 }, s2.FillForegroundXSSFColor.RGB, "template=" + template);
+                wb.Close();
+            }
+        }
+        [Test]
         public void TestGetFillForegroundColor()
         {
 
