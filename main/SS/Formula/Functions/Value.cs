@@ -42,7 +42,15 @@ namespace NPOI.SS.Formula.Functions
             {
                 return e.GetErrorEval();
             }
+            if (veText == BlankEval.instance)
+            {
+                return new NumberEval(ZERO);
+            }
             String strText = OperandResolver.CoerceValueToString(veText);
+            if (String.IsNullOrWhiteSpace(strText))
+            {
+                return ErrorEval.VALUE_INVALID;
+            }
             Double result = ConvertTextToNumber(strText);
             if (Double.IsNaN(result))
             {

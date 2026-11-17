@@ -20,7 +20,9 @@ namespace TestCases.SS.Formula.Functions
     using NPOI.SS.Formula.Eval;
     using System;
     using NPOI.SS.Formula.Functions;
+    using NPOI.HSSF.UserModel;
     using NUnit.Framework;using NUnit.Framework.Legacy;
+    using TestCases.SS.Util;
 
     /**
      * Tests for {@link Value}
@@ -98,6 +100,20 @@ namespace TestCases.SS.Formula.Functions
             ConfirmValueError(",300");
             ConfirmValueError("0.233,4");
             ConfirmValueError("1e2.5");
+            ConfirmValueError("");
+            ConfirmValueError(" ");
+        }
+        [Test]
+        public void TestBlank()
+        {
+            using var wb = new HSSFWorkbook();
+            var sheet = wb.CreateSheet();
+            var row = sheet.CreateRow(0);
+            var b1 = row.CreateCell(1);
+            var c1 = row.CreateCell(2);
+            var fe = new HSSFFormulaEvaluator(wb);
+            Utils.AssertDouble(fe, b1, "VALUE(A1)", 0.0);
+            Utils.AssertDouble(fe, c1, "VALUE(B1)", 0.0);
         }
     }
 
