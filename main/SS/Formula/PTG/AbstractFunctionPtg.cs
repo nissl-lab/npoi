@@ -148,7 +148,7 @@ namespace NPOI.SS.Formula.PTG
          */
         public static bool IsBuiltInFunctionName(String name)
         {
-            short ix = FunctionMetadataRegistry.LookupIndexByName(name.ToUpper());
+            short ix = FunctionMetadataRegistry.LookupIndexByName(name.ToUpperInvariant());
             return ix >= 0;
         }
         protected String LookupName(short index)
@@ -173,7 +173,7 @@ namespace NPOI.SS.Formula.PTG
          */
         protected static short LookupIndex(String name)
         {
-            short ix = FunctionMetadataRegistry.LookupIndexByName(name.ToUpper());
+            short ix = FunctionMetadataRegistry.LookupIndexByName(name.ToUpperInvariant());
             if (ix < 0)
             {
                 return FUNCTION_INDEX_EXTERNAL;
