@@ -61,6 +61,18 @@ namespace TestCases.HSSF.Model
             return result;
         }
         [Test]
+        public void TestLowerCaseFunctionNamesWithTurkishCulture()
+        {
+            // In tr-TR, "i".ToUpper() is the dotted "İ", so "min" must not become "MİN"
+            System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture("tr-TR");
+
+            Ptg[] ptgs = ParseFormula("min(A1:A3)");
+            ClassicAssert.AreEqual("MIN", ((AbstractFunctionPtg)ptgs[ptgs.Length - 1]).Name);
+
+            ptgs = ParseFormula("index(A1:B2,1,1)");
+            ClassicAssert.AreEqual("INDEX", ((AbstractFunctionPtg)ptgs[ptgs.Length - 1]).Name);
+        }
+        [Test]
         public void TestSimpleFormula()
         {
             Ptg[] ptgs = ParseFormula("2+2");

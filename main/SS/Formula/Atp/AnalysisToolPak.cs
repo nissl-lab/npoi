@@ -61,7 +61,7 @@ namespace NPOI.SS.Formula.Atp
             String prefix = "_xlfn.";
             if (name.StartsWith(prefix)) name = name.Substring(prefix.Length);
 
-            string key = name.ToUpper();
+            string key = name.ToUpperInvariant();
             if (_functionsByName.TryGetValue(key, out FreeRefFunction function))
                 return function;
 
