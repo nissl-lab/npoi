@@ -211,7 +211,7 @@ namespace NPOI.HSSF.UserModel
             {
                 using(Image img = Image.Load(ms))
                 {
-                    return img.Size();
+                    return new Size(img.Width, img.Height);
                 }
             }
         }

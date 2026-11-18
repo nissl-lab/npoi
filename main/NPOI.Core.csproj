@@ -21,7 +21,10 @@
     <PackageReference Include="BouncyCastle.Cryptography" />
     <PackageReference Include="SharpZipLib" />
     <PackageReference Include="SixLabors.Fonts" />
-    <PackageReference Include="SixLabors.ImageSharp" />
+    <PackageReference Include="SixLabors.ImageSharp">
+      <!-- Keep the ImageSharp build targets on the direct reference. -->
+      <PackExclude Condition="'$(TargetFramework)' == 'net8.0'">build</PackExclude>
+    </PackageReference>
     <PackageReference Include="ZString" />
   </ItemGroup>
 
