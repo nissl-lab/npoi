@@ -13,6 +13,8 @@
 
     <ItemGroup>
         <PackageReference Include="Nuke.Common" Version="10.0.0" />
+        <PackageReference Include="NuGet.Packaging" Version="6.12.5" />
+        <PackageReference Include="System.Security.Cryptography.Pkcs" Version="9.0.23" />
     </ItemGroup>
 
 </Project>

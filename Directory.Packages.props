@@ -23,8 +23,8 @@
     <PackageVersion Include="SixLabors.Fonts" Version="1.0.1" />
     <PackageVersion Include="SixLabors.ImageSharp" Version="2.1.11" />
     <PackageVersion Include="System.Configuration.ConfigurationManager" Version="8.0.1" />
-    <PackageVersion Include="System.Formats.Asn1" Version="8.0.1" />
-    <PackageVersion Include="System.Security.Cryptography.Xml" Version="8.0.2" />
+    <PackageVersion Include="System.Formats.Asn1" Version="8.0.2" />
+    <PackageVersion Include="System.Security.Cryptography.Xml" Version="8.0.5" />
     <PackageVersion Include="ZString" Version="2.6.0" />
   </ItemGroup>
 </Project>
