@@ -25,6 +25,8 @@ using System;
 using NPOI.OpenXmlFormats;
 using NPOI.OpenXml4Net.OPC.Internal;
 using NPOI.XSSF.UserModel;
+using ICSharpCode.SharpZipLib.Zip;
+using System.Text;
 namespace TestCases.OpenXml4Net.OPC
 {
 
@@ -228,6 +230,59 @@ namespace TestCases.OpenXml4Net.OPC
             props2.SetTitleProperty("Bug 51444 fixed");
             pkg2.Close();
         }
+
+        [TestCase(PackageRelationshipTypes.CORE_PROPERTIES)]
+        [TestCase(PackageRelationshipTypes.CORE_PROPERTIES_ECMA376)]
+        [TestCase(PackageRelationshipTypes.CORE_PROPERTIES_ECMA376_LOWERCASE)]
+        public void TestSaveKeepsSingleCorePropertiesPart(string relationshipType)
+        {
+            byte[] input = WithCorePropertiesRelationshipType("51444.xlsx", relationshipType);
+
+            OPCPackage pkg1 = OPCPackage.Open(new MemoryStream(input));
+            ZipEntry coreEntry = ZipHelper.GetCorePropertiesZipEntry((ZipPackage)pkg1);
+            ClassicAssert.IsNotNull(coreEntry);
+            ClassicAssert.AreEqual("/docProps/core.xml", coreEntry.Name);
+            pkg1.GetPackageProperties().SetTitleProperty("Saved once");
+            MemoryStream out1 = new MemoryStream();
+            pkg1.Save(out1);
+            pkg1.Close();
+
+            OPCPackage pkg2 = OPCPackage.Open(new MemoryStream(out1.ToArray()));
+            ClassicAssert.AreEqual("Saved once", pkg2.GetPackageProperties().GetTitleProperty());
+            ClassicAssert.AreEqual(1, pkg2.GetPartsByContentType(ContentTypes.CORE_PROPERTIES_PART).Count);
+            ClassicAssert.AreEqual(1, pkg2.GetRelationshipsByType(relationshipType).Size);
+            ClassicAssert.AreEqual(1,
+                pkg2.GetRelationshipsByType(PackageRelationshipTypes.CORE_PROPERTIES).Size
+                + pkg2.GetRelationshipsByType(PackageRelationshipTypes.CORE_PROPERTIES_ECMA376).Size
+                + pkg2.GetRelationshipsByType(PackageRelationshipTypes.CORE_PROPERTIES_ECMA376_LOWERCASE).Size);
+            pkg2.Revert();
+        }
+
+        private static byte[] WithCorePropertiesRelationshipType(string sampleName, string relationshipType)
+        {
+            MemoryStream output = new MemoryStream();
+            using (ZipInputStream zis = new ZipInputStream(OpenXml4NetTestDataSamples.OpenSampleStream(sampleName)))
+            using (ZipOutputStream zos = new ZipOutputStream(output) { IsStreamOwner = false })
+            {
+                ZipEntry entry;
+                while ((entry = zis.GetNextEntry()) != null)
+                {
+                    byte[] data = IOUtils.ToByteArray(zis);
+                    if (entry.Name == "_rels/.rels")
+                    {
+                        string rels = Encoding.UTF8.GetString(data);
+                        StringAssert.Contains(PackageRelationshipTypes.CORE_PROPERTIES_ECMA376_LOWERCASE, rels);
+                        rels = rels.Replace(PackageRelationshipTypes.CORE_PROPERTIES_ECMA376_LOWERCASE, relationshipType);
+                        data = Encoding.UTF8.GetBytes(rels);
+                    }
+                    zos.PutNextEntry(new ZipEntry(entry.Name));
+                    zos.Write(data, 0, data.Length);
+                    zos.CloseEntry();
+                }
+            }
+            return output.ToArray();
+        }
+
         [Test]
         public void TestEntitiesInCoreProps_56164()
         {

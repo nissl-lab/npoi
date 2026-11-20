@@ -537,7 +537,8 @@ namespace NPOI.OpenXml4Net.OPC
                 // If the core properties part does not exist in the part list,
                 // we save it as well
                 if (this.GetPartsByRelationshipType(PackageRelationshipTypes.CORE_PROPERTIES).Count == 0 &&
-                this.GetPartsByRelationshipType(PackageRelationshipTypes.CORE_PROPERTIES_ECMA376).Count == 0)
+                this.GetPartsByRelationshipType(PackageRelationshipTypes.CORE_PROPERTIES_ECMA376).Count == 0 &&
+                this.GetPartsByRelationshipType(PackageRelationshipTypes.CORE_PROPERTIES_ECMA376_LOWERCASE).Count == 0)
                 {
                     logger.Log(POILogger.DEBUG, "Save core properties part");
 
