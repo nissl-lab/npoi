@@ -47,21 +47,20 @@ namespace NPOI.OpenXml4Net.OPC
             }
         }
 
-        /**
-         * Constructor. <b>Operation not supported.</b>
-         *
-         * @param in
-         *            Zip input stream to load.
-         * @param access
-         */
+        /// <summary>
+        /// Opens a Zip based Open XML document from a Stream.
+        /// </summary>
+        /// <param name="in1">Zip input stream to load.</param>
+        /// <param name="access">The package access mode.</param>
         public ZipPackage(Stream in1, PackageAccess access)
             : base(access)
         {
             isStream = true;
-            ZipInputStream zis = ZipHelper.OpenZipStream(in1);
-            // TODO: ZipSecureFile
-            //ThresholdInputStream zis = ZipHelper.OpenZipStream(in1);
-            this.zipArchive = new ZipInputStreamZipEntrySource(zis);
+            // Wrap the raw stream so we can measure compressed bytes per entry and detect
+            // decompression bombs even for streamed / data-descriptor entries (Size == -1).
+            CountingStream counter = new CountingStream(in1);
+            ZipInputStream zis = ZipHelper.OpenZipStream(counter);
+            this.zipArchive = new ZipInputStreamZipEntrySource(zis, counter);
         }
 
         /**
@@ -113,10 +112,11 @@ namespace NPOI.OpenXml4Net.OPC
                 try
                 {
                     fis = file.Create();
-                    // TODO: ZipSecureFile
-                    // zis = ZipHelper.OpenZipStream(fis);
-                    zis = ZipHelper.OpenZipStream(fis);
-                    ze = new ZipInputStreamZipEntrySource(zis);
+                    // Wrap the raw stream so we can measure compressed bytes per entry and
+                    // detect decompression bombs even for streamed / data-descriptor entries.
+                    CountingStream counter = new CountingStream(fis);
+                    zis = ZipHelper.OpenZipStream(counter);
+                    ze = new ZipInputStreamZipEntrySource(zis, counter);
                 }
                 catch (IOException e2)
                 {

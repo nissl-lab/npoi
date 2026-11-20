@@ -1,0 +1,186 @@
+# Sponsors
+
+NPOI is an open-source .NET library for reading and writing Microsoft Office
+formats without requiring Microsoft Office, COM, or interop.
+
+Maintaining a widely used Office-file library requires ongoing work on bug
+fixes, compatibility, security updates, NuGet releases, CI infrastructure, and
+community support. We are grateful to the organizations and individuals who
+help make this work sustainable.
+
+## Important Note on Licensing and Maintenance
+
+NPOI is developed and distributed as an open-source project, but the project
+also applies an Open Source Maintenance Fee (OSMF) policy for qualifying
+organizations and users of binary distributions. This is part of the project's
+sustainability model and is separate from GitHub sponsorship.
+
+In other words:
+
+- GitHub Sponsors and corporate support help fund ongoing maintenance and
+  community work.
+- The OSMF / maintenance fee policy is a separate licensing/compliance
+  requirement for certain organizations and commercial users of the binary
+  packages.
+- Sponsorship does not replace or waive any applicable OSMF obligations.
+
+For the latest policy details and FAQ, please review the project documentation
+and the OSMF information referenced in the repository.
+
+## Become a Sponsor
+
+If your organization depends on NPOI, please consider supporting the project
+directly.
+
+- Sponsor through [GitHub Sponsors](https://github.com/sponsors/tonyqus)
+- For enterprise sponsorship or licensing questions, use the project
+  discussions or contact the maintainers through the repository channels.
+
+## Corporate Sponsors
+
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://www.swyfft.com/">
+        <img
+          src="https://github.com/user-attachments/assets/2f043f1f-9d56-4cf5-b46f-71868567b2d3"
+          alt="Swyfft Insurance"
+          width="180"
+        />
+      </a>
+      <br />
+      Swyfft Insurance
+    </td>
+    <td align="center">
+      <a href="https://www.baramundi.com/">
+        <img
+          src="https://avatars.githubusercontent.com/u/171809088?s=200&v=4"
+          alt="baramundi"
+          width="100"
+        />
+      </a>
+      <br />
+      Baramundi
+    </td>
+<td align="center">
+      <a href="https://www.devolis.com/">
+        <img width="100" alt="image" src="https://github.com/user-attachments/assets/286f43fb-7aee-474c-a02a-20f1ff29f35c" />
+      </a>
+      <br />
+      Devolis
+</td>
+<td align="center">
+      <a href="https://github.com/ISS-Switzerland">
+        <img width="181" height="181" alt="image" src="https://github.com/user-attachments/assets/3f8c46c4-203a-4fa6-b25f-227f6c7e86b7" />
+      </a>
+      <br />
+      ISS-Switzerland
+</td>
+<td align="center">
+      <a href="https://easylaser.com/">
+     <img width="100" alt="image" src="https://github.com/user-attachments/assets/5e3fb6ab-93c3-49b3-89ea-eb0851763d68" />
+      </a>
+      <br />
+      Easy-Laser-AB
+</td>
+<td align="center">
+      <a href="https://cepres.com/">
+     <img width="192" height="192" alt="image" src="https://github.com/user-attachments/assets/ebc391a8-ac9c-45c6-aa09-3360fc5d6bfe" />
+      </a>
+      <br />
+      CEPRES GmbH
+</td>
+<td align="center">
+      <a href="https://github.com/Porky-Products">
+     <img width="200" height="200" alt="image" src="https://github.com/user-attachments/assets/2ef3191a-2ac9-4f1c-9421-3bd9b0ac5296" />
+      </a>
+      <br />
+      Porky Products
+</td>
+<td align="center">
+      <a href="https://github.com/Piro-AB">
+     <img width="200" height="200" alt="image" src="https://github.com/user-attachments/assets/dcfc66af-bf7d-49d0-99ae-0d4b34c821aa" />
+      </a>
+      <br />
+      Piro AB
+</td>
+<td align="center">
+      <a href="https://homie.io/">
+        <img width="100" alt="image" src="https://github.com/user-attachments/assets/80555e34-d82b-43e7-9965-5b43b33c4b74" />
+      </a>
+      <br />
+      Homie AG
+</td>
+
+<td align="center">
+      <a href="https://www.silex-partners.com/">
+        <img width="100" alt="image" src="https://github.com/user-attachments/assets/fc4aa3ee-9340-4272-b425-07c91aabceea" />
+      </a>
+      <br />
+      Silex
+</td>
+
+<td align="center">
+      <a href="https://wem.io/">
+        <img width="100 alt="image" src="https://github.com/user-attachments/assets/1c349370-946b-4d96-81fa-17743f11bbcf" />
+      </a>
+      <br />
+      WEM
+</td>
+
+<td align="center">
+        <img width="100" alt="image" src="https://github.com/user-attachments/assets/40a1bbd8-59be-48c5-a250-1d85d7ee2982" />
+      <br />
+      Equin Limited
+</td>
+  </tr>
+   <tr>
+  <td align="center">
+     <a href="https://www.lifehelp.com/">
+     <img width="100" alt="image" src="https://github.com/user-attachments/assets/aa9d7ffb-bbe2-4da1-8c82-16daff20202a" />
+     </a>
+    <br/>
+     Life Help
+   </td>
+  <td align="center">
+     <a href="https://keysys.io/">
+    <img width="200" height="200" alt="image" src="https://github.com/user-attachments/assets/60d09e70-d394-4834-8677-b89bffc2af05" />
+     </a>
+    <br/>
+     KEYSYS
+   </td>
+
+     
+
+   </tr>
+</table>
+
+## Individual Sponsors
+
+[@kenjiuno](https://github.com/kenjiuno)
+
+[@AnneLazar](https://github.com/AnneLazar)
+
+[@AlessandroMartinelli](https://github.com/AlessandroMartinelli)
+
+[@SanjeevElement](https://github.com/SanjeevElement)
+
+[@maelstraggiotti](https://github.com/maelstraggiotti)
+
+Thank you to all individual sponsors supporting NPOI through GitHub Sponsors
+and other approved channels.
+
+## Recognition Policy
+
+- Sponsor names, logos, and links are displayed with the sponsor's permission.
+- Private sponsors will not be listed here. 
+- Logo placement and size may be adjusted to keep project documentation clear
+  and consistent.
+- Sponsorship helps sustain NPOI but does not grant control over project
+  governance, roadmap decisions, releases, or issue prioritization.
+- Sponsor recognition may be updated or removed when a sponsorship changes,
+  ends, or branding information becomes outdated.
+- OSMF / maintenance fee obligations are separate from public sponsor
+  recognition and are governed by the project's applicable licensing policy.
+
+_Last updated: September 2026.9_

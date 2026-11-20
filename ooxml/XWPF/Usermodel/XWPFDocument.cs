@@ -1249,7 +1249,7 @@ namespace NPOI.XWPF.UserModel
         public void CreateTOC()
         {
             var ctStyles = DocumentStylesBuilder.BuildStylesForTOC();
-            styles.SetStyles(ctStyles);
+            CreateStyles().SetStyles(ctStyles);
 
             CT_SdtBlock tocBlock = Document.body.AddNewSdt();
             TOC toc = new TOC(tocBlock);

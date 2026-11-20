@@ -40,11 +40,9 @@ namespace NPOI.POIFS.Crypt.CryptoAPI
 
         public override void ConfirmPassword(String password)
         {
-            Random r = new Random();
             byte[] salt = new byte[16];
             byte[] verifier = new byte[16];
-            r.NextBytes(salt);
-            r.NextBytes(verifier);
+            FillRandomBytes(salt, verifier);
             ConfirmPassword(password, null, null, verifier, salt, null);
         }
 

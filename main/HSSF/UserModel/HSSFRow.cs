@@ -116,12 +116,12 @@ namespace NPOI.HSSF.UserModel
 
         /// <summary>
         /// Use this to create new cells within the row and return it.
-        /// The cell that is returned is a CELL_TYPE_BLANK. The type can be changed
-        /// either through calling setCellValue or setCellType.
+        /// The cell that is returned will be of the requested type. The type can be changed
+        /// either through calling SetCellValue or SetCellType.
         /// </summary>
         /// <param name="columnIndex">the column number this cell represents</param>
-        /// <param name="type">a high level representation of the created cell.</param>
-        /// <returns></returns>
+        /// <param name="type">the cell's data type</param>
+        /// <returns>a high level representation of the created cell.</returns>
         public ICell CreateCell(int columnIndex, CellType type)
         {
             short shortCellNum = (short)columnIndex;

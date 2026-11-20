@@ -17,7 +17,9 @@
 namespace TestCases.XSSF.UserModel
 {
     using System;
+    using System.IO;
     using NPOI.SS.UserModel;
+    using NPOI.SS.Util;
     using NPOI.XSSF.UserModel;
     using NUnit.Framework;using NUnit.Framework.Legacy;
 
@@ -52,6 +54,25 @@ namespace TestCases.XSSF.UserModel
             CollectionAssert.AreEqual(expected, constraint.ExplicitListValues);
             // Excel and DataValidationConstraint Parser ignore (strip) whitespace; quotes should still be intact
             ClassicAssert.AreEqual(literal.Replace(" ", ""), constraint.Formula1);
+        }
+
+        // See issue 1369
+        [Test]
+        public void ListLiteralsWithSpecialCharactersAreWrittenAsExcelStrings()
+        {
+            String[] values = new String[] { "a\"b", "x&y", "<b>", "it's", "a]]>b" };
+            XSSFWorkbook workbook = new XSSFWorkbook();
+            ISheet sheet = workbook.CreateSheet();
+            IDataValidationHelper helper = sheet.GetDataValidationHelper();
+            sheet.AddValidationData(helper.CreateValidation(helper.CreateExplicitListConstraint(values), new CellRangeAddressList(0, 0, 0, 0)));
+
+            MemoryStream output = new MemoryStream();
+            workbook.Write(output, true);
+
+            XSSFWorkbook readBack = new XSSFWorkbook(new MemoryStream(output.ToArray()));
+            IDataValidationConstraint readConstraint = readBack.GetSheetAt(0).GetDataValidations()[0].ValidationConstraint;
+            ClassicAssert.AreEqual("\"a\"\"b,x&y,<b>,it's,a]]>b\"", readConstraint.Formula1);
+            CollectionAssert.AreEqual(values, readConstraint.ExplicitListValues);
         }
 
         [Test]

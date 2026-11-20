@@ -930,9 +930,19 @@ namespace TestCases.XWPF.UserModel
         [Test]
         public void TestGettersWithEmptyParagraphProperties()
         {
-            using(XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("emptyPPr.docx"))
+            using(XWPFDocument doc = new XWPFDocument())
             {
-                XWPFParagraph p = doc.GetParagraphArray(0);
+                XWPFParagraph p = doc.CreateParagraph();
+                p.GetCTP().pPr = null;
+                ClassicAssert.IsNull(p.GetCTP().pPr);
+                ClassicAssert.AreEqual(-1, p.SpacingAfter);
+                ClassicAssert.IsNull(p.GetCTP().pPr);
+                ClassicAssert.AreEqual(-1, p.IndentationLeft);
+                ClassicAssert.IsNull(p.GetCTP().pPr);
+                ClassicAssert.IsFalse(p.IsWordWrapped);
+                ClassicAssert.IsNull(p.StyleID);
+                ClassicAssert.IsNull(p.Style);
+                ClassicAssert.IsNull(p.GetCTP().pPr);
 
                 ClassicAssert.IsNull(p.GetNumID());
                 ClassicAssert.IsNull(p.GetNumIlvl());

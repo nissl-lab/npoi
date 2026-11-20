@@ -16,6 +16,7 @@
 ==================================================================== */
 
 using System.IO;
+using System.Security.Cryptography;
 using NPOI.POIFS.FileSystem;
 
 namespace NPOI.POIFS.Crypt
@@ -126,6 +127,17 @@ namespace NPOI.POIFS.Crypt
             {
                 { "secretKey", () => _secretKey == null ? null : (object)_secretKey.GetEncoded() }
             };
+        }
+
+        protected static void FillRandomBytes(params byte[][] buffers)
+        {
+            using(var randomNumberGenerator = RandomNumberGenerator.Create())
+            {
+                foreach(var buffer in buffers)
+                {
+                    randomNumberGenerator.GetBytes(buffer);
+                }
+            }
         }
     }
 }

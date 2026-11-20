@@ -64,6 +64,14 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
     {
 
         [Test]
+        public void TestCorePropertiesEcma376RelationshipType()
+        {
+            ClassicAssert.AreEqual(
+                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/metadata/core-properties",
+                PackageRelationshipTypes.CORE_PROPERTIES_ECMA376);
+        }
+
+        [Test]
         public void TestCorePropertiesPart()
         {
             OPCPackage pkg;

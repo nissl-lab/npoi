@@ -10819,13 +10819,13 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                 else if (childNode.LocalName == "stockChart")
                     ctObj.stockChart.Add(CT_StockChart.Parse(childNode, namespaceManager));
                 else if (childNode.LocalName == "valAx")
-                    ctObj.valAx.Add(CT_ValAx.Parse(childNode, namespaceManager));
+                    ctObj.valAx.Add(ctObj.RecordAxis(CT_ValAx.Parse(childNode, namespaceManager)));
                 else if (childNode.LocalName == "serAx")
-                    ctObj.serAx.Add(CT_SerAx.Parse(childNode, namespaceManager));
+                    ctObj.serAx.Add(ctObj.RecordAxis(CT_SerAx.Parse(childNode, namespaceManager)));
                 else if (childNode.LocalName == "dateAx")
-                    ctObj.dateAx.Add(CT_DateAx.Parse(childNode, namespaceManager));
+                    ctObj.dateAx.Add(ctObj.RecordAxis(CT_DateAx.Parse(childNode, namespaceManager)));
                 else if (childNode.LocalName == "catAx")
-                    ctObj.catAx.Add(CT_CatAx.Parse(childNode, namespaceManager));
+                    ctObj.catAx.Add(ctObj.RecordAxis(CT_CatAx.Parse(childNode, namespaceManager)));
                 else if (childNode.LocalName == "extLst")
                     ctObj.extLst.Add(CT_Extension.Parse(childNode, namespaceManager));
             }
@@ -10954,32 +10954,22 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
                     x.Write(sw, "stockChart");
                 }
             }
-            if (this.serAx != null)
+            foreach (object axis in GetAxesInDocumentOrder())
             {
-                foreach (CT_SerAx x in this.serAx)
+                switch (axis)
                 {
-                    x.Write(sw, "serAx");
-                }
-            }
-            if (this.dateAx != null)
-            {
-                foreach (CT_DateAx x in this.dateAx)
-                {
-                    x.Write(sw, "dateAx");
-                }
-            }
-            if (this.valAx != null)
-            {
-                foreach (CT_ValAx x in this.valAx)
-                {
-                    x.Write(sw, "valAx");
-                }
-            }
-            if (this.catAx != null)
-            {
-                foreach (CT_CatAx x in this.catAx)
-                {
-                    x.Write(sw, "catAx");
+                    case CT_SerAx x:
+                        x.Write(sw, "serAx");
+                        break;
+                    case CT_DateAx x:
+                        x.Write(sw, "dateAx");
+                        break;
+                    case CT_ValAx x:
+                        x.Write(sw, "valAx");
+                        break;
+                    case CT_CatAx x:
+                        x.Write(sw, "catAx");
+                        break;
                 }
             }
             if (this.spPr != null)
@@ -10998,12 +10988,68 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
         List<CT_SerAx> serAxField;
         List<CT_CatAx> catAxField;
         List<CT_DateAx> dateAxField;
+
+        // The schema declares the axes as one repeating choice (valAx | catAx | dateAx | serAx), and
+        // Excel pairs chart groups with the primary and secondary axes by the order the axis
+        // elements appear in. The typed lists above cannot carry that interleaving, so the order in
+        // which axes were parsed or added is recorded here and Write follows it.
+        private readonly List<object> axisOrderField = new List<object>();
+
+        private T RecordAxis<T>(T axis)
+        {
+            this.axisOrderField.Add(axis);
+            return axis;
+        }
+
+        /// <summary>
+        /// All axes of the plot area in document order: the order they were parsed or added in.
+        /// Axes placed directly into the typed lists (<see cref="valAx"/>, <see cref="catAx"/>,
+        /// <see cref="dateAx"/>, <see cref="serAx"/>) follow the recorded ones, and axes removed
+        /// from those lists are omitted. Reordering axes that are already recorded within a typed
+        /// list does not change their document order.
+        /// </summary>
+        public List<object> GetAxesInDocumentOrder()
+        {
+            List<object> present = new List<object>();
+            if (this.serAxField != null)
+                present.AddRange(this.serAxField);
+            if (this.dateAxField != null)
+                present.AddRange(this.dateAxField);
+            if (this.valAxField != null)
+                present.AddRange(this.valAxField);
+            if (this.catAxField != null)
+                present.AddRange(this.catAxField);
+
+            List<object> ordered = new List<object>(present.Count);
+            foreach (object axis in this.axisOrderField)
+            {
+                if (ContainsReference(present, axis) && !ContainsReference(ordered, axis))
+                    ordered.Add(axis);
+            }
+            foreach (object axis in present)
+            {
+                if (!ContainsReference(ordered, axis))
+                    ordered.Add(axis);
+            }
+            return ordered;
+        }
+
+        private static bool ContainsReference(List<object> list, object item)
+        {
+            foreach (object candidate in list)
+            {
+                if (ReferenceEquals(candidate, item))
+                    return true;
+            }
+            return false;
+        }
+
         public CT_ValAx AddNewValAx()
         {
             if (valAxField == null)
                 valAxField = new List<CT_ValAx>();
             CT_ValAx val = new CT_ValAx();
-            this.valAxField.Add(val);
+            this.valAxField.Add(RecordAxis(val));
             return val;
         }
 
@@ -11012,7 +11058,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             if (serAxField == null)
                 serAxField = new List<CT_SerAx>();
             CT_SerAx val = new CT_SerAx();
-            this.serAxField.Add(val);
+            this.serAxField.Add(RecordAxis(val));
             return val;
         }
         public bool IsSetLayout()
@@ -11347,7 +11393,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             CT_CatAx newax = new CT_CatAx();
             if(this.catAxField==null)
                 this.catAxField = new List<CT_CatAx>();
-            this.catAxField.Add(newax);
+            this.catAxField.Add(RecordAxis(newax));
             return newax;
         }
 
@@ -11358,7 +11404,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             {
                 this.dateAxField = new List<CT_DateAx>();
             }
-            this.dateAxField.Add(newax);
+            this.dateAxField.Add(RecordAxis(newax));
             return newax;
         }
 

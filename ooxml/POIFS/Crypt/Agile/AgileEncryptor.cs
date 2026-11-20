@@ -37,7 +37,6 @@ namespace NPOI.POIFS.Crypt.Agile
 
         public override void ConfirmPassword(String password) {
             // see [MS-OFFCRYPTO] - 2.3.3 EncryptionVerifier
-            Random r = new Random();
             int blockSize = builder.GetHeader().BlockSize;
             int keySize = builder.GetHeader().KeySize / 8;
             int hashSize = builder.GetHeader().HashAlgorithm.hashSize;
@@ -47,11 +46,7 @@ namespace NPOI.POIFS.Crypt.Agile
                  , newKeySalt = new byte[blockSize]
                  , newKeySpec = new byte[keySize]
                  , newIntegritySalt = new byte[hashSize];
-            r.NextBytes(newVerifierSalt); // blocksize
-            r.NextBytes(newVerifier); // blocksize
-            r.NextBytes(newKeySalt); // blocksize
-            r.NextBytes(newKeySpec); // keysize
-            r.NextBytes(newIntegritySalt); // hashsize
+            FillRandomBytes(newVerifierSalt, newVerifier, newKeySalt, newKeySpec, newIntegritySalt);
 
             ConfirmPassword(password, newKeySpec, newKeySalt, newVerifierSalt, newVerifier, newIntegritySalt);
         }

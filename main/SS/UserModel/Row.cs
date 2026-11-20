@@ -53,11 +53,11 @@ namespace NPOI.SS.UserModel
         /// <summary>
         /// Use this to create new cells within the row and return it.
         /// 
-        /// The cell that is returned is a <see cref="ICell"/>/<see cref="CellType.Blank"/>. The type can be changed
+        /// The cell that is returned will be of the requested type. The type can be changed
         /// either through calling <code>SetCellValue</code> or <code>SetCellType</code>.
         /// </summary>
         /// <param name="column">the column number this cell represents</param>
-        /// <param name="type"></param>
+        /// <param name="type">the cell's data type</param>
         /// <returns>Cell a high level representation of the created cell.</returns>
         /// <throws>ArgumentException if columnIndex &lt; 0 or greater than the maximum number of supported columns
         /// (255 for *.xls, 1048576 for *.xlsx)

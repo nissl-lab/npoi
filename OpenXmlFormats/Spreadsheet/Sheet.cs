@@ -7469,15 +7469,15 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             sw.Write('>');
             if (this.formula1 != null)
             {
-                sw.Write("<formula1><![CDATA[");
-                sw.Write(this.formula1);
-                sw.Write("]]></formula1>");
+                sw.Write("<formula1>");
+                sw.WriteCDATA(this.formula1);
+                sw.Write("</formula1>");
             }
             if (this.formula2 != null)
             {
-                sw.Write("<formula2><![CDATA[");
-                sw.Write(this.formula2);
-                sw.Write("]]></formula2>");
+                sw.Write("<formula2>");
+                sw.WriteCDATA(this.formula2);
+                sw.Write("</formula2>");
             }
 
             sw.WriteEndElement(nodeName);

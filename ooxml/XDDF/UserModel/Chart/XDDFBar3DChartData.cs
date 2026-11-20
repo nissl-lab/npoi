@@ -120,7 +120,6 @@ public class XDDFBar3DChartData<T, V> : XDDFChartData<T, V>
         int index = this.series.Count;
         CT_BarSer ctSer = new CT_BarSer();
         chart.ser.Add(ctSer);
-        ctSer.tx = new CT_SerTx();
         ctSer.cat = new CT_AxDataSource();
         ctSer.val = new CT_NumDataSource();
         ctSer.idx = new CT_UnsignedInt { val = (uint)index };

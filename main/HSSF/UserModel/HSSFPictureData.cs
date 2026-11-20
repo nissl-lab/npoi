@@ -136,16 +136,11 @@ namespace NPOI.HSSF.UserModel
             }
         }
 
-        /**
-     * @return the POI internal image type, -1 if not unknown image type
-     *
-     * @see Workbook#PICTURE_TYPE_DIB
-     * @see Workbook#PICTURE_TYPE_EMF
-     * @see Workbook#PICTURE_TYPE_JPEG
-     * @see Workbook#PICTURE_TYPE_PICT
-     * @see Workbook#PICTURE_TYPE_PNG
-     * @see Workbook#PICTURE_TYPE_WMF
-     */
+        /// <summary>
+        /// Gets the POI internal image type, or <see cref="PictureType.Unknown"/> (-1)
+        /// if the image type is unknown.
+        /// </summary>
+        /// <seealso cref="PictureType"/>
         public PictureType PictureType
         {
             get

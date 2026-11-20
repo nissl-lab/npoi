@@ -2,10 +2,13 @@
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using NPOI.XDDF.UserModel.Chart;
+using NPOI.XSSF;
 using NPOI.XSSF.UserModel;
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
+using System.IO;
 using System.Linq;
+using System.Xml;
 
 namespace TestCases.XSSF.UserModel.Charts
 {
@@ -74,6 +77,35 @@ namespace TestCases.XSSF.UserModel.Charts
             CT_BarChart ctBarChart = xssfChart.GetCTChart().plotArea.barChart.FirstOrDefault();
             ClassicAssert.NotNull(ctBarChart);
             ClassicAssert.AreEqual(ST_BarGrouping.clustered, ctBarChart!.grouping.val);
+        }
+
+        // CT_SerTx requires a strRef or a v; an empty <c:tx/> makes Excel discard the whole drawing.
+        [Test]
+        public void TestSeriesWithoutTitleWritesNoSeriesText()
+        {
+            using XSSFWorkbook wb = new XSSFWorkbook();
+            ISheet sheet = new SheetBuilder(wb, plotData).Build();
+            var drawing = (XSSFDrawing)sheet.CreateDrawingPatriarch();
+            var chart = (XSSFChart)drawing.CreateChart(drawing.CreateAnchor(0, 0, 0, 0, 1, 1, 10, 30));
+
+            var barChartData = chart.CreateData<string, double>(ChartTypes.BAR,
+                chart.CreateCategoryAxis(AxisPosition.Bottom), chart.CreateValueAxis(AxisPosition.Left));
+            barChartData.AddSeries(
+                XDDFDataSourcesFactory.FromStringCellRange(sheet, CellRangeAddress.ValueOf("A1:J1")),
+                XDDFDataSourcesFactory.FromNumericCellRange(sheet, CellRangeAddress.ValueOf("A2:J2")));
+            chart.Plot(barChartData);
+
+            using XSSFWorkbook readBack = XSSFTestDataSamples.WriteOutAndReadBack(wb);
+            XSSFChart readChart = ((XSSFSheet)readBack.GetSheetAt(0)).GetDrawingPatriarch().GetCharts().Single();
+            XmlDocument xml = new XmlDocument();
+            using (Stream stream = readChart.GetPackagePart().GetInputStream())
+            {
+                xml.Load(stream);
+            }
+            XmlNamespaceManager ns = new XmlNamespaceManager(xml.NameTable);
+            ns.AddNamespace("c", "http://schemas.openxmlformats.org/drawingml/2006/chart");
+            ClassicAssert.AreEqual(1, xml.SelectNodes("//c:barChart/c:ser", ns).Count);
+            ClassicAssert.AreEqual(0, xml.SelectNodes("//c:barChart/c:ser/c:tx", ns).Count);
         }
     }
 }

@@ -33,6 +33,10 @@ Documentation
 
 [Useful Packages based on NPOI](https://github.com/nissl-lab/npoi/wiki/ORM-on-NPOI)
 
+Sponsors
+=================
+Thank you for all the sponsors. [Here is the sponsors list](Sponsors.md) 
+
 Advantage of NPOI
 =================
 a. It's totally free to startups, freelancers, and hobbyists (whose annual revenue is less than $10,000 USD)
@@ -49,9 +53,65 @@ f. Real successful cases all over the world
 
 g. Works on both Windows and Linux 
 
+PPTX foundation (XSLF)
+======================
+The initial `NPOI.XSLF.UserModel` API supports creating an empty transitional
+`.pptx` presentation, adding blank slides, and saving and reopening the package:
+
+```csharp
+using NPOI.XSLF.UserModel;
+using System.IO;
+
+using var presentation = new XMLSlideShow();
+presentation.CreateSlide();
+presentation.CreateSlide();
+using var output = File.Create("blank-slides.pptx");
+presentation.Write(output);
+```
+
+Use `new XMLSlideShow(inputStream)` or `new XMLSlideShow(opcPackage)` to open an
+existing presentation, and `GetSlides()` to access slides in presentation order.
+Closing the presentation closes its underlying OPC package. As with the other
+OOXML APIs, save to a different file when opening a package from a file path.
+
+The foundation follows the existing OOXML layering: partial PresentationML data
+models live in `OpenXmlFormats/Presentation`, while `XMLSlideShow`, `XSLFSlide`,
+`XSLFRelation`, and `XSLFFactory` live in `ooxml/XSLF/UserModel`. Packaging uses the
+existing OPC implementation. Slides, masters, and layouts share `XSLFSheet`.
+`GetSlideMasters()` and `GetSlideLayouts()` follow their XML reference-list order.
+`XSLFTheme` exposes read-only theme metadata using the existing DrawingML model.
+Unchanged master, layout, and theme parts retain their original bytes; unmodeled
+content remains intact when supported sheet models are saved.
+Opaque extension children retain their order relative to modeled sheet content,
+including extensions preceding common slide data in masters and layouts.
+
+Use a layout from the same presentation to create a slide explicitly:
+
+```csharp
+var master = presentation.GetSlideMasters()[0];
+var layout = master.GetLayout("Blank");
+if (layout == null)
+    throw new InvalidOperationException("This master has no layout named Blank.");
+var slide = presentation.CreateSlide(layout);
+var theme = slide.GetTheme(); // May be null when the master has no theme.
+```
+
+Layouts expose `Name` and the PresentationML `Type` string. Slides expose
+`GetSlideLayout()`, `GetSlideMaster()`, and `GetTheme()`. The layout must be listed
+by a referenced master in the same presentation. Attaching a layout does not
+yet copy placeholder shapes or resolve inherited text formatting. Theme editing
+is not supported.
+
+This is a foundation, not full PowerPoint support. Parameterless slide creation
+requires an existing blank layout (included in newly created presentations).
+The layout overload can select other layout types. Existing slide
+content and unsupported related parts are retained, but high-level text boxes,
+pictures, tables, charts, notes, rendering, and animation APIs are not yet
+implemented. Strict OOXML and macro-enabled presentation formats are not supported.
+
 System Requirement
 ===================
-.NET 8
+.NET 8, .NET 10
 
 .NET Standard 2.1 (.NET Core 3.x, .NET 5, .NET 6)
 
@@ -61,11 +121,6 @@ System Requirement
 
 Contributors
 ===================
-![Contributors](https://contrib.rocks/image?repo=nissl-lab/npoi)
-
-### Sponsored By
-[<img alt="Swyfft Insurance" src="https://github.com/user-attachments/assets/2f043f1f-9d56-4cf5-b46f-71868567b2d3" width="180" />](https://www.swyfft.com/) <br>
-[<img alt="Baramundi" src="https://avatars.githubusercontent.com/u/171809088?s=200&v=4" width="100" />](https://www.baramundi.com/)
-
+For detailed contributors list, you are [read here](Contributors.md)
 
 <a href="https://info.flagcounter.com/bndt"><img src="https://s01.flagcounter.com/count/bndt/bg_FFFFFF/txt_000000/border_CCCCCC/columns_3/maxflags_20/viewers_0/labels_1/pageviews_1/flags_0/percent_0/" alt="Flag Counter" border="0"></a>

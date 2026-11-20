@@ -20,9 +20,10 @@ namespace NPOI.HSSF.EventUserModel
     using NPOI.HSSF.Record;
 
     /**
-     * Interface for use with the HSSFRequest and HSSFEventFactory.  Users should Create
-     * a listener supporting this interface and register it with the HSSFRequest (associating
-     * it with Record SID's).
+     * Abstract class for use with the HSSFRequest and HSSFEventFactory, which
+     * allows processing to be halted. Users should create a subclass and override
+     * AbortableProcessRecord(Record) to do their processing, then register it
+     * with the HSSFRequest (associating it with Record SID's) as usual.
      *
      * @see org.apache.poi.hssf.eventusermodel.HSSFEventFactory
      * @see org.apache.poi.hssf.eventusermodel.HSSFRequest
@@ -35,9 +36,9 @@ namespace NPOI.HSSF.EventUserModel
     public abstract class AbortableHSSFListener : IHSSFListener
     {
         /**
-         * This method, inherited from HSSFListener Is implemented as a stub.
-         * It Is never called by HSSFEventFActory or HSSFRequest.
-         *
+         * This method, inherited from IHSSFListener, is implemented as a stub.
+         * It is never called by HSSFEventFactory or HSSFRequest.
+         * Override AbortableProcessRecord instead.
          */
 
         public virtual void ProcessRecord(Record record)

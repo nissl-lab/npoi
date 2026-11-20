@@ -80,12 +80,12 @@ namespace TestCases.DDF
             ClassicAssert.AreEqual(bse1.Tag, bse2.Tag);
             ClassicAssert.AreEqual(bse1.Size, bse2.Size);
 
-            EscherBitmapBlip blip2 = (EscherBitmapBlip)bse1.BlipRecord;
+            var blip2 = (EscherBitmapBlip)bse2.BlipRecord;
             ClassicAssert.AreEqual(blip1.Options, blip2.Options);
             ClassicAssert.AreEqual(blip1.RecordId, blip2.RecordId);
             ClassicAssert.AreEqual(blip1.UID, blip2.UID);
 
-            ClassicAssert.IsTrue(Arrays.Equals(blip1.PictureData, blip1.PictureData));
+            ClassicAssert.IsTrue(Arrays.Equals(blip1.PictureData, blip2.PictureData));
         }
 
         //Test Reading/serializing of a PICT metafile
@@ -133,13 +133,13 @@ namespace TestCases.DDF
             ClassicAssert.AreEqual(bse1.Tag, bse2.Tag);
             ClassicAssert.AreEqual(bse1.Size, bse2.Size);
 
-            EscherMetafileBlip blip2 = (EscherMetafileBlip)bse1.BlipRecord;
+            var blip2 = (EscherMetafileBlip)bse2.BlipRecord;
             ClassicAssert.AreEqual(blip1.Options, blip2.Options);
             ClassicAssert.AreEqual(blip1.RecordId, blip2.RecordId);
             ClassicAssert.AreEqual(blip1.UID, blip2.UID);
             ClassicAssert.AreEqual(blip1.PrimaryUID, blip2.PrimaryUID);
 
-            ClassicAssert.IsTrue(Arrays.Equals(blip1.PictureData, blip1.PictureData));
+            ClassicAssert.IsTrue(Arrays.Equals(blip1.PictureData, blip2.PictureData));
         }
 
         //integral Test: check that the Read-Write-Read round trip is consistent
