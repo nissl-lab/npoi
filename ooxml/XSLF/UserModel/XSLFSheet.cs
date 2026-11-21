@@ -1,13 +1,17 @@
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Xml;
 using NPOI.OpenXml4Net.OPC;
+using NPOI.OpenXmlFormats.Dml;
 
 namespace NPOI.XSLF.UserModel
 {
     /// <summary>
-    /// Shared package navigation and XML persistence for slides, layouts, and masters.
+    /// Shared shapes, package navigation and XML persistence for slides, layouts, and masters.
     /// </summary>
-    public abstract class XSLFSheet : POIXMLDocumentPart
+    public abstract class XSLFSheet : POIXMLDocumentPart, IXSLFShapeContainer
     {
         private byte[] savedXml;
 
@@ -46,6 +50,52 @@ namespace NPOI.XSLF.UserModel
         /// Returns the inherited theme, or null if the master has no theme.
         /// </summary>
         public abstract XSLFTheme GetTheme();
+
+        /// <inheritdoc/>
+        public IReadOnlyList<XSLFShape> GetShapes()
+        {
+            return XSLFShapeHelper.GetShapes(this, this, GetShapeTree());
+        }
+
+        /// <inheritdoc/>
+        public XSLFSimpleShape CreateAutoShape(ST_ShapeType shapeType = ST_ShapeType.rect)
+        {
+            EnsureShapesWritable();
+            return XSLFShapeHelper.CreateAutoShape(this, this, GetShapeTree(), shapeType);
+        }
+
+        /// <inheritdoc/>
+        public XSLFGroupShape CreateGroup()
+        {
+            EnsureShapesWritable();
+            return XSLFShapeHelper.CreateGroup(this, this, GetShapeTree());
+        }
+
+        /// <inheritdoc/>
+        public XSLFTextBox CreateTextBox()
+        {
+            EnsureShapesWritable();
+            return XSLFShapeHelper.CreateTextBox(this, this, GetShapeTree());
+        }
+
+        protected abstract XmlElement GetCommonSlideData();
+
+        internal XmlElement GetShapeTree()
+        {
+            return XSLFShapeHelper.RequiredChild(GetCommonSlideData(), "spTree", XSLFShapeHelper.PresentationNamespace);
+        }
+
+        internal void EnsureShapesWritable()
+        {
+            var presentation = GetSlideShow();
+            presentation.EnsureWritable();
+            var part = GetPackagePart();
+            if (Committed || part == null || !ReferenceEquals(part.Package, presentation.Package) ||
+                !ReferenceEquals(presentation.Package.GetPart(part.PartName), part))
+            {
+                throw new InvalidOperationException("Shape changes to a detached or committed sheet would not be saved.");
+            }
+        }
 
         protected void InitializeXml()
         {
