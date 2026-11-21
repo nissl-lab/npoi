@@ -24,6 +24,18 @@ using System.Text;
 
 namespace NPOI.Common.UserModel.Fonts
 {
+    public interface FontInfo
+    {
+        int Index { get; set; }
+        string Typeface { get; set; }
+        FontCharset Charset { get; set; }
+        FontFamily Family { get; set; }
+
+        byte[] Panose { get; set; }
+
+        List<FontFacet> GetFacets();
+    }
+
     /// <summary>
     /// <para>
     /// A FontInfo object holds information about a font configuration.
