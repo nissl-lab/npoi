@@ -460,7 +460,8 @@ namespace NPOI.XSSF.UserModel
             XSSFSheet sheet = Sheet;
             XSSFWorkbook wb = sheet.Workbook as XSSFWorkbook;
             int sheetIndex = wb.GetSheetIndex(sheet);
-            long shapeId = (sheetIndex+1)*1024 + NewShapeId();
+            var vml = sheet.GetVMLDrawing(true);
+            long shapeId = vml.AllocateShapeId(checked((int)((sheetIndex + 1) * 1024 + NewShapeId())));
 
             // add reference to OLE part
             PackagePartName olePN;
@@ -500,7 +501,19 @@ namespace NPOI.XSSF.UserModel
 
             ole1.objectPr.id = imgSheetPR.Id;
             ole1.objectPr.defaultSize = false;
-            ole1.objectPr.anchor.moveWithCells = true;
+            ole1.objectPr.anchor.moveWithCells = anchor.AnchorType != AnchorType.DontMoveAndResize;
+            ole1.objectPr.anchor.sizeWithCells = anchor.AnchorType == AnchorType.MoveAndResize;
+
+            // Set oleObject anchor coordinates from the client anchor
+            XSSFClientAnchor ca = (XSSFClientAnchor)anchor;
+            ole1.objectPr.anchor.from.col = ca.Col1;
+            ole1.objectPr.anchor.from.colOff = ca.Dx1;
+            ole1.objectPr.anchor.from.row = ca.Row1;
+            ole1.objectPr.anchor.from.rowOff = ca.Dy1;
+            ole1.objectPr.anchor.to.col = ca.Col2;
+            ole1.objectPr.anchor.to.colOff = ca.Dx2;
+            ole1.objectPr.anchor.to.row = ca.Row2;
+            ole1.objectPr.anchor.to.rowOff = ca.Dy2;
 
             CT_TwoCellAnchor ctAnchor = CreateTwoCellAnchor((XSSFClientAnchor)anchor);
 
@@ -521,7 +534,7 @@ namespace NPOI.XSSF.UserModel
             ctShape.Set(XSSFObjectData.Prototype());
             ctShape.spPr.xfrm = (CreateXfrm((XSSFClientAnchor) anchor));
 
-            // workaround for not having the vmlDrawing filled
+            // add image fill to drawingML shape for preview icon in Excel
             NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_BlipFillProperties blipFill = ctShape.spPr.AddNewBlipFill();
             blipFill.AddNewBlip().embed = imgDrawPR.Id;
             blipFill.AddNewStretch().AddNewFillRect();
@@ -543,6 +556,15 @@ namespace NPOI.XSSF.UserModel
 
             XSSFObjectData shape = new XSSFObjectData(this, ctShape);
             shape.anchor = (XSSFClientAnchor) anchor;
+
+            // create VML shape for OLE object visibility in Excel
+            PackagePart vmlPart = vml.GetPackagePart();
+            PackageRelationship vmlImgRel = null;
+            if (vmlPart != null)
+            {
+                vmlImgRel = vmlPart.AddRelationship(imgPN, TargetMode.Internal, PackageRelationshipTypes.IMAGE_PART);
+            }
+            vml.newOleShape((XSSFClientAnchor)anchor, vmlImgRel?.Id, "_x0000_s" + shapeId);
 
             return shape;
         }
