@@ -51,8 +51,10 @@ namespace NPOI.OpenXml4Net.OPC.Internal
          */
         public static ZipEntry GetCorePropertiesZipEntry(ZipPackage pkg)
         {
-            PackageRelationship corePropsRel = pkg.GetRelationshipsByType(
-                    PackageRelationshipTypes.CORE_PROPERTIES).GetRelationship(0);
+            PackageRelationship corePropsRel =
+                    pkg.GetRelationshipsByType(PackageRelationshipTypes.CORE_PROPERTIES).GetRelationship(0)
+                    ?? pkg.GetRelationshipsByType(PackageRelationshipTypes.CORE_PROPERTIES_ECMA376).GetRelationship(0)
+                    ?? pkg.GetRelationshipsByType(PackageRelationshipTypes.CORE_PROPERTIES_ECMA376_LOWERCASE).GetRelationship(0);
 
             if (corePropsRel == null)
                 return null;

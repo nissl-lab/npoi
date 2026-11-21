@@ -33,6 +33,13 @@ namespace NPOI.OpenXml4Net.OPC
         public const string CORE_PROPERTIES_ECMA376 = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/metadata/core-properties";
 
         /**
+         * Core properties relationship type as spelled in [MS-OE376] 2.1.33, with a lower-case 'd' in
+         * 'officedocument'. LibreOffice writes this spelling (see Apache POI bug 51444), and relationship
+         * types are compared case-sensitively, so it has to be recognised alongside CORE_PROPERTIES_ECMA376.
+         */
+        public const string CORE_PROPERTIES_ECMA376_LOWERCASE = "http://schemas.openxmlformats.org/officedocument/2006/relationships/metadata/core-properties";
+
+        /**
          * Namespace of Core properties relationship type as defiend in ECMA 376
          */
         public const string CORE_PROPERTIES_ECMA376_NS = "http://schemas.openxmlformats.org/officeDocument/2006/relationships";
