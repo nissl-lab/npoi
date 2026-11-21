@@ -1,9 +1,4 @@
-﻿using Org.BouncyCastle.Utilities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 
 namespace NPOI.SL.Draw.Geom
 {
@@ -33,12 +28,15 @@ namespace NPOI.SL.Draw.Geom
                 return true;
             if(!(o is AdjustPoint)) return false;
             AdjustPoint that = (AdjustPoint) o;
-            return Objects.Equals(X, that.X) &&
-                    Objects.Equals(Y, that.Y);
+            return string.Equals(X, that.X, StringComparison.Ordinal) &&
+                    string.Equals(Y, that.Y, StringComparison.Ordinal);
         }
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            unchecked
+            {
+                return ((X?.GetHashCode() ?? 0) * 397) ^ (Y?.GetHashCode() ?? 0);
+            }
         }
     }
 }

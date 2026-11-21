@@ -1,14 +1,11 @@
-﻿using Org.BouncyCastle.Pqc.Crypto.Lms;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NPOI.SL.Draw.Geom
 {
     public class BuiltInGuide:Formula
     {
+        private static readonly Dictionary<string, BuiltInGuide> indexes = new Dictionary<string, BuiltInGuide>(StringComparer.Ordinal);
         public static readonly BuiltInGuide _3cd4 = new BuiltInGuide("3cd4");
         public static readonly BuiltInGuide _3cd8 = new BuiltInGuide("3cd8");
         public static readonly BuiltInGuide _5cd8 = new BuiltInGuide("5cd8");
@@ -18,7 +15,7 @@ namespace NPOI.SL.Draw.Geom
         public static readonly BuiltInGuide cd4 = new BuiltInGuide("cd4");
         public static readonly BuiltInGuide cd8 = new BuiltInGuide("cd8");
         public static readonly BuiltInGuide hc = new BuiltInGuide("hc");
-        public static readonly BuiltInGuide h = new BuiltInGuide("cd8");
+        public static readonly BuiltInGuide h = new BuiltInGuide("h");
         public static readonly BuiltInGuide hd2 = new BuiltInGuide("hd2");
         public static readonly BuiltInGuide hd3 = new BuiltInGuide("hd3");
         public static readonly BuiltInGuide hd4 = new BuiltInGuide("hd4");
@@ -32,23 +29,22 @@ namespace NPOI.SL.Draw.Geom
         public static readonly BuiltInGuide ssd2 = new BuiltInGuide("ssd2");
         public static readonly BuiltInGuide ssd4 = new BuiltInGuide("ssd4");
         public static readonly BuiltInGuide ssd6 = new BuiltInGuide("ssd6");
-        public static readonly BuiltInGuide ssd8 = new BuiltInGuide("ssd9");
+        public static readonly BuiltInGuide ssd8 = new BuiltInGuide("ssd8");
         public static readonly BuiltInGuide ssd16 = new BuiltInGuide("ssd16");
         public static readonly BuiltInGuide ssd32= new BuiltInGuide("ssd32");
         public static readonly BuiltInGuide t= new BuiltInGuide("t");
         public static readonly BuiltInGuide vc= new BuiltInGuide("vc");
         public static readonly BuiltInGuide w= new BuiltInGuide("w");
-        public static readonly BuiltInGuide w2= new BuiltInGuide("w2");
-        public static readonly BuiltInGuide w3= new BuiltInGuide("w3");
-        public static readonly BuiltInGuide w4= new BuiltInGuide("w4");
-        public static readonly BuiltInGuide w5= new BuiltInGuide("w5");
-        public static readonly BuiltInGuide w6= new BuiltInGuide("w6");
-        public static readonly BuiltInGuide w8= new BuiltInGuide("w8");
-        public static readonly BuiltInGuide w10= new BuiltInGuide("w10");
-        public static readonly BuiltInGuide w32= new BuiltInGuide("w32");
+        public static readonly BuiltInGuide w2= new BuiltInGuide("wd2");
+        public static readonly BuiltInGuide w3= new BuiltInGuide("wd3");
+        public static readonly BuiltInGuide w4= new BuiltInGuide("wd4");
+        public static readonly BuiltInGuide w5= new BuiltInGuide("wd5");
+        public static readonly BuiltInGuide w6= new BuiltInGuide("wd6");
+        public static readonly BuiltInGuide w8= new BuiltInGuide("wd8");
+        public static readonly BuiltInGuide w10= new BuiltInGuide("wd10");
+        public static readonly BuiltInGuide w32= new BuiltInGuide("wd32");
 
         private string name=null;
-        static Dictionary<string, BuiltInGuide> indexes=new Dictionary<string, BuiltInGuide>();
         protected BuiltInGuide(string name)
         {
             this.name=name;
@@ -56,13 +52,17 @@ namespace NPOI.SL.Draw.Geom
         }
         public string Name {
             get {
-                return this.name.Substring(1);
+                return this.name;
             }
         }
 
         public static BuiltInGuide ValueOf(string name)
         {
-            return indexes[name];
+            if (name == null)
+                throw new ArgumentNullException(nameof(name));
+            if (indexes.TryGetValue(name, out var guide))
+                return guide;
+            throw new ArgumentException("Unknown built-in geometry guide: " + name, nameof(name));
         }
         public override double Evaluate(Context ctx)
         {
@@ -84,16 +84,16 @@ namespace NPOI.SL.Draw.Geom
                     return 315 * OOXML_DEGREE;
                 case "t":
                     // top
-                    return anchor.Y;
+                    return anchor.Top;
                 case "b":
                     // bottom
-                    return anchor.Y; //.getMaxY();
+                    return anchor.Bottom;
                 case "l":
                     // left
-                    return anchor.X;
+                    return anchor.Left;
                 case "r":
                     // right
-                    return anchor.X;  //getMaxX();
+                    return anchor.Right;
                 case "cd2":
                     // circle div 2": 360 / 2 = 180
                     return 180 * OOXML_DEGREE;
@@ -105,7 +105,7 @@ namespace NPOI.SL.Draw.Geom
                     return 45 * OOXML_DEGREE;
                 case "hc":
                     // horizontal center
-                    return anchor.X/2.0;
+                    return anchor.Left + width / 2.0;
                 case "h":
                     // height
                     return height;
@@ -153,7 +153,7 @@ namespace NPOI.SL.Draw.Geom
                     return ss / 32.0;
                 case "vc":
                     // vertical center
-                    return anchor.Y/2.0;
+                    return anchor.Top + height / 2.0;
                 case "w":
                     // width
                     return width;
@@ -182,7 +182,7 @@ namespace NPOI.SL.Draw.Geom
                     // width div 32
                     return width / 32.0;
                 default:
-                    return 0;
+                    throw new InvalidOperationException("Unsupported built-in geometry guide: " + name);
             }
         }
     }

@@ -1,33 +1,27 @@
-﻿using SixLabors.ImageSharp;
+﻿using SkiaSharp;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using System.Globalization;
 
 namespace NPOI.SL.Draw.Geom
 {
     public class Context
     {
-        private static Regex DOUBLE_PATTERN = new Regex(
-        "[\\x00-\\x20]*[+-]?(NaN|Infinity|((((\\p{Digit}+)(\\.)?((\\p{Digit}+)?)" +
-        "([eE][+-]?(\\p{Digit}+))?)|(\\.(\\p{Digit}+)([eE][+-]?(\\p{Digit}+))?)|" +
-        "(((0[xX](\\p{XDigit}+)(\\.)?)|(0[xX](\\p{XDigit}+)?(\\.)(\\p{XDigit}+)))" +
-        "[pP][+-]?(\\p{Digit}+)))[fFdD]?))[\\x00-\\x20]*", RegexOptions.Compiled);
         private Dictionary<string, double> _ctx= new Dictionary<string, double>();
         private IAdjustableShape _props;
-        private Rectangle _anchor;
+        private SKRect _anchor;
 
-        public Context(CustomGeometry geom, Rectangle anchor, IAdjustableShape props)
+        public Context(CustomGeometry geom, SKRect anchor, IAdjustableShape props)
         {
+            if (geom == null)
+                throw new ArgumentNullException(nameof(geom));
             _props = props;
             _anchor = anchor;
-            foreach(GuideIf gd in geom.adjusts)
+            foreach(GuideIf gd in geom.Adjusts)
             {
                 Evaluate(gd);
             }
-            foreach(GuideIf gd in geom.guides)
+            foreach(GuideIf gd in geom.Guides)
             {
                 Evaluate(gd);
             }
@@ -45,24 +39,25 @@ namespace NPOI.SL.Draw.Geom
             }
             return result;
         }
-        internal Rectangle GetShapeAnchor()
+        internal SKRect GetShapeAnchor()
         {
             return _anchor;
         }
 
         internal GuideIf GetAdjustValue(String name)
         {
-            return _props.GetAdjustValue(name);
+            return _props?.GetAdjustValue(name);
         }
         public double GetValue(String key)
         {
-            if(DOUBLE_PATTERN.Matches(key).Count>0)
+            if (string.IsNullOrWhiteSpace(key))
+                throw new ArgumentException("A geometry value or guide name is required.", nameof(key));
+            if (double.TryParse(key, NumberStyles.Float, CultureInfo.InvariantCulture, out var value))
             {
-                return Double.Parse(key);
+                return value;
             }
 
-            // BuiltInGuide throws IllegalArgumentException if key is not defined
-            return _ctx.ContainsKey(key) ? _ctx[key] : Evaluate(BuiltInGuide.ValueOf(key));
+            return _ctx.TryGetValue(key, out value) ? value : Evaluate(BuiltInGuide.ValueOf(key));
         }
     }
 }

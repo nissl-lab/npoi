@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NPOI.SL.Draw.Geom
 {
@@ -22,7 +18,9 @@ namespace NPOI.SL.Draw.Geom
         double evaluateGuide(Context ctx)
         {
             Op op;
-            String[] operands = Fmla.Split([' '], StringSplitOptions.RemoveEmptyEntries);
+            if (string.IsNullOrWhiteSpace(Fmla))
+                throw new ArgumentException("A geometry formula is required.", nameof(Fmla));
+            String[] operands = Fmla.Split((char[])null, StringSplitOptions.RemoveEmptyEntries);
             switch(operands[0])
             {
                 case "*/":
@@ -38,9 +36,34 @@ namespace NPOI.SL.Draw.Geom
                     op = Op.ifelse;
                     break;
                 default:
-                    op = Op.ValueOf(operands[0]);
+                    if (!Enum.TryParse(operands[0], out op) || !Enum.IsDefined(typeof(Op), op) ||
+                        operands[0] != op.ToString())
+                        throw new ArgumentException("Unknown geometry formula operator: " + operands[0], nameof(Fmla));
                     break;
             }
+
+            int operandCount;
+            switch (op)
+            {
+                case Op.val:
+                case Op.abs:
+                case Op.sqrt:
+                    operandCount = 1;
+                    break;
+                case Op.max:
+                case Op.min:
+                case Op.at2:
+                case Op.sin:
+                case Op.cos:
+                case Op.tan:
+                    operandCount = 2;
+                    break;
+                default:
+                    operandCount = 3;
+                    break;
+            }
+            if (operands.Length != operandCount + 1)
+                throw new ArgumentException("Incorrect number of geometry formula operands.", nameof(Fmla));
 
             double x = (operands.Length > 1) ? ctx.GetValue(operands[1]) : 0;
             double y = (operands.Length > 2) ? ctx.GetValue(operands[2]) : 0;
@@ -102,7 +125,7 @@ namespace NPOI.SL.Draw.Geom
                     // Tangent Formula: "tan x y" = (x * tan( y )) = value of this guide
                     return x *  Math.Tan(DegreeToRadian(y / OOXML_DEGREE));
                 default:
-                    return 0;
+                    throw new InvalidOperationException("Unsupported geometry formula operator: " + op);
             }
         }
     }

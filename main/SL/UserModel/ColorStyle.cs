@@ -1,10 +1,10 @@
-using SixLabors.ImageSharp;
+using SkiaSharp;
 
 namespace NPOI.SL.UserModel
 {
     public interface ColorStyle
     {
-        Color GetColor();
+        SKColor GetColor();
         int Alpha { get; }
         int HueOff { get; }
         int HueMod { get; }
