@@ -358,6 +358,11 @@ namespace NPOI.XSSF.UserModel
         /// the maximum number of columns supported by the SpreadsheetML format(.xlsx)</exception>
         public ICell CreateCell(int columnIndex, CellType type)
         {
+            // Validate before touching the row: the cell element is added below, so a later
+            // rejection would leave an orphaned cell in the XML that the object model never
+            // tracks but the file still carries. Matches SXSSFRow.CreateCell.
+            XSSFCell.CheckBounds(columnIndex);
+
             CT_Cell ctCell;
             XSSFCell prev = _cells.TryGetValue(columnIndex, out ICell cell) ? (XSSFCell)cell : null;
             if (prev != null)
