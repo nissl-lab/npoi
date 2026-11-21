@@ -1319,7 +1319,9 @@ namespace NPOI.OpenXml4Net.OPC
             // A format consumer shall consider more than one core properties
             // relationship for a package to be an error. If present, the
             // relationship shall target the Core Properties part.
-            if (relationshipType.Equals(PackageRelationshipTypes.CORE_PROPERTIES)
+            if ((relationshipType.Equals(PackageRelationshipTypes.CORE_PROPERTIES)
+                    || relationshipType.Equals(PackageRelationshipTypes.CORE_PROPERTIES_ECMA376)
+                    || relationshipType.Equals(PackageRelationshipTypes.CORE_PROPERTIES_ECMA376_LOWERCASE))
                     && this.packageProperties != null)
                 throw new InvalidOperationException(
                         "OPC Compliance error [M4.1]: can't add another core properties part ! Use the built-in package method instead.");

@@ -165,6 +165,23 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
         }
 
         /**
+         * Test M4.1 rule for the ECMA 376 spellings of the core properties relationship type.
+         */
+        [TestCase(PackageRelationshipTypes.CORE_PROPERTIES_ECMA376)]
+        [TestCase(PackageRelationshipTypes.CORE_PROPERTIES_ECMA376_LOWERCASE)]
+        public void TestOnlyOneCorePropertiesPart_AddEcma376Relationship(string relationshipType)
+        {
+            Stream is1 = OpenXml4NetTestDataSamples.OpenComplianceSampleStream("OPCCompliance_CoreProperties_OnlyOneCorePropertiesPart.docx");
+            OPCPackage pkg = OPCPackage.Open(is1);
+
+            PackagePartName partName = PackagingUriHelper.CreatePartName(CreateURI("/docProps/core2.xml"));
+            InvalidOperationException e = Assert.Throws<InvalidOperationException>(
+                () => pkg.AddRelationship(partName, TargetMode.Internal, relationshipType));
+            ClassicAssert.AreEqual("OPC Compliance error [M4.1]: can't add another core properties part ! Use the built-in package method instead.", e.Message);
+            pkg.Revert();
+        }
+
+        /**
          * Test M4.1 rule.
          */
         [Test]
