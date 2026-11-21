@@ -20,7 +20,7 @@ namespace TestCases.SS.Formula.Atp
 
 
     using System;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.SS.Formula.Atp;
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.UserModel;
@@ -60,7 +60,7 @@ namespace TestCases.SS.Formula.Atp
             {
                 double hours = diff * 365 * 24;
                 Console.WriteLine(startDate + " " + endDate + " off by " + hours + " hours");
-                Assert.AreEqual(expectedValue, actualValue, 0.000000001);
+                ClassicAssert.AreEqual(expectedValue, actualValue, 0.000000001);
             }
 
         }

@@ -21,12 +21,12 @@ namespace TestCases.HSSF.UserModel
     using System;
     using System.Collections;
     using NPOI.HSSF.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using System.IO;
     using TestCases.HSSF;
     using NPOI.SS.UserModel;
     using System.Collections.Generic;
-    using SixLabors.ImageSharp;
+    using SkiaSharp;
 
 
     /**
@@ -46,7 +46,7 @@ namespace TestCases.HSSF.UserModel
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("SimpleWithImages.xls");
 
             IList lst = wb.GetAllPictures();
-            //Assert.AreEqual(2, lst.Count);
+            //ClassicAssert.AreEqual(2, lst.Count);
 
             for (IEnumerator it = lst.GetEnumerator(); it.MoveNext(); )
             {
@@ -56,18 +56,18 @@ namespace TestCases.HSSF.UserModel
                 if (ext.Equals("jpeg"))
                 {
                     //try to read image data using javax.imageio.* (JDK 1.4+)
-                    Image jpg = Image.Load(new MemoryStream(data));
-                    Assert.IsNotNull(jpg);
-                    Assert.AreEqual(192, jpg.Width);
-                    Assert.AreEqual(176, jpg.Height);
+                    using SKBitmap jpg = SKBitmap.Decode(new MemoryStream(data));
+                    ClassicAssert.IsNotNull(jpg);
+                    ClassicAssert.AreEqual(192, jpg.Width);
+                    ClassicAssert.AreEqual(176, jpg.Height);
                 }
                 else if (ext.Equals("png"))
                 {
                     //try to read image data using javax.imageio.* (JDK 1.4+)
-                    Image png = Image.Load(new MemoryStream(data));
-                    Assert.IsNotNull(png);
-                    Assert.AreEqual(300, png.Width);
-                    Assert.AreEqual(300, png.Height);
+                    using SKBitmap png = SKBitmap.Decode(new MemoryStream(data));
+                    ClassicAssert.IsNotNull(png);
+                    ClassicAssert.AreEqual(300, png.Width);
+                    ClassicAssert.AreEqual(300, png.Height);
                 }
                 else
                 {
@@ -81,7 +81,7 @@ namespace TestCases.HSSF.UserModel
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("53446.xls");
 
             List<HSSFPictureData> lst = (List<HSSFPictureData>)wb.GetAllPictures();
-            Assert.AreEqual(1, lst.Count);
+            ClassicAssert.AreEqual(1, lst.Count);
 
             HSSFPictureData pict = lst[(0)];
             String ext = pict.SuggestFileExtension();
@@ -94,12 +94,12 @@ namespace TestCases.HSSF.UserModel
             byte[] data = pict.Data;
             using (MemoryStream ms = new MemoryStream(data))
             {
-                Image png = Image.Load(ms);
-                Assert.IsNotNull(png);
-                Assert.AreEqual(78, png.Width);
-                Assert.AreEqual(76, png.Height);
-                Assert.AreEqual((int)PictureType.PNG, pict.Format);
-                Assert.AreEqual("image/png", pict.MimeType);
+                using SKBitmap png = SKBitmap.Decode(ms);
+                ClassicAssert.IsNotNull(png);
+                ClassicAssert.AreEqual(78, png.Width);
+                ClassicAssert.AreEqual(76, png.Height);
+                ClassicAssert.AreEqual((int)PictureType.PNG, pict.Format);
+                ClassicAssert.AreEqual("image/png", pict.MimeType);
             }
         }
 
@@ -113,7 +113,7 @@ namespace TestCases.HSSF.UserModel
             List<HSSFPictureData> lst = (List<HSSFPictureData>)wb.GetAllPictures();
             foreach (HSSFPictureData pict in lst)
             {
-                Assert.IsNotNull(pict);
+                ClassicAssert.IsNotNull(pict);
             }
         }
     }

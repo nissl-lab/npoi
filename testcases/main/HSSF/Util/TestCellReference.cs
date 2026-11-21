@@ -20,7 +20,7 @@ namespace TestCases.HSSF.Util
     using System;
 
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     using NPOI.SS.Util;
     using NPOI.SS;
@@ -32,28 +32,28 @@ namespace TestCases.HSSF.Util
         [Test]
         public void TestColNumConversion()
         {
-            Assert.AreEqual(0, CellReference.ConvertColStringToIndex("A"));
-            Assert.AreEqual(1, CellReference.ConvertColStringToIndex("B"));
-            Assert.AreEqual(25, CellReference.ConvertColStringToIndex("Z"));
-            Assert.AreEqual(26, CellReference.ConvertColStringToIndex("AA"));
-            Assert.AreEqual(27, CellReference.ConvertColStringToIndex("AB"));
-            Assert.AreEqual(51, CellReference.ConvertColStringToIndex("AZ"));
-            Assert.AreEqual(701, CellReference.ConvertColStringToIndex("ZZ"));
-            Assert.AreEqual(702, CellReference.ConvertColStringToIndex("AAA"));
-            Assert.AreEqual(18277, CellReference.ConvertColStringToIndex("ZZZ"));
+            ClassicAssert.AreEqual(0, CellReference.ConvertColStringToIndex("A"));
+            ClassicAssert.AreEqual(1, CellReference.ConvertColStringToIndex("B"));
+            ClassicAssert.AreEqual(25, CellReference.ConvertColStringToIndex("Z"));
+            ClassicAssert.AreEqual(26, CellReference.ConvertColStringToIndex("AA"));
+            ClassicAssert.AreEqual(27, CellReference.ConvertColStringToIndex("AB"));
+            ClassicAssert.AreEqual(51, CellReference.ConvertColStringToIndex("AZ"));
+            ClassicAssert.AreEqual(701, CellReference.ConvertColStringToIndex("ZZ"));
+            ClassicAssert.AreEqual(702, CellReference.ConvertColStringToIndex("AAA"));
+            ClassicAssert.AreEqual(18277, CellReference.ConvertColStringToIndex("ZZZ"));
 
-            Assert.AreEqual("A", CellReference.ConvertNumToColString(0));
-            Assert.AreEqual("B", CellReference.ConvertNumToColString(1));
-            Assert.AreEqual("Z", CellReference.ConvertNumToColString(25));
-            Assert.AreEqual("AA", CellReference.ConvertNumToColString(26));
-            Assert.AreEqual("ZZ", CellReference.ConvertNumToColString(701));
-            Assert.AreEqual("AAA", CellReference.ConvertNumToColString(702));
-            Assert.AreEqual("ZZZ", CellReference.ConvertNumToColString(18277));
+            ClassicAssert.AreEqual("A", CellReference.ConvertNumToColString(0));
+            ClassicAssert.AreEqual("B", CellReference.ConvertNumToColString(1));
+            ClassicAssert.AreEqual("Z", CellReference.ConvertNumToColString(25));
+            ClassicAssert.AreEqual("AA", CellReference.ConvertNumToColString(26));
+            ClassicAssert.AreEqual("ZZ", CellReference.ConvertNumToColString(701));
+            ClassicAssert.AreEqual("AAA", CellReference.ConvertNumToColString(702));
+            ClassicAssert.AreEqual("ZZZ", CellReference.ConvertNumToColString(18277));
 
             // Absolute references are allowed for the string ones
-            Assert.AreEqual(0, CellReference.ConvertColStringToIndex("$A"));
-            Assert.AreEqual(25, CellReference.ConvertColStringToIndex("$Z"));
-            Assert.AreEqual(26, CellReference.ConvertColStringToIndex("$AA"));
+            ClassicAssert.AreEqual(0, CellReference.ConvertColStringToIndex("$A"));
+            ClassicAssert.AreEqual(25, CellReference.ConvertColStringToIndex("$Z"));
+            ClassicAssert.AreEqual(26, CellReference.ConvertColStringToIndex("$AA"));
 
             // $ sign isn't allowed elsewhere though
             try
@@ -131,12 +131,12 @@ namespace TestCases.HSSF.Util
             int expCol, bool expIsRowAbs, bool expIsColAbs, String expText)
         {
 
-            Assert.AreEqual(expSheetName, cf.SheetName);
-            Assert.AreEqual(expRow, cf.Row, "row index is wrong");
-            Assert.AreEqual(expCol, cf.Col, "col index is wrong");
-            Assert.AreEqual(expIsRowAbs, cf.IsRowAbsolute, "isRowAbsolute is wrong");
-            Assert.AreEqual(expIsColAbs, cf.IsColAbsolute, "isColAbsolute is wrong");
-            Assert.AreEqual(expText, cf.FormatAsString(), "text is wrong");
+            ClassicAssert.AreEqual(expSheetName, cf.SheetName);
+            ClassicAssert.AreEqual(expRow, cf.Row, "row index is wrong");
+            ClassicAssert.AreEqual(expCol, cf.Col, "col index is wrong");
+            ClassicAssert.AreEqual(expIsRowAbs, cf.IsRowAbsolute, "isRowAbsolute is wrong");
+            ClassicAssert.AreEqual(expIsColAbs, cf.IsColAbsolute, "isColAbsolute is wrong");
+            ClassicAssert.AreEqual(expText, cf.FormatAsString(), "text is wrong");
         }
         [Test]
         public void TestClassifyCellReference()
@@ -168,20 +168,20 @@ namespace TestCases.HSSF.Util
         private void ConfirmNameType(String ref1, NameType expectedResult)
         {
             NameType actualResult = CellReference.ClassifyCellReference(ref1, SpreadsheetVersion.EXCEL97);
-            Assert.AreEqual(expectedResult, actualResult);
+            ClassicAssert.AreEqual(expectedResult, actualResult);
         }
 
         [Test]
         public void TestConvertColStringToIndex()
         {
-            Assert.AreEqual(0, CellReference.ConvertColStringToIndex("A"));
-            Assert.AreEqual(1, CellReference.ConvertColStringToIndex("B"));
-            Assert.AreEqual(14, CellReference.ConvertColStringToIndex("O"));
-            Assert.AreEqual(701, CellReference.ConvertColStringToIndex("ZZ"));
-            Assert.AreEqual(18252, CellReference.ConvertColStringToIndex("ZZA"));
+            ClassicAssert.AreEqual(0, CellReference.ConvertColStringToIndex("A"));
+            ClassicAssert.AreEqual(1, CellReference.ConvertColStringToIndex("B"));
+            ClassicAssert.AreEqual(14, CellReference.ConvertColStringToIndex("O"));
+            ClassicAssert.AreEqual(701, CellReference.ConvertColStringToIndex("ZZ"));
+            ClassicAssert.AreEqual(18252, CellReference.ConvertColStringToIndex("ZZA"));
 
-            Assert.AreEqual(0, CellReference.ConvertColStringToIndex("$A"));
-            Assert.AreEqual(1, CellReference.ConvertColStringToIndex("$B"));
+            ClassicAssert.AreEqual(0, CellReference.ConvertColStringToIndex("$A"));
+            ClassicAssert.AreEqual(1, CellReference.ConvertColStringToIndex("$B"));
 
             try
             {
@@ -190,22 +190,22 @@ namespace TestCases.HSSF.Util
             }
             catch (ArgumentException e)
             {
-                Assert.IsTrue(e.Message.Contains("A$"));
+                ClassicAssert.IsTrue(e.Message.Contains("A$"));
             }
         }
 
         [Test]
         public void TestConvertNumColColString()
         {
-            Assert.AreEqual("A", CellReference.ConvertNumToColString(0));
-            Assert.AreEqual("AV", CellReference.ConvertNumToColString(47));
-            Assert.AreEqual("AW", CellReference.ConvertNumToColString(48));
-            Assert.AreEqual("BF", CellReference.ConvertNumToColString(57));
+            ClassicAssert.AreEqual("A", CellReference.ConvertNumToColString(0));
+            ClassicAssert.AreEqual("AV", CellReference.ConvertNumToColString(47));
+            ClassicAssert.AreEqual("AW", CellReference.ConvertNumToColString(48));
+            ClassicAssert.AreEqual("BF", CellReference.ConvertNumToColString(57));
 
-            Assert.AreEqual("", CellReference.ConvertNumToColString(-1));
-            Assert.AreEqual("", CellReference.ConvertNumToColString(Int32.MinValue));
-            Assert.AreEqual("", CellReference.ConvertNumToColString(Int32.MaxValue));
-            Assert.AreEqual("FXSHRXW", CellReference.ConvertNumToColString(Int32.MaxValue - 1));
+            ClassicAssert.AreEqual("", CellReference.ConvertNumToColString(-1));
+            ClassicAssert.AreEqual("", CellReference.ConvertNumToColString(Int32.MinValue));
+            ClassicAssert.AreEqual("", CellReference.ConvertNumToColString(Int32.MaxValue));
+            ClassicAssert.AreEqual("FXSHRXW", CellReference.ConvertNumToColString(Int32.MaxValue - 1));
         }
 
     }

@@ -2,27 +2,22 @@
 
 namespace NPOI.HPSF
 {
-    internal class Blob
+    internal sealed class Blob
     {
+        //arbitrarily selected; may need to increase
+        private static int MAX_RECORD_LENGTH = 1_000_000;
         private byte[] _value;
 
-        public Blob(byte[] data, int offset)
-        {
-            int size = LittleEndian.GetInt(data, offset);
+        internal Blob() { }
 
-            if (size == 0)
+        internal void Read(LittleEndianByteArrayInputStream lei)
+        {
+            int size = lei.ReadInt();
+            _value = IOUtils.SafelyAllocate(size, MAX_RECORD_LENGTH);
+            if(size > 0)
             {
-                _value = new byte[0];
-                return;
+                lei.ReadFully(_value);
             }
-
-            _value = LittleEndian.GetByteArray(data, offset
-                    + LittleEndian.INT_SIZE, size);
-        }
-
-        public int Size
-        {
-            get { return LittleEndian.INT_SIZE + _value.Length; }
         }
     }
 }

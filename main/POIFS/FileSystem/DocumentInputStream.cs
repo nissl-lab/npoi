@@ -53,24 +53,24 @@ namespace NPOI.POIFS.FileSystem
         /// </exception>
         public DocumentInputStream(DocumentEntry document)
         {
-            if (!(document is DocumentNode))
+            if (document is not DocumentNode documentNode)
             {
                 throw new IOException("Cannot open internal document storage");
             }
-            DocumentNode documentNode = (DocumentNode)document;
+
             DirectoryNode parentNode = (DirectoryNode)document.Parent;
 
             if (documentNode.Document != null)
             {
-                delegate1 = new ODocumentInputStream(document);
+                delegate1 = new ODocumentInputStream(documentNode);
             }
             else if (parentNode.OFileSystem != null)
             {
-                delegate1 = new ODocumentInputStream(document);
+                delegate1 = new ODocumentInputStream(documentNode);
             }
             else if (parentNode.NFileSystem != null)
             {
-                delegate1 = new NDocumentInputStream(document);
+                delegate1 = new NDocumentInputStream(documentNode);
             }
             else
             {
@@ -219,6 +219,11 @@ namespace NPOI.POIFS.FileSystem
         public virtual int ReadUByte()
         {
             return delegate1.ReadUByte();
+        }
+
+        public void ReadPlain(byte[] buf, int off, int len)
+        {
+            ReadFully(buf, off, len);
         }
     }
 

@@ -19,7 +19,7 @@ namespace TestCases.HSSF.Model
 {
     using System;
     using System.Text;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     using TestCases.HSSF;
     using NPOI.SS.Formula;

@@ -43,7 +43,7 @@ namespace NPOI.HSSF.Record.Chart
         private byte verWriter;
         private CFRTID[] rgCFRTID;
 
-        private class CFRTID : ICloneable
+        private sealed class CFRTID : ICloneable
         {
             public const int ENCODED_SIZE = 4;
             private int rtFirst;

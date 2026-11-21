@@ -22,7 +22,7 @@ namespace TestCases.SS.Formula
     using System.Collections.Generic;
     using System.IO;
     using System.Text;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.Model;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Formula;
@@ -651,12 +651,12 @@ namespace TestCases.SS.Formula
 
             CellValue cv;
             cv = fe.Evaluate(cellA1);
-            Assert.AreEqual(3.7, cv.NumberValue, 0.0);
+            ClassicAssert.AreEqual(3.7, cv.NumberValue, 0.0);
 
             cellB1.SetCellType(CellType.Blank);
             fe.NotifyUpdateCell(cellB1);
             cv = fe.Evaluate(cellA1); // B1 was used to Evaluate A1
-            Assert.AreEqual(2.2, cv.NumberValue, 0.0);
+            ClassicAssert.AreEqual(2.2, cv.NumberValue, 0.0);
 
             cellB1.SetCellValue(0.4);  // changing B1, so A1 cached result should be Cleared
             fe.NotifyUpdateCell(cellB1);
@@ -666,7 +666,7 @@ namespace TestCases.SS.Formula
                 // looks like left-over cached result from before change to B1
                 throw new AssertionException("Identified bug 46053");
             }
-            Assert.AreEqual(2.6, cv.NumberValue, 0.0);
+            ClassicAssert.AreEqual(2.6, cv.NumberValue, 0.0);
         }
 
         /**
@@ -707,8 +707,8 @@ namespace TestCases.SS.Formula
         private static void ConfirmEvaluate(MySheet ms, String cellRefText, double expectedValue)
         {
             ValueEval v = ms.EvaluateCell(cellRefText);
-            Assert.AreEqual(typeof(NumberEval), v.GetType());
-            Assert.AreEqual(expectedValue, ((NumberEval)v).NumberValue, 0.0);
+            ClassicAssert.AreEqual(typeof(NumberEval), v.GetType());
+            ClassicAssert.AreEqual(expectedValue, ((NumberEval)v).NumberValue, 0.0);
         }
 
         private static void ConfirmLog(MySheet ms, String[] expectedLog)
@@ -844,7 +844,49 @@ namespace TestCases.SS.Formula
             //calculate
             IFormulaEvaluator Evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
             Evaluator.EvaluateFormulaCell(summaryCell);
-            Assert.AreEqual(8394753.0, summaryCell.NumericCellValue);
+            ClassicAssert.AreEqual(8394753.0, summaryCell.NumericCellValue);
+        }
+
+        /// <summary>
+        /// Verifies that FormulaCellCache.Remove() actually evicts entries.
+        /// Regression test for bug where Remove() used cell instead of cell.IdentityKey,
+        /// causing entries to never be removed from the cache.
+        /// </summary>
+        [Test]
+        public void TestFormulaCellCacheRemoveActuallyEvicts()
+        {
+            HSSFWorkbook wb = new HSSFWorkbook();
+            ISheet sheet = wb.CreateSheet();
+            IRow row = sheet.CreateRow(0);
+
+            ICell cellA1 = row.CreateCell(0);
+            cellA1.SetCellFormula("1+1");
+            ICell cellB1 = row.CreateCell(1);
+            cellB1.SetCellFormula("2+2");
+
+            IEvaluationCell evalCellA1 = HSSFEvaluationTestHelper.WrapCell(cellA1);
+            IEvaluationCell evalCellB1 = HSSFEvaluationTestHelper.WrapCell(cellB1);
+
+            FormulaCellCache cache = new FormulaCellCache();
+            FormulaCellCacheEntry entryA1 = new FormulaCellCacheEntry();
+            FormulaCellCacheEntry entryB1 = new FormulaCellCacheEntry();
+
+            cache.Put(evalCellA1, entryA1);
+            cache.Put(evalCellB1, entryB1);
+
+            // Both entries should be retrievable
+            ClassicAssert.AreSame(entryA1, cache.Get(evalCellA1));
+            ClassicAssert.AreSame(entryB1, cache.Get(evalCellB1));
+            ClassicAssert.AreEqual(2, cache.GetCacheEntries().Length);
+
+            // Remove A1 and verify it's actually evicted
+            FormulaCellCacheEntry removed = cache.Remove(evalCellA1);
+            ClassicAssert.AreSame(entryA1, removed, "Remove should return the evicted entry");
+            ClassicAssert.IsNull(cache.Get(evalCellA1), "Entry should be evicted after Remove");
+            ClassicAssert.AreSame(entryB1, cache.Get(evalCellB1), "Other entries should be unaffected");
+            ClassicAssert.AreEqual(1, cache.GetCacheEntries().Length);
+
+            wb.Close();
         }
 
     }

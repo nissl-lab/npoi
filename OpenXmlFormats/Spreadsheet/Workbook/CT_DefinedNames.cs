@@ -78,7 +78,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "name", this.name,true);
             XmlHelper.WriteAttribute(sw, "comment", this.comment);
             XmlHelper.WriteAttribute(sw, "customMenu", this.customMenu);
@@ -101,9 +101,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 XmlHelper.WriteAttribute(sw, "publishToServer", this.publishToServer);
             if (workbookParameterField)
                 XmlHelper.WriteAttribute(sw, "workbookParameter", this.workbookParameter);
-            sw.Write(">");
-            sw.Write(string.Format("<![CDATA[{0}]]>", this.Value));
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.Write('>');
+            sw.Write("<![CDATA[");
+            sw.Write(this.Value);
+            sw.Write("]]>");
+            sw.WriteEndElement(nodeName);
         }
 
         public CT_DefinedName()
@@ -379,8 +381,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
-            sw.Write(">");
+            sw.WriteStart(nodeName);
+            sw.Write('>');
             if (this.definedName != null)
             {
                 foreach (CT_DefinedName x in this.definedName)
@@ -388,7 +390,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                     x.Write(sw, "definedName");
                 }
             }
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.WriteEndElement(nodeName);
         }
 
         public CT_DefinedName AddNewDefinedName()

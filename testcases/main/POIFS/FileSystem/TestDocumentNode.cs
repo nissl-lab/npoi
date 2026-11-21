@@ -30,7 +30,7 @@ using System;
 using System.Collections;
 using System.IO;
 
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 
 using NPOI.POIFS.FileSystem;
 using NPOI.Util;
@@ -83,22 +83,22 @@ namespace TestCases.POIFS.FileSystem
             DocumentNode node = new DocumentNode(property2, parent);
 
             // Verify we can retrieve the document
-            Assert.AreEqual(property2.Document, node.Document);
+            ClassicAssert.AreEqual(property2.Document, node.Document);
 
             // Verify we can Get the size
-            Assert.AreEqual(property2.Size, node.Size);
+            ClassicAssert.AreEqual(property2.Size, node.Size);
 
             // Verify isDocumentEntry returns true
-            Assert.IsTrue(node.IsDocumentEntry);
+            ClassicAssert.IsTrue(node.IsDocumentEntry);
 
             // Verify isDirectoryEntry returns false
-            Assert.IsTrue(!node.IsDirectoryEntry);
+            ClassicAssert.IsTrue(!node.IsDirectoryEntry);
 
             // Verify GetName behaves correctly
-            Assert.AreEqual(property2.Name, node.Name);
+            ClassicAssert.AreEqual(property2.Name, node.Name);
 
             // Verify GetParent behaves correctly
-            Assert.AreEqual(parent, node.Parent);
+            ClassicAssert.AreEqual(parent, node.Parent);
         }
     }
 }

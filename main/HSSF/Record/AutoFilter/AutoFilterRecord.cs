@@ -129,11 +129,30 @@ namespace NPOI.HSSF.Record.AutoFilter
             get
             {
                 int recSize = 2 + 2 + 10 + 10;
-                if (field_3_doper1.LengthOfString > 0)
-                    recSize += 1 + field_5_rgch1.Length;
+                if(field_3_doper1.LengthOfString > 0)
+                {
+                    if(rgch1_multibyte)
+                    {
+                        recSize += 1 + 2 * field_5_rgch1.Length;
+                    }
+                    else
+                    {
+                        recSize += 1 + field_5_rgch1.Length;
+                    }
+                }
 
                 if(field_4_doper2.LengthOfString > 0)
-                    recSize += 1+ field_6_rgch2.Length;
+                {
+                    if(rgch2_multibyte)
+                    {
+                        recSize += 1 + 2 * field_6_rgch2.Length;
+                    }
+                    else
+                    {
+                        recSize += 1 + field_6_rgch2.Length;
+                    }
+                }
+
                 return recSize;
             }
         }
@@ -152,6 +171,8 @@ namespace NPOI.HSSF.Record.AutoFilter
             rec.field_4_doper2 = field_4_doper2;
             rec.field_5_rgch1 = field_5_rgch1;
             rec.field_6_rgch2 = field_6_rgch2;
+            rec.rgch1_multibyte = rgch1_multibyte;
+            rec.rgch2_multibyte = rgch2_multibyte;
             return rec;
         }
 

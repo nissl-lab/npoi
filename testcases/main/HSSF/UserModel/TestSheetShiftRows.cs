@@ -21,7 +21,7 @@ namespace TestCases.HSSF.UserModel
     using System.IO;
     using NPOI.HSSF.UserModel;
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using TestCases.HSSF;
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
@@ -61,11 +61,11 @@ namespace TestCases.HSSF.UserModel
             // row (in original file each row was unique)
             s = wb.GetSheetAt(0);
 
-            Assert.AreEqual(1, s.GetRow(0).PhysicalNumberOfCells);
+            ClassicAssert.AreEqual(1, s.GetRow(0).PhysicalNumberOfCells);
             ConfirmEmptyRow(s, 1);
-            Assert.AreEqual(2, s.GetRow(2).PhysicalNumberOfCells);
-            Assert.AreEqual(4, s.GetRow(3).PhysicalNumberOfCells);
-            Assert.AreEqual(5, s.GetRow(4).PhysicalNumberOfCells);
+            ClassicAssert.AreEqual(2, s.GetRow(2).PhysicalNumberOfCells);
+            ClassicAssert.AreEqual(4, s.GetRow(3).PhysicalNumberOfCells);
+            ClassicAssert.AreEqual(5, s.GetRow(4).PhysicalNumberOfCells);
 
             // Shift rows 1-3 down 3 in the current one.  This Tests when
             // 1 row is blank.  Write to a another temp file
@@ -77,9 +77,9 @@ namespace TestCases.HSSF.UserModel
             ConfirmEmptyRow(s, 0);
             ConfirmEmptyRow(s, 1);
             ConfirmEmptyRow(s, 2);
-            Assert.AreEqual(1, s.GetRow(3).PhysicalNumberOfCells);
+            ClassicAssert.AreEqual(1, s.GetRow(3).PhysicalNumberOfCells);
             ConfirmEmptyRow(s, 4);
-            Assert.AreEqual(2, s.GetRow(5).PhysicalNumberOfCells);
+            ClassicAssert.AreEqual(2, s.GetRow(5).PhysicalNumberOfCells);
 
             // Read the first file again
             wb = HSSFTestDataSamples.OpenSampleWorkbook("SimpleMultiCell.xls");
@@ -89,16 +89,16 @@ namespace TestCases.HSSF.UserModel
             s.ShiftRows(2, 3, -2);
             wb = HSSFTestDataSamples.WriteOutAndReadBack(wb);
             s = wb.GetSheetAt(0);
-            Assert.AreEqual(s.GetRow(0).PhysicalNumberOfCells, 3);
-            Assert.AreEqual(s.GetRow(1).PhysicalNumberOfCells, 4);
+            ClassicAssert.AreEqual(s.GetRow(0).PhysicalNumberOfCells, 3);
+            ClassicAssert.AreEqual(s.GetRow(1).PhysicalNumberOfCells, 4);
             ConfirmEmptyRow(s, 2);
             ConfirmEmptyRow(s, 3);
-            Assert.AreEqual(s.GetRow(4).PhysicalNumberOfCells, 5);
+            ClassicAssert.AreEqual(s.GetRow(4).PhysicalNumberOfCells, 5);
         }
         private static void ConfirmEmptyRow(NPOI.SS.UserModel.ISheet s, int rowIx)
         {
             IRow row = s.GetRow(rowIx);
-            Assert.IsTrue(row == null || row.PhysicalNumberOfCells == 0);
+            ClassicAssert.IsTrue(row == null || row.PhysicalNumberOfCells == 0);
         }
         /**
          * Tests when rows are null.
@@ -144,7 +144,7 @@ namespace TestCases.HSSF.UserModel
             s.SetRowBreak(4);
 
             s.ShiftRows(4, 4, 2);
-            Assert.IsTrue(s.IsRowBroken(6), "Row number 6 should have a pagebreak");
+            ClassicAssert.IsTrue(s.IsRowBroken(6), "Row number 6 should have a pagebreak");
 
         }
 
@@ -154,20 +154,20 @@ namespace TestCases.HSSF.UserModel
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("comments.xls");
 
             NPOI.SS.UserModel.ISheet sheet = wb.GetSheet("Sheet1");
-            Assert.AreEqual(3, sheet.LastRowNum);
+            ClassicAssert.AreEqual(3, sheet.LastRowNum);
 
             // Verify comments are in the position expected
-            Assert.IsNotNull(sheet.GetCellComment(new CellAddress(0, 0)));
-            Assert.IsNull(sheet.GetCellComment(new CellAddress(1, 0)));
-            Assert.IsNotNull(sheet.GetCellComment(new CellAddress(2, 0)));
-            Assert.IsNotNull(sheet.GetCellComment(new CellAddress(3, 0)));
+            ClassicAssert.IsNotNull(sheet.GetCellComment(new CellAddress(0, 0)));
+            ClassicAssert.IsNull(sheet.GetCellComment(new CellAddress(1, 0)));
+            ClassicAssert.IsNotNull(sheet.GetCellComment(new CellAddress(2, 0)));
+            ClassicAssert.IsNotNull(sheet.GetCellComment(new CellAddress(3, 0)));
 
             String comment1 = sheet.GetCellComment(new CellAddress(0, 0)).String.String;
-            Assert.AreEqual(comment1, "comment top row1 (index0)\n");
+            ClassicAssert.AreEqual(comment1, "comment top row1 (index0)\n");
             String comment3 = sheet.GetCellComment(new CellAddress(2, 0)).String.String;
-            Assert.AreEqual(comment3, "comment top row3 (index2)\n");
+            ClassicAssert.AreEqual(comment3, "comment top row3 (index2)\n");
             String comment4 = sheet.GetCellComment(new CellAddress(3, 0)).String.String;
-            Assert.AreEqual(comment4, "comment top row4 (index3)\n");
+            ClassicAssert.AreEqual(comment4, "comment top row4 (index3)\n");
 
             // Shifting all but first line down to Test comments shifting
             sheet.ShiftRows(1, sheet.LastRowNum, 1, true, true);
@@ -175,39 +175,39 @@ namespace TestCases.HSSF.UserModel
             wb.Write(outputStream);
 
             // Test that comments were shifted as expected
-            Assert.AreEqual(4, sheet.LastRowNum);
-            Assert.IsNotNull(sheet.GetCellComment(new CellAddress(0, 0)));
-            Assert.IsNull(sheet.GetCellComment(new CellAddress(1, 0)));
-            Assert.IsNull(sheet.GetCellComment(new CellAddress(2, 0)));
-            Assert.IsNotNull(sheet.GetCellComment(new CellAddress(3, 0)));
-            Assert.IsNotNull(sheet.GetCellComment(new CellAddress(4, 0)));
+            ClassicAssert.AreEqual(4, sheet.LastRowNum);
+            ClassicAssert.IsNotNull(sheet.GetCellComment(new CellAddress(0, 0)));
+            ClassicAssert.IsNull(sheet.GetCellComment(new CellAddress(1, 0)));
+            ClassicAssert.IsNull(sheet.GetCellComment(new CellAddress(2, 0)));
+            ClassicAssert.IsNotNull(sheet.GetCellComment(new CellAddress(3, 0)));
+            ClassicAssert.IsNotNull(sheet.GetCellComment(new CellAddress(4, 0)));
 
             String comment1_shifted = sheet.GetCellComment(new CellAddress(0, 0)).String.String;
-            Assert.AreEqual(comment1, comment1_shifted);
+            ClassicAssert.AreEqual(comment1, comment1_shifted);
             String comment3_shifted = sheet.GetCellComment(new CellAddress(3, 0)).String.String;
-            Assert.AreEqual(comment3, comment3_shifted);
+            ClassicAssert.AreEqual(comment3, comment3_shifted);
             String comment4_shifted = sheet.GetCellComment(new CellAddress(4, 0)).String.String;
-            Assert.AreEqual(comment4, comment4_shifted);
+            ClassicAssert.AreEqual(comment4, comment4_shifted);
 
             // Write out and read back in again
             // Ensure that the changes were persisted
             wb = new HSSFWorkbook(new MemoryStream(outputStream.ToArray()));
             sheet = wb.GetSheet("Sheet1");
-            Assert.AreEqual(4, sheet.LastRowNum);
+            ClassicAssert.AreEqual(4, sheet.LastRowNum);
 
             // Verify comments are in the position expected after the shift
-            Assert.IsNotNull(sheet.GetCellComment(new CellAddress(0, 0)));
-            Assert.IsNull(sheet.GetCellComment(new CellAddress(1, 0)));
-            Assert.IsNull(sheet.GetCellComment(new CellAddress(2, 0)));
-            Assert.IsNotNull(sheet.GetCellComment(new CellAddress(3, 0)));
-            Assert.IsNotNull(sheet.GetCellComment(new CellAddress(4, 0)));
+            ClassicAssert.IsNotNull(sheet.GetCellComment(new CellAddress(0, 0)));
+            ClassicAssert.IsNull(sheet.GetCellComment(new CellAddress(1, 0)));
+            ClassicAssert.IsNull(sheet.GetCellComment(new CellAddress(2, 0)));
+            ClassicAssert.IsNotNull(sheet.GetCellComment(new CellAddress(3, 0)));
+            ClassicAssert.IsNotNull(sheet.GetCellComment(new CellAddress(4, 0)));
 
             comment1_shifted = sheet.GetCellComment(new CellAddress(0, 0)).String.String;
-            Assert.AreEqual(comment1, comment1_shifted);
+            ClassicAssert.AreEqual(comment1, comment1_shifted);
             comment3_shifted = sheet.GetCellComment(new CellAddress(3, 0)).String.String;
-            Assert.AreEqual(comment3, comment3_shifted);
+            ClassicAssert.AreEqual(comment3, comment3_shifted);
             comment4_shifted = sheet.GetCellComment(new CellAddress(4, 0)).String.String;
-            Assert.AreEqual(comment4, comment4_shifted);
+            ClassicAssert.AreEqual(comment4, comment4_shifted);
         }
 
         /**
@@ -219,7 +219,7 @@ namespace TestCases.HSSF.UserModel
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("ForShifting.xls");
 
             NPOI.SS.UserModel.ISheet sheet = wb.GetSheet("Sheet1");
-            Assert.AreEqual(20, sheet.LastRowNum);
+            ClassicAssert.AreEqual(20, sheet.LastRowNum);
 
             ConfirmRow(sheet, 0, 1, 171, 1, "ROW(D1)", "100+B1", "COUNT(D1:E1)");
             ConfirmRow(sheet, 1, 2, 172, 1, "ROW(D2)", "100+B2", "COUNT(D2:E2)");
@@ -241,7 +241,7 @@ namespace TestCases.HSSF.UserModel
             ConfirmRow(sheet, 0, 1, 171, 1, "ROW(D1)", "100+B1", "COUNT(D1:E1)");
 
             // row "2" is now empty
-            Assert.AreEqual(0, sheet.GetRow(1).PhysicalNumberOfCells);
+            ClassicAssert.AreEqual(0, sheet.GetRow(1).PhysicalNumberOfCells);
 
             // Row "2" moved to row "12", and the formula has been updated.
             // note however that the cached formula result (2) has not been updated. (POI differs from Excel here)
@@ -283,8 +283,8 @@ namespace TestCases.HSSF.UserModel
                 double expectedValue, String expectedFormula)
         {
             ICell cell = sheet.GetRow(rowIx).GetCell(colIx);
-            Assert.AreEqual(expectedValue, cell.NumericCellValue, 0.0);
-            Assert.AreEqual(expectedFormula, cell.CellFormula);
+            ClassicAssert.AreEqual(expectedValue, cell.NumericCellValue, 0.0);
+            ClassicAssert.AreEqual(expectedFormula, cell.CellFormula);
         }
     }
 }

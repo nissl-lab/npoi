@@ -43,11 +43,14 @@ namespace NPOI.SS.Formula.Functions {
             return AverageIfs.instance.Evaluate(new [] {  GetSumRange(args), args[0], args[1]}, ec);
         }
 
-        private ValueEval GetSumRange(ValueEval[] args){
-            try {
+        private static ValueEval GetSumRange(ValueEval[] args)
+        {
+            try
+            {
                 return args[2];
             }
-            catch {
+            catch
+            {
                 return args[0];
             }
         }

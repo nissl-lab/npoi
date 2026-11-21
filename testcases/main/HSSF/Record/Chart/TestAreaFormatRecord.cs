@@ -23,7 +23,7 @@ namespace TestCases.HSSF.Record.Chart
     using System;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.Chart;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     /**
      * Tests the serialization and deserialization of the AreaFormatRecord
@@ -55,17 +55,17 @@ namespace TestCases.HSSF.Record.Chart
         {
 
             AreaFormatRecord record = new AreaFormatRecord(TestcaseRecordInputStream.Create((short)0x100a, data));
-            Assert.AreEqual(0xFFFFFF, record.ForegroundColor);
-            Assert.AreEqual(0x000000, record.BackgroundColor);
-            Assert.AreEqual(1, record.Pattern);
-            Assert.AreEqual(1, record.FormatFlags);
-            Assert.AreEqual(true, record.IsAutomatic);
-            Assert.AreEqual(false, record.IsInvert);
-            Assert.AreEqual(0x4e, record.ForecolorIndex);
-            Assert.AreEqual(0x4d, record.BackcolorIndex);
+            ClassicAssert.AreEqual(0xFFFFFF, record.ForegroundColor);
+            ClassicAssert.AreEqual(0x000000, record.BackgroundColor);
+            ClassicAssert.AreEqual(1, record.Pattern);
+            ClassicAssert.AreEqual(1, record.FormatFlags);
+            ClassicAssert.AreEqual(true, record.IsAutomatic);
+            ClassicAssert.AreEqual(false, record.IsInvert);
+            ClassicAssert.AreEqual(0x4e, record.ForecolorIndex);
+            ClassicAssert.AreEqual(0x4d, record.BackcolorIndex);
 
 
-            Assert.AreEqual(20, record.RecordSize);
+            ClassicAssert.AreEqual(20, record.RecordSize);
         }
         [Test]
         public void TestStore()
@@ -81,9 +81,9 @@ namespace TestCases.HSSF.Record.Chart
 
 
             byte[] recordBytes = record.Serialize();
-            Assert.AreEqual(recordBytes.Length - 4, data.Length);
+            ClassicAssert.AreEqual(recordBytes.Length - 4, data.Length);
             for (int i = 0; i < data.Length; i++)
-                Assert.AreEqual(data[i], recordBytes[i + 4], "At offset " + i);
+                ClassicAssert.AreEqual(data[i], recordBytes[i + 4], "At offset " + i);
         }
     }
 }

@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NPOI.OpenXmlFormats.Shared;
-using NPOI.XWPF.UserModel;
 
-namespace NPOI.XWPF.Usermodel
+namespace NPOI.XWPF.UserModel
 {
     public class XWPFOMathArg : MathContainer
     {

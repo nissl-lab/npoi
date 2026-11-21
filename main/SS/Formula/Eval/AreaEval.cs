@@ -74,10 +74,10 @@ namespace NPOI.SS.Formula.Eval
          */
         bool ContainsRow(int row);
         /**
- * @return the ValueEval from within this area at the specified row and col index. Never
- * <code>null</code> (possibly {@link BlankEval}).  The specified indexes should be absolute
- * indexes in the sheet and not relative indexes within the area.
- */
+         * @return the ValueEval from within this area at the specified row and col index. Never
+         * <code>null</code> (possibly {@link BlankEval}).  The specified indexes should be absolute
+         * indexes in the sheet and not relative indexes within the area.
+         */
         ValueEval GetAbsoluteValue(int row, int col);
         /**
          * @return the ValueEval from within this area at the specified relativeRowIndex and 

@@ -22,7 +22,7 @@ namespace TestCases.SS.Formula.Functions
 {
 
     using NPOI.SS.Formula.Eval;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.SS.Formula.Functions;
     using System;
 
@@ -43,32 +43,32 @@ namespace TestCases.SS.Formula.Functions
             v = new double[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
             d = StatsLib.devsq(v);
             x = 82.5;
-            Assert.AreEqual( x, d,"devsq ");
+            ClassicAssert.AreEqual( x, d,"devsq ");
 
             v = new double[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
             d = StatsLib.devsq(v);
             x = 0;
-            Assert.AreEqual( x, d,"devsq ");
+            ClassicAssert.AreEqual( x, d,"devsq ");
 
             v = new double[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
             d = StatsLib.devsq(v);
             x = 0;
-            Assert.AreEqual( x, d,"devsq ");
+            ClassicAssert.AreEqual( x, d,"devsq ");
 
             v = new double[] { 1, 2, 1, 2, 1, 2, 1, 2, 1, 2 };
             d = StatsLib.devsq(v);
             x = 2.5;
-            Assert.AreEqual( x, d,"devsq ");
+            ClassicAssert.AreEqual( x, d,"devsq ");
 
             v = new double[] { 123.12, 33.3333, 2d / 3d, 5.37828, 0.999 };
             d = StatsLib.devsq(v);
             x = 10953.7416965767;
-            Assert.AreEqual( x, d, 0.0000000001, "devsq ");
+            ClassicAssert.AreEqual( x, d, 0.0000000001, "devsq ");
 
             v = new double[] { -1, -2, -3, -4, -5, -6, -7, -8, -9, -10 };
             d = StatsLib.devsq(v);
             x = 82.5;
-            Assert.AreEqual( x, d,"devsq ");
+            ClassicAssert.AreEqual( x, d,"devsq ");
         }
         [Test]
         public void TestKthLargest()
@@ -79,32 +79,32 @@ namespace TestCases.SS.Formula.Functions
             v = new double[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
             d = StatsLib.kthLargest(v, 3);
             x = 8;
-            Assert.AreEqual( x, d,"kthLargest ");
+            ClassicAssert.AreEqual( x, d,"kthLargest ");
 
             v = new double[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
             d = StatsLib.kthLargest(v, 3);
             x = 1;
-            Assert.AreEqual( x, d,"kthLargest ");
+            ClassicAssert.AreEqual( x, d,"kthLargest ");
 
             v = new double[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
             d = StatsLib.kthLargest(v, 3);
             x = 0;
-            Assert.AreEqual( x, d,"kthLargest ");
+            ClassicAssert.AreEqual( x, d,"kthLargest ");
 
             v = new double[] { 1, 2, 1, 2, 1, 2, 1, 2, 1, 2 };
             d = StatsLib.kthLargest(v, 3);
             x = 2;
-            Assert.AreEqual( x, d,"kthLargest ");
+            ClassicAssert.AreEqual( x, d,"kthLargest ");
 
             v = new double[] { 123.12, 33.3333, 2d / 3d, 5.37828, 0.999 };
             d = StatsLib.kthLargest(v, 3);
             x = 5.37828;
-            Assert.AreEqual( x, d,"kthLargest ");
+            ClassicAssert.AreEqual( x, d,"kthLargest ");
 
             v = new double[] { -1, -2, -3, -4, -5, -6, -7, -8, -9, -10 };
             d = StatsLib.kthLargest(v, 3);
             x = -3;
-            Assert.AreEqual( x, d,"kthLargest ");
+            ClassicAssert.AreEqual( x, d,"kthLargest ");
         }
         [Test]
         public void TestKthSmallest()
@@ -119,32 +119,32 @@ namespace TestCases.SS.Formula.Functions
             v = new double[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
             d = StatsLib.avedev(v);
             x = 2.5;
-            Assert.AreEqual( x, d,"avedev ");
+            ClassicAssert.AreEqual( x, d,"avedev ");
 
             v = new double[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
             d = StatsLib.avedev(v);
             x = 0;
-            Assert.AreEqual( x, d,"avedev ");
+            ClassicAssert.AreEqual( x, d,"avedev ");
 
             v = new double[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
             d = StatsLib.avedev(v);
             x = 0;
-            Assert.AreEqual( x, d,"avedev ");
+            ClassicAssert.AreEqual( x, d,"avedev ");
 
             v = new double[] { 1, 2, 1, 2, 1, 2, 1, 2, 1, 2 };
             d = StatsLib.avedev(v);
             x = 0.5;
-            Assert.AreEqual( x, d,"avedev ");
+            ClassicAssert.AreEqual( x, d,"avedev ");
 
             v = new double[] { 123.12, 33.3333, 2d / 3d, 5.37828, 0.999 };
             d = StatsLib.avedev(v);
             x = 36.42176053333;
-            Assert.AreEqual( x, d,0.00000000001,"avedev ");
+            ClassicAssert.AreEqual( x, d,0.00000000001,"avedev ");
 
             v = new double[] { -1, -2, -3, -4, -5, -6, -7, -8, -9, -10 };
             d = StatsLib.avedev(v);
             x = 2.5;
-            Assert.AreEqual( x, d,"avedev ");
+            ClassicAssert.AreEqual( x, d,"avedev ");
         }
         [Test]
         public void TestMedian()
@@ -155,42 +155,42 @@ namespace TestCases.SS.Formula.Functions
             v = new double[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
             d = StatsLib.median(v);
             x = 5.5;
-            Assert.AreEqual( x, d,"median ");
+            ClassicAssert.AreEqual( x, d,"median ");
 
             v = new double[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
             d = StatsLib.median(v);
             x = 1;
-            Assert.AreEqual( x, d,"median ");
+            ClassicAssert.AreEqual( x, d,"median ");
 
             v = new double[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
             d = StatsLib.median(v);
             x = 0;
-            Assert.AreEqual( x, d,"median ");
+            ClassicAssert.AreEqual( x, d,"median ");
 
             v = new double[] { 1, 2, 1, 2, 1, 2, 1, 2, 1, 2 };
             d = StatsLib.median(v);
             x = 1.5;
-            Assert.AreEqual( x, d,"median ");
+            ClassicAssert.AreEqual( x, d,"median ");
 
             v = new double[] { 123.12, 33.3333, 2d / 3d, 5.37828, 0.999 };
             d = StatsLib.median(v);
             x = 5.37828;
-            Assert.AreEqual( x, d,"median ");
+            ClassicAssert.AreEqual( x, d,"median ");
 
             v = new double[] { -1, -2, -3, -4, -5, -6, -7, -8, -9, -10 };
             d = StatsLib.median(v);
             x = -5.5;
-            Assert.AreEqual( x, d,"median ");
+            ClassicAssert.AreEqual( x, d,"median ");
 
             v = new double[] { -2, -3, -4, -5, -6, -7, -8, -9, -10 };
             d = StatsLib.median(v);
             x = -6;
-            Assert.AreEqual( x, d,"median ");
+            ClassicAssert.AreEqual( x, d,"median ");
 
             v = new double[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
             d = StatsLib.median(v);
             x = 5;
-            Assert.AreEqual( x, d,"median ");
+            ClassicAssert.AreEqual( x, d,"median ");
         }
         [Test]
         public void TestMode()
@@ -240,12 +240,12 @@ namespace TestCases.SS.Formula.Functions
             {
                 if (expectedResult == null)
                 {
-                    Assert.AreEqual(ErrorEval.NA, e.GetErrorEval());
+                    ClassicAssert.AreEqual(ErrorEval.NA, e.GetErrorEval());
                     return;
                 }
                 throw e;
             }
-            Assert.AreEqual( expectedResult.Value, actual,"mode");
+            ClassicAssert.AreEqual( expectedResult.Value, actual,"mode");
         }
 
         [Test]
@@ -257,32 +257,32 @@ namespace TestCases.SS.Formula.Functions
             v = new double[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
             d = StatsLib.stdev(v);
             x = 3.02765035409749;
-            Assert.AreEqual( x, d,0.0000000001, "stdev ");
+            ClassicAssert.AreEqual( x, d,0.0000000001, "stdev ");
 
             v = new double[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
             d = StatsLib.stdev(v);
             x = 0;
-            Assert.AreEqual( x, d,"stdev ");
+            ClassicAssert.AreEqual( x, d,"stdev ");
 
             v = new double[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
             d = StatsLib.stdev(v);
             x = 0;
-            Assert.AreEqual( x, d,"stdev ");
+            ClassicAssert.AreEqual( x, d,"stdev ");
 
             v = new double[] { 1, 2, 1, 2, 1, 2, 1, 2, 1, 2 };
             d = StatsLib.stdev(v);
             x = 0.52704627669;
-            Assert.AreEqual( x, d,0.000000001,"stdev ");
+            ClassicAssert.AreEqual( x, d,0.000000001,"stdev ");
 
             v = new double[] { 123.12, 33.3333, 2d / 3d, 5.37828, 0.999 };
             d = StatsLib.stdev(v);
             x = 52.33006233652;
-            Assert.AreEqual( x, d,0.0000000001,"stdev ");
+            ClassicAssert.AreEqual( x, d,0.0000000001,"stdev ");
 
             v = new double[] { -1, -2, -3, -4, -5, -6, -7, -8, -9, -10 };
             d = StatsLib.stdev(v);
             x = 3.02765035410;
-            Assert.AreEqual( x, d,0.0000000001,"stdev ");
+            ClassicAssert.AreEqual( x, d,0.0000000001,"stdev ");
         }
         [Test]
         
@@ -295,22 +295,22 @@ namespace TestCases.SS.Formula.Functions
             d = StatsLib.var(v);
             x = 3.6178;
             //the following AreEqual add a delta param against java version, otherwise tests fail.
-            Assert.AreEqual( x, d, 0.00001,"var ");
+            ClassicAssert.AreEqual( x, d, 0.00001,"var ");
 
             v = new double[] { 34.5, 2.0, 8.9, -4.0 };
             d = StatsLib.var(v);
             x = 286.99;
-            Assert.AreEqual( x, d,0.001,"var ");
+            ClassicAssert.AreEqual( x, d,0.001,"var ");
 
             v = new double[] { 7.0, 25.0, 21.69 };
             d = StatsLib.var(v);
             x = 91.79203333;
-            Assert.AreEqual( x, d,0.00000001,"var ");
+            ClassicAssert.AreEqual( x, d,0.00000001,"var ");
 
             v = new double[] { 1345, 1301, 1368, 1322, 1310, 1370, 1318, 1350, 1303, 1299 };
             d = StatsLib.var(v);
             x = 754.2666667;
-            Assert.AreEqual( x, d, 0.0000001,"var ");
+            ClassicAssert.AreEqual( x, d, 0.0000001,"var ");
         }
         [Test]
         public void TestVarp()
@@ -321,22 +321,22 @@ namespace TestCases.SS.Formula.Functions
             v = new double[] { 3.50, 5.00, 7.23, 2.99 };
             d = StatsLib.varp(v);
             x = 2.71335;
-            Assert.AreEqual( x, d, 0.000001, "varp ");
+            ClassicAssert.AreEqual( x, d, 0.000001, "varp ");
 
             v = new double[] { 34.5, 2.0, 8.9, -4.0 };
             d = StatsLib.varp(v);
             x = 215.2425;
-            Assert.AreEqual( x, d,0.00001,"varp ");
+            ClassicAssert.AreEqual( x, d,0.00001,"varp ");
 
             v = new double[] { 7.0, 25.0, 21.69 };
             d = StatsLib.varp(v);
             x = 61.19468889;
-            Assert.AreEqual( x, d, 0.00000001, "varp ");
+            ClassicAssert.AreEqual( x, d, 0.00000001, "varp ");
 
             v = new double[] { 1345, 1301, 1368, 1322, 1310, 1370, 1318, 1350, 1303, 1299 };
             d = StatsLib.varp(v);
             x = 678.84;
-            Assert.AreEqual( x, d, 0.001,"varp ");
+            ClassicAssert.AreEqual( x, d, 0.001,"varp ");
         }
     }
 

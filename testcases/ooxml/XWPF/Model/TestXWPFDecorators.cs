@@ -19,7 +19,7 @@ namespace TestCases.XWPF.Model
 {
     using NPOI.XWPF.Model;
     using NPOI.XWPF.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using System.Linq;
 
     /**
@@ -49,71 +49,71 @@ namespace TestCases.XWPF.Model
         {
             XWPFParagraph ps;
             XWPFParagraph ph;
-            Assert.AreEqual(7, simple.Paragraphs.Count);
-            Assert.AreEqual(5, hyperlink.Paragraphs.Count);
+            ClassicAssert.AreEqual(7, simple.Paragraphs.Count);
+            ClassicAssert.AreEqual(5, hyperlink.Paragraphs.Count);
 
             // Simple text
             ps = simple.Paragraphs[(0)];
-            Assert.AreEqual("I am a test document", ps.ParagraphText);
-            Assert.AreEqual(1, ps.Runs.Count);
+            ClassicAssert.AreEqual("I am a test document", ps.ParagraphText);
+            ClassicAssert.AreEqual(1, ps.Runs.Count);
 
             ph = hyperlink.Paragraphs[(4)];
-            Assert.AreEqual("We have a hyperlink here, and another.", ph.ParagraphText);
-            Assert.AreEqual(3, ph.Runs.Count);
+            ClassicAssert.AreEqual("We have a hyperlink here, and another.", ph.ParagraphText);
+            ClassicAssert.AreEqual(3, ph.Runs.Count);
 
 
             // The proper way to do hyperlinks(!)
-            Assert.IsFalse(ps.Runs[(0)] is XWPFHyperlinkRun);
-            Assert.IsFalse(ph.Runs[(0)] is XWPFHyperlinkRun);
-            Assert.IsTrue(ph.Runs[(1)] is XWPFHyperlinkRun);
-            Assert.IsFalse(ph.Runs[(2)] is XWPFHyperlinkRun);
+            ClassicAssert.IsFalse(ps.Runs[(0)] is XWPFHyperlinkRun);
+            ClassicAssert.IsFalse(ph.Runs[(0)] is XWPFHyperlinkRun);
+            ClassicAssert.IsTrue(ph.Runs[(1)] is XWPFHyperlinkRun);
+            ClassicAssert.IsFalse(ph.Runs[(2)] is XWPFHyperlinkRun);
 
             XWPFHyperlinkRun link = (XWPFHyperlinkRun)ph.Runs[(1)];
-            Assert.AreEqual("http://poi.apache.org/", link.GetHyperlink(hyperlink).URL);
+            ClassicAssert.AreEqual("http://poi.apache.org/", link.GetHyperlink(hyperlink).URL);
         }
 
         [Test]
         public void TestHyperlinkInFooter()
         {
-            Assert.AreEqual(1, footerhyperlink.Paragraphs.Count);
+            ClassicAssert.AreEqual(1, footerhyperlink.Paragraphs.Count);
 
             // Simple text
             XWPFParagraph paragraph = footerhyperlink.Paragraphs[(0)];
-            Assert.AreEqual("This is a test document.", paragraph.ParagraphText);
-            Assert.AreEqual(2, paragraph.Runs.Count);
+            ClassicAssert.AreEqual("This is a test document.", paragraph.ParagraphText);
+            ClassicAssert.AreEqual(2, paragraph.Runs.Count);
             
-            Assert.AreEqual(3, footerhyperlink.FooterList.Count);
+            ClassicAssert.AreEqual(3, footerhyperlink.FooterList.Count);
 
-            Assert.AreEqual(1, footerhyperlink.GetHyperlinks().Length);
+            ClassicAssert.AreEqual(1, footerhyperlink.GetHyperlinks().Length);
 
             XWPFHyperlinkRun run = (XWPFHyperlinkRun)((XWPFParagraph)footerhyperlink.FooterList[2].BodyElements[0]).Runs[1];
-            Assert.AreEqual("http://poi.apache.org/", run.GetHyperlink(footerhyperlink).URL);
+            ClassicAssert.AreEqual("http://poi.apache.org/", run.GetHyperlink(footerhyperlink).URL);
 
-            Assert.AreEqual(1, footerhyperlink.FooterList[2].GetHyperlinks().Count);
+            ClassicAssert.AreEqual(1, footerhyperlink.FooterList[2].GetHyperlinks().Count);
 
             XWPFHyperlink link = footerhyperlink.GetHyperlinks().First();
-            Assert.AreEqual("http://poi.apache.org/", link.URL);
+            ClassicAssert.AreEqual("http://poi.apache.org/", link.URL);
         }
 
         [Test]
         public void TestHyperlinkInFootnotes()
         {
-            Assert.AreEqual(1, footerhyperlink.Paragraphs.Count);
+            ClassicAssert.AreEqual(1, footerhyperlink.Paragraphs.Count);
 
             // Simple text
             XWPFParagraph paragraph = footnotehyperlink.Paragraphs[(0)];
-            Assert.AreEqual("This is a test document.[footnoteRef:1]", paragraph.ParagraphText);
-            Assert.AreEqual(3, paragraph.Runs.Count);
+            ClassicAssert.AreEqual("This is a test document.[footnoteRef:1]", paragraph.ParagraphText);
+            ClassicAssert.AreEqual(3, paragraph.Runs.Count);
 
-            Assert.AreEqual(3, footnotehyperlink.GetFootnotes().Count);
+            ClassicAssert.AreEqual(3, footnotehyperlink.GetFootnotes().Count);
 
-            Assert.AreEqual(1, footnotehyperlink.GetHyperlinks().Length);
+            ClassicAssert.AreEqual(1, footnotehyperlink.GetHyperlinks().Length);
 
             XWPFHyperlinkRun run = (XWPFHyperlinkRun)footnotehyperlink.GetFootnotes()[2].Paragraphs[0].Runs[3];
-            Assert.AreEqual("http://poi.apache.org/", run.GetHyperlink(footerhyperlink).URL);
+            ClassicAssert.AreEqual("http://poi.apache.org/", run.GetHyperlink(footerhyperlink).URL);
 
             XWPFHyperlink link = footnotehyperlink.GetHyperlinks().First();
-            Assert.AreEqual("http://poi.apache.org/", link.URL);
+            ClassicAssert.AreEqual("http://poi.apache.org/", link.URL);
         }
 
         [Test]
@@ -126,10 +126,10 @@ namespace TestCases.XWPF.Model
                 if (d.GetCommentText().Length > 0)
                 {
                     numComments++;
-                    Assert.AreEqual("\tComment by", d.GetCommentText().Substring(0, 11));
+                    ClassicAssert.AreEqual("\tComment by", d.GetCommentText().Substring(0, 11));
                 }
             }
-            Assert.AreEqual(3, numComments);
+            ClassicAssert.AreEqual(3, numComments);
         }
     }
 

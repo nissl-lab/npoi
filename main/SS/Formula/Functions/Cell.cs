@@ -23,13 +23,13 @@ namespace NPOI.SS.Formula.Functions
             if(string.Equals(s0, "col", System.StringComparison.InvariantCultureIgnoreCase))
             {
                 // "col"
-                if(arg1 is AreaEval)
+                if(arg1 is AreaEval eval)
                 {
-                    rnum = ((AreaEval) arg1).FirstColumn;
+                    rnum = eval.FirstColumn;
                 }
-                else if(arg1 is RefEval)
+                else if(arg1 is RefEval refEval)
                 {
-                    rnum = ((RefEval) arg1).Column;
+                    rnum = refEval.Column;
                 }
                 else
                 {
@@ -40,13 +40,13 @@ namespace NPOI.SS.Formula.Functions
             else if(string.Equals(s0, "row", System.StringComparison.InvariantCultureIgnoreCase))
             {
                 // "row"
-                if(arg1 is AreaEval)
+                if(arg1 is AreaEval eval)
                 {
-                    rnum = ((AreaEval) arg1).FirstRow;
+                    rnum = eval.FirstRow;
                 }
-                else if(arg1 is RefEval)
+                else if(arg1 is RefEval refEval)
                 {
-                    rnum = ((RefEval) arg1).Row;
+                    rnum = refEval.Row;
                 }
                 else
                 {

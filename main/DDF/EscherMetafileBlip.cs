@@ -23,7 +23,7 @@ namespace NPOI.DDF
     using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
     using ICSharpCode.SharpZipLib.Zip.Compression;
     using NPOI.HSSF.UserModel;
-    using SixLabors.ImageSharp;
+    using SkiaSharp;
 
     /// <summary>
     /// @author Daniel Noll
@@ -31,6 +31,8 @@ namespace NPOI.DDF
     public class EscherMetafileBlip:EscherBlipRecord
     {
         private static POILogger log = POILogFactory.GetLogger(typeof(EscherMetafileBlip));
+        //arbitrarily selected; may need to increase
+        private static int MAX_RECORD_LENGTH = 100_000_000;
 
         public const short RECORD_ID_EMF = unchecked((short) 0xF018) + 2;
         public const short RECORD_ID_WMF = unchecked((short)0xF018) + 3;
@@ -95,7 +97,7 @@ namespace NPOI.DDF
             field_6_fCompression = data[pos]; pos++;
             field_7_fFilter = data[pos]; pos++;
 
-            raw_pictureData = new byte[field_5_cbSave];
+            raw_pictureData = IOUtils.SafelyAllocate(field_5_cbSave, MAX_RECORD_LENGTH);
             Array.Copy( data, pos, raw_pictureData, 0, field_5_cbSave );
             pos += field_5_cbSave;
 
@@ -112,7 +114,7 @@ namespace NPOI.DDF
             int remaining = bytesAfterHeader - pos + offset + HEADER_SIZE;
             if (remaining > 0)
             {
-                remainingData = new byte[remaining];
+                remainingData = IOUtils.SafelyAllocate(remaining, MAX_RECORD_LENGTH);
                 Array.Copy(data, pos, remainingData, 0, remaining);
             }
             return bytesAfterHeader + HEADER_SIZE;
@@ -261,21 +263,21 @@ namespace NPOI.DDF
         /// Gets or sets the bounds.
         /// </summary>
         /// <value>The bounds.</value>
-        public Rectangle Bounds
+        public SKRectI Bounds
         {
             get 
             {
-                return new Rectangle(field_3_rcBounds_x1,
+                return SKRectI.Create(field_3_rcBounds_x1,
                                      field_3_rcBounds_y1,
                                      field_3_rcBounds_x2 - field_3_rcBounds_x1,
                                      field_3_rcBounds_y2 - field_3_rcBounds_y1);        
             }
             set
             {
-                field_3_rcBounds_x1 = value.X;
-                field_3_rcBounds_y1 = value.Y;
-                field_3_rcBounds_x2 = value.X + value.Width;
-                field_3_rcBounds_y2 = value.Y + value.Height;
+                field_3_rcBounds_x1 = value.Left;
+                field_3_rcBounds_y1 = value.Top;
+                field_3_rcBounds_x2 = value.Right;
+                field_3_rcBounds_y2 = value.Bottom;
             }
         }
 
@@ -283,10 +285,10 @@ namespace NPOI.DDF
         /// Gets or sets the size EMU.
         /// </summary>
         /// <value>The size EMU.</value>
-        public Size SizeEMU
+        public SKSizeI SizeEMU
         {
             get{
-                return new Size(field_4_ptSize_w, field_4_ptSize_h);
+                return new SKSizeI(field_4_ptSize_w, field_4_ptSize_h);
             }
             set 
             {
@@ -324,10 +326,10 @@ namespace NPOI.DDF
             }
         }
         /// <summary>
-        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+        /// Returns a <see cref="System.String"/> that represents the current <see cref="System.Object"/>.
         /// </summary>
         /// <returns>
-        /// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+        /// A <see cref="System.String"/> that represents the current <see cref="System.Object"/>.
         /// </returns>
         public override String ToString()
         {

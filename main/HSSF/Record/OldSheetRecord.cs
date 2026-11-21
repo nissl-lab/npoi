@@ -29,6 +29,8 @@ namespace NPOI.HSSF.Record
      */
     public class OldSheetRecord
     {
+        //arbitrarily selected; may need to increase
+        private static int MAX_RECORD_LENGTH = 100_000;
         public const short sid = 0x0085;
 
         private int field_1_position_of_BOF;
@@ -43,7 +45,7 @@ namespace NPOI.HSSF.Record
             field_2_visibility = in1.ReadUByte();
             field_3_type = in1.ReadUByte();
             int field_4_sheetname_length = in1.ReadUByte();
-            field_5_sheetname = new byte[field_4_sheetname_length];
+            field_5_sheetname = IOUtils.SafelyAllocate(field_4_sheetname_length, MAX_RECORD_LENGTH);
             in1.Read(field_5_sheetname, 0, field_4_sheetname_length);
         }
 

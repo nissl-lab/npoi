@@ -24,7 +24,7 @@ namespace TestCases.SS.Formula.Eval
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.UserModel;
     using NPOI.Util;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using TestCases.HSSF;
     using TestCases.SS.Formula.Functions;
 
@@ -107,25 +107,25 @@ namespace TestCases.SS.Formula.Eval
             switch (expected.CellType)
             {
                 case CellType.Blank:
-                    Assert.AreEqual(CellType.Blank, actual.CellType, msg);
+                    ClassicAssert.AreEqual(CellType.Blank, actual.CellType, msg);
                     break;
                 case CellType.Boolean:
-                    Assert.AreEqual(CellType.Boolean, actual.CellType, msg);
-                    Assert.AreEqual(expected.BooleanCellValue, actual.BooleanValue, msg);
+                    ClassicAssert.AreEqual(CellType.Boolean, actual.CellType, msg);
+                    ClassicAssert.AreEqual(expected.BooleanCellValue, actual.BooleanValue, msg);
                     break;
                 case CellType.Error:
-                    Assert.AreEqual(CellType.Error, actual.CellType, msg);
-                    Assert.AreEqual(msg, ErrorEval.GetText(expected.ErrorCellValue), ErrorEval.GetText(actual.ErrorValue));
+                    ClassicAssert.AreEqual(CellType.Error, actual.CellType, msg);
+                    ClassicAssert.AreEqual(msg, ErrorEval.GetText(expected.ErrorCellValue), ErrorEval.GetText(actual.ErrorValue));
                     break;
                 case CellType.Formula: // will never be used, since we will call method After formula Evaluation
                     throw new AssertFailedException("Cannot expect formula as result of formula Evaluation: " + msg);
                 case CellType.Numeric:
-                    Assert.AreEqual(CellType.Numeric, actual.CellType, msg);
+                    ClassicAssert.AreEqual(CellType.Numeric, actual.CellType, msg);
                     TestMathX.AssertEquals(msg, expected.NumericCellValue, actual.NumberValue, TestMathX.POS_ZERO, TestMathX.DIFF_TOLERANCE_FACTOR);
                     break;
                 case CellType.String:
-                    Assert.AreEqual(CellType.String, actual.CellType, msg);
-                    Assert.AreEqual(msg, expected.RichStringCellValue.String, actual.StringValue);
+                    ClassicAssert.AreEqual(CellType.String, actual.CellType, msg);
+                    ClassicAssert.AreEqual(msg, expected.RichStringCellValue.String, actual.StringValue);
                     break;
             }
         }

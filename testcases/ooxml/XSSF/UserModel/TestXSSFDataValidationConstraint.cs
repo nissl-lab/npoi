@@ -17,9 +17,11 @@
 namespace TestCases.XSSF.UserModel
 {
     using System;
+    using System.IO;
     using NPOI.SS.UserModel;
+    using NPOI.SS.Util;
     using NPOI.XSSF.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     [TestFixture]
     public class TestXSSFDataValidationConstraint
@@ -39,7 +41,7 @@ namespace TestCases.XSSF.UserModel
             CollectionAssert.AreEqual(expected, constraint.ExplicitListValues);
             // Excel and DataValidationConstraint Parser ignore (strip) whitespace; quotes should still be intact
             // FIXME: whitespace wasn't stripped
-            Assert.AreEqual(literal, constraint.Formula1);
+            ClassicAssert.AreEqual(literal, constraint.Formula1);
         }
 
         [Test]
@@ -51,7 +53,26 @@ namespace TestCases.XSSF.UserModel
             IDataValidationConstraint constraint = new XSSFDataValidationConstraint(expected);
             CollectionAssert.AreEqual(expected, constraint.ExplicitListValues);
             // Excel and DataValidationConstraint Parser ignore (strip) whitespace; quotes should still be intact
-            Assert.AreEqual(literal.Replace(" ", ""), constraint.Formula1);
+            ClassicAssert.AreEqual(literal.Replace(" ", ""), constraint.Formula1);
+        }
+
+        // See issue 1369
+        [Test]
+        public void ListLiteralsWithSpecialCharactersAreWrittenAsExcelStrings()
+        {
+            String[] values = new String[] { "a\"b", "x&y", "<b>", "it's", "a]]>b" };
+            XSSFWorkbook workbook = new XSSFWorkbook();
+            ISheet sheet = workbook.CreateSheet();
+            IDataValidationHelper helper = sheet.GetDataValidationHelper();
+            sheet.AddValidationData(helper.CreateValidation(helper.CreateExplicitListConstraint(values), new CellRangeAddressList(0, 0, 0, 0)));
+
+            MemoryStream output = new MemoryStream();
+            workbook.Write(output, true);
+
+            XSSFWorkbook readBack = new XSSFWorkbook(new MemoryStream(output.ToArray()));
+            IDataValidationConstraint readConstraint = readBack.GetSheetAt(0).GetDataValidations()[0].ValidationConstraint;
+            ClassicAssert.AreEqual("\"a\"\"b,x&y,<b>,it's,a]]>b\"", readConstraint.Formula1);
+            CollectionAssert.AreEqual(values, readConstraint.ExplicitListValues);
         }
 
         [Test]
@@ -60,8 +81,8 @@ namespace TestCases.XSSF.UserModel
             // (unnamed range) reference list        
             String reference = "A1:A5";
             IDataValidationConstraint constraint = new XSSFDataValidationConstraint(listType, ignoredType, reference, null);
-            Assert.IsNull(constraint.ExplicitListValues);
-            Assert.AreEqual("A1:A5", constraint.Formula1);
+            ClassicAssert.IsNull(constraint.ExplicitListValues);
+            ClassicAssert.AreEqual("A1:A5", constraint.Formula1);
         }
 
         [Test]
@@ -70,8 +91,8 @@ namespace TestCases.XSSF.UserModel
             // named range list
             String namedRange = "MyNamedRange";
             IDataValidationConstraint constraint = new XSSFDataValidationConstraint(listType, ignoredType, namedRange, null);
-            Assert.IsNull(constraint.ExplicitListValues);
-            Assert.AreEqual("MyNamedRange", constraint.Formula1);
+            ClassicAssert.IsNull(constraint.ExplicitListValues);
+            ClassicAssert.AreEqual("MyNamedRange", constraint.Formula1);
         }
 
     }

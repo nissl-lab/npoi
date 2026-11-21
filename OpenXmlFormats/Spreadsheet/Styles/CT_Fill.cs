@@ -80,13 +80,13 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
-            sw.Write(">");
+            sw.WriteStart(nodeName);
+            sw.Write('>');
             if (this.patternFill != null)
                 this.patternFill.Write(sw, "patternFill");
             if (this.gradientFill != null)
                 this.gradientFill.Write(sw, "gradientFill");
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.WriteEndElement(nodeName);
         }
 
         //internal static XmlSerializer serializer = new XmlSerializer(typeof(CT_Fill));

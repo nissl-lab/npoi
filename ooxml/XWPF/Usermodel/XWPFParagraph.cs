@@ -19,11 +19,16 @@ namespace NPOI.XWPF.UserModel
     using System;
     using System.Collections.Generic;
     using NPOI.OpenXmlFormats.Wordprocessing;
-    using System.Text;
+    using System.Text; 
+    using Cysharp.Text;
     using NPOI.Util;
     using System.Collections;
     using NPOI.WP.UserModel;
+    using System.Linq;
     using S=NPOI.OpenXmlFormats.Shared;
+    using NPOI.POIFS.Properties;
+    using System.Data;
+    using Org.BouncyCastle.Asn1.Mozilla;
 
     /**
 * <p>A Paragraph within a Document, Table, Header etc.</p> 
@@ -73,9 +78,8 @@ namespace NPOI.XWPF.UserModel
                     for (int i = 0; i < r.Items.Count; i++)
                     {
                         object o = r.Items[i];
-                        if (o is CT_FtnEdnRef)
+                        if (o is CT_FtnEdnRef ftn)
                         {
-                            CT_FtnEdnRef ftn = (CT_FtnEdnRef)o;
                             footnoteText.Append("[").Append(ftn.id).Append(": ");
 
                             XWPFFootnote footnote = null;
@@ -122,26 +126,22 @@ namespace NPOI.XWPF.UserModel
         {
             foreach (object o in items)
             {
-                if (o is CT_R)
+                if (o is CT_R ctR)
                 {
-                    XWPFRun r = new XWPFRun((CT_R)o, (IRunBody)this);
+                    XWPFRun r = new XWPFRun(ctR, (IRunBody)this);
                     runs.Add(r);
                     iRuns.Add(r);
                 }
-                if (o is CT_Hyperlink1)
+                if (o is CT_Hyperlink1 link)
                 {
-                    CT_Hyperlink1 link = (CT_Hyperlink1)o;
                     foreach (CT_R r in link.GetRList())
                     {
-                        //runs.Add(new XWPFHyperlinkRun(link, r, this));
                         XWPFHyperlinkRun hr = new XWPFHyperlinkRun(link, r, this);
                         runs.Add(hr);
                         iRuns.Add(hr);
-
                     }
                 }
-                if (o is CT_SimpleField) {
-                    CT_SimpleField field = (CT_SimpleField)o;
+                if (o is CT_SimpleField field) {
                     foreach (CT_R r in field.GetRList())
                     {
                         XWPFFieldRun fr = new XWPFFieldRun(field, r, this);
@@ -149,34 +149,34 @@ namespace NPOI.XWPF.UserModel
                         iRuns.Add(fr);
                     }
                 }
-                if (o is CT_SdtBlock)
+                if (o is CT_SdtBlock block)
                 {
-                    XWPFSDT cc = new XWPFSDT((CT_SdtBlock)o, part);
+                    XWPFSDT cc = new XWPFSDT(block, part);
                     iRuns.Add(cc);
                 }
-                if (o is CT_SdtRun)
+                if (o is CT_SdtRun run)
                 {
-                    XWPFSDT cc = new XWPFSDT((CT_SdtRun)o, part);
+                    XWPFSDT cc = new XWPFSDT(run, part);
                     iRuns.Add(cc);
                 }
-                if (o is CT_RunTrackChange)
+                if (o is CT_RunTrackChange change)
                 {
-                    foreach (CT_R r in ((CT_RunTrackChange)o).GetRList())
+                    foreach (CT_R r in change.GetRList())
                     {
                         XWPFRun cr = new XWPFRun(r, (IRunBody)this);
                         runs.Add(cr);
                         iRuns.Add(cr);
                     }
                 }
-                if (o is CT_SmartTagRun)
+                if (o is CT_SmartTagRun tagRun)
                 {
                     // Smart Tags can be nested many times. 
                     // This implementation does not preserve the tagging information
-                    BuildRunsInOrderFromXml((o as CT_SmartTagRun).Items);
+                    BuildRunsInOrderFromXml(tagRun.Items);
                 }
-                if (o is CT_RunTrackChange) {
+                if (o is CT_RunTrackChange trackChange) {
                     // add all the insertions as text
-                    foreach (CT_RunTrackChange ins in ((CT_RunTrackChange)o).GetInsList())
+                    foreach (CT_RunTrackChange ins in trackChange.GetInsList())
                     {
                         foreach (CT_R r in ins.GetRList())
                         {
@@ -193,9 +193,9 @@ namespace NPOI.XWPF.UserModel
         {
             foreach (object o in items)
             {
-                if(o is S.CT_OMath)
+                if(o is S.CT_OMath math)
                 {
-                    oMaths.Add(new XWPFOMath(o as S.CT_OMath, this));
+                    oMaths.Add(new XWPFOMath(math, this));
                 }
             }
         }
@@ -261,21 +261,20 @@ namespace NPOI.XWPF.UserModel
         {
             get
             {
-                StringBuilder out1 = new StringBuilder();
+                using var out1 = ZString.CreateStringBuilder();
                 foreach (IRunElement run in iRuns)
                 {
-                    if (run is XWPFRun)
+                    if (run is XWPFRun xRun)
                     {
-                        XWPFRun xRun = (XWPFRun)run;
                         // don't include the text if reviewing is enabled and this is a deleted run
                         if (xRun.GetCTR().GetDelTextList().Count==0)
                         {
                             out1.Append(xRun.ToString());
                         }
                     }
-                    else if (run is XWPFSDT)
+                    else if (run is XWPFSDT xwpfsdt)
                     {
-                        out1.Append(((XWPFSDT)run).Content.Text);
+                        out1.Append(xwpfsdt.Content.Text);
                     }
                     else
                     {
@@ -533,7 +532,7 @@ namespace NPOI.XWPF.UserModel
         {
             get
             {
-                StringBuilder text = new StringBuilder();
+                using var text = ZString.CreateStringBuilder();
                 foreach (XWPFRun run in runs)
                 {
                     text.Append(run.ToString());
@@ -548,7 +547,7 @@ namespace NPOI.XWPF.UserModel
         {
             get
             {
-                StringBuilder text = new StringBuilder();
+                using var text = ZString.CreateStringBuilder();
                 foreach (XWPFRun run in runs)
                 {
                     text.Append(run.PictureText);
@@ -571,18 +570,27 @@ namespace NPOI.XWPF.UserModel
         /// <summary>
         /// Returns the paragraph alignment which shall be applied to text in this paragraph.
         /// </summary>
-        public ParagraphAlignment Alignment
+        public ParagraphAlignment? Alignment
         {
             get
             {
-                CT_PPr pr = GetCTPPr();
-                return pr == null || !pr.IsSetJc() ? ParagraphAlignment.LEFT : EnumConverter.ValueOf<ParagraphAlignment, ST_Jc>(pr.jc.val);
+                CT_PPr pr = GetCTPPr(false);
+                return (pr == null || !pr.IsSetJc()) ? ParagraphAlignment.LEFT : EnumConverter.ValueOf<ParagraphAlignment, ST_Jc>(pr.jc.val);
             }
             set
             {
-                CT_PPr pr = GetCTPPr();
-                CT_Jc jc = pr.IsSetJc() ? pr.jc : pr.AddNewJc();
-                jc.val = EnumConverter.ValueOf<ST_Jc, ParagraphAlignment>(value);
+                if(value==null)
+                {
+                    CT_PPr pr = GetCTPPr(false);
+                    if(pr!=null)
+                        pr.UnsetJc();
+                }
+                else
+                {
+                    CT_PPr pr = GetCTPPr(true);
+                    CT_Jc jc = pr.IsSetJc() ? pr.jc : pr.AddNewJc();
+                    jc.val = EnumConverter.ValueOf<ST_Jc, ParagraphAlignment>((ParagraphAlignment) value);
+                }
             }
         }
 
@@ -623,7 +631,7 @@ namespace NPOI.XWPF.UserModel
         {
             get
             {
-                CT_PPr pr = GetCTPPr();
+                CT_PPr pr = GetCTPPr(false);
                 return (pr == null || !pr.IsSetTextAlignment()) ? TextAlignment.AUTO
                         : EnumConverter.ValueOf<TextAlignment, ST_TextAlignment>(pr.textAlignment.val);
             }
@@ -1244,8 +1252,8 @@ namespace NPOI.XWPF.UserModel
         {
             get
             {
-                CT_OnOff wordWrap = GetCTPPr().IsSetWordWrap() ? GetCTPPr()
-                        .wordWrap : null;
+                var ppr = GetCTPPr(false);
+                CT_OnOff wordWrap = ppr!=null && ppr.IsSetWordWrap() ? ppr.wordWrap : null;
                 if (wordWrap != null)
                 {
                     return wordWrap.val;
@@ -1276,15 +1284,28 @@ namespace NPOI.XWPF.UserModel
         {
             get
             {
-                CT_PPr pr = GetCTPPr();
+                CT_PPr pr = GetCTPPr(false);
+                if(pr==null)
+                {
+                    return null;
+                }
                 CT_String style = pr.IsSetPStyle() ? pr.pStyle : null;
                 return style != null ? style.val : null;
             }
             set
             {
-                CT_PPr pr = GetCTPPr();
-                CT_String style = pr.pStyle != null ? pr.pStyle : pr.AddNewPStyle();
-                style.val = value;
+                if(value==null)
+                {
+                    var pr= GetCTPPr(false);
+                    if(pr!=null)
+                        pr.jc = null;
+                }
+                else
+                { 
+                    CT_PPr pr = GetCTPPr(true);
+                    CT_String style = pr.pStyle != null ? pr.pStyle : pr.AddNewPStyle();
+                    style.val = value;
+                }
             }
         }
 
@@ -1294,12 +1315,15 @@ namespace NPOI.XWPF.UserModel
          */
         private CT_PBdr GetCTPBrd(bool create)
         {
-            CT_PPr pr = GetCTPPr();
+            CT_PPr pr = GetCTPPr(create);
+            if(pr==null)
+            {
+                return null;
+            }
             CT_PBdr ct = pr.IsSetPBdr() ? pr.pBdr : null;
-            if (create && ct == null)
+            if(create && ct == null)
                 ct = pr.AddNewPBdr();
             return ct;
-
         }
 
         /**
@@ -1308,8 +1332,12 @@ namespace NPOI.XWPF.UserModel
          */
         private CT_Spacing GetCTSpacing(bool create)
         {
-            CT_PPr pr = GetCTPPr();
-            CT_Spacing ct = pr.spacing == null ? null : pr.spacing;
+            CT_PPr pr = GetCTPPr(create);
+            if(pr==null)
+            {
+                return null;
+            }
+            CT_Spacing ct = pr?.spacing;
             if (create && ct == null)
                 ct = pr.AddNewSpacing();
             return ct;
@@ -1321,22 +1349,28 @@ namespace NPOI.XWPF.UserModel
          */
         private CT_Ind GetCTInd(bool create)
         {
-            CT_PPr pr = GetCTPPr();
-            CT_Ind ct = pr.ind == null ? null : pr.ind;
+            CT_PPr pr = GetCTPPr(create);
+            if (pr == null)
+                return null;
+            CT_Ind ct = pr.ind;
             if (create && ct == null)
                 ct = pr.AddNewInd();
             return ct;
         }
-
+        internal CT_PPr GetCTPPr()
+        {
+            return GetCTPPr(true);
+        }
         /**
          * Get a <b>copy</b> of the currently used CTPPr, if none is used, return
          * a new instance.
          */
-        internal CT_PPr GetCTPPr()
+        internal CT_PPr GetCTPPr(bool create)
         {
-            CT_PPr pr = paragraph.pPr == null ? paragraph.AddNewPPr()
-                    : paragraph.pPr;
-            return pr;
+            if (create && paragraph.pPr == null)
+                paragraph.AddNewPPr();
+
+            return paragraph.pPr;
         }
 
 
@@ -1400,11 +1434,11 @@ namespace NPOI.XWPF.UserModel
                 CT_R ctRun = paragraph.GetRList()[runPos];
                 foreach (object o in ctRun.Items)
                 {
-                    if (o is CT_Text)
+                    if (o is CT_Text text)
                     {
                         if (textPos >= startText)
                         {
-                            String candidate = ((CT_Text)o).Value;
+                            String candidate = text.Value;
                             if (runPos == startRun)
                                 charPos = startChar;
                             else
@@ -1490,7 +1524,12 @@ namespace NPOI.XWPF.UserModel
         /// <returns>the inserted run or null if the given pos is out of bounds.</returns>
         public XWPFRun InsertNewRun(int pos)
         {
-            if (pos >= 0 && pos <= runs.Count)
+            if(pos == runs.Count)
+            {
+                return CreateRun();
+            }
+
+            if (pos >= 0 && pos < runs.Count)
             {
                 // calculate the correct pos as our run/irun list contains
                 // hyperlinks
@@ -1514,7 +1553,7 @@ namespace NPOI.XWPF.UserModel
             int iPos = iRuns.Count;
                 if (pos < runs.Count)
                 {
-                    XWPFRun oldAtPos = runs[(pos)];
+                    XWPFRun oldAtPos = runs[pos];
                     int oldAt = iRuns.IndexOf(oldAtPos);
                     if (oldAt != -1)
                     {
@@ -1544,7 +1583,7 @@ namespace NPOI.XWPF.UserModel
             int RunEnd = segment.EndRun;
             int textEnd = segment.EndText;
             int charEnd = segment.EndChar;
-            StringBuilder text = new StringBuilder();
+            using var text = ZString.CreateStringBuilder();
             for (int i = RunBegin; i <= RunEnd; i++)
             {
                 int startText = 0, endText = paragraph.GetRList()[i].GetTList().Count - 1;
@@ -1576,28 +1615,38 @@ namespace NPOI.XWPF.UserModel
          */
         public bool RemoveRun(int pos)
         {
-            if (pos >= 0 && pos < runs.Count)
+            if(pos >= 0 && pos < runs.Count)
             {
                 // Remove the run from our high level lists
-                XWPFRun run = runs[(pos)];
-                if (run is XWPFHyperlinkRun || run is XWPFFieldRun)
+                XWPFRun run = runs[pos];
+
+                // CTP -> CTHyperlink -> R array
+                if(run is XWPFHyperlinkRun && IsTheOnlyCTHyperlinkInRuns((XWPFHyperlinkRun) run))
                 {
-                    // TODO Add support for removing these kinds of nested runs,
-                    //  which aren't on the CTP -> R array, but CTP -> XXX -> R array
-                    throw new ArgumentException("Removing Field or Hyperlink runs not yet supported");
+                    var hl=((XWPFHyperlinkRun) run).GetCTHyperlink();
+                    hl.Parent.RemoveHyperlink(hl);
+                }
+                // CTP -> CTField -> R array
+                if(run is XWPFFieldRun && IsTheOnlyCTFieldInRuns((XWPFFieldRun) run))
+                {
+                    var sf=((XWPFFieldRun) run).GetCTField();
+                    sf.Parent.RemoveSimpleField(sf);
                 }
                 runs.RemoveAt(pos);
                 iRuns.Remove(run);
-                // Remove the run from the low-level XML
-                //calculate the correct pos as our run/irun list contains hyperlinks and fields so is different to the paragraph R array.
-                int rPos = 0;
-                for (int i = 0; i < pos; i++)
+                if(!(run is XWPFHyperlinkRun|| run is XWPFFieldRun))
                 {
-                    XWPFRun currRun = runs[i];
-                    if (!(currRun is XWPFHyperlinkRun || currRun is XWPFFieldRun))
-                        rPos++;
+                    // Remove the run from the low-level XML
+                    //calculate the correct pos as our run/irun list contains hyperlinks and fields so is different to the paragraph R array.
+                    int rPos = 0;
+                    for(int i = 0; i < pos; i++)
+                    {
+                        XWPFRun currRun = runs[i];
+                        if(!(currRun is XWPFHyperlinkRun || currRun is XWPFFieldRun))
+                            rPos++;
+                    }
+                    GetCTP().RemoveR(rPos);
                 }
-                GetCTP().RemoveR(pos);
                 return true;
             }
             return false;
@@ -1684,21 +1733,104 @@ namespace NPOI.XWPF.UserModel
         /// <summary>
         /// Appends a new hyperlink run to this paragraph
         /// </summary>
-        /// <param name="rId">a new hyperlink run</param>
+        /// <param name="uri">hyperlink uri</param>
         /// <returns></returns>
-        public XWPFHyperlinkRun CreateHyperlinkRun(string rId)
+        public XWPFHyperlinkRun CreateHyperlinkRun(string uri)
         {
-            CT_R r = new CT_R();
-            r.AddNewRPr().rStyle = new CT_String() { val = "Hyperlink" };
+            // Create a relationship ID for this link. 
+            string rId = Part.GetPackagePart().AddExternalRelationship(
+                uri, XWPFRelation.HYPERLINK.Relation).Id;
 
-            CT_Hyperlink1 hl = paragraph.AddNewHyperlink();
-            hl.history = ST_OnOff.on;
+            // Create the run. 
+            CT_Hyperlink1 hl = GetCTP().AddNewHyperlink();
             hl.id = rId;
-            hl.Items.Add(r);
-            XWPFHyperlinkRun xwpfRun = new XWPFHyperlinkRun(hl, r, this);
-            runs.Add(xwpfRun);
-            iRuns.Add(xwpfRun);
-            return xwpfRun;
+            hl.Parent = paragraph;
+            hl.AddNewR();
+
+            XWPFHyperlinkRun link = new XWPFHyperlinkRun(hl, hl.GetRArray(0), this);
+            runs.Add(link);
+            iRuns.Add(link);
+            return link;
+        }
+        /// <summary>
+        /// insert a new hyperlink run in RunArray
+        /// </summary>
+        /// <param name="pos">The position at which the new run should be added.</param>
+        /// <param name="uri">hyperlink uri</param>
+        /// <returns>the inserted hyperlink run or null if the given pos is out of bounds.</returns>
+        public XWPFHyperlinkRun InsertNewHyperlinkRun(int pos, string uri)
+        {
+            if(pos == runs.Count)
+            {
+                return CreateHyperlinkRun(uri);
+            }
+
+            if(pos >= 0 && pos < runs.Count)
+            {
+                //find on which position of the low level XML the new run is to be added (position of the element currently in pos in the Runs list)
+                int itemPos = paragraph.Items.IndexOf(runs[pos].GetCTR());
+                if(itemPos == -1)
+                {
+                    itemPos = paragraph.Items.Count;
+                }
+
+                string rId = Part.GetPackagePart().AddExternalRelationship(
+                    uri, XWPFRelation.HYPERLINK.Relation).Id;
+
+                CT_Hyperlink1 hl = new CT_Hyperlink1();
+                hl.Parent = paragraph;
+                paragraph.Items.Insert(itemPos, hl);
+                paragraph.ItemsElementName.Insert(itemPos, ParagraphItemsChoiceType.hyperlink);
+
+                hl.id=rId;
+                XWPFHyperlinkRun newRun = new XWPFHyperlinkRun(hl, hl.AddNewR(), this);
+                UpdateRunAfterInsert(pos, newRun);
+                return newRun;
+            }
+            return null;
+        }
+        public XWPFFieldRun InsertNewFieldRun(int pos)
+        {
+            if(pos == runs.Count)
+            {
+                return CreateFieldRun();
+            }
+            if(pos >= 0 && pos < runs.Count)
+            {
+                int itemPos = paragraph.Items.IndexOf(runs[pos].GetCTR());
+                if(itemPos == -1)
+                {
+                    itemPos = paragraph.Items.Count;
+                }
+
+                CT_SimpleField ctSimpleField = new CT_SimpleField();
+                ctSimpleField.Parent = paragraph;
+                paragraph.Items.Insert(itemPos, ctSimpleField);
+                paragraph.ItemsElementName.Insert(itemPos, ParagraphItemsChoiceType.fldSimple);
+
+                XWPFFieldRun newRun = new XWPFFieldRun(ctSimpleField, ctSimpleField.AddNewR(), this);
+                UpdateRunAfterInsert(pos, newRun);
+                return newRun;
+            }
+            return null;
+        }
+        private void UpdateRunAfterInsert(int pos, XWPFRun newRun)
+        {
+            // To update the iRuns, find where we're going
+            // in the normal Runs, and go in there
+            int iPos = iRuns.Count;
+            if(pos < runs.Count)
+            {
+                XWPFRun oldAtPos = runs[pos];
+                int oldAt = iRuns.IndexOf(oldAtPos);
+                if(oldAt != -1)
+                {
+                    iPos = oldAt;
+                }
+            }
+            iRuns.Insert(iPos, newRun);
+            // Runs itself is easy to update
+            runs.Insert(pos, newRun);
         }
         /// <summary>
         /// Add a new run with a reference to the specified footnote. The footnote reference run will have the style name "FootnoteReference".
@@ -1712,6 +1844,125 @@ namespace NPOI.XWPF.UserModel
             rstyle.val="FootnoteReference";
             var footnoteRef = ctRun.AddNewFootnoteReference();
             footnoteRef.id= footnote.Id.ToString();
+        }
+        public XWPFFieldRun CreateFieldRun()
+        {
+            CT_SimpleField ctSimpleField = paragraph.AddNewFldSimple();
+            ctSimpleField.Parent = paragraph;
+            XWPFFieldRun newRun = new XWPFFieldRun(ctSimpleField, ctSimpleField.AddNewR(), this);
+            runs.Add(newRun);
+            iRuns.Add(newRun);
+            return newRun;
+        }
+        public XWPFFieldRun CreateFieldRun(string instruction, string text)
+        {
+            var fieldrun = this.CreateFieldRun();
+            fieldrun.FieldInstruction= instruction;
+            fieldrun.SetText(text);
+            return fieldrun;
+        }
+
+        public void ChangeOrientation(ST_PageOrientation orientation)
+        {
+            var pPr = paragraph.IsSetPPr()
+            ? paragraph.pPr
+            : paragraph.AddNewPPr();
+
+            // Create <w:sectPr> inside <w:pPr>
+            var sectPr = pPr.IsSetSectPr()
+            ? pPr.sectPr
+            : pPr.AddNewSectPr();
+
+            var pageSize = sectPr.IsSetPgSz()
+            ? sectPr.pgSz
+            : sectPr.AddNewPgSz();
+
+            pageSize.orient = orientation;
+            if(orientation== ST_PageOrientation.landscape)
+            {
+                pageSize.w = 842 * 20;
+                pageSize.h = 595 * 20;
+            }
+            else
+            {
+                pageSize.h = 842 * 20;
+                pageSize.w = 595 * 20;
+            }
+        }
+
+        private bool IsTheOnlyCTHyperlinkInRuns(XWPFHyperlinkRun run)
+        {
+            CT_Hyperlink1 ctHyperlink = run.GetCTHyperlink();
+            long count = runs.Count(r=>(r is XWPFHyperlinkRun) 
+            && ctHyperlink == ((XWPFHyperlinkRun) r).GetCTHyperlink());
+            return count <= 1;
+        }
+
+        private bool IsTheOnlyCTFieldInRuns(XWPFFieldRun run)
+        {
+            CT_SimpleField ctField = run.GetCTField();
+            long count = runs.Count(r=>(r is XWPFFieldRun)
+            && ctField  == ((XWPFFieldRun) r).GetCTField());
+            return count <= 1;
+        }
+
+        /// <summary>
+        /// Returns true if the paragraph has a paragraph alignment value of its own
+        /// or false in case it should fall back to the alignment value set by the paragraph style.
+        /// </summary>
+        /// <returns></returns>
+        public bool IsAlignmentSet()
+        {
+            var pr = GetCTPPr(false);
+            return pr != null && pr.IsSetJc();
+        }
+
+        public bool RunsIsEmpty()
+        {
+            return runs.Count==0;
+        }
+
+        /// <summary>
+        /// Indicates whether this paragraph should be kept on the same page as the next one.
+        /// </summary>
+        public bool IsKeepNext
+        {
+            get {
+                if(GetCTP() != null && GetCTP().pPr != null && GetCTP().pPr.IsSetKeepNext())
+                {
+                    return GetCTP().pPr.keepNext.val;
+                }
+                return false;
+
+            }
+        }
+
+        public int IndentationLeftChars 
+        {
+            get
+            {
+                var indentation = GetCTInd(false);
+                return (indentation != null && indentation.IsSetLeftChars()) ? Int32.Parse(indentation.leftChars)
+                        : -1;
+            }
+            set {
+                var indent = GetCTInd(true);
+                indent.leftChars= value.ToString();
+            }
+        }
+        public int IndentationRightChars
+        {
+            get
+            {
+                var indentation = GetCTInd(false);
+                return (indentation != null && indentation.IsSetRightChars()) ? Int32.Parse(indentation.rightChars)
+                        : -1;
+            }
+            set
+            {
+                var indent = GetCTInd(true);
+                indent.rightChars= value.ToString();
+            }
         }
     }
 

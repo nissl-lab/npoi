@@ -33,6 +33,9 @@ namespace NPOI.DDF
     /// </summary>
     public class EscherBSERecord : EscherRecord
     {
+        //arbitrarily selected; may need to increase
+        private static int MAX_RECORD_LENGTH = 100_000;
+
         public const short RECORD_ID = unchecked((short)0xF007);
         public const String RECORD_DESCRIPTION = "MsofbtBSE";
 
@@ -58,7 +61,7 @@ namespace NPOI.DDF
         private byte field_11_unused3;
         private EscherBlipRecord field_12_blipRecord;
 
-        private byte[] _remainingData = new byte[0];
+        private byte[] _remainingData = [];
 
         /// <summary>
         /// This method deSerializes the record from a byte array.
@@ -95,7 +98,7 @@ namespace NPOI.DDF
             pos += 36 + bytesRead;
             bytesRemaining -= bytesRead;
 
-            _remainingData = new byte[bytesRemaining];
+            _remainingData = IOUtils.SafelyAllocate(bytesRemaining, MAX_RECORD_LENGTH);
             Array.Copy(data, pos, _remainingData, 0, bytesRemaining);
             return bytesRemaining + 8 + 36 + (field_12_blipRecord == null ? 0 : field_12_blipRecord.RecordSize);
 
@@ -114,7 +117,7 @@ namespace NPOI.DDF
             listener.BeforeRecordSerialize(offset, RecordId, this);
 
             if (_remainingData == null)
-                _remainingData = new byte[0];
+                _remainingData = [];
 
             LittleEndian.PutShort(data, offset, Options);
             LittleEndian.PutShort(data, offset + 2, RecordId);
@@ -322,7 +325,7 @@ namespace NPOI.DDF
             {
                 if (value == null)
                 {
-                    _remainingData = new byte[0];
+                    _remainingData = [];
                 }
                 else
                 {
@@ -333,10 +336,10 @@ namespace NPOI.DDF
             }
         }
         /// <summary>
-        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+        /// Returns a <see cref="System.String"/> that represents the current <see cref="System.Object"/>.
         /// </summary>
         /// <returns>
-        /// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+        /// A <see cref="System.String"/> that represents the current <see cref="System.Object"/>.
         /// </returns>
         public override String ToString()
         {

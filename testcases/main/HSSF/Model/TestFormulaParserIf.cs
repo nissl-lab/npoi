@@ -20,7 +20,7 @@ namespace TestCases.HSSF.Model
     using System;
     using NPOI.HSSF.Model;
     using NPOI.SS.Formula;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Formula.PTG;
 
@@ -48,7 +48,7 @@ namespace TestCases.HSSF.Model
                 throw new AssertionException("Token[" + i + "] was not AttrPtg as expected");
             }
             AttrPtg attrPtg = (AttrPtg)ptg;
-            Assert.AreEqual(expectedData, attrPtg.Data);
+            ClassicAssert.AreEqual(expectedData, attrPtg.Data);
         }
         [Test]
         public void TestSimpleIf()
@@ -168,33 +168,33 @@ namespace TestCases.HSSF.Model
         public void TestEmbeddedIf()
         {
             Ptg[] ptgs = ParseFormula("IF(3>=1,\"*\",IF(4<>1,\"first\",\"second\"))");
-            Assert.AreEqual(17, ptgs.Length);
+            ClassicAssert.AreEqual(17, ptgs.Length);
 
-            Assert.AreEqual(typeof(AttrPtg), ptgs[5].GetType(), "6th Ptg is1 not a goto (Attr) ptg");
-            Assert.AreEqual(typeof(NotEqualPtg), ptgs[8].GetType(), "9th Ptg is1 not a not equal ptg");
-            Assert.AreEqual(typeof(FuncVarPtg), ptgs[14].GetType(), "15th Ptg is1 not the inner IF variable function ptg");
+            ClassicAssert.AreEqual(typeof(AttrPtg), ptgs[5].GetType(), "6th Ptg is1 not a goto (Attr) ptg");
+            ClassicAssert.AreEqual(typeof(NotEqualPtg), ptgs[8].GetType(), "9th Ptg is1 not a not equal ptg");
+            ClassicAssert.AreEqual(typeof(FuncVarPtg), ptgs[14].GetType(), "15th Ptg is1 not the inner IF variable function ptg");
         }
 
         [Test]
         public void TestSimpleLogical()
         {
             Ptg[] ptgs = ParseFormula("IF(A1<A2,B1,B2)");
-            Assert.AreEqual(9, ptgs.Length);
-            Assert.AreEqual(typeof(LessThanPtg), ptgs[2].GetType(), "3rd Ptg is1 less than");
+            ClassicAssert.AreEqual(9, ptgs.Length);
+            ClassicAssert.AreEqual(typeof(LessThanPtg), ptgs[2].GetType(), "3rd Ptg is1 less than");
         }
         [Test]
         public void TestParenIf()
         {
             Ptg[] ptgs = ParseFormula("IF((A1+A2)<=3,\"yes\",\"no\")");
-            Assert.AreEqual(12, ptgs.Length);
-            Assert.AreEqual(typeof(LessEqualPtg), ptgs[5].GetType(), "6th Ptg is1 less than equal");
-            Assert.AreEqual(typeof(AttrPtg), ptgs[10].GetType(), "11th Ptg is1 not a goto (Attr) ptg");
+            ClassicAssert.AreEqual(12, ptgs.Length);
+            ClassicAssert.AreEqual(typeof(LessEqualPtg), ptgs[5].GetType(), "6th Ptg is1 less than equal");
+            ClassicAssert.AreEqual(typeof(AttrPtg), ptgs[10].GetType(), "11th Ptg is1 not a goto (Attr) ptg");
         }
         [Test]
         public void TestYN()
         {
             Ptg[] ptgs = ParseFormula("IF(TRUE,\"Y\",\"N\")");
-            Assert.AreEqual(7, ptgs.Length);
+            ClassicAssert.AreEqual(7, ptgs.Length);
 
             BoolPtg flag = (BoolPtg)ptgs[0];
             AttrPtg funif = (AttrPtg)ptgs[1];
@@ -203,11 +203,11 @@ namespace TestCases.HSSF.Model
             StringPtg n = (StringPtg)ptgs[4];
 
 
-            Assert.AreEqual(true, flag.Value);
-            Assert.AreEqual("Y", y.Value);
-            Assert.AreEqual("N", n.Value);
-            Assert.AreEqual("IF", funif.ToFormulaString());
-            Assert.IsTrue(goto1.IsSkip, "Goto ptg exists");
+            ClassicAssert.AreEqual(true, flag.Value);
+            ClassicAssert.AreEqual("Y", y.Value);
+            ClassicAssert.AreEqual("N", n.Value);
+            ClassicAssert.AreEqual("IF", funif.ToFormulaString());
+            ClassicAssert.IsTrue(goto1.IsSkip, "Goto ptg exists");
         }
         /**
          * Make sure the ptgs are generated properly with two functions embedded
@@ -217,31 +217,31 @@ namespace TestCases.HSSF.Model
         public void TestNestedFunctionIf()
         {
             Ptg[] ptgs = ParseFormula("IF(A1=B1,AVERAGE(A1:B1),AVERAGE(A2:B2))");
-            Assert.AreEqual(11, ptgs.Length);
+            ClassicAssert.AreEqual(11, ptgs.Length);
 
-            Assert.IsTrue((ptgs[3] is AttrPtg), "IF Attr Set correctly");
+            ClassicAssert.IsTrue((ptgs[3] is AttrPtg), "IF Attr Set correctly");
             AttrPtg ifFunc = (AttrPtg)ptgs[3];
-            Assert.IsTrue(ifFunc.IsOptimizedIf, "It is1 not an if");
+            ClassicAssert.IsTrue(ifFunc.IsOptimizedIf, "It is1 not an if");
 
-            Assert.IsTrue((ptgs[5] is FuncVarPtg), "Average Function Set correctly");
+            ClassicAssert.IsTrue((ptgs[5] is FuncVarPtg), "Average Function Set correctly");
         }
         [Test]
         public void TestIfSingleCondition()
         {
             Ptg[] ptgs = ParseFormula("IF(1=1,10)");
-            Assert.AreEqual(7, ptgs.Length);
+            ClassicAssert.AreEqual(7, ptgs.Length);
 
-            Assert.IsTrue((ptgs[3] is AttrPtg), "IF Attr Set correctly");
+            ClassicAssert.IsTrue((ptgs[3] is AttrPtg), "IF Attr Set correctly");
             AttrPtg ifFunc = (AttrPtg)ptgs[3];
-            Assert.IsTrue(ifFunc.IsOptimizedIf, "It is1 not an if");
+            ClassicAssert.IsTrue(ifFunc.IsOptimizedIf, "It is1 not an if");
 
-            Assert.IsTrue((ptgs[4] is IntPtg), "Single Value is1 not an IntPtg");
+            ClassicAssert.IsTrue((ptgs[4] is IntPtg), "Single Value is1 not an IntPtg");
             IntPtg intPtg = (IntPtg)ptgs[4];
-            Assert.AreEqual((short)10, intPtg.Value, "Result");
+            ClassicAssert.AreEqual((short)10, intPtg.Value, "Result");
 
-            Assert.IsTrue((ptgs[6] is FuncVarPtg), "Ptg is1 not a Variable Function");
+            ClassicAssert.IsTrue((ptgs[6] is FuncVarPtg), "Ptg is1 not a Variable Function");
             FuncVarPtg funcPtg = (FuncVarPtg)ptgs[6];
-            Assert.AreEqual(2, funcPtg.NumberOfOperands, "Arguments");
+            ClassicAssert.AreEqual(2, funcPtg.NumberOfOperands, "Arguments");
         }
     }
 }

@@ -22,7 +22,7 @@ namespace TestCases.HSSF.UserModel
     using System;
     using NPOI.HSSF.UserModel;
     using NPOI.HSSF.Model;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     /**
     * Tests HSSFWorkbook method setSheetOrder()

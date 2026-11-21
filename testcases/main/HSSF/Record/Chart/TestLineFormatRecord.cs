@@ -23,7 +23,7 @@ namespace TestCases.HSSF.Record.Chart
     using System;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.Chart;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     /**
      * Tests the serialization and deserialization of the LineFormatRecord
@@ -52,16 +52,16 @@ namespace TestCases.HSSF.Record.Chart
         public void TestLoad()
         {
             LineFormatRecord record = new LineFormatRecord(TestcaseRecordInputStream.Create((short)0x1007, data));
-            Assert.AreEqual(0, record.LineColor);
-            Assert.AreEqual(0, record.LinePattern);
-            Assert.AreEqual(0, record.Weight);
-            Assert.AreEqual(1, record.Format);
-            Assert.AreEqual(true, record.IsAuto);
-            Assert.AreEqual(false, record.IsDrawTicks);
-            Assert.AreEqual(0x4d, record.ColourPaletteIndex);
+            ClassicAssert.AreEqual(0, record.LineColor);
+            ClassicAssert.AreEqual(0, record.LinePattern);
+            ClassicAssert.AreEqual(0, record.Weight);
+            ClassicAssert.AreEqual(1, record.Format);
+            ClassicAssert.AreEqual(true, record.IsAuto);
+            ClassicAssert.AreEqual(false, record.IsDrawTicks);
+            ClassicAssert.AreEqual(0x4d, record.ColourPaletteIndex);
 
 
-            Assert.AreEqual(16, record.RecordSize);
+            ClassicAssert.AreEqual(16, record.RecordSize);
         }
         [Test]
         public void TestStore()
@@ -76,9 +76,9 @@ namespace TestCases.HSSF.Record.Chart
 
 
             byte[] recordBytes = record.Serialize();
-            Assert.AreEqual(recordBytes.Length - 4, data.Length);
+            ClassicAssert.AreEqual(recordBytes.Length - 4, data.Length);
             for (int i = 0; i < data.Length; i++)
-                Assert.AreEqual(data[i], recordBytes[i + 4], "At offset " + i);
+                ClassicAssert.AreEqual(data[i], recordBytes[i + 4], "At offset " + i);
         }
     }
 }

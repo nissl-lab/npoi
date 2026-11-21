@@ -41,14 +41,14 @@ namespace NPOI.SS
          */
         public static SpreadsheetVersion EXCEL2007 = new SpreadsheetVersion("xlsx", 0x100000, 0x4000, 255, Int32.MaxValue, 64000, 32767, "EXCEL2007");
 
-        private string _defaultExtension;
-        private int _maxRows;
-        private int _maxColumns;
-        private int _maxFunctionArgs;
-        private int _maxCondFormats;
-        private int _maxCellStyles;
-        private int _maxTextLength;
-        private string _name;
+        private readonly string _defaultExtension;
+        private readonly int _maxRows;
+        private readonly int _maxColumns;
+        private readonly int _maxFunctionArgs;
+        private readonly int _maxCondFormats;
+        private readonly int _maxCellStyles;
+        private readonly int _maxTextLength;
+        private readonly string _name;
 
 
         private SpreadsheetVersion(string defaultExtension, int maxRows, int maxColumns, int maxFunctionArgs, int maxCondFormats, int maxCellStyles, int maxText, string name)

@@ -53,7 +53,7 @@ namespace NPOI.SS.Formula.Functions
             {
                 double d0 = NumericFunction.SingleOperandEvaluate(arg0, srcRowIndex, srcColumnIndex);
                 double d1 = NumericFunction.SingleOperandEvaluate(arg1, srcRowIndex, srcColumnIndex);
-                return new NumberEval(Evaluate(d0, d1, false));
+                return new NumberEval(Days360.Evaluate(d0, d1, false));
             }
             catch (EvaluationException e)
             {
@@ -69,35 +69,38 @@ namespace NPOI.SS.Formula.Functions
                 double d1 = NumericFunction.SingleOperandEvaluate(arg1, srcRowIndex, srcColumnIndex);
                 ValueEval ve = OperandResolver.GetSingleValue(arg2, srcRowIndex, srcColumnIndex);
                 bool? method = OperandResolver.CoerceValueToBoolean(ve, false);
-                return new NumberEval(Evaluate(d0, d1, method != null && (bool)method));
+                return new NumberEval(Days360.Evaluate(d0, d1, method != null && (bool)method));
             }
             catch (EvaluationException e)
             {
                 return e.GetErrorEval();
             }
         }
-        private double Evaluate(double d0, double d1, bool method)
+
+        private static double Evaluate(double d0, double d1, bool method)
         {
             DateTime realStart = GetDate(d0);
             DateTime realEnd = GetDate(d1);
-            int[] startingDate = GetStartingDate(realStart, method);
+            int[] startingDate = Days360.GetStartingDate(realStart, method);
             int[] endingDate = GetEndingDate(realEnd, startingDate, method);
 
             return
                 (endingDate[0] * 360 + endingDate[1] * 30 + endingDate[2]) -
                 (startingDate[0] * 360 + startingDate[1] * 30 + startingDate[2]);
         }
-        private DateTime GetDate(double date)
+
+        private static DateTime GetDate(double date)
         {
             return DateUtil.GetJavaDate(date);
         }
-        private int[] GetStartingDate(DateTime realStart, bool method)
+
+        private static int[] GetStartingDate(DateTime realStart, bool method)
         {
             int yyyy = realStart.Year;
             int mm = realStart.Month;
             int dd = Math.Min(30, realStart.Day);
             
-            if (!method&& IsLastDayOfMonth(realStart)) dd = 30;
+            if (!method&& Days360.IsLastDayOfMonth(realStart)) dd = 30;
             return new int[] { yyyy, mm, dd };
         }
 
@@ -126,6 +129,7 @@ namespace NPOI.SS.Formula.Functions
 
             return new int[] { yyyy, mm, dd };
         }
+
         private static int[] GetEndingDate(DateTime realEnd, int[] startingDate, bool method)
         {
             int yyyy = realEnd.Year;
@@ -147,10 +151,11 @@ namespace NPOI.SS.Formula.Functions
             }
             return new int[] { yyyy, mm, dd };
         }
-        private DateTime GetEndingDateAccordingToStartingDate(double date, DateTime startingDate, bool method)
+
+        private static DateTime GetEndingDateAccordingToStartingDate(double date, DateTime startingDate, bool method)
         {
             DateTime endingDate = DateUtil.GetJavaDate(date, false);
-            if (IsLastDayOfMonth(endingDate))
+            if (Days360.IsLastDayOfMonth(endingDate))
             {
                 if (startingDate.Day < 30)
                 {
@@ -159,14 +164,16 @@ namespace NPOI.SS.Formula.Functions
             }
             return endingDate;
         }
-        private bool IsLastDayOfMonth(DateTime date)
+
+        private static bool IsLastDayOfMonth(DateTime date)
         {
             //int dayOfMonth = date.Day;
             //int lastDayOfMonth = GetFirstDayOfNextMonth(date).AddDays(-1).Day;// getActualMaximum(Calendar.DAY_OF_MONTH);
             //return (dayOfMonth == lastDayOfMonth);
             return date.AddDays(1).Month != date.Month;
         }
-        private DateTime GetFirstDayOfNextMonth(DateTime date)
+
+        private static DateTime GetFirstDayOfNextMonth(DateTime date)
         {
             DateTime newDate;
             if (date.Month < 12)

@@ -18,7 +18,7 @@
 namespace TestCases.HSSF.Record.Crypto
 {
     using System;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.Util;
     using TestCases.Exceptions;
     using NPOI.HSSF.Record.Crypto;
@@ -108,11 +108,11 @@ namespace TestCases.HSSF.Record.Crypto
             bool actResult = key.Validate(saltData, saltHash);
             if (expectedResult)
             {
-                Assert.IsTrue(actResult, "validate failed");
+                ClassicAssert.IsTrue(actResult, "validate failed");
             }
             else
             {
-                Assert.IsFalse(actResult, "validate succeeded unexpectedly");
+                ClassicAssert.IsFalse(actResult, "validate succeeded unexpectedly");
             }
         }
     }

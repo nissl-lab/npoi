@@ -23,7 +23,7 @@ namespace TestCases.HSSF.Record.Chart
     using System;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.Chart;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     /**
      * Tests the serialization and deserialization of the CategorySeriesAxisRecord
@@ -52,16 +52,16 @@ namespace TestCases.HSSF.Record.Chart
         {
 
             CatSerRangeRecord record = new CatSerRangeRecord(TestcaseRecordInputStream.Create((short)0x1020, data));
-            Assert.AreEqual(1, record.CrossPoint);
-            Assert.AreEqual(1, record.LabelInterval);
-            Assert.AreEqual(1, record.MarkInterval);
-            Assert.AreEqual(1, record.Options);
-            Assert.AreEqual(true, record.IsBetween);
-            Assert.AreEqual(false, record.IsMaxCross);
-            Assert.AreEqual(false, record.IsReverse);
+            ClassicAssert.AreEqual(1, record.CrossPoint);
+            ClassicAssert.AreEqual(1, record.LabelInterval);
+            ClassicAssert.AreEqual(1, record.MarkInterval);
+            ClassicAssert.AreEqual(1, record.Options);
+            ClassicAssert.AreEqual(true, record.IsBetween);
+            ClassicAssert.AreEqual(false, record.IsMaxCross);
+            ClassicAssert.AreEqual(false, record.IsReverse);
 
 
-            Assert.AreEqual(4 + 8, record.RecordSize);
+            ClassicAssert.AreEqual(4 + 8, record.RecordSize);
         }
         [Test]
         public void TestStore()
@@ -76,9 +76,9 @@ namespace TestCases.HSSF.Record.Chart
 
 
             byte[] recordBytes = record.Serialize();
-            Assert.AreEqual(recordBytes.Length - 4, data.Length);
+            ClassicAssert.AreEqual(recordBytes.Length - 4, data.Length);
             for (int i = 0; i < data.Length; i++)
-                Assert.AreEqual(data[i], recordBytes[i + 4], "At offset " + i);
+                ClassicAssert.AreEqual(data[i], recordBytes[i + 4], "At offset " + i);
         }
     }
 }

@@ -20,7 +20,7 @@ using NPOI;
 using NPOI.OpenXml4Net.OPC;
 using NPOI.POIFS.FileSystem;
 using NPOI.Util;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using System.IO;
 using TestCases.HSSF;
 
@@ -48,41 +48,40 @@ namespace TestCases.OOXML
             in1 = new PushbackStream(
                     HSSFTestDataSamples.OpenSampleFileStream("SampleSS.xlsx")
             );
-            Assert.IsTrue(DocumentFactoryHelper.HasOOXMLHeader(in1));
+            ClassicAssert.IsTrue(DocumentFactoryHelper.HasOOXMLHeader(in1));
             in1.Close();
 
             // xls file isn't
             in1 = new PushbackStream(
                     HSSFTestDataSamples.OpenSampleFileStream("SampleSS.xls")
             );
-            Assert.IsFalse(DocumentFactoryHelper.HasOOXMLHeader(in1));
+            ClassicAssert.IsFalse(DocumentFactoryHelper.HasOOXMLHeader(in1));
             in1.Close();
 
             // text file isn't
             in1 = new PushbackStream(
                     HSSFTestDataSamples.OpenSampleFileStream("SampleSS.txt")
             );
-            Assert.IsFalse(DocumentFactoryHelper.HasOOXMLHeader(in1));
+            ClassicAssert.IsFalse(DocumentFactoryHelper.HasOOXMLHeader(in1));
             in1.Close();
         }
         [Test]
         public void TestFileCorruption()
         {
             // create test InputStream
-            byte[] testData = { (byte)1, (byte)2, (byte)3 };
+            byte[] testData = { 1, 2, 3 };
             ByteArrayInputStream testInput = new ByteArrayInputStream(testData);
-
+            InputStream is1 = FileMagicContainer.PrepareToCheckMagic(testInput);
+        
             // detect header
-            InputStream in1 = new PushbackInputStream(testInput, 10);
-            Assert.IsFalse(DocumentFactoryHelper.HasOOXMLHeader(in1));
-            //noinspection deprecation
-            Assert.IsFalse(POIXMLDocument.HasOOXMLHeader(in1));
-
+            ClassicAssert.IsFalse(DocumentFactoryHelper.HasOOXMLHeader(is1));
+        
             // check if InputStream is still intact
-            byte[] test = new byte[3];
-            Assert.AreEqual(3, in1.Read(test));
-            Assert.IsTrue(Arrays.Equals(testData, test));
-            Assert.AreEqual(-1, in1.Read());
+            byte[] act = IOUtils.ToByteArray(is1);
+            ClassicAssert.IsTrue(Arrays.Equals(testData, act));
+            //assertArrayEquals(testData, act);
+            ClassicAssert.AreEqual(-1, is1.Read());
+            is1.Close();
         }
     }
 }

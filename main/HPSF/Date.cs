@@ -19,15 +19,17 @@ using NPOI.Util;
 
 namespace NPOI.HPSF
 {
-    internal class Date
+    internal sealed class Date
     {
-        public const int SIZE = 8;
+        private static readonly int SIZE = 8;
 
-        private byte[] _value;
+        private readonly byte[] _value = new byte[SIZE];
+    
+        internal Date() {}
 
-        public Date(byte[] data, int offset)
+        internal void Read( LittleEndianByteArrayInputStream lei ) 
         {
-            _value = LittleEndian.GetByteArray(data, offset, SIZE);
+            lei.ReadFully(_value);
         }
     }
 }

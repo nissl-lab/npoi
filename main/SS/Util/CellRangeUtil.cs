@@ -97,7 +97,7 @@ namespace NPOI.SS.Util
         {
             if (cellRanges.Length < 1)
             {
-                return new CellRangeAddress[] { };
+                return [];
             }
             //ArrayList temp = MergeCellRanges(NPOI.Util.Arrays.AsList(cellRanges));
             List<CellRangeAddress> lst = new List<CellRangeAddress>(cellRanges);
@@ -126,6 +126,7 @@ namespace NPOI.SS.Util
                         }
                         somethingGotMerged = true;
                         // overwrite range1 with first result 
+                        range1 = mergeResult[0];
                         cellRangeList[i] = mergeResult[0];
                         // remove range2
                         cellRangeList.RemoveAt(j--);

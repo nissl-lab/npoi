@@ -21,7 +21,8 @@
 namespace NPOI.SS.Formula.Functions
 {
     using System;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
     using NPOI.SS.Formula.Eval;
 
     /**
@@ -79,7 +80,8 @@ namespace NPOI.SS.Formula.Functions
             {
                 return oldStr;
             }
-            StringBuilder sb = new StringBuilder();
+            using var sb = ZString.CreateStringBuilder();
+
             int startIndex = 0;
             int nextMatch = -1;
             while (true)

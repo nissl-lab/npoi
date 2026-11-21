@@ -48,27 +48,27 @@ namespace NPOI.POIFS.Storage
          * What big block Size the file uses. Most files
          *  use 512 bytes, but a few use 4096
          */
-        private POIFSBigBlockSize bigBlockSize;
+        private readonly POIFSBigBlockSize bigBlockSize;
 
         // number of big block allocation table blocks (int)
-        private int _bat_count;
+        private readonly int _bat_count;
 
         // start of the property Set block (int index of the property Set
         // chain's first big block)
-        private int _property_start;
+        private readonly int _property_start;
 
         // start of the small block allocation table (int index of small
         // block allocation table's first big block)
-        private int _sbat_start;
+        private readonly int _sbat_start;
         	/**
 	 * Number of small block allocation table blocks (int)
 	 * (Number of MiniFAT Sectors in Microsoft parlance)
 	 */
 	private int _sbat_count;
         // big block index for extension to the big block allocation table
-        private int _xbat_start;
-        private int _xbat_count;
-        private byte[]       _data;
+        private readonly int _xbat_start;
+        private readonly int _xbat_count;
+        private readonly byte[]       _data;
 
         /// <summary>
         /// create a new HeaderBlockReader from an Stream
@@ -138,7 +138,7 @@ namespace NPOI.POIFS.Storage
         }
 	
 
-        private byte[] ReadFirst512(Stream stream)
+        private static byte[] ReadFirst512(Stream stream)
         {
             // Grab the first 512 bytes
             // (For 4096 sized blocks, the remaining 3584 bytes are zero)
@@ -159,7 +159,7 @@ namespace NPOI.POIFS.Storage
         /// </summary>
         /// <param name="read">The read.</param>
         /// <param name="expectedReadSize">expected size to read</param>
-        private void AlertShortRead(int read,int expectedReadSize)
+        private static void AlertShortRead(int read,int expectedReadSize)
         {
             if (read < 0)
     		    //Cant have -1 bytes Read in the error message!

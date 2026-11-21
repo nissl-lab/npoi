@@ -17,7 +17,7 @@
 
 namespace TestCases
 {
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using System;
     using System.Collections.Generic;
     using System.Globalization;
@@ -102,7 +102,7 @@ namespace TestCases
 
             R expected;
             R actual = POITestCase.GetFieldValue(clazz, instance, fieldType, fieldName);
-            Assert.AreEqual(expected, actual);
+            ClassicAssert.AreEqual(expected, actual);
             */
         }
 
@@ -124,7 +124,7 @@ namespace TestCases
 
             R expected;
             R actual = POITestCase.CallMethod(clazz, instance, returnType, methodName, parameterTypes, parameters);
-            Assert.AreEqual(expected, actual);
+            ClassicAssert.AreEqual(expected, actual);
             */
         }
 

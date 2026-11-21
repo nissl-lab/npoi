@@ -71,20 +71,20 @@ namespace NPOI.POIFS.Properties
         // documents must be at least this size to be stored in big blocks
         private const int _big_block_minimum_bytes = POIFSConstants.BIG_BLOCK_MINIMUM_DOCUMENT_SIZE;   //4096;
         private String              _name;
-        private ShortField          _name_size;
-        private ByteField           _property_type;
-        private ByteField           _node_color;
-        private IntegerField        _previous_property;
-        private IntegerField        _next_property;
-        private IntegerField        _child_property;
-        private ClassID             _storage_clsid;
+        private readonly ShortField          _name_size;
+        private readonly ByteField           _property_type;
+        private readonly ByteField           _node_color;
+        private readonly IntegerField        _previous_property;
+        private readonly IntegerField        _next_property;
+        private readonly IntegerField        _child_property;
+        private HPSF.ClassID             _storage_clsid;
         private IntegerField        _user_flags;
-        private IntegerField        _seconds_1;
-        private IntegerField        _days_1;
-        private IntegerField        _seconds_2;
-        private IntegerField        _days_2;
-        private IntegerField        _start_block;
-        private IntegerField        _size;
+        private readonly IntegerField        _seconds_1;
+        private readonly IntegerField        _days_1;
+        private readonly IntegerField        _seconds_2;
+        private readonly IntegerField        _days_2;
+        private readonly IntegerField        _start_block;
+        private readonly IntegerField        _size;
         private byte[]              _raw_data;
         private int                 _index;
         private Child               _next_child;
@@ -110,7 +110,7 @@ namespace NPOI.POIFS.Properties
                                                   _NO_INDEX, _raw_data);
             _child_property    = new IntegerField(_child_property_offset,
                                                   _NO_INDEX, _raw_data);
-            _storage_clsid     = new ClassID(_raw_data,_storage_clsid_offset);
+            _storage_clsid     = new HPSF.ClassID(_raw_data,_storage_clsid_offset);
             _user_flags        = new IntegerField(_user_flags_offset, 0, _raw_data);
             _seconds_1         = new IntegerField(_seconds_1_offset, 0,
                                                   _raw_data);
@@ -147,7 +147,7 @@ namespace NPOI.POIFS.Properties
                                                   _raw_data);
             _child_property    = new IntegerField(_child_property_offset,
                                                   _raw_data);
-            _storage_clsid     = new ClassID(_raw_data,_storage_clsid_offset);
+            _storage_clsid     = new HPSF.ClassID(_raw_data,_storage_clsid_offset);
             _user_flags        = new IntegerField(_user_flags_offset, 0, _raw_data);
             _seconds_1         = new IntegerField(_seconds_1_offset, _raw_data);
             _days_1            = new IntegerField(_days_1_offset, _raw_data);
@@ -279,7 +279,7 @@ namespace NPOI.POIFS.Properties
         /// Gets or sets the storage class ID for this property stream. ThIs Is the Class ID
         /// of the COM object which can read and write this property stream </summary>
         /// <value>Storage Class ID</value>
-        public ClassID StorageClsid 
+        public HPSF.ClassID StorageClsid 
         {
             get
             {
@@ -290,7 +290,7 @@ namespace NPOI.POIFS.Properties
                 _storage_clsid = value;
                 if (value == null)
                 {
-                    for (int i = _storage_clsid_offset; i < _storage_clsid_offset + ClassID.LENGTH; i++)
+                    for (int i = _storage_clsid_offset; i < _storage_clsid_offset + HPSF.ClassID.LENGTH; i++)
                         _raw_data[i] = (byte)0;
                 }
                 else

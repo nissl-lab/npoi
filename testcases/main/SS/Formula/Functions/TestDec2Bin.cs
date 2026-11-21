@@ -22,7 +22,7 @@ namespace TestCases.SS.Formula.Functions
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.SS.Formula.Functions;
 
     /**
@@ -53,15 +53,15 @@ namespace TestCases.SS.Formula.Functions
         private static void ConfirmValue(String msg, String number1, String expected)
         {
             ValueEval result = invokeValue(number1);
-            Assert.AreEqual(typeof(StringEval), result.GetType(), "Had: " + result.ToString());
-            Assert.AreEqual(expected, ((StringEval)result).StringValue, msg);
+            ClassicAssert.AreEqual(typeof(StringEval), result.GetType(), "Had: " + result.ToString());
+            ClassicAssert.AreEqual(expected, ((StringEval)result).StringValue, msg);
         }
 
         private static void ConfirmValueError(String msg, String number1, ErrorEval numError)
         {
             ValueEval result = invokeValue(number1);
-            Assert.AreEqual(typeof(ErrorEval), result.GetType());
-            Assert.AreEqual(numError, result, msg);
+            ClassicAssert.AreEqual(typeof(ErrorEval), result.GetType());
+            ClassicAssert.AreEqual(numError, result, msg);
         }
 
         [Test]
@@ -91,8 +91,8 @@ namespace TestCases.SS.Formula.Functions
             ValueEval[] args = new ValueEval[] { ctx.GetRefEval(0, 0) };
             ValueEval result = new Dec2Bin().Evaluate(args, ctx);
 
-            Assert.AreEqual(typeof(StringEval), result.GetType());
-            Assert.AreEqual("1101", ((StringEval)result).StringValue);
+            ClassicAssert.AreEqual(typeof(StringEval), result.GetType());
+            ClassicAssert.AreEqual("1101", ((StringEval)result).StringValue);
         }
 
         [Test]
@@ -103,8 +103,8 @@ namespace TestCases.SS.Formula.Functions
             ValueEval[] args = new ValueEval[] { ErrorEval.VALUE_INVALID };
             ValueEval result = new Dec2Bin().Evaluate(args, ctx);
 
-            Assert.AreEqual(typeof(ErrorEval), result.GetType());
-            Assert.AreEqual(ErrorEval.VALUE_INVALID, result);
+            ClassicAssert.AreEqual(typeof(ErrorEval), result.GetType());
+            ClassicAssert.AreEqual(ErrorEval.VALUE_INVALID, result);
         }
 
         private OperationEvaluationContext CreateContext()
@@ -143,8 +143,8 @@ namespace TestCases.SS.Formula.Functions
             ValueEval[] args = new ValueEval[] { ctx.GetRefEval(0, 0) };
             ValueEval result = new Dec2Bin().Evaluate(args, -1, -1);
 
-            Assert.AreEqual(result.GetType(), typeof(StringEval), "Had: " + result.ToString());
-            Assert.AreEqual("1101", ((StringEval)result).StringValue);
+            ClassicAssert.AreEqual(result.GetType(), typeof(StringEval), "Had: " + result.ToString());
+            ClassicAssert.AreEqual("1101", ((StringEval)result).StringValue);
         }
 
         [Test]
@@ -155,9 +155,9 @@ namespace TestCases.SS.Formula.Functions
             ValueEval[] args = new ValueEval[] { ctx.GetRefEval(0, 0), ctx.GetRefEval(0, 1) };
             ValueEval result = new Dec2Bin().Evaluate(args, -1, -1);
 
-            Assert.AreEqual(typeof(StringEval), result.GetType(), "Had: " + result.ToString());
+            ClassicAssert.AreEqual(typeof(StringEval), result.GetType(), "Had: " + result.ToString());
             // TODO: documentation and behavior do not match here!
-            Assert.AreEqual("1101", ((StringEval)result).StringValue);
+            ClassicAssert.AreEqual("1101", ((StringEval)result).StringValue);
         }
 
         [Test]
@@ -168,9 +168,9 @@ namespace TestCases.SS.Formula.Functions
             ValueEval[] args = new ValueEval[] { ctx.GetRefEval(0, 0), ctx.GetRefEval(0, 1) };
             ValueEval result = new Dec2Bin().Evaluate(args, ctx);
 
-            Assert.AreEqual(typeof(StringEval), result.GetType(), "Had: " + result.ToString());
+            ClassicAssert.AreEqual(typeof(StringEval), result.GetType(), "Had: " + result.ToString());
             // TODO: documentation and behavior do not match here!
-            Assert.AreEqual("1101", ((StringEval)result).StringValue);
+            ClassicAssert.AreEqual("1101", ((StringEval)result).StringValue);
         }
 
         [Test]
@@ -181,8 +181,8 @@ namespace TestCases.SS.Formula.Functions
             ValueEval[] args = new ValueEval[] { ctx.GetRefEval(0, 0), ctx.GetRefEval(0, 3) };
             ValueEval result = new Dec2Bin().Evaluate(args, -1, -1);
 
-            Assert.AreEqual(typeof(ErrorEval), result.GetType());
-            Assert.AreEqual(ErrorEval.NUM_ERROR, result);
+            ClassicAssert.AreEqual(typeof(ErrorEval), result.GetType());
+            ClassicAssert.AreEqual(ErrorEval.NUM_ERROR, result);
         }
 
         [Test]
@@ -193,8 +193,8 @@ namespace TestCases.SS.Formula.Functions
             ValueEval[] args = new ValueEval[] { ctx.GetRefEval(0, 0), ctx.GetRefEval(0, 1), ctx.GetRefEval(0, 1) };
             ValueEval result = new Dec2Bin().Evaluate(args, -1, -1);
 
-            Assert.AreEqual(typeof(ErrorEval), result.GetType());
-            Assert.AreEqual(ErrorEval.VALUE_INVALID, result);
+            ClassicAssert.AreEqual(typeof(ErrorEval), result.GetType());
+            ClassicAssert.AreEqual(ErrorEval.VALUE_INVALID, result);
         }
 
         [Test]
@@ -205,8 +205,8 @@ namespace TestCases.SS.Formula.Functions
             ValueEval[] args = new ValueEval[] { ctx.GetRefEval(0, 0), ctx.GetRefEval(0, 1), ctx.GetRefEval(0, 1) };
             ValueEval result = new Dec2Bin().Evaluate(args, ctx);
 
-            Assert.AreEqual(typeof(ErrorEval), result.GetType());
-            Assert.AreEqual(ErrorEval.VALUE_INVALID, result);
+            ClassicAssert.AreEqual(typeof(ErrorEval), result.GetType());
+            ClassicAssert.AreEqual(ErrorEval.VALUE_INVALID, result);
         }
 
         [Test]
@@ -217,8 +217,8 @@ namespace TestCases.SS.Formula.Functions
             ValueEval[] args = new ValueEval[] { ctx.GetRefEval(0, 0), ErrorEval.NULL_INTERSECTION };
             ValueEval result = new Dec2Bin().Evaluate(args, -1, -1);
 
-            Assert.AreEqual(typeof(ErrorEval), result.GetType());
-            Assert.AreEqual(ErrorEval.NULL_INTERSECTION, result);
+            ClassicAssert.AreEqual(typeof(ErrorEval), result.GetType());
+            ClassicAssert.AreEqual(ErrorEval.NULL_INTERSECTION, result);
         }
 
         [Test]
@@ -229,8 +229,8 @@ namespace TestCases.SS.Formula.Functions
             ValueEval[] args = new ValueEval[] { ctx.GetRefEval(0, 0), ctx.GetRefEval(0, 2) };
             ValueEval result = new Dec2Bin().Evaluate(args, -1, -1);
 
-            Assert.AreEqual(typeof(ErrorEval), result.GetType());
-            Assert.AreEqual(ErrorEval.NUM_ERROR, result);
+            ClassicAssert.AreEqual(typeof(ErrorEval), result.GetType());
+            ClassicAssert.AreEqual(ErrorEval.NUM_ERROR, result);
         }
 
         [Test]
@@ -241,8 +241,8 @@ namespace TestCases.SS.Formula.Functions
             ValueEval[] args = new ValueEval[] { ctx.GetRefEval(0, 0), new NumberEval(0.0) };
             ValueEval result = new Dec2Bin().Evaluate(args, -1, -1);
 
-            Assert.AreEqual(typeof(ErrorEval), result.GetType());
-            Assert.AreEqual(ErrorEval.NUM_ERROR, result);
+            ClassicAssert.AreEqual(typeof(ErrorEval), result.GetType());
+            ClassicAssert.AreEqual(ErrorEval.NUM_ERROR, result);
         }
 
         [Test]
@@ -253,8 +253,8 @@ namespace TestCases.SS.Formula.Functions
             ValueEval[] args = new ValueEval[] { ctx.GetRefEval(0, 0), ctx.GetRefEval(1, 0) };
             ValueEval result = new Dec2Bin().Evaluate(args, -1, -1);
 
-            Assert.AreEqual(typeof(ErrorEval), result.GetType());
-            Assert.AreEqual(ErrorEval.VALUE_INVALID, result);
+            ClassicAssert.AreEqual(typeof(ErrorEval), result.GetType());
+            ClassicAssert.AreEqual(ErrorEval.VALUE_INVALID, result);
         }
 
         [Test]
@@ -263,12 +263,12 @@ namespace TestCases.SS.Formula.Functions
             for (int i = -512; i < 512; i++)
             {
                 ValueEval result = invokeValue(i.ToString());
-                Assert.AreEqual(typeof(StringEval), result.GetType(), "Had: " + result.ToString());
+                ClassicAssert.AreEqual(typeof(StringEval), result.GetType(), "Had: " + result.ToString());
 
                 ValueEval back = invokeBack(((StringEval)result).StringValue);
-                Assert.AreEqual(typeof(NumberEval), back.GetType(), "Had: " + back.ToString());
+                ClassicAssert.AreEqual(typeof(NumberEval), back.GetType(), "Had: " + back.ToString());
 
-                Assert.AreEqual(i.ToString(), ((NumberEval)back).StringValue);
+                ClassicAssert.AreEqual(i.ToString(), ((NumberEval)back).StringValue);
             }
         }
     }

@@ -17,7 +17,7 @@
 
 namespace TestCases.SS.Formula.Constant
 {
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.UserModel;
     using NPOI.Util;
 
@@ -49,7 +49,7 @@ namespace TestCases.SS.Formula.Constant
         public void TestGetEncodedSize()
         {
             int actual = ConstantValueParser.GetEncodedSize(SAMPLE_VALUES);
-            Assert.AreEqual(51, actual);
+            ClassicAssert.AreEqual(51, actual);
         }
         [Test]
         public void TestEncode()

@@ -41,7 +41,7 @@ namespace NPOI.SS.Formula.Functions
          */
         protected override bool HasInitialRange => false;
 
-        private class MyAggregator : IAggregator
+        private sealed class MyAggregator : IAggregator
         {
             double accumulator = 0.0;
 

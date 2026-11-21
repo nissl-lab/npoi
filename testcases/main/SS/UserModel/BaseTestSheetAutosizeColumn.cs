@@ -19,7 +19,7 @@ namespace TestCases.SS.UserModel
 {
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using System;
 
 
@@ -74,20 +74,20 @@ namespace TestCases.SS.UserModel
             for (int i = 0; i < 6; i++) 
                 sheet.AutoSizeColumn(i);
 
-            Assert.IsTrue(sheet.GetColumnWidth(0) < sheet.GetColumnWidth(1));  // width of '0' is less then width of '10'
-            Assert.AreEqual(sheet.GetColumnWidth(1), sheet.GetColumnWidth(2)); // 10 and '10' should be sized Equally
-            Assert.AreEqual(sheet.GetColumnWidth(3), sheet.GetColumnWidth(0)); // formula result is unknown, the width is calculated  for '0'
-            Assert.AreEqual(sheet.GetColumnWidth(4), sheet.GetColumnWidth(5)); // 10.0000 and '10.0000'
+            ClassicAssert.IsTrue(sheet.GetColumnWidth(0) < sheet.GetColumnWidth(1));  // width of '0' is less then width of '10'
+            ClassicAssert.AreEqual(sheet.GetColumnWidth(1), sheet.GetColumnWidth(2)); // 10 and '10' should be sized Equally
+            ClassicAssert.AreEqual(sheet.GetColumnWidth(3), sheet.GetColumnWidth(0)); // formula result is unknown, the width is calculated  for '0'
+            ClassicAssert.AreEqual(sheet.GetColumnWidth(4), sheet.GetColumnWidth(5)); // 10.0000 and '10.0000'
 
             // Evaluate formulas and re-autosize
             EvaluateWorkbook(workbook);
 
             for (int i = 0; i < 6; i++) sheet.AutoSizeColumn(i);
 
-            Assert.IsTrue(sheet.GetColumnWidth(0) < sheet.GetColumnWidth(1));  // width of '0' is less then width of '10'
-            Assert.AreEqual(sheet.GetColumnWidth(1), sheet.GetColumnWidth(2)); // columns 1, 2 and 3 should have the same width
-            Assert.AreEqual(sheet.GetColumnWidth(2), sheet.GetColumnWidth(3)); // columns 1, 2 and 3 should have the same width
-            Assert.AreEqual(sheet.GetColumnWidth(4), sheet.GetColumnWidth(5)); // 10.0000 and '10.0000'
+            ClassicAssert.IsTrue(sheet.GetColumnWidth(0) < sheet.GetColumnWidth(1));  // width of '0' is less then width of '10'
+            ClassicAssert.AreEqual(sheet.GetColumnWidth(1), sheet.GetColumnWidth(2)); // columns 1, 2 and 3 should have the same width
+            ClassicAssert.AreEqual(sheet.GetColumnWidth(2), sheet.GetColumnWidth(3)); // columns 1, 2 and 3 should have the same width
+            ClassicAssert.AreEqual(sheet.GetColumnWidth(4), sheet.GetColumnWidth(5)); // 10.0000 and '10.0000'
 
             workbook.Close();
         }
@@ -108,18 +108,18 @@ namespace TestCases.SS.UserModel
             // autosize not-Evaluated cells, formula cells are sized as if the result is 0
             for (int i = 0; i < 4; i++) sheet.AutoSizeColumn(i);
 
-            Assert.IsTrue(sheet.GetColumnWidth(1) > sheet.GetColumnWidth(0));  // 'true' is wider than '0'
-            Assert.AreEqual(sheet.GetColumnWidth(1), sheet.GetColumnWidth(2));  // 10 and '10' should be sized Equally
-            Assert.AreEqual(sheet.GetColumnWidth(3), sheet.GetColumnWidth(0));  // formula result is unknown, the width is calculated  for '0'
+            ClassicAssert.IsTrue(sheet.GetColumnWidth(1) > sheet.GetColumnWidth(0));  // 'true' is wider than '0'
+            ClassicAssert.AreEqual(sheet.GetColumnWidth(1), sheet.GetColumnWidth(2));  // 10 and '10' should be sized Equally
+            ClassicAssert.AreEqual(sheet.GetColumnWidth(3), sheet.GetColumnWidth(0));  // formula result is unknown, the width is calculated  for '0'
 
             // Evaluate formulas and re-autosize
             EvaluateWorkbook(workbook);
 
             for (int i = 0; i < 4; i++) sheet.AutoSizeColumn(i);
 
-            Assert.IsTrue(sheet.GetColumnWidth(1) > sheet.GetColumnWidth(0));  // 'true' is wider than '0'
-            Assert.AreEqual(sheet.GetColumnWidth(1), sheet.GetColumnWidth(2));  // columns 1, 2 and 3 should have the same width
-            Assert.AreEqual(sheet.GetColumnWidth(2), sheet.GetColumnWidth(3));  // columns 1, 2 and 3 should have the same width
+            ClassicAssert.IsTrue(sheet.GetColumnWidth(1) > sheet.GetColumnWidth(0));  // 'true' is wider than '0'
+            ClassicAssert.AreEqual(sheet.GetColumnWidth(1), sheet.GetColumnWidth(2));  // columns 1, 2 and 3 should have the same width
+            ClassicAssert.AreEqual(sheet.GetColumnWidth(2), sheet.GetColumnWidth(3));  // columns 1, 2 and 3 should have the same width
 
             workbook.Close();
         }
@@ -170,11 +170,11 @@ namespace TestCases.SS.UserModel
             // autosize not-Evaluated cells, formula cells are sized as if the result is 0
             for (int i = 0; i < 8; i++) 
                 sheet.AutoSizeColumn(i);
-            Assert.AreEqual(sheet.GetColumnWidth(2), sheet.GetColumnWidth(1)); // date formatted as 'm'
-            Assert.IsTrue(sheet.GetColumnWidth(3) > sheet.GetColumnWidth(1));  // 'mmm' is wider than 'm'
-            Assert.AreEqual(sheet.GetColumnWidth(4), sheet.GetColumnWidth(3)); // date formatted as 'mmm'
-            Assert.IsTrue(sheet.GetColumnWidth(5) > sheet.GetColumnWidth(3));  // 'mmm/dd/yyyy' is wider than 'mmm'
-            Assert.AreEqual(sheet.GetColumnWidth(6), sheet.GetColumnWidth(5)); // date formatted as 'mmm/dd/yyyy'
+            ClassicAssert.AreEqual(sheet.GetColumnWidth(2), sheet.GetColumnWidth(1)); // date formatted as 'm'
+            ClassicAssert.IsTrue(sheet.GetColumnWidth(3) > sheet.GetColumnWidth(1));  // 'mmm' is wider than 'm'
+            ClassicAssert.AreEqual(sheet.GetColumnWidth(4), sheet.GetColumnWidth(3)); // date formatted as 'mmm'
+            ClassicAssert.IsTrue(sheet.GetColumnWidth(5) > sheet.GetColumnWidth(3));  // 'mmm/dd/yyyy' is wider than 'mmm'
+            ClassicAssert.AreEqual(sheet.GetColumnWidth(6), sheet.GetColumnWidth(5)); // date formatted as 'mmm/dd/yyyy'
 
             // YK: width of not-Evaluated formulas that return data is not determined
             // POI seems to conevert '0' to Excel date which is the beginng of the Excel's date system
@@ -184,12 +184,12 @@ namespace TestCases.SS.UserModel
 
             for (int i = 0; i < 8; i++) sheet.AutoSizeColumn(i);
 
-            Assert.AreEqual(sheet.GetColumnWidth(2), sheet.GetColumnWidth(1)); // date formatted as 'm'
-            Assert.IsTrue(sheet.GetColumnWidth(3) > sheet.GetColumnWidth(1));  // 'mmm' is wider than 'm'
-            Assert.AreEqual(sheet.GetColumnWidth(4), sheet.GetColumnWidth(3)); // date formatted as 'mmm'
-            Assert.IsTrue(sheet.GetColumnWidth(5) > sheet.GetColumnWidth(3));  // 'mmm/dd/yyyy' is wider than 'mmm'
-            Assert.AreEqual(sheet.GetColumnWidth(6), sheet.GetColumnWidth(5)); // date formatted as 'mmm/dd/yyyy'
-            Assert.AreEqual(sheet.GetColumnWidth(4), sheet.GetColumnWidth(7)); // date formula formatted as 'mmm'
+            ClassicAssert.AreEqual(sheet.GetColumnWidth(2), sheet.GetColumnWidth(1)); // date formatted as 'm'
+            ClassicAssert.IsTrue(sheet.GetColumnWidth(3) > sheet.GetColumnWidth(1));  // 'mmm' is wider than 'm'
+            ClassicAssert.AreEqual(sheet.GetColumnWidth(4), sheet.GetColumnWidth(3)); // date formatted as 'mmm'
+            ClassicAssert.IsTrue(sheet.GetColumnWidth(5) > sheet.GetColumnWidth(3));  // 'mmm/dd/yyyy' is wider than 'mmm'
+            ClassicAssert.AreEqual(sheet.GetColumnWidth(6), sheet.GetColumnWidth(5)); // date formatted as 'mmm/dd/yyyy'
+            ClassicAssert.AreEqual(sheet.GetColumnWidth(4), sheet.GetColumnWidth(7)); // date formula formatted as 'mmm'
 
             workbook.Close();
         }
@@ -221,10 +221,10 @@ namespace TestCases.SS.UserModel
 
             for (int i = 0; i < 10; i++) sheet.AutoSizeColumn(i);
 
-            Assert.IsTrue(2 * sheet.GetColumnWidth(0) < sheet.GetColumnWidth(1)); // width is roughly proportional to the number of characters
-            Assert.IsTrue(2 * sheet.GetColumnWidth(1) < sheet.GetColumnWidth(2));
-            Assert.AreEqual(sheet.GetColumnWidth(4), sheet.GetColumnWidth(3));
-            Assert.IsTrue(sheet.GetColumnWidth(5) > sheet.GetColumnWidth(4)); //larger font results in a wider column width
+            ClassicAssert.IsTrue(2 * sheet.GetColumnWidth(0) < sheet.GetColumnWidth(1)); // width is roughly proportional to the number of characters
+            ClassicAssert.IsTrue(2 * sheet.GetColumnWidth(1) < sheet.GetColumnWidth(2));
+            ClassicAssert.AreEqual(sheet.GetColumnWidth(4), sheet.GetColumnWidth(3));
+            ClassicAssert.IsTrue(sheet.GetColumnWidth(5) > sheet.GetColumnWidth(4)); //larger font results in a wider column width
 
             workbook.Close();
         }
@@ -252,7 +252,7 @@ namespace TestCases.SS.UserModel
             double w0 = sheet.GetColumnWidth(0);
             double w1 = sheet.GetColumnWidth(1);
 
-            Assert.IsTrue(w0 * 5 < w1); // rotated text occupies at least five times less horizontal space than normal text
+            ClassicAssert.IsTrue(w0 * 5 < w1); // rotated text occupies at least five times less horizontal space than normal text
 
             workbook.Close();
         }
@@ -273,10 +273,10 @@ namespace TestCases.SS.UserModel
             double defaulWidth = sheet.GetColumnWidth(0);
             sheet.AutoSizeColumn(0);
             // column is unChanged if merged regions are ignored (Excel like behavior)
-            Assert.AreEqual(defaulWidth, sheet.GetColumnWidth(0));
+            ClassicAssert.AreEqual(defaulWidth, sheet.GetColumnWidth(0));
 
             sheet.AutoSizeColumn(0, true);
-            Assert.IsTrue(sheet.GetColumnWidth(0) > defaulWidth);
+            ClassicAssert.IsTrue(sheet.GetColumnWidth(0) > defaulWidth);
 
             workbook.Close();
         }

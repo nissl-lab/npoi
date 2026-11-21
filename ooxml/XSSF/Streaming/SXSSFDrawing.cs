@@ -18,6 +18,7 @@
 namespace NPOI.XSSF.Streaming
 {
     using NPOI.SS.UserModel;
+    using NPOI.XDDF.UserModel.Chart;
     using NPOI.XSSF.UserModel;
     using System.Collections;
     using System.Collections.Generic;
@@ -27,10 +28,10 @@ namespace NPOI.XSSF.Streaming
     /// Delegates most tasks to the non-streaming XSSF code.
     /// TODO: Potentially, Comment and Chart need a similar streaming wrapper like Picture.
     /// </summary>
-    public class SXSSFDrawing : IDrawing, IDrawing<XSSFShape>
+    public class SXSSFDrawing : IDrawing<XSSFShape>
     {
-        private SXSSFWorkbook _wb;
-        private XSSFDrawing _drawing;
+        private readonly SXSSFWorkbook _wb;
+        private readonly XSSFDrawing _drawing;
 
         public SXSSFDrawing(SXSSFWorkbook workbook, XSSFDrawing Drawing)
         {
@@ -46,7 +47,7 @@ namespace NPOI.XSSF.Streaming
         {
             return _drawing.CreateCellComment(anchor);
         }
-        public IChart CreateChart(IClientAnchor anchor)
+        public XDDFChart CreateChart(IClientAnchor anchor)
         {
             return _drawing.CreateChart(anchor);
         }
@@ -64,10 +65,10 @@ namespace NPOI.XSSF.Streaming
         {
             return this.GetEnumerator();
         }
-        //public ObjectData CreateObjectData(IClientAnchor anchor, int storageId, int pictureIndex)
-        //{
-        //    return _drawing.CreateObjectData(anchor, storageId, pictureIndex);
-        //}
+        public IObjectData CreateObjectData(IClientAnchor anchor, int storageId, int pictureIndex)
+        {
+            return _drawing.CreateObjectData(anchor, storageId, pictureIndex);
+        }
         //public Iterator<XSSFShape> iterator()
         //{
         //    return _drawing.Shapes.Iterator();

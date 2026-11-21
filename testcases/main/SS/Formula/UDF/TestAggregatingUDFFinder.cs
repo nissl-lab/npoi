@@ -20,7 +20,7 @@ namespace TestCases.SS.Formula.UDF
 
     using NPOI.SS.Formula.Atp;
     using NPOI.SS.Formula.UDF;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     [TestFixture]
     public class TestAggregatingUDFFinder : BaseTestUDFFinder

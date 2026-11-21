@@ -7,9 +7,9 @@ namespace NPOI.OpenXml4Net.OPC.Internal
 {
     public class MemoryPackagePartOutputStream : Stream
     {
-        private MemoryPackagePart _part;
+        private readonly MemoryPackagePart _part;
 
-        private MemoryStream _buff;
+        private readonly MemoryStream _buff;
 
         public MemoryPackagePartOutputStream(MemoryPackagePart part)
         {

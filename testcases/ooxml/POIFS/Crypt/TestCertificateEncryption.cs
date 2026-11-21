@@ -22,7 +22,7 @@ namespace TestCases.POIFS.Crypt
     using NPOI.POIFS.Crypt.Agile;
     using NPOI.POIFS.FileSystem;
     using NPOI.Util;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using Org.BouncyCastle.X509;
     using TestCases;
 
@@ -158,7 +158,7 @@ namespace TestCases.POIFS.Crypt
             info = new EncryptionInfo(fs);
             AgileDecryptor agDec = (AgileDecryptor)info.Decryptor;
             bool passed = agDec.VerifyPassword(certData.keypair, certData.x509);
-            Assert.IsTrue(passed, "certificate verification failed");
+            ClassicAssert.IsTrue(passed, "certificate verification failed");
 
             Stream fis = agDec.GetDataStream(fs);
             byte[] byteActual = IOUtils.ToByteArray(fis);

@@ -38,7 +38,7 @@ namespace NPOI.SS.Formula.Constant
         private static readonly ErrorConstant NUM = new ErrorConstant(FormulaError.NUM.Code);
         private static readonly ErrorConstant NA = new ErrorConstant(FormulaError.NA.Code);
 
-        private int _errorCode;
+        private readonly int _errorCode;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ErrorConstant"/> class.
@@ -98,10 +98,10 @@ namespace NPOI.SS.Formula.Constant
             return new ErrorConstant(errorCode);
         }
         /// <summary>
-        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+        /// Returns a <see cref="System.String"/> that represents the current <see cref="System.Object"/>.
         /// </summary>
         /// <returns>
-        /// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+        /// A <see cref="System.String"/> that represents the current <see cref="System.Object"/>.
         /// </returns>
         public override String ToString()
         {

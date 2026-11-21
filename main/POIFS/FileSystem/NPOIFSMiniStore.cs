@@ -33,11 +33,11 @@ namespace NPOI.POIFS.FileSystem
      */
     public class NPOIFSMiniStore : BlockStore
     {
-        private NPOIFSFileSystem _filesystem;
+        private readonly NPOIFSFileSystem _filesystem;
         private NPOIFSStream _mini_stream;
-        private List<BATBlock> _sbat_blocks;
-        private HeaderBlock _header;
-        private RootProperty _root;
+        private readonly List<BATBlock> _sbat_blocks;
+        private readonly HeaderBlock _header;
+        private readonly RootProperty _root;
 
         public NPOIFSMiniStore(NPOIFSFileSystem filesystem, RootProperty root,
              List<BATBlock> sbats, HeaderBlock header)

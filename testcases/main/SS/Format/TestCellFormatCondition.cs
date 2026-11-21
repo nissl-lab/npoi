@@ -18,7 +18,7 @@ namespace TestCases.SS.Format
 {
     using System;
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.SS.Format;
 
     [TestFixture]
@@ -30,44 +30,44 @@ namespace TestCases.SS.Format
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
 
             CellFormatCondition lt = CellFormatCondition.GetInstance("<", "1.5");
-            Assert.IsTrue(lt.Pass(1.4));
-            Assert.IsFalse(lt.Pass(1.5));
-            Assert.IsFalse(lt.Pass(1.6));
+            ClassicAssert.IsTrue(lt.Pass(1.4));
+            ClassicAssert.IsFalse(lt.Pass(1.5));
+            ClassicAssert.IsFalse(lt.Pass(1.6));
 
             CellFormatCondition le = CellFormatCondition.GetInstance("<=", "1.5");
-            Assert.IsTrue(le.Pass(1.4));
-            Assert.IsTrue(le.Pass(1.5));
-            Assert.IsFalse(le.Pass(1.6));
+            ClassicAssert.IsTrue(le.Pass(1.4));
+            ClassicAssert.IsTrue(le.Pass(1.5));
+            ClassicAssert.IsFalse(le.Pass(1.6));
 
             CellFormatCondition gt = CellFormatCondition.GetInstance(">", "1.5");
-            Assert.IsFalse(gt.Pass(1.4));
-            Assert.IsFalse(gt.Pass(1.5));
-            Assert.IsTrue(gt.Pass(1.6));
+            ClassicAssert.IsFalse(gt.Pass(1.4));
+            ClassicAssert.IsFalse(gt.Pass(1.5));
+            ClassicAssert.IsTrue(gt.Pass(1.6));
 
             CellFormatCondition ge = CellFormatCondition.GetInstance(">=", "1.5");
-            Assert.IsFalse(ge.Pass(1.4));
-            Assert.IsTrue(ge.Pass(1.5));
-            Assert.IsTrue(ge.Pass(1.6));
+            ClassicAssert.IsFalse(ge.Pass(1.4));
+            ClassicAssert.IsTrue(ge.Pass(1.5));
+            ClassicAssert.IsTrue(ge.Pass(1.6));
 
             CellFormatCondition eqs = CellFormatCondition.GetInstance("=", "1.5");
-            Assert.IsFalse(eqs.Pass(1.4));
-            Assert.IsTrue(eqs.Pass(1.5));
-            Assert.IsFalse(eqs.Pass(1.6));
+            ClassicAssert.IsFalse(eqs.Pass(1.4));
+            ClassicAssert.IsTrue(eqs.Pass(1.5));
+            ClassicAssert.IsFalse(eqs.Pass(1.6));
 
             CellFormatCondition eql = CellFormatCondition.GetInstance("==", "1.5");
-            Assert.IsFalse(eql.Pass(1.4));
-            Assert.IsTrue(eql.Pass(1.5));
-            Assert.IsFalse(eql.Pass(1.6));
+            ClassicAssert.IsFalse(eql.Pass(1.4));
+            ClassicAssert.IsTrue(eql.Pass(1.5));
+            ClassicAssert.IsFalse(eql.Pass(1.6));
 
             CellFormatCondition neo = CellFormatCondition.GetInstance("<>", "1.5");
-            Assert.IsTrue(neo.Pass(1.4));
-            Assert.IsFalse(neo.Pass(1.5));
-            Assert.IsTrue(neo.Pass(1.6));
+            ClassicAssert.IsTrue(neo.Pass(1.4));
+            ClassicAssert.IsFalse(neo.Pass(1.5));
+            ClassicAssert.IsTrue(neo.Pass(1.6));
 
             CellFormatCondition nen = CellFormatCondition.GetInstance("!=", "1.5");
-            Assert.IsTrue(nen.Pass(1.4));
-            Assert.IsFalse(nen.Pass(1.5));
-            Assert.IsTrue(nen.Pass(1.6));
+            ClassicAssert.IsTrue(nen.Pass(1.4));
+            ClassicAssert.IsFalse(nen.Pass(1.5));
+            ClassicAssert.IsTrue(nen.Pass(1.6));
         }
     }
 }

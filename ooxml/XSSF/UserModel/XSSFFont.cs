@@ -23,7 +23,7 @@ using NPOI.OpenXmlFormats.Dml;
 using Dml = NPOI.OpenXmlFormats.Dml;
 using NPOI.XSSF.Model;
 using NPOI.Util;
-using NPOI.Common.UserModel.Fonts;
+using NPOI.OOXML.XSSF.UserModel;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -50,8 +50,9 @@ namespace NPOI.XSSF.UserModel
          */
         public static short DEFAULT_FONT_COLOR = IndexedColors.Black.Index;
 
+        private IIndexedColorMap _indexedColorMap;
         private ThemesTable _themes;
-        private CT_Font _ctFont;
+        private readonly CT_Font _ctFont;
         private short _index;
 
         /**
@@ -65,10 +66,17 @@ namespace NPOI.XSSF.UserModel
             _index = 0;
         }
 
-        public XSSFFont(CT_Font font, int index)
+        /// <summary>
+        /// Called from parsing styles.xml
+        /// </summary>
+        /// <param name="font"></param>
+        /// <param name="index">font index</param>
+        /// <param name="colorMap">colorMap for default or custom indexed colors</param>
+        public XSSFFont(CT_Font font, int index, IIndexedColorMap colorMap)
         {
             _ctFont = font;
             _index = (short)index;
+            _indexedColorMap = colorMap;
         }
 
         /**
@@ -203,7 +211,7 @@ namespace NPOI.XSSF.UserModel
             Spreadsheet.CT_Color ctColor = _ctFont.sizeOfColorArray() == 0 ? null : _ctFont.GetColorArray(0);
             if (ctColor != null)
             {
-                XSSFColor color = new XSSFColor(ctColor);
+                XSSFColor color = XSSFColor.From(ctColor, _indexedColorMap);
                 if (_themes != null)
                 {
                     _themes.InheritFromThemeAsRequired(color);
@@ -424,25 +432,6 @@ namespace NPOI.XSSF.UserModel
         }
 
         /**
-         * get the boldness to use
-         * @return boldweight
-         * @see #BOLDWEIGHT_NORMAL
-         * @see #BOLDWEIGHT_BOLD
-         */
-        [Obsolete("deprecated POI 3.15 beta 2. Use IsBold instead.")]
-        public short Boldweight
-        {
-            get
-            {
-                return (IsBold ? (short)FontBoldWeight.Bold : (short)FontBoldWeight.Normal);
-            }
-            set 
-            {
-                this.IsBold = (value == (short)FontBoldWeight.Bold);
-            }
-        }
-
-        /**
          * set character-set to use.
          *
          * @param charset - charset
@@ -561,7 +550,7 @@ namespace NPOI.XSSF.UserModel
         // */
         public long RegisterTo(StylesTable styles)
         {
-            this._themes = styles.GetTheme();
+            this._themes = styles.Theme;
             short idx = (short)styles.PutFont(this, true);
             this._index = idx;
             return idx;
@@ -612,7 +601,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                CT_IntProperty family = _ctFont.sizeOfFamilyArray() == 0 ? _ctFont.AddNewFamily() : _ctFont.GetFamilyArray(0);
+                CT_IntProperty family = _ctFont.sizeOfFamilyArray() == 0 ? null : _ctFont.GetFamilyArray(0);
                 return family == null ? FontFamily.NOT_APPLICABLE.Value : FontFamily.ValueOf(family.val).Value;
             }
             set 
@@ -640,7 +629,15 @@ namespace NPOI.XSSF.UserModel
          * @return unique index number of the underlying record this Font represents (probably you don't care
          *  unless you're comparing which one is which)
          */
+        [Obsolete]
         public short Index
+        {
+            get
+            {
+                return _index;
+            }
+        }
+        public int IndexAsInt
         {
             get
             {
@@ -655,9 +652,8 @@ namespace NPOI.XSSF.UserModel
 
         public override bool Equals(Object o)
         {
-            if (!(o is XSSFFont)) return false;
+            if (o is not XSSFFont cf) return false;
 
-            XSSFFont cf = (XSSFFont)o;
             return _ctFont.ToString().Equals(cf.GetCTFont().ToString());
         }
 
@@ -669,7 +665,6 @@ namespace NPOI.XSSF.UserModel
             FontName = src.FontName;
             FontHeight = src.FontHeight;
             IsBold = src.IsBold;
-            Boldweight = src.Boldweight;
             IsItalic = src.IsItalic;
             IsStrikeout = src.IsStrikeout;
             Color = src.Color;

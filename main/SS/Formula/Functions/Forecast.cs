@@ -101,7 +101,7 @@ namespace NPOI.SS.Formula.Functions
 
         private abstract class ValueArray(int size) : ValueVector
         {
-            public ValueEval GetItem(int index)
+            public override ValueEval GetItem(int index)
             {
                 if(index < 0 || index > size)
                 {
@@ -113,10 +113,10 @@ namespace NPOI.SS.Formula.Functions
 
             protected abstract ValueEval GetItemInternal(int index);
 
-            public int Size => size;
+            public override int Size => size;
         }
 
-        private class SingleCellValueArray(ValueEval value) : ValueArray(1)
+        private sealed class SingleCellValueArray(ValueEval value) : ValueArray(1)
         {
             protected override ValueEval GetItemInternal(int index)
             {
@@ -124,7 +124,7 @@ namespace NPOI.SS.Formula.Functions
             }
         }
 
-        private class RefValueArray(RefEval ref1) : ValueArray(ref1.NumberOfSheets)
+        private sealed class RefValueArray(RefEval ref1) : ValueArray(ref1.NumberOfSheets)
         {
             private readonly int _width = ref1.NumberOfSheets;
 
@@ -135,7 +135,7 @@ namespace NPOI.SS.Formula.Functions
             }
         }
 
-        private class AreaValueArray(TwoDEval ae) : ValueArray(ae.Width * ae.Height)
+        private sealed class AreaValueArray(TwoDEval ae) : ValueArray(ae.Width * ae.Height)
         {
             private readonly int _width = ae.Width;
 

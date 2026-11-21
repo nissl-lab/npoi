@@ -18,7 +18,7 @@
 namespace TestCases.HSSF.Model
 {
     using System;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Formula.PTG;
     using NPOI.HSSF.Model;
@@ -35,7 +35,7 @@ namespace TestCases.HSSF.Model
         private static Ptg[] ParseFormula(String formula)
         {
             Ptg[] result = HSSFFormulaParser.Parse(formula, (HSSFWorkbook)null);
-            Assert.IsNotNull(result, "Ptg array should not be null");
+            ClassicAssert.IsNotNull(result, "Ptg array should not be null");
             return result;
         }
 
@@ -107,8 +107,8 @@ namespace TestCases.HSSF.Model
 
             FuncVarPtg rowFunc = (FuncVarPtg)ptgs[10];
             FuncVarPtg sumifFunc = (FuncVarPtg)ptgs[12];
-            Assert.AreEqual("ROW", rowFunc.Name);
-            Assert.AreEqual("SUMIF", sumifFunc.Name);
+            ClassicAssert.AreEqual("ROW", rowFunc.Name);
+            ClassicAssert.AreEqual("SUMIF", sumifFunc.Name);
 
             if (rowFunc.PtgClass == Ptg.CLASS_VALUE || sumifFunc.PtgClass == Ptg.CLASS_VALUE)
             {
@@ -130,7 +130,7 @@ namespace TestCases.HSSF.Model
         {
             ConfirmTokenClass(ptgs, i, operandClass);
             AbstractFunctionPtg afp = (AbstractFunctionPtg)ptgs[i];
-            Assert.AreEqual(expectedFunctionName, afp.Name);
+            ClassicAssert.AreEqual(expectedFunctionName, afp.Name);
         }
 
         private void ConfirmTokenClass(Ptg[] ptgs, int i, byte operandClass)

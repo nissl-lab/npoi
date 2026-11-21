@@ -28,7 +28,7 @@
 using System;
 using System.Collections.Generic;
 
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using System.IO;
 using NPOI.Util;
 
@@ -68,7 +68,7 @@ namespace TestCases.Util
             }
             ByteField field = new ByteField(2);
 
-            Assert.AreEqual(( byte ) 0, field.Value);
+            ClassicAssert.AreEqual(( byte ) 0, field.Value);
             try
             {
                 new ByteField(-1, ( byte ) 1);
@@ -80,7 +80,7 @@ namespace TestCases.Util
                 // as expected
             }
             field = new ByteField(2, ( byte ) 3);
-            Assert.AreEqual(( byte ) 3, field.Value);
+            ClassicAssert.AreEqual(( byte ) 3, field.Value);
             byte[] array = new byte[ 3 ];
 
             try
@@ -94,8 +94,8 @@ namespace TestCases.Util
                 // as expected
             }
             field = new ByteField(2, ( byte ) 4, array);
-            Assert.AreEqual(( byte ) 4, field.Value);
-            Assert.AreEqual(( byte ) 4, array[ 2 ]);
+            ClassicAssert.AreEqual(( byte ) 4, field.Value);
+            ClassicAssert.AreEqual(( byte ) 4, array[ 2 ]);
             array = new byte[ 2 ];
             try
             {
@@ -111,7 +111,7 @@ namespace TestCases.Util
             {
                 array = new byte[ 1 ];
                 new ByteField(0, _test_array[ j ], array);
-                Assert.AreEqual(_test_array[ j ], new ByteField(0, array).Value);
+                ClassicAssert.AreEqual(_test_array[ j ], new ByteField(0, array).Value);
             }
         }
 
@@ -127,11 +127,11 @@ namespace TestCases.Util
             for (int j = 0; j < _test_array.Length; j++)
             {
                 field.Value=_test_array[ j ];
-                Assert.AreEqual(_test_array[j], field.Value, "testing _1 " + j);
+                ClassicAssert.AreEqual(_test_array[j], field.Value, "testing _1 " + j);
                 field = new ByteField(0);
                 field.Set(_test_array[ j ], array);
-                Assert.AreEqual(_test_array[j], field.Value, "testing _2 ");
-                Assert.AreEqual(_test_array[j], array[0], "testing _3 ");
+                ClassicAssert.AreEqual(_test_array[j], field.Value, "testing _2 ");
+                ClassicAssert.AreEqual(_test_array[j], array[0], "testing _3 ");
             }
         }
 
@@ -159,7 +159,7 @@ namespace TestCases.Util
             {
                 array[ 0 ] = _test_array[ j ];
                 field.ReadFromBytes(array);
-                Assert.AreEqual(_test_array[j], field.Value, "testing " + j);
+                ClassicAssert.AreEqual(_test_array[j], field.Value, "testing " + j);
             }
         }
 
@@ -180,7 +180,7 @@ namespace TestCases.Util
             for (int j = 0; j < buffer.Length; j++)
             {
                 field.ReadFromStream(stream);
-                Assert.AreEqual(_test_array[j], field.Value, "Testing " + j);
+                ClassicAssert.AreEqual(_test_array[j], field.Value, "Testing " + j);
             }
         }
 
@@ -197,7 +197,7 @@ namespace TestCases.Util
             {
                 field.Value=_test_array[ j ];
                 field.WriteToBytes(array);
-                Assert.AreEqual(_test_array[j], array[0], "testing ");
+                ClassicAssert.AreEqual(_test_array[j], array[0], "testing ");
             }
         }
     }

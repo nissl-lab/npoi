@@ -33,5 +33,14 @@ namespace NPOI.Util
         double ReadDouble();
         void ReadFully(byte[] buf);
         void ReadFully(byte[] buf, int off, int len);
+        /**
+     * Usually acts the same as {@link #readFully(byte[], int, int)}, but
+     * for an encrypted stream the raw (unencrypted) data is filled 
+     *
+     * @param buf the byte array to receive the bytes
+     * @param off the start offset into the byte array 
+     * @param len the amount of bytes to fill
+     */
+        void ReadPlain(byte[] buf, int off, int len);
     }
 }

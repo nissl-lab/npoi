@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFramework>net10.0</TargetFramework>
         <RootNamespace></RootNamespace>
         <NoWarn>$(NoWarn);CS0649;CS0169;NU1903</NoWarn>
         <NukeRootDirectory>..</NukeRootDirectory>
@@ -12,7 +12,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Nuke.Common" Version="9.0.4" />
+        <PackageReference Include="Nuke.Common" Version="10.0.0" />
+        <PackageReference Include="NuGet.Packaging" Version="6.13.1" />
+        <PackageReference Include="System.Security.Cryptography.Xml" Version="10.0.13" />
     </ItemGroup>
 
 </Project>

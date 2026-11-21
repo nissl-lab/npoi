@@ -23,7 +23,7 @@ namespace TestCases.HSSF.UserModel
     using NPOI.HSSF.Record;
     using TestCases.HSSF;
     using NPOI.SS.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.Model;
     using System.Collections.Generic;
 
@@ -46,7 +46,7 @@ namespace TestCases.HSSF.UserModel
             ICell firstCell = firstRow.GetCell(0);
 
             //System.out.println("first assertion for date");
-            Assert.AreEqual(new DateTime(2000, 1, 1, 10, 51, 2),
+            ClassicAssert.AreEqual(new DateTime(2000, 1, 1, 10, 51, 2),
                          DateUtil.GetJavaDate(firstCell.NumericCellValue, false));
             IRow row = sheet.CreateRow(15);
             ICell cell = row.CreateCell(1);
@@ -56,9 +56,9 @@ namespace TestCases.HSSF.UserModel
             IList<RecordBase> records = newSheet.Records;
 
             //System.out.println("BOF Assertion");
-            Assert.IsTrue(records[0] is BOFRecord);
+            ClassicAssert.IsTrue(records[0] is BOFRecord);
             //System.out.println("EOF Assertion");
-            Assert.IsTrue(records[records.Count - 1] is EOFRecord);
+            ClassicAssert.IsTrue(records[records.Count - 1] is EOFRecord);
 
             workbook.Close();
         }

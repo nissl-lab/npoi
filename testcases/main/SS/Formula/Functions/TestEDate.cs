@@ -2,7 +2,7 @@
 using NPOI.SS.Formula.Eval;
 using NPOI.SS.Formula.Functions;
 using NPOI.SS.UserModel;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 
 namespace TestCases.SS.Formula.Functions
 {
@@ -28,14 +28,14 @@ namespace TestCases.SS.Formula.Functions
         {
             EDate eDate = new EDate();
             NumberEval result = (NumberEval)eDate.Evaluate(new ValueEval[] { new NumberEval(startDate), new NumberEval(monthInc) }, null);
-            Assert.AreEqual(expectedResult, result.NumberValue);
+            ClassicAssert.AreEqual(expectedResult, result.NumberValue);
         }
         [Test]
         public void TestEDateInvalidValues()
         {
             EDate eDate = (EDate)EDate.Instance;
             ErrorEval result = (ErrorEval)eDate.Evaluate(new ValueEval[] { new NumberEval(1000) }, null);
-            Assert.AreEqual(FormulaError.VALUE.Code, result.ErrorCode);
+            ClassicAssert.AreEqual(FormulaError.VALUE.Code, result.ErrorCode);
         }
         [Test]
         public void TestEDateIncrease()
@@ -50,12 +50,12 @@ namespace TestCases.SS.Formula.Functions
         }
         private void CompareDateTimes(DateTime a, DateTime b)
         {
-            Assert.AreEqual(a.Year, b.Year);
-            Assert.AreEqual(a.Month, b.Month);
-            Assert.AreEqual(a.Day, b.Day);
-            Assert.AreEqual(a.Hour, b.Hour);
-            Assert.AreEqual(a.Minute, b.Minute);
-            Assert.AreEqual(a.Second, b.Second, delta: 1); // can shift during tests
+            ClassicAssert.AreEqual(a.Year, b.Year);
+            ClassicAssert.AreEqual(a.Month, b.Month);
+            ClassicAssert.AreEqual(a.Day, b.Day);
+            ClassicAssert.AreEqual(a.Hour, b.Hour);
+            ClassicAssert.AreEqual(a.Minute, b.Minute);
+            ClassicAssert.AreEqual(a.Second, b.Second, delta: 1); // can shift during tests
         }
         [Test]
         public void TestEDateDecrease()
@@ -75,7 +75,7 @@ namespace TestCases.SS.Formula.Functions
         {
             EDate eDate = new EDate();
             NumberEval result = (NumberEval)eDate.Evaluate(new ValueEval[] { new NumberEval(1000), new RefEvalImplementation(new NumberEval(0)) }, null);
-            Assert.AreEqual(1000d, result.NumberValue);
+            ClassicAssert.AreEqual(1000d, result.NumberValue);
         }
 
         [Test]
@@ -83,7 +83,7 @@ namespace TestCases.SS.Formula.Functions
         {
             EDate eDate = new EDate();
             NumberEval result = (NumberEval)eDate.Evaluate(new ValueEval[] { new RefEvalImplementation(new NumberEval(1000)), new NumberEval(0) }, null);
-            Assert.AreEqual(1000d, result.NumberValue);
+            ClassicAssert.AreEqual(1000d, result.NumberValue);
         }
         private class ValueEval1 : ValueEval
         {
@@ -93,15 +93,15 @@ namespace TestCases.SS.Formula.Functions
         public void TestEDateInvalidValueEval()
         {
             ValueEval Evaluate = new EDate().Evaluate(new ValueEval[] { new ValueEval1() { }, new NumberEval(0) }, null);
-            Assert.IsTrue(Evaluate is ErrorEval);
-            Assert.AreEqual(ErrorEval.VALUE_INVALID, Evaluate);
+            ClassicAssert.IsTrue(Evaluate is ErrorEval);
+            ClassicAssert.AreEqual(ErrorEval.VALUE_INVALID, Evaluate);
         }
 
         [Test]
         public void TestEDateBlankValueEval()
         {
             NumberEval Evaluate = (NumberEval)new EDate().Evaluate(new ValueEval[] { BlankEval.instance, new NumberEval(0) }, null);
-            Assert.AreEqual(-1.0d, Evaluate.NumberValue);
+            ClassicAssert.AreEqual(-1.0d, Evaluate.NumberValue);
         }
 
         [Test]
@@ -109,10 +109,10 @@ namespace TestCases.SS.Formula.Functions
         {
             EDate eDate = new EDate();
             NumberEval result = (NumberEval)eDate.Evaluate(new ValueEval[] { new RefEvalImplementation(BlankEval.instance), new NumberEval(0) }, null);
-            Assert.AreEqual(-1.0d, result.NumberValue, "0 startDate triggers BAD_DATE currently, thus -1.0!");
+            ClassicAssert.AreEqual(-1.0d, result.NumberValue, "0 startDate triggers BAD_DATE currently, thus -1.0!");
 
             result = (NumberEval)eDate.Evaluate(new ValueEval[] { new NumberEval(1), new RefEvalImplementation(BlankEval.instance) }, null);
-            Assert.AreEqual(1.0d, result.NumberValue, "Blank is handled as 0 otherwise");
+            ClassicAssert.AreEqual(1.0d, result.NumberValue, "Blank is handled as 0 otherwise");
         }
 
     }

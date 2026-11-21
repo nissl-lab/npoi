@@ -15,10 +15,12 @@
    limitations under the License.
 ==================================================================== */
 
+using System;
+using System.Globalization;
+
 namespace NPOI.SS.Format
 {
-    using System;
-    internal class GeneralCellFormatType : CellFormatType
+    internal sealed class GeneralCellFormatType : CellFormatType
     {
         public override CellFormatter Formatter(String pattern)
         {
@@ -28,8 +30,13 @@ namespace NPOI.SS.Format
         {
             return false;
         }
+        public override CellFormatter Formatter(CultureInfo locale, String pattern)
+        {
+            return new CellGeneralFormatter(locale);
+        }
     }
-    internal class NumberCellFormatType : CellFormatType
+
+    internal sealed class NumberCellFormatType : CellFormatType
     {
         public override CellFormatter Formatter(String pattern)
         {
@@ -39,8 +46,13 @@ namespace NPOI.SS.Format
         {
             return false;
         }
+        public override CellFormatter Formatter(CultureInfo locale, String pattern)
+        {
+            return new CellNumberFormatter(locale, pattern);
+        }
     }
-    internal class DateCellFormatType : CellFormatType
+
+    internal sealed class DateCellFormatType : CellFormatType
     {
         public override bool IsSpecial(char ch)
         {
@@ -50,8 +62,13 @@ namespace NPOI.SS.Format
         {
             return new CellDateFormatter(pattern);
         }
+        public override CellFormatter Formatter(CultureInfo locale, String pattern)
+        {
+            return new CellDateFormatter(locale, pattern);
+        }
     }
-    internal class ElapsedCellFormatType : CellFormatType
+
+    internal sealed class ElapsedCellFormatType : CellFormatType
     {
         public override bool IsSpecial(char ch)
         {
@@ -61,8 +78,13 @@ namespace NPOI.SS.Format
         {
             return new CellElapsedFormatter(pattern);
         }
+        public override CellFormatter Formatter(CultureInfo locale, String pattern)
+        {
+            return new CellElapsedFormatter(pattern);
+        }
     }
-    internal class TextCellFormatType : CellFormatType
+
+    internal sealed class TextCellFormatType : CellFormatType
     {
         public override bool IsSpecial(char ch)
         {
@@ -72,7 +94,12 @@ namespace NPOI.SS.Format
         {
             return new CellTextFormatter(pattern);
         }
+        public override CellFormatter Formatter(CultureInfo locale, String pattern)
+        {
+            return new CellTextFormatter(pattern);
+        }
     }
+
     /**
      * The different kinds of formats that the formatter understands.
      *
@@ -110,6 +137,15 @@ namespace NPOI.SS.Format
          */
         public abstract CellFormatter Formatter(String pattern);
 
+        /**
+         * Returns a new formatter of the appropriate type, for the given pattern.
+         * The pattern must be appropriate for the type.
+         *
+         * @param locale The locale to use.
+         * @param pattern The pattern to use.
+         *
+         * @return A new formatter of the appropriate type, for the given pattern.
+         */
+        public abstract CellFormatter Formatter(CultureInfo locale, String pattern);
     }
-
 }

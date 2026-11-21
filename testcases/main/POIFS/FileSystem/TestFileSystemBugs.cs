@@ -21,7 +21,7 @@ namespace TestCases.POIFS.FileSystem
     using System.Collections.Generic;
     using System.IO;
     using NPOI.POIFS.FileSystem;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using TestCases;
 
     /**
@@ -102,32 +102,32 @@ namespace TestCases.POIFS.FileSystem
             // Check the contents
             foreach (DirectoryNode root in openSample("Notes.ole2", false))
             {
-                Assert.AreEqual(1, root.EntryCount);
+                ClassicAssert.AreEqual(1, root.EntryCount);
                 IEnumerator<Entry> it = root.Entries;
                 it.MoveNext();
                 Entry entry = it.Current;
 
-                Assert.IsTrue(entry.IsDirectoryEntry);
-                Assert.IsTrue(entry is DirectoryEntry);
+                ClassicAssert.IsTrue(entry.IsDirectoryEntry);
+                ClassicAssert.IsTrue(entry is DirectoryEntry);
 
                 // The directory lacks a name!
                 DirectoryEntry dir = (DirectoryEntry)entry;
-                Assert.AreEqual("", dir.Name);
+                ClassicAssert.AreEqual("", dir.Name);
 
                 // Has two children
-                Assert.AreEqual(2, dir.EntryCount);
+                ClassicAssert.AreEqual(2, dir.EntryCount);
 
                 it = dir.Entries;
                 // Check them
                 it.MoveNext();
                 entry = it.Current;
-                Assert.AreEqual(true, entry.IsDocumentEntry);
-                Assert.AreEqual("\u0001Ole10Native", entry.Name);
+                ClassicAssert.AreEqual(true, entry.IsDocumentEntry);
+                ClassicAssert.AreEqual("\u0001Ole10Native", entry.Name);
 
                 it.MoveNext();
                 entry = it.Current;
-                Assert.AreEqual(true, entry.IsDocumentEntry);
-                Assert.AreEqual("\u0001CompObj", entry.Name);
+                ClassicAssert.AreEqual(true, entry.IsDocumentEntry);
+                ClassicAssert.AreEqual("\u0001CompObj", entry.Name);
             }
         }
 
@@ -143,7 +143,7 @@ namespace TestCases.POIFS.FileSystem
         {
             foreach (DirectoryNode root in openSample("unknown_properties.msg", true))
             {
-                Assert.AreEqual(42, root.EntryCount);
+                ClassicAssert.AreEqual(42, root.EntryCount);
             }
         }
 
@@ -214,14 +214,14 @@ namespace TestCases.POIFS.FileSystem
                 if (entry is DirectoryNode)
                 {
                     String ourPath = path + entry.Name + "/";
-                    Assert.IsTrue(entries.ContainsKey(ourPath));
-                    Assert.AreEqual(-1, entries[(ourPath)]);
+                    ClassicAssert.IsTrue(entries.ContainsKey(ourPath));
+                    ClassicAssert.AreEqual(-1, entries[(ourPath)]);
                     CheckSizes(ourPath, (DirectoryNode)entry, entries);
                 }
                 else
                 {
                     DocumentNode doc = (DocumentNode)entry;
-                    Assert.AreEqual(entries[(path + entry.Name)], doc.Size);
+                    ClassicAssert.AreEqual(entries[(path + entry.Name)], doc.Size);
                 }
             }
         }

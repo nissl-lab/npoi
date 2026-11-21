@@ -19,6 +19,7 @@
 using System;
 using NPOI.POIFS.Storage;
 using System.IO;
+using NPOI.Util;
 
 namespace NPOI.POIFS.FileSystem
 {
@@ -37,13 +38,13 @@ namespace NPOI.POIFS.FileSystem
         private long _marked_offset;
 
         /** the Document's size */
-        private int _document_size;
+        private readonly int _document_size;
 
         /** have we been closed? */
         private bool _closed;
 
         /** the actual Document */
-        private OPOIFSDocument _document;
+        private readonly OPOIFSDocument _document;
 
         /** the data block Containing the current stream pointer */
         private DataInputBlock _currentBlock;
@@ -58,11 +59,11 @@ namespace NPOI.POIFS.FileSystem
          */
         public ODocumentInputStream(DocumentEntry document)
         {
-            if (!(document is DocumentNode))
+            if (document is not DocumentNode documentNode)
             {
                 throw new IOException("Cannot open internal document storage");
             }
-            DocumentNode documentNode = (DocumentNode)document;
+
             if (documentNode.Document == null)
             {
                 throw new IOException("Cannot open internal document storage");
@@ -71,6 +72,10 @@ namespace NPOI.POIFS.FileSystem
             _current_offset = 0;
             _marked_offset = 0;
             _document_size = document.Size;
+            if (_document_size < 0)
+            {
+			    throw new RecordFormatException("document_size cannot be < 0");
+		    }
             _closed = false;
             _document = documentNode.Document;
             _currentBlock = GetDataInputBlock(0);

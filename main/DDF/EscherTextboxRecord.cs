@@ -34,10 +34,13 @@ namespace NPOI.DDF
     /// </summary>
     public class EscherTextboxRecord : EscherRecord, ICloneable
     {
+        //arbitrarily selected; may need to increase
+        private static int MAX_RECORD_LENGTH = 100_000;
+
         public const short RECORD_ID = unchecked((short)0xF00D);
         public const string RECORD_DESCRIPTION = "msofbtClientTextbox";
 
-        private static readonly byte[] NO_BYTES = new byte[0];
+        private static readonly byte[] NO_BYTES = [];
 
         /** The data for this record not including the the 8 byte header */
         private byte[] _thedata = NO_BYTES;
@@ -60,7 +63,7 @@ namespace NPOI.DDF
 
             // Save the data, Ready for the calling code to do something
             //  useful with it
-            _thedata = new byte[bytesRemaining];
+            _thedata = IOUtils.SafelyAllocate(bytesRemaining, MAX_RECORD_LENGTH);
             Array.Copy(data, offset + 8, _thedata, 0, bytesRemaining);
             return bytesRemaining + 8;
         }
@@ -112,7 +115,7 @@ namespace NPOI.DDF
         /// <param name="length">The length.</param>
         public void SetData(byte[] b, int start, int length)
         {
-            _thedata = new byte[length];
+            _thedata = IOUtils.SafelyAllocate(length, MAX_RECORD_LENGTH);
             Array.Copy(b, start, _thedata, 0, length);
         }
         /// <summary>
@@ -154,10 +157,10 @@ namespace NPOI.DDF
         }
 
         /// <summary>
-        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+        /// Returns a <see cref="System.String"/> that represents the current <see cref="System.Object"/>.
         /// </summary>
         /// <returns>
-        /// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+        /// A <see cref="System.String"/> that represents the current <see cref="System.Object"/>.
         /// </returns>
         public override String ToString()
         {

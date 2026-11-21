@@ -25,9 +25,9 @@ namespace NPOI.SS.Formula
      */
     public abstract class CellCacheEntry : ICacheEntry
     {
-        public static CellCacheEntry[] EMPTY_ARRAY = { };
+        public static CellCacheEntry[] EMPTY_ARRAY = [];
 
-        private FormulaCellCacheEntrySet _consumingCells;
+        private readonly FormulaCellCacheEntrySet _consumingCells;
         private ValueEval _value;
 
 

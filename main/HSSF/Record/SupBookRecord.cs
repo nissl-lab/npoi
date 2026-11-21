@@ -33,7 +33,7 @@ namespace NPOI.HSSF.Record
      */
     public class SupBookRecord : StandardRecord
     {
-        private static POILogger logger = POILogFactory.GetLogger(typeof(SupBookRecord));
+        private static readonly POILogger logger = POILogFactory.GetLogger(typeof(SupBookRecord));
         public const short sid = 0x1AE;
 
         private const short SMALL_RECORD_SIZE = 4;
@@ -42,8 +42,8 @@ namespace NPOI.HSSF.Record
 
         private short field_1_number_of_sheets;
         private String field_2_encoded_url;
-        private String[] field_3_sheet_names;
-        private bool _isAddInFunctions;
+        private readonly String[] field_3_sheet_names;
+        private readonly bool _isAddInFunctions;
 
         public const char CH_VOLUME = (char)1;
         public const char CH_SAME_VOLUME = (char)2;
@@ -84,13 +84,10 @@ namespace NPOI.HSSF.Record
             _isAddInFunctions = false;
         }
 
-        /**
-         * Constructs a Extern Sheet record and Sets its fields appropriately.
-         *
-         * @param id     id must be 0x16 or an exception will be throw upon validation
-         * @param size  the size of the data area of the record
-         * @param data  data of the record (should not contain sid/len)
-         */
+        /// <summary>
+        /// Constructs a SupBook record (sid 0x1AE) and sets its fields from the stream.
+        /// </summary>
+        /// <param name="in1">the stream to read the record data from</param>
         public SupBookRecord(RecordInputStream in1)
         {
             int recLen = in1.Remaining;

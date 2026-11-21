@@ -50,7 +50,7 @@ namespace NPOI.HSSF.Record
     public class RecordFactory
     {
         private static int NUM_RECORDS = 512;
-        private static Type[] recordClasses;
+        private static readonly Type[] recordClasses;
         #region inner Record Creater
         private interface I_RecordCreator
         {
@@ -58,10 +58,11 @@ namespace NPOI.HSSF.Record
 
             Type GetRecordClass();
         }
-        private class ReflectionConstructorRecordCreator : I_RecordCreator
+
+        private sealed class ReflectionConstructorRecordCreator : I_RecordCreator
         {
 
-            private ConstructorInfo _c;
+            private readonly ConstructorInfo _c;
             public ReflectionConstructorRecordCreator(ConstructorInfo c)
             {
                 _c = c;
@@ -87,10 +88,10 @@ namespace NPOI.HSSF.Record
          * A "create" method is used instead of the usual constructor if the created record might
          * be of a different class to the declaring class.
          */
-        private class ReflectionMethodRecordCreator : I_RecordCreator
+        private sealed class ReflectionMethodRecordCreator : I_RecordCreator
         {
 
-            private MethodInfo _m;
+            private readonly MethodInfo _m;
             public ReflectionMethodRecordCreator(MethodInfo m)
             {
                 _m = m;
@@ -114,7 +115,7 @@ namespace NPOI.HSSF.Record
         }
         #endregion
 
-        private static Type[] CONSTRUCTOR_ARGS = new Type[] { typeof(RecordInputStream), };
+        private static readonly Type[] CONSTRUCTOR_ARGS = new Type[] { typeof(RecordInputStream), };
 
 
         static RecordFactory()
@@ -242,6 +243,8 @@ namespace NPOI.HSSF.Record
 		        typeof(WriteProtectRecord),
 		        typeof(WSBoolRecord),
                 typeof(SheetExtRecord),
+                typeof(FeatHdrRecord),
+                typeof(FeatRecord),
 
                 // chart records
                 //typeof(AlRunsRecord),
@@ -409,7 +412,7 @@ namespace NPOI.HSSF.Record
         /**
 	     * cache of the recordsToMap();
 	     */
-        private static Dictionary<short, I_RecordCreator> _recordCreatorsById = null;//RecordsToMap(recordClasses);
+        private static readonly Dictionary<short, I_RecordCreator> _recordCreatorsById = null;//RecordsToMap(recordClasses);
 
         private static short[] _allKnownRecordSIDs;
         /**
@@ -453,7 +456,7 @@ namespace NPOI.HSSF.Record
          *            InputStream
          */
 
-        public static List<Record> CreateRecords(Stream in1)
+        public static List<Record> CreateRecords(InputStream in1)
         {
             List<Record> records = new List<Record>(NUM_RECORDS);
 
@@ -486,13 +489,13 @@ namespace NPOI.HSSF.Record
                 // Not needed by POI.  Regenerated from scratch by POI when spreadsheet is written
                 return new Record[] { null, };
             }
-            if (record is RKRecord)
+            if (record is RKRecord rkRecord)
             {
-                return new Record[] { ConvertToNumberRecord((RKRecord)record), };
+                return new Record[] { ConvertToNumberRecord(rkRecord), };
             }
-            if (record is MulRKRecord)
+            if (record is MulRKRecord mulRkRecord)
             {
-                return ConvertRKRecords((MulRKRecord)record);
+                return ConvertRKRecords(mulRkRecord);
             }
             return new Record[] { record, };
         }
@@ -516,9 +519,8 @@ namespace NPOI.HSSF.Record
 
         public static Record CreateSingleRecord(RecordInputStream in1)
         {
-            if (_recordCreatorsById.ContainsKey(in1.Sid))
+            if (_recordCreatorsById.TryGetValue(in1.Sid, out I_RecordCreator constructor))
             {
-                I_RecordCreator constructor = _recordCreatorsById[in1.Sid];
                 return constructor.Create(in1);
             }
             else
@@ -614,9 +616,9 @@ namespace NPOI.HSSF.Record
                     throw new RecordFormatException(
                         "Unable to determine record types", ArgumentException);
                 }
-                if (result.ContainsKey(sid))
+                if (result.TryGetValue(sid, out I_RecordCreator value))
                 {
-                    Type prevClass = result[sid].GetRecordClass();
+                    Type prevClass = value.GetRecordClass();
                     throw new RuntimeException("duplicate record sid 0x" + sid.ToString("X", CultureInfo.CurrentCulture)
                             + " for classes (" + recClass.Name + ") and (" + prevClass.Name + ")");
                 }

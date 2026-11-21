@@ -32,7 +32,7 @@ namespace TestCases.POIFS.Storage
     using System.IO;
     using System.Collections;
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.POIFS.Storage;
     using NPOI.POIFS.Common;
     using NPOI.Util;
@@ -339,7 +339,7 @@ namespace TestCases.POIFS.Storage
             PropertyTable properties = new PropertyTable(headerBlock, dataBlocks);
             RootProperty root = properties.Root;
             BlockList bl = SmallBlockTableReader.GetSmallDocumentBlocks(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS, dataBlocks, root, 14);
-            Assert.AreNotEqual(bl, null); 
+            ClassicAssert.AreNotEqual(bl, null); 
 
         }
     }

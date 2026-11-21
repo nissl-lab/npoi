@@ -15,7 +15,7 @@
    limitations under the License.
 ==================================================================== */
 using NPOI.Util;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using System;
 namespace TestCases.Util
 {
@@ -26,11 +26,11 @@ namespace TestCases.Util
         public void TestBasic()
         {
             IdentifierManager manager = new IdentifierManager(0L, 100L);
-            Assert.AreEqual(101L, manager.GetRemainingIdentifiers());
-            Assert.AreEqual(0L, manager.ReserveNew());
-            Assert.AreEqual(100L, manager.GetRemainingIdentifiers());
-            Assert.AreEqual(1L, manager.Reserve(0L));
-            Assert.AreEqual(99L, manager.GetRemainingIdentifiers());
+            ClassicAssert.AreEqual(101L, manager.GetRemainingIdentifiers());
+            ClassicAssert.AreEqual(0L, manager.ReserveNew());
+            ClassicAssert.AreEqual(100L, manager.GetRemainingIdentifiers());
+            ClassicAssert.AreEqual(1L, manager.Reserve(0L));
+            ClassicAssert.AreEqual(99L, manager.GetRemainingIdentifiers());
         }
         [Test]
         public void TestLongLimits()
@@ -38,11 +38,11 @@ namespace TestCases.Util
             long min = IdentifierManager.MIN_ID;
             long max = IdentifierManager.MAX_ID;
             IdentifierManager manager = new IdentifierManager(min, max);
-            Assert.IsTrue(max - min + 1 > 0, "Limits lead to a long variable overflow");
-            Assert.IsTrue(manager.GetRemainingIdentifiers() > 0, "Limits lead to a long variable overflow");
-            Assert.AreEqual(min, manager.ReserveNew());
-            Assert.AreEqual(max, manager.Reserve(max));
-            Assert.AreEqual(max - min - 1, manager.GetRemainingIdentifiers());
+            ClassicAssert.IsTrue(max - min + 1 > 0, "Limits lead to a long variable overflow");
+            ClassicAssert.IsTrue(manager.GetRemainingIdentifiers() > 0, "Limits lead to a long variable overflow");
+            ClassicAssert.AreEqual(min, manager.ReserveNew());
+            ClassicAssert.AreEqual(max, manager.Reserve(max));
+            ClassicAssert.AreEqual(max - min - 1, manager.GetRemainingIdentifiers());
             manager.Release(max);
             manager.Release(min);
         }
@@ -50,18 +50,18 @@ namespace TestCases.Util
         public void TestReserve()
         {
             IdentifierManager manager = new IdentifierManager(10L, 30L);
-            Assert.AreEqual(12L, manager.Reserve(12L));
+            ClassicAssert.AreEqual(12L, manager.Reserve(12L));
             long reserve = manager.Reserve(12L);
-            Assert.IsFalse(reserve == 12L, "Same id must be reserved twice!");
-            Assert.IsTrue(manager.Release(12L));
-            Assert.IsTrue(manager.Release(reserve));
-            Assert.IsFalse(manager.Release(12L));
-            Assert.IsFalse(manager.Release(reserve));
+            ClassicAssert.IsFalse(reserve == 12L, "Same id must be reserved twice!");
+            ClassicAssert.IsTrue(manager.Release(12L));
+            ClassicAssert.IsTrue(manager.Release(reserve));
+            ClassicAssert.IsFalse(manager.Release(12L));
+            ClassicAssert.IsFalse(manager.Release(reserve));
 
             manager = new IdentifierManager(0L, 2L);
-            Assert.AreEqual(0L, manager.Reserve(0L));
-            Assert.AreEqual(1L, manager.Reserve(1L));
-            Assert.AreEqual(2L, manager.Reserve(2L));
+            ClassicAssert.AreEqual(0L, manager.Reserve(0L));
+            ClassicAssert.AreEqual(1L, manager.Reserve(1L));
+            ClassicAssert.AreEqual(2L, manager.Reserve(2L));
             try
             {
                 manager.Reserve(0L);
@@ -94,9 +94,9 @@ namespace TestCases.Util
         public void TestReserveNew()
         {
             IdentifierManager manager = new IdentifierManager(10L, 12L);
-            Assert.AreEqual(10L, manager.ReserveNew());
-            Assert.AreEqual(11L, manager.ReserveNew());
-            Assert.AreEqual(12L, manager.ReserveNew());
+            ClassicAssert.AreEqual(10L, manager.ReserveNew());
+            ClassicAssert.AreEqual(11L, manager.ReserveNew());
+            ClassicAssert.AreEqual(12L, manager.ReserveNew());
             try
             {
                 manager.ReserveNew();
@@ -111,25 +111,25 @@ namespace TestCases.Util
         public void TestRelease()
         {
             IdentifierManager manager = new IdentifierManager(10L, 20L);
-            Assert.AreEqual(10L, manager.Reserve(10L));
-            Assert.AreEqual(11L, manager.Reserve(11L));
-            Assert.AreEqual(12L, manager.Reserve(12L));
-            Assert.AreEqual(13L, manager.Reserve(13L));
-            Assert.AreEqual(14L, manager.Reserve(14L));
+            ClassicAssert.AreEqual(10L, manager.Reserve(10L));
+            ClassicAssert.AreEqual(11L, manager.Reserve(11L));
+            ClassicAssert.AreEqual(12L, manager.Reserve(12L));
+            ClassicAssert.AreEqual(13L, manager.Reserve(13L));
+            ClassicAssert.AreEqual(14L, manager.Reserve(14L));
 
-            Assert.IsTrue(manager.Release(10L));
-            Assert.AreEqual(10L, manager.Reserve(10L));
-            Assert.IsTrue(manager.Release(10L));
+            ClassicAssert.IsTrue(manager.Release(10L));
+            ClassicAssert.AreEqual(10L, manager.Reserve(10L));
+            ClassicAssert.IsTrue(manager.Release(10L));
 
-            Assert.IsTrue(manager.Release(11L));
-            Assert.AreEqual(11L, manager.Reserve(11L));
-            Assert.IsTrue(manager.Release(11L));
-            Assert.IsFalse(manager.Release(11L));
-            Assert.IsFalse(manager.Release(10L));
+            ClassicAssert.IsTrue(manager.Release(11L));
+            ClassicAssert.AreEqual(11L, manager.Reserve(11L));
+            ClassicAssert.IsTrue(manager.Release(11L));
+            ClassicAssert.IsFalse(manager.Release(11L));
+            ClassicAssert.IsFalse(manager.Release(10L));
 
-            Assert.AreEqual(10L, manager.Reserve(10L));
-            Assert.AreEqual(11L, manager.Reserve(11L));
-            Assert.IsTrue(manager.Release(12L));
+            ClassicAssert.AreEqual(10L, manager.Reserve(10L));
+            ClassicAssert.AreEqual(11L, manager.Reserve(11L));
+            ClassicAssert.IsTrue(manager.Release(12L));
         }
     }
 

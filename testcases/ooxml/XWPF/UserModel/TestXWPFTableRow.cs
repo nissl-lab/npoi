@@ -18,7 +18,7 @@
 namespace TestCases.XWPF.UserModel
 {
     using NPOI.XWPF.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     [TestFixture]
     public class TestXWPFTableRow
@@ -29,7 +29,7 @@ namespace TestCases.XWPF.UserModel
             XWPFDocument doc = new XWPFDocument();
             XWPFTable table = doc.CreateTable(1, 1);
             XWPFTableRow tr = table.CreateRow();
-            Assert.IsNotNull(tr);
+            ClassicAssert.IsNotNull(tr);
             doc.Close();
         }
 
@@ -41,21 +41,21 @@ namespace TestCases.XWPF.UserModel
             XWPFTable table = doc.CreateTable(1, 1);
             // table has a single row by default; grab it
             XWPFTableRow tr = table.GetRow(0);
-            Assert.IsNotNull(tr);
+            ClassicAssert.IsNotNull(tr);
 
             // Assert the repeat header is false by default
             bool isCantSplit = tr.IsCantSplitRow;
-            Assert.IsFalse(isCantSplit);
+            ClassicAssert.IsFalse(isCantSplit);
 
             // Repeat the header
             tr.SetCantSplitRow(true);
             isCantSplit = tr.IsCantSplitRow;
-            Assert.IsTrue(isCantSplit);
+            ClassicAssert.IsTrue(isCantSplit);
 
             // Make the header no longer repeating
             tr.SetCantSplitRow(false);
             isCantSplit = tr.IsCantSplitRow;
-            Assert.IsFalse(isCantSplit);
+            ClassicAssert.IsFalse(isCantSplit);
 
             doc.Close();
         }
@@ -68,21 +68,21 @@ namespace TestCases.XWPF.UserModel
             XWPFTable table = doc.CreateTable(3, 1);
             // table has a single row by default; grab it
             XWPFTableRow tr = table.GetRow(0);
-            Assert.IsNotNull(tr);
+            ClassicAssert.IsNotNull(tr);
 
             // Assert the repeat header is false by default
             bool isRpt = tr.IsRepeatHeader;
-            Assert.IsFalse(isRpt);
+            ClassicAssert.IsFalse(isRpt);
 
             // Repeat the header
             tr.SetRepeatHeader(true);
             isRpt = tr.IsRepeatHeader;
-            Assert.IsTrue(isRpt);
+            ClassicAssert.IsTrue(isRpt);
 
             // Make the header no longer repeating
             tr.SetRepeatHeader(false);
             isRpt = tr.IsRepeatHeader;
-            Assert.IsFalse(isRpt);
+            ClassicAssert.IsFalse(isRpt);
 
             // If the third row is set to repeat, but not the second,
             // isRepeatHeader should report false because Word will
@@ -90,7 +90,7 @@ namespace TestCases.XWPF.UserModel
             tr = table.GetRow(2);
             tr.SetRepeatHeader(true);
             isRpt = tr.IsRepeatHeader;
-            Assert.IsFalse(isRpt);
+            ClassicAssert.IsFalse(isRpt);
 
             doc.Close();
         }
@@ -105,15 +105,15 @@ namespace TestCases.XWPF.UserModel
             XWPFTable table = doc.Tables[0];
             XWPFTableRow tr = table.GetRow(0);
             bool isRpt = tr.IsRepeatHeader;
-            Assert.IsTrue(isRpt);
+            ClassicAssert.IsTrue(isRpt);
 
             tr = table.GetRow(1);
             isRpt = tr.IsRepeatHeader;
-            Assert.IsFalse(isRpt);
+            ClassicAssert.IsFalse(isRpt);
 
             tr = table.GetRow(2);
             isRpt = tr.IsRepeatHeader;
-            Assert.IsFalse(isRpt);
+            ClassicAssert.IsFalse(isRpt);
         }
 
 
@@ -127,15 +127,15 @@ namespace TestCases.XWPF.UserModel
             XWPFTable table = doc.Tables[0];
             XWPFTableRow tr = table.GetRow(0);
             bool isCantSplit = tr.IsCantSplitRow;
-            Assert.IsFalse(isCantSplit);
+            ClassicAssert.IsFalse(isCantSplit);
 
             tr = table.GetRow(1);
             isCantSplit = tr.IsCantSplitRow;
-            Assert.IsFalse(isCantSplit);
+            ClassicAssert.IsFalse(isCantSplit);
 
             tr = table.GetRow(2);
             isCantSplit = tr.IsCantSplitRow;
-            Assert.IsTrue(isCantSplit);
+            ClassicAssert.IsTrue(isCantSplit);
         }
     }
 }

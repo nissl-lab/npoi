@@ -19,7 +19,7 @@
 
 namespace TestCases.SS.Formula.Functions
 {
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using System;
     using HSSF;
     using NPOI.SS.Formula.Eval;
@@ -148,9 +148,9 @@ namespace TestCases.SS.Formula.Functions
 
             ISheet example1 = wb.GetSheet("TestFromFile");
             ICell a8 = example1.GetRow(7).GetCell(0);
-            Assert.AreEqual("FORECAST(30,A2:A6,B2:B6)", a8.CellFormula);
+            ClassicAssert.AreEqual("FORECAST(30,A2:A6,B2:B6)", a8.CellFormula);
             fe.Evaluate(a8);
-            Assert.AreEqual(10.60725309, a8.NumericCellValue, 0.00000001);
+            ClassicAssert.AreEqual(10.60725309, a8.NumericCellValue, 0.00000001);
         }
 
         private static ValueEval Invoke(ValueEval x, ValueEval yArray, ValueEval xArray)
@@ -162,15 +162,15 @@ namespace TestCases.SS.Formula.Functions
         private static void Confirm(ValueEval x, ValueEval yArray, ValueEval xArray, double expected)
         {
             ValueEval result = Invoke(x, yArray, xArray);
-            Assert.AreEqual(typeof(NumberEval), result.GetType());
-            Assert.AreEqual(expected, ((NumberEval) result).NumberValue, expected * .000000001);
+            ClassicAssert.AreEqual(typeof(NumberEval), result.GetType());
+            ClassicAssert.AreEqual(expected, ((NumberEval) result).NumberValue, expected * .000000001);
         }
 
         private static void ConfirmError(ValueEval x, ValueEval yArray, ValueEval xArray, ErrorEval expectedError)
         {
             ValueEval result = Invoke(x, yArray, xArray);
-            Assert.AreEqual(typeof(ErrorEval), result.GetType());
-            Assert.AreEqual(expectedError, (ErrorEval) result);
+            ClassicAssert.AreEqual(typeof(ErrorEval), result.GetType());
+            ClassicAssert.AreEqual(expectedError, (ErrorEval) result);
         }
 
         private static ValueEval[] CreateMockNumberArray(int size, double value)

@@ -41,11 +41,20 @@ namespace NPOI
     {
         private static POILogger logger = POILogFactory.GetLogger(typeof(POIXMLDocumentPart));
 
-        private String coreDocumentRel = PackageRelationshipTypes.CORE_DOCUMENT;
+        private readonly String coreDocumentRel = PackageRelationshipTypes.CORE_DOCUMENT;
         private PackagePart packagePart;
         private POIXMLDocumentPart parent;
-        private Dictionary<String, RelationPart> relations = new Dictionary<String, RelationPart>();
+        private readonly Dictionary<String, RelationPart> relations = new Dictionary<String, RelationPart>();
+        private bool isCommitted = false;
 
+        /// <summary>
+        /// Get or set embedded part is committed
+        /// </summary>
+        public bool Committed
+        {
+            get => isCommitted;
+            set => isCommitted = value;
+        }
         /**
          * The RelationPart is a cached relationship between the document, which contains the RelationPart,
          * and one of its referenced child document parts.
@@ -55,8 +64,8 @@ namespace NPOI
 
         public class RelationPart
         {
-            private PackageRelationship relationship;
-            private POIXMLDocumentPart documentPart;
+            private readonly PackageRelationship relationship;
+            private readonly POIXMLDocumentPart documentPart;
 
             internal RelationPart(PackageRelationship relationship, POIXMLDocumentPart documentPart)
             {
@@ -249,6 +258,7 @@ namespace NPOI
             XmlNamespaceManager ns = new XmlNamespaceManager(nt);
             ns.AddNamespace(string.Empty, PackageNamespaces.SCHEMA_MAIN);
             ns.AddNamespace("d", PackageNamespaces.SCHEMA_MAIN);
+            ns.AddNamespace("x", PackageNamespaces.SCHEMA_MAIN);
             ns.AddNamespace("a", PackageNamespaces.SCHEMA_DRAWING);
             ns.AddNamespace("xdr", PackageNamespaces.SCHEMA_SHEETDRAWINGS);
             ns.AddNamespace("r", PackageNamespaces.SCHEMA_RELATIONSHIPS);
@@ -376,10 +386,9 @@ namespace NPOI
 
         public POIXMLDocumentPart GetRelationById(String id)
         {
-            if (string.IsNullOrEmpty(id) || !relations.ContainsKey(id))
+            if (string.IsNullOrEmpty(id) || !relations.TryGetValue(id, out RelationPart rp))
                 return null;
 
-            RelationPart rp = relations[id];
             return (rp == null) ? null : rp.DocumentPart;
         }
 
@@ -557,6 +566,11 @@ namespace NPOI
 
         protected internal void OnSave(List<PackagePart> alreadySaved)
         {
+            //if part is already committed then return
+            if (this.isCommitted) {
+                return;
+            }
+
             // this usually clears out previous content in the part...
             PrepareForCommit();
 
@@ -717,22 +731,22 @@ namespace NPOI
 
         public TValue PutDictionary<TKey, TValue>(Dictionary<TKey, TValue> dict, TKey key, TValue value)
         {
-            TValue oldValue = default(TValue);
-            if (dict.ContainsKey(key))
+            if (dict.TryGetValue(key, out TValue oldValue))
             {
-                oldValue = dict[key];
                 dict[key] = value;
             }
             else
+            {
                 dict.Add(key, value);
+            }
             return oldValue;
         }
 
         public TValue GetDictionary<TKey, TValue>(Dictionary<TKey, TValue> dict, TKey key)
         {
-            if (dict.ContainsKey(key))
+            if (dict.TryGetValue(key, out TValue dictionary))
             {
-                return dict[key];
+                return dictionary;
             }
             return default(TValue);
         }
@@ -770,7 +784,7 @@ namespace NPOI
                     // check for internal references (e.g. '#Sheet1!A1')
                     PackagePartName relName;
                     //if (uri.getRawFragment() != null)
-                    if (uri.OriginalString.IndexOf('#') >= 0)
+                    if (uri.OriginalString.Contains('#'))
                     {
                         string path = string.Empty;
                         try

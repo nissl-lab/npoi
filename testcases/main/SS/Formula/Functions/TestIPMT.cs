@@ -21,7 +21,7 @@ namespace TestCases.SS.Formula.Functions
 {
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using TestCases.HSSF;
 
     /**
@@ -46,11 +46,11 @@ namespace TestCases.SS.Formula.Functions
             ISheet example1 = wb.GetSheet("IPMT");
             ICell ex1cell1 = example1.GetRow(6).GetCell(0);
             fe.Evaluate(ex1cell1);
-            Assert.AreEqual(-22.41, ex1cell1.NumericCellValue, 0.1);
+            ClassicAssert.AreEqual(-22.41, ex1cell1.NumericCellValue, 0.1);
 
             ICell ex1cell2 = example1.GetRow(7).GetCell(0);
             fe.Evaluate(ex1cell2);
-            Assert.AreEqual(-292.45, ex1cell2.NumericCellValue, 0.1);
+            ClassicAssert.AreEqual(-292.45, ex1cell2.NumericCellValue, 0.1);
 
         }
     }

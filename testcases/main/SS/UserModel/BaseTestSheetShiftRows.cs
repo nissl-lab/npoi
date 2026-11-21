@@ -20,7 +20,7 @@ namespace TestCases.SS.UserModel
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using System;
     using System.Collections.Generic;
     using TestCases.SS;
@@ -78,11 +78,11 @@ namespace TestCases.SS.UserModel
                 Console.WriteLine(msg);
             }
 
-            Assert.AreEqual(s.GetRow(0).PhysicalNumberOfCells, 1);
+            ClassicAssert.AreEqual(s.GetRow(0).PhysicalNumberOfCells, 1);
             ConfirmEmptyRow(s, 1);
-            Assert.AreEqual(s.GetRow(2).PhysicalNumberOfCells, 2);
-            Assert.AreEqual(s.GetRow(3).PhysicalNumberOfCells, 4);
-            Assert.AreEqual(s.GetRow(4).PhysicalNumberOfCells, 5);
+            ClassicAssert.AreEqual(s.GetRow(2).PhysicalNumberOfCells, 2);
+            ClassicAssert.AreEqual(s.GetRow(3).PhysicalNumberOfCells, 4);
+            ClassicAssert.AreEqual(s.GetRow(4).PhysicalNumberOfCells, 5);
 
             // Shift rows 1-3 down 3 in the current one.  This Tests when
             // 1 row is blank.  Write to a another temp file
@@ -104,9 +104,9 @@ namespace TestCases.SS.UserModel
             ConfirmEmptyRow(s, 0);
             ConfirmEmptyRow(s, 1);
             ConfirmEmptyRow(s, 2);
-            Assert.AreEqual(1, s.GetRow(3).PhysicalNumberOfCells);
+            ClassicAssert.AreEqual(1, s.GetRow(3).PhysicalNumberOfCells);
             ConfirmEmptyRow(s, 4);
-            Assert.AreEqual(2, s.GetRow(5).PhysicalNumberOfCells);
+            ClassicAssert.AreEqual(2, s.GetRow(5).PhysicalNumberOfCells);
 
             wb3.Close();
 
@@ -128,11 +128,11 @@ namespace TestCases.SS.UserModel
                 var msg = string.Format("3b {0}-{1}-{2}-{3}-{4}-{5}", GetRowValue(s, 0), GetRowValue(s, 1), GetRowValue(s, 2), GetRowValue(s, 3), GetRowValue(s, 4), GetRowValue(s, 5));
                 Console.WriteLine(msg);
             }
-            Assert.AreEqual(3, s.GetRow(0).PhysicalNumberOfCells);
-            Assert.AreEqual(4, s.GetRow(1).PhysicalNumberOfCells);
+            ClassicAssert.AreEqual(3, s.GetRow(0).PhysicalNumberOfCells);
+            ClassicAssert.AreEqual(4, s.GetRow(1).PhysicalNumberOfCells);
             ConfirmEmptyRow(s, 2);
             ConfirmEmptyRow(s, 3);
-            Assert.AreEqual(5, s.GetRow(4).PhysicalNumberOfCells);
+            ClassicAssert.AreEqual(5, s.GetRow(4).PhysicalNumberOfCells);
             wb5.Close();
         }
         private string GetRowValue(ISheet s, int rowIx)
@@ -150,7 +150,7 @@ namespace TestCases.SS.UserModel
         private void ConfirmEmptyRow(ISheet s, int rowIx)
         {
             IRow row = s.GetRow(rowIx);
-            Assert.IsTrue(row == null || row.PhysicalNumberOfCells == 0);
+            ClassicAssert.IsTrue(row == null || row.PhysicalNumberOfCells == 0);
         }
 
         /**
@@ -168,6 +168,30 @@ namespace TestCases.SS.UserModel
         }
 
         /**
+         * When shifting rows up, PhysicalNumberOfRows should decrease to match LastRowNum.
+         * Verifies that vacated rows are properly removed from the sheet.
+         */
+        [Test]
+        public void TestShiftRowsUpPhysicalRowCount()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet s = wb.CreateSheet();
+            for (int i = 0; i < 5; i++)
+            {
+                s.CreateRow(i).CreateCell(0).SetCellValue(i);
+            }
+            ClassicAssert.AreEqual(4, s.LastRowNum);
+            ClassicAssert.AreEqual(5, s.PhysicalNumberOfRows);
+
+            // Shift the last two rows up by 1 (rows 3 and 4 -> rows 2 and 3)
+            s.ShiftRows(3, 4, -1);
+
+            ClassicAssert.AreEqual(3, s.LastRowNum);
+            ClassicAssert.AreEqual(4, s.PhysicalNumberOfRows);
+            wb.Close();
+        }
+
+        /**
          * When Shifting rows, the page breaks should go with it
          */
         [Test]
@@ -180,7 +204,7 @@ namespace TestCases.SS.UserModel
             s.SetRowBreak(4);
 
             s.ShiftRows(4, 4, 2);
-            Assert.IsTrue(s.IsRowBroken(6), "Row number 6 should have a pagebreak");
+            ClassicAssert.IsTrue(s.IsRowBroken(6), "Row number 6 should have a pagebreak");
             wb.Close();
         }
         [Test]
@@ -189,20 +213,20 @@ namespace TestCases.SS.UserModel
             IWorkbook wb1 = _testDataProvider.OpenSampleWorkbook("comments." + _testDataProvider.StandardFileNameExtension);
 
             ISheet sheet = wb1.GetSheet("Sheet1");
-            Assert.AreEqual(3, sheet.LastRowNum);
+            ClassicAssert.AreEqual(3, sheet.LastRowNum);
 
             // Verify comments are in the position expected
-            Assert.IsNotNull(sheet.GetCellComment(new CellAddress(0, 0)));
-            Assert.IsNull(sheet.GetCellComment(new CellAddress(1, 0)));
-            Assert.IsNotNull(sheet.GetCellComment(new CellAddress(2, 0)));
-            Assert.IsNotNull(sheet.GetCellComment(new CellAddress(3, 0)));
+            ClassicAssert.IsNotNull(sheet.GetCellComment(new CellAddress(0, 0)));
+            ClassicAssert.IsNull(sheet.GetCellComment(new CellAddress(1, 0)));
+            ClassicAssert.IsNotNull(sheet.GetCellComment(new CellAddress(2, 0)));
+            ClassicAssert.IsNotNull(sheet.GetCellComment(new CellAddress(3, 0)));
 
             String comment1 = sheet.GetCellComment(new CellAddress(0, 0)).String.String;
-            Assert.AreEqual(comment1, "comment top row1 (index0)\n");
+            ClassicAssert.AreEqual(comment1, "comment top row1 (index0)\n");
             String comment3 = sheet.GetCellComment(new CellAddress(2, 0)).String.String;
-            Assert.AreEqual(comment3, "comment top row3 (index2)\n");
+            ClassicAssert.AreEqual(comment3, "comment top row3 (index2)\n");
             String comment4 = sheet.GetCellComment(new CellAddress(3, 0)).String.String;
-            Assert.AreEqual(comment4, "comment top row4 (index3)\n");
+            ClassicAssert.AreEqual(comment4, "comment top row4 (index3)\n");
 
             //Workbook wbBack = _testDataProvider.writeOutAndReadBack(wb);
 
@@ -210,40 +234,40 @@ namespace TestCases.SS.UserModel
             sheet.ShiftRows(1, sheet.LastRowNum, 1, true, true);
 
             // Test that comments were Shifted as expected
-            Assert.AreEqual(4, sheet.LastRowNum);
-            Assert.IsNotNull(sheet.GetCellComment(new CellAddress(0, 0)));
-            Assert.IsNull(sheet.GetCellComment(new CellAddress(1, 0)));
-            Assert.IsNull(sheet.GetCellComment(new CellAddress(2, 0)));
-            Assert.IsNotNull(sheet.GetCellComment(new CellAddress(3, 0)));
-            Assert.IsNotNull(sheet.GetCellComment(new CellAddress(4, 0)));
+            ClassicAssert.AreEqual(4, sheet.LastRowNum);
+            ClassicAssert.IsNotNull(sheet.GetCellComment(new CellAddress(0, 0)));
+            ClassicAssert.IsNull(sheet.GetCellComment(new CellAddress(1, 0)));
+            ClassicAssert.IsNull(sheet.GetCellComment(new CellAddress(2, 0)));
+            ClassicAssert.IsNotNull(sheet.GetCellComment(new CellAddress(3, 0)));
+            ClassicAssert.IsNotNull(sheet.GetCellComment(new CellAddress(4, 0)));
 
             String comment1_Shifted = sheet.GetCellComment(new CellAddress(0, 0)).String.String;
-            Assert.AreEqual(comment1, comment1_Shifted);
+            ClassicAssert.AreEqual(comment1, comment1_Shifted);
             String comment3_Shifted = sheet.GetCellComment(new CellAddress(3, 0)).String.String;
-            Assert.AreEqual(comment3, comment3_Shifted);
+            ClassicAssert.AreEqual(comment3, comment3_Shifted);
             String comment4_Shifted = sheet.GetCellComment(new CellAddress(4, 0)).String.String;
-            Assert.AreEqual(comment4, comment4_Shifted);
+            ClassicAssert.AreEqual(comment4, comment4_Shifted);
 
             // Write out and read back in again
             // Ensure that the Changes were persisted
             IWorkbook wb2 = _testDataProvider.WriteOutAndReadBack(wb1);
             wb1.Close();
             sheet = wb2.GetSheet("Sheet1");
-            Assert.AreEqual(4, sheet.LastRowNum);
+            ClassicAssert.AreEqual(4, sheet.LastRowNum);
 
             // Verify comments are in the position expected After the shift
-            Assert.IsNotNull(sheet.GetCellComment(new CellAddress(0, 0)));
-            Assert.IsNull(sheet.GetCellComment(new CellAddress(1, 0)));
-            Assert.IsNull(sheet.GetCellComment(new CellAddress(2, 0)));
-            Assert.IsNotNull(sheet.GetCellComment(new CellAddress(3, 0)));
-            Assert.IsNotNull(sheet.GetCellComment(new CellAddress(4, 0)));
+            ClassicAssert.IsNotNull(sheet.GetCellComment(new CellAddress(0, 0)));
+            ClassicAssert.IsNull(sheet.GetCellComment(new CellAddress(1, 0)));
+            ClassicAssert.IsNull(sheet.GetCellComment(new CellAddress(2, 0)));
+            ClassicAssert.IsNotNull(sheet.GetCellComment(new CellAddress(3, 0)));
+            ClassicAssert.IsNotNull(sheet.GetCellComment(new CellAddress(4, 0)));
 
             comment1_Shifted = sheet.GetCellComment(new CellAddress(0, 0)).String.String;
-            Assert.AreEqual(comment1, comment1_Shifted);
+            ClassicAssert.AreEqual(comment1, comment1_Shifted);
             comment3_Shifted = sheet.GetCellComment(new CellAddress(3, 0)).String.String;
-            Assert.AreEqual(comment3, comment3_Shifted);
+            ClassicAssert.AreEqual(comment3, comment3_Shifted);
             comment4_Shifted = sheet.GetCellComment(new CellAddress(4, 0)).String.String;
-            Assert.AreEqual(comment4, comment4_Shifted);
+            ClassicAssert.AreEqual(comment4, comment4_Shifted);
 
             // Shifting back up again, now two rows
             sheet.ShiftRows(2, sheet.LastRowNum, -2, true, true);
@@ -252,19 +276,19 @@ namespace TestCases.SS.UserModel
             // by Shifting rows...
             if (!(wb2 is HSSFWorkbook))
             {
-                Assert.AreEqual(2, sheet.LastRowNum);
+                ClassicAssert.AreEqual(2, sheet.LastRowNum);
 
                 // Verify comments are in the position expected
-                Assert.IsNull(sheet.GetCellComment(new CellAddress(0, 0)),
+                ClassicAssert.IsNull(sheet.GetCellComment(new CellAddress(0, 0)),
                     "Had: " + (sheet.GetCellComment(new CellAddress(0, 0)) == null ? "null" : sheet.GetCellComment(new CellAddress(0, 0)).String.String));
-                Assert.IsNotNull(sheet.GetCellComment(new CellAddress(1, 0)));
-                Assert.IsNotNull(sheet.GetCellComment(new CellAddress(2, 0)));
+                ClassicAssert.IsNotNull(sheet.GetCellComment(new CellAddress(1, 0)));
+                ClassicAssert.IsNotNull(sheet.GetCellComment(new CellAddress(2, 0)));
             }
 
             comment1 = sheet.GetCellComment(new CellAddress(1, 0)).String.String;
-            Assert.AreEqual(comment1, "comment top row3 (index2)\n");
+            ClassicAssert.AreEqual(comment1, "comment top row3 (index2)\n");
             String comment2 = sheet.GetCellComment(new CellAddress(2, 0)).String.String;
-            Assert.AreEqual(comment2, "comment top row4 (index3)\n");
+            ClassicAssert.AreEqual(comment2, "comment top row4 (index3)\n");
             wb2.Close();
         }
         [Test]
@@ -298,17 +322,17 @@ namespace TestCases.SS.UserModel
 
             sheet1.ShiftRows(0, 1, 2);  //shift down the top row on Sheet1.
             name1 = wb.GetName("name1");
-            Assert.AreEqual(name1.RefersToFormula, "Sheet1!$A$3+Sheet1!$B$3");
+            ClassicAssert.AreEqual(name1.RefersToFormula, "Sheet1!$A$3+Sheet1!$B$3");
 
             name2 = wb.GetName("name2");
-            Assert.AreEqual(name2.RefersToFormula, "Sheet1!$A$3");
+            ClassicAssert.AreEqual(name2.RefersToFormula, "Sheet1!$A$3");
 
             //name3 and name4 refer to Sheet2 and should not be affected
             name3 = wb.GetName("name3");
-            Assert.AreEqual(name3.RefersToFormula, "Sheet2!$A$1");
+            ClassicAssert.AreEqual(name3.RefersToFormula, "Sheet2!$A$1");
 
             name4 = wb.GetName("name4");
-            Assert.AreEqual(name4.RefersToFormula, "A1");
+            ClassicAssert.AreEqual(name4.RefersToFormula, "A1");
             wb.Close();
         }
         [Test]
@@ -320,13 +344,13 @@ namespace TestCases.SS.UserModel
             row.CreateCell(0).SetCellValue(1.1);
             row.CreateCell(1).SetCellValue(2.2);
             CellRangeAddress region = new CellRangeAddress(0, 0, 0, 2);
-            Assert.AreEqual("A1:C1", region.FormatAsString());
+            ClassicAssert.AreEqual("A1:C1", region.FormatAsString());
 
             sheet.AddMergedRegion(region);
 
             sheet.ShiftRows(0, 1, 2);
             region = sheet.GetMergedRegion(0);
-            Assert.AreEqual("A3:C3", region.FormatAsString());
+            ClassicAssert.AreEqual("A3:C3", region.FormatAsString());
             wb.Close();
         }
         //[Ignore("bug 56454: Incorrectly handles merged regions that do not contain column 0")]
@@ -370,7 +394,7 @@ namespace TestCases.SS.UserModel
             // FIXME: remove try, catch, and testPassesNow, skipTest when test passes
             try
             {
-                Assert.AreEqual(expectedMergedRegions, sheet.MergedRegions);
+                ClassicAssert.AreEqual(expectedMergedRegions, sheet.MergedRegions);
                 POITestCase.TestPassesNow(56454);
             }
             catch (AssertionException e)
@@ -389,7 +413,7 @@ namespace TestCases.SS.UserModel
             IWorkbook wb = _testDataProvider.OpenSampleWorkbook("ForShifting." + _testDataProvider.StandardFileNameExtension);
 
             ISheet sheet = wb.GetSheet("Sheet1");
-            Assert.AreEqual(20, sheet.LastRowNum);
+            ClassicAssert.AreEqual(20, sheet.LastRowNum);
 
             ConfirmRow(sheet, 0, 1, 171, 1, "ROW(D1)", "100+B1", "COUNT(D1:E1)");
             ConfirmRow(sheet, 1, 2, 172, 1, "ROW(D2)", "100+B2", "COUNT(D2:E2)");
@@ -454,8 +478,8 @@ namespace TestCases.SS.UserModel
                 double expectedValue, String expectedFormula)
         {
             ICell cell = sheet.GetRow(rowIx).GetCell(colIx);
-            Assert.AreEqual(expectedValue, cell.NumericCellValue, 0.0);
-            Assert.AreEqual(expectedFormula, cell.CellFormula);
+            ClassicAssert.AreEqual(expectedValue, cell.NumericCellValue, 0.0);
+            ClassicAssert.AreEqual(expectedFormula, cell.CellFormula);
         }
         [Test]
         public void TestShiftSharedFormulasBug54206()
@@ -463,13 +487,13 @@ namespace TestCases.SS.UserModel
             IWorkbook wb = _testDataProvider.OpenSampleWorkbook("54206." + _testDataProvider.StandardFileNameExtension);
 
             ISheet sheet = wb.GetSheetAt(0);
-            Assert.AreEqual(sheet.GetRow(3).GetCell(6).CellFormula, "SUMIF($B$19:$B$82,$B4,G$19:G$82)");
-            Assert.AreEqual(sheet.GetRow(3).GetCell(7).CellFormula, "SUMIF($B$19:$B$82,$B4,H$19:H$82)");
-            Assert.AreEqual(sheet.GetRow(3).GetCell(8).CellFormula, "SUMIF($B$19:$B$82,$B4,I$19:I$82)");
+            ClassicAssert.AreEqual(sheet.GetRow(3).GetCell(6).CellFormula, "SUMIF($B$19:$B$82,$B4,G$19:G$82)");
+            ClassicAssert.AreEqual(sheet.GetRow(3).GetCell(7).CellFormula, "SUMIF($B$19:$B$82,$B4,H$19:H$82)");
+            ClassicAssert.AreEqual(sheet.GetRow(3).GetCell(8).CellFormula, "SUMIF($B$19:$B$82,$B4,I$19:I$82)");
 
-            Assert.AreEqual(sheet.GetRow(14).GetCell(6).CellFormula, "SUMIF($B$19:$B$82,$B15,G$19:G$82)");
-            Assert.AreEqual(sheet.GetRow(14).GetCell(7).CellFormula, "SUMIF($B$19:$B$82,$B15,H$19:H$82)");
-            Assert.AreEqual(sheet.GetRow(14).GetCell(8).CellFormula, "SUMIF($B$19:$B$82,$B15,I$19:I$82)");
+            ClassicAssert.AreEqual(sheet.GetRow(14).GetCell(6).CellFormula, "SUMIF($B$19:$B$82,$B15,G$19:G$82)");
+            ClassicAssert.AreEqual(sheet.GetRow(14).GetCell(7).CellFormula, "SUMIF($B$19:$B$82,$B15,H$19:H$82)");
+            ClassicAssert.AreEqual(sheet.GetRow(14).GetCell(8).CellFormula, "SUMIF($B$19:$B$82,$B15,I$19:I$82)");
 
             // now the whole block G4L:15
             for (int i = 3; i <= 14; i++)
@@ -478,23 +502,23 @@ namespace TestCases.SS.UserModel
                 {
                     String col = CellReference.ConvertNumToColString(j);
                     String expectedFormula = "SUMIF($B$19:$B$82,$B" + (i + 1) + "," + col + "$19:" + col + "$82)";
-                    Assert.AreEqual(expectedFormula, sheet.GetRow(i).GetCell(j).CellFormula);
+                    ClassicAssert.AreEqual(expectedFormula, sheet.GetRow(i).GetCell(j).CellFormula);
                 }
             }
 
-            Assert.AreEqual(sheet.GetRow(23).GetCell(9).CellFormula, "SUM(G24:I24)");
-            Assert.AreEqual(sheet.GetRow(24).GetCell(9).CellFormula, "SUM(G25:I25)");
-            Assert.AreEqual(sheet.GetRow(25).GetCell(9).CellFormula, "SUM(G26:I26)");
+            ClassicAssert.AreEqual(sheet.GetRow(23).GetCell(9).CellFormula, "SUM(G24:I24)");
+            ClassicAssert.AreEqual(sheet.GetRow(24).GetCell(9).CellFormula, "SUM(G25:I25)");
+            ClassicAssert.AreEqual(sheet.GetRow(25).GetCell(9).CellFormula, "SUM(G26:I26)");
 
             sheet.ShiftRows(24, sheet.LastRowNum, 4, true, false);
 
-            Assert.AreEqual(sheet.GetRow(3).GetCell(6).CellFormula, "SUMIF($B$19:$B$86,$B4,G$19:G$86)");
-            Assert.AreEqual(sheet.GetRow(3).GetCell(7).CellFormula, "SUMIF($B$19:$B$86,$B4,H$19:H$86)");
-            Assert.AreEqual(sheet.GetRow(3).GetCell(8).CellFormula, "SUMIF($B$19:$B$86,$B4,I$19:I$86)");
+            ClassicAssert.AreEqual(sheet.GetRow(3).GetCell(6).CellFormula, "SUMIF($B$19:$B$86,$B4,G$19:G$86)");
+            ClassicAssert.AreEqual(sheet.GetRow(3).GetCell(7).CellFormula, "SUMIF($B$19:$B$86,$B4,H$19:H$86)");
+            ClassicAssert.AreEqual(sheet.GetRow(3).GetCell(8).CellFormula, "SUMIF($B$19:$B$86,$B4,I$19:I$86)");
 
-            Assert.AreEqual(sheet.GetRow(14).GetCell(6).CellFormula, "SUMIF($B$19:$B$86,$B15,G$19:G$86)");
-            Assert.AreEqual(sheet.GetRow(14).GetCell(7).CellFormula, "SUMIF($B$19:$B$86,$B15,H$19:H$86)");
-            Assert.AreEqual(sheet.GetRow(14).GetCell(8).CellFormula, "SUMIF($B$19:$B$86,$B15,I$19:I$86)");
+            ClassicAssert.AreEqual(sheet.GetRow(14).GetCell(6).CellFormula, "SUMIF($B$19:$B$86,$B15,G$19:G$86)");
+            ClassicAssert.AreEqual(sheet.GetRow(14).GetCell(7).CellFormula, "SUMIF($B$19:$B$86,$B15,H$19:H$86)");
+            ClassicAssert.AreEqual(sheet.GetRow(14).GetCell(8).CellFormula, "SUMIF($B$19:$B$86,$B15,I$19:I$86)");
 
             // now the whole block G4L:15
             for (int i = 3; i <= 14; i++)
@@ -503,20 +527,20 @@ namespace TestCases.SS.UserModel
                 {
                     String col = CellReference.ConvertNumToColString(j);
                     String expectedFormula = "SUMIF($B$19:$B$86,$B" + (i + 1) + "," + col + "$19:" + col + "$86)";
-                    Assert.AreEqual(expectedFormula, sheet.GetRow(i).GetCell(j).CellFormula);
+                    ClassicAssert.AreEqual(expectedFormula, sheet.GetRow(i).GetCell(j).CellFormula);
                 }
             }
 
-            Assert.AreEqual(sheet.GetRow(23).GetCell(9).CellFormula, "SUM(G24:I24)");
+            ClassicAssert.AreEqual(sheet.GetRow(23).GetCell(9).CellFormula, "SUM(G24:I24)");
 
             // shifted rows
-            Assert.IsTrue(sheet.GetRow(24) == null || sheet.GetRow(24).GetCell(9) == null);
-            Assert.IsTrue(sheet.GetRow(25) == null || sheet.GetRow(25).GetCell(9) == null);
-            Assert.IsTrue(sheet.GetRow(26) == null || sheet.GetRow(26).GetCell(9) == null);
-            Assert.IsTrue(sheet.GetRow(27) == null || sheet.GetRow(27).GetCell(9) == null);
+            ClassicAssert.IsTrue(sheet.GetRow(24) == null || sheet.GetRow(24).GetCell(9) == null);
+            ClassicAssert.IsTrue(sheet.GetRow(25) == null || sheet.GetRow(25).GetCell(9) == null);
+            ClassicAssert.IsTrue(sheet.GetRow(26) == null || sheet.GetRow(26).GetCell(9) == null);
+            ClassicAssert.IsTrue(sheet.GetRow(27) == null || sheet.GetRow(27).GetCell(9) == null);
 
-            Assert.AreEqual(sheet.GetRow(28).GetCell(9).CellFormula, "SUM(G29:I29)");
-            Assert.AreEqual(sheet.GetRow(29).GetCell(9).CellFormula, "SUM(G30:I30)");
+            ClassicAssert.AreEqual(sheet.GetRow(28).GetCell(9).CellFormula, "SUM(G29:I29)");
+            ClassicAssert.AreEqual(sheet.GetRow(29).GetCell(9).CellFormula, "SUM(G30:I30)");
             wb.Close();
         }
 
@@ -623,12 +647,12 @@ namespace TestCases.SS.UserModel
             VerifyHyperlink(shiftedRow.GetCell(1), HyperlinkType.Url, "http://poi.apache.org/");
 
             // Make sure hyperlinks were moved and not copied
-            Assert.IsNull(sh.GetHyperlink(0, 0), "Document hyperlink should be moved, not copied");
-            Assert.IsNull(sh.GetHyperlink(0, 1), "URL hyperlink should be moved, not copied");
+            ClassicAssert.IsNull(sh.GetHyperlink(0, 0), "Document hyperlink should be moved, not copied");
+            ClassicAssert.IsNull(sh.GetHyperlink(0, 1), "URL hyperlink should be moved, not copied");
 
             // Make sure hyperlink in overwritten row is deleted
             //System.out.println(sh.getHyperlinkList());
-            Assert.AreEqual(3, sh.GetHyperlinkList().Count);
+            ClassicAssert.AreEqual(3, sh.GetHyperlinkList().Count);
             CellAddress unexpectedLinkAddress = new CellAddress("C4");
             foreach (IHyperlink link in sh.GetHyperlinkList()) {
                 CellAddress linkAddress = new CellAddress(link.FirstRow, link.FirstColumn);
@@ -641,12 +665,12 @@ namespace TestCases.SS.UserModel
 
             // Make sure unaffected rows are not shifted
             ICell unaffectedCell = sh.GetRow(20).GetCell(3);
-            Assert.IsTrue(CellHasHyperlink(unaffectedCell));
+            ClassicAssert.IsTrue(CellHasHyperlink(unaffectedCell));
             VerifyHyperlink(unaffectedCell, HyperlinkType.File, "54524.xlsx");
 
             // Make sure cells on other sheets are not affected
             unaffectedCell = read.GetSheet("other").GetRow(0).GetCell(0);
-            Assert.IsTrue(CellHasHyperlink(unaffectedCell));
+            ClassicAssert.IsTrue(CellHasHyperlink(unaffectedCell));
             VerifyHyperlink(unaffectedCell, HyperlinkType.Url, "http://apache.org/");
 
             read.Close();
@@ -682,9 +706,9 @@ namespace TestCases.SS.UserModel
             // FIXME: remove try, catch, and testPassesNow, skipTest when test passes
             try
             {
-                Assert.AreEqual(2, sheet.NumMergedRegions);
-                Assert.AreEqual(CellRangeAddress.ValueOf("A4:B8"), sheet.GetMergedRegion(0));
-                Assert.AreEqual(CellRangeAddress.ValueOf("C5:D8"), sheet.GetMergedRegion(1));
+                ClassicAssert.AreEqual(2, sheet.NumMergedRegions);
+                ClassicAssert.AreEqual(CellRangeAddress.ValueOf("A4:B8"), sheet.GetMergedRegion(0));
+                ClassicAssert.AreEqual(CellRangeAddress.ValueOf("C5:D8"), sheet.GetMergedRegion(1));
                 POITestCase.TestPassesNow(56454);
             }
             catch (AssertionException e)
@@ -700,7 +724,7 @@ namespace TestCases.SS.UserModel
         {
             IWorkbook wb = _testDataProvider.CreateWorkbook();
             ISheet sheet = wb.CreateSheet("test");
-            PopulateSheetCells(sheet);
+            PopulateSheetCells(sheet, 2);
             CellRangeAddress A1_E1 = new CellRangeAddress(0, 0, 0, 4);
             CellRangeAddress A2_C2 = new CellRangeAddress(1, 1, 0, 2);
             sheet.AddMergedRegion(A1_E1);
@@ -708,14 +732,63 @@ namespace TestCases.SS.UserModel
             // A1:E1 should be removed
             // A2:C2 will be A1:C1
             sheet.ShiftRows(1, sheet.LastRowNum, -1);
-            Assert.AreEqual(1, sheet.NumMergedRegions);
-            Assert.AreEqual(CellRangeAddress.ValueOf("A1:C1"), sheet.GetMergedRegion(0));
+            ClassicAssert.AreEqual(1, sheet.NumMergedRegions);
+            ClassicAssert.AreEqual(CellRangeAddress.ValueOf("A1:C1"), sheet.GetMergedRegion(0));
             wb.Close();
         }
-        private void PopulateSheetCells(ISheet sheet)
+
+        [Test]
+        public void ShiftMergedRowsToMergedRowsOverlappingMergedRegion()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb.CreateSheet("test");
+            PopulateSheetCells(sheet, 10);
+
+            CellRangeAddress A1_E1 = new CellRangeAddress(0, 0, 0, 4);
+            CellRangeAddress A2_C2 = new CellRangeAddress(1, 7, 0, 2);
+
+            sheet.AddMergedRegion(A1_E1);
+            sheet.AddMergedRegion(A2_C2);
+
+            // A1:E1 should Move to A5:E5
+            // A2:C2 should be removed
+            sheet.ShiftRows(0, 0, 4);
+
+            ClassicAssert.AreEqual(1, sheet.NumMergedRegions);
+            ClassicAssert.AreEqual(CellRangeAddress.ValueOf("A5:E5"), sheet.GetMergedRegion(0));
+
+            wb.Close();
+        }
+
+        [Test]
+        public void Bug60384ShiftMergedRegion()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb.CreateSheet("test");
+            PopulateSheetCells(sheet, 9);
+
+
+            CellRangeAddress A8_E8 = new CellRangeAddress(7, 7, 0, 4);
+            CellRangeAddress A9_C9 = new CellRangeAddress(8, 8, 0, 2);
+
+            sheet.AddMergedRegion(A8_E8);
+            sheet.AddMergedRegion(A9_C9);
+
+            // A1:E1 should be removed
+            // A2:C2 will be A1:C1
+            sheet.ShiftRows(3, sheet.LastRowNum, 1);
+
+            ClassicAssert.AreEqual(2, sheet.NumMergedRegions);
+            ClassicAssert.AreEqual(CellRangeAddress.ValueOf("A9:E9"), sheet.GetMergedRegion(0));
+            ClassicAssert.AreEqual(CellRangeAddress.ValueOf("A10:C10"), sheet.GetMergedRegion(1));
+
+            wb.Close();
+        }
+
+        private void PopulateSheetCells(ISheet sheet, int rowCount)
         {
             // populate sheet cells
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < rowCount; i++)
             {
                 IRow row = sheet.CreateRow(i);
                 for (int j = 0; j < 5; j++)
@@ -731,7 +804,7 @@ namespace TestCases.SS.UserModel
             IWorkbook wb = _testDataProvider.CreateWorkbook();
             ISheet sheet = wb.CreateSheet("test");
             // populate sheet cells
-            PopulateSheetCells(sheet);
+            PopulateSheetCells(sheet, 2);
             CellRangeAddress A1_E1 = new CellRangeAddress(0, 0, 0, 4);
             CellRangeAddress A2_C2 = new CellRangeAddress(1, 1, 0, 2);
             sheet.AddMergedRegion(A1_E1);
@@ -739,11 +812,32 @@ namespace TestCases.SS.UserModel
             // A1:E1 should be moved to A2:E2
             // A2:C2 will be removed
             sheet.ShiftRows(0, 0, 1);
-            Assert.AreEqual(1, sheet.NumMergedRegions);
-            Assert.AreEqual(CellRangeAddress.ValueOf("A2:E2"), sheet.GetMergedRegion(0));
+            ClassicAssert.AreEqual(1, sheet.NumMergedRegions);
+            ClassicAssert.AreEqual(CellRangeAddress.ValueOf("A2:E2"), sheet.GetMergedRegion(0));
             wb.Close();
         }
 
+        [Test]
+        public void Test61840_shifting_rows_up_does_not_produce_REF_errors()
+        {
+            IWorkbook wb = _testDataProvider.CreateWorkbook();
+            ISheet sheet = wb.CreateSheet();
+            ICell cell = sheet.CreateRow(4).CreateCell(0);
+
+            cell.SetCellFormula("(B5-C5)/B5");
+            sheet.ShiftRows(4, 4, -1);
+
+            // Cell objects created before a row shift are still valid.
+            // The row number of those cell references will be shifted if
+            // the cell is within the shift range.
+            ClassicAssert.AreEqual("(B4-C4)/B4", cell.CellFormula);
+
+            // New cell references are also valid.
+            ICell shiftedCell = sheet.GetRow(3).GetCell(0);
+            ClassicAssert.IsNotNull(shiftedCell);
+            ClassicAssert.AreEqual("(B4-C4)/B4", shiftedCell.CellFormula);
+            wb.Close();
+        }
 
         private void CreateHyperlink(ICreationHelper helper, ICell cell, HyperlinkType linkType, String ref1)
         {
@@ -755,10 +849,10 @@ namespace TestCases.SS.UserModel
 
         private void VerifyHyperlink(ICell cell, HyperlinkType linkType, String ref1)
         {
-            Assert.IsTrue(CellHasHyperlink(cell));
+            ClassicAssert.IsTrue(CellHasHyperlink(cell));
             IHyperlink link = cell.Hyperlink;
-            Assert.AreEqual(linkType, link.Type);
-            Assert.AreEqual(ref1, link.Address);
+            ClassicAssert.AreEqual(linkType, link.Type);
+            ClassicAssert.AreEqual(ref1, link.Address);
         }
 
         private bool CellHasHyperlink(ICell cell)

@@ -20,7 +20,7 @@ namespace TestCases.SS.Formula.Eval
 
     using System;
     using System.IO;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
     using TestCases.HSSF;
@@ -51,15 +51,15 @@ namespace TestCases.SS.Formula.Eval
             ICell cell = row.GetCell(0);
 
             // this defInitely would have failed due to 27349
-            Assert.AreEqual("VLOOKUP(1,'DATA TABLE'!$A$8:'DATA TABLE'!$B$10,2)", cell
+            ClassicAssert.AreEqual("VLOOKUP(1,'DATA TABLE'!$A$8:'DATA TABLE'!$B$10,2)", cell
                     .CellFormula);
 
             // We might as well Evaluate the formula
             IFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
             CellValue cv = fe.Evaluate(cell);
 
-            Assert.AreEqual(CellType.Numeric, cv.CellType);
-            Assert.AreEqual(3.0, cv.NumberValue, 0.0);
+            ClassicAssert.AreEqual(CellType.Numeric, cv.CellType);
+            ClassicAssert.AreEqual(3.0, cv.NumberValue, 0.0);
         }
 
         /**
@@ -109,12 +109,12 @@ namespace TestCases.SS.Formula.Eval
             IFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
             CellValue cv;
             cv = fe.Evaluate(cell);
-            Assert.AreEqual(CellType.Numeric, cv.CellType);
-            Assert.AreEqual(1.0, cv.NumberValue, 0.0);
+            ClassicAssert.AreEqual(CellType.Numeric, cv.CellType);
+            ClassicAssert.AreEqual(1.0, cv.NumberValue, 0.0);
 
             cv = fe.Evaluate(row.GetCell(1));
-            Assert.AreEqual(CellType.Boolean, cv.CellType);
-            Assert.AreEqual(true, cv.BooleanValue);
+            ClassicAssert.AreEqual(CellType.Boolean, cv.CellType);
+            ClassicAssert.AreEqual(true, cv.BooleanValue);
         }
 
         /**
@@ -146,7 +146,7 @@ namespace TestCases.SS.Formula.Eval
                 throw new AssertionException("Identified bug 42448");
             }
 
-            Assert.AreEqual("SUMPRODUCT(A!C7:A!C67,B8:B68)/B69", cell.CellFormula);
+            ClassicAssert.AreEqual("SUMPRODUCT(A!C7:A!C67,B8:B68)/B69", cell.CellFormula);
 
             // might as well Evaluate the sucker...
 
@@ -165,8 +165,8 @@ namespace TestCases.SS.Formula.Eval
             IFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
             CellValue cv = fe.Evaluate(cell);
 
-            Assert.AreEqual(CellType.Numeric, cv.CellType);
-            Assert.AreEqual(expectedResult, cv.NumberValue, 0.0);
+            ClassicAssert.AreEqual(CellType.Numeric, cv.CellType);
+            ClassicAssert.AreEqual(expectedResult, cv.NumberValue, 0.0);
         }
 
         private static void AddCell(ISheet sheet, int rowIx, int colIx,
@@ -184,25 +184,84 @@ namespace TestCases.SS.Formula.Eval
             IRow row = sheet.CreateRow(0);
             ICell cell = row.CreateCell(1);
 
-            checkFormulaValue(wb, cell, "PV(0.08/12, 20*12, 500, ,0)", -59777.14585);
-            checkFormulaValue(wb, cell, "PV(0.08/12, 20*12, 500, ,)", -59777.14585);
-            checkFormulaValue(wb, cell, "PV(0.08/12, 20*12, 500, 500,)", -59878.6315455);
+            CheckFormulaValue(wb, cell, "PV(0.08/12, 20*12, 500, ,0)", -59777.14585);
+            CheckFormulaValue(wb, cell, "PV(0.08/12, 20*12, 500, ,)", -59777.14585);
+            CheckFormulaValue(wb, cell, "PV(0.08/12, 20*12, 500, 500,)", -59878.6315455);
 
-            checkFormulaValue(wb, cell, "FV(0.08/12, 20*12, 500, ,)", -294510.2078107270);
-            checkFormulaValue(wb, cell, "PMT(0.08/12, 20*12, 500, ,)", -4.1822003450);
-            checkFormulaValue(wb, cell, "NPER(0.08/12, 20*12, 500, ,)", -2.0758873434);
+            CheckFormulaValue(wb, cell, "FV(0.08/12, 20*12, 500, ,)", -294510.2078107270);
+            CheckFormulaValue(wb, cell, "PMT(0.08/12, 20*12, 500, ,)", -4.1822003450);
+            CheckFormulaValue(wb, cell, "NPER(0.08/12, 20*12, 500, ,)", -2.0758873434);
 
             wb.Close();
         }
 
-        private void checkFormulaValue(IWorkbook wb, ICell cell, String formula, double expectedValue)
+        // bug 52063: LOOKUP(2-arg) and LOOKUP(3-arg)
+        // FIXME: This could be Moved into LookupFunctionsTestCaseData.xls, which is tested by TestLookupFunctionsFromSpreadsheet.java
+        [Test]
+        public void TestLookupFormula()
+        {
+
+            IWorkbook wb = new HSSFWorkbook();
+            ISheet sheet = wb.CreateSheet("52063");
+
+            // Note: Values in arrays are in ascending order since LOOKUP expects that in order to work properly
+            //         column
+            //         A B C
+            //       +-------
+            // row 1 | P Q R
+            // row 2 | X Y Z
+            IRow row = sheet.CreateRow(0);
+            row.CreateCell(0).SetCellValue("P");
+            row.CreateCell(1).SetCellValue("Q");
+            row.CreateCell(2).SetCellValue("R");
+            row = sheet.CreateRow(1);
+            row.CreateCell(0).SetCellValue("X");
+            row.CreateCell(1).SetCellValue("Y");
+            row.CreateCell(2).SetCellValue("Z");
+
+            ICell evalcell = sheet.CreateRow(2).CreateCell(0);
+
+            //// ROW VECTORS
+            // lookup and result row are the same
+            CheckFormulaValue(wb, evalcell, "LOOKUP(\"Q\", A1:C1)", "Q");
+            CheckFormulaValue(wb, evalcell, "LOOKUP(\"R\", A1:C1)", "R");
+            CheckFormulaValue(wb, evalcell, "LOOKUP(\"Q\", A1:C1, A1:C1)", "Q");
+            CheckFormulaValue(wb, evalcell, "LOOKUP(\"R\", A1:C1, A1:C1)", "R");
+
+            // lookup and result row are different
+            CheckFormulaValue(wb, evalcell, "LOOKUP(\"Q\", A1:C2)", "Y");
+            CheckFormulaValue(wb, evalcell, "LOOKUP(\"R\", A1:C2)", "Z");
+            CheckFormulaValue(wb, evalcell, "LOOKUP(\"Q\", A1:C1, A2:C2)", "Y");
+            CheckFormulaValue(wb, evalcell, "LOOKUP(\"R\", A1:C1, A2:C2)", "Z");
+
+            //// COLUMN VECTORS
+            // lookup and result column are different
+            CheckFormulaValue(wb, evalcell, "LOOKUP(\"P\", A1:B2)", "Q");
+            CheckFormulaValue(wb, evalcell, "LOOKUP(\"X\", A1:A2, C1:C2)", "Z");
+
+            wb.Close();
+        }
+
+        private static CellValue EvaluateFormulaInCell(IWorkbook wb, ICell cell, String formula)
         {
             cell.SetCellFormula(formula);
 
             IFormulaEvaluator evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
             CellValue value = evaluator.Evaluate(cell);
 
-            Assert.AreEqual(expectedValue, value.NumberValue, 0.0001);
+            return value;
+        }
+
+        private static void CheckFormulaValue(IWorkbook wb, ICell cell, String formula, double expectedValue)
+        {
+            CellValue value = EvaluateFormulaInCell(wb, cell, formula);
+            ClassicAssert.AreEqual(expectedValue, value.NumberValue, 0.0001);
+        }
+
+        private static void CheckFormulaValue(IWorkbook wb, ICell cell, String formula, String expectedValue)
+        {
+            CellValue value = EvaluateFormulaInCell(wb, cell, formula);
+            ClassicAssert.AreEqual(expectedValue, value.StringValue);
         }
     }
 }

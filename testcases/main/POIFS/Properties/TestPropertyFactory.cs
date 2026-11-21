@@ -29,7 +29,7 @@ using System.Text;
 using System.Collections;
 using System.IO;
 
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 
 using NPOI.POIFS.Common;
 using NPOI.POIFS.Storage;
@@ -338,7 +338,7 @@ namespace TestCases.POIFS.Properties
 
             List<Property> properties = PropertyFactory.ConvertToProperties(rawData);
 
-            Assert.AreEqual(64, properties.Count);
+            ClassicAssert.AreEqual(64, properties.Count);
 
             string[] names = {
             "Root Entry", null, null, null, null, null, null, null, null,
@@ -359,7 +359,7 @@ namespace TestCases.POIFS.Properties
             null, null, null, null, null, null, null, null, null, null, null,
             null, null, null
         };
-            Assert.AreEqual(64, names.Length);
+            ClassicAssert.AreEqual(64, names.Length);
 
             bool[] isRoot = {
             true, false, false, false, false, false, false, false, false,
@@ -371,7 +371,7 @@ namespace TestCases.POIFS.Properties
             false, false, false, false, false, false, false, false, false,
             false
         };
-            Assert.AreEqual(64, isRoot.Length);
+            ClassicAssert.AreEqual(64, isRoot.Length);
 
             bool[] isDocument =
         {
@@ -384,7 +384,7 @@ namespace TestCases.POIFS.Properties
             false, false, false, false
         };
 
-            Assert.AreEqual(64, isDocument.Length);
+            ClassicAssert.AreEqual(64, isDocument.Length);
             bool[] isDirectory =
         {
             false, false, false, false, false, false, false, false, false,
@@ -397,7 +397,7 @@ namespace TestCases.POIFS.Properties
             false
         };
 
-            Assert.AreEqual(64, isDirectory.Length);
+            ClassicAssert.AreEqual(64, isDirectory.Length);
             bool[] isNull =
         {
             false, true, true, true, true, true, true, true, true, true, true,
@@ -409,22 +409,22 @@ namespace TestCases.POIFS.Properties
             true, true, true, true, true, true, true
         };
 
-            Assert.AreEqual(64, isNull.Length);
+            ClassicAssert.AreEqual(64, isNull.Length);
             for (int j = 0; j < 64; j++)
             {
                 if (isNull[j])
-                    Assert.IsTrue(isNull[j], "Checking property " + j);
+                    ClassicAssert.IsTrue(isNull[j], "Checking property " + j);
                 else
                 {
-                    Assert.IsFalse(isNull[j], "Checking property " + j);
+                    ClassicAssert.IsFalse(isNull[j], "Checking property " + j);
                     if (isRoot[j])
-                        Assert.IsTrue(isRoot[j], " Checking property " + j);
+                        ClassicAssert.IsTrue(isRoot[j], " Checking property " + j);
                     if (isDirectory[j])
-                        Assert.IsTrue(properties[j] is DirectoryProperty, "Checking property " + j);
+                        ClassicAssert.IsTrue(properties[j] is DirectoryProperty, "Checking property " + j);
                     if (isDocument[j])
-                        Assert.IsTrue(properties[j] is DocumentProperty, "Checking property " + j);
+                        ClassicAssert.IsTrue(properties[j] is DocumentProperty, "Checking property " + j);
 
-                    Assert.AreEqual(names[j], properties[j].Name, "Checking property " + j);
+                    ClassicAssert.AreEqual(names[j], properties[j].Name, "Checking property " + j);
                 }
             }
         }

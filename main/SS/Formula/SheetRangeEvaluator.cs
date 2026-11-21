@@ -20,16 +20,17 @@ namespace NPOI.SS.Formula
     using System;
 
     using NPOI.SS.Formula.Eval;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
 
     /**
      * Evaluator for returning cells or sheets for a range of sheets
      */
     public class SheetRangeEvaluator : ISheetRange
     {
-        private int _firstSheetIndex;
-        private int _lastSheetIndex;
-        private SheetRefEvaluator[] _sheetEvaluators;
+        private readonly int _firstSheetIndex;
+        private readonly int _lastSheetIndex;
+        private readonly SheetRefEvaluator[] _sheetEvaluators;
 
         public SheetRangeEvaluator(int firstSheetIndex, int lastSheetIndex, SheetRefEvaluator[] sheetEvaluators)
         {
@@ -84,7 +85,8 @@ namespace NPOI.SS.Formula
         {
             get
             {
-                StringBuilder sb = new StringBuilder();
+                using var sb = ZString.CreateStringBuilder();
+
                 sb.Append(GetSheetName(_firstSheetIndex));
                 if (_firstSheetIndex != _lastSheetIndex)
                 {

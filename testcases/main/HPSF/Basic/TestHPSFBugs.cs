@@ -18,7 +18,7 @@
 namespace TestCases.HPSF.Basic
 {
     using System.IO;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.UserModel;
     using System;
     using NPOI.SS.UserModel;
@@ -44,14 +44,14 @@ namespace TestCases.HPSF.Basic
             HSSFWorkbook wb = new HSSFWorkbook();
 
             // Starts empty
-            Assert.IsNull(wb.DocumentSummaryInformation);
-            Assert.IsNull(wb.SummaryInformation);
+            ClassicAssert.IsNull(wb.DocumentSummaryInformation);
+            ClassicAssert.IsNull(wb.SummaryInformation);
 
             // Add new properties
             wb.CreateInformationProperties();
 
-            Assert.IsNotNull(wb.DocumentSummaryInformation);
-            Assert.IsNotNull(wb.SummaryInformation);
+            ClassicAssert.IsNotNull(wb.DocumentSummaryInformation);
+            ClassicAssert.IsNotNull(wb.SummaryInformation);
 
             // Set Initial values
             wb.SummaryInformation.Author = (/*setter*/"Apache POI");
@@ -70,13 +70,13 @@ namespace TestCases.HPSF.Basic
 
 
             // Ensure Changes were taken
-            Assert.IsNotNull(wb.DocumentSummaryInformation);
-            Assert.IsNotNull(wb.SummaryInformation);
+            ClassicAssert.IsNotNull(wb.DocumentSummaryInformation);
+            ClassicAssert.IsNotNull(wb.SummaryInformation);
 
-            Assert.AreEqual("Apache POI", wb.SummaryInformation.Author);
-            Assert.AreEqual("Testing POI", wb.SummaryInformation.Keywords);
-            Assert.AreEqual(12345, DateUtil.GetExcelDate(wb.SummaryInformation.CreateDateTime.Value));
-            Assert.AreEqual("Apache", wb.DocumentSummaryInformation.Company);
+            ClassicAssert.AreEqual("Apache POI", wb.SummaryInformation.Author);
+            ClassicAssert.AreEqual("Testing POI", wb.SummaryInformation.Keywords);
+            ClassicAssert.AreEqual(12345, DateUtil.GetExcelDate(wb.SummaryInformation.CreateDateTime.Value));
+            ClassicAssert.AreEqual("Apache", wb.DocumentSummaryInformation.Company);
 
 
             // Set some more, save + reload
@@ -88,14 +88,14 @@ namespace TestCases.HPSF.Basic
             wb = new HSSFWorkbook(bais);
 
             // Check again
-            Assert.IsNotNull(wb.DocumentSummaryInformation);
-            Assert.IsNotNull(wb.SummaryInformation);
+            ClassicAssert.IsNotNull(wb.DocumentSummaryInformation);
+            ClassicAssert.IsNotNull(wb.SummaryInformation);
 
-            Assert.AreEqual("Apache POI", wb.SummaryInformation.Author);
-            Assert.AreEqual("Testing POI", wb.SummaryInformation.Keywords);
-            Assert.AreEqual("Resaved", wb.SummaryInformation.Comments);
-            Assert.AreEqual(12345, DateUtil.GetExcelDate(wb.SummaryInformation.CreateDateTime.Value));
-            Assert.AreEqual("Apache", wb.DocumentSummaryInformation.Company);
+            ClassicAssert.AreEqual("Apache POI", wb.SummaryInformation.Author);
+            ClassicAssert.AreEqual("Testing POI", wb.SummaryInformation.Keywords);
+            ClassicAssert.AreEqual("Resaved", wb.SummaryInformation.Comments);
+            ClassicAssert.AreEqual(12345, DateUtil.GetExcelDate(wb.SummaryInformation.CreateDateTime.Value));
+            ClassicAssert.AreEqual("Apache", wb.DocumentSummaryInformation.Company);
         }
 
         /**
@@ -117,10 +117,10 @@ namespace TestCases.HPSF.Basic
             DocumentSummaryInformation dsi = (DocumentSummaryInformation)PropertySetFactory.Create(dis);
 
             // Test
-            Assert.AreEqual("Microsoft Word 10.0", si.ApplicationName);
-            Assert.AreEqual("", si.Title);
-            Assert.AreEqual("", si.Author);
-            Assert.AreEqual("Cour de Justice", dsi.Company);
+            ClassicAssert.AreEqual("Microsoft Word 10.0", si.ApplicationName);
+            ClassicAssert.AreEqual("", si.Title);
+            ClassicAssert.AreEqual("", si.Author);
+            ClassicAssert.AreEqual("Cour de Justice", dsi.Company);
 
 
             // Write out and read back, should still be valid
@@ -131,10 +131,10 @@ namespace TestCases.HPSF.Basic
             doc = new HPSFPropertiesOnlyDocument(new POIFSFileSystem(bais));
 
             // Check properties are still there
-            Assert.AreEqual("Microsoft Word 10.0", si.ApplicationName);
-            Assert.AreEqual("", si.Title);
-            Assert.AreEqual("", si.Author);
-            Assert.AreEqual("Cour de Justice", dsi.Company);
+            ClassicAssert.AreEqual("Microsoft Word 10.0", si.ApplicationName);
+            ClassicAssert.AreEqual("", si.Title);
+            ClassicAssert.AreEqual("", si.Author);
+            ClassicAssert.AreEqual("Cour de Justice", dsi.Company);
         }
 
         /**
@@ -154,12 +154,12 @@ namespace TestCases.HPSF.Basic
             DocumentSummaryInformation dsi = (DocumentSummaryInformation)PropertySetFactory.Create(dis);
 
             // Test
-            Assert.AreEqual("MSProject", si.ApplicationName);
-            Assert.AreEqual("project1", si.Title);
-            Assert.AreEqual("Jon Iles", si.Author);
+            ClassicAssert.AreEqual("MSProject", si.ApplicationName);
+            ClassicAssert.AreEqual("project1", si.Title);
+            ClassicAssert.AreEqual("Jon Iles", si.Author);
 
-            Assert.AreEqual("", dsi.Company);
-            Assert.AreEqual(2, dsi.SectionCount);
+            ClassicAssert.AreEqual("", dsi.Company);
+            ClassicAssert.AreEqual(2, dsi.SectionCount);
         }
     }
 

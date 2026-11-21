@@ -14,17 +14,21 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.IO;
-using System.Linq;
+
+using NPOI.HSSF.Util;
+using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.SS;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using NPOI.Util;
 using NPOI.XSSF.UserModel;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Data;
+using System.IO;
+using System.Linq;
 
 namespace NPOI.XSSF.Streaming
 {
@@ -32,12 +36,12 @@ namespace NPOI.XSSF.Streaming
     {
         // TODO: fields should be private and use public property
         internal XSSFSheet _sh;
-        private SXSSFWorkbook _workbook;
+        private readonly SXSSFWorkbook _workbook;
         //private TreeMap<Integer, SXSSFRow> _rows = new TreeMap<Integer, SXSSFRow>();
-        private IDictionary<int, SXSSFRow> _rows = new Dictionary<int, SXSSFRow>();
-        private SheetDataWriter _writer;
+        private readonly Dictionary<int, SXSSFRow> _rows = new Dictionary<int, SXSSFRow>();
+        private readonly SheetDataWriter _writer;
         private int _randomAccessWindowSize = SXSSFWorkbook.DEFAULT_WINDOW_SIZE;
-        private Lazy<AutoSizeColumnTracker> _autoSizeColumnTracker;
+        private AutoSizeColumnTracker _autoSizeColumnTracker;
         private int outlineLevelRow = 0;
         private int lastFlushedRowNumber = -1;
         private bool allFlushed = false;
@@ -52,8 +56,15 @@ namespace NPOI.XSSF.Streaming
             _sh = xSheet;
             _writer = workbook.CreateSheetDataWriter();
             SetRandomAccessWindowSize(_workbook.RandomAccessWindowSize);
-            _autoSizeColumnTracker = new Lazy<AutoSizeColumnTracker>(
-                () => new AutoSizeColumnTracker(this));
+        }
+
+        private AutoSizeColumnTracker GetOrCreateAutoSizeColumnTracker()
+        {
+            if (_autoSizeColumnTracker == null)
+            {
+                _autoSizeColumnTracker = new AutoSizeColumnTracker(this);
+            }
+            return _autoSizeColumnTracker;
         }
 
         public void SetRandomAccessWindowSize(int value)
@@ -179,7 +190,7 @@ namespace NPOI.XSSF.Streaming
             }
         }
 
-        public IDrawing DrawingPatriarch
+        public IDrawing<IShape> DrawingPatriarch
         {
             get
             {
@@ -532,6 +543,12 @@ namespace NPOI.XSSF.Streaming
             AutoSizeColumn(column, false);
         }
 
+        /// <inheritdoc />
+        public void AutoSizeColumn(int column, int maxRows)
+        {
+            AutoSizeColumn(column, false, maxRows);
+        }
+
         /**
          * Adjusts the column width to fit the contents.
          * <p>
@@ -554,7 +571,7 @@ namespace NPOI.XSSF.Streaming
          * @param column the column index to auto-size
          * @param useMergedCells whether to use the contents of merged cells when calculating the width of the column
          */
-        public void AutoSizeColumn(int column, bool useMergedCells)
+        public void AutoSizeColumn(int column, bool useMergedCells, int maxRows = 0)
         {
             // Multiple calls to autoSizeColumn need to look up the best-fit width
             // of rows already flushed to disk plus re-calculate the best-fit width
@@ -572,7 +589,7 @@ namespace NPOI.XSSF.Streaming
             try
             {
                 // get the best fit width of rows already flushed to disk
-                flushedWidth = _autoSizeColumnTracker.Value.GetBestFitColumnWidth(column, useMergedCells);
+                flushedWidth = GetOrCreateAutoSizeColumnTracker().GetBestFitColumnWidth(column, useMergedCells);
             }
             catch (Exception e)
             {
@@ -655,7 +672,7 @@ namespace NPOI.XSSF.Streaming
             return _sh.GetHyperlinkList();
         }
 
-        public IDrawing CreateDrawingPatriarch()
+        public IDrawing<IShape> CreateDrawingPatriarch()
         {
             return new SXSSFDrawing((SXSSFWorkbook)Workbook, (XSSFDrawing)_sh.CreateDrawingPatriarch());
         }
@@ -734,17 +751,6 @@ namespace NPOI.XSSF.Streaming
         }
 
         /// <summary>
-        /// Returns cell comment for the specified row and column
-        /// </summary>
-        /// <param name="row">The row.</param>
-        /// <param name="column">The column.</param>
-        /// <returns>cell comment or <code>null</code> if not found</returns>
-        [Obsolete("deprecated as of 2015-11-23 (circa POI 3.14beta1). Use {@link #getCellComment(CellAddress)} instead.")]
-        public IComment GetCellComment(int row, int column)
-        {
-            return GetCellComment(new CellAddress(row, column));
-        }
-        /// <summary>
         /// Returns cell comment for the specified location
         /// </summary>
         /// <param name="ref1">cell location</param>
@@ -794,11 +800,6 @@ namespace NPOI.XSSF.Streaming
             return _sh.GetDataValidations();
         }
 
-        public IEnumerator GetEnumerator()
-        {
-            return (IEnumerator<IRow>)new SortedDictionary<int,SXSSFRow>(_rows).Values.GetEnumerator();
-        }
-
         public double GetMargin(MarginType margin)
         {
             return _sh.GetMargin(margin);
@@ -811,15 +812,15 @@ namespace NPOI.XSSF.Streaming
 
         public IRow GetRow(int rownum)
         {
-            if (_rows.ContainsKey(rownum))
-                return _rows[rownum];
+            if (_rows.TryGetValue(rownum, out SXSSFRow row))
+                return row;
             else
                 return null;
         }
 
         public IEnumerator GetRowEnumerator()
         {
-            return GetEnumerator();
+            return _rows.GetEnumerator();
         }
 
         public void GroupColumn(int fromColumn, int toColumn)
@@ -1076,7 +1077,7 @@ namespace NPOI.XSSF.Streaming
          */
         public void TrackColumnForAutoSizing(int column)
         {
-            _autoSizeColumnTracker.Value.TrackColumn(column);
+            GetOrCreateAutoSizeColumnTracker().TrackColumn(column);
         }
 
         /**
@@ -1089,7 +1090,7 @@ namespace NPOI.XSSF.Streaming
          */
         public void TrackColumnsForAutoSizing(ICollection<int> columns)
         {
-            _autoSizeColumnTracker.Value.TrackColumns(columns);
+            GetOrCreateAutoSizeColumnTracker().TrackColumns(columns);
         }
 
         /**
@@ -1099,7 +1100,7 @@ namespace NPOI.XSSF.Streaming
          */
         public void TrackAllColumnsForAutoSizing()
         {
-            _autoSizeColumnTracker.Value.TrackAllColumns();
+            GetOrCreateAutoSizeColumnTracker().TrackAllColumns();
         }
 
         /**
@@ -1115,7 +1116,7 @@ namespace NPOI.XSSF.Streaming
          */
         public bool UntrackColumnForAutoSizing(int column)
         {
-            return _autoSizeColumnTracker.Value.UntrackColumn(column);
+            return GetOrCreateAutoSizeColumnTracker().UntrackColumn(column);
         }
 
         /**
@@ -1131,7 +1132,7 @@ namespace NPOI.XSSF.Streaming
          */
         public bool UntrackColumnsForAutoSizing(ICollection<int> columns)
         {
-            return _autoSizeColumnTracker.Value.UntrackColumns(columns);
+            return GetOrCreateAutoSizeColumnTracker().UntrackColumns(columns);
         }
 
         /**
@@ -1141,7 +1142,7 @@ namespace NPOI.XSSF.Streaming
          */
         public void UntrackAllColumnsForAutoSizing()
         {
-            _autoSizeColumnTracker.Value.UntrackAllColumns();
+            GetOrCreateAutoSizeColumnTracker().UntrackAllColumns();
         }
 
         /**
@@ -1153,7 +1154,7 @@ namespace NPOI.XSSF.Streaming
          */
         public bool IsColumnTrackedForAutoSizing(int column)
         {
-            return _autoSizeColumnTracker.Value.IsColumnTracked(column);
+            return GetOrCreateAutoSizeColumnTracker().IsColumnTracked(column);
         }
 
         /**
@@ -1168,7 +1169,7 @@ namespace NPOI.XSSF.Streaming
         {
             get
             {
-                return _autoSizeColumnTracker.Value.TrackedColumns;
+                return GetOrCreateAutoSizeColumnTracker().TrackedColumns;
             }
         }
 
@@ -1257,12 +1258,6 @@ namespace NPOI.XSSF.Streaming
                 currRow = (SXSSFRow)GetRow(rowIndex);
             }
             return rowIndex;
-        }
-
-        [Obsolete("deprecated 2015-11-23 (circa POI 3.14beta1). Use {@link #setZoom(int)} instead.")]
-        public void SetZoom(int numerator, int denominator)
-        {
-            _sh.SetZoom(numerator, denominator);
         }
 
         /**
@@ -1412,7 +1407,7 @@ namespace NPOI.XSSF.Streaming
             var firstRowNum = _rows.Keys.Min();
             // Update the best fit column widths for auto-sizing just before the rows are flushed
             var firstRow = _rows[firstRowNum];
-            _autoSizeColumnTracker.Value?.UpdateColumnWidths(firstRow);
+            _autoSizeColumnTracker?.UpdateColumnWidths(firstRow);
             _writer.WriteRow(firstRowNum, firstRow);
             _rows.Remove(firstRowNum);
             lastFlushedRowNumber = firstRowNum;
@@ -1460,6 +1455,7 @@ namespace NPOI.XSSF.Streaming
                 _sh.TabColor = value;
             }
         }
+
         public void CopyTo(IWorkbook dest, string name, bool copyStyle, bool keepFormulas)
         {
             throw new NotImplementedException();
@@ -1475,9 +1471,233 @@ namespace NPOI.XSSF.Streaming
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Enable sheet protection
+        /// </summary>
+        public void EnableLocking()
+        {
+            SafeGetProtectionField().sheet = true;
+        }
+
+        /// <summary>
+        /// Disable sheet protection
+        /// </summary>
+        public void DisableLocking()
+        {
+            SafeGetProtectionField().sheet = false;
+        }
+
+        /// <summary>
+        /// Enable or disable Autofilters locking.
+        /// This does not modify sheet protection status.
+        /// To enforce this un-/locking, call <see cref="DisableLocking()" /> or <see cref="EnableLocking()" />
+        /// </summary>
+        public void LockAutoFilter(bool enabled)
+        {
+            SafeGetProtectionField().autoFilter = enabled;
+        }
+
+        /// <summary>
+        /// Enable or disable Deleting columns locking.
+        /// This does not modify sheet protection status.
+        /// To enforce this un-/locking, call <see cref="DisableLocking()" /> or <see cref="EnableLocking()" />
+        /// </summary>
+        public void LockDeleteColumns(bool enabled)
+        {
+            SafeGetProtectionField().deleteColumns = enabled;
+        }
+
+        /// <summary>
+        /// Enable or disable Deleting rows locking.
+        /// This does not modify sheet protection status.
+        /// To enforce this un-/locking, call <see cref="DisableLocking()" /> or <see cref="EnableLocking()" />
+        /// </summary>
+        public void LockDeleteRows(bool enabled)
+        {
+            SafeGetProtectionField().deleteRows = enabled;
+        }
+
+        /// <summary>
+        /// Enable or disable Formatting cells locking.
+        /// This does not modify sheet protection status.
+        /// To enforce this un-/locking, call <see cref="DisableLocking()" /> or <see cref="EnableLocking()" />
+        /// </summary>
+        public void LockFormatCells(bool enabled)
+        {
+            SafeGetProtectionField().formatCells = enabled;
+        }
+
+        /// <summary>
+        /// Enable or disable Formatting columns locking.
+        /// This does not modify sheet protection status.
+        /// To enforce this un-/locking, call <see cref="DisableLocking()" /> or <see cref="EnableLocking()" />
+        /// </summary>
+        public void LockFormatColumns(bool enabled)
+        {
+            SafeGetProtectionField().formatColumns = enabled;
+        }
+
+        /// <summary>
+        /// Enable or disable Formatting rows locking.
+        /// This does not modify sheet protection status.
+        /// To enforce this un-/locking, call <see cref="DisableLocking()" /> or <see cref="EnableLocking()" />
+        /// </summary>
+        public void LockFormatRows(bool enabled)
+        {
+            SafeGetProtectionField().formatRows = enabled;
+        }
+
+        /// <summary>
+        /// Enable or disable Inserting columns locking.
+        /// This does not modify sheet protection status.
+        /// To enforce this un-/locking, call <see cref="DisableLocking()" /> or <see cref="EnableLocking()" />
+        /// </summary>
+        public void LockInsertColumns(bool enabled)
+        {
+            SafeGetProtectionField().insertColumns = enabled;
+        }
+
+        /// <summary>
+        /// Enable or disable Inserting hyperlinks locking.
+        /// This does not modify sheet protection status.
+        /// To enforce this un-/locking, call <see cref="DisableLocking()" /> or <see cref="EnableLocking()" />
+        /// </summary>
+        public void LockInsertHyperlinks(bool enabled)
+        {
+            SafeGetProtectionField().insertHyperlinks = enabled;
+        }
+
+        /// <summary>
+        /// Enable or disable Inserting rows locking.
+        /// This does not modify sheet protection status.
+        /// To enforce this un-/locking, call <see cref="DisableLocking()" /> or <see cref="EnableLocking()" />
+        /// </summary>
+        public void LockInsertRows(bool enabled)
+        {
+            SafeGetProtectionField().insertRows = enabled;
+        }
+
+        /// <summary>
+        /// Enable or disable Pivot Tables locking.
+        /// This does not modify sheet protection status.
+        /// To enforce this un-/locking, call <see cref="DisableLocking()" /> or <see cref="EnableLocking()" />
+        /// </summary>
+        public void LockPivotTables(bool enabled)
+        {
+            SafeGetProtectionField().pivotTables = enabled;
+        }
+
+        /// <summary>
+        /// Enable or disable Sort locking.
+        /// This does not modify sheet protection status.
+        /// To enforce this un-/locking, call <see cref="DisableLocking()" /> or <see cref="EnableLocking()" />
+        /// </summary>
+        public void LockSort(bool enabled)
+        {
+            SafeGetProtectionField().sort = enabled;
+        }
+
+        /// <summary>
+        /// Enable or disable Objects locking.
+        /// This does not modify sheet protection status.
+        /// To enforce this un-/locking, call <see cref="DisableLocking()" /> or <see cref="EnableLocking()" />
+        /// </summary>
+        public void LockObjects(bool enabled)
+        {
+            SafeGetProtectionField().objects = enabled;
+        }
+
+        /// <summary>
+        /// Enable or disable Scenarios locking.
+        /// This does not modify sheet protection status.
+        /// To enforce this un-/locking, call <see cref="DisableLocking()" /> or <see cref="EnableLocking()" />
+        /// </summary>
+        public void LockScenarios(bool enabled)
+        {
+            SafeGetProtectionField().scenarios = enabled;
+        }
+
+        /// <summary>
+        /// Enable or disable Selection of locked cells locking.
+        /// This does not modify sheet protection status.
+        /// To enforce this un-/locking, call <see cref="DisableLocking()" /> or <see cref="EnableLocking()" />
+        /// </summary>
+        public void LockSelectLockedCells(bool enabled)
+        {
+            SafeGetProtectionField().selectLockedCells = enabled;
+        }
+
+        /// <summary>
+        /// Enable or disable Selection of unlocked cells locking.
+        /// This does not modify sheet protection status.
+        /// To enforce this un-/locking, call <see cref="DisableLocking()" /> or <see cref="EnableLocking()" />
+        /// </summary>
+        public void LockSelectUnlockedCells(bool enabled)
+        {
+            SafeGetProtectionField().selectUnlockedCells = enabled;
+        }
+
+        private CT_SheetProtection SafeGetProtectionField()
+        {
+            CT_Worksheet ct = _sh.GetCTWorksheet();
+            if (!IsSheetProtectionEnabled())
+            {
+                return ct.AddNewSheetProtection();
+            }
+            return ct.sheetProtection;
+        }
+
+        /* package */
+        internal bool IsSheetProtectionEnabled()
+        {
+            CT_Worksheet ct = _sh.GetCTWorksheet();
+            return (ct.IsSetSheetProtection());
+        }
+
+        /// <summary>
+        /// Set background color of the sheet tab
+        /// </summary>
+        /// <param name="colorIndex"> the indexed color to Set, must be a constant from <see cref="IndexedColors"/></param>
+        public void SetTabColor(int colorIndex)
+        {
+            CT_Worksheet ct = _sh.GetCTWorksheet();
+            CT_SheetPr pr = ct.sheetPr;
+            if (pr == null) pr = ct.AddNewSheetPr();
+            CT_Color color = new CT_Color();
+            color.indexed = (uint)colorIndex;
+            pr.tabColor = color;
+        }
+
         IEnumerator<IRow> IEnumerable<IRow>.GetEnumerator()
         {
-            return ((IEnumerable<IRow>) _sh).GetEnumerator();
+            return _rows.Values.GetEnumerator();
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            return _rows.Values.GetEnumerator();
+        }
+
+        public NCellRange Cells
+        {
+            get
+            {
+                return new NCellRange(this, 0, 0, this.Workbook.SpreadsheetVersion.MaxRows, this.Workbook.SpreadsheetVersion.MaxColumns);
+            }
+        }
+
+        public NCellRange this[string address] => Cells[address];
+
+        public NRowRange Rows
+        {
+            get
+            {
+                return new NRowRange(this, 0, this.Workbook.SpreadsheetVersion.MaxRows);
+            }
+        }
+        public DataTable ToDataTable(bool firstRowAsHeader = false, bool showCalculatedValue = false)
+        {
+            return SheetUtil.ToDataTable(this, firstRowAsHeader, showCalculatedValue);
         }
     }
 }

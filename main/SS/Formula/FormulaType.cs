@@ -19,9 +19,9 @@ using System;
 
 namespace NPOI.SS.Formula
 {
-    internal class SingleValueAttribute : Attribute
+    internal sealed class SingleValueAttribute : Attribute
     {
-        private bool _isSingleValue=false;
+        private readonly bool _isSingleValue=false;
         public SingleValueAttribute(bool isSingleValue)
         {
             this._isSingleValue = isSingleValue;

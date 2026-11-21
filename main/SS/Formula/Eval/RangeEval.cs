@@ -62,17 +62,17 @@ namespace NPOI.SS.Formula.Eval
 
         private static AreaEval EvaluateRef(ValueEval arg)
         {
-            if (arg is AreaEval)
+            if (arg is AreaEval eval)
             {
-                return (AreaEval)arg;
+                return eval;
             }
-            if (arg is RefEval)
+            if (arg is RefEval refEval)
             {
-                return ((RefEval)arg).Offset(0, 0, 0, 0);
+                return refEval.Offset(0, 0, 0, 0);
             }
-            if (arg is ErrorEval)
+            if (arg is ErrorEval errorEval)
             {
-                throw new EvaluationException((ErrorEval)arg);
+                throw new EvaluationException(errorEval);
             }
             throw new ArgumentException("Unexpected ref arg class (" + arg.GetType().Name + ")");
         }

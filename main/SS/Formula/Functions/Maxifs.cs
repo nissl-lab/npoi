@@ -55,13 +55,13 @@ namespace NPOI.SS.Formula.Functions
          */
         protected override bool HasInitialRange => true;
 
-        private class MyAggregator : IAggregator
+        private sealed class MyAggregator : IAggregator
         {
             double? accumulator = null;
 
             public void AddValue(ValueEval value)
             {
-                double d = (value is NumberEval) ? ((NumberEval)value).NumberValue : 0.0;
+                double d = (value is NumberEval eval) ? eval.NumberValue : 0.0;
                 if(accumulator == null || accumulator < d)
                 {
                     accumulator = d;

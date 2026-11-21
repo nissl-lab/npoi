@@ -22,7 +22,6 @@ namespace NPOI.XWPF.UserModel
     using System.Linq;
     using System.Text;
     using NPOI.OpenXmlFormats.Shared;
-    using NPOI.XWPF.Usermodel;
 
     public class XWPFOMath : MathContainer
     {

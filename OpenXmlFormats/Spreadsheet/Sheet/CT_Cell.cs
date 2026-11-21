@@ -41,7 +41,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 return null;
             CT_Cell ctObj = new CT_Cell();
             ctObj.r = XmlHelper.ReadString(node.Attributes["r"]);
-            ctObj.s = XmlHelper.ReadUInt(node.Attributes["s"]);
+            ctObj.sField = XmlHelper.ReadUInt(node.Attributes["s"]);
             if (node.Attributes["t"] != null)
                 ctObj.t = (ST_CellType)Enum.Parse(typeof(ST_CellType), node.Attributes["t"].Value);
             ctObj.cm = XmlHelper.ReadUInt(node.Attributes["cm"]);
@@ -65,11 +65,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write("<");
-            sw.Write(nodeName);
-
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "r", this.r);
-            XmlHelper.WriteAttribute(sw, "s", this.s, true);
+            if(this.IsSetS())
+                XmlHelper.WriteAttribute(sw, "s", this.s, true);
             if (this.t != ST_CellType.n)
                 XmlHelper.WriteAttribute(sw, "t", this.t.ToString());
             XmlHelper.WriteAttribute(sw, "cm", this.cm);
@@ -84,7 +83,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
             else
             {
-                sw.Write(">");
+                sw.Write('>');
                 if (this.f != null)
                     this.f.Write(sw, "f");
                 if (!string.IsNullOrEmpty(this.v))

@@ -27,7 +27,7 @@ namespace TestCases.POIFS.Crypt
 {
     using NPOI.OpenXml4Net.OPC;
     using NPOI.POIFS.Crypt.Dsig;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using System;
     using System.Collections.Generic;
     using System.Security.Cryptography.X509Certificates;
@@ -73,7 +73,7 @@ namespace TestCases.POIFS.Crypt
                 SignatureInfo si = new SignatureInfo();
                 si.SetSignatureConfig(sic);
                 bool isValid = si.VerifySignature();
-                Assert.IsTrue(isValid);
+                ClassicAssert.IsTrue(isValid);
             }
             finally
             {
@@ -109,8 +109,8 @@ namespace TestCases.POIFS.Crypt
                 }
                 pkg.Revert();
                 pkg.Close();
-                Assert.IsNotNull(result);
-                Assert.IsEmpty(result);
+                ClassicAssert.IsNotNull(result);
+                ClassicAssert.IsEmpty(result);
             }
         }
 
@@ -149,13 +149,13 @@ namespace TestCases.POIFS.Crypt
                         }
                     }
 
-                    Assert.IsNotNull(result);
-                    Assert.AreEqual(1, result.Count, "test-file: " + testFile);
+                    ClassicAssert.IsNotNull(result);
+                    ClassicAssert.AreEqual(1, result.Count, "test-file: " + testFile);
                     X509Certificate signer = result[0];
                     //LOG.Log(POILogger.DEBUG, "signer: " + signer.SubjectX500Principal);
 
                     bool b = si.VerifySignature();
-                    Assert.IsTrue(b, "test-file: " + testFile);
+                    ClassicAssert.IsTrue(b, "test-file: " + testFile);
                     pkg.Revert();
                 }
                 finally
@@ -183,15 +183,15 @@ namespace TestCases.POIFS.Crypt
             //        }
             //    }
 
-            //    Assert.IsNotNull(result);
-            //    Assert.AreEqual("test-file: " + testFile, 2, result.Size());
+            //    ClassicAssert.IsNotNull(result);
+            //    ClassicAssert.AreEqual("test-file: " + testFile, 2, result.Size());
             //    X509Certificate signer1 = result.Get(0);
             //    X509Certificate signer2 = result.Get(1);
             //    //LOG.Log(POILogger.DEBUG, "signer 1: " + signer1.SubjectX500Principal);
             //    //LOG.Log(POILogger.DEBUG, "signer 2: " + signer2.SubjectX500Principal);
 
             //    bool b = si.VerifySignature();
-            //    Assert.IsTrue("test-file: " + testFile, b);
+            //    ClassicAssert.IsTrue("test-file: " + testFile, b);
             //    pkg.Revert();
             //} finally {
             //    pkg.Close();
@@ -235,7 +235,7 @@ namespace TestCases.POIFS.Crypt
             //SignatureInfo si = new SignatureInfo();
             //si.SignatureConfig = (/*setter*/sic);
             //bool b = si.VerifySignature();
-            //Assert.IsFalse("signature should be broken", b);
+            //ClassicAssert.IsFalse("signature should be broken", b);
 
             //wb.Close();
             throw new NotImplementedException();
@@ -262,7 +262,7 @@ namespace TestCases.POIFS.Crypt
             //        result.Add(sp.Signer);
             //    }
             //}
-            //Assert.AreEqual(1, result.Size());
+            //ClassicAssert.AreEqual(1, result.Size());
             //pkg.Close();
             throw new NotImplementedException();
         }
@@ -368,15 +368,15 @@ namespace TestCases.POIFS.Crypt
             //    if(!(e.Cause is ConnectException)) {
             //        throw e;
             //    }
-            //    Assert.IsTrue("Only allowing ConnectException with 'timed out' as message here, but had: " + e, e.Cause.Message.Contains("timed out"));
+            //    ClassicAssert.IsTrue("Only allowing ConnectException with 'timed out' as message here, but had: " + e, e.Cause.Message.Contains("timed out"));
             //}
 
             //// verify
             //Iterator<SignaturePart> spIter = si.SignatureParts.Iterator();
-            //Assert.IsTrue(spIter.HasNext());
+            //ClassicAssert.IsTrue(spIter.HasNext());
             //SignaturePart sp = spIter.Next();
             //bool valid = sp.Validate();
-            //Assert.IsTrue(valid);
+            //ClassicAssert.IsTrue(valid);
 
             //SignatureDocument sigDoc = sp.SignatureDocument;
             //String declareNS =
@@ -386,24 +386,24 @@ namespace TestCases.POIFS.Crypt
             //String digestValXQuery = declareNS +
             //    "$this/ds:Signature/ds:SignedInfo/ds:Reference";
             //foreach (ReferenceType rt in (ReferenceType[])sigDoc.SelectPath(digestValXQuery)) {
-            //    Assert.IsNotNull(rt.DigestValue);
-            //    Assert.AreEqual(signatureConfig.DigestMethodUri, rt.DigestMethod.Algorithm);
+            //    ClassicAssert.IsNotNull(rt.DigestValue);
+            //    ClassicAssert.AreEqual(signatureConfig.DigestMethodUri, rt.DigestMethod.Algorithm);
             //}
 
             //String certDigestXQuery = declareNS +
             //    "$this//xades:SigningCertificate/xades:Cert/xades:CertDigest";
             //XmlObject xoList[] = sigDoc.SelectPath(certDigestXQuery);
-            //Assert.AreEqual(xoList.Length, 1);
+            //ClassicAssert.AreEqual(xoList.Length, 1);
             //DigestAlgAndValueType certDigest = (DigestAlgAndValueType)xoList[0];
-            //Assert.IsNotNull(certDigest.DigestValue);
+            //ClassicAssert.IsNotNull(certDigest.DigestValue);
 
             //String qualPropXQuery = declareNS +
             //    "$this/ds:Signature/ds:Object/xades:QualifyingProperties";
             //xoList = sigDoc.SelectPath(qualPropXQuery);
-            //Assert.AreEqual(xoList.Length, 1);
+            //ClassicAssert.AreEqual(xoList.Length, 1);
             //QualifyingPropertiesType qualProp = (QualifyingPropertiesType)xoList[0];
             //bool qualPropXsdOk = qualProp.Validate();
-            //Assert.IsTrue(qualPropXsdOk);
+            //ClassicAssert.IsTrue(qualPropXsdOk);
 
             //pkg.Close();
             throw new NotImplementedException();
@@ -494,11 +494,11 @@ namespace TestCases.POIFS.Crypt
             //si.ConfirmSignature();
 
             //foreach (SignaturePart sp in si.SignatureParts) {
-            //    Assert.IsTrue("Could not validate", sp.Validate());
+            //    ClassicAssert.IsTrue("Could not validate", sp.Validate());
             //    X509Certificate signer = sp.Signer;
-            //    Assert.IsNotNull("signer undefined?!", signer);
+            //    ClassicAssert.IsNotNull("signer undefined?!", signer);
             //    List<X509Certificate> certChainRes = sp.CertChain;
-            //    Assert.AreEqual(3, certChainRes.Size());
+            //    ClassicAssert.AreEqual(3, certChainRes.Size());
             //}
 
             //pkg.Close();
@@ -530,7 +530,7 @@ namespace TestCases.POIFS.Crypt
 
             //        si.ConfirmSignature();
             //        bool b = si.VerifySignature();
-            //        Assert.IsTrue("Signature not correctly calculated for " + ha, b);
+            //        ClassicAssert.IsTrue("Signature not correctly calculated for " + ha, b);
             //    } finally {
             //        if (pkg != null) pkg.Close();
             //    }
@@ -576,12 +576,12 @@ namespace TestCases.POIFS.Crypt
             //DigestInfo digestInfo = si.PreSign(document, null);
 
             //// verify
-            //Assert.IsNotNull(digestInfo);
+            //ClassicAssert.IsNotNull(digestInfo);
             //LOG.Log(POILogger.DEBUG, "digest algo: " + digestInfo.HashAlgo);
             //LOG.Log(POILogger.DEBUG, "digest description: " + digestInfo.description);
-            //Assert.AreEqual("Office OpenXML Document", digestInfo.description);
-            //Assert.IsNotNull(digestInfo.HashAlgo);
-            //Assert.IsNotNull(digestInfo.digestValue);
+            //ClassicAssert.AreEqual("Office OpenXML Document", digestInfo.description);
+            //ClassicAssert.IsNotNull(digestInfo.HashAlgo);
+            //ClassicAssert.IsNotNull(digestInfo.digestValue);
 
             //// Setup: key material, signature value
             //byte[] signatureValue = si.SignDigest(digestInfo.digestValue);
@@ -597,7 +597,7 @@ namespace TestCases.POIFS.Crypt
             //        result.Add(sp.Signer);
             //    }
             //}
-            //Assert.AreEqual(signerCount, result.Size());
+            //ClassicAssert.AreEqual(signerCount, result.Size());
         }
 
         private void InitKeyPair(String alias, String subjectDN)

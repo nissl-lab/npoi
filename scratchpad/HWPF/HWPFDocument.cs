@@ -225,7 +225,7 @@ namespace NPOI.HWPF
             }
             catch (FileNotFoundException)
             {
-                _dataStream = new byte[0];
+                _dataStream = [];
             }
 
             // Get the cp of the start of text in the main stream

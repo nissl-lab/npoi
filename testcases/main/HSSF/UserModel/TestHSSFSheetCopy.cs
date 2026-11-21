@@ -3,7 +3,7 @@ using System.Linq;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 
 namespace TestCases.HSSF.UserModel
 {
@@ -19,11 +19,11 @@ namespace TestCases.HSSF.UserModel
             sheetA.CreateRow(1).CreateCell(0).SetCellValue("Test case item 2");
             ISheet sheetB = sheetA.CopySheet("Sheet B", false);
             //Ensure cell values were copied
-            Assert.AreEqual(sheetA.GetRow(0).GetCell(0).StringCellValue, sheetB.GetRow(0).GetCell(0).StringCellValue);
-            Assert.AreEqual(sheetA.GetRow(1).GetCell(0).StringCellValue, sheetB.GetRow(1).GetCell(0).StringCellValue);
+            ClassicAssert.AreEqual(sheetA.GetRow(0).GetCell(0).StringCellValue, sheetB.GetRow(0).GetCell(0).StringCellValue);
+            ClassicAssert.AreEqual(sheetA.GetRow(1).GetCell(0).StringCellValue, sheetB.GetRow(1).GetCell(0).StringCellValue);
             //Now test to make sure the copy is independent. Changes to the copy should not affect the original.
             sheetB.GetRow(1).GetCell(0).SetCellValue("This was changed");
-            Assert.AreNotEqual(sheetA.GetRow(1).GetCell(0).StringCellValue, sheetB.GetRow(1).GetCell(0).StringCellValue);
+            ClassicAssert.AreNotEqual(sheetA.GetRow(1).GetCell(0).StringCellValue, sheetB.GetRow(1).GetCell(0).StringCellValue);
         }
 
         [Test]
@@ -41,10 +41,10 @@ namespace TestCases.HSSF.UserModel
             sheetA.CopyTo(bookB, "Copied Sheet A", false, false);
             sheetA.CopyTo(bookC, "Copied Sheet A", false, false);
             //Ensure the sheet was copied to the 2nd sheet of Book B, not the 1st sheet.
-            Assert.AreNotEqual(sheetA.GetRow(0).GetCell(0).StringCellValue, bookB.GetSheetAt(0).GetRow(0).GetCell(0).StringCellValue);
-            Assert.AreEqual(sheetA.GetRow(0).GetCell(0).StringCellValue, bookB.GetSheetAt(1).GetRow(0).GetCell(0).StringCellValue);
+            ClassicAssert.AreNotEqual(sheetA.GetRow(0).GetCell(0).StringCellValue, bookB.GetSheetAt(0).GetRow(0).GetCell(0).StringCellValue);
+            ClassicAssert.AreEqual(sheetA.GetRow(0).GetCell(0).StringCellValue, bookB.GetSheetAt(1).GetRow(0).GetCell(0).StringCellValue);
             //Ensure the sheet was copied to the 1st sheet in Book C
-            Assert.AreEqual(sheetA.GetRow(0).GetCell(0).StringCellValue, bookC.GetSheetAt(0).GetRow(0).GetCell(0).StringCellValue);
+            ClassicAssert.AreEqual(sheetA.GetRow(0).GetCell(0).StringCellValue, bookC.GetSheetAt(0).GetRow(0).GetCell(0).StringCellValue);
         }
 
         [Test]
@@ -86,16 +86,16 @@ namespace TestCases.HSSF.UserModel
             //Check that the fill color got copied
             byte[] srcColor = bookA.Workbook.CustomPalette.GetColor(0x9);
             byte[] destColor = bookB.Workbook.CustomPalette.GetColor(copiedCell.CellStyle.FillForegroundColor);
-            Assert.IsTrue(srcColor[0]==destColor[0] && srcColor[1]==destColor[1] && srcColor[2]==destColor[2]);
+            ClassicAssert.IsTrue(srcColor[0]==destColor[0] && srcColor[1]==destColor[1] && srcColor[2]==destColor[2]);
             //Check that the font color got copied
             srcColor = bookA.Workbook.CustomPalette.GetColor(0x8);
             destColor = bookB.Workbook.CustomPalette.GetColor(copiedCell.CellStyle.GetFont(bookB).Color);
-            Assert.IsTrue(srcColor[0] == destColor[0] && srcColor[1] == destColor[1] && srcColor[2] == destColor[2]);
+            ClassicAssert.IsTrue(srcColor[0] == destColor[0] && srcColor[1] == destColor[1] && srcColor[2] == destColor[2]);
             //Check that the fill color of the cell originally in the destination book is still intact
             srcColor = bookB.Workbook.CustomPalette.GetColor(0x8);
-            Assert.IsTrue(srcColor[0] == 192 && srcColor[1] == 168 && srcColor[2] == 0);
+            ClassicAssert.IsTrue(srcColor[0] == 192 && srcColor[1] == 168 && srcColor[2] == 0);
             //Check that the font made it over okay
-            Assert.AreEqual(copiedCell.CellStyle.GetFont(bookB).FontName, myFont.FontName);
+            ClassicAssert.AreEqual(copiedCell.CellStyle.GetFont(bookB).FontName, myFont.FontName);
         }
 
         [Test]
@@ -112,7 +112,7 @@ namespace TestCases.HSSF.UserModel
                 ms.Position = 0;
                 HSSFWorkbook sanityCheck = new HSSFWorkbook(ms);
                 //Assert that only one image got copied, because only one image was used on the first page
-                Assert.IsTrue(sanityCheck.GetAllPictures().Count == 1);
+                ClassicAssert.IsTrue(sanityCheck.GetAllPictures().Count == 1);
             }
             HSSFSheet sheet2 = srcBook.GetSheetAt(1) as HSSFSheet;
             sheet2.CopyTo(destBook, "Second Sheet", true, true);
@@ -122,7 +122,7 @@ namespace TestCases.HSSF.UserModel
                 ms.Position = 0;
                 HSSFWorkbook sanityCheck = new HSSFWorkbook(ms);
                 //2nd sheet copied, make sure we have two images now, because sheet 2 had one image
-                Assert.IsTrue(sanityCheck.GetAllPictures().Count == 2);
+                ClassicAssert.IsTrue(sanityCheck.GetAllPictures().Count == 2);
             }
         }
 
@@ -142,10 +142,10 @@ namespace TestCases.HSSF.UserModel
             srcSheet.CopyTo(destWorkbook, srcSheet.SheetName, true, true);
 
             var destSheet = destWorkbook.GetSheet("Sheet1");
-            Assert.NotNull(destSheet);
+            ClassicAssert.NotNull(destSheet);
 
-            Assert.AreEqual(1, destSheet.GetRow(0)?.GetCell(0).NumericCellValue);
-            Assert.AreEqual("A1+1", destSheet.GetRow(0)?.GetCell(1).CellFormula);
+            ClassicAssert.AreEqual(1, destSheet.GetRow(0)?.GetCell(0).NumericCellValue);
+            ClassicAssert.AreEqual("A1+1", destSheet.GetRow(0)?.GetCell(1).CellFormula);
 
             destSheet.GetRow(0)?.GetCell(0).SetCellValue(10);
             var evaluator = destWorkbook.GetCreationHelper()
@@ -155,7 +155,7 @@ namespace TestCases.HSSF.UserModel
             evaluator.EvaluateFormulaCell(destCell);
             var destCellValue = evaluator.Evaluate(destCell);
 
-            Assert.AreEqual(11, destCellValue.NumberValue);
+            ClassicAssert.AreEqual(11, destCellValue.NumberValue);
         }
 
         [Test]
@@ -173,10 +173,10 @@ namespace TestCases.HSSF.UserModel
             srcSheet.CopyTo(destWorkbook, srcSheet.SheetName, true, true);
 
             var destSheet = destWorkbook.GetSheet("Sheet1");
-            Assert.NotNull(destSheet);
-            Assert.AreEqual(2, destSheet.MergedRegions.Count);
+            ClassicAssert.NotNull(destSheet);
+            ClassicAssert.AreEqual(2, destSheet.MergedRegions.Count);
 
-            Assert.IsTrue(
+            ClassicAssert.IsTrue(
                 new string[]
                 {
                     "A1:B4",

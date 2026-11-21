@@ -33,9 +33,9 @@ namespace NPOI.SS.Formula.Eval.Forked
     class ForkedEvaluationCell : IEvaluationCell
     {
 
-        private IEvaluationSheet _sheet;
+        private readonly IEvaluationSheet _sheet;
         /** corresponding cell from master workbook */
-        private IEvaluationCell _masterCell;
+        private readonly IEvaluationCell _masterCell;
         private bool _boolValue;
         private CellType _cellType;
         private int _errorValue;

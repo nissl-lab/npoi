@@ -24,7 +24,7 @@ namespace TestCases.SS.Formula.Functions
     using NPOI.HSSF.Util;
     using NPOI.SS.UserModel;
     using System;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using System.Text;
     using NPOI.SS.Util;
     using TestCases.Exceptions;

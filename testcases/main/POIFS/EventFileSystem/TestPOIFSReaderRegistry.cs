@@ -20,7 +20,7 @@ using System;
 using System.Text;
 using System.Collections;
 using NPOI.POIFS.FileSystem;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using NPOI.POIFS.EventFileSystem;
 namespace TestCases.POIFS.EventFileSystem
 {
@@ -60,7 +60,7 @@ namespace TestCases.POIFS.EventFileSystem
                 for (int j = 0; j < names.Length; j++)
                 {
                     IEnumerator listeners = registry.GetListeners(paths[i], names[j]);
-                    Assert.IsTrue(!listeners.MoveNext());
+                    ClassicAssert.IsTrue(!listeners.MoveNext());
                 }
             }
         }
@@ -93,7 +93,7 @@ namespace TestCases.POIFS.EventFileSystem
                     IEnumerator listeners = registry.GetListeners(paths[k], names[n]);
 
                     if (k == n)
-                        Assert.IsTrue(!listeners.MoveNext());
+                        ClassicAssert.IsTrue(!listeners.MoveNext());
                     else
                     {
                         ArrayList registeredListeners = new ArrayList();
@@ -102,13 +102,13 @@ namespace TestCases.POIFS.EventFileSystem
                         {
                             registeredListeners.Add(listeners.Current);
                         }
-                        Assert.AreEqual(this.listeners.Length - 1, registeredListeners.Count);
+                        ClassicAssert.AreEqual(this.listeners.Length - 1, registeredListeners.Count);
                         for (int j = 0; j < this.listeners.Length; j++)
                         {
                             if (j == k)
-                                Assert.IsTrue(!registeredListeners.Contains(this.listeners[j]));
+                                ClassicAssert.IsTrue(!registeredListeners.Contains(this.listeners[j]));
                             else
-                                Assert.IsTrue(registeredListeners.Contains(this.listeners[j]));
+                                ClassicAssert.IsTrue(registeredListeners.Contains(this.listeners[j]));
                         }
 
                     }
@@ -130,11 +130,11 @@ namespace TestCases.POIFS.EventFileSystem
                         registeredListeners.Add(listeners.Current);
                     }
 
-                    Assert.AreEqual(this.listeners.Length, registeredListeners.Count);
+                    ClassicAssert.AreEqual(this.listeners.Length, registeredListeners.Count);
 
                     for (int j = 0; j < this.listeners.Length; j++)
                     {
-                        Assert.IsTrue(registeredListeners.Contains(this.listeners[j]));
+                        ClassicAssert.IsTrue(registeredListeners.Contains(this.listeners[j]));
                     }
                 }
             }

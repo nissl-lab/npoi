@@ -4,7 +4,7 @@ using System.Text;
 
 namespace NPOI.Util
 {
-    internal class AssertFailedException : ApplicationException
+    public sealed class AssertFailedException : ApplicationException
     {
         public AssertFailedException(string message)
             : base(message)

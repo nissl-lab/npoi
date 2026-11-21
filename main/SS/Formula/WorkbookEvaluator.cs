@@ -21,8 +21,6 @@ using NPOI.SS.Formula.Atp;
 namespace NPOI.SS.Formula
 {
     using System;
-    using System.Collections;
-    using NPOI.SS.Formula;
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.Util;
     using NPOI.SS.Formula.Functions;
@@ -48,16 +46,16 @@ namespace NPOI.SS.Formula
     public class WorkbookEvaluator
     {
 
-        private IEvaluationWorkbook _workbook;
+        private readonly IEvaluationWorkbook _workbook;
         private EvaluationCache _cache;
         private int _workbookIx;
 
-        private IEvaluationListener _evaluationListener;
-        private Dictionary<IEvaluationSheet, int> _sheetIndexesBySheet;
-        private Dictionary<String, int> _sheetIndexesByName;
+        private readonly IEvaluationListener _evaluationListener;
+        private readonly Dictionary<IEvaluationSheet, int> _sheetIndexesBySheet;
+        private readonly Dictionary<String, int> _sheetIndexesByName;
         private CollaboratingWorkbooksEnvironment _collaboratingWorkbookEnvironment;
-        private IStabilityClassifier _stabilityClassifier;
-        private UDFFinder _udfFinder;
+        private readonly IStabilityClassifier _stabilityClassifier;
+        private readonly AggregatingUDFFinder _udfFinder;
 
         private bool _ignoreMissingWorkbooks = false;
 
@@ -210,8 +208,8 @@ namespace NPOI.SS.Formula
         public int GetSheetIndex(IEvaluationSheet sheet)
         {
             int result = int.MinValue;
-            if(_sheetIndexesBySheet.ContainsKey(sheet))
-                result = _sheetIndexesBySheet[sheet];
+            if(_sheetIndexesBySheet.TryGetValue(sheet, out int value))
+                result = value;
             if (result == int.MinValue)
             {
                 int sheetIndex = _workbook.GetSheetIndex(sheet);
@@ -237,9 +235,9 @@ namespace NPOI.SS.Formula
         public int GetSheetIndex(String sheetName)
         {
             int result;
-            if (_sheetIndexesByName.ContainsKey(sheetName))
+            if (_sheetIndexesByName.TryGetValue(sheetName, out int value))
             {
-                result = _sheetIndexesByName[sheetName];
+                result = value;
             }
             else
             {
@@ -295,6 +293,26 @@ namespace NPOI.SS.Formula
         {
             return Evaluate(formula, target, region, FormulaType.Cell);
         }
+
+        
+        /**
+         * Some expressions need to be evaluated in terms of an offset from the top left corner of a region,
+         * such as some data validation and conditional format expressions, when those constraints apply
+         * to contiguous cells.  When a relative formula is used, it must be evaluated by shifting by the target
+         * offset position relative to the top left of the range.
+         * <p>
+         * Returns a ValueEval that may be one or more values, such as the allowed values for a data validation constraint.
+         * 
+         * @param formula
+         * @param target cell context for the operation
+         * @param region containing the cell
+         * @return ValueEval for one or more values
+         * @throws IllegalArgumentException if target does not define a sheet name to evaluate the formula on.
+         */
+        public ValueEval EvaluateList(String formula, CellReference target, CellRangeAddressBase region) {
+            return Evaluate(formula, target, region, FormulaType.DataValidationList);
+        }
+
         private ValueEval Evaluate(String formula, CellReference target, CellRangeAddressBase region, FormulaType formulaType)
         {
             String sheetName = target == null ? null : target.SheetName;
@@ -309,6 +327,15 @@ namespace NPOI.SS.Formula
                 formulaType.GetAttributes().Get<SingleValueAttribute>().IsSingleValue);
             return EvaluateNameFormula(ptgs, ec);
         }
+        /// <summary>
+        /// Adjust formula relative references by the offset between the start of the given region and the given target cell.
+        /// </summary>
+        /// <param name="ptgs"></param>
+        /// <param name="target">cell within the region to use.</param>
+        /// <param name="region">containing the cell</param>
+        /// <returns>true if any Ptg references were shifted</returns>
+        /// <exception cref="IndexOutOfRangeException">if the resulting shifted row/column indexes are over the document format limits</exception>
+        /// <exception cref="ArgumentException">if target is not within region.</exception>
         protected bool AdjustRegionRelativeReference(Ptg[] ptgs, CellReference target, CellRangeAddressBase region)
         {
             if (!region.IsInRange(target))
@@ -316,18 +343,31 @@ namespace NPOI.SS.Formula
                 throw new ArgumentException(target + " is not within " + region);
             }
 
-            //return adjustRegionRelativeReference(ptgs, target.getRow() - region.getFirstRow(), target.getCol() - region.getFirstColumn());
-
-            int deltaRow = target.Row;
-            int deltaColumn = target.Col;
+            return AdjustRegionRelativeReference(ptgs, target.Row - region.FirstRow, target.Col - region.FirstColumn);
+        }
+    
+        /// <summary>
+        /// Adjust the formula relative cell references by a given delta
+        /// </summary>
+        /// <param name="ptgs"></param>
+        /// <param name="deltaRow">target row offset from the top left cell of a region</param>
+        /// <param name="deltaColumn">target column offset from the top left cell of a region</param>
+        /// <returns>true if any Ptg references were shifted</returns>
+        /// <exception cref="IndexOutOfRangeException">if the resulting shifted row/column indexes are over the document format limits</exception>
+        /// <exception cref="ArgumentException">if either of the deltas are negative, as the assumption is we are shifting formulas
+        /// relative to the top left cell of a region.
+        /// </exception>
+        protected bool AdjustRegionRelativeReference(Ptg[] ptgs, int deltaRow, int deltaColumn) 
+        {
+            if (deltaRow < 0) throw new ArgumentException("offset row must be positive");
+            if (deltaColumn < 0) throw new ArgumentException("offset column must be positive");
 
             bool shifted = false;
             foreach(Ptg ptg in ptgs)
             {
                 // base class for cell reference "things"
-                if (ptg is RefPtgBase) {
-                RefPtgBase reference = (RefPtgBase)ptg;
-                // re-calculate cell references
+                if (ptg is RefPtgBase reference) {
+                    // re-calculate cell references
                 SpreadsheetVersion version = _workbook.GetSpreadsheetVersion();
                 if (reference.IsRowRelative)
                 {
@@ -367,7 +407,7 @@ namespace NPOI.SS.Formula
                 result = GetValueFromNonFormulaCell(srcCell);
                 if (shouldCellDependencyBeRecorded)
                 {
-                    tracker.AcceptPlainValueDependency(_workbookIx, sheetIndex, rowIndex, columnIndex, result);
+                    tracker.AcceptPlainValueDependency(_workbook, _workbookIx, sheetIndex, rowIndex, columnIndex, result);
                 }
                 return result;
             }
@@ -384,11 +424,12 @@ namespace NPOI.SS.Formula
                 {
                     return ErrorEval.CIRCULAR_REF_ERROR;
                 }
-                OperationEvaluationContext ec = new OperationEvaluationContext(this, _workbook, sheetIndex, rowIndex, columnIndex, tracker);
 
                 try
                 {
                     Ptg[] ptgs = _workbook.GetFormulaTokens(srcCell);
+                    OperationEvaluationContext ec = new OperationEvaluationContext
+                        (this, _workbook, sheetIndex, rowIndex, columnIndex, tracker);
                     if (evalListener == null)
                     {
                         result = EvaluateFormula(ec, ptgs);
@@ -464,6 +505,8 @@ namespace NPOI.SS.Formula
             //return cce.GetValue();
             return result;
         }
+
+
         /**
          * Adds the current cell reference to the exception for easier debugging.
          * Would be nice to get the formula text as well, but that seems to require
@@ -520,7 +563,7 @@ namespace NPOI.SS.Formula
         private bool dbgEvaluationOutputForNextEval = false;
 
         // special logger for formula evaluation output (because of possibly very large output)
-        private POILogger EVAL_LOG = POILogFactory.GetLogger("POI.FormulaEval");
+        private readonly POILogger EVAL_LOG = POILogFactory.GetLogger("POI.FormulaEval");
         // current indent level for evalution; negative value for no output
         private int dbgEvaluationOutputIndent = -1;
 
@@ -561,9 +604,8 @@ namespace NPOI.SS.Formula
                 {
                     EVAL_LOG.Log(POILogger.INFO, dbgIndentStr + "  * ptg " + i + ": " + ptg.ToString()+", stack:"+stack);
                 }
-                if (ptg is AttrPtg)
+                if (ptg is AttrPtg attrPtg)
                 {
-                    AttrPtg attrPtg = (AttrPtg)ptg;
                     if (attrPtg.IsSum)
                     {
                         // Excel prefers To encode 'SUM()' as a tAttr Token, but this evaluator
@@ -630,10 +672,10 @@ namespace NPOI.SS.Formula
                                int dist = attrPtg.Data;
                                i += CountTokensToBeSkipped(ptgs, i, dist);
                                Ptg nextPtg = ptgs[i + 1];
-                               if (ptgs[i] is AttrPtg && nextPtg is FuncVarPtg &&
+                               if (ptgs[i] is AttrPtg && nextPtg is FuncVarPtg varPtg &&
                                    // in order to verify that there is no third param, we need to check 
                                    // if we really have the IF next or some other FuncVarPtg as third param, e.g. ROW()/COLUMN()!
-                                   ((FuncVarPtg)nextPtg).FunctionIndex == FunctionMetadataRegistry.FUNCTION_INDEX_IF)
+                                   varPtg.FunctionIndex == FunctionMetadataRegistry.FUNCTION_INDEX_IF)
                                {
                                    // this is an if statement without a false param (as opposed to MissingArgPtg as the false param)
                                    //i++;
@@ -678,21 +720,45 @@ namespace NPOI.SS.Formula
                     continue;
                 }
                 ValueEval opResult;
-                if (ptg is OperationPtg)
+                if (ptg is OperationPtg optg)
                 {
-                    OperationPtg optg = (OperationPtg)ptg;
-
-                    if (optg is UnionPtg) { continue; }
-
                     int numops = optg.NumberOfOperands;
                     ValueEval[] ops = new ValueEval[numops];
 
                     // storing the ops in reverse order since they are popping
+                    bool areaArg = false; // whether one of the operands is an area
                     for (int j = numops - 1; j >= 0; j--)
                     {
                         ValueEval p = (ValueEval)stack.Pop();
                         ops[j] = p;
+                        if(p is AreaEval)
+                        {
+                            areaArg = true;
+                        }
                     }
+                    bool arrayMode = false;
+                    if(areaArg)
+                        for(int ii = i; ii < iSize; ii++)
+                        {
+                            if(ptgs[ii] is FuncVarPtg)
+                            {
+                                FuncVarPtg f = (FuncVarPtg)ptgs[ii];
+                                try
+                                {
+                                    Functions.Function func = FunctionEval.GetBasicFunction(f.FunctionIndex);
+                                    if(func != null && func is IArrayMode) {
+                                        arrayMode = true;
+                                    }
+                                }
+                                catch(NotImplementedException ne)
+                                {
+                                    //FunctionEval.getBasicFunction can throw NotImplementedException
+                                    // if the fucntion is not yet supported.
+                                }
+                                break;
+                            }
+                        }
+                    ec.IsArraymode = arrayMode;
                     //				logDebug("Invoke " + operation + " (nAgs=" + numops + ")");
                     opResult = OperationEvaluatorFactory.Evaluate(optg, ops, ec);
                 }
@@ -717,6 +783,7 @@ namespace NPOI.SS.Formula
             {
                 throw new InvalidOperationException("evaluation stack not empty");
             }
+
             ValueEval result;
             if (ec.IsSingleValue)
             {
@@ -792,14 +859,14 @@ namespace NPOI.SS.Formula
             return value;
         }
         /**
- * Dereferences a single value from any AreaEval or RefEval evaluation
- * result. If the supplied evaluationResult is just a plain value, it is
- * returned as-is.
- *
- * @return a {@link NumberEval}, {@link StringEval}, {@link BoolEval}, or
- *         {@link ErrorEval}. Never <code>null</code>. {@link BlankEval} is
- *         converted to {@link NumberEval#ZERO}
- */
+         * Dereferences a single value from any AreaEval or RefEval evaluation
+         * result. If the supplied evaluationResult is just a plain value, it is
+         * returned as-is.
+         *
+         * @return a {@link NumberEval}, {@link StringEval}, {@link BoolEval}, or
+         *         {@link ErrorEval}. Never <code>null</code>. {@link BlankEval} is
+         *         converted to {@link NumberEval#ZERO}
+         */
         public static ValueEval DereferenceResult(ValueEval evaluationResult, OperationEvaluationContext ec)
         {
             ValueEval value;
@@ -816,9 +883,9 @@ namespace NPOI.SS.Formula
             IEvaluationSheet evalSheet = ec.GetWorkbook().GetSheet(ec.SheetIndex);
             IEvaluationCell evalCell = evalSheet.GetCell(ec.RowIndex, ec.ColumnIndex);
 
-            if (evalCell.IsPartOfArrayFormulaGroup && evaluationResult is AreaEval)
+            if (evalCell != null && evalCell.IsPartOfArrayFormulaGroup && evaluationResult is AreaEval eval)
             {
-                value = OperandResolver.GetElementFromArray((AreaEval)evaluationResult, evalCell);
+                value = OperandResolver.GetElementFromArray(eval, evalCell);
             }
             else
             {
@@ -837,42 +904,41 @@ namespace NPOI.SS.Formula
         {
             //  consider converting all these (ptg is XxxPtg) expressions To (ptg.GetType() == XxxPtg.class)
 
-            if (ptg is NamePtg)
+            if (ptg is NamePtg namePtg)
             {
                 // Named ranges, macro functions
-                NamePtg namePtg = (NamePtg)ptg;
                 IEvaluationName nameRecord = _workbook.GetName(namePtg);
                 return GetEvalForNameRecord(nameRecord, ec);
             }
-            if (ptg is NameXPtg) 
+            if (ptg is NameXPtg xPtg) 
             {
                 // Externally defined named ranges or macro functions
-                return ProcessNameEval(ec.GetNameXEval((NameXPtg)ptg), ec);
+                return ProcessNameEval(ec.GetNameXEval(xPtg), ec);
             }
-            if (ptg is NameXPxg)
+            if (ptg is NameXPxg pxg)
             {
                 // Externally defined named ranges or macro functions
-                return ProcessNameEval(ec.GetNameXEval((NameXPxg)ptg), ec);
+                return ProcessNameEval(ec.GetNameXEval(pxg), ec);
             }
-            if (ptg is IntPtg)
+            if (ptg is IntPtg intPtg)
             {
-                return new NumberEval(((IntPtg)ptg).Value);
+                return new NumberEval(intPtg.Value);
             }
-            if (ptg is NumberPtg)
+            if (ptg is NumberPtg numberPtg)
             {
-                return new NumberEval(((NumberPtg)ptg).Value);
+                return new NumberEval(numberPtg.Value);
             }
-            if (ptg is StringPtg)
+            if (ptg is StringPtg stringPtg)
             {
-                return new StringEval(((StringPtg)ptg).Value);
+                return new StringEval(stringPtg.Value);
             }
-            if (ptg is BoolPtg)
+            if (ptg is BoolPtg boolPtg)
             {
-                return BoolEval.ValueOf(((BoolPtg)ptg).Value);
+                return BoolEval.ValueOf(boolPtg.Value);
             }
-            if (ptg is ErrPtg)
+            if (ptg is ErrPtg errPtg)
             {
-                return ErrorEval.ValueOf(((ErrPtg)ptg).ErrorCode);
+                return ErrorEval.ValueOf(errPtg.ErrorCode);
             }
             if (ptg is MissingArgPtg)
             {
@@ -883,34 +949,31 @@ namespace NPOI.SS.Formula
             {
                 return ErrorEval.REF_INVALID;
             }
-            if (ptg is Ref3DPtg)
+            if (ptg is Ref3DPtg ref3DPtg)
             {
-                return ec.GetRef3DEval((Ref3DPtg)ptg);
+                return ec.GetRef3DEval(ref3DPtg);
             }
 
-            if (ptg is Ref3DPxg)
+            if (ptg is Ref3DPxg ref3DPxg)
             {
-                return ec.GetRef3DEval((Ref3DPxg)ptg);
+                return ec.GetRef3DEval(ref3DPxg);
             }
-            if (ptg is Area3DPtg) {
-               return ec.GetArea3DEval((Area3DPtg)ptg);
+            if (ptg is Area3DPtg area3DPtg) {
+               return ec.GetArea3DEval(area3DPtg);
            }
-           if (ptg is Area3DPxg) {
-               return ec.GetArea3DEval((Area3DPxg)ptg);
+           if (ptg is Area3DPxg area3DPxg) {
+               return ec.GetArea3DEval(area3DPxg);
            }
 
-            if (ptg is RefPtg)
+            if (ptg is RefPtg rptg)
             {
-                RefPtg rptg = (RefPtg)ptg;
                 return ec.GetRefEval(rptg.Row, rptg.Column);
             }
-            if (ptg is AreaPtg)
+            if (ptg is AreaPtg areaPtg)
             {
-                AreaPtg aptg = (AreaPtg)ptg;
-                return ec.GetAreaEval(aptg.FirstRow, aptg.FirstColumn, aptg.LastRow, aptg.LastColumn);
+                return ec.GetAreaEval(areaPtg.FirstRow, areaPtg.FirstColumn, areaPtg.LastRow, areaPtg.LastColumn);
             }
-            if (ptg is ArrayPtg) {
-                ArrayPtg aptg = (ArrayPtg)ptg;
+            if (ptg is ArrayPtg aptg) {
                 return ec.GetAreaValueEval(0, 0, aptg.RowCount - 1, aptg.ColumnCount - 1, aptg.GetTokenArrayValues());
             }
 
@@ -932,9 +995,9 @@ namespace NPOI.SS.Formula
 
         private ValueEval ProcessNameEval(ValueEval eval, OperationEvaluationContext ec)
         {
-            if (eval is ExternalNameEval)
+            if (eval is ExternalNameEval nameEval)
             {
-                IEvaluationName name = ((ExternalNameEval)eval).Name;
+                IEvaluationName name = nameEval.Name;
                 return GetEvalForNameRecord(name, ec);
             }
             return eval;

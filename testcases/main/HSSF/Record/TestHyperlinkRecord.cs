@@ -25,7 +25,7 @@ namespace TestCases.HSSF.Record
 
 
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     /**
      * Test HyperlinkRecord
@@ -273,7 +273,7 @@ namespace TestCases.HSSF.Record
 
         private void ConfirmGUID(GUID expectedGuid, GUID actualGuid)
         {
-            Assert.AreEqual(expectedGuid, actualGuid);
+            ClassicAssert.AreEqual(expectedGuid, actualGuid);
         }
 
         [Test]
@@ -281,77 +281,77 @@ namespace TestCases.HSSF.Record
         {
             RecordInputStream is1 = TestcaseRecordInputStream.Create(HyperlinkRecord.sid, data1);
             HyperlinkRecord link = new HyperlinkRecord(is1);
-            Assert.AreEqual(2, link.FirstRow);
-            Assert.AreEqual(2, link.LastRow);
-            Assert.AreEqual(0, link.FirstColumn);
-            Assert.AreEqual(0, link.LastColumn);
+            ClassicAssert.AreEqual(2, link.FirstRow);
+            ClassicAssert.AreEqual(2, link.LastRow);
+            ClassicAssert.AreEqual(0, link.FirstColumn);
+            ClassicAssert.AreEqual(0, link.LastColumn);
             ConfirmGUID(HyperlinkRecord.STD_MONIKER, link.Guid);
             ConfirmGUID(HyperlinkRecord.URL_MONIKER, link.Moniker);
-            Assert.AreEqual(2, link.LabelOptions);
+            ClassicAssert.AreEqual(2, link.LabelOptions);
             int opts = HyperlinkRecord.HLINK_URL | HyperlinkRecord.HLINK_ABS | HyperlinkRecord.HLINK_LABEL;
-            Assert.AreEqual(0x17, opts);
-            Assert.AreEqual(opts, link.LinkOptions);
-            Assert.AreEqual(0, link.FileOptions);
+            ClassicAssert.AreEqual(0x17, opts);
+            ClassicAssert.AreEqual(opts, link.LinkOptions);
+            ClassicAssert.AreEqual(0, link.FileOptions);
 
-            Assert.AreEqual("My Link", link.Label);
-            Assert.AreEqual("http://www.lakings.com/", link.Address);
+            ClassicAssert.AreEqual("My Link", link.Label);
+            ClassicAssert.AreEqual("http://www.lakings.com/", link.Address);
         }
         [Test]
         public void TestReadFileLink()
         {
             RecordInputStream is1 = TestcaseRecordInputStream.Create((short)HyperlinkRecord.sid, data2);
             HyperlinkRecord link = new HyperlinkRecord(is1);
-            Assert.AreEqual(0, link.FirstRow);
-            Assert.AreEqual(0, link.LastRow);
-            Assert.AreEqual(0, link.FirstColumn);
-            Assert.AreEqual(0, link.LastColumn);
+            ClassicAssert.AreEqual(0, link.FirstRow);
+            ClassicAssert.AreEqual(0, link.LastRow);
+            ClassicAssert.AreEqual(0, link.FirstColumn);
+            ClassicAssert.AreEqual(0, link.LastColumn);
             ConfirmGUID(HyperlinkRecord.STD_MONIKER, link.Guid);
             ConfirmGUID(HyperlinkRecord.FILE_MONIKER, link.Moniker);
-            Assert.AreEqual(2, link.LabelOptions);
+            ClassicAssert.AreEqual(2, link.LabelOptions);
             int opts = HyperlinkRecord.HLINK_URL | HyperlinkRecord.HLINK_LABEL;
-            Assert.AreEqual(0x15, opts);
-            Assert.AreEqual(opts, link.LinkOptions);
+            ClassicAssert.AreEqual(0x15, opts);
+            ClassicAssert.AreEqual(opts, link.LinkOptions);
 
-            Assert.AreEqual("file", link.Label);
-            Assert.AreEqual("link1.xls", link.ShortFilename);
+            ClassicAssert.AreEqual("file", link.Label);
+            ClassicAssert.AreEqual("link1.xls", link.ShortFilename);
         }
         [Test]
         public void TestReadEmailLink()
         {
             RecordInputStream is1 = TestcaseRecordInputStream.Create((short)HyperlinkRecord.sid, data3);
             HyperlinkRecord link = new HyperlinkRecord(is1);
-            Assert.AreEqual(1, link.FirstRow);
-            Assert.AreEqual(1, link.LastRow);
-            Assert.AreEqual(0, link.FirstColumn);
-            Assert.AreEqual(0, link.LastColumn);
+            ClassicAssert.AreEqual(1, link.FirstRow);
+            ClassicAssert.AreEqual(1, link.LastRow);
+            ClassicAssert.AreEqual(0, link.FirstColumn);
+            ClassicAssert.AreEqual(0, link.LastColumn);
             ConfirmGUID(HyperlinkRecord.STD_MONIKER, link.Guid);
             ConfirmGUID(HyperlinkRecord.URL_MONIKER, link.Moniker);
-            Assert.AreEqual(2, link.LabelOptions);
+            ClassicAssert.AreEqual(2, link.LabelOptions);
             int opts = HyperlinkRecord.HLINK_URL | HyperlinkRecord.HLINK_ABS | HyperlinkRecord.HLINK_LABEL;
-            Assert.AreEqual(0x17, opts);
-            Assert.AreEqual(opts, link.LinkOptions);
+            ClassicAssert.AreEqual(0x17, opts);
+            ClassicAssert.AreEqual(opts, link.LinkOptions);
 
-            Assert.AreEqual("email", link.Label);
-            Assert.AreEqual("mailto:ebgans@mail.ru?subject=Hello,%20Ebgans!", link.Address);
+            ClassicAssert.AreEqual("email", link.Label);
+            ClassicAssert.AreEqual("mailto:ebgans@mail.ru?subject=Hello,%20Ebgans!", link.Address);
         }
         [Test]
         public void TestReadDocumentLink()
         {
             RecordInputStream is1 = TestcaseRecordInputStream.Create(HyperlinkRecord.sid, data4);
             HyperlinkRecord link = new HyperlinkRecord(is1);
-            Assert.AreEqual(3, link.FirstRow);
-            Assert.AreEqual(3, link.LastRow);
-            Assert.AreEqual(0, link.FirstColumn);
-            Assert.AreEqual(0, link.LastColumn);
+            ClassicAssert.AreEqual(3, link.FirstRow);
+            ClassicAssert.AreEqual(3, link.LastRow);
+            ClassicAssert.AreEqual(0, link.FirstColumn);
+            ClassicAssert.AreEqual(0, link.LastColumn);
             ConfirmGUID(HyperlinkRecord.STD_MONIKER, link.Guid);
-            Assert.AreEqual(2, link.LabelOptions);
+            ClassicAssert.AreEqual(2, link.LabelOptions);
             int opts = HyperlinkRecord.HLINK_LABEL | HyperlinkRecord.HLINK_PLACE;
-            Assert.AreEqual(0x1C, opts);
-            Assert.AreEqual(opts, link.LinkOptions);
+            ClassicAssert.AreEqual(0x1C, opts);
+            ClassicAssert.AreEqual(opts, link.LinkOptions);
 
-            Assert.AreEqual("place", link.Label);
-            Assert.AreEqual("Sheet1!A1", link.TextMark);
-            Assert.AreEqual("Sheet1!A1", link.Address);
+            ClassicAssert.AreEqual("place", link.Label);
+            ClassicAssert.AreEqual("Sheet1!A1", link.TextMark);
+            ClassicAssert.AreEqual("Sheet1!A1", link.Address);
         }
         private void Serialize(byte[] data)
         {
@@ -361,8 +361,8 @@ namespace TestCases.HSSF.Record
             is1 = TestcaseRecordInputStream.Create(bytes1);
             link = new HyperlinkRecord(is1);
             byte[] bytes2 = link.Serialize();
-            Assert.AreEqual(bytes1.Length, bytes2.Length);
-            Assert.IsTrue(Arrays.Equals(bytes1, bytes2));
+            ClassicAssert.AreEqual(bytes1.Length, bytes2.Length);
+            ClassicAssert.IsTrue(Arrays.Equals(bytes1, bytes2));
         }
         [Test]
         public void TestSerialize()
@@ -385,8 +385,8 @@ namespace TestCases.HSSF.Record
             byte[] tmp = link.Serialize();
             byte[] ser = new byte[tmp.Length - 4];
             Array.Copy(tmp, 4, ser, 0, ser.Length);
-            Assert.AreEqual(data1.Length, ser.Length);
-            Assert.IsTrue(Arrays.Equals(data1, ser));
+            ClassicAssert.AreEqual(data1.Length, ser.Length);
+            ClassicAssert.IsTrue(Arrays.Equals(data1, ser));
         }
         [Test]
         public void TestCreateFileRecord()
@@ -401,8 +401,8 @@ namespace TestCases.HSSF.Record
             byte[] tmp = link.Serialize();
             byte[] ser = new byte[tmp.Length - 4];
             Array.Copy(tmp, 4, ser, 0, ser.Length);
-            Assert.AreEqual(data2.Length, ser.Length);
-            Assert.IsTrue(Arrays.Equals(data2, ser));
+            ClassicAssert.AreEqual(data2.Length, ser.Length);
+            ClassicAssert.IsTrue(Arrays.Equals(data2, ser));
         }
         [Test]
         public void TestCreateDocumentRecord()
@@ -417,8 +417,8 @@ namespace TestCases.HSSF.Record
             byte[] tmp = link.Serialize();
             byte[] ser = new byte[tmp.Length - 4];
             Array.Copy(tmp, 4, ser, 0, ser.Length);
-            //Assert.AreEqual(data4.Length, ser.Length);
-            Assert.IsTrue(Arrays.Equals(data4, ser));
+            //ClassicAssert.AreEqual(data4.Length, ser.Length);
+            ClassicAssert.IsTrue(Arrays.Equals(data4, ser));
         }
         [Test]
         public void TestCreateEmailtRecord()
@@ -433,8 +433,8 @@ namespace TestCases.HSSF.Record
             byte[] tmp = link.Serialize();
             byte[] ser = new byte[tmp.Length - 4];
             Array.Copy(tmp, 4, ser, 0, ser.Length);
-            Assert.AreEqual(data3.Length, ser.Length);
-            Assert.IsTrue(Arrays.Equals(data3, ser));
+            ClassicAssert.AreEqual(data3.Length, ser.Length);
+            ClassicAssert.IsTrue(Arrays.Equals(data3, ser));
         }
         [Test]
         public void TestClone()
@@ -445,7 +445,7 @@ namespace TestCases.HSSF.Record
                 RecordInputStream is1 = TestcaseRecordInputStream.Create(HyperlinkRecord.sid, data[i]);
                 HyperlinkRecord link = new HyperlinkRecord(is1);
                 HyperlinkRecord clone = (HyperlinkRecord)link.Clone();
-                Assert.IsTrue(Arrays.Equals(link.Serialize(), clone.Serialize()));
+                ClassicAssert.IsTrue(Arrays.Equals(link.Serialize(), clone.Serialize()));
             }
 
         }
@@ -471,8 +471,8 @@ namespace TestCases.HSSF.Record
             {
                 throw new AssertionException("Identified bug in reading workbook link");
             }
-            Assert.AreNotEqual("YEARFR~1.XLS", hr.Address, "Identified bug in reading workbook link");
-            Assert.AreEqual("yearfracExamples.xls", hr.Address);
+            ClassicAssert.AreNotEqual("YEARFR~1.XLS", hr.Address, "Identified bug in reading workbook link");
+            ClassicAssert.AreEqual("yearfracExamples.xls", hr.Address);
         }
         [Test]
         public void TestReserializeUNC()
@@ -497,26 +497,26 @@ namespace TestCases.HSSF.Record
             GUID g;
             g = GUID.Parse("3F2504E0-4F89-11D3-9A0C-0305E82C3301");
             ConfirmGUID(g, 0x3F2504E0, 0x4F89, 0x11D3, unchecked((long)0x9A0C0305E82C3301L));
-            Assert.AreEqual("3F2504E0-4F89-11D3-9A0C-0305E82C3301", g.FormatAsString());
+            ClassicAssert.AreEqual("3F2504E0-4F89-11D3-9A0C-0305E82C3301", g.FormatAsString());
 
             g = GUID.Parse("13579BDF-0246-8ACE-0123-456789ABCDEF");
             ConfirmGUID(g, 0x13579BDF, 0x0246, 0x8ACE, unchecked((long)0x0123456789ABCDEFL));
-            Assert.AreEqual("13579BDF-0246-8ACE-0123-456789ABCDEF", g.FormatAsString());
+            ClassicAssert.AreEqual("13579BDF-0246-8ACE-0123-456789ABCDEF", g.FormatAsString());
 
             byte[] buf = new byte[16];
             g.Serialize(new LittleEndianByteArrayOutputStream(buf, 0));
             String expectedDump = "[DF, 9B, 57, 13, 46, 02, CE, 8A, 01, 23, 45, 67, 89, AB, CD, EF]";
-            Assert.AreEqual(expectedDump, HexDump.ToHex(buf));
+            ClassicAssert.AreEqual(expectedDump, HexDump.ToHex(buf));
 
             // STD Moniker
             g = CreateFromStreamDump("[D0, C9, EA, 79, F9, BA, CE, 11, 8C, 82, 00, AA, 00, 4B, A9, 0B]");
-            Assert.AreEqual("79EAC9D0-BAF9-11CE-8C82-00AA004BA90B", g.FormatAsString());
+            ClassicAssert.AreEqual("79EAC9D0-BAF9-11CE-8C82-00AA004BA90B", g.FormatAsString());
             // URL Moniker
             g = CreateFromStreamDump("[E0, C9, EA, 79, F9, BA, CE, 11, 8C, 82, 00, AA, 00, 4B, A9, 0B]");
-            Assert.AreEqual("79EAC9E0-BAF9-11CE-8C82-00AA004BA90B", g.FormatAsString());
+            ClassicAssert.AreEqual("79EAC9E0-BAF9-11CE-8C82-00AA004BA90B", g.FormatAsString());
             // File Moniker
             g = CreateFromStreamDump("[03, 03, 00, 00, 00, 00, 00, 00, C0, 00, 00, 00, 00, 00, 00, 46]");
-            Assert.AreEqual("00000303-0000-0000-C000-000000000046", g.FormatAsString());
+            ClassicAssert.AreEqual("00000303-0000-0000-C000-000000000046", g.FormatAsString());
         }
 
         private static GUID CreateFromStreamDump(String s)
@@ -526,29 +526,29 @@ namespace TestCases.HSSF.Record
 
         private void ConfirmGUID(GUID g, int d1, int d2, int d3, long d4)
         {
-            Assert.AreEqual(new String(HexDump.IntToHex(d1)), new String(HexDump.IntToHex(g.D1)));
-            Assert.AreEqual(new String(HexDump.ShortToHex(d2)), new String(HexDump.ShortToHex(g.D2)));
-            Assert.AreEqual(new String(HexDump.ShortToHex(d3)), new String(HexDump.ShortToHex(g.D3)));
-            Assert.AreEqual(new String(HexDump.LongToHex(d4)), new String(HexDump.LongToHex(g.D4)));
+            ClassicAssert.AreEqual(new String(HexDump.IntToHex(d1)), new String(HexDump.IntToHex(g.D1)));
+            ClassicAssert.AreEqual(new String(HexDump.ShortToHex(d2)), new String(HexDump.ShortToHex(g.D2)));
+            ClassicAssert.AreEqual(new String(HexDump.ShortToHex(d3)), new String(HexDump.ShortToHex(g.D3)));
+            ClassicAssert.AreEqual(new String(HexDump.LongToHex(d4)), new String(HexDump.LongToHex(g.D4)));
         }
         [Test]
         public void Test47498()
         {
             RecordInputStream is1 = TestcaseRecordInputStream.Create(HyperlinkRecord.sid, data_47498);
             HyperlinkRecord link = new HyperlinkRecord(is1);
-            Assert.AreEqual(2, link.FirstRow);
-            Assert.AreEqual(2, link.LastRow);
-            Assert.AreEqual(0, link.FirstColumn);
-            Assert.AreEqual(0, link.LastColumn);
+            ClassicAssert.AreEqual(2, link.FirstRow);
+            ClassicAssert.AreEqual(2, link.LastRow);
+            ClassicAssert.AreEqual(0, link.FirstColumn);
+            ClassicAssert.AreEqual(0, link.LastColumn);
             ConfirmGUID(HyperlinkRecord.STD_MONIKER, link.Guid);
             ConfirmGUID(HyperlinkRecord.URL_MONIKER, link.Moniker);
-            Assert.AreEqual(2, link.LabelOptions);
+            ClassicAssert.AreEqual(2, link.LabelOptions);
             int opts = HyperlinkRecord.HLINK_URL | HyperlinkRecord.HLINK_LABEL;
-            Assert.AreEqual(opts, link.LinkOptions);
-            Assert.AreEqual(0, link.FileOptions);
+            ClassicAssert.AreEqual(opts, link.LinkOptions);
+            ClassicAssert.AreEqual(0, link.FileOptions);
 
-            Assert.AreEqual("PDF", link.Label);
-            Assert.AreEqual("testfolder/test.PDF", link.Address);
+            ClassicAssert.AreEqual("PDF", link.Label);
+            ClassicAssert.AreEqual("testfolder/test.PDF", link.Address);
 
             byte[] ser = link.Serialize();
             TestcaseRecordInputStream.ConfirmRecordEncoding(HyperlinkRecord.sid, data_47498, ser);

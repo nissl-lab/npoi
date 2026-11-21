@@ -17,8 +17,10 @@
 namespace NPOI.SS.Format
 {
     using System;
+    using System.Globalization;
+    using System.Runtime.Serialization;
     using System.Text;
-
+    using NPOI.Util;
 
 
     /**
@@ -30,10 +32,15 @@ namespace NPOI.SS.Format
     {
         /** Creates a new general formatter. */
         public CellGeneralFormatter()
-            : base("General")
+            : this(LocaleUtil.GetUserLocale())
         {
-            ;
         }
+        /** Creates a new general formatter. */
+        public CellGeneralFormatter(CultureInfo locale)
+            : base(locale, "General")
+        {
+        }
+
 
         /**
          * The general style is not quite the same as any other, or any combination
@@ -67,16 +74,14 @@ namespace NPOI.SS.Format
                     fmt = "F0";
                     stripZeros = false;
                 }
-                toAppendTo.Append(val.ToString(fmt));
+                toAppendTo.Append(val.ToString(fmt, locale));
 
-                //Formatter formatter = new Formatter(toAppendTo);
-                //formatter.Format(LOCALE, fmt, value);
                 if (stripZeros)
                 {
                     // strip off trailing zeros
                     int RemoveFrom;
-                    if (fmt.StartsWith("E"))
-                        RemoveFrom = toAppendTo.ToString().LastIndexOf("E") - 1;
+                    if (fmt.StartsWith('E'))
+                        RemoveFrom = toAppendTo.ToString().LastIndexOf('E') - 1;
                     else
                         RemoveFrom = toAppendTo.Length - 1;
                     while (toAppendTo[RemoveFrom] == '0')
@@ -89,7 +94,7 @@ namespace NPOI.SS.Format
                     }
                     // remove zeros after E   by antony.liu
                     string text = toAppendTo.ToString();
-                    RemoveFrom = toAppendTo.ToString().LastIndexOf("E");
+                    RemoveFrom = toAppendTo.ToString().LastIndexOf('E');
                     if (RemoveFrom > 0)
                     {
                         RemoveFrom++;

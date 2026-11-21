@@ -18,7 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 
@@ -40,22 +40,22 @@ namespace TestCases.HSSF.UserModel
             mainWorkbook = HSSFTestDataSamples.OpenSampleWorkbook(MAIN_WORKBOOK_FILENAME);
             sourceWorkbook = HSSFTestDataSamples.OpenSampleWorkbook(SOURCE_WORKBOOK_FILENAME);
 
-            Assert.IsNotNull(mainWorkbook);
-            Assert.IsNotNull(sourceWorkbook);
+            ClassicAssert.IsNotNull(mainWorkbook);
+            ClassicAssert.IsNotNull(sourceWorkbook);
         }
         [Test]
         public void TestDummyToSource()
         {
             bool changed = mainWorkbook.ChangeExternalReference("DOESNOTEXIST", SOURCE_WORKBOOK_FILENAME);
-            Assert.IsFalse(changed);
+            ClassicAssert.IsFalse(changed);
 
             changed = mainWorkbook.ChangeExternalReference(SOURCE_DUMMY_WORKBOOK_FILENAME, SOURCE_WORKBOOK_FILENAME);
-            Assert.IsTrue(changed);
+            ClassicAssert.IsTrue(changed);
 
             HSSFSheet lSheet = (HSSFSheet)mainWorkbook.GetSheetAt(0);
             HSSFCell lA1Cell = (HSSFCell)lSheet.GetRow(0).GetCell(0);
 
-            Assert.AreEqual(CellType.Formula, lA1Cell.CellType);
+            ClassicAssert.AreEqual(CellType.Formula, lA1Cell.CellType);
 
             HSSFFormulaEvaluator lMainWorkbookEvaluator = new HSSFFormulaEvaluator(mainWorkbook);
             HSSFFormulaEvaluator lSourceEvaluator = new HSSFFormulaEvaluator(sourceWorkbook);
@@ -63,9 +63,9 @@ namespace TestCases.HSSF.UserModel
                     new String[] { MAIN_WORKBOOK_FILENAME, SOURCE_WORKBOOK_FILENAME },
                     new HSSFFormulaEvaluator[] { lMainWorkbookEvaluator, lSourceEvaluator });
 
-            Assert.AreEqual(CellType.Numeric, lMainWorkbookEvaluator.EvaluateFormulaCell(lA1Cell));
+            ClassicAssert.AreEqual(CellType.Numeric, lMainWorkbookEvaluator.EvaluateFormulaCell(lA1Cell));
 
-            Assert.AreEqual(20.0d, lA1Cell.NumericCellValue, 0.00001d);
+            ClassicAssert.AreEqual(20.0d, lA1Cell.NumericCellValue, 0.00001d);
 
         }
 

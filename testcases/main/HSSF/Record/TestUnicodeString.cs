@@ -21,7 +21,7 @@ namespace TestCases.HSSF.Record
 {
     using System;
     using NPOI.HSSF.Record;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.Record.Cont;
     using System.Text;
     using System.IO;
@@ -150,8 +150,8 @@ namespace TestCases.HSSF.Record
         public void TestFormatRun()
         {
             UnicodeString.FormatRun fr = new UnicodeString.FormatRun((short)4, (short)0x15c);
-            Assert.AreEqual(4, fr.CharacterPos);
-            Assert.AreEqual(0x15c, fr.FontIndex);
+            ClassicAssert.AreEqual(4, fr.CharacterPos);
+            ClassicAssert.AreEqual(0x15c, fr.FontIndex);
 
             MemoryStream baos = new MemoryStream();
             LittleEndianOutputStream out1 = new LittleEndianOutputStream(baos);
@@ -159,18 +159,18 @@ namespace TestCases.HSSF.Record
             fr.Serialize(out1);
 
             byte[] b = baos.ToArray();
-            Assert.AreEqual(4, b.Length);
-            Assert.AreEqual(4, b[0]);
-            Assert.AreEqual(0, b[1]);
-            Assert.AreEqual(0x5c, b[2]);
-            Assert.AreEqual(0x01, b[3]);
+            ClassicAssert.AreEqual(4, b.Length);
+            ClassicAssert.AreEqual(4, b[0]);
+            ClassicAssert.AreEqual(0, b[1]);
+            ClassicAssert.AreEqual(0x5c, b[2]);
+            ClassicAssert.AreEqual(0x01, b[3]);
 
             LittleEndianInputStream inp = new LittleEndianInputStream(
                   new MemoryStream(b)
             );
             fr = new UnicodeString.FormatRun(inp);
-            Assert.AreEqual(4, fr.CharacterPos);
-            Assert.AreEqual(0x15c, fr.FontIndex);
+            ClassicAssert.AreEqual(4, fr.CharacterPos);
+            ClassicAssert.AreEqual(0x15c, fr.FontIndex);
         }
 
         [Test]
@@ -178,12 +178,12 @@ namespace TestCases.HSSF.Record
         {
             UnicodeString.ExtRst ext = new UnicodeString.ExtRst();
 
-            Assert.AreEqual(0, ext.NumberOfRuns);
-            Assert.AreEqual(0, ext.FormattingFontIndex);
-            Assert.AreEqual(0, ext.FormattingOptions);
-            Assert.AreEqual("", ext.PhoneticText);
-            Assert.AreEqual(0, ext.PhRuns.Length);
-            Assert.AreEqual(10, ext.DataSize); // Excludes 4 byte header
+            ClassicAssert.AreEqual(0, ext.NumberOfRuns);
+            ClassicAssert.AreEqual(0, ext.FormattingFontIndex);
+            ClassicAssert.AreEqual(0, ext.FormattingOptions);
+            ClassicAssert.AreEqual("", ext.PhoneticText);
+            ClassicAssert.AreEqual(0, ext.PhRuns.Length);
+            ClassicAssert.AreEqual(10, ext.DataSize); // Excludes 4 byte header
 
             MemoryStream baos = new MemoryStream();
             LittleEndianOutputStream out1 = new LittleEndianOutputStream(baos);
@@ -193,37 +193,37 @@ namespace TestCases.HSSF.Record
             cout.WriteContinue();
 
             byte[] b = baos.ToArray();
-            Assert.AreEqual(20, b.Length);
+            ClassicAssert.AreEqual(20, b.Length);
 
             // First 4 bytes from the outputstream
-            Assert.AreEqual((sbyte)-1, (sbyte)b[0]);
-            Assert.AreEqual((sbyte)-1, (sbyte)b[1]);
-            Assert.AreEqual(14, b[2]);
-            Assert.AreEqual(00, b[3]);
+            ClassicAssert.AreEqual((sbyte)-1, (sbyte)b[0]);
+            ClassicAssert.AreEqual((sbyte)-1, (sbyte)b[1]);
+            ClassicAssert.AreEqual(14, b[2]);
+            ClassicAssert.AreEqual(00, b[3]);
 
             // Reserved
-            Assert.AreEqual(1, b[4]);
-            Assert.AreEqual(0, b[5]);
+            ClassicAssert.AreEqual(1, b[4]);
+            ClassicAssert.AreEqual(0, b[5]);
             // Data size
-            Assert.AreEqual(10, b[6]);
-            Assert.AreEqual(00, b[7]);
+            ClassicAssert.AreEqual(10, b[6]);
+            ClassicAssert.AreEqual(00, b[7]);
             // Font*2
-            Assert.AreEqual(0, b[8]);
-            Assert.AreEqual(0, b[9]);
-            Assert.AreEqual(0, b[10]);
-            Assert.AreEqual(0, b[11]);
+            ClassicAssert.AreEqual(0, b[8]);
+            ClassicAssert.AreEqual(0, b[9]);
+            ClassicAssert.AreEqual(0, b[10]);
+            ClassicAssert.AreEqual(0, b[11]);
             // 0 Runs
-            Assert.AreEqual(0, b[12]);
-            Assert.AreEqual(0, b[13]);
+            ClassicAssert.AreEqual(0, b[12]);
+            ClassicAssert.AreEqual(0, b[13]);
             // Size=0, *2
-            Assert.AreEqual(0, b[14]);
-            Assert.AreEqual(0, b[15]);
-            Assert.AreEqual(0, b[16]);
-            Assert.AreEqual(0, b[17]);
+            ClassicAssert.AreEqual(0, b[14]);
+            ClassicAssert.AreEqual(0, b[15]);
+            ClassicAssert.AreEqual(0, b[16]);
+            ClassicAssert.AreEqual(0, b[17]);
 
             // Last 2 bytes from the outputstream
-            Assert.AreEqual(ContinueRecord.sid, b[18]);
-            Assert.AreEqual(0, b[19]);
+            ClassicAssert.AreEqual(ContinueRecord.sid, b[18]);
+            ClassicAssert.AreEqual(0, b[19]);
 
 
             // Load in again and re-test
@@ -234,11 +234,11 @@ namespace TestCases.HSSF.Record
             );
             ext = new UnicodeString.ExtRst(inp, data.Length);
 
-            Assert.AreEqual(0, ext.NumberOfRuns);
-            Assert.AreEqual(0, ext.FormattingFontIndex);
-            Assert.AreEqual(0, ext.FormattingOptions);
-            Assert.AreEqual("", ext.PhoneticText);
-            Assert.AreEqual(0, ext.PhRuns.Length);
+            ClassicAssert.AreEqual(0, ext.NumberOfRuns);
+            ClassicAssert.AreEqual(0, ext.FormattingFontIndex);
+            ClassicAssert.AreEqual(0, ext.FormattingOptions);
+            ClassicAssert.AreEqual("", ext.PhoneticText);
+            ClassicAssert.AreEqual(0, ext.PhRuns.Length);
         }
 
         [Test]
@@ -251,19 +251,19 @@ namespace TestCases.HSSF.Record
              00, 00, 00, 00, 
              00, 00 // Cruft at the end, as found from real files
        };
-            Assert.AreEqual(16, data.Length);
+            ClassicAssert.AreEqual(16, data.Length);
 
             LittleEndianInputStream inp = new LittleEndianInputStream(
                   new MemoryStream(data)
             );
             UnicodeString.ExtRst ext = new UnicodeString.ExtRst(inp, data.Length);
-            Assert.AreEqual(0x0c, ext.DataSize); // Excludes 4 byte header
+            ClassicAssert.AreEqual(0x0c, ext.DataSize); // Excludes 4 byte header
 
-            Assert.AreEqual(0, ext.NumberOfRuns);
-            Assert.AreEqual(0x37, ext.FormattingOptions);
-            Assert.AreEqual(0, ext.FormattingFontIndex);
-            Assert.AreEqual("", ext.PhoneticText);
-            Assert.AreEqual(0, ext.PhRuns.Length);
+            ClassicAssert.AreEqual(0, ext.NumberOfRuns);
+            ClassicAssert.AreEqual(0x37, ext.FormattingOptions);
+            ClassicAssert.AreEqual(0, ext.FormattingFontIndex);
+            ClassicAssert.AreEqual("", ext.PhoneticText);
+            ClassicAssert.AreEqual(0, ext.PhRuns.Length);
         }
 
         [Test]
@@ -273,7 +273,7 @@ namespace TestCases.HSSF.Record
              0x79, 0x79, 0x11, 0x11, 
              0x22, 0x22, 0x33, 0x33, 
        };
-            Assert.AreEqual(8, data.Length);
+            ClassicAssert.AreEqual(8, data.Length);
 
             LittleEndianInputStream inp = new LittleEndianInputStream(
                   new MemoryStream(data)
@@ -281,17 +281,17 @@ namespace TestCases.HSSF.Record
             UnicodeString.ExtRst ext = new UnicodeString.ExtRst(inp, data.Length);
 
             // Will be empty
-            Assert.AreEqual(ext, new UnicodeString.ExtRst());
+            ClassicAssert.AreEqual(ext, new UnicodeString.ExtRst());
 
             // If written, will be the usual size
-            Assert.AreEqual(10, ext.DataSize); // Excludes 4 byte header
+            ClassicAssert.AreEqual(10, ext.DataSize); // Excludes 4 byte header
 
             // Is empty
-            Assert.AreEqual(0, ext.NumberOfRuns);
-            Assert.AreEqual(0, ext.FormattingOptions);
-            Assert.AreEqual(0, ext.FormattingFontIndex);
-            Assert.AreEqual("", ext.PhoneticText);
-            Assert.AreEqual(0, ext.PhRuns.Length);
+            ClassicAssert.AreEqual(0, ext.NumberOfRuns);
+            ClassicAssert.AreEqual(0, ext.FormattingOptions);
+            ClassicAssert.AreEqual(0, ext.FormattingFontIndex);
+            ClassicAssert.AreEqual("", ext.PhoneticText);
+            ClassicAssert.AreEqual(0, ext.PhRuns.Length);
         }
         [Test]
         public void TestExtRstEqualsAndHashCode()
@@ -317,8 +317,8 @@ namespace TestCases.HSSF.Record
             in1 = new LittleEndianByteArrayInputStream(buf, 0, bos.WriteIndex);
             UnicodeString.ExtRst extRst2 = new UnicodeString.ExtRst(in1, bos.WriteIndex);
 
-            Assert.AreEqual(extRst1, extRst2);
-            Assert.AreEqual(extRst1.GetHashCode(), extRst2.GetHashCode());
+            ClassicAssert.AreEqual(extRst1, extRst2);
+            ClassicAssert.AreEqual(extRst1.GetHashCode(), extRst2.GetHashCode());
         }
 
         private static void ConfirmSize(int expectedSize, UnicodeString s)
@@ -343,7 +343,7 @@ namespace TestCases.HSSF.Record
             s.Serialize(out1);
             int size1 = out1.TotalSize;
             int actualSize = size1 - size0;
-            Assert.AreEqual(expectedSize, actualSize);
+            ClassicAssert.AreEqual(expectedSize, actualSize);
         }
 
         private static UnicodeString MakeUnicodeString(String s)

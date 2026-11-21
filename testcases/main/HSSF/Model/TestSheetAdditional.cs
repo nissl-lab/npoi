@@ -20,7 +20,7 @@ namespace TestCases.HSSF.Model
     using System;
     using System.Collections;
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Model;
@@ -46,21 +46,21 @@ namespace TestCases.HSSF.Model
 
             sheet._columnInfos.InsertColumn(nci);
 
-            Assert.AreEqual(100, sheet.GetColumnWidth(5));
-            Assert.AreEqual(100, sheet.GetColumnWidth(6));
-            Assert.AreEqual(100, sheet.GetColumnWidth(7));
-            Assert.AreEqual(100, sheet.GetColumnWidth(8));
-            Assert.AreEqual(100, sheet.GetColumnWidth(9));
-            Assert.AreEqual(100, sheet.GetColumnWidth(10));
+            ClassicAssert.AreEqual(100, sheet.GetColumnWidth(5));
+            ClassicAssert.AreEqual(100, sheet.GetColumnWidth(6));
+            ClassicAssert.AreEqual(100, sheet.GetColumnWidth(7));
+            ClassicAssert.AreEqual(100, sheet.GetColumnWidth(8));
+            ClassicAssert.AreEqual(100, sheet.GetColumnWidth(9));
+            ClassicAssert.AreEqual(100, sheet.GetColumnWidth(10));
 
             sheet.SetColumnWidth(6, 200);
 
-            Assert.AreEqual(100, sheet.GetColumnWidth(5));
-            Assert.AreEqual(200, sheet.GetColumnWidth(6));
-            Assert.AreEqual(100, sheet.GetColumnWidth(7));
-            Assert.AreEqual(100, sheet.GetColumnWidth(8));
-            Assert.AreEqual(100, sheet.GetColumnWidth(9));
-            Assert.AreEqual(100, sheet.GetColumnWidth(10));
+            ClassicAssert.AreEqual(100, sheet.GetColumnWidth(5));
+            ClassicAssert.AreEqual(200, sheet.GetColumnWidth(6));
+            ClassicAssert.AreEqual(100, sheet.GetColumnWidth(7));
+            ClassicAssert.AreEqual(100, sheet.GetColumnWidth(8));
+            ClassicAssert.AreEqual(100, sheet.GetColumnWidth(9));
+            ClassicAssert.AreEqual(100, sheet.GetColumnWidth(10));
         }
         [Test]
         public void TestMaxColumnWidth()
@@ -74,7 +74,7 @@ namespace TestCases.HSSF.Model
             }
             catch (ArgumentException e)
             {
-                Assert.AreEqual(e.Message, "The maximum column width for an individual cell is 255 characters.");
+                ClassicAssert.AreEqual(e.Message, "The maximum column width for an individual cell is 255 characters.");
             }
         }
     }

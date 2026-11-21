@@ -21,6 +21,7 @@ namespace TestCases.XWPF.UserModel
     using NPOI.Util;
     using NPOI.XWPF.UserModel;
     using NUnit.Framework;
+    using NUnit.Framework.Legacy;
     using System;
     using System.Collections.Generic;
     using System.Text;
@@ -41,14 +42,14 @@ namespace TestCases.XWPF.UserModel
             XWPFDocument xml = XWPFTestDataSamples.OpenSampleDocument("ThreeColHead.docx");
 
             XWPFHeader hdr = xml.GetHeaderFooterPolicy().GetDefaultHeader();
-            Assert.IsNotNull(hdr);
+            ClassicAssert.IsNotNull(hdr);
 
             IList<XWPFParagraph> ps = hdr.Paragraphs;
-            Assert.AreEqual(1, ps.Count);
+            ClassicAssert.AreEqual(1, ps.Count);
             XWPFParagraph p = ps[(0)];
 
-            Assert.AreEqual(5, p.GetCTP().GetRList().Count);
-            Assert.AreEqual("First header column!\tMid header\tRight header!", p.Text);
+            ClassicAssert.AreEqual(5, p.GetCTP().GetRList().Count);
+            ClassicAssert.AreEqual("First header column!\tMid header\tRight header!", p.Text);
         }
 
         /**
@@ -60,24 +61,24 @@ namespace TestCases.XWPF.UserModel
         {
             XWPFDocument xml = XWPFTestDataSamples.OpenSampleDocument("ThreeColHead.docx");
             IList<XWPFParagraph> ps = xml.Paragraphs;
-            Assert.AreEqual(10, ps.Count);
+            ClassicAssert.AreEqual(10, ps.Count);
 
-            Assert.IsFalse(ps[(0)].IsEmpty);
-            Assert.AreEqual(
+            ClassicAssert.IsFalse(ps[(0)].IsEmpty);
+            ClassicAssert.AreEqual(
                     "This is a sample word document. It has two pages. It has a three column heading, but no footer.",
                     ps[(0)].Text);
 
-            Assert.IsTrue(ps[1].IsEmpty);
-            Assert.AreEqual("", ps[1].Text);
+            ClassicAssert.IsTrue(ps[1].IsEmpty);
+            ClassicAssert.AreEqual("", ps[1].Text);
 
-            Assert.IsFalse(ps[2].IsEmpty);
-            Assert.AreEqual("HEADING TEXT", ps[2].Text);
+            ClassicAssert.IsFalse(ps[2].IsEmpty);
+            ClassicAssert.AreEqual("HEADING TEXT", ps[2].Text);
 
-            Assert.IsTrue(ps[3].IsEmpty);
-            Assert.AreEqual("", ps[3].Text);
+            ClassicAssert.IsTrue(ps[3].IsEmpty);
+            ClassicAssert.AreEqual("", ps[3].Text);
 
-            Assert.IsFalse(ps[4].IsEmpty);
-            Assert.AreEqual("More on page one", ps[4].Text);
+            ClassicAssert.IsFalse(ps[4].IsEmpty);
+            ClassicAssert.AreEqual("More on page one", ps[4].Text);
         }
 
         [Test]
@@ -87,7 +88,7 @@ namespace TestCases.XWPF.UserModel
             XWPFDocument doc = new XWPFDocument();
             XWPFParagraph p = doc.CreateParagraph();
 
-            Assert.AreEqual(ST_Border.none, EnumConverter.ValueOf<ST_Border, Borders>(p.BorderTop));
+            ClassicAssert.AreEqual(ST_Border.none, EnumConverter.ValueOf<ST_Border, Borders>(p.BorderTop));
 
             CT_P ctp = p.GetCTP();
             CT_PPr ppr = ctp.pPr == null ? ctp.AddNewPPr() : ctp.pPr;
@@ -98,29 +99,38 @@ namespace TestCases.XWPF.UserModel
             borderTop.val = (ST_Border.@double);
             bdr.top = (borderTop);
 
-            Assert.AreEqual(Borders.Double, p.BorderTop);
+            ClassicAssert.AreEqual(Borders.Double, p.BorderTop);
             p.BorderTop = (Borders.Single);
-            Assert.AreEqual(ST_Border.single, borderTop.val);
+            ClassicAssert.AreEqual(ST_Border.single, borderTop.val);
         }
 
         [Test]
-        public void TestSetAlignment()
+        public void TestSetGetAlignment()
         {
             //new clean instance of paragraph
-            XWPFDocument doc = new XWPFDocument();
-            XWPFParagraph p = doc.CreateParagraph();
+            using(XWPFDocument doc = new XWPFDocument())
+            {
+                XWPFParagraph p = doc.CreateParagraph();
 
-            Assert.AreEqual(ParagraphAlignment.LEFT, p.Alignment);
+                ClassicAssert.AreEqual(ParagraphAlignment.LEFT, p.Alignment);
+                ClassicAssert.IsFalse(p.IsAlignmentSet());
 
-            CT_P ctp = p.GetCTP();
-            CT_PPr ppr = ctp.pPr == null ? ctp.AddNewPPr() : ctp.pPr;
+                CT_P ctp = p.GetCTP();
+                CT_PPr ppr = ctp.pPr == null ? ctp.AddNewPPr() : ctp.pPr;
 
-            CT_Jc align = ppr.AddNewJc();
-            align.val = (ST_Jc.center);
-            Assert.AreEqual(ParagraphAlignment.CENTER, p.Alignment);
+                CT_Jc align = ppr.AddNewJc();
+                align.val = (ST_Jc.center);
+                ClassicAssert.AreEqual(ParagraphAlignment.CENTER, p.Alignment);
+                ClassicAssert.IsTrue(p.IsAlignmentSet());
 
-            p.Alignment = (ParagraphAlignment.BOTH);
-            Assert.AreEqual((int)ST_Jc.both, (int)ppr.jc.val);
+                p.Alignment = (ParagraphAlignment.BOTH);
+                ClassicAssert.AreEqual((int) ST_Jc.both, (int) ppr.jc.val);
+                ClassicAssert.IsTrue(p.IsAlignmentSet());
+
+                p.Alignment=null;
+                ClassicAssert.AreEqual(ParagraphAlignment.LEFT, p.Alignment);
+                ClassicAssert.IsFalse(p.IsAlignmentSet());
+            }
         }
 
         [Test]
@@ -132,34 +142,34 @@ namespace TestCases.XWPF.UserModel
             CT_P ctp = p.GetCTP();
             CT_PPr ppr = ctp.pPr == null ? ctp.AddNewPPr() : ctp.pPr;
 
-            Assert.AreEqual(-1, p.SpacingBefore);
-            Assert.AreEqual(-1, p.SpacingAfter);
-            Assert.AreEqual(-1, p.SpacingBetween, 0.1);
-            Assert.AreEqual(LineSpacingRule.AUTO, p.SpacingLineRule);
+            ClassicAssert.AreEqual(-1, p.SpacingBefore);
+            ClassicAssert.AreEqual(-1, p.SpacingAfter);
+            ClassicAssert.AreEqual(-1, p.SpacingBetween, 0.1);
+            ClassicAssert.AreEqual(LineSpacingRule.AUTO, p.SpacingLineRule);
 
             CT_Spacing spacing = ppr.AddNewSpacing();
             spacing.after = 10;
-            Assert.AreEqual(10, p.SpacingAfter);
+            ClassicAssert.AreEqual(10, p.SpacingAfter);
             spacing.before = 10;
-            Assert.AreEqual(10, p.SpacingBefore);
+            ClassicAssert.AreEqual(10, p.SpacingBefore);
 
             p.SpacingAfter = 100;
-            Assert.AreEqual(100, (int)spacing.after);
+            ClassicAssert.AreEqual(100, (int)spacing.after);
             p.SpacingBefore = 100;
-            Assert.AreEqual(100, spacing.before);
+            ClassicAssert.AreEqual(100, spacing.before);
 
             p.SetSpacingBetween(.25, LineSpacingRule.EXACT);
-            Assert.AreEqual(.25, p.SpacingBetween, 0.01);
-            Assert.AreEqual(LineSpacingRule.EXACT, p.SpacingLineRule);
+            ClassicAssert.AreEqual(.25, p.SpacingBetween, 0.01);
+            ClassicAssert.AreEqual(LineSpacingRule.EXACT, p.SpacingLineRule);
             p.SetSpacingBetween(1.25, LineSpacingRule.AUTO);
-            Assert.AreEqual(1.25, p.SpacingBetween, 0.01);
-            Assert.AreEqual(LineSpacingRule.AUTO, p.SpacingLineRule);
+            ClassicAssert.AreEqual(1.25, p.SpacingBetween, 0.01);
+            ClassicAssert.AreEqual(LineSpacingRule.AUTO, p.SpacingLineRule);
             p.SetSpacingBetween(.5, LineSpacingRule.ATLEAST);
-            Assert.AreEqual(.5, p.SpacingBetween, 0.01);
-            Assert.AreEqual(LineSpacingRule.ATLEAST, p.SpacingLineRule);
+            ClassicAssert.AreEqual(.5, p.SpacingBetween, 0.01);
+            ClassicAssert.AreEqual(LineSpacingRule.ATLEAST, p.SpacingLineRule);
             p.SetSpacingBetween(1.15);
-            Assert.AreEqual(1.15, p.SpacingBetween, 0.01);
-            Assert.AreEqual(LineSpacingRule.AUTO, p.SpacingLineRule);
+            ClassicAssert.AreEqual(1.15, p.SpacingBetween, 0.01);
+            ClassicAssert.AreEqual(LineSpacingRule.AUTO, p.SpacingLineRule);
 
             doc.Close();
         }
@@ -173,14 +183,14 @@ namespace TestCases.XWPF.UserModel
             CT_P ctp = p.GetCTP();
             CT_PPr ppr = ctp.pPr == null ? ctp.AddNewPPr() : ctp.pPr;
 
-            Assert.AreEqual(LineSpacingRule.AUTO, p.SpacingLineRule);
+            ClassicAssert.AreEqual(LineSpacingRule.AUTO, p.SpacingLineRule);
 
             CT_Spacing spacing = ppr.AddNewSpacing();
             spacing.lineRule = (ST_LineSpacingRule.atLeast);
-            Assert.AreEqual(LineSpacingRule.ATLEAST, p.SpacingLineRule);
+            ClassicAssert.AreEqual(LineSpacingRule.ATLEAST, p.SpacingLineRule);
 
             p.SpacingAfter = 100;
-            Assert.AreEqual(100, (int)spacing.after);
+            ClassicAssert.AreEqual(100, (int)spacing.after);
         }
 
         [Test]
@@ -189,19 +199,19 @@ namespace TestCases.XWPF.UserModel
             XWPFDocument doc = new XWPFDocument();
             XWPFParagraph p = doc.CreateParagraph();
 
-            Assert.AreEqual(-1, p.IndentationLeft);
+            ClassicAssert.AreEqual(-1, p.IndentationLeft);
 
             CT_P ctp = p.GetCTP();
             CT_PPr ppr = ctp.pPr == null ? ctp.AddNewPPr() : ctp.pPr;
 
-            Assert.AreEqual(-1, p.IndentationLeft);
+            ClassicAssert.AreEqual(-1, p.IndentationLeft);
 
             CT_Ind ind = ppr.AddNewInd();
             ind.left = "10";
-            Assert.AreEqual(10, p.IndentationLeft);
+            ClassicAssert.AreEqual(10, p.IndentationLeft);
 
             p.IndentationLeft = 100;
-            Assert.AreEqual(100, int.Parse(ind.left));
+            ClassicAssert.AreEqual(100, int.Parse(ind.left));
         }
 
         [Test]
@@ -216,10 +226,10 @@ namespace TestCases.XWPF.UserModel
 
             CT_TextAlignment txtAlign = ppr.AddNewTextAlignment();
             txtAlign.val = (ST_TextAlignment.center);
-            Assert.AreEqual(TextAlignment.CENTER, p.VerticalAlignment);
+            ClassicAssert.AreEqual(TextAlignment.CENTER, p.VerticalAlignment);
 
             p.VerticalAlignment = (TextAlignment.BOTTOM);
-            Assert.AreEqual(ST_TextAlignment.bottom, ppr.textAlignment.val);
+            ClassicAssert.AreEqual(ST_TextAlignment.bottom, ppr.textAlignment.val);
         }
 
         [Test]
@@ -233,10 +243,10 @@ namespace TestCases.XWPF.UserModel
 
             CT_OnOff wordWrap = ppr.AddNewWordWrap();
             wordWrap.val = false;
-            Assert.AreEqual(false, p.IsWordWrapped);
+            ClassicAssert.AreEqual(false, p.IsWordWrapped);
 
             p.IsWordWrapped = true;
-            Assert.AreEqual(true, ppr.wordWrap.val);
+            ClassicAssert.AreEqual(true, ppr.wordWrap.val);
         }
 
         [Test]
@@ -250,10 +260,10 @@ namespace TestCases.XWPF.UserModel
 
             CT_OnOff pageBreak = ppr.AddNewPageBreakBefore();
             pageBreak.val = false;
-            Assert.AreEqual(false, p.IsPageBreak);
+            ClassicAssert.AreEqual(false, p.IsPageBreak);
 
             p.IsPageBreak = (true);
-            Assert.AreEqual(true, ppr.pageBreakBefore.val);
+            ClassicAssert.AreEqual(true, ppr.pageBreakBefore.val);
         }
 
         [Test]
@@ -261,14 +271,14 @@ namespace TestCases.XWPF.UserModel
         {
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("bookmarks.docx");
             XWPFParagraph paragraph = doc.Paragraphs[0];
-            Assert.AreEqual("Sample Word Document", paragraph.Text);
-            Assert.AreEqual(1, paragraph.GetCTP().SizeOfBookmarkStartArray());
-            Assert.AreEqual(0, paragraph.GetCTP().SizeOfBookmarkEndArray());
+            ClassicAssert.AreEqual("Sample Word Document", paragraph.Text);
+            ClassicAssert.AreEqual(1, paragraph.GetCTP().SizeOfBookmarkStartArray());
+            ClassicAssert.AreEqual(0, paragraph.GetCTP().SizeOfBookmarkEndArray());
             CT_Bookmark ctBookmark = paragraph.GetCTP().GetBookmarkStartArray(0);
-            Assert.AreEqual("poi", ctBookmark.name);
+            ClassicAssert.AreEqual("poi", ctBookmark.name);
             foreach (CT_Bookmark bookmark in paragraph.GetCTP().GetBookmarkStartList())
             {
-                Assert.AreEqual("poi", bookmark.name);
+                ClassicAssert.AreEqual("poi", bookmark.name);
             }
         }
 
@@ -279,7 +289,7 @@ namespace TestCases.XWPF.UserModel
             XWPFParagraph p = doc.CreateParagraph();
 
             p.SetNumID("10");
-            Assert.AreEqual("10", p.GetNumID());
+            ClassicAssert.AreEqual("10", p.GetNumID());
         }
 
         [Test]
@@ -289,7 +299,7 @@ namespace TestCases.XWPF.UserModel
             XWPFParagraph p = doc.CreateParagraph();
 
             p.SetNumILvl("1");
-            Assert.AreEqual("1", p.GetNumIlvl());
+            ClassicAssert.AreEqual("1", p.GetNumIlvl());
 
         }
 
@@ -299,88 +309,88 @@ namespace TestCases.XWPF.UserModel
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("sample.docx");
 
             XWPFParagraph p = doc.Paragraphs[0];
-            Assert.AreEqual(2, p.Runs.Count);
+            ClassicAssert.AreEqual(2, p.Runs.Count);
 
             XWPFRun r = p.CreateRun();
-            Assert.AreEqual(3, p.Runs.Count);
-            Assert.AreEqual(2, p.Runs.IndexOf(r));
+            ClassicAssert.AreEqual(3, p.Runs.Count);
+            ClassicAssert.AreEqual(2, p.Runs.IndexOf(r));
 
             XWPFRun r2 = p.InsertNewRun(1);
-            Assert.AreEqual(4, p.Runs.Count);
-            Assert.AreEqual(1, p.Runs.IndexOf(r2));
-            Assert.AreEqual(3, p.Runs.IndexOf(r));
+            ClassicAssert.AreEqual(4, p.Runs.Count);
+            ClassicAssert.AreEqual(1, p.Runs.IndexOf(r2));
+            ClassicAssert.AreEqual(3, p.Runs.IndexOf(r));
         }
 
         [Test]
         public void TestPictures()
         {
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("VariousPictures.docx");
-            Assert.AreEqual(7, doc.Paragraphs.Count);
+            ClassicAssert.AreEqual(7, doc.Paragraphs.Count);
 
             XWPFParagraph p;
             XWPFRun r;
 
             // Text paragraphs
-            Assert.AreEqual("Sheet with various pictures", doc.Paragraphs[0].Text);
-            Assert.AreEqual("(jpeg, png, wmf, emf and pict) ", doc.Paragraphs[1].Text);
+            ClassicAssert.AreEqual("Sheet with various pictures", doc.Paragraphs[0].Text);
+            ClassicAssert.AreEqual("(jpeg, png, wmf, emf and pict) ", doc.Paragraphs[1].Text);
 
             // Spacer ones
-            Assert.AreEqual("", doc.Paragraphs[2].Text);
-            Assert.AreEqual("", doc.Paragraphs[3].Text);
-            Assert.AreEqual("", doc.Paragraphs[4].Text);
+            ClassicAssert.AreEqual("", doc.Paragraphs[2].Text);
+            ClassicAssert.AreEqual("", doc.Paragraphs[3].Text);
+            ClassicAssert.AreEqual("", doc.Paragraphs[4].Text);
 
             // Image one
             p = doc.Paragraphs[5];
-            Assert.AreEqual(6, p.Runs.Count);
+            ClassicAssert.AreEqual(6, p.Runs.Count);
 
             r = p.Runs[0];
-            Assert.AreEqual("", r.ToString());
-            Assert.AreEqual(1, r.GetEmbeddedPictures().Count);
-            Assert.IsNotNull(r.GetEmbeddedPictures()[0].GetPictureData());
-            Assert.AreEqual("image1.wmf", r.GetEmbeddedPictures()[0].GetPictureData().FileName);
+            ClassicAssert.AreEqual("", r.ToString());
+            ClassicAssert.AreEqual(1, r.GetEmbeddedPictures().Count);
+            ClassicAssert.IsNotNull(r.GetEmbeddedPictures()[0].GetPictureData());
+            ClassicAssert.AreEqual("image1.wmf", r.GetEmbeddedPictures()[0].GetPictureData().FileName);
 
             r = p.Runs[1];
-            Assert.AreEqual("", r.ToString());
-            Assert.AreEqual(1, r.GetEmbeddedPictures().Count);
-            Assert.IsNotNull(r.GetEmbeddedPictures()[0].GetPictureData());
-            Assert.AreEqual("image2.png", r.GetEmbeddedPictures()[0].GetPictureData().FileName);
+            ClassicAssert.AreEqual("", r.ToString());
+            ClassicAssert.AreEqual(1, r.GetEmbeddedPictures().Count);
+            ClassicAssert.IsNotNull(r.GetEmbeddedPictures()[0].GetPictureData());
+            ClassicAssert.AreEqual("image2.png", r.GetEmbeddedPictures()[0].GetPictureData().FileName);
 
             r = p.Runs[2];
-            Assert.AreEqual("", r.ToString());
-            Assert.AreEqual(1, r.GetEmbeddedPictures().Count);
-            Assert.IsNotNull(r.GetEmbeddedPictures()[0].GetPictureData());
-            Assert.AreEqual("image3.emf", r.GetEmbeddedPictures()[0].GetPictureData().FileName);
+            ClassicAssert.AreEqual("", r.ToString());
+            ClassicAssert.AreEqual(1, r.GetEmbeddedPictures().Count);
+            ClassicAssert.IsNotNull(r.GetEmbeddedPictures()[0].GetPictureData());
+            ClassicAssert.AreEqual("image3.emf", r.GetEmbeddedPictures()[0].GetPictureData().FileName);
 
             r = p.Runs[3];
-            Assert.AreEqual("", r.ToString());
-            Assert.AreEqual(1, r.GetEmbeddedPictures().Count);
-            Assert.IsNotNull(r.GetEmbeddedPictures()[0].GetPictureData());
-            Assert.AreEqual("image4.emf", r.GetEmbeddedPictures()[0].GetPictureData().FileName);
+            ClassicAssert.AreEqual("", r.ToString());
+            ClassicAssert.AreEqual(1, r.GetEmbeddedPictures().Count);
+            ClassicAssert.IsNotNull(r.GetEmbeddedPictures()[0].GetPictureData());
+            ClassicAssert.AreEqual("image4.emf", r.GetEmbeddedPictures()[0].GetPictureData().FileName);
 
             r = p.Runs[4];
-            Assert.AreEqual("", r.ToString());
-            Assert.AreEqual(1, r.GetEmbeddedPictures().Count);
-            Assert.IsNotNull(r.GetEmbeddedPictures()[0].GetPictureData());
-            Assert.AreEqual("image5.jpeg", r.GetEmbeddedPictures()[0].GetPictureData().FileName);
+            ClassicAssert.AreEqual("", r.ToString());
+            ClassicAssert.AreEqual(1, r.GetEmbeddedPictures().Count);
+            ClassicAssert.IsNotNull(r.GetEmbeddedPictures()[0].GetPictureData());
+            ClassicAssert.AreEqual("image5.jpeg", r.GetEmbeddedPictures()[0].GetPictureData().FileName);
 
             r = p.Runs[5];
             //Is there a bug about XmlSerializer? it can not Deserialize the tag which inner text is only one whitespace
             //e.g. <w:t> </w:t> to CT_Text;
             //TODO 
-            Assert.AreEqual(" ", r.ToString());
-            Assert.AreEqual(0, r.GetEmbeddedPictures().Count);
+            ClassicAssert.AreEqual(" ", r.ToString());
+            ClassicAssert.AreEqual(0, r.GetEmbeddedPictures().Count);
 
             // Final spacer
-            Assert.AreEqual("", doc.Paragraphs[(6)].Text);
+            ClassicAssert.AreEqual("", doc.Paragraphs[(6)].Text);
 
 
             // Look in detail at one
             r = p.Runs[4];
             XWPFPicture pict = r.GetEmbeddedPictures()[0];
-            //CT_Picture picture = pict.GetCTPicture();
+            //CT_Picture picture = pict.CTPicture();
             NPOI.OpenXmlFormats.Dml.Picture.CT_Picture picture = pict.GetCTPicture();
             //Assert.Fail("picture.blipFill.blip.embed is missing from wordprocessing CT_Picture.");
-            Assert.AreEqual("rId8", picture.blipFill.blip.embed);
+            ClassicAssert.AreEqual("rId8", picture.blipFill.blip.embed);
 
             // Ensure that the ooxml compiler Finds everything we need
             r.GetCTR().GetDrawingArray(0);
@@ -388,7 +398,7 @@ namespace TestCases.XWPF.UserModel
             NPOI.OpenXmlFormats.Dml.CT_GraphicalObject go = r.GetCTR().GetDrawingArray(0).GetInlineArray(0).graphic;
             NPOI.OpenXmlFormats.Dml.CT_GraphicalObjectData god = r.GetCTR().GetDrawingArray(0).GetInlineArray(0).graphic.graphicData;
             //PicDocument pd = new PicDocumentImpl(null);
-            //assertTrue(pd.isNil());
+            //ClassicAssert.IsTrue(pd.isNil());
         }
 
         [Test]
@@ -399,9 +409,9 @@ namespace TestCases.XWPF.UserModel
             //CTMoveBookmarkImpl into ooxml-lite.
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("Tika-792.docx");
             XWPFParagraph paragraph = doc.Paragraphs[(0)];
-            Assert.AreEqual("", paragraph.Text);
+            ClassicAssert.AreEqual("", paragraph.Text);
             paragraph = doc.Paragraphs[1];
-            Assert.AreEqual("b", paragraph.Text);
+            ClassicAssert.AreEqual("b", paragraph.Text);
         }
 
         [Test]
@@ -410,117 +420,117 @@ namespace TestCases.XWPF.UserModel
             XWPFDocument doc = new XWPFDocument();
             XWPFParagraph p = doc.CreateParagraph();
 
-            //Assert.IsTrue(p.IsEmpty);
-            Assert.IsFalse(p.RemoveRun(0));
+            //ClassicAssert.IsTrue(p.IsEmpty);
+            ClassicAssert.IsFalse(p.RemoveRun(0));
 
             p.BorderTop = (/*setter*/Borders.BabyPacifier);
             p.BorderBetween = (/*setter*/Borders.BabyPacifier);
             p.BorderBottom = (/*setter*/Borders.BabyPacifier);
 
-            Assert.IsNotNull(p.IRuns);
-            Assert.AreEqual(0, p.IRuns.Count);
-            Assert.IsFalse(p.IsEmpty);
-            Assert.IsNull(p.StyleID);
-            Assert.IsNull(p.Style);
+            ClassicAssert.IsNotNull(p.IRuns);
+            ClassicAssert.AreEqual(0, p.IRuns.Count);
+            ClassicAssert.IsFalse(p.IsEmpty);
+            ClassicAssert.IsNull(p.StyleID);
+            ClassicAssert.IsNull(p.Style);
 
-            Assert.IsNull(p.GetNumID());
+            ClassicAssert.IsNull(p.GetNumID());
             p.SetNumID("12");
-            Assert.AreEqual("12", p.GetNumID());
+            ClassicAssert.AreEqual("12", p.GetNumID());
             p.SetNumID("13");
-            Assert.AreEqual("13", p.GetNumID());
+            ClassicAssert.AreEqual("13", p.GetNumID());
 
-            Assert.IsNull(p.GetNumFmt());
+            ClassicAssert.IsNull(p.GetNumFmt());
 
-            //Assert.IsNull(p.GetNumIlvl());
+            //ClassicAssert.IsNull(p.GetNumIlvl());
 
-            Assert.AreEqual("", p.ParagraphText);
-            Assert.AreEqual("", p.PictureText);
-            Assert.AreEqual("", p.FootnoteText);
+            ClassicAssert.AreEqual("", p.ParagraphText);
+            ClassicAssert.AreEqual("", p.PictureText);
+            ClassicAssert.AreEqual("", p.FootnoteText);
 
             p.BorderBetween = (/*setter*/Borders.None);
-            Assert.AreEqual(Borders.None, p.BorderBetween);
+            ClassicAssert.AreEqual(Borders.None, p.BorderBetween);
             p.BorderBetween = (/*setter*/Borders.BasicBlackDashes);
-            Assert.AreEqual(Borders.BasicBlackDashes, p.BorderBetween);
+            ClassicAssert.AreEqual(Borders.BasicBlackDashes, p.BorderBetween);
 
             p.BorderBottom = (/*setter*/Borders.None);
-            Assert.AreEqual(Borders.None, p.BorderBottom);
+            ClassicAssert.AreEqual(Borders.None, p.BorderBottom);
             p.BorderBottom = (/*setter*/Borders.BabyPacifier);
-            Assert.AreEqual(Borders.BabyPacifier, p.BorderBottom);
+            ClassicAssert.AreEqual(Borders.BabyPacifier, p.BorderBottom);
 
             p.BorderLeft = (/*setter*/Borders.None);
-            Assert.AreEqual(Borders.None, p.BorderLeft);
+            ClassicAssert.AreEqual(Borders.None, p.BorderLeft);
             p.BorderLeft = (/*setter*/Borders.BasicWhiteSquares);
-            Assert.AreEqual(Borders.BasicWhiteSquares, p.BorderLeft);
+            ClassicAssert.AreEqual(Borders.BasicWhiteSquares, p.BorderLeft);
 
             p.BorderRight = (/*setter*/Borders.None);
-            Assert.AreEqual(Borders.None, p.BorderRight);
+            ClassicAssert.AreEqual(Borders.None, p.BorderRight);
             p.BorderRight = (/*setter*/Borders.BasicWhiteDashes);
-            Assert.AreEqual(Borders.BasicWhiteDashes, p.BorderRight);
+            ClassicAssert.AreEqual(Borders.BasicWhiteDashes, p.BorderRight);
 
             p.BorderBottom = (/*setter*/Borders.None);
-            Assert.AreEqual(Borders.None, p.BorderBottom);
+            ClassicAssert.AreEqual(Borders.None, p.BorderBottom);
             p.BorderBottom = (/*setter*/Borders.BasicWhiteDots);
-            Assert.AreEqual(Borders.BasicWhiteDots, p.BorderBottom);
+            ClassicAssert.AreEqual(Borders.BasicWhiteDots, p.BorderBottom);
 
-            Assert.IsFalse(p.IsPageBreak);
+            ClassicAssert.IsFalse(p.IsPageBreak);
             p.IsPageBreak = (/*setter*/true);
-            Assert.IsTrue(p.IsPageBreak);
+            ClassicAssert.IsTrue(p.IsPageBreak);
             p.IsPageBreak = (/*setter*/false);
-            Assert.IsFalse(p.IsPageBreak);
+            ClassicAssert.IsFalse(p.IsPageBreak);
 
-            Assert.AreEqual(-1, p.SpacingAfter);
+            ClassicAssert.AreEqual(-1, p.SpacingAfter);
             p.SpacingAfter = (/*setter*/12);
-            Assert.AreEqual(12, p.SpacingAfter);
+            ClassicAssert.AreEqual(12, p.SpacingAfter);
 
-            Assert.AreEqual(-1, p.SpacingAfterLines);
+            ClassicAssert.AreEqual(-1, p.SpacingAfterLines);
             p.SpacingAfterLines = (/*setter*/14);
-            Assert.AreEqual(14, p.SpacingAfterLines);
+            ClassicAssert.AreEqual(14, p.SpacingAfterLines);
 
-            Assert.AreEqual(-1, p.SpacingBefore);
+            ClassicAssert.AreEqual(-1, p.SpacingBefore);
             p.SpacingBefore = (/*setter*/16);
-            Assert.AreEqual(16, p.SpacingBefore);
+            ClassicAssert.AreEqual(16, p.SpacingBefore);
 
-            Assert.AreEqual(-1, p.SpacingBeforeLines);
+            ClassicAssert.AreEqual(-1, p.SpacingBeforeLines);
             p.SpacingBeforeLines = (/*setter*/18);
-            Assert.AreEqual(18, p.SpacingBeforeLines);
+            ClassicAssert.AreEqual(18, p.SpacingBeforeLines);
 
-            Assert.AreEqual(LineSpacingRule.AUTO, p.SpacingLineRule);
+            ClassicAssert.AreEqual(LineSpacingRule.AUTO, p.SpacingLineRule);
             p.SpacingLineRule = (/*setter*/LineSpacingRule.EXACT);
-            Assert.AreEqual(LineSpacingRule.EXACT, p.SpacingLineRule);
+            ClassicAssert.AreEqual(LineSpacingRule.EXACT, p.SpacingLineRule);
 
-            Assert.AreEqual(-1, p.IndentationLeft);
+            ClassicAssert.AreEqual(-1, p.IndentationLeft);
             p.IndentationLeft = (/*setter*/21);
-            Assert.AreEqual(21, p.IndentationLeft);
+            ClassicAssert.AreEqual(21, p.IndentationLeft);
 
-            Assert.AreEqual(-1, p.IndentationRight);
+            ClassicAssert.AreEqual(-1, p.IndentationRight);
             p.IndentationRight = (/*setter*/25);
-            Assert.AreEqual(25, p.IndentationRight);
+            ClassicAssert.AreEqual(25, p.IndentationRight);
 
-            Assert.AreEqual(-1, p.IndentationHanging);
+            ClassicAssert.AreEqual(-1, p.IndentationHanging);
             p.IndentationHanging = (/*setter*/25);
-            Assert.AreEqual(25, p.IndentationHanging);
+            ClassicAssert.AreEqual(25, p.IndentationHanging);
 
-            Assert.AreEqual(-1, p.IndentationFirstLine);
+            ClassicAssert.AreEqual(-1, p.IndentationFirstLine);
             p.IndentationFirstLine = (/*setter*/25);
-            Assert.AreEqual(25, p.IndentationFirstLine);
+            ClassicAssert.AreEqual(25, p.IndentationFirstLine);
 
-            Assert.IsFalse(p.IsWordWrapped);
+            ClassicAssert.IsFalse(p.IsWordWrapped);
             p.IsWordWrapped = (/*setter*/true);
-            Assert.IsTrue(p.IsWordWrapped);
+            ClassicAssert.IsTrue(p.IsWordWrapped);
             p.IsWordWrapped = (/*setter*/false);
-            Assert.IsFalse(p.IsWordWrapped);
+            ClassicAssert.IsFalse(p.IsWordWrapped);
 
-            Assert.IsNull(p.Style);
+            ClassicAssert.IsNull(p.Style);
             p.Style = (/*setter*/"teststyle");
-            Assert.AreEqual("teststyle", p.Style);
+            ClassicAssert.AreEqual("teststyle", p.Style);
 
             p.AddRun(new CT_R());
 
-            //Assert.IsTrue(p.RemoveRun(0));
+            //ClassicAssert.IsTrue(p.RemoveRun(0));
 
-            Assert.IsNotNull(p.Body);
-            Assert.AreEqual(BodyElementType.PARAGRAPH, p.ElementType);
-            Assert.AreEqual(BodyType.DOCUMENT, p.PartType);
+            ClassicAssert.IsNotNull(p.Body);
+            ClassicAssert.AreEqual(BodyElementType.PARAGRAPH, p.ElementType);
+            ClassicAssert.AreEqual(BodyType.DOCUMENT, p.PartType);
         }
 
         [Test]
@@ -529,8 +539,8 @@ namespace TestCases.XWPF.UserModel
             XWPFDocument doc = new XWPFDocument();
             XWPFParagraph p = doc.CreateParagraph();
 
-            Assert.IsNull(p.SearchText("test", new PositionInParagraph()));
-            Assert.AreEqual("", p.Text);
+            ClassicAssert.IsNull(p.SearchText("test", new PositionInParagraph()));
+            ClassicAssert.AreEqual("", p.Text);
         }
 
         [Test]
@@ -539,16 +549,16 @@ namespace TestCases.XWPF.UserModel
             XWPFDocument xml = XWPFTestDataSamples.OpenSampleDocument("ThreeColHead.docx");
 
             IList<XWPFParagraph> ps = xml.Paragraphs;
-            Assert.AreEqual(10, ps.Count);
+            ClassicAssert.AreEqual(10, ps.Count);
 
             XWPFParagraph p = ps[(0)];
 
             TextSegment segment = p.SearchText("sample word document", new PositionInParagraph());
-            Assert.IsNotNull(segment);
+            ClassicAssert.IsNotNull(segment);
 
-            Assert.AreEqual("sample word document", p.GetText(segment));
+            ClassicAssert.AreEqual("sample word document", p.GetText(segment));
 
-            Assert.IsTrue(p.RemoveRun(0));
+            ClassicAssert.IsTrue(p.RemoveRun(0));
         }
 
         [Test]
@@ -556,19 +566,19 @@ namespace TestCases.XWPF.UserModel
         {
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("FldSimple.docx");
             IList<XWPFParagraph> ps = doc.Paragraphs;
-            Assert.AreEqual(1, ps.Count);
+            ClassicAssert.AreEqual(1, ps.Count);
 
             XWPFParagraph p = ps[0];
-            Assert.AreEqual(1, p.Runs.Count);
-            Assert.AreEqual(1, p.IRuns.Count);
+            ClassicAssert.AreEqual(1, p.Runs.Count);
+            ClassicAssert.AreEqual(1, p.IRuns.Count);
 
             XWPFRun r = p.Runs[0];
-            Assert.AreEqual(typeof(XWPFFieldRun), r.GetType());
+            ClassicAssert.AreEqual(typeof(XWPFFieldRun), r.GetType());
 
             XWPFFieldRun fr = (XWPFFieldRun)r;
-            Assert.AreEqual(" FILENAME   \\* MERGEFORMAT ", fr.FieldInstruction);
-            Assert.AreEqual("FldSimple.docx", fr.Text);
-            Assert.AreEqual("FldSimple.docx", p.Text);
+            ClassicAssert.AreEqual(" FILENAME   \\* MERGEFORMAT ", fr.FieldInstruction);
+            ClassicAssert.AreEqual("FldSimple.docx", fr.Text);
+            ClassicAssert.AreEqual("FldSimple.docx", p.Text);
         }
 
         [Test]
@@ -583,8 +593,22 @@ namespace TestCases.XWPF.UserModel
             p.AddRun(r);
             p.AddRun(r);
 
-            Assert.IsNotNull(p.GetRun(run));
-            Assert.IsNull(p.GetRun(null));
+            ClassicAssert.IsNotNull(p.GetRun(run));
+            ClassicAssert.IsNull(p.GetRun(null));
+        }
+
+        [Test]
+        public void TestAddHyperlink()
+        {
+            XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("SampleDoc.docx");
+
+            XWPFParagraph p = doc.CreateParagraph();
+            XWPFHyperlinkRun h = p.CreateHyperlinkRun("http://poi.apache.org/");
+            h.SetText("Apache POI");
+
+            ClassicAssert.AreEqual("http://poi.apache.org/", h.GetHyperlink(doc).URL);
+            ClassicAssert.AreEqual(1, p.Runs.Count);
+            ClassicAssert.AreEqual(h, p.Runs[0]);
         }
 
         [Test]
@@ -597,7 +621,7 @@ namespace TestCases.XWPF.UserModel
             {
                 str.Append(par.Text).Append("\n");
             }
-            Assert.AreEqual("This is a test.\n\n\n\n3\n4\n5\n\n\n\nThis is a whole paragraph where one word is deleted.\n", str.ToString());
+            ClassicAssert.AreEqual("This is a test.\n\n\n\n3\n4\n5\n\n\n\nThis is a whole paragraph where one word is deleted.\n", str.ToString());
         }
 
         [Test]
@@ -611,7 +635,7 @@ namespace TestCases.XWPF.UserModel
                 str.Append(par.Text).Append("\n");
             }
             String s = str.ToString();
-            Assert.IsTrue(s.Trim().Length > 0, "Having text: \n" + s + "\nTrimmed lenght: " + s.Trim().Length);
+            ClassicAssert.IsTrue(s.Trim().Length > 0, "Having text: \n" + s + "\nTrimmed lenght: " + s.Trim().Length);
         }
 
         [Test]
@@ -625,9 +649,27 @@ namespace TestCases.XWPF.UserModel
                 str.Append(par.Text).Append("\n");
             }
             String s = str.ToString();
-            Assert.IsFalse(s.Contains("This is another Test"));
+            ClassicAssert.IsFalse(s.Contains("This is another Test"));
         }
-
+        [Test]
+        public void TestSearchText()
+        {
+            using(XWPFDocument doc = new XWPFDocument())
+            {
+                XWPFParagraph paragraph = doc.CreateParagraph();
+                paragraph.CreateRun().SetText("abc");
+                paragraph.CreateRun().SetText("de");
+                paragraph.CreateRun().SetText("f");
+                paragraph.CreateRun().SetText("g");
+                TextSegment result = paragraph.SearchText("cdefg", new PositionInParagraph());
+                ClassicAssert.AreEqual(0, result.BeginRun);
+                ClassicAssert.AreEqual(3, result.EndRun);
+                ClassicAssert.AreEqual(0, result.BeginText);
+                ClassicAssert.AreEqual(0, result.EndText);
+                ClassicAssert.AreEqual(2, result.BeginChar);
+                ClassicAssert.AreEqual(0, result.EndChar);
+            }
+        }
         [Test]
         public void Testpullrequest404()
         {
@@ -638,12 +680,12 @@ namespace TestCases.XWPF.UserModel
             paragraph.CreateRun().AppendText("f");
             paragraph.CreateRun().AppendText("g");
             var result = paragraph.SearchText("cdefg", new PositionInParagraph());
-            Assert.AreEqual(result.BeginRun, 0);
-            Assert.AreEqual(result.EndRun, 3);
-            Assert.AreEqual(result.BeginText, 0);
-            Assert.AreEqual(result.EndText, 0);
-            Assert.AreEqual(result.BeginChar, 2);
-            Assert.AreEqual(result.EndChar, 0);
+            ClassicAssert.AreEqual(result.BeginRun, 0);
+            ClassicAssert.AreEqual(result.EndRun, 3);
+            ClassicAssert.AreEqual(result.BeginText, 0);
+            ClassicAssert.AreEqual(result.EndText, 0);
+            ClassicAssert.AreEqual(result.BeginChar, 2);
+            ClassicAssert.AreEqual(result.EndChar, 0);
         }
 
         [Test]
@@ -656,12 +698,12 @@ namespace TestCases.XWPF.UserModel
             paragraph.CreateRun().AppendText("fg");
             paragraph.CreateRun().AppendText("hi");
             var result = paragraph.SearchText("cdefg", new PositionInParagraph());
-            Assert.AreEqual(result.BeginRun, 0);
-            Assert.AreEqual(result.EndRun, 2);
-            Assert.AreEqual(result.BeginText, 0);
-            Assert.AreEqual(result.EndText, 0);
-            Assert.AreEqual(result.BeginChar, 2);
-            Assert.AreEqual(result.EndChar, 1);
+            ClassicAssert.AreEqual(result.BeginRun, 0);
+            ClassicAssert.AreEqual(result.EndRun, 2);
+            ClassicAssert.AreEqual(result.BeginText, 0);
+            ClassicAssert.AreEqual(result.EndText, 0);
+            ClassicAssert.AreEqual(result.BeginChar, 2);
+            ClassicAssert.AreEqual(result.EndChar, 1);
         }
 
         /**
@@ -677,82 +719,268 @@ namespace TestCases.XWPF.UserModel
             XWPFParagraph p;
         
             p = doc.GetParagraphArray(0);
-            Assert.AreEqual("This is a document with numbered lists", p.Text);
-            Assert.AreEqual(null, p.GetNumID());
-            Assert.AreEqual(null, p.GetNumIlvl());
-            Assert.AreEqual(null, p.GetNumStartOverride());
+            ClassicAssert.AreEqual("This is a document with numbered lists", p.Text);
+            ClassicAssert.AreEqual(null, p.GetNumID());
+            ClassicAssert.AreEqual(null, p.GetNumIlvl());
+            ClassicAssert.AreEqual(null, p.GetNumStartOverride());
         
             p = doc.GetParagraphArray(1);
-            Assert.AreEqual("Entry #1", p.Text);
-            Assert.AreEqual("1", p.GetNumID());
-            Assert.AreEqual("0", p.GetNumIlvl());
-            Assert.AreEqual(null, p.GetNumStartOverride());
+            ClassicAssert.AreEqual("Entry #1", p.Text);
+            ClassicAssert.AreEqual("1", p.GetNumID());
+            ClassicAssert.AreEqual("0", p.GetNumIlvl());
+            ClassicAssert.AreEqual(null, p.GetNumStartOverride());
         
             p = doc.GetParagraphArray(2);
-            Assert.AreEqual("Entry #2, with children", p.Text);
-            Assert.AreEqual("1", p.GetNumID());
-            Assert.AreEqual("0", p.GetNumIlvl());
-            Assert.AreEqual(null, p.GetNumStartOverride());
+            ClassicAssert.AreEqual("Entry #2, with children", p.Text);
+            ClassicAssert.AreEqual("1", p.GetNumID());
+            ClassicAssert.AreEqual("0", p.GetNumIlvl());
+            ClassicAssert.AreEqual(null, p.GetNumStartOverride());
         
             p = doc.GetParagraphArray(3);
-            Assert.AreEqual("2-a", p.Text);
-            Assert.AreEqual("1", p.GetNumID());
-            Assert.AreEqual("1", p.GetNumIlvl());
-            Assert.AreEqual(null, p.GetNumStartOverride());
+            ClassicAssert.AreEqual("2-a", p.Text);
+            ClassicAssert.AreEqual("1", p.GetNumID());
+            ClassicAssert.AreEqual("1", p.GetNumIlvl());
+            ClassicAssert.AreEqual(null, p.GetNumStartOverride());
         
             p = doc.GetParagraphArray(4);
-            Assert.AreEqual("2-b", p.Text);
-            Assert.AreEqual("1", p.GetNumID());
-            Assert.AreEqual("1", p.GetNumIlvl());
-            Assert.AreEqual(null, p.GetNumStartOverride());
+            ClassicAssert.AreEqual("2-b", p.Text);
+            ClassicAssert.AreEqual("1", p.GetNumID());
+            ClassicAssert.AreEqual("1", p.GetNumIlvl());
+            ClassicAssert.AreEqual(null, p.GetNumStartOverride());
         
             p = doc.GetParagraphArray(5);
-            Assert.AreEqual("2-c", p.Text);
-            Assert.AreEqual("1", p.GetNumID());
-            Assert.AreEqual("1", p.GetNumIlvl());
-            Assert.AreEqual(null, p.GetNumStartOverride());
+            ClassicAssert.AreEqual("2-c", p.Text);
+            ClassicAssert.AreEqual("1", p.GetNumID());
+            ClassicAssert.AreEqual("1", p.GetNumIlvl());
+            ClassicAssert.AreEqual(null, p.GetNumStartOverride());
         
             p = doc.GetParagraphArray(6);
-            Assert.AreEqual("Entry #3", p.Text);
-            Assert.AreEqual("1", p.GetNumID());
-            Assert.AreEqual("0", p.GetNumIlvl());
-            Assert.AreEqual(null, p.GetNumStartOverride());
+            ClassicAssert.AreEqual("Entry #3", p.Text);
+            ClassicAssert.AreEqual("1", p.GetNumID());
+            ClassicAssert.AreEqual("0", p.GetNumIlvl());
+            ClassicAssert.AreEqual(null, p.GetNumStartOverride());
         
             p = doc.GetParagraphArray(7);
-            Assert.AreEqual("Entry #4", p.Text);
-            Assert.AreEqual("1", p.GetNumID());
-            Assert.AreEqual("0", p.GetNumIlvl());
-            Assert.AreEqual(null, p.GetNumStartOverride());
+            ClassicAssert.AreEqual("Entry #4", p.Text);
+            ClassicAssert.AreEqual("1", p.GetNumID());
+            ClassicAssert.AreEqual("0", p.GetNumIlvl());
+            ClassicAssert.AreEqual(null, p.GetNumStartOverride());
         
             // New list
             p = doc.GetParagraphArray(8);
-            Assert.AreEqual("Restarted to 1 from 5", p.Text);
-            Assert.AreEqual("2", p.GetNumID());
-            Assert.AreEqual("0", p.GetNumIlvl());
-            Assert.AreEqual(null, p.GetNumStartOverride());
+            ClassicAssert.AreEqual("Restarted to 1 from 5", p.Text);
+            ClassicAssert.AreEqual("2", p.GetNumID());
+            ClassicAssert.AreEqual("0", p.GetNumIlvl());
+            ClassicAssert.AreEqual(null, p.GetNumStartOverride());
         
             p = doc.GetParagraphArray(9);
-            Assert.AreEqual("Restarted @ 2", p.Text);
-            Assert.AreEqual("2", p.GetNumID());
-            Assert.AreEqual("0", p.GetNumIlvl());
-            Assert.AreEqual(null, p.GetNumStartOverride());
+            ClassicAssert.AreEqual("Restarted @ 2", p.Text);
+            ClassicAssert.AreEqual("2", p.GetNumID());
+            ClassicAssert.AreEqual("0", p.GetNumIlvl());
+            ClassicAssert.AreEqual(null, p.GetNumStartOverride());
         
             p = doc.GetParagraphArray(10);
-            Assert.AreEqual("Restarted @ 3", p.Text);
-            Assert.AreEqual("2", p.GetNumID());
-            Assert.AreEqual("0", p.GetNumIlvl());
-            Assert.AreEqual(null, p.GetNumStartOverride());
+            ClassicAssert.AreEqual("Restarted @ 3", p.Text);
+            ClassicAssert.AreEqual("2", p.GetNumID());
+            ClassicAssert.AreEqual("0", p.GetNumIlvl());
+            ClassicAssert.AreEqual(null, p.GetNumStartOverride());
         
             // New list starting at 10
             p = doc.GetParagraphArray(11);
-            Assert.AreEqual("Jump to new list at 10", p.Text);
-            Assert.AreEqual("6", p.GetNumID());
-            Assert.AreEqual("0", p.GetNumIlvl());
+            ClassicAssert.AreEqual("Jump to new list at 10", p.Text);
+            ClassicAssert.AreEqual("6", p.GetNumID());
+            ClassicAssert.AreEqual("0", p.GetNumIlvl());
             // TODO Why isn't this seen as 10?
-            Assert.AreEqual(null, p.GetNumStartOverride());
+            ClassicAssert.AreEqual(null, p.GetNumStartOverride());
         
             // TODO Shouldn't we use XWPFNumbering or similar here?
             // TODO Make it easier to change
+        }
+        [Test]
+        public void TestCreateNewRuns()
+        {
+            using(XWPFDocument doc = new XWPFDocument())
+            {
+                XWPFParagraph p = doc.CreateParagraph();
+                XWPFHyperlinkRun h = p.CreateHyperlinkRun("http://poi.apache.org");
+                XWPFFieldRun fieldRun = p.CreateFieldRun();
+                XWPFRun r = p.CreateRun();
+
+                ClassicAssert.AreEqual(3, p.Runs.Count);
+                ClassicAssert.AreEqual(0, p.Runs.IndexOf(h));
+                ClassicAssert.AreEqual(1, p.Runs.IndexOf(fieldRun));
+                ClassicAssert.AreEqual(2, p.Runs.IndexOf(r));
+
+                ClassicAssert.AreEqual(3, p.IRuns.Count);
+                ClassicAssert.AreEqual(0, p.IRuns.IndexOf(h));
+                ClassicAssert.AreEqual(1, p.IRuns.IndexOf(fieldRun));
+                ClassicAssert.AreEqual(2, p.IRuns.IndexOf(r));
+            }
+        }
+        [Test]
+        public void TestInsertNewRuns()
+        {
+            using(XWPFDocument doc = new XWPFDocument())
+            {
+                XWPFParagraph p = doc.CreateParagraph();
+                XWPFRun r = p.CreateRun();
+                ClassicAssert.AreEqual(1, p.Runs.Count);
+                ClassicAssert.AreEqual(0, p.Runs.IndexOf(r));
+
+                XWPFHyperlinkRun h = p.InsertNewHyperlinkRun(0, "http://poi.apache.org");
+                ClassicAssert.AreEqual(2, p.Runs.Count);
+                ClassicAssert.AreEqual(0, p.Runs.IndexOf(h));
+                ClassicAssert.AreEqual(1, p.Runs.IndexOf(r));
+
+                XWPFFieldRun fieldRun2 = p.InsertNewFieldRun(2);
+                ClassicAssert.AreEqual(3, p.Runs.Count);
+                ClassicAssert.AreEqual(2, p.Runs.IndexOf(fieldRun2));
+            }
+        }
+        [Test]
+        public void TestRemoveRuns()
+        {
+            using(XWPFDocument doc = new XWPFDocument())
+            {
+                XWPFParagraph p = doc.CreateParagraph();
+                XWPFRun r = p.CreateRun();
+                p.CreateRun();
+                XWPFHyperlinkRun hyperlinkRun = p
+                    .CreateHyperlinkRun("http://poi.apache.org");
+                XWPFFieldRun fieldRun = p.CreateFieldRun();
+
+                ClassicAssert.AreEqual(4, p.Runs.Count);
+                ClassicAssert.AreEqual(2, p.Runs.IndexOf(hyperlinkRun));
+                ClassicAssert.AreEqual(3, p.Runs.IndexOf(fieldRun));
+
+                p.RemoveRun(2);
+                ClassicAssert.AreEqual(3, p.Runs.Count);
+                ClassicAssert.AreEqual(-1, p.Runs.IndexOf(hyperlinkRun));
+                ClassicAssert.AreEqual(2, p.Runs.IndexOf(fieldRun));
+
+                p.RemoveRun(0);
+                ClassicAssert.AreEqual(2, p.Runs.Count);
+                ClassicAssert.AreEqual(-1, p.Runs.IndexOf(r));
+                ClassicAssert.AreEqual(1, p.Runs.IndexOf(fieldRun));
+
+                p.RemoveRun(1);
+                ClassicAssert.AreEqual(1, p.Runs.Count);
+                ClassicAssert.AreEqual(-1, p.Runs.IndexOf(fieldRun));
+            }
+        }
+        [Test]
+        public void TestRemoveAndInsertRunsWithOtherIRunElement()
+        {
+            XWPFDocument doc = new XWPFDocument();
+
+            XWPFParagraph p = doc.CreateParagraph();
+            p.CreateRun();
+            // add other run element
+            p.GetCTP().AddNewSdt();
+            // add two CTR in hyperlink
+            XWPFHyperlinkRun hyperlinkRun = p
+                .CreateHyperlinkRun("http://poi.apache.org");
+            hyperlinkRun.GetCTHyperlink().AddNewR();
+            p.CreateFieldRun();
+
+            XWPFDocument doc2 = XWPFTestDataSamples.WriteOutAndReadBack(doc);
+            XWPFParagraph paragraph = doc2.GetParagraphArray(0);
+
+            ClassicAssert.AreEqual(4, paragraph.Runs.Count);
+            ClassicAssert.AreEqual(5, paragraph.IRuns.Count);
+
+            ClassicAssert.IsTrue(paragraph.Runs[1] is XWPFHyperlinkRun);
+            ClassicAssert.IsTrue(paragraph.Runs[2] is XWPFHyperlinkRun);
+            ClassicAssert.IsTrue(paragraph.Runs[3] is XWPFFieldRun);
+
+            ClassicAssert.IsTrue(paragraph.IRuns[1] is XWPFSDT);
+            ClassicAssert.IsTrue(paragraph.IRuns[2] is XWPFHyperlinkRun);
+
+            paragraph.RemoveRun(1);
+            ClassicAssert.AreEqual(3, paragraph.Runs.Count);
+            ClassicAssert.IsTrue(paragraph.Runs[1] is XWPFHyperlinkRun);
+            ClassicAssert.IsTrue(paragraph.Runs[2] is XWPFFieldRun);
+
+            ClassicAssert.IsTrue(paragraph.IRuns[1] is XWPFSDT);
+            ClassicAssert.IsTrue(paragraph.IRuns[2] is XWPFHyperlinkRun);
+
+            paragraph.RemoveRun(1);
+            ClassicAssert.AreEqual(2, paragraph.Runs.Count);
+            ClassicAssert.IsTrue(paragraph.Runs[1] is XWPFFieldRun);
+
+            ClassicAssert.IsTrue(paragraph.IRuns[1] is XWPFSDT);
+            ClassicAssert.IsTrue(paragraph.IRuns[2] is XWPFFieldRun);
+
+            paragraph.RemoveRun(0);
+            ClassicAssert.AreEqual(1, paragraph.Runs.Count);
+            ClassicAssert.IsTrue(paragraph.Runs[0] is XWPFFieldRun);
+
+            ClassicAssert.IsTrue(paragraph.IRuns[0] is XWPFSDT);
+            ClassicAssert.IsTrue(paragraph.IRuns[1] is XWPFFieldRun);
+
+            XWPFRun newRun = paragraph.InsertNewRun(0);
+            ClassicAssert.AreEqual(2, paragraph.Runs.Count);
+
+            ClassicAssert.AreEqual(3, paragraph.IRuns.Count);
+            ClassicAssert.AreEqual(0, paragraph.Runs.IndexOf(newRun));
+
+            doc.Close();
+            doc2.Close();
+        }
+        [Test]
+        public void TestGettersWithEmptyParagraphProperties()
+        {
+            using(XWPFDocument doc = new XWPFDocument())
+            {
+                XWPFParagraph p = doc.CreateParagraph();
+                p.GetCTP().pPr = null;
+                ClassicAssert.IsNull(p.GetCTP().pPr);
+                ClassicAssert.AreEqual(-1, p.SpacingAfter);
+                ClassicAssert.IsNull(p.GetCTP().pPr);
+                ClassicAssert.AreEqual(-1, p.IndentationLeft);
+                ClassicAssert.IsNull(p.GetCTP().pPr);
+                ClassicAssert.IsFalse(p.IsWordWrapped);
+                ClassicAssert.IsNull(p.StyleID);
+                ClassicAssert.IsNull(p.Style);
+                ClassicAssert.IsNull(p.GetCTP().pPr);
+
+                ClassicAssert.IsNull(p.GetNumID());
+                ClassicAssert.IsNull(p.GetNumIlvl());
+                ClassicAssert.IsNull(p.GetNumFmt());
+                ClassicAssert.IsNull(p.NumLevelText);
+                ClassicAssert.IsNull(p.GetNumStartOverride());
+                ClassicAssert.IsFalse(p.IsKeepNext);
+
+                ClassicAssert.IsFalse(p.IsAlignmentSet());
+                ClassicAssert.AreEqual(ParagraphAlignment.LEFT, p.Alignment);
+                ClassicAssert.AreEqual(TextAlignment.AUTO, p.VerticalAlignment);
+
+                ClassicAssert.AreEqual(Borders.None, p.BorderTop);
+                ClassicAssert.AreEqual(Borders.None, p.BorderBottom);
+                ClassicAssert.AreEqual(Borders.None, p.BorderLeft);
+                ClassicAssert.AreEqual(Borders.None, p.BorderRight);
+                ClassicAssert.AreEqual(Borders.None, p.BorderBetween);
+
+                ClassicAssert.AreEqual(-1, p.SpacingAfter);
+                ClassicAssert.AreEqual(-1, p.SpacingAfterLines);
+                ClassicAssert.AreEqual(-1, p.SpacingBefore);
+                ClassicAssert.AreEqual(-1, p.SpacingBeforeLines);
+                ClassicAssert.AreEqual(-1, p.SpacingBetween);
+                ClassicAssert.AreEqual(LineSpacingRule.AUTO, p.SpacingLineRule);
+
+                ClassicAssert.AreEqual(-1, p.IndentationLeft);
+                ClassicAssert.AreEqual(-1, p.IndentationLeftChars);
+                ClassicAssert.AreEqual(-1, p.IndentationRight);
+                ClassicAssert.AreEqual(-1, p.IndentationRightChars);
+                ClassicAssert.AreEqual(-1, p.IndentationHanging);
+                ClassicAssert.AreEqual(-1, p.IndentationFirstLine);
+
+                ClassicAssert.IsFalse(p.IsPageBreak);
+                ClassicAssert.IsFalse(p.IsWordWrapped);
+
+                ClassicAssert.IsNull(p.StyleID);
+                ClassicAssert.IsNull(p.Style);
+            }
         }
     }
 }

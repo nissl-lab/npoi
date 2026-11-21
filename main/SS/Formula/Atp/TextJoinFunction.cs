@@ -2,7 +2,8 @@
 using NPOI.SS.Formula.Functions;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Text; 
+using Cysharp.Text;
 
 namespace NPOI.SS.Formula.Atp
 {
@@ -71,7 +72,7 @@ namespace NPOI.SS.Formula.Atp
                 }
                 else if (delimiterArgs.Count == 1)
                 {
-                    String delimiter = LaxValueToString(delimiterArgs[0]);
+                    String delimiter = TextJoinFunction.LaxValueToString(delimiterArgs[0]);
                     return new StringEval(String.Join(delimiter, textValues));
                 }
                 else
@@ -81,10 +82,11 @@ namespace NPOI.SS.Formula.Atp
                     List<string> delimiters = new List<string>();
                     foreach (ValueEval delimiterArg in delimiterArgs)
                     {
-                        delimiters.Add(LaxValueToString(delimiterArg));
+                        delimiters.Add(TextJoinFunction.LaxValueToString(delimiterArg));
                     }
-                    StringBuilder sb = new StringBuilder();
-                    for (int i = 0; i < textValues.Count; i++)
+                    using var sb = ZString.CreateStringBuilder();
+
+                    for(int i = 0; i < textValues.Count; i++)
                     {
                         if (i > 0)
                         {
@@ -102,7 +104,7 @@ namespace NPOI.SS.Formula.Atp
             }
         }
 
-        private String LaxValueToString(ValueEval eval)
+        private static String LaxValueToString(ValueEval eval)
         {
             return (eval is MissingArgEval) ? "" : OperandResolver.CoerceValueToString(eval);
         }
@@ -110,11 +112,10 @@ namespace NPOI.SS.Formula.Atp
         //https://support.microsoft.com/en-us/office/textjoin-function-357b449a-ec91-49d0-80c3-0e8fc845691c
         //in example 3, the delimiter is defined by a large area but only the last row of that area seems to be used
         //this is why lastRowOnly is supported
-        private List<ValueEval> GetValues(ValueEval eval, int srcRowIndex, int srcColumnIndex, bool lastRowOnly)
+        private static List<ValueEval> GetValues(ValueEval eval, int srcRowIndex, int srcColumnIndex, bool lastRowOnly)
         {
-            if (eval is AreaEval)
+            if (eval is AreaEval ae)
             {
-                AreaEval ae = (AreaEval)eval;
                 List<ValueEval> list = new List<ValueEval>();
                 int startRow = lastRowOnly ? ae.LastRow : ae.FirstRow;
                 for (int r = startRow; r <= ae.LastRow; r++)

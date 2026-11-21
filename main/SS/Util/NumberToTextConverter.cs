@@ -16,6 +16,7 @@
 ==================================================================== */
 
 using System;
+using System.Globalization;
 using System.Text;
 namespace NPOI.SS.Util
 {
@@ -133,6 +134,21 @@ namespace NPOI.SS.Util
         public static String ToText(double value)
         {
             return RawDoubleBitsToText(BitConverter.DoubleToInt64Bits(value));
+        }
+
+        /// <summary>
+        /// Converts the supplied <c>value</c> to the text representation that Excel would give if
+        /// the value were to appear in an unformatted cell, using the supplied locale for the decimal separator.
+        /// </summary>
+        public static String ToText(double value, CultureInfo locale)
+        {
+            String result = ToText(value);
+            String decimalSeparator = locale.NumberFormat.NumberDecimalSeparator;
+            if (decimalSeparator != ".")
+            {
+                result = result.Replace(".", decimalSeparator);
+            }
+            return result;
         }
         /* namespace */
         public static String RawDoubleBitsToText(long pRawBits)

@@ -24,7 +24,7 @@ namespace TestCases.DDF
     using System.Collections.Generic;
     using System.IO;
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.DDF;
     using NPOI.Util;
 
@@ -38,8 +38,8 @@ namespace TestCases.DDF
 
             byte[] data = new byte[16];
             int bytesWritten = r.Serialize(0, data);
-            Assert.AreEqual(16, bytesWritten);
-            Assert.AreEqual("[10, 00, " +
+            ClassicAssert.AreEqual(16, bytesWritten);
+            ClassicAssert.AreEqual("[10, 00, " +
                     "08, F0, " +
                     "08, 00, 00, 00, " +
                     "02, 00, 00, 00, " +     // num shapes in drawing
@@ -58,9 +58,9 @@ namespace TestCases.DDF
             EscherDgRecord r = new EscherDgRecord();
             int bytesWritten = r.FillFields(data, new DefaultEscherRecordFactory());
 
-            Assert.AreEqual(16, bytesWritten);
-            Assert.AreEqual(2, r.NumShapes);
-            Assert.AreEqual(1025, r.LastMSOSPID);
+            ClassicAssert.AreEqual(16, bytesWritten);
+            ClassicAssert.AreEqual(2, r.NumShapes);
+            ClassicAssert.AreEqual(1025, r.LastMSOSPID);
         }
         [Test]
         public void TestToString()
@@ -73,7 +73,7 @@ namespace TestCases.DDF
                     "  Instance: 0x0001" + nl +
                     "  NumShapes: 2" + nl +
                     "  LastMSOSPID: 1025" + nl;
-            Assert.AreEqual(expected, CreateRecord().ToString());
+            ClassicAssert.AreEqual(expected, CreateRecord().ToString());
         }
 
         private EscherDgRecord CreateRecord()

@@ -17,18 +17,11 @@
 
 namespace NPOI.HSSF.UserModel
 {
-
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Globalization;
-    using System.IO;
-    using System.Reflection;
-    using System.Security.Cryptography;
-    using System.Text;
     using NPOI.DDF;
+    using NPOI.HPSF;
     using NPOI.HSSF.Model;
     using NPOI.HSSF.Record;
+    using NPOI.HSSF.Record.Crypto;
     using NPOI.POIFS.Crypt;
     using NPOI.POIFS.FileSystem;
     using NPOI.SS;
@@ -37,6 +30,14 @@ namespace NPOI.HSSF.UserModel
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
     using NPOI.Util;
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Data;
+    using System.Globalization;
+    using System.IO;
+    using System.Security.Cryptography;
+    using System.Text;
 
 
     /// <summary>
@@ -121,10 +122,10 @@ namespace NPOI.HSSF.UserModel
         /// <summary>
         /// Totals the sizes of all sheet records and eventually serializes them
         /// </summary>
-        private class SheetRecordCollector : NPOI.HSSF.Record.Aggregates.RecordVisitor,IDisposable
+        private sealed class SheetRecordCollector : NPOI.HSSF.Record.Aggregates.RecordVisitor,IDisposable
         {
 
-            private ArrayList _list;
+            private readonly ArrayList _list;
             private int _totalSize;
 
             public SheetRecordCollector()
@@ -233,14 +234,9 @@ namespace NPOI.HSSF.UserModel
         {
             foreach (String wbName in InternalWorkbook.WORKBOOK_DIR_ENTRY_NAMES)
             {
-                try
+                if(directory.HasEntry(wbName))
                 {
-                    directory.GetEntry(wbName);
                     return wbName;
-                }
-                catch (FileNotFoundException)
-                {
-                    // continue - to try other options
                 }
             }
             // check for an encrypted .xlsx file - they get OLE2 wrapped
@@ -317,7 +313,7 @@ namespace NPOI.HSSF.UserModel
 
             // Grab the data from the workbook stream, however
             //  it happens to be spelled.
-            Stream stream = directory.CreatePOIFSDocumentReader(workbookName);
+            InputStream stream = directory.CreatePOIFSDocumentReader(workbookName);
 
 
             List<Record> records = RecordFactory.CreateRecords(stream);
@@ -414,7 +410,7 @@ namespace NPOI.HSSF.UserModel
                     records.RemoveAt(k);
                     LabelSSTRecord newrec = new LabelSSTRecord();
                     int stringid =
-                        workbook.AddSSTString(new UnicodeString(oldrec.Value));
+                        workbook.AddSSTString(new HSSF.Record.UnicodeString(oldrec.Value));
 
                     newrec.Row = (oldrec.Row);
                     newrec.Column = (oldrec.Column);
@@ -614,7 +610,7 @@ namespace NPOI.HSSF.UserModel
                 ValidateSheetIndex(index);
             }
             // ignore duplicates
-            ISet<int> set = new HashSet<int>(indexes);
+            HashSet<int> set = new(indexes);
             int nSheets = _sheets.Count;
             for (int i = 0; i < nSheets; i++)
             {
@@ -896,7 +892,7 @@ namespace NPOI.HSSF.UserModel
             int uniqueIndex = 2;
             String baseName = srcName;
             int bracketPos = srcName.LastIndexOf('(');
-            if (bracketPos > 0 && srcName.EndsWith(")", StringComparison.Ordinal))
+            if (bracketPos > 0 && srcName.EndsWith(')'))
             {
                 String suffix = srcName.Substring(bracketPos + 1, srcName.Length - bracketPos - 2);
                 try
@@ -1008,6 +1004,8 @@ namespace NPOI.HSSF.UserModel
             }
             return retval;
         }
+
+        public NPOI.SS.UserModel.ISheet this[string name] => GetSheet(name);
 
         /// <summary>
         /// Removes sheet at the given index.
@@ -1139,7 +1137,7 @@ namespace NPOI.HSSF.UserModel
             }
         }
 
-        private bool IsRowColHeaderRecord(NameRecord r)
+        private static bool IsRowColHeaderRecord(NameRecord r)
         {
             return r.OptionFlag == 0x20 && ("" + ((char)7)).Equals(r.NameText);
         }
@@ -1164,55 +1162,6 @@ namespace NPOI.HSSF.UserModel
             // Ask getFontAt() to build it for us,
             //  so it gets properly cached
             return GetFontAt(fontindex);
-        }
-
-        //public NPOI.SS.UserModel.Font FindFont(NPOI.SS.UserModel.FontBoldWeight boldWeight, short color, short fontHeight,
-        //                 String name, bool italic, bool strikeout,
-        //                 NPOI.SS.UserModel.FontSuperScript typeOffset, NPOI.SS.UserModel.FontUnderlineType Underline)
-        //{
-        //    return this.FindFont(boldWeight, color, fontHeight, name, italic, strikeout, typeOffset, Underline);
-        //}
-
-        /// <summary>
-        /// Finds a font that matches the one with the supplied attributes
-        /// </summary>
-        /// <param name="boldWeight">The bold weight.</param>
-        /// <param name="color">The color.</param>
-        /// <param name="fontHeight">Height of the font.</param>
-        /// <param name="name">The name.</param>
-        /// <param name="italic">if set to <c>true</c> [italic].</param>
-        /// <param name="strikeout">if set to <c>true</c> [strikeout].</param>
-        /// <param name="typeOffset">The type offset.</param>
-        /// <param name="underline">The underline.</param>
-        /// <returns></returns>
-        [Obsolete("deprecated 3.15 beta 2. Use {@link #findFont(boolean, short, short, String, boolean, boolean, short, byte)} instead.")]
-        public NPOI.SS.UserModel.IFont FindFont(short boldWeight, short color, short fontHeight,
-                         String name, bool italic, bool strikeout,
-                         FontSuperScript typeOffset, FontUnderlineType underline)
-        {
-            short numberOfFonts = NumberOfFonts;
-            for (short i = 0; i <= numberOfFonts; i++)
-            {
-                // Remember - there is no 4!
-                if (i == 4)
-                    continue;
-
-                NPOI.SS.UserModel.IFont hssfFont = GetFontAt(i);
-                if (hssfFont.Boldweight == boldWeight
-                        && hssfFont.Color == color
-                        && hssfFont.FontHeight == fontHeight
-                        && hssfFont.FontName.Equals(name)
-                        && hssfFont.IsItalic == italic
-                        && hssfFont.IsStrikeout == strikeout
-                        && hssfFont.TypeOffset == typeOffset
-                        && hssfFont.Underline == underline)
-                {
-                    return hssfFont;
-                }
-            }
-
-            //        Console.WriteLine( "No font found" );
-            return null;
         }
 
         /// <summary>
@@ -1291,9 +1240,9 @@ namespace NPOI.HSSF.UserModel
             //  the same object every time, but create
             //  them lazily
 
-            if (fonts.ContainsKey(idx))
+            if (fonts.TryGetValue(idx, out HSSFFont font1))
             {
-                return (HSSFFont)fonts[idx];
+                return (HSSFFont)font1;
             }
 
             FontRecord font = workbook.GetFontRecordAt(idx);
@@ -1518,6 +1467,8 @@ namespace NPOI.HSSF.UserModel
             List<HSSFSheet> sheets = GetSheets();
             int nSheets = sheets.Count;
 
+            UpdateEncryptionInfo();
+
             // before Getting the workbook size we must tell the sheets that
             // serialization Is about to occur.
             workbook.PreSerialize();
@@ -1564,8 +1515,139 @@ namespace NPOI.HSSF.UserModel
                 pos += serializedSize;
                 src.Dispose();
             }
-            
+
+            EncryptBytes(retval);
+
             return retval;
+        }
+
+        public override EncryptionInfo GetEncryptionInfo()
+        {
+            FilePassRecord fpr = (FilePassRecord)workbook.FindFirstRecordBySid(FilePassRecord.sid);
+            return fpr != null ? fpr.GetEncryptionInfo() : null;
+        }
+
+        private void EncryptBytes(byte[] buf)
+        {
+            EncryptionInfo ei = GetEncryptionInfo();
+            if (ei == null)
+            {
+                return;
+            }
+
+            Encryptor enc = ei.Encryptor;
+            int initialOffset = 0;
+
+            var bos = new MemoryStream(buf);
+            bos.Position = 0;
+            var plain = new LittleEndianInputStream(bos);
+            var leos = new LittleEndianByteArrayOutputStream(buf, 0);
+            enc.SetChunkSize(Biff8DecryptingStream.RC4_REKEYING_INTERVAL);
+            byte[] tmp = new byte[1024];
+
+            try
+            {
+                ChunkedCipherOutputStream os = enc.GetDataStream(leos, initialOffset);
+                int totalBytes = 0;
+
+                while (totalBytes < buf.Length)
+                {
+                    IOUtils.ReadFully(plain, tmp, 0, 4);
+                    int sid = LittleEndian.GetUShort(tmp, 0);
+                    int len = LittleEndian.GetUShort(tmp, 2);
+                    bool isPlain = Biff8DecryptingStream.IsNeverEncryptedRecord(sid);
+
+                    os.SetNextRecordSize(len, isPlain);
+                    os.WritePlain(tmp, 0, 4);
+
+                    if (sid == BoundSheetRecord.sid)
+                    {
+                        // special case for the field_1_position_of_BOF (=lbPlyPos) field of
+                        // the BoundSheet8 record which must be unencrypted
+                        byte[] bsrBuf = IOUtils.SafelyAllocate(len, CryptoFunctions.MAX_RECORD_LENGTH);
+                        plain.ReadFully(bsrBuf);
+                        os.WritePlain(bsrBuf, 0, 4);
+                        os.Write(bsrBuf, 4, len - 4);
+                    }
+                    else
+                    {
+                        int todo = len;
+                        while (todo > 0)
+                        {
+                            int nextLen = Math.Min(todo, tmp.Length);
+                            plain.ReadFully(tmp, 0, nextLen);
+                            if (isPlain)
+                            {
+                                os.WritePlain(tmp, 0, nextLen);
+                            }
+                            else
+                            {
+                                os.Write(tmp, 0, nextLen);
+                            }
+                            todo -= nextLen;
+                        }
+                    }
+                    totalBytes += 4 + len;
+                }
+                os.Close();
+            }
+            catch(Exception e)
+            {
+                throw new EncryptedDocumentException(e);
+            }
+        }
+
+        private void UpdateEncryptionInfo()
+        {
+            // make sure, that we've read all the streams ...
+            ReadProperties();
+            FilePassRecord fpr = (FilePassRecord)workbook.FindFirstRecordBySid(FilePassRecord.sid);
+
+            var password = Biff8EncryptionKey.CurrentUserPassword;
+            WorkbookRecordList wrl = workbook.GetWorkbookRecordList();
+
+            if (password == null)
+            {
+                if (fpr != null)
+                {
+                    // need to remove password data
+                    wrl.Remove(fpr);
+                }
+            }
+            else
+            {
+                // create password record
+                if (fpr == null)
+                {
+                    fpr = new FilePassRecord(EncryptionMode.CryptoAPI);
+                    wrl.Add(1, fpr);
+                }
+
+                // check if the password has been changed
+                EncryptionInfo ei = fpr.GetEncryptionInfo();
+                EncryptionVerifier ver = ei.Verifier;
+                byte[] encVer = ver.GetVerifier();
+                Decryptor dec = ei.Decryptor;
+                Encryptor enc = ei.Encryptor;
+
+                try
+                {
+                    if (encVer == null || !dec.VerifyPassword(password))
+                    {
+                        enc.ConfirmPassword(password);
+                    }
+                    else
+                    {
+                        byte[] verifier = dec.GetVerifier();
+                        byte[] salt = ver.Salt;
+                        enc.ConfirmPassword(password, null, null, verifier, salt, null);
+                    }
+                }
+                catch (Exception e)
+                {
+                    throw new EncryptedDocumentException("can't validate/update encryption setting", e);
+                }
+            }
         }
 
         /**
@@ -1689,7 +1771,7 @@ namespace NPOI.HSSF.UserModel
             if (name == null)
                 name = workbook.CreateBuiltInName(NameRecord.BUILTIN_PRINT_AREA, sheetIndex + 1);
             //Adding one here because 0 indicates a global named region; doesnt make sense for print areas
-            String[] parts = reference.Split(new char[]{','});
+            String[] parts = reference.Split(',');
             StringBuilder sb = new StringBuilder(32);
             for (int i = 0; i < parts.Length; i++)
             {
@@ -1910,7 +1992,7 @@ namespace NPOI.HSSF.UserModel
             {
                 foreach (HSSFSheet sh in _sheets)
                 {
-                    IDrawing tmp = sh.DrawingPatriarch;
+                    IDrawing<IShape> _ = sh.DrawingPatriarch;
                 }
             }
             else
@@ -1943,7 +2025,7 @@ namespace NPOI.HSSF.UserModel
                     // see also http://de.wikipedia.org/wiki/Windows_Metafile#Hinweise_zur_WMF-Spezifikation
                     if (LittleEndian.GetInt(pictureData) == unchecked((int)0x9AC6CDD7)) {
                         byte[] picDataNoHeader = new byte[pictureData.Length-22];
-                        Array.Copy(pictureData, 22, picDataNoHeader, 0, pictureData.Length-22);
+                        System.Array.Copy(pictureData, 22, picDataNoHeader, 0, pictureData.Length-22);
                         pictureData = picDataNoHeader;
                     }
                     EscherMetafileBlip blipRecordMeta = new EscherMetafileBlip();
@@ -2027,10 +2109,10 @@ namespace NPOI.HSSF.UserModel
             List<HSSFPictureData> pictures = new List<HSSFPictureData>();
             foreach (Record r in workbook.Records)
             {
-                if (r is AbstractEscherHolderRecord) {
-                    ((AbstractEscherHolderRecord)r).Decode();
-                    IList escherRecords = ((AbstractEscherHolderRecord)r).EscherRecords;
-                    SearchForPictures(escherRecords, pictures);
+                if (r is AbstractEscherHolderRecord record) {
+                    record.Decode();
+                    IList escherRecords = record.EscherRecords;
+                    HSSFWorkbook.SearchForPictures(escherRecords, pictures);
                 }
             }
             return pictures;
@@ -2050,19 +2132,17 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="escherRecords">the escher records.</param>
         /// <param name="pictures">the list to populate with the pictures.</param>
-        private void SearchForPictures(IList escherRecords, List<HSSFPictureData> pictures)
+        private static void SearchForPictures(IList escherRecords, List<HSSFPictureData> pictures)
         {
             IEnumerator recordIter = escherRecords.GetEnumerator();
             while (recordIter.MoveNext())
             {
                 Object obj = recordIter.Current;
-                if (obj is EscherRecord)
+                if (obj is EscherRecord escherRecord)
                 {
-                    EscherRecord escherRecord = (EscherRecord)obj;
-
-                    if (escherRecord is EscherBSERecord)
+                    if (escherRecord is EscherBSERecord record)
                     {
-                        EscherBlipRecord blip = ((EscherBSERecord)escherRecord).BlipRecord;
+                        EscherBlipRecord blip = record.BlipRecord;
                         if (blip != null)
                         {
                             // TODO: Some kind of structure.
@@ -2071,7 +2151,7 @@ namespace NPOI.HSSF.UserModel
                     }
 
                     // Recursive call.
-                    SearchForPictures(escherRecord.ChildRecords, pictures);
+                    HSSFWorkbook.SearchForPictures(escherRecord.ChildRecords, pictures);
                 }
             }
         }
@@ -2107,6 +2187,15 @@ namespace NPOI.HSSF.UserModel
             }
         }
 
+        /// <summary>
+        /// Adds an OLE package manager object with the given content to the sheet
+        /// </summary>
+        /// <param name="oleData">the payload</param>
+        /// <param name="label">the label of the payload</param>
+        /// <param name="fileName">the original filename</param>
+        /// <param name="command">the command to open the payload</param>
+        /// <return>the index of the added ole object, i.e. the storage id</return>
+        /// <exception cref="IOException">if the object can't be embedded</exception>
         public int AddOlePackage(byte[] oleData, String label, String fileName, String command)
         {
             // check if we were Created by POIFS otherwise create a new dummy POIFS for storing the package data
@@ -2197,7 +2286,7 @@ namespace NPOI.HSSF.UserModel
             List<HSSFObjectData> objects = new List<HSSFObjectData>();
             foreach (HSSFSheet sheet in _sheets)
             {
-                GetAllEmbeddedObjects(sheet, objects);
+                HSSFWorkbook.GetAllEmbeddedObjects(sheet, objects);
             }
             return objects;
         }
@@ -2207,14 +2296,14 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="sheet">the list of records to search.</param>
         /// <param name="objects">the list of embedded objects to populate.</param>
-        private void GetAllEmbeddedObjects(HSSFSheet sheet, List<HSSFObjectData> objects)
+        private static void GetAllEmbeddedObjects(HSSFSheet sheet, List<HSSFObjectData> objects)
         {
             HSSFPatriarch patriarch = sheet.DrawingPatriarch as HSSFPatriarch;
             if (null == patriarch)
             {
                 return;
             }
-            GetAllEmbeddedObjects(patriarch, objects);
+            HSSFWorkbook.GetAllEmbeddedObjects(patriarch, objects);
         }
 
         /// <summary>
@@ -2222,13 +2311,13 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="parent">the parent.</param>
         /// <param name="objects">the list of embedded objects to populate.</param>
-        private void GetAllEmbeddedObjects(HSSFShapeContainer parent, List<HSSFObjectData> objects)
+        private static void GetAllEmbeddedObjects(HSSFShapeContainer parent, List<HSSFObjectData> objects)
         {
             foreach (HSSFShape shape in parent.Children) {
-                if (shape is HSSFObjectData) {
-                    objects.Add((HSSFObjectData) shape);
-                } else if (shape is HSSFShapeContainer) {
-                    GetAllEmbeddedObjects((HSSFShapeContainer) shape, objects);
+                if (shape is HSSFObjectData data) {
+                    objects.Add(data);
+                } else if (shape is HSSFShapeContainer container) {
+                    HSSFWorkbook.GetAllEmbeddedObjects(container, objects);
                 }
             }
         }
@@ -2410,6 +2499,11 @@ namespace NPOI.HSSF.UserModel
         public bool IsDate1904()
         {
             return Workbook.IsUsing1904DateWindowing;
+        }
+
+        public DataSet ToDataSet(bool firstRowAsHeader = false, bool showCalculatedValue = false)
+        {
+            return WorkbookUtil.ToDataSet(this, firstRowAsHeader, showCalculatedValue);
         }
 
         public void Dispose()

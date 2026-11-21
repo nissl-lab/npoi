@@ -21,23 +21,32 @@ namespace NPOI.XSSF.UserModel
     using System.Collections.Generic;
     using NPOI.HSSF.Util;
     using NPOI.SS.UserModel;
-    using NPOI.OpenXmlFormats.Dml.Spreadsheet;
     using NPOI.OpenXmlFormats.Dml;
-    using System.Text;
+    using OpenXmlFormats.Dml.Spreadsheet;
+    using System.Text; 
+using Cysharp.Text;
     using NPOI.OpenXmlFormats.Spreadsheet;
     using NPOI.Util;
+    using NPOI.XDDF.UserModel.Text;
+    using NPOI.XDDF.UserModel;
+    using NPOI.Util.Optional;
 
 
     /**
      * Represents a shape with a predefined geometry in a SpreadsheetML Drawing.
      * Possible shape types are defined in {@link NPOI.SS.UserModel.ShapeTypes}
      */
-    public class XSSFSimpleShape : XSSFShape, IEnumerable<XSSFTextParagraph>, ISimpleShape
+    public class XSSFSimpleShape : XSSFShape, IEnumerable<XSSFTextParagraph>, 
+        ISimpleShape, ITextContainer
     { // TODO - instantiable superclass
+        /// <summary>
+        /// The text body containing the paragraphs for this shape.
+        /// </summary>
+        private XDDFTextBody _textBody;
         /**
          * List of the paragraphs that make up the text in this shape
          */
-        private List<XSSFTextParagraph> _paragraphs;
+        private readonly List<XSSFTextParagraph> _paragraphs;
         /**
          * A default instance of CTShape used for creating new shapes.
          */
@@ -46,7 +55,7 @@ namespace NPOI.XSSF.UserModel
         /**
          *  Xml bean that stores properties of this shape
          */
-        private CT_Shape ctShape;
+        private readonly CT_Shape ctShape;
 
         protected internal XSSFSimpleShape(XSSFDrawing Drawing, CT_Shape ctShape)
         {
@@ -57,10 +66,15 @@ namespace NPOI.XSSF.UserModel
 
             // Initialize any existing paragraphs - this will be the default body paragraph in a new shape, 
             // or existing paragraphs that have been loaded from the file
-            NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_TextBody body = ctShape.txBody;
-            if (body != null)
+            CT_TextBody body = ctShape.txBody;
+            if(body == null)
             {
-                for (int i = 0; i < body.SizeOfPArray(); i++)
+                _textBody = null;
+            }
+            else
+            {
+                _textBody = new XDDFTextBody(this, body);
+                for(int i = 0; i < body.SizeOfPArray(); i++)
                 {
                     _paragraphs.Add(new XSSFTextParagraph(body.GetPArray(i), ctShape));
                 }
@@ -82,12 +96,12 @@ namespace NPOI.XSSF.UserModel
                 CT_Shape shape = new CT_Shape();
 
                 CT_ShapeNonVisual nv = shape.AddNewNvSpPr();
-                NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_NonVisualDrawingProps nvp = nv.AddNewCNvPr();
+                OpenXmlFormats.Dml.Spreadsheet.CT_NonVisualDrawingProps nvp = nv.AddNewCNvPr();
                 nvp.id = (/*setter*/1);
                 nvp.name = (/*setter*/"Shape 1");
                 nv.AddNewCNvSpPr();
 
-                NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_ShapeProperties sp = shape.AddNewSpPr();
+                OpenXmlFormats.Dml.Spreadsheet.CT_ShapeProperties sp = shape.AddNewSpPr();
                 CT_Transform2D t2d = sp.AddNewXfrm();
                 CT_PositiveSize2D p1 = t2d.AddNewExt();
                 p1.cx = (/*setter*/0);
@@ -100,24 +114,31 @@ namespace NPOI.XSSF.UserModel
                 geom.prst = (/*setter*/ST_ShapeType.rect);
                 geom.AddNewAvLst();
 
-                NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_TextBody body = shape.AddNewTxBody();
-                CT_TextBodyProperties bodypr = body.AddNewBodyPr();
-                bodypr.anchor = (/*setter*/ST_TextAnchoringType.t);
-                bodypr.rtlCol = (/*setter*/false);
-                CT_TextParagraph p = body.AddNewP();
-                p.AddNewPPr().algn = (/*setter*/ST_TextAlignType.l);
-                CT_TextCharacterProperties endPr = p.AddNewEndParaRPr();
-                endPr.lang = (/*setter*/"en-US");
-                endPr.sz = (/*setter*/1100);
-                CT_SolidColorFillProperties scfpr = endPr.AddNewSolidFill();
-                scfpr.AddNewSrgbClr().val = (/*setter*/new byte[] { 0, 0, 0 });
+                //CT_TextBody body = shape.AddNewTxBody();
+                //CT_TextBodyProperties bodypr = body.AddNewBodyPr();
+                //bodypr.anchor = (/*setter*/ST_TextAnchoringType.t);
+                //bodypr.rtlCol = (/*setter*/false);
+                //CT_TextParagraph p = body.AddNewP();
+                //p.AddNewPPr().algn = (/*setter*/ST_TextAlignType.l);
+                //CT_TextCharacterProperties endPr = p.AddNewEndParaRPr();
+                //endPr.lang = (/*setter*/"en-US");
+                //endPr.sz = (/*setter*/1100);
+                //CT_SolidColorFillProperties scfpr = endPr.AddNewSolidFill();
+                //scfpr.AddNewSrgbClr().val = (/*setter*/new byte[] { 0, 0, 0 });
 
-                bodypr.lIns = 91440;    //default value
-                bodypr.tIns = 45720;    //default value
-                bodypr.rIns = 91440;    //default value
-                bodypr.bIns = 45720;    //default value
+                //bodypr.lIns = 91440;    //default value
+                //bodypr.tIns = 45720;    //default value
+                //bodypr.rIns = 91440;    //default value
+                //bodypr.bIns = 45720;    //default value
 
-                body.AddNewLstStyle();
+                //body.AddNewLstStyle();
+
+                XDDFTextBody body = new XDDFTextBody(null, shape.AddNewTxBody());
+                XDDFTextParagraph p = body.Initialize();
+                XDDFRunProperties rp = p.AfterLastRunProperties;
+                XDDFColor black = new XDDFColorRgbBinary(new byte[] { 0, 0, 0 });
+                IXDDFFillProperties fp = new XDDFSolidFillProperties(black);
+                rp.SetFillProperties(fp);
 
                 prototype = shape;
             }
@@ -130,6 +151,7 @@ namespace NPOI.XSSF.UserModel
             return ctShape;
         }
 
+        public XDDFTextBody TextBody => _textBody;
         /**
          * Returns the simple shape id.
          * @return id of the simple shape
@@ -316,9 +338,9 @@ namespace NPOI.XSSF.UserModel
          * @param value the value of the bullet
          * @return appropriate prefix for an auto-numbering bullet
          */
-        private String GetBulletPrefix(ListAutoNumber scheme, int value)
+        private static String GetBulletPrefix(ListAutoNumber scheme, int value)
         {
-            StringBuilder out1 = new StringBuilder();
+            using var out1 = ZString.CreateStringBuilder();
 
             switch (scheme)
             {
@@ -386,7 +408,7 @@ namespace NPOI.XSSF.UserModel
         /**
          * Convert an integer to its alpha equivalent e.g. 1 = A, 2 = B, 27 = AA etc
          */
-        private String valueToAlpha(int value)
+        private static String valueToAlpha(int value)
         {
             String alpha = "";
             int modulo;
@@ -399,15 +421,15 @@ namespace NPOI.XSSF.UserModel
             return alpha;
         }
 
-        private static String[] _romanChars = new String[] { "M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I" };
-        private static int[] _romanAlphaValues = new int[] { 1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1 };
+        private static readonly String[] _romanChars = new String[] { "M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I" };
+        private static readonly int[] _romanAlphaValues = new int[] { 1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1 };
 
         /**
          * Convert an integer to its roman equivalent e.g. 1 = I, 9 = IX etc
          */
-        private String valueToRoman(int value)
+        private static String valueToRoman(int value)
         {
-            StringBuilder out1 = new StringBuilder();
+            using var out1 = ZString.CreateStringBuilder();
             for (int i = 0; value > 0 && i < _romanChars.Length; i++)
             {
                 while (_romanAlphaValues[i] <= value)
@@ -425,7 +447,7 @@ namespace NPOI.XSSF.UserModel
         public void ClearText()
         {
             _paragraphs.Clear();
-            NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_TextBody txBody = ctShape.txBody;
+            CT_TextBody txBody = ctShape.txBody;
             txBody.SetPArray(null); // remove any existing paragraphs
         }
 
@@ -517,7 +539,7 @@ namespace NPOI.XSSF.UserModel
          */
         public XSSFTextParagraph AddNewTextParagraph()
         {
-            NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_TextBody txBody = ctShape.txBody;
+            CT_TextBody txBody = ctShape.txBody;
             CT_TextParagraph p = txBody.AddNewP();
             XSSFTextParagraph paragraph = new XSSFTextParagraph(p, ctShape);
             _paragraphs.Add(paragraph);
@@ -543,7 +565,7 @@ namespace NPOI.XSSF.UserModel
          */
         public XSSFTextParagraph AddNewTextParagraph(XSSFRichTextString str)
         {
-            NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_TextBody txBody = ctShape.txBody;
+            CT_TextBody txBody = ctShape.txBody;
             CT_TextParagraph p = txBody.AddNewP();
 
             if (str.NumFormattingRuns == 0)
@@ -1013,6 +1035,26 @@ namespace NPOI.XSSF.UserModel
                     }
                 }
             }
+        }
+
+        public Option<R> FindDefinedParagraphProperty<R>(Func<CT_TextParagraphProperties, bool> isSet, Func<CT_TextParagraphProperties, R> getter) where R : class
+        {
+            return Option<R>.None();
+        }
+
+        public Option<R> FindDefinedRunProperty<R>(Func<CT_TextCharacterProperties, bool> isSet, Func<CT_TextCharacterProperties, R> getter) where R : class
+        {
+            return Option<R>.None();
+        }
+
+        public ValueOption<V> FindDefinedParagraphValueProperty<V>(Func<CT_TextParagraphProperties, bool> isSet, Func<CT_TextParagraphProperties, V> getter) where V : struct
+        {
+            return ValueOption<V>.None();
+        }
+
+        public ValueOption<V> FindDefinedRunValueProperty<V>(Func<CT_TextCharacterProperties, bool> isSet, Func<CT_TextCharacterProperties, V> getter) where V : struct
+        {
+            return ValueOption<V>.None();
         }
 
         public override string ShapeName => ctShape.nvSpPr.cNvPr.name;

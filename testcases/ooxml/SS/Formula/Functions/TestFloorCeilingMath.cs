@@ -16,7 +16,7 @@
  *    limitations under the License.
  * ====================================================================
  */
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -113,7 +113,7 @@ namespace TestCases.SS.Formula.Functions
 
                         var functionResult = function.Evaluate(number, significance);
                         
-                        Assert.AreEqual(expected, functionResult, Tolerance, $"{function}, {number}, {significance}");
+                        ClassicAssert.AreEqual(expected, functionResult, Tolerance, $"{function}, {number}, {significance}");
                     }
                 }
             });

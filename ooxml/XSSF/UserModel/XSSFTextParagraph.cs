@@ -18,10 +18,11 @@ using System.Collections.Generic;
 using NPOI.OpenXmlFormats.Dml;
 using NPOI.OpenXmlFormats.Dml.Spreadsheet;
 using System;
-using System.Text;
+using System.Text; 
+using Cysharp.Text;
 using NPOI.XSSF.Model;
 using NPOI.Util;
-using SixLabors.ImageSharp.PixelFormats;
+using SkiaSharp;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -31,9 +32,9 @@ namespace NPOI.XSSF.UserModel
      */
     public class XSSFTextParagraph : IEnumerator<XSSFTextRun>, IEnumerable<XSSFTextRun>
     {
-        private CT_TextParagraph _p;
-        private CT_Shape _shape;
-        private List<XSSFTextRun> _Runs;
+        private readonly CT_TextParagraph _p;
+        private readonly CT_Shape _shape;
+        private readonly List<XSSFTextRun> _Runs;
 
         public XSSFTextParagraph(CT_TextParagraph p, CT_Shape ctShape)
         {
@@ -42,25 +43,22 @@ namespace NPOI.XSSF.UserModel
             _Runs = new List<XSSFTextRun>();
             foreach (object ch in _p.r)
             {
-                if (ch is CT_RegularTextRun)
+                if (ch is CT_RegularTextRun run)
                 {
-                    CT_RegularTextRun r = (CT_RegularTextRun)ch;
-                    _Runs.Add(new XSSFTextRun(r, this));
+                    _Runs.Add(new XSSFTextRun(run, this));
                 }
-                else if (ch is CT_TextLineBreak)
+                else if (ch is CT_TextLineBreak br)
                 {
-                    CT_TextLineBreak br = (CT_TextLineBreak)ch;
                     CT_RegularTextRun r = new CT_RegularTextRun();
                     r.rPr = (br.rPr);
                     r.t=("\n");
                     _Runs.Add(new XSSFTextRun(r, this));
                 }
-                else if (ch is CT_TextField)
+                else if (ch is CT_TextField field)
                 {
-                    CT_TextField f = (CT_TextField)ch;
                     CT_RegularTextRun r = new CT_RegularTextRun();
-                    r.rPr = (f.rPr);
-                    r.t = (f.t);
+                    r.rPr = (field.rPr);
+                    r.t = (field.t);
                     _Runs.Add(new XSSFTextRun(r, this));
                 }
             }
@@ -88,7 +86,7 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                StringBuilder out1 = new StringBuilder();
+                using var out1 = ZString.CreateStringBuilder();
                 foreach (XSSFTextRun r in _Runs)
                 {
                     out1.Append(r.Text);
@@ -185,7 +183,7 @@ namespace NPOI.XSSF.UserModel
                 }
             }
         }
-        private class ParagraphPropertyTextAlignFetcher : ParagraphPropertyFetcher<TextAlign?>
+        private sealed class ParagraphPropertyTextAlignFetcher : ParagraphPropertyFetcher<TextAlign?>
         {
             public ParagraphPropertyTextAlignFetcher(int level) : base(level) 
             {
@@ -341,7 +339,7 @@ namespace NPOI.XSSF.UserModel
          * @return the color of bullet characters within a given paragraph.
          * A <code>null</code> value means to use the text font color.
          */
-        public Rgb24 BulletFontColor
+        public SKColor BulletFontColor
         {
             get
             {
@@ -367,10 +365,10 @@ namespace NPOI.XSSF.UserModel
                 CT_TextParagraphProperties pr = _p.IsSetPPr() ? _p.pPr : _p.AddNewPPr();
                 CT_Color c = pr.IsSetBuClr() ? pr.buClr : pr.AddNewBuClr();
                 CT_SRgbColor clr = c.IsSetSrgbClr() ? c.srgbClr : c.AddNewSrgbClr();
-                clr.val = (new byte[] { value.R, value.G, value.B });
+                clr.val = (new byte[] { value.Red, value.Green, value.Blue });
             }
         }
-        class ParagraphPropertyFetcherBulletFontColor : ParagraphPropertyFetcher<Rgb24>
+        class ParagraphPropertyFetcherBulletFontColor : ParagraphPropertyFetcher<SKColor>
         {
             public ParagraphPropertyFetcherBulletFontColor(int level) : base(level) { }
             public override bool Fetch(CT_TextParagraphProperties props)
@@ -381,7 +379,7 @@ namespace NPOI.XSSF.UserModel
                     {
                         CT_SRgbColor clr = props.buClr.srgbClr;
                         byte[] rgb = clr.val;
-                        SetValue(new Rgb24((byte)(0xFF & rgb[0]), (byte)(0xFF & rgb[1]), (byte)(0xFF & rgb[2])));
+                        SetValue(new SKColor((byte)(0xFF & rgb[0]), (byte)(0xFF & rgb[1]), (byte)(0xFF & rgb[2])));
                         return true;
                     }
                 }
@@ -674,7 +672,7 @@ namespace NPOI.XSSF.UserModel
 
         class ParagraphPropertyFetcherTabStop : ParagraphPropertyFetcher<double>
         {
-            private int idx;
+            private readonly int idx;
             public ParagraphPropertyFetcherTabStop(int level, int idx) : base(level) { this.idx = idx; }
             public override bool Fetch(CT_TextParagraphProperties props)
             {

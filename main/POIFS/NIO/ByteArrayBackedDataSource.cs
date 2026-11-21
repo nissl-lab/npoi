@@ -22,10 +22,13 @@ using NPOI.Util;
 namespace NPOI.POIFS.NIO
 {
     /// <summary>
-    /// A POIFS <see cref="T:NPOI.POIFS.NIO.DataSource"/> backed by a byte array.
+    /// A POIFS <see cref="NPOI.POIFS.NIO.DataSource"/> backed by a byte array.
     /// </summary>
     public class ByteArrayBackedDataSource : DataSource
     {
+        //Can we make this shorter?
+        private static int MAX_RECORD_LENGTH = int.MaxValue;
+
         private byte[] buffer;
         private long size;
         
@@ -85,7 +88,8 @@ namespace NPOI.POIFS.NIO
             {
                 difference = 4096;
             }
-            byte[] nb = new byte[(int)(difference + buffer.Length)];
+            long totalLen = difference+buffer.Length;
+            byte[] nb = IOUtils.SafelyAllocate(totalLen, MAX_RECORD_LENGTH);
             Array.Copy(buffer, 0, nb, 0, (int)size);
             buffer = nb;
         }

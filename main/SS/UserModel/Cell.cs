@@ -19,10 +19,16 @@ namespace NPOI.SS.UserModel
 {
     using System;
     using NPOI.SS.Util;
+    using NPOI.Util;
 
     public enum CellType : int
     {
-        Unknown = -1,
+        /**
+         * Unknown type, used to represent a state prior to initialization or the
+         * lack of a concrete type.
+         * For internal use only.
+         */
+        _None = -1, /*Internal*/
         Numeric = 0,
         String = 1,
         Formula = 2,
@@ -240,8 +246,10 @@ namespace NPOI.SS.UserModel
         ICellStyle CellStyle { get; set; }
 
         /// <summary>
-        /// Sets this cell as the active cell for the worksheet
+        /// Gets or sets the cell style. Same as <see cref="CellStyle"/>. Provided for API consistency with IronXL.
         /// </summary>
+        ICellStyle Style { get; set; }
+
         void SetAsActiveCell();
 
         /**
@@ -296,6 +304,7 @@ namespace NPOI.SS.UserModel
         /// Will be renamed to <c>getCachedFormulaResultType()</c> when we make the CellType enum transition in POI 4.0. See bug 59791.
         /// </remarks>
         [Obsolete("Will be removed at NPOI 2.8, Use CachedFormulaResultType instead.")]
+        [Removal(Version = "4.2")]
         CellType GetCachedFormulaResultTypeEnum();
     }
 }

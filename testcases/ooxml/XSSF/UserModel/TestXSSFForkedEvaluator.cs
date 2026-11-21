@@ -17,7 +17,7 @@
 
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using TestCases.SS.Formula.Eval.Forked;
 
 namespace TestCases.XSSF.UserModel

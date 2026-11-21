@@ -1,7 +1,8 @@
 ﻿using NPOI.SS.Formula.Eval;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Text; 
+using Cysharp.Text;
 
 namespace NPOI.SS.Formula.Functions
 {
@@ -100,7 +101,7 @@ namespace NPOI.SS.Formula.Functions
                 return ErrorEval.VALUE_INVALID;
             }
 
-            StringBuilder strb = new StringBuilder("");
+            using var strb = ZString.CreateStringBuilder();
             if (realNum != 0)
             {
                 if (isDoubleAnInt(realNum))
@@ -140,7 +141,7 @@ namespace NPOI.SS.Formula.Functions
             return new StringEval(strb.ToString());
         }
 
-        private bool isDoubleAnInt(double number)
+        private static bool isDoubleAnInt(double number)
         {
             return (number == Math.Floor(number)) && !Double.IsInfinity(number);
         }

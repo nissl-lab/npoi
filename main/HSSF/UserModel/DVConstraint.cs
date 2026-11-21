@@ -37,8 +37,8 @@ using NPOI.HSSF.Record;
         public class FormulaPair
         {
 
-            private Ptg[] _formula1;
-            private Ptg[] _formula2;
+            private readonly Ptg[] _formula1;
+            private readonly Ptg[] _formula2;
 
             public FormulaPair(Ptg[] formula1, Ptg[] formula2)
             {
@@ -66,7 +66,7 @@ using NPOI.HSSF.Record;
         //private static ValidationType VT = null;
 
 
-        private int _validationType;
+        private readonly int _validationType;
         private int _operator;
         private String[] _explicitListValues;
 
@@ -527,11 +527,11 @@ using NPOI.HSSF.Record;
                     if (dvRecord.ListExplicitFormula)
                     {
                         String values = toFormulaString(dvRecord.Formula1, book).AsString();
-                        if (values.StartsWith("\""))
+                        if (values.StartsWith('"'))
                         {
                             values = values.Substring(1);
                         }
-                        if (values.EndsWith("\""))
+                        if (values.EndsWith('"'))
                         {
                             values = values.Substring(0, values.Length - 1);
                         }
@@ -550,7 +550,7 @@ using NPOI.HSSF.Record;
             }
         }
 
-        private class FormulaValuePair
+        private sealed class FormulaValuePair
         {
             internal String _formula;
             internal String _value;

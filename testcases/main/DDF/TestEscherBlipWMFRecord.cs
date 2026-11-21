@@ -24,7 +24,7 @@ namespace TestCases.DDF
     using System.Collections.Generic;
     using System.IO;
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.DDF;
     using NPOI.Util;
     [TestFixture]
@@ -66,7 +66,7 @@ namespace TestCases.DDF
             byte[] buf = new byte[r.RecordSize];
             r.Serialize(0, buf);
 
-            Assert.AreEqual("[2C, 15, 18, F0, 26, 00, 00, 00, " +
+            ClassicAssert.AreEqual("[2C, 15, 18, F0, 26, 00, 00, 00, " +
                     "01, 01, 01, 01, 01, 01, 01, 01, 01, 01, 01, 01, 01, 01, 01, 01, " +
                     "06, 00, 00, 00, " +    // field_2_cacheOfSize
                     "03, 00, 00, 00, " +    // field_3_boundaryTop
@@ -80,7 +80,7 @@ namespace TestCases.DDF
                     "07, " +                // field_11_filter
                     "01, 02]",            // field_12_data
                     HexDump.ToHex(buf));
-            Assert.AreEqual(60, r.RecordSize);
+            ClassicAssert.AreEqual(60, r.RecordSize);
 
         }
         [Test]
@@ -89,20 +89,20 @@ namespace TestCases.DDF
             EscherBlipWMFRecord r = new EscherBlipWMFRecord();
             r.FillFields(data, 0, new DefaultEscherRecordFactory());
 
-            Assert.AreEqual(EscherBlipWMFRecord.RECORD_ID_START, r.RecordId);
-            Assert.AreEqual(1, r.BoundaryLeft);
-            Assert.AreEqual(2, r.BoundaryHeight);
-            Assert.AreEqual(3, r.BoundaryTop);
-            Assert.AreEqual(4, r.BoundaryWidth);
-            Assert.AreEqual(5, r.CacheOfSavedSize);
-            Assert.AreEqual(6, r.CacheOfSize);
-            Assert.AreEqual(7, r.Filter);
-            Assert.AreEqual(8, r.CompressionFlag);
-            Assert.AreEqual("[01, 01, 01, 01, 01, 01, 01, 01, 01, 01, 01, 01, 01, 01, 01, 01]", HexDump.ToHex(r.SecondaryUID));
-            Assert.AreEqual(10, r.Width);
-            Assert.AreEqual(11, r.Height);
-            Assert.AreEqual((short)5420, r.Options);
-            Assert.AreEqual("[01, 02]", HexDump.ToHex(r.Data));
+            ClassicAssert.AreEqual(EscherBlipWMFRecord.RECORD_ID_START, r.RecordId);
+            ClassicAssert.AreEqual(1, r.BoundaryLeft);
+            ClassicAssert.AreEqual(2, r.BoundaryHeight);
+            ClassicAssert.AreEqual(3, r.BoundaryTop);
+            ClassicAssert.AreEqual(4, r.BoundaryWidth);
+            ClassicAssert.AreEqual(5, r.CacheOfSavedSize);
+            ClassicAssert.AreEqual(6, r.CacheOfSize);
+            ClassicAssert.AreEqual(7, r.Filter);
+            ClassicAssert.AreEqual(8, r.CompressionFlag);
+            ClassicAssert.AreEqual("[01, 01, 01, 01, 01, 01, 01, 01, 01, 01, 01, 01, 01, 01, 01, 01]", HexDump.ToHex(r.SecondaryUID));
+            ClassicAssert.AreEqual(10, r.Width);
+            ClassicAssert.AreEqual(11, r.Height);
+            ClassicAssert.AreEqual((short)5420, r.Options);
+            ClassicAssert.AreEqual("[01, 02]", HexDump.ToHex(r.Data));
         }
         [Test]
         public void TestToString()
@@ -112,7 +112,7 @@ namespace TestCases.DDF
 
             String nl = Environment.NewLine;
 
-            Assert.AreEqual("EscherBlipWMFRecord:" + nl +
+            ClassicAssert.AreEqual("EscherBlipWMFRecord:" + nl +
                     "  RecordId: 0xF018" + nl +
                     "  Version: 0x000C" + nl +
                     "  Instance: 0x0152" + nl +

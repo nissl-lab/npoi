@@ -16,7 +16,7 @@
 ==================================================================== */
 
 using NPOI.XSSF.UserModel;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 
 namespace TestCases.XSSF.UserModel
 {
@@ -35,27 +35,27 @@ namespace TestCases.XSSF.UserModel
             row.CreateCell(0);
             XSSFEvaluationSheet evalsheet = new XSSFEvaluationSheet(sheet);
 
-            Assert.IsNotNull(evalsheet.GetCell(0, 0), "Cell 0,0 is found");
-            Assert.IsNull(evalsheet.GetCell(0, 1), "Cell 0,1 is not found");
-            Assert.IsNull(evalsheet.GetCell(1, 0), "Cell 1,0 is not found");
+            ClassicAssert.IsNotNull(evalsheet.GetCell(0, 0), "Cell 0,0 is found");
+            ClassicAssert.IsNull(evalsheet.GetCell(0, 1), "Cell 0,1 is not found");
+            ClassicAssert.IsNull(evalsheet.GetCell(1, 0), "Cell 1,0 is not found");
 
             // now add Cell 0,1
             row.CreateCell(1);
 
-            Assert.IsNotNull(evalsheet.GetCell(0, 0), "Cell 0,0 is found");
-            Assert.IsNotNull(evalsheet.GetCell(0, 1), "Cell 0,1 is now also found");
-            Assert.IsNull(evalsheet.GetCell(1, 0), "Cell 1,0 is not found");
+            ClassicAssert.IsNotNull(evalsheet.GetCell(0, 0), "Cell 0,0 is found");
+            ClassicAssert.IsNotNull(evalsheet.GetCell(0, 1), "Cell 0,1 is now also found");
+            ClassicAssert.IsNull(evalsheet.GetCell(1, 0), "Cell 1,0 is not found");
 
             // After clearing all values it also works
             row.CreateCell(2);
             evalsheet.ClearAllCachedResultValues();
 
-            Assert.IsNotNull(evalsheet.GetCell(0, 0), "Cell 0,0 is found");
-            Assert.IsNotNull(evalsheet.GetCell(0, 2), "Cell 0,2 is now also found");
-            Assert.IsNull(evalsheet.GetCell(1, 0), "Cell 1,0 is not found");
+            ClassicAssert.IsNotNull(evalsheet.GetCell(0, 0), "Cell 0,0 is found");
+            ClassicAssert.IsNotNull(evalsheet.GetCell(0, 2), "Cell 0,2 is now also found");
+            ClassicAssert.IsNull(evalsheet.GetCell(1, 0), "Cell 1,0 is not found");
 
             // other things
-            Assert.AreEqual(sheet, evalsheet.XSSFSheet);
+            ClassicAssert.AreEqual(sheet, evalsheet.XSSFSheet);
         }
     }
 }

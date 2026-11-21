@@ -25,8 +25,8 @@ namespace NPOI.SS.Formula
 
     public class ExternalSheet
     {
-        private String _workbookName;
-        private String _sheetName;
+        private readonly String _workbookName;
+        private readonly String _sheetName;
 
         public ExternalSheet(String workbookName, String sheetName)
         {
@@ -51,7 +51,7 @@ namespace NPOI.SS.Formula
 
     public class ExternalSheetRange : ExternalSheet
     {
-        private String _lastSheetName;
+        private readonly String _lastSheetName;
         public ExternalSheetRange(String workbookName, String firstSheetName, String lastSheetName)
             : base(workbookName, firstSheetName)
         {
@@ -134,9 +134,9 @@ namespace NPOI.SS.Formula
 
     public class ExternalName
     {
-        private String _nameName;
-        private int _nameNumber;
-        private int _ix;
+        private readonly String _nameName;
+        private readonly int _nameNumber;
+        private readonly int _ix;
 
         public ExternalName(String nameName, int nameNumber, int ix)
         {

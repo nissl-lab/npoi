@@ -29,7 +29,7 @@ using System;
 using System.IO;
 using System.Collections;
 
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using NPOI.POIFS.Storage;
 using NPOI.POIFS.Common;
 using NPOI.Util;
@@ -103,7 +103,7 @@ namespace TestCases.POIFS.Storage
             }
 
             dummyPoiLogger.Reset(); // the logger may have been used before
-            Assert.AreEqual(0, dummyPoiLogger.logged.Count);
+            ClassicAssert.AreEqual(0, dummyPoiLogger.logged.Count);
 
             // Test for various short sizes
             for (int k = 2049; k < 2560; k++)
@@ -118,7 +118,7 @@ namespace TestCases.POIFS.Storage
                 // Check we logged the error
                 dummyPoiLogger.Reset();
                 new RawDataBlockList(new MemoryStream(data), POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS);
-                Assert.AreEqual(1, dummyPoiLogger.logged.Count);
+                ClassicAssert.AreEqual(1, dummyPoiLogger.logged.Count);
             }
         }
     }

@@ -39,7 +39,7 @@ namespace NPOI.Util
     public class ByteField : FixedField
     {
         private const byte _default_value = 0;
-        private int _offset;
+        private readonly int _offset;
         private byte _value;
 
         /// <summary>
@@ -135,10 +135,10 @@ namespace NPOI.Util
         }
 
         /// <summary>
-        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+        /// Returns a <see cref="System.String"/> that represents the current <see cref="System.Object"/>.
         /// </summary>
         /// <returns>
-        /// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+        /// A <see cref="System.String"/> that represents the current <see cref="System.Object"/>.
         /// </returns>
         public override string ToString()
         {

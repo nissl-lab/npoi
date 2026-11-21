@@ -63,9 +63,8 @@ namespace NPOI.HSSF.EventUserModel
             int thisColumn;
             CellValueRecordInterface[] expandedRecords = null;
 
-            if (record is CellValueRecordInterface)
+            if (record is CellValueRecordInterface valueRec)
             {
-                CellValueRecordInterface valueRec = (CellValueRecordInterface)record;
                 thisRow = valueRec.Row;
                 thisColumn = valueRec.Column;
             }

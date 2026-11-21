@@ -22,7 +22,7 @@ using System.Linq;
 using System.Text;
 using NPOI.POIFS.FileSystem;
 using NPOI.Util;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using System.IO;
 
 namespace TestCases.POIFS.FileSystem
@@ -52,27 +52,27 @@ namespace TestCases.POIFS.FileSystem
         public void TestNoFiltering()
         {
             FilteringDirectoryNode d = new FilteringDirectoryNode(fs.Root, new HashSet<String>());
-            Assert.AreEqual(3, d.EntryCount);
-            Assert.AreEqual(dirA.Name, d.GetEntry(dirA.Name).Name);
+            ClassicAssert.AreEqual(3, d.EntryCount);
+            ClassicAssert.AreEqual(dirA.Name, d.GetEntry(dirA.Name).Name);
 
-            Assert.AreEqual(true, d.GetEntry(dirA.Name).IsDirectoryEntry);
-            Assert.AreEqual(false, d.GetEntry(dirA.Name).IsDocumentEntry);
+            ClassicAssert.AreEqual(true, d.GetEntry(dirA.Name).IsDirectoryEntry);
+            ClassicAssert.AreEqual(false, d.GetEntry(dirA.Name).IsDocumentEntry);
 
-            Assert.AreEqual(true, d.GetEntry(dirB.Name).IsDirectoryEntry);
-            Assert.AreEqual(false, d.GetEntry(dirB.Name).IsDocumentEntry);
+            ClassicAssert.AreEqual(true, d.GetEntry(dirB.Name).IsDirectoryEntry);
+            ClassicAssert.AreEqual(false, d.GetEntry(dirB.Name).IsDocumentEntry);
 
-            Assert.AreEqual(false, d.GetEntry(eRoot.Name).IsDirectoryEntry);
-            Assert.AreEqual(true, d.GetEntry(eRoot.Name).IsDocumentEntry);
+            ClassicAssert.AreEqual(false, d.GetEntry(eRoot.Name).IsDirectoryEntry);
+            ClassicAssert.AreEqual(true, d.GetEntry(eRoot.Name).IsDocumentEntry);
 
             IEnumerator<Entry> i = d.Entries;
             i.MoveNext();
-            Assert.AreEqual(dirA, i.Current);
+            ClassicAssert.AreEqual(dirA, i.Current);
             i.MoveNext();
-            Assert.AreEqual(dirB, i.Current);
+            ClassicAssert.AreEqual(dirB, i.Current);
             i.MoveNext();
-            Assert.AreEqual(eRoot, i.Current);
+            ClassicAssert.AreEqual(eRoot, i.Current);
             i.MoveNext();
-            Assert.AreEqual(null, i.Current);
+            ClassicAssert.AreEqual(null, i.Current);
         }
         [Test]
         public void TestChildFiltering()
@@ -80,13 +80,13 @@ namespace TestCases.POIFS.FileSystem
             List<String> excl = new List<string>(new String[] { "NotThere", "AlsoNotThere", eRoot.Name });
             FilteringDirectoryNode d = new FilteringDirectoryNode(fs.Root, excl);
 
-            Assert.AreEqual(2, d.EntryCount);
-            Assert.AreEqual(true, d.HasEntry(dirA.Name));
-            Assert.AreEqual(true, d.HasEntry(dirB.Name));
-            Assert.AreEqual(false, d.HasEntry(eRoot.Name));
+            ClassicAssert.AreEqual(2, d.EntryCount);
+            ClassicAssert.AreEqual(true, d.HasEntry(dirA.Name));
+            ClassicAssert.AreEqual(true, d.HasEntry(dirB.Name));
+            ClassicAssert.AreEqual(false, d.HasEntry(eRoot.Name));
 
-            Assert.AreEqual(dirA, d.GetEntry(dirA.Name));
-            Assert.AreEqual(dirB, d.GetEntry(dirB.Name));
+            ClassicAssert.AreEqual(dirA, d.GetEntry(dirA.Name));
+            ClassicAssert.AreEqual(dirB, d.GetEntry(dirB.Name));
             try
             {
                 d.GetEntry(eRoot.Name);
@@ -96,21 +96,21 @@ namespace TestCases.POIFS.FileSystem
 
             IEnumerator<Entry> i = d.Entries;
             i.MoveNext();
-            Assert.AreEqual(dirA, i.Current);
+            ClassicAssert.AreEqual(dirA, i.Current);
             i.MoveNext();
-            Assert.AreEqual(dirB, i.Current);
+            ClassicAssert.AreEqual(dirB, i.Current);
             i.MoveNext();
-            Assert.AreEqual(null, i.Current);
+            ClassicAssert.AreEqual(null, i.Current);
 
 
             // Filter more
             excl = new List<string>(new String[] { "NotThere", "AlsoNotThere", eRoot.Name, dirA.Name });
             d = new FilteringDirectoryNode(fs.Root, excl);
 
-            Assert.AreEqual(1, d.EntryCount);
-            Assert.AreEqual(false, d.HasEntry(dirA.Name));
-            Assert.AreEqual(true, d.HasEntry(dirB.Name));
-            Assert.AreEqual(false, d.HasEntry(eRoot.Name));
+            ClassicAssert.AreEqual(1, d.EntryCount);
+            ClassicAssert.AreEqual(false, d.HasEntry(dirA.Name));
+            ClassicAssert.AreEqual(true, d.HasEntry(dirB.Name));
+            ClassicAssert.AreEqual(false, d.HasEntry(eRoot.Name));
 
             try
             {
@@ -118,7 +118,7 @@ namespace TestCases.POIFS.FileSystem
                 Assert.Fail("Should be filtered");
             }
             catch (FileNotFoundException) { }
-            Assert.AreEqual(dirB, d.GetEntry(dirB.Name));
+            ClassicAssert.AreEqual(dirB, d.GetEntry(dirB.Name));
             try
             {
                 d.GetEntry(eRoot.Name);
@@ -128,19 +128,19 @@ namespace TestCases.POIFS.FileSystem
 
             i = d.Entries;
             i.MoveNext();
-            Assert.AreEqual(dirB, i.Current);
+            ClassicAssert.AreEqual(dirB, i.Current);
             i.MoveNext();
-            Assert.AreEqual(null, i.Current);
+            ClassicAssert.AreEqual(null, i.Current);
 
 
             // Filter everything
             excl = new List<string>(new String[] { "NotThere", eRoot.Name, dirA.Name, dirB.Name });
             d = new FilteringDirectoryNode(fs.Root, excl);
 
-            Assert.AreEqual(0, d.EntryCount);
-            Assert.AreEqual(false, d.HasEntry(dirA.Name));
-            Assert.AreEqual(false, d.HasEntry(dirB.Name));
-            Assert.AreEqual(false, d.HasEntry(eRoot.Name));
+            ClassicAssert.AreEqual(0, d.EntryCount);
+            ClassicAssert.AreEqual(false, d.HasEntry(dirA.Name));
+            ClassicAssert.AreEqual(false, d.HasEntry(dirB.Name));
+            ClassicAssert.AreEqual(false, d.HasEntry(eRoot.Name));
 
             try
             {
@@ -163,7 +163,7 @@ namespace TestCases.POIFS.FileSystem
 
             i = d.Entries;
             i.MoveNext();
-            Assert.AreEqual(null, i.Current);
+            ClassicAssert.AreEqual(null, i.Current);
         }
         [Test]
         public void TestNestedFiltering()
@@ -177,21 +177,21 @@ namespace TestCases.POIFS.FileSystem
             FilteringDirectoryNode d = new FilteringDirectoryNode(fs.Root, excl);
 
             // Check main
-            Assert.AreEqual(2, d.EntryCount);
-            Assert.AreEqual(true, d.HasEntry(dirA.Name));
-            Assert.AreEqual(true, d.HasEntry(dirB.Name));
-            Assert.AreEqual(false, d.HasEntry(eRoot.Name));
+            ClassicAssert.AreEqual(2, d.EntryCount);
+            ClassicAssert.AreEqual(true, d.HasEntry(dirA.Name));
+            ClassicAssert.AreEqual(true, d.HasEntry(dirB.Name));
+            ClassicAssert.AreEqual(false, d.HasEntry(eRoot.Name));
 
             // Check filtering down
-            Assert.AreEqual(true, d.GetEntry(dirA.Name) is FilteringDirectoryNode);
-            Assert.AreEqual(false, d.GetEntry(dirB.Name) is FilteringDirectoryNode);
+            ClassicAssert.AreEqual(true, d.GetEntry(dirA.Name) is FilteringDirectoryNode);
+            ClassicAssert.AreEqual(false, d.GetEntry(dirB.Name) is FilteringDirectoryNode);
 
             DirectoryEntry fdA = (DirectoryEntry)d.GetEntry(dirA.Name);
-            Assert.AreEqual(false, fdA.HasEntry(eA.Name));
-            Assert.AreEqual(true, fdA.HasEntry(dirAA.Name));
+            ClassicAssert.AreEqual(false, fdA.HasEntry(eA.Name));
+            ClassicAssert.AreEqual(true, fdA.HasEntry(dirAA.Name));
 
             DirectoryEntry fdAA = (DirectoryEntry)fdA.GetEntry(dirAA.Name);
-            Assert.AreEqual(true, fdAA.HasEntry(eAA.Name));
+            ClassicAssert.AreEqual(true, fdAA.HasEntry(eAA.Name));
         }
     }
 }

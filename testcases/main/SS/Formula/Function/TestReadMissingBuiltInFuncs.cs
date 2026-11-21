@@ -22,7 +22,7 @@ namespace TestCases.SS.Formula.Function
     using System;
     using TestCases.HSSF;
     using NPOI.SS.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.Util;
 
     /**
@@ -76,7 +76,7 @@ namespace TestCases.SS.Formula.Function
                 // some other unexpected error
                 throw e;
             }
-            Assert.AreEqual("DATEDIF(NOW(),NOW(),\"d\")", formula);
+            ClassicAssert.AreEqual("DATEDIF(NOW(),NOW(),\"d\")", formula);
         }
         [Test]
         public void TestDdb()
@@ -87,7 +87,7 @@ namespace TestCases.SS.Formula.Function
             {
                 throw afe("DDB() not registered");
             }
-            Assert.AreEqual("DDB(1,1,1,1,1)", formula);
+            ClassicAssert.AreEqual("DDB(1,1,1,1,1)", formula);
         }
         [Test]
         public void TestAtan()
@@ -98,7 +98,7 @@ namespace TestCases.SS.Formula.Function
             {
                 throw afe("func ix 18 registered as ARCTAN() instead of ATAN()");
             }
-            Assert.AreEqual("ATAN(1)", formula);
+            ClassicAssert.AreEqual("ATAN(1)", formula);
         }
         [Test]
         public void TestUsdollar()
@@ -109,7 +109,7 @@ namespace TestCases.SS.Formula.Function
             {
                 throw afe("func ix 204 registered as YEN() instead of USDOLLAR()");
             }
-            Assert.AreEqual("USDOLLAR(1)", formula);
+            ClassicAssert.AreEqual("USDOLLAR(1)", formula);
         }
         [Test]
         public void TestDBCS()
@@ -137,7 +137,7 @@ namespace TestCases.SS.Formula.Function
             {
                 throw afe("func ix 215 registered as JIS() instead of DBCS()");
             }
-            Assert.AreEqual("DBCS(\"abc\")", formula);
+            ClassicAssert.AreEqual("DBCS(\"abc\")", formula);
         }
         [Test]
         public void TestIsnontext()
@@ -156,14 +156,14 @@ namespace TestCases.SS.Formula.Function
                 // some other unexpected error
                 throw e;
             }
-            Assert.AreEqual("ISNONTEXT(\"abc\")", formula);
+            ClassicAssert.AreEqual("ISNONTEXT(\"abc\")", formula);
         }
         [Test]
         public void TestDproduct()
         {
 
             String formula = GetCellFormula(6);
-            Assert.AreEqual("DPRODUCT(C1:E5,\"HarvestYield\",G1:H2)", formula);
+            ClassicAssert.AreEqual("DPRODUCT(C1:E5,\"HarvestYield\",G1:H2)", formula);
         }
 
         private String GetCellFormula(int rowIx)

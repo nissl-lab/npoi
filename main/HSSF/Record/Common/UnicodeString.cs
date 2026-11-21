@@ -32,18 +32,21 @@ namespace NPOI.HSSF.Record
      * REFERENCE:  PG 951 Excel Binary File Format (.xls) Structure Specification v20091214 
      */
     public class UnicodeString : IComparable<UnicodeString>
-    { // TODO - make this when the compatibility version is Removed
-        private static POILogger _logger = POILogFactory.GetLogger(typeof(UnicodeString));
+    { 
+        // TODO - make this when the compatibility version is Removed
+        private static readonly POILogger _logger = POILogFactory.GetLogger(typeof(UnicodeString));
+        //arbitrarily selected; may need to increase
+        private static int MAX_RECORD_LENGTH = 100_000;
 
         private short field_1_charCount;
         private byte field_2_optionflags;
         private String field_3_string;
         private List<FormatRun> field_4_format_runs;
         private ExtRst field_5_ext_rst;
-        private static BitField highByte = BitFieldFactory.GetInstance(0x1);
+        private static readonly BitField highByte = BitFieldFactory.GetInstance(0x1);
         // 0x2 is reserved
-        private static BitField extBit = BitFieldFactory.GetInstance(0x4);
-        private static BitField richText = BitFieldFactory.GetInstance(0x8);
+        private static readonly BitField extBit = BitFieldFactory.GetInstance(0x4);
+        private static readonly BitField richText = BitFieldFactory.GetInstance(0x8);
 
         public class FormatRun : IComparable<FormatRun>
         {
@@ -79,11 +82,10 @@ namespace NPOI.HSSF.Record
 
             public override bool Equals(Object o)
             {
-                if (!(o is FormatRun))
+                if (o is not FormatRun other)
                 {
                     return false;
                 }
-                FormatRun other = (FormatRun)o;
 
                 return _character == other._character && _fontIndex == other._fontIndex;
             }
@@ -138,8 +140,8 @@ namespace NPOI.HSSF.Record
             {
                 reserved = 1;
                 phoneticText = "";
-                phRuns = new PhRun[0];
-                extraData = new byte[0];
+                phRuns = [];
+                extraData = [];
             }
             public override int GetHashCode()
             {
@@ -229,7 +231,7 @@ namespace NPOI.HSSF.Record
                     //System.err.Println("Warning - ExtRst overran by " + (0-extraDataLength) + " bytes");
                     extraDataLength = 0;
                 }
-                extraData = new byte[extraDataLength];
+                extraData = IOUtils.SafelyAllocate(extraDataLength, MAX_RECORD_LENGTH);
                 for (int i = 0; i < extraData.Length; i++)
                 {
                     extraData[i] = (byte)in1.ReadByte();
@@ -275,11 +277,11 @@ namespace NPOI.HSSF.Record
 
             public override bool Equals(Object obj)
             {
-                if (!(obj is ExtRst))
+                if (obj is not ExtRst other)
                 {
                     return false;
                 }
-                ExtRst other = (ExtRst)obj;
+
                 return (CompareTo(other) == 0);
             }
             public override string ToString()
@@ -435,11 +437,10 @@ namespace NPOI.HSSF.Record
          */
         public override bool Equals(Object o)
         {
-            if (!(o is UnicodeString))
+            if (o is not UnicodeString other)
             {
                 return false;
             }
-            UnicodeString other = (UnicodeString)o;
 
             //OK lets do this in stages to return a quickly, first check the actual string
             if (field_1_charCount != other.field_1_charCount

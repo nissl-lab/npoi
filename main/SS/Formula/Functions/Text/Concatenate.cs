@@ -20,7 +20,8 @@
  */
 namespace NPOI.SS.Formula.Functions
 {
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
     using NPOI.SS.Formula.Eval;
 
     /**
@@ -33,9 +34,9 @@ namespace NPOI.SS.Formula.Functions
 
         public override ValueEval EvaluateFunc(ValueEval[] args, int srcCellRow, int srcCellCol)
         {
+            using var sb = ZString.CreateStringBuilder();
 
-            StringBuilder sb = new StringBuilder();
-			for (int i=0, iSize=args.Length; i<iSize; i++) {
+            for(int i=0, iSize=args.Length; i<iSize; i++) {
 				sb.Append(EvaluateStringArg(args[i], srcCellRow, srcCellCol));
 			}
 			return new StringEval(sb.ToString());

@@ -24,7 +24,7 @@ namespace TestCases.HSSF.UserModel
     using NPOI.SS.Util;
     using NPOI.Util;
     using NPOI.HSSF.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.SS.UserModel;
     using NPOI.SS.Formula.PTG;
     using NPOI.HSSF.Model;
@@ -67,7 +67,7 @@ namespace TestCases.HSSF.UserModel
             r = s.GetRow(1);
             c = r.GetCell(1);
 
-            Assert.IsTrue("1+1".Equals(c.CellFormula), "Formula is as expected");
+            ClassicAssert.IsTrue("1+1".Equals(c.CellFormula), "Formula is as expected");
         }
 
         /**
@@ -227,9 +227,9 @@ namespace TestCases.HSSF.UserModel
                 {
 
                     ICell c = r.GetCell(y);
-                    Assert.IsTrue(c.CellFormula != null, "got a formula");
+                    ClassicAssert.IsTrue(c.CellFormula != null, "got a formula");
 
-                    Assert.IsTrue(
+                    ClassicAssert.IsTrue(
                     ("" + x + "." + y + operator1 + y + "." + x).Equals(c.CellFormula),
                     "loop Formula is as expected " + x + "." + y + operator1 + y + "." + x + "!=" + c.CellFormula);
                 }
@@ -344,7 +344,7 @@ namespace TestCases.HSSF.UserModel
             r = s.GetRow(0);
             c = r.GetCell(1);
             //get our minimum values
-            Assert.IsTrue(("A2" + operator1 + "A3").Equals(c.CellFormula), "minval Formula is as expected A2" + operator1 + "A3 != " + c.CellFormula);
+            ClassicAssert.IsTrue(("A2" + operator1 + "A3").Equals(c.CellFormula), "minval Formula is as expected A2" + operator1 + "A3 != " + c.CellFormula);
 
 
             for (int x = 1; x < short.MaxValue && x > 0; x = (short)(x * 2))
@@ -388,7 +388,7 @@ namespace TestCases.HSSF.UserModel
                     String ref2 = cr.FormatAsString();
 
 
-                    Assert.IsTrue((
+                    ClassicAssert.IsTrue((
                     ("" + ref1 + operator1 + ref2).Equals(c.CellFormula)
                                                              ), "loop Formula is as expected " + ref1 + operator1 + ref2 + "!=" + c.CellFormula
                     );
@@ -399,7 +399,7 @@ namespace TestCases.HSSF.UserModel
             r = s.GetRow(0);
             c = r.GetCell(0);
 
-            Assert.AreEqual("B1" + operator1 + "IV255", c.CellFormula);
+            ClassicAssert.AreEqual("B1" + operator1 + "IV255", c.CellFormula);
         }
 
 
@@ -425,7 +425,7 @@ namespace TestCases.HSSF.UserModel
             //get our minimum values
             r = s.GetRow(0);
             c = r.GetCell(1);
-            Assert.IsTrue(formula.Equals(c.CellFormula), "minval Formula is as expected"
+            ClassicAssert.IsTrue(formula.Equals(c.CellFormula), "minval Formula is as expected"
                       );
         }
 
@@ -483,7 +483,7 @@ namespace TestCases.HSSF.UserModel
             //get our minimum values
             r = s.GetRow(0);
             c = r.GetCell(1);
-            Assert.IsTrue(("1" + operator1 + "1").Equals(c.CellFormula),
+            ClassicAssert.IsTrue(("1" + operator1 + "1").Equals(c.CellFormula),
             "minval Formula is as expected 1" + operator1 + "1 != " + c.CellFormula);
 
             for (int x = 1; x < short.MaxValue && x > 0; x = (short)(x * 2))
@@ -495,7 +495,7 @@ namespace TestCases.HSSF.UserModel
 
                     c = r.GetCell(y);
 
-                    Assert.IsTrue(("" + x + operator1 + y).Equals(c.CellFormula),
+                    ClassicAssert.IsTrue(("" + x + operator1 + y).Equals(c.CellFormula),
                         "loop Formula is as expected " + x + operator1 + y + "!=" + c.CellFormula
                     );
                 }
@@ -505,7 +505,7 @@ namespace TestCases.HSSF.UserModel
             r = s.GetRow(0);
             c = r.GetCell(0);
 
-            Assert.IsTrue(
+            ClassicAssert.IsTrue(
             ("" + short.MaxValue + operator1 + short.MaxValue).Equals(c.CellFormula), "maxval Formula is as expected"
 
             );
@@ -533,7 +533,7 @@ namespace TestCases.HSSF.UserModel
             r = s.GetRow(0);
             c = r.GetCell(0);
 
-            Assert.IsTrue((function + "(A2:A3)").Equals((function + "(A2:A3)")), "function =" + function + "(A2:A3)"
+            ClassicAssert.IsTrue((function + "(A2:A3)").Equals((function + "(A2:A3)")), "function =" + function + "(A2:A3)"
                       );
         }
 
@@ -560,7 +560,7 @@ namespace TestCases.HSSF.UserModel
             r = s.GetRow(0);
             c = r.GetCell(0);
 
-            Assert.IsTrue((function + "(A2,A3)").Equals(c.CellFormula), "function =" + function + "(A2,A3)"
+            ClassicAssert.IsTrue((function + "(A2,A3)").Equals(c.CellFormula), "function =" + function + "(A2,A3)"
                       );
         }
 
@@ -590,12 +590,12 @@ namespace TestCases.HSSF.UserModel
             r = s.GetRow(0);
             c = r.GetCell(0);
 
-            Assert.IsTrue(
+            ClassicAssert.IsTrue(
                         (function + "(A2:A4,B2:B4)").Equals(c.CellFormula), "function =" + function + "(A2:A4,B2:B4)"
                       );
 
             c = r.GetCell(1);
-            Assert.IsTrue((function + "($A$2:$A4,B$2:B4)").Equals(c.CellFormula),
+            ClassicAssert.IsTrue((function + "($A$2:$A4,B$2:B4)").Equals(c.CellFormula),
                 "function =" + function + "($A$2:$A4,B$2:B4)"
                       );
         }
@@ -625,15 +625,15 @@ namespace TestCases.HSSF.UserModel
             s = wb.GetSheetAt(0);
             r = s.GetRow(0);
             c = r.GetCell(0);
-            Assert.IsTrue(("A3+A2").Equals(c.CellFormula), "A3+A2");
+            ClassicAssert.IsTrue(("A3+A2").Equals(c.CellFormula), "A3+A2");
             c = r.GetCell(1);
-            Assert.IsTrue(("$A3+$A2").Equals(c.CellFormula), "$A3+$A2");
+            ClassicAssert.IsTrue(("$A3+$A2").Equals(c.CellFormula), "$A3+$A2");
             c = r.GetCell(2);
-            Assert.IsTrue(("A$3+A$2").Equals(c.CellFormula), "A$3+A$2");
+            ClassicAssert.IsTrue(("A$3+A$2").Equals(c.CellFormula), "A$3+A$2");
             c = r.GetCell(3);
-            Assert.IsTrue(("$A$3+$A$2").Equals(c.CellFormula), "$A$3+$A$2");
+            ClassicAssert.IsTrue(("$A$3+$A$2").Equals(c.CellFormula), "$A$3+$A$2");
             c = r.GetCell(4);
-            Assert.IsTrue(("SUM($A$3,$A$2)").Equals(c.CellFormula), "SUM($A$3,$A$2)");
+            ClassicAssert.IsTrue(("SUM($A$3,$A$2)").Equals(c.CellFormula), "SUM($A$3,$A$2)");
         }
         [Test]
         public void TestSheetFunctions()
@@ -657,9 +657,9 @@ namespace TestCases.HSSF.UserModel
             s = wb.GetSheet("B");
             r = s.GetRow(0);
             c = r.GetCell(0);
-            Assert.IsTrue(("AVERAGE(A!A1:B1)").Equals(c.CellFormula), "expected: AVERAGE(A!A1:B1) got: " + c.CellFormula);
+            ClassicAssert.IsTrue(("AVERAGE(A!A1:B1)").Equals(c.CellFormula), "expected: AVERAGE(A!A1:B1) got: " + c.CellFormula);
             c = r.GetCell(1);
-            Assert.IsTrue(("A!A1+A!B1").Equals(c.CellFormula), "expected: A!A1+A!B1 got: " + c.CellFormula);
+            ClassicAssert.IsTrue(("A!A1+A!B1").Equals(c.CellFormula), "expected: A!A1+A!B1 got: " + c.CellFormula);
         }
         [Test]
         public void TestRVAoperands()
@@ -699,7 +699,7 @@ namespace TestCases.HSSF.UserModel
 
             wb.Write(out1);
             out1.Close();
-            Assert.IsTrue(File.Exists(tmpfile), "file exists");
+            ClassicAssert.IsTrue(File.Exists(tmpfile), "file exists");
         }
         [Test]
         public void TestStringFormulas()
@@ -719,7 +719,7 @@ namespace TestCases.HSSF.UserModel
             s = wb.GetSheetAt(0);
             r = s.GetRow(0);
             c = r.GetCell(0);
-            Assert.AreEqual("UPPER(\"xyz\")", c.CellFormula);
+            ClassicAssert.AreEqual("UPPER(\"xyz\")", c.CellFormula);
         }
         [Test]
         public void TestLogicalFormulas()
@@ -736,7 +736,7 @@ namespace TestCases.HSSF.UserModel
             s = wb.GetSheetAt(0);
             r = s.GetRow(0);
             c = r.GetCell(1);
-            Assert.AreEqual("IF(A1<A2,B1,B2)", c.CellFormula, "Formula in cell 1 ");
+            ClassicAssert.AreEqual("IF(A1<A2,B1,B2)", c.CellFormula, "Formula in cell 1 ");
         }
         [Test]
         public void TestDateFormulas()
@@ -754,7 +754,7 @@ namespace TestCases.HSSF.UserModel
             c.SetCellValue(new DateTime());
             c.CellStyle = (cellStyle);
 
-            // Assert.AreEqual("Checking hour = " + hour, date.GetTime().GetTime(),
+            // ClassicAssert.AreEqual("Checking hour = " + hour, date.GetTime().GetTime(),
             //              NPOI.SS.UserModel.DateUtil.GetJavaDate(excelDate).GetTime());
 
             for (int k = 1; k < 100; k++)
@@ -786,15 +786,15 @@ namespace TestCases.HSSF.UserModel
             r = s.GetRow(0);
             c = r.GetCell(4);
 
-            Assert.IsTrue(("IF(A1=D1,\"A1\",\"B1\")").Equals(c.CellFormula), "expected: IF(A1=D1,\"A1\",\"B1\") got " + c.CellFormula);
+            ClassicAssert.IsTrue(("IF(A1=D1,\"A1\",\"B1\")").Equals(c.CellFormula), "expected: IF(A1=D1,\"A1\",\"B1\") got " + c.CellFormula);
 
             wb = OpenSample("IfFormulaTest.xls");
             s = wb.GetSheetAt(0);
             r = s.GetRow(3);
             c = r.GetCell(0);
-            Assert.IsTrue(("IF(A3=A1,\"A1\",\"A2\")").Equals(c.CellFormula), "expected: IF(A3=A1,\"A1\",\"A2\") got " + c.CellFormula);
+            ClassicAssert.IsTrue(("IF(A3=A1,\"A1\",\"A2\")").Equals(c.CellFormula), "expected: IF(A3=A1,\"A1\",\"A2\") got " + c.CellFormula);
             //c = r.GetCell((short)1);
-            //Assert.IsTrue("expected: A!A1+A!B1 got: "+c.CellFormula, ("A!A1+A!B1").Equals(c.CellFormula));
+            //ClassicAssert.IsTrue("expected: A!A1+A!B1 got: "+c.CellFormula, ("A!A1+A!B1").Equals(c.CellFormula));
 
 
             wb = new HSSFWorkbook();
@@ -841,7 +841,7 @@ namespace TestCases.HSSF.UserModel
             NPOI.SS.UserModel.ISheet s = wb.GetSheetAt(0);
             IRow r = s.GetRow(0);
             ICell c = r.GetCell(2);
-            Assert.AreEqual(function, c.CellFormula);
+            ClassicAssert.AreEqual(function, c.CellFormula);
 
 
             wb = new HSSFWorkbook();
@@ -882,43 +882,43 @@ namespace TestCases.HSSF.UserModel
             IRow[] r = { s0.GetRow(0), s0.GetRow(1) };
 
             ICell a1 = r[0].GetCell(0);
-            Assert.AreEqual("square(1)", a1.CellFormula);
-            Assert.AreEqual(1d, a1.NumericCellValue, 1e-9);
+            ClassicAssert.AreEqual("square(1)", a1.CellFormula);
+            ClassicAssert.AreEqual(1d, a1.NumericCellValue, 1e-9);
 
             ICell a2 = r[1].GetCell(0);
-            Assert.AreEqual("square(2)", a2.CellFormula);
-            Assert.AreEqual(4d, a2.NumericCellValue, 1e-9);
+            ClassicAssert.AreEqual("square(2)", a2.CellFormula);
+            ClassicAssert.AreEqual(4d, a2.NumericCellValue, 1e-9);
 
             ICell b1 = r[0].GetCell(1);
-            Assert.AreEqual("IF(TRUE,square(1))", b1.CellFormula);
-            Assert.AreEqual(1d, b1.NumericCellValue, 1e-9);
+            ClassicAssert.AreEqual("IF(TRUE,square(1))", b1.CellFormula);
+            ClassicAssert.AreEqual(1d, b1.NumericCellValue, 1e-9);
 
             ICell b2 = r[1].GetCell(1);
-            Assert.AreEqual("IF(TRUE,square(2))", b2.CellFormula);
-            Assert.AreEqual(4d, b2.NumericCellValue, 1e-9);
+            ClassicAssert.AreEqual("IF(TRUE,square(2))", b2.CellFormula);
+            ClassicAssert.AreEqual(4d, b2.NumericCellValue, 1e-9);
 
             ICell c1 = r[0].GetCell(2);
-            Assert.AreEqual("square(square(1))", c1.CellFormula);
-            Assert.AreEqual(1d, c1.NumericCellValue, 1e-9);
+            ClassicAssert.AreEqual("square(square(1))", c1.CellFormula);
+            ClassicAssert.AreEqual(1d, c1.NumericCellValue, 1e-9);
 
             ICell c2 = r[1].GetCell(2);
-            Assert.AreEqual("square(square(2))", c2.CellFormula);
-            Assert.AreEqual(16d, c2.NumericCellValue, 1e-9);
+            ClassicAssert.AreEqual("square(square(2))", c2.CellFormula);
+            ClassicAssert.AreEqual(16d, c2.NumericCellValue, 1e-9);
 
             ICell d1 = r[0].GetCell(3);
-            Assert.AreEqual("square(one())", d1.CellFormula);
-            Assert.AreEqual(1d, d1.NumericCellValue, 1e-9);
+            ClassicAssert.AreEqual("square(one())", d1.CellFormula);
+            ClassicAssert.AreEqual(1d, d1.NumericCellValue, 1e-9);
 
             ICell d2 = r[1].GetCell(3);
-            Assert.AreEqual("square(two())", d2.CellFormula);
-            Assert.AreEqual(4d, d2.NumericCellValue, 1e-9);
+            ClassicAssert.AreEqual("square(two())", d2.CellFormula);
+            ClassicAssert.AreEqual(4d, d2.NumericCellValue, 1e-9);
         }
         [Test]
         public void TestStringFormulaRead()
         {
             HSSFWorkbook w = OpenSample("StringFormulas.xls");
             ICell c = w.GetSheetAt(0).GetRow(0).GetCell(0);
-            Assert.AreEqual("XYZ", c.RichStringCellValue.String, "String Cell value");
+            ClassicAssert.AreEqual("XYZ", c.RichStringCellValue.String, "String Cell value");
         }
 
         /** Test for bug 34021*/
@@ -955,7 +955,7 @@ namespace TestCases.HSSF.UserModel
         {
             HSSFWorkbook wb = OpenSample("27272_1.xls");
             wb.GetSheetAt(0);
-            Assert.AreEqual("Compliance!#REF!", wb.GetNameAt(0).RefersToFormula, "Reference for named range ");
+            ClassicAssert.AreEqual("Compliance!#REF!", wb.GetNameAt(0).RefersToFormula, "Reference for named range ");
             string tmpfile = TempFile.GetTempFilePath("bug27272_1", ".xls");
             FileStream fs = new FileStream(tmpfile, FileMode.OpenOrCreate);
             try
@@ -973,7 +973,7 @@ namespace TestCases.HSSF.UserModel
         public void Test27272_2()
         {
             HSSFWorkbook wb = OpenSample("27272_2.xls");
-            Assert.AreEqual("LOAD.POD_HISTORIES!#REF!", wb.GetNameAt(0).RefersToFormula, "Reference for named range ");
+            ClassicAssert.AreEqual("LOAD.POD_HISTORIES!#REF!", wb.GetNameAt(0).RefersToFormula, "Reference for named range ");
             string tmpfile = TempFile.GetTempFilePath("bug27272_2", ".xls");
             FileStream fs = new FileStream(tmpfile, FileMode.OpenOrCreate);
             try
@@ -1007,10 +1007,10 @@ namespace TestCases.HSSF.UserModel
         {
             HSSFWorkbook wb = OpenSample("SharedFormulaTest.xls");
 
-            Assert.AreEqual("A$1*2", wb.GetSheetAt(0).GetRow(1).GetCell(1).ToString());
-            Assert.AreEqual("$A11*2", wb.GetSheetAt(0).GetRow(11).GetCell(1).ToString());
-            Assert.AreEqual("DZ2*2", wb.GetSheetAt(0).GetRow(1).GetCell(128).ToString());
-            Assert.AreEqual("B32770*2", wb.GetSheetAt(0).GetRow(32768).GetCell(1).ToString());
+            ClassicAssert.AreEqual("A$1*2", wb.GetSheetAt(0).GetRow(1).GetCell(1).ToString());
+            ClassicAssert.AreEqual("$A11*2", wb.GetSheetAt(0).GetRow(11).GetCell(1).ToString());
+            ClassicAssert.AreEqual("DZ2*2", wb.GetSheetAt(0).GetRow(1).GetCell(128).ToString());
+            ClassicAssert.AreEqual("B32770*2", wb.GetSheetAt(0).GetRow(32768).GetCell(1).ToString());
         }
         /**
          * Test creation / evaluation of formulas with sheet-level names
@@ -1046,19 +1046,19 @@ namespace TestCases.HSSF.UserModel
             //check that NamePtg refers to the correct NameRecord
             Ptg[] ptgs1 = HSSFFormulaParser.Parse("sales_1", wb, FormulaType.Cell, 0);
             NamePtg nPtg1 = (NamePtg)ptgs1[0];
-            Assert.AreSame(nm1, wb.GetNameAt(nPtg1.Index));
+            ClassicAssert.AreSame(nm1, wb.GetNameAt(nPtg1.Index));
 
             Ptg[] ptgs2 = HSSFFormulaParser.Parse("sales_1", wb, FormulaType.Cell, 1);
             NamePtg nPtg2 = (NamePtg)ptgs2[0];
-            Assert.AreSame(nm2, wb.GetNameAt(nPtg2.Index));
+            ClassicAssert.AreSame(nm2, wb.GetNameAt(nPtg2.Index));
 
             //check that the formula evaluator returns the correct result
             HSSFFormulaEvaluator evaluator = new HSSFFormulaEvaluator(wb);
-            Assert.AreEqual(3.0, evaluator.Evaluate(sh1.GetRow(0).GetCell(1)).NumberValue, 0.0);
-            Assert.AreEqual(6.0, evaluator.Evaluate(sh1.GetRow(0).GetCell(2)).NumberValue, 0.0);
+            ClassicAssert.AreEqual(3.0, evaluator.Evaluate(sh1.GetRow(0).GetCell(1)).NumberValue, 0.0);
+            ClassicAssert.AreEqual(6.0, evaluator.Evaluate(sh1.GetRow(0).GetCell(2)).NumberValue, 0.0);
 
-            Assert.AreEqual(5.0, evaluator.Evaluate(sh2.GetRow(0).GetCell(1)).NumberValue, 0.0);
-            Assert.AreEqual(15.0, evaluator.Evaluate(sh2.GetRow(0).GetCell(2)).NumberValue, 0.0);
+            ClassicAssert.AreEqual(5.0, evaluator.Evaluate(sh2.GetRow(0).GetCell(1)).NumberValue, 0.0);
+            ClassicAssert.AreEqual(15.0, evaluator.Evaluate(sh2.GetRow(0).GetCell(2)).NumberValue, 0.0);
         }
 
         /**
@@ -1082,7 +1082,7 @@ namespace TestCases.HSSF.UserModel
                 ISheet sheet = wb.CreateSheet();
                 ICell cell = sheet.CreateRow(0).CreateCell(2);
                 cell.CellFormula = ("_score1*SUM(_score1+_score2)");
-                Assert.AreEqual("_score1*SUM(_score1+_score2)", cell.CellFormula);
+                ClassicAssert.AreEqual("_score1*SUM(_score1+_score2)", cell.CellFormula);
             }
             finally
             {

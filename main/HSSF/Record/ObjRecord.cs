@@ -36,13 +36,13 @@ namespace NPOI.HSSF.Record
         private const int MAX_PAD_ALIGNMENT = 4;
 
         public const short sid = 0x5D;
-        private List<SubRecord> subrecords;
+        private readonly List<SubRecord> subrecords;
         /** used when POI has no idea what is going on */
-        private byte[] _uninterpretedData;
+        private readonly byte[] _uninterpretedData;
         /**
         * Excel seems to tolerate padding to quad or double byte length
         */
-        private bool _isPaddedToQuadByteMultiple;
+        private readonly bool _isPaddedToQuadByteMultiple;
 
         //00000000 15 00 12 00 01 00 01 00 11 60 00 00 00 00 00 0D .........`......
         //00000010 26 01 00 00 00 00 00 00 00 00                   &.........

@@ -205,7 +205,7 @@ namespace NPOI.HSSF.Record
             WriteFormatData(out1,_text);
         }
 
-        private void WriteFormatData(ContinuableRecordOutput out1, IRichTextString str)
+        private static void WriteFormatData(ContinuableRecordOutput out1, IRichTextString str)
         {
             int nRuns = str.NumFormattingRuns;
             for (int i = 0; i < nRuns; i++)

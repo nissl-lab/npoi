@@ -95,7 +95,7 @@ namespace NPOI.HSSF.Record.Aggregates
             return true;
         }
 
-        private void CheckNotPresent(Record rec)
+        private static void CheckNotPresent(Record rec)
         {
             if (rec != null)
             {

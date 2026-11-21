@@ -21,7 +21,7 @@ namespace TestCases.SS.Formula.Functions
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.UserModel;
     using System;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using TestCases.HSSF;
     using NPOI.HSSF.UserModel;
     using System.Text;
@@ -102,15 +102,15 @@ namespace TestCases.SS.Formula.Functions
             switch (expected.CellType)
             {
                 case CellType.Boolean:
-                    Assert.AreEqual(expected.BooleanCellValue, actual.BooleanValue, msg);
+                    ClassicAssert.AreEqual(expected.BooleanCellValue, actual.BooleanValue, msg);
                     break;
                 case CellType.Formula: // will never be used, since we will call method After formula Evaluation
                     throw new AssertionException("Cannot expect formula as result of formula Evaluation: " + msg);
                 case CellType.Numeric:
-                    Assert.AreEqual(expected.NumericCellValue, actual.NumberValue, 0.0, msg);
+                    ClassicAssert.AreEqual(expected.NumericCellValue, actual.NumberValue, 0.0, msg);
                     break;
                 case CellType.String:
-                    Assert.AreEqual(expected.RichStringCellValue.String, actual.StringValue, msg);
+                    ClassicAssert.AreEqual(expected.RichStringCellValue.String, actual.StringValue, msg);
                     break;
             }
         }
@@ -325,7 +325,7 @@ namespace TestCases.SS.Formula.Functions
             }
             //ISheet sheet = workbook.GetSheetAt(0);
             //String specifiedClassName = sheet.GetRow(2).GetCell(0).RichStringCellValue.String;
-            //Assert.AreEqual(this.GetType().FullName, specifiedClassName, "Test class name in spreadsheet comment");
+            //ClassicAssert.AreEqual(this.GetType().FullName, specifiedClassName, "Test class name in spreadsheet comment");
         }
 
         /**

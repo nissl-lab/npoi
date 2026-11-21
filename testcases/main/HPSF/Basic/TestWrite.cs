@@ -20,6 +20,7 @@ namespace TestCases.HPSF.Basic
 {
     using System;
     using System.Collections;
+    using System.Collections.Generic;
     using System.IO;
     using System.Text;
 
@@ -29,7 +30,7 @@ namespace TestCases.HPSF.Basic
     using NPOI.POIFS.FileSystem;
     using NPOI.Util;
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NUnit.Framework.Constraints;
 
     /**
@@ -42,20 +43,27 @@ namespace TestCases.HPSF.Basic
     [TestFixture]
     public class TestWrite
     {
-        static String POI_FS = "TestHPSFWritingFunctionality.doc";
         private static POIDataSamples _samples = POIDataSamples.GetHPSFInstance();
+        private static int CODEPAGE_DEFAULT = -1;
 
-        static int[] SECTION_COUNT = { 1, 2 };
-        static bool[] IS_SUMMARY_INFORMATION = { true, false };
-        static bool[] IS_DOCUMENT_SUMMARY_INFORMATION = { false, true };
+        private static string POI_FS = "TestHPSFWritingFunctionality.doc";
 
-        String IMPROPER_DEFAULT_CHARSET_MESSAGE =
+        private static int BYTE_ORDER = 0xfffe;
+        private static int FORMAT     = 0x0000;
+        private static int OS_VERSION = 0x00020A04;
+        private static int[] SECTION_COUNT = {1, 2};
+        private static bool[] IS_SUMMARY_INFORMATION = {true, false};
+        private static bool[] IS_DOCUMENT_SUMMARY_INFORMATION = {false, true};
+
+        private string IMPROPER_DEFAULT_CHARSET_MESSAGE =
             "Your default character Set is " + GetDefaultCharSetName() +
             ". However, this Testcase must be run in an environment " +
             "with a default character Set supporting at least " +
             "8-bit-characters. You can achieve this by Setting the " +
             "LANG environment variable to a proper value, e.g. " +
             "\"de_DE\".";
+
+        POIFile[] poiFiles;
 
         [SetUp]
         public void SetUp()
@@ -91,10 +99,10 @@ namespace TestCases.HPSF.Basic
                 /* Write it to a POIFS and the latter to disk: */
                 try
                 {
-                    MemoryStream psStream = new MemoryStream();
+                    ByteArrayOutputStream psStream = new ByteArrayOutputStream();
                     ps.Write(psStream);
                     psStream.Close();
-                    byte[] streamData = psStream.ToArray();
+                    byte[] streamData = psStream.ToByteArray();
                     poiFs.CreateDocument(new MemoryStream(streamData),
                                          SummaryInformation.DEFAULT_STREAM_NAME);
                     poiFs.WriteFileSystem(out1);
@@ -103,7 +111,7 @@ namespace TestCases.HPSF.Basic
                 }
                 catch (Exception ex)
                 {
-                    Assert.IsTrue(ex is NoFormatIDException);
+                    ClassicAssert.IsTrue(ex is NoFormatIDException);
                 }
                 finally
                 {
@@ -143,12 +151,12 @@ namespace TestCases.HPSF.Basic
                 POIFSFileSystem poiFs = new POIFSFileSystem();
                 MutablePropertySet ps = new MutablePropertySet();
                 MutableSection s = (MutableSection)ps.Sections[0];
-                s.SetFormatID(SectionIDMap.SUMMARY_INFORMATION_ID);
+                s.FormatID = SectionIDMap.SUMMARY_INFORMATION_ID;
 
-                MemoryStream psStream = new MemoryStream();
+                ByteArrayOutputStream psStream = new ByteArrayOutputStream();
                 ps.Write(psStream);
                 psStream.Close();
-                byte[] streamData = psStream.ToArray();
+                byte[] streamData = psStream.ToByteArray();
                 poiFs.CreateDocument(new MemoryStream(streamData),
                                      SummaryInformation.DEFAULT_STREAM_NAME);
                 poiFs.WriteFileSystem(out1);
@@ -209,7 +217,7 @@ namespace TestCases.HPSF.Basic
 
             MutablePropertySet ps = new MutablePropertySet();
             MutableSection si = new MutableSection();
-            si.SetFormatID(SectionIDMap.SUMMARY_INFORMATION_ID);
+            si.FormatID = SectionIDMap.SUMMARY_INFORMATION_ID;
             ps.Sections[0] = si;
 
             MutableProperty p = new MutableProperty();
@@ -231,14 +239,14 @@ namespace TestCases.HPSF.Basic
             POIFSReaderListener1 psl = new POIFSReaderListener1();
             reader1.RegisterListener(psl);
             reader1.Read(file);
-            Assert.IsNotNull(psa[0]);
-            Assert.IsTrue(psa[0].IsSummaryInformation);
+            ClassicAssert.IsNotNull(psa[0]);
+            ClassicAssert.IsTrue(psa[0].IsSummaryInformation);
 
             Section s = (Section)(psa[0].Sections[0]);
             Object p1 = s.GetProperty(PropertyIDMap.PID_AUTHOR);
             Object p2 = s.GetProperty(PropertyIDMap.PID_TITLE);
-            Assert.AreEqual(AUTHOR, p1);
-            Assert.AreEqual(TITLE, p2);
+            ClassicAssert.AreEqual(AUTHOR, p1);
+            ClassicAssert.AreEqual(TITLE, p2);
             file.Close();
             try
             {
@@ -291,12 +299,12 @@ namespace TestCases.HPSF.Basic
             formatID.Bytes = new byte[]{0, 1,  2,  3,  4,  5,  6,  7,
                                      8, 9, 10, 11, 12, 13, 14, 15};
             MutableSection s1 = new MutableSection();
-            s1.SetFormatID(formatID);
+            s1.FormatID = formatID;
             s1.SetProperty(2, SECTION1);
             ps.AddSection(s1);
 
             MutableSection s2 = new MutableSection();
-            s2.SetFormatID(formatID);
+            s2.FormatID = formatID;
             s2.SetProperty(2, SECTION2);
             ps.AddSection(s2);
 
@@ -312,14 +320,14 @@ namespace TestCases.HPSF.Basic
             POIFSReaderListener2 prl = new POIFSReaderListener2();
             reader2.RegisterListener(prl);
             reader2.Read(file);
-            Assert.IsNotNull(psa[0]);
+            ClassicAssert.IsNotNull(psa[0]);
             Section s = (Section)(psa[0].Sections[0]);
-            Assert.AreEqual(s.FormatID, formatID);
+            ClassicAssert.AreEqual(s.FormatID, formatID);
             Object p = s.GetProperty(2);
-            Assert.AreEqual(SECTION1, p);
+            ClassicAssert.AreEqual(SECTION1, p);
             s = (Section)(psa[0].Sections[1]);
             p = s.GetProperty(2);
-            Assert.AreEqual(SECTION2, p);
+            ClassicAssert.AreEqual(SECTION2, p);
 
             file.Close();
             //File.Delete(dataDir + POI_FS);
@@ -352,15 +360,6 @@ namespace TestCases.HPSF.Basic
 
             #endregion
         }
-        
-
-
-
-        private static int CODEPAGE_DEFAULT = -1;
-        private static int CODEPAGE_1252 = 1252;
-        private static int CODEPAGE_UTF8 = CodePageUtil.CP_UTF8;
-        private static int CODEPAGE_UTF16 = CodePageUtil.CP_UTF16;
-
 
 
         /**
@@ -371,65 +370,27 @@ namespace TestCases.HPSF.Basic
         public void TestVariantTypes()
         {
             int codepage = CODEPAGE_DEFAULT;
-            if (!hasProperDefaultCharSet())
-            {
-                Console.Error.WriteLine(IMPROPER_DEFAULT_CHARSET_MESSAGE +
-                    " This Testcase is skipped.");
-                return;
-            }
+            Assume.That(hasProperDefaultCharSet(), IMPROPER_DEFAULT_CHARSET_MESSAGE);
 
             check(Variant.VT_EMPTY, null, codepage);
             check(Variant.VT_BOOL, true, codepage);
             check(Variant.VT_BOOL, false, codepage);
-            check(Variant.VT_CF, new byte[] { 8, 0, 0, 0, 1, 0, 0, 0, 1, 2, 3,
-                    4 }, codepage);
+            check( Variant.VT_CF, new byte[] { 8, 0, 0, 0, 1, 0, 0, 0, 1, 2, 3, 4 }, codepage );
             check(Variant.VT_I4, 27, codepage);
-            check(Variant.VT_I8, (long)28, codepage);
-            check(Variant.VT_R8, 29.0, codepage);
+            check(Variant.VT_I8, 28L, codepage);
+            check(Variant.VT_R8, 29.0d, codepage);
             check(Variant.VT_I4, -27, codepage);
-            check(Variant.VT_I8, (long)-28, codepage);
-            check(Variant.VT_R8, -29.0, codepage);
+            check(Variant.VT_I8, -28L, codepage);
+            check(Variant.VT_R8, -29.0d, codepage);
             check(Variant.VT_FILETIME, new DateTime(1984, 5, 16, 8, 23, 15), codepage);
-            check(Variant.VT_I4, int.MaxValue, codepage);
-            check(Variant.VT_I4, int.MinValue, codepage);
+            check(Variant.VT_I4, Int32.MaxValue, codepage);
+            check(Variant.VT_I4, Int32.MinValue, codepage);
             check(Variant.VT_I8, long.MaxValue, codepage);
             check(Variant.VT_I8, long.MinValue, codepage);
             check(Variant.VT_R8, Double.MaxValue, codepage);
             check(Variant.VT_R8, Double.MinValue, codepage);
-
-            check(Variant.VT_LPSTR,
-                  "", codepage);
-            check(Variant.VT_LPSTR,
-                  "\u00e4", codepage);
-            check(Variant.VT_LPSTR,
-                  "\u00e4\u00f6", codepage);
-            check(Variant.VT_LPSTR,
-                  "\u00e4\u00f6\u00fc", codepage);
-            check(Variant.VT_LPSTR,
-                  "\u00e4\u00f6\u00fc\u00df", codepage);
-            check(Variant.VT_LPSTR,
-                  "\u00e4\u00f6\u00fc\u00df\u00c4", codepage);
-            check(Variant.VT_LPSTR,
-                  "\u00e4\u00f6\u00fc\u00df\u00c4\u00d6", codepage);
-            check(Variant.VT_LPSTR,
-                  "\u00e4\u00f6\u00fc\u00df\u00c4\u00d6\u00dc", codepage);
-
-            check(Variant.VT_LPWSTR,
-                  "", codepage);
-            check(Variant.VT_LPWSTR,
-                  "\u00e4", codepage);
-            check(Variant.VT_LPWSTR,
-                  "\u00e4\u00f6", codepage);
-            check(Variant.VT_LPWSTR,
-                  "\u00e4\u00f6\u00fc", codepage);
-            check(Variant.VT_LPWSTR,
-                  "\u00e4\u00f6\u00fc\u00df", codepage);
-            check(Variant.VT_LPWSTR,
-                  "\u00e4\u00f6\u00fc\u00df\u00c4", codepage);
-            check(Variant.VT_LPWSTR,
-                  "\u00e4\u00f6\u00fc\u00df\u00c4\u00d6", codepage);
-            check(Variant.VT_LPWSTR,
-                  "\u00e4\u00f6\u00fc\u00df\u00c4\u00d6\u00dc", codepage);
+            checkString(Variant.VT_LPSTR, "\u00e4\u00f6\u00fc\u00df\u00c4\u00d6\u00dc", codepage);
+            checkString(Variant.VT_LPWSTR, "\u00e4\u00f6\u00fc\u00df\u00c4\u00d6\u00dc", codepage);
         }
 
 
@@ -443,7 +404,7 @@ namespace TestCases.HPSF.Basic
         public void TestCodepages()
         {
             //Exception thr = null;
-            int[] validCodepages = new int[] { CODEPAGE_DEFAULT, CODEPAGE_UTF8, CODEPAGE_UTF16, CODEPAGE_1252 };
+            int[] validCodepages = new int[] { CODEPAGE_DEFAULT, CodePageUtil.CP_UTF8, CodePageUtil.CP_UNICODE, CodePageUtil.CP_WINDOWS_1252 };
             for (int i = 0; i < validCodepages.Length; i++)
             {
                 int cp = validCodepages[i];
@@ -454,56 +415,27 @@ namespace TestCases.HPSF.Basic
                     continue;
                 }
 
-                long t = cp == CODEPAGE_UTF16 ? Variant.VT_LPWSTR
-                                                    : Variant.VT_LPSTR;
-                try
-                {
-                    check(t, "", cp);
-                    check(t, "\u00e4", cp);
-                    check(t, "\u00e4\u00f6", cp);
-                    check(t, "\u00e4\u00f6\u00fc", cp);
-                    check(t, "\u00e4\u00f6\u00fc\u00c4", cp);
-                    check(t, "\u00e4\u00f6\u00fc\u00c4\u00d6", cp);
-                    check(t, "\u00e4\u00f6\u00fc\u00c4\u00d6\u00dc", cp);
-                    check(t, "\u00e4\u00f6\u00fc\u00c4\u00d6\u00dc\u00df", cp);
-                    if (cp == CodePageUtil.CP_UTF16 || cp == CodePageUtil.CP_UTF8)
-                        check(t, "\u79D1\u5B78", cp);
-                }
-                catch (Exception ex)
-                {
-                    Assert.Fail(ex.Message +
-                         " with codepage " + cp);
+                long t = (cp == CodePageUtil.CP_UNICODE) ? Variant.VT_LPWSTR : Variant.VT_LPSTR;
+                checkString(t, "\u00e4\u00f6\u00fc\u00c4\u00d6\u00dc\u00df", cp);
+                if (cp == CodePageUtil.CP_UTF16 || cp == CodePageUtil.CP_UTF8) {
+                    check(t, "\u79D1\u5B78", cp);
                 }
             }
 
             int[] invalidCodepages = new int[] { 0, 1, 2, 4711, 815 };
-            for (int i = 0; i < invalidCodepages.Length; i++)
+            foreach (int cp in invalidCodepages)
             {
-                int cp = invalidCodepages[i];
-                long type = cp == CODEPAGE_UTF16 ? Variant.VT_LPWSTR
-                                                       : Variant.VT_LPSTR;
-
+                long type = (cp == CodePageUtil.CP_UNICODE) ? Variant.VT_LPWSTR : Variant.VT_LPSTR;
                 try
                 {
-                    check(type, "", cp);
-                    check(type, "\u00e4", cp);
-                    check(type, "\u00e4\u00f6", cp);
-                    check(type, "\u00e4\u00f6\u00fc", cp);
-                    check(type, "\u00e4\u00f6\u00fc\u00c4", cp);
-                    check(type, "\u00e4\u00f6\u00fc\u00c4\u00d6", cp);
-                    check(type, "\u00e4\u00f6\u00fc\u00c4\u00d6\u00dc", cp);
-                    check(type, "\u00e4\u00f6\u00fc\u00c4\u00d6\u00dc\u00df", cp);
-
-                    Assert.Fail("UnsupportedEncodingException for codepage " + cp +
-                     " expected.");
+                    checkString(type, "\u00e4\u00f6\u00fc\u00c4\u00d6\u00dc\u00df", cp);
+                    ClassicAssert.Fail("UnsupportedEncodingException for codepage " + cp + " expected.");
                 }
-                catch (Exception ex)
+                catch (UnsupportedEncodingException ex)
                 {
-                    Console.WriteLine(ex.Message);
+                    /* This is the expected behaviour. */
                 }
-
             }
-
         }
 
 
@@ -518,44 +450,32 @@ namespace TestCases.HPSF.Basic
             String TITLE = "This is a sample title";
             MutablePropertySet mps = new MutablePropertySet();
             MutableSection ms = (MutableSection)mps.Sections[0];
-            ms.SetFormatID(SectionIDMap.SUMMARY_INFORMATION_ID);
+            ms.FormatID = SectionIDMap.SUMMARY_INFORMATION_ID;
             MutableProperty p = new MutableProperty();
             p.ID = PropertyIDMap.PID_TITLE;
             p.Type = Variant.VT_LPSTR;
             p.Value = TITLE;
             ms.SetProperty(p);
 
-            Exception t = null;
-            try
-            {
-                MemoryStream out1 = new MemoryStream();
-                mps.Write(out1);
-                out1.Close();
-                byte[] bytes = out1.ToArray();
+            ByteArrayOutputStream out1 = new ByteArrayOutputStream();
+            mps.Write(out1);
+            out1.Close();
+            byte[] bytes = out1.ToByteArray();
 
-                PropertySet psr = new PropertySet(bytes);
-                Assert.IsTrue(psr.IsSummaryInformation);
-                Section sr = (Section)psr.Sections[0];
-                String title = (String)sr.GetProperty(PropertyIDMap.PID_TITLE);
-                Assert.AreEqual(TITLE, title);
-            }
-            catch (WritingNotSupportedException e)
-            {
-                t = e;
-            }
-            catch (IOException e)
-            {
-                t = e;
-            }
-            catch (NoPropertySetStreamException e)
-            {
-                t = e;
-            }
-            if (t != null)
-                Assert.Fail(t.Message);
+            PropertySet psr = new PropertySet(bytes);
+            ClassicAssert.IsTrue(psr.IsSummaryInformation);
+            Section sr = (Section)psr.Sections[0];
+            String title = (String)sr.GetProperty(PropertyIDMap.PID_TITLE);
+            ClassicAssert.AreEqual(TITLE, title);
         }
 
-
+        private void checkString(long variantType, string value, int codepage)
+        {
+            for (int i=0; i<value.Length; i++)
+            {
+                check(variantType, value.Substring(0, i), codepage);
+            }
+        }
 
         /**
          * Writes a property and Reads it back in.
@@ -568,8 +488,7 @@ namespace TestCases.HPSF.Basic
          * @throws ReadingNotSupportedException 
          * @throws UnsupportedEncodingException 
          */
-        private void check(long variantType, Object value,
-                           int codepage)
+        private void check(long variantType, Object value, int codepage)
         {
             MemoryStream out1 = new MemoryStream();
             VariantSupport.Write(out1, variantType, value, codepage);
@@ -580,150 +499,11 @@ namespace TestCases.HPSF.Basic
                                     variantType, codepage);
             if (objRead is byte[])
             {
-                byte[] valueB = (byte[])value;
-                byte[] readB = (byte[])objRead;
-                if (valueB.Length != readB.Length)
-                    Assert.Fail("Byte arrays are different length - expected " + valueB.Length +
-                          " but found " + readB.Length);
-                int diff1 = diff(valueB, readB);
-                if (diff1 >= 0)
-                    Assert.Fail("Byte arrays are different. First different byte is at " +
-                         "index " + diff1 + ".");
+                POITestCase.AssertEquals((byte[])value, (byte[])objRead);
             }
-            else
-                if (value != null && !value.Equals(objRead))
-                {
-                    Assert.Fail("Expected: \"" + value + "\" but was: \"" + objRead +
-                         "\". Codepage: " + codepage +
-                         (codepage == -1 ?
-                          " (" + Encoding.Default.EncodingName + ")." : "."));
-                }
-                else
-                    Assert.AreEqual(value, objRead);
-        }
-
-
-
-        /**
-         * Compares two byte arrays.
-         *
-         * @param a The first byte array
-         * @param b The second byte array
-         * @return The index of the first byte that is different. If the byte arrays
-         * are equal, -1 is returned.
-         */
-        private int diff(byte[] a, byte[] b)
-        {
-            int min = Math.Min(a.Length, b.Length);
-            for (int i = 0; i < min; i++)
-                if (a[i] != b[i])
-                    return i;
-            if (a.Length != b.Length)
-                return min;
-            return -1;
-        }
-
-
-
-        /**
-         * This Test method does a Write and Read back Test with all POI
-         * filesystems in the "data" directory by performing the following
-         * actions for each file:
-         * 
-         * <ul>
-         * 
-         * <li>Read its property Set streams.</li>
-         * 
-         * <li>Create a new POI filesystem containing the origin file's
-         * property Set streams.</li>
-         * 
-         * <li>Read the property Set streams from the POI filesystem just
-         * Created.</li>
-         * 
-         * <li>Compare each property Set stream with the corresponding one from
-         * the origin file and check whether they are equal.</li>
-         *
-         * </ul>
-         */
-        [Test]
-        public void TestRecreate()
-        {
-            string[] files = _samples.GetFiles();
-            for (int i = 0; i < files.Length; i++)
-            {
-                string filename = Path.GetFileName(files[i]);
-                if (filename.StartsWith("Test") && TestReadAllFiles.checkExclude(filename))
-                {
-                    try
-                    {
-                        TestRecreate(new FileInfo(files[i]));
-                    }
-                    catch (Exception e)
-                    {
-                        throw new IOException("While handling file " + files[i], e);
-                    }
-                }
+            else if (value != null && !value.Equals(objRead)) {
+                ClassicAssert.AreEqual(value, objRead);
             }
-        }
-
-
-
-        /**
-         * Performs the check described in {@link #TestReCreate()} for a single
-         * POI filesystem.
-         *
-         * @param f the POI filesystem to check
-         */
-        private void TestRecreate(FileInfo f)
-        {
-            Console.WriteLine("Recreating file \"" + f.Name + "\"");
-            
-            /* Read the POI filesystem's property Set streams: */
-            POIFile[] psf1 = Util.ReadPropertySets(f);
-
-            /* Create a new POI filesystem containing the origin file's
-             * property Set streams: */
-            FileInfo copy = TempFile.CreateTempFile(f.Name, "");
-            //File.Create(Path.Combine(TestContext.CurrentContext.TestDirectory,f.Name));
-            //copy.deleteOnExit();
-            FileStream out1 = copy.OpenWrite();
-            POIFSFileSystem poiFs = new POIFSFileSystem();
-            for (int i = 0; i < psf1.Length; i++)
-            {
-                Stream in1 =
-                    new ByteArrayInputStream(psf1[i].GetBytes());
-                PropertySet psIn = PropertySetFactory.Create(in1);
-                MutablePropertySet psOut = new MutablePropertySet(psIn);
-                MemoryStream psStream =
-                    new MemoryStream();
-                psOut.Write(psStream);
-                psStream.Close();
-                byte[] streamData = psStream.ToArray();
-                poiFs.CreateDocument(new ByteArrayInputStream(streamData),
-                                     psf1[i].GetName());
-                poiFs.WriteFileSystem(out1);
-            }
-            poiFs.Close();
-            out1.Close();
-
-            /* Read the property Set streams from the POI filesystem just
-             * Created. */
-            POIFile[] psf2 = Util.ReadPropertySets(copy);
-            for (int i = 0; i < psf2.Length; i++)
-            {
-                byte[] bytes1 = psf1[i].GetBytes();
-                byte[] bytes2 = psf2[i].GetBytes();
-                Stream in1 = new ByteArrayInputStream(bytes1);
-                Stream in2 = new ByteArrayInputStream(bytes2);
-                PropertySet ps1 = PropertySetFactory.Create(in1);
-                PropertySet ps2 = PropertySetFactory.Create(in2);
-
-                /* Compare the property Set stream with the corresponding one
-                 * from the origin file and check whether they are equal. */
-                
-                Assert.AreEqual(ps1, ps2, "Equality for file " + f.Name);
-            }
-            out1.Close();
         }
 
         /**
@@ -739,12 +519,12 @@ namespace TestCases.HPSF.Basic
                 /* Write: */
                 POIFSFileSystem poiFs = new POIFSFileSystem();
                 MutableSection s = (MutableSection)ps1.Sections[0];
-                Hashtable m = new Hashtable(3, 1.0f);
+                Dictionary<long, string> m = new();
                 m[1] = "String 1";
                 m[2] = "String 2";
                 m[3] = "String 3";
-                s.Dictionary = (m);
-                s.SetFormatID(SectionIDMap.DOCUMENT_SUMMARY_INFORMATION_ID1);
+                s.SetDictionary(m);
+                s.FormatID = SectionIDMap.DOCUMENT_SUMMARY_INFORMATION_ID[0];
                 int codepage = CodePageUtil.CP_UNICODE;
                 s.SetProperty(PropertyIDMap.PID_CODEPAGE, Variant.VT_I2, codepage);
                 poiFs.CreateDocument(ps1.ToInputStream(), "Test");
@@ -752,19 +532,19 @@ namespace TestCases.HPSF.Basic
                 poiFs.Close();
             }
             /* Read back: */
-            POIFile[] psf = Util.ReadPropertySets(copy);
-            Assert.AreEqual(1, psf.Length);
+            List<POIFile> psf = Util.ReadPropertySets(copy);
+            ClassicAssert.AreEqual(1, psf.Count);
             byte[] bytes = psf[0].GetBytes();
-            Stream in1 = new ByteArrayInputStream(bytes);
+            InputStream in1 = new ByteArrayInputStream(bytes);
             PropertySet ps2 = PropertySetFactory.Create(in1);
 
             /* Check if the result is a DocumentSummaryInformation stream, as
                 * specified. */
-            Assert.IsTrue(ps2.IsDocumentSummaryInformation);
+            ClassicAssert.IsTrue(ps2.IsDocumentSummaryInformation);
 
             /* Compare the property Set stream with the corresponding one
                 * from the origin file and check whether they are equal. */
-            Assert.IsTrue(ps1.Equals(ps2));
+            ClassicAssert.IsTrue(ps1.Equals(ps2));
             
             copy.Delete();
         }
@@ -806,20 +586,20 @@ namespace TestCases.HPSF.Basic
             InputStream sinfStream = new NDocumentInputStream(sinfDoc);
             sinf = (SummaryInformation)PropertySetFactory.Create(sinfStream);
             sinfStream.Close();
-            Assert.AreEqual(131077, sinf.OSVersion);
+            ClassicAssert.AreEqual(131077, sinf.OSVersion);
 
             InputStream dinfStream = new NDocumentInputStream(dinfDoc);
             dinf = (DocumentSummaryInformation)PropertySetFactory.Create(dinfStream);
             dinfStream.Close();
-            Assert.AreEqual(131077, dinf.OSVersion);
+            ClassicAssert.AreEqual(131077, dinf.OSVersion);
 
             // Check they start as we expect
-            Assert.AreEqual("Reiichiro Hori", sinf.Author);
-            Assert.AreEqual("Microsoft Word 9.0", sinf.ApplicationName);
-            Assert.AreEqual("\u7b2c1\u7ae0", sinf.Title);
+            ClassicAssert.AreEqual("Reiichiro Hori", sinf.Author);
+            ClassicAssert.AreEqual("Microsoft Word 9.0", sinf.ApplicationName);
+            ClassicAssert.AreEqual("\u7b2c1\u7ae0", sinf.Title);
 
-            Assert.AreEqual("", dinf.Company);
-            Assert.AreEqual(null, dinf.Manager);
+            ClassicAssert.AreEqual("", dinf.Company);
+            ClassicAssert.AreEqual(null, dinf.Manager);
 
             // Do an in-place replace via an InputStream
             new NPOIFSDocument(sinfDoc).ReplaceContents(sinf.ToInputStream());
@@ -833,12 +613,12 @@ namespace TestCases.HPSF.Basic
             InputStream sinfStream2 = new NDocumentInputStream(sinfDoc);
             sinf = (SummaryInformation)PropertySetFactory.Create(sinfStream2);
             sinfStream2.Close();
-            Assert.AreEqual(131077, sinf.OSVersion);
+            ClassicAssert.AreEqual(131077, sinf.OSVersion);
 
             InputStream dinfStream2 = new NDocumentInputStream(dinfDoc);
             dinf = (DocumentSummaryInformation)PropertySetFactory.Create(dinfStream2);
             dinfStream2.Close();
-            Assert.AreEqual(131077, dinf.OSVersion);
+            ClassicAssert.AreEqual(131077, dinf.OSVersion);
 
 
             // Start again!
@@ -860,12 +640,12 @@ namespace TestCases.HPSF.Basic
             InputStream sinfStream3 = new NDocumentInputStream(sinfDoc);
             sinf = (SummaryInformation)PropertySetFactory.Create(sinfStream3);
             sinfStream3.Close();
-            Assert.AreEqual(131077, sinf.OSVersion);
+            ClassicAssert.AreEqual(131077, sinf.OSVersion);
 
             InputStream dinfStream3 = new NDocumentInputStream(dinfDoc);
             dinf = (DocumentSummaryInformation)PropertySetFactory.Create(dinfStream3);
             dinfStream3.Close();
-            Assert.AreEqual(131077, dinf.OSVersion);
+            ClassicAssert.AreEqual(131077, dinf.OSVersion);
 
 
             // Have them write themselves in-place with no Changes
@@ -877,9 +657,9 @@ namespace TestCases.HPSF.Basic
             doufStream.Close();
 
             // And also write to some bytes for Checking
-            MemoryStream sinfBytes = new MemoryStream();
+            ByteArrayOutputStream sinfBytes = new ByteArrayOutputStream();
             sinf.Write(sinfBytes);
-            MemoryStream dinfBytes = new MemoryStream();
+            ByteArrayOutputStream dinfBytes = new ByteArrayOutputStream();
             dinf.Write(dinfBytes);
 
 
@@ -893,27 +673,27 @@ namespace TestCases.HPSF.Basic
             InputStream dinfStream4 = new NDocumentInputStream(dinfDoc);
             byte[] dinfData = IOUtils.ToByteArray(dinfStream4);
             dinfStream4.Close();
-            Assert.That(sinfBytes.ToArray(), new EqualConstraint(sinfData));
-            Assert.That(dinfBytes.ToArray(), new EqualConstraint(dinfData));
+            Assert.That(sinfBytes.ToByteArray(), new EqualConstraint(sinfData));
+            Assert.That(dinfBytes.ToByteArray(), new EqualConstraint(dinfData));
 
 
             // Read back in as-is
             InputStream sinfStream5 = new NDocumentInputStream(sinfDoc);
             sinf = (SummaryInformation)PropertySetFactory.Create(sinfStream5);
             sinfStream5.Close();
-            Assert.AreEqual(131077, sinf.OSVersion);
+            ClassicAssert.AreEqual(131077, sinf.OSVersion);
 
             InputStream dinfStream5 = new NDocumentInputStream(dinfDoc);
             dinf = (DocumentSummaryInformation)PropertySetFactory.Create(dinfStream5);
             dinfStream5.Close();
-            Assert.AreEqual(131077, dinf.OSVersion);
+            ClassicAssert.AreEqual(131077, dinf.OSVersion);
 
-            Assert.AreEqual("Reiichiro Hori", sinf.Author);
-            Assert.AreEqual("Microsoft Word 9.0", sinf.ApplicationName);
-            Assert.AreEqual("\u7b2c1\u7ae0", sinf.Title);
+            ClassicAssert.AreEqual("Reiichiro Hori", sinf.Author);
+            ClassicAssert.AreEqual("Microsoft Word 9.0", sinf.ApplicationName);
+            ClassicAssert.AreEqual("\u7b2c1\u7ae0", sinf.Title);
 
-            Assert.AreEqual("", dinf.Company);
-            Assert.AreEqual(null, dinf.Manager);
+            ClassicAssert.AreEqual("", dinf.Company);
+            ClassicAssert.AreEqual(null, dinf.Manager);
 
 
             // Now alter a few of them
@@ -936,20 +716,20 @@ namespace TestCases.HPSF.Basic
             InputStream sinfStream6 = new NDocumentInputStream(sinfDoc);
             sinf = (SummaryInformation)PropertySetFactory.Create(sinfStream6);
             sinfStream6.Close();
-            Assert.AreEqual(131077, sinf.OSVersion);
+            ClassicAssert.AreEqual(131077, sinf.OSVersion);
 
             dinfDoc = (DocumentNode)root.GetEntry(DocumentSummaryInformation.DEFAULT_STREAM_NAME);
             InputStream dinfStream6 = new NDocumentInputStream(dinfDoc);
             dinf = (DocumentSummaryInformation)PropertySetFactory.Create(dinfStream6);
             dinfStream6.Close();
-            Assert.AreEqual(131077, dinf.OSVersion);
+            ClassicAssert.AreEqual(131077, dinf.OSVersion);
 
-            Assert.AreEqual("Changed Author", sinf.Author);
-            Assert.AreEqual("Microsoft Word 9.0", sinf.ApplicationName);
-            Assert.AreEqual("Le titre \u00e9tait chang\u00e9", sinf.Title);
+            ClassicAssert.AreEqual("Changed Author", sinf.Author);
+            ClassicAssert.AreEqual("Microsoft Word 9.0", sinf.ApplicationName);
+            ClassicAssert.AreEqual("Le titre \u00e9tait chang\u00e9", sinf.Title);
 
-            Assert.AreEqual("", dinf.Company);
-            Assert.AreEqual("Changed Manager", dinf.Manager);
+            ClassicAssert.AreEqual("", dinf.Company);
+            ClassicAssert.AreEqual("Changed Manager", dinf.Manager);
 
 
             // Close the whole filesystem, and open it once more
@@ -964,20 +744,20 @@ namespace TestCases.HPSF.Basic
             InputStream sinfStream7 = new NDocumentInputStream(sinfDoc);
             sinf = (SummaryInformation)PropertySetFactory.Create(sinfStream7);
             sinfStream7.Close();
-            Assert.AreEqual(131077, sinf.OSVersion);
+            ClassicAssert.AreEqual(131077, sinf.OSVersion);
 
             dinfDoc = (DocumentNode)root.GetEntry(DocumentSummaryInformation.DEFAULT_STREAM_NAME);
             InputStream dinfStream7 = new NDocumentInputStream(dinfDoc);
             dinf = (DocumentSummaryInformation)PropertySetFactory.Create(dinfStream7);
             dinfStream7.Close();
-            Assert.AreEqual(131077, dinf.OSVersion);
+            ClassicAssert.AreEqual(131077, dinf.OSVersion);
 
-            Assert.AreEqual("Changed Author", sinf.Author);
-            Assert.AreEqual("Microsoft Word 9.0", sinf.ApplicationName);
-            Assert.AreEqual("Le titre \u00e9tait chang\u00e9", sinf.Title);
+            ClassicAssert.AreEqual("Changed Author", sinf.Author);
+            ClassicAssert.AreEqual("Microsoft Word 9.0", sinf.ApplicationName);
+            ClassicAssert.AreEqual("Le titre \u00e9tait chang\u00e9", sinf.Title);
 
-            Assert.AreEqual("", dinf.Company);
-            Assert.AreEqual("Changed Manager", dinf.Manager);
+            ClassicAssert.AreEqual("", dinf.Company);
+            ClassicAssert.AreEqual("Changed Manager", dinf.Manager);
 
 
             // Tidy up
@@ -1000,7 +780,7 @@ namespace TestCases.HPSF.Basic
                 POIFSFileSystem poiFs = new POIFSFileSystem();
                 MutablePropertySet ps1 = new MutablePropertySet();
                 MutableSection s = (MutableSection)ps1.Sections[0];
-                Hashtable m = new Hashtable(3, 1.0f);
+                Dictionary<long, string> m = new();
                 m[1] = "String 1";
                 m[2] = "String 2";
                 m[3] = "String 3";
@@ -1008,8 +788,8 @@ namespace TestCases.HPSF.Basic
                 try
                 {
                     Assert.Throws<IllegalPropertySetDataException>(() => {
-                        s.Dictionary = m;
-                        s.SetFormatID(SectionIDMap.DOCUMENT_SUMMARY_INFORMATION_ID1);
+                        s.SetDictionary(m);
+                        s.FormatID = SectionIDMap.DOCUMENT_SUMMARY_INFORMATION_ID[0];
                         s.SetProperty(PropertyIDMap.PID_CODEPAGE, Variant.VT_I2, 12345);
                         poiFs.CreateDocument(ps1.ToInputStream(), "Test");
                         poiFs.WriteFileSystem(copy);

@@ -30,7 +30,7 @@ using System;
 using System.IO;
 using System.Collections;
 
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using NPOI.POIFS.Storage;
 using NPOI.Util;
 using NPOI.POIFS.FileSystem;
@@ -85,7 +85,7 @@ namespace TestCases.POIFS.Storage
                 SmallDocumentBlock.Convert(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS, 
                     documents.ToArray(), testDataSize);
 
-            Assert.AreEqual((testDataSize + 63) / 64, results.Length, "checking correct result size: ");
+            ClassicAssert.AreEqual((testDataSize + 63) / 64, results.Length, "checking correct result size: ");
             MemoryStream output = new MemoryStream();
 
             for (int j = 0; j < results.Length; j++)
@@ -94,18 +94,18 @@ namespace TestCases.POIFS.Storage
             }
             byte[] output_array = output.ToArray();
 
-            Assert.AreEqual(64 * results.Length,
+            ClassicAssert.AreEqual(64 * results.Length,
                          output_array.Length, "checking correct output size: ");
             int index = 0;
 
             for (; index < testDataSize; index++)
             {
-                Assert.AreEqual(testData[index],
+                ClassicAssert.AreEqual(testData[index],
                              output_array[index], "checking output " + index);
             }
             for (; index < output_array.Length; index++)
             {
-                Assert.AreEqual((byte)0xff,
+                ClassicAssert.AreEqual((byte)0xff,
                              output_array[index], "checking output " + index);
             }
         }
@@ -130,7 +130,7 @@ namespace TestCases.POIFS.Storage
                 }
                 SmallDocumentBlock[] blocks = SmallDocumentBlock.Convert(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS, array, 319);
 
-                Assert.AreEqual(5, blocks.Length);
+                ClassicAssert.AreEqual(5, blocks.Length);
                 MemoryStream stream = new MemoryStream();
 
                 for (int k = 0; k < blocks.Length; k++)
@@ -142,11 +142,11 @@ namespace TestCases.POIFS.Storage
 
                 for (int k = 0; k < array.Length; k++)
                 {
-                    Assert.AreEqual(array[k], output[k], k.ToString());
+                    ClassicAssert.AreEqual(array[k], output[k], k.ToString());
                 }
                 for (int k = array.Length; k < 320; k++)
                 {
-                    Assert.AreEqual((byte)0xFF, output[k], k.ToString());
+                    ClassicAssert.AreEqual((byte)0xFF, output[k], k.ToString());
                 }
             }
         }
@@ -185,7 +185,7 @@ namespace TestCases.POIFS.Storage
                     SmallDocumentBlock.Read(blocks, buffer, offset);
                     for (int n = 0; n < buffer.Length; n++)
                     {
-                        Assert.AreEqual(testData[(k * j) + n], buffer[n],
+                        ClassicAssert.AreEqual(testData[(k * j) + n], buffer[n],
                             "checking byte " + (k * j) + n);
                     }
                     offset += j;
@@ -211,8 +211,8 @@ namespace TestCases.POIFS.Storage
                 }
                 int result = SmallDocumentBlock.Fill(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS, blocks);
 
-                Assert.AreEqual((j + 7) / 8, result, "correct big block count: ");
-                Assert.AreEqual(8 * result,
+                ClassicAssert.AreEqual((j + 7) / 8, result, "correct big block count: ");
+                ClassicAssert.AreEqual(8 * result,
                              blocks.Count, "correct small block count: ");
                 for (int m = j; m < blocks.Count; m++)
                 {
@@ -222,10 +222,10 @@ namespace TestCases.POIFS.Storage
                     block.WriteBlocks(stream);
                     byte[] output = stream.ToArray();
 
-                    Assert.AreEqual(64, output.Length, "correct output size (block[ " + m + " ]): ");
+                    ClassicAssert.AreEqual(64, output.Length, "correct output size (block[ " + m + " ]): ");
                     for (int n = 0; n < 64; n++)
                     {
-                        Assert.AreEqual((byte)0xff, output[n], "correct value (block[ " + m + " ][ " + n
+                        ClassicAssert.AreEqual((byte)0xff, output[n], "correct value (block[ " + m + " ][ " + n
                                      + " ]): ");
                     }
                 }
@@ -240,7 +240,7 @@ namespace TestCases.POIFS.Storage
         {
             for (int j = 0; j < 10; j++)
             {
-                Assert.AreEqual(j * 64,
+                ClassicAssert.AreEqual(j * 64,
                              SmallDocumentBlock.CalcSize(j), "testing " + j);
             }
         }
@@ -274,11 +274,11 @@ namespace TestCases.POIFS.Storage
             {
                 byte[] out_data = block.Data;
 
-                Assert.AreEqual(64,
+                ClassicAssert.AreEqual(64,
                              out_data.Length, "testing block at offset " + offset);
                 for (int j = 0; j < out_data.Length; j++)
                 {
-                    Assert.AreEqual(data[offset], out_data[j], "testing byte at offset " + offset);
+                    ClassicAssert.AreEqual(data[offset], out_data[j], "testing byte at offset " + offset);
                     offset++;
                 }
             }

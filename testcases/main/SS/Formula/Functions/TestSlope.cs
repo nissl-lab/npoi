@@ -22,7 +22,7 @@ namespace TestCases.SS.Formula.Functions
 
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.Formula.Functions;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using System;
     /**
      * Test for Excel function SLOPE()
@@ -43,14 +43,14 @@ namespace TestCases.SS.Formula.Functions
         private void Confirm(Function function, ValueEval xArray, ValueEval yArray, double expected)
         {
             ValueEval result = invoke(function, xArray, yArray);
-            Assert.AreEqual(typeof(NumberEval), result.GetType());
-            Assert.AreEqual(expected, ((NumberEval)result).NumberValue, 0);
+            ClassicAssert.AreEqual(typeof(NumberEval), result.GetType());
+            ClassicAssert.AreEqual(expected, ((NumberEval)result).NumberValue, 0);
         }
         private void ConfirmError(Function function, ValueEval xArray, ValueEval yArray, ErrorEval expectedError)
         {
             ValueEval result = invoke(function, xArray, yArray);
-            Assert.AreEqual(typeof(ErrorEval), result.GetType());
-            Assert.AreEqual(expectedError.ErrorCode, ((ErrorEval)result).ErrorCode);
+            ClassicAssert.AreEqual(typeof(ErrorEval), result.GetType());
+            ClassicAssert.AreEqual(expectedError.ErrorCode, ((ErrorEval)result).ErrorCode);
         }
 
         private void ConfirmError(ValueEval xArray, ValueEval yArray, ErrorEval expectedError)

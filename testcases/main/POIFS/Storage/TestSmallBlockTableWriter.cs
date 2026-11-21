@@ -32,7 +32,7 @@ namespace TestCases.POIFS.Storage
     using System.IO;
     using System.Collections;
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.POIFS.Storage;
     using NPOI.POIFS.Common;
     using NPOI.Util;
@@ -112,14 +112,14 @@ namespace TestCases.POIFS.Storage
 
             // 15 small blocks: 6 for doc340, 0 for doc5000 (too big), 0
             // for doc0 (no storage needed), 1 each for doc1 through doc9
-            Assert.AreEqual(15 * 64, root.Size);
+            ClassicAssert.AreEqual(15 * 64, root.Size);
 
             // 15 small blocks rounds up to 2 big blocks
-            Assert.AreEqual(2, sbtw.CountBlocks);
+            ClassicAssert.AreEqual(2, sbtw.CountBlocks);
             int start_block = 1000 + root.StartBlock;
 
             sbtw.StartBlock = start_block;
-            Assert.AreEqual(start_block, root.StartBlock);
+            ClassicAssert.AreEqual(start_block, root.StartBlock);
         }
     }
 }

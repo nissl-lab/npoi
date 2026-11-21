@@ -122,10 +122,10 @@ namespace NPOI.DDF
         }
 
         /// <summary>
-        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+        /// Returns a <see cref="System.String"/> that represents the current <see cref="System.Object"/>.
         /// </summary>
         /// <returns>
-        /// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+        /// A <see cref="System.String"/> that represents the current <see cref="System.Object"/>.
         /// </returns>
         public override String ToString()
         {
@@ -154,7 +154,7 @@ namespace NPOI.DDF
         /// </summary>
         /// <param name="flags">The flags.</param>
         /// <returns></returns>
-        private String DecodeFlags(int flags)
+        private static String DecodeFlags(int flags)
         {
             StringBuilder result = new StringBuilder();
             result.Append((flags & FLAG_GROUP) != 0 ? "|GROUP" : "");

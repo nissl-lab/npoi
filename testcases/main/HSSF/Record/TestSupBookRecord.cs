@@ -23,7 +23,7 @@ namespace TestCases.HSSF.Record
 
     using System;
     using NPOI.HSSF.Record;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     /**
      * Tests the serialization and deserialization of the SupBook record
@@ -66,10 +66,10 @@ namespace TestCases.HSSF.Record
         {
 
             SupBookRecord record = new SupBookRecord(TestcaseRecordInputStream.Create(0x01AE, dataIR));
-            Assert.IsTrue(record.IsInternalReferences);             //expected flag
-            Assert.AreEqual(0x4, record.NumberOfSheets);    //expected # of sheets
+            ClassicAssert.IsTrue(record.IsInternalReferences);             //expected flag
+            ClassicAssert.AreEqual(0x4, record.NumberOfSheets);    //expected # of sheets
 
-            Assert.AreEqual(8, record.RecordSize);  //sid+size+data
+            ClassicAssert.AreEqual(8, record.RecordSize);  //sid+size+data
         }
         /**
          * tests that we can load the record
@@ -79,16 +79,16 @@ namespace TestCases.HSSF.Record
         {
 
             SupBookRecord record = new SupBookRecord(TestcaseRecordInputStream.Create(0x01AE, dataER));
-            Assert.IsTrue(record.IsExternalReferences);             //expected flag
-            Assert.AreEqual(0x2, record.NumberOfSheets);    //expected # of sheets
+            ClassicAssert.IsTrue(record.IsExternalReferences);             //expected flag
+            ClassicAssert.AreEqual(0x2, record.NumberOfSheets);    //expected # of sheets
 
-            Assert.AreEqual(34, record.RecordSize);  //sid+size+data
+            ClassicAssert.AreEqual(34, record.RecordSize);  //sid+size+data
 
-            Assert.AreEqual("testURL", record.URL);
+            ClassicAssert.AreEqual("testURL", record.URL);
             String[] sheetNames = record.SheetNames;
-            Assert.AreEqual(2, sheetNames.Length);
-            Assert.AreEqual("Sheet1", sheetNames[0]);
-            Assert.AreEqual("Sheet2", sheetNames[1]);
+            ClassicAssert.AreEqual(2, sheetNames.Length);
+            ClassicAssert.AreEqual("Sheet1", sheetNames[0]);
+            ClassicAssert.AreEqual("Sheet2", sheetNames[1]);
         }
 
         /**
@@ -99,9 +99,9 @@ namespace TestCases.HSSF.Record
         {
 
             SupBookRecord record = new SupBookRecord(TestcaseRecordInputStream.Create(0x01AE, dataAIF));
-            Assert.IsTrue(record.IsAddInFunctions);             //expected flag
-            Assert.AreEqual(0x1, record.NumberOfSheets);    //expected # of sheets
-            Assert.AreEqual(8, record.RecordSize);  //sid+size+data
+            ClassicAssert.IsTrue(record.IsAddInFunctions);             //expected flag
+            ClassicAssert.AreEqual(0x1, record.NumberOfSheets);    //expected # of sheets
+            ClassicAssert.AreEqual(8, record.RecordSize);  //sid+size+data
         }
 
         /**
@@ -133,39 +133,39 @@ namespace TestCases.HSSF.Record
             SupBookRecord record;
 
             record = new SupBookRecord(startMarker + "test.xls", sheetNames);
-            Assert.AreEqual("test.xls", record.URL);
+            ClassicAssert.AreEqual("test.xls", record.URL);
 
             //UNC path notation
             record = new SupBookRecord(startMarker + "" + SupBookRecord.CH_VOLUME + "@servername" + SupBookRecord.CH_DOWN_DIR + "test.xls", sheetNames);
-            Assert.AreEqual("\\\\servername" + SupBookRecord.PATH_SEPERATOR + "test.xls", record.URL);
+            ClassicAssert.AreEqual("\\\\servername" + SupBookRecord.PATH_SEPERATOR + "test.xls", record.URL);
 
             //Absolute path notation - different device
             record = new SupBookRecord(startMarker + "" + SupBookRecord.CH_VOLUME + "D" + SupBookRecord.CH_DOWN_DIR + "test.xls", sheetNames);
-            Assert.AreEqual("D:" + SupBookRecord.PATH_SEPERATOR + "test.xls", record.URL);
+            ClassicAssert.AreEqual("D:" + SupBookRecord.PATH_SEPERATOR + "test.xls", record.URL);
 
             //Absolute path notation - same device
             record = new SupBookRecord(startMarker + "" + SupBookRecord.CH_SAME_VOLUME + "folder" + SupBookRecord.CH_DOWN_DIR + "test.xls", sheetNames);
-            Assert.AreEqual(SupBookRecord.PATH_SEPERATOR + "folder" + SupBookRecord.PATH_SEPERATOR + "test.xls", record.URL);
+            ClassicAssert.AreEqual(SupBookRecord.PATH_SEPERATOR + "folder" + SupBookRecord.PATH_SEPERATOR + "test.xls", record.URL);
 
             //Relative path notation - down
             record = new SupBookRecord(startMarker + "folder" + SupBookRecord.CH_DOWN_DIR + "test.xls", sheetNames);
-            Assert.AreEqual("folder" + SupBookRecord.PATH_SEPERATOR + "test.xls", record.URL);
+            ClassicAssert.AreEqual("folder" + SupBookRecord.PATH_SEPERATOR + "test.xls", record.URL);
 
             //Relative path notation - up
             record = new SupBookRecord(startMarker + "" + SupBookRecord.CH_UP_DIR + "test.xls", sheetNames);
-            Assert.AreEqual(".." + SupBookRecord.PATH_SEPERATOR + "test.xls", record.URL);
+            ClassicAssert.AreEqual(".." + SupBookRecord.PATH_SEPERATOR + "test.xls", record.URL);
 
             //Relative path notation - for EXCEL.exe - fallback
             record = new SupBookRecord(startMarker + "" + SupBookRecord.CH_STARTUP_DIR + "test.xls", sheetNames);
-            Assert.AreEqual("." + SupBookRecord.PATH_SEPERATOR + "test.xls", record.URL);
+            ClassicAssert.AreEqual("." + SupBookRecord.PATH_SEPERATOR + "test.xls", record.URL);
 
             //Relative path notation - for EXCEL lib folder - fallback
             record = new SupBookRecord(startMarker + "" + SupBookRecord.CH_LIB_DIR + "test.xls", sheetNames);
-            Assert.AreEqual("." + SupBookRecord.PATH_SEPERATOR + "test.xls", record.URL);
+            ClassicAssert.AreEqual("." + SupBookRecord.PATH_SEPERATOR + "test.xls", record.URL);
 
             //Relative path notation - for alternative EXCEL.exe - fallback
             record = new SupBookRecord(startMarker + "" + SupBookRecord.CH_ALT_STARTUP_DIR + "test.xls", sheetNames);
-            Assert.AreEqual("." + SupBookRecord.PATH_SEPERATOR + "test.xls", record.URL);
+            ClassicAssert.AreEqual("." + SupBookRecord.PATH_SEPERATOR + "test.xls", record.URL);
         }
     }
 }

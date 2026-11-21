@@ -1,7 +1,7 @@
 ﻿using NPOI.HSSF.UserModel;
 using NPOI.SS.Formula.Eval;
 using NPOI.SS.UserModel;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -40,8 +40,8 @@ namespace TestCases.SS.Formula.Atp
             cell.SetCellFormula(formulaText);
             fe.NotifyUpdateCell(cell);
             CellValue result = fe.Evaluate(cell);
-            Assert.AreEqual(result.CellType, CellType.String);
-            Assert.AreEqual(expectedResult, result.StringValue);
+            ClassicAssert.AreEqual(result.CellType, CellType.String);
+            ClassicAssert.AreEqual(expectedResult, result.StringValue);
         }
         [SetUp]
         public void SetUp()
@@ -75,7 +75,7 @@ namespace TestCases.SS.Formula.Atp
             evaluator.ClearAllCachedResultValues();
             formulaCell.SetCellFormula("TEXTJOIN(\",\", true, \"Text\")");
             evaluator.EvaluateFormulaCell(formulaCell);
-            Assert.AreEqual("Text", formulaCell.StringCellValue);
+            ClassicAssert.AreEqual("Text", formulaCell.StringCellValue);
         }
 
         [Test]
@@ -84,7 +84,7 @@ namespace TestCases.SS.Formula.Atp
             evaluator.ClearAllCachedResultValues();
             formulaCell.SetCellFormula("TEXTJOIN(\",\", true, \"One\", \"Two\", \"Three\")");
             evaluator.EvaluateFormulaCell(formulaCell);
-            Assert.AreEqual("One,Two,Three", formulaCell.StringCellValue);
+            ClassicAssert.AreEqual("One,Two,Three", formulaCell.StringCellValue);
         }
 
         [Test]
@@ -93,7 +93,7 @@ namespace TestCases.SS.Formula.Atp
             evaluator.ClearAllCachedResultValues();
             formulaCell.SetCellFormula("TEXTJOIN(\",\", true, \"Text\", 1)");
             evaluator.EvaluateFormulaCell(formulaCell);
-            Assert.AreEqual("Text,1", formulaCell.StringCellValue);
+            ClassicAssert.AreEqual("Text,1", formulaCell.StringCellValue);
         }
 
         [Test]
@@ -102,7 +102,7 @@ namespace TestCases.SS.Formula.Atp
             evaluator.ClearAllCachedResultValues();
             formulaCell.SetCellFormula("TEXTJOIN(\",\", false, \"A\", \"\", \"B\")");
             evaluator.EvaluateFormulaCell(formulaCell);
-            Assert.AreEqual("A,,B", formulaCell.StringCellValue);
+            ClassicAssert.AreEqual("A,,B", formulaCell.StringCellValue);
         }
 
         [Test]
@@ -111,7 +111,7 @@ namespace TestCases.SS.Formula.Atp
             evaluator.ClearAllCachedResultValues();
             formulaCell.SetCellFormula("TEXTJOIN(\",\", true, \"A\", \"\", \"B\")");
             evaluator.EvaluateFormulaCell(formulaCell);
-            Assert.AreEqual("A,B", formulaCell.StringCellValue);
+            ClassicAssert.AreEqual("A,B", formulaCell.StringCellValue);
         }
 
         [Test]
@@ -120,7 +120,7 @@ namespace TestCases.SS.Formula.Atp
             evaluator.ClearAllCachedResultValues();
             formulaCell.SetCellFormula("TEXTJOIN(\",\", false, \"\", \"\")");
             evaluator.EvaluateFormulaCell(formulaCell);
-            Assert.AreEqual(",", formulaCell.StringCellValue);
+            ClassicAssert.AreEqual(",", formulaCell.StringCellValue);
         }
 
         [Test]
@@ -129,7 +129,7 @@ namespace TestCases.SS.Formula.Atp
             evaluator.ClearAllCachedResultValues();
             formulaCell.SetCellFormula("TEXTJOIN(\",\", true, \"\", \"\")");
             evaluator.EvaluateFormulaCell(formulaCell);
-            Assert.AreEqual("", formulaCell.StringCellValue);
+            ClassicAssert.AreEqual("", formulaCell.StringCellValue);
         }
 
         [Test]
@@ -138,7 +138,7 @@ namespace TestCases.SS.Formula.Atp
             evaluator.ClearAllCachedResultValues();
             formulaCell.SetCellFormula("TEXTJOIN(\",\", true, A1, B1)");
             evaluator.EvaluateFormulaCell(formulaCell);
-            Assert.AreEqual("One,Two", formulaCell.StringCellValue);
+            ClassicAssert.AreEqual("One,Two", formulaCell.StringCellValue);
         }
 
         [Test]
@@ -147,7 +147,7 @@ namespace TestCases.SS.Formula.Atp
             evaluator.ClearAllCachedResultValues();
             formulaCell.SetCellFormula("TEXTJOIN(\",\", true, D1, E1)");
             evaluator.EvaluateFormulaCell(formulaCell);
-            Assert.AreEqual("1,2", formulaCell.StringCellValue);
+            ClassicAssert.AreEqual("1,2", formulaCell.StringCellValue);
         }
 
         [Test]
@@ -156,7 +156,7 @@ namespace TestCases.SS.Formula.Atp
             evaluator.ClearAllCachedResultValues();
             formulaCell.SetCellFormula("TEXTJOIN(\",\", false, A1, C1, B1)");
             evaluator.EvaluateFormulaCell(formulaCell);
-            Assert.AreEqual("One,,Two", formulaCell.StringCellValue);
+            ClassicAssert.AreEqual("One,,Two", formulaCell.StringCellValue);
         }
 
         [Test]
@@ -165,7 +165,7 @@ namespace TestCases.SS.Formula.Atp
             evaluator.ClearAllCachedResultValues();
             formulaCell.SetCellFormula("TEXTJOIN(\",\", true, A1, C1, B1)");
             evaluator.EvaluateFormulaCell(formulaCell);
-            Assert.AreEqual("One,Two", formulaCell.StringCellValue);
+            ClassicAssert.AreEqual("One,Two", formulaCell.StringCellValue);
         }
 
         [Test]
@@ -174,8 +174,8 @@ namespace TestCases.SS.Formula.Atp
             evaluator.ClearAllCachedResultValues();
             formulaCell.SetCellFormula("TEXTJOIN(\",\", true)");
             evaluator.EvaluateFormulaCell(formulaCell);
-            Assert.AreEqual(CellType.Error, formulaCell.CachedFormulaResultType);
-            Assert.AreEqual(ErrorEval.VALUE_INVALID.ErrorCode, formulaCell.ErrorCellValue);
+            ClassicAssert.AreEqual(CellType.Error, formulaCell.CachedFormulaResultType);
+            ClassicAssert.AreEqual(ErrorEval.VALUE_INVALID.ErrorCode, formulaCell.ErrorCellValue);
         }
 
         //https://support.microsoft.com/en-us/office/textjoin-function-357b449a-ec91-49d0-80c3-0e8fc845691c

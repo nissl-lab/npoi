@@ -17,15 +17,17 @@
 namespace TestCases.XSSF.UserModel
 {
     using NPOI.SS.Util;
+    using NPOI.Util;
     using NPOI.XSSF;
     using NPOI.XSSF.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using System.Collections.Generic;
     using System.Diagnostics;
 
     [TestFixture]
     public class TestXSSFSheetMergeRegions
     {
+        private static POILogger LOG = POILogFactory.GetLogger(typeof(TestXSSFSheetMergeRegions));
         [Test]
         public void TestMergeRegionsSpeed()
         {
@@ -43,11 +45,11 @@ namespace TestCases.XSSF.UserModel
                     {
                         break;
                     }
-                    System.Console.WriteLine("Retry " + i + " because run-time is too high: " + millis);
+                    LOG.Log(POILogger.INFO,"Retry " + i + " because run-time is too high: " + millis);
                 }
 
                 // This time is typically ~800ms, versus ~7800ms to iterate getMergedRegion(int).
-                Assert.IsTrue(millis < 2000, "Should have taken <2000 ms to iterate 50k merged regions but took " + millis);
+                ClassicAssert.IsTrue(millis < 2000, "Should have taken <2000 ms to iterate 50k merged regions but took " + millis);
             }
             finally
             {
@@ -62,11 +64,11 @@ namespace TestCases.XSSF.UserModel
             Stopwatch stopwatch = Stopwatch.StartNew();
 
             List<CellRangeAddress> mergedRegions = sheet.MergedRegions;
-            Assert.AreEqual(50000, mergedRegions.Count);
+            ClassicAssert.AreEqual(50000, mergedRegions.Count);
             foreach (CellRangeAddress cellRangeAddress in mergedRegions)
             {
-                Assert.AreEqual(cellRangeAddress.FirstRow, cellRangeAddress.LastRow);
-                Assert.AreEqual(2, cellRangeAddress.NumberOfCells);
+                ClassicAssert.AreEqual(cellRangeAddress.FirstRow, cellRangeAddress.LastRow);
+                ClassicAssert.AreEqual(2, cellRangeAddress.NumberOfCells);
             }
             //long millis = System.CurrentTimeMillis() - start;
             stopwatch.Stop();

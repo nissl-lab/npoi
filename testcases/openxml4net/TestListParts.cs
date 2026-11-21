@@ -19,7 +19,7 @@ using NPOI.Util;
 using NPOI.OpenXml4Net.OPC;
 using TestCases.OpenXml4Net;
 using System.IO;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using System;
 using System.Collections.Generic;
 namespace TestCases.OpenXml4Net.OPC
@@ -97,8 +97,8 @@ namespace TestCases.OpenXml4Net.OPC
             // Compare expected values with values return by the namespace
             foreach (PackagePartName partName in expectedValues.Keys)
             {
-                Assert.IsNotNull(values[partName]);
-                Assert.AreEqual(expectedValues[partName], values[partName]);
+                ClassicAssert.IsNotNull(values[partName]);
+                ClassicAssert.AreEqual(expectedValues[partName], values[partName]);
             }
         }
     }

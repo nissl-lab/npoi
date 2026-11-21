@@ -39,7 +39,7 @@ namespace NPOI.POIFS.Storage
     /// </summary>
     public class PropertyBlock : BigBlock
     {
-        private class AnonymousProperty : Property
+        private sealed class AnonymousProperty : Property
         {
             public override void PreWrite()
             {
@@ -56,7 +56,7 @@ namespace NPOI.POIFS.Storage
 
 
 
-        private Property[]       _properties;
+        private readonly Property[]       _properties;
 
         /// <summary>
         /// Create a single instance initialized with default values

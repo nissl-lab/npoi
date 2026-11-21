@@ -20,7 +20,7 @@ namespace TestCases.SS.Formula.Atp
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     /**
      * Testcase for 'Analysis Toolpak' function MROUND()
@@ -59,15 +59,15 @@ namespace TestCases.SS.Formula.Atp
 
             IFormulaEvaluator Evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
 
-            Assert.AreEqual(9.0, Evaluator.Evaluate(cell1).NumberValue, accuracy, "Rounds 10 to a nearest multiple of 3 (9)");
+            ClassicAssert.AreEqual(9.0, Evaluator.Evaluate(cell1).NumberValue, accuracy, "Rounds 10 to a nearest multiple of 3 (9)");
 
-            Assert.AreEqual(-9.0, Evaluator.Evaluate(cell2).NumberValue, accuracy, "Rounds -10 to a nearest multiple of -3 (-9)");
+            ClassicAssert.AreEqual(-9.0, Evaluator.Evaluate(cell2).NumberValue, accuracy, "Rounds -10 to a nearest multiple of -3 (-9)");
 
-            Assert.AreEqual(1.4, Evaluator.Evaluate(cell3).NumberValue, accuracy, "Rounds 1.3 to a nearest multiple of 0.2 (1.4)");
+            ClassicAssert.AreEqual(1.4, Evaluator.Evaluate(cell3).NumberValue, accuracy, "Rounds 1.3 to a nearest multiple of 0.2 (1.4)");
 
-            Assert.AreEqual(ErrorEval.NUM_ERROR.ErrorCode, Evaluator.Evaluate(cell4).ErrorValue, "Returns an error, because -2 and 5 have different signs (#NUM!)");
+            ClassicAssert.AreEqual(ErrorEval.NUM_ERROR.ErrorCode, Evaluator.Evaluate(cell4).ErrorValue, "Returns an error, because -2 and 5 have different signs (#NUM!)");
 
-            Assert.AreEqual(0.0, Evaluator.Evaluate(cell5).NumberValue, "Returns 0 because the multiple is 0");
+            ClassicAssert.AreEqual(0.0, Evaluator.Evaluate(cell5).NumberValue, "Returns 0 because the multiple is 0");
         }
     }
 

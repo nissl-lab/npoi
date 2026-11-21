@@ -23,7 +23,7 @@ namespace TestCases.HSSF.UserModel
     using NPOI.HSSF.Record;
     using NPOI.HSSF.UserModel;
     using NPOI.Util;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using TestCases.SS.UserModel;
 
     /**
@@ -48,9 +48,9 @@ namespace TestCases.HSSF.UserModel
             HSSFSheet s = b.CreateSheet("Test") as HSSFSheet;
             HSSFSheet s2 = s.CloneSheet(b) as HSSFSheet;
 
-            Assert.IsNull(s.DrawingPatriarch);
-            Assert.IsNull(s2.DrawingPatriarch);
-            Assert.AreEqual(HSSFTestHelper.GetSheetForTest(s).Records.Count, HSSFTestHelper.GetSheetForTest(s2).Records.Count);
+            ClassicAssert.IsNull(s.DrawingPatriarch);
+            ClassicAssert.IsNull(s2.DrawingPatriarch);
+            ClassicAssert.AreEqual(HSSFTestHelper.GetSheetForTest(s).Records.Count, HSSFTestHelper.GetSheetForTest(s2).Records.Count);
 
         }
         [Test]
@@ -71,13 +71,13 @@ namespace TestCases.HSSF.UserModel
             EscherSpRecord sp1 = (EscherSpRecord)agg1.GetEscherContainer().GetChild(1).GetChild(0).GetChild(1);
             EscherSpRecord sp2 = (EscherSpRecord)agg2.GetEscherContainer().GetChild(1).GetChild(0).GetChild(1);
 
-            Assert.AreEqual(sp1.ShapeId, 1024);
-            Assert.AreEqual(sp2.ShapeId, 2048);
+            ClassicAssert.AreEqual(sp1.ShapeId, 1024);
+            ClassicAssert.AreEqual(sp2.ShapeId, 2048);
 
             EscherDgRecord dg = (EscherDgRecord)agg2.GetEscherContainer().GetChild(0);
 
-            Assert.AreEqual(dg.LastMSOSPID, 2048);
-            Assert.AreEqual(dg.Instance, 0x2);
+            ClassicAssert.AreEqual(dg.LastMSOSPID, 2048);
+            ClassicAssert.AreEqual(dg.Instance, 0x2);
 
             //everything except id and DgRecord.lastMSOSPID and DgRecord.Instance must be the same
 
@@ -85,9 +85,9 @@ namespace TestCases.HSSF.UserModel
             dg.LastMSOSPID = (1024);
             dg.Instance =((short)0x1);
 
-            Assert.AreEqual(agg1.Serialize().Length, agg2.Serialize().Length);
-            Assert.AreEqual(agg1.ToXml(""), agg2.ToXml(""));
-            Assert.IsTrue(Arrays.Equals(agg1.Serialize(), agg2.Serialize()));
+            ClassicAssert.AreEqual(agg1.Serialize().Length, agg2.Serialize().Length);
+            ClassicAssert.AreEqual(agg1.ToXml(""), agg2.ToXml(""));
+            ClassicAssert.IsTrue(Arrays.Equals(agg1.Serialize(), agg2.Serialize()));
         }
         [Test]
         public void TestCloneComment()
@@ -104,32 +104,32 @@ namespace TestCases.HSSF.UserModel
             HSSFPatriarch p2 = sh2.DrawingPatriarch as HSSFPatriarch;
             HSSFComment c2 = (HSSFComment)p2.Children[0];
 
-            Assert.AreEqual(c.String, c2.String);
-            Assert.AreEqual(c.Row, c2.Row);
-            Assert.AreEqual(c.Column, c2.Column);
+            ClassicAssert.AreEqual(c.String, c2.String);
+            ClassicAssert.AreEqual(c.Row, c2.Row);
+            ClassicAssert.AreEqual(c.Column, c2.Column);
 
             // The ShapeId is not equal? 
             // assertEquals(c.getNoteRecord().getShapeId(), c2.getNoteRecord().getShapeId());
 
-            Assert.IsTrue(Arrays.Equals(c2.GetTextObjectRecord().Serialize(), c.GetTextObjectRecord().Serialize()));
+            ClassicAssert.IsTrue(Arrays.Equals(c2.GetTextObjectRecord().Serialize(), c.GetTextObjectRecord().Serialize()));
 
             // ShapeId is different
             CommonObjectDataSubRecord subRecord = (CommonObjectDataSubRecord)c2.GetObjRecord().SubRecords[0];
             subRecord.ObjectId = (1025);
 
-            Assert.IsTrue(Arrays.Equals(c2.GetObjRecord().Serialize(), c.GetObjRecord().Serialize()));
+            ClassicAssert.IsTrue(Arrays.Equals(c2.GetObjRecord().Serialize(), c.GetObjRecord().Serialize()));
 
             // ShapeId is different
             c2.NoteRecord.ShapeId = (1025);
 
-            Assert.IsTrue(Arrays.Equals(c2.NoteRecord.Serialize(), c.NoteRecord.Serialize()));
+            ClassicAssert.IsTrue(Arrays.Equals(c2.NoteRecord.Serialize(), c.NoteRecord.Serialize()));
 
 
             //everything except spRecord.shapeId must be the same
-            Assert.IsFalse(Arrays.Equals(c2.GetEscherContainer().Serialize(), c.GetEscherContainer().Serialize()));
+            ClassicAssert.IsFalse(Arrays.Equals(c2.GetEscherContainer().Serialize(), c.GetEscherContainer().Serialize()));
             EscherSpRecord sp = (EscherSpRecord)c2.GetEscherContainer().GetChild(0);
             sp.ShapeId=(1025);
-            Assert.IsTrue(Arrays.Equals(c2.GetEscherContainer().Serialize(), c.GetEscherContainer().Serialize()));
+            ClassicAssert.IsTrue(Arrays.Equals(c2.GetEscherContainer().Serialize(), c.GetEscherContainer().Serialize()));
 
             wb.Close();
         }

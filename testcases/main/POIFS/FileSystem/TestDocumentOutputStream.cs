@@ -30,7 +30,7 @@ using System;
 using System.Collections;
 using System.IO;
 
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 
 using NPOI.POIFS.FileSystem;
 using NPOI.Util;
@@ -87,10 +87,10 @@ namespace TestCases.POIFS.FileSystem
             }
             byte[] output = stream.ToArray();
 
-            Assert.AreEqual(25, output.Length);
+            ClassicAssert.AreEqual(25, output.Length);
             for (int j = 0; j < 25; j++)
             {
-                Assert.AreEqual((byte)j, output[j]);
+                ClassicAssert.AreEqual((byte)j, output[j]);
             }
             stream.Close();
         }
@@ -131,12 +131,12 @@ namespace TestCases.POIFS.FileSystem
             }
             byte[] output = stream.ToArray();
 
-            Assert.AreEqual(24, output.Length);
+            ClassicAssert.AreEqual(24, output.Length);
             for (int j = 0; j < 6; j++)
             {
                 for (int k = 0; k < 4; k++)
                 {
-                    Assert.AreEqual((byte)j,
+                    ClassicAssert.AreEqual((byte)j,
                                  output[(j * 4) + k], ((j * 4) + k).ToString());
                 }
             }
@@ -170,10 +170,10 @@ namespace TestCases.POIFS.FileSystem
             }
             byte[] output = stream.ToArray();
 
-            Assert.AreEqual(25, output.Length);
+            ClassicAssert.AreEqual(25, output.Length);
             for (int j = 0; j < 25; j++)
             {
-                Assert.AreEqual((byte)(j + 1), output[j]);
+                ClassicAssert.AreEqual((byte)(j + 1), output[j]);
             }
             stream.Close();
         }
@@ -204,14 +204,14 @@ namespace TestCases.POIFS.FileSystem
             dstream.WriteFiller(100, (byte)0xff);
             byte[] output = stream.ToArray();
 
-            Assert.AreEqual(100, output.Length);
+            ClassicAssert.AreEqual(100, output.Length);
             for (int j = 0; j < 25; j++)
             {
-                Assert.AreEqual((byte)j, output[j]);
+                ClassicAssert.AreEqual((byte)j, output[j]);
             }
             for (int j = 25; j < 100; j++)
             {
-                Assert.AreEqual((byte)0xff, output[j], j.ToString());
+                ClassicAssert.AreEqual((byte)0xff, output[j], j.ToString());
             }
             stream.Close();
         }

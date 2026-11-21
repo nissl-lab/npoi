@@ -74,11 +74,11 @@ namespace NPOI.HSSF.Record.Aggregates
         }
 
 
-        private class SerializingRecordVisitor : RecordVisitor
+        private sealed class SerializingRecordVisitor : RecordVisitor
         {
 
-            private byte[] _data;
-            private int _startOffset;
+            private readonly byte[] _data;
+            private readonly int _startOffset;
             private int _countBytesWritten;
 
             public SerializingRecordVisitor(byte[] data, int startOffset)
@@ -97,7 +97,8 @@ namespace NPOI.HSSF.Record.Aggregates
                 _countBytesWritten += r.Serialize(currentOffset, _data);
             }
         }
-        private class RecordSizingVisitor : RecordVisitor
+
+        private sealed class RecordSizingVisitor : RecordVisitor
         {
 
             private int _totalSize;
@@ -129,7 +130,7 @@ namespace NPOI.HSSF.Record.Aggregates
      */
     public class PositionTrackingVisitor : RecordVisitor
     {
-        private RecordVisitor _rv;
+        private readonly RecordVisitor _rv;
         private int _position;
 
         public PositionTrackingVisitor(RecordVisitor rv, int initialPosition)

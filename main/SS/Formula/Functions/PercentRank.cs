@@ -11,10 +11,12 @@ namespace NPOI.SS.Formula.Functions
     public class PercentRank : Function
     {
         public static Function instance = new PercentRank();
+
         private PercentRank()
         {
             // Enforce singleton
         }
+
         public ValueEval Evaluate(ValueEval[] args, int srcRowIndex, int srcColumnIndex)
         {
             if (args.Length < 2)
@@ -84,7 +86,8 @@ namespace NPOI.SS.Formula.Functions
 
             return calculateRank(numbers, x, significance, true);
         }
-        private ValueEval calculateRank(List<Double> numbers, double x, int significance, bool recurse)
+
+        private static ValueEval calculateRank(List<Double> numbers, double x, int significance, bool recurse)
         {
             double closestMatchBelow = Double.MinValue;
             double closestMatchAbove = Double.MaxValue;
@@ -115,15 +118,14 @@ namespace NPOI.SS.Formula.Functions
             else
             {
                 ValueEval belowRank = calculateRank(numbers, closestMatchBelow, significance, false);
-                if (!(belowRank is NumberEval)) {
+                if (belowRank is not NumberEval below) {
                     return belowRank;
                 }
                 ValueEval aboveRank = calculateRank(numbers, closestMatchAbove, significance, false);
-                if (!(aboveRank is NumberEval)) {
+                if (aboveRank is not NumberEval above) {
                     return aboveRank;
                 }
-                NumberEval below = (NumberEval)belowRank;
-                NumberEval above = (NumberEval)aboveRank;
+
                 double diff = closestMatchAbove - closestMatchBelow;
                 double pos = x - closestMatchBelow;
                 double rankDiff = above.NumberValue - below.NumberValue;
@@ -131,11 +133,11 @@ namespace NPOI.SS.Formula.Functions
                 return new NumberEval(Math.Round(result,significance));
             }
         }
-        private List<ValueEval> getValues(ValueEval eval, int srcRowIndex, int srcColumnIndex)
+
+        private static List<ValueEval> getValues(ValueEval eval, int srcRowIndex, int srcColumnIndex)
         {
-            if (eval is AreaEval)
+            if (eval is AreaEval ae)
             {
-                AreaEval ae = (AreaEval)eval;
                 List<ValueEval> list = new List<ValueEval>();
                 for (int r = ae.FirstRow; r <= ae.LastRow; r++)
                 {

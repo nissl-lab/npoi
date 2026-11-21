@@ -42,6 +42,10 @@ namespace NPOI.XWPF.UserModel
 
         public XWPFSDTContent(CT_SdtContentRun sdtRun, IBody part, IRunBody parent)
         {
+            if (sdtRun == null)
+            {
+                return;
+            }
             foreach (CT_R ctr in sdtRun.GetRList())
             {
                 XWPFRun run = new XWPFRun((CT_R)ctr, parent);
@@ -51,30 +55,33 @@ namespace NPOI.XWPF.UserModel
         }
         public XWPFSDTContent(CT_SdtContentBlock block, IBody part, IRunBody parent)
         {
-            
+            if (block == null)
+            {
+                return;
+            }
             foreach (object o in block.Items)
             {
-                if (o is CT_P)
+                if (o is CT_P ctP)
                 {
-                    XWPFParagraph p = new XWPFParagraph((CT_P)o, part);
+                    XWPFParagraph p = new XWPFParagraph(ctP, part);
                     bodyElements.Add(p);
                     paragraphs.Add(p);
                 }
-                else if (o is CT_Tbl)
+                else if (o is CT_Tbl tbl)
                 {
-                    XWPFTable t = new XWPFTable((CT_Tbl)o, part);
+                    XWPFTable t = new XWPFTable(tbl, part);
                     bodyElements.Add(t);
                     tables.Add(t);
                 }
-                else if (o is CT_SdtBlock)
+                else if (o is CT_SdtBlock sdtBlock)
                 {
-                    XWPFSDT c = new XWPFSDT(((CT_SdtBlock)o), part);
+                    XWPFSDT c = new XWPFSDT(sdtBlock, part);
                     bodyElements.Add(c);
                     contentControls.Add(c);
                 }
-                else if (o is CT_R)
+                else if (o is CT_R r)
                 {
-                    XWPFRun run = new XWPFRun((CT_R)o, parent);
+                    XWPFRun run = new XWPFRun(r, parent);
                     runs.Add(run);
                     bodyElements.Add(run);
                 }
@@ -90,24 +97,24 @@ namespace NPOI.XWPF.UserModel
                 for (int i = 0; i < bodyElements.Count; i++)
                 {
                     Object o = bodyElements[i];
-                    if (o is XWPFParagraph)
+                    if (o is XWPFParagraph paragraph)
                     {
-                        AppendParagraph((XWPFParagraph)o, text);
+                        AppendParagraph(paragraph, text);
                         addNewLine = true;
                     }
-                    else if (o is XWPFTable)
+                    else if (o is XWPFTable table)
                     {
-                        AppendTable((XWPFTable)o, text);
+                        AppendTable(table, text);
                         addNewLine = true;
                     }
-                    else if (o is XWPFSDT)
+                    else if (o is XWPFSDT xwpfsdt)
                     {
-                        text.Append(((XWPFSDT)o).Content.Text);
+                        text.Append(xwpfsdt.Content.Text);
                         addNewLine = true;
                     }
-                    else if (o is XWPFRun)
+                    else if (o is XWPFRun run)
                     {
-                        text.Append(((XWPFRun)o).ToString());
+                        text.Append(run.ToString());
                         addNewLine = false;
                     }
                     if (addNewLine && i < bodyElements.Count-1)
@@ -119,7 +126,7 @@ namespace NPOI.XWPF.UserModel
             }
         }
 
-        private void AppendTable(XWPFTable table, StringBuilder text)
+        private static void AppendTable(XWPFTable table, StringBuilder text)
         {
             //this works recursively to pull embedded tables from within cells
             foreach (XWPFTableRow row in table.Rows)
@@ -128,13 +135,13 @@ namespace NPOI.XWPF.UserModel
                 for (int i = 0; i < cells.Count; i++)
                 {
                     ICell cell = cells[i];
-                    if (cell is XWPFTableCell)
+                    if (cell is XWPFTableCell tableCell)
                     {
-                        text.Append(((XWPFTableCell)cell).GetTextRecursively());
+                        text.Append(tableCell.GetTextRecursively());
                     }
-                    else if (cell is XWPFSDTCell)
+                    else if (cell is XWPFSDTCell xwpfsdtCell)
                     {
-                        text.Append(((XWPFSDTCell)cell).Content.Text);
+                        text.Append(xwpfsdtCell.Content.Text);
                     }
                     if (i < cells.Count - 1)
                     {
@@ -145,7 +152,7 @@ namespace NPOI.XWPF.UserModel
             }
         }
 
-        private void AppendParagraph(XWPFParagraph paragraph, StringBuilder text)
+        private static void AppendParagraph(XWPFParagraph paragraph, StringBuilder text)
         {
             foreach (IRunElement run in paragraph.Runs)
             {

@@ -4,13 +4,14 @@ using NPOI.SS.Formula.Functions;
 namespace NPOI.SS.Formula.Eval
 {
 
-    public abstract class TwoOperandNumericOperation : Fixed2ArgFunction, ArrayFunction
+    public abstract class TwoOperandNumericOperation : Fixed2ArgFunction, IArrayFunction
     {
         protected double SingleOperandEvaluate(ValueEval arg, int srcCellRow, int srcCellCol)
         {
             ValueEval ve = OperandResolver.GetSingleValue(arg, srcCellRow, srcCellCol);
             return OperandResolver.CoerceValueToDouble(ve);
         }
+
         public ValueEval EvaluateArray(ValueEval[] args, int srcRowIndex, int srcColumnIndex)
         {
             if (args.Length != 2)
@@ -32,7 +33,7 @@ namespace NPOI.SS.Formula.Eval
                 if (result == 0.0)
                 { // this '==' matches +0.0 and -0.0
                     // Excel Converts -0.0 to +0.0 for '*', '/', '%', '+' and '^'
-                    if (!(this is SubtractEval))
+                    if (this is not SS.Formula.Eval.SubtractEval)
                     {
                         return NumberEval.ZERO;
                     }
@@ -57,15 +58,15 @@ namespace NPOI.SS.Formula.Eval
         public static NPOI.SS.Formula.Functions.Function PowerEval = new PowerEval();
         public static NPOI.SS.Formula.Functions.Function SubtractEval = new SubtractEval();
 
-        private class ArrayEval : MatrixFunction.TwoArrayArg
+        private sealed class ArrayEval : MatrixFunction.TwoArrayArg
         {
-            Func<double, double, double> _evaluateFunc = null;
+            readonly Func<double, double, double> _evaluateFunc = null;
             public ArrayEval(Func<double, double, double> evalFunc)
             {
                 _evaluateFunc = evalFunc;
             }
 
-            private MatrixFunction.MutableValueCollector instance = new MatrixFunction.MutableValueCollector(false, true);
+            private readonly MatrixFunction.MutableValueCollector instance = new MatrixFunction.MutableValueCollector(true, true);
 
             protected override double[] CollectValues(ValueEval arg)
             {

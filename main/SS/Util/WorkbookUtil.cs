@@ -1,6 +1,7 @@
-using System;
-using System.Text;
 using NPOI.SS.UserModel;
+using System;
+using System.Data;
+using System.Text;
 
 namespace NPOI.SS.Util
 {
@@ -205,6 +206,17 @@ namespace NPOI.SS.Util
             {
                 return sheetIx;
             }
+        }
+        public static DataSet ToDataSet(IWorkbook workbook, bool firstRowAsHeader, bool showCalculatedFormulaValue = false)
+        {
+            DataSet ds = new DataSet();
+            for(int i = 0; i < workbook.NumberOfSheets; i++)
+            {
+                var sheet=workbook.GetSheetAt(0);
+                var dt=sheet.ToDataTable(firstRowAsHeader, showCalculatedFormulaValue);
+                ds.Tables.Add(dt);
+            }
+            return ds;
         }
     }
 

@@ -23,7 +23,7 @@ namespace TestCases.HSSF.Record.Chart
     using System;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.Chart;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     /**
      * Tests the serialization and deserialization of the AxisOptionsRecord
@@ -51,26 +51,26 @@ namespace TestCases.HSSF.Record.Chart
         public void TestLoad()
         {
             AxcExtRecord record = new AxcExtRecord(TestcaseRecordInputStream.Create((short)0x1062, data));
-            Assert.AreEqual(0, record.MinimumDate);
-            Assert.AreEqual(0, record.MaximumDate);
-            Assert.AreEqual(1, record.MajorInterval);
-            Assert.AreEqual(0, (short)record.MajorUnit);
-            Assert.AreEqual(1, record.MinorInterval);
-            Assert.AreEqual(0, (short)record.MinorUnit);
-            Assert.AreEqual(0, (short)record.BaseUnit);
-            Assert.AreEqual(0, record.CrossDate);
-            Assert.AreEqual(239, record.Options);
-            Assert.AreEqual(true, record.IsAutoMin);
-            Assert.AreEqual(true, record.IsAutoMax);
-            Assert.AreEqual(true, record.IsAutoMajor);
-            Assert.AreEqual(true, record.IsAutoMinor);
-            Assert.AreEqual(false, record.IsDateAxis);
-            Assert.AreEqual(true, record.IsAutoBase);
-            Assert.AreEqual(true, record.IsAutoCross);
-            Assert.AreEqual(true, record.IsAutoDate);
+            ClassicAssert.AreEqual(0, record.MinimumDate);
+            ClassicAssert.AreEqual(0, record.MaximumDate);
+            ClassicAssert.AreEqual(1, record.MajorInterval);
+            ClassicAssert.AreEqual(0, (short)record.MajorUnit);
+            ClassicAssert.AreEqual(1, record.MinorInterval);
+            ClassicAssert.AreEqual(0, (short)record.MinorUnit);
+            ClassicAssert.AreEqual(0, (short)record.BaseUnit);
+            ClassicAssert.AreEqual(0, record.CrossDate);
+            ClassicAssert.AreEqual(239, record.Options);
+            ClassicAssert.AreEqual(true, record.IsAutoMin);
+            ClassicAssert.AreEqual(true, record.IsAutoMax);
+            ClassicAssert.AreEqual(true, record.IsAutoMajor);
+            ClassicAssert.AreEqual(true, record.IsAutoMinor);
+            ClassicAssert.AreEqual(false, record.IsDateAxis);
+            ClassicAssert.AreEqual(true, record.IsAutoBase);
+            ClassicAssert.AreEqual(true, record.IsAutoCross);
+            ClassicAssert.AreEqual(true, record.IsAutoDate);
 
 
-            Assert.AreEqual(22, record.RecordSize);
+            ClassicAssert.AreEqual(22, record.RecordSize);
         }
         [Test]
         public void TestStore()
@@ -96,9 +96,9 @@ namespace TestCases.HSSF.Record.Chart
 
 
             byte[] recordBytes = record.Serialize();
-            Assert.AreEqual(recordBytes.Length - 4, data.Length);
+            ClassicAssert.AreEqual(recordBytes.Length - 4, data.Length);
             for (int i = 0; i < data.Length; i++)
-                Assert.AreEqual(data[i], recordBytes[i + 4], "At offset " + i);
+                ClassicAssert.AreEqual(data[i], recordBytes[i + 4], "At offset " + i);
         }
     }
 }

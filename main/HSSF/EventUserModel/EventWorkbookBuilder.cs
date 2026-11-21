@@ -214,9 +214,9 @@ namespace NPOI.HSSF.EventUserModel
                 {
                     externSheetRecords.Add(record);
                 }
-                else if (record is SSTRecord)
+                else if (record is SSTRecord record1)
                 {
-                    sstRecord = (SSTRecord)record;
+                    sstRecord = record1;
                 }
             }
         }

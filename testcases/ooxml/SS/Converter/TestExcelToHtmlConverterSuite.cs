@@ -2,7 +2,7 @@
 using NPOI.SS.Converter;
 using NPOI.XSSF;
 using NPOI.XSSF.UserModel;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -58,7 +58,7 @@ namespace TestCases.SS.Converter
                     sw.Close();
                 }
             }
-            Assert.IsTrue(failingFiles.Count == 0, "{0}({1}) files failed to convert to html. see " + output, failingFiles.Count, toConverter.Count);
+            ClassicAssert.IsTrue(failingFiles.Count == 0, "{0}({1}) files failed to convert to html. see " + output, failingFiles.Count, toConverter.Count);
         }
         private void Test(string fileName)
         {

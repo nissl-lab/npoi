@@ -77,8 +77,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
-            sw.Write(">");
+            sw.WriteStart(nodeName);
+            sw.Write('>');
             if (this.sz != null)
                 this.sz.Write(sw, "sz");
             if (this.color != null)
@@ -109,7 +109,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.vertAlign.Write(sw, "vertAlign");
             if (this.scheme != null)
                 this.scheme.Write(sw, "scheme");
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.WriteEndElement(nodeName);
         }
 
 

@@ -41,9 +41,9 @@ namespace NPOI.HSSF.Record
         public const short sid = 0xe5;
 
         /** sometimes the regions array is shared with other MergedCellsRecords */
-        private CellRangeAddress[] _regions;
-        private int _startIndex;
-        private int _numberOfRegions;
+        private readonly CellRangeAddress[] _regions;
+        private readonly int _startIndex;
+        private readonly int _numberOfRegions;
 
 
         public MergeCellsRecord(CellRangeAddress[] regions, int startIndex, int numberOfRegions)

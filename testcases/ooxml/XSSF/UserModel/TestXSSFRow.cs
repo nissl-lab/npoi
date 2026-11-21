@@ -15,10 +15,13 @@
    limitations under the License.
 ==================================================================== */
 
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using NPOI.SS.UserModel;
 using NPOI.XSSF;
 using NPOI.XSSF.UserModel;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using TestCases.SS.UserModel;
 
 namespace TestCases.XSSF.UserModel
@@ -46,8 +49,8 @@ namespace TestCases.XSSF.UserModel
             XSSFRow destRow = sheet.CreateRow(1) as XSSFRow;
 
             destRow.CopyRowFrom(srcRow, new CellCopyPolicy());
-            Assert.IsNotNull(destRow.GetCell(0));
-            Assert.AreEqual("Hello", destRow.GetCell(0).StringCellValue);
+            ClassicAssert.IsNotNull(destRow.GetCell(0));
+            ClassicAssert.AreEqual("Hello", destRow.GetCell(0).StringCellValue);
 
             workbook.Close();
         }
@@ -87,39 +90,39 @@ namespace TestCases.XSSF.UserModel
             //Test 2D and 3D Ref Ptgs (Pxg for OOXML Workbooks)
             col = 0;
             ICell cell = destRow.GetCell(col++);
-            Assert.IsNotNull(cell);
-            Assert.AreEqual("B6", cell.CellFormula, "RefPtg");
+            ClassicAssert.IsNotNull(cell);
+            ClassicAssert.AreEqual("B6", cell.CellFormula, "RefPtg");
 
             cell = destRow.GetCell(col++);
-            Assert.IsNotNull(cell);
-            Assert.AreEqual("src!B6", cell.CellFormula, "Ref3DPtg");
+            ClassicAssert.IsNotNull(cell);
+            ClassicAssert.AreEqual("src!B6", cell.CellFormula, "Ref3DPtg");
 
             cell = destRow.GetCell(col++);
-            Assert.IsNotNull(cell);
-            Assert.AreEqual("dest!B6", cell.CellFormula, "Ref3DPtg");
+            ClassicAssert.IsNotNull(cell);
+            ClassicAssert.AreEqual("dest!B6", cell.CellFormula, "Ref3DPtg");
 
             cell = destRow.GetCell(col++);
-            Assert.IsNotNull(cell);
-            Assert.AreEqual("other!B6", cell.CellFormula, "Ref3DPtg");
+            ClassicAssert.IsNotNull(cell);
+            ClassicAssert.AreEqual("other!B6", cell.CellFormula, "Ref3DPtg");
 
             /////////////////////////////////////////////
 
             //Test 2D and 3D Ref Ptgs with absolute row (Ptg row number shouldn't change)
             cell = destRow.GetCell(col++);
-            Assert.IsNotNull(cell);
-            Assert.AreEqual("B$5", cell.CellFormula, "RefPtg");
+            ClassicAssert.IsNotNull(cell);
+            ClassicAssert.AreEqual("B$5", cell.CellFormula, "RefPtg");
 
             cell = destRow.GetCell(col++);
-            Assert.IsNotNull(cell);
-            Assert.AreEqual("src!B$5", cell.CellFormula, "Ref3DPtg");
+            ClassicAssert.IsNotNull(cell);
+            ClassicAssert.AreEqual("src!B$5", cell.CellFormula, "Ref3DPtg");
 
             cell = destRow.GetCell(col++);
-            Assert.IsNotNull(cell);
-            Assert.AreEqual("dest!B$5", cell.CellFormula, "Ref3DPtg");
+            ClassicAssert.IsNotNull(cell);
+            ClassicAssert.AreEqual("dest!B$5", cell.CellFormula, "Ref3DPtg");
 
             cell = destRow.GetCell(col++);
-            Assert.IsNotNull(cell);
-            Assert.AreEqual("other!B$5", cell.CellFormula, "Ref3DPtg") ;
+            ClassicAssert.IsNotNull(cell);
+            ClassicAssert.AreEqual("other!B$5", cell.CellFormula, "Ref3DPtg") ;
 
             //////////////////////////////////////////
 
@@ -127,20 +130,20 @@ namespace TestCases.XSSF.UserModel
             // Note: absolute row changes from last cell to first cell in order
             // to maintain topLeft:bottomRight order
             cell = destRow.GetCell(col++);
-            Assert.IsNotNull(cell);
-            Assert.AreEqual("SUM(B$5:D6)", cell.CellFormula, "Area2DPtg");
+            ClassicAssert.IsNotNull(cell);
+            ClassicAssert.AreEqual("SUM(B$5:D6)", cell.CellFormula, "Area2DPtg");
 
             cell = destRow.GetCell(col++);
-            Assert.IsNotNull(cell);
-            Assert.AreEqual("SUM(src!B$5:D6)", cell.CellFormula, "Area3DPtg");
+            ClassicAssert.IsNotNull(cell);
+            ClassicAssert.AreEqual("SUM(src!B$5:D6)", cell.CellFormula, "Area3DPtg");
 
             cell = destRow.GetCell(col++);
-            Assert.IsNotNull(destRow.GetCell(6));
-            Assert.AreEqual( "SUM(dest!B$5:D6)", cell.CellFormula, "Area3DPtg");
+            ClassicAssert.IsNotNull(destRow.GetCell(6));
+            ClassicAssert.AreEqual( "SUM(dest!B$5:D6)", cell.CellFormula, "Area3DPtg");
 
             cell = destRow.GetCell(col++);
-            Assert.IsNotNull(destRow.GetCell(7));
-            Assert.AreEqual( "SUM(other!B$5:D6)", cell.CellFormula, "Area3DPtg");
+            ClassicAssert.IsNotNull(destRow.GetCell(7));
+            ClassicAssert.AreEqual( "SUM(other!B$5:D6)", cell.CellFormula, "Area3DPtg");
 
             workbook.Close();
         }
@@ -172,21 +175,210 @@ namespace TestCases.XSSF.UserModel
             // this is mostly so existing references to rows that are overwritten are updated
             // rather than allowing users to continue updating rows that are no longer part of the sheet
 
-            Assert.AreSame(srcRow, sheet1.GetRow(0), "existing references to srcRow are still valid");
-            Assert.AreSame(destRow, sheet1.GetRow(1), "existing references to destRow are still valid");
-            Assert.AreSame(observerRow, sheet1.GetRow(2), "existing references to observerRow are still valid");
-            Assert.AreSame(externObserverRow, sheet2.GetRow(0), "existing references to externObserverRow are still valid");
+            ClassicAssert.AreSame(srcRow, sheet1.GetRow(0), "existing references to srcRow are still valid");
+            ClassicAssert.AreSame(destRow, sheet1.GetRow(1), "existing references to destRow are still valid");
+            ClassicAssert.AreSame(observerRow, sheet1.GetRow(2), "existing references to observerRow are still valid");
+            ClassicAssert.AreSame(externObserverRow, sheet2.GetRow(0), "existing references to externObserverRow are still valid");
 
             // Make sure copyRowFrom actually copied row (this is tested elsewhere)
-            Assert.AreEqual(CellType.String, destRow.GetCell(0).CellType);
-            Assert.AreEqual("hello", destRow.GetCell(0).StringCellValue);
+            ClassicAssert.AreEqual(CellType.String, destRow.GetCell(0).CellType);
+            ClassicAssert.AreEqual("hello", destRow.GetCell(0).StringCellValue);
 
             // We don't want #REF! errors if we copy a row that contains cells that are referred to by other cells outside of copied region
-            Assert.AreEqual("A2", observerRow.GetCell(0).CellFormula, "references to overwritten cells are unmodified");
-            Assert.AreEqual("B2", observerRow.GetCell(1).CellFormula, "references to overwritten cells are unmodified");
-            Assert.AreEqual("Sheet1!A2", externObserverRow.GetCell(0).CellFormula, "references to overwritten cells are unmodified");
+            ClassicAssert.AreEqual("A2", observerRow.GetCell(0).CellFormula, "references to overwritten cells are unmodified");
+            ClassicAssert.AreEqual("B2", observerRow.GetCell(1).CellFormula, "references to overwritten cells are unmodified");
+            ClassicAssert.AreEqual("Sheet1!A2", externObserverRow.GetCell(0).CellFormula, "references to overwritten cells are unmodified");
 
             workbook.Close();
+        }
+
+        [Test]
+        public void TestSparseRowCellBounds()
+        {
+            // Test with cells at distant column indices (sparse row)
+            using var workbook = new XSSFWorkbook();
+            var sheet = workbook.CreateSheet("test");
+            var row = sheet.CreateRow(0);
+
+            row.CreateCell(0).SetCellValue("first");
+            row.CreateCell(1000).SetCellValue("distant");
+
+            ClassicAssert.AreEqual(0, row.FirstCellNum);
+            ClassicAssert.AreEqual(1001, row.LastCellNum);
+            ClassicAssert.AreEqual(2, row.PhysicalNumberOfCells);
+
+            // Add a cell in the middle — bounds should not change
+            row.CreateCell(500).SetCellValue("middle");
+            ClassicAssert.AreEqual(0, row.FirstCellNum);
+            ClassicAssert.AreEqual(1001, row.LastCellNum);
+            ClassicAssert.AreEqual(3, row.PhysicalNumberOfCells);
+
+            // Remove the first cell — FirstCellNum should update
+            row.RemoveCell(row.GetCell(0));
+            ClassicAssert.AreEqual(500, row.FirstCellNum);
+            ClassicAssert.AreEqual(1001, row.LastCellNum);
+            ClassicAssert.AreEqual(2, row.PhysicalNumberOfCells);
+
+            // Remove the last cell — LastCellNum should update
+            row.RemoveCell(row.GetCell(1000));
+            ClassicAssert.AreEqual(500, row.FirstCellNum);
+            ClassicAssert.AreEqual(501, row.LastCellNum);
+            ClassicAssert.AreEqual(1, row.PhysicalNumberOfCells);
+        }
+
+        [Test]
+        public void TestCellIterationOrderWithSparseColumns()
+        {
+            // Create cells in reverse order, verify iteration is always column-ascending
+            using var workbook = new XSSFWorkbook();
+            var sheet = workbook.CreateSheet("test");
+            var row = sheet.CreateRow(0);
+
+            row.CreateCell(5000).SetCellValue("E");
+            row.CreateCell(100).SetCellValue("B");
+            row.CreateCell(10000).SetCellValue("F");
+            row.CreateCell(0).SetCellValue("A");
+            row.CreateCell(500).SetCellValue("C");
+            row.CreateCell(1000).SetCellValue("D");
+
+            // Verify GetEnumerator returns cells in ascending column order
+            var cells = new List<ICell>();
+            foreach (ICell cell in row)
+            {
+                cells.Add(cell);
+            }
+
+            ClassicAssert.AreEqual(6, cells.Count);
+            ClassicAssert.AreEqual(0, cells[0].ColumnIndex);
+            ClassicAssert.AreEqual(100, cells[1].ColumnIndex);
+            ClassicAssert.AreEqual(500, cells[2].ColumnIndex);
+            ClassicAssert.AreEqual(1000, cells[3].ColumnIndex);
+            ClassicAssert.AreEqual(5000, cells[4].ColumnIndex);
+            ClassicAssert.AreEqual(10000, cells[5].ColumnIndex);
+
+            // Verify .Cells property also returns in column order
+            List<ICell> cellsProp = row.Cells;
+            ClassicAssert.AreEqual(6, cellsProp.Count);
+            for (int i = 0; i < cells.Count; i++)
+            {
+                ClassicAssert.AreEqual(cells[i].ColumnIndex, cellsProp[i].ColumnIndex);
+            }
+        }
+
+        [Test]
+        public void TestFirstLastCellNumAfterInterleavedAddRemove()
+        {
+            // Interleaved add/remove operations should always yield correct bounds
+            using var workbook = new XSSFWorkbook();
+            var sheet = workbook.CreateSheet("test");
+            var row = sheet.CreateRow(0);
+
+            ClassicAssert.AreEqual(-1, row.FirstCellNum);
+            ClassicAssert.AreEqual(-1, row.LastCellNum);
+
+            // Add cells in non-sequential order
+            row.CreateCell(5);
+            ClassicAssert.AreEqual(5, row.FirstCellNum);
+            ClassicAssert.AreEqual(6, row.LastCellNum);
+
+            row.CreateCell(2);
+            ClassicAssert.AreEqual(2, row.FirstCellNum);
+            ClassicAssert.AreEqual(6, row.LastCellNum);
+
+            row.CreateCell(8);
+            ClassicAssert.AreEqual(2, row.FirstCellNum);
+            ClassicAssert.AreEqual(9, row.LastCellNum);
+
+            // Remove the middle cell — bounds unchanged
+            row.RemoveCell(row.GetCell(5));
+            ClassicAssert.AreEqual(2, row.FirstCellNum);
+            ClassicAssert.AreEqual(9, row.LastCellNum);
+
+            // Remove the first cell — FirstCellNum updates
+            row.RemoveCell(row.GetCell(2));
+            ClassicAssert.AreEqual(8, row.FirstCellNum);
+            ClassicAssert.AreEqual(9, row.LastCellNum);
+
+            // Add a new cell that becomes the new first
+            row.CreateCell(1);
+            ClassicAssert.AreEqual(1, row.FirstCellNum);
+            ClassicAssert.AreEqual(9, row.LastCellNum);
+
+            // Remove the last cell — LastCellNum updates
+            row.RemoveCell(row.GetCell(8));
+            ClassicAssert.AreEqual(1, row.FirstCellNum);
+            ClassicAssert.AreEqual(2, row.LastCellNum);
+
+            // Remove all cells
+            row.RemoveCell(row.GetCell(1));
+            ClassicAssert.AreEqual(-1, row.FirstCellNum);
+            ClassicAssert.AreEqual(-1, row.LastCellNum);
+        }
+
+        [Test]
+        public void TestCellOrderingPersistsAfterSaveAndLoad()
+        {
+            // Create cells out of order, save, reload, verify order is preserved
+            using var workbook = new XSSFWorkbook();
+            var sheet = workbook.CreateSheet("test");
+            var row = sheet.CreateRow(0);
+
+            row.CreateCell(10).SetCellValue("C");
+            row.CreateCell(0).SetCellValue("A");
+            row.CreateCell(5).SetCellValue("B");
+
+            ClassicAssert.AreEqual(0, row.FirstCellNum);
+            ClassicAssert.AreEqual(11, row.LastCellNum);
+
+            // Save and reload
+            using var ms = new MemoryStream();
+            workbook.Write(ms, leaveOpen: true);
+            ms.Position = 0;
+
+            using var loaded = new XSSFWorkbook(ms);
+            var loadedRow = loaded.GetSheetAt(0).GetRow(0);
+
+            // Verify bounds
+            ClassicAssert.AreEqual(0, loadedRow.FirstCellNum);
+            ClassicAssert.AreEqual(11, loadedRow.LastCellNum);
+            ClassicAssert.AreEqual(3, loadedRow.PhysicalNumberOfCells);
+
+            // Verify iteration order
+            var cells = loadedRow.Cells;
+            ClassicAssert.AreEqual(0, cells[0].ColumnIndex);
+            ClassicAssert.AreEqual(5, cells[1].ColumnIndex);
+            ClassicAssert.AreEqual(10, cells[2].ColumnIndex);
+
+            // Verify cell values
+            ClassicAssert.AreEqual("A", loadedRow.GetCell(0).StringCellValue);
+            ClassicAssert.AreEqual("B", loadedRow.GetCell(5).StringCellValue);
+            ClassicAssert.AreEqual("C", loadedRow.GetCell(10).StringCellValue);
+        }
+
+        [Test]
+        public void TestLargeColumnIndex()
+        {
+            // Excel supports up to column 16383 (XFD)
+            using var workbook = new XSSFWorkbook();
+            var sheet = workbook.CreateSheet("test");
+            var row = sheet.CreateRow(0);
+
+            row.CreateCell(0).SetCellValue("first");
+            row.CreateCell(16383).SetCellValue("last");
+
+            ClassicAssert.AreEqual(0, row.FirstCellNum);
+            ClassicAssert.AreEqual(16384, row.LastCellNum);
+            ClassicAssert.AreEqual(2, row.PhysicalNumberOfCells);
+
+            // Verify both cells are accessible
+            ClassicAssert.AreEqual("first", row.GetCell(0).StringCellValue);
+            ClassicAssert.AreEqual("last", row.GetCell(16383).StringCellValue);
+
+            // Verify iteration includes both
+            var cells = row.Cells;
+            ClassicAssert.AreEqual(2, cells.Count);
+            ClassicAssert.AreEqual(0, cells[0].ColumnIndex);
+            ClassicAssert.AreEqual(16383, cells[1].ColumnIndex);
         }
 
     }

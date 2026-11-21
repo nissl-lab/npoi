@@ -24,7 +24,7 @@ namespace TestCases.HSSF.Record.Chart
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.Chart;
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     /**
      * Tests the serialization and deserialization of the LegendRecord
@@ -51,28 +51,28 @@ namespace TestCases.HSSF.Record.Chart
             LegendRecord record = new LegendRecord(TestcaseRecordInputStream.Create((short)0x1015, data));
 
 
-            Assert.AreEqual((int)0xe76, record.XAxisUpperLeft);
+            ClassicAssert.AreEqual((int)0xe76, record.XAxisUpperLeft);
 
-            Assert.AreEqual((int)0x786, record.YAxisUpperLeft);
+            ClassicAssert.AreEqual((int)0x786, record.YAxisUpperLeft);
 
-            Assert.AreEqual((int)0x119, record.XSize);
+            ClassicAssert.AreEqual((int)0x119, record.XSize);
 
-            Assert.AreEqual((int)0x8b, record.YSize);
+            ClassicAssert.AreEqual((int)0x8b, record.YSize);
 
-            Assert.AreEqual((byte)0x3, record.Type);
+            ClassicAssert.AreEqual((byte)0x3, record.Type);
 
-            Assert.AreEqual((byte)0x1, record.Spacing);
+            ClassicAssert.AreEqual((byte)0x1, record.Spacing);
 
-            Assert.AreEqual((short)0x1f, record.Options);
-            Assert.AreEqual(true, record.IsAutoPosition);
-            Assert.AreEqual(true, record.IsAutoSeries);
-            Assert.AreEqual(true, record.IsAutoXPositioning);
-            Assert.AreEqual(true, record.IsAutoYPositioning);
-            Assert.AreEqual(true, record.IsVertical);
-            Assert.AreEqual(false, record.IsDataTable);
+            ClassicAssert.AreEqual((short)0x1f, record.Options);
+            ClassicAssert.AreEqual(true, record.IsAutoPosition);
+            ClassicAssert.AreEqual(true, record.IsAutoSeries);
+            ClassicAssert.AreEqual(true, record.IsAutoXPositioning);
+            ClassicAssert.AreEqual(true, record.IsAutoYPositioning);
+            ClassicAssert.AreEqual(true, record.IsVertical);
+            ClassicAssert.AreEqual(false, record.IsDataTable);
 
 
-            Assert.AreEqual(24, record.RecordSize);
+            ClassicAssert.AreEqual(24, record.RecordSize);
         }
         [Test]
         public void TestStore()
@@ -103,9 +103,9 @@ namespace TestCases.HSSF.Record.Chart
 
 
             byte[] recordBytes = record.Serialize();
-            Assert.AreEqual(recordBytes.Length - 4, data.Length);
+            ClassicAssert.AreEqual(recordBytes.Length - 4, data.Length);
             for (int i = 0; i < data.Length; i++)
-                Assert.AreEqual(data[i], recordBytes[i + 4], "At offset " + i);
+                ClassicAssert.AreEqual(data[i], recordBytes[i + 4], "At offset " + i);
         }
     }
 }

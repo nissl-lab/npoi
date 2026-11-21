@@ -16,49 +16,68 @@
 ==================================================================== */
 namespace NPOI.SS.UserModel
 {
+    using NPOI.SS.Util;
     using System;
-    /**
-     * An object that handles instantiating concrete
-     *  classes of the various instances one needs for
-     *  HSSF and XSSF.
-     * Works around a major shortcoming in Java, where we
-     *  can't have static methods on interfaces or abstract
-     *  classes.
-     * This allows you to get the appropriate class for
-     *  a given interface, without you having to worry
-     *  about if you're dealing with HSSF or XSSF, despite
-     *  Java being quite rubbish.
-     */
+    /// <summary>
+    /// An object that handles instantiating concrete
+    ///  classes of the various instances one needs for
+    ///  HSSF and XSSF.
+    /// Works around a limitation in Java where we
+    ///  cannot have static methods on interfaces or abstract
+    ///  classes.
+    /// This allows you to Get the appropriate class for
+    ///  a given interface, without you having to worry
+    ///  about if you're dealing with HSSF or XSSF.
+    /// </summary>
     public interface ICreationHelper
     {
-        /**
-         * Creates a new RichTextString instance
-         * @param text The text to Initialise the RichTextString with
-         */
+        /// <summary>
+        /// Creates a new RichTextString instance
+        /// </summary>
+        /// <param name="text">The text to initialise the RichTextString with</param>
         IRichTextString CreateRichTextString(String text);
 
-        /**
-         * Creates a new DataFormat instance
-         */
+        /// <summary>
+        /// Creates a new DataFormat instance
+        /// </summary>
         IDataFormat CreateDataFormat();
 
-        /**
-         * Creates a new Hyperlink, of the given type
-         */
+        /// <summary>
+        /// Creates a new Hyperlink, of the given type
+        /// </summary>
         IHyperlink CreateHyperlink(HyperlinkType type);
 
-        /**
-         * Creates FormulaEvaluator - an object that Evaluates formula cells.
-         *
-         * @return a FormulaEvaluator instance
-         */
+        /// <summary>
+        /// Creates FormulaEvaluator - an object that evaluates formula cells.
+        /// </summary>
+        /// <return>a FormulaEvaluator instance</return>
         IFormulaEvaluator CreateFormulaEvaluator();
 
-        /**
-         * Creates a XSSF-style Color object, used for extended sheet
-         *  formattings and conditional formattings
-         */
+        /// <summary>
+        /// Creates a XSSF-style Color object, used for extended sheet
+        ///  formattings and conditional formattings
+        /// </summary>
         ExtendedColor CreateExtendedColor();
+        /// <summary>
+        /// Creates a ClientAnchor. Use this object to position Drawing object in a sheet
+        /// </summary>
+        /// <return>a ClientAnchor instance</return>
+        /// <see cref="IDrawing" />
         IClientAnchor CreateClientAnchor();
+
+        /// <summary>
+        /// Creates an AreaReference.
+        /// </summary>
+        /// <param name="reference">cell reference</param>
+        /// <return>an AreaReference instance</return>
+        AreaReference CreateAreaReference(String reference);
+
+        /// <summary>
+        /// Creates an area ref from a pair of Cell References..
+        /// </summary>
+        /// <param name="topLeft">cell reference</param>
+        /// <param name="bottomRight">cell reference</param>
+        /// <return>an AreaReference instance</return>
+        AreaReference CreateAreaReference(CellReference topLeft, CellReference bottomRight);
     }
 }

@@ -1,4 +1,4 @@
-﻿using BenchmarkDotNet.Running;
+using BenchmarkDotNet.Running;
 using NPOI.Benchmarks;
 
-BenchmarkSwitcher.FromAssembly(typeof(LargeExcelFileBenchmark).Assembly).Run();
+BenchmarkSwitcher.FromAssembly(typeof(LargeExcelFileBenchmark).Assembly).Run(args);

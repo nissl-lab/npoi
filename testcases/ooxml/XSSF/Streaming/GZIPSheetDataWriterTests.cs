@@ -16,7 +16,7 @@
 ==================================================================== */
 using ICSharpCode.SharpZipLib.GZip;
 using NPOI.XSSF.Streaming;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using System.IO;
 
 namespace TestCases.XSSF.Streaming
@@ -41,8 +41,8 @@ namespace TestCases.XSSF.Streaming
         public void IfCallingEmptyConstructorShouldCreateZippedTempFileAndGZipOutputStream()
         {
             _objectToTest = new GZIPSheetDataWriter();
-            Assert.True(_objectToTest.TemporaryFilePath().Contains("poi-sxssf-sheet-xml"));
-            Assert.True(_objectToTest.TemporaryFilePath().Contains(".gz"));
+            ClassicAssert.True(_objectToTest.TemporaryFilePath().Contains("poi-sxssf-sheet-xml"));
+            ClassicAssert.True(_objectToTest.TemporaryFilePath().Contains(".gz"));
         }
 
         [Test]
@@ -53,7 +53,7 @@ namespace TestCases.XSSF.Streaming
             var tempFile = _objectToTest.CreateTempFile();
             using (var result = _objectToTest.CreateWriter(tempFile))
             {
-                Assert.True(result is GZipOutputStream);
+                ClassicAssert.True(result is GZipOutputStream);
             }
         }
 
@@ -65,7 +65,7 @@ namespace TestCases.XSSF.Streaming
 
             using (var result = _objectToTest.GetWorksheetXmlInputStream())
             {
-                Assert.True(result is GZipInputStream);
+                ClassicAssert.True(result is GZipInputStream);
             }   
         }
     }

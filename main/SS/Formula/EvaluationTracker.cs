@@ -15,15 +15,13 @@
    limitations under the License.
 ==================================================================== */
 
+using System;
+using System.Collections.Generic;
+
+using NPOI.SS.Formula.Eval;
+
 namespace NPOI.SS.Formula
 {
-
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using NPOI.SS.Formula.Eval;
-    
-
     /// <summary>
     /// Instances of this class keep track of multiple dependent cell evaluations due
     /// To recursive calls To <see cref="WorkbookEvaluator.Evaluate"/>
@@ -37,15 +35,15 @@ namespace NPOI.SS.Formula
     public class EvaluationTracker
     {
         // TODO - consider deleting this class and letting CellEvaluationFrame take care of itself
-        private IList<CellEvaluationFrame> _evaluationFrames;
-        private ISet<FormulaCellCacheEntry> _currentlyEvaluatingCells;
-        private EvaluationCache _cache;
+        private readonly List<CellEvaluationFrame> _evaluationFrames;
+        private readonly HashSet<FormulaCellCacheEntry> _currentlyEvaluatingCells;
+        private readonly EvaluationCache _cache;
 
         public EvaluationTracker(EvaluationCache cache)
         {
             _cache = cache;
-            _evaluationFrames = new List<CellEvaluationFrame>();
-            _currentlyEvaluatingCells = new HashSet<FormulaCellCacheEntry>();
+            _evaluationFrames = [];
+            _currentlyEvaluatingCells = [];
         }
 
         /**
@@ -135,7 +133,7 @@ namespace NPOI.SS.Formula
             }
         }
 
-        public void AcceptPlainValueDependency(int bookIndex, int sheetIndex,
+        public void AcceptPlainValueDependency(IEvaluationWorkbook evalWorkbook, int bookIndex, int sheetIndex,
                 int rowIndex, int columnIndex, ValueEval value)
         {
             // Tell the currently evaluating cell frame that it Has a dependency on the specified
@@ -149,7 +147,7 @@ namespace NPOI.SS.Formula
                 CellEvaluationFrame consumingFrame = (CellEvaluationFrame)_evaluationFrames[prevFrameIndex];
                 if (value == BlankEval.instance)
                 {
-                    consumingFrame.AddUsedBlankCell(bookIndex, sheetIndex, rowIndex, columnIndex);
+                    consumingFrame.AddUsedBlankCell(evalWorkbook, bookIndex, sheetIndex, rowIndex, columnIndex);
                 }
                 else
                 {

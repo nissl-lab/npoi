@@ -11,7 +11,7 @@ namespace NPOI.OpenXml4Net.OPC
      * @version 1.0
      * @see org.apache.poi.OpenXml4Net.opc.OPCPackage
      */
-    public interface PackageProperties
+    public interface IPackageProperties
     {
         /* Getters and Setters */
 
@@ -197,5 +197,18 @@ namespace NPOI.OpenXml4Net.OPC
          * Set the version number.
          */
         void SetVersionProperty(String version);
+    }
+
+    public class PackageProperties
+    {
+        /**
+	     * Dublin Core Terms URI.
+	     */
+	    public static String NAMESPACE_DCTERMS = "http://purl.org/dc/terms/";
+	
+	    /**
+	     * Dublin Core namespace URI.
+	     */
+	    public static String NAMESPACE_DC = "http://purl.org/dc/elements/1.1/";
     }
 }

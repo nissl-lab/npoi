@@ -2,7 +2,7 @@
 using System.Text;
 using System.Collections.Generic;
 
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using NPOI.SS;
 
 namespace TestCases.SS
@@ -64,25 +64,25 @@ namespace TestCases.SS
         public void TestExcel97()
         {
             SpreadsheetVersion v = SpreadsheetVersion.EXCEL97;
-            Assert.AreEqual(1 << 8, v.MaxColumns);
-            Assert.AreEqual(v.MaxColumns - 1, v.LastColumnIndex);
-            Assert.AreEqual(1 << 16, v.MaxRows);
-            Assert.AreEqual(v.MaxRows - 1, v.LastRowIndex);
-            Assert.AreEqual(30, v.MaxFunctionArgs);
-            Assert.AreEqual(3, v.MaxConditionalFormats);
-            Assert.AreEqual("IV", v.LastColumnName);
+            ClassicAssert.AreEqual(1 << 8, v.MaxColumns);
+            ClassicAssert.AreEqual(v.MaxColumns - 1, v.LastColumnIndex);
+            ClassicAssert.AreEqual(1 << 16, v.MaxRows);
+            ClassicAssert.AreEqual(v.MaxRows - 1, v.LastRowIndex);
+            ClassicAssert.AreEqual(30, v.MaxFunctionArgs);
+            ClassicAssert.AreEqual(3, v.MaxConditionalFormats);
+            ClassicAssert.AreEqual("IV", v.LastColumnName);
         }
         [Test]
         public void TestExcel2007()
         {
             SpreadsheetVersion v = SpreadsheetVersion.EXCEL2007;
-            Assert.AreEqual(1 << 14, v.MaxColumns);
-            Assert.AreEqual(v.MaxColumns - 1, v.LastColumnIndex);
-            Assert.AreEqual(1 << 20, v.MaxRows);
-            Assert.AreEqual(v.MaxRows - 1, v.LastRowIndex);
-            Assert.AreEqual(255, v.MaxFunctionArgs);
-            Assert.AreEqual(Int32.MaxValue, v.MaxConditionalFormats);
-            Assert.AreEqual("XFD", v.LastColumnName);
+            ClassicAssert.AreEqual(1 << 14, v.MaxColumns);
+            ClassicAssert.AreEqual(v.MaxColumns - 1, v.LastColumnIndex);
+            ClassicAssert.AreEqual(1 << 20, v.MaxRows);
+            ClassicAssert.AreEqual(v.MaxRows - 1, v.LastRowIndex);
+            ClassicAssert.AreEqual(255, v.MaxFunctionArgs);
+            ClassicAssert.AreEqual(Int32.MaxValue, v.MaxConditionalFormats);
+            ClassicAssert.AreEqual("XFD", v.LastColumnName);
         }
     }
 }

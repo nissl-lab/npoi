@@ -26,7 +26,7 @@ namespace NPOI.HSSF.UserModel
             //this.workbook = workbook;
 
             Ptg[] ptgs = HSSFFormulaParser.Parse(formula, workbook);
-            if (!(ptgs[0] is Area3DPtg))
+            if (ptgs[0] is not Area3DPtg)
                 throw new ArgumentException("incorrect formula");
 
             Area3DPtg ptg = (Area3DPtg)ptgs[0];
@@ -58,7 +58,7 @@ namespace NPOI.HSSF.UserModel
             }
         }
 
-        private void CreateAutoFilterInfoRecord(HSSFSheet sheet, int insertPos, Area3DPtg ptg)
+        private static void CreateAutoFilterInfoRecord(HSSFSheet sheet, int insertPos, Area3DPtg ptg)
         {
             //look for the AutoFilterInfo Record
             NPOI.HSSF.Record.Record record = sheet.Sheet.FindFirstRecordBySid(AutoFilterInfoRecord.sid);

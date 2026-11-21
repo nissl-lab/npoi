@@ -15,7 +15,7 @@
    limitations under the License.
 ==================================================================== */
 
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.XSSF.UserModel;
 using System.Collections.Generic;
@@ -47,44 +47,44 @@ namespace TestCases.XSSF.Model
             int idx;
 
             // Check defaults
-            Assert.IsNotNull(sst.Items);
-            Assert.AreEqual(0, sst.Items.Count);
-            Assert.AreEqual(0, sst.Count);
-            Assert.AreEqual(0, sst.UniqueCount);
+            ClassicAssert.IsNotNull(sst.Items);
+            ClassicAssert.AreEqual(0, sst.Items.Count);
+            ClassicAssert.AreEqual(0, sst.Count);
+            ClassicAssert.AreEqual(0, sst.UniqueCount);
 
             st = new CT_Rst();
             st.t = ("Hello, World!");
 
             idx = sst.AddEntry(st);
-            Assert.AreEqual(0, idx);
-            Assert.AreEqual(1, sst.Count);
-            Assert.AreEqual(1, sst.UniqueCount);
+            ClassicAssert.AreEqual(0, idx);
+            ClassicAssert.AreEqual(1, sst.Count);
+            ClassicAssert.AreEqual(1, sst.UniqueCount);
 
             //add the same entry again
             idx = sst.AddEntry(st);
-            Assert.AreEqual(0, idx);
-            Assert.AreEqual(2, sst.Count);
-            Assert.AreEqual(1, sst.UniqueCount);
+            ClassicAssert.AreEqual(0, idx);
+            ClassicAssert.AreEqual(2, sst.Count);
+            ClassicAssert.AreEqual(1, sst.UniqueCount);
 
             //and again
             idx = sst.AddEntry(st);
-            Assert.AreEqual(0, idx);
-            Assert.AreEqual(3, sst.Count);
-            Assert.AreEqual(1, sst.UniqueCount);
+            ClassicAssert.AreEqual(0, idx);
+            ClassicAssert.AreEqual(3, sst.Count);
+            ClassicAssert.AreEqual(1, sst.UniqueCount);
 
             st = new CT_Rst();
             st.t = ("Second string");
 
             idx = sst.AddEntry(st);
-            Assert.AreEqual(1, idx);
-            Assert.AreEqual(4, sst.Count);
-            Assert.AreEqual(2, sst.UniqueCount);
+            ClassicAssert.AreEqual(1, idx);
+            ClassicAssert.AreEqual(4, sst.Count);
+            ClassicAssert.AreEqual(2, sst.UniqueCount);
 
             //add the same entry again
             idx = sst.AddEntry(st);
-            Assert.AreEqual(1, idx);
-            Assert.AreEqual(5, sst.Count);
-            Assert.AreEqual(2, sst.UniqueCount);
+            ClassicAssert.AreEqual(1, idx);
+            ClassicAssert.AreEqual(5, sst.Count);
+            ClassicAssert.AreEqual(2, sst.UniqueCount);
 
             st = new CT_Rst();
             CT_RElt r = st.AddNewR();
@@ -95,21 +95,90 @@ namespace TestCases.XSSF.Model
             r.t = ("Second string");
 
             idx = sst.AddEntry(st);
-            Assert.AreEqual(2, idx);
-            Assert.AreEqual(6, sst.Count);
-            Assert.AreEqual(3, sst.UniqueCount);
+            ClassicAssert.AreEqual(2, idx);
+            ClassicAssert.AreEqual(6, sst.Count);
+            ClassicAssert.AreEqual(3, sst.UniqueCount);
 
             idx = sst.AddEntry(st);
-            Assert.AreEqual(2, idx);
-            Assert.AreEqual(7, sst.Count);
-            Assert.AreEqual(3, sst.UniqueCount);
+            ClassicAssert.AreEqual(2, idx);
+            ClassicAssert.AreEqual(7, sst.Count);
+            ClassicAssert.AreEqual(3, sst.UniqueCount);
 
             //OK. the sst table is Filled, check the contents
-            Assert.AreEqual(3, sst.Items.Count);
-            Assert.AreEqual("Hello, World!", new XSSFRichTextString(sst.GetEntryAt(0)).ToString());
-            Assert.AreEqual("Second string", new XSSFRichTextString(sst.GetEntryAt(1)).ToString());
-            Assert.AreEqual("Second string", new XSSFRichTextString(sst.GetEntryAt(2)).ToString());
+            ClassicAssert.AreEqual(3, sst.Items.Count);
+            ClassicAssert.AreEqual("Hello, World!", new XSSFRichTextString(sst.GetEntryAt(0)).ToString());
+            ClassicAssert.AreEqual("Second string", new XSSFRichTextString(sst.GetEntryAt(1)).ToString());
+            ClassicAssert.AreEqual("Second string", new XSSFRichTextString(sst.GetEntryAt(2)).ToString());
         }
+
+        [Test]
+        public void TestCreateUsingRichTextStrings()
+        {
+            SharedStringsTable sst = new SharedStringsTable();
+
+            // Check defaults
+            ClassicAssert.IsNotNull(sst.SharedStringItems);
+            ClassicAssert.AreEqual(0, sst.SharedStringItems.Count);
+            ClassicAssert.AreEqual(0, sst.Count);
+            ClassicAssert.AreEqual(0, sst.UniqueCount);
+
+            int idx;
+
+            XSSFRichTextString rts = new XSSFRichTextString("Hello, World!");
+
+            idx = sst.AddSharedStringItem(rts);
+            ClassicAssert.AreEqual(0, idx);
+            ClassicAssert.AreEqual(1, sst.Count);
+            ClassicAssert.AreEqual(1, sst.UniqueCount);
+
+            //add the same entry again
+            idx = sst.AddSharedStringItem(rts);
+            ClassicAssert.AreEqual(0, idx);
+            ClassicAssert.AreEqual(2, sst.Count);
+            ClassicAssert.AreEqual(1, sst.UniqueCount);
+
+            //and again
+            idx = sst.AddSharedStringItem(rts);
+            ClassicAssert.AreEqual(0, idx);
+            ClassicAssert.AreEqual(3, sst.Count);
+            ClassicAssert.AreEqual(1, sst.UniqueCount);
+
+            rts = new XSSFRichTextString("Second string");
+
+            idx = sst.AddSharedStringItem(rts);
+            ClassicAssert.AreEqual(1, idx);
+            ClassicAssert.AreEqual(4, sst.Count);
+            ClassicAssert.AreEqual(2, sst.UniqueCount);
+
+            //add the same entry again
+            idx = sst.AddSharedStringItem(rts);
+            ClassicAssert.AreEqual(1, idx);
+            ClassicAssert.AreEqual(5, sst.Count);
+            ClassicAssert.AreEqual(2, sst.UniqueCount);
+
+            rts = new XSSFRichTextString("Second string");
+            XSSFFont font = new XSSFFont();
+            font.FontName = "Arial";
+            font.IsBold = true;
+            rts.ApplyFont(font);
+
+            idx = sst.AddSharedStringItem(rts);
+            ClassicAssert.AreEqual(2, idx);
+            ClassicAssert.AreEqual(6, sst.Count);
+            ClassicAssert.AreEqual(3, sst.UniqueCount);
+
+            idx = sst.AddSharedStringItem(rts);
+            ClassicAssert.AreEqual(2, idx);
+            ClassicAssert.AreEqual(7, sst.Count);
+            ClassicAssert.AreEqual(3, sst.UniqueCount);
+
+            //OK. the sst table is filled, check the contents
+            ClassicAssert.AreEqual(3, sst.SharedStringItems.Count);
+            ClassicAssert.AreEqual("Hello, World!", sst.GetItemAt(0).ToString());
+            ClassicAssert.AreEqual("Second string", sst.GetItemAt(1).ToString());
+            ClassicAssert.AreEqual("Second string", sst.GetItemAt(2).ToString());
+        }
+
         [Test]
         public void TestReadWrite()
         {
@@ -119,20 +188,20 @@ namespace TestCases.XSSF.Model
             //Serialize, read back and compare with the original
             SharedStringsTable sst2 = XSSFTestDataSamples.WriteOutAndReadBack(wb).GetSharedStringSource();
 
-            Assert.AreEqual(sst1.Count, sst2.Count);
-            Assert.AreEqual(sst1.UniqueCount, sst2.UniqueCount);
+            ClassicAssert.AreEqual(sst1.Count, sst2.Count);
+            ClassicAssert.AreEqual(sst1.UniqueCount, sst2.UniqueCount);
 
             IList<CT_Rst> items1 = sst1.Items;
             IList<CT_Rst> items2 = sst2.Items;
-            Assert.AreEqual(items1.Count, items2.Count);
+            ClassicAssert.AreEqual(items1.Count, items2.Count);
             for (int i = 0; i < items1.Count; i++)
             {
                 CT_Rst st1 = items1[i];
                 CT_Rst st2 = items2[i];
-                Assert.AreEqual(st1.ToString(), st2.ToString());
+                ClassicAssert.AreEqual(st1.ToString(), st2.ToString());
             }
 
-            Assert.IsNotNull(XSSFTestDataSamples.WriteOutAndReadBack(wb));
+            ClassicAssert.IsNotNull(XSSFTestDataSamples.WriteOutAndReadBack(wb));
         }
 
         /**
@@ -167,10 +236,10 @@ namespace TestCases.XSSF.Model
             foreach (String str in lst)
             {
                 String val = s.GetRow(i++).GetCell(0).StringCellValue;
-                Assert.AreEqual(str, val);
+                ClassicAssert.AreEqual(str, val);
             }
 
-            Assert.IsNotNull(XSSFTestDataSamples.WriteOutAndReadBack(w));
+            ClassicAssert.IsNotNull(XSSFTestDataSamples.WriteOutAndReadBack(w));
         }
 
         private List<String> ReadStrings(String filename)
@@ -191,6 +260,129 @@ namespace TestCases.XSSF.Model
             return strs;
         }
 
+        /// <summary>
+        /// Verify that opening a workbook and writing it without accessing shared
+        /// strings does not cause the SST to be parsed or rewritten.
+        /// </summary>
+        [Test]
+        public void TestLazyLoadNotTriggeredByWrite()
+        {
+            XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("sample.xlsx");
+            SharedStringsTable sst = wb.GetSharedStringSource();
+
+            // SST should NOT be loaded yet
+            ClassicAssert.IsFalse(sst.IsLoaded, "SST should not be loaded before any access");
+
+            // Write the workbook without touching any string cells
+            byte[] writtenBytes;
+            using (MemoryStream ms = new MemoryStream())
+            {
+                wb.Write(ms, false);
+                writtenBytes = ms.ToArray();
+            }
+
+            // SST should still be unloaded (not dirty, not accessed)
+            ClassicAssert.IsFalse(sst.IsLoaded, "SST should still not be loaded after Write() without string access");
+
+            // The written workbook should still contain the correct SST
+            XSSFWorkbook wb2 = new XSSFWorkbook(new MemoryStream(writtenBytes));
+            SharedStringsTable sst2 = wb2.GetSharedStringSource();
+
+            // Now access to force load
+            ClassicAssert.IsTrue(sst2.Count > 0, "Written workbook should have preserved the SST");
+            ClassicAssert.IsTrue(sst2.Items.Count > 0);
+
+            wb.Close();
+            wb2.Close();
+        }
+
+        /// <summary>
+        /// Verify that reading SST content marks it loaded but not dirty,
+        /// and that saving preserves the original SST data without re-serializing.
+        /// </summary>
+        [Test]
+        public void TestReadSstNotDirtyAfterAccess()
+        {
+            XSSFWorkbook wb1 = XSSFTestDataSamples.OpenSampleWorkbook("sample.xlsx");
+            SharedStringsTable sst1 = wb1.GetSharedStringSource();
+
+            // Access SST – this should load but not dirty it
+            int origCount = sst1.Count;
+            int origUnique = sst1.UniqueCount;
+            IList<CT_Rst> origItems = sst1.Items;
+            ClassicAssert.IsTrue(sst1.IsLoaded, "SST should be loaded after Count access");
+
+            // Round-trip: write + read back
+            XSSFWorkbook wb2 = XSSFTestDataSamples.WriteOutAndReadBack(wb1);
+            SharedStringsTable sst2 = wb2.GetSharedStringSource();
+
+            ClassicAssert.AreEqual(origCount, sst2.Count);
+            ClassicAssert.AreEqual(origUnique, sst2.UniqueCount);
+            ClassicAssert.AreEqual(origItems.Count, sst2.Items.Count);
+            for (int i = 0; i < origItems.Count; i++)
+                ClassicAssert.AreEqual(origItems[i].ToString(), sst2.Items[i].ToString());
+
+            wb1.Close();
+            wb2.Close();
+        }
+
+        /// <summary>
+        /// Verify that rich text runs and phonetic runs in 51519.xlsx are parsed
+        /// correctly by the streaming parser and survive a round-trip write + read.
+        /// </summary>
+        [Test]
+        public void TestPhoneticAndRichTextFidelity()
+        {
+            POIDataSamples ssTests = POIDataSamples.GetSpreadSheetInstance();
+            XSSFWorkbook wb = new XSSFWorkbook(ssTests.OpenResourceAsStream("51519.xlsx"));
+            SharedStringsTable sst = wb.GetSharedStringSource();
+
+            ClassicAssert.AreEqual(49, sst.Items.Count, "Expected 49 shared strings in 51519.xlsx");
+
+            // Entry 0: plain Japanese text (no rich runs)
+            CT_Rst entry0 = sst.GetEntryAt(0);
+            ClassicAssert.AreEqual("\u30B3\u30E1\u30F3\u30C8",
+                new XSSFRichTextString(entry0).ToString(),
+                "Entry 0 text mismatch");
+
+            // Entry 3: should have phonetic runs (rPh elements)
+            CT_Rst entry3 = sst.GetEntryAt(3);
+            ClassicAssert.IsNotNull(entry3.rPh, "Entry 3 should have phonetic runs");
+            ClassicAssert.IsTrue(entry3.rPh.Count > 0, "Entry 3 should have at least one phonetic run");
+
+            // Round-trip: write + read back
+            XSSFWorkbook wb2 = XSSFTestDataSamples.WriteOutAndReadBack(wb);
+            SharedStringsTable sst2 = wb2.GetSharedStringSource();
+
+            ClassicAssert.AreEqual(49, sst2.Items.Count, "Round-tripped SST should still have 49 entries");
+
+            CT_Rst entry0rt = sst2.GetEntryAt(0);
+            ClassicAssert.AreEqual("\u30B3\u30E1\u30F3\u30C8",
+                new XSSFRichTextString(entry0rt).ToString(),
+                "Entry 0 text mismatch after round-trip");
+
+            CT_Rst entry3rt = sst2.GetEntryAt(3);
+            ClassicAssert.IsNotNull(entry3rt.rPh, "Entry 3 should have phonetic runs after round-trip");
+            ClassicAssert.AreEqual(entry3.rPh.Count, entry3rt.rPh.Count,
+                "Phonetic run count should match after round-trip");
+
+            wb.Close();
+            wb2.Close();
+        }
+        /// <summary>
+        /// Fix #1860 
+        /// </summary>
+        [Test]
+        public void TestSelfClosingSiElement()
+        {
+            using var wb = XSSFTestDataSamples.OpenSampleWorkbook("si_sc.xlsx");
+            var A1 = wb.GetSheetAt(0).GetRow(0).GetCell(0)?.StringCellValue;
+            var A2 = wb.GetSheetAt(0).GetRow(1).GetCell(0)?.StringCellValue;
+            var A3 = wb.GetSheetAt(0).GetRow(2).GetCell(0)?.StringCellValue;
+            ClassicAssert.AreEqual("A", A1);
+            ClassicAssert.AreEqual(null, A2);
+            ClassicAssert.AreEqual("B", A3);
+        }
     }
 }
 

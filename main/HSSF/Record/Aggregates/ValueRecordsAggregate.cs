@@ -198,7 +198,7 @@ namespace NPOI.HSSF.Record.Aggregates
             }
         }
 
-        private MulBlankRecord CreateMBR(CellValueRecordInterface[] cellValues, int startIx, int nBlank)
+        private static MulBlankRecord CreateMBR(CellValueRecordInterface[] cellValues, int startIx, int nBlank)
         {
 
             short[] xfs = new short[nBlank];
@@ -213,9 +213,8 @@ namespace NPOI.HSSF.Record.Aggregates
 
         public void Construct(CellValueRecordInterface rec, RecordStream rs, SharedValueManager sfh)
         {
-            if (rec is FormulaRecord)
+            if (rec is FormulaRecord formulaRec)
             {
-                FormulaRecord formulaRec = (FormulaRecord) rec;
                 // read optional cached text value
                 StringRecord cachedText = null;
                 Type nextClass = rs.PeekNextClass();
@@ -304,11 +303,10 @@ namespace NPOI.HSSF.Record.Aggregates
                 for (int j = 0; j < rowCells.Length; j++)
                 {
                     CellValueRecordInterface cell = rowCells[j];
-                    if (cell is FormulaRecordAggregate)
+                    if (cell is FormulaRecordAggregate fra)
                     {
-                        FormulaRecordAggregate fra = (FormulaRecordAggregate) cell;
                         Ptg[] ptgs = fra.FormulaTokens; // needs clone() inside this getter?
-                        Ptg[] ptgs2 = ((FormulaRecordAggregate) cell).FormulaRecord
+                        Ptg[] ptgs2 = fra.FormulaRecord
                             .ParsedExpression; // needs clone() inside this getter?
 
                         if (shifter.AdjustFormula(ptgs, currentExternSheetIndex))
@@ -343,9 +341,8 @@ namespace NPOI.HSSF.Record.Aggregates
                     rv.VisitRecord(CreateMBR(rowCells, i, nBlank));
                     i += nBlank - 1;
                 }
-                else if (cvr is RecordAggregate)
+                else if (cvr is RecordAggregate agg)
                 {
-                    RecordAggregate agg = (RecordAggregate) cvr;
                     agg.VisitContainedRecords(rv);
                 }
                 else
@@ -361,7 +358,7 @@ namespace NPOI.HSSF.Record.Aggregates
             while (i < rowCellValues.Length)
             {
                 CellValueRecordInterface cvr = rowCellValues[i];
-                if (!(cvr is BlankRecord))
+                if (cvr is not BlankRecord)
                 {
                     break;
                 }
@@ -399,7 +396,7 @@ namespace NPOI.HSSF.Record.Aggregates
             return GetEnumerator();
         }
 
-        private class ValueEnumerator : IEnumerator<CellValueRecordInterface>
+        private sealed class ValueEnumerator : IEnumerator<CellValueRecordInterface>
         {
             short nextColumn = -1;
             int nextRow, lastRow;
@@ -443,11 +440,6 @@ namespace NPOI.HSSF.Record.Aggregates
             object IEnumerator.Current
             {
                 get { return this.Current; }
-            }
-
-            public void Remove()
-            {
-                throw new InvalidOperationException("gibt's noch nicht");
             }
 
             private void FindNext()

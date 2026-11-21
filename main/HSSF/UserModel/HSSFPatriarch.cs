@@ -34,20 +34,20 @@ namespace NPOI.HSSF.UserModel
     /// little other than act as a container for other shapes and Groups.
     /// @author Glen Stampoultzis (glens at apache.org)
     /// </summary>
-    public class HSSFPatriarch : HSSFShapeContainer, IDrawing, IDrawing<HSSFShape>
+    public class HSSFPatriarch : HSSFShapeContainer, IDrawing<HSSFShape>
     {
         //private static POILogger log = POILogFactory.GetLogger(typeof(HSSFPatriarch));
-        List<HSSFShape> _shapes = new List<HSSFShape>();
-        private HSSFSheet _sheet;
-        private EscherSpgrRecord _spgrRecord;
-        private EscherContainerRecord _mainSpgrContainer;
+        readonly List<HSSFShape> _shapes = new List<HSSFShape>();
+        private readonly HSSFSheet _sheet;
+        private readonly EscherSpgrRecord _spgrRecord;
+        private readonly EscherContainerRecord _mainSpgrContainer;
 
         /**
          * The EscherAggregate we have been bound to.
          * (This will handle writing us out into records,
          *  and building up our shapes from the records)
          */
-        private EscherAggregate _boundAggregate;
+        private readonly EscherAggregate _boundAggregate;
 
         /// <summary>
         /// Creates the patriarch.
@@ -73,9 +73,9 @@ namespace NPOI.HSSF.UserModel
             foreach (HSSFShape shape in patriarch.Children)
             {
                 HSSFShape newShape;
-                if (shape is HSSFShapeGroup)
+                if (shape is HSSFShapeGroup group)
                 {
-                    newShape = ((HSSFShapeGroup)shape).CloneShape(newPatriarch);
+                    newShape = group.CloneShape(newPatriarch);
                 }
                 else
                 {
@@ -100,7 +100,7 @@ namespace NPOI.HSSF.UserModel
             Hashtable coordinates = new Hashtable(tailRecords.Count);
             foreach (NoteRecord rec in tailRecords.Values)
             {
-                String noteRef = new CellReference(rec.Row, rec.Column).FormatAsString(); // A1-style notation
+                String noteRef = new CellReference(rec.Row, rec.Column, true, true).FormatAsString(); // A1-style notation
                 if (coordinates.Contains(noteRef))
                 {
                     throw new InvalidOperationException("found multiple cell comments for cell " + noteRef);
@@ -200,18 +200,8 @@ namespace NPOI.HSSF.UserModel
             return CreatePicture((HSSFClientAnchor)anchor, pictureIndex);
         }
 
-        /**
-     * Adds a new OLE Package Shape 
-     * 
-     * @param anchor       the client anchor describes how this picture is
-     *                     attached to the sheet.
-     * @param storageId    the storageId returned by {@Link HSSFWorkbook.AddOlePackage}
-     * @param pictureIndex the index of the picture (used as preview image) in the
-     *                     workbook collection of pictures.
-     *
-     * @return newly Created shape
-     */
-        public HSSFObjectData CreateObjectData(HSSFClientAnchor anchor, int storageId, int pictureIndex)
+
+        public IObjectData CreateObjectData(IClientAnchor anchor, int storageId, int pictureIndex)
         {
             ObjRecord obj = new ObjRecord();
 
@@ -274,7 +264,7 @@ namespace NPOI.HSSF.UserModel
             }
 
             // create picture shape, which need to be minimal modified for oleshapes
-            HSSFPicture shape = new HSSFPicture(null, anchor);
+            HSSFPicture shape = new HSSFPicture(null, (HSSFClientAnchor)anchor);
             shape.PictureIndex = (/*setter*/pictureIndex);
             EscherContainerRecord spContainer = shape.GetEscherContainer();
             EscherSpRecord spRecord = spContainer.GetChildById(EscherSpRecord.RECORD_ID) as EscherSpRecord;
@@ -353,10 +343,7 @@ namespace NPOI.HSSF.UserModel
             return CreateComment((HSSFAnchor)anchor);
         }
 
-
-
-
-        private void SetFlipFlags(HSSFShape shape)
+        private static void SetFlipFlags(HSSFShape shape)
         {
             EscherSpRecord sp = (EscherSpRecord)shape.GetEscherContainer().GetChildById(EscherSpRecord.RECORD_ID);
             if ((shape.Anchor as HSSFAnchor).IsHorizontallyFlipped)
@@ -368,6 +355,7 @@ namespace NPOI.HSSF.UserModel
                 sp.Flags = (sp.Flags | EscherSpRecord.FLAG_FLIPVERT);
             }
         }
+
         /// <summary>
         /// Returns a list of all shapes contained by the patriarch.
         /// </summary>
@@ -446,8 +434,8 @@ namespace NPOI.HSSF.UserModel
             DrawingManager2 dm = ((HSSFWorkbook)_sheet.Workbook).Workbook.DrawingManager;
             EscherDgRecord dg =
                    (EscherDgRecord)_boundAggregate.GetEscherContainer().GetChildById(EscherDgRecord.RECORD_ID);
-            short drawingGroupId = dg.DrawingGroupId;
-            return dm.AllocateShapeId(drawingGroupId, dg);
+
+            return dm.AllocateShapeId(dg);
         }
         /// <summary>
         /// Does this HSSFPatriarch contain a chart?
@@ -551,11 +539,6 @@ namespace NPOI.HSSF.UserModel
         public IClientAnchor CreateAnchor(int dx1, int dy1, int dx2, int dy2, int col1, int row1, int col2, int row2)
         {
             return new HSSFClientAnchor(dx1, dy1, dx2, dy2, (short)col1, row1, (short)col2, row2);
-        }
-
-        public IChart CreateChart(IClientAnchor anchor)
-        {
-            throw new RuntimeException("NotImplemented");
         }
         /**
      * create shape tree from existing escher records tree

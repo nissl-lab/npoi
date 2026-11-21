@@ -19,7 +19,7 @@ namespace TestCases.SS.Formula
 {
 
     using NPOI.SS.Formula;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using System;
 
     /**
@@ -33,7 +33,7 @@ namespace TestCases.SS.Formula
 
         private static void ConfirmFormat(String rawSheetName, String expectedSheetNameEncoding)
         {
-            Assert.AreEqual(expectedSheetNameEncoding, SheetNameFormatter.Format(rawSheetName));
+            ClassicAssert.AreEqual(expectedSheetNameEncoding, SheetNameFormatter.Format(rawSheetName));
         }
 
         /**
@@ -72,7 +72,7 @@ namespace TestCases.SS.Formula
 
         private static void ConfirmCellNameMatch(String rawSheetName, bool expected)
         {
-            Assert.AreEqual(expected, SheetNameFormatter.NameLooksLikePlainCellReference(rawSheetName));
+            ClassicAssert.AreEqual(expected, SheetNameFormatter.NameLooksLikePlainCellReference(rawSheetName));
         }
 
         /**
@@ -97,7 +97,7 @@ namespace TestCases.SS.Formula
         {
             String prefix = text.Substring(0, numberOfPrefixLetters);
             String suffix = text.Substring(numberOfPrefixLetters);
-            Assert.AreEqual(expected, SheetNameFormatter.CellReferenceIsWithinRange(prefix, suffix));
+            ClassicAssert.AreEqual(expected, SheetNameFormatter.CellReferenceIsWithinRange(prefix, suffix));
         }
 
         /**

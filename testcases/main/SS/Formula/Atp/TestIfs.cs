@@ -18,7 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using NPOI.SS.UserModel;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.Util;
@@ -53,14 +53,14 @@ namespace TestCases.SS.Formula.Atp
 	        IFormulaEvaluator evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
 
 	        cellA1.SetCellValue("A");
-	        Assert.AreEqual(CellType.String, evaluator.Evaluate(cell1).CellType, "Checks that the cell is numeric");
-	        Assert.AreEqual("Value for A", evaluator.Evaluate(cell1).StringValue, "IFS should return 'Value for B'");
+	        ClassicAssert.AreEqual(CellType.String, evaluator.Evaluate(cell1).CellType, "Checks that the cell is numeric");
+	        ClassicAssert.AreEqual("Value for A", evaluator.Evaluate(cell1).StringValue, "IFS should return 'Value for B'");
 
 	        cellA1.SetCellValue("B");
 	        evaluator.ClearAllCachedResultValues();
 
-            Assert.AreEqual(CellType.String, evaluator.Evaluate(cell1).CellType, "Checks that the cell is numeric");
-	        Assert.AreEqual("Value for B", evaluator.Evaluate(cell1).StringValue, "IFS should return 'Value for B'");
+            ClassicAssert.AreEqual(CellType.String, evaluator.Evaluate(cell1).CellType, "Checks that the cell is numeric");
+	        ClassicAssert.AreEqual("Value for B", evaluator.Evaluate(cell1).StringValue, "IFS should return 'Value for B'");
         }
     }
 }

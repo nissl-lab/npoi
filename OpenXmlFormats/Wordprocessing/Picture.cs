@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using NPOI.OpenXml4Net.Util;
 using NPOI.OpenXmlFormats.Vml;
+using Cysharp.Text;
 
 namespace NPOI.OpenXmlFormats.Wordprocessing
 {
@@ -59,13 +60,12 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         public void Set(object obj)
         {
-            if (obj is CT_Group)
+            if (obj is CT_Group group)
             {
-                var group = (CT_Group)obj;
                 foreach (var item in group.Items)
                 {
                     /*XmlSerializer xmlse = new XmlSerializer(item.GetType());
-                    StringBuilder output = new StringBuilder();
+                    // StringBuilder output = new StringBuilder();
                     XmlWriterSettings settings = new XmlWriterSettings();
 
                     settings.Encoding = Encoding.UTF8;
@@ -200,24 +200,25 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}>", nodeName));
+            sw.WriteStartW(nodeName);
+            sw.Write('>');
             if (this.movie != null)
                 this.movie.Write(sw, "movie");
             if (this.control != null)
                 this.control.Write(sw, "control");
             foreach (var childnode in Items)
             {
-                if (childnode is XmlNode)
+                if (childnode is XmlNode node)
                 {
-                    sw.Write(((XmlNode)childnode).OuterXml);
+                    sw.Write(node.OuterXml);
                 }
-                else if (childnode is CT_Shape)
+                else if (childnode is CT_Shape shape)
                 {
-                    ((CT_Shape)childnode).Write(sw, "shape");
+                    shape.Write(sw, "shape");
                 }
-                else if (childnode is CT_Shapetype)
+                else if (childnode is CT_Shapetype shapetype)
                 {
-                    ((CT_Shapetype)childnode).Write(sw, "shapetype");
+                    shapetype.Write(sw, "shapetype");
                 }
             }
             sw.WriteEndW(nodeName);
@@ -264,7 +265,7 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.WriteStartW(nodeName);
             if(themeColorField!= ST_ThemeColor.none)
                 XmlHelper.WriteAttribute(sw, "w:themeColor", this.themeColor.ToString());
             XmlHelper.WriteAttribute(sw, "w:themeTint", this.themeTint);
@@ -445,10 +446,10 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:dxaOrig", this.dxaOrig);
             XmlHelper.WriteAttribute(sw, "w:dyaOrig", this.dyaOrig);
-            sw.Write(">");
+            sw.Write('>');
             if (this.control != null)
                 this.control.Write(sw, "control");
             sw.WriteEndW(nodeName);
@@ -477,11 +478,11 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<w:{0}", nodeName));
+            sw.WriteStartW(nodeName);
             XmlHelper.WriteAttribute(sw, "w:name", this.name);
             XmlHelper.WriteAttribute(sw, "w:shapeid", this.shapeid);
             XmlHelper.WriteAttribute(sw, "r:id", this.id);
-            sw.Write(">");
+            sw.Write('>');
             sw.WriteEndW(nodeName);
         }
 

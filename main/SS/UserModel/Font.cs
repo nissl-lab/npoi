@@ -84,27 +84,6 @@ namespace NPOI.SS.UserModel
 
         Red = 0xa,
     }
-    [Obsolete("deprecated POI 3.15 beta 2. Boldweight constants no longer needed due to IsBold property")]
-    public enum FontBoldWeight:short
-    {
-        /// <summary>
-        /// Allow accessing the Initial value.
-        /// </summary>
-        None = 0,
-
-        /**
-         * Normal boldness (not bold)
-         */
-
-        Normal = 0x190,
-
-        /**
-         * Bold boldness (bold)
-         */
-
-        Bold = 0x2bc,
-    }
-
 
     public interface IFont
     {
@@ -171,8 +150,6 @@ namespace NPOI.SS.UserModel
         /// get the index within the Workbook (sequence within the collection of Font objects)
         /// </summary>
         short Index { get; }
-        [Obsolete("deprecated POI 3.15 beta 2. Use IsBold instead.")]
-        short Boldweight { get; set; }
 
         bool IsBold { get; set; }
 

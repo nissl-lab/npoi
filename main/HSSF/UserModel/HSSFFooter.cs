@@ -35,7 +35,7 @@ namespace NPOI.HSSF.UserModel
     /// </summary>
     public class HSSFFooter : HeaderFooter,IFooter
     {
-        private PageSettingsBlock _psb;
+        private readonly PageSettingsBlock _psb;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HSSFFooter"/> class.

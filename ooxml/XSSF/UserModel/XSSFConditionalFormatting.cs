@@ -22,7 +22,8 @@ using NPOI.OpenXmlFormats.Spreadsheet;
 using System.Collections.Generic;
 using NPOI.SS.Util;
 using System;
-using System.Text;
+using System.Text; 
+using Cysharp.Text;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -34,8 +35,8 @@ namespace NPOI.XSSF.UserModel
      */
     public class XSSFConditionalFormatting : IConditionalFormatting
     {
-        private CT_ConditionalFormatting _cf;
-        private XSSFSheet _sh;
+        private readonly CT_ConditionalFormatting _cf;
+        private readonly XSSFSheet _sh;
 
         /*package*/
         internal XSSFConditionalFormatting(XSSFSheet sh)
@@ -63,7 +64,7 @@ namespace NPOI.XSSF.UserModel
         public CellRangeAddress[] GetFormattingRanges()
         {
             List<CellRangeAddress> lst = new List<CellRangeAddress>();
-            String[] regions = _cf.sqref.Split(new char[] { ' ' });
+            String[] regions = _cf.sqref.Split(' ');
             for (int i = 0; i < regions.Length; i++)
             {
                 lst.Add(CellRangeAddress.ValueOf(regions[i]));
@@ -77,7 +78,8 @@ namespace NPOI.XSSF.UserModel
             {
                 throw new ArgumentNullException("cellRanges must not be null");
             }
-            StringBuilder sb = new StringBuilder();
+            using var sb = ZString.CreateStringBuilder();
+
             bool first = true;
             foreach (CellRangeAddress range in ranges)
             {

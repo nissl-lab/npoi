@@ -20,7 +20,7 @@ namespace TestCases.HSSF.Record.Chart
     using System;
     using System.Collections;
     using System.IO;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     using TestCases.HSSF;
     using NPOI.HSSF.Record;
@@ -54,11 +54,11 @@ namespace TestCases.HSSF.Record.Chart
             din.Close();
 
             // Should've found one
-            Assert.AreEqual(1, grabber.chartTitleFormatRecords.Count);
+            ClassicAssert.AreEqual(1, grabber.chartTitleFormatRecords.Count);
             // And it should be of something interesting
             AlRunsRecord r =
                 (AlRunsRecord)grabber.chartTitleFormatRecords[0];
-            Assert.AreEqual(3, r.GetFormatCount());
+            ClassicAssert.AreEqual(3, r.GetFormatCount());
         }
 
         private class ChartTitleFormatRecordGrabber : IHSSFListener

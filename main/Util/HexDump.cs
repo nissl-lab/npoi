@@ -26,7 +26,8 @@
  * ==============================================================*/
 
 using System;
-using System.Text;
+using System.Text; 
+using Cysharp.Text;
 using System.IO;
 using System.Globalization;
 
@@ -456,7 +457,7 @@ namespace NPOI.Util
             for (int i = 0; i < digits; i++)
                 formatString.Append('0');
             formatString.Append(": ");
-            StringBuilder retVal = new StringBuilder();
+            using var retVal = ZString.CreateStringBuilder();
             retVal.Append(((double)0).ToString(formatString.ToString(), CultureInfo.InvariantCulture));
             if (value.Length == 0)
                 retVal.Append("0");

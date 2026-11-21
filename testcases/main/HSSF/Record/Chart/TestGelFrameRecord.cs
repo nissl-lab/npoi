@@ -20,7 +20,7 @@ using System.Collections.Generic;
 using System.Text;
 using NPOI.HSSF.Record;
 using NPOI.HSSF.Record.Chart;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using NPOI.Util;
 
 namespace TestCases.HSSF.Record.Chart
@@ -56,7 +56,7 @@ namespace TestCases.HSSF.Record.Chart
         public void TestLoad()
         {
             GelFrameRecord record = new GelFrameRecord(TestcaseRecordInputStream.Create((short)0x1066, data));
-            //Assert.AreEqual(0xD, record.Options);
+            //ClassicAssert.AreEqual(0xD, record.Options);
         }
     }
 }

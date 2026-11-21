@@ -21,7 +21,7 @@ namespace TestCases.SS.Formula.Functions
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.SS.Formula.Functions;
 
     [TestFixture]
@@ -92,22 +92,22 @@ namespace TestCases.SS.Formula.Functions
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
             Fixed fixedFunc = new Fixed();
             ValueEval Evaluate = fixedFunc.Evaluate(0, 0, new NumberEval(1234.56789));
-            Assert.IsTrue(Evaluate is StringEval);
-            Assert.AreEqual("1,234.57", ((StringEval)Evaluate).StringValue);
+            ClassicAssert.IsTrue(Evaluate is StringEval);
+            ClassicAssert.AreEqual("1,234.57", ((StringEval)Evaluate).StringValue);
 
             Evaluate = fixedFunc.Evaluate(0, 0, new NumberEval(1234.56789), new NumberEval(1));
-            Assert.IsTrue(Evaluate is StringEval);
-            Assert.AreEqual("1,234.6", ((StringEval)Evaluate).StringValue);
+            ClassicAssert.IsTrue(Evaluate is StringEval);
+            ClassicAssert.AreEqual("1,234.6", ((StringEval)Evaluate).StringValue);
 
             Evaluate = fixedFunc.Evaluate(0, 0, new NumberEval(1234.56789), new NumberEval(1), BoolEval.TRUE);
-            Assert.IsTrue(Evaluate is StringEval);
-            Assert.AreEqual("1234.6", ((StringEval)Evaluate).StringValue);
+            ClassicAssert.IsTrue(Evaluate is StringEval);
+            ClassicAssert.AreEqual("1234.6", ((StringEval)Evaluate).StringValue);
 
             Evaluate = fixedFunc.Evaluate(new ValueEval[] { }, 1, 1);
-            Assert.IsTrue(Evaluate is ErrorEval);
+            ClassicAssert.IsTrue(Evaluate is ErrorEval);
 
             Evaluate = fixedFunc.Evaluate(new ValueEval[] { new NumberEval(1), new NumberEval(1), new NumberEval(1), new NumberEval(1) }, 1, 1);
-            Assert.IsTrue(Evaluate is ErrorEval);
+            ClassicAssert.IsTrue(Evaluate is ErrorEval);
         }
 
         private void Confirm(String formulaText, String expectedResult)
@@ -115,9 +115,9 @@ namespace TestCases.SS.Formula.Functions
             cell11.CellFormula = (/*setter*/formulaText);
             Evaluator.ClearAllCachedResultValues();
             CellValue cv = Evaluator.Evaluate(cell11);
-            Assert.AreEqual(CellType.String, cv.CellType, "Wrong result type: " + cv.FormatAsString());
+            ClassicAssert.AreEqual(CellType.String, cv.CellType, "Wrong result type: " + cv.FormatAsString());
             String actualValue = cv.StringValue;
-            Assert.AreEqual(expectedResult, actualValue);
+            ClassicAssert.AreEqual(expectedResult, actualValue);
         }
 
         private void ConfirmValueError(String formulaText)
@@ -125,7 +125,7 @@ namespace TestCases.SS.Formula.Functions
             cell11.CellFormula = (/*setter*/formulaText);
             Evaluator.ClearAllCachedResultValues();
             CellValue cv = Evaluator.Evaluate(cell11);
-            Assert.IsTrue(cv.CellType == CellType.Error
+            ClassicAssert.IsTrue(cv.CellType == CellType.Error
                     && cv.ErrorValue == FormulaError.VALUE.Code, "Wrong result type: " + cv.FormatAsString());
         }
     }

@@ -18,7 +18,7 @@
 namespace TestCases.HSSF.Record
 {
     using System;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.Record;
     using NPOI.Util;
 
@@ -76,7 +76,7 @@ namespace TestCases.HSSF.Record
 
                 throw e;
             }
-            Assert.AreEqual("\u591A\u8A00\u8A9E - Multilingual", actual);
+            ClassicAssert.AreEqual("\u591A\u8A00\u8A9E - Multilingual", actual);
         }
         [Test]
         public void TestChangeFromUnCompressedToCompressed()
@@ -88,7 +88,7 @@ namespace TestCases.HSSF.Record
                     );
             RecordInputStream in1 = TestcaseRecordInputStream.Create(changingFlagSimpleData);
             String actual = in1.ReadCompressedUnicode(18);
-            Assert.AreEqual("Multilingual - \u591A\u8A00\u8A9E", actual);
+            ClassicAssert.AreEqual("Multilingual - \u591A\u8A00\u8A9E", actual);
         }
         [Test]
         public void TestReadString()
@@ -102,7 +102,7 @@ namespace TestCases.HSSF.Record
                     );
             RecordInputStream in1 = TestcaseRecordInputStream.Create(changingFlagFullData);
             String actual = in1.ReadString();
-            Assert.AreEqual("Multilingual - \u591A\u8A00\u8A9E", actual);
+            ClassicAssert.AreEqual("Multilingual - \u591A\u8A00\u8A9E", actual);
         }
 
         [Test]

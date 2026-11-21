@@ -24,7 +24,7 @@ namespace TestCases.HSSF.Record
     using NPOI.Util;
     using NPOI.HSSF.Model;
     using NPOI.HSSF.Record;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using System.Collections.Generic;
 
     /**
@@ -84,9 +84,9 @@ namespace TestCases.HSSF.Record
 
             EscherAggregate aggregate = EscherAggregate.CreateAggregate(records, 0);
 
-            Assert.AreEqual(1, aggregate.EscherRecords.Count);
-            Assert.AreEqual(unchecked((short)0xF002), aggregate.GetEscherRecord(0).RecordId);
-            Assert.AreEqual(2, aggregate.GetEscherRecord(0).ChildRecords.Count);
+            ClassicAssert.AreEqual(1, aggregate.EscherRecords.Count);
+            ClassicAssert.AreEqual(unchecked((short)0xF002), aggregate.GetEscherRecord(0).RecordId);
+            ClassicAssert.AreEqual(2, aggregate.GetEscherRecord(0).ChildRecords.Count);
 
             //        System.out.println( "aggregate = " + aggregate );
         }
@@ -131,8 +131,8 @@ namespace TestCases.HSSF.Record
 
             byte[] data = new byte[112];
             int bytesWritten = aggregate.Serialize(0, data);
-            Assert.AreEqual(112, bytesWritten);
-            Assert.AreEqual("[EC, 00, 40, 00, 0F, 00, 00, 00, 58, 00, 00, 00, 0F, 00, 04, F0, 10, 00, 00, 00, 00, 00, 0A, F0, 08, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 0F, 00, 04, F0, 18, 00, 00, 00, 00, 00, 0A, F0, 08, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 11, F0, 00, 00, 00, 00, 5D, 00, 00, 00, EC, 00, 20, 00, 0F, 00, 04, F0, 18, 00, 00, 00, 00, 00, 0A, F0, 08, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 11, F0, 00, 00, 00, 00, 5D, 00, 00, 00]",
+            ClassicAssert.AreEqual(112, bytesWritten);
+            ClassicAssert.AreEqual("[EC, 00, 40, 00, 0F, 00, 00, 00, 58, 00, 00, 00, 0F, 00, 04, F0, 10, 00, 00, 00, 00, 00, 0A, F0, 08, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 0F, 00, 04, F0, 18, 00, 00, 00, 00, 00, 0A, F0, 08, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 11, F0, 00, 00, 00, 00, 5D, 00, 00, 00, EC, 00, 20, 00, 0F, 00, 04, F0, 18, 00, 00, 00, 00, 00, 0A, F0, 08, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 11, F0, 00, 00, 00, 00, 5D, 00, 00, 00]",
                     HexDump.ToHex(data));
         }
 

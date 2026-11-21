@@ -15,9 +15,8 @@
    limitations under the License.
 ==================================================================== */
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
+
 using NPOI.SS.Formula.Eval;
 using NPOI.Util;
 
@@ -63,22 +62,30 @@ namespace NPOI.SS.Formula.Functions
             //Function func;
             switch (functionCode)
             {
-                case 1: return AggregateFunction.SubtotalInstance(AggregateFunction.AVERAGE);
-                case 2: return Count.SubtotalInstance();
-                case 3: return Counta.SubtotalInstance();
-                case 4: return AggregateFunction.SubtotalInstance(AggregateFunction.MAX);
-                case 5: return AggregateFunction.SubtotalInstance(AggregateFunction.MIN);
-                case 6: return AggregateFunction.SubtotalInstance(AggregateFunction.PRODUCT);
-                case 7: return AggregateFunction.SubtotalInstance(AggregateFunction.STDEV);
-                case 8: throw new NotImplementedFunctionException("STDEVP");
-                case 9: return AggregateFunction.SubtotalInstance(AggregateFunction.SUM);
-                case 10: throw new NotImplementedFunctionException("VAR");
-                case 11: throw new NotImplementedFunctionException("VARP");
+                case 1: return AggregateFunction.SubtotalInstance(AggregateFunction.AVERAGE, true);
+                case 2: return Count.SubtotalInstance(true);
+                case 3: return Counta.SubtotalInstance(true);
+                case 4: return AggregateFunction.SubtotalInstance(AggregateFunction.MAX, true);
+                case 5: return AggregateFunction.SubtotalInstance(AggregateFunction.MIN, true);
+                case 6: return AggregateFunction.SubtotalInstance(AggregateFunction.PRODUCT, true);
+                case 7: return AggregateFunction.SubtotalInstance(AggregateFunction.STDEV, true);
+                case 8: return AggregateFunction.SubtotalInstance(AggregateFunction.STDEVP, true);
+                case 9: return AggregateFunction.SubtotalInstance(AggregateFunction.SUM, true);
+                case 10: return AggregateFunction.SubtotalInstance(AggregateFunction.VAR, true);
+                case 11: return AggregateFunction.SubtotalInstance(AggregateFunction.VARP, true);
+                case 101: return AggregateFunction.SubtotalInstance(AggregateFunction.AVERAGE, false);
+                case 102: return Count.SubtotalInstance(false);
+                case 103: return Counta.SubtotalInstance(false);
+                case 104: return AggregateFunction.SubtotalInstance(AggregateFunction.MAX, false);
+                case 105: return AggregateFunction.SubtotalInstance(AggregateFunction.MIN, false);
+                case 106: return AggregateFunction.SubtotalInstance(AggregateFunction.PRODUCT, false);
+                case 107: return AggregateFunction.SubtotalInstance(AggregateFunction.STDEV, false);
+                case 108: return AggregateFunction.SubtotalInstance(AggregateFunction.STDEVP, false);
+                case 109: return AggregateFunction.SubtotalInstance(AggregateFunction.SUM, false);
+                case 110: return AggregateFunction.SubtotalInstance(AggregateFunction.VAR, false);
+                case 111: return AggregateFunction.SubtotalInstance(AggregateFunction.VARP, false);
             }
-            if (functionCode > 100 && functionCode < 112)
-            {
-                throw new NotImplementedException("SUBTOTAL - with 'exclude hidden values' option");
-            }
+            
             throw EvaluationException.InvalidValue();
         }
 
@@ -103,27 +110,26 @@ namespace NPOI.SS.Formula.Functions
             }
 
             // ignore the first arg, this is the function-type, we check for the length above
-            IList<ValueEval> list = new List<ValueEval>(Arrays.AsList(args).GetRange(1, args.Length - 1));
-            IEnumerator<ValueEval> it = list.GetEnumerator();
+            List<ValueEval> list = new List<ValueEval>(Arrays.AsList(args).GetRange(1, args.Length - 1));
             // See https://support.office.com/en-us/article/SUBTOTAL-function-7b027003-f060-4ade-9040-e478765b9939
             // "If there are other subtotals within ref1, ref2,... (or nested subtotals), these nested subtotals are ignored to avoid double counting."
             // For array references it is handled in1 other evaluation steps, but we need to handle this here for references to subtotal-functions
-            IList<ValueEval> toRemove = new List<ValueEval>();
-            while (it.MoveNext())
+            List<ValueEval> toRemove = [];
+            foreach (var eval in list)
             {
-                ValueEval eval = it.Current;
-                if (eval is LazyRefEval)
+                if (eval is LazyRefEval lazyRefEval)
                 {
-                    LazyRefEval lazyRefEval = (LazyRefEval)eval;
                     if (lazyRefEval.IsSubTotal)
                     {
-                        toRemove.Add(eval);
+                        toRemove.Add(lazyRefEval);
                     }
                 }
             }
 
-            foreach (var x in toRemove)
+            foreach(var x in toRemove)
+            {
                 list.Remove(x);
+            }
 
             return innerFunc.Evaluate(list.ToArray(), srcRowIndex, srcColumnIndex);
 

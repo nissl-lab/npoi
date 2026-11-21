@@ -15,17 +15,16 @@
    limitations under the License.
 ==================================================================== */
 
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Xml;
+
+using NPOI.OpenXmlFormats.Wordprocessing;
+using NPOI.OpenXml4Net.OPC;
+
 namespace NPOI.XWPF.UserModel
 {
-    using System;
-    using System.Collections.Generic;
-    using NPOI.OpenXmlFormats.Wordprocessing;
-    using NPOI.OpenXml4Net.OPC;
-    using System.IO;
-    using System.Xml;
-    using System.Xml.Serialization;
-
-
     /**
      * Looks After the collection of Footnotes for a document
      *  
@@ -33,9 +32,9 @@ namespace NPOI.XWPF.UserModel
      */
     public class XWPFFootnotes : POIXMLDocumentPart
     {
-        private List<XWPFFootnote> listFootnote = new List<XWPFFootnote>();
+        private readonly List<XWPFFootnote> listFootnote = [];
         private CT_Footnotes ctFootnotes;
-        private List<XWPFHyperlink> hyperlinks = new List<XWPFHyperlink>();
+        private readonly List<XWPFHyperlink> hyperlinks = [];
 
         protected XWPFDocument document;
 
@@ -244,14 +243,14 @@ namespace NPOI.XWPF.UserModel
             }
         }
 
-        public XWPFHyperlink GetHyperlinkByID(String id)
+        public XWPFHyperlink GetHyperlinkByID(string id)
         {
-            IEnumerator<XWPFHyperlink> iter = hyperlinks.GetEnumerator();
-            while (iter.MoveNext())
+            foreach (XWPFHyperlink link in hyperlinks)
             {
-                XWPFHyperlink link = iter.Current;
-                if (link.Id.Equals(id))
+                if(link.Id.Equals(id))
+                {
                     return link;
+                }
             }
 
             return null;

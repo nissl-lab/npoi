@@ -23,7 +23,7 @@ namespace TestCases.HSSF.Record.Chart
 
     using System;
     using NPOI.HSSF.Record;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     /**
      * Tests the serialization and deserialization of the TickRecord
@@ -54,23 +54,23 @@ namespace TestCases.HSSF.Record.Chart
         public void TestLoad()
         {
             TickRecord record = new TickRecord(TestcaseRecordInputStream.Create(0x101e, data));
-            Assert.AreEqual((byte)2, record.MajorTickType);
-            Assert.AreEqual((byte)0, record.MinorTickType);
-            Assert.AreEqual((byte)3, record.LabelPosition);
-            Assert.AreEqual((short)1, record.Background);
-            Assert.AreEqual(0, record.LabelColorRgb);
-            Assert.AreEqual((short)0, record.Zero1);
-            Assert.AreEqual((short)0, record.Zero2);
-            Assert.AreEqual((short)35, record.Options);
-            Assert.AreEqual(true, record.IsAutoTextColor);
-            Assert.AreEqual(true, record.IsAutoTextBackground);
-            Assert.AreEqual((short)0x0, record.Rotation);
-            Assert.AreEqual(true, record.IsAutorotate);
-            Assert.AreEqual((short)77, record.TickColor);
-            Assert.AreEqual((short)0x0, record.Zero3);
+            ClassicAssert.AreEqual((byte)2, record.MajorTickType);
+            ClassicAssert.AreEqual((byte)0, record.MinorTickType);
+            ClassicAssert.AreEqual((byte)3, record.LabelPosition);
+            ClassicAssert.AreEqual((short)1, record.Background);
+            ClassicAssert.AreEqual(0, record.LabelColorRgb);
+            ClassicAssert.AreEqual((short)0, record.Zero1);
+            ClassicAssert.AreEqual((short)0, record.Zero2);
+            ClassicAssert.AreEqual((short)35, record.Options);
+            ClassicAssert.AreEqual(true, record.IsAutoTextColor);
+            ClassicAssert.AreEqual(true, record.IsAutoTextBackground);
+            ClassicAssert.AreEqual((short)0x0, record.Rotation);
+            ClassicAssert.AreEqual(true, record.IsAutorotate);
+            ClassicAssert.AreEqual((short)77, record.TickColor);
+            ClassicAssert.AreEqual((short)0x0, record.Zero3);
 
 
-            Assert.AreEqual(34, record.RecordSize);
+            ClassicAssert.AreEqual(34, record.RecordSize);
         }
         [Test]
         public void TestStore()
@@ -93,9 +93,9 @@ namespace TestCases.HSSF.Record.Chart
 
 
             byte[] recordBytes = record.Serialize();
-            Assert.AreEqual(recordBytes.Length - 4, data.Length);
+            ClassicAssert.AreEqual(recordBytes.Length - 4, data.Length);
             for (int i = 0; i < data.Length; i++)
-                Assert.AreEqual(data[i], recordBytes[i + 4], "At offset " + i);
+                ClassicAssert.AreEqual(data[i], recordBytes[i + 4], "At offset " + i);
         }
     }
 }

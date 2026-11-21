@@ -22,7 +22,7 @@
 namespace TestCases.SS.Formula.Functions
 {
     using System;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     /**
      * @author Amol S. Deshmukh &lt; amolweb at ya hoo dot com &gt;
      *
@@ -57,15 +57,15 @@ namespace TestCases.SS.Formula.Functions
             double negZero = -1 * posZero;
             if (Double.IsNaN(baseval))
             {
-                Assert.IsTrue(Double.IsNaN(baseval), message + ": Expected " + baseval + " but was " + checkval);
+                ClassicAssert.IsTrue(Double.IsNaN(baseval), message + ": Expected " + baseval + " but was " + checkval);
             }
             else if (Double.IsInfinity(baseval))
             {
-                Assert.IsTrue(Double.IsInfinity(baseval) && ((baseval < 0) == (checkval < 0)), message + ": Expected " + baseval + " but was " + checkval);
+                ClassicAssert.IsTrue(Double.IsInfinity(baseval) && ((baseval < 0) == (checkval < 0)), message + ": Expected " + baseval + " but was " + checkval);
             }
             else
             {
-                Assert.IsTrue(baseval != 0 ? Math.Abs(baseval - checkval) <= Math.Abs(diffToleranceFactor * baseval) : checkval < posZero && checkval > negZero, message + ": Expected " + baseval + " but was " + checkval);
+                ClassicAssert.IsTrue(baseval != 0 ? Math.Abs(baseval - checkval) <= Math.Abs(diffToleranceFactor * baseval) : checkval < posZero && checkval > negZero, message + ": Expected " + baseval + " but was " + checkval);
             }
         }
 

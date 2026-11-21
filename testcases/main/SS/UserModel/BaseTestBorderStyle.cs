@@ -23,7 +23,7 @@ namespace TestCases.SS.UserModel
 {
     using System;
     using NPOI.SS.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using TestCases.SS;
 
     /**
@@ -75,11 +75,14 @@ namespace TestCases.SS.UserModel
 
         protected void AssertBorderStyleEquals(BorderStyle expected, ICell cell)
         {
+            System.Diagnostics.Debug.WriteLine($"DEBUG: cell.CellStyle called for row={cell.RowIndex}, col={cell.ColumnIndex}");
             ICellStyle style = cell.CellStyle;
-            Assert.AreEqual(expected, style.BorderTop);
-            Assert.AreEqual(expected, style.BorderBottom);
-            Assert.AreEqual(expected, style.BorderLeft);
-            Assert.AreEqual(expected, style.BorderRight);
+            System.Diagnostics.Debug.WriteLine($"DEBUG: cell.CellStyle returned: {(style == null ? "null" : style.GetType().Name)}");
+            ClassicAssert.IsNotNull(style, "CellStyle should not be null");
+            ClassicAssert.AreEqual(expected, style.BorderTop);
+            ClassicAssert.AreEqual(expected, style.BorderBottom);
+            ClassicAssert.AreEqual(expected, style.BorderLeft);
+            ClassicAssert.AreEqual(expected, style.BorderRight);
         }
 
     }

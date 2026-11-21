@@ -18,7 +18,7 @@
 namespace TestCases.HSSF.Record.Pivot
 {
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.PivotTable;
     using NPOI.Util;
@@ -55,7 +55,7 @@ namespace TestCases.HSSF.Record.Pivot
                 throw e;
             }
 
-            Assert.AreEqual(data.Length, rec.RecordSize);
+            ClassicAssert.AreEqual(data.Length, rec.RecordSize);
         }
 
         [Test]

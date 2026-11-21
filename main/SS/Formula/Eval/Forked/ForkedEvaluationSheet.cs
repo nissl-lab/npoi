@@ -35,11 +35,11 @@ namespace NPOI.SS.Formula.Eval.Forked
     class ForkedEvaluationSheet : IEvaluationSheet
     {
 
-        private IEvaluationSheet _masterSheet;
+        private readonly IEvaluationSheet _masterSheet;
         /**
          * Only cells which have been split are Put in this map.  (This has been done to conserve memory).
          */
-        private Dictionary<RowColKey, ForkedEvaluationCell> _sharedCellsByRowCol;
+        private readonly Dictionary<RowColKey, ForkedEvaluationCell> _sharedCellsByRowCol;
 
         public ForkedEvaluationSheet(IEvaluationSheet masterSheet)
         {
@@ -47,13 +47,25 @@ namespace NPOI.SS.Formula.Eval.Forked
             _sharedCellsByRowCol = new Dictionary<RowColKey, ForkedEvaluationCell>();
         }
 
+        /* (non-Javadoc)
+         * @see org.apache.poi.ss.formula.EvaluationSheet#getlastRowNum()
+         * @since POI 4.0.0
+         */
+        public int LastRowNum
+        {
+            get
+            {
+                return _masterSheet.LastRowNum;
+            }
+        }
+
         public IEvaluationCell GetCell(int rowIndex, int columnIndex)
         {
             RowColKey key = new RowColKey(rowIndex, columnIndex);
 
             ForkedEvaluationCell result = null;
-            if (_sharedCellsByRowCol.ContainsKey(key))
-                result = _sharedCellsByRowCol[(key)];
+            if (_sharedCellsByRowCol.TryGetValue(key, out ForkedEvaluationCell value))
+                result = value;
 
             if (result == null)
             {
@@ -67,8 +79,8 @@ namespace NPOI.SS.Formula.Eval.Forked
             RowColKey key = new RowColKey(rowIndex, columnIndex);
 
             ForkedEvaluationCell result = null;
-            if (_sharedCellsByRowCol.ContainsKey(key))
-                result = _sharedCellsByRowCol[(key)];
+            if (_sharedCellsByRowCol.TryGetValue(key, out ForkedEvaluationCell value))
+                result = value;
             if (result == null)
             {
                 IEvaluationCell mcell = _masterSheet.GetCell(rowIndex, columnIndex);
@@ -79,10 +91,7 @@ namespace NPOI.SS.Formula.Eval.Forked
                             + cr.FormatAsString() + "' is missing in master sheet.");
                 }
                 result = new ForkedEvaluationCell(this, mcell);
-                if (_sharedCellsByRowCol.ContainsKey(key))
-                    _sharedCellsByRowCol[key] = result;
-                else
-                    _sharedCellsByRowCol.Add(key, result);
+                _sharedCellsByRowCol[key] = result;
             }
             return result;
         }
@@ -125,10 +134,10 @@ namespace NPOI.SS.Formula.Eval.Forked
             _masterSheet.ClearAllCachedResultValues();
         }
 
-        private class RowColKey : IComparable<RowColKey>
+        private sealed class RowColKey : IComparable<RowColKey>
         {
-            private int _rowIndex;
-            private int _columnIndex;
+            private readonly int _rowIndex;
+            private readonly int _columnIndex;
 
             public RowColKey(int rowIndex, int columnIndex)
             {

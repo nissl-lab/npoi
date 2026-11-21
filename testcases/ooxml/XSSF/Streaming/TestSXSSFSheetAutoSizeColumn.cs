@@ -22,7 +22,7 @@ namespace TestCases.XSSF.Streaming
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
     using NPOI.XSSF.Streaming;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     //Add a new test fixture, set useMergedCells with true value.
     [TestFixture]
@@ -203,21 +203,20 @@ namespace TestCases.XSSF.Streaming
 
             if (useMergedCells)
             {
-                // Excel and LibreOffice behavior: ignore merged cells for auto-sizing.
-                // POI behavior: evenly distribute the column width among the merged columns.
-                //               each column must be auto-sized in order for the column widths
-                //               to add up to the best fit width.
-                int colspan = 2;
-                int expectedWidth = (10000 + 1000) / colspan; //average of 1_000 and 10_000
-                int minExpectedWidth = expectedWidth / 2;
-                int maxExpectedWidth = expectedWidth * 3 / 2;
-                assertColumnWidthStrictlyWithinRange(sheet.GetColumnWidth(0), minExpectedWidth, maxExpectedWidth); //short
+                // With useMergedCells=true: A1 has LONG merged text evenly distributed across
+                // the colspan (A1:B1). The SXSSF tracker records LONG/2 for column A only
+                // (B1 is not explicitly created), while column B gets SHORT from row 2 only.
+                // Column A should be wide (LONG/2 > SHORT_THRESHOLD) and column B should be short.
+                assertColumnWidthStrictlyWithinRange(sheet.GetColumnWidth(0), COLUMN_WIDTH_THRESHOLD_BETWEEN_SHORT_AND_LONG, MAX_COLUMN_WIDTH); // A: LONG/2
+                assertColumnWidthStrictlyWithinRange(sheet.GetColumnWidth(1), 0, COLUMN_WIDTH_THRESHOLD_BETWEEN_SHORT_AND_LONG); // B: SHORT
             }
             else
             {
-                assertColumnWidthStrictlyWithinRange(sheet.GetColumnWidth(0), COLUMN_WIDTH_THRESHOLD_BETWEEN_SHORT_AND_LONG, MAX_COLUMN_WIDTH); //long
+                // When useMergedCells=false: merged cells A1:B1 are skipped at flush time, so only row 2
+                // (SHORT, SHORT) determines the column widths for both columns.
+                assertColumnWidthStrictlyWithinRange(sheet.GetColumnWidth(0), 0, COLUMN_WIDTH_THRESHOLD_BETWEEN_SHORT_AND_LONG); //short
+                assertColumnWidthStrictlyWithinRange(sheet.GetColumnWidth(1), 0, COLUMN_WIDTH_THRESHOLD_BETWEEN_SHORT_AND_LONG); //short
             }
-            assertColumnWidthStrictlyWithinRange(sheet.GetColumnWidth(1), 0, COLUMN_WIDTH_THRESHOLD_BETWEEN_SHORT_AND_LONG); //short
         }
 
         [Test]
@@ -229,7 +228,7 @@ namespace TestCases.XSSF.Streaming
 
             SortedSet<int> expected = new SortedSet<int>();
             expected.Add(0);
-            Assert.AreEqual(expected, sheet.TrackedColumnsForAutoSizing);
+            ClassicAssert.AreEqual(expected, sheet.TrackedColumnsForAutoSizing);
 
             sheet.AutoSizeColumn(0, useMergedCells);
             try
@@ -252,7 +251,7 @@ namespace TestCases.XSSF.Streaming
 
             sheet.TrackColumnsForAutoSizing(columns);
             SortedSet<int> sorted = new SortedSet<int>(columns);
-            Assert.AreEqual(sorted, sheet.TrackedColumnsForAutoSizing);
+            ClassicAssert.AreEqual(sorted, sheet.TrackedColumnsForAutoSizing);
 
             sheet.AutoSizeColumn(sorted.First(), useMergedCells);
             try
@@ -325,10 +324,10 @@ namespace TestCases.XSSF.Streaming
             sheet.TrackColumnsForAutoSizing(columns);
             foreach (int column in columns)
             {
-                Assert.IsTrue(sheet.IsColumnTrackedForAutoSizing(column));
+                ClassicAssert.IsTrue(sheet.IsColumnTrackedForAutoSizing(column));
 
                 Assume.That(!columns.Contains(column + 10));
-                Assert.IsFalse(sheet.IsColumnTrackedForAutoSizing(column + 10));
+                ClassicAssert.IsFalse(sheet.IsColumnTrackedForAutoSizing(column + 10));
             }
         }
 
@@ -402,9 +401,9 @@ namespace TestCases.XSSF.Streaming
 
         private static void assertColumnWidthStrictlyWithinRange(double actualColumnWidth, int lowerBoundExclusive, int upperBoundExclusive)
         {
-            Assert.IsTrue(actualColumnWidth > lowerBoundExclusive,
+            ClassicAssert.IsTrue(actualColumnWidth > lowerBoundExclusive,
                 "Expected a column width greater than " + lowerBoundExclusive + " but found " + actualColumnWidth);
-            Assert.IsTrue(actualColumnWidth < upperBoundExclusive,
+            ClassicAssert.IsTrue(actualColumnWidth < upperBoundExclusive,
                 "Expected column width less than " + upperBoundExclusive + " but found " + actualColumnWidth);
 
         }

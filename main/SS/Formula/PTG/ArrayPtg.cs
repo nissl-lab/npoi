@@ -19,7 +19,8 @@ namespace NPOI.SS.Formula.PTG
 {
 
     using System;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
     using NPOI.Util;
 
 
@@ -51,14 +52,14 @@ namespace NPOI.SS.Formula.PTG
         //private static byte[] DEFAULT_RESERVED_DATA = new byte[RESERVED_FIELD_LEN];
 
         // 7 bytes of data (stored as an int, short and byte here)
-        private int _reserved0Int;
-        private int _reserved1Short;
-        private int _reserved2Byte;
+        private readonly int _reserved0Int;
+        private readonly int _reserved1Short;
+        private readonly int _reserved2Byte;
 
         // data from these fields comes after the Ptg data of all tokens in current formula
-        private int _nColumns;
-        private int _nRows;
-        private object[] _arrayValues;
+        private readonly int _nColumns;
+        private readonly int _nRows;
+        private readonly object[] _arrayValues;
 
         ArrayPtg(int reserved0, int reserved1, int reserved2, int nColumns, int nRows, object[] arrayValues)
         {
@@ -95,18 +96,20 @@ namespace NPOI.SS.Formula.PTG
             _reserved1Short = 0;
             _reserved2Byte = 0;
         }
-        public Object[,] GetTokenArrayValues()
+        public Object[][] GetTokenArrayValues()
         {
             if (_arrayValues == null)
             {
                 throw new InvalidOperationException("array values not read yet");
             }
-            Object[,] result = new Object[_nRows,_nColumns];
+            Object[][] result = new Object[_nRows][];
             for (int r = 0; r < _nRows; r++)
             {
+                result[r] = new object[_nColumns];
+                object[] rowData = result[r];
                 for (int c = 0; c < _nColumns; c++)
                 {
-                    result[r,c] = _arrayValues[GetValueIndex(c, r)];
+                    rowData[c] = _arrayValues[GetValueIndex(c, r)];
                 }
             }
             return result;
@@ -201,7 +204,7 @@ namespace NPOI.SS.Formula.PTG
 
         public override String ToFormulaString()
         {
-            StringBuilder b = new StringBuilder();
+           using var b= ZString.CreateStringBuilder();
             b.Append("{");
             for (int y = 0; y < _nRows; y++)
             {
@@ -230,9 +233,9 @@ namespace NPOI.SS.Formula.PTG
             {
                 return ""; // TODO - how is 'empty value' represented in formulas?
             }
-            if (o is String)
+            if (o is String s)
             {
-                return "\"" + (String)o + "\"";
+                return "\"" + s + "\"";
             }
             if (o is Double || o is double)
             {
@@ -242,9 +245,9 @@ namespace NPOI.SS.Formula.PTG
             {
                 return ((bool)o).ToString().ToUpper();
             }
-            if (o is ErrorConstant)
+            if (o is ErrorConstant constant)
             {
-                return ((ErrorConstant)o).Text;
+                return constant.Text;
             }
             throw new ArgumentException("Unexpected constant class (" + o.GetType().Name + ")");
         }
@@ -263,9 +266,9 @@ namespace NPOI.SS.Formula.PTG
  */
         public class Initial : Ptg
         {
-            private int _reserved0;
-            private int _reserved1;
-            private int _reserved2;
+            private readonly int _reserved0;
+            private readonly int _reserved1;
+            private readonly int _reserved2;
 
             public Initial(ILittleEndianInput in1)
             {

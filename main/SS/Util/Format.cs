@@ -2,6 +2,7 @@
 using System.Text;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using ExtendedNumerics;
 
 namespace NPOI.SS.Util
 {
@@ -48,7 +49,7 @@ namespace NPOI.SS.Util
     public class SSNFormat : FormatBase
     {
         public static readonly FormatBase Instance = new SSNFormat();
-        private static string df = "000000000";
+        private static readonly string df = "000000000";
         private SSNFormat()
         {
             // enforce singleton
@@ -57,7 +58,7 @@ namespace NPOI.SS.Util
         /** Format a number as an SSN */
         public override string Format(object obj, CultureInfo culture)
         {
-            var result = ((double)obj).ToString(df, culture);
+            var result = Convert.ToDouble(obj, CultureInfo.InvariantCulture).ToString(df, culture);
             var sb = new StringBuilder();
             sb.Append(result.Substring(0, 3)).Append('-');
             sb.Append(result.Substring(3, 2)).Append('-');
@@ -89,7 +90,7 @@ namespace NPOI.SS.Util
     public class ZipPlusFourFormat : FormatBase
     {
         public static readonly FormatBase Instance = new ZipPlusFourFormat();
-        private static string df = "000000000";
+        private static readonly string df = "000000000";
         private ZipPlusFourFormat()
         {
             // enforce singleton
@@ -98,7 +99,7 @@ namespace NPOI.SS.Util
         /** Format a number as Zip + 4 */
         public override string Format(object obj, CultureInfo culture)
         {
-            var result = ((double)obj).ToString(df, culture);
+            var result = Convert.ToDouble(obj, CultureInfo.InvariantCulture).ToString(df, culture);
             return result.Substring(0, 5)+'-'+result.Substring(5, 4);
         }
 
@@ -127,7 +128,7 @@ namespace NPOI.SS.Util
     public class PhoneFormat : FormatBase
     {
         public static readonly FormatBase Instance = new PhoneFormat();
-        private static string df = "##########";
+        private static readonly string df = "##########";
         private PhoneFormat()
         {
             // enforce singleton
@@ -136,7 +137,7 @@ namespace NPOI.SS.Util
         /** Format a number as a phone number */
         public override string Format(object obj, CultureInfo culture)
         {
-            var result = ((double)obj).ToString(df, culture);
+            var result = Convert.ToDouble(obj, CultureInfo.InvariantCulture).ToString(df, culture);
             var sb = new StringBuilder();
             String seg1, seg2, seg3;
             var len = result.Length;
@@ -187,11 +188,11 @@ namespace NPOI.SS.Util
         }
 
         private string _pattern;
-        private NumberFormatInfo _formatInfo;
-
+        private readonly NumberFormatInfo _formatInfo;
+        
         public DecimalFormat(string pattern)
         {
-            if (pattern.IndexOf("'", StringComparison.Ordinal) != -1)
+            if (pattern.Contains('\''))
                 throw new ArgumentException("invalid pattern");
             this._pattern = pattern;
         }
@@ -206,7 +207,7 @@ namespace NPOI.SS.Util
         }
 
         private static readonly Regex RegexFraction = new Regex("#+/#+", RegexOptions.Compiled);
-        public override string Format(Object obj)
+        public override string Format(object obj)
         {
             return Format(obj, CultureInfo.CurrentCulture);
         }
@@ -220,13 +221,16 @@ namespace NPOI.SS.Util
                 culture.NumberFormat = _formatInfo;
             }
                 
-            if (_pattern.IndexOf("'", StringComparison.Ordinal) != -1)
+            if (_pattern.Contains('\''))
             {
                 return Convert.ToDouble(obj, CultureInfo.InvariantCulture).ToString(culture);
             }
             else
             {
-                var value = Convert.ToDouble(obj, CultureInfo.InvariantCulture);
+                object toConvert = obj;
+                if(obj is BigDecimal)
+                    toConvert = obj.ToString();
+                var value = Convert.ToDouble(toConvert, CultureInfo.InvariantCulture);
                 var ret = value.ToString(_pattern, culture);
                 if (string.IsNullOrEmpty(ret))
                     ret = "0";
@@ -302,7 +306,7 @@ namespace NPOI.SS.Util
     }
     public class SimpleDateFormat : DateFormat
     {
-        private string _pattern;
+        private readonly string _pattern;
         private DateTimeFormatInfo _formatData;
         private CultureInfo _culture;
         public SimpleDateFormat():this("", CultureInfo.CurrentCulture)
@@ -392,8 +396,8 @@ namespace NPOI.SS.Util
      */
     public class ConstantStringFormat : FormatBase
     {
-        private static DecimalFormat df = new DecimalFormat("##########");
-        private string str;
+        private static readonly DecimalFormat df = new DecimalFormat("##########");
+        private readonly string str;
         public ConstantStringFormat(string s)
         {
             str = s;

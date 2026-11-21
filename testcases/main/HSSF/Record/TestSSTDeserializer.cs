@@ -19,7 +19,7 @@ namespace TestCases.HSSF.Record
 {
     using System;
     using System.IO;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.Record;
     using TestCases.HSSF;
     using NPOI.Util;
@@ -68,7 +68,7 @@ namespace TestCases.HSSF.Record
             SSTDeserializer deserializer = new SSTDeserializer(strings);
             deserializer.ManufactureStrings(1, in1);
 
-            Assert.AreEqual("At a dinner party orAt At At ", strings[0] + "");
+            ClassicAssert.AreEqual("At a dinner party orAt At At ", strings[0] + "");
         }
         [Test]
         public void TestContinuationWithNoOverlap()
@@ -81,8 +81,8 @@ namespace TestCases.HSSF.Record
             SSTDeserializer deserializer = new SSTDeserializer(strings);
             deserializer.ManufactureStrings(2, in1);
 
-            Assert.AreEqual("At a dinner party or", strings[0] + "");
-            Assert.AreEqual("At a dinner party", strings[1] + "");
+            ClassicAssert.AreEqual("At a dinner party or", strings[0] + "");
+            ClassicAssert.AreEqual("At a dinner party", strings[1] + "");
         }
 
         /**
@@ -103,8 +103,8 @@ namespace TestCases.HSSF.Record
             SSTDeserializer deserializer = new SSTDeserializer(strings);
             deserializer.ManufactureStrings(2, in1);
 
-            Assert.AreEqual("At a dinner party or", strings[0] + "");
-            Assert.AreEqual("At a dinner partyAt a dinner party", strings[1] + "");
+            ClassicAssert.AreEqual("At a dinner party or", strings[0] + "");
+            ClassicAssert.AreEqual("At a dinner partyAt a dinner party", strings[1] + "");
         }
         [Test]
         public void TestExtendedStrings()
@@ -117,7 +117,7 @@ namespace TestCases.HSSF.Record
             SSTDeserializer deserializer = new SSTDeserializer(strings);
             deserializer.ManufactureStrings(1, in1);
 
-            Assert.AreEqual("At a dinner party orAt At At ", strings[0].ToString());
+            ClassicAssert.AreEqual("At a dinner party orAt At At ", strings[0].ToString());
 
 
             header = ReadSampleHexData("extendedtextstrings.txt", "norich-header", FAKE_SID);
@@ -128,7 +128,7 @@ namespace TestCases.HSSF.Record
             deserializer = new SSTDeserializer(strings);
             deserializer.ManufactureStrings(1, in1);
 
-            Assert.AreEqual("At a dinner party orAt At At ", strings[0] + "");
+            ClassicAssert.AreEqual("At a dinner party orAt At At ", strings[0] + "");
         }
 
         /**
@@ -147,8 +147,8 @@ namespace TestCases.HSSF.Record
             // The record data in notenoughstrings.txt only contains 1 string, deliberately pass in a larger number.
             deserializer.ManufactureStrings(2, in1);
 
-            Assert.AreEqual("At a dinner party or", strings[0] + "");
-            Assert.AreEqual("", strings[1] + "");
+            ClassicAssert.AreEqual("At a dinner party or", strings[0] + "");
+            ClassicAssert.AreEqual("", strings[1] + "");
         }
     }
 }

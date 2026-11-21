@@ -23,7 +23,7 @@ namespace TestCases.SS.Formula.Functions
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.Formula.Functions;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     /**
      * Test cases for MINIFS()
@@ -40,9 +40,9 @@ namespace TestCases.SS.Formula.Functions
 
         private static void ConfirmDouble(double expected, ValueEval actualEval)
         {
-            Assert.IsTrue(actualEval is NumericValueEval, "Expected numeric result");
+            ClassicAssert.IsTrue(actualEval is NumericValueEval, "Expected numeric result");
             NumericValueEval nve = (NumericValueEval)actualEval;
-            Assert.AreEqual(expected, nve.NumberValue, 0);
+            ClassicAssert.AreEqual(expected, nve.NumberValue, 0);
         }
 
         private static void Confirm(double expectedResult, ValueEval[] args)

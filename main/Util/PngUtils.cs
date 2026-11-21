@@ -15,6 +15,8 @@
    limitations Under the License.
 ==================================================================== */
 
+using System;
+
 namespace NPOI.Util
 {
     public class PngUtils
@@ -22,7 +24,7 @@ namespace NPOI.Util
         /**
      * File header for PNG format.
      */
-        private static byte[] PNG_FILE_HEADER =
+        private static readonly byte[] PNG_FILE_HEADER =
             new byte[] { (byte)0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A };
 
         private PngUtils()
@@ -44,15 +46,7 @@ namespace NPOI.Util
                 return false;
             }
 
-            for (int i = 0; i < PNG_FILE_HEADER.Length; i++)
-            {
-                if (PNG_FILE_HEADER[i] != data[i + offset])
-                {
-                    return false;
-                }
-            }
-
-            return true;
+            return data.AsSpan(offset, PNG_FILE_HEADER.Length).SequenceEqual(PNG_FILE_HEADER);
         }
     }
 }

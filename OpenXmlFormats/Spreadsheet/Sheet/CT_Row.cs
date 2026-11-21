@@ -118,7 +118,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "thickBot", this.thickBot,false);
             XmlHelper.WriteAttribute(sw, "ph", this.ph, false);
             XmlHelper.WriteAttribute(sw, "x14ac:dyDescent", this.dyDescentField, false);
-            sw.Write(">");
+            sw.Write('>');
             if (this.extLst != null)
                 this.extLst.Write(sw, "extLst");
             if (this.c != null)

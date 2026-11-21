@@ -8,6 +8,7 @@ using NPOI.POIFS.Common;
 using NPOI.Util;
 using NPOI.POIFS.Storage;
 using NPOI.Openxml4Net.Exceptions;
+using NPOI.POIFS.FileSystem;
 
 namespace NPOI.OpenXml4Net.OPC.Internal
 {
@@ -28,6 +29,13 @@ namespace NPOI.OpenXml4Net.OPC.Internal
         public static int READ_WRITE_FILE_BUFFER_SIZE = 8192;
 
         /**
+         * Fixed timestamp used for all zip entries, matching Excel's behavior.
+         * Excel sets all zip entry timestamps to the DOS epoch minimum (1980-01-01 00:00:00),
+         * which makes output deterministic for identical content.
+         */
+        public static readonly DateTime ZipEntryTimestamp = new DateTime(1980, 1, 1, 0, 0, 0);
+
+        /**
          * Prevent this class to be instancied.
          */
         private ZipHelper()
@@ -43,13 +51,15 @@ namespace NPOI.OpenXml4Net.OPC.Internal
          */
         public static ZipEntry GetCorePropertiesZipEntry(ZipPackage pkg)
         {
-            PackageRelationship corePropsRel = pkg.GetRelationshipsByType(
-                    PackageRelationshipTypes.CORE_PROPERTIES).GetRelationship(0);
+            PackageRelationship corePropsRel =
+                    pkg.GetRelationshipsByType(PackageRelationshipTypes.CORE_PROPERTIES).GetRelationship(0)
+                    ?? pkg.GetRelationshipsByType(PackageRelationshipTypes.CORE_PROPERTIES_ECMA376).GetRelationship(0)
+                    ?? pkg.GetRelationshipsByType(PackageRelationshipTypes.CORE_PROPERTIES_ECMA376_LOWERCASE).GetRelationship(0);
 
             if (corePropsRel == null)
                 return null;
 
-            ZipEntry ze = new ZipEntry(corePropsRel.TargetUri.OriginalString);
+            ZipEntry ze = new ZipEntry(corePropsRel.TargetUri.OriginalString) { DateTime = ZipEntryTimestamp };
             return ze;
         }
 
@@ -142,50 +152,28 @@ namespace NPOI.OpenXml4Net.OPC.Internal
          */
         public static void VerifyZipHeader(InputStream stream)
         {
-            // Grab the first 8 bytes
-            byte[] data = new byte[8];
-            IOUtils.ReadFully(stream, data);
+            InputStream is1 = FileMagicContainer.PrepareToCheckMagic(stream);
+            FileMagic fm = FileMagicContainer.ValueOf(is1);
 
-            // OLE2?
-            long signature = LittleEndian.GetLong(data);
-            if (signature == HeaderBlockConstants._signature)
+            switch(fm)
             {
-                throw new OLE2NotOfficeXmlFileException(
-                    "The supplied data appears to be in the OLE2 Format. " +
-                    "You are calling the part of POI that deals with OOXML " +
-                    "(Office Open XML) Documents. You need to call a different " +
-                    "part of POI to process this data (eg HSSF instead of XSSF)");
-            }
-
-            // Raw XML?
-            byte[] RAW_XML_FILE_HEADER = POIFSConstants.RAW_XML_FILE_HEADER;
-            if (data[0] == RAW_XML_FILE_HEADER[0] &&
-                data[1] == RAW_XML_FILE_HEADER[1] &&
-                data[2] == RAW_XML_FILE_HEADER[2] &&
-                data[3] == RAW_XML_FILE_HEADER[3] &&
-                data[4] == RAW_XML_FILE_HEADER[4])
-            {
-                throw new NotOfficeXmlFileException(
-                    "The supplied data appears to be a raw XML file. " +
-                    "Formats such as Office 2003 XML are not supported");
-            }
-
-            // Don't check for a Zip header, as to maintain backwards
-            //  compatibility we need to let them seek over junk at the
-            //  start before beginning processing.
-
-            // Put things back
-            if (stream is PushbackInputStream)
-            {
-                ((PushbackInputStream)stream).Unread(data);
-            }
-            else if (stream.MarkSupported())
-            {
-                stream.Reset();
-            }
-            else
-            {
-                // Oh dear... I hope you know what you're doing!
+                case FileMagic.OLE2:
+                    throw new OLE2NotOfficeXmlFileException(
+                        "The supplied data appears to be in the OLE2 Format. " +
+                        "You are calling the part of POI that deals with OOXML " +
+                        "(Office Open XML) Documents. You need to call a different " +
+                        "part of POI to process this data (eg HSSF instead of XSSF)");
+                case FileMagic.XML:
+                    throw new NotOfficeXmlFileException(
+                        "The supplied data appears to be a raw XML file. " +
+                        "Formats such as Office 2003 XML are not supported");
+                default:
+                case FileMagic.OOXML:
+                case FileMagic.UNKNOWN:
+                    // Don't check for a Zip header, as to maintain backwards
+                    //  compatibility we need to let them seek over junk at the
+                    //  start before beginning processing.
+                    break;
             }
         }
 

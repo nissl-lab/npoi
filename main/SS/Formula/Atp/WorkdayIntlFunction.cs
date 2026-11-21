@@ -40,18 +40,18 @@ namespace NPOI.SS.Formula.Atp
             double[] holidays;
             try
             {
-                start = this.evaluator.EvaluateDateArg(args[0], srcCellRow, srcCellCol);
-                days = (int)Math.Floor(this.evaluator.EvaluateNumberArg(args[1], srcCellRow, srcCellCol));
+                start = ArgumentsEvaluator.EvaluateDateArg(args[0], srcCellRow, srcCellCol);
+                days = (int)Math.Floor(ArgumentsEvaluator.EvaluateNumberArg(args[1], srcCellRow, srcCellCol));
                 if (args.Length >= 3)
                 {
-                    weekendType = (int)this.evaluator.EvaluateNumberArg(args[2], srcCellRow, srcCellCol);
+                    weekendType = (int) ArgumentsEvaluator.EvaluateNumberArg(args[2], srcCellRow, srcCellCol);
                     if (!WorkdayCalculator.instance.GetValidWeekendTypes().Contains(weekendType))
                     {
                         return ErrorEval.NUM_ERROR;
                     }
                 }
                 ValueEval holidaysCell = args.Length>=4 ? args[3] : null;
-                holidays = this.evaluator.EvaluateDatesArg(holidaysCell, srcCellRow, srcCellCol);
+                holidays = ArgumentsEvaluator.EvaluateDatesArg(holidaysCell, srcCellRow, srcCellCol);
                 return new NumberEval(DateUtil.GetExcelDate(
                     WorkdayCalculator.instance.CalculateWorkdays(start, days, weekendType, holidays)));
             }

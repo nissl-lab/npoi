@@ -31,7 +31,7 @@ namespace TestCases.POIFS.FileSystem
     using System.Collections;
     using System.IO;
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     using NPOI.POIFS.FileSystem;
     using NPOI.Util;
@@ -196,7 +196,7 @@ namespace TestCases.POIFS.FileSystem
             {
                 throw;
             }
-            Assert.IsTrue(testIS.IsClosed(), "input stream was not closed");
+            ClassicAssert.IsTrue(testIS.IsClosed(), "input stream was not closed");
 
             // intended to crash after Reading 10000 bytes
             testIS = new TestIS(OpenSampleStream("13224.xls"), 10000);
@@ -213,7 +213,7 @@ namespace TestCases.POIFS.FileSystem
             {
                 // expected
             }
-            Assert.IsTrue(testIS.IsClosed(), "input stream was not closed"); // but still Should close
+            ClassicAssert.IsTrue(testIS.IsClosed(), "input stream was not closed"); // but still Should close
 
         }
 
@@ -268,7 +268,7 @@ namespace TestCases.POIFS.FileSystem
             catch (IOException e)
             {
                 String msg = e.Message;
-                Assert.IsTrue(msg.StartsWith("Your file contains 695 sectors"));
+                ClassicAssert.IsTrue(msg.StartsWith("Your file contains 695 sectors"));
             }
         }
 
@@ -287,8 +287,8 @@ namespace TestCases.POIFS.FileSystem
             // Check the header was written properly
             Stream inp = new MemoryStream(fsData);
             HeaderBlock header = new HeaderBlock(inp);
-            Assert.AreEqual(109 + 21, header.BATCount);
-            Assert.AreEqual(1, header.XBATCount);
+            ClassicAssert.AreEqual(109 + 21, header.BATCount);
+            ClassicAssert.AreEqual(1, header.XBATCount);
 
             ByteBuffer xbatData = ByteBuffer.CreateBuffer(512);
             xbatData.Write(fsData, (1 + header.XBATIndex) * 512, 512);
@@ -299,32 +299,32 @@ namespace TestCases.POIFS.FileSystem
 
             for (int i = 0; i < 21; i++)
             {
-                Assert.IsTrue(xbat.GetValueAt(i) != POIFSConstants.UNUSED_BLOCK);
+                ClassicAssert.IsTrue(xbat.GetValueAt(i) != POIFSConstants.UNUSED_BLOCK);
             }
 
             for (int i = 21; i < 127; i++)
-                Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, xbat.GetValueAt(i));
+                ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, xbat.GetValueAt(i));
 
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, xbat.GetValueAt(127));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, xbat.GetValueAt(127));
 
             RawDataBlockList blockList = new RawDataBlockList(inp, POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS);
-            Assert.AreEqual(fsData.Length / 512, blockList.BlockCount() + 1);
+            ClassicAssert.AreEqual(fsData.Length / 512, blockList.BlockCount() + 1);
             new BlockAllocationTableReader(header.BigBlockSize,
                                             header.BATCount,
                                             header.BATArray,
                                             header.XBATCount,
                                             header.XBATIndex,
                                             blockList);
-            Assert.AreEqual(fsData.Length / 512, blockList.BlockCount() + 1);
+            ClassicAssert.AreEqual(fsData.Length / 512, blockList.BlockCount() + 1);
 
             fs = null;
             fs = new OPOIFSFileSystem(new MemoryStream(fsData));
 
 
             DirectoryNode root = fs.Root;
-            Assert.AreEqual(1, root.EntryCount);
+            ClassicAssert.AreEqual(1, root.EntryCount);
             DocumentNode big = (DocumentNode)root.GetEntry("BIG");
-            Assert.AreEqual(hugeStream.Length, big.Size);
+            ClassicAssert.AreEqual(hugeStream.Length, big.Size);
 
         }
 
@@ -338,22 +338,22 @@ namespace TestCases.POIFS.FileSystem
                 // First up, check that we can process the header properly
                 HeaderBlock header_block = new HeaderBlock(inp);
                 POIFSBigBlockSize bigBlockSize = header_block.BigBlockSize;
-                Assert.AreEqual(4096, bigBlockSize.GetBigBlockSize());
+                ClassicAssert.AreEqual(4096, bigBlockSize.GetBigBlockSize());
 
                 // Check the fat info looks sane
-                Assert.AreEqual(1, header_block.BATArray.Length);
-                Assert.AreEqual(1, header_block.BATCount);
-                Assert.AreEqual(0, header_block.XBATCount);
+                ClassicAssert.AreEqual(1, header_block.BATArray.Length);
+                ClassicAssert.AreEqual(1, header_block.BATCount);
+                ClassicAssert.AreEqual(0, header_block.XBATCount);
 
                 // Now check we can get the basic fat
                 RawDataBlockList data_blocks = new RawDataBlockList(inp, bigBlockSize);
-                Assert.AreEqual(15, data_blocks.BlockCount());
+                ClassicAssert.AreEqual(15, data_blocks.BlockCount());
 
                 // Now try and open properly
                 OPOIFSFileSystem fs = new OPOIFSFileSystem(
                       _samples.OpenResourceAsStream("BlockSize4096.zvi")
                 );
-                Assert.IsTrue(fs.Root.EntryCount > 3);
+                ClassicAssert.IsTrue(fs.Root.EntryCount > 3);
 
                 // Check we can get at all the contents
                 CheckAllDirectoryContents(fs.Root);
@@ -363,7 +363,7 @@ namespace TestCases.POIFS.FileSystem
                 fs = new OPOIFSFileSystem(
                      _samples.OpenResourceAsStream("BlockSize512.zvi")
                );
-                Assert.IsTrue(fs.Root.EntryCount > 3);
+                ClassicAssert.IsTrue(fs.Root.EntryCount > 3);
                 CheckAllDirectoryContents(fs.Root);
             }
             finally

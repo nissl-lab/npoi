@@ -116,15 +116,9 @@ namespace NPOI.XSSF.Model
         }
 
 
-        public int GetNumberOfComments()
-        {
-            return comments.commentList.SizeOfCommentArray();
-        }
+        public int NumberOfComments => comments.commentList.SizeOfCommentArray();
 
-        public int GetNumberOfAuthors()
-        {
-            return comments.authors.SizeOfAuthorArray();
-        }
+        public int NumberOfAuthors => comments.authors.SizeOfAuthorArray();
 
         public String GetAuthor(long authorId)
         {
@@ -206,8 +200,8 @@ namespace NPOI.XSSF.Model
             PrepareCTCommentCache();
 
             // Return the comment, or null if not known
-            if (commentRefs.ContainsKey(cellRef))
-                return commentRefs[cellRef];
+            if (commentRefs.TryGetValue(cellRef, out CT_Comment comment))
+                return comment;
             return null;
         }
 

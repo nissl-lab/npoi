@@ -18,7 +18,7 @@
 namespace TestCases.HSSF.Record
 {
     using System.IO;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.SS.Formula.PTG;
     using NPOI.SS.Util;
     using NPOI.Util;
@@ -53,17 +53,17 @@ namespace TestCases.HSSF.Record
             RecordInputStream in1 = TestcaseRecordInputStream.Create(ObjRecord.sid, data);
             // check read OK
             ObjRecord record = new ObjRecord(in1);
-            Assert.AreEqual(3, record.SubRecords.Count);
+            ClassicAssert.AreEqual(3, record.SubRecords.Count);
             SubRecord sr = record.SubRecords[(2)];
-            Assert.IsTrue(sr is LbsDataSubRecord);
+            ClassicAssert.IsTrue(sr is LbsDataSubRecord);
             LbsDataSubRecord lbs = (LbsDataSubRecord)sr;
-            Assert.AreEqual(4, lbs.NumberOfItems);
+            ClassicAssert.AreEqual(4, lbs.NumberOfItems);
 
-            Assert.IsTrue(lbs.Formula is AreaPtg);
+            ClassicAssert.IsTrue(lbs.Formula is AreaPtg);
             AreaPtg ptg = (AreaPtg)lbs.Formula;
             CellRangeAddress range = new CellRangeAddress(
                     ptg.FirstRow, ptg.LastRow, ptg.FirstColumn, ptg.LastColumn);
-            Assert.AreEqual("H10:H13", range.FormatAsString());
+            ClassicAssert.AreEqual("H10:H13", range.FormatAsString());
 
             // check that it re-Serializes to the same data
             byte[] ser = record.Serialize();
@@ -99,10 +99,10 @@ namespace TestCases.HSSF.Record
             ObjRecord record = new ObjRecord(in1);
 
             SubRecord sr = record.SubRecords[(2)];
-            Assert.IsTrue(sr is LbsDataSubRecord);
+            ClassicAssert.IsTrue(sr is LbsDataSubRecord);
             LbsDataSubRecord lbs = (LbsDataSubRecord)sr;
-            Assert.AreEqual(8, lbs.NumberOfItems);
-            Assert.IsNull(lbs.Formula);
+            ClassicAssert.AreEqual(8, lbs.NumberOfItems);
+            ClassicAssert.IsNull(lbs.Formula);
 
             // check that it re-Serializes to the same data
             byte[] ser = record.Serialize();
@@ -139,14 +139,14 @@ namespace TestCases.HSSF.Record
             // check that it re-Serializes to the same data
             byte[] ser = record.Serialize();
 
-            Assert.AreEqual(data.Length - 5, ser.Length);
-            for (int i = 0; i < ser.Length; i++) Assert.AreEqual(data[i], ser[i]);
+            ClassicAssert.AreEqual(data.Length - 5, ser.Length);
+            for (int i = 0; i < ser.Length; i++) ClassicAssert.AreEqual(data[i], ser[i]);
 
             //check we can read the Trimmed record
             RecordInputStream in2 = TestcaseRecordInputStream.Create(ser);
             ObjRecord record2 = new ObjRecord(in2);
             byte[] ser2 = record2.Serialize();
-            Assert.IsTrue(Arrays.Equals(ser, ser2));
+            ClassicAssert.IsTrue(Arrays.Equals(ser, ser2));
         }
         [Test]
         public void Test_LbsDropData()
@@ -167,7 +167,7 @@ namespace TestCases.HSSF.Record
             MemoryStream baos = new MemoryStream();
             lbs.Serialize(new LittleEndianOutputStream(baos));
 
-            Assert.IsTrue(Arrays.Equals(data, baos.ToArray()));
+            ClassicAssert.IsTrue(Arrays.Equals(data, baos.ToArray()));
         }
     }
 

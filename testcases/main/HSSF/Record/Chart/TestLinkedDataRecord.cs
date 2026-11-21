@@ -25,7 +25,7 @@ namespace TestCases.HSSF.Record.Chart
     using NPOI.HSSF.Record;
     using NPOI.SS.Formula;
     using NPOI.HSSF.Record.Chart;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.SS.Formula.PTG;
 
     /**
@@ -171,18 +171,18 @@ namespace TestCases.HSSF.Record.Chart
         {
 
             LinkedDataRecord record = new LinkedDataRecord(TestcaseRecordInputStream.Create((short)0x1051, data));
-            Assert.AreEqual(LinkedDataRecord.LINK_TYPE_VALUES, record.LinkType);
-            Assert.AreEqual(LinkedDataRecord.REFERENCE_TYPE_WORKSHEET, record.ReferenceType);
-            Assert.AreEqual(0, record.Options);
-            Assert.AreEqual(false, record.IsCustomNumberFormat);
-            Assert.AreEqual(0, record.IndexNumberFmtRecord);
+            ClassicAssert.AreEqual(LinkedDataRecord.LINK_TYPE_VALUES, record.LinkType);
+            ClassicAssert.AreEqual(LinkedDataRecord.REFERENCE_TYPE_WORKSHEET, record.ReferenceType);
+            ClassicAssert.AreEqual(0, record.Options);
+            ClassicAssert.AreEqual(false, record.IsCustomNumberFormat);
+            ClassicAssert.AreEqual(0, record.IndexNumberFmtRecord);
 
             Area3DPtg ptgExpected = new Area3DPtg(0, 7936, 0, 0,false, false, false, false, 0);
 
             Object ptgActual = record.FormulaOfLink[0];
-            Assert.AreEqual(ptgExpected.ToString(), ptgActual.ToString());
+            ClassicAssert.AreEqual(ptgExpected.ToString(), ptgActual.ToString());
 
-            Assert.AreEqual(data.Length + 4, record.RecordSize);
+            ClassicAssert.AreEqual(data.Length + 4, record.RecordSize);
 
         }
         [Test]
@@ -199,9 +199,9 @@ namespace TestCases.HSSF.Record.Chart
             record.FormulaOfLink = (new Ptg[] { ptg, });
 
             byte[] recordBytes = record.Serialize();
-            Assert.AreEqual(recordBytes.Length - 4, data.Length);
+            ClassicAssert.AreEqual(recordBytes.Length - 4, data.Length);
             for (int i = 0; i < data.Length; i++)
-                Assert.AreEqual(data[i], recordBytes[i + 4], "At offset " + i);
+                ClassicAssert.AreEqual(data[i], recordBytes[i + 4], "At offset " + i);
         }
     }
 }

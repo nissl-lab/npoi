@@ -19,7 +19,7 @@ namespace TestCases.SS.Util
 {
     using System;
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
@@ -51,21 +51,21 @@ namespace TestCases.SS.Util
             s.AddMergedRegion(new CellRangeAddress(2, 2, 1, 4));
 
             // With a cell that isn't defined, we'll Get null
-            Assert.AreEqual(null, SheetUtil.GetCellWithMerges(s, 0, 0));
+            ClassicAssert.AreEqual(null, SheetUtil.GetCellWithMerges(s, 0, 0));
 
             // With a cell that's not in a merged region, we'll Get that
-            Assert.AreEqual(10.0, SheetUtil.GetCellWithMerges(s, 1, 0).NumericCellValue);
-            Assert.AreEqual(11.0, SheetUtil.GetCellWithMerges(s, 1, 1).NumericCellValue);
+            ClassicAssert.AreEqual(10.0, SheetUtil.GetCellWithMerges(s, 1, 0).NumericCellValue);
+            ClassicAssert.AreEqual(11.0, SheetUtil.GetCellWithMerges(s, 1, 1).NumericCellValue);
 
             // With a cell that's the primary one of a merged region, we Get that cell
-            Assert.AreEqual(20.0, SheetUtil.GetCellWithMerges(s, 2, 0).NumericCellValue);
-            Assert.AreEqual(21, SheetUtil.GetCellWithMerges(s, 2, 1).NumericCellValue);
+            ClassicAssert.AreEqual(20.0, SheetUtil.GetCellWithMerges(s, 2, 0).NumericCellValue);
+            ClassicAssert.AreEqual(21, SheetUtil.GetCellWithMerges(s, 2, 1).NumericCellValue);
 
             // With a cell elsewhere in the merged region, Get top-left
-            Assert.AreEqual(20.0, SheetUtil.GetCellWithMerges(s, 3, 0).NumericCellValue);
-            Assert.AreEqual(21.0, SheetUtil.GetCellWithMerges(s, 2, 2).NumericCellValue);
-            Assert.AreEqual(21.0, SheetUtil.GetCellWithMerges(s, 2, 3).NumericCellValue);
-            Assert.AreEqual(21.0, SheetUtil.GetCellWithMerges(s, 2, 4).NumericCellValue);
+            ClassicAssert.AreEqual(20.0, SheetUtil.GetCellWithMerges(s, 3, 0).NumericCellValue);
+            ClassicAssert.AreEqual(21.0, SheetUtil.GetCellWithMerges(s, 2, 2).NumericCellValue);
+            ClassicAssert.AreEqual(21.0, SheetUtil.GetCellWithMerges(s, 2, 3).NumericCellValue);
+            ClassicAssert.AreEqual(21.0, SheetUtil.GetCellWithMerges(s, 2, 4).NumericCellValue);
 
             wb.Close();
         }
@@ -88,7 +88,7 @@ namespace TestCases.SS.Util
 
             // no contents: cell.setCellValue("sometext");
 
-            Assert.AreEqual(-1.0, SheetUtil.GetCellWidth(cell, 1, null, true));
+            ClassicAssert.AreEqual(-1.0, SheetUtil.GetCellWidth(cell, 1, null, true));
 
             wb.Close();
         }
@@ -102,7 +102,7 @@ namespace TestCases.SS.Util
 
             cell.SetCellValue("sometext");
 
-            Assert.IsTrue(SheetUtil.GetCellWidth(cell, 1, null, true) > 0);
+            ClassicAssert.IsTrue(SheetUtil.GetCellWidth(cell, 1, null, true) > 0);
 
             wb.Close();
         }
@@ -116,7 +116,7 @@ namespace TestCases.SS.Util
 
             cell.SetCellValue(88.234);
 
-            Assert.IsTrue(SheetUtil.GetCellWidth(cell, 1, null, true) > 0);
+            ClassicAssert.IsTrue(SheetUtil.GetCellWidth(cell, 1, null, true) > 0);
 
             wb.Close();
         }
@@ -130,7 +130,7 @@ namespace TestCases.SS.Util
 
             cell.SetCellValue(false);
 
-            Assert.IsTrue(SheetUtil.GetCellWidth(cell, 1, null, false) > 0);
+            ClassicAssert.IsTrue(SheetUtil.GetCellWidth(cell, 1, null, false) > 0);
 
             wb.Close();
         }
@@ -146,8 +146,8 @@ namespace TestCases.SS.Util
 
             cell.SetCellValue("sometext");
 
-            Assert.IsTrue(SheetUtil.GetColumnWidth(sheet, 0, true) > 0, "Having some width for rows with actual cells");
-            Assert.AreEqual(-1.0, SheetUtil.GetColumnWidth(sheet, 0, true, 1, 2)
+            ClassicAssert.IsTrue(SheetUtil.GetColumnWidth(sheet, 0, true) > 0, "Having some width for rows with actual cells");
+            ClassicAssert.AreEqual(-1.0, SheetUtil.GetColumnWidth(sheet, 0, true, 1, 2)
                     , "Not having any widht for rows with all empty cells");
 
             wb.Close();
@@ -165,11 +165,11 @@ namespace TestCases.SS.Util
 
             cell.SetCellValue("sometext");
             
-            Assert.IsTrue(SheetUtil.GetRowHeight(sheet, 0, true) > 0, "Having some height for a row with a cell with content");
-            Assert.AreEqual(0.0, SheetUtil.GetRowHeight(sheet, 0, true, 1, 2)
+            ClassicAssert.IsTrue(SheetUtil.GetRowHeight(sheet, 0, true) > 0, "Having some height for a row with a cell with content");
+            ClassicAssert.AreEqual(0.0, SheetUtil.GetRowHeight(sheet, 0, true, 1, 2)
                     , "Not having any height for row with empty cells");
-            Assert.IsTrue(SheetUtil.GetRowHeight(row, true) > 0, "Having some height for a row with a cell with content");
-            Assert.AreEqual(0.0, SheetUtil.GetRowHeight(row, true, 1, 2)
+            ClassicAssert.IsTrue(SheetUtil.GetRowHeight(row, true) > 0, "Having some height for a row with a cell with content");
+            ClassicAssert.AreEqual(0.0, SheetUtil.GetRowHeight(row, true, 1, 2)
                     , "Not having any height for row with empty cells");
 
             wb.Close();
@@ -187,8 +187,8 @@ namespace TestCases.SS.Util
 
             cell.SetCellValue("sometext");
 
-            Assert.IsTrue(SheetUtil.GetCellHeight(cell, false) > 0, "Having some height for a cell with content");
-            Assert.AreEqual(0.0, SheetUtil.GetCellHeight(emptyCell, false), "Not having any height for a cell with no content");
+            ClassicAssert.IsTrue(SheetUtil.GetCellHeight(cell, false) > 0, "Having some height for a cell with content");
+            ClassicAssert.AreEqual(0.0, SheetUtil.GetCellHeight(emptyCell, false), "Not having any height for a cell with no content");
 
             wb.Close();
         }

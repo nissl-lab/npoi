@@ -51,7 +51,7 @@ namespace NPOI.SS.Formula
     class OperandClassTransformer
     {
 
-        private FormulaType _formulaType;
+        private readonly FormulaType _formulaType;
 
         public OperandClassTransformer(FormulaType formulaType)
         {
@@ -107,18 +107,28 @@ namespace NPOI.SS.Formula
                 SetSimpleValueFuncClass((AbstractFunctionPtg)token, desiredOperandClass, callerForceArrayFlag);
                 return;
             }
-		if (IsSingleArgSum(token)) {
-			// Need to process the argument of SUM with transformFunctionNode below
-			// so make a dummy FuncVarPtg for that call.
-			token = FuncVarPtg.SUM;
-			// Note - the tAttrSum token (node.getToken()) is a base
-			// token so does not need to have its operand class set
-		}
-            if (token is ValueOperatorPtg || token is ControlPtg
-                || token is MemFuncPtg
-				|| token is MemAreaPtg
-				|| token is UnionPtg
+        if (IsSingleArgSum(token)) {
+            // Need to process the argument of SUM with transformFunctionNode below
+            // so make a dummy FuncVarPtg for that call.
+            token = FuncVarPtg.SUM;
+            // Note - the tAttrSum token (node.getToken()) is a base
+            // token so does not need to have its operand class set
+        }
+            if (token is MemFuncPtg
+                || token is MemAreaPtg
+                || token is UnionPtg
                 || token is IntersectionPtg)
+            {
+                // Reference-type operators: children preserve the desired operand class.
+                // This ensures that Area3DPtg tokens inside union/intersection expressions
+                // (e.g. multiple print areas) keep CLASS_REF when used in a named range context.
+                for (int i = 0; i < children.Length; i++)
+                {
+                    TransformNode(children[i], desiredOperandClass, callerForceArrayFlag);
+                }
+                return;
+            }
+            if (token is ValueOperatorPtg || token is ControlPtg)
             {
                 // Value Operator Ptgs and Control are base Tokens, so Token will be unchanged
                 // but any child nodes are processed according To desiredOperandClass and callerForceArrayFlag
@@ -133,9 +143,9 @@ namespace NPOI.SS.Formula
                 }
                 return;
             }
-            if (token is AbstractFunctionPtg)
+            if (token is AbstractFunctionPtg ptg)
             {
-                TransformFunctionNode((AbstractFunctionPtg)token, children, desiredOperandClass, callerForceArrayFlag);
+                TransformFunctionNode(ptg, children, desiredOperandClass, callerForceArrayFlag);
                 return;
             }
             if (children.Length > 0)
@@ -158,18 +168,16 @@ namespace NPOI.SS.Formula
         }
         private static bool IsSingleArgSum(Ptg token)
         {
-            if (token is AttrPtg)
+            if (token is AttrPtg attrPtg)
             {
-                AttrPtg attrPtg = (AttrPtg)token;
                 return attrPtg.IsSum;
             }
             return false;
         }
         private static bool IsSimpleValueFunction(Ptg token)
         {
-            if (token is AbstractFunctionPtg)
+            if (token is AbstractFunctionPtg aptg)
             {
-                AbstractFunctionPtg aptg = (AbstractFunctionPtg)token;
                 if (aptg.DefaultOperandClass != Ptg.CLASS_VALUE)
                 {
                     return false;
@@ -187,8 +195,7 @@ namespace NPOI.SS.Formula
             return false;
         }
 
-        private byte TransformClass(byte currentOperandClass, byte desiredOperandClass,
-                bool callerForceArrayFlag)
+        private static byte TransformClass(byte currentOperandClass, byte desiredOperandClass, bool callerForceArrayFlag)
         {
             switch (desiredOperandClass)
             {
@@ -313,10 +320,8 @@ namespace NPOI.SS.Formula
             }
         }
 
-        private void SetSimpleValueFuncClass(AbstractFunctionPtg afp,
-                byte desiredOperandClass, bool callerForceArrayFlag)
+        private static void SetSimpleValueFuncClass(AbstractFunctionPtg afp, byte desiredOperandClass, bool callerForceArrayFlag)
         {
-
             if (callerForceArrayFlag || desiredOperandClass == Ptg.CLASS_ARRAY)
             {
                 afp.PtgClass = (Ptg.CLASS_ARRAY);

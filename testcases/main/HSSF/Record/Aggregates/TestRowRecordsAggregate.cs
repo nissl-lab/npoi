@@ -18,7 +18,7 @@
 namespace TestCases.HSSF.Record.Aggregates
 {
     using System;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.Aggregates;
     using NPOI.HSSF.UserModel;
@@ -45,9 +45,9 @@ namespace TestCases.HSSF.Record.Aggregates
 
             RowRecord rr1 = rra.GetRow(4);
 
-            Assert.IsNotNull(rr1);
-            Assert.AreEqual(4, rr1.RowNumber, "Row number is1 1");
-            Assert.IsTrue(rr1 == rr, "Row record retrieved is1 identical");
+            ClassicAssert.IsNotNull(rr1);
+            ClassicAssert.AreEqual(4, rr1.RowNumber, "Row number is1 1");
+            ClassicAssert.IsTrue(rr1 == rr, "Row record retrieved is1 identical");
         }
         /**
 	 * Prior to Aug 2008, POI would re-serialize spreadsheets with {@link ArrayRecord}s or
@@ -62,14 +62,14 @@ namespace TestCases.HSSF.Record.Aggregates
             Record[] sheetRecs = RecordInspector.GetRecords(wb.GetSheetAt(0), 0);
 
             int countArrayFormulas = verifySharedValues(sheetRecs, typeof(ArrayRecord));
-            Assert.AreEqual(5, countArrayFormulas);
+            ClassicAssert.AreEqual(5, countArrayFormulas);
             int countTableFormulas = verifySharedValues(sheetRecs, typeof(TableRecord));
-            Assert.AreEqual(3, countTableFormulas);
+            ClassicAssert.AreEqual(3, countTableFormulas);
 
             // Note - SharedFormulaRecords are currently not re-serialized by POI (each is extracted
             // into many non-shared formulas), but if they ever were, the same rules would apply.
             int countSharedFormulas = verifySharedValues(sheetRecs, typeof(SharedFormulaRecord));
-            Assert.AreEqual(0, countSharedFormulas);
+            ClassicAssert.AreEqual(0, countSharedFormulas);
 
 
             //if (false) { // set true to observe re-serialized file
@@ -113,8 +113,8 @@ namespace TestCases.HSSF.Record.Aggregates
         private static void verifySharedFormula(FormulaRecord firstFormula, Record rec)
         {
             CellRangeAddress8Bit range = ((SharedValueRecordBase)rec).Range;
-            Assert.AreEqual(range.FirstRow, firstFormula.Row);
-            Assert.AreEqual(range.FirstColumn, firstFormula.Column);
+            ClassicAssert.AreEqual(range.FirstRow, firstFormula.Row);
+            ClassicAssert.AreEqual(range.FirstColumn, firstFormula.Column);
         }
 
         /**
@@ -157,7 +157,7 @@ namespace TestCases.HSSF.Record.Aggregates
             RecordInspector.RecordCollector rv = new RecordInspector.RecordCollector();
             rra.VisitContainedRecords(rv);
             Record[] outRecs = rv.Records;
-            Assert.AreEqual(5, outRecs.Length);
+            ClassicAssert.AreEqual(5, outRecs.Length);
         }
     }
 }

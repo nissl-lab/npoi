@@ -49,7 +49,7 @@ namespace NPOI.SS.Formula.Functions
         public static FreeRefFunction instance = new FactDouble();
 
         //Caching of previously calculated factorial for speed
-        static Dictionary<int, BigInteger> cache = new Dictionary<int, BigInteger>();
+        static readonly Dictionary<int, BigInteger> cache = new Dictionary<int, BigInteger>();
 
         public override ValueEval Evaluate(int srcRowIndex, int srcColumnIndex, ValueEval numberVE)
         {
@@ -78,9 +78,9 @@ namespace NPOI.SS.Formula.Functions
                 return BigInteger.One;
             }
 
-            if (cache.ContainsKey(n))
+            if (cache.TryGetValue(n, out BigInteger factorial1))
             {
-                return cache[(n)];
+                return factorial1;
             }
 
             BigInteger result = BigInteger.ValueOf(n).Multiply(factorial(n - 2));

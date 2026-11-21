@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Text; 
+using Cysharp.Text;
 
 namespace NPOI.OpenXml4Net.OPC
 {
@@ -95,16 +96,16 @@ namespace NPOI.OpenXml4Net.OPC
 
         public override bool Equals(Object obj)
         {
-            if (!(obj is PackageRelationship))
+            if (obj is not PackageRelationship rel)
             {
                 return false;
             }
-            PackageRelationship rel = (PackageRelationship)obj;
+
             return (this.id == rel.id
                     && this.relationshipType == rel.relationshipType
                     && (rel.source != null ? rel.source.Equals(this.source) : true)
                     && this.targetMode == rel.targetMode && this.targetUri
-                    .Equals(rel.targetUri));
+                        .Equals(rel.targetUri));
         }
 
 
@@ -215,7 +216,7 @@ namespace NPOI.OpenXml4Net.OPC
                 // Internal target
                 // If it isn't absolute, resolve it relative
                 //  to ourselves
-                if (!targetUri.ToString().StartsWith("/"))
+                if (!targetUri.ToString().StartsWith('/'))
                 {
                     // So it's a relative part name, try to resolve it
                     return PackagingUriHelper.ResolvePartUri(SourceUri, targetUri);
@@ -227,7 +228,8 @@ namespace NPOI.OpenXml4Net.OPC
 
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder();
+            using var sb = ZString.CreateStringBuilder();
+
             sb.Append(id == null ? "id=null" : "id=" + id);
             sb.Append(container == null ? " - container=null" : " - container="
                     + container.ToString());

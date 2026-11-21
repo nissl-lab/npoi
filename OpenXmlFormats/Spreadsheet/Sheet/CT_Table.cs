@@ -168,13 +168,18 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "displayName", this.displayName);
             XmlHelper.WriteAttribute(sw, "comment", this.comment);
             XmlHelper.WriteAttribute(sw, "ref", this.@ref);
-            XmlHelper.WriteAttribute(sw, "tableType", this.tableType.ToString());
-            XmlHelper.WriteAttribute(sw, "headerRowCount", this.headerRowCount);
-            XmlHelper.WriteAttribute(sw, "insertRow", this.insertRow);
-            XmlHelper.WriteAttribute(sw, "insertRowShift", this.insertRowShift);
+            if(this.tableType!= ST_TableType.worksheet)
+                XmlHelper.WriteAttribute(sw, "tableType", this.tableType.ToString());
+            if(this.headerRowCount!=1)
+                XmlHelper.WriteAttribute(sw, "headerRowCount", this.headerRowCount);
+            if(this.insertRow)
+                XmlHelper.WriteAttribute(sw, "insertRow", this.insertRow);
+            if(this.insertRowShift)
+                XmlHelper.WriteAttribute(sw, "insertRowShift", this.insertRowShift);
             XmlHelper.WriteAttribute(sw, "totalsRowCount", this.totalsRowCount);
             XmlHelper.WriteAttribute(sw, "totalsRowShown", this.totalsRowShown);
-            XmlHelper.WriteAttribute(sw, "published", this.published);
+            if(this.published)
+                XmlHelper.WriteAttribute(sw, "published", this.published);
             XmlHelper.WriteAttribute(sw, "headerRowDxfId", this.headerRowDxfId);
             XmlHelper.WriteAttribute(sw, "dataDxfId", this.dataDxfId);
             XmlHelper.WriteAttribute(sw, "totalsRowDxfId", this.totalsRowDxfId);
@@ -185,7 +190,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "dataCellStyle", this.dataCellStyle);
             XmlHelper.WriteAttribute(sw, "totalsRowCellStyle", this.totalsRowCellStyle);
             XmlHelper.WriteAttribute(sw, "connectionId", this.connectionId);
-            sw.Write(">");
+            sw.Write('>');
             if (this.autoFilter != null)
                 this.autoFilter.Write(sw, "autoFilter");
             if (this.sortState != null)
@@ -653,7 +658,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         public CT_TableColumns()
         {
-            //this.tableColumnField = new List<CT_TableColumn>();
+            this.tableColumnField = new List<CT_TableColumn>();
         }
         public static CT_TableColumns Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
@@ -673,9 +678,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "count", this.count);
-            sw.Write(">");
+            sw.Write('>');
             if (this.tableColumn != null)
             {
                 foreach (CT_TableColumn x in this.tableColumn)
@@ -683,10 +688,14 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                     x.Write(sw, "tableColumn");
                 }
             }
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.WriteEndElement(nodeName);
         }
         public CT_TableColumn InsertNewTableColumn(int columnIndex)
         {
+            if (this.tableColumnField == null)
+            {
+                this.tableColumnField = new List<CT_TableColumn>();
+            }
             var newTableColumn = new CT_TableColumn();
             this.tableColumn.Insert(columnIndex,newTableColumn);
             return newTableColumn;
@@ -703,6 +712,31 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         {
             this.tableColumn.RemoveAt(columnIndex);
         }
+
+        public CT_TableColumn AddNewTableColumn()
+        {
+            if (this.tableColumnField == null)
+            {
+                this.tableColumnField = new List<CT_TableColumn>();
+            }
+            var col = new CT_TableColumn();
+            tableColumn.Add(col);
+            return col;
+        }
+
+        public CT_TableColumn GetTableColumnArray(int index)
+        {
+            if (this.tableColumnField == null)
+            {
+                return null;
+            }
+            if (index < 0 || index >= this.tableColumnField.Count)
+            {
+                throw new ArgumentOutOfRangeException(nameof(index));
+            }
+            return this.tableColumnField[index];
+        }
+
         [XmlElement]
         public List<CT_TableColumn> tableColumn
         {
@@ -835,11 +869,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "id", this.id);
             XmlHelper.WriteAttribute(sw, "uniqueName", this.uniqueName);
             XmlHelper.WriteAttribute(sw, "name", this.name);
-            XmlHelper.WriteAttribute(sw, "totalsRowFunction", this.totalsRowFunction.ToString());
+            if(this.totalsRowFunction!= ST_TotalsRowFunction.none)
+                XmlHelper.WriteAttribute(sw, "totalsRowFunction", this.totalsRowFunction.ToString());
             XmlHelper.WriteAttribute(sw, "totalsRowLabel", this.totalsRowLabel);
             XmlHelper.WriteAttribute(sw, "queryTableFieldId", this.queryTableFieldId);
             XmlHelper.WriteAttribute(sw, "headerRowDxfId", this.headerRowDxfId);
@@ -848,7 +883,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             XmlHelper.WriteAttribute(sw, "headerRowCellStyle", this.headerRowCellStyle);
             XmlHelper.WriteAttribute(sw, "dataCellStyle", this.dataCellStyle);
             XmlHelper.WriteAttribute(sw, "totalsRowCellStyle", this.totalsRowCellStyle);
-            sw.Write(">");
+            sw.Write('>');
             if (this.calculatedColumnFormula != null)
                 this.calculatedColumnFormula.Write(sw, "calculatedColumnFormula");
             if (this.totalsRowFormula != null)
@@ -857,7 +892,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 this.xmlColumnPr.Write(sw, "xmlColumnPr");
             if (this.extLst != null)
                 this.extLst.Write(sw, "extLst");
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.WriteEndElement(nodeName);
         }
 
         [XmlElement]
@@ -1160,11 +1195,11 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "array", this.array);
-            sw.Write(">");
+            sw.Write('>');
             sw.Write(XmlHelper.EncodeXml(this.valueField));
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.WriteEndElement(nodeName);
         }
 
     }

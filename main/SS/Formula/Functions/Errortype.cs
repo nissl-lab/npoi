@@ -66,7 +66,7 @@ namespace NPOI.SS.Formula.Functions
             }
         }
 
-        private int TranslateErrorCodeToErrorTypeValue(int errorCode)
+        private static int TranslateErrorCodeToErrorTypeValue(int errorCode)
         {
             switch ((FormulaErrorEnum)errorCode)
             {

@@ -24,7 +24,7 @@ namespace TestCases
     using NPOI.Util;
     using NPOI.XSSF.UserModel;
     using NPOI.XWPF.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     /**
      * Class to Test that we handle embeded bits in
@@ -61,16 +61,16 @@ namespace TestCases
 
         private void Test(POIXMLDocument doc, int expectedCount)
         {
-            Assert.IsNotNull(doc.GetAllEmbedds());
-            Assert.AreEqual(expectedCount, doc.GetAllEmbedds().Count);
+            ClassicAssert.IsNotNull(doc.GetAllEmbedds());
+            ClassicAssert.AreEqual(expectedCount, doc.GetAllEmbedds().Count);
 
             for (int i = 0; i < doc.GetAllEmbedds().Count; i++)
             {
                 PackagePart pp = doc.GetAllEmbedds()[i];
-                Assert.IsNotNull(pp);
+                ClassicAssert.IsNotNull(pp);
 
                 byte[] b = IOUtils.ToByteArray(pp.GetStream(System.IO.FileMode.Open));
-                Assert.IsTrue(b.Length > 0);
+                ClassicAssert.IsTrue(b.Length > 0);
             }
         }
     }

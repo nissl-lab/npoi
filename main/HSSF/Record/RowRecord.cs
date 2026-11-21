@@ -401,11 +401,10 @@ namespace NPOI.HSSF.Record
 
         public override bool Equals(Object obj)
         {
-            if (!(obj is RowRecord))
+            if (obj is not RowRecord loc)
             {
                 return false;
             }
-            RowRecord loc = (RowRecord)obj;
 
             if (this.RowNumber == loc.RowNumber)
             {

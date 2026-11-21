@@ -414,7 +414,7 @@ public class Slide : Sheet
     	}
 
     	// None found
-    	return new Comment[0];
+    	return [];
     }
 
     public void Draw(Graphics2D graphics){

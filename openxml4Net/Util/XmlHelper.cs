@@ -3,7 +3,8 @@ using System;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
-using System.Text;
+using System.Text; 
+using Cysharp.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Serialization;
@@ -116,6 +117,13 @@ namespace NPOI.OpenXml4Net.Util
         {
             if (attr == null)
                 return null;
+            return attr.Value;
+        }
+
+        public static string ReadString(XmlAttribute attr, string defaultValue)
+        {
+            if (attr == null)
+                return defaultValue;
             return attr.Value;
         }
         public static decimal ReadDecimal(XmlAttribute attr)
@@ -284,7 +292,7 @@ namespace NPOI.OpenXml4Net.Util
             if (!match.Success) return t;
 
             bool useNextValue = false;
-            StringBuilder ret = new StringBuilder();
+            using var ret = ZString.CreateStringBuilder();
             int prevIndex = 0;
             while (match.Success)
             {
@@ -313,6 +321,7 @@ namespace NPOI.OpenXml4Net.Util
         }
 
         private static readonly char[] xmlEncodeCharsToReplace = { '&', '<', '>', '"' };
+        private static readonly char[] cdataEncodeCharsToReplace = { '&', '<', '>','\'' ,'"' };
 
         public static string EncodeXml(string xml)
         {
@@ -327,6 +336,23 @@ namespace NPOI.OpenXml4Net.Util
                 .Replace("<", "&lt;")
                 .Replace(">", "&gt;")
                 .Replace("\"", "&quot;");//.Replace("'", "&apos;");
+        }
+
+        [Obsolete("CDATA content is not entity-decoded, so readers get the encoded text. Write CDATA content as it is and split \"]]>\" across two sections.", true)]
+        public static string EncodeCDATAContent(string xml)
+        {
+            // quick check whether needed
+            if(xml.IndexOfAny(cdataEncodeCharsToReplace) == -1)
+            {
+                return xml;
+            }
+
+            return xml
+                .Replace("&", "&#38;")
+                .Replace("<", "&#60;")
+                .Replace(">", "&#62;")
+                .Replace("\"", "&#34;")
+                .Replace("'", "&#39;");
         }
 
         public static void WriteAttribute(StreamWriter sw, string attributeName, bool value)
@@ -459,8 +485,13 @@ namespace NPOI.OpenXml4Net.Util
 
         public static sbyte ReadSByte(XmlAttribute attr)
         {
+            return ReadSByte(attr, 0);
+        }
+
+        public static sbyte ReadSByte(XmlAttribute attr, sbyte defaultValue)
+        {
             if (attr == null)
-                return 0;
+                return defaultValue;
 
             sbyte i;
             if (sbyte.TryParse(attr.Value, out i))

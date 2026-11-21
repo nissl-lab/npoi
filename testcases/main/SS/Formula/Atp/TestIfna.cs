@@ -1,7 +1,7 @@
 ﻿using NPOI.HSSF.UserModel;
 using NPOI.SS.Formula.Eval;
 using NPOI.SS.UserModel;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -66,8 +66,8 @@ namespace TestCases.SS.Formula.Atp
             cell.SetCellFormula(formulaText);
             fe.NotifyUpdateCell(cell);
             CellValue result = fe.Evaluate(cell);
-            Assert.AreEqual(expectedResult.CellType, result.CellType, "Testing result type for: " + formulaText);
-            Assert.AreEqual(expectedResult.FormatAsString(), result.FormatAsString(), "Testing result for: " + formulaText);
+            ClassicAssert.AreEqual(expectedResult.CellType, result.CellType, "Testing result type for: " + formulaText);
+            ClassicAssert.AreEqual(expectedResult.FormatAsString(), result.FormatAsString(), "Testing result for: " + formulaText);
         }
 
         private static void ConfirmError(IFormulaEvaluator fe, ICell cell, String formulaText,ErrorEval expectedError)
@@ -76,8 +76,8 @@ namespace TestCases.SS.Formula.Atp
             cell.SetCellFormula(formulaText);
             fe.NotifyUpdateCell(cell);
             CellValue result = fe.Evaluate(cell);
-            Assert.AreEqual(CellType.Error, result.CellType, "Testing result type for: " + formulaText);
-            Assert.AreEqual(expectedError.ErrorString, result.FormatAsString(), "Testing error type for: " + formulaText);
+            ClassicAssert.AreEqual(CellType.Error, result.CellType, "Testing result type for: " + formulaText);
+            ClassicAssert.AreEqual(expectedError.ErrorString, result.FormatAsString(), "Testing error type for: " + formulaText);
         }
     }
 }

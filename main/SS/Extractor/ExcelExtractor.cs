@@ -27,7 +27,9 @@ namespace NPOI.SS.Extractor
         bool IncludeCellComments { get; set; }
         bool IncludeSheetNames { get; set; }
         bool FormulasNotResults { get; set; }
-        bool IncludeHeaderFooter { get; set; }
+        bool IncludeHeadersFooters { get; set; }
+        //Add a tab delimiter for each empty cell.
+        bool AddTabEachEmptyCell { get; set; }
         /**
          * Retreives the text contents of the file
          */

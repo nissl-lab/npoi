@@ -3,7 +3,7 @@ using NPOI.HSSF.UserModel;
 using NPOI.POIFS.FileSystem;
 using NPOI.Util;
 using NPOI.HPSF;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,23 +38,23 @@ namespace TestCases
         private void readPropertiesHelper(POIDocument docWB)
         {
             // We should have both sets
-            Assert.IsNotNull(docWB.DocumentSummaryInformation);
-            Assert.IsNotNull(docWB.SummaryInformation);
+            ClassicAssert.IsNotNull(docWB.DocumentSummaryInformation);
+            ClassicAssert.IsNotNull(docWB.SummaryInformation);
 
             // Check they are as expected for the test doc
-            Assert.AreEqual("Administrator", docWB.SummaryInformation.Author);
-            Assert.AreEqual(0, docWB.DocumentSummaryInformation.ByteCount);
+            ClassicAssert.AreEqual("Administrator", docWB.SummaryInformation.Author);
+            ClassicAssert.AreEqual(0, docWB.DocumentSummaryInformation.ByteCount);
         }
         [Test]
         public void TestReadProperties2()
         {
             // Check again on the word one
-            Assert.IsNotNull(doc2.DocumentSummaryInformation);
-            Assert.IsNotNull(doc2.SummaryInformation);
+            ClassicAssert.IsNotNull(doc2.DocumentSummaryInformation);
+            ClassicAssert.IsNotNull(doc2.SummaryInformation);
 
-            Assert.AreEqual("Avik Sengupta", doc2.SummaryInformation.Author);
-            Assert.AreEqual(null, doc2.SummaryInformation.Keywords);
-            Assert.AreEqual(0, doc2.DocumentSummaryInformation.ByteCount);
+            ClassicAssert.AreEqual("Avik Sengupta", doc2.SummaryInformation.Author);
+            ClassicAssert.AreEqual(null, doc2.SummaryInformation.Keywords);
+            ClassicAssert.AreEqual(0, doc2.DocumentSummaryInformation.ByteCount);
         }
         [Test]
         public void TestWriteProperties()
@@ -65,10 +65,10 @@ namespace TestCases
             doc.WriteProperties(outFS);
 
             // Should now hold them
-            Assert.IsNotNull(
+            ClassicAssert.IsNotNull(
                     outFS.CreateDocumentInputStream("\x0005SummaryInformation")
             );
-            Assert.IsNotNull(
+            ClassicAssert.IsNotNull(
                     outFS.CreateDocumentInputStream("\x0005DocumentSummaryInformation")
             );
         }
@@ -100,13 +100,13 @@ namespace TestCases
             POIDocument doc = new HSSFWorkbook();
 
             // New document won't have them
-            Assert.IsNull(doc.SummaryInformation);
-            Assert.IsNull(doc.DocumentSummaryInformation);
+            ClassicAssert.IsNull(doc.SummaryInformation);
+            ClassicAssert.IsNull(doc.DocumentSummaryInformation);
 
             // Add them in
             doc.CreateInformationProperties();
-            Assert.IsNotNull(doc.SummaryInformation);
-            Assert.IsNotNull(doc.DocumentSummaryInformation);
+            ClassicAssert.IsNotNull(doc.SummaryInformation);
+            ClassicAssert.IsNotNull(doc.DocumentSummaryInformation);
 
             // Write out and back in again, no change
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -115,8 +115,8 @@ namespace TestCases
 
             doc = new HSSFWorkbook(bais);
 
-            Assert.IsNotNull(doc.SummaryInformation);
-            Assert.IsNotNull(doc.DocumentSummaryInformation);
+            ClassicAssert.IsNotNull(doc.SummaryInformation);
+            ClassicAssert.IsNotNull(doc.DocumentSummaryInformation);
         }
         [Test]
         public void TestCreateNewPropertiesOnExistingFile()
@@ -124,8 +124,8 @@ namespace TestCases
             POIDocument doc = new HSSFWorkbook();
 
             // New document won't have them
-            Assert.IsNull(doc.SummaryInformation);
-            Assert.IsNull(doc.DocumentSummaryInformation);
+            ClassicAssert.IsNull(doc.SummaryInformation);
+            ClassicAssert.IsNull(doc.DocumentSummaryInformation);
 
             // Write out and back in again, no change
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -133,8 +133,8 @@ namespace TestCases
             ByteArrayInputStream bais = new ByteArrayInputStream(baos.ToByteArray());
             doc = new HSSFWorkbook(bais);
 
-            Assert.IsNull(doc.SummaryInformation);
-            Assert.IsNull(doc.DocumentSummaryInformation);
+            ClassicAssert.IsNull(doc.SummaryInformation);
+            ClassicAssert.IsNull(doc.DocumentSummaryInformation);
 
             // Create, and change
             doc.CreateInformationProperties();
@@ -148,17 +148,17 @@ namespace TestCases
             doc = new HSSFWorkbook(bais);
 
             // Check
-            Assert.IsNotNull(doc.SummaryInformation);
-            Assert.IsNotNull(doc.DocumentSummaryInformation);
-            Assert.AreEqual("POI Testing", doc.SummaryInformation.Author);
-            Assert.AreEqual("ASF", doc.DocumentSummaryInformation.Company);
+            ClassicAssert.IsNotNull(doc.SummaryInformation);
+            ClassicAssert.IsNotNull(doc.DocumentSummaryInformation);
+            ClassicAssert.AreEqual("POI Testing", doc.SummaryInformation.Author);
+            ClassicAssert.AreEqual("ASF", doc.DocumentSummaryInformation.Company);
 
             // Asking to re-create will make no difference now
             doc.CreateInformationProperties();
-            Assert.IsNotNull(doc.SummaryInformation);
-            Assert.IsNotNull(doc.DocumentSummaryInformation);
-            Assert.AreEqual("POI Testing", doc.SummaryInformation.Author);
-            Assert.AreEqual("ASF", doc.DocumentSummaryInformation.Company);
+            ClassicAssert.IsNotNull(doc.SummaryInformation);
+            ClassicAssert.IsNotNull(doc.DocumentSummaryInformation);
+            ClassicAssert.AreEqual("POI Testing", doc.SummaryInformation.Author);
+            ClassicAssert.AreEqual("ASF", doc.DocumentSummaryInformation.Company);
         }
     }
 }

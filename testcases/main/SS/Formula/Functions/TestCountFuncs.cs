@@ -25,7 +25,7 @@ namespace TestCases.SS.Formula.Functions
     using NPOI.SS.Formula.Functions;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using System;
     using TestCases.HSSF;
 
@@ -151,15 +151,15 @@ namespace TestCases.SS.Formula.Functions
         public void TestCriteriaPredicateNe_Bug46647()
         {
             IMatchPredicate mp = Countif.CreateCriteriaPredicate(new StringEval("<>aa"), 0, 0);
-            Assert.IsNotNull(mp);
+            ClassicAssert.IsNotNull(mp);
             StringEval seA = new StringEval("aa"); // this should not match the criteria '<>aa'
             StringEval seB = new StringEval("bb"); // this should match
             if (mp.Matches(seA) && !mp.Matches(seB))
             {
                 throw new AssertionException("Identified bug 46647");
             }
-            Assert.IsFalse(mp.Matches(seA));
-            Assert.IsTrue(mp.Matches(seB));
+            ClassicAssert.IsFalse(mp.Matches(seA));
+            ClassicAssert.IsTrue(mp.Matches(seB));
 
             // general Tests for not-equal (<>) operator
             AreaEval range;
@@ -246,27 +246,27 @@ namespace TestCases.SS.Formula.Functions
             ValueEval[] args = { arg0, criteriaArg, };
 
             double actual = NumericFunctionInvoker.Invoke(new Countif(), args);
-            Assert.AreEqual(4, actual, 0D);
+            ClassicAssert.AreEqual(4, actual, 0D);
         }
 
         private static void ConfirmCountA(int expected, ValueEval[] args)
         {
             double result = NumericFunctionInvoker.Invoke(new Counta(), args);
-            Assert.AreEqual(expected, result, 0);
+            ClassicAssert.AreEqual(expected, result, 0);
         }
         private static void ConfirmCountIf(int expected, AreaEval range, ValueEval criteria)
         {
 
             ValueEval[] args = { range, criteria, };
             double result = NumericFunctionInvoker.Invoke(new Countif(), args);
-            Assert.AreEqual(expected, result, 0);
+            ClassicAssert.AreEqual(expected, result, 0);
         }
         private static void ConfirmCountBlank(int expected, AreaEval range)
         {
 
             ValueEval[] args = { range };
             double result = NumericFunctionInvoker.Invoke(new Countblank(), args);
-            Assert.AreEqual(expected, result, 0);
+            ClassicAssert.AreEqual(expected, result, 0);
         }
 
         private static IMatchPredicate CreateCriteriaPredicate(ValueEval ev)
@@ -421,7 +421,7 @@ namespace TestCases.SS.Formula.Functions
             {
                 CellValue expected = evaluator.Evaluate(sheet.GetRow(i).GetCell(REF_COL));
                 CellValue actual = evaluator.Evaluate(sheet.GetRow(i).GetCell(EVAL_COL));
-                Assert.AreEqual(expected.FormatAsString(), actual.FormatAsString());
+                ClassicAssert.AreEqual(expected.FormatAsString(), actual.FormatAsString());
             }
 
             // boolean criteria
@@ -433,7 +433,7 @@ namespace TestCases.SS.Formula.Functions
                 double expectedValue = cellRef.NumericCellValue;
                 double actualValue = evaluator.Evaluate(cellFmla).NumberValue;
 
-                Assert.AreEqual(expectedValue, actualValue, 0.0001,
+                ClassicAssert.AreEqual(expectedValue, actualValue, 0.0001,
                     "Problem with a formula at " +
                                 new CellReference(cellFmla).FormatAsString() + "[" + cellFmla.CellFormula + "] ");
             }
@@ -447,7 +447,7 @@ namespace TestCases.SS.Formula.Functions
                 double expectedValue = cellRef.NumericCellValue;
                 double actualValue = evaluator.Evaluate(cellFmla).NumberValue;
 
-                Assert.AreEqual(expectedValue, actualValue, 0.0001,
+                ClassicAssert.AreEqual(expectedValue, actualValue, 0.0001,
                     "Problem with a formula at " +
                                 new CellReference(cellFmla).FormatAsString() + "[" + cellFmla.CellFormula + "] ");
             }
@@ -512,16 +512,16 @@ namespace TestCases.SS.Formula.Functions
 
         private static void ConfirmPredicate(bool expectedResult, IMatchPredicate matchPredicate, int value)
         {
-            Assert.AreEqual(expectedResult, matchPredicate.Matches(new NumberEval(value)));
+            ClassicAssert.AreEqual(expectedResult, matchPredicate.Matches(new NumberEval(value)));
         }
         private static void ConfirmPredicate(bool expectedResult, IMatchPredicate matchPredicate, String value)
         {
             ValueEval ev = (value == null) ? BlankEval.instance : (ValueEval)new StringEval(value);
-            Assert.AreEqual(expectedResult, matchPredicate.Matches(ev));
+            ClassicAssert.AreEqual(expectedResult, matchPredicate.Matches(ev));
         }
         private static void ConfirmPredicate(bool expectedResult, IMatchPredicate matchPredicate, ErrorEval value)
         {
-            Assert.AreEqual(expectedResult, matchPredicate.Matches(value));
+            ClassicAssert.AreEqual(expectedResult, matchPredicate.Matches(value));
         }
         [Test]
         public void TestCountifFromSpreadsheet()
@@ -544,14 +544,14 @@ namespace TestCases.SS.Formula.Functions
             {
                 HSSFRow row = (HSSFRow)sheet1.GetRow(rowIx - 1);
                 HSSFCell cellA = (HSSFCell)row.GetCell(0);  // cell containing a formula with COUNTIF
-                Assert.AreEqual(CellType.Formula, cellA.CellType);
+                ClassicAssert.AreEqual(CellType.Formula, cellA.CellType);
                 HSSFCell cellC = (HSSFCell)row.GetCell(2);  // cell with a reference value
-                Assert.AreEqual(CellType.Numeric, cellC.CellType);
+                ClassicAssert.AreEqual(CellType.Numeric, cellC.CellType);
 
                 CellValue cv = fe.Evaluate(cellA);
                 double actualValue = cv.NumberValue;
                 double expectedValue = cellC.NumericCellValue;
-                Assert.AreEqual(expectedValue, actualValue, 0.0001,
+                ClassicAssert.AreEqual(expectedValue, actualValue, 0.0001,
                     "Problem with a formula at  " + new CellReference(cellA).FormatAsString()
                                 + ": " + cellA.CellFormula + " :"
                         + "Expected = (" + expectedValue + ") Actual=(" + actualValue + ") ");
@@ -562,15 +562,15 @@ namespace TestCases.SS.Formula.Functions
             {
                 HSSFRow row = (HSSFRow)sheet2.GetRow(rowIx - 1);
                 HSSFCell cellA = (HSSFCell)row.GetCell(0);  // cell containing a formula with COUNTIF
-                Assert.AreEqual(CellType.Formula, cellA.CellType);
+                ClassicAssert.AreEqual(CellType.Formula, cellA.CellType);
                 HSSFCell cellC = (HSSFCell)row.GetCell(2);  // cell with a reference value
-                Assert.AreEqual(CellType.Numeric, cellC.CellType);
+                ClassicAssert.AreEqual(CellType.Numeric, cellC.CellType);
 
                 CellValue cv = fe.Evaluate(cellA);
                 double actualValue = cv.NumberValue;
                 double expectedValue = cellC.NumericCellValue;
 
-                Assert.AreEqual(expectedValue, actualValue, 0.0001,
+                ClassicAssert.AreEqual(expectedValue, actualValue, 0.0001,
                     "Problem with a formula at " +
                                 new CellReference(cellA).FormatAsString() + "[" + cellA.CellFormula + "]: "
                                 + "Expected = (" + expectedValue + ") Actual=(" + actualValue + ") ");

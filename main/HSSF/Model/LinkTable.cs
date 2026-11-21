@@ -88,11 +88,11 @@ namespace NPOI.HSSF.Model
             return ExternSheetRecord.Combine(esrs);
         }
 
-        private class CRNBlock
+        private sealed class CRNBlock
         {
 
-            private CRNCountRecord _countRecord;
-            private CRNRecord[] _crns;
+            private readonly CRNCountRecord _countRecord;
+            private readonly CRNRecord[] _crns;
 
             public CRNBlock(RecordStream rs)
             {
@@ -111,9 +111,9 @@ namespace NPOI.HSSF.Model
             }
         }
 
-        private class ExternalBookBlock
+        private sealed class ExternalBookBlock
         {
-            private SupBookRecord _externalBookRecord;
+            private readonly SupBookRecord _externalBookRecord;
             internal ExternalNameRecord[] _externalNameRecords;
             private CRNBlock[] _crnBlocks;
             /**
@@ -124,8 +124,8 @@ namespace NPOI.HSSF.Model
             public ExternalBookBlock()
             {
                 _externalBookRecord = SupBookRecord.CreateAddInFunctions();
-                _externalNameRecords = new ExternalNameRecord[0];
-                _crnBlocks = new CRNBlock[0];
+                _externalNameRecords = [];
+                _crnBlocks = [];
             }
             public ExternalBookBlock(RecordStream rs)
             {
@@ -152,7 +152,7 @@ namespace NPOI.HSSF.Model
             public ExternalBookBlock(String url, String[] sheetNames)
             {
                 _externalBookRecord = SupBookRecord.CreateExternalReferences(url, sheetNames);
-                _crnBlocks = new CRNBlock[0];
+                _crnBlocks = [];
             }
 
             /**
@@ -163,8 +163,8 @@ namespace NPOI.HSSF.Model
             public ExternalBookBlock(int numberOfSheets)
             {
                 _externalBookRecord = SupBookRecord.CreateInternalReferences((short)numberOfSheets);
-                _externalNameRecords = new ExternalNameRecord[0];
-                _crnBlocks = new CRNBlock[0];
+                _externalNameRecords = [];
+                _crnBlocks = [];
             }
 
             public int NumberOfNames
@@ -217,10 +217,10 @@ namespace NPOI.HSSF.Model
         }
 
         private ExternalBookBlock[] _externalBookBlocks;
-        private ExternSheetRecord _externSheetRecord;
-        private List<NameRecord> _definedNames;
-        private int _recordCount;
-        private WorkbookRecordList _workbookRecordList; // TODO - would be nice to Remove this
+        private readonly ExternSheetRecord _externSheetRecord;
+        private readonly List<NameRecord> _definedNames;
+        private readonly int _recordCount;
+        private readonly WorkbookRecordList _workbookRecordList; // TODO - would be nice to Remove this
 
         public LinkTable(List<Record> inputList, int startIndex, WorkbookRecordList workbookRecordList, Dictionary<String, NameCommentRecord> commentRecords)
         {
@@ -321,12 +321,8 @@ namespace NPOI.HSSF.Model
 
         public NameRecord GetSpecificBuiltinRecord(byte builtInCode, int sheetNumber)
         {
-
-            IEnumerator<NameRecord> iterator = _definedNames.GetEnumerator();
-            while (iterator.MoveNext())
+            foreach (var record in _definedNames)
             {
-                NameRecord record = iterator.Current;
-
                 //print areas are one based
                 if (record.BuiltInName == builtInCode && record.SheetNumber == sheetNumber)
                 {
@@ -498,9 +494,9 @@ namespace NPOI.HSSF.Model
             for (IEnumerator iterator = _workbookRecordList.GetEnumerator(); iterator.MoveNext(); supLinkIndex++)
             {
                 Record record = (Record)iterator.Current;
-                if (record is SupBookRecord)
+                if (record is SupBookRecord bookRecord)
                 {
-                    if (((SupBookRecord)record).IsAddInFunctions) break;
+                    if (bookRecord.IsAddInFunctions) break;
                 }
             }
             int numberOfNames = extBlock.NumberOfNames;

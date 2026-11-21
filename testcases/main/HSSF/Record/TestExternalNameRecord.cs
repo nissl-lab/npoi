@@ -19,7 +19,7 @@ namespace TestCases.HSSF.Record
 {
     using System;
     using NPOI.HSSF.Record;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.Util;
     /**
      * 
@@ -55,7 +55,7 @@ namespace TestCases.HSSF.Record
         {
 
             ExternalNameRecord enr = CreateSimpleENR(dataFDS);
-            Assert.AreEqual("FDS", enr.Text);
+            ClassicAssert.AreEqual("FDS", enr.Text);
 
             try
             {
@@ -77,9 +77,9 @@ namespace TestCases.HSSF.Record
             {
                 throw new AssertionException("Identified bug 44695");
             }
-            Assert.AreEqual(17, enr.RecordSize);
+            ClassicAssert.AreEqual(17, enr.RecordSize);
 
-            Assert.IsNotNull(enr.Serialize());
+            ClassicAssert.IsNotNull(enr.Serialize());
         }
         [Test]
         public void TestAutoStdDocName()
@@ -98,14 +98,14 @@ namespace TestCases.HSSF.Record
                 }
                 throw e;
             }
-            Assert.AreEqual("'191219AW4 Corp,[WORKOUT_PX]'", enr.Text);
-            Assert.IsTrue(enr.IsAutomaticLink);
-            Assert.IsFalse(enr.IsBuiltInName);
-            Assert.IsFalse(enr.IsIconifiedPictureLink);
+            ClassicAssert.AreEqual("'191219AW4 Corp,[WORKOUT_PX]'", enr.Text);
+            ClassicAssert.IsTrue(enr.IsAutomaticLink);
+            ClassicAssert.IsFalse(enr.IsBuiltInName);
+            ClassicAssert.IsFalse(enr.IsIconifiedPictureLink);
 
-            Assert.IsFalse(enr.IsOLELink);
-            Assert.IsFalse(enr.IsPicureLink);
-            Assert.IsTrue(enr.IsStdDocumentNameIdentifier);
+            ClassicAssert.IsFalse(enr.IsOLELink);
+            ClassicAssert.IsFalse(enr.IsPicureLink);
+            ClassicAssert.IsTrue(enr.IsStdDocumentNameIdentifier);
 
 
             TestcaseRecordInputStream.ConfirmRecordEncoding(0x0023, dataAutoDocName, enr.Serialize());
@@ -115,13 +115,13 @@ namespace TestCases.HSSF.Record
         {
 
             ExternalNameRecord enr = CreateSimpleENR(dataPlainName);
-            Assert.AreEqual("Rate_Date", enr.Text);
-            Assert.IsFalse(enr.IsAutomaticLink);
-            Assert.IsFalse(enr.IsBuiltInName);
-            Assert.IsFalse(enr.IsIconifiedPictureLink);
-            Assert.IsFalse(enr.IsOLELink);
-            Assert.IsFalse(enr.IsPicureLink);
-            Assert.IsFalse(enr.IsStdDocumentNameIdentifier);
+            ClassicAssert.AreEqual("Rate_Date", enr.Text);
+            ClassicAssert.IsFalse(enr.IsAutomaticLink);
+            ClassicAssert.IsFalse(enr.IsBuiltInName);
+            ClassicAssert.IsFalse(enr.IsIconifiedPictureLink);
+            ClassicAssert.IsFalse(enr.IsOLELink);
+            ClassicAssert.IsFalse(enr.IsPicureLink);
+            ClassicAssert.IsFalse(enr.IsStdDocumentNameIdentifier);
 
             TestcaseRecordInputStream.ConfirmRecordEncoding(0x0023, dataPlainName, enr.Serialize());
         }
@@ -157,7 +157,7 @@ namespace TestCases.HSSF.Record
                 }
                 throw e;
             }
-            Assert.AreEqual("010672AT0 MUNI,[RTG_MOODY_UNDERLYING,RTG_SP_UNDERLYING]", enr.Text);
+            ClassicAssert.AreEqual("010672AT0 MUNI,[RTG_MOODY_UNDERLYING,RTG_SP_UNDERLYING]", enr.Text);
 
             TestcaseRecordInputStream.ConfirmRecordEncoding(0x0023, dataDDE, enr.Serialize());
         }
@@ -186,7 +186,7 @@ namespace TestCases.HSSF.Record
                 }
                 throw e;
             }
-            Assert.AreEqual("\u0159azen\u00ED_Billa", enr.Text);
+            ClassicAssert.AreEqual("\u0159azen\u00ED_Billa", enr.Text);
         }
 
         [Test]
@@ -201,7 +201,7 @@ namespace TestCases.HSSF.Record
             ExternalNameRecord enr = CreateSimpleENR(data);
 
             byte[] ser = enr.Serialize();
-            Assert.AreEqual("[23, 00, 11, 00, 02, 7F, 00, 00, 00, 00, 09, 00, 52, 61, 74, 65, 5F, 44, 61, 74, 65]",
+            ClassicAssert.AreEqual("[23, 00, 11, 00, 02, 7F, 00, 00, 00, 00, 09, 00, 52, 61, 74, 65, 5F, 44, 61, 74, 65]",
                     HexDump.ToHex(ser));
         }
 

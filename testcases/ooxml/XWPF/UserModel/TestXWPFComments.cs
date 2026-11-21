@@ -1,7 +1,7 @@
 ﻿namespace TestCases.XWPF.UserModel
 {
     using NPOI.XWPF.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using System.Collections.Generic;
     using System.IO;
     using System.Reflection.Metadata;
@@ -15,12 +15,12 @@
             var cId = "0";
             using (XWPFDocument docOut = new XWPFDocument())
             {
-                Assert.IsNull(docOut.GetDocComments());
+                ClassicAssert.IsNull(docOut.GetDocComments());
 
                 // create comments
                 XWPFComments comments = docOut.CreateComments();
-                Assert.IsNotNull(comments);
-                Assert.AreSame(comments, docOut.CreateComments());
+                ClassicAssert.IsNotNull(comments);
+                ClassicAssert.AreSame(comments, docOut.CreateComments());
 
                 // create comment
                 XWPFComment comment = comments.CreateComment(cId);
@@ -36,11 +36,11 @@
 
                 // check
                 XWPFDocument docIn = XWPFTestDataSamples.WriteOutAndReadBack(docOut);
-                Assert.IsNotNull(docIn.GetDocComments());
-                Assert.AreEqual(1, docIn.GetComments().Length);
+                ClassicAssert.IsNotNull(docIn.GetDocComments());
+                ClassicAssert.AreEqual(1, docIn.GetComments().Length);
                 comment = docIn.GetCommentByID("0");
-                Assert.IsNotNull(comment);
-                Assert.AreEqual("Author", comment.GetAuthor());
+                ClassicAssert.IsNotNull(comment);
+                ClassicAssert.AreEqual("Author", comment.GetAuthor());
             }
         }
 
@@ -50,12 +50,12 @@
             using (XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("testComment.docx"))
             {
                 XWPFComments docComments = doc.GetDocComments();
-                Assert.IsNotNull(docComments);
+                ClassicAssert.IsNotNull(docComments);
                 XWPFComment[] comments = doc.GetComments();
-                Assert.AreEqual(1, comments.Length);
+                ClassicAssert.AreEqual(1, comments.Length);
 
                 IList<XWPFPictureData> allPictures = docComments.GetAllPictures();
-                Assert.AreEqual(1, allPictures.Count);
+                ClassicAssert.AreEqual(1, allPictures.Count);
             }
         }
 
@@ -65,22 +65,22 @@
             using(XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("NPOI-bug-1481.docx"))
             {
                 XWPFComment[] comments = doc.GetComments();
-                Assert.AreEqual(1, comments.Length);
+                ClassicAssert.AreEqual(1, comments.Length);
 
                 XWPFComment comment = comments[0];
-                Assert.AreEqual("Claudio Pais", comment.GetAuthor());
-                Assert.AreEqual("2025-01-23T17:18:00Z", comment.Date);
-                Assert.AreEqual("Bla bla", comment.GetText());
+                ClassicAssert.AreEqual("Claudio Pais", comment.GetAuthor());
+                ClassicAssert.AreEqual("2025-01-23T17:18:00Z", comment.Date);
+                ClassicAssert.AreEqual("Bla bla", comment.GetText());
 
                 XWPFDocument docIn = XWPFTestDataSamples.WriteOutAndReadBack(doc);
 
                 comments = docIn.GetComments();
-                Assert.AreEqual(1, comments.Length);
+                ClassicAssert.AreEqual(1, comments.Length);
 
                 comment = comments[0];
-                Assert.AreEqual("Claudio Pais", comment.GetAuthor());
-                Assert.AreEqual("2025-01-23T17:18:00Z", comment.Date);
-                Assert.AreEqual("Bla bla", comment.GetText());
+                ClassicAssert.AreEqual("Claudio Pais", comment.GetAuthor());
+                ClassicAssert.AreEqual("2025-01-23T17:18:00Z", comment.Date);
+                ClassicAssert.AreEqual("Bla bla", comment.GetText());
 
             }
         }

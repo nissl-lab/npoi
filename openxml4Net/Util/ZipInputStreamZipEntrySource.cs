@@ -20,16 +20,31 @@ namespace NPOI.OpenXml4Net.Util
         private List<FakeZipEntry> zipEntries;
 
         /**
-         * Reads all the entries from the ZipInputStream 
+         * Reads all the entries from the ZipInputStream
          *  into memory, and closes the source stream.
          * We'll then eat lots of memory, but be able to
          *  work with the entries at-will.
          */
         public ZipInputStreamZipEntrySource(ZipInputStream inp)
+            : this(inp, null)
+        {
+        }
+
+        /**
+         * As {@link #ZipInputStreamZipEntrySource(ZipInputStream)}, but additionally
+         * passes a counter over the raw (compressed) source stream so that each entry
+         * can be checked for a decompression-bomb ratio while it is buffered. This is
+         * required because streamed / data-descriptor entries report Size == -1, so the
+         * uncompressed size is not known up-front and the ratio must be derived from the
+         * compressed bytes actually consumed.
+         */
+        public ZipInputStreamZipEntrySource(ZipInputStream inp, CountingStream compressedCounter)
         {
             zipEntries = new List<FakeZipEntry>();
 
             bool going = true;
+            //if(inp.Position != 0)
+            //    inp.Position = 0;
             while (going)
             {
                 ZipEntry zipEntry = inp.GetNextEntry();
@@ -39,7 +54,7 @@ namespace NPOI.OpenXml4Net.Util
                 }
                 else
                 {
-                    FakeZipEntry entry = new FakeZipEntry(zipEntry, inp);
+                    FakeZipEntry entry = new FakeZipEntry(zipEntry, inp, compressedCounter);
                     //inp.Close();
 
                     zipEntries.Add(entry);
@@ -76,7 +91,7 @@ namespace NPOI.OpenXml4Net.Util
          * Why oh why oh why are Iterator and Enumeration
          *  still not compatible?
          */
-        internal class EntryEnumerator : IEnumerator
+        internal sealed class EntryEnumerator : IEnumerator
         {
             private List<FakeZipEntry>.Enumerator iterator;
 
@@ -119,11 +134,16 @@ namespace NPOI.OpenXml4Net.Util
         {
             private byte[] data;
 
-            public FakeZipEntry(ZipEntry entry, ZipInputStream inp) : base(entry.Name)
+            public FakeZipEntry(ZipEntry entry, ZipInputStream inp)
+                : this(entry, inp, null)
+            {
+            }
+
+            public FakeZipEntry(ZipEntry entry, ZipInputStream inp, CountingStream compressedCounter) : base(entry.Name)
             {
 
                 // Grab the de-compressed contents for later
-                MemoryStream baos = new MemoryStream();
+                MemoryStream baos;
 
                 long entrySize = entry.Size;
 
@@ -141,10 +161,26 @@ namespace NPOI.OpenXml4Net.Util
                     baos = new MemoryStream();
                 }
 
+                // Baseline of compressed bytes consumed before this entry's data is read,
+                // so we can measure this entry's compressed size even when the header omits
+                // it (streamed / data-descriptor entries with Size == -1).
+                long compressedStart = compressedCounter != null ? compressedCounter.BytesRead : -1;
+
                 byte[] buffer = new byte[4096];
+                long decompressed = 0;
                 int read = 0;
                 while ((read = inp.Read(buffer, 0, buffer.Length)) > 0)
                 {
+                    decompressed += read;
+
+                    // Prefer the header's compressed size when present and trustworthy;
+                    // otherwise fall back to the raw bytes actually consumed for this entry.
+                    long compressed = compressedStart >= 0
+                        ? compressedCounter.BytesRead - compressedStart
+                        : entry.CompressedSize;
+
+                    ZipSecureFile.CheckThreshold(decompressed, compressed);
+
                     baos.Write(buffer, 0, read);
                 }
 

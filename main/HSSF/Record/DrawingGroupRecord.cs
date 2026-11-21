@@ -145,11 +145,10 @@ namespace NPOI.HSSF.Record
             LittleEndian.PutShort(data, 2 + offset, (short)sizeExcludingHeader);
         }
 
-        private void WriteContinueHeader(byte[] data, int offset, int sizeExcludingHeader)
+        private static void WriteContinueHeader(byte[] data, int offset, int sizeExcludingHeader)
         {
             LittleEndian.PutShort(data, 0 + offset, ContinueRecord.sid);
             LittleEndian.PutShort(data, 2 + offset, (short)sizeExcludingHeader);
         }
-
     }
 }

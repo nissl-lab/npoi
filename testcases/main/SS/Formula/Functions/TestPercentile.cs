@@ -20,7 +20,7 @@ namespace TestCases.SS.Formula
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.Formula.Functions;
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using TestCases.SS.Formula.Functions;
 
     /**
@@ -53,16 +53,16 @@ namespace TestCases.SS.Formula
         private void ConfirmPercentile(ValueEval percentile, ValueEval[] args, double expected)
         {
             ValueEval result = invokePercentile(args, percentile);
-            Assert.AreEqual(typeof(NumberEval), result.GetType());
+            ClassicAssert.AreEqual(typeof(NumberEval), result.GetType());
             double delta = 0.00000001;
-            Assert.AreEqual(expected, ((NumberEval)result).NumberValue, delta);
+            ClassicAssert.AreEqual(expected, ((NumberEval)result).NumberValue, delta);
         }
 
         private void ConfirmPercentile(ValueEval percentile, ValueEval[] args, ErrorEval expectedError)
         {
             ValueEval result = invokePercentile(args, percentile);
-            Assert.AreEqual(typeof(ErrorEval), result.GetType());
-            Assert.AreEqual(expectedError.ErrorCode, ((ErrorEval)result).ErrorCode);
+            ClassicAssert.AreEqual(typeof(ErrorEval), result.GetType());
+            ClassicAssert.AreEqual(expectedError.ErrorCode, ((ErrorEval)result).ErrorCode);
         }
 
         [Test]

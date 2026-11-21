@@ -51,12 +51,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "name", this.name);
             XmlHelper.WriteAttribute(sw, "pivot", this.pivot);
             XmlHelper.WriteAttribute(sw, "table", this.table);
             XmlHelper.WriteAttribute(sw, "count", this.count);
-            sw.Write(">");
+            sw.Write('>');
             if (this.tableStyleElement != null)
             {
                 foreach (CT_TableStyleElement x in this.tableStyleElement)
@@ -64,7 +64,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                     x.Write(sw, "tableStyleElement");
                 }
             }
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.WriteEndElement(nodeName);
         }
 
         [XmlElement]
@@ -187,7 +187,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "name", this.name);
             XmlHelper.WriteAttribute(sw, "showFirstColumn", this.showFirstColumn);
             XmlHelper.WriteAttribute(sw, "showLastColumn", this.showLastColumn);
@@ -343,19 +343,19 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "count", this.count, true);
             XmlHelper.WriteAttribute(sw, "defaultTableStyle", this.defaultTableStyle);
             XmlHelper.WriteAttribute(sw, "defaultPivotStyle", this.defaultPivotStyle);
 
             if (this.tableStyle.Count > 0)
             {
-                sw.Write(">");
+                sw.Write('>');
                 foreach (CT_TableStyle x in this.tableStyle)
                 {
                     x.Write(sw, "tableStyle");
                 }
-                sw.Write(string.Format("</{0}>", nodeName));
+                sw.WriteEndElement(nodeName);
             }
             else
             {
@@ -541,20 +541,21 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             if (node.Attributes["type"] != null)
                 ctObj.type = (ST_TableStyleType)Enum.Parse(typeof(ST_TableStyleType), node.Attributes["type"].Value);
             ctObj.size = XmlHelper.ReadUInt(node.Attributes["size"]);
-            ctObj.dxfId = XmlHelper.ReadUInt(node.Attributes["dxfId"]);
+            ctObj.dxfIdFieldSpecified = node.Attributes["dxfId"] != null;
+            if(ctObj.dxfIdFieldSpecified)
+                ctObj.dxfId = XmlHelper.ReadUInt(node.Attributes["dxfId"]);
             return ctObj;
         }
 
-
-
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "type", this.type.ToString());
             XmlHelper.WriteAttribute(sw, "size", this.size);
-            XmlHelper.WriteAttribute(sw, "dxfId", this.dxfId);
-            sw.Write(">");
-            sw.Write(string.Format("</{0}>", nodeName));
+            if(this.dxfIdFieldSpecified)
+                XmlHelper.WriteAttribute(sw, "dxfId", this.dxfId);
+            sw.Write('>');
+            sw.WriteEndElement(nodeName);
         }
 
         [XmlAttribute]
@@ -591,6 +592,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
             set
             {
+                this.dxfIdFieldSpecified = true;
                 this.dxfIdField = value;
             }
         }

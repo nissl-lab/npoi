@@ -91,7 +91,7 @@ namespace NPOI.HSSF.Record
         private void ConvertToEscherRecords(int offset, int size, byte[] data)
         {
             escherRecords.Clear();
-            IEscherRecordFactory recordFactory = new DefaultEscherRecordFactory();
+            DefaultEscherRecordFactory recordFactory = new();
             int pos = offset;
             while (pos < offset + size)
             {
@@ -236,9 +236,9 @@ namespace NPOI.HSSF.Record
             for (IEnumerator it = escherRecords.GetEnumerator(); it.MoveNext(); )
             {
                 Object er = it.Current;
-                if (er is EscherContainerRecord)
+                if (er is EscherContainerRecord record)
                 {
-                    return (EscherContainerRecord)er;
+                    return record;
                 }
             }
             return null;
@@ -253,7 +253,8 @@ namespace NPOI.HSSF.Record
         {
             return FindFirstWithId(id, EscherRecords);
         }
-        private EscherRecord FindFirstWithId(short id, List<EscherRecord> records)
+
+        private static EscherRecord FindFirstWithId(short id, List<EscherRecord> records)
         {
             // Check at our level
             for (IEnumerator it = records.GetEnumerator(); it.MoveNext(); )

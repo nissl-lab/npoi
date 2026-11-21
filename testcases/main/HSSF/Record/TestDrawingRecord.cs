@@ -20,7 +20,7 @@ namespace TestCases.HSSF.Record
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.Record;
     using NPOI.Util;
 
@@ -53,13 +53,13 @@ namespace TestCases.HSSF.Record
             dataX = cn.Serialize();
             out1.Write(dataX, 0, dataX.Length);
 
-            List<Record> rec = RecordFactory.CreateRecords(new MemoryStream(out1.ToArray()));
-            Assert.AreEqual(2, rec.Count);
-            Assert.IsTrue(rec[0] is DrawingRecord);
-            Assert.IsTrue(rec[1] is ContinueRecord);
+            List<Record> rec = RecordFactory.CreateRecords(new ByteArrayInputStream(out1.ToArray()));
+            ClassicAssert.AreEqual(2, rec.Count);
+            ClassicAssert.IsTrue(rec[0] is DrawingRecord);
+            ClassicAssert.IsTrue(rec[1] is ContinueRecord);
 
-            Assert.IsTrue(Arrays.Equals(data1, ((DrawingRecord)rec[0]).RecordData));
-            Assert.IsTrue(Arrays.Equals(data2, ((ContinueRecord)rec[1]).Data));
+            ClassicAssert.IsTrue(Arrays.Equals(data1, ((DrawingRecord)rec[0]).RecordData));
+            ClassicAssert.IsTrue(Arrays.Equals(data2, ((ContinueRecord)rec[1]).Data));
 
         }
 

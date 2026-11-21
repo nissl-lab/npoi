@@ -31,7 +31,7 @@ namespace NPOI.XWPF.UserModel
         private CT_AbstractNum ctAbstractNum;
         protected XWPFNumbering numbering;
 
-        protected XWPFAbstractNum()
+        internal XWPFAbstractNum()
         {
             this.ctAbstractNum = null;
             this.numbering = null;
@@ -115,6 +115,11 @@ namespace NPOI.XWPF.UserModel
                 this.ctAbstractNum.lvl[lvl].tentative = ST_OnOff.on;
             else
                 this.ctAbstractNum.lvl[lvl].tentative = ST_OnOff.off;
+        }
+
+        internal void SetCTAbstractNum(CT_AbstractNum ctAbstractNum)
+        {
+            this.ctAbstractNum=ctAbstractNum;
         }
     }
     /// <summary>

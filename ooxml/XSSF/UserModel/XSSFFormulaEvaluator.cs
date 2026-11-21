@@ -39,7 +39,7 @@ namespace NPOI.XSSF.UserModel
     public class XSSFFormulaEvaluator : BaseXSSFFormulaEvaluator
     {
 
-        private XSSFWorkbook _book;
+        private readonly XSSFWorkbook _book;
 
         public XSSFFormulaEvaluator(IWorkbook workbook)
             : this(workbook as XSSFWorkbook, null, null)
@@ -71,6 +71,18 @@ namespace NPOI.XSSF.UserModel
             return new XSSFFormulaEvaluator(workbook, stabilityClassifier, udfFinder);
         }
         
+        public override void NotifySetFormula(ICell cell)
+        {
+            _bookEvaluator.NotifyUpdateCell(new XSSFEvaluationCell((XSSFCell)cell));
+        }
+        public override void NotifyDeleteCell(ICell cell)
+        {
+            _bookEvaluator.NotifyDeleteCell(new XSSFEvaluationCell((XSSFCell)cell));
+        }
+        public override void NotifyUpdateCell(ICell cell)
+        {
+            _bookEvaluator.NotifyUpdateCell(new XSSFEvaluationCell((XSSFCell)cell));
+        }
         /**
          * Loops over all cells in all sheets of the supplied
          *  workbook.
@@ -107,12 +119,12 @@ namespace NPOI.XSSF.UserModel
 	     */
         protected override IEvaluationCell ToEvaluationCell(ICell cell)
         {
-            if (!(cell is XSSFCell)){
+            if (cell is not XSSFCell xssfCell){
                 throw new ArgumentException("Unexpected type of cell: " + cell.GetType().Name + "." +
                         " Only XSSFCells can be evaluated.");
             }
 
-            return new XSSFEvaluationCell((XSSFCell)cell);
+            return new XSSFEvaluationCell(xssfCell);
         }
     }
 }

@@ -18,7 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using NPOI.POIFS.Common;
 using NPOI.POIFS.FileSystem;
 using NPOI.POIFS.NIO;
@@ -51,19 +51,19 @@ namespace TestCases.POIFS.FileSystem
             // 98 is actually the last block in a two block stream...
             NPOIFSStream stream = new NPOIFSStream(fs, 98);
             IEnumerator<ByteBuffer> i = stream.GetBlockIterator();
-            Assert.AreEqual(true, i.MoveNext());
+            ClassicAssert.AreEqual(true, i.MoveNext());
             ByteBuffer b = i.Current;
-            Assert.AreEqual(false, i.MoveNext());
+            ClassicAssert.AreEqual(false, i.MoveNext());
 
             // Check the contents
-            Assert.AreEqual((byte)0x81, b[0]);
-            Assert.AreEqual((byte)0x00, b[1]);
-            Assert.AreEqual((byte)0x00, b[2]);
-            Assert.AreEqual((byte)0x00, b[3]);
-            Assert.AreEqual((byte)0x82, b[4]);
-            Assert.AreEqual((byte)0x00, b[5]);
-            Assert.AreEqual((byte)0x00, b[6]);
-            Assert.AreEqual((byte)0x00, b[7]);
+            ClassicAssert.AreEqual((byte)0x81, b[0]);
+            ClassicAssert.AreEqual((byte)0x00, b[1]);
+            ClassicAssert.AreEqual((byte)0x00, b[2]);
+            ClassicAssert.AreEqual((byte)0x00, b[3]);
+            ClassicAssert.AreEqual((byte)0x82, b[4]);
+            ClassicAssert.AreEqual((byte)0x00, b[5]);
+            ClassicAssert.AreEqual((byte)0x00, b[6]);
+            ClassicAssert.AreEqual((byte)0x00, b[7]);
 
             fs.Close();
         }
@@ -77,35 +77,35 @@ namespace TestCases.POIFS.FileSystem
             NPOIFSStream stream = new NPOIFSStream(fs, 97);
             IEnumerator<ByteBuffer> i = stream.GetBlockIterator();
 
-            Assert.AreEqual(true, i.MoveNext());
+            ClassicAssert.AreEqual(true, i.MoveNext());
 
            // i.MoveNext();
             ByteBuffer b97 = i.Current;
-            Assert.AreEqual(true, i.MoveNext());
+            ClassicAssert.AreEqual(true, i.MoveNext());
 
             //i.MoveNext();
             ByteBuffer b98 = i.Current;
-            Assert.AreEqual(false, i.MoveNext());
+            ClassicAssert.AreEqual(false, i.MoveNext());
 
             // Check the contents of the 1st block
-            Assert.AreEqual((byte)0x01, b97[0]);
-            Assert.AreEqual((byte)0x00, b97[1]);
-            Assert.AreEqual((byte)0x00, b97[2]);
-            Assert.AreEqual((byte)0x00, b97[3]);
-            Assert.AreEqual((byte)0x02, b97[4]);
-            Assert.AreEqual((byte)0x00, b97[5]);
-            Assert.AreEqual((byte)0x00, b97[6]);
-            Assert.AreEqual((byte)0x00, b97[7]);
+            ClassicAssert.AreEqual((byte)0x01, b97[0]);
+            ClassicAssert.AreEqual((byte)0x00, b97[1]);
+            ClassicAssert.AreEqual((byte)0x00, b97[2]);
+            ClassicAssert.AreEqual((byte)0x00, b97[3]);
+            ClassicAssert.AreEqual((byte)0x02, b97[4]);
+            ClassicAssert.AreEqual((byte)0x00, b97[5]);
+            ClassicAssert.AreEqual((byte)0x00, b97[6]);
+            ClassicAssert.AreEqual((byte)0x00, b97[7]);
 
             // Check the contents of the 2nd block
-            Assert.AreEqual((byte)0x81, b98[0]);
-            Assert.AreEqual((byte)0x00, b98[1]);
-            Assert.AreEqual((byte)0x00, b98[2]);
-            Assert.AreEqual((byte)0x00, b98[3]);
-            Assert.AreEqual((byte)0x82, b98[4]);
-            Assert.AreEqual((byte)0x00, b98[5]);
-            Assert.AreEqual((byte)0x00, b98[6]);
-            Assert.AreEqual((byte)0x00, b98[7]);
+            ClassicAssert.AreEqual((byte)0x81, b98[0]);
+            ClassicAssert.AreEqual((byte)0x00, b98[1]);
+            ClassicAssert.AreEqual((byte)0x00, b98[2]);
+            ClassicAssert.AreEqual((byte)0x00, b98[3]);
+            ClassicAssert.AreEqual((byte)0x82, b98[4]);
+            ClassicAssert.AreEqual((byte)0x00, b98[5]);
+            ClassicAssert.AreEqual((byte)0x00, b98[6]);
+            ClassicAssert.AreEqual((byte)0x00, b98[7]);
 
             fs.Close();
         }
@@ -142,30 +142,30 @@ namespace TestCases.POIFS.FileSystem
 
                 count++;
             }
-            Assert.AreEqual(23, count);
+            ClassicAssert.AreEqual(23, count);
 
             // Check the contents
             //  1st block is at 0
-            Assert.AreEqual((byte)0x9e, b0[0]);
-            Assert.AreEqual((byte)0x75, b0[1]);
-            Assert.AreEqual((byte)0x97, b0[2]);
-            Assert.AreEqual((byte)0xf6, b0[3]);
+            ClassicAssert.AreEqual((byte)0x9e, b0[0]);
+            ClassicAssert.AreEqual((byte)0x75, b0[1]);
+            ClassicAssert.AreEqual((byte)0x97, b0[2]);
+            ClassicAssert.AreEqual((byte)0xf6, b0[3]);
 
             //  2nd block is at 1
-            Assert.AreEqual((byte)0x86, b1[0]);
-            Assert.AreEqual((byte)0x09, b1[1]);
-            Assert.AreEqual((byte)0x22, b1[2]);
-            Assert.AreEqual((byte)0xfb, b1[3]);
+            ClassicAssert.AreEqual((byte)0x86, b1[0]);
+            ClassicAssert.AreEqual((byte)0x09, b1[1]);
+            ClassicAssert.AreEqual((byte)0x22, b1[2]);
+            ClassicAssert.AreEqual((byte)0xfb, b1[3]);
 
             //  last block is at 89
-            Assert.AreEqual((byte)0xfe, b22[0]);
-            Assert.AreEqual((byte)0xff, b22[1]);
-            Assert.AreEqual((byte)0x00, b22[2]);
-            Assert.AreEqual((byte)0x00, b22[3]);
-            Assert.AreEqual((byte)0x05, b22[4]);
-            Assert.AreEqual((byte)0x01, b22[5]);
-            Assert.AreEqual((byte)0x02, b22[6]);
-            Assert.AreEqual((byte)0x00, b22[7]);
+            ClassicAssert.AreEqual((byte)0xfe, b22[0]);
+            ClassicAssert.AreEqual((byte)0xff, b22[1]);
+            ClassicAssert.AreEqual((byte)0x00, b22[2]);
+            ClassicAssert.AreEqual((byte)0x00, b22[3]);
+            ClassicAssert.AreEqual((byte)0x05, b22[4]);
+            ClassicAssert.AreEqual((byte)0x01, b22[5]);
+            ClassicAssert.AreEqual((byte)0x02, b22[6]);
+            ClassicAssert.AreEqual((byte)0x00, b22[7]);
 
             fs.Close();
         }
@@ -179,49 +179,49 @@ namespace TestCases.POIFS.FileSystem
             NPOIFSStream stream = new NPOIFSStream(fs, 0);
             IEnumerator<ByteBuffer> i = stream.GetBlockIterator();
 
-            Assert.AreEqual(true, i.MoveNext());
+            ClassicAssert.AreEqual(true, i.MoveNext());
 
            // i.MoveNext();
             ByteBuffer b0 = i.Current;
-            Assert.AreEqual(true, i.MoveNext());
+            ClassicAssert.AreEqual(true, i.MoveNext());
 
            // i.MoveNext();
             ByteBuffer b1 = i.Current;
-            Assert.AreEqual(true, i.MoveNext());
+            ClassicAssert.AreEqual(true, i.MoveNext());
 
            // i.MoveNext();
             ByteBuffer b2 = i.Current;
-            Assert.AreEqual(false, i.MoveNext());
+            ClassicAssert.AreEqual(false, i.MoveNext());
 
             // Check the contents of the 1st block
-            Assert.AreEqual((byte)0x9E, b0[0]);
-            Assert.AreEqual((byte)0x75, b0[1]);
-            Assert.AreEqual((byte)0x97, b0[2]);
-            Assert.AreEqual((byte)0xF6, b0[3]);
-            Assert.AreEqual((byte)0xFF, b0[4]);
-            Assert.AreEqual((byte)0x21, b0[5]);
-            Assert.AreEqual((byte)0xD2, b0[6]);
-            Assert.AreEqual((byte)0x11, b0[7]);
+            ClassicAssert.AreEqual((byte)0x9E, b0[0]);
+            ClassicAssert.AreEqual((byte)0x75, b0[1]);
+            ClassicAssert.AreEqual((byte)0x97, b0[2]);
+            ClassicAssert.AreEqual((byte)0xF6, b0[3]);
+            ClassicAssert.AreEqual((byte)0xFF, b0[4]);
+            ClassicAssert.AreEqual((byte)0x21, b0[5]);
+            ClassicAssert.AreEqual((byte)0xD2, b0[6]);
+            ClassicAssert.AreEqual((byte)0x11, b0[7]);
 
             // Check the contents of the 2nd block
-            Assert.AreEqual((byte)0x00, b1[0]);
-            Assert.AreEqual((byte)0x00, b1[1]);
-            Assert.AreEqual((byte)0x03, b1[2]);
-            Assert.AreEqual((byte)0x00, b1[3]);
-            Assert.AreEqual((byte)0x00, b1[4]);
-            Assert.AreEqual((byte)0x00, b1[5]);
-            Assert.AreEqual((byte)0x00, b1[6]);
-            Assert.AreEqual((byte)0x00, b1[7]);
+            ClassicAssert.AreEqual((byte)0x00, b1[0]);
+            ClassicAssert.AreEqual((byte)0x00, b1[1]);
+            ClassicAssert.AreEqual((byte)0x03, b1[2]);
+            ClassicAssert.AreEqual((byte)0x00, b1[3]);
+            ClassicAssert.AreEqual((byte)0x00, b1[4]);
+            ClassicAssert.AreEqual((byte)0x00, b1[5]);
+            ClassicAssert.AreEqual((byte)0x00, b1[6]);
+            ClassicAssert.AreEqual((byte)0x00, b1[7]);
 
             // Check the contents of the 3rd block
-            Assert.AreEqual((byte)0x6D, b2[0]);
-            Assert.AreEqual((byte)0x00, b2[1]);
-            Assert.AreEqual((byte)0x00, b2[2]);
-            Assert.AreEqual((byte)0x00, b2[3]);
-            Assert.AreEqual((byte)0x03, b2[4]);
-            Assert.AreEqual((byte)0x00, b2[5]);
-            Assert.AreEqual((byte)0x46, b2[6]);
-            Assert.AreEqual((byte)0x00, b2[7]);
+            ClassicAssert.AreEqual((byte)0x6D, b2[0]);
+            ClassicAssert.AreEqual((byte)0x00, b2[1]);
+            ClassicAssert.AreEqual((byte)0x00, b2[2]);
+            ClassicAssert.AreEqual((byte)0x00, b2[3]);
+            ClassicAssert.AreEqual((byte)0x03, b2[4]);
+            ClassicAssert.AreEqual((byte)0x00, b2[5]);
+            ClassicAssert.AreEqual((byte)0x46, b2[6]);
+            ClassicAssert.AreEqual((byte)0x00, b2[7]);
 
             fs.Close();
         }
@@ -240,20 +240,20 @@ namespace TestCases.POIFS.FileSystem
             NPOIFSStream stream = new NPOIFSStream(fs, 0);
             IEnumerator<ByteBuffer> i = stream.GetBlockIterator();
             //1st read works
-            Assert.AreEqual(true, i.MoveNext());
+            ClassicAssert.AreEqual(true, i.MoveNext());
 
             // 1st read works
           //  i.MoveNext();
             // 2nd read works
-            Assert.AreEqual(true, i.MoveNext());
+            ClassicAssert.AreEqual(true, i.MoveNext());
 
             
           // i.MoveNext();
-          //  Assert.AreEqual(true, i.MoveNext());
+          //  ClassicAssert.AreEqual(true, i.MoveNext());
 
             // 3rd read works
             //i.MoveNext();
-            Assert.AreEqual(true, i.MoveNext());
+            ClassicAssert.AreEqual(true, i.MoveNext());
 
             // 4th read blows up as it loops back to 0
             try
@@ -265,7 +265,7 @@ namespace TestCases.POIFS.FileSystem
             {
                 // Good, it was detected
             }
-            //Assert.AreEqual(true, i.MoveNext());
+            //ClassicAssert.AreEqual(true, i.MoveNext());
 
             fs.Close();
         }
@@ -279,54 +279,54 @@ namespace TestCases.POIFS.FileSystem
             // 178 -> 179 -> 180 -> end
             NPOIFSStream stream = new NPOIFSStream(ministore, 178);
             IEnumerator<ByteBuffer> i = stream.GetBlockIterator();
-            Assert.AreEqual(true, i.MoveNext());
-          //  Assert.AreEqual(true, i.MoveNext());
-          //  Assert.AreEqual(true, i.MoveNext());
+            ClassicAssert.AreEqual(true, i.MoveNext());
+          //  ClassicAssert.AreEqual(true, i.MoveNext());
+          //  ClassicAssert.AreEqual(true, i.MoveNext());
 
            // i.MoveNext();
             ByteBuffer b178 = i.Current;
-            Assert.AreEqual(true, i.MoveNext());
-           // Assert.AreEqual(true, i.MoveNext());
+            ClassicAssert.AreEqual(true, i.MoveNext());
+           // ClassicAssert.AreEqual(true, i.MoveNext());
 
            // i.MoveNext();
             ByteBuffer b179 = i.Current;
-            Assert.AreEqual(true, i.MoveNext());
+            ClassicAssert.AreEqual(true, i.MoveNext());
 
            // i.MoveNext();
             ByteBuffer b180 = i.Current;
-            Assert.AreEqual(false, i.MoveNext());
-            Assert.AreEqual(false, i.MoveNext());
-           // Assert.AreEqual(false, i.MoveNext());
+            ClassicAssert.AreEqual(false, i.MoveNext());
+            ClassicAssert.AreEqual(false, i.MoveNext());
+           // ClassicAssert.AreEqual(false, i.MoveNext());
 
             // Check the contents of the 1st block
-            Assert.AreEqual((byte)0xfe, b178[0]);
-            Assert.AreEqual((byte)0xff, b178[1]);
-            Assert.AreEqual((byte)0x00, b178[2]);
-            Assert.AreEqual((byte)0x00, b178[3]);
-            Assert.AreEqual((byte)0x05, b178[4]);
-            Assert.AreEqual((byte)0x01, b178[5]);
-            Assert.AreEqual((byte)0x02, b178[6]);
-            Assert.AreEqual((byte)0x00, b178[7]);
+            ClassicAssert.AreEqual((byte)0xfe, b178[0]);
+            ClassicAssert.AreEqual((byte)0xff, b178[1]);
+            ClassicAssert.AreEqual((byte)0x00, b178[2]);
+            ClassicAssert.AreEqual((byte)0x00, b178[3]);
+            ClassicAssert.AreEqual((byte)0x05, b178[4]);
+            ClassicAssert.AreEqual((byte)0x01, b178[5]);
+            ClassicAssert.AreEqual((byte)0x02, b178[6]);
+            ClassicAssert.AreEqual((byte)0x00, b178[7]);
 
             // And the 2nd
-            Assert.AreEqual((byte)0x6c, b179[0]);
-            Assert.AreEqual((byte)0x00, b179[1]);
-            Assert.AreEqual((byte)0x00, b179[2]);
-            Assert.AreEqual((byte)0x00, b179[3]);
-            Assert.AreEqual((byte)0x28, b179[4]);
-            Assert.AreEqual((byte)0x00, b179[5]);
-            Assert.AreEqual((byte)0x00, b179[6]);
-            Assert.AreEqual((byte)0x00, b179[7]);
+            ClassicAssert.AreEqual((byte)0x6c, b179[0]);
+            ClassicAssert.AreEqual((byte)0x00, b179[1]);
+            ClassicAssert.AreEqual((byte)0x00, b179[2]);
+            ClassicAssert.AreEqual((byte)0x00, b179[3]);
+            ClassicAssert.AreEqual((byte)0x28, b179[4]);
+            ClassicAssert.AreEqual((byte)0x00, b179[5]);
+            ClassicAssert.AreEqual((byte)0x00, b179[6]);
+            ClassicAssert.AreEqual((byte)0x00, b179[7]);
 
             // And the 3rd
-            Assert.AreEqual((byte)0x30, b180[0]);
-            Assert.AreEqual((byte)0x00, b180[1]);
-            Assert.AreEqual((byte)0x00, b180[2]);
-            Assert.AreEqual((byte)0x00, b180[3]);
-            Assert.AreEqual((byte)0x00, b180[4]);
-            Assert.AreEqual((byte)0x00, b180[5]);
-            Assert.AreEqual((byte)0x00, b180[6]);
-            Assert.AreEqual((byte)0x80, b180[7]);
+            ClassicAssert.AreEqual((byte)0x30, b180[0]);
+            ClassicAssert.AreEqual((byte)0x00, b180[1]);
+            ClassicAssert.AreEqual((byte)0x00, b180[2]);
+            ClassicAssert.AreEqual((byte)0x00, b180[3]);
+            ClassicAssert.AreEqual((byte)0x00, b180[4]);
+            ClassicAssert.AreEqual((byte)0x00, b180[5]);
+            ClassicAssert.AreEqual((byte)0x00, b180[6]);
+            ClassicAssert.AreEqual((byte)0x80, b180[7]);
 
             fs.Close();
         }
@@ -349,11 +349,11 @@ namespace TestCases.POIFS.FileSystem
             // Check the reading of blocks
             IEnumerator<ByteBuffer> it = stream.GetBlockIterator();
 
-            Assert.AreEqual(true, it.MoveNext());
+            ClassicAssert.AreEqual(true, it.MoveNext());
 
           //  it.MoveNext();
             ByteBuffer b = it.Current;
-            Assert.AreEqual(false, it.MoveNext());
+            ClassicAssert.AreEqual(false, it.MoveNext());
 
             // Now check the contents
             data = new byte[512];
@@ -361,7 +361,7 @@ namespace TestCases.POIFS.FileSystem
             for (int i = 0; i < data.Length; i++)
             {
                 byte exp = (byte)(i % 256);
-                Assert.AreEqual(exp, data[i]);
+                ClassicAssert.AreEqual(exp, data[i]);
             }
 
             fs.Close();
@@ -379,24 +379,24 @@ namespace TestCases.POIFS.FileSystem
             }
 
             // 97 -> 98 -> end
-            Assert.AreEqual(98, fs.GetNextBlock(97));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(98));
+            ClassicAssert.AreEqual(98, fs.GetNextBlock(97));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(98));
 
             // Create a 2 block stream, will become a 1 block one
             NPOIFSStream stream = new NPOIFSStream(fs, 97);
             stream.UpdateContents(data);
 
             // 97 should now be the end, and 98 free
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(97));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(98));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(97));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(98));
 
             // Check the reading of blocks
             IEnumerator<ByteBuffer> it = stream.GetBlockIterator();
 
-            Assert.AreEqual(true, it.MoveNext());
+            ClassicAssert.AreEqual(true, it.MoveNext());
             ByteBuffer b = it.Current;
 
-            Assert.AreEqual(false, it.MoveNext());
+            ClassicAssert.AreEqual(false, it.MoveNext());
 
             // Now check the contents
             data = new byte[512];
@@ -408,7 +408,7 @@ namespace TestCases.POIFS.FileSystem
             for (int i = 0; i < data.Length; i++)
             {
                 byte exp = (byte)(i % 256);
-                Assert.AreEqual(exp, data[i]);
+                ClassicAssert.AreEqual(exp, data[i]);
             }
 
             fs.Close();
@@ -426,21 +426,21 @@ namespace TestCases.POIFS.FileSystem
             }
 
             // 97 -> 98 -> end
-            Assert.AreEqual(98, fs.GetNextBlock(97));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(98));
+            ClassicAssert.AreEqual(98, fs.GetNextBlock(97));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(98));
 
             // 100 is our first free one
-            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(99));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(100));
+            ClassicAssert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(99));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(100));
 
             // Create a 2 block stream, will become a 3 block one
             NPOIFSStream stream = new NPOIFSStream(fs, 97);
             stream.UpdateContents(data);
 
             // 97 -> 98 -> 100 -> end
-            Assert.AreEqual(98, fs.GetNextBlock(97));
-            Assert.AreEqual(100, fs.GetNextBlock(98));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(100));
+            ClassicAssert.AreEqual(98, fs.GetNextBlock(97));
+            ClassicAssert.AreEqual(100, fs.GetNextBlock(98));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(100));
 
             // Check the reading of blocks
             IEnumerator<ByteBuffer> it = stream.GetBlockIterator();
@@ -456,11 +456,11 @@ namespace TestCases.POIFS.FileSystem
                 for (int i = 0; i < data.Length; i++)
                 {
                     byte exp = (byte)(i % 256);
-                    Assert.AreEqual(exp, data[i]);
+                    ClassicAssert.AreEqual(exp, data[i]);
                 }
                 count++;
             }
-            Assert.AreEqual(3, count);
+            ClassicAssert.AreEqual(3, count);
 
             fs.Close();
         }
@@ -471,12 +471,12 @@ namespace TestCases.POIFS.FileSystem
             NPOIFSFileSystem fs = new NPOIFSFileSystem(_inst.OpenResourceAsStream("BlockSize512.zvi"));
 
             // 100 is our first free one
-            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(99));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(100));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(101));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(102));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(103));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(104));
+            ClassicAssert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(99));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(100));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(101));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(102));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(103));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(104));
 
 
             // Add a single block one
@@ -490,12 +490,12 @@ namespace TestCases.POIFS.FileSystem
             stream.UpdateContents(data);
 
             // Check it was allocated properly
-            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(99));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(100));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(101));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(102));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(103));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(104));
+            ClassicAssert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(99));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(100));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(101));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(102));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(103));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(104));
 
             // And check the contents
             IEnumerator<ByteBuffer> it = stream.GetBlockIterator();
@@ -511,11 +511,11 @@ namespace TestCases.POIFS.FileSystem
                 for (int i = 0; i < data.Length; i++)
                 {
                     byte exp = (byte)(i % 256);
-                    Assert.AreEqual(exp, data[i]);
+                    ClassicAssert.AreEqual(exp, data[i]);
                 }
                 count++;
             }
-            Assert.AreEqual(1, count);
+            ClassicAssert.AreEqual(1, count);
 
 
             // And a multi block one
@@ -529,12 +529,12 @@ namespace TestCases.POIFS.FileSystem
             stream.UpdateContents(data);
 
             // Check it was allocated properly
-            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(99));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(100));
-            Assert.AreEqual(102, fs.GetNextBlock(101));
-            Assert.AreEqual(103, fs.GetNextBlock(102));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(103));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(104));
+            ClassicAssert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(99));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(100));
+            ClassicAssert.AreEqual(102, fs.GetNextBlock(101));
+            ClassicAssert.AreEqual(103, fs.GetNextBlock(102));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(103));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(104));
 
             // And check the contents
             it = stream.GetBlockIterator();
@@ -549,20 +549,20 @@ namespace TestCases.POIFS.FileSystem
                 for (int i = 0; i < data.Length; i++)
                 {
                     byte exp = (byte)(i % 256);
-                    Assert.AreEqual(exp, data[i]);
+                    ClassicAssert.AreEqual(exp, data[i]);
                 }
                 count++;
             }
-            Assert.AreEqual(3, count);
+            ClassicAssert.AreEqual(3, count);
 
             // Free it
             stream.Free();
-            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(99));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(100));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(101));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(102));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(103));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(104));
+            ClassicAssert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(99));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(100));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(101));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(102));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(103));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(104));
 
             fs.Close();
         }
@@ -573,15 +573,15 @@ namespace TestCases.POIFS.FileSystem
             NPOIFSFileSystem fs = new NPOIFSFileSystem(_inst.OpenResourceAsStream("BlockSize512.zvi"));
 
             // Allocate almost all the blocks
-            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(99));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(100));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(127));
+            ClassicAssert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(99));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(100));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(127));
             for (int i = 100; i < 127; i++)
             {
                 fs.SetNextBlock(i, POIFSConstants.END_OF_CHAIN);
             }
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(127));
-            Assert.AreEqual(true, fs.GetBATBlockAndIndex(0).Block.HasFreeSectors);
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(127));
+            ClassicAssert.AreEqual(true, fs.GetBATBlockAndIndex(0).Block.HasFreeSectors);
 
 
             // Write a 3 block stream
@@ -594,16 +594,16 @@ namespace TestCases.POIFS.FileSystem
             stream.UpdateContents(data);
 
             // Check we got another BAT
-            Assert.AreEqual(false, fs.GetBATBlockAndIndex(0).Block.HasFreeSectors);
-            Assert.AreEqual(true, fs.GetBATBlockAndIndex(128).Block.HasFreeSectors);
+            ClassicAssert.AreEqual(false, fs.GetBATBlockAndIndex(0).Block.HasFreeSectors);
+            ClassicAssert.AreEqual(true, fs.GetBATBlockAndIndex(128).Block.HasFreeSectors);
 
             // the BAT will be in the first spot of the new block
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(126));
-            Assert.AreEqual(129, fs.GetNextBlock(127));
-            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(128));
-            Assert.AreEqual(130, fs.GetNextBlock(129));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(130));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(131));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(126));
+            ClassicAssert.AreEqual(129, fs.GetNextBlock(127));
+            ClassicAssert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(128));
+            ClassicAssert.AreEqual(130, fs.GetNextBlock(129));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(130));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(131));
 
             fs.Close();
         }
@@ -614,14 +614,14 @@ namespace TestCases.POIFS.FileSystem
             NPOIFSFileSystem fs = new NPOIFSFileSystem(_inst.OpenResourceAsStream("BlockSize4096.zvi"));
 
             // 0 -> 1 -> 2 -> end
-            Assert.AreEqual(1, fs.GetNextBlock(0));
-            Assert.AreEqual(2, fs.GetNextBlock(1));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(2));
-            Assert.AreEqual(4, fs.GetNextBlock(3));
+            ClassicAssert.AreEqual(1, fs.GetNextBlock(0));
+            ClassicAssert.AreEqual(2, fs.GetNextBlock(1));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(2));
+            ClassicAssert.AreEqual(4, fs.GetNextBlock(3));
 
             // First free one is at 15
-            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(14));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(15));
+            ClassicAssert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(14));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(15));
 
 
             // Write a 5 block file 
@@ -635,14 +635,14 @@ namespace TestCases.POIFS.FileSystem
 
 
             // Check it
-            Assert.AreEqual(1, fs.GetNextBlock(0));
-            Assert.AreEqual(2, fs.GetNextBlock(1));
-            Assert.AreEqual(15, fs.GetNextBlock(2)); // Jumps
-            Assert.AreEqual(4, fs.GetNextBlock(3));  // Next stream
-            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(14));
-            Assert.AreEqual(16, fs.GetNextBlock(15)); // Continues
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(16)); // Ends
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(17)); // Free
+            ClassicAssert.AreEqual(1, fs.GetNextBlock(0));
+            ClassicAssert.AreEqual(2, fs.GetNextBlock(1));
+            ClassicAssert.AreEqual(15, fs.GetNextBlock(2)); // Jumps
+            ClassicAssert.AreEqual(4, fs.GetNextBlock(3));  // Next stream
+            ClassicAssert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, fs.GetNextBlock(14));
+            ClassicAssert.AreEqual(16, fs.GetNextBlock(15)); // Continues
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, fs.GetNextBlock(16)); // Ends
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, fs.GetNextBlock(17)); // Free
 
             // Check the contents too
             IEnumerator<ByteBuffer> it = stream.GetBlockIterator();
@@ -657,11 +657,11 @@ namespace TestCases.POIFS.FileSystem
                 for (int i = 0; i < data.Length; i++)
                 {
                     byte exp = (byte)(i % 256);
-                    Assert.AreEqual(exp, data[i]);
+                    ClassicAssert.AreEqual(exp, data[i]);
                 }
                 count++;
             }
-            Assert.AreEqual(5, count);
+            ClassicAssert.AreEqual(5, count);
 
             fs.Close();
         }
@@ -674,9 +674,9 @@ namespace TestCases.POIFS.FileSystem
             NPOIFSStream stream = new NPOIFSStream(ministore, 178);
 
             // 178 -> 179 -> 180 -> end
-            Assert.AreEqual(179, ministore.GetNextBlock(178));
-            Assert.AreEqual(180, ministore.GetNextBlock(179));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, ministore.GetNextBlock(180));
+            ClassicAssert.AreEqual(179, ministore.GetNextBlock(178));
+            ClassicAssert.AreEqual(180, ministore.GetNextBlock(179));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, ministore.GetNextBlock(180));
 
 
             // Try writing 3 full blocks worth
@@ -689,9 +689,9 @@ namespace TestCases.POIFS.FileSystem
             stream.UpdateContents(data);
 
             // Check
-            Assert.AreEqual(179, ministore.GetNextBlock(178));
-            Assert.AreEqual(180, ministore.GetNextBlock(179));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, ministore.GetNextBlock(180));
+            ClassicAssert.AreEqual(179, ministore.GetNextBlock(178));
+            ClassicAssert.AreEqual(180, ministore.GetNextBlock(179));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, ministore.GetNextBlock(180));
 
             stream = new NPOIFSStream(ministore, 178);
             IEnumerator<ByteBuffer> it = stream.GetBlockIterator();
@@ -702,14 +702,14 @@ namespace TestCases.POIFS.FileSystem
             it.MoveNext();
             ByteBuffer b180 = it.Current;
 
-            Assert.AreEqual(false, it.MoveNext());
+            ClassicAssert.AreEqual(false, it.MoveNext());
 
-            Assert.AreEqual((byte)0x00, b178.Read());
-            Assert.AreEqual((byte)0x01, b178.Read());
-            Assert.AreEqual((byte)0x40, b179.Read());
-            Assert.AreEqual((byte)0x41, b179.Read());
-            Assert.AreEqual((byte)0x80, b180.Read());
-            Assert.AreEqual((byte)0x81, b180.Read());
+            ClassicAssert.AreEqual((byte)0x00, b178.Read());
+            ClassicAssert.AreEqual((byte)0x01, b178.Read());
+            ClassicAssert.AreEqual((byte)0x40, b179.Read());
+            ClassicAssert.AreEqual((byte)0x41, b179.Read());
+            ClassicAssert.AreEqual((byte)0x80, b180.Read());
+            ClassicAssert.AreEqual((byte)0x81, b180.Read());
 
 
             // Try writing just into 3 blocks worth
@@ -722,9 +722,9 @@ namespace TestCases.POIFS.FileSystem
             stream.UpdateContents(data);
 
             // Check
-            Assert.AreEqual(179, ministore.GetNextBlock(178));
-            Assert.AreEqual(180, ministore.GetNextBlock(179));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, ministore.GetNextBlock(180));
+            ClassicAssert.AreEqual(179, ministore.GetNextBlock(178));
+            ClassicAssert.AreEqual(180, ministore.GetNextBlock(179));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, ministore.GetNextBlock(180));
 
             stream = new NPOIFSStream(ministore, 178);
             it = stream.GetBlockIterator();
@@ -734,14 +734,14 @@ namespace TestCases.POIFS.FileSystem
             b179 = it.Current;
             it.MoveNext();
             b180 = it.Current;
-            Assert.AreEqual(false, it.MoveNext());
+            ClassicAssert.AreEqual(false, it.MoveNext());
 
-            Assert.AreEqual((byte)0x04, b178.Read());
-            Assert.AreEqual((byte)0x05, b178.Read());
-            Assert.AreEqual((byte)0x44, b179.Read());
-            Assert.AreEqual((byte)0x45, b179.Read());
-            Assert.AreEqual((byte)0x84, b180.Read());
-            Assert.AreEqual((byte)0x85, b180.Read());
+            ClassicAssert.AreEqual((byte)0x04, b178.Read());
+            ClassicAssert.AreEqual((byte)0x05, b178.Read());
+            ClassicAssert.AreEqual((byte)0x44, b179.Read());
+            ClassicAssert.AreEqual((byte)0x45, b179.Read());
+            ClassicAssert.AreEqual((byte)0x84, b180.Read());
+            ClassicAssert.AreEqual((byte)0x85, b180.Read());
 
 
             // Try writing 1, should truncate
@@ -753,26 +753,26 @@ namespace TestCases.POIFS.FileSystem
             stream = new NPOIFSStream(ministore, 178);
             stream.UpdateContents(data);
 
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, ministore.GetNextBlock(178));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, ministore.GetNextBlock(179));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, ministore.GetNextBlock(180));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, ministore.GetNextBlock(178));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, ministore.GetNextBlock(179));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, ministore.GetNextBlock(180));
 
             stream = new NPOIFSStream(ministore, 178);
             it = stream.GetBlockIterator();
             it.MoveNext();
             b178 = it.Current;
-            Assert.AreEqual(false, it.MoveNext());
+            ClassicAssert.AreEqual(false, it.MoveNext());
 
-            Assert.AreEqual((byte)0x09, b178[0]);
-            Assert.AreEqual((byte)0x0a, b178[1]);
+            ClassicAssert.AreEqual((byte)0x09, b178[0]);
+            ClassicAssert.AreEqual((byte)0x0a, b178[1]);
 
             // Try writing 5, should extend
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, ministore.GetNextBlock(178));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, ministore.GetNextBlock(179));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, ministore.GetNextBlock(180));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, ministore.GetNextBlock(181));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, ministore.GetNextBlock(182));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, ministore.GetNextBlock(183));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, ministore.GetNextBlock(178));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, ministore.GetNextBlock(179));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, ministore.GetNextBlock(180));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, ministore.GetNextBlock(181));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, ministore.GetNextBlock(182));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, ministore.GetNextBlock(183));
 
             data = new byte[64 * 4 + 12];
             for (int i = 0; i < data.Length; i++)
@@ -782,11 +782,11 @@ namespace TestCases.POIFS.FileSystem
             stream = new NPOIFSStream(ministore, 178);
             stream.UpdateContents(data);
 
-            Assert.AreEqual(179, ministore.GetNextBlock(178));
-            Assert.AreEqual(180, ministore.GetNextBlock(179));
-            Assert.AreEqual(181, ministore.GetNextBlock(180));
-            Assert.AreEqual(182, ministore.GetNextBlock(181));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, ministore.GetNextBlock(182));
+            ClassicAssert.AreEqual(179, ministore.GetNextBlock(178));
+            ClassicAssert.AreEqual(180, ministore.GetNextBlock(179));
+            ClassicAssert.AreEqual(181, ministore.GetNextBlock(180));
+            ClassicAssert.AreEqual(182, ministore.GetNextBlock(181));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, ministore.GetNextBlock(182));
 
             stream = new NPOIFSStream(ministore, 178);
             it = stream.GetBlockIterator();
@@ -800,18 +800,18 @@ namespace TestCases.POIFS.FileSystem
             ByteBuffer b181 = it.Current;
             it.MoveNext();
             ByteBuffer b182 = it.Current;
-            Assert.AreEqual(false, it.MoveNext());
+            ClassicAssert.AreEqual(false, it.MoveNext());
 
-            Assert.AreEqual((byte)0x03, b178[0]);
-            Assert.AreEqual((byte)0x04, b178[1]);
-            Assert.AreEqual((byte)0x43, b179[0]);
-            Assert.AreEqual((byte)0x44, b179[1]);
-            Assert.AreEqual((byte)0x83, b180[0]);
-            Assert.AreEqual((byte)0x84, b180[1]);
-            Assert.AreEqual((byte)0xc3, b181[0]);
-            Assert.AreEqual((byte)0xc4, b181[1]);
-            Assert.AreEqual((byte)0x03, b182[0]);
-            Assert.AreEqual((byte)0x04, b182[1]);
+            ClassicAssert.AreEqual((byte)0x03, b178[0]);
+            ClassicAssert.AreEqual((byte)0x04, b178[1]);
+            ClassicAssert.AreEqual((byte)0x43, b179[0]);
+            ClassicAssert.AreEqual((byte)0x44, b179[1]);
+            ClassicAssert.AreEqual((byte)0x83, b180[0]);
+            ClassicAssert.AreEqual((byte)0x84, b180[1]);
+            ClassicAssert.AreEqual((byte)0xc3, b181[0]);
+            ClassicAssert.AreEqual((byte)0xc4, b181[1]);
+            ClassicAssert.AreEqual((byte)0x03, b182[0]);
+            ClassicAssert.AreEqual((byte)0x04, b182[1]);
 
 
             // Write lots, so it needs another big block
@@ -835,14 +835,14 @@ namespace TestCases.POIFS.FileSystem
             stream.UpdateContents(data);
 
             // Should have added 2 more blocks to the chain
-            Assert.AreEqual(179, ministore.GetNextBlock(178));
-            Assert.AreEqual(180, ministore.GetNextBlock(179));
-            Assert.AreEqual(181, ministore.GetNextBlock(180));
-            Assert.AreEqual(182, ministore.GetNextBlock(181));
-            Assert.AreEqual(183, ministore.GetNextBlock(182));
-            Assert.AreEqual(184, ministore.GetNextBlock(183));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, ministore.GetNextBlock(184));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, ministore.GetNextBlock(185));
+            ClassicAssert.AreEqual(179, ministore.GetNextBlock(178));
+            ClassicAssert.AreEqual(180, ministore.GetNextBlock(179));
+            ClassicAssert.AreEqual(181, ministore.GetNextBlock(180));
+            ClassicAssert.AreEqual(182, ministore.GetNextBlock(181));
+            ClassicAssert.AreEqual(183, ministore.GetNextBlock(182));
+            ClassicAssert.AreEqual(184, ministore.GetNextBlock(183));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, ministore.GetNextBlock(184));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, ministore.GetNextBlock(185));
 
             // Block 184 should exist
             ministore.GetBlockAt(183);
@@ -866,22 +866,22 @@ namespace TestCases.POIFS.FileSystem
             ByteBuffer b183 = it.Current;
             it.MoveNext();
             ByteBuffer b184 = it.Current;
-            Assert.AreEqual(false, it.MoveNext());
+            ClassicAssert.AreEqual(false, it.MoveNext());
 
-            Assert.AreEqual((byte)0x01, b178[0]);
-            Assert.AreEqual((byte)0x02, b178[1]);
-            Assert.AreEqual((byte)0x41, b179[0]);
-            Assert.AreEqual((byte)0x42, b179[1]);
-            Assert.AreEqual((byte)0x81, b180[0]);
-            Assert.AreEqual((byte)0x82, b180[1]);
-            Assert.AreEqual((byte)0xc1, b181[0]);
-            Assert.AreEqual((byte)0xc2, b181[1]);
-            Assert.AreEqual((byte)0x01, b182[0]);
-            Assert.AreEqual((byte)0x02, b182[1]);
-            Assert.AreEqual((byte)0x41, b183[0]);
-            Assert.AreEqual((byte)0x42, b183[1]);
-            Assert.AreEqual((byte)0x81, b184[0]);
-            Assert.AreEqual((byte)0x82, b184[1]);
+            ClassicAssert.AreEqual((byte)0x01, b178[0]);
+            ClassicAssert.AreEqual((byte)0x02, b178[1]);
+            ClassicAssert.AreEqual((byte)0x41, b179[0]);
+            ClassicAssert.AreEqual((byte)0x42, b179[1]);
+            ClassicAssert.AreEqual((byte)0x81, b180[0]);
+            ClassicAssert.AreEqual((byte)0x82, b180[1]);
+            ClassicAssert.AreEqual((byte)0xc1, b181[0]);
+            ClassicAssert.AreEqual((byte)0xc2, b181[1]);
+            ClassicAssert.AreEqual((byte)0x01, b182[0]);
+            ClassicAssert.AreEqual((byte)0x02, b182[1]);
+            ClassicAssert.AreEqual((byte)0x41, b183[0]);
+            ClassicAssert.AreEqual((byte)0x42, b183[1]);
+            ClassicAssert.AreEqual((byte)0x81, b184[0]);
+            ClassicAssert.AreEqual((byte)0x82, b184[1]);
 
             fs.Close();
         }
@@ -931,14 +931,14 @@ namespace TestCases.POIFS.FileSystem
             NPOIFSStream stream = new NPOIFSStream(fs);
 
             // Check our filesystem has Properties then BAT
-            Assert.AreEqual(2, fs.GetFreeBlock());
+            ClassicAssert.AreEqual(2, fs.GetFreeBlock());
             BATBlock bat = fs.GetBATBlockAndIndex(0).Block;
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(0));
-            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, bat.GetValueAt(1));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, bat.GetValueAt(2));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(0));
+            ClassicAssert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, bat.GetValueAt(1));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, bat.GetValueAt(2));
 
             // Check the stream as-is
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, stream.GetStartBlock());
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, stream.GetStartBlock());
             try
             {
                 stream.GetBlockIterator();
@@ -959,18 +959,18 @@ namespace TestCases.POIFS.FileSystem
             stream.UpdateContents(data);
 
             // Check now
-            Assert.AreEqual(4, fs.GetFreeBlock());
+            ClassicAssert.AreEqual(4, fs.GetFreeBlock());
             bat = fs.GetBATBlockAndIndex(0).Block;
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(0));
-            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, bat.GetValueAt(1));
-            Assert.AreEqual(3, bat.GetValueAt(2));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(3));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, bat.GetValueAt(4));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(0));
+            ClassicAssert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, bat.GetValueAt(1));
+            ClassicAssert.AreEqual(3, bat.GetValueAt(2));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(3));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, bat.GetValueAt(4));
 
 
             IEnumerator<ByteBuffer> it = stream.GetBlockIterator();
 
-            Assert.AreEqual(true, it.MoveNext());
+            ClassicAssert.AreEqual(true, it.MoveNext());
             ByteBuffer b = it.Current;
 
             byte[] read = new byte[512];
@@ -979,11 +979,11 @@ namespace TestCases.POIFS.FileSystem
             b.Read(read);
             for (int i = 0; i < read.Length; i++)
             {
-                //Assert.AreEqual("Wrong value at " + i, data[i], read[i]);
-                Assert.AreEqual(data[i], read[i], "Wrong value at " + i);
+                //ClassicAssert.AreEqual("Wrong value at " + i, data[i], read[i]);
+                ClassicAssert.AreEqual(data[i], read[i], "Wrong value at " + i);
             }
 
-            Assert.AreEqual(true, it.MoveNext());
+            ClassicAssert.AreEqual(true, it.MoveNext());
             b = it.Current;
 
             read = new byte[512];
@@ -992,14 +992,14 @@ namespace TestCases.POIFS.FileSystem
             b.Read(read);
             for (int i = 0; i < 20; i++)
             {
-                Assert.AreEqual(data[i + 512], read[i]);
+                ClassicAssert.AreEqual(data[i + 512], read[i]);
             }
             for (int i = 20; i < read.Length; i++)
             {
-                Assert.AreEqual(0, read[i]);
+                ClassicAssert.AreEqual(0, read[i]);
             }
 
-            Assert.AreEqual(false, it.MoveNext());
+            ClassicAssert.AreEqual(false, it.MoveNext());
 
             fs.Close();
         }
@@ -1013,9 +1013,9 @@ namespace TestCases.POIFS.FileSystem
 
             // Starts empty, other that Properties and BAT
             BATBlock bat = fs.GetBATBlockAndIndex(0).Block;
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(0));
-            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, bat.GetValueAt(1));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, bat.GetValueAt(2));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(0));
+            ClassicAssert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, bat.GetValueAt(1));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, bat.GetValueAt(2));
 
             // Write something that uses a main stream
             byte[] main4106 = new byte[4106];
@@ -1025,22 +1025,22 @@ namespace TestCases.POIFS.FileSystem
                     "Normal", new MemoryStream(main4106));
 
             // Should have used 9 blocks
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(0));
-            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, bat.GetValueAt(1));
-            Assert.AreEqual(3, bat.GetValueAt(2));
-            Assert.AreEqual(4, bat.GetValueAt(3));
-            Assert.AreEqual(5, bat.GetValueAt(4));
-            Assert.AreEqual(6, bat.GetValueAt(5));
-            Assert.AreEqual(7, bat.GetValueAt(6));
-            Assert.AreEqual(8, bat.GetValueAt(7));
-            Assert.AreEqual(9, bat.GetValueAt(8));
-            Assert.AreEqual(10, bat.GetValueAt(9));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(10));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, bat.GetValueAt(11));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(0));
+            ClassicAssert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, bat.GetValueAt(1));
+            ClassicAssert.AreEqual(3, bat.GetValueAt(2));
+            ClassicAssert.AreEqual(4, bat.GetValueAt(3));
+            ClassicAssert.AreEqual(5, bat.GetValueAt(4));
+            ClassicAssert.AreEqual(6, bat.GetValueAt(5));
+            ClassicAssert.AreEqual(7, bat.GetValueAt(6));
+            ClassicAssert.AreEqual(8, bat.GetValueAt(7));
+            ClassicAssert.AreEqual(9, bat.GetValueAt(8));
+            ClassicAssert.AreEqual(10, bat.GetValueAt(9));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(10));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, bat.GetValueAt(11));
 
             normal = (DocumentEntry)fs.Root.GetEntry("Normal");
-            Assert.AreEqual(4106, normal.Size);
-            Assert.AreEqual(4106, ((DocumentNode)normal).Property.Size);
+            ClassicAssert.AreEqual(4106, normal.Size);
+            ClassicAssert.AreEqual(4106, ((DocumentNode)normal).Property.Size);
 
 
             // Replace with one still big enough for a main stream, but one block smaller
@@ -1053,22 +1053,22 @@ namespace TestCases.POIFS.FileSystem
             nout.Close();
 
             // Will have dropped to 8
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(0));
-            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, bat.GetValueAt(1));
-            Assert.AreEqual(3, bat.GetValueAt(2));
-            Assert.AreEqual(4, bat.GetValueAt(3));
-            Assert.AreEqual(5, bat.GetValueAt(4));
-            Assert.AreEqual(6, bat.GetValueAt(5));
-            Assert.AreEqual(7, bat.GetValueAt(6));
-            Assert.AreEqual(8, bat.GetValueAt(7));
-            Assert.AreEqual(9, bat.GetValueAt(8));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(9));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, bat.GetValueAt(10));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, bat.GetValueAt(11));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(0));
+            ClassicAssert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, bat.GetValueAt(1));
+            ClassicAssert.AreEqual(3, bat.GetValueAt(2));
+            ClassicAssert.AreEqual(4, bat.GetValueAt(3));
+            ClassicAssert.AreEqual(5, bat.GetValueAt(4));
+            ClassicAssert.AreEqual(6, bat.GetValueAt(5));
+            ClassicAssert.AreEqual(7, bat.GetValueAt(6));
+            ClassicAssert.AreEqual(8, bat.GetValueAt(7));
+            ClassicAssert.AreEqual(9, bat.GetValueAt(8));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(9));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, bat.GetValueAt(10));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, bat.GetValueAt(11));
 
             normal = (DocumentEntry)fs.Root.GetEntry("Normal");
-            Assert.AreEqual(4096, normal.Size);
-            Assert.AreEqual(4096, ((DocumentNode)normal).Property.Size);
+            ClassicAssert.AreEqual(4096, normal.Size);
+            ClassicAssert.AreEqual(4096, ((DocumentNode)normal).Property.Size);
 
 
             // Write and check
@@ -1076,22 +1076,22 @@ namespace TestCases.POIFS.FileSystem
             bat = fs.GetBATBlockAndIndex(0).Block;
 
             // No change after write
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(0));
-            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, bat.GetValueAt(1));
-            Assert.AreEqual(3, bat.GetValueAt(2));
-            Assert.AreEqual(4, bat.GetValueAt(3));
-            Assert.AreEqual(5, bat.GetValueAt(4));
-            Assert.AreEqual(6, bat.GetValueAt(5));
-            Assert.AreEqual(7, bat.GetValueAt(6));
-            Assert.AreEqual(8, bat.GetValueAt(7));
-            Assert.AreEqual(9, bat.GetValueAt(8));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(9)); // End of Normal
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, bat.GetValueAt(10));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, bat.GetValueAt(11));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(0));
+            ClassicAssert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, bat.GetValueAt(1));
+            ClassicAssert.AreEqual(3, bat.GetValueAt(2));
+            ClassicAssert.AreEqual(4, bat.GetValueAt(3));
+            ClassicAssert.AreEqual(5, bat.GetValueAt(4));
+            ClassicAssert.AreEqual(6, bat.GetValueAt(5));
+            ClassicAssert.AreEqual(7, bat.GetValueAt(6));
+            ClassicAssert.AreEqual(8, bat.GetValueAt(7));
+            ClassicAssert.AreEqual(9, bat.GetValueAt(8));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(9)); // End of Normal
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, bat.GetValueAt(10));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, bat.GetValueAt(11));
 
             normal = (DocumentEntry)fs.Root.GetEntry("Normal");
-            Assert.AreEqual(4096, normal.Size);
-            Assert.AreEqual(4096, ((DocumentNode)normal).Property.Size);
+            ClassicAssert.AreEqual(4096, normal.Size);
+            ClassicAssert.AreEqual(4096, ((DocumentNode)normal).Property.Size);
 
 
             // Make longer, take 1 block at the end
@@ -1100,23 +1100,23 @@ namespace TestCases.POIFS.FileSystem
             nout.Write(main4106);
             nout.Close();
 
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(0));
-            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, bat.GetValueAt(1));
-            Assert.AreEqual(3, bat.GetValueAt(2));
-            Assert.AreEqual(4, bat.GetValueAt(3));
-            Assert.AreEqual(5, bat.GetValueAt(4));
-            Assert.AreEqual(6, bat.GetValueAt(5));
-            Assert.AreEqual(7, bat.GetValueAt(6));
-            Assert.AreEqual(8, bat.GetValueAt(7));
-            Assert.AreEqual(9, bat.GetValueAt(8));
-            Assert.AreEqual(10, bat.GetValueAt(9));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(10)); // Normal
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, bat.GetValueAt(11));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, bat.GetValueAt(12));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(0));
+            ClassicAssert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, bat.GetValueAt(1));
+            ClassicAssert.AreEqual(3, bat.GetValueAt(2));
+            ClassicAssert.AreEqual(4, bat.GetValueAt(3));
+            ClassicAssert.AreEqual(5, bat.GetValueAt(4));
+            ClassicAssert.AreEqual(6, bat.GetValueAt(5));
+            ClassicAssert.AreEqual(7, bat.GetValueAt(6));
+            ClassicAssert.AreEqual(8, bat.GetValueAt(7));
+            ClassicAssert.AreEqual(9, bat.GetValueAt(8));
+            ClassicAssert.AreEqual(10, bat.GetValueAt(9));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(10)); // Normal
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, bat.GetValueAt(11));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, bat.GetValueAt(12));
 
             normal = (DocumentEntry)fs.Root.GetEntry("Normal");
-            Assert.AreEqual(4106, normal.Size);
-            Assert.AreEqual(4106, ((DocumentNode)normal).Property.Size);
+            ClassicAssert.AreEqual(4106, normal.Size);
+            ClassicAssert.AreEqual(4106, ((DocumentNode)normal).Property.Size);
 
 
             // Make it small, will trigger the SBAT stream and free lots up
@@ -1126,23 +1126,23 @@ namespace TestCases.POIFS.FileSystem
             nout.Write(mini);
             nout.Close();
 
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(0));
-            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, bat.GetValueAt(1));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(2)); // SBAT
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(3)); // Mini Stream
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, bat.GetValueAt(4));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, bat.GetValueAt(5));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, bat.GetValueAt(6));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, bat.GetValueAt(7));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, bat.GetValueAt(8));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, bat.GetValueAt(9));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, bat.GetValueAt(10));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, bat.GetValueAt(11));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, bat.GetValueAt(12));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(0));
+            ClassicAssert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, bat.GetValueAt(1));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(2)); // SBAT
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(3)); // Mini Stream
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, bat.GetValueAt(4));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, bat.GetValueAt(5));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, bat.GetValueAt(6));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, bat.GetValueAt(7));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, bat.GetValueAt(8));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, bat.GetValueAt(9));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, bat.GetValueAt(10));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, bat.GetValueAt(11));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, bat.GetValueAt(12));
 
             normal = (DocumentEntry)fs.Root.GetEntry("Normal");
-            Assert.AreEqual(7, normal.Size);
-            Assert.AreEqual(7, ((DocumentNode)normal).Property.Size);
+            ClassicAssert.AreEqual(7, normal.Size);
+            ClassicAssert.AreEqual(7, ((DocumentNode)normal).Property.Size);
 
 
             // Finally back to big again
@@ -1151,48 +1151,48 @@ namespace TestCases.POIFS.FileSystem
             nout.Close();
 
             // Will keep the mini stream, now empty
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(0));
-            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, bat.GetValueAt(1));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(2)); // SBAT
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(3)); // Mini Stream
-            Assert.AreEqual(5, bat.GetValueAt(4));
-            Assert.AreEqual(6, bat.GetValueAt(5));
-            Assert.AreEqual(7, bat.GetValueAt(6));
-            Assert.AreEqual(8, bat.GetValueAt(7));
-            Assert.AreEqual(9, bat.GetValueAt(8));
-            Assert.AreEqual(10, bat.GetValueAt(9));
-            Assert.AreEqual(11, bat.GetValueAt(10));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(11));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, bat.GetValueAt(12));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, bat.GetValueAt(13));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(0));
+            ClassicAssert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, bat.GetValueAt(1));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(2)); // SBAT
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(3)); // Mini Stream
+            ClassicAssert.AreEqual(5, bat.GetValueAt(4));
+            ClassicAssert.AreEqual(6, bat.GetValueAt(5));
+            ClassicAssert.AreEqual(7, bat.GetValueAt(6));
+            ClassicAssert.AreEqual(8, bat.GetValueAt(7));
+            ClassicAssert.AreEqual(9, bat.GetValueAt(8));
+            ClassicAssert.AreEqual(10, bat.GetValueAt(9));
+            ClassicAssert.AreEqual(11, bat.GetValueAt(10));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(11));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, bat.GetValueAt(12));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, bat.GetValueAt(13));
 
             normal = (DocumentEntry)fs.Root.GetEntry("Normal");
-            Assert.AreEqual(4096, normal.Size);
-            Assert.AreEqual(4096, ((DocumentNode)normal).Property.Size);
+            ClassicAssert.AreEqual(4096, normal.Size);
+            ClassicAssert.AreEqual(4096, ((DocumentNode)normal).Property.Size);
 
 
             // Save, re-load, re-check
             fs = TestNPOIFSFileSystem.WriteOutAndReadBack(fs);
             bat = fs.GetBATBlockAndIndex(0).Block;
 
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(0));
-            Assert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, bat.GetValueAt(1));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(2)); // SBAT
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(3)); // Mini Stream
-            Assert.AreEqual(5, bat.GetValueAt(4));
-            Assert.AreEqual(6, bat.GetValueAt(5));
-            Assert.AreEqual(7, bat.GetValueAt(6));
-            Assert.AreEqual(8, bat.GetValueAt(7));
-            Assert.AreEqual(9, bat.GetValueAt(8));
-            Assert.AreEqual(10, bat.GetValueAt(9));
-            Assert.AreEqual(11, bat.GetValueAt(10));
-            Assert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(11));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, bat.GetValueAt(12));
-            Assert.AreEqual(POIFSConstants.UNUSED_BLOCK, bat.GetValueAt(13));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(0));
+            ClassicAssert.AreEqual(POIFSConstants.FAT_SECTOR_BLOCK, bat.GetValueAt(1));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(2)); // SBAT
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(3)); // Mini Stream
+            ClassicAssert.AreEqual(5, bat.GetValueAt(4));
+            ClassicAssert.AreEqual(6, bat.GetValueAt(5));
+            ClassicAssert.AreEqual(7, bat.GetValueAt(6));
+            ClassicAssert.AreEqual(8, bat.GetValueAt(7));
+            ClassicAssert.AreEqual(9, bat.GetValueAt(8));
+            ClassicAssert.AreEqual(10, bat.GetValueAt(9));
+            ClassicAssert.AreEqual(11, bat.GetValueAt(10));
+            ClassicAssert.AreEqual(POIFSConstants.END_OF_CHAIN, bat.GetValueAt(11));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, bat.GetValueAt(12));
+            ClassicAssert.AreEqual(POIFSConstants.UNUSED_BLOCK, bat.GetValueAt(13));
 
             normal = (DocumentEntry)fs.Root.GetEntry("Normal");
-            Assert.AreEqual(4096, normal.Size);
-            Assert.AreEqual(4096, ((DocumentNode)normal).Property.Size);
+            ClassicAssert.AreEqual(4096, normal.Size);
+            ClassicAssert.AreEqual(4096, ((DocumentNode)normal).Property.Size);
 
             fs.Close();
         }

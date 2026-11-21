@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using NPOI.HSSF.UserModel;
 using NPOI.HSSF.Model;
 using NPOI.DDF;
@@ -28,34 +28,34 @@ namespace TestCases.HSSF.UserModel
             polygon.SetPoints(new int[] { 0, 90, 50 }, new int[] { 5, 5, 44 });
             polygon.ShapeId = (1024);
 
-            Assert.AreEqual(polygon.GetEscherContainer().ChildRecords.Count, 4);
+            ClassicAssert.AreEqual(polygon.GetEscherContainer().ChildRecords.Count, 4);
 
             //sp record
             byte[] expected = Decompress("H4sIAAAAAAAAAGNi4PrAwQAELEDMxcAAAAU6ZlwQAAAA");
             byte[] actual = polygon.GetEscherContainer().GetChild(0).Serialize();
 
-            Assert.AreEqual(expected.Length, actual.Length);
-            Assert.IsTrue(Arrays.Equals(expected, actual));
+            ClassicAssert.AreEqual(expected.Length, actual.Length);
+            ClassicAssert.IsTrue(Arrays.Equals(expected, actual));
 
             expected = Decompress("H4sIAAAAAAAAAGNgEPggxIANAABK4+laGgAAAA==");
             actual = polygon.GetEscherContainer().GetChild(2).Serialize();
 
-            Assert.AreEqual(expected.Length, actual.Length);
-            Assert.IsTrue(Arrays.Equals(expected, actual));
+            ClassicAssert.AreEqual(expected.Length, actual.Length);
+            ClassicAssert.IsTrue(Arrays.Equals(expected, actual));
 
             expected = Decompress("H4sIAAAAAAAAAGNgEPzAAAQACl6c5QgAAAA=");
             actual = polygon.GetEscherContainer().GetChild(3).Serialize();
 
-            Assert.AreEqual(expected.Length, actual.Length);
-            Assert.IsTrue(Arrays.Equals(expected, actual));
+            ClassicAssert.AreEqual(expected.Length, actual.Length);
+            ClassicAssert.IsTrue(Arrays.Equals(expected, actual));
 
             ObjRecord obj = polygon.GetObjRecord();
 
             expected = Decompress("H4sIAAAAAAAAAItlkGIQZRBikGNgYBBMYEADAOAV/ZkeAAAA");
             actual = obj.Serialize();
 
-            Assert.AreEqual(expected.Length, actual.Length);
-            Assert.IsTrue(Arrays.Equals(expected, actual));
+            ClassicAssert.AreEqual(expected.Length, actual.Length);
+            ClassicAssert.IsTrue(Arrays.Equals(expected, actual));
 
             wb.Close();
         }
@@ -83,12 +83,12 @@ namespace TestCases.HSSF.UserModel
             "</EscherArrayProperty>";
             String actual = verticesProp1.ToXml("").Replace("\r", "").Replace("\n", "").Replace("\t", "");
 
-            Assert.AreEqual(verticesProp1.NumberOfElementsInArray, 5);
-            Assert.AreEqual(expected, actual);
+            ClassicAssert.AreEqual(verticesProp1.NumberOfElementsInArray, 5);
+            ClassicAssert.AreEqual(expected, actual);
 
             polygon.SetPoints(new int[] { 1, 2, 3 }, new int[] { 4, 5, 6 });
-            Assert.IsTrue(Arrays.Equals(polygon.XPoints, new int[] { 1, 2, 3 }));
-            Assert.IsTrue(Arrays.Equals(polygon.YPoints, new int[] { 4, 5, 6 }));
+            ClassicAssert.IsTrue(Arrays.Equals(polygon.XPoints, new int[] { 1, 2, 3 }));
+            ClassicAssert.IsTrue(Arrays.Equals(polygon.YPoints, new int[] { 4, 5, 6 }));
 
             verticesProp1 = polygon.GetOptRecord().Lookup(EscherProperties.GEOMETRY__VERTICES) as EscherArrayProperty;
 
@@ -101,8 +101,8 @@ namespace TestCases.HSSF.UserModel
             "</EscherArrayProperty>";
             actual = verticesProp1.ToXml("").Replace("\r", "").Replace("\n", "").Replace("\t", "");
 
-            Assert.AreEqual(verticesProp1.NumberOfElementsInArray, 4);
-            Assert.AreEqual(expected, actual);
+            ClassicAssert.AreEqual(verticesProp1.NumberOfElementsInArray, 4);
+            ClassicAssert.AreEqual(expected, actual);
 
             wb.Close();
         }
@@ -117,10 +117,10 @@ namespace TestCases.HSSF.UserModel
             polygon.SetPolygonDrawArea(102, 101);
             polygon.SetPoints(new int[] { 1, 2, 3 }, new int[] { 4, 5, 6 });
 
-            Assert.IsTrue(Arrays.Equals(polygon.XPoints, new int[] { 1, 2, 3 }));
-            Assert.IsTrue(Arrays.Equals(polygon.YPoints, new int[] { 4, 5, 6 }));
-            Assert.AreEqual(polygon.DrawAreaHeight, 101);
-            Assert.AreEqual(polygon.DrawAreaWidth, 102);
+            ClassicAssert.IsTrue(Arrays.Equals(polygon.XPoints, new int[] { 1, 2, 3 }));
+            ClassicAssert.IsTrue(Arrays.Equals(polygon.YPoints, new int[] { 4, 5, 6 }));
+            ClassicAssert.AreEqual(polygon.DrawAreaHeight, 101);
+            ClassicAssert.AreEqual(polygon.DrawAreaWidth, 102);
 
             HSSFWorkbook wb2 = HSSFTestDataSamples.WriteOutAndReadBack(wb1);
             wb1.Close();
@@ -128,18 +128,18 @@ namespace TestCases.HSSF.UserModel
             patriarch = sh.DrawingPatriarch as HSSFPatriarch;
 
             polygon = (HSSFPolygon)patriarch.Children[0];
-            Assert.IsTrue(Arrays.Equals(polygon.XPoints, new int[] { 1, 2, 3 }));
-            Assert.IsTrue(Arrays.Equals(polygon.YPoints, new int[] { 4, 5, 6 }));
-            Assert.AreEqual(polygon.DrawAreaHeight, 101);
-            Assert.AreEqual(polygon.DrawAreaWidth, 102);
+            ClassicAssert.IsTrue(Arrays.Equals(polygon.XPoints, new int[] { 1, 2, 3 }));
+            ClassicAssert.IsTrue(Arrays.Equals(polygon.YPoints, new int[] { 4, 5, 6 }));
+            ClassicAssert.AreEqual(polygon.DrawAreaHeight, 101);
+            ClassicAssert.AreEqual(polygon.DrawAreaWidth, 102);
 
             polygon.SetPolygonDrawArea(1021, 1011);
             polygon.SetPoints(new int[] { 11, 21, 31 }, new int[] { 41, 51, 61 });
 
-            Assert.IsTrue(Arrays.Equals(polygon.XPoints, new int[] { 11, 21, 31 }));
-            Assert.IsTrue(Arrays.Equals(polygon.YPoints, new int[] { 41, 51, 61 }));
-            Assert.AreEqual(polygon.DrawAreaHeight, 1011);
-            Assert.AreEqual(polygon.DrawAreaWidth, 1021);
+            ClassicAssert.IsTrue(Arrays.Equals(polygon.XPoints, new int[] { 11, 21, 31 }));
+            ClassicAssert.IsTrue(Arrays.Equals(polygon.YPoints, new int[] { 41, 51, 61 }));
+            ClassicAssert.AreEqual(polygon.DrawAreaHeight, 1011);
+            ClassicAssert.AreEqual(polygon.DrawAreaWidth, 1021);
 
             HSSFWorkbook wb3 = HSSFTestDataSamples.WriteOutAndReadBack(wb2);
             wb2.Close();
@@ -148,10 +148,10 @@ namespace TestCases.HSSF.UserModel
 
             polygon = (HSSFPolygon)patriarch.Children[0];
 
-            Assert.IsTrue(Arrays.Equals(polygon.XPoints, new int[] { 11, 21, 31 }));
-            Assert.IsTrue(Arrays.Equals(polygon.YPoints, new int[] { 41, 51, 61 }));
-            Assert.AreEqual(polygon.DrawAreaHeight, 1011);
-            Assert.AreEqual(polygon.DrawAreaWidth, 1021);
+            ClassicAssert.IsTrue(Arrays.Equals(polygon.XPoints, new int[] { 11, 21, 31 }));
+            ClassicAssert.IsTrue(Arrays.Equals(polygon.YPoints, new int[] { 41, 51, 61 }));
+            ClassicAssert.AreEqual(polygon.DrawAreaHeight, 1011);
+            ClassicAssert.AreEqual(polygon.DrawAreaWidth, 1021);
 
             wb3.Close();
         }
@@ -175,7 +175,7 @@ namespace TestCases.HSSF.UserModel
             sh = wb2.GetSheetAt(0) as HSSFSheet;
             patriarch = sh.DrawingPatriarch as HSSFPatriarch;
 
-            Assert.AreEqual(patriarch.Children.Count, 2);
+            ClassicAssert.AreEqual(patriarch.Children.Count, 2);
 
             HSSFPolygon polygon2 = patriarch.CreatePolygon(new HSSFClientAnchor());
             polygon2.SetPolygonDrawArea(203, 204);
@@ -186,26 +186,26 @@ namespace TestCases.HSSF.UserModel
             sh = wb3.GetSheetAt(0) as HSSFSheet;
             patriarch = sh.DrawingPatriarch as HSSFPatriarch;
 
-            Assert.AreEqual(patriarch.Children.Count, 3);
+            ClassicAssert.AreEqual(patriarch.Children.Count, 3);
 
             polygon = (HSSFPolygon)patriarch.Children[0];
             polygon1 = (HSSFPolygon)patriarch.Children[1];
             polygon2 = (HSSFPolygon)patriarch.Children[2];
 
-            Assert.IsTrue(Arrays.Equals(polygon.XPoints, new int[] { 1, 2, 3 }));
-            Assert.IsTrue(Arrays.Equals(polygon.YPoints, new int[] { 4, 5, 6 }));
-            Assert.AreEqual(polygon.DrawAreaHeight, 101);
-            Assert.AreEqual(polygon.DrawAreaWidth, 102);
+            ClassicAssert.IsTrue(Arrays.Equals(polygon.XPoints, new int[] { 1, 2, 3 }));
+            ClassicAssert.IsTrue(Arrays.Equals(polygon.YPoints, new int[] { 4, 5, 6 }));
+            ClassicAssert.AreEqual(polygon.DrawAreaHeight, 101);
+            ClassicAssert.AreEqual(polygon.DrawAreaWidth, 102);
 
-            Assert.IsTrue(Arrays.Equals(polygon1.XPoints, new int[] { 11, 12, 13 }));
-            Assert.IsTrue(Arrays.Equals(polygon1.YPoints, new int[] { 14, 15, 16 }));
-            Assert.AreEqual(polygon1.DrawAreaHeight, 104);
-            Assert.AreEqual(polygon1.DrawAreaWidth, 103);
+            ClassicAssert.IsTrue(Arrays.Equals(polygon1.XPoints, new int[] { 11, 12, 13 }));
+            ClassicAssert.IsTrue(Arrays.Equals(polygon1.YPoints, new int[] { 14, 15, 16 }));
+            ClassicAssert.AreEqual(polygon1.DrawAreaHeight, 104);
+            ClassicAssert.AreEqual(polygon1.DrawAreaWidth, 103);
 
-            Assert.IsTrue(Arrays.Equals(polygon2.XPoints, new int[] { 21, 22, 23 }));
-            Assert.IsTrue(Arrays.Equals(polygon2.YPoints, new int[] { 24, 25, 26 }));
-            Assert.AreEqual(polygon2.DrawAreaHeight, 204);
-            Assert.AreEqual(polygon2.DrawAreaWidth, 203);
+            ClassicAssert.IsTrue(Arrays.Equals(polygon2.XPoints, new int[] { 21, 22, 23 }));
+            ClassicAssert.IsTrue(Arrays.Equals(polygon2.YPoints, new int[] { 24, 25, 26 }));
+            ClassicAssert.AreEqual(polygon2.DrawAreaHeight, 204);
+            ClassicAssert.AreEqual(polygon2.DrawAreaWidth, 203);
 
             wb3.Close();
         }
@@ -215,13 +215,13 @@ namespace TestCases.HSSF.UserModel
             HSSFWorkbook wb = HSSFTestDataSamples.OpenSampleWorkbook("drawings.xls");
             HSSFSheet sheet = wb.GetSheet("polygon") as HSSFSheet;
             HSSFPatriarch Drawing = sheet.DrawingPatriarch as HSSFPatriarch;
-            Assert.AreEqual(1, Drawing.Children.Count);
+            ClassicAssert.AreEqual(1, Drawing.Children.Count);
 
             HSSFPolygon polygon = (HSSFPolygon)Drawing.Children[0];
-            Assert.AreEqual(polygon.DrawAreaHeight, 2466975);
-            Assert.AreEqual(polygon.DrawAreaWidth, 3686175);
-            Assert.IsTrue(Arrays.Equals(polygon.XPoints, new int[] { 0, 0, 31479, 16159, 19676, 20502 }));
-            Assert.IsTrue(Arrays.Equals(polygon.YPoints, new int[] { 0, 0, 36, 56, 34, 18 }));
+            ClassicAssert.AreEqual(polygon.DrawAreaHeight, 2466975);
+            ClassicAssert.AreEqual(polygon.DrawAreaWidth, 3686175);
+            ClassicAssert.IsTrue(Arrays.Equals(polygon.XPoints, new int[] { 0, 0, 31479, 16159, 19676, 20502 }));
+            ClassicAssert.IsTrue(Arrays.Equals(polygon.YPoints, new int[] { 0, 0, 36, 56, 34, 18 }));
 
             wb.Close();
         }
@@ -254,9 +254,9 @@ namespace TestCases.HSSF.UserModel
             sh = wb3.GetSheetAt(0) as HSSFSheet;
             patriarch = sh.DrawingPatriarch as HSSFPatriarch;
 
-            Assert.AreEqual(patriarch.Children.Count, 2);
-            Assert.IsTrue(patriarch.Children[0] is HSSFPolygon);
-            Assert.IsTrue(patriarch.Children[1] is HSSFPolygon);
+            ClassicAssert.AreEqual(patriarch.Children.Count, 2);
+            ClassicAssert.IsTrue(patriarch.Children[0] is HSSFPolygon);
+            ClassicAssert.IsTrue(patriarch.Children[1] is HSSFPolygon);
 
             wb3.Close();
         }

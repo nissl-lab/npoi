@@ -103,7 +103,7 @@ namespace NPOI.HSSF.Record
          */
         public NameCommentRecord(RecordInputStream ris)
         {
-            ILittleEndianInput in1 = ris;
+            RecordInputStream in1 = ris;
             field_1_record_type = in1.ReadShort();
             field_2_frt_cell_ref_flag = in1.ReadShort();
             field_3_reserved = in1.ReadLong();

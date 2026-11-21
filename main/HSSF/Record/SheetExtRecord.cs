@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Text;
+using System.Text; 
+using Cysharp.Text;
 
 using NPOI.Util;
 
@@ -127,7 +128,8 @@ namespace NPOI.HSSF.Record
         }
         public override string ToString()
         {
-            StringBuilder sb = new StringBuilder();
+            using var sb = ZString.CreateStringBuilder();
+
             sb.Append("[SHEETEXT]");
             sb.Append("[/SHEETEXT]");
             return sb.ToString();

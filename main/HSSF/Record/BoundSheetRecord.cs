@@ -203,7 +203,7 @@ namespace NPOI.HSSF.Record
 
 
 
-        private class BOFComparator : IComparer<BoundSheetRecord>
+        private sealed class BOFComparator : IComparer<BoundSheetRecord>
         {
 		    public int Compare(BoundSheetRecord bsr1, BoundSheetRecord bsr2) {
 			    return bsr1.PositionOfBof - bsr2.PositionOfBof;

@@ -1,11 +1,10 @@
 ﻿using NPOI.OpenXmlFormats.Shared;
-using NPOI.XWPF.UserModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace NPOI.XWPF.Usermodel
+namespace NPOI.XWPF.UserModel
 {
     /// <summary>
     /// n-ary Operator Object

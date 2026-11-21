@@ -18,12 +18,9 @@
 using NPOI.OpenXmlFormats.Spreadsheet;
 using System.IO;
 using System.Xml;
-using System.Collections.Generic;
 using System;
-using NPOI.OpenXmlFormats;
 using NPOI.Util;
 using NPOI.OpenXml4Net.OPC;
-using NPOI.OpenXmlFormats.Dml;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -80,25 +77,29 @@ namespace NPOI.XSSF.UserModel
          */
         public CT_Chartsheet GetCTChartsheet()
         {
+            EnsureWorksheetLoaded();
             return chartsheet;
         }
 
 
         protected override NPOI.OpenXmlFormats.Spreadsheet.CT_Drawing GetCTDrawing()
         {
+            EnsureWorksheetLoaded();
             return chartsheet.drawing;
         }
 
 
         protected override NPOI.OpenXmlFormats.Spreadsheet.CT_LegacyDrawing GetCTLegacyDrawing()
         {
+            EnsureWorksheetLoaded();
             return chartsheet.legacyDrawing;
         }
 
 
-        internal override void Write(Stream out1, bool leaveOpen=false)
+        internal override void Write(Stream output, bool leaveOpen=false)
         {
-            new ChartsheetDocument(this.chartsheet).Save(out1);
+            EnsureWorksheetLoaded();
+            new ChartsheetDocument(this.chartsheet).Save(output);
         }
 
         private static byte[] blankWorksheet()

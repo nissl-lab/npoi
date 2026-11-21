@@ -16,12 +16,12 @@
 ==================================================================== */
 
 using NPOI.SS.UserModel;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using NPOI.Util;
 using NPOI.SS.Util;
 using System.IO;
 using TestCases.HSSF;
-using SixLabors.ImageSharp;
+using SkiaSharp;
 
 namespace TestCases.SS.UserModel
 {
@@ -48,26 +48,26 @@ namespace TestCases.SS.UserModel
             IClientAnchor inpCA = input.ClientAnchor;
             IClientAnchor cmpCA = Compare.ClientAnchor;
 
-            Size inpDim = ImageUtils.GetDimensionFromAnchor(input);
-            Size cmpDim = ImageUtils.GetDimensionFromAnchor(Compare);
+            SKSizeI inpDim = ImageUtils.GetDimensionFromAnchor(input);
+            SKSizeI cmpDim = ImageUtils.GetDimensionFromAnchor(Compare);
 
             double emuPX = Units.EMU_PER_PIXEL;
 
-            Assert.AreEqual(inpDim.Height, cmpDim.Height, emuPX * 6, "the image height differs");
-            Assert.AreEqual(inpDim.Width, cmpDim.Width, emuPX * 6, "the image width differs");
-            Assert.AreEqual(inpCA.Col1, cmpCA.Col1, "the starting column differs");
-            Assert.AreEqual(inpCA.Dx1, cmpCA.Dx1, 1, "the column x-offset differs");
-            Assert.AreEqual(inpCA.Dy1, cmpCA.Dy1, 1, "the column y-offset differs");
-            Assert.AreEqual(inpCA.Col2, cmpCA.Col2, "the ending columns differs");
+            ClassicAssert.AreEqual(inpDim.Height, cmpDim.Height, emuPX * 6, "the image height differs");
+            ClassicAssert.AreEqual(inpDim.Width, cmpDim.Width, emuPX * 6, "the image width differs");
+            ClassicAssert.AreEqual(inpCA.Col1, cmpCA.Col1, "the starting column differs");
+            ClassicAssert.AreEqual(inpCA.Dx1, cmpCA.Dx1, 1, "the column x-offset differs");
+            ClassicAssert.AreEqual(inpCA.Dy1, cmpCA.Dy1, 1, "the column y-offset differs");
+            ClassicAssert.AreEqual(inpCA.Col2, cmpCA.Col2, "the ending columns differs");
             // can't compare row heights because of variable test heights
 
             input.Resize();
             inpDim = ImageUtils.GetDimensionFromAnchor(input);
 
-            Size imgDim = input.GetImageDimension();
+            SKSizeI imgDim = input.GetImageDimension();
 
-            Assert.AreEqual(imgDim.Height, inpDim.Height / emuPX, 1, "the image height differs");
-            Assert.AreEqual(imgDim.Width, inpDim.Width / emuPX, 1, "the image width differs");
+            ClassicAssert.AreEqual(imgDim.Height, inpDim.Height / emuPX, 1, "the image height differs");
+            ClassicAssert.AreEqual(imgDim.Width, inpDim.Width / emuPX, 1, "the image width differs");
         }
 
         [Test]
@@ -80,11 +80,11 @@ namespace TestCases.SS.UserModel
 
                 IRow row = sheet.CreateRow(0);
 
-                handleResize(wb, sheet, row);
+                HandleResize(wb, sheet, row);
             }
             finally
             {
-                //wb.Close();
+                wb.Close();
             }
         }
 
@@ -99,7 +99,7 @@ namespace TestCases.SS.UserModel
                 IRow row = sheet.CreateRow(0);
                 row.CreateCell(0);
 
-                handleResize(wb, sheet, row);
+                HandleResize(wb, sheet, row);
             }
             finally
             {
@@ -108,10 +108,10 @@ namespace TestCases.SS.UserModel
         }
 
 
-        private void handleResize(IWorkbook wb, ISheet sheet, IRow row)
+        private void HandleResize(IWorkbook wb, ISheet sheet, IRow row)
         {
-            IDrawing Drawing = sheet.CreateDrawingPatriarch();
-            ICreationHelper CreateHelper = wb.GetCreationHelper();
+            IDrawing<IShape> drawing = sheet.CreateDrawingPatriarch();
+            ICreationHelper createHelper = wb.GetCreationHelper();
 
             byte[] bytes = HSSFITestDataProvider.Instance.GetTestDataFileContent("logoKarmokar4.png");
 
@@ -120,25 +120,25 @@ namespace TestCases.SS.UserModel
             int pictureIdx = wb.AddPicture(bytes, PictureType.PNG);
 
             //add a picture shape
-            IClientAnchor anchor = CreateHelper.CreateClientAnchor();
+            IClientAnchor anchor = createHelper.CreateClientAnchor();
             //set top-left corner of the picture,
             //subsequent call of Picture#resize() will operate relative to it
             anchor.Col1 = (/*setter*/0);
             anchor.Row1 = (/*setter*/0);
 
-            IPicture pict = Drawing.CreatePicture(anchor, pictureIdx);
+            IPicture pict = drawing.CreatePicture(anchor, pictureIdx);
 
             //auto-size picture relative to its top-left corner
             pict.Resize();
         }
 
-        private static Point GetImageSize(byte[] image)
+        private static SKPointI GetImageSize(byte[] image)
         {
-            Image img = Image.Load(new MemoryStream(image));
+            using SKBitmap img = SKBitmap.Decode(new MemoryStream(image));
 
-            Assert.IsNotNull(img);
+            ClassicAssert.IsNotNull(img);
 
-            return new Point(img.Width, img.Height);
+            return new SKPointI(img.Width, img.Height);
         }
 
     }

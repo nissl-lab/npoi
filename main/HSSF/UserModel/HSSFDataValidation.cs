@@ -41,8 +41,8 @@ namespace NPOI.HSSF.UserModel
         private bool _suppress_dropdown_arrow = false;
         private bool _ShowPromptBox = true;
         private bool _ShowErrorBox = true;
-        private CellRangeAddressList _regions;
-        private DVConstraint _constraint;
+        private readonly CellRangeAddressList _regions;
+        private readonly DVConstraint _constraint;
 
         /**
          * Constructor which Initializes the cell range on which this object will be

@@ -18,7 +18,7 @@
 namespace TestCases.HSSF.Record.CF
 {
     using System;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.Record.CF;
     using NPOI.HSSF.Util;
     using NPOI.SS.Util;
@@ -78,7 +78,7 @@ namespace TestCases.HSSF.Record.CF
                 for (int j = 0; j != ranges.Length; j++)
                 {
                     bool expectedResult = containsExpectedResults[i, j];
-                    Assert.AreEqual(expectedResult, CellRangeUtil.Contains(ranges[i], ranges[j]), "(" + i + "," + j + "): ");
+                    ClassicAssert.AreEqual(expectedResult, CellRangeUtil.Contains(ranges[i], ranges[j]), "(" + i + "," + j + "): ");
                 }
             }
         }
@@ -98,65 +98,65 @@ namespace TestCases.HSSF.Record.CF
         [Test]
         public void TestHasSharedBorderMethod()
         {
-            Assert.IsFalse(CellRangeUtil.HasExactSharedBorder(col1, col1));
-            Assert.IsFalse(CellRangeUtil.HasExactSharedBorder(col2, col2));
-            Assert.IsTrue(CellRangeUtil.HasExactSharedBorder(col1, col2));
-            Assert.IsTrue(CellRangeUtil.HasExactSharedBorder(col2, col1));
+            ClassicAssert.IsFalse(CellRangeUtil.HasExactSharedBorder(col1, col1));
+            ClassicAssert.IsFalse(CellRangeUtil.HasExactSharedBorder(col2, col2));
+            ClassicAssert.IsTrue(CellRangeUtil.HasExactSharedBorder(col1, col2));
+            ClassicAssert.IsTrue(CellRangeUtil.HasExactSharedBorder(col2, col1));
 
-            Assert.IsFalse(CellRangeUtil.HasExactSharedBorder(row1, row1));
-            Assert.IsFalse(CellRangeUtil.HasExactSharedBorder(row2, row2));
-            Assert.IsTrue(CellRangeUtil.HasExactSharedBorder(row1, row2));
-            Assert.IsTrue(CellRangeUtil.HasExactSharedBorder(row2, row1));
+            ClassicAssert.IsFalse(CellRangeUtil.HasExactSharedBorder(row1, row1));
+            ClassicAssert.IsFalse(CellRangeUtil.HasExactSharedBorder(row2, row2));
+            ClassicAssert.IsTrue(CellRangeUtil.HasExactSharedBorder(row1, row2));
+            ClassicAssert.IsTrue(CellRangeUtil.HasExactSharedBorder(row2, row1));
 
-            Assert.IsFalse(CellRangeUtil.HasExactSharedBorder(row1, col1));
-            Assert.IsFalse(CellRangeUtil.HasExactSharedBorder(row1, col2));
-            Assert.IsFalse(CellRangeUtil.HasExactSharedBorder(col1, row1));
-            Assert.IsFalse(CellRangeUtil.HasExactSharedBorder(col2, row1));
-            Assert.IsFalse(CellRangeUtil.HasExactSharedBorder(row2, col1));
-            Assert.IsFalse(CellRangeUtil.HasExactSharedBorder(row2, col2));
-            Assert.IsFalse(CellRangeUtil.HasExactSharedBorder(col1, row2));
-            Assert.IsFalse(CellRangeUtil.HasExactSharedBorder(col2, row2));
-            Assert.IsTrue(CellRangeUtil.HasExactSharedBorder(col2, col1));
+            ClassicAssert.IsFalse(CellRangeUtil.HasExactSharedBorder(row1, col1));
+            ClassicAssert.IsFalse(CellRangeUtil.HasExactSharedBorder(row1, col2));
+            ClassicAssert.IsFalse(CellRangeUtil.HasExactSharedBorder(col1, row1));
+            ClassicAssert.IsFalse(CellRangeUtil.HasExactSharedBorder(col2, row1));
+            ClassicAssert.IsFalse(CellRangeUtil.HasExactSharedBorder(row2, col1));
+            ClassicAssert.IsFalse(CellRangeUtil.HasExactSharedBorder(row2, col2));
+            ClassicAssert.IsFalse(CellRangeUtil.HasExactSharedBorder(col1, row2));
+            ClassicAssert.IsFalse(CellRangeUtil.HasExactSharedBorder(col2, row2));
+            ClassicAssert.IsTrue(CellRangeUtil.HasExactSharedBorder(col2, col1));
 
-            Assert.IsFalse(CellRangeUtil.HasExactSharedBorder(box1, box1));
-            Assert.IsTrue(CellRangeUtil.HasExactSharedBorder(box1, box2));
-            Assert.IsTrue(CellRangeUtil.HasExactSharedBorder(box1, box3));
-            Assert.IsFalse(CellRangeUtil.HasExactSharedBorder(box1, box4));
+            ClassicAssert.IsFalse(CellRangeUtil.HasExactSharedBorder(box1, box1));
+            ClassicAssert.IsTrue(CellRangeUtil.HasExactSharedBorder(box1, box2));
+            ClassicAssert.IsTrue(CellRangeUtil.HasExactSharedBorder(box1, box3));
+            ClassicAssert.IsFalse(CellRangeUtil.HasExactSharedBorder(box1, box4));
 
-            Assert.IsTrue(CellRangeUtil.HasExactSharedBorder(box2, box1));
-            Assert.IsFalse(CellRangeUtil.HasExactSharedBorder(box2, box2));
-            Assert.IsFalse(CellRangeUtil.HasExactSharedBorder(box2, box3));
-            Assert.IsTrue(CellRangeUtil.HasExactSharedBorder(box2, box4));
+            ClassicAssert.IsTrue(CellRangeUtil.HasExactSharedBorder(box2, box1));
+            ClassicAssert.IsFalse(CellRangeUtil.HasExactSharedBorder(box2, box2));
+            ClassicAssert.IsFalse(CellRangeUtil.HasExactSharedBorder(box2, box3));
+            ClassicAssert.IsTrue(CellRangeUtil.HasExactSharedBorder(box2, box4));
 
-            Assert.IsTrue(CellRangeUtil.HasExactSharedBorder(box3, box1));
-            Assert.IsFalse(CellRangeUtil.HasExactSharedBorder(box3, box2));
-            Assert.IsFalse(CellRangeUtil.HasExactSharedBorder(box3, box3));
-            Assert.IsTrue(CellRangeUtil.HasExactSharedBorder(box3, box4));
+            ClassicAssert.IsTrue(CellRangeUtil.HasExactSharedBorder(box3, box1));
+            ClassicAssert.IsFalse(CellRangeUtil.HasExactSharedBorder(box3, box2));
+            ClassicAssert.IsFalse(CellRangeUtil.HasExactSharedBorder(box3, box3));
+            ClassicAssert.IsTrue(CellRangeUtil.HasExactSharedBorder(box3, box4));
 
-            Assert.IsFalse(CellRangeUtil.HasExactSharedBorder(box4, box1));
-            Assert.IsTrue(CellRangeUtil.HasExactSharedBorder(box4, box2));
-            Assert.IsTrue(CellRangeUtil.HasExactSharedBorder(box4, box3));
-            Assert.IsFalse(CellRangeUtil.HasExactSharedBorder(box4, box4));
+            ClassicAssert.IsFalse(CellRangeUtil.HasExactSharedBorder(box4, box1));
+            ClassicAssert.IsTrue(CellRangeUtil.HasExactSharedBorder(box4, box2));
+            ClassicAssert.IsTrue(CellRangeUtil.HasExactSharedBorder(box4, box3));
+            ClassicAssert.IsFalse(CellRangeUtil.HasExactSharedBorder(box4, box4));
         }
 
         [Test]
         public void TestIntersectMethod()
         {
-            Assert.AreEqual(CellRangeUtil.OVERLAP, CellRangeUtil.Intersect(box0, box5));
-            Assert.AreEqual(CellRangeUtil.OVERLAP, CellRangeUtil.Intersect(box5, box0));
-            Assert.AreEqual(CellRangeUtil.NO_INTERSECTION, CellRangeUtil.Intersect(box1, box4));
-            Assert.AreEqual(CellRangeUtil.NO_INTERSECTION, CellRangeUtil.Intersect(box4, box1));
-            Assert.AreEqual(CellRangeUtil.NO_INTERSECTION, CellRangeUtil.Intersect(box2, box3));
-            Assert.AreEqual(CellRangeUtil.NO_INTERSECTION, CellRangeUtil.Intersect(box3, box2));
-            Assert.AreEqual(CellRangeUtil.INSIDE, CellRangeUtil.Intersect(box0, box1));
-            Assert.AreEqual(CellRangeUtil.INSIDE, CellRangeUtil.Intersect(box0, box0));
-            Assert.AreEqual(CellRangeUtil.ENCLOSES, CellRangeUtil.Intersect(box1, box0));
-            Assert.AreEqual(CellRangeUtil.INSIDE, CellRangeUtil.Intersect(tenthColumn, oneCell));
-            Assert.AreEqual(CellRangeUtil.ENCLOSES, CellRangeUtil.Intersect(oneCell, tenthColumn));
-            Assert.AreEqual(CellRangeUtil.OVERLAP, CellRangeUtil.Intersect(tenthColumn, tenthRow));
-            Assert.AreEqual(CellRangeUtil.OVERLAP, CellRangeUtil.Intersect(tenthRow, tenthColumn));
-            Assert.AreEqual(CellRangeUtil.INSIDE, CellRangeUtil.Intersect(tenthColumn, tenthColumn));
-            Assert.AreEqual(CellRangeUtil.INSIDE, CellRangeUtil.Intersect(tenthRow, tenthRow));
+            ClassicAssert.AreEqual(CellRangeUtil.OVERLAP, CellRangeUtil.Intersect(box0, box5));
+            ClassicAssert.AreEqual(CellRangeUtil.OVERLAP, CellRangeUtil.Intersect(box5, box0));
+            ClassicAssert.AreEqual(CellRangeUtil.NO_INTERSECTION, CellRangeUtil.Intersect(box1, box4));
+            ClassicAssert.AreEqual(CellRangeUtil.NO_INTERSECTION, CellRangeUtil.Intersect(box4, box1));
+            ClassicAssert.AreEqual(CellRangeUtil.NO_INTERSECTION, CellRangeUtil.Intersect(box2, box3));
+            ClassicAssert.AreEqual(CellRangeUtil.NO_INTERSECTION, CellRangeUtil.Intersect(box3, box2));
+            ClassicAssert.AreEqual(CellRangeUtil.INSIDE, CellRangeUtil.Intersect(box0, box1));
+            ClassicAssert.AreEqual(CellRangeUtil.INSIDE, CellRangeUtil.Intersect(box0, box0));
+            ClassicAssert.AreEqual(CellRangeUtil.ENCLOSES, CellRangeUtil.Intersect(box1, box0));
+            ClassicAssert.AreEqual(CellRangeUtil.INSIDE, CellRangeUtil.Intersect(tenthColumn, oneCell));
+            ClassicAssert.AreEqual(CellRangeUtil.ENCLOSES, CellRangeUtil.Intersect(oneCell, tenthColumn));
+            ClassicAssert.AreEqual(CellRangeUtil.OVERLAP, CellRangeUtil.Intersect(tenthColumn, tenthRow));
+            ClassicAssert.AreEqual(CellRangeUtil.OVERLAP, CellRangeUtil.Intersect(tenthRow, tenthColumn));
+            ClassicAssert.AreEqual(CellRangeUtil.INSIDE, CellRangeUtil.Intersect(tenthColumn, tenthColumn));
+            ClassicAssert.AreEqual(CellRangeUtil.INSIDE, CellRangeUtil.Intersect(tenthRow, tenthRow));
         }
 
         /**
@@ -189,16 +189,16 @@ namespace TestCases.HSSF.Record.CF
 
         private static void ConfirmRange(CellRangeAddress cr, bool isFullRow, bool isFullColumn)
         {
-            Assert.AreEqual(isFullRow, cr.IsFullRowRange, "isFullRowRange");
-            Assert.AreEqual(isFullColumn, cr.IsFullColumnRange, "isFullColumnRange");
+            ClassicAssert.AreEqual(isFullRow, cr.IsFullRowRange, "isFullRowRange");
+            ClassicAssert.AreEqual(isFullColumn, cr.IsFullColumnRange, "isFullColumnRange");
         }
 
         [Test]
         public void TestNumberOfCells()
         {
-            Assert.AreEqual(1, oneCell.NumberOfCells);
-            Assert.AreEqual(100, box9x9.NumberOfCells);
-            Assert.AreEqual(121, box10to20c.NumberOfCells);
+            ClassicAssert.AreEqual(1, oneCell.NumberOfCells);
+            ClassicAssert.AreEqual(100, box9x9.NumberOfCells);
+            ClassicAssert.AreEqual(121, box10to20c.NumberOfCells);
         }
 
         [Test]
@@ -265,11 +265,11 @@ namespace TestCases.HSSF.Record.CF
 
         private void VerifyExpectedResult(CellRangeAddress[] result, params string[] expectedOutput)
         {
-            Assert.AreEqual(expectedOutput.Length, result.Length,
+            ClassicAssert.AreEqual(expectedOutput.Length, result.Length,
                 "\nExpected: " + Arrays.ToString(expectedOutput) + "\nHad: " + Arrays.ToString(result));
             for (int i = 0; i < expectedOutput.Length; i++)
             {
-                Assert.AreEqual(expectedOutput[i], result[i].FormatAsString(),
+                ClassicAssert.AreEqual(expectedOutput[i], result[i].FormatAsString(),
                     "\nExpected: " + Arrays.ToString(expectedOutput) + "\nHad: " + Arrays.ToString(result));
             }
         }
@@ -278,16 +278,16 @@ namespace TestCases.HSSF.Record.CF
         public void TestValueOf()
         {
             CellRangeAddress cr1 = CellRangeAddress.ValueOf("A1:B1");
-            Assert.AreEqual(0, cr1.FirstColumn);
-            Assert.AreEqual(0, cr1.FirstRow);
-            Assert.AreEqual(1, cr1.LastColumn);
-            Assert.AreEqual(0, cr1.LastRow);
+            ClassicAssert.AreEqual(0, cr1.FirstColumn);
+            ClassicAssert.AreEqual(0, cr1.FirstRow);
+            ClassicAssert.AreEqual(1, cr1.LastColumn);
+            ClassicAssert.AreEqual(0, cr1.LastRow);
 
             CellRangeAddress cr2 = CellRangeAddress.ValueOf("B1");
-            Assert.AreEqual(1, cr2.FirstColumn);
-            Assert.AreEqual(0, cr2.FirstRow);
-            Assert.AreEqual(1, cr2.LastColumn);
-            Assert.AreEqual(0, cr2.LastRow);
+            ClassicAssert.AreEqual(1, cr2.FirstColumn);
+            ClassicAssert.AreEqual(0, cr2.FirstRow);
+            ClassicAssert.AreEqual(1, cr2.LastColumn);
+            ClassicAssert.AreEqual(0, cr2.LastRow);
         }
     }
 }

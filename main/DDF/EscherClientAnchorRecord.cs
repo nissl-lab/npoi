@@ -32,6 +32,9 @@ namespace NPOI.DDF
     /// </summary>
     public class EscherClientAnchorRecord : EscherRecord
     {
+        //arbitrarily selected; may need to increase
+        private static int MAX_RECORD_LENGTH = 100_000;
+
         public const short RECORD_ID = unchecked((short)0xF010);
         public const String RECORD_DESCRIPTION = "MsofbtClientAnchor";
         /**
@@ -52,7 +55,7 @@ namespace NPOI.DDF
         private short field_7_dx2;
         private short field_8_row2;
         private short field_9_dy2;
-        private byte[] remainingData = new byte[0];
+        private byte[] remainingData = [];
         private bool shortRecord = false;
 
         /// <summary>
@@ -94,7 +97,7 @@ namespace NPOI.DDF
                 }
             }
             bytesRemaining -= size;
-            remainingData = new byte[bytesRemaining];
+            remainingData = IOUtils.SafelyAllocate(bytesRemaining, MAX_RECORD_LENGTH);
             Array.Copy(data, pos + size, remainingData, 0, bytesRemaining);
             return 8 + size + bytesRemaining;
         }
@@ -110,7 +113,7 @@ namespace NPOI.DDF
         {
             listener.BeforeRecordSerialize(offset, RecordId, this);
 
-            if (remainingData == null) remainingData = new byte[0];
+            if (remainingData == null) remainingData = [];
             LittleEndian.PutShort(data, offset, Options);
             LittleEndian.PutShort(data, offset + 2, RecordId);
             int remainingBytes = remainingData.Length + (shortRecord ? 8 : 18);
@@ -162,10 +165,10 @@ namespace NPOI.DDF
         }
 
         /// <summary>
-        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+        /// Returns a <see cref="System.String"/> that represents the current <see cref="System.Object"/>.
         /// </summary>
         /// <returns>
-        /// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+        /// A <see cref="System.String"/> that represents the current <see cref="System.Object"/>.
         /// </returns>
         public override String ToString()
         {
@@ -329,7 +332,7 @@ namespace NPOI.DDF
             {
                 if (value == null)
                 {
-                    this.remainingData = new byte[0];
+                    this.remainingData = [];
                 }
                 else
                 {

@@ -31,6 +31,9 @@ namespace NPOI.DDF
     /// </summary>
     public class EscherClientDataRecord : EscherRecord
     {
+        //arbitrarily selected; may need to increase
+        private static int MAX_RECORD_LENGTH = 100_000;
+
         public const short RECORD_ID = unchecked((short)0xF011);
         public const String RECORD_DESCRIPTION = "MsofbtClientData";
 
@@ -47,7 +50,7 @@ namespace NPOI.DDF
         {
             int bytesRemaining = ReadHeader(data, offset);
             int pos = offset + 8;
-            remainingData = new byte[bytesRemaining];
+            remainingData = IOUtils.SafelyAllocate(bytesRemaining, MAX_RECORD_LENGTH);
             Array.Copy(data, pos, remainingData, 0, bytesRemaining);
             return 8 + bytesRemaining;
         }
@@ -65,7 +68,7 @@ namespace NPOI.DDF
         {
             listener.BeforeRecordSerialize(offset, RecordId, this);
 
-            if (remainingData == null) remainingData = new byte[0];
+            if (remainingData == null) remainingData = [];
             LittleEndian.PutShort(data, offset, Options);
             LittleEndian.PutShort(data, offset + 2, RecordId);
             LittleEndian.PutInt(data, offset + 4, remainingData.Length);
@@ -137,7 +140,7 @@ namespace NPOI.DDF
             get { return remainingData; }
             set
             {
-                this.remainingData = (value == null) ? new byte[0] : (byte[])value.Clone();
+                this.remainingData = (value == null) ? [] : (byte[])value.Clone();
             }
         }
     }

@@ -31,15 +31,15 @@ namespace NPOI.HSSF.Record.Aggregates.Chart
     /// </summary>
     public class ChartSheetAggregate : ChartRecordAggregate
     {
-        private BOFRecord _bofRec;
+        private readonly BOFRecord _bofRec;
         /**
          * All the records between BOF and EOF
          */
-        private List<RecordBase> _recs;
-        private PageSettingsBlock _psBlock;
+        private readonly List<RecordBase> _recs;
+        private readonly PageSettingsBlock _psBlock;
 
-        private ChartFormatsAggregate chartFormats;
-        private SeriesDataAggregate seriesData;
+        private readonly ChartFormatsAggregate chartFormats;
+        private readonly SeriesDataAggregate seriesData;
 
         public ChartSheetAggregate(RecordStream rs, ChartRecordAggregate container)
             : base(RuleName_CHARTSHEET, container)
@@ -82,7 +82,7 @@ namespace NPOI.HSSF.Record.Aggregates.Chart
             }
             _recs = temp;
             Record eof = rs.GetNext(); // no need to save EOF in field
-            if (!(eof is EOFRecord))
+            if (eof is not EOFRecord)
             {
                 throw new InvalidOperationException("Bad chart EOF");
             }
@@ -99,9 +99,9 @@ namespace NPOI.HSSF.Record.Aggregates.Chart
             for (int i = 0; i < _recs.Count; i++)
             {
                 RecordBase rb = _recs[i];
-                if (rb is RecordAggregate)
+                if (rb is RecordAggregate aggregate)
                 {
-                    ((RecordAggregate)rb).VisitContainedRecords(rv);
+                    aggregate.VisitContainedRecords(rv);
                 }
                 else
                 {

@@ -23,7 +23,7 @@ namespace TestCases.HSSF.Util
     using System.Collections;
     using NPOI.HSSF.Util;
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using System.Collections.Generic;
 
     /**
@@ -35,30 +35,30 @@ namespace TestCases.HSSF.Util
         [Test]
         public void TestBasics()
         {
-            Assert.IsNotNull(typeof(HSSFColor.Yellow));
-            Assert.IsTrue(HSSFColor.Yellow.Index > 0);
-            Assert.IsTrue(HSSFColor.Yellow.Index2 > 0);
+            ClassicAssert.IsNotNull(typeof(HSSFColor.Yellow));
+            ClassicAssert.IsTrue(HSSFColor.Yellow.Index > 0);
+            ClassicAssert.IsTrue(HSSFColor.Yellow.Index2 > 0);
         }
         [Test]
         public void TestContents()
         {
-            Assert.AreEqual(3, HSSFColor.Yellow.Triplet.Length);
-            Assert.AreEqual(255, HSSFColor.Yellow.Triplet[0]);
-            Assert.AreEqual(255, HSSFColor.Yellow.Triplet[1]);
-            Assert.AreEqual(0, HSSFColor.Yellow.Triplet[2]);
+            ClassicAssert.AreEqual(3, HSSFColor.Yellow.Triplet.Length);
+            ClassicAssert.AreEqual(255, HSSFColor.Yellow.Triplet[0]);
+            ClassicAssert.AreEqual(255, HSSFColor.Yellow.Triplet[1]);
+            ClassicAssert.AreEqual(0, HSSFColor.Yellow.Triplet[2]);
 
-            Assert.AreEqual("FFFF:FFFF:0", HSSFColor.Yellow.HexString);
+            ClassicAssert.AreEqual("FFFF:FFFF:0", HSSFColor.Yellow.HexString);
         }
         [Test]
         public void TestTrippletHash()
         {
             Dictionary<String, HSSFColor> tripplets = HSSFColor.GetTripletHash();
 
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                     typeof(HSSFColor.Maroon),
                     tripplets[HSSFColor.Maroon.HexString].GetType()
             );
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                     typeof(HSSFColor.Yellow),
                     tripplets[HSSFColor.Yellow.HexString].GetType()
             );

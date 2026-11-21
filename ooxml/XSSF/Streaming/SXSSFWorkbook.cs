@@ -15,20 +15,21 @@
    limitations under the License.
 ==================================================================== */
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.IO;
-using System.Text;
 using ICSharpCode.SharpZipLib.Zip;
-using NPOI.OpenXml4Net.Util;
 using NPOI.SS;
 using NPOI.SS.Formula.UDF;
 using NPOI.SS.UserModel;
+using NPOI.SS.Util;
+using NPOI.OpenXml4Net.OPC.Internal;
 using NPOI.Util;
 using NPOI.XSSF.Model;
 using NPOI.XSSF.UserModel;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Data;
+using System.IO;
+using System.Text;
 
 namespace NPOI.XSSF.Streaming
 {
@@ -66,14 +67,14 @@ namespace NPOI.XSSF.Streaming
         private static readonly POILogger logger = POILogFactory.GetLogger(typeof(SXSSFWorkbook));
 
         public const int DEFAULT_WINDOW_SIZE = 100;
-        private XSSFWorkbook _wb;
+        private readonly XSSFWorkbook _wb;
         public XSSFWorkbook XssfWorkbook
         {
             get { return _wb; }
         }
 
-        private Dictionary<SXSSFSheet, XSSFSheet> _sxFromXHash = new Dictionary<SXSSFSheet, XSSFSheet>();
-        private Dictionary<XSSFSheet, SXSSFSheet> _xFromSxHash = new Dictionary<XSSFSheet, SXSSFSheet>();
+        private readonly Dictionary<SXSSFSheet, XSSFSheet> _sxFromXHash = new Dictionary<SXSSFSheet, XSSFSheet>();
+        private readonly Dictionary<XSSFSheet, SXSSFSheet> _xFromSxHash = new Dictionary<XSSFSheet, SXSSFSheet>();
 
         private int _randomAccessWindowSize = DEFAULT_WINDOW_SIZE;
 
@@ -110,7 +111,7 @@ namespace NPOI.XSSF.Streaming
         /// <summary>
         /// shared string table - a cache of strings in this workbook.
         /// </summary>
-        private SharedStringsTable _sharedStringSource;
+        private readonly SharedStringsTable _sharedStringSource;
 
         public int ActiveSheetIndex
         {
@@ -388,16 +389,16 @@ namespace NPOI.XSSF.Streaming
 
         public XSSFSheet GetXSSFSheet(SXSSFSheet sheet)
         {
-            if (sheet != null && _sxFromXHash.ContainsKey(sheet))
-                return _sxFromXHash[sheet];
+            if (sheet != null && _sxFromXHash.TryGetValue(sheet, out XSSFSheet xssfSheet))
+                return xssfSheet;
             else
                 return null;
         }
 
         public SXSSFSheet GetSXSSFSheet(XSSFSheet sheet)
         {
-            if (sheet != null && _xFromSxHash.ContainsKey(sheet))
-                return _xFromSxHash[sheet];
+            if (sheet != null && _xFromSxHash.TryGetValue(sheet, out SXSSFSheet sxssfSheet))
+                return sxssfSheet;
             else
                 return null;
         }
@@ -412,6 +413,10 @@ namespace NPOI.XSSF.Streaming
          * </p>
          * <p>
          *     Please note the the "compress" option may cause performance penalty.
+         * </p>
+         * <p>
+         *     Setting this option only affects compression for subsequent <code>createSheet()</code> 
+         *     calls.
          * </p>
          * @param compress whether to compress temp files
          */
@@ -464,10 +469,11 @@ namespace NPOI.XSSF.Streaming
                     while (en.MoveNext())
                     {
                         var ze = (ZipEntry)en.Current;
-                        zos.PutNextEntry(new ZipEntry(ze.Name));
+                        zos.PutNextEntry(new ZipEntry(ze.Name) { DateTime = ZipHelper.ZipEntryTimestamp });
                         var inputStream = zip.GetInputStream(ze);
                         XSSFSheet xSheet = GetSheetFromZipEntryName(ze.Name);
-                        if (xSheet != null)
+                        // See bug 56557, we should not inject data into the special ChartSheets
+                        if (xSheet != null && !(xSheet is XSSFChartSheet))
                         {
                             SXSSFSheet sxSheet = GetSXSSFSheet(xSheet);
                             var xis = sxSheet.GetWorksheetXMLInputStream();
@@ -500,8 +506,9 @@ namespace NPOI.XSSF.Streaming
 
         private static void CopyStreamAndInjectWorksheet(Stream inputStream, Stream outputStream, Stream worksheetData)
         {
-            StreamReader inReader = new StreamReader(inputStream, Encoding.UTF8);
-            StreamWriter outWriter = new StreamWriter(outputStream, Encoding.UTF8);
+            const int BufferSize = 131072;
+            StreamReader inReader = new StreamReader(inputStream, Encoding.UTF8, true, BufferSize);
+            StreamWriter outWriter = new StreamWriter(outputStream, Encoding.UTF8, BufferSize);
             bool needsStartTag = true;
             int c;
             int pos = 0;
@@ -682,6 +689,8 @@ namespace NPOI.XSSF.Streaming
             return GetSXSSFSheet((XSSFSheet)XssfWorkbook.GetSheet(name));
         }
 
+        public ISheet this[string name] => GetSheet(name);
+
         public void RemoveSheetAt(int index)
         {
             // Get the sheet to be removed
@@ -713,12 +722,6 @@ namespace NPOI.XSSF.Streaming
             return XssfWorkbook.CreateFont();
         }
 
-        [Obsolete("deprecated in poi 3.16")]
-        public IFont FindFont(short boldWeight, short color, short fontHeight, string name, bool italic, bool strikeout, FontSuperScript typeOffset, FontUnderlineType underline)
-        {
-            return XssfWorkbook.FindFont(boldWeight, color, fontHeight, name, italic, strikeout, typeOffset, underline);
-        }
-
         /**
          * Finds a font that matches the one with the supplied attributes
          *
@@ -745,8 +748,16 @@ namespace NPOI.XSSF.Streaming
         }
 
 
+        /// <summary>
+        /// Closes the workbook, flushing and closing all sheet data writers, and
+        /// disposes of all temporary files backing this workbook on disk.
+        /// After this call the workbook should no longer be used.
+        /// </summary>
         public void Close()
         {
+            // Flush remaining rows and dispose of temporary files before closing writers
+            DisposeTempFiles();
+
             // ensure that any lingering writer is closed
             foreach (SXSSFSheet sheet in _xFromSxHash.Values)
             {
@@ -807,12 +818,22 @@ namespace NPOI.XSSF.Streaming
             }
         }
 
-        /**
-        * Dispose of temporary files backing this workbook on disk.
-        * Calling this method will render the workbook unusable.
-        * @return true if all temporary files were deleted successfully.
-        */
+        /// <summary>
+        /// Dispose of temporary files backing this workbook on disk.
+        /// Calling this method will render the workbook unusable.
+        /// Note: <see cref="Close"/> now automatically calls this method, so explicit
+        /// calls to <see cref="Dispose()"/> are no longer necessary when using a
+        /// <c>using</c> statement or calling <see cref="Close"/>.
+        /// </summary>
+        /// <returns>true if all temporary files were deleted successfully.</returns>
+        [Obsolete("Deprecated. Temporary files are now automatically disposed when Close() is called. " +
+                  "Prefer using a 'using' statement or calling Close() instead.")]
         public bool Dispose()
+        {
+            return DisposeTempFiles();
+        }
+
+        private bool DisposeTempFiles()
         {
             var success = true;
             foreach (SXSSFSheet sheet in _sxFromXHash.Keys)
@@ -982,6 +1003,11 @@ namespace NPOI.XSSF.Streaming
             }
         }
 
+        public int AddOlePackage(byte[] oleData, String label, String fileName, String command) 
+        {
+            return _wb.AddOlePackage(oleData, label, fileName, command);
+        }
+
         /// <summary>
         /// Gets a bool value that indicates whether the date systems used in the workbook starts in 1904.
         /// The default value is false, meaning that the workbook uses the 1900 date system,
@@ -993,20 +1019,25 @@ namespace NPOI.XSSF.Streaming
             return XssfWorkbook.IsDate1904();
         }
 
+        public DataSet ToDataSet(bool firstRowAsHeader = false, bool showCalculatedValue = false)
+        {
+            return WorkbookUtil.ToDataSet(this, firstRowAsHeader, showCalculatedValue);
+        }
+
         void IDisposable.Dispose()
         {
-            this.Dispose();
+            Close();
         }
 
 
 
         //TODO: missing method isDate1904, isHidden, setHidden
 
-        private class SheetEnumerator<T> : IEnumerator<T> where T : class, ISheet
+        private sealed class SheetEnumerator<T> : IEnumerator<T> where T : class, ISheet
         {
             private XSSFWorkbook _wb;
-            private SXSSFWorkbook _xwb;
-            private IEnumerator<ISheet> it;
+            private readonly SXSSFWorkbook _xwb;
+            private readonly IEnumerator<ISheet> it;
             public SheetEnumerator(XSSFWorkbook wb, SXSSFWorkbook xwb)
             {
                 this._wb = wb;
@@ -1049,5 +1080,30 @@ namespace NPOI.XSSF.Streaming
                 it.Reset();
             }
         }
+        public bool ForceFormulaRecalculation
+        {
+            get
+            {
+                bool forcerecalc=true;
+                for(int i = 0; i < this.NumberOfSheets; i++)
+                {
+                    var sheet = this.GetSheetAt(i);
+                    if(!sheet.ForceFormulaRecalculation)
+                    {
+                        forcerecalc = false;
+                        break;
+                    }
+                }
+                return forcerecalc;
+            }
+            set
+            {
+                for(int i = 0; i < this.NumberOfSheets; i++)
+                {
+                    var sheet = this.GetSheetAt(i);
+                    sheet.ForceFormulaRecalculation = value;
+                }
+            }
+        }
     }
-}
+ }

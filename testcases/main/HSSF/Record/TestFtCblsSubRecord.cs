@@ -20,7 +20,7 @@ namespace TestCases.HSSF.Record
     using System;
 
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using TestCases.HSSF.Record;
     using NPOI.Util;
     using NPOI.HSSF.Record;
@@ -46,18 +46,18 @@ namespace TestCases.HSSF.Record
 
             FtCblsSubRecord record = new FtCblsSubRecord(TestcaseRecordInputStream.Create(FtCblsSubRecord.sid, data), data.Length);
 
-            Assert.AreEqual(FtCblsSubRecord.sid, record.Sid);
-            Assert.AreEqual(data.Length, record.DataSize);
+            ClassicAssert.AreEqual(FtCblsSubRecord.sid, record.Sid);
+            ClassicAssert.AreEqual(data.Length, record.DataSize);
         }
         [Test]
         public void TestWrite()
         {
             FtCblsSubRecord record = new FtCblsSubRecord();
-            Assert.AreEqual(FtCblsSubRecord.sid, record.Sid);
-            Assert.AreEqual(data.Length, record.DataSize);
+            ClassicAssert.AreEqual(FtCblsSubRecord.sid, record.Sid);
+            ClassicAssert.AreEqual(data.Length, record.DataSize);
 
             byte[] ser = record.Serialize();
-            Assert.AreEqual(ser.Length - 4, data.Length);
+            ClassicAssert.AreEqual(ser.Length - 4, data.Length);
 
         }
         [Test]
@@ -69,8 +69,8 @@ namespace TestCases.HSSF.Record
             FtCblsSubRecord Cloned = (FtCblsSubRecord)record.Clone();
             byte[] cln = Cloned.Serialize();
 
-            Assert.AreEqual(record.DataSize, Cloned.DataSize);
-            Assert.IsTrue(Arrays.Equals(src, cln));
+            ClassicAssert.AreEqual(record.DataSize, Cloned.DataSize);
+            ClassicAssert.IsTrue(Arrays.Equals(src, cln));
         }
     }
 }

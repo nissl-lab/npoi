@@ -20,7 +20,8 @@ namespace NPOI.XWPF.UserModel
     using NPOI.OpenXmlFormats.Wordprocessing;
     using System;
     using System.Collections.Generic;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
     using System.Xml;
 
     /**
@@ -47,21 +48,21 @@ namespace NPOI.XWPF.UserModel
         {
             foreach (var o in ctComment.Items)
             {
-                if (o is CT_P)
+                if (o is CT_P ctP)
                 {
-                    XWPFParagraph p = new XWPFParagraph((CT_P)o, this);
+                    XWPFParagraph p = new XWPFParagraph(ctP, this);
                     bodyElements.Add(p);
                     paragraphs.Add(p);
                 }
-                else if (o is CT_Tbl)
+                else if (o is CT_Tbl tbl)
                 {
-                    XWPFTable t = new XWPFTable((CT_Tbl)o, this);
+                    XWPFTable t = new XWPFTable(tbl, this);
                     bodyElements.Add(t);
                     tables.Add(t);
                 }
-                else if (o is CT_SdtBlock)
+                else if (o is CT_SdtBlock block)
                 {
-                    XWPFSDT c = new XWPFSDT((CT_SdtBlock)o, this);
+                    XWPFSDT c = new XWPFSDT(block, this);
                     bodyElements.Add(c);
                 }
             }
@@ -372,7 +373,7 @@ namespace NPOI.XWPF.UserModel
 
         public String GetText()
         {
-            StringBuilder text = new StringBuilder();
+            using var text = ZString.CreateStringBuilder();
             foreach (XWPFParagraph p in paragraphs)
             {
                 if (text.Length > 0)

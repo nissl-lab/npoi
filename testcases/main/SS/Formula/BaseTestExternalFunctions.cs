@@ -18,7 +18,7 @@ namespace TestCases.SS.Formula
 {
 
     using System;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.Formula.Functions;
@@ -61,7 +61,7 @@ namespace TestCases.SS.Formula
             ICell cell1 = sh.CreateRow(0).CreateCell(0);
             // functions from the Excel Analysis Toolpack
             cell1.CellFormula=("ISODD(1)+ISEVEN(2)"); 
-            Assert.AreEqual("ISODD(1)+ISEVEN(2)", cell1.CellFormula);
+            ClassicAssert.AreEqual("ISODD(1)+ISEVEN(2)", cell1.CellFormula);
 
             ICell cell2 = sh.CreateRow(1).CreateCell(0);
             //unregistered functions are parseable and renderable, but may not be evaluateable
@@ -96,16 +96,16 @@ namespace TestCases.SS.Formula
             wb.AddToolPack(customToolpack);
 
             cell2.CellFormula = ("MYBASEEXTFUNC(\"B1\")");
-            Assert.AreEqual("MYBASEEXTFUNC(\"B1\")", cell2.CellFormula);
+            ClassicAssert.AreEqual("MYBASEEXTFUNC(\"B1\")", cell2.CellFormula);
 
             ICell cell3 = sh.CreateRow(2).CreateCell(0);
             cell3.CellFormula = ("MYBASEEXTFUNC2(\"C1\")&\"-\"&A2");  //where A2 is defined above
-            Assert.AreEqual("MYBASEEXTFUNC2(\"C1\")&\"-\"&A2", cell3.CellFormula);
+            ClassicAssert.AreEqual("MYBASEEXTFUNC2(\"C1\")&\"-\"&A2", cell3.CellFormula);
 
             IFormulaEvaluator Evaluator = wb.GetCreationHelper().CreateFormulaEvaluator();
-            Assert.AreEqual(2.0, Evaluator.Evaluate(cell1).NumberValue);
-            Assert.AreEqual("B1abc", Evaluator.Evaluate(cell2).StringValue);
-            Assert.AreEqual("C1abc2-B1abc", Evaluator.Evaluate(cell3).StringValue);
+            ClassicAssert.AreEqual(2.0, Evaluator.Evaluate(cell1).NumberValue);
+            ClassicAssert.AreEqual("B1abc", Evaluator.Evaluate(cell2).StringValue);
+            ClassicAssert.AreEqual("C1abc2-B1abc", Evaluator.Evaluate(cell3).StringValue);
 
             wb.Close();
         }
@@ -122,18 +122,18 @@ namespace TestCases.SS.Formula
 
             ISheet sh = wb.GetSheetAt(0);
             // these two are not imlemented in r
-            Assert.AreEqual("DELTA(1.3,1.5)", sh.GetRow(0).GetCell(1).CellFormula);
-            Assert.AreEqual("COMPLEX(2,4)", sh.GetRow(1).GetCell(1).CellFormula);
+            ClassicAssert.AreEqual("DELTA(1.3,1.5)", sh.GetRow(0).GetCell(1).CellFormula);
+            ClassicAssert.AreEqual("COMPLEX(2,4)", sh.GetRow(1).GetCell(1).CellFormula);
 
             ICell cell2 = sh.GetRow(2).GetCell(1);
-            Assert.AreEqual("ISODD(2)", cell2.CellFormula);
-            Assert.AreEqual(false, Evaluator.Evaluate(cell2).BooleanValue);
-            Assert.AreEqual(CellType.Boolean, Evaluator.EvaluateFormulaCell(cell2));
+            ClassicAssert.AreEqual("ISODD(2)", cell2.CellFormula);
+            ClassicAssert.AreEqual(false, Evaluator.Evaluate(cell2).BooleanValue);
+            ClassicAssert.AreEqual(CellType.Boolean, Evaluator.EvaluateFormulaCell(cell2));
 
             ICell cell3 = sh.GetRow(3).GetCell(1);
-            Assert.AreEqual("ISEVEN(2)", cell3.CellFormula);
-            Assert.AreEqual(true, Evaluator.Evaluate(cell3).BooleanValue);
-            Assert.AreEqual(CellType.Boolean, Evaluator.EvaluateFormulaCell(cell3));
+            ClassicAssert.AreEqual("ISEVEN(2)", cell3.CellFormula);
+            ClassicAssert.AreEqual(true, Evaluator.Evaluate(cell3).BooleanValue);
+            ClassicAssert.AreEqual(CellType.Boolean, Evaluator.EvaluateFormulaCell(cell3));
 
             wb.Close();
         }

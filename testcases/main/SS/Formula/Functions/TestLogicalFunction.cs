@@ -20,7 +20,7 @@ namespace TestCases.SS.Formula.Functions
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     /**
      * LogicalFunction unit tests.
@@ -88,8 +88,8 @@ namespace TestCases.SS.Formula.Functions
             CellValue cell1Value = Evaluator.Evaluate(cell1);
             CellValue cell2Value = Evaluator.Evaluate(cell2);
 
-            Assert.AreEqual(true, cell1Value.BooleanValue);
-            Assert.AreEqual(false, cell2Value.BooleanValue);
+            ClassicAssert.AreEqual(true, cell1Value.BooleanValue);
+            ClassicAssert.AreEqual(false, cell2Value.BooleanValue);
         }
 
         [Test]
@@ -103,8 +103,8 @@ namespace TestCases.SS.Formula.Functions
             CellValue cell1Value = Evaluator.Evaluate(cell1);
             CellValue cell2Value = Evaluator.Evaluate(cell2);
 
-            Assert.AreEqual(true, cell1Value.BooleanValue);
-            Assert.AreEqual(true, cell2Value.BooleanValue);
+            ClassicAssert.AreEqual(true, cell1Value.BooleanValue);
+            ClassicAssert.AreEqual(true, cell2Value.BooleanValue);
         }
     }
 

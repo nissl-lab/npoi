@@ -236,7 +236,7 @@ namespace NPOI.DDF
         /// <summary>
         /// This class Reads the standard escher header.
         /// </summary>
-        internal class DeleteEscherRecordHeader
+        internal sealed class DeleteEscherRecordHeader
         {
             private short options;
             private short recordId;
@@ -275,7 +275,7 @@ namespace NPOI.DDF
             /// Gets the record id.
             /// </summary>
             /// <value>The record id.</value>
-            public virtual short RecordId
+            public short RecordId
             {
                 get { return recordId; }
             }
@@ -290,10 +290,10 @@ namespace NPOI.DDF
             }
 
             /// <summary>
-            /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+            /// Returns a <see cref="System.String"/> that represents the current <see cref="System.Object"/>.
             /// </summary>
             /// <returns>
-            /// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+            /// A <see cref="System.String"/> that represents the current <see cref="System.Object"/>.
             /// </returns>
             public override String ToString()
             {

@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using NPOI.SS.Formula.Eval;
 using NPOI.SS.Formula.Functions;
 using NPOI.HSSF.UserModel;
@@ -47,15 +47,15 @@ namespace TestCases.SS.Formula.Functions
         private static void confirmValue(String number1, double expected)
         {
             ValueEval result = invokeValue(number1);
-            Assert.IsTrue(result is NumberEval);
-            Assert.AreEqual(expected, ((NumberEval)result).NumberValue, 0.0000001);
+            ClassicAssert.IsTrue(result is NumberEval);
+            ClassicAssert.AreEqual(expected, ((NumberEval)result).NumberValue, 0.0000001);
         }
 
         private static void confirmInvalidError(String number1)
         {
             ValueEval result = invokeValue(number1);
-            Assert.IsTrue(result is ErrorEval);
-            Assert.AreEqual(ErrorEval.VALUE_INVALID, result);
+            ClassicAssert.IsTrue(result is ErrorEval);
+            ClassicAssert.AreEqual(ErrorEval.VALUE_INVALID, result);
         }
     }
 }

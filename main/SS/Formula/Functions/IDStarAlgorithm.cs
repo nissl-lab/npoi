@@ -39,6 +39,12 @@ namespace NPOI.SS.Formula.Functions
          * @return a ValueEval
          */
         ValueEval Result { get; }
+        /**
+         * Whether the field value (the 2nd param in DCOUNT, DGET, etc.) can evaluate to empty. It
+         * is allowed to evaluate to empty for DCOUNT.
+         * @return whether the field value can evaluate to empty
+         */
+        bool AllowEmptyMatchField { get; }
     }
 
 }

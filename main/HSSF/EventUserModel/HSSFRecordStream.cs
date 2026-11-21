@@ -203,11 +203,11 @@ namespace NPOI.HSSF.EventUserModel
                         // Trigger them on the drawing record, now it's complete
                         rec = lastDrawingRecord;
                     }
-                    else if ((lastRec is DrawingGroupRecord))
+                    else if ((lastRec is DrawingGroupRecord record))
                     {
-                        ((DrawingGroupRecord)lastRec).ProcessContinueRecord(crec.Data);
+                        record.ProcessContinueRecord(crec.Data);
                         // Trigger them on the drawing record, now it's complete
-                        rec = lastRec;
+                        rec = record;
                     }
                     else
                     {
@@ -224,9 +224,9 @@ namespace NPOI.HSSF.EventUserModel
 
                 // Update our tracking of the last record
                 lastRec = rec;
-                if (rec is DrawingRecord)
+                if (rec is DrawingRecord drawingRecord)
                 {
-                    lastDrawingRecord = (DrawingRecord)rec;
+                    lastDrawingRecord = drawingRecord;
                 }
             }
             else

@@ -20,7 +20,7 @@ namespace TestCases.HSSF.Record.Aggregates
     using System;
     using System.Collections;
     using NPOI.HSSF.Record;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.Record.Aggregates;
 
     /**
@@ -38,7 +38,7 @@ namespace TestCases.HSSF.Record.Aggregates
             agg.InsertColumn(CreateColInfo(4, 7));
             agg.InsertColumn(CreateColInfo(8, 8));
             agg.GroupColumnRange(2, 5, true);
-            Assert.AreEqual(4, agg.NumColumns);
+            ClassicAssert.AreEqual(4, agg.NumColumns);
 
             ConfirmSerializedSize(agg);
 
@@ -52,7 +52,7 @@ namespace TestCases.HSSF.Record.Aggregates
             int estimatedSize = cirAgg.RecordSize;
             byte[] buf = new byte[estimatedSize];
             int serializedSize = cirAgg.Serialize(0, buf);
-            Assert.AreEqual(estimatedSize, serializedSize);
+            ClassicAssert.AreEqual(estimatedSize, serializedSize);
         }
 
         private static ColumnInfoRecord CreateColInfo(int firstCol, int lastCol)
@@ -100,7 +100,7 @@ namespace TestCases.HSSF.Record.Aggregates
                 throw new AssertionException("Identified bug 45639");
             }
             ColumnInfoRecord[] cirs = CIRCollector.GetRecords(agg);
-            Assert.AreEqual(5, cirs.Length);
+            ClassicAssert.AreEqual(5, cirs.Length);
             ConfirmCIR(cirs, 0, 1, 3, 1, false, false);
             ConfirmCIR(cirs, 1, 4, 6, 2, false, false);
             ConfirmCIR(cirs, 2, 7, 9, 3, false, false);
@@ -125,7 +125,7 @@ namespace TestCases.HSSF.Record.Aggregates
             agg.CollapseColumn(3);
 
             cirs = CIRCollector.GetRecords(agg);
-            Assert.AreEqual(5, cirs.Length);
+            ClassicAssert.AreEqual(5, cirs.Length);
             ConfirmCIR(cirs, 0, 1, 3, 1, true, false);
             ConfirmCIR(cirs, 1, 4, 12, 2, true, false);
             ConfirmCIR(cirs, 2, 13, 13, 1, true, true);
@@ -136,7 +136,7 @@ namespace TestCases.HSSF.Record.Aggregates
             agg.ExpandColumn(6);
 
             cirs = CIRCollector.GetRecords(agg);
-            Assert.AreEqual(4, cirs.Length);
+            ClassicAssert.AreEqual(4, cirs.Length);
             if (!cirs[1].IsHidden)
             {
                 throw new AssertionException("Inner Group should still be hidden");
@@ -150,11 +150,11 @@ namespace TestCases.HSSF.Record.Aggregates
             int ix, int startColIx, int endColIx, int level, bool isHidden, bool isCollapsed)
         {
             ColumnInfoRecord cir = cirs[ix];
-            Assert.AreEqual(startColIx, cir.FirstColumn, "startColIx");
-            Assert.AreEqual(endColIx, cir.LastColumn, "endColIx");
-            Assert.AreEqual(level, cir.OutlineLevel, "level");
-            Assert.AreEqual(isHidden, cir.IsHidden, "hidden");
-            Assert.AreEqual(isCollapsed, cir.IsCollapsed, "collapsed");
+            ClassicAssert.AreEqual(startColIx, cir.FirstColumn, "startColIx");
+            ClassicAssert.AreEqual(endColIx, cir.LastColumn, "endColIx");
+            ClassicAssert.AreEqual(level, cir.OutlineLevel, "level");
+            ClassicAssert.AreEqual(isHidden, cir.IsHidden, "hidden");
+            ClassicAssert.AreEqual(isCollapsed, cir.IsCollapsed, "collapsed");
         }
     }
 }

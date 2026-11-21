@@ -30,7 +30,7 @@ using System;
 using System.Collections;
 using System.IO;
 
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 
 using NPOI.POIFS.FileSystem;
 using NPOI.Util;
@@ -96,12 +96,12 @@ namespace TestCases.POIFS.FileSystem
 
                             if (m == n)
                             {
-                                Assert.AreEqual(d1, d2, "" + j + "," + k + "," + m + ","
+                                ClassicAssert.AreEqual(d1, d2, "" + j + "," + k + "," + m + ","
                                              + n);
                             }
                             else
                             {
-                                Assert.IsTrue(!d1.Equals(d2), "" + j + "," + k + "," + m + "," + n);
+                                ClassicAssert.IsTrue(!d1.Equals(d2), "" + j + "," + k + "," + m + "," + n);
                             }
                         }
                     }
@@ -161,12 +161,12 @@ namespace TestCases.POIFS.FileSystem
 
                             if ((k == j) && (m == n))
                             {
-                                Assert.AreEqual(d1, d2, "" + j + "," + k + "," + m + ","
+                                ClassicAssert.AreEqual(d1, d2, "" + j + "," + k + "," + m + ","
                                              + n);
                             }
                             else
                             {
-                                Assert.IsTrue(!(d1.Equals(d2)), "" + j + "," + k + "," + m + "," + n);
+                                ClassicAssert.IsTrue(!(d1.Equals(d2)), "" + j + "," + k + "," + m + "," + n);
                             }
                         }
                     }
@@ -204,7 +204,7 @@ namespace TestCases.POIFS.FileSystem
                                 new DocumentDescriptor(builtUpPaths[k],
                                                        names[n]);
 
-                            Assert.IsTrue(!(d1.Equals(d2)), "" + j + "," + k + "," + m + "," + n);
+                            ClassicAssert.IsTrue(!(d1.Equals(d2)), "" + j + "," + k + "," + m + "," + n);
                         }
                     }
                 }

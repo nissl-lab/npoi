@@ -30,7 +30,7 @@ using System.Text;
 using System.Collections;
 using System.IO;
 
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 
 using NPOI.POIFS.Common;
 using NPOI.POIFS.Storage;
@@ -138,7 +138,7 @@ namespace TestCases.POIFS.Properties
             {
                 children.Add(iter.Current);
             }
-            Assert.AreEqual(count, children.Count);
+            ClassicAssert.AreEqual(count, children.Count);
             if (count != 0)
             {
                 bool[] found = new bool[count];
@@ -161,7 +161,7 @@ namespace TestCases.POIFS.Properties
 
                         if (index != -1)
                         {
-                            Assert.IsTrue(!found[index - 1], "found index " + index + " twice");
+                            ClassicAssert.IsTrue(!found[index - 1], "found index " + index + " twice");
                             found[index - 1] = true;
                             total_found++;
                         }
@@ -174,13 +174,13 @@ namespace TestCases.POIFS.Properties
 
                         if (index != -1)
                         {
-                            Assert.IsTrue(!found[index - 1], "found index " + index + " twice");
+                            ClassicAssert.IsTrue(!found[index - 1], "found index " + index + " twice");
                             found[index - 1] = true;
                             total_found++;
                         }
                     }
                 }
-                Assert.AreEqual(count, total_found);
+                ClassicAssert.AreEqual(count, total_found);
             }
         }
 
@@ -225,10 +225,10 @@ namespace TestCases.POIFS.Properties
             _property.WriteData(stream);
             byte[] output = stream.ToArray();
 
-            Assert.AreEqual(_testblock.Length, output.Length);
+            ClassicAssert.AreEqual(_testblock.Length, output.Length);
             for (int j = 0; j < _testblock.Length; j++)
             {
-                Assert.AreEqual(_testblock[j],
+                ClassicAssert.AreEqual(_testblock[j],
                              output[j], "mismatch at offset " + j);
             }
         }
@@ -289,8 +289,8 @@ namespace TestCases.POIFS.Properties
 
                 // as expected
             }
-            Assert.IsTrue(_property.DeleteChild(p1));
-            Assert.IsTrue(!_property.DeleteChild(p1));
+            ClassicAssert.IsTrue(_property.DeleteChild(p1));
+            ClassicAssert.IsTrue(!_property.DeleteChild(p1));
             _property.AddChild(new LocalProperty(1));
         }
 
@@ -307,16 +307,16 @@ namespace TestCases.POIFS.Properties
             String originalName = p1.Name;
 
             _property.AddChild(p1);
-            Assert.IsTrue(_property.ChangeName(p1, "foobar"));
-            Assert.AreEqual("foobar", p1.Name);
-            Assert.IsTrue(!_property.ChangeName(p1, "foobar"));
-            Assert.AreEqual("foobar", p1.Name);
+            ClassicAssert.IsTrue(_property.ChangeName(p1, "foobar"));
+            ClassicAssert.AreEqual("foobar", p1.Name);
+            ClassicAssert.IsTrue(!_property.ChangeName(p1, "foobar"));
+            ClassicAssert.AreEqual("foobar", p1.Name);
             Property p2 = new LocalProperty(1);
 
             _property.AddChild(p2);
-            Assert.IsTrue(!_property.ChangeName(p1, originalName));
-            Assert.IsTrue(_property.ChangeName(p2, "foo"));
-            Assert.IsTrue(_property.ChangeName(p1, originalName));
+            ClassicAssert.IsTrue(!_property.ChangeName(p1, originalName));
+            ClassicAssert.IsTrue(_property.ChangeName(p2, "foo"));
+            ClassicAssert.IsTrue(_property.ChangeName(p1, originalName));
         }
 
         /**
@@ -378,15 +378,15 @@ namespace TestCases.POIFS.Properties
             property.WriteData(stream);
             byte[] output = stream.ToArray();
 
-            Assert.AreEqual(128, output.Length);
+            ClassicAssert.AreEqual(128, output.Length);
             for (int j = 0; j < 128; j++)
             {
-                Assert.AreEqual(expected[j],
+                ClassicAssert.AreEqual(expected[j],
                              output[j], "mismatch at offset " + j);
             }
-            Assert.AreEqual(index, property.Index);
-            Assert.AreEqual(name, property.Name);
-            Assert.IsTrue(!property.Children.MoveNext());
+            ClassicAssert.AreEqual(index, property.Index);
+            ClassicAssert.AreEqual(name, property.Name);
+            ClassicAssert.IsTrue(!property.Children.MoveNext());
         }
 
     }

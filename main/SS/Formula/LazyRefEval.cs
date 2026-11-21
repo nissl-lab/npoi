@@ -33,7 +33,7 @@ namespace NPOI.SS.Formula
     public class LazyRefEval : RefEvalBase
     {
 
-        private SheetRangeEvaluator _evaluator;
+        private readonly SheetRangeEvaluator _evaluator;
 
         public LazyRefEval(int rowIndex, int columnIndex, SheetRangeEvaluator sre)
             :base(sre, rowIndex, columnIndex)

@@ -17,7 +17,7 @@
 namespace TestCases.SS.Formula.Functions
 {
     using System;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     /**
     * Tests D*() functions as loaded from a test data spreadsheet.

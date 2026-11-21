@@ -407,14 +407,9 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
-        IDrawing ISheet.DrawingPatriarch
+        public IDrawing<IShape> DrawingPatriarch
         {
             get { throw new System.NotImplementedException(); }
-        }
-
-        void ISheet.SetZoom(int numerator, int denominator)
-        {
-            throw new System.NotImplementedException();
         }
 
         short ISheet.TopRow
@@ -609,17 +604,12 @@ namespace NPOI.XSSF.UserModel
             throw new System.NotImplementedException();
         }
 
-        void ISheet.AutoSizeColumn(int column, bool useMergedCells)
+        void ISheet.AutoSizeColumn(int column, bool useMergedCells, int maxRows)
         {
             throw new System.NotImplementedException();
         }
 
-        IComment ISheet.GetCellComment(int row, int column)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        IDrawing ISheet.CreateDrawingPatriarch()
+        IDrawing<IShape> ISheet.CreateDrawingPatriarch()
         {
             throw new System.NotImplementedException();
         }

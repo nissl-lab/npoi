@@ -67,6 +67,8 @@ namespace NPOI.HSSF.Record
  */
     public class DConRefRecord : StandardRecord
     {
+        //arbitrarily selected; may need to increase
+        private static int MAX_RECORD_LENGTH = 100_000;
 
         /**
          * The id of the record type,
@@ -78,15 +80,37 @@ namespace NPOI.HSSF.Record
          * <a href="http://msdn.microsoft.com/en-us/library/dd920420(office.12).aspx">
          * [MS XLS s.2.5.211]</a>
          */
-        private int firstRow, lastRow, firstCol, lastCol;
+        private readonly int firstRow;
+
+        /**
+         * A RefU structure specifying the range of cells if this record is part of an SXTBL.
+         * <a href="http://msdn.microsoft.com/en-us/library/dd920420(office.12).aspx">
+         * [MS XLS s.2.5.211]</a>
+         */
+        private readonly int lastRow;
+
+        /**
+         * A RefU structure specifying the range of cells if this record is part of an SXTBL.
+         * <a href="http://msdn.microsoft.com/en-us/library/dd920420(office.12).aspx">
+         * [MS XLS s.2.5.211]</a>
+         */
+        private readonly int firstCol;
+
+        /**
+         * A RefU structure specifying the range of cells if this record is part of an SXTBL.
+         * <a href="http://msdn.microsoft.com/en-us/library/dd920420(office.12).aspx">
+         * [MS XLS s.2.5.211]</a>
+         */
+        private readonly int lastCol;
+
         /**
          * the number of chars in the link
          */
-        private int charCount;
+        private readonly int charCount;
         /**
          * the type of characters (single or double byte)
          */
-        private int charType;
+        private readonly int charType;
         /**
          * The link's path string. This is the <code>rgb</code> field of a
          * <code>XLUnicodeStringNoCch</code>. Therefore it will contain at least one leading special
@@ -97,11 +121,11 @@ namespace NPOI.HSSF.Record
          * VirtualPath [MS-XLS s. 2.5.69]</a>
          * <p/>
          */
-        private byte[] path;
+        private readonly byte[] path;
         /**
          * unused bits at the end, must be set to 0.
          */
-        private byte[] _unused;
+        private readonly byte[] _unused;
 
         /**
          * Read constructor.
@@ -141,7 +165,7 @@ namespace NPOI.HSSF.Record
              */
             int byteLength = charCount * ((charType & 1) + 1);
 
-            path = LittleEndian.GetByteArray(data, offset, byteLength);
+            path = LittleEndian.GetByteArray(data, offset, byteLength, MAX_RECORD_LENGTH);
             offset += byteLength;
 
             /*
@@ -149,7 +173,7 @@ namespace NPOI.HSSF.Record
              * unused field. Not sure If i need to bother with this...
              */
             if (path[0] == 0x02)
-                _unused = LittleEndian.GetByteArray(data, offset, (charType + 1));
+                _unused = LittleEndian.GetByteArray(data, offset, (charType + 1), MAX_RECORD_LENGTH);
 
         }
 
@@ -174,7 +198,7 @@ namespace NPOI.HSSF.Record
             // byteLength depends on whether we are using single- or double-byte chars.
             int byteLength = charCount * (charType + 1);
 
-            path = new byte[byteLength];
+            path = IOUtils.SafelyAllocate(byteLength, MAX_RECORD_LENGTH);
             inStream.ReadFully(path);
 
             if (path[0] == 0x02)

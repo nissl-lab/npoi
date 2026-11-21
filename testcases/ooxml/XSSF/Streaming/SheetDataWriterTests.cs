@@ -18,7 +18,7 @@ using NPOI.SS.UserModel;
 using NPOI.XSSF.Streaming;
 using NPOI.XSSF.UserModel;
 using NSubstitute;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using System.Globalization;
 using System.IO;
 using System.Threading;
@@ -31,7 +31,7 @@ namespace TestCases.XSSF.Streaming
         private SheetDataWriter _objectToTest;
         private SXSSFRow _row;
         private ICell _cell;
-
+        private ICellStyle _cellStyle;
         [SetUp]
         public void Init()
         {
@@ -40,6 +40,7 @@ namespace TestCases.XSSF.Streaming
             var _workbook = Substitute.For<SXSSFWorkbook>();
             var _sheet = Substitute.For<SXSSFSheet>(_workbook, _xssfsheet);
             _row = Substitute.For<SXSSFRow>(_sheet);
+            _cellStyle = _workbook.CreateCellStyle();
             _cell = Substitute.For<ICell>();
         }
 
@@ -59,8 +60,8 @@ namespace TestCases.XSSF.Streaming
         public void IfCallingEmptyConstructorShouldCreateNonZippedTempFileNonDecoratedStream()
         {
             _objectToTest = new SheetDataWriter();
-            Assert.True(_objectToTest.TemporaryFilePath().Contains("poi-sxssf-sheet"));
-            Assert.True(!_objectToTest.TemporaryFilePath().Contains(".gz"));
+            ClassicAssert.True(_objectToTest.TemporaryFilePath().Contains("poi-sxssf-sheet"));
+            ClassicAssert.True(!_objectToTest.TemporaryFilePath().Contains(".gz"));
         }
 
         [Test]
@@ -76,9 +77,9 @@ namespace TestCases.XSSF.Streaming
 
             var lines = File.ReadAllLines(_objectToTest.TemporaryFilePath());
 
-            Assert.True(lines.Length == 2);
-            Assert.AreEqual($"<row r=\"{1}\" customHeight=\"1\" ht=\"{row.HeightInPoints}\">", lines[0]);
-            Assert.AreEqual("</row>", lines[1]);
+            ClassicAssert.True(lines.Length == 2);
+            ClassicAssert.AreEqual($"<row r=\"{1}\" customHeight=\"true\" ht=\"{row.HeightInPoints}\">", lines[0]);
+            ClassicAssert.AreEqual("</row>", lines[1]);
         }
 
         [Test]
@@ -94,9 +95,9 @@ namespace TestCases.XSSF.Streaming
 
             var lines = File.ReadAllLines(_objectToTest.TemporaryFilePath());
 
-            Assert.True(lines.Length == 2);
-            Assert.AreEqual("<row r=\"" + 1 + "\" hidden=\"1\">", lines[0]);
-            Assert.AreEqual("</row>", lines[1]);
+            ClassicAssert.True(lines.Length == 2);
+            ClassicAssert.AreEqual("<row r=\"" + 1 + "\" hidden=\"true\">", lines[0]);
+            ClassicAssert.AreEqual("</row>", lines[1]);
 
 
         }
@@ -109,15 +110,15 @@ namespace TestCases.XSSF.Streaming
             _row.HasCustomHeight().Returns(false);
             _row.ZeroHeight.Returns(false);
             _row.IsFormatted.Returns(true);
-            _row.RowStyle.Index.Returns((short)1);
+            _row.RowStyle.Returns(_cellStyle);
             _objectToTest.WriteRow(0, _row);
             _objectToTest.Close();
 
             var lines = File.ReadAllLines(_objectToTest.TemporaryFilePath());
 
-            Assert.True(lines.Length == 2);
-            Assert.AreEqual("<row r=\"" + 1 + "\" s=\"" + _row.RowStyle.Index + "\" customFormat=\"1\">", lines[0]);
-            Assert.AreEqual("</row>", lines[1]);
+            ClassicAssert.True(lines.Length == 2);
+            ClassicAssert.AreEqual("<row r=\"" + 1 + "\" s=\"" + _row.RowStyleIndex + "\" customFormat=\"1\">", lines[0]);
+            ClassicAssert.AreEqual("</row>", lines[1]);
 
 
         }
@@ -136,9 +137,9 @@ namespace TestCases.XSSF.Streaming
 
             var lines = File.ReadAllLines(_objectToTest.TemporaryFilePath());
 
-            Assert.True(lines.Length == 2);
-            Assert.AreEqual("<row r=\"" + 1 + "\" outlineLevel=\"" + _row.OutlineLevel + "\">", lines[0]);
-            Assert.AreEqual("</row>", lines[1]);
+            ClassicAssert.True(lines.Length == 2);
+            ClassicAssert.AreEqual("<row r=\"" + 1 + "\" outlineLevel=\"" + _row.OutlineLevel + "\">", lines[0]);
+            ClassicAssert.AreEqual("</row>", lines[1]);
 
 
         }
@@ -158,9 +159,9 @@ namespace TestCases.XSSF.Streaming
 
             var lines = File.ReadAllLines(_objectToTest.TemporaryFilePath());
 
-            Assert.True(lines.Length == 2);
-            Assert.AreEqual("<row r=\"" + 1 + "\" hidden=\"" + (_row.Hidden.Value ? "1" : "0") + "\">", lines[0]);
-            Assert.AreEqual("</row>", lines[1]);
+            ClassicAssert.True(lines.Length == 2);
+            ClassicAssert.AreEqual("<row r=\"" + 1 + "\" hidden=\"" + (_row.Hidden.Value ? "1" : "0") + "\">", lines[0]);
+            ClassicAssert.AreEqual("</row>", lines[1]);
 
 
         }
@@ -181,9 +182,9 @@ namespace TestCases.XSSF.Streaming
 
             var lines = File.ReadAllLines(_objectToTest.TemporaryFilePath());
 
-            Assert.True(lines.Length == 2);
-            Assert.AreEqual("<row r=\"" + 1 + "\" collapsed=\"" + (_row.Collapsed.Value ? "1" : "0") + "\">", lines[0]);
-            Assert.AreEqual("</row>", lines[1]);
+            ClassicAssert.True(lines.Length == 2);
+            ClassicAssert.AreEqual("<row r=\"" + 1 + "\" collapsed=\"" + (_row.Collapsed.Value ? "1" : "0") + "\">", lines[0]);
+            ClassicAssert.AreEqual("</row>", lines[1]);
 
 
         }
@@ -204,9 +205,9 @@ namespace TestCases.XSSF.Streaming
 
             var lines = File.ReadAllLines(_objectToTest.TemporaryFilePath());
 
-            Assert.True(lines.Length == 2);
-            Assert.AreEqual("<row r=\"" + 1 + "\" collapsed=\"" + (_row.Collapsed.Value ? "1" : "0") + "\">", lines[0]);
-            Assert.AreEqual("</row>", lines[1]);
+            ClassicAssert.True(lines.Length == 2);
+            ClassicAssert.AreEqual("<row r=\"" + 1 + "\" collapsed=\"" + (_row.Collapsed.Value ? "1" : "0") + "\">", lines[0]);
+            ClassicAssert.AreEqual("</row>", lines[1]);
 
 
         }
@@ -223,8 +224,8 @@ namespace TestCases.XSSF.Streaming
 
             var lines = File.ReadAllLines(_objectToTest.TemporaryFilePath());
 
-            Assert.True(lines.Length == 1);
-            Assert.AreEqual("<c r=\"A1\"></c>", lines[0]);
+            ClassicAssert.True(lines.Length == 1);
+            ClassicAssert.AreEqual("<c r=\"A1\"></c>", lines[0]);
 
         }
 
@@ -243,8 +244,8 @@ namespace TestCases.XSSF.Streaming
 
             var lines = File.ReadAllLines(_objectToTest.TemporaryFilePath());
 
-            Assert.True(lines.Length == 1);
-            Assert.AreEqual("<c r=\"A1\"><f>SUM(A1:A3)</f><v>1</v></c>", lines[0]);
+            ClassicAssert.True(lines.Length == 1);
+            ClassicAssert.AreEqual("<c r=\"A1\"><f>SUM(A1:A3)</f><v>1</v></c>", lines[0]);
 
         }
 
@@ -261,8 +262,8 @@ namespace TestCases.XSSF.Streaming
 
             var lines = File.ReadAllLines(_objectToTest.TemporaryFilePath());
 
-            Assert.True(lines.Length == 1);
-            Assert.AreEqual("<c r=\"A1\" t=\"n\"><v>1</v></c>", lines[0]);
+            ClassicAssert.True(lines.Length == 1);
+            ClassicAssert.AreEqual("<c r=\"A1\" t=\"n\"><v>1</v></c>", lines[0]);
 
         }
 
@@ -279,8 +280,8 @@ namespace TestCases.XSSF.Streaming
 
             var lines = File.ReadAllLines(_objectToTest.TemporaryFilePath());
 
-            Assert.True(lines.Length == 1);
-            Assert.AreEqual("<c r=\"A1\" t=\"b\"><v>1</v></c>", lines[0]);
+            ClassicAssert.True(lines.Length == 1);
+            ClassicAssert.AreEqual("<c r=\"A1\" t=\"b\"><v>1</v></c>", lines[0]);
 
         }
 
@@ -297,8 +298,8 @@ namespace TestCases.XSSF.Streaming
 
             var lines = File.ReadAllLines(_objectToTest.TemporaryFilePath());
 
-            Assert.True(lines.Length == 1);
-            Assert.AreEqual("<c r=\"A1\" t=\"b\"><v>0</v></c>", lines[0]);
+            ClassicAssert.True(lines.Length == 1);
+            ClassicAssert.AreEqual("<c r=\"A1\" t=\"b\"><v>0</v></c>", lines[0]);
 
         }
 
@@ -315,8 +316,8 @@ namespace TestCases.XSSF.Streaming
 
             var lines = File.ReadAllLines(_objectToTest.TemporaryFilePath());
 
-            Assert.True(lines.Length == 1);
-            Assert.AreEqual("<c r=\"A1\" t=\"e\"><v>#NULL!</v></c>", lines[0]);
+            ClassicAssert.True(lines.Length == 1);
+            ClassicAssert.AreEqual("<c r=\"A1\" t=\"e\"><v>#NULL!</v></c>", lines[0]);
 
         }
 
@@ -333,8 +334,8 @@ namespace TestCases.XSSF.Streaming
 
             var lines = File.ReadAllLines(_objectToTest.TemporaryFilePath());
 
-            Assert.True(lines.Length == 1);
-            Assert.AreEqual("<c r=\"A1\" t=\"inlineStr\"><is><t xml:space=\"preserve\">\'\'&lt;&gt;&#x9;&#xa;&#xd;&amp;&quot;?         test:SLDFKj    </t></is></c>", lines[0]);
+            ClassicAssert.True(lines.Length == 1);
+            ClassicAssert.AreEqual("<c r=\"A1\" t=\"inlineStr\"><is><t xml:space=\"preserve\">\'\'&lt;&gt;&#x9;&#xa;&#xd;&amp;&quot;?         test:SLDFKj    </t></is></c>", lines[0]);
 
         }
 

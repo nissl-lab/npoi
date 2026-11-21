@@ -30,7 +30,7 @@ using System.Text;
 using System.Collections;
 using System.IO;
 
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 
 using NPOI.POIFS.Common;
 using NPOI.POIFS.Storage;
@@ -124,14 +124,14 @@ namespace TestCases.POIFS.Properties
             property.WriteData(stream);
             byte[] output = stream.ToArray();
 
-            Assert.AreEqual(128, output.Length);
+            ClassicAssert.AreEqual(128, output.Length);
             for (int j = 0; j < 128; j++)
             {
-                Assert.AreEqual(expected[j],
+                ClassicAssert.AreEqual(expected[j],
                              output[j], "mismatch at offset " + j);
             }
-            Assert.AreEqual(index, property.Index);
-            Assert.AreEqual(name, property.Name);
+            ClassicAssert.AreEqual(index, property.Index);
+            ClassicAssert.AreEqual(name, property.Name);
         }
 
         private void VerifyProperty(String name, int size)
@@ -140,11 +140,11 @@ namespace TestCases.POIFS.Properties
 
             if (size >= 4096)
             {
-                Assert.IsTrue(!property.ShouldUseSmallBlocks);
+                ClassicAssert.IsTrue(!property.ShouldUseSmallBlocks);
             }
             else
             {
-                Assert.IsTrue(property.ShouldUseSmallBlocks);
+                ClassicAssert.IsTrue(property.ShouldUseSmallBlocks);
             }
             byte[] Testblock = new byte[128];
             int index = 0;
@@ -191,10 +191,10 @@ namespace TestCases.POIFS.Properties
             property.WriteData(stream);
             byte[] output = stream.ToArray();
 
-            Assert.AreEqual(Testblock.Length, output.Length);
+            ClassicAssert.AreEqual(Testblock.Length, output.Length);
             for (int j = 0; j < Testblock.Length; j++)
             {
-                Assert.AreEqual(Testblock[j],
+                ClassicAssert.AreEqual(Testblock[j],
                              output[j], "mismatch at offset " + j);
             }
         }

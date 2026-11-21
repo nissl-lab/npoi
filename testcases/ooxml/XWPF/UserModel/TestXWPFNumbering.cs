@@ -20,7 +20,9 @@ namespace TestCases.XWPF.UserModel
 
     using NPOI.OpenXmlFormats.Wordprocessing;
     using NPOI.XWPF.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
+    using System;
+    using System.Linq;
 
     [TestFixture]
     public class TestXWPFNumbering
@@ -32,12 +34,12 @@ namespace TestCases.XWPF.UserModel
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("Numbering.docx");
             XWPFNumbering numbering = doc.GetNumbering();
             int numId = 1;
-            Assert.IsTrue(numbering.NumExist(numId.ToString()));
+            ClassicAssert.IsTrue(numbering.NumExist(numId.ToString()));
             XWPFNum num = numbering.GetNum(numId.ToString());
             string abstrNumId = num.GetCTNum().abstractNumId.val;
             XWPFAbstractNum abstractNum = numbering.GetAbstractNum(abstrNumId);
             string CompareAbstractNum = numbering.GetIdOfAbstractNum(abstractNum);
-            Assert.AreEqual(abstrNumId, CompareAbstractNum);
+            ClassicAssert.AreEqual(abstrNumId, CompareAbstractNum);
         }
 
         [Test]
@@ -53,32 +55,32 @@ namespace TestCases.XWPF.UserModel
             XWPFDocument docIn = XWPFTestDataSamples.WriteOutAndReadBack(docOut);
 
             numbering = docIn.GetNumbering();
-            Assert.IsTrue(numbering.NumExist(numId));
+            ClassicAssert.IsTrue(numbering.NumExist(numId));
             XWPFNum num = numbering.GetNum(numId);
 
             string CompareAbstractNum = num.GetCTNum().abstractNumId.val;
-            Assert.AreEqual(abstractNumId, CompareAbstractNum);
+            ClassicAssert.AreEqual(abstractNumId, CompareAbstractNum);
         }
         [Test]
         public void TestGetNumIlvl()
         {
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("Numbering.docx");
             string numIlvl = "0";
-            Assert.AreEqual(numIlvl, doc.Paragraphs[0].GetNumIlvl());
+            ClassicAssert.AreEqual(numIlvl, doc.Paragraphs[0].GetNumIlvl());
             numIlvl = "1";
-            Assert.AreEqual(numIlvl, doc.Paragraphs[5].GetNumIlvl());
+            ClassicAssert.AreEqual(numIlvl, doc.Paragraphs[5].GetNumIlvl());
         }
         [Test]
         public void TestGetNumFmt()
         {
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("Numbering.docx");
-            Assert.AreEqual("bullet", doc.Paragraphs[0].GetNumFmt());
-            Assert.AreEqual("bullet", doc.Paragraphs[1].GetNumFmt());
-            Assert.AreEqual("bullet", doc.Paragraphs[2].GetNumFmt());
-            Assert.AreEqual("bullet", doc.Paragraphs[3].GetNumFmt());
-            Assert.AreEqual("decimal", doc.Paragraphs[4].GetNumFmt());
-            Assert.AreEqual("lowerLetter", doc.Paragraphs[5].GetNumFmt());
-            Assert.AreEqual("lowerRoman", doc.Paragraphs[6].GetNumFmt());
+            ClassicAssert.AreEqual("bullet", doc.Paragraphs[0].GetNumFmt());
+            ClassicAssert.AreEqual("bullet", doc.Paragraphs[1].GetNumFmt());
+            ClassicAssert.AreEqual("bullet", doc.Paragraphs[2].GetNumFmt());
+            ClassicAssert.AreEqual("bullet", doc.Paragraphs[3].GetNumFmt());
+            ClassicAssert.AreEqual("decimal", doc.Paragraphs[4].GetNumFmt());
+            ClassicAssert.AreEqual("lowerLetter", doc.Paragraphs[5].GetNumFmt());
+            ClassicAssert.AreEqual("lowerRoman", doc.Paragraphs[6].GetNumFmt());
         }
 
         [Test]
@@ -86,17 +88,17 @@ namespace TestCases.XWPF.UserModel
         {
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("Numbering.docx");
 
-            Assert.AreEqual("%1.%2.%3.", doc.Paragraphs[(12)].NumLevelText);
+            ClassicAssert.AreEqual("%1.%2.%3.", doc.Paragraphs[(12)].NumLevelText);
 
-            Assert.AreEqual("NEW-%1-FORMAT", doc.Paragraphs[(14)].NumLevelText);
+            ClassicAssert.AreEqual("NEW-%1-FORMAT", doc.Paragraphs[(14)].NumLevelText);
 
             XWPFParagraph p = doc.Paragraphs[(18)];
-            Assert.AreEqual("%1.", p.NumLevelText);
+            ClassicAssert.AreEqual("%1.", p.NumLevelText);
             //test that null doesn't throw NPE
-            //Assert.IsNull(p.GetNumFmt());
+            //ClassicAssert.IsNull(p.GetNumFmt());
 
             //C# enum is never null
-            Assert.AreEqual(ST_NumberFormat.@decimal.ToString(), p.GetNumFmt());
+            ClassicAssert.AreEqual(ST_NumberFormat.@decimal.ToString(), p.GetNumFmt());
         }
 
         [Test]
@@ -106,10 +108,60 @@ namespace TestCases.XWPF.UserModel
             XWPFParagraph p = doc.Paragraphs[(4)];
             XWPFNumbering numbering = doc.GetNumbering();
             CT_Num ctNum = numbering.GetNum(p.GetNumID()).GetCTNum();
-            Assert.AreEqual(9, ctNum.SizeOfLvlOverrideArray());
+            ClassicAssert.AreEqual(9, ctNum.SizeOfLvlOverrideArray());
             CT_NumLvl ctNumLvl = ctNum.GetLvlOverrideArray(0);
-            Assert.AreEqual("upperLetter", ctNumLvl.lvl.numFmt.val.ToString());
+            ClassicAssert.AreEqual("upperLetter", ctNumLvl.lvl.numFmt.val.ToString());
+        }
+        [Test]
+        public void TestAddAbstractNum()
+        {
+            using(XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("NumberingWithOutOfOrderId.docx"))
+            {
+                doc.GetNumbering().AddAbstractNum(new XWPFAbstractNum());
+                var count = doc.GetNumbering()
+                    .GetAbstractNums().Select(e=>Int32.Parse(e.GetCTAbstractNum().abstractNumId)).Distinct().Count();
+                ClassicAssert.AreEqual(doc.GetNumbering().GetAbstractNums().Count, count);
+            }
+        }
+        [Test]
+        public void testAddAbstractNumIfAbstractNumNotEqualNull()
+        {
+            string abstractNumId = "1";
+            XWPFDocument docOut = new XWPFDocument();
+            XWPFNumbering numbering = docOut.CreateNumbering();
+
+            var cTAbstractNum = new CT_AbstractNum();
+            // must set the AbstractNumId, Otherwise fail
+            cTAbstractNum.abstractNumId = abstractNumId;
+            XWPFAbstractNum abstractNum = new XWPFAbstractNum(cTAbstractNum);
+            abstractNumId = numbering.AddAbstractNum(abstractNum);
+            var numId = numbering.AddNum(abstractNumId);
+
+            XWPFDocument docIn = XWPFTestDataSamples.WriteOutAndReadBack(docOut);
+
+            numbering = docIn.GetNumbering();
+            XWPFNum num = numbering.GetNum(numId);
+            var compareAbstractNum = num.GetCTNum().abstractNumId.val;
+            ClassicAssert.AreEqual(abstractNumId, compareAbstractNum);
         }
 
+        [Test]
+        public void testAddAbstractNumIfAbstractNumEqualNull()
+        {
+            XWPFDocument docOut = new XWPFDocument();
+            XWPFNumbering numbering = docOut.CreateNumbering();
+
+            XWPFAbstractNum abstractNum = new XWPFAbstractNum();
+            var abstractNumId = numbering.AddAbstractNum(abstractNum);
+            var numId = numbering.AddNum(abstractNumId);
+
+            XWPFDocument docIn = XWPFTestDataSamples.WriteOutAndReadBack(docOut);
+
+            numbering = docIn.GetNumbering();
+            XWPFNum num = numbering.GetNum(numId);
+
+            var compareAbstractNum = num.GetCTNum().abstractNumId.val;
+            ClassicAssert.AreEqual(abstractNumId, compareAbstractNum);
+        }
     }
 }

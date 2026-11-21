@@ -15,10 +15,10 @@
 ==================================================================== */
 namespace NPOI.HSSF.UserModel
 {
-    using System.Collections;
-    using NPOI.SS.UserModel;
-
     using NPOI.HSSF.Record;
+    using NPOI.SS.UserModel;
+    using System;
+    using System.Collections;
 
     /// <summary>
     /// Excel can Get cranky if you give it files containing too
@@ -217,48 +217,85 @@ namespace NPOI.HSSF.UserModel
 
             // Loop over each style, seeing if it is the same
             //  as an earlier one. If it is, point users of the
-            //  later duplicate copy to the earlier one, and 
+            //  later duplicate copy to the earlier one, and
             //  mark the later one as needing deleting
             // Only work on user added ones, which come after 20
-            for (int i = 21; i < newPos.Length; i++)
+            for(int i = 21; i < newPos.Length; i++)
             {
                 // Check this one for being a duplicate
                 //  of an earlier one
                 int earlierDuplicate = -1;
-                for (int j = 0; j < i && earlierDuplicate == -1; j++)
+                for(int j = 0; j < i && earlierDuplicate == -1; j++)
                 {
                     ExtendedFormatRecord xfCheck = workbook.Workbook.GetExFormatAt(j);
-                    if (xfCheck.Equals(xfrs[i]))
+                    if(xfCheck.Equals(xfrs[i]) &&
+                            // newer duplicate user defined styles
+                            !IsUserDefined(workbook, j))
                     {
                         earlierDuplicate = j;
                     }
                 }
 
                 // If we got a duplicate, mark it as such
-                if (earlierDuplicate != -1)
+                if(earlierDuplicate != -1)
                 {
-                    newPos[i] = (short)earlierDuplicate;
+                    newPos[i] = (short) earlierDuplicate;
                     zapRecords[i] = true;
                 }
-                // If we got a duplicate, mark the one we're keeping as used
-                if (earlierDuplicate != -1)
-                {
-                    isUsed[earlierDuplicate] = true;
-                }
             }
+
             // Loop over all the cells in the file, and identify any user defined
             //  styles aren't actually being used (don't touch built-in ones)
-            for (int sheetNum = 0; sheetNum < workbook.NumberOfSheets; sheetNum++)
+            for(int sheetNum = 0; sheetNum < workbook.NumberOfSheets; sheetNum++)
             {
-                HSSFSheet s = (HSSFSheet)workbook.GetSheetAt(sheetNum);
-                foreach (IRow row in s)
+                HSSFSheet s = workbook.GetSheetAt(sheetNum) as HSSFSheet;
+                foreach(IRow row in s)
                 {
-                    foreach (ICell cellI in row)
+                    foreach(ICell cellI in row)
                     {
-                        HSSFCell cell = (HSSFCell)cellI;
-                        short oldXf = cell.CellValueRecord.XFIndex;
+                        HSSFCell cell = (HSSFCell) cellI;
+                        short oldXf1 = cell.CellValueRecord.XFIndex;
+                        // some documents contain invalid values here
+                        if(oldXf1 < newPos.Length)
+                        {
+                            isUsed[oldXf1] = true;
+                        }
+                    }
+
+                    // also mark row style as being used
+                    short oldXf = ((HSSFRow) row).RowRecord.XFIndex;
+                    // some documents contain invalid values here
+                    if(oldXf < newPos.Length)
+                    {
                         isUsed[oldXf] = true;
                     }
+                }
+
+                // also mark column styles as being used
+                for(int col = s.Sheet.MinColumnIndex; col <= s.Sheet.MaxColumnIndex; col++)
+                {
+                    short oldXf = s.Sheet.GetXFIndexForColAt((short) col);
+                    // some documents contain invalid values here
+                    if(oldXf < newPos.Length)
+                    {
+                        isUsed[oldXf] = true;
+                    }
+                }
+            }
+
+            // Propagate isUsed for duplicates and always set user styles to being used to never optimize them away
+            for(int i = 21; i < isUsed.Length; i++)
+            {
+                // user defined styles are always "used"
+                if(IsUserDefined(workbook, i))
+                {
+                    isUsed[i] = true;
+                }
+
+                // If we got a duplicate which is used, mark the one we're keeping as used
+                if(newPos[i] != i && isUsed[i])
+                {
+                    isUsed[newPos[i]] = true;
                 }
             }
             // Mark any that aren't used as needing zapping
@@ -288,6 +325,20 @@ namespace NPOI.HSSF.UserModel
 
                 // Update the new position
                 newPos[i] = newPosition;
+                // also update StyleRecord and Parent-link
+                if(i != newPosition && newPosition != 0)
+                {
+                    workbook.Workbook.UpdateStyleRecord(i, newPosition);
+
+                    ExtendedFormatRecord exFormat = workbook.Workbook.GetExFormatAt(i);
+                    short oldParent = exFormat.ParentIndex;
+                    // some documents contain invalid values here
+                    if(oldParent < newPos.Length)
+                    {
+                        short newParent = newPos[oldParent];
+                        exFormat.ParentIndex = newParent;
+                    }
+                }
             }
 
             // Zap the un-needed user style records
@@ -307,27 +358,55 @@ namespace NPOI.HSSF.UserModel
             }
 
             // Finally, update the cells to point at their new extended format records
-            for (int sheetNum = 0; sheetNum < workbook.NumberOfSheets; sheetNum++)
+            for(int sheetNum = 0; sheetNum < workbook.NumberOfSheets; sheetNum++)
             {
-                HSSFSheet s = (HSSFSheet)workbook.GetSheetAt(sheetNum);
-                //IEnumerator rIt = s.GetRowEnumerator();
-                //while (rIt.MoveNext())
+                HSSFSheet s = workbook.GetSheetAt(sheetNum) as HSSFSheet;
                 foreach(IRow row in s)
                 {
-                    //HSSFRow row = (HSSFRow)rIt.Current;
-                    //IEnumerator cIt = row.GetEnumerator();
-                    //while (cIt.MoveNext())
-                    foreach (ICell cell in row)
+                    foreach(ICell cell in row)
                     {
-                        //ICell cell = (HSSFCell)cIt.Current;
-                        short oldXf = ((HSSFCell)cell).CellValueRecord.XFIndex;
-                        NPOI.SS.UserModel.ICellStyle newStyle = workbook.GetCellStyleAt(
-                                newPos[oldXf]
-                        );
-                        cell.CellStyle = (newStyle);
+                        short oldXf1 = ((HSSFCell) cell).CellValueRecord.XFIndex;
+                        // some documents contain invalid values here
+                        if(oldXf1 >= newPos.Length)
+                        {
+                            continue;
+                        }
+                        HSSFCellStyle newStyle1 = workbook.GetCellStyleAt(newPos[oldXf1]) as HSSFCellStyle;
+                        cell.CellStyle = newStyle1;
                     }
+
+                    // adjust row column style
+                    short oldXf = ((HSSFRow) row).RowRecord.XFIndex;
+                    // some documents contain invalid values here
+                    if(oldXf >= newPos.Length)
+                    {
+                        continue;
+                    }
+                    HSSFCellStyle newStyle = workbook.GetCellStyleAt(newPos[oldXf]) as HSSFCellStyle;
+                    row.RowStyle = newStyle;
+                }
+
+                // adjust cell column style
+                for(int col = s.Sheet.MinColumnIndex; col <= s.Sheet.MaxColumnIndex; col++)
+                {
+                    short oldXf = s.Sheet.GetXFIndexForColAt((short) col);
+                    // some documents contain invalid values here
+                    if(oldXf >= newPos.Length)
+                    {
+                        continue;
+                    }
+                    HSSFCellStyle newStyle = workbook.GetCellStyleAt(newPos[oldXf]) as HSSFCellStyle;
+                    s.SetDefaultColumnStyle(col, newStyle);
                 }
             }
+        }
+
+        private static bool IsUserDefined(HSSFWorkbook workbook, int index)
+        {
+            StyleRecord styleRecord = workbook.Workbook.GetStyleRecord(index);
+            return styleRecord != null &&
+                    !styleRecord.IsBuiltin &&
+                    styleRecord.Name != null;
         }
     }
 }

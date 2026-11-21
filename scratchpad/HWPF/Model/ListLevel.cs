@@ -62,9 +62,9 @@ namespace NPOI.HWPF.Model
         public ListLevel(int level, bool numbered)
         {
             _iStartAt = 1;
-            _grpprlPapx = new byte[0];
-            _grpprlChpx = new byte[0];
-            _numberText = new char[0];
+            _grpprlPapx = [];
+            _grpprlChpx = [];
+            _numberText = [];
             _rgbxchNums = new byte[RGBXCH_NUMS_SIZE];
 
             if (numbered)

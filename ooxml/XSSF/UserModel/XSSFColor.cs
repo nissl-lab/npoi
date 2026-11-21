@@ -21,8 +21,8 @@ using System.Text;
 using NPOI.Util;
 using NPOI.SS.UserModel;
 using NPOI.OpenXmlFormats.Spreadsheet;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.PixelFormats;
+using SkiaSharp;
+using NPOI.OOXML.XSSF.UserModel;
 
 namespace NPOI.XSSF.UserModel
 {
@@ -34,45 +34,58 @@ namespace NPOI.XSSF.UserModel
     {
 
         private CT_Color ctColor;
+        private IIndexedColorMap indexedColorMap;
 
         /**
-         * Create an instance of XSSFColor from the supplied XML bean
+         * @param color
+         * @param map
+         * @return null if color is null, new instance otherwise
          */
-        public XSSFColor(CT_Color color)
+        public static XSSFColor From(CT_Color color, IIndexedColorMap map)
         {
-            this.ctColor = color;
+            return color == null ? null : new XSSFColor(color, map);
         }
 
+        [Obsolete("we want to have the indexed map, and all calling contexts have access to it. Remove it at POI 4.2.")]
+        public XSSFColor(CT_Color color, IIndexedColorMap map)
+        {
+            this.ctColor = color;
+            this.indexedColorMap = map;
+        }
         /**
          * Create an new instance of XSSFColor
          */
+        [Obsolete("we want to have the indexed map, and all calling contexts have access to it.  Remove it at POI 4.2.")]
         public XSSFColor()
+            : this(new CT_Color(), new DefaultIndexedColorMap())
         {
-            this.ctColor = new CT_Color();
         }
 
-        public XSSFColor(Color clr)
-            : this()
+        public XSSFColor(IIndexedColorMap colorMap)
+            : this(new CT_Color(), colorMap)
         {
-            var c = clr.ToPixel<Rgb24>();
-            ctColor.SetRgb(c.R, c.G, c.B);
         }
 
-        public XSSFColor(Rgb24 clr)
-            : this() {
-
-            ctColor.SetRgb(clr.R, clr.G, clr.B);
+        public XSSFColor(SKColor clr)
+            : this(clr, new DefaultIndexedColorMap())
+        {
         }
 
-        public XSSFColor(byte[] rgb)
-            : this()
+        public XSSFColor(SKColor clr, IIndexedColorMap map)
+            : this(map) {
+
+            ctColor.SetRgb(clr.Red, clr.Green, clr.Blue);
+        }
+
+        public XSSFColor(byte[] rgb, IIndexedColorMap colorMap)
+            : this(new CT_Color(), colorMap)
         {
 
             ctColor.SetRgb(rgb);
         }
 
-        public XSSFColor(IndexedColors indexedColor)
-            : this()
+        public XSSFColor(IndexedColors indexedColor, IIndexedColorMap colorMap)
+            : this(new CT_Color(), colorMap)
         {
             ctColor.indexed = (uint)indexedColor.Index;
         }
@@ -178,6 +191,20 @@ namespace NPOI.XSSF.UserModel
             }
             
         }
+
+        protected override byte[] IndexedRGB
+        {
+            get
+            {
+                if (IsIndexed)
+                {
+                   if (indexedColorMap != null) return indexedColorMap.GetRGB(Index);
+                   return DefaultIndexedColorMap.GetDefaultRGB(Index);
+                }
+                return null;
+            }
+           
+       }
         /**
          * Standard Red Green Blue ctColor value (RGB).
          * If there was an A (Alpha) value, it will be stripped.
@@ -385,7 +412,7 @@ namespace NPOI.XSSF.UserModel
             // FIXME: this method would be more useful if it could convert any Color to an XSSFColor
             // Currently the only benefit of this method is to throw an IllegalArgumentException
             // instead of a ClassCastException.
-            if (color != null && !(color is XSSFColor)) {
+            if (color != null && color is not XSSFColor) {
                 throw new ArgumentException("Only XSSFColor objects are supported");
             }
             return (XSSFColor)color;
@@ -450,10 +477,8 @@ namespace NPOI.XSSF.UserModel
 
         public override bool Equals(Object o)
         {
-            if (o == null || !(o is XSSFColor))
+            if (o == null || o is not XSSFColor other)
                 return false;
-
-            XSSFColor other = (XSSFColor)o;
 
             // Compare each field in ctColor.
             // Cannot compare ctColor's XML string representation because equivalent

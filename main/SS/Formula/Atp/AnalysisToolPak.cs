@@ -30,7 +30,7 @@ namespace NPOI.SS.Formula.Atp
 
     public class NotImplemented : FreeRefFunction
     {
-        private String _functionName;
+        private readonly String _functionName;
 
         public NotImplemented(String functionName)
         {
@@ -47,7 +47,7 @@ namespace NPOI.SS.Formula.Atp
     {
         public static UDFFinder instance = new AnalysisToolPak();
 
-        private static Dictionary<String, FreeRefFunction> _functionsByName = CreateFunctionsMap();
+        private static readonly Dictionary<String, FreeRefFunction> _functionsByName = CreateFunctionsMap();
 
         private AnalysisToolPak()
         {
@@ -62,8 +62,8 @@ namespace NPOI.SS.Formula.Atp
             if (name.StartsWith(prefix)) name = name.Substring(prefix.Length);
 
             string key = name.ToUpper();
-            if (_functionsByName.ContainsKey(key))
-                return _functionsByName[key];
+            if (_functionsByName.TryGetValue(key, out FreeRefFunction function))
+                return function;
 
             return null;
         }
@@ -105,6 +105,7 @@ namespace NPOI.SS.Formula.Atp
             r(m, "CUBEVALUE", null);
             r(m, "CUMIPMT", null);
             r(m, "CUMPRINC", null);
+            r(m, "DAYS", Days.Instance);
             r(m, "DEC2BIN", Dec2Bin.instance);
             r(m, "DEC2HEX", Dec2Hex.instance);
             r(m, "DEC2OCT", null);
@@ -177,6 +178,7 @@ namespace NPOI.SS.Formula.Atp
             r(m, "RECEIVED", null);
             r(m, "RTD", null);
             r(m, "SERIESSUM", null);
+            r(m, "SHEET", Sheet.instance);
             r(m, "SQRTPI", null);
             r(m, "SUMIFS", Sumifs.instance);
             r(m, "SWITCH", Switch.instance);
@@ -233,7 +235,7 @@ namespace NPOI.SS.Formula.Atp
             foreach (KeyValuePair<String, FreeRefFunction> me in AnalysisToolPak._functionsByName)
             {
                 FreeRefFunction func = me.Value;
-                if (func != null && !(func is NotImplemented))
+                if (func != null && func is not NotImplemented)
                 {
                     lst.Add(me.Key);
                 }
@@ -287,15 +289,12 @@ namespace NPOI.SS.Formula.Atp
                 }
             }
             FreeRefFunction f = inst.FindFunction(name);
-            if (f != null && !(f is NotImplemented))
+            if (f != null && f is not NotImplemented)
             {
                 throw new ArgumentException("POI already implememts " + name +
                         ". You cannot override POI's implementations of Excel functions");
             }
-            if (_functionsByName.ContainsKey(name))
-                _functionsByName[name] = func;
-            else
-                _functionsByName.Add(name, func);
+            _functionsByName[name] = func;
         }
     }
 }

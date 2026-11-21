@@ -224,9 +224,11 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
-                return IsFormatted
-                    && _stylesSource != null
-                    && _stylesSource.NumCellStyles > 0
+                if (!IsFormatted || _stylesSource == null)
+                {
+                    return null;
+                }
+                return _stylesSource.NumCellStyles > 0
                     ? _stylesSource.GetStyleAt((int)_column.style)
                     : (ICellStyle)null;
             }
@@ -634,7 +636,7 @@ namespace NPOI.XSSF.UserModel
         /// Fired when the document is written to an output stream.
         /// See <see cref="XSSFSheet.Write"/>
         /// </summary>
-        internal void OnDocumentWrite()
+        internal static void OnDocumentWrite()
         {
 
         }
@@ -708,7 +710,7 @@ namespace NPOI.XSSF.UserModel
             return _column.ToString();
         }
 
-        private void ValidateCellType(CellType cellType)
+        private static void ValidateCellType(CellType cellType)
         {
             switch (cellType)
             {

@@ -18,6 +18,8 @@
 using NPOI.OpenXmlFormats.Dml;
 using NPOI.OpenXmlFormats.Dml.Spreadsheet;
 using NPOI.SS.UserModel;
+using NPOI.Util;
+using System;
 namespace NPOI.XSSF.UserModel
 {
 
@@ -28,10 +30,13 @@ namespace NPOI.XSSF.UserModel
      */
     public abstract class XSSFShape: IShape
     {
+        [Obsolete]
         public static int EMU_PER_PIXEL = 9525;
+        [Obsolete]
         public static int EMU_PER_POINT = 12700;
-
+        [Obsolete]
         public static int POINT_DPI = 72;
+        [Obsolete]
         public static int PIXEL_DPI = 96;
 
         /**
@@ -231,7 +236,7 @@ namespace NPOI.XSSF.UserModel
                 NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_ShapeProperties props = GetShapeProperties();
                 if (props.IsSetLn())
                 {
-                    return props.ln.w*1.0 / EMU_PER_POINT;
+                    return props.ln.w*1.0 / Units.EMU_PER_POINT;
                 }
                 else
                 {
@@ -242,7 +247,7 @@ namespace NPOI.XSSF.UserModel
             {
                 NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_ShapeProperties props = GetShapeProperties();
                 CT_LineProperties ln = props.IsSetLn() ? props.ln : props.AddNewLn();
-                ln.w = (int)(value * EMU_PER_POINT);
+                ln.w = (int)(value * Units.EMU_PER_POINT);
             }
         }
 

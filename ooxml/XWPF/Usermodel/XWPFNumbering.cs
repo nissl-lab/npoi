@@ -24,6 +24,7 @@ namespace NPOI.XWPF.UserModel
     using System.IO;
     using System.Xml.Serialization;
     using System.Xml;
+    using NPOI.Util;
 
 
     /**
@@ -229,6 +230,14 @@ namespace NPOI.XWPF.UserModel
             }
             return null;
         }
+        public List<XWPFAbstractNum> GetAbstractNums()
+        {
+            return abstractNums;
+        }   
+        public List<XWPFNum> GetNums()
+        {
+            return nums;
+        }
         /**
          * Compare AbstractNum with abstractNums of this numbering document.
          * If the content of abstractNum Equals with an abstractNum of the List in numbering
@@ -272,12 +281,21 @@ namespace NPOI.XWPF.UserModel
             }
             else
             {
-                ctNumbering.AddNewAbstractNum();
-                abstractNum.GetAbstractNum().abstractNumId = pos.ToString();
+                abstractNum.SetCTAbstractNum(ctNumbering.AddNewAbstractNum());
+                abstractNum.GetAbstractNum().abstractNumId = FindNextAbstractNumberingId().ToString();
                 ctNumbering.SetAbstractNumArray(pos, abstractNum.GetAbstractNum());
             }
             abstractNums.Add(abstractNum);
             return abstractNum.GetAbstractNum().abstractNumId;
+        }
+        private long FindNextAbstractNumberingId()
+        {
+            long maxId = 0;
+            foreach(XWPFAbstractNum num in abstractNums)
+            {
+                maxId = Math.Max(maxId, long.Parse(num.GetAbstractNum().abstractNumId));
+            }
+            return maxId + 1;
         }
         /// <summary>
         /// Add a new AbstractNum
@@ -302,11 +320,24 @@ namespace NPOI.XWPF.UserModel
          */
         public bool RemoveAbstractNum(string abstractNumID)
         {
-            if (int.Parse(abstractNumID) < abstractNums.Count)
+            foreach (XWPFAbstractNum abstractNum in abstractNums)
             {
-                ctNumbering.RemoveAbstractNum(int.Parse(abstractNumID));
-                abstractNums.RemoveAt(int.Parse(abstractNumID));
-                return true;
+                string foundNumId = abstractNum.GetAbstractNum().abstractNumId;
+                if(abstractNumID.Equals(foundNumId))
+                {
+                    abstractNums.Remove(abstractNum);
+                    break;
+                }
+            }
+            for(int i = 0; i < ctNumbering.SizeOfAbstractNumArray; i++)
+            {
+                var ctAbstractNum = ctNumbering.abstractNum[i];
+                string foundNumId = ctAbstractNum.abstractNumId;
+                if(abstractNumID.Equals(foundNumId))
+                {
+                    ctNumbering.RemoveAbstractNum(i);
+                    return true;
+                }
             }
             return false;
         }

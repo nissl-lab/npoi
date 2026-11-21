@@ -21,18 +21,19 @@ namespace NPOI.HSSF.Model
     using System;
     using System.Collections;
 
+    //ready to remove at NPOI 2.8
     [Obsolete("deprecated in POI 3.15-beta2, scheduled for removal in 3.17, use DrawingManager2 instead")]
     public class DrawingManager
     {
         EscherDggRecord dgg;
         Hashtable dgMap = new Hashtable(); // key = Short(drawingId), value=EscherDgRecord
 
-        public DrawingManager(EscherDggRecord dgg)
+        private DrawingManager(EscherDggRecord dgg)
         {
             this.dgg = dgg;
         }
 
-        public EscherDgRecord CreateDgRecord()
+        private EscherDgRecord CreateDgRecord()
         {
             EscherDgRecord dg = new EscherDgRecord();
             dg.RecordId=(EscherDgRecord.RECORD_ID);
@@ -81,7 +82,7 @@ namespace NPOI.HSSF.Model
                         if (c.NumShapeIdsUsed != 1024)
                         {
                             // Increment the number of shapes used for this cluster.
-                            c.IncrementShapeId();
+                            //c.IncrementShapeId();
                         }
                     }
                     // If the last shape id = -1 then we know to Find a free block;

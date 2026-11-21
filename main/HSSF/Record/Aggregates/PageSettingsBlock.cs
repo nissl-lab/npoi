@@ -51,8 +51,8 @@ namespace NPOI.HSSF.Record.Aggregates
         private Record _bitmap;
         private HeaderFooterRecord _headerFooter;
 
-        private List<HeaderFooterRecord> _sviewHeaderFooters = new List<HeaderFooterRecord>();
-        private List<PLSAggregate> _plsRecords;
+        private readonly List<HeaderFooterRecord> _sviewHeaderFooters = new List<HeaderFooterRecord>();
+        private readonly List<PLSAggregate> _plsRecords;
 
         private Record _printSize;
 
@@ -177,7 +177,8 @@ namespace NPOI.HSSF.Record.Aggregates
             }
             return true;
         }
-        private void CheckNotPresent(Record rec)
+
+        private static void CheckNotPresent(Record rec)
         {
             if (rec != null)
             {
@@ -185,6 +186,7 @@ namespace NPOI.HSSF.Record.Aggregates
                         + StringUtil.ToHexString(rec.Sid) + ")");
             }
         }
+
         private PageBreakRecord RowBreaksRecord
         {
             get
@@ -466,27 +468,28 @@ namespace NPOI.HSSF.Record.Aggregates
          * @param stop Ending "main" value to shift breaks
          * @param count number of units (rows/columns) to shift by
          */
-        private static void ShiftBreaks(PageBreakRecord breaks, int start, int stop, int count) {
+        private static void ShiftBreaks(PageBreakRecord breaks, int start, int stop, int count)
+        {
+            IEnumerator iterator = breaks.GetBreaksEnumerator();
+            List<PageBreakRecord.Break> shiftedBreak = [];
+            while(iterator.MoveNext())
+            {
+                PageBreakRecord.Break breakItem = (PageBreakRecord.Break) iterator.Current;
+                int breakLocation = breakItem.main;
+                bool inStart = (breakLocation >= start);
+                bool inEnd = (breakLocation <= stop);
+                if(inStart && inEnd)
+                    shiftedBreak.Add(breakItem);
+            }
 
-		IEnumerator iterator = breaks.GetBreaksEnumerator();
-		IList shiftedBreak = new ArrayList();
-		while(iterator.MoveNext())
-		{
-			PageBreakRecord.Break breakItem = (PageBreakRecord.Break)iterator.Current;
-			int breakLocation = breakItem.main;
-			bool inStart = (breakLocation >= start);
-			bool inEnd = (breakLocation <= stop);
-			if(inStart && inEnd)
-				shiftedBreak.Add(breakItem);
-		}
-
-		iterator = shiftedBreak.GetEnumerator();
-		while (iterator.MoveNext()) {
-			PageBreakRecord.Break breakItem = (PageBreakRecord.Break)iterator.Current;
-			breaks.RemoveBreak(breakItem.main);
-			breaks.AddBreak((short)(breakItem.main+count), breakItem.subFrom, breakItem.subTo);
-		}
-	}
+            iterator = shiftedBreak.GetEnumerator();
+            while(iterator.MoveNext())
+            {
+                PageBreakRecord.Break breakItem = (PageBreakRecord.Break) iterator.Current;
+                breaks.RemoveBreak(breakItem.main);
+                breaks.AddBreak((short) (breakItem.main + count), breakItem.subFrom, breakItem.subTo);
+            }
+        }
 
 
         /**
@@ -661,20 +664,20 @@ namespace NPOI.HSSF.Record.Aggregates
             {
                 foreach (RecordBase rb in sheetRecords)
                 {
-                    if (rb is CustomViewSettingsRecordAggregate)
+                    if (rb is CustomViewSettingsRecordAggregate cv)
                     {
-                        CustomViewSettingsRecordAggregate cv = (CustomViewSettingsRecordAggregate)rb;
                         cv.VisitContainedRecords(new CustomRecordVisitor1(cv,hf,_sviewHeaderFooters,hfGuidMap));
                     }
                 }
             }
         }
-        private class CustomRecordVisitor1 : RecordVisitor
+
+        private sealed class CustomRecordVisitor1 : RecordVisitor
         {
-            CustomViewSettingsRecordAggregate _cv;
-            HeaderFooterRecord _hf;
-            List<HeaderFooterRecord> _sviewHeaderFooters;
-            Dictionary<String, HeaderFooterRecord> _hfGuidMap;
+            readonly CustomViewSettingsRecordAggregate _cv;
+            readonly HeaderFooterRecord _hf;
+            readonly List<HeaderFooterRecord> _sviewHeaderFooters;
+            readonly Dictionary<String, HeaderFooterRecord> _hfGuidMap;
             public CustomRecordVisitor1(CustomViewSettingsRecordAggregate cv, HeaderFooterRecord hf, 
                 List<HeaderFooterRecord> sviewHeaderFooter, Dictionary<String, HeaderFooterRecord> hfGuidMap)
             {

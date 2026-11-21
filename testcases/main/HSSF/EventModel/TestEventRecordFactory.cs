@@ -27,7 +27,7 @@ namespace TestCases.HSSF.EventModel
     using NPOI.HSSF.Record;
     using NPOI.POIFS.FileSystem;
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
 
     /**
@@ -52,7 +52,7 @@ namespace TestCases.HSSF.EventModel
             public bool ProcessRecord(Record rec)
             {
                 wascalled[0] = true;
-                Assert.IsTrue(
+                ClassicAssert.IsTrue(
                            (rec.Sid == BOFRecord.sid),
                            "must be BOFRecord got SID=" + rec.Sid);
                 return true;
@@ -88,7 +88,7 @@ namespace TestCases.HSSF.EventModel
             offset = eof.Serialize(offset, bytes);
 
             factory.ProcessRecords(new MemoryStream(bytes));
-            Assert.IsTrue(wascalled[0], "The record listener must be called");
+            ClassicAssert.IsTrue(wascalled[0], "The record listener must be called");
         }
 
         /**
@@ -110,8 +110,8 @@ namespace TestCases.HSSF.EventModel
 
             Record[] records = RecordFactory.CreateRecord(TestcaseRecordInputStream.Create(bytes));
 
-            Assert.IsTrue(records.Length == 1, "record.Length must be 1, was =" + records.Length);
-            Assert.IsTrue(CompareRec(bof, records[0]), "record is the same");
+            ClassicAssert.IsTrue(records.Length == 1, "record.Length must be 1, was =" + records.Length);
+            ClassicAssert.IsTrue(CompareRec(bof, records[0]), "record is the same");
 
         }
 
@@ -172,7 +172,7 @@ namespace TestCases.HSSF.EventModel
             public bool ProcessRecord(Record rec)
             {
                 // System.out.println(rec.toString());
-                Assert.AreEqual(
+                ClassicAssert.AreEqual(
                   expectedRecordTypes[recCnt[0]],
                   rec.GetType().Name,
                   "Record type"
@@ -186,7 +186,7 @@ namespace TestCases.HSSF.EventModel
                 byte[] recData = record.Serialize();
                 for (int i = 0; i < recData.Length; i++)
                 {
-                    Assert.AreEqual(recData[i], data[offset[0]++], message + " data byte " + i);
+                    ClassicAssert.AreEqual(recData[i], data[offset[0]++], message + " data byte " + i);
                 }
             }
         }
@@ -217,8 +217,8 @@ namespace TestCases.HSSF.EventModel
             EventRecordFactory factory = new EventRecordFactory(listener, sids);
 
             factory.ProcessRecords(new MemoryStream(data));
-            Assert.AreEqual(3, recCnt[0], "nr. of Processed records");
-            Assert.AreEqual(data.Length, offset[0], "nr. of Processed bytes");
+            ClassicAssert.AreEqual(3, recCnt[0], "nr. of Processed records");
+            ClassicAssert.AreEqual(data.Length, offset[0], "nr. of Processed bytes");
         }
     }
 }

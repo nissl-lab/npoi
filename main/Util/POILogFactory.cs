@@ -38,13 +38,13 @@ namespace NPOI.Util
         /**
          * Map of POILogger instances, with classes as keys
          */
-        private static Hashtable _loggers = new Hashtable();
+        private static readonly Hashtable _loggers = new Hashtable();
 
         /**
          * A common instance of NullLogger, as it does nothing
          *  we only need the one
          */
-        private static POILogger _nullLogger = new NullLogger();
+        private static readonly POILogger _nullLogger = new NullLogger();
         /**
          * The name of the class to use. Initialised the
          *  first time we need it

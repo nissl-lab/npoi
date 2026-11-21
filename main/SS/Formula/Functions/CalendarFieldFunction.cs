@@ -45,7 +45,7 @@ namespace NPOI.SS.Formula.Functions
         public static readonly Function MINUTE = new CalendarFieldFunction(MINUTE_ID);
         public static readonly Function SECOND = new CalendarFieldFunction(SECOND_ID);
 
-        private int _dateFieldId;
+        private readonly int _dateFieldId;
 
         private CalendarFieldFunction(int dateFieldId)
         {

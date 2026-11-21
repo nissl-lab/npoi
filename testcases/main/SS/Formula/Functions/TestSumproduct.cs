@@ -19,7 +19,7 @@ namespace TestCases.SS.Formula.Functions
 {
 
     using NPOI.SS.Formula.Eval;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.SS.Formula.Functions;
 
     /**
@@ -43,7 +43,7 @@ namespace TestCases.SS.Formula.Functions
                 Assert.Fail("Expected numeric result");
             }
             NumericValueEval nve = (NumericValueEval)actualEval;
-            Assert.AreEqual(expected, nve.NumberValue, 0);
+            ClassicAssert.AreEqual(expected, nve.NumberValue, 0);
         }
         [Test]
         public void TestScalarSimple()
@@ -103,10 +103,10 @@ namespace TestCases.SS.Formula.Functions
 
             ValueEval[] args;
             args = new ValueEval[] { aeA, aeB, };
-            Assert.AreEqual(ErrorEval.VALUE_INVALID, invokeSumproduct(args));
+            ClassicAssert.AreEqual(ErrorEval.VALUE_INVALID, invokeSumproduct(args));
 
             args = new ValueEval[] { aeA, new NumberEval(5), };
-            Assert.AreEqual(ErrorEval.VALUE_INVALID, invokeSumproduct(args));
+            ClassicAssert.AreEqual(ErrorEval.VALUE_INVALID, invokeSumproduct(args));
         }
         [Test]
         public void TestAreaWithErrorCell()
@@ -119,7 +119,7 @@ namespace TestCases.SS.Formula.Functions
             AreaEval aeB = EvalFactory.CreateAreaEval("B1:B2", new ValueEval[2]);
 
             ValueEval[] args = { aeA, aeB, };
-            Assert.AreEqual(ErrorEval.REF_INVALID, invokeSumproduct(args));
+            ClassicAssert.AreEqual(ErrorEval.REF_INVALID, invokeSumproduct(args));
         }
     }
 

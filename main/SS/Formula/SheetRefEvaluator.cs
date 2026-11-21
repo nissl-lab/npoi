@@ -31,10 +31,10 @@ namespace NPOI.SS.Formula
     public class SheetRefEvaluator
     {
 
-        private WorkbookEvaluator _bookEvaluator;
-        private EvaluationTracker _tracker;
+        private readonly WorkbookEvaluator _bookEvaluator;
+        private readonly EvaluationTracker _tracker;
         private IEvaluationSheet _sheet;
-        private int _sheetIndex;
+        private readonly int _sheetIndex;
 
         public SheetRefEvaluator(WorkbookEvaluator bookEvaluator, EvaluationTracker tracker, int sheetIndex)
         {
@@ -52,6 +52,14 @@ namespace NPOI.SS.Formula
             get
             {
                 return _bookEvaluator.GetSheetName(_sheetIndex);
+            }
+        }
+
+        public int LastRowNum
+        {
+            get
+            {
+                return Sheet.LastRowNum;
             }
         }
 
@@ -85,10 +93,9 @@ namespace NPOI.SS.Formula
                 IEvaluationWorkbook wb = _bookEvaluator.Workbook;
                 foreach (Ptg ptg in wb.GetFormulaTokens(cell))
                 {
-                    if (ptg is FuncVarPtg)
+                    if (ptg is FuncVarPtg varPtg)
                     {
-                        FuncVarPtg f = (FuncVarPtg)ptg;
-                        if ("SUBTOTAL".Equals(f.Name))
+                        if ("SUBTOTAL".Equals(varPtg.Name))
                         {
                             subtotal = true;
                             break;

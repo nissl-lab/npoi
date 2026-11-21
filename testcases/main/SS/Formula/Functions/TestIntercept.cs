@@ -20,7 +20,7 @@
 namespace TestCases.SS.Formula.Functions
 {
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using System;
     using TestCases.HSSF;
     using NPOI.SS.Formula.Eval;
@@ -47,14 +47,14 @@ namespace TestCases.SS.Formula.Functions
         private void Confirm(Function function, ValueEval xArray, ValueEval yArray, double expected)
         {
             ValueEval result = invoke(function, xArray, yArray);
-            Assert.AreEqual(typeof(NumberEval), result.GetType());
-            Assert.AreEqual(expected, ((NumberEval)result).NumberValue, 0);
+            ClassicAssert.AreEqual(typeof(NumberEval), result.GetType());
+            ClassicAssert.AreEqual(expected, ((NumberEval)result).NumberValue, 0);
         }
         private void ConfirmError(Function function, ValueEval xArray, ValueEval yArray, ErrorEval expectedError)
         {
             ValueEval result = invoke(function, xArray, yArray);
-            Assert.AreEqual(typeof(ErrorEval), result.GetType());
-            Assert.AreEqual(expectedError.ErrorCode, ((ErrorEval)result).ErrorCode);
+            ClassicAssert.AreEqual(typeof(ErrorEval), result.GetType());
+            ClassicAssert.AreEqual(expectedError.ErrorCode, ((ErrorEval)result).ErrorCode);
         }
 
         private void ConfirmError(ValueEval xArray, ValueEval yArray, ErrorEval expectedError)
@@ -165,9 +165,9 @@ namespace TestCases.SS.Formula.Functions
 
             ISheet example1 = wb.GetSheet("Example 1");
             ICell a8 = example1.GetRow(7).GetCell(0);
-            Assert.AreEqual("INTERCEPT(A2:A6,B2:B6)", a8.CellFormula);
+            ClassicAssert.AreEqual("INTERCEPT(A2:A6,B2:B6)", a8.CellFormula);
             fe.Evaluate(a8);
-            Assert.AreEqual(0.048387097, a8.NumericCellValue, 0.000000001);
+            ClassicAssert.AreEqual(0.048387097, a8.NumericCellValue, 0.000000001);
 
         }
     }

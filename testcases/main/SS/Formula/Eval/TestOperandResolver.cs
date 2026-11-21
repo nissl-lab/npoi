@@ -16,7 +16,7 @@
 ==================================================================== */
 
 using System;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using NPOI.SS.Formula.Eval;
 namespace TestCases.SS.Formula.Eval
 {
@@ -46,7 +46,7 @@ namespace TestCases.SS.Formula.Eval
                 throw new AssertionException("Identified bug 48472");
             }
 
-            Assert.AreEqual(double.NaN, ResolvedValue);
+            ClassicAssert.AreEqual(double.NaN, ResolvedValue);
 
         }
         [Test]
@@ -60,7 +60,7 @@ namespace TestCases.SS.Formula.Eval
 
             ResolvedValue = OperandResolver.ParseDouble(value);
 
-            Assert.IsNotNull(ResolvedValue, "Identified bug 49723");
+            ClassicAssert.IsNotNull(ResolvedValue, "Identified bug 49723");
 
         }
 
@@ -78,8 +78,8 @@ namespace TestCases.SS.Formula.Eval
 
             foreach (String value in values)
             {
-                Assert.AreNotEqual(double.NaN,OperandResolver.ParseDouble(value));  //this bug is caused by double.Parse
-                Assert.AreEqual(OperandResolver.ParseDouble(value), Double.Parse(value));
+                ClassicAssert.AreNotEqual(double.NaN,OperandResolver.ParseDouble(value));  //this bug is caused by double.Parse
+                ClassicAssert.AreEqual(OperandResolver.ParseDouble(value), Double.Parse(value));
             }
 
         }
@@ -98,7 +98,7 @@ namespace TestCases.SS.Formula.Eval
 
             foreach (String value in values)
             {
-                Assert.AreEqual(double.NaN, OperandResolver.ParseDouble(value));
+                ClassicAssert.AreEqual(double.NaN, OperandResolver.ParseDouble(value));
             }
 
         }

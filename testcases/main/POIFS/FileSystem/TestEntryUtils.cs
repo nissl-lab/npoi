@@ -20,7 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NPOI.POIFS.FileSystem;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using NPOI.Util;
 using System.IO;
 
@@ -44,50 +44,50 @@ namespace TestCases.POIFS.FileSystem
             DocumentEntry entryA2 = dirA.CreateDocument("EntryA2", new ByteArrayInputStream(dataSmallB));
 
             // Copy docs
-            Assert.AreEqual(0, fsD.Root.EntryCount);
+            ClassicAssert.AreEqual(0, fsD.Root.EntryCount);
             EntryUtils.CopyNodeRecursively(entryR, fsD.Root);
 
-            Assert.AreEqual(1, fsD.Root.EntryCount);
-            Assert.IsNotNull(fsD.Root.GetEntry("EntryRoot"));
+            ClassicAssert.AreEqual(1, fsD.Root.EntryCount);
+            ClassicAssert.IsNotNull(fsD.Root.GetEntry("EntryRoot"));
 
             EntryUtils.CopyNodeRecursively(entryA1, fsD.Root);
-            Assert.AreEqual(2, fsD.Root.EntryCount);
-            Assert.IsNotNull(fsD.Root.GetEntry("EntryRoot"));
-            Assert.IsNotNull(fsD.Root.GetEntry("EntryA1"));
+            ClassicAssert.AreEqual(2, fsD.Root.EntryCount);
+            ClassicAssert.IsNotNull(fsD.Root.GetEntry("EntryRoot"));
+            ClassicAssert.IsNotNull(fsD.Root.GetEntry("EntryA1"));
 
             EntryUtils.CopyNodeRecursively(entryA2, fsD.Root);
-            Assert.AreEqual(3, fsD.Root.EntryCount);
-            Assert.IsNotNull(fsD.Root.GetEntry("EntryRoot"));
-            Assert.IsNotNull(fsD.Root.GetEntry("EntryA1"));
-            Assert.IsNotNull(fsD.Root.GetEntry("EntryA2"));
+            ClassicAssert.AreEqual(3, fsD.Root.EntryCount);
+            ClassicAssert.IsNotNull(fsD.Root.GetEntry("EntryRoot"));
+            ClassicAssert.IsNotNull(fsD.Root.GetEntry("EntryA1"));
+            ClassicAssert.IsNotNull(fsD.Root.GetEntry("EntryA2"));
 
             // Copy directories
             fsD = new POIFSFileSystem();
-            Assert.AreEqual(0, fsD.Root.EntryCount);
+            ClassicAssert.AreEqual(0, fsD.Root.EntryCount);
 
             EntryUtils.CopyNodeRecursively(dirB, fsD.Root);
-            Assert.AreEqual(1, fsD.Root.EntryCount);
-            Assert.IsNotNull(fsD.Root.GetEntry("DirB"));
-            Assert.AreEqual(0, ((DirectoryEntry)fsD.Root.GetEntry("DirB")).EntryCount);
+            ClassicAssert.AreEqual(1, fsD.Root.EntryCount);
+            ClassicAssert.IsNotNull(fsD.Root.GetEntry("DirB"));
+            ClassicAssert.AreEqual(0, ((DirectoryEntry)fsD.Root.GetEntry("DirB")).EntryCount);
 
             EntryUtils.CopyNodeRecursively(dirA, fsD.Root);
-            Assert.AreEqual(2, fsD.Root.EntryCount);
-            Assert.IsNotNull(fsD.Root.GetEntry("DirB"));
-            Assert.AreEqual(0, ((DirectoryEntry)fsD.Root.GetEntry("DirB")).EntryCount);
-            Assert.IsNotNull(fsD.Root.GetEntry("DirA"));
-            Assert.AreEqual(2, ((DirectoryEntry)fsD.Root.GetEntry("DirA")).EntryCount);
+            ClassicAssert.AreEqual(2, fsD.Root.EntryCount);
+            ClassicAssert.IsNotNull(fsD.Root.GetEntry("DirB"));
+            ClassicAssert.AreEqual(0, ((DirectoryEntry)fsD.Root.GetEntry("DirB")).EntryCount);
+            ClassicAssert.IsNotNull(fsD.Root.GetEntry("DirA"));
+            ClassicAssert.AreEqual(2, ((DirectoryEntry)fsD.Root.GetEntry("DirA")).EntryCount);
 
             // Copy the whole lot
             fsD = new POIFSFileSystem();
-            Assert.AreEqual(0, fsD.Root.EntryCount);
+            ClassicAssert.AreEqual(0, fsD.Root.EntryCount);
 
             EntryUtils.CopyNodes(fs, fsD, new List<String>());
-            Assert.AreEqual(3, fsD.Root.EntryCount);
-            Assert.IsNotNull(fsD.Root.GetEntry(dirA.Name));
-            Assert.IsNotNull(fsD.Root.GetEntry(dirB.Name));
-            Assert.IsNotNull(fsD.Root.GetEntry(entryR.Name));
-            Assert.AreEqual(0, ((DirectoryEntry)fsD.Root.GetEntry("DirB")).EntryCount);
-            Assert.AreEqual(2, ((DirectoryEntry)fsD.Root.GetEntry("DirA")).EntryCount);
+            ClassicAssert.AreEqual(3, fsD.Root.EntryCount);
+            ClassicAssert.IsNotNull(fsD.Root.GetEntry(dirA.Name));
+            ClassicAssert.IsNotNull(fsD.Root.GetEntry(dirB.Name));
+            ClassicAssert.IsNotNull(fsD.Root.GetEntry(entryR.Name));
+            ClassicAssert.AreEqual(0, ((DirectoryEntry)fsD.Root.GetEntry("DirB")).EntryCount);
+            ClassicAssert.AreEqual(2, ((DirectoryEntry)fsD.Root.GetEntry("DirA")).EntryCount);
         }
         [Test]
         public void TestAreDocumentsIdentical()
@@ -103,15 +103,15 @@ namespace TestCases.POIFS.FileSystem
 
 
             // Names must match
-            Assert.AreEqual(false, entryA1.Name.Equals(entryA1b.Name));
-            Assert.AreEqual(false, EntryUtils.AreDocumentsIdentical(entryA1, entryA1b));
+            ClassicAssert.AreEqual(false, entryA1.Name.Equals(entryA1b.Name));
+            ClassicAssert.AreEqual(false, EntryUtils.AreDocumentsIdentical(entryA1, entryA1b));
 
             // Contents must match
-            Assert.AreEqual(false, EntryUtils.AreDocumentsIdentical(entryA1, entryA2));
+            ClassicAssert.AreEqual(false, EntryUtils.AreDocumentsIdentical(entryA1, entryA2));
 
             // Parents don't matter if contents + names are the same
-            Assert.AreEqual(false, entryA1.Parent.Equals(entryB1.Parent));
-            Assert.AreEqual(true, EntryUtils.AreDocumentsIdentical(entryA1, entryB1));
+            ClassicAssert.AreEqual(false, entryA1.Parent.Equals(entryB1.Parent));
+            ClassicAssert.AreEqual(true, EntryUtils.AreDocumentsIdentical(entryA1, entryB1));
 
 
             // Can work with NPOIFS + POIFS
@@ -127,14 +127,14 @@ namespace TestCases.POIFS.FileSystem
             DocumentEntry eNA2 = (DocumentEntry)dN1.GetEntry(entryA2.Name);
             DocumentEntry eNB1 = (DocumentEntry)dN2.GetEntry(entryB1.Name);
 
-            Assert.AreEqual(false, EntryUtils.AreDocumentsIdentical(eNA1, eNA2));
-            Assert.AreEqual(true, EntryUtils.AreDocumentsIdentical(eNA1, eNB1));
+            ClassicAssert.AreEqual(false, EntryUtils.AreDocumentsIdentical(eNA1, eNA2));
+            ClassicAssert.AreEqual(true, EntryUtils.AreDocumentsIdentical(eNA1, eNB1));
 
-            Assert.AreEqual(false, EntryUtils.AreDocumentsIdentical(eNA1, entryA1b));
-            Assert.AreEqual(false, EntryUtils.AreDocumentsIdentical(eNA1, entryA2));
+            ClassicAssert.AreEqual(false, EntryUtils.AreDocumentsIdentical(eNA1, entryA1b));
+            ClassicAssert.AreEqual(false, EntryUtils.AreDocumentsIdentical(eNA1, entryA2));
 
-            Assert.AreEqual(true, EntryUtils.AreDocumentsIdentical(eNA1, entryA1));
-            Assert.AreEqual(true, EntryUtils.AreDocumentsIdentical(eNA1, entryB1));
+            ClassicAssert.AreEqual(true, EntryUtils.AreDocumentsIdentical(eNA1, entryA1));
+            ClassicAssert.AreEqual(true, EntryUtils.AreDocumentsIdentical(eNA1, entryB1));
         }
         [Test]
         public void TestAreDirectoriesIdentical()
@@ -144,26 +144,26 @@ namespace TestCases.POIFS.FileSystem
             DirectoryEntry dirB = fs.CreateDirectory("DirB");
 
             // Names must match
-            Assert.AreEqual(false, EntryUtils.AreDirectoriesIdentical(dirA, dirB));
+            ClassicAssert.AreEqual(false, EntryUtils.AreDirectoriesIdentical(dirA, dirB));
 
             // Empty dirs are fine
             DirectoryEntry dirA1 = dirA.CreateDirectory("TheDir");
             DirectoryEntry dirB1 = dirB.CreateDirectory("TheDir");
-            Assert.AreEqual(0, dirA1.EntryCount);
-            Assert.AreEqual(0, dirB1.EntryCount);
-            Assert.AreEqual(true, EntryUtils.AreDirectoriesIdentical(dirA1, dirB1));
+            ClassicAssert.AreEqual(0, dirA1.EntryCount);
+            ClassicAssert.AreEqual(0, dirB1.EntryCount);
+            ClassicAssert.AreEqual(true, EntryUtils.AreDirectoriesIdentical(dirA1, dirB1));
 
             // Otherwise children must match
             dirA1.CreateDocument("Entry1", new ByteArrayInputStream(dataSmallA));
-            Assert.AreEqual(false, EntryUtils.AreDirectoriesIdentical(dirA1, dirB1));
+            ClassicAssert.AreEqual(false, EntryUtils.AreDirectoriesIdentical(dirA1, dirB1));
 
             dirB1.CreateDocument("Entry1", new ByteArrayInputStream(dataSmallA));
-            Assert.AreEqual(true, EntryUtils.AreDirectoriesIdentical(dirA1, dirB1));
+            ClassicAssert.AreEqual(true, EntryUtils.AreDirectoriesIdentical(dirA1, dirB1));
 
             dirA1.CreateDirectory("DD");
-            Assert.AreEqual(false, EntryUtils.AreDirectoriesIdentical(dirA1, dirB1));
+            ClassicAssert.AreEqual(false, EntryUtils.AreDirectoriesIdentical(dirA1, dirB1));
             dirB1.CreateDirectory("DD");
-            Assert.AreEqual(true, EntryUtils.AreDirectoriesIdentical(dirA1, dirB1));
+            ClassicAssert.AreEqual(true, EntryUtils.AreDirectoriesIdentical(dirA1, dirB1));
 
 
             // Excludes support
@@ -171,29 +171,29 @@ namespace TestCases.POIFS.FileSystem
             FilteringDirectoryNode fdA = new FilteringDirectoryNode(dirA1, excl);
             FilteringDirectoryNode fdB = new FilteringDirectoryNode(dirB1, excl);
 
-            Assert.AreEqual(true, EntryUtils.AreDirectoriesIdentical(fdA, fdB));
+            ClassicAssert.AreEqual(true, EntryUtils.AreDirectoriesIdentical(fdA, fdB));
 
             // Add an ignored doc, no notice is taken
             fdA.CreateDocument("Ignore1", new ByteArrayInputStream(dataSmallA));
-            Assert.AreEqual(true, EntryUtils.AreDirectoriesIdentical(fdA, fdB));
+            ClassicAssert.AreEqual(true, EntryUtils.AreDirectoriesIdentical(fdA, fdB));
 
             // Add a directory with filtered contents, not the same
             DirectoryEntry dirAI = dirA1.CreateDirectory("IgnDir");
-            Assert.AreEqual(false, EntryUtils.AreDirectoriesIdentical(fdA, fdB));
+            ClassicAssert.AreEqual(false, EntryUtils.AreDirectoriesIdentical(fdA, fdB));
 
             DirectoryEntry dirBI = dirB1.CreateDirectory("IgnDir");
-            Assert.AreEqual(true, EntryUtils.AreDirectoriesIdentical(fdA, fdB));
+            ClassicAssert.AreEqual(true, EntryUtils.AreDirectoriesIdentical(fdA, fdB));
 
             // Add something to the filtered subdir that gets ignored
             dirAI.CreateDocument("Ign2", new ByteArrayInputStream(dataSmallA));
-            Assert.AreEqual(true, EntryUtils.AreDirectoriesIdentical(fdA, fdB));
+            ClassicAssert.AreEqual(true, EntryUtils.AreDirectoriesIdentical(fdA, fdB));
 
             // And something that doesn't
             dirAI.CreateDocument("IgnZZ", new ByteArrayInputStream(dataSmallA));
-            Assert.AreEqual(false, EntryUtils.AreDirectoriesIdentical(fdA, fdB));
+            ClassicAssert.AreEqual(false, EntryUtils.AreDirectoriesIdentical(fdA, fdB));
 
             dirBI.CreateDocument("IgnZZ", new ByteArrayInputStream(dataSmallA));
-            Assert.AreEqual(true, EntryUtils.AreDirectoriesIdentical(fdA, fdB));
+            ClassicAssert.AreEqual(true, EntryUtils.AreDirectoriesIdentical(fdA, fdB));
         }
     }
 

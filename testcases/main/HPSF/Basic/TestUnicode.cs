@@ -20,7 +20,7 @@ namespace TestCases.HPSF.Basic
 {
     using System;
     using System.IO;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HPSF;
     using NPOI.Util;
 
@@ -70,24 +70,17 @@ namespace TestCases.HPSF.Basic
             POIDataSamples samples = POIDataSamples.GetHPSFInstance();
             using (FileStream data = samples.GetFile(POI_FS))
             {
-
                 POIFile poiFile = Util.ReadPOIFiles(data, POI_FILES)[0];
                 byte[] b = poiFile.GetBytes();
-                PropertySet ps =
-                    PropertySetFactory.Create(new ByteArrayInputStream(b));
-                Assert.IsTrue(ps.IsDocumentSummaryInformation, "IsDocumentSummaryInformation");
-                Assert.AreEqual(ps.SectionCount, 2);
+                PropertySet ps = PropertySetFactory.Create(new ByteArrayInputStream(b));
+                ClassicAssert.IsTrue(ps.IsDocumentSummaryInformation, "IsDocumentSummaryInformation");
+                ClassicAssert.AreEqual(ps.SectionCount, 2);
                 Section s = (Section)ps.Sections[1];
-                Assert.AreEqual(s.GetProperty(1),
-                                    CodePageUtil.CP_UTF16);
-                Assert.AreEqual(s.GetProperty(2),
-                                    -96070278);
-                Assert.AreEqual(s.GetProperty(3),
-                                    "MCon_Info zu Office bei Schreiner");
-                Assert.AreEqual(s.GetProperty(4),
-                                    "petrovitsch@schreiner-online.de");
-                Assert.AreEqual(s.GetProperty(5),
-                                    "Petrovitsch, Wilhelm");
+                ClassicAssert.AreEqual(s.GetProperty(1), CodePageUtil.CP_UTF16);
+                ClassicAssert.AreEqual(s.GetProperty(2), -96070278);
+                ClassicAssert.AreEqual(s.GetProperty(3), "MCon_Info zu Office bei Schreiner");
+                ClassicAssert.AreEqual(s.GetProperty(4), "petrovitsch@schreiner-online.de");
+                ClassicAssert.AreEqual(s.GetProperty(5), "Petrovitsch, Wilhelm");
             }
         }
     }

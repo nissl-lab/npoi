@@ -101,9 +101,7 @@ namespace NPOI.DDF
         public override bool Equals(Object o)
         {
             if (this == o) return true;
-            if (!(o is EscherSimpleProperty)) return false;
-
-            EscherSimpleProperty escherSimpleProperty = (EscherSimpleProperty)o;
+            if (o is not EscherSimpleProperty escherSimpleProperty) return false;
 
             if (propertyValue != escherSimpleProperty.propertyValue) return false;
             if (Id != escherSimpleProperty.Id) return false;
@@ -115,7 +113,7 @@ namespace NPOI.DDF
         /// Serves as a hash function for a particular type.
         /// </summary>
         /// <returns>
-        /// A hash code for the current <see cref="T:System.Object"/>.
+        /// A hash code for the current <see cref="System.Object"/>.
         /// </returns>
         public override int GetHashCode()
         {
@@ -123,10 +121,10 @@ namespace NPOI.DDF
         }
 
         /// <summary>
-        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+        /// Returns a <see cref="System.String"/> that represents the current <see cref="System.Object"/>.
         /// </summary>
         /// <returns>
-        /// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+        /// A <see cref="System.String"/> that represents the current <see cref="System.Object"/>.
         /// </returns>
         public override String ToString()
         {

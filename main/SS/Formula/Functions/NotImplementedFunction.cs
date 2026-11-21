@@ -36,7 +36,7 @@ namespace NPOI.SS.Formula.Functions
     public class NotImplementedFunction : Function
     {
 
-        private String _functionName;
+        private readonly String _functionName;
         internal NotImplementedFunction()
         {
             _functionName = GetType().Name;

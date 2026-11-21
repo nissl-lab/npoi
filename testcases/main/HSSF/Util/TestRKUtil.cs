@@ -19,7 +19,7 @@ namespace TestCases.HSSF.Util
 {
     using System;
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.Util;
     using NPOI.HSSF.Util;
 

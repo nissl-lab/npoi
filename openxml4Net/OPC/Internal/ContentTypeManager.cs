@@ -50,7 +50,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal
         /**
          * Default content type tree. <Extension, ContentType>
          */
-        private SortedList<String, String> defaultContentType;
+        private readonly SortedList<String, String> defaultContentType;
 
         /**
          * Override content type tree.
@@ -269,8 +269,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal
             if (contentType == null)
                 throw new ArgumentException("contentType");
 
-            return (this.defaultContentType.Values.Contains(contentType) || (this.overrideContentType != null && this.overrideContentType
-                    .Values.Contains(contentType)));
+            return defaultContentType.ContainsValue(contentType) || (overrideContentType != null && overrideContentType.ContainsValue(contentType));
         }
 
         /**
@@ -318,12 +317,12 @@ namespace NPOI.OpenXml4Net.OPC.Internal
                 throw new ArgumentException("partName");
 
             if ((this.overrideContentType != null)
-                    && this.overrideContentType.ContainsKey(partName))
-                return this.overrideContentType[partName];
+                    && this.overrideContentType.TryGetValue(partName, out string type))
+                return type;
 
             String extension = partName.Extension.ToLower();
-            if (this.defaultContentType.ContainsKey(extension))
-                return this.defaultContentType[extension];
+            if (this.defaultContentType.TryGetValue(extension, out string contentType))
+                return contentType;
 
             /*
              * [M2.4] : The package implementer shall require that the Content Types
@@ -460,8 +459,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal
          *            The values to Append.
          * @see #save(java.io.OutputStream)
          */
-        private void AppendSpecificTypes(XmlDocument xmldoc, XmlElement root,
-                KeyValuePair<PackagePartName, String> entry)
+        private static void AppendSpecificTypes(XmlDocument xmldoc, XmlElement root, KeyValuePair<PackagePartName, String> entry)
         {
             XmlElement elem = xmldoc.CreateElement(OVERRIDE_TAG_NAME, PackageNamespaces.CONTENT_TYPES);
             root.AppendChild(elem);
@@ -481,7 +479,7 @@ namespace NPOI.OpenXml4Net.OPC.Internal
          *            The values to Append.
          * @see #save(java.io.OutputStream)
          */
-        private void AppendDefaultType(XmlDocument xmldoc, XmlElement root, KeyValuePair<String, String> entry)
+        private static void AppendDefaultType(XmlDocument xmldoc, XmlElement root, KeyValuePair<String, String> entry)
         {
             XmlElement elem = xmldoc.CreateElement(DEFAULT_TAG_NAME,PackageNamespaces.CONTENT_TYPES);
             root.AppendChild(elem);

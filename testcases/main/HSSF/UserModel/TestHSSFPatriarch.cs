@@ -20,7 +20,7 @@ namespace TestCases.HSSF.UserModel
     using System;
     using NPOI.HSSF.UserModel;
     using TestCases.HSSF;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.SS.UserModel;
 
     /**
@@ -36,9 +36,9 @@ namespace TestCases.HSSF.UserModel
             HSSFWorkbook wb = new HSSFWorkbook();
             NPOI.SS.UserModel.ISheet sheet = wb.CreateSheet();
 
-            IDrawing patr = sheet.CreateDrawingPatriarch();
+            IDrawing<IShape> patr = sheet.CreateDrawingPatriarch();
 
-            Assert.IsNotNull(patr);
+            ClassicAssert.IsNotNull(patr);
 
             // assert something more interesting
         }
@@ -52,10 +52,10 @@ namespace TestCases.HSSF.UserModel
             NPOI.SS.UserModel.ISheet sheet = wb.CreateSheet();
 
             // 1. Create drawing patriarch
-            IDrawing patr = sheet.CreateDrawingPatriarch();
+            IDrawing<IShape> patr = sheet.CreateDrawingPatriarch();
 
             // 2. Try to re-get the patriarch
-            IDrawing existingPatr;
+            IDrawing<IShape> existingPatr;
             try
             {
                 existingPatr = sheet.DrawingPatriarch;
@@ -74,7 +74,7 @@ namespace TestCases.HSSF.UserModel
 
             // 4. Try to re-use patriarch later
             existingPatr = sheet.DrawingPatriarch;
-            Assert.IsNotNull(existingPatr);
+            ClassicAssert.IsNotNull(existingPatr);
         }
 
     }

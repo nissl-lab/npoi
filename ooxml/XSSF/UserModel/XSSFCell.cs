@@ -48,19 +48,19 @@ namespace NPOI.XSSF.UserModel
     public class XSSFCell : ICell
     {
 
-        private static String FALSE_AS_STRING = "0";
-        private static String TRUE_AS_STRING = "1";
+        private static readonly String FALSE_AS_STRING = "0";
+        private static readonly String TRUE_AS_STRING = "1";
 
         /**
          * the xml bean Containing information about the cell's location, value,
          * data type, formatting, and formula
          */
-        private CT_Cell _cell;
+        private readonly CT_Cell _cell;
 
         /**
          * the XSSFRow this cell belongs to
          */
-        private XSSFRow _row;
+        private readonly XSSFRow _row;
 
         /**
          * 0-based column index
@@ -71,12 +71,19 @@ namespace NPOI.XSSF.UserModel
          * Table of strings shared across this workbook.
          * If two cells contain the same string, then the cell value is the same index into SharedStringsTable
          */
-        private SharedStringsTable _sharedStringSource;
+        private readonly SharedStringsTable _sharedStringSource;
 
         /**
          * Table of cell styles shared across all cells in a workbook.
          */
-        private StylesTable _stylesSource;
+        private readonly StylesTable _stylesSource;
+
+        private double? _cachedNumericValue;
+        private string _cachedNumericValueSource;
+        private IRichTextString _cachedRichTextValue;
+        private string _cachedRichTextValueSource;
+        private ST_CellType _cachedRichTextCellType;
+        private ICellStyle _cachedStyle;
 
         /**
          * Construct a XSSFCell.
@@ -115,96 +122,8 @@ namespace NPOI.XSSF.UserModel
         /// <exception cref="ArgumentException">if copy cell style and srcCell is from a different workbook</exception>
         public void CopyCellFrom(ICell srcCell, CellCopyPolicy policy)
         {
-            // Copy cell value (cell type is updated implicitly)
-            if (policy.IsCopyCellValue)
-            {
-                if (srcCell != null)
-                {
-                    CellType copyCellType = srcCell.CellType;
-                    if (copyCellType == CellType.Formula && !policy.IsCopyCellFormula)
-                    {
-                        // Copy formula result as value
-                        // FIXME: Cached value may be stale
-                        copyCellType = srcCell.CachedFormulaResultType;
-                    }
-                    switch (copyCellType)
-                    {
-                        case CellType.Boolean:
-                            SetCellValue(srcCell.BooleanCellValue);
-                            break;
-                        case CellType.Error:
-                            SetCellErrorValue(srcCell.ErrorCellValue);
-                            break;
-                        case CellType.Formula:
-                            SetCellFormula(srcCell.CellFormula);
-                            break;
-                        case CellType.Numeric:
-                            // DataFormat is not copied unless policy.isCopyCellStyle is true
-                            if (DateUtil.IsCellDateFormatted(srcCell))
-                            {
-                                SetCellValue(srcCell.DateCellValue);
-                            }
-                            else
-                            {
-                                SetCellValue(srcCell.NumericCellValue);
-                            }
-                            break;
-                        case CellType.String:
-                            SetCellValue(srcCell.StringCellValue);
-                            break;
-                        case CellType.Blank:
-                            SetBlankInternal();
-                            break;
-                        default:
-                            throw new ArgumentException("Invalid cell type " + srcCell.CellType);
-                    }
-                }
-                else
-                { //srcCell is null
-                    SetBlankInternal();
-                }
-            }
-
-            // Copy CellStyle
-            if (policy.IsCopyCellStyle)
-            {
-                if (srcCell != null)
-                {
-                    CellStyle = (srcCell.CellStyle);
-                }
-                else
-                {
-                    // clear cell style
-                    CellStyle = (null);
-                }
-            }
-
-
-            if (policy.IsMergeHyperlink)
-            {
-                // if srcCell doesn't have a hyperlink and destCell has a hyperlink, don't clear destCell's hyperlink
-                IHyperlink srcHyperlink = srcCell.Hyperlink;
-                if (srcHyperlink != null)
-                {
-                    Hyperlink = new XSSFHyperlink(srcHyperlink);
-                }
-            }
-            else if (policy.IsCopyHyperlink)
-            {
-                // overwrite the hyperlink at dest cell with srcCell's hyperlink
-                // if srcCell doesn't have a hyperlink, clear the hyperlink (if one exists) at destCell
-                if (srcCell == null || srcCell.Hyperlink == null)
-                {
-                    Hyperlink = (null);
-                }
-                else
-                {
-                    Hyperlink = new XSSFHyperlink(srcCell.Hyperlink);
-                }
-            }
+            CellUtil.CopyCell(srcCell, this, policy);
         }
-
-
         /**
          * @return table of strings shared across this workbook
          */
@@ -214,11 +133,44 @@ namespace NPOI.XSSF.UserModel
         }
 
         /**
-         * @return table of cell styles shared across this workbook
+         * @return table of cell styles shared across all cells in a workbook.
          */
         protected StylesTable GetStylesSource()
         {
             return _stylesSource;
+        }
+
+        private bool IsNumericCacheValid()
+        {
+            return _cachedNumericValue.HasValue && _cachedNumericValueSource == _cell.v;
+        }
+
+        private void InvalidateNumericCache()
+        {
+            _cachedNumericValue = null;
+            _cachedNumericValueSource = null;
+        }
+
+        private bool IsRichTextCacheValid()
+        {
+            ST_CellType? cellType = _cell.t;
+            return _cachedRichTextValue != null 
+                && _cachedRichTextValueSource == _cell.v 
+                && (_cachedRichTextCellType == cellType 
+                    || (cellType == null && _cachedRichTextCellType == default(ST_CellType)));
+        }
+
+        private void InvalidateRichTextCache()
+        {
+            _cachedRichTextValue = null;
+            _cachedRichTextValueSource = null;
+            _cachedRichTextCellType = default(ST_CellType);
+        }
+
+        private void InvalidateAllCaches()
+        {
+            InvalidateNumericCache();
+            InvalidateRichTextCache();
         }
 
         /**
@@ -287,6 +239,7 @@ namespace NPOI.XSSF.UserModel
         {
             _cell.t = (ST_CellType.b);
             _cell.v = (value ? TRUE_AS_STRING : FALSE_AS_STRING);
+            InvalidateAllCaches();
             return this;
         }
 
@@ -316,9 +269,13 @@ namespace NPOI.XSSF.UserModel
                         {
                             if (string.IsNullOrEmpty(_cell.v))
                                 return 0.0;
+                            if (IsNumericCacheValid())
+                                return _cachedNumericValue.Value;
                             try
                             {
-                                return Double.Parse(_cell.v, CultureInfo.InvariantCulture);
+                                _cachedNumericValue = Double.Parse(_cell.v, CultureInfo.InvariantCulture);
+                                _cachedNumericValueSource = _cell.v;
+                                return _cachedNumericValue.Value;
                             }
                             catch (FormatException)
                             {
@@ -348,14 +305,12 @@ namespace NPOI.XSSF.UserModel
             if (Double.IsInfinity(value))
             {
                 // Excel does not support positive/negative infInities,
-                // rather, it gives a #DIV/0! error in these cases.
+                // rather, it gives a #DIV/0! error in these case
                 _cell.t = (ST_CellType.e);
                 _cell.v = (FormulaError.DIV0.String);
             }
             else if (Double.IsNaN(value))
             {
-                // Excel does not support Not-a-Number (NaN),
-                // instead it immediately generates an #NUM! error.
                 _cell.t = (ST_CellType.e);
                 _cell.v = (FormulaError.NUM.String);
             }
@@ -365,6 +320,7 @@ namespace NPOI.XSSF.UserModel
                 _cell.v = (value.ToString(CultureInfo.InvariantCulture));
             }
 
+            InvalidateAllCaches();
             return this;
         }
 
@@ -396,6 +352,9 @@ namespace NPOI.XSSF.UserModel
         {
             get
             {
+                if (IsRichTextCacheValid())
+                    return _cachedRichTextValue;
+
                 CellType cellType = CellType;
                 XSSFRichTextString rt;
                 switch (cellType)
@@ -408,12 +367,10 @@ namespace NPOI.XSSF.UserModel
                         {
                             if (_cell.IsSetIs())
                             {
-                                //string is expressed directly in the cell defInition instead of implementing the shared string table.
                                 rt = new XSSFRichTextString(_cell.@is);
                             }
                             else if (_cell.IsSetV())
                             {
-                                //cached result of a formula
                                 rt = new XSSFRichTextString(_cell.v);
                             }
                             else
@@ -423,7 +380,6 @@ namespace NPOI.XSSF.UserModel
                         }
                         else if (_cell.t == ST_CellType.str)
                         {
-                            //cached formula value
                             rt = new XSSFRichTextString(_cell.IsSetV() ? _cell.v : "");
                         }
                         else
@@ -447,6 +403,9 @@ namespace NPOI.XSSF.UserModel
                         throw TypeMismatch(CellType.String, cellType, false);
                 }
                 rt.SetStylesTableReference(_stylesSource);
+                _cachedRichTextValue = rt;
+                _cachedRichTextValueSource = _cell.v;
+                _cachedRichTextCellType = _cell.t;
                 return rt;
             }
         }
@@ -510,12 +469,13 @@ namespace NPOI.XSSF.UserModel
                         _cell.t = ST_CellType.s;
                         XSSFRichTextString rt = (XSSFRichTextString)str;
                         rt.SetStylesTableReference(_stylesSource);
-                        int sRef = _sharedStringSource.AddEntry(rt.GetCTRst());
+                        int sRef = _sharedStringSource.AddSharedStringItem(rt);
                         _cell.v=sRef.ToString();
                     }
                     break;
             }
 
+            InvalidateAllCaches();
             return this;
         }
 
@@ -660,7 +620,8 @@ namespace NPOI.XSSF.UserModel
             //un-register the single-cell array formula from the parent sheet through public interface
             Row.Sheet.RemoveArrayFormula(this);
         }
-        private ICell SetFormula(String formula, FormulaType formulaType)
+
+        private XSSFCell SetFormula(String formula, FormulaType formulaType)
         {
             XSSFWorkbook wb = (XSSFWorkbook)_row.Sheet.Workbook;
             if (formula == null)
@@ -675,9 +636,27 @@ namespace NPOI.XSSF.UserModel
                 //validate through the FormulaParser
                 FormulaParser.Parse(formula, fpb, formulaType, wb.GetSheetIndex(this.Sheet), RowIndex);
             }
-            CT_CellFormula f = new CT_CellFormula { Value = formula };
-            _cell.f= f;
+
+            CT_CellFormula f;
+            if(_cell.IsSetF())
+            {
+                f = _cell.f;
+                f.Value = formula;
+                if(f.t == ST_CellFormulaType.shared)
+                {
+                    (Row.Sheet as XSSFSheet).OnReadCell(this);
+                }
+            }
+            else
+            {
+                f = new CT_CellFormula {
+                    Value = formula
+                };
+                _cell.f = f;
+            }
+
             if (_cell.IsSetV()) _cell.unsetV();
+            InvalidateAllCaches();
             return this;
         }
 
@@ -728,21 +707,30 @@ namespace NPOI.XSSF.UserModel
             }
         }
         /// <summary>
-        /// Return the cell's style.
+        /// Get the cell style. This is a reference to a cell style contained in the workbook
+        /// object. If there is no explicit cell style, the default style is returned.
+        /// cell has no style of its own. If no column default style is set, the row default style is checked.
+        /// This method has always fallen back to return the default style
+        /// if there is no other style to return.
         /// </summary>
         public ICellStyle CellStyle
         {
             get
             {
-                XSSFCellStyle style = null;
-                if ((null != _stylesSource) && (_stylesSource.NumCellStyles > 0))
+                XSSFCellStyle style = GetExplicitCellStyle();
+                if (style == null)
                 {
-                    long idx = _cell.IsSetS() ? _cell.s : 0;
-                    style = _stylesSource.GetStyleAt((int)idx);
+                    style = GetDefaultCellStyleFromColumn();
+                }
+                // Return default style at index 0 if no explicit or column style exists
+                // This matches HSSFCell behavior which always returns a non-null style
+                if (style == null && _stylesSource != null)
+                {
+                    style = _stylesSource.GetStyleAt(0);
                 }
                 return style;
             }
-            set 
+            set
             {
                 if (value == null)
                 {
@@ -759,11 +747,87 @@ namespace NPOI.XSSF.UserModel
             }
         }
 
+        private XSSFCellStyle GetExplicitCellStyle()
+        {
+            XSSFCellStyle style = null;
+            if (_stylesSource != null && _cell.IsSetS())
+            {
+                if (_stylesSource.NumCellStyles > 0)
+                {
+                    long idx = _cell.s;
+                    style = _stylesSource.GetStyleAt((int)idx);
+                }
+            }
+            return style;
+        }
+
+        private XSSFCellStyle GetDefaultCellStyleFromColumn()
+        {
+            XSSFCellStyle style = null;
+            XSSFSheet sheet = (XSSFSheet)Sheet;
+            if (sheet != null)
+            {
+                style = (XSSFCellStyle)sheet.GetColumnStyle(ColumnIndex);
+            }
+            return style;
+        }
+
+        internal void ApplyDefaultCellStyleIfNecessary()
+        {
+            XSSFCellStyle style = GetExplicitCellStyle();
+            if (style == null)
+            {
+                XSSFSheet sheet = (XSSFSheet)Sheet;
+                if (sheet != null)
+                {
+                    XSSFCellStyle defaultStyle = GetDefaultCellStyleFromColumn();
+                    // Only apply if it's a real column-specific style, not just the
+                    // workbook default (index 0). Cells without an explicit style
+                    // already implicitly use style 0.
+                    if (defaultStyle != null && defaultStyle.Index != 0)
+                    {
+                        CellStyle = defaultStyle;
+                    }
+                }
+            }
+        }
+        public ICellStyle Style
+        {
+            get
+            {
+                if (_cachedStyle == null)
+                {
+                    _cachedStyle = CellStyle;
+                    if (_cachedStyle == null)
+                    {
+                        _cachedStyle = _stylesSource.CreateCellStyle();
+                    }
+                }
+                return _cachedStyle;
+            }
+            set
+            {
+                _cachedStyle = value;
+                CellStyle = value;
+            }
+        }
+
+        /// <summary>
+        /// POI currently supports these formula types:
+        /// <list type="bullet">
+        /// <item><description> <see cref="ST_CellFormulaType.normal" /></description></item>
+        /// <item><description> <see cref="ST_CellFormulaType.shared" /></description></item>
+        /// <item><description> <see cref="ST_CellFormulaType.array" /></description></item>
+        /// </list>
+        /// POI does not support <see cref="ST_CellFormulaType.dataTable" /> formulas.
+        /// </summary>
+        /// <return>true if the cell is of a formula type POI can handle
+        /// </return>
         private bool IsFormulaCell
         {
             get
             {
-                if (_cell.f != null || ((XSSFSheet)Sheet).IsCellInArrayFormulaContext(this))
+                if ((_cell.f != null && _cell.f.t != ST_CellFormulaType.dataTable) || ((XSSFSheet)Sheet).IsCellInArrayFormulaContext(this))
                 {
                     return true;
                 }
@@ -772,7 +836,12 @@ namespace NPOI.XSSF.UserModel
             
         }
         /// <summary>
-        /// Return the cell type.
+        /// Return the cell type.  Tables in an array formula return
+        /// <see cref="CellType.FORMULA" /> for all cells, even though the formula is only defined
+        /// in the OOXML file for the top left cell of the array.
+        /// <para>
+        /// NOTE: POI does not support data table formulas.
+        /// Cells in a data table appear to POI as plain cells typed from their cached value.</para>
         /// </summary>
         public CellType CellType
         {
@@ -967,6 +1036,7 @@ namespace NPOI.XSSF.UserModel
         {
             _cell.t = ST_CellType.e;
             _cell.v = error.String;
+            InvalidateAllCaches();
             return this;
         }
 
@@ -1044,7 +1114,7 @@ namespace NPOI.XSSF.UserModel
                         String str = ConvertCellValueToString();
                         XSSFRichTextString rt = new XSSFRichTextString(str);
                         rt.SetStylesTableReference(_stylesSource);
-                        int sRef = _sharedStringSource.AddEntry(rt.GetCTRst());
+                        int sRef = _sharedStringSource.AddSharedStringItem(rt);
                         _cell.v= sRef.ToString();
                     }
                     _cell.t= (ST_CellType.s);
@@ -1066,6 +1136,7 @@ namespace NPOI.XSSF.UserModel
                 _cell.unsetF();
             }
 
+            InvalidateAllCaches();
             return this;
         }
         /// <summary>
@@ -1090,7 +1161,7 @@ namespace NPOI.XSSF.UserModel
                 case CellType.Numeric:
                     if (DateUtil.IsCellDateFormatted(this))
                     {
-                        FormatBase sdf = new SimpleDateFormat("dd-MMM-yyyy");
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
                         return sdf.Format(DateCellValue, CultureInfo.CurrentCulture);
                     }
                     return NumericCellValue.ToString();
@@ -1140,7 +1211,7 @@ namespace NPOI.XSSF.UserModel
         /**
          * Used to help format error messages
          */
-        private static Exception TypeMismatch(CellType expectedTypeCode, CellType actualTypeCode, bool isFormulaCell)
+        private static InvalidOperationException TypeMismatch(CellType expectedTypeCode, CellType actualTypeCode, bool isFormulaCell)
         {
             String msg = "Cannot get a "
                 + GetCellTypeName(expectedTypeCode) + " value from a "
@@ -1399,6 +1470,7 @@ namespace NPOI.XSSF.UserModel
         }
 
         [Obsolete("Will be removed at NPOI 2.8, Use CachedFormulaResultType instead.")]
+        [Removal(Version = "4.2")]
         public CellType GetCachedFormulaResultTypeEnum()
         {
             if(!IsFormulaCell)

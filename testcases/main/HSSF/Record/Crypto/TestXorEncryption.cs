@@ -24,7 +24,7 @@ namespace TestCases.HSSF.Record.Crypto
     using NPOI.POIFS.FileSystem;
     using NPOI.SS.UserModel;
     using NPOI.Util;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using TestCases.HSSF;
 
     [TestFixture]
@@ -47,8 +47,8 @@ namespace TestCases.HSSF.Record.Crypto
             // verifier = 52250
             int verifier = CryptoFunctions.CreateXorVerifier1("abc");
             int key = CryptoFunctions.CreateXorKey1("abc");
-            Assert.AreEqual(20810, key);
-            Assert.AreEqual(52250, verifier);
+            ClassicAssert.AreEqual(20810, key);
+            ClassicAssert.AreEqual(52250, verifier);
 
             byte[] xorArrAct = CryptoFunctions.CreateXorArray1("abc");
             byte[] xorArrExp = HexRead.ReadFromString("AC-CC-A4-AB-D6-BA-C3-BA-D6-A3-2B-45-D3-79-29-BB");
@@ -65,9 +65,9 @@ namespace TestCases.HSSF.Record.Crypto
             IWorkbook hwb = new HSSFWorkbook(fs.Root, true);
 
             ISheet sh = hwb.GetSheetAt(0);
-            Assert.AreEqual(1.0, sh.GetRow(0).GetCell(0).NumericCellValue, 0.0);
-            Assert.AreEqual(2.0, sh.GetRow(1).GetCell(0).NumericCellValue, 0.0);
-            Assert.AreEqual(3.0, sh.GetRow(2).GetCell(0).NumericCellValue, 0.0);
+            ClassicAssert.AreEqual(1.0, sh.GetRow(0).GetCell(0).NumericCellValue, 0.0);
+            ClassicAssert.AreEqual(2.0, sh.GetRow(1).GetCell(0).NumericCellValue, 0.0);
+            ClassicAssert.AreEqual(3.0, sh.GetRow(2).GetCell(0).NumericCellValue, 0.0);
 
             fs.Close();
         }

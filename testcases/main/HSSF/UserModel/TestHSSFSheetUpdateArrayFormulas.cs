@@ -18,7 +18,7 @@
 namespace TestCases.HSSF.UserModel
 {
     using System;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.Aggregates;
     using NPOI.HSSF.UserModel;
@@ -47,20 +47,20 @@ namespace TestCases.HSSF.UserModel
 
             CellRangeAddress range = new CellRangeAddress(2, 2, 2, 2);
             ICell[] cells = sheet.SetArrayFormula("SUM(C11:C12*D11:D12)", range).FlattenedCells;
-            Assert.AreEqual(1, cells.Length);
+            ClassicAssert.AreEqual(1, cells.Length);
 
             // sheet.SetArrayFormula Creates rows and cells for the designated range
-            Assert.IsNotNull(sheet.GetRow(2));
+            ClassicAssert.IsNotNull(sheet.GetRow(2));
             ICell cell = sheet.GetRow(2).GetCell(2);
-            Assert.IsNotNull(cell);
+            ClassicAssert.IsNotNull(cell);
 
-            Assert.IsTrue(cell.IsPartOfArrayFormulaGroup);
+            ClassicAssert.IsTrue(cell.IsPartOfArrayFormulaGroup);
             //retrieve the range and check it is the same
-            Assert.AreEqual(range.FormatAsString(), cell.ArrayFormulaRange.FormatAsString());
+            ClassicAssert.AreEqual(range.FormatAsString(), cell.ArrayFormulaRange.FormatAsString());
 
             FormulaRecordAggregate agg = (FormulaRecordAggregate)(((HSSFCell)cell).CellValueRecord);
-            Assert.AreEqual(range.FormatAsString(), agg.GetArrayFormulaRange().FormatAsString());
-            Assert.IsTrue(agg.IsPartOfArrayFormula);
+            ClassicAssert.AreEqual(range.FormatAsString(), agg.GetArrayFormulaRange().FormatAsString());
+            ClassicAssert.IsTrue(agg.IsPartOfArrayFormula);
             workbook.Close();
         }
 
@@ -83,15 +83,15 @@ namespace TestCases.HSSF.UserModel
             ConfirmRecordClass(recs, ix + 2, typeof(FormulaRecord));
             ConfirmRecordClass(recs, ix + 3, typeof(FormulaRecord));
             // just one array record
-            Assert.IsTrue(FindRecordOfType(recs, typeof(ArrayRecord), ix + 1) < 0);
+            ClassicAssert.IsTrue(FindRecordOfType(recs, typeof(ArrayRecord), ix + 1) < 0);
 
             s.RemoveArrayFormula(cr.TopLeftCell);
 
             // Make sure the array formula has been Removed properly
 
             recs = RecordInspector.GetRecords(s, 0);
-            Assert.IsTrue(FindRecordOfType(recs, typeof(ArrayRecord), 0) < 0);
-            Assert.IsTrue(FindRecordOfType(recs, typeof(FormulaRecord), 0) < 0);
+            ClassicAssert.IsTrue(FindRecordOfType(recs, typeof(ArrayRecord), 0) < 0);
+            ClassicAssert.IsTrue(FindRecordOfType(recs, typeof(FormulaRecord), 0) < 0);
             RowRecordsAggregate rra = ((HSSFSheet)s).Sheet.RowsAggregate;
             SharedValueManager svm = TestSharedValueManager.ExtractFromRRA(rra);
             if (svm.GetArrayRecord(4, 1) != null)
@@ -108,7 +108,7 @@ namespace TestCases.HSSF.UserModel
                 Assert.Fail("Expected (" + cls.Name + ") at index "
                         + index + " but array length is " + recs.Length + ".");
             }
-            Assert.AreEqual(cls, recs[index].GetType());
+            ClassicAssert.AreEqual(cls, recs[index].GetType());
         }
         /**
          * @return <tt>-1<tt> if not found

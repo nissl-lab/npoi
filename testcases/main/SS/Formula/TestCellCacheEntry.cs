@@ -19,7 +19,7 @@ namespace TestCases.SS.Formula
 {
 
     using NPOI.SS.Formula.Eval;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.SS.Formula;
 
     /**
@@ -35,13 +35,13 @@ namespace TestCases.SS.Formula
         {
             CellCacheEntry pcce = new PlainValueCellCacheEntry(new NumberEval(42.0));
             ValueEval ve = pcce.GetValue();
-            Assert.AreEqual(42, ((NumberEval)ve).NumberValue, 0.0);
+            ClassicAssert.AreEqual(42, ((NumberEval)ve).NumberValue, 0.0);
 
             FormulaCellCacheEntry fcce = new FormulaCellCacheEntry();
             fcce.UpdateFormulaResult(new NumberEval(10.0), CellCacheEntry.EMPTY_ARRAY, null);
 
             ve = fcce.GetValue();
-            Assert.AreEqual(10, ((NumberEval)ve).NumberValue, 0.0);
+            ClassicAssert.AreEqual(10, ((NumberEval)ve).NumberValue, 0.0);
         }
     }
 

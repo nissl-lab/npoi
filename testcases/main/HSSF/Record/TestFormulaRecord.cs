@@ -23,7 +23,7 @@ namespace TestCases.HSSF.Record
     using System.IO;
     using System.Collections;
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.SS.Formula.PTG;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
@@ -46,10 +46,10 @@ namespace TestCases.HSSF.Record
             record.Row=(1);
             record.XFIndex=((short)4);
 
-            Assert.AreEqual(record.Column, (short)0);
-            //Assert.AreEqual(record.Row,(short)1);
-            Assert.AreEqual((short)record.Row, (short)1);
-            Assert.AreEqual(record.XFIndex, (short)4);
+            ClassicAssert.AreEqual(record.Column, (short)0);
+            //ClassicAssert.AreEqual(record.Row,(short)1);
+            ClassicAssert.AreEqual((short)record.Row, (short)1);
+            ClassicAssert.AreEqual(record.XFIndex, (short)4);
         }
 
         /**
@@ -89,16 +89,16 @@ namespace TestCases.HSSF.Record
 		};
 
             FormulaRecord record = new FormulaRecord(TestcaseRecordInputStream.Create(FormulaRecord.sid,  formulaByte));
-            Assert.AreEqual(0, record.Row, "Row");
-            Assert.AreEqual(0, record.Column, "Column");
-            Assert.AreEqual(record.CachedResultType,NPOI.SS.UserModel.CellType.Error);
+            ClassicAssert.AreEqual(0, record.Row, "Row");
+            ClassicAssert.AreEqual(0, record.Column, "Column");
+            ClassicAssert.AreEqual(record.CachedResultType,NPOI.SS.UserModel.CellType.Error);
 
             byte[] output = record.Serialize();
-            Assert.AreEqual(33, output.Length, "Output size"); //includes sid+recordlength
+            ClassicAssert.AreEqual(33, output.Length, "Output size"); //includes sid+recordlength
 
             for (int i = 5; i < 13; i++)
             {
-                Assert.AreEqual(formulaByte[i], output[i + 4], "FormulaByte NaN doesn't match");
+                ClassicAssert.AreEqual(formulaByte[i], output[i + 4], "FormulaByte NaN doesn't match");
             }
         }
 
@@ -118,11 +118,11 @@ namespace TestCases.HSSF.Record
             formulaByte[20] = (byte)0x05;
             formulaByte[22] = (byte)0x01;
             FormulaRecord record = new FormulaRecord(TestcaseRecordInputStream.Create(FormulaRecord.sid, formulaByte));
-            Assert.AreEqual(0, record.Row, "Row");
-            Assert.AreEqual(0, record.Column, "Column");
+            ClassicAssert.AreEqual(0, record.Row, "Row");
+            ClassicAssert.AreEqual(0, record.Column, "Column");
             byte[] output = record.Serialize();
-            Assert.AreEqual(31, output.Length, "Output size"); //includes sid+recordlength
-            Assert.AreEqual(1, output[26], "OffSet 22");
+            ClassicAssert.AreEqual(31, output.Length, "Output size"); //includes sid+recordlength
+            ClassicAssert.AreEqual(1, output[26], "OffSet 22");
         }
         [Test]
         public void TestWithConcat()
@@ -150,19 +150,19 @@ namespace TestCases.HSSF.Record
             FormulaRecord fr = new FormulaRecord(inp);
 
             Ptg[] ptgs = fr.ParsedExpression;
-            Assert.AreEqual(9, ptgs.Length);
-            Assert.AreEqual(typeof(IntPtg), ptgs[0].GetType());
-            Assert.AreEqual(typeof(AttrPtg), ptgs[1].GetType());
-            Assert.AreEqual(typeof(RefPtg), ptgs[2].GetType());
-            Assert.AreEqual(typeof(AttrPtg), ptgs[3].GetType());
-            Assert.AreEqual(typeof(RefPtg), ptgs[4].GetType());
-            Assert.AreEqual(typeof(AttrPtg), ptgs[5].GetType());
-            Assert.AreEqual(typeof(RefPtg), ptgs[6].GetType());
-            Assert.AreEqual(typeof(AttrPtg), ptgs[7].GetType());
-            Assert.AreEqual(typeof(FuncVarPtg), ptgs[8].GetType());
+            ClassicAssert.AreEqual(9, ptgs.Length);
+            ClassicAssert.AreEqual(typeof(IntPtg), ptgs[0].GetType());
+            ClassicAssert.AreEqual(typeof(AttrPtg), ptgs[1].GetType());
+            ClassicAssert.AreEqual(typeof(RefPtg), ptgs[2].GetType());
+            ClassicAssert.AreEqual(typeof(AttrPtg), ptgs[3].GetType());
+            ClassicAssert.AreEqual(typeof(RefPtg), ptgs[4].GetType());
+            ClassicAssert.AreEqual(typeof(AttrPtg), ptgs[5].GetType());
+            ClassicAssert.AreEqual(typeof(RefPtg), ptgs[6].GetType());
+            ClassicAssert.AreEqual(typeof(AttrPtg), ptgs[7].GetType());
+            ClassicAssert.AreEqual(typeof(FuncVarPtg), ptgs[8].GetType());
 
             FuncVarPtg choose = (FuncVarPtg)ptgs[8];
-            Assert.AreEqual("CHOOSE", choose.Name);
+            ClassicAssert.AreEqual("CHOOSE", choose.Name);
         }
         [Test]
         public void TestReSerialize()
@@ -173,15 +173,15 @@ namespace TestCases.HSSF.Record
             formulaRecord.ParsedExpression = (/*setter*/new Ptg[] { new RefPtg("B$5"), });
             formulaRecord.Value = (/*setter*/3.3);
             byte[] ser = formulaRecord.Serialize();
-            Assert.AreEqual(31, ser.Length);
+            ClassicAssert.AreEqual(31, ser.Length);
 
             RecordInputStream in1 = TestcaseRecordInputStream.Create(ser);
             FormulaRecord fr2 = new FormulaRecord(in1);
-            Assert.AreEqual(3.3, fr2.Value, 0.0);
+            ClassicAssert.AreEqual(3.3, fr2.Value, 0.0);
             Ptg[] ptgs = fr2.ParsedExpression;
-            Assert.AreEqual(1, ptgs.Length);
+            ClassicAssert.AreEqual(1, ptgs.Length);
             RefPtg rp = (RefPtg)ptgs[0];
-            Assert.AreEqual("B$5", rp.ToFormulaString());
+            ClassicAssert.AreEqual("B$5", rp.ToFormulaString());
         }
 
         /**
@@ -195,9 +195,9 @@ namespace TestCases.HSSF.Record
             FormulaRecord fr1 = new FormulaRecord();
             // Test some other cached value types 
             fr0.Value = (/*setter*/3.5);
-            Assert.AreEqual(3.5, fr0.Value, 0.0);
+            ClassicAssert.AreEqual(3.5, fr0.Value, 0.0);
             fr0.SetCachedResultErrorCode (FormulaError.REF.Code);
-            Assert.AreEqual(FormulaError.REF.Code, fr0.CachedErrorValue);
+            ClassicAssert.AreEqual(FormulaError.REF.Code, fr0.CachedErrorValue);
 
             fr0.SetCachedResultBoolean(false);
             fr1.SetCachedResultBoolean(true);
@@ -205,8 +205,8 @@ namespace TestCases.HSSF.Record
             {
                 throw new AssertionException("Identified bug 46479c");
             }
-            Assert.AreEqual(false, fr0.CachedBooleanValue);
-            Assert.AreEqual(true, fr1.CachedBooleanValue);
+            ClassicAssert.AreEqual(false, fr0.CachedBooleanValue);
+            ClassicAssert.AreEqual(true, fr1.CachedBooleanValue);
         }
     }
 }

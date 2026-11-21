@@ -1,13 +1,15 @@
 namespace NPOI.SS.Formula.Functions
 {
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
     using NPOI.SS.Formula.Eval;
 
     public class Concat : FreeRefFunction
     {
         public ValueEval Evaluate(ValueEval[] args, OperationEvaluationContext ec)
         {
-            StringBuilder sb = new StringBuilder();
+            using var sb = ZString.CreateStringBuilder();
+
             foreach(ValueEval arg in args)
             {
                 try

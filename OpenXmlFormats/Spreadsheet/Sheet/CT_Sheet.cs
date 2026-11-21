@@ -40,14 +40,14 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "name", this.name);
             XmlHelper.WriteAttribute(sw, "sheetId", this.sheetId);
             if(state!= ST_SheetState.visible)
                 XmlHelper.WriteAttribute(sw, "state", this.state.ToString());
             XmlHelper.WriteAttribute(sw, "r:id", this.id);
-            sw.Write(">");
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.Write('>');
+            sw.WriteEndElement(nodeName);
         }
 
         public CT_Sheet()

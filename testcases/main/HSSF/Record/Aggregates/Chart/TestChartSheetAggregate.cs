@@ -17,7 +17,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using NPOI.HSSF.UserModel;
 using TestCases.HSSF.UserModel;
 
@@ -49,7 +49,7 @@ namespace TestCases.HSSF.Record.Aggregates.Chart
             Record[] outRecs = rv.Records;
             for (int i = 0; i < outRecs.Length; i++)
             {
-                Assert.AreEqual(sheetRecs[pos + i].GetType(), outRecs[i].GetType());
+                ClassicAssert.AreEqual(sheetRecs[pos + i].GetType(), outRecs[i].GetType());
             }
         }
     }

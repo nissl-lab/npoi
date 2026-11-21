@@ -66,9 +66,8 @@ namespace NPOI.SS.Formula
                     stack.Push("(" + contents + ")");
                     continue;
                 }
-                if (ptg is AttrPtg)
+                if (ptg is AttrPtg attrPtg)
                 {
-                    AttrPtg attrPtg = ((AttrPtg)ptg);
                     if (attrPtg.IsOptimizedIf || attrPtg.IsOptimizedChoose || attrPtg.IsSkip)
                     {
                         continue;
@@ -95,21 +94,19 @@ namespace NPOI.SS.Formula
                     throw new Exception("Unexpected tAttr: " + attrPtg.ToString());
                 }
 
-                if (ptg is WorkbookDependentFormula)
+                if (ptg is WorkbookDependentFormula optg)
                 {
-                    WorkbookDependentFormula optg = (WorkbookDependentFormula)ptg;
                     stack.Push(optg.ToFormulaString(book));
                     continue;
                 }
-                if (!(ptg is OperationPtg))
+                if (ptg is not OperationPtg operationPtg)
                 {
                     stack.Push(ptg.ToFormulaString());
                     continue;
                 }
 
-                OperationPtg o = (OperationPtg)ptg;
-                String[] operands1 = GetOperands(stack, o.NumberOfOperands);
-                stack.Push(o.ToFormulaString(operands1));
+                String[] operands1 = GetOperands(stack, operationPtg.NumberOfOperands);
+                stack.Push(operationPtg.ToFormulaString(operands1));
             }
             if (stack.Count == 0)
             {

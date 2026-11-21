@@ -18,7 +18,7 @@
 namespace TestCases.HSSF.Record
 {
     using System;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.UserModel;
     using NPOI.SS;
@@ -81,7 +81,7 @@ namespace TestCases.HSSF.Record
             Ptg[] ConvertedFormula = sf.ConvertSharedFormulas(sharedFormula, 100, 200);
 
             RefPtg refPtg = (RefPtg)ConvertedFormula[1];
-            Assert.AreEqual("$C101", refPtg.ToFormulaString());
+            ClassicAssert.AreEqual("$C101", refPtg.ToFormulaString());
             if (refPtg.PtgClass == Ptg.CLASS_REF)
             {
                 throw new AssertionException("Identified bug 45123");
@@ -92,7 +92,7 @@ namespace TestCases.HSSF.Record
 
         private static void ConfirmOperandClasses(Ptg[] originalPtgs, Ptg[] convertedPtg)
         {
-            Assert.AreEqual(originalPtgs.Length, convertedPtg.Length);
+            ClassicAssert.AreEqual(originalPtgs.Length, convertedPtg.Length);
             for (int i = 0; i < convertedPtg.Length; i++)
             {
                 Ptg originalPtg = originalPtgs[i];
@@ -117,30 +117,30 @@ namespace TestCases.HSSF.Record
             ConvertedFormula = sf.ConvertSharedFormulas(sharedFormula, 0, 0);
             ConfirmOperandClasses(sharedFormula, ConvertedFormula);
             //conversion relative to [0,0] should return the original formula
-            Assert.AreEqual(FormulaRenderer.ToFormulaString(fpb, ConvertedFormula), "A2");
+            ClassicAssert.AreEqual(FormulaRenderer.ToFormulaString(fpb, ConvertedFormula), "A2");
 
             ConvertedFormula = sf.ConvertSharedFormulas(sharedFormula, 1, 0);
             ConfirmOperandClasses(sharedFormula, ConvertedFormula);
             //one row down
-            Assert.AreEqual(FormulaRenderer.ToFormulaString(fpb, ConvertedFormula), "A3");
+            ClassicAssert.AreEqual(FormulaRenderer.ToFormulaString(fpb, ConvertedFormula), "A3");
 
             ConvertedFormula = sf.ConvertSharedFormulas(sharedFormula, 1, 1);
             ConfirmOperandClasses(sharedFormula, ConvertedFormula);
             //one row down and one cell right
-            Assert.AreEqual(FormulaRenderer.ToFormulaString(fpb, ConvertedFormula), "B3");
+            ClassicAssert.AreEqual(FormulaRenderer.ToFormulaString(fpb, ConvertedFormula), "B3");
 
             sharedFormula = FormulaParser.Parse("SUM(A1:C1)", fpb, FormulaType.Cell, -1, -1);
             ConvertedFormula = sf.ConvertSharedFormulas(sharedFormula, 0, 0);
             ConfirmOperandClasses(sharedFormula, ConvertedFormula);
-            Assert.AreEqual(FormulaRenderer.ToFormulaString(fpb, ConvertedFormula), "SUM(A1:C1)");
+            ClassicAssert.AreEqual(FormulaRenderer.ToFormulaString(fpb, ConvertedFormula), "SUM(A1:C1)");
 
             ConvertedFormula = sf.ConvertSharedFormulas(sharedFormula, 1, 0);
             ConfirmOperandClasses(sharedFormula, ConvertedFormula);
-            Assert.AreEqual(FormulaRenderer.ToFormulaString(fpb, ConvertedFormula), "SUM(A2:C2)");
+            ClassicAssert.AreEqual(FormulaRenderer.ToFormulaString(fpb, ConvertedFormula), "SUM(A2:C2)");
 
             ConvertedFormula = sf.ConvertSharedFormulas(sharedFormula, 1, 1);
             ConfirmOperandClasses(sharedFormula, ConvertedFormula);
-            Assert.AreEqual(FormulaRenderer.ToFormulaString(fpb, ConvertedFormula), "SUM(B2:D2)");
+            ClassicAssert.AreEqual(FormulaRenderer.ToFormulaString(fpb, ConvertedFormula), "SUM(B2:D2)");
         }
 
         /**
@@ -160,13 +160,13 @@ namespace TestCases.HSSF.Record
             cellB32769 = sheet.GetRow(32768).GetCell(1);
             cellC32769 = sheet.GetRow(32768).GetCell(2);
             // check Reading of formulas which are shared (two cells from a 1R x 8C range)
-            Assert.AreEqual("B32770*2", cellB32769.CellFormula);
-            Assert.AreEqual("C32770*2", cellC32769.CellFormula);
+            ClassicAssert.AreEqual("B32770*2", cellB32769.CellFormula);
+            ClassicAssert.AreEqual("C32770*2", cellC32769.CellFormula);
             ConfirmCellEvaluation(wb, cellB32769, 4);
             ConfirmCellEvaluation(wb, cellC32769, 6);
             // Confirm this example really does have SharedFormulas.
             // there are 3 others besides the one at A32769:H32769
-            Assert.AreEqual(4, countSharedFormulas(sheet));
+            ClassicAssert.AreEqual(4, countSharedFormulas(sheet));
 
 
             // Re-serialize and check again
@@ -174,9 +174,9 @@ namespace TestCases.HSSF.Record
             sheet = wb.GetSheetAt(0);
             cellB32769 = sheet.GetRow(32768).GetCell(1);
             cellC32769 = sheet.GetRow(32768).GetCell(2);
-            Assert.AreEqual("B32770*2", cellB32769.CellFormula);
+            ClassicAssert.AreEqual("B32770*2", cellB32769.CellFormula);
             ConfirmCellEvaluation(wb, cellB32769, 4);
-            Assert.AreEqual(4, countSharedFormulas(sheet));
+            ClassicAssert.AreEqual(4, countSharedFormulas(sheet));
         }
         [Test]
         public void TestUnshareFormulaDueToChangeFormula()
@@ -195,9 +195,9 @@ namespace TestCases.HSSF.Record
             cellB32769.CellFormula = (/*setter*/"1+1");
             ConfirmCellEvaluation(wb, cellB32769, 2);
             // currently (Oct 2008) POI handles this by exploding the whole shared formula group
-            Assert.AreEqual(3, countSharedFormulas(sheet)); // one less now
+            ClassicAssert.AreEqual(3, countSharedFormulas(sheet)); // one less now
             // check that nearby cell of the same group still has the same formula
-            Assert.AreEqual("C32770*2", cellC32769.CellFormula);
+            ClassicAssert.AreEqual("C32770*2", cellC32769.CellFormula);
             ConfirmCellEvaluation(wb, cellC32769, 6);
         }
         [Test]
@@ -212,35 +212,35 @@ namespace TestCases.HSSF.Record
             wb = HSSFTestDataSamples.OpenSampleWorkbook(SHARED_FORMULA_TEST_XLS);
             sheet = wb.GetSheetAt(0);
 
-            Assert.AreEqual("A$1*2", sheet.GetRow(ROW_IX).GetCell(1).CellFormula);
+            ClassicAssert.AreEqual("A$1*2", sheet.GetRow(ROW_IX).GetCell(1).CellFormula);
             cell = sheet.GetRow(ROW_IX).GetCell(1);
             cell.SetCellType(CellType.Blank);
-            Assert.AreEqual(3, countSharedFormulas(sheet));
+            ClassicAssert.AreEqual(3, countSharedFormulas(sheet));
 
             wb = HSSFTestDataSamples.WriteOutAndReadBack(wb);
             sheet = wb.GetSheetAt(0);
-            Assert.AreEqual("A$1*2", sheet.GetRow(ROW_IX + 1).GetCell(1).CellFormula);
+            ClassicAssert.AreEqual("A$1*2", sheet.GetRow(ROW_IX + 1).GetCell(1).CellFormula);
 
             // deleting shared formula cell
             wb = HSSFTestDataSamples.OpenSampleWorkbook(SHARED_FORMULA_TEST_XLS);
             sheet = wb.GetSheetAt(0);
 
-            Assert.AreEqual("A$1*2", sheet.GetRow(ROW_IX).GetCell(1).CellFormula);
+            ClassicAssert.AreEqual("A$1*2", sheet.GetRow(ROW_IX).GetCell(1).CellFormula);
             cell = sheet.GetRow(ROW_IX).GetCell(1);
             sheet.GetRow(ROW_IX).RemoveCell(cell);
-            Assert.AreEqual(3, countSharedFormulas(sheet));
+            ClassicAssert.AreEqual(3, countSharedFormulas(sheet));
 
             wb = HSSFTestDataSamples.WriteOutAndReadBack(wb);
             sheet = wb.GetSheetAt(0);
-            Assert.AreEqual("A$1*2", sheet.GetRow(ROW_IX + 1).GetCell(1).CellFormula);
+            ClassicAssert.AreEqual("A$1*2", sheet.GetRow(ROW_IX + 1).GetCell(1).CellFormula);
         }
 
         private static void ConfirmCellEvaluation(IWorkbook wb, ICell cell, double expectedValue)
         {
             HSSFFormulaEvaluator fe = new HSSFFormulaEvaluator(wb);
             CellValue cv = fe.Evaluate(cell);
-            Assert.AreEqual(CellType.Numeric, cv.CellType);
-            Assert.AreEqual(expectedValue, cv.NumberValue, 0.0);
+            ClassicAssert.AreEqual(CellType.Numeric, cv.CellType);
+            ClassicAssert.AreEqual(expectedValue, cv.NumberValue, 0.0);
         }
 
         /**

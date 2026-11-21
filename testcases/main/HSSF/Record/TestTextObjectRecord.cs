@@ -20,7 +20,7 @@ namespace TestCases.HSSF.Record
     using System;
     using System.IO;
     using System.Text;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Formula.PTG;
     using NPOI.SS.UserModel;
@@ -56,12 +56,12 @@ namespace TestCases.HSSF.Record
             RecordInputStream is1 = TestcaseRecordInputStream.Create(simpleData);
             TextObjectRecord record = new TextObjectRecord(is1);
 
-            Assert.AreEqual(TextObjectRecord.sid, record.Sid);
-            Assert.AreEqual(HorizontalTextAlignment.Left, record.HorizontalTextAlignment);
-            Assert.AreEqual(VerticalTextAlignment.Top, record.VerticalTextAlignment);
-            Assert.IsTrue(record.IsTextLocked);
-            Assert.AreEqual(TextOrientation.None, record.TextOrientation);
-            Assert.AreEqual("Hello, World!", record.Str.String);
+            ClassicAssert.AreEqual(TextObjectRecord.sid, record.Sid);
+            ClassicAssert.AreEqual(HorizontalTextAlignment.Left, record.HorizontalTextAlignment);
+            ClassicAssert.AreEqual(VerticalTextAlignment.Top, record.VerticalTextAlignment);
+            ClassicAssert.IsTrue(record.IsTextLocked);
+            ClassicAssert.AreEqual(TextOrientation.None, record.TextOrientation);
+            ClassicAssert.AreEqual("Hello, World!", record.Str.String);
         }
         [Test]
         public void TestWrite()
@@ -76,9 +76,9 @@ namespace TestCases.HSSF.Record
             record.TextOrientation = (/*setter*/ TextOrientation.None);
 
             byte[] ser = record.Serialize();
-            Assert.AreEqual(ser.Length, simpleData.Length);
+            ClassicAssert.AreEqual(ser.Length, simpleData.Length);
 
-            Assert.IsTrue(Arrays.Equals(simpleData, ser));
+            ClassicAssert.IsTrue(Arrays.Equals(simpleData, ser));
 
             //read again
             RecordInputStream is1 = TestcaseRecordInputStream.Create(simpleData);
@@ -99,14 +99,14 @@ namespace TestCases.HSSF.Record
             byte[] ser = record.Serialize();
 
             int formatDataLen = LittleEndian.GetUShort(ser, 16);
-            Assert.AreEqual(0, formatDataLen, "formatDataLength");
+            ClassicAssert.AreEqual(0, formatDataLen, "formatDataLength");
 
-            Assert.AreEqual(22, ser.Length); // just the TXO record
+            ClassicAssert.AreEqual(22, ser.Length); // just the TXO record
 
             //read again
             RecordInputStream is1 = TestcaseRecordInputStream.Create(ser);
             record = new TextObjectRecord(is1);
-            Assert.AreEqual(0, record.Str.Length);
+            ClassicAssert.AreEqual(0, record.Str.Length);
         }
 
         /**
@@ -134,8 +134,8 @@ namespace TestCases.HSSF.Record
                 TextObjectRecord record = new TextObjectRecord(is1);
                 str = record.Str;
 
-                Assert.AreEqual(buff.Length, str.Length);
-                Assert.AreEqual(buff.ToString(), str.String);
+                ClassicAssert.AreEqual(buff.Length, str.Length);
+                ClassicAssert.AreEqual(buff.ToString(), str.String);
             }
         }
 
@@ -153,14 +153,14 @@ namespace TestCases.HSSF.Record
 
 
             TextObjectRecord Cloned = (TextObjectRecord)obj.Clone();
-            Assert.AreEqual(obj.RecordSize, Cloned.RecordSize);
-            Assert.AreEqual(obj.HorizontalTextAlignment, Cloned.HorizontalTextAlignment);
-            Assert.AreEqual(obj.Str.String, Cloned.Str.String);
+            ClassicAssert.AreEqual(obj.RecordSize, Cloned.RecordSize);
+            ClassicAssert.AreEqual(obj.HorizontalTextAlignment, Cloned.HorizontalTextAlignment);
+            ClassicAssert.AreEqual(obj.Str.String, Cloned.Str.String);
 
             //finally check that the Serialized data is the same
             byte[] src = obj.Serialize();
             byte[] cln = Cloned.Serialize();
-            Assert.IsTrue(Arrays.Equals(src, cln));
+            ClassicAssert.IsTrue(Arrays.Equals(src, cln));
         }
 
         /** similar to {@link #simpleData} but with link formula at end of TXO rec*/
@@ -196,14 +196,14 @@ namespace TestCases.HSSF.Record
             TextObjectRecord rec = new TextObjectRecord(is1);
 
             Ptg ptg = rec.LinkRefPtg;
-            Assert.IsNotNull(ptg);
-            Assert.AreEqual(typeof(RefPtg), ptg.GetType());
+            ClassicAssert.IsNotNull(ptg);
+            ClassicAssert.AreEqual(typeof(RefPtg), ptg.GetType());
             RefPtg rptg = (RefPtg)ptg;
-            Assert.AreEqual("T2", rptg.ToFormulaString());
+            ClassicAssert.AreEqual("T2", rptg.ToFormulaString());
 
             byte[] data2 = rec.Serialize();
-            Assert.AreEqual(linkData.Length, data2.Length);
-            Assert.IsTrue(Arrays.Equals(linkData, data2));
+            ClassicAssert.AreEqual(linkData.Length, data2.Length);
+            ClassicAssert.IsTrue(Arrays.Equals(linkData, data2));
         }
     }
 }

@@ -22,7 +22,7 @@ namespace TestCases.SS.Formula.Functions
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
     using System;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.SS.Formula.Functions;
 
     /**
@@ -187,7 +187,7 @@ namespace TestCases.SS.Formula.Functions
             {
                 throw new AssertionException("expected numeric cell type but got " + cv.FormatAsString());
             }
-            Assert.AreEqual(expectedResult, cv.NumberValue, 0.0);
+            ClassicAssert.AreEqual(expectedResult, cv.NumberValue, 0.0);
         }
         private static void Confirm(IFormulaEvaluator fe, ICell cell, String formula,
                 ErrorEval expectedResult)
@@ -210,7 +210,7 @@ namespace TestCases.SS.Formula.Functions
         [Test]
         public void TestInvalidInput()
         {
-            Assert.AreEqual(ErrorEval.VALUE_INVALID, Indirect.instance.Evaluate(new ValueEval[] { }, null));
+            ClassicAssert.AreEqual(ErrorEval.VALUE_INVALID, Indirect.instance.Evaluate(new ValueEval[] { }, null));
         }
     }
 

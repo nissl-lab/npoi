@@ -58,47 +58,48 @@ namespace NPOI.SS.Util
         public const string VERTICAL_ALIGNMENT = "verticalAlignment";
         public const string WRAP_TEXT = "wrapText";
 
-        private static ISet<String> shortValues = new HashSet<string>(new string[]{
-                    BOTTOM_BORDER_COLOR,
-                    LEFT_BORDER_COLOR,
-                    RIGHT_BORDER_COLOR,
-                    TOP_BORDER_COLOR,
-                    FILL_FOREGROUND_COLOR,
-                    FILL_BACKGROUND_COLOR,
-                    INDENTION,
-                    DATA_FORMAT,
-                    ROTATION
-            });
-        private static ISet<String> intValues = new HashSet<string>(new string[]{
-                        FONT
-        });
-        private static ISet<String> booleanValues = new HashSet<string>(new string[]{
-                        LOCKED,
-                        HIDDEN,
-                        WRAP_TEXT
-        });
-        private static ISet<String> borderTypeValues = new HashSet<string>(new string[]{
-                        BORDER_BOTTOM,
-                        BORDER_LEFT,
-                        BORDER_RIGHT,
-                        BORDER_TOP
-        });
+        private static readonly HashSet<string> shortValues =
+        [
+            BOTTOM_BORDER_COLOR,
+            LEFT_BORDER_COLOR,
+            RIGHT_BORDER_COLOR,
+            TOP_BORDER_COLOR,
+            FILL_FOREGROUND_COLOR,
+            FILL_BACKGROUND_COLOR,
+            INDENTION,
+            DATA_FORMAT,
+            ROTATION
+        ];
 
+        private static readonly HashSet<string> intValues = [FONT];
 
-        private static UnicodeMapping[] unicodeMappings;
+        private static readonly HashSet<string> booleanValues = [LOCKED, HIDDEN, WRAP_TEXT];
 
-        private class UnicodeMapping
+        private static readonly HashSet<string> borderTypeValues =
+        [
+            BORDER_BOTTOM, BORDER_LEFT, BORDER_RIGHT, BORDER_TOP
+        ];
+
+        private static readonly UnicodeMapping[] unicodeMappings;
+
+        private sealed class UnicodeMapping
         {
+            public readonly string entityName;
+            public readonly string resolvedValue;
 
-            public String entityName;
-            public String resolvedValue;
-
-            public UnicodeMapping(String pEntityName, String pResolvedValue)
+            public UnicodeMapping(string pEntityName, string pResolvedValue)
             {
                 entityName = "&" + pEntityName + ";";
                 resolvedValue = pResolvedValue;
             }
         }
+
+        /// <summary>
+        /// Controls whether the per-workbook style cache is used in
+        /// <see cref="SetCellStyleProperties"/>.  Defaults to <c>true</c>.
+        /// Set to <c>false</c> for benchmarking or diagnostic purposes only.
+        /// </summary>
+        public static bool UseStyleCache { get; set; } = true;
 
         private CellUtil()
         {
@@ -128,7 +129,96 @@ namespace NPOI.SS.Util
 
             return CopyCell(oldCell, newCell, sourceIndex, targetIndex);
         }
+        public static void CopyCell(ICell srcCell, ICell destCell, CellCopyPolicy policy)
+        {
+            // Copy cell value (cell type is updated implicitly)
+            if(policy.IsCopyCellValue)
+            {
+                if(srcCell != null)
+                {
+                    CellType copyCellType = srcCell.CellType;
+                    if(copyCellType == CellType.Formula && !policy.IsCopyCellFormula)
+                    {
+                        // Copy formula result as value
+                        // FIXME: Cached value may be stale
+                        copyCellType = srcCell.CachedFormulaResultType;
+                    }
+                    switch(copyCellType)
+                    {
+                        case CellType.Numeric:
+                            // DataFormat is not copied unless policy.isCopyCellStyle is true
+                            if(!policy.IsCopyCellStyle&& DateUtil.IsCellDateFormatted(srcCell))
+                            {
+                                destCell.SetCellValue((DateTime) srcCell.DateCellValue);
+                            }
+                            else
+                            {
+                                destCell.SetCellValue(srcCell.NumericCellValue);
+                            }
+                            break;
+                        case CellType.String:
+                            destCell.SetCellValue(srcCell.StringCellValue);
+                            break;
+                        case CellType.Formula:
+                            destCell.SetCellFormula(srcCell.CellFormula);
+                            break;
+                        case CellType.Blank:
+                            destCell.SetBlank();
+                            break;
+                        case CellType.Boolean:
+                            destCell.SetCellValue(srcCell.BooleanCellValue);
+                            break;
+                        case CellType.Error:
+                            destCell.SetCellErrorValue(srcCell.ErrorCellValue);
+                            break;
+                        default:
+                            throw new ArgumentException("Invalid cell type " + srcCell.CellType);
+                    }
+                }
+                else
+                { //srcCell is null
+                    destCell.SetBlank();
+                }
+            }
 
+            // Copy CellStyle
+            if(policy.IsCopyCellStyle)
+            {
+                if(srcCell != null)
+                {
+                    destCell.CellStyle = (srcCell.CellStyle);
+                }
+                else
+                {
+                    // clear cell style
+                    destCell.CellStyle = (null);
+                }
+            }
+
+
+            if(policy.IsMergeHyperlink)
+            {
+                // if srcCell doesn't have a hyperlink and destCell has a hyperlink, don't clear destCell's hyperlink
+                IHyperlink srcHyperlink = srcCell.Hyperlink;
+                if(srcHyperlink != null)
+                {
+                    destCell.Hyperlink = srcHyperlink.Copy();
+                }
+            }
+            else if(policy.IsCopyHyperlink)
+            {
+                // overwrite the hyperlink at dest cell with srcCell's hyperlink
+                // if srcCell doesn't have a hyperlink, clear the hyperlink (if one exists) at destCell
+                if(srcCell == null || srcCell.Hyperlink == null)
+                {
+                    destCell.Hyperlink = (null);
+                }
+                else
+                {
+                    destCell.Hyperlink = srcCell.Hyperlink.Copy();
+                }
+            }
+        }
         public static ICell CopyCell(IColumn column, int sourceIndex, int targetIndex)
         {
             // Grab a copy of the old/new cell
@@ -152,6 +242,7 @@ namespace NPOI.SS.Util
 
             return CopyCell(oldCell, newCell, sourceIndex, targetIndex);
         }
+
 
         private static ICell CopyCell(ICell oldCell, ICell newCell, int sourceIndex, int targetIndex)
         {
@@ -275,20 +366,6 @@ namespace NPOI.SS.Util
 
         /**
          * Take a cell, and align it.
-         *
-         *@param cell the cell to set the alignment for
-         *@param workbook The workbook that is being worked with.
-         *@param align the column alignment to use.
-         *
-         * @see CellStyle for alignment options
-         */
-        [Obsolete("deprecated 3.15-beta2. Use {@link #SetAlignment(ICell, HorizontalAlignment)} instead.")]
-        public static void SetAlignment(ICell cell, IWorkbook workbook, short align)
-        {
-            SetCellStyleProperty(cell, workbook, ALIGNMENT, align);
-        }
-        /**
-         * Take a cell, and align it.
          * 
          * This is superior to cell.getCellStyle().setAlignment(align) because
          * this method will not modify the CellStyle object that may be referenced
@@ -327,28 +404,6 @@ namespace NPOI.SS.Util
             SetCellStyleProperty(cell, VERTICAL_ALIGNMENT, align);
         }
 
-        /**
-         * Take a cell, and apply a font to it
-         *
-         *@param cell the cell to set the alignment for
-         *@param workbook The workbook that is being worked with.
-         *@param font The Font that you want to set...
-         */
-        [Obsolete("deprecated 3.15-beta2. Use {@link #SetFont(ICell, IFont)} instead.")]
-        public static void SetFont(ICell cell, IWorkbook workbook, IFont font)
-        {
-            // Check if font belongs to workbook
-            short fontIndex = font.Index;
-            if (!workbook.GetFontAt(fontIndex).Equals(font))
-            {
-                throw new ArgumentException("Font does not belong to this workbook");
-            }
-
-            // Check if cell belongs to workbook
-            // (checked in setCellStyleProperty)
-
-            SetCellStyleProperty(cell, workbook, FONT, fontIndex);
-        }
         /**
          * Take a cell, and apply a font to it
          *
@@ -401,36 +456,58 @@ namespace NPOI.SS.Util
         {
             IWorkbook workbook = cell.Sheet.Workbook;
             ICellStyle originalStyle = cell.CellStyle;
-            ICellStyle newStyle = null;
+
             Dictionary<string, object> values = GetFormatProperties(originalStyle);
             PutAll(properties, values);
 
-            // index seems like what index the cellstyle is in the list of styles for a workbook.
-            // not good to compare on!
-            int numberCellStyles = workbook.NumCellStyles;
+            ICellStyle newStyle;
 
-            for (int i = 0; i < numberCellStyles; i++)
+            if (UseStyleCache)
             {
-                ICellStyle wbStyle = workbook.GetCellStyleAt(i);
-                Dictionary<string, object> wbStyleMap = GetFormatProperties(wbStyle);
+                // O(1) cache-backed path.
+                StyleKey desiredKey = StyleKey.FromPropertyMap(values);
+                StyleCache cache = StyleCache.ForWorkbook(workbook);
 
-                // the desired style already exists in the workbook. Use the existing style.
-                if (DictionaryEqual(wbStyleMap, values, null))
+                if (cache.TryGet(in desiredKey, out newStyle))
                 {
-                    newStyle = wbStyle;
-                    break;
+                    cell.CellStyle = newStyle;   // cache hit — no allocation
+                    return;
                 }
-            }
 
-            // the desired style does not exist in the workbook. Create a new style with desired properties.
-            if (newStyle == null)
-            {
+                // Cache miss: materialise the ICellStyle only now.
                 newStyle = workbook.CreateCellStyle();
                 if (cloneExistingStyles)
                 {
                     newStyle.CloneStyleFrom(originalStyle);
                 }
                 SetFormatProperties(newStyle, workbook, values);
+                cache.Register(in desiredKey, newStyle);
+            }
+            else
+            {
+                // Legacy O(n) path: linear scan over all workbook styles.
+                newStyle = null;
+                int numberCellStyles = workbook.NumCellStyles;
+                for (int i = 0; i < numberCellStyles; i++)
+                {
+                    ICellStyle wbStyle = workbook.GetCellStyleAt(i);
+                    Dictionary<string, object> wbStyleMap = GetFormatProperties(wbStyle);
+                    if (DictionaryEqual(wbStyleMap, values, null))
+                    {
+                        newStyle = wbStyle;
+                        break;
+                    }
+                }
+
+                if (newStyle == null)
+                {
+                    newStyle = workbook.CreateCellStyle();
+                    if (cloneExistingStyles)
+                    {
+                        newStyle.CloneStyleFrom(originalStyle);
+                    }
+                    SetFormatProperties(newStyle, workbook, values);
+                }
             }
 
             cell.CellStyle = newStyle;
@@ -474,36 +551,7 @@ namespace NPOI.SS.Util
             Dictionary<String, Object> values = new Dictionary<string, object>() { { propertyName, propertyValue } };
             SetCellStyleProperties(cell, values);
         }
-        /**
-	     * <p>This method attempts to find an existing CellStyle that matches the <code>cell</code>'s
-	     * current style plus a single style property <code>propertyName</code> with value
-	     * <code>propertyValue</code>.
-	     * A new style is created if the workbook does not contain a matching style.</p>
-	     * 
-	     * <p>Modifies the cell style of <code>cell</code> without affecting other cells that use the
-	     * same style.</p>
-	     * 
-	     * <p>If setting more than one cell style property on a cell, use
-	     * {@link #setCellStyleProperties(Cell, Map)},
-	     * which is faster and does not add unnecessary intermediate CellStyles to the workbook.</p>
-	     * 
-	     * @param workbook The workbook that is being worked with.
-	     * @param propertyName The name of the property that is to be changed.
-	     * @param propertyValue The value of the property that is to be changed.
-	     * @param cell The cell that needs it's style changes
-	     */
-        [Obsolete("deprecated 3.15-beta2. Use {@link #setCellStyleProperty(Cell, String, Object)} instead.")]
-        public static void SetCellStyleProperty(ICell cell, IWorkbook workbook, String propertyName,
-               Object propertyValue)
-        {
-            if (cell.Sheet.Workbook != workbook)
-            {
-                throw new ArgumentException("Cannot set cell style property. Cell does not belong to workbook.");
-            }
 
-            Dictionary<String, Object> values = new Dictionary<string, object>() { { propertyName, propertyValue } };
-            SetCellStyleProperties(cell, values);
-        }
 
         /**
          * Copies the entries in src to dest, using the preferential data type
@@ -566,6 +614,11 @@ namespace NPOI.SS.Util
          */
         private static Dictionary<String, Object> GetFormatProperties(ICellStyle style)
         {
+            if (style == null)
+            {
+                return new Dictionary<String, Object>();
+            }
+
             Dictionary<String, Object> properties = new Dictionary<String, Object>();
             Put(properties, ALIGNMENT, style.Alignment);
             Put(properties, VERTICAL_ALIGNMENT, style.VerticalAlignment);
@@ -631,9 +684,12 @@ namespace NPOI.SS.Util
          * @param name property name
          * @return zero if the property does not exist, or is not a {@link Short}.
          */
-        private static short GetShort(Dictionary<String, Object> properties, String name)
+        internal static short GetShort(Dictionary<String, Object> properties, String name)
         {
-            Object value = properties[name];
+            if (!properties.TryGetValue(name, out var value) || value == null)
+            {
+                return 0;
+            }
             short result = 0;
             if (short.TryParse(value.ToString(), out result))
                 return result;
@@ -648,9 +704,12 @@ namespace NPOI.SS.Util
          * @return zero if the property does not exist, or is not a {@link Integer}
          *         otherwise the property value
          */
-        private static int GetInt(Dictionary<String, Object> properties, String name)
+        internal static int GetInt(Dictionary<String, Object> properties, String name)
         {
-            Object value = properties[name];
+            if (!properties.TryGetValue(name, out var value))
+            {
+                return 0;
+            }
             if (Number.IsNumber(value))
             {
                 return int.Parse(value.ToString());
@@ -659,19 +718,22 @@ namespace NPOI.SS.Util
         }
 
         /**
-	     * Utility method that returns the named BorderStyle value form the given map.
-	     *
-	     * @param properties map of named properties (String -> Object)
-	     * @param name property name
-	     * @return Border style if set, otherwise {@link BorderStyle#NONE}
-	     */
-        private static BorderStyle GetBorderStyle(Dictionary<String, Object> properties, String name)
+         * Utility method that returns the named BorderStyle value form the given map.
+         *
+         * @param properties map of named properties (String -> Object)
+         * @param name property name
+         * @return Border style if set, otherwise {@link BorderStyle#NONE}
+         */
+        internal static BorderStyle GetBorderStyle(Dictionary<String, Object> properties, String name)
         {
-            Object value = properties[name];
-            BorderStyle border;
-            if (value is BorderStyle)
+            if (!properties.TryGetValue(name, out var value))
             {
-                border = (BorderStyle)value;
+                return BorderStyle.None;
+            }
+            BorderStyle border;
+            if (value is BorderStyle style)
+            {
+                border = style;
             }
             // @deprecated 3.15 beta 2. getBorderStyle will only work on BorderStyle enums instead of codes in the future.
             else if (value is short || value is int)
@@ -703,23 +765,25 @@ namespace NPOI.SS.Util
          * @return FillPattern style if set, otherwise {@link FillPattern#NO_FILL}
          * @since POI 3.15 beta 3
          */
-        private static FillPattern GetFillPattern(Dictionary<String, Object> properties, String name)
+        internal static FillPattern GetFillPattern(Dictionary<String, Object> properties, String name)
         {
-            Object value = properties[name];
-            FillPattern pattern;
-            if (value is FillPattern)
+            if (!properties.TryGetValue(name, out var value))
             {
-                pattern = (FillPattern)value;
+                return FillPattern.NoFill;
+            }
+            FillPattern pattern;
+            if (value is FillPattern fillPattern)
+            {
+                pattern = fillPattern;
             }
             // @deprecated 3.15 beta 2. getFillPattern will only work on FillPattern enums instead of codes in the future.
-            else if (value is short)
+            else if (value is short code)
             {
                 //if (log.check(POILogger.WARN))
                 //{
                 //    log.log(POILogger.WARN, "Deprecation warning: CellUtil properties map uses Short values for "
                 //            + name + ". Should use FillPattern enums instead.");
                 //}
-                short code = (short)value;
                 pattern = (FillPattern)code;
             }
             else if (value == null)
@@ -741,23 +805,25 @@ namespace NPOI.SS.Util
          * @return HorizontalAlignment style if set, otherwise {@link HorizontalAlignment#GENERAL}
          * @since POI 3.15 beta 3
          */
-        private static HorizontalAlignment GetHorizontalAlignment(Dictionary<String, Object> properties, String name)
+        internal static HorizontalAlignment GetHorizontalAlignment(Dictionary<String, Object> properties, String name)
         {
-            Object value = properties[name];
-            HorizontalAlignment align;
-            if (value is HorizontalAlignment)
+            if (!properties.TryGetValue(name, out var value))
             {
-                align = (HorizontalAlignment)value;
+                return HorizontalAlignment.General;
+            }
+            HorizontalAlignment align;
+            if (value is HorizontalAlignment alignment)
+            {
+                align = alignment;
             }
             // @deprecated 3.15 beta 2. getHorizontalAlignment will only work on HorizontalAlignment enums instead of codes in the future.
-            else if (value is short)
+            else if (value is short code)
             {
                 //if (log.check(POILogger.WARN))
                 //{
                 //    log.log(POILogger.WARN, "Deprecation warning: CellUtil properties map used a Short value for "
                 //            + name + ". Should use HorizontalAlignment enums instead.");
                 //}
-                short code = (short)value;
                 align = (HorizontalAlignment)code;
             }
             else if (value == null)
@@ -779,23 +845,25 @@ namespace NPOI.SS.Util
          * @return VerticalAlignment style if set, otherwise {@link VerticalAlignment#BOTTOM}
          * @since POI 3.15 beta 3
          */
-        private static VerticalAlignment GetVerticalAlignment(Dictionary<String, Object> properties, String name)
+        internal static VerticalAlignment GetVerticalAlignment(Dictionary<String, Object> properties, String name)
         {
-            Object value = properties[name];
-            VerticalAlignment align;
-            if (value is VerticalAlignment)
+            if (!properties.TryGetValue(name, out var value))
             {
-                align = (VerticalAlignment)value;
+                return VerticalAlignment.Bottom;
+            }
+            VerticalAlignment align;
+            if (value is VerticalAlignment alignment)
+            {
+                align = alignment;
             }
             // @deprecated 3.15 beta 2. getVerticalAlignment will only work on VerticalAlignment enums instead of codes in the future.
-            else if (value is short)
+            else if (value is short code)
             {
                 //if (log.check(POILogger.WARN))
                 //{
                 //    log.log(POILogger.WARN, "Deprecation warning: CellUtil properties map used a Short value for "
                 //            + name + ". Should use VerticalAlignment enums instead.");
                 //}
-                short code = (short)value;
                 align = (VerticalAlignment)code;
             }
             else if (value == null)
@@ -816,9 +884,12 @@ namespace NPOI.SS.Util
          * @param name property name
          * @return false if the property does not exist, or is not a {@link Boolean}.
          */
-        private static bool GetBoolean(Dictionary<String, Object> properties, String name)
+        internal static bool GetBoolean(Dictionary<String, Object> properties, String name)
         {
-            Object value = properties[name];
+            if (!properties.TryGetValue(name, out var value) || value == null)
+            {
+                return false;
+            }
             bool result = false;
             if (bool.TryParse(value.ToString(), out result))
                 return result;
@@ -836,39 +907,7 @@ namespace NPOI.SS.Util
         {
             properties[name] = value;
         }
-        /**
-         * Utility method that puts the named short value to the given map.
-         *
-         * @param properties map of properties (String -> Object)
-         * @param name property name
-         * @param value property value
-         */
-        private static void PutShort(Dictionary<String, Object> properties, String name, short value)
-        {
-            properties[name] = value;
-        }
-        /**
-       * Utility method that puts the named short value to the given map.
-       *
-       * @param properties map of properties (String -> Object)
-       * @param name property name
-       * @param value property value
-       */
-        private static void PutEnum(Dictionary<String, Object> properties, String name, Enum value)
-        {
-            properties[name] = value;
-        }
-        /**
-         * Utility method that puts the named boolean value to the given map.
-         *
-         * @param properties map of properties (String -> Object)
-         * @param name property name
-         * @param value property value
-         */
-        private static void PutBoolean(Dictionary<String, Object> properties, String name, bool value)
-        {
-            properties[name] = value;
-        }
+
 
         /**
          *  Looks for text in the cell that should be unicode, like an alpha and provides the

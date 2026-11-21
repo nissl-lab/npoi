@@ -76,7 +76,7 @@ namespace NPOI.Util.Collections
 
         public bool HasMoreTokens() {
             if (! retDelims) {
-                while (pos < len && delim.IndexOf(str[pos]) >= 0)
+                while (pos < len && delim.Contains(str[pos]))
                     pos++;
             }
             return pos < len;
@@ -88,14 +88,20 @@ namespace NPOI.Util.Collections
         }
 
         public String NextToken() {
-            if (pos < len && delim.IndexOf(str[pos]) >= 0) {
-                if (retDelims)
+            if (pos < len && delim.Contains(str[pos])) {
+                if(retDelims)
+                {
                     return str.Substring(pos++, 1);
-                while (++pos < len && delim.IndexOf(str[pos]) >= 0);
+                }
+                while(++pos < len && delim.Contains(str[pos]))
+                {
+                }
             }
             if (pos < len) {
                 int start = pos;
-                while (++pos < len && delim.IndexOf(str[pos]) < 0);
+                while(++pos < len && delim.IndexOf(str[pos]) < 0)
+                {
+                }
 
                 return str.Substring(start, pos - start);
             }
@@ -109,7 +115,7 @@ namespace NPOI.Util.Collections
             int tmpPos = pos;
 
             while (tmpPos < len) {
-                if (delim.IndexOf(str[tmpPos++]) >= 0) {
+                if (delim.Contains(str[tmpPos++])) {
                     if (tokenFound) {
                         count++;
                         tokenFound = false;

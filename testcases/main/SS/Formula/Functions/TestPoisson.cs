@@ -19,7 +19,7 @@ namespace TestCases.SS.Formula.Functions
 {
 
     using NPOI.SS.Formula.Eval;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.SS.Formula.Functions;
 
     /**
@@ -51,7 +51,7 @@ namespace TestCases.SS.Formula.Functions
 
             NumberEval myResult = (NumberEval)invokePoisson(x, mean, true);
 
-            Assert.AreEqual(myResult.NumberValue, result, DELTA);
+            ClassicAssert.AreEqual(myResult.NumberValue, result, DELTA);
         }
         [Test]
         public void TestNonCumulativeProbability()
@@ -62,7 +62,7 @@ namespace TestCases.SS.Formula.Functions
 
             NumberEval myResult = (NumberEval)invokePoisson(x, mean, false);
 
-            Assert.AreEqual(myResult.NumberValue, result, DELTA);
+            ClassicAssert.AreEqual(myResult.NumberValue, result, DELTA);
         }
         [Test]
         public void TestNegativeMean()
@@ -72,7 +72,7 @@ namespace TestCases.SS.Formula.Functions
 
             ErrorEval myResult = (ErrorEval)invokePoisson(x, mean, false);
 
-            Assert.AreEqual(ErrorEval.NUM_ERROR.ErrorCode, myResult.ErrorCode);
+            ClassicAssert.AreEqual(ErrorEval.NUM_ERROR.ErrorCode, myResult.ErrorCode);
         }
         [Test]
         public void TestNegativeX()
@@ -82,7 +82,7 @@ namespace TestCases.SS.Formula.Functions
 
             ErrorEval myResult = (ErrorEval)invokePoisson(x, mean, false);
 
-            Assert.AreEqual(ErrorEval.NUM_ERROR.ErrorCode, myResult.ErrorCode);
+            ClassicAssert.AreEqual(ErrorEval.NUM_ERROR.ErrorCode, myResult.ErrorCode);
         }
 
 
@@ -95,7 +95,7 @@ namespace TestCases.SS.Formula.Functions
 
             NumberEval myResult = (NumberEval)invokePoisson(x, mean, true);
 
-            Assert.AreEqual(myResult.NumberValue, result, DELTA);
+            ClassicAssert.AreEqual(myResult.NumberValue, result, DELTA);
         }
         [Test]
         public void TestXZeroMeanZero()
@@ -106,7 +106,7 @@ namespace TestCases.SS.Formula.Functions
 
             NumberEval myResult = (NumberEval)invokePoisson(x, mean, true);
 
-            Assert.AreEqual(myResult.NumberValue, result, DELTA);
+            ClassicAssert.AreEqual(myResult.NumberValue, result, DELTA);
         }
     }
 

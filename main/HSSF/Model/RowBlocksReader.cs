@@ -34,9 +34,9 @@ namespace NPOI.HSSF.Model
     public class RowBlocksReader
     {
 
-        private ArrayList _plainRecords;
-        private SharedValueManager _sfm;
-        private MergeCellsRecord[] _mergedCellsRecords;
+        private readonly ArrayList _plainRecords;
+        private readonly SharedValueManager _sfm;
+        private readonly MergeCellsRecord[] _mergedCellsRecords;
 
         /**
          * Also collects any loose MergeCellRecords and puts them in the supplied
@@ -72,11 +72,11 @@ namespace NPOI.HSSF.Model
                         break;
                     case SharedFormulaRecord.sid:
                         dest = shFrmRecords;
-                        if (!(prevRec is FormulaRecord))
+                        if (prevRec is not FormulaRecord fr)
                         {
                             throw new Exception("Shared formula record should follow a FormulaRecord");
                         }
-                        FormulaRecord fr = (FormulaRecord)prevRec;
+
                         firstCellRefs.Add(new CellReference(fr.Row, fr.Column));
 
                         break;

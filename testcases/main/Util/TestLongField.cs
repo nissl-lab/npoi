@@ -32,7 +32,7 @@ using System.Collections.Generic;
 using System.IO;
 
 
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using NPOI.Util;
 
 namespace TestCases.Util
@@ -71,7 +71,7 @@ namespace TestCases.Util
             }
             LongField field = new LongField(2);
 
-            Assert.AreEqual(0L, field.Value);
+            ClassicAssert.AreEqual(0L, field.Value);
             try
             {
                 new LongField(-1, 1L);
@@ -83,7 +83,7 @@ namespace TestCases.Util
                 // as expected
             }
             field = new LongField(2, 0x123456789ABCDEF0L);
-            Assert.AreEqual(0x123456789ABCDEF0L, field.Value);
+            ClassicAssert.AreEqual(0x123456789ABCDEF0L, field.Value);
             byte[] array = new byte[ 10 ];
 
             try
@@ -97,15 +97,15 @@ namespace TestCases.Util
                 // as expected
             }
             field = new LongField(2, 0x123456789ABCDEF0L, array);
-            Assert.AreEqual(0x123456789ABCDEF0L, field.Value);
-            Assert.AreEqual(( byte ) 0xF0, array[ 2 ]);
-            Assert.AreEqual(( byte ) 0xDE, array[ 3 ]);
-            Assert.AreEqual(( byte ) 0xBC, array[ 4 ]);
-            Assert.AreEqual(( byte ) 0x9A, array[ 5 ]);
-            Assert.AreEqual(( byte ) 0x78, array[ 6 ]);
-            Assert.AreEqual(( byte ) 0x56, array[ 7 ]);
-            Assert.AreEqual(( byte ) 0x34, array[ 8 ]);
-            Assert.AreEqual(( byte ) 0x12, array[ 9 ]);
+            ClassicAssert.AreEqual(0x123456789ABCDEF0L, field.Value);
+            ClassicAssert.AreEqual(( byte ) 0xF0, array[ 2 ]);
+            ClassicAssert.AreEqual(( byte ) 0xDE, array[ 3 ]);
+            ClassicAssert.AreEqual(( byte ) 0xBC, array[ 4 ]);
+            ClassicAssert.AreEqual(( byte ) 0x9A, array[ 5 ]);
+            ClassicAssert.AreEqual(( byte ) 0x78, array[ 6 ]);
+            ClassicAssert.AreEqual(( byte ) 0x56, array[ 7 ]);
+            ClassicAssert.AreEqual(( byte ) 0x34, array[ 8 ]);
+            ClassicAssert.AreEqual(( byte ) 0x12, array[ 9 ]);
             array = new byte[ 9 ];
             try
             {
@@ -121,7 +121,7 @@ namespace TestCases.Util
             {
                 array = new byte[ 8 ];
                 new LongField(0, _test_array[ j ], array);
-                Assert.AreEqual(_test_array[ j ], new LongField(0, array).Value);
+                ClassicAssert.AreEqual(_test_array[ j ], new LongField(0, array).Value);
             }
         }
 
@@ -137,23 +137,23 @@ namespace TestCases.Util
             for (int j = 0; j < _test_array.Length; j++)
             {
                 field.Value=_test_array[ j ];
-                Assert.AreEqual(_test_array[j], field.Value, "testing _1 " + j);
+                ClassicAssert.AreEqual(_test_array[j], field.Value, "testing _1 " + j);
                 field = new LongField(0);
                 field.Set(_test_array[ j ],array);
-                Assert.AreEqual(_test_array[ j ], field.Value,"testing _2 ");
-                Assert.AreEqual(( byte ) (_test_array[ j ] % 256), array[ 0 ],"testing _3.0 " + _test_array[ j ]);
-                Assert.AreEqual(( byte ) ((_test_array[ j ] >> 8) % 256),
+                ClassicAssert.AreEqual(_test_array[ j ], field.Value,"testing _2 ");
+                ClassicAssert.AreEqual(( byte ) (_test_array[ j ] % 256), array[ 0 ],"testing _3.0 " + _test_array[ j ]);
+                ClassicAssert.AreEqual(( byte ) ((_test_array[ j ] >> 8) % 256),
                              array[ 1 ],"testing _3.1 " + _test_array[ j ]);
-                Assert.AreEqual(( byte ) ((_test_array[ j ] >> 16) % 256),
+                ClassicAssert.AreEqual(( byte ) ((_test_array[ j ] >> 16) % 256),
                              array[ 2 ],"testing _3.2 " + _test_array[ j ]);
-                Assert.AreEqual(( byte ) ((_test_array[ j ] >> 24) % 256),
+                ClassicAssert.AreEqual(( byte ) ((_test_array[ j ] >> 24) % 256),
                              array[ 3 ],"testing _3.3 " + _test_array[ j ]);
-                Assert.AreEqual(( byte ) ((_test_array[ j ] >> 32) % 256),array[ 4 ],"testing _3.4 " + _test_array[ j ]);
-                Assert.AreEqual(( byte ) ((_test_array[ j ] >> 40) % 256),
+                ClassicAssert.AreEqual(( byte ) ((_test_array[ j ] >> 32) % 256),array[ 4 ],"testing _3.4 " + _test_array[ j ]);
+                ClassicAssert.AreEqual(( byte ) ((_test_array[ j ] >> 40) % 256),
                              array[ 5 ],"testing _3.5 " + _test_array[ j ]);
-                Assert.AreEqual(( byte ) ((_test_array[ j ] >> 48) % 256),
+                ClassicAssert.AreEqual(( byte ) ((_test_array[ j ] >> 48) % 256),
                              array[6], "testing _3.6 " + _test_array[j]);
-                Assert.AreEqual(( byte ) ((_test_array[ j ] >> 56) % 256),
+                ClassicAssert.AreEqual(( byte ) ((_test_array[ j ] >> 56) % 256),
                              array[7], "testing _3.7 " + _test_array[j]);
             }
         }
@@ -189,7 +189,7 @@ namespace TestCases.Util
                 array[ 6 ] = ( byte ) ((_test_array[ j ] >> 48) % 256);
                 array[ 7 ] = ( byte ) ((_test_array[ j ] >> 56) % 256);
                 field.ReadFromBytes(array);
-                Assert.AreEqual(_test_array[j], field.Value, "testing " + j);
+                ClassicAssert.AreEqual(_test_array[j], field.Value, "testing " + j);
             }
         }
 
@@ -220,7 +220,7 @@ namespace TestCases.Util
             for (int j = 0; j < buffer.Length / 8; j++)
             {
                 field.ReadFromStream(stream);
-                Assert.AreEqual(_test_array[j], field.Value, "Testing " + j);
+                ClassicAssert.AreEqual(_test_array[j], field.Value, "Testing " + j);
             }
         }
 
@@ -247,7 +247,7 @@ namespace TestCases.Util
                 val += ((( long ) array[ 2 ]) << 16) & 0x0000000000FF0000L;
                 val += ((( long ) array[ 1 ]) << 8) & 0x000000000000FF00L;
                 val += (array[ 0 ] & 0x00000000000000FFL);
-                Assert.AreEqual(_test_array[ j ], val,"testing ");
+                ClassicAssert.AreEqual(_test_array[ j ], val,"testing ");
             }
         }
     }

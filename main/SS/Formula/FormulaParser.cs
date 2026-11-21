@@ -19,10 +19,10 @@ namespace NPOI.SS.Formula
 {
 
     using System;
-    using System.Collections;
     using System.Collections.Generic;
     using System.Globalization;
-    using System.Text;
+    using System.Text; 
+    using Cysharp.Text;
     using System.Text.RegularExpressions;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Formula.Constant;
@@ -31,7 +31,6 @@ namespace NPOI.SS.Formula
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
     using NPOI.Util;
-    using SixLabors.Fonts.Unicode;
 
     /// <summary>
     /// Specific exception thrown when a supplied formula does not Parse properly.
@@ -62,8 +61,8 @@ namespace NPOI.SS.Formula
      */
     public class FormulaParser
     {
-        private String _formulaString;
-        private int _formulaLength;
+        private readonly String _formulaString;
+        private readonly int _formulaLength;
         /** points at the next character to be read (after the {@link #look} codepoint) */
         private int _pointer;
 
@@ -85,11 +84,11 @@ namespace NPOI.SS.Formula
          */
         private bool _inIntersection;
 
-        private IFormulaParsingWorkbook _book;
+        private readonly IFormulaParsingWorkbook _book;
         private static SpreadsheetVersion _ssVersion;
 
-        private int _sheetIndex;
-        private int _rowIndex; // 0-based
+        private readonly int _sheetIndex;
+        private readonly int _rowIndex; // 0-based
 
         /**
          * Create the formula Parser, with the string that is To be
@@ -156,7 +155,7 @@ namespace NPOI.SS.Formula
         public static Area3DPxg ParseStructuredReference(String tableText, IFormulaParsingWorkbook workbook, int rowIndex)
         {
             Ptg[] arr = FormulaParser.Parse(tableText, workbook, 0, 0, rowIndex);
-            if (arr.Length != 1 || !(arr[0] is Area3DPxg) ) {
+            if (arr.Length != 1 || arr[0] is not Area3DPxg ) {
                 throw new InvalidOperationException("Illegal structured reference");
             }
             return (Area3DPxg)arr[0];
@@ -199,7 +198,7 @@ namespace NPOI.SS.Formula
         }
 
         /** Report What Was Expected */
-        private Exception expected(String s)
+        private FormulaParseException expected(String s)
         {
             String msg;
 
@@ -220,18 +219,18 @@ namespace NPOI.SS.Formula
         /** Recognize an Alpha Character */
         private static bool IsAlpha(int c)
         {
-            return CodePoint.IsLetter(new CodePoint(c)) || c == '$' || c == '_';
+            return char.IsLetter(char.ConvertFromUtf32(c), 0) || c == '$' || c == '_';
         }
 
         private static bool IsLetter(int c)
         {
-            return CodePoint.IsLetter(new CodePoint(c));
+            return char.IsLetter(char.ConvertFromUtf32(c), 0);
         }
 
         /** Recognize a Decimal Digit */
         private static bool IsDigit(int c)
         {
-            return CodePoint.IsDigit(new CodePoint(c));
+            return char.IsDigit(char.ConvertFromUtf32(c), 0);
         }
 
         /** Recognize an Alphanumeric */
@@ -248,7 +247,7 @@ namespace NPOI.SS.Formula
 
         private static bool IsLetterOrDigit(int c)
         {
-            return CodePoint.IsLetterOrDigit(new CodePoint(c));
+            return char.IsLetterOrDigit(char.ConvertFromUtf32(c), 0);
         }
 
         /** Skip Over Leading White Space */
@@ -279,8 +278,10 @@ namespace NPOI.SS.Formula
             {
                 throw expected("unquoted identifier");
             }
-            StringBuilder sb = new StringBuilder();
-            while (IsLetterOrDigit(look) || look == '.')
+
+            using var sb = ZString.CreateStringBuilder();
+
+            while(IsLetterOrDigit(look) || look == '.')
             {
                 sb.Append(char.ConvertFromUtf32(look));
                 GetChar();
@@ -421,7 +422,7 @@ namespace NPOI.SS.Formula
         /**
          * @param currentParsePosition used to format a potential error message
          */
-        private void CheckValidRangeOperand(String sideName, int currentParsePosition, ParseNode pn)
+        private static void CheckValidRangeOperand(String sideName, int currentParsePosition, ParseNode pn)
         {
             if (!IsValidRangeOperand(pn))
             {
@@ -434,7 +435,7 @@ namespace NPOI.SS.Formula
           * @return false if sub-expression represented the specified ParseNode definitely
           * cannot appear on either side of the range (':') operator
           */
-        private bool IsValidRangeOperand(ParseNode a)
+        private static bool IsValidRangeOperand(ParseNode a)
         {
             Ptg tkn = a.GetToken();
             // Note - order is important for these instance-of checks
@@ -445,11 +446,12 @@ namespace NPOI.SS.Formula
             }
 
             // next 2 are special cases of OperationPtg
-            if (tkn is AbstractFunctionPtg)
+            if (tkn is AbstractFunctionPtg afp)
             {
-                AbstractFunctionPtg afp = (AbstractFunctionPtg)tkn;
                 byte returnClass = afp.DefaultOperandClass;
-                return Ptg.CLASS_REF == returnClass;
+                //CLASS_VALUE was added as valid to support example 6 in
+                //https://support.microsoft.com/en-us/office/xlookup-function-b7fd680e-6d10-43e6-84f9-88eae8bf5929
+                return Ptg.CLASS_REF == returnClass || Ptg.CLASS_VALUE == returnClass;
             }
             if (tkn is ValueOperatorPtg)
             {
@@ -664,11 +666,11 @@ namespace NPOI.SS.Formula
             return ParseNonRange(savePointer);
         }
 
-        private static String specHeaders = "Headers";
-        private static String specAll = "All";
-        private static String specData = "Data";
-        private static String specTotals = "Totals";
-        private static String specThisRow = "This Row";
+        private static readonly String specHeaders = "Headers";
+        private static readonly String specAll = "All";
+        private static readonly String specData = "Data";
+        private static readonly String specTotals = "Totals";
+        private static readonly String specThisRow = "This Row";
 
         /**
          * Parses a structured reference, returns it as area reference.
@@ -861,7 +863,7 @@ namespace NPOI.SS.Formula
             // Done reading from input stream
             // Ok to return now
 
-            if (isTotalsSpec && !tbl.IsHasTotalsRow)
+            if (isTotalsSpec && tbl.TotalsRowCount == 0)
             {
                 return new ParseNode(ErrPtg.REF_INVALID);
             }
@@ -893,7 +895,7 @@ namespace NPOI.SS.Formula
                 }
                 else if (isDataSpec && isHeadersSpec)
                 {
-                    if (tbl.IsHasTotalsRow)
+                    if (tbl.TotalsRowCount > 0)
                     {
                         actualEndRow = endRow - 1;
                     }
@@ -905,7 +907,7 @@ namespace NPOI.SS.Formula
                 else if (nSpecQuantifiers == 1 && isDataSpec)
                 {
                     actualStartRow = startRow + 1;
-                    if (tbl.IsHasTotalsRow)
+                    if (tbl.TotalsRowCount > 0)
                     {
                         actualEndRow = endRow - 1;
                     }
@@ -931,13 +933,17 @@ namespace NPOI.SS.Formula
             else
             {
                 if (isThisRow)
-                { // there is a @
+                { 
+                    // there is a @
                     actualStartRow = _rowIndex; //The rowNum is 0 based
                     actualEndRow = _rowIndex;
                 }
                 else
-                { // Really no special quantifiers
+                { 
+                    // Really no special quantifiers
                     actualStartRow++;
+                    if (tbl.TotalsRowCount > 0)
+                        actualEndRow--;
                 }
             }
             //Selecting cols
@@ -974,7 +980,7 @@ namespace NPOI.SS.Formula
             CellReference topLeft = new CellReference(actualStartRow, actualStartCol);
             CellReference bottomRight = new CellReference(actualEndRow, actualEndCol);
             SheetIdentifier sheetIden = new SheetIdentifier(null, new NameIdentifier(sheetName, true));
-            Ptg ptg = _book.Get3DReferencePtg(new AreaReference(topLeft, bottomRight), sheetIden);
+            Ptg ptg = _book.Get3DReferencePtg(new AreaReference(topLeft, bottomRight, _ssVersion), sheetIden);
             return new ParseNode(ptg);
         }
 
@@ -1099,10 +1105,10 @@ namespace NPOI.SS.Formula
 
         private String ParseAsName()
         {
-            StringBuilder sb = new StringBuilder();
+            using var sb = ZString.CreateStringBuilder();
 
             // defined names may begin with a letter or underscore  or backslash
-            if (!IsLetter(look) && look != '_' && look != '\\')
+            if(!IsLetter(look) && look != '_' && look != '\\')
             {
                 throw expected("number, string, defined name, or data table");
             }
@@ -1190,9 +1196,8 @@ namespace NPOI.SS.Formula
             {
                 return AreaReference.GetWholeColumn(_ssVersion, part1.Rep, part2.Rep);
             }
-            return new AreaReference(part1.CellReference, part2.CellReference);
+            return new AreaReference(part1.CellReference, part2.CellReference, _ssVersion);
         }
-
 
         /**
           * Parses out a potential LHS or RHS of a ':' intended to produce a plain AreaRef.  Normally these are
@@ -1283,23 +1288,20 @@ namespace NPOI.SS.Formula
          */
         private static Ptg ReduceRangeExpression(Ptg ptgA, Ptg ptgB)
         {
-            if (!(ptgB is RefPtg))
+            if (ptgB is not RefPtg refB)
             {
                 // only when second ref is simple 2-D ref can the range 
                 // expression be converted To an area ref
                 return null;
             }
-            RefPtg refB = (RefPtg)ptgB;
 
-            if (ptgA is RefPtg)
+            if (ptgA is RefPtg a)
             {
-                RefPtg refA = (RefPtg)ptgA;
-                return new AreaPtg(refA.Row, refB.Row, refA.Column, refB.Column,
-                        refA.IsRowRelative, refB.IsRowRelative, refA.IsColRelative, refB.IsColRelative);
+                return new AreaPtg(a.Row, refB.Row, a.Column, refB.Column,
+                        a.IsRowRelative, refB.IsRowRelative, a.IsColRelative, refB.IsColRelative);
             }
-            if (ptgA is Ref3DPtg)
+            if (ptgA is Ref3DPtg refA)
             {
-                Ref3DPtg refA = (Ref3DPtg)ptgA;
                 return new Area3DPtg(refA.Row, refB.Row, refA.Column, refB.Column,
                         refA.IsRowRelative, refB.IsRowRelative, refA.IsColRelative, refB.IsColRelative,
                         refA.ExternSheetIndex);
@@ -1311,7 +1313,7 @@ namespace NPOI.SS.Formula
         /**
          * A1, $A1, A$1, $A$1, A, 1
          */
-        private class SimpleRangePart
+        private sealed class SimpleRangePart
         {
             public enum PartType
             {
@@ -1331,8 +1333,8 @@ namespace NPOI.SS.Formula
                 return PartType.Row;
             }
 
-            private PartType _type;
-            private String _rep;
+            private readonly PartType _type;
+            private readonly String _rep;
 
             public SimpleRangePart(String rep, bool hasLetters, bool hasNumbers)
             {
@@ -1415,7 +1417,8 @@ namespace NPOI.SS.Formula
 
         private String GetBookName()
         {
-            StringBuilder sb = new StringBuilder();
+            using var sb = ZString.CreateStringBuilder();
+
             GetChar();
             while (look != ']')
             {
@@ -1450,7 +1453,8 @@ namespace NPOI.SS.Formula
                     bookName = GetBookName();
                 }
 
-                StringBuilder sb = new StringBuilder();
+                using var sb = ZString.CreateStringBuilder();
+
                 bool done = look == '\'';
                 while (!done)
                 {
@@ -1482,9 +1486,9 @@ namespace NPOI.SS.Formula
             // unquoted sheet names must start with underscore or a letter
             if (look == '_' || IsLetter(look))
             {
-                StringBuilder sb = new StringBuilder();
+                using var sb = ZString.CreateStringBuilder();
                 // can concatenate idens with dots
-                while (IsUnquotedSheetNameChar(look))
+                while (FormulaParser.IsUnquotedSheetNameChar(look))
                 {
                     sb.Append(char.ConvertFromUtf32(look));
                     GetChar();
@@ -1514,10 +1518,10 @@ namespace NPOI.SS.Formula
         }
 
         /**
-         * If we have something that looks like [book]Sheet1: or 
+         * If we have something that looks like [book]Sheet1: or
          *  Sheet1, see if it's actually a range eg Sheet1:Sheet2!
          */
-        private SheetIdentifier ParseSheetRange(String bookname, NameIdentifier sheet1Name)
+        private SheetRangeIdentifier ParseSheetRange(String bookname, NameIdentifier sheet1Name)
         {
             GetChar();
             SheetIdentifier sheet2 = ParseSheetName();
@@ -1530,7 +1534,7 @@ namespace NPOI.SS.Formula
         /**
           * very similar to {@link SheetNameFormatter#isSpecialChar(char)}
           */
-        private bool IsUnquotedSheetNameChar(int ch)
+        private static bool IsUnquotedSheetNameChar(int ch)
         {
             if (IsLetterOrDigit(ch))
             {
@@ -1795,7 +1799,7 @@ namespace NPOI.SS.Formula
         private ParseNode[] Arguments()
         {
             //average 2 args per Function
-            ArrayList temp = new ArrayList(2);
+            List<ParseNode> temp = new List<ParseNode>(2);
             SkipWhite();
             if (look == ')')
             {
@@ -1831,7 +1835,7 @@ namespace NPOI.SS.Formula
                     throw expected("',' or ')'");
                 }
             }
-            ParseNode[] result = (ParseNode[])temp.ToArray(typeof(ParseNode));
+            ParseNode[] result = temp.ToArray();
             return result;
         }
 
@@ -1921,22 +1925,22 @@ namespace NPOI.SS.Formula
                 // + or - directly next to a number is parsed with the number
 
                 Ptg token = factor.GetToken();
-                if (token is NumberPtg)
+                if (token is NumberPtg ptg)
                 {
                     if (isPlus)
                     {
                         return factor;
                     }
-                    token = new NumberPtg(-((NumberPtg)token).Value);
+                    token = new NumberPtg(-ptg.Value);
                     return new ParseNode(token);
                 }
-                if (token is IntPtg)
+                if (token is IntPtg intPtg)
                 {
                     if (isPlus)
                     {
                         return factor;
                     }
-                    int intVal = ((IntPtg)token).Value;
+                    int intVal = intPtg.Value;
                     // note - cannot use IntPtg for negatives
                     token = new NumberPtg(-intVal);
                     return new ParseNode(token);
@@ -1970,7 +1974,8 @@ namespace NPOI.SS.Formula
 
             return new ParseNode(new ArrayPtg(values2d));
         }
-        private void CheckRowLengths(Object[][] values2d, int nColumns)
+
+        private static void CheckRowLengths(Object[][] values2d, int nColumns)
         {
             for (int i = 0; i < values2d.Length; i++)
             {
@@ -1985,7 +1990,7 @@ namespace NPOI.SS.Formula
 
         private Object[] ParseArrayRow()
         {
-            ArrayList temp = new ArrayList();
+            List<object> temp = new List<object>();
             while (true)
             {
                 temp.Add(ParseArrayItem());
@@ -2005,9 +2010,7 @@ namespace NPOI.SS.Formula
                 break;
             }
 
-            Object[] result = new Object[temp.Count];
-            result = temp.ToArray();
-            return result;
+            return temp.ToArray();
         }
 
         private Object ParseArrayItem()
@@ -2048,13 +2051,13 @@ namespace NPOI.SS.Formula
         private static Double ConvertArrayNumber(Ptg ptg, bool isPositive)
         {
             double value;
-            if (ptg is IntPtg)
+            if (ptg is IntPtg intPtg)
             {
-                value = ((IntPtg)ptg).Value;
+                value = intPtg.Value;
             }
-            else if (ptg is NumberPtg)
+            else if (ptg is NumberPtg numberPtg)
             {
-                value = ((NumberPtg)ptg).Value;
+                value = numberPtg.Value;
             }
             else
             {
@@ -2196,7 +2199,7 @@ namespace NPOI.SS.Formula
          */
         private static Ptg GetNumberPtgFromString(String number1, String number2, String exponent)
         {
-            StringBuilder number = new StringBuilder();
+            using var number = ZString.CreateStringBuilder();
 
             if (number2 == null)
             {
@@ -2251,7 +2254,7 @@ namespace NPOI.SS.Formula
         {
             Match('"');
 
-            StringBuilder Token = new StringBuilder();
+            using var Token = ZString.CreateStringBuilder();
             while (true)
             {
                 if (look == '"')
@@ -2314,7 +2317,7 @@ namespace NPOI.SS.Formula
             }
         }
 
-        private Ptg GetComparisonToken()
+        private ValueOperatorPtg GetComparisonToken()
         {
             if (look == '=')
             {

@@ -20,7 +20,7 @@ using NPOI.Util;
 using NPOI.XSSF;
 using NPOI.XSSF.Model;
 using NPOI.XSSF.UserModel;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using System.IO;
 namespace TestCases.XSSF.Model
 {
@@ -52,14 +52,14 @@ namespace TestCases.XSSF.Model
 
                     CT_MapInfo ctMapInfo = mapInfo.GetCTMapInfo();
 
-                    Assert.IsNotNull(ctMapInfo);
+                    ClassicAssert.IsNotNull(ctMapInfo);
 
-                    Assert.AreEqual(1, ctMapInfo.Schema.Count);
+                    ClassicAssert.AreEqual(1, ctMapInfo.Schema.Count);
 
                     foreach (XSSFMap map in mapInfo.GetAllXSSFMaps())
                     {
                         string xmlSchema = map.GetSchema();
-                        Assert.IsNotNull(xmlSchema);
+                        ClassicAssert.IsNotNull(xmlSchema);
                     }
                 }
             }
@@ -75,8 +75,8 @@ namespace TestCases.XSSF.Model
                 }
 
             }
-            Assert.IsNotNull(mapInfo);
-            Assert.IsNotNull(SingleXMLCells);
+            ClassicAssert.IsNotNull(mapInfo);
+            ClassicAssert.IsNotNull(SingleXMLCells);
         }
 
         [Test]
@@ -102,29 +102,29 @@ namespace TestCases.XSSF.Model
                     MapInfo mapInfo = (MapInfo) p;
                     CT_MapInfo ctMapInfo = mapInfo.GetCTMapInfo();
 
-                    Assert.IsNotNull(ctMapInfo);
+                    ClassicAssert.IsNotNull(ctMapInfo);
 
-                    Assert.AreEqual(1, ctMapInfo.Schema.Count);
-                    Assert.AreEqual("Schema1", ctMapInfo.Schema[0].ID);
-                    Assert.AreEqual(1, ctMapInfo.Map.Count);
+                    ClassicAssert.AreEqual(1, ctMapInfo.Schema.Count);
+                    ClassicAssert.AreEqual("Schema1", ctMapInfo.Schema[0].ID);
+                    ClassicAssert.AreEqual(1, ctMapInfo.Map.Count);
                     CT_Map map = ctMapInfo.Map[0];
-                    Assert.IsNotNull(map);
-                    Assert.AreEqual(1, map.ID);
-                    Assert.AreEqual("DataList_Map", map.Name);
-                    Assert.AreEqual("DataList", map.RootElement);
-                    Assert.AreEqual("Schema1", map.SchemaID);
-                    Assert.IsFalse(map.ShowImportExportValidationErrors);
-                    Assert.IsTrue(map.AutoFit);
-                    Assert.IsFalse(map.Append);
-                    Assert.IsTrue(map.PreserveSortAFLayout);
-                    Assert.IsTrue(map.PreserveFormat);
+                    ClassicAssert.IsNotNull(map);
+                    ClassicAssert.AreEqual(1, map.ID);
+                    ClassicAssert.AreEqual("DataList_Map", map.Name);
+                    ClassicAssert.AreEqual("DataList", map.RootElement);
+                    ClassicAssert.AreEqual("Schema1", map.SchemaID);
+                    ClassicAssert.IsFalse(map.ShowImportExportValidationErrors);
+                    ClassicAssert.IsTrue(map.AutoFit);
+                    ClassicAssert.IsFalse(map.Append);
+                    ClassicAssert.IsTrue(map.PreserveSortAFLayout);
+                    ClassicAssert.IsTrue(map.PreserveFormat);
 
-                    Assert.IsNotNull(map.DataBinding);
-                    Assert.AreEqual(1, map.DataBinding.ConnectionID);
-                    Assert.IsTrue(map.DataBinding.FileBinding);
-                    Assert.IsNull(map.DataBinding.DataBindingName);
-                    Assert.IsNull(map.DataBinding.FileBindingName);
-                    Assert.AreEqual(1,map.DataBinding.DataBindingLoadMode);
+                    ClassicAssert.IsNotNull(map.DataBinding);
+                    ClassicAssert.AreEqual(1, map.DataBinding.ConnectionID);
+                    ClassicAssert.IsTrue(map.DataBinding.FileBinding);
+                    ClassicAssert.IsNull(map.DataBinding.DataBindingName);
+                    ClassicAssert.IsNull(map.DataBinding.FileBindingName);
+                    ClassicAssert.AreEqual(1,map.DataBinding.DataBindingLoadMode);
                 }
             }
         }

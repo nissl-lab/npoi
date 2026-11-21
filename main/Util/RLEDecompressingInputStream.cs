@@ -309,7 +309,7 @@ namespace NPOI.Util
             return ReadInt(this);
         }
 
-        private int ReadShort(Stream stream)
+        private static int ReadShort(Stream stream)
         {
             int b0, b1;
             if ((b0 = stream.ReadByte()) == -1)
@@ -323,7 +323,7 @@ namespace NPOI.Util
             return (b0 & 0xFF) | ((b1 & 0xFF) << 8);
         }
 
-        private int ReadInt(InputStream stream)
+        private static int ReadInt(RLEDecompressingInputStream stream)
         {
             int b0, b1, b2, b3;
             if ((b0 = stream.Read()) == -1)
@@ -352,9 +352,9 @@ namespace NPOI.Util
 
         public static byte[] Decompress(byte[] compressed, int offset, int length)
         {
-            MemoryStream out1 = new MemoryStream();
-            Stream instream = new MemoryStream(compressed, offset, length);
-            InputStream stream = new RLEDecompressingInputStream(instream);
+            using MemoryStream out1 = new MemoryStream();
+            using Stream instream = new MemoryStream(compressed, offset, length);
+            using RLEDecompressingInputStream stream = new RLEDecompressingInputStream(instream);
             IOUtils.Copy(stream, out1);
             stream.Close();
             out1.Close();

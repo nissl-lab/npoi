@@ -32,13 +32,14 @@ namespace NPOI.XWPF.Extractor
     public class XWPFWordExtractor : POIXMLTextExtractor
     {
         public static XWPFRelation[] SUPPORTED_TYPES = new XWPFRelation[] {
-      XWPFRelation.DOCUMENT, XWPFRelation.TEMPLATE,
-      XWPFRelation.MACRO_DOCUMENT, 
-      XWPFRelation.MACRO_TEMPLATE_DOCUMENT
-   };
+            XWPFRelation.DOCUMENT, XWPFRelation.TEMPLATE,
+            XWPFRelation.MACRO_DOCUMENT, 
+            XWPFRelation.MACRO_TEMPLATE_DOCUMENT
+        };
 
         private XWPFDocument document;
         private bool fetchHyperlinks = false;
+        private bool concatenatePhoneticRuns = true;
 
         public XWPFWordExtractor(OPCPackage Container)
             : this(new XWPFDocument(Container))
@@ -62,6 +63,13 @@ namespace NPOI.XWPF.Extractor
             fetchHyperlinks = fetch;
         }
 
+        /**
+         * Should we concatenate phonetic runs in extraction.  Default is <code>true</code>
+         * @param concatenatePhoneticRuns
+         */
+        public void SetConcatenatePhoneticRuns(bool concatenatePhoneticRuns) {
+            this.concatenatePhoneticRuns = concatenatePhoneticRuns;
+        }
 
         public override String Text
         {
@@ -71,7 +79,7 @@ namespace NPOI.XWPF.Extractor
                 XWPFHeaderFooterPolicy hfPolicy = document.GetHeaderFooterPolicy();
 
                 // Start out with all headers
-                ExtractHeaders(text, hfPolicy);
+                XWPFWordExtractor.ExtractHeaders(text, hfPolicy);
 
                 // body elements
                 foreach (IBodyElement e in document.BodyElements)
@@ -89,17 +97,17 @@ namespace NPOI.XWPF.Extractor
 
         public void AppendBodyElementText(StringBuilder text, IBodyElement e)
         {
-            if (e is XWPFParagraph)
+            if (e is XWPFParagraph paragraph)
             {
-                AppendParagraphText(text, (XWPFParagraph)e);
+                AppendParagraphText(text, paragraph);
             }
-            else if (e is XWPFTable)
+            else if (e is XWPFTable table)
             {
-                AppendTableText(text, (XWPFTable)e);
+                AppendTableText(text, table);
             }
-            else if (e is XWPFSDT)
+            else if (e is XWPFSDT xwpfsdt)
             {
-                text.Append(((XWPFSDT)e).Content.Text);
+                text.Append(xwpfsdt.Content.Text);
             }
         }
 
@@ -118,16 +126,23 @@ namespace NPOI.XWPF.Extractor
                 if (ctSectPr != null)
                 {
                     headerFooterPolicy = new XWPFHeaderFooterPolicy(document, ctSectPr);
-                    ExtractHeaders(text, headerFooterPolicy);
+                    XWPFWordExtractor.ExtractHeaders(text, headerFooterPolicy);
                 }
 
 
                 foreach (IRunElement run in paragraph.Runs)
                 {
-                    text.Append(run.ToString());
-                    if (run is XWPFHyperlinkRun && fetchHyperlinks)
+                    if (!concatenatePhoneticRuns && run is XWPFRun xr)
                     {
-                        XWPFHyperlink link = ((XWPFHyperlinkRun)run).GetHyperlink(document);
+                        text.Append(xr.GetText());
+                    }
+                    else
+                    {
+                        text.Append(run.ToString());
+                    }
+                    if (run is XWPFHyperlinkRun hyperlinkRun && fetchHyperlinks)
+                    {
+                        XWPFHyperlink link = hyperlinkRun.GetHyperlink(document);
                         if (link != null)
                             text.Append(" <" + link.URL + ">");
                     }
@@ -164,7 +179,7 @@ namespace NPOI.XWPF.Extractor
 
         }
 
-        private void AppendTableText(StringBuilder text, XWPFTable table)
+        private static void AppendTableText(StringBuilder text, XWPFTable table)
         {
             //this works recursively to pull embedded tables from tables
             foreach (XWPFTableRow row in table.Rows)
@@ -173,13 +188,13 @@ namespace NPOI.XWPF.Extractor
                 for (int i = 0; i < cells.Count; i++)
                 {
                     ICell cell = cells[(i)];
-                    if (cell is XWPFTableCell)
+                    if (cell is XWPFTableCell tableCell)
                     {
-                        text.Append(((XWPFTableCell)cell).GetTextRecursively());
+                        text.Append(tableCell.GetTextRecursively());
                     }
-                    else if (cell is XWPFSDTCell)
+                    else if (cell is XWPFSDTCell xwpfsdtCell)
                     {
-                        text.Append(((XWPFSDTCell)cell).Content.Text);
+                        text.Append(xwpfsdtCell.Content.Text);
                     }
                     if (i < cells.Count - 1)
                     {
@@ -190,7 +205,7 @@ namespace NPOI.XWPF.Extractor
             }
         }
 
-        private void ExtractFooters(StringBuilder text, XWPFHeaderFooterPolicy hfPolicy)
+        private static void ExtractFooters(StringBuilder text, XWPFHeaderFooterPolicy hfPolicy)
         {
             if (hfPolicy == null) return;
             if (hfPolicy.GetFirstPageFooter() != null)
@@ -207,7 +222,7 @@ namespace NPOI.XWPF.Extractor
             }
         }
 
-        private void ExtractHeaders(StringBuilder text, XWPFHeaderFooterPolicy hfPolicy)
+        private static void ExtractHeaders(StringBuilder text, XWPFHeaderFooterPolicy hfPolicy)
         {
             if (hfPolicy == null) return;
             if (hfPolicy.GetFirstPageHeader() != null)

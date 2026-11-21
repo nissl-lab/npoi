@@ -50,9 +50,8 @@ namespace NPOI.SS.Formula.Functions
         public override ValueEval Evaluate(int srcRowIndex, int srcColumnIndex, ValueEval numberVE)
         {
             String number;
-            if (numberVE is RefEval)
+            if (numberVE is RefEval re)
             {
-                RefEval re = (RefEval)numberVE;
                 number = OperandResolver.CoerceValueToString(re.GetInnerValueEval(re.FirstSheetIndex));
             }
             else
@@ -76,7 +75,7 @@ namespace NPOI.SS.Formula.Functions
             else
             {
                 unsigned = number.Substring(1);
-                isPositive = number.StartsWith("0");
+                isPositive = number.StartsWith('0');
             }
 
             String value;
@@ -109,7 +108,7 @@ namespace NPOI.SS.Formula.Functions
             return new NumberEval(long.Parse(value));
         }
 
-        private int getDecimalValue(String unsigned)
+        private static int getDecimalValue(String unsigned)
         {
             int sum = 0;
             int numBits = unsigned.Length;

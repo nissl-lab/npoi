@@ -20,7 +20,7 @@ namespace TestCases.HSSF.UserModel
 {
     using System;
     using TestCases.SS.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     [TestFixture]
     public class TestSheetHiding:BaseTestSheetHiding

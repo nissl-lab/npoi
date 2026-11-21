@@ -20,7 +20,7 @@ namespace TestCases.HSSF.UserModel
     using System;
     using System.Collections;
     using NPOI.HSSF.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.SS.UserModel;
 
     /**
@@ -65,9 +65,9 @@ namespace TestCases.HSSF.UserModel
             s2r1c1.CellFormula = ("S1!A1");
 
             // Not Evaluated yet
-            Assert.AreEqual(0.0, s1r1c3.NumericCellValue, 0);
-            Assert.AreEqual(0.0, s1r2c3.NumericCellValue, 0);
-            Assert.AreEqual(0.0, s2r1c1.NumericCellValue, 0);
+            ClassicAssert.AreEqual(0.0, s1r1c3.NumericCellValue, 0);
+            ClassicAssert.AreEqual(0.0, s1r2c3.NumericCellValue, 0);
+            ClassicAssert.AreEqual(0.0, s2r1c1.NumericCellValue, 0);
 
             // Do a full Evaluate, as per our docs
             // uses EvaluateFormulaCell()
@@ -88,24 +88,24 @@ namespace TestCases.HSSF.UserModel
                             evaluator.EvaluateFormulaCell(c);
 
                             // For Testing - all should be numeric
-                            Assert.AreEqual(CellType.Numeric, evaluator.EvaluateFormulaCell(c));
+                            ClassicAssert.AreEqual(CellType.Numeric, evaluator.EvaluateFormulaCell(c));
                         }
                     }
                 }
             }
 
             // Check now as expected
-            Assert.AreEqual(55.7, wb.GetSheetAt(0).GetRow(0).GetCell(2).NumericCellValue, 0);
-            Assert.AreEqual("SUM(A1:B1)", wb.GetSheetAt(0).GetRow(0).GetCell(2).CellFormula);
-            Assert.AreEqual(CellType.Formula, wb.GetSheetAt(0).GetRow(0).GetCell(2).CellType);
+            ClassicAssert.AreEqual(55.7, wb.GetSheetAt(0).GetRow(0).GetCell(2).NumericCellValue, 0);
+            ClassicAssert.AreEqual("SUM(A1:B1)", wb.GetSheetAt(0).GetRow(0).GetCell(2).CellFormula);
+            ClassicAssert.AreEqual(CellType.Formula, wb.GetSheetAt(0).GetRow(0).GetCell(2).CellType);
 
-            Assert.AreEqual(-4.6, wb.GetSheetAt(0).GetRow(1).GetCell(2).NumericCellValue, 0);
-            Assert.AreEqual("SUM(A2:B2)", wb.GetSheetAt(0).GetRow(1).GetCell(2).CellFormula);
-            Assert.AreEqual(CellType.Formula, wb.GetSheetAt(0).GetRow(1).GetCell(2).CellType);
+            ClassicAssert.AreEqual(-4.6, wb.GetSheetAt(0).GetRow(1).GetCell(2).NumericCellValue, 0);
+            ClassicAssert.AreEqual("SUM(A2:B2)", wb.GetSheetAt(0).GetRow(1).GetCell(2).CellFormula);
+            ClassicAssert.AreEqual(CellType.Formula, wb.GetSheetAt(0).GetRow(1).GetCell(2).CellType);
 
-            Assert.AreEqual(22.3, wb.GetSheetAt(1).GetRow(0).GetCell(0).NumericCellValue, 0);
-            Assert.AreEqual("'S1'!A1", wb.GetSheetAt(1).GetRow(0).GetCell(0).CellFormula);
-            Assert.AreEqual(CellType.Formula, wb.GetSheetAt(1).GetRow(0).GetCell(0).CellType);
+            ClassicAssert.AreEqual(22.3, wb.GetSheetAt(1).GetRow(0).GetCell(0).NumericCellValue, 0);
+            ClassicAssert.AreEqual("'S1'!A1", wb.GetSheetAt(1).GetRow(0).GetCell(0).CellFormula);
+            ClassicAssert.AreEqual(CellType.Formula, wb.GetSheetAt(1).GetRow(0).GetCell(0).CellType);
 
 
             // Now do the alternate call, which zaps the formulas
@@ -126,14 +126,14 @@ namespace TestCases.HSSF.UserModel
                 }
             }
 
-            Assert.AreEqual(55.7, wb.GetSheetAt(0).GetRow(0).GetCell(2).NumericCellValue, 0);
-            Assert.AreEqual(CellType.Numeric, wb.GetSheetAt(0).GetRow(0).GetCell(2).CellType);
+            ClassicAssert.AreEqual(55.7, wb.GetSheetAt(0).GetRow(0).GetCell(2).NumericCellValue, 0);
+            ClassicAssert.AreEqual(CellType.Numeric, wb.GetSheetAt(0).GetRow(0).GetCell(2).CellType);
 
-            Assert.AreEqual(-4.6, wb.GetSheetAt(0).GetRow(1).GetCell(2).NumericCellValue, 0);
-            Assert.AreEqual(CellType.Numeric, wb.GetSheetAt(0).GetRow(1).GetCell(2).CellType);
+            ClassicAssert.AreEqual(-4.6, wb.GetSheetAt(0).GetRow(1).GetCell(2).NumericCellValue, 0);
+            ClassicAssert.AreEqual(CellType.Numeric, wb.GetSheetAt(0).GetRow(1).GetCell(2).CellType);
 
-            Assert.AreEqual(22.3, wb.GetSheetAt(1).GetRow(0).GetCell(0).NumericCellValue, 0);
-            Assert.AreEqual(CellType.Numeric, wb.GetSheetAt(1).GetRow(0).GetCell(0).CellType);
+            ClassicAssert.AreEqual(22.3, wb.GetSheetAt(1).GetRow(0).GetCell(0).NumericCellValue, 0);
+            ClassicAssert.AreEqual(CellType.Numeric, wb.GetSheetAt(1).GetRow(0).GetCell(0).CellType);
         }
     }
 }

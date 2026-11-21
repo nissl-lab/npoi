@@ -21,7 +21,7 @@ namespace TestCases.XSSF.UserModel
     using NPOI.SS.UserModel;
     using NPOI.XSSF;
     using NPOI.XSSF.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     [TestFixture]
     public class TestXSSFSheetRowGrouping
@@ -92,7 +92,7 @@ namespace TestCases.XSSF.UserModel
             //        } finally {
             //            fileOut.Close();
             //        }
-            Assert.IsNotNull(XSSFTestDataSamples.WriteOutAndReadBack(p_wb));
+            ClassicAssert.IsNotNull(XSSFTestDataSamples.WriteOutAndReadBack(p_wb));
         }
 
         [Test]
@@ -326,9 +326,9 @@ namespace TestCases.XSSF.UserModel
             printWorkbook(wb);
             ISheet sheet = wb.GetSheetAt(0);
 
-            Assert.AreEqual(collapsed.Length, hidden.Length);
-            Assert.AreEqual(collapsed.Length, outlineLevel.Length);
-            Assert.AreEqual(collapsed.Length, sheet.LastRowNum - sheet.FirstRowNum + 1,
+            ClassicAssert.AreEqual(collapsed.Length, hidden.Length);
+            ClassicAssert.AreEqual(collapsed.Length, outlineLevel.Length);
+            ClassicAssert.AreEqual(collapsed.Length, sheet.LastRowNum - sheet.FirstRowNum + 1,
                 "Expected " + collapsed.Length + " rows with collapsed state, but had " + (sheet.LastRowNum - sheet.FirstRowNum + 1) + " rows ("
                     + sheet.FirstRowNum + "-" + sheet.LastRowNum + ")");
             for (int i = sheet.FirstRowNum; i < sheet.LastRowNum; i++)
@@ -338,12 +338,12 @@ namespace TestCases.XSSF.UserModel
                     continue;
                 }
                 XSSFRow row = (XSSFRow)sheet.GetRow(i);
-                Assert.IsNotNull(row, "Could not read row " + i);
-                Assert.IsNotNull(row.GetCTRow(), "Could not read row " + i);
-                Assert.AreEqual(collapsed[i - sheet.FirstRowNum], row.GetCTRow().collapsed, "Row: " + i + ": collapsed");
-                Assert.AreEqual(hidden[i - sheet.FirstRowNum], row.GetCTRow().hidden, "Row: " + i + ": hidden");
+                ClassicAssert.IsNotNull(row, "Could not read row " + i);
+                ClassicAssert.IsNotNull(row.GetCTRow(), "Could not read row " + i);
+                ClassicAssert.AreEqual(collapsed[i - sheet.FirstRowNum], row.GetCTRow().collapsed, "Row: " + i + ": collapsed");
+                ClassicAssert.AreEqual(hidden[i - sheet.FirstRowNum], row.GetCTRow().hidden, "Row: " + i + ": hidden");
 
-                Assert.AreEqual(outlineLevel[i - sheet.FirstRowNum], row.GetCTRow().outlineLevel, "Row: " + i + ": level");
+                ClassicAssert.AreEqual(outlineLevel[i - sheet.FirstRowNum], row.GetCTRow().outlineLevel, "Row: " + i + ": level");
             }
 
             WriteToFile(wb);
@@ -353,9 +353,9 @@ namespace TestCases.XSSF.UserModel
             printWorkbook(wb);
             ISheet sheet = wb.GetSheetAt(0);
 
-            Assert.AreEqual(collapsed.Length, hidden.Length);
-            Assert.AreEqual(collapsed.Length, outlineLevel.Length);
-            Assert.AreEqual(collapsed.Length, sheet.LastRowNum - sheet.FirstRowNum + 1,
+            ClassicAssert.AreEqual(collapsed.Length, hidden.Length);
+            ClassicAssert.AreEqual(collapsed.Length, outlineLevel.Length);
+            ClassicAssert.AreEqual(collapsed.Length, sheet.LastRowNum - sheet.FirstRowNum + 1,
                 "Expected " + collapsed.Length + " rows with collapsed state, but had " + (sheet.LastRowNum - sheet.FirstRowNum + 1) + " rows ("
                     + sheet.FirstRowNum + "-" + sheet.LastRowNum + ")");
             for (int i = sheet.FirstRowNum; i < sheet.LastRowNum; i++)
@@ -365,12 +365,12 @@ namespace TestCases.XSSF.UserModel
                     continue;
                 }
                 XSSFRow row = (XSSFRow)sheet.GetRow(i);
-                Assert.IsNotNull(row, "Could not read row " + i);
-                Assert.IsNotNull(row.GetCTRow(), "Could not read row " + i);
-                Assert.AreEqual(collapsed[i - sheet.FirstRowNum], row.GetCTRow().collapsed, "Row: " + i + ": collapsed");
-                Assert.AreEqual(hidden[i - sheet.FirstRowNum], row.GetCTRow().hidden, "Row: " + i + ": hidden");
+                ClassicAssert.IsNotNull(row, "Could not read row " + i);
+                ClassicAssert.IsNotNull(row.GetCTRow(), "Could not read row " + i);
+                ClassicAssert.AreEqual(collapsed[i - sheet.FirstRowNum], row.GetCTRow().collapsed, "Row: " + i + ": collapsed");
+                ClassicAssert.AreEqual(hidden[i - sheet.FirstRowNum], row.GetCTRow().hidden, "Row: " + i + ": hidden");
 
-                Assert.AreEqual(outlineLevel[i - sheet.FirstRowNum], row.GetCTRow().outlineLevel, "Row: " + i + ": level");
+                ClassicAssert.AreEqual(outlineLevel[i - sheet.FirstRowNum], row.GetCTRow().outlineLevel, "Row: " + i + ": level");
             }
 
             WriteToFile(wb);
@@ -424,7 +424,7 @@ namespace TestCases.XSSF.UserModel
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("GroupTest.xlsx");
 
-            Assert.AreEqual(31, wb.GetSheetAt(0).LastRowNum);
+            ClassicAssert.AreEqual(31, wb.GetSheetAt(0).LastRowNum);
 
             // NOTE: This is currently based on current behavior of POI, somehow
             // what POI returns in the calls to collapsed/hidden is not fully matching 

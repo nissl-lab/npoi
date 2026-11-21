@@ -23,9 +23,10 @@ namespace TestCases.DDF
     using System.Text;
     using System.IO;
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.DDF;
     using NPOI.Util;
+
     [TestFixture]
     public class TestEscherClientAnchorRecord
     {
@@ -36,8 +37,8 @@ namespace TestCases.DDF
 
             byte[] data = new byte[8 + 18 + 2];
             int bytesWritten = r.Serialize(0, data);
-            Assert.AreEqual(28, bytesWritten);
-            Assert.AreEqual("[01, 00, " +
+            ClassicAssert.AreEqual(28, bytesWritten);
+            ClassicAssert.AreEqual("[01, 00, " +
                     "10, F0, " +
                     "14, 00, 00, 00, " +
                     "4D, 00, 37, 00, 21, 00, 58, 00, " +
@@ -59,19 +60,19 @@ namespace TestCases.DDF
             EscherClientAnchorRecord r = new EscherClientAnchorRecord();
             int bytesWritten = r.FillFields(data, new DefaultEscherRecordFactory());
 
-            Assert.AreEqual(28, bytesWritten);
-            Assert.AreEqual((short)55, r.Col1);
-            Assert.AreEqual((short)44, r.Col2);
-            Assert.AreEqual((short)33, r.Dx1);
-            Assert.AreEqual((short)22, r.Dx2);
-            Assert.AreEqual((short)11, r.Dy1);
-            Assert.AreEqual((short)66, r.Dy2);
-            Assert.AreEqual((short)77, r.Flag);
-            Assert.AreEqual((short)88, r.Row1);
-            Assert.AreEqual((short)99, r.Row2);
-            Assert.AreEqual((short)0x0001, r.Options);
-            Assert.AreEqual((byte)0xFF, r.RemainingData[0]);
-            Assert.AreEqual((byte)0xDD, r.RemainingData[1]);
+            ClassicAssert.AreEqual(28, bytesWritten);
+            ClassicAssert.AreEqual((short)55, r.Col1);
+            ClassicAssert.AreEqual((short)44, r.Col2);
+            ClassicAssert.AreEqual((short)33, r.Dx1);
+            ClassicAssert.AreEqual((short)22, r.Dx2);
+            ClassicAssert.AreEqual((short)11, r.Dy1);
+            ClassicAssert.AreEqual((short)66, r.Dy2);
+            ClassicAssert.AreEqual((short)77, r.Flag);
+            ClassicAssert.AreEqual((short)88, r.Row1);
+            ClassicAssert.AreEqual((short)99, r.Row2);
+            ClassicAssert.AreEqual((short)0x0001, r.Options);
+            ClassicAssert.AreEqual((byte)0xFF, r.RemainingData[0]);
+            ClassicAssert.AreEqual((byte)0xDD, r.RemainingData[1]);
         }
         [Test]
         public void TestToString()
@@ -93,7 +94,7 @@ namespace TestCases.DDF
                     "  DY2: 66" + nl +
                     "  Extra Data:" + nl +
                     "00000000 FF DD                                           .." + nl;
-            Assert.AreEqual(expected, CreateRecord().ToString());
+            ClassicAssert.AreEqual(expected, CreateRecord().ToString());
         }
 
         private EscherClientAnchorRecord CreateRecord()

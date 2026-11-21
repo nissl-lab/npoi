@@ -40,8 +40,8 @@ namespace NPOI.SS.Formula.Function
         public const short FUNCTION_INDEX_EXTERNAL = 255;
         private static FunctionMetadataRegistry _instance;
 
-        private FunctionMetadata[] _functionDataByIndex;
-        private Dictionary<string, FunctionMetadata> _functionDataByName;
+        private readonly FunctionMetadata[] _functionDataByIndex;
+        private readonly Dictionary<string, FunctionMetadata> _functionDataByName;
 
         private static FunctionMetadataRegistry GetInstance()
         {

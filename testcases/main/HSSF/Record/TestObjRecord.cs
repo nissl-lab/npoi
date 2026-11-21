@@ -19,7 +19,7 @@ namespace TestCases.HSSF.Record
 {
     using System;
     using System.Collections;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.Record;
     using NPOI.Util;
 
@@ -56,12 +56,12 @@ namespace TestCases.HSSF.Record
         {
             ObjRecord record = new ObjRecord(TestcaseRecordInputStream.Create(ObjRecord.sid, recdata));
 
-            Assert.AreEqual(26, record.RecordSize - 4);
+            ClassicAssert.AreEqual(26, record.RecordSize - 4);
 
             IList subrecords = record.SubRecords;
-            Assert.AreEqual(2, subrecords.Count);
-            Assert.IsTrue(subrecords[0] is CommonObjectDataSubRecord);
-            Assert.IsTrue(subrecords[1] is EndSubRecord);
+            ClassicAssert.AreEqual(2, subrecords.Count);
+            ClassicAssert.IsTrue(subrecords[0] is CommonObjectDataSubRecord);
+            ClassicAssert.IsTrue(subrecords[1] is EndSubRecord);
 
         }
         [Test]
@@ -70,10 +70,10 @@ namespace TestCases.HSSF.Record
             ObjRecord record = new ObjRecord(TestcaseRecordInputStream.Create(ObjRecord.sid, recdata));
 
             byte[] recordBytes = record.Serialize();
-            Assert.AreEqual(26, recordBytes.Length - 4);
+            ClassicAssert.AreEqual(26, recordBytes.Length - 4);
             byte[] subData = new byte[recdata.Length];
             System.Array.Copy(recordBytes, 4, subData, 0, subData.Length);
-            Assert.IsTrue(NPOI.Util.Arrays.Equals(recdata, subData));
+            ClassicAssert.IsTrue(NPOI.Util.Arrays.Equals(recdata, subData));
         }
         [Test]
         public void TestConstruct()
@@ -98,9 +98,9 @@ namespace TestCases.HSSF.Record
 
             record = new ObjRecord(TestcaseRecordInputStream.Create(ObjRecord.sid, bytes));
             IList subrecords = record.SubRecords;
-            Assert.AreEqual(2, subrecords.Count);
-            Assert.IsTrue(subrecords[0] is CommonObjectDataSubRecord);
-            Assert.IsTrue(subrecords[1] is EndSubRecord);
+            ClassicAssert.AreEqual(2, subrecords.Count);
+            ClassicAssert.IsTrue(subrecords[0] is CommonObjectDataSubRecord);
+            ClassicAssert.IsTrue(subrecords[1] is EndSubRecord);
         }
         [Test]
         public void TestReadWriteWithPadding_bug45133()
@@ -112,13 +112,13 @@ namespace TestCases.HSSF.Record
                 throw new AssertionException("Identified bug 45133");
             }
 
-            Assert.AreEqual(36, record.RecordSize);
+            ClassicAssert.AreEqual(36, record.RecordSize);
 
             IList subrecords = record.SubRecords;
-            Assert.AreEqual(3, subrecords.Count);
-            Assert.AreEqual(typeof(CommonObjectDataSubRecord), subrecords[0].GetType());
-            Assert.AreEqual(typeof(GroupMarkerSubRecord), subrecords[1].GetType());
-            Assert.AreEqual(typeof(EndSubRecord), subrecords[2].GetType());
+            ClassicAssert.AreEqual(3, subrecords.Count);
+            ClassicAssert.AreEqual(typeof(CommonObjectDataSubRecord), subrecords[0].GetType());
+            ClassicAssert.AreEqual(typeof(GroupMarkerSubRecord), subrecords[1].GetType());
+            ClassicAssert.AreEqual(typeof(EndSubRecord), subrecords[2].GetType());
         }
         /**
  * Check that ObjRecord tolerates and preserves padding to a 4-byte boundary

@@ -21,7 +21,7 @@ namespace TestCases.HSSF.Record
 {
     using System;
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.Util;
     using TestCases.HSSF.Record;
     using NPOI.HSSF.Record;
@@ -825,15 +825,15 @@ namespace TestCases.HSSF.Record
          */
         public static void AssertAreEqual(SSTRecord expected, SSTRecord actual)
         {
-            Assert.AreEqual(expected.NumStrings, actual.NumStrings, "number of strings");
-            Assert.AreEqual(expected.NumUniqueStrings, actual.NumUniqueStrings, "number of unique strings");
-            Assert.AreEqual(expected.CountStrings, actual.CountStrings, "count of strings");
+            ClassicAssert.AreEqual(expected.NumStrings, actual.NumStrings, "number of strings");
+            ClassicAssert.AreEqual(expected.NumUniqueStrings, actual.NumUniqueStrings, "number of unique strings");
+            ClassicAssert.AreEqual(expected.CountStrings, actual.CountStrings, "count of strings");
             for (int k = 0; k < expected.CountStrings; k++)
             {
                 UnicodeString us1 = expected.GetString(k);
                 UnicodeString us2 = actual.GetString(k);
 
-                Assert.IsTrue(us1.Equals(us2), "String at idx=" + k);
+                ClassicAssert.IsTrue(us1.Equals(us2), "String at idx=" + k);
             }
         }
 
@@ -846,27 +846,27 @@ namespace TestCases.HSSF.Record
             byte[] bytes = HexRead.ReadFromString(data_50967);
 
             RecordInputStream in1 = TestcaseRecordInputStream.Create(bytes);
-            Assert.AreEqual(ExtSSTRecord.sid, in1.Sid);
+            ClassicAssert.AreEqual(ExtSSTRecord.sid, in1.Sid);
             ExtSSTRecord src = new ExtSSTRecord(in1);
-            Assert.AreEqual(12386, src.DataSize);
+            ClassicAssert.AreEqual(12386, src.DataSize);
             InfoSubRecord[] sub1 = src.InfoSubRecords;
 
             byte[] Serialized = src.Serialize();
 
             in1 = TestcaseRecordInputStream.Create(Serialized);
-            Assert.AreEqual(ExtSSTRecord.sid, in1.Sid);
+            ClassicAssert.AreEqual(ExtSSTRecord.sid, in1.Sid);
             ExtSSTRecord dst = new ExtSSTRecord(in1);
-            Assert.AreEqual(12386, dst.DataSize);
+            ClassicAssert.AreEqual(12386, dst.DataSize);
             InfoSubRecord[] sub2 = src.InfoSubRecords;
-            Assert.AreEqual(sub1.Length, sub2.Length);
+            ClassicAssert.AreEqual(sub1.Length, sub2.Length);
 
             for (int i = 0; i < sub1.Length; i++)
             {
                 InfoSubRecord s1 = sub1[i];
                 InfoSubRecord s2 = sub2[i];
 
-                Assert.AreEqual(s1.BucketSSTOffset, s2.BucketSSTOffset);
-                Assert.AreEqual(s1.StreamPos, s2.StreamPos);
+                ClassicAssert.AreEqual(s1.BucketSSTOffset, s2.BucketSSTOffset);
+                ClassicAssert.AreEqual(s1.StreamPos, s2.StreamPos);
 
             }
         }

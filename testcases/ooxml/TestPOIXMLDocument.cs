@@ -23,7 +23,7 @@ namespace TestCases.OOXML
     using NPOI.Util;
     using NPOI.XSSF.UserModel;
     using NPOI.XWPF.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using System;
     using System.Collections.Generic;
     using System.IO;
@@ -81,14 +81,14 @@ namespace TestCases.OOXML
          */
         private void Traverse(POIXMLDocumentPart part, Dictionary<String, POIXMLDocumentPart> context)
         {
-            Assert.AreEqual(part.GetPackageRelationship().TargetUri.ToString(), part.GetPackagePart().PartName.Name);
+            ClassicAssert.AreEqual(part.GetPackageRelationship().TargetUri.ToString(), part.GetPackagePart().PartName.Name);
 
             context[part.GetPackagePart().PartName.Name] = part;
             foreach (POIXMLDocumentPart p in part.GetRelations())
             {
-                Assert.IsNotNull(p.ToString());
+                ClassicAssert.IsNotNull(p.ToString());
                 String uri = p.GetPackagePart().PartName.URI.ToString();
-                Assert.AreEqual(uri, p.GetPackageRelationship().TargetUri.ToString());
+                ClassicAssert.AreEqual(uri, p.GetPackageRelationship().TargetUri.ToString());
 
                 if (!context.ContainsKey(uri))
                 {
@@ -97,7 +97,7 @@ namespace TestCases.OOXML
                 else
                 {
                     POIXMLDocumentPart prev = context[uri];
-                    Assert.AreSame(prev, p, "Duplicate POIXMLDocumentPart instance for targetURI=" + uri);
+                    ClassicAssert.AreSame(prev, p, "Duplicate POIXMLDocumentPart instance for targetURI=" + uri);
                 }
             }
         }
@@ -169,24 +169,24 @@ namespace TestCases.OOXML
                 Traverse(doc, context);
                 context.Clear();
 
-                Assert.AreEqual(pkg1.Relationships.Size, pkg2.Relationships.Size);
+                ClassicAssert.AreEqual(pkg1.Relationships.Size, pkg2.Relationships.Size);
 
                 List<PackagePart> l1 = pkg1.GetParts();
                 List<PackagePart> l2 = pkg2.GetParts();
 
-                Assert.AreEqual(l1.Count, l2.Count);
+                ClassicAssert.AreEqual(l1.Count, l2.Count);
                 for (int i = 0; i < l1.Count; i++)
                 {
                     PackagePart p1 = l1[i];
                     PackagePart p2 = l2[i];
 
-                    Assert.AreEqual(p1.ContentType, p2.ContentType);
-                    Assert.AreEqual(p1.HasRelationships, p2.HasRelationships);
+                    ClassicAssert.AreEqual(p1.ContentType, p2.ContentType);
+                    ClassicAssert.AreEqual(p1.HasRelationships, p2.HasRelationships);
                     if (p1.HasRelationships)
                     {
-                        Assert.AreEqual(p1.Relationships.Size, p2.Relationships.Size);
+                        ClassicAssert.AreEqual(p1.Relationships.Size, p2.Relationships.Size);
                     }
-                    Assert.AreEqual(p1.PartName, p2.PartName);
+                    ClassicAssert.AreEqual(p1.PartName, p2.PartName);
                 }
             }
             finally
@@ -234,7 +234,7 @@ namespace TestCases.OOXML
                 foreach (POIXMLDocumentPart rel in doc.GetRelations())
                 {
                     //TODO finish me
-                    Assert.IsNotNull(rel);
+                    ClassicAssert.IsNotNull(rel);
                 }
             }
             finally
@@ -255,24 +255,24 @@ namespace TestCases.OOXML
                 doc.Parse(new TestFactory());
 
                 // Non-indexed parts: Word is taken, Excel is not
-                Assert.AreEqual(-1, doc.GetNextPartNumber(XWPFRelation.DOCUMENT, 0));
-                Assert.AreEqual(-1, doc.GetNextPartNumber(XWPFRelation.DOCUMENT, -1));
-                Assert.AreEqual(-1, doc.GetNextPartNumber(XWPFRelation.DOCUMENT, 99));
-                Assert.AreEqual(0, doc.GetNextPartNumber(XSSFRelation.WORKBOOK, 0));
-                Assert.AreEqual(0, doc.GetNextPartNumber(XSSFRelation.WORKBOOK, -1));
-                Assert.AreEqual(0, doc.GetNextPartNumber(XSSFRelation.WORKBOOK, 99));
+                ClassicAssert.AreEqual(-1, doc.GetNextPartNumber(XWPFRelation.DOCUMENT, 0));
+                ClassicAssert.AreEqual(-1, doc.GetNextPartNumber(XWPFRelation.DOCUMENT, -1));
+                ClassicAssert.AreEqual(-1, doc.GetNextPartNumber(XWPFRelation.DOCUMENT, 99));
+                ClassicAssert.AreEqual(0, doc.GetNextPartNumber(XSSFRelation.WORKBOOK, 0));
+                ClassicAssert.AreEqual(0, doc.GetNextPartNumber(XSSFRelation.WORKBOOK, -1));
+                ClassicAssert.AreEqual(0, doc.GetNextPartNumber(XSSFRelation.WORKBOOK, 99));
 
                 // Indexed parts:
                 // Has 2 headers
-                Assert.AreEqual(0, doc.GetNextPartNumber(XWPFRelation.HEADER, 0));
-                Assert.AreEqual(3, doc.GetNextPartNumber(XWPFRelation.HEADER, -1));
-                Assert.AreEqual(3, doc.GetNextPartNumber(XWPFRelation.HEADER, 1));
-                Assert.AreEqual(8, doc.GetNextPartNumber(XWPFRelation.HEADER, 8));
+                ClassicAssert.AreEqual(0, doc.GetNextPartNumber(XWPFRelation.HEADER, 0));
+                ClassicAssert.AreEqual(3, doc.GetNextPartNumber(XWPFRelation.HEADER, -1));
+                ClassicAssert.AreEqual(3, doc.GetNextPartNumber(XWPFRelation.HEADER, 1));
+                ClassicAssert.AreEqual(8, doc.GetNextPartNumber(XWPFRelation.HEADER, 8));
 
                 // Has no Excel Sheets
-                Assert.AreEqual(0, doc.GetNextPartNumber(XSSFRelation.WORKSHEET, 0));
-                Assert.AreEqual(1, doc.GetNextPartNumber(XSSFRelation.WORKSHEET, -1));
-                Assert.AreEqual(1, doc.GetNextPartNumber(XSSFRelation.WORKSHEET, 1));
+                ClassicAssert.AreEqual(0, doc.GetNextPartNumber(XSSFRelation.WORKSHEET, 0));
+                ClassicAssert.AreEqual(1, doc.GetNextPartNumber(XSSFRelation.WORKSHEET, -1));
+                ClassicAssert.AreEqual(1, doc.GetNextPartNumber(XSSFRelation.WORKSHEET, 1));
             }
             finally
             {
@@ -287,11 +287,11 @@ namespace TestCases.OOXML
             part.Commit();
             part.OnSave(new List<PackagePart>());
 
-            Assert.IsNull(part.GetRelationById(null));
-            Assert.IsNull(part.GetRelationId(null));
-            Assert.IsFalse(part.RemoveRelation(null, true));
+            ClassicAssert.IsNull(part.GetRelationById(null));
+            ClassicAssert.IsNull(part.GetRelationId(null));
+            ClassicAssert.IsFalse(part.RemoveRelation(null, true));
             part.RemoveRelation(null);
-            Assert.AreEqual(string.Empty, part.ToString());
+            ClassicAssert.AreEqual(string.Empty, part.ToString());
             part.OnDocumentCreate();
             //part.GetTargetPart(null);
         }

@@ -43,14 +43,14 @@ namespace NPOI.SS.Formula
     {
         public static readonly CollaboratingWorkbooksEnvironment EMPTY = new CollaboratingWorkbooksEnvironment();
 
-        private Dictionary<String, WorkbookEvaluator> _evaluatorsByName;
-        private WorkbookEvaluator[] _evaluators;
+        private readonly Dictionary<String, WorkbookEvaluator> _evaluatorsByName;
+        private readonly WorkbookEvaluator[] _evaluators;
 
         private bool _unhooked;
         private CollaboratingWorkbooksEnvironment()
         {
             _evaluatorsByName = new Dictionary<String, WorkbookEvaluator>();
-            _evaluators = new WorkbookEvaluator[0];
+            _evaluators = [];
         }
         public static void Setup(String[] workbookNames, WorkbookEvaluator[] evaluators)
         {
@@ -85,9 +85,9 @@ namespace NPOI.SS.Formula
             {
                 string wbName = swb.Key;
                 IFormulaEvaluator eval = swb.Value;
-                if (eval is IWorkbookEvaluatorProvider)
+                if (eval is IWorkbookEvaluatorProvider provider)
                 {
-                    evaluatorsByName.Add(wbName, ((IWorkbookEvaluatorProvider)eval).GetWorkbookEvaluator());
+                    evaluatorsByName.Add(wbName, provider.GetWorkbookEvaluator());
                 }
                 else
                 {
@@ -122,10 +122,10 @@ namespace NPOI.SS.Formula
             Dictionary<WorkbookEvaluator, String> uniqueEvals = new Dictionary<WorkbookEvaluator, String>(evaluators.Length);
             foreach (KeyValuePair<string, WorkbookEvaluator> me in evaluatorsByName)
             {
-                if (uniqueEvals.ContainsKey(me.Value))
+                if (uniqueEvals.TryGetValue(me.Value, out string eval))
                 {
                     String msg = "Attempted to register same workbook under names '" +
-                        uniqueEvals[me.Value] + "' and '" + me.Key + "'";
+                        eval + "' and '" + me.Key + "'";
                     throw new ArgumentException(msg);
                 }
                 uniqueEvals.Add(me.Value, me.Key);
@@ -161,7 +161,8 @@ namespace NPOI.SS.Formula
             }
 
         }
-        private void UnhookOldEnvironments(WorkbookEvaluator[] evaluators)
+
+        private static void UnhookOldEnvironments(WorkbookEvaluator[] evaluators)
         {
             ArrayList oldEnvs = new ArrayList();
             for (int i = 0; i < evaluators.Length; i++)
@@ -199,9 +200,9 @@ namespace NPOI.SS.Formula
                 throw new InvalidOperationException("This environment Has been unhooked");
             }
             WorkbookEvaluator result;
-            if (_evaluatorsByName.ContainsKey(workbookName))
+            if (_evaluatorsByName.TryGetValue(workbookName, out WorkbookEvaluator value))
             {
-                result = (WorkbookEvaluator)_evaluatorsByName[workbookName];
+                result = (WorkbookEvaluator)value;
             }
             else
             {

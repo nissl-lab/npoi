@@ -42,7 +42,7 @@ namespace NPOI.HSSF.Record.Crypto
         private int _currentKeyIndex;
         private bool _shouldSkipEncryptionOnCurrentRecord;
 
-        private Biff8EncryptionKey _key;
+        private readonly Biff8EncryptionKey _key;
 
         public Biff8RC4(int InitialOffset, Biff8EncryptionKey key)
         {

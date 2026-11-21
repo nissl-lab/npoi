@@ -40,8 +40,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
-            sw.Write(">");
+            sw.WriteStart(nodeName);
+            sw.Write('>');
             if (this.row != null)
             {
                 foreach (CT_Row x in this.row)
@@ -49,7 +49,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                     x.Write(sw, "row");
                 }
             }
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.WriteEndElement(nodeName);
         }
 
 
@@ -106,6 +106,10 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         public CT_Row GetRowArray(int index)
         {
             return (null == rowField) ? null : rowField[index];
+        }
+        public List<CT_Row> GetRowArray()
+        {
+            return row;
         }
         [XmlElement("row")]
         public List<CT_Row> row

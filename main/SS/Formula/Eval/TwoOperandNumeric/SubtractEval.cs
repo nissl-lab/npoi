@@ -26,7 +26,16 @@ namespace NPOI.SS.Formula.Eval
 
         public override double Evaluate(double d0, double d1)
         {
-            return d0 - d1;
+            long bits = System.BitConverter.DoubleToInt64Bits(d0);
+            bool negativeZero = bits == unchecked((long)0x8000000000000000L);
+            decimal dec0 = (decimal)d0;
+            decimal dec1 = (decimal)d1;
+            double result = decimal.ToDouble(dec0 - dec1);
+            if (result == 0.0 && negativeZero)
+            {
+                return -0.0;
+            }
+            return result;
         }
     }
 }

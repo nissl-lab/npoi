@@ -23,7 +23,7 @@ namespace TestCases.HSSF.Record.Chart
     using System;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.Chart;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     /**
      * Tests the serialization and deserialization of the PlotGrowthRecord
@@ -49,11 +49,11 @@ namespace TestCases.HSSF.Record.Chart
         {
 
             PlotGrowthRecord record = new PlotGrowthRecord(TestcaseRecordInputStream.Create(0x1064, data));
-            Assert.AreEqual(65536, record.HorizontalScale);
-            Assert.AreEqual(65536, record.VerticalScale);
+            ClassicAssert.AreEqual(65536, record.HorizontalScale);
+            ClassicAssert.AreEqual(65536, record.VerticalScale);
 
 
-            Assert.AreEqual(12, record.RecordSize);
+            ClassicAssert.AreEqual(12, record.RecordSize);
         }
         [Test]
         public void TestStore()
@@ -64,9 +64,9 @@ namespace TestCases.HSSF.Record.Chart
 
 
             byte[] recordBytes = record.Serialize();
-            Assert.AreEqual(recordBytes.Length - 4, data.Length);
+            ClassicAssert.AreEqual(recordBytes.Length - 4, data.Length);
             for (int i = 0; i < data.Length; i++)
-                Assert.AreEqual(data[i], recordBytes[i + 4], "At offset " + i);
+                ClassicAssert.AreEqual(data[i], recordBytes[i + 4], "At offset " + i);
         }
     }
 }

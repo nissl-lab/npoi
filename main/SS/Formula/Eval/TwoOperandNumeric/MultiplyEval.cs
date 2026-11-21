@@ -25,10 +25,18 @@ namespace NPOI.SS.Formula.Eval
     {
         public override double Evaluate(double d0, double d1)
         {
-            decimal dec0 = (decimal)d0;
-            decimal dec1 = (decimal)d1;
+            try
+            {
+                decimal dec0 = (decimal)d0;
+                decimal dec1 = (decimal)d1;
 
-            return decimal.ToDouble(dec0 * dec1);
+                return decimal.ToDouble(dec0 * dec1);
+            }
+            catch (System.OverflowException)
+            {
+                // Values too large for decimal — fall back to double arithmetic (matches Excel behavior)
+                return d0 * d1;
+            }
         }
     }
 }

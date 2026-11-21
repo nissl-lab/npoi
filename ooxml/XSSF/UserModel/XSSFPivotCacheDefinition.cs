@@ -152,7 +152,7 @@ namespace NPOI.XSSF.UserModel
                 {
                     if (table.Name.Equals(name))
                     { //case-sensitive?
-                        return new AreaReference(table.StartCellReference, table.EndCellReference);
+                        return new AreaReference(table.StartCellReference, table.EndCellReference, SpreadsheetVersion.EXCEL2007);
                     }
                 }
             }

@@ -16,7 +16,7 @@
 ==================================================================== */
 
 using System;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 namespace TestCases.SS.Formula.Functions
@@ -116,10 +116,10 @@ namespace TestCases.SS.Formula.Functions
             Evaluator.ClearAllCachedResultValues();
 
             double actualValue = Evaluator.Evaluate(cell11).NumberValue;
-            Assert.AreEqual(expectedValue, actualValue, 0.0);
+            ClassicAssert.AreEqual(expectedValue, actualValue, 0.0);
 
             String actualText = form.FormatCellValue(cell11, Evaluator);
-            Assert.AreEqual(expectedTimeStr, actualText);
+            ClassicAssert.AreEqual(expectedTimeStr, actualText);
         }
     }
 }

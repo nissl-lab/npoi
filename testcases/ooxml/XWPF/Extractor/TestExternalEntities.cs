@@ -19,7 +19,7 @@ namespace TestCases.XWPF.Extractor
 {
     using NPOI.XWPF.Extractor;
     using NPOI.XWPF.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using System;
     using TestCases.XWPF;
 
@@ -40,10 +40,10 @@ namespace TestCases.XWPF.Extractor
 
             String text = extractor.Text;
 
-            Assert.IsTrue(text.Length > 0);
+            ClassicAssert.IsTrue(text.Length > 0);
 
             // Check contents, they should not contain the text from POI web site After colon!
-            Assert.AreEqual("Here should not be the POI web site: \"\"", text.Trim());
+            ClassicAssert.AreEqual("Here should not be the POI web site: \"\"", text.Trim());
 
             extractor.Close();
         }

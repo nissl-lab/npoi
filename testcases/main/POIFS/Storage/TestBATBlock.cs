@@ -29,7 +29,7 @@ using System.Text;
 using System.Collections.Generic;
 using System.IO;
 
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 
 using NPOI.POIFS.Storage;
 using NPOI.POIFS.Common;
@@ -50,26 +50,26 @@ namespace TestCases.POIFS.Storage
             // Test 0 Length array (basic sanity)
             BATBlock[] rvalue = BATBlock.CreateBATBlocks(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS, CreateTestArray(0));
 
-            Assert.AreEqual(0, rvalue.Length);
+            ClassicAssert.AreEqual(0, rvalue.Length);
 
             // Test array of Length 1
             rvalue = BATBlock.CreateBATBlocks(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS, CreateTestArray(1));
-            Assert.AreEqual(1, rvalue.Length);
+            ClassicAssert.AreEqual(1, rvalue.Length);
             VerifyContents(rvalue, 1);
 
             // Test array of Length 127
             rvalue = BATBlock.CreateBATBlocks(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS, CreateTestArray(127));
-            Assert.AreEqual(1, rvalue.Length);
+            ClassicAssert.AreEqual(1, rvalue.Length);
             VerifyContents(rvalue, 127);
 
             // Test array of Length 128
             rvalue = BATBlock.CreateBATBlocks(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS, CreateTestArray(128));
-            Assert.AreEqual(1, rvalue.Length);
+            ClassicAssert.AreEqual(1, rvalue.Length);
             VerifyContents(rvalue, 128);
 
             // Test array of Length 129
             rvalue = BATBlock.CreateBATBlocks(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS, CreateTestArray(129));
-            Assert.AreEqual(2, rvalue.Length);
+            ClassicAssert.AreEqual(2, rvalue.Length);
             VerifyContents(rvalue, 129);
         }
 
@@ -109,10 +109,10 @@ namespace TestCases.POIFS.Storage
             }
             byte[] actual = stream.ToArray();
 
-            Assert.AreEqual(expected.Length, actual.Length);
+            ClassicAssert.AreEqual(expected.Length, actual.Length);
             for (int j = 0; j < expected.Length; j++)
             {
-                Assert.AreEqual(expected[j], actual[j]);
+                ClassicAssert.AreEqual(expected[j], actual[j]);
             }
         }
 
@@ -128,31 +128,31 @@ namespace TestCases.POIFS.Storage
             // Test 0 Length array (basic sanity)
             BATBlock[] rvalue = BATBlock.CreateXBATBlocks(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS, CreateTestArray(0), 1);
 
-            Assert.AreEqual(0, rvalue.Length);
+            ClassicAssert.AreEqual(0, rvalue.Length);
 
             // Test array of Length 1
             rvalue = BATBlock.CreateXBATBlocks(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS, CreateTestArray(1), 1);
-            Assert.AreEqual(1, rvalue.Length);
+            ClassicAssert.AreEqual(1, rvalue.Length);
             verifyXBATContents(rvalue, 1, 1);
 
             // Test array of Length 127
             rvalue = BATBlock.CreateXBATBlocks(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS, CreateTestArray(127), 1);
-            Assert.AreEqual(1, rvalue.Length);
+            ClassicAssert.AreEqual(1, rvalue.Length);
             verifyXBATContents(rvalue, 127, 1);
 
             // Test array of Length 128
             rvalue = BATBlock.CreateXBATBlocks(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS, CreateTestArray(128), 1);
-            Assert.AreEqual(2, rvalue.Length);
+            ClassicAssert.AreEqual(2, rvalue.Length);
             verifyXBATContents(rvalue, 128, 1);
 
             // Test array of Length 254
             rvalue = BATBlock.CreateXBATBlocks(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS, CreateTestArray(254), 1);
-            Assert.AreEqual(2, rvalue.Length);
+            ClassicAssert.AreEqual(2, rvalue.Length);
             verifyXBATContents(rvalue, 254, 1);
 
             // Test array of Length 255
             rvalue = BATBlock.CreateXBATBlocks(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS, CreateTestArray(255), 1);
-            Assert.AreEqual(3, rvalue.Length);
+            ClassicAssert.AreEqual(3, rvalue.Length);
             verifyXBATContents(rvalue, 255, 1);
         }
 
@@ -202,10 +202,10 @@ namespace TestCases.POIFS.Storage
             }
             byte[] actual = stream.ToArray();
 
-            Assert.AreEqual(expected.Length, actual.Length);
+            ClassicAssert.AreEqual(expected.Length, actual.Length);
             for (int j = 0; j < expected.Length; j++)
             {
-                Assert.AreEqual(expected[j], actual[j], "offset " + j);
+                ClassicAssert.AreEqual(expected[j], actual[j], "offset " + j);
             }
         }
 
@@ -226,7 +226,7 @@ namespace TestCases.POIFS.Storage
 
             for (int j = 0; j < blockCounts.Length; j++)
             {
-                Assert.AreEqual(
+                ClassicAssert.AreEqual(
                      requirements[j],
                     BATBlock.CalculateXBATStorageRequirements(blockCounts[j]),
                     "requirement for " + blockCounts[j]);
@@ -239,7 +239,7 @@ namespace TestCases.POIFS.Storage
         [Test]
         public void TestEntriesPerBlock()
         {
-            Assert.AreEqual(128, BATBlock.EntriesPerBlock);
+            ClassicAssert.AreEqual(128, BATBlock.EntriesPerBlock);
         }
 
         /**
@@ -248,7 +248,7 @@ namespace TestCases.POIFS.Storage
         [Test]
         public void TestEntriesPerXBATBlock()
         {
-            Assert.AreEqual(127, BATBlock.EntriesPerXBATBlock);
+            ClassicAssert.AreEqual(127, BATBlock.EntriesPerXBATBlock);
         }
 
         /**
@@ -257,36 +257,36 @@ namespace TestCases.POIFS.Storage
         [Test]
         public void TestGetXBATChainOffset()
         {
-            Assert.AreEqual(508, BATBlock.XBATChainOffset);
+            ClassicAssert.AreEqual(508, BATBlock.XBATChainOffset);
         }
         [Test]
         public void TestCalculateMaximumSize()
         {
             // Zero fat blocks isn't technically valid, but it'd be header only
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                   512,
                   BATBlock.CalculateMaximumSize(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS, 0)
             );
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                   4096,
                   BATBlock.CalculateMaximumSize(POIFSConstants.LARGER_BIG_BLOCK_SIZE_DETAILS, 0)
             );
 
             // A single FAT block can address 128/1024 blocks
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                   512 + 512 * 128,
                   BATBlock.CalculateMaximumSize(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS, 1)
             );
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                   4096 + 4096 * 1024,
                   BATBlock.CalculateMaximumSize(POIFSConstants.LARGER_BIG_BLOCK_SIZE_DETAILS, 1)
             );
 
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                   512 + 4 * 512 * 128,
                   BATBlock.CalculateMaximumSize(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS, 4)
             );
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                   4096 + 4 * 4096 * 1024,
                   BATBlock.CalculateMaximumSize(POIFSConstants.LARGER_BIG_BLOCK_SIZE_DETAILS, 4)
             );
@@ -294,39 +294,39 @@ namespace TestCases.POIFS.Storage
             // One XBAT block holds 127/1023 individual BAT blocks, so they can address
             //  a fairly hefty amount of space themselves
             // However, the BATs continue as before
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                   512 + 109 * 512 * 128,
                   BATBlock.CalculateMaximumSize(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS, 109)
             );
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                   4096 + 109 * 4096 * 1024,
                   BATBlock.CalculateMaximumSize(POIFSConstants.LARGER_BIG_BLOCK_SIZE_DETAILS, 109)
             );
 
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                   512 + 110 * 512 * 128,
                   BATBlock.CalculateMaximumSize(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS, 110)
             );
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                   4096 + 110 * 4096 * 1024,
                   BATBlock.CalculateMaximumSize(POIFSConstants.LARGER_BIG_BLOCK_SIZE_DETAILS, 110)
             );
 
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                   512 + 112 * 512 * 128,
                   BATBlock.CalculateMaximumSize(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS, 112)
             );
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                   4096 + 112 * 4096 * 1024,
                   BATBlock.CalculateMaximumSize(POIFSConstants.LARGER_BIG_BLOCK_SIZE_DETAILS, 112)
             );
 
             // Check for >2gb, which we only support via a File
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                     512 + 8030L * 512 * 128,
                     BATBlock.CalculateMaximumSize(POIFSConstants.SMALLER_BIG_BLOCK_SIZE_DETAILS, 8030)
             );
-            Assert.AreEqual(
+            ClassicAssert.AreEqual(
                     4096 + 8030L * 4096 * 1024,
                     BATBlock.CalculateMaximumSize(POIFSConstants.LARGER_BIG_BLOCK_SIZE_DETAILS, 8030)
             );
@@ -340,50 +340,50 @@ namespace TestCases.POIFS.Storage
 
             // Try first with 512 block sizes, which can hold 128 entries
             BATBlock block512 = BATBlock.CreateEmptyBATBlock(b512, false);
-            Assert.AreEqual(true, block512.HasFreeSectors);
-            Assert.AreEqual(0, block512.GetUsedSectors(false));
+            ClassicAssert.AreEqual(true, block512.HasFreeSectors);
+            ClassicAssert.AreEqual(0, block512.GetUsedSectors(false));
             // Allocate a few
             block512.SetValueAt(0, 42);
             block512.SetValueAt(10, 42);
             block512.SetValueAt(20, 42);
-            Assert.AreEqual(true, block512.HasFreeSectors);
-            Assert.AreEqual(3, block512.GetUsedSectors(false));
+            ClassicAssert.AreEqual(true, block512.HasFreeSectors);
+            ClassicAssert.AreEqual(3, block512.GetUsedSectors(false));
 
             // Allocate all
             for (int i = 0; i < b512.GetBATEntriesPerBlock(); i++) {
                 block512.SetValueAt(i, 82);
             }
             // Check
-            Assert.AreEqual(false, block512.HasFreeSectors);
-            Assert.AreEqual(128, block512.GetUsedSectors(false));
-            Assert.AreEqual(127, block512.GetUsedSectors(true));
+            ClassicAssert.AreEqual(false, block512.HasFreeSectors);
+            ClassicAssert.AreEqual(128, block512.GetUsedSectors(false));
+            ClassicAssert.AreEqual(127, block512.GetUsedSectors(true));
 
             // Release one
             block512.SetValueAt(10, POIFSConstants.UNUSED_BLOCK);
-            Assert.AreEqual(true, block512.HasFreeSectors);
-            Assert.AreEqual(127, block512.GetUsedSectors(false));
-            Assert.AreEqual(126, block512.GetUsedSectors(true));
+            ClassicAssert.AreEqual(true, block512.HasFreeSectors);
+            ClassicAssert.AreEqual(127, block512.GetUsedSectors(false));
+            ClassicAssert.AreEqual(126, block512.GetUsedSectors(true));
 
 
             // Now repeat with 4096 block sizes
             BATBlock block4096 = BATBlock.CreateEmptyBATBlock(b4096, false);
-            Assert.AreEqual(true, block4096.HasFreeSectors);
-            Assert.AreEqual(0, block4096.GetUsedSectors(false));
+            ClassicAssert.AreEqual(true, block4096.HasFreeSectors);
+            ClassicAssert.AreEqual(0, block4096.GetUsedSectors(false));
 
             block4096.SetValueAt(0, 42);
             block4096.SetValueAt(10, 42);
             block4096.SetValueAt(20, 42);
-            Assert.AreEqual(true, block4096.HasFreeSectors);
-            Assert.AreEqual(3, block4096.GetUsedSectors(false));
+            ClassicAssert.AreEqual(true, block4096.HasFreeSectors);
+            ClassicAssert.AreEqual(3, block4096.GetUsedSectors(false));
 
             // Allocate all
             for (int i = 0; i < b4096.GetBATEntriesPerBlock(); i++) {
                 block4096.SetValueAt(i, 82);
             }
             // Check
-            Assert.AreEqual(false, block4096.HasFreeSectors);
-            Assert.AreEqual(1024, block4096.GetUsedSectors(false));
-            Assert.AreEqual(1023, block4096.GetUsedSectors(true));
+            ClassicAssert.AreEqual(false, block4096.HasFreeSectors);
+            ClassicAssert.AreEqual(1024, block4096.GetUsedSectors(false));
+            ClassicAssert.AreEqual(1023, block4096.GetUsedSectors(true));
         }
         [Test]
         public void TestGetBATBlockAndIndex()
@@ -400,16 +400,16 @@ namespace TestCases.POIFS.Storage
             );
 
             offset = 0;
-            Assert.AreEqual(0, BATBlock.GetBATBlockAndIndex(offset, header, blocks).Index);
-            Assert.AreEqual(0, blocks.IndexOf(BATBlock.GetBATBlockAndIndex(offset, header, blocks).Block));
+            ClassicAssert.AreEqual(0, BATBlock.GetBATBlockAndIndex(offset, header, blocks).Index);
+            ClassicAssert.AreEqual(0, blocks.IndexOf(BATBlock.GetBATBlockAndIndex(offset, header, blocks).Block));
 
             offset = 1;
-            Assert.AreEqual(1, BATBlock.GetBATBlockAndIndex(offset, header, blocks).Index);
-            Assert.AreEqual(0, blocks.IndexOf(BATBlock.GetBATBlockAndIndex(offset, header, blocks).Block));
+            ClassicAssert.AreEqual(1, BATBlock.GetBATBlockAndIndex(offset, header, blocks).Index);
+            ClassicAssert.AreEqual(0, blocks.IndexOf(BATBlock.GetBATBlockAndIndex(offset, header, blocks).Block));
 
             offset = 127;
-            Assert.AreEqual(127, BATBlock.GetBATBlockAndIndex(offset, header, blocks).Index);
-            Assert.AreEqual(0, blocks.IndexOf(BATBlock.GetBATBlockAndIndex(offset, header, blocks).Block));
+            ClassicAssert.AreEqual(127, BATBlock.GetBATBlockAndIndex(offset, header, blocks).Index);
+            ClassicAssert.AreEqual(0, blocks.IndexOf(BATBlock.GetBATBlockAndIndex(offset, header, blocks).Block));
 
 
             // Now go for one with multiple BAT blocks
@@ -419,83 +419,83 @@ namespace TestCases.POIFS.Storage
             );
 
             offset = 0;
-            Assert.AreEqual(0, BATBlock.GetBATBlockAndIndex(offset, header, blocks).Index);
-            Assert.AreEqual(0, blocks.IndexOf(BATBlock.GetBATBlockAndIndex(offset, header, blocks).Block));
+            ClassicAssert.AreEqual(0, BATBlock.GetBATBlockAndIndex(offset, header, blocks).Index);
+            ClassicAssert.AreEqual(0, blocks.IndexOf(BATBlock.GetBATBlockAndIndex(offset, header, blocks).Block));
 
             offset = 127;
-            Assert.AreEqual(127, BATBlock.GetBATBlockAndIndex(offset, header, blocks).Index);
-            Assert.AreEqual(0, blocks.IndexOf(BATBlock.GetBATBlockAndIndex(offset, header, blocks).Block));
+            ClassicAssert.AreEqual(127, BATBlock.GetBATBlockAndIndex(offset, header, blocks).Index);
+            ClassicAssert.AreEqual(0, blocks.IndexOf(BATBlock.GetBATBlockAndIndex(offset, header, blocks).Block));
 
             offset = 128;
-            Assert.AreEqual(0, BATBlock.GetBATBlockAndIndex(offset, header, blocks).Index);
-            Assert.AreEqual(1, blocks.IndexOf(BATBlock.GetBATBlockAndIndex(offset, header, blocks).Block));
+            ClassicAssert.AreEqual(0, BATBlock.GetBATBlockAndIndex(offset, header, blocks).Index);
+            ClassicAssert.AreEqual(1, blocks.IndexOf(BATBlock.GetBATBlockAndIndex(offset, header, blocks).Block));
 
             offset = 129;
-            Assert.AreEqual(1, BATBlock.GetBATBlockAndIndex(offset, header, blocks).Index);
-            Assert.AreEqual(1, blocks.IndexOf(BATBlock.GetBATBlockAndIndex(offset, header, blocks).Block));
+            ClassicAssert.AreEqual(1, BATBlock.GetBATBlockAndIndex(offset, header, blocks).Index);
+            ClassicAssert.AreEqual(1, blocks.IndexOf(BATBlock.GetBATBlockAndIndex(offset, header, blocks).Block));
 
 
             // The XBAT count makes no difference, as we flatten in memory
             header.BATCount = (1);
             header.XBATCount = (1);
             offset = 0;
-            Assert.AreEqual(0, BATBlock.GetBATBlockAndIndex(offset, header, blocks).Index);
-            Assert.AreEqual(0, blocks.IndexOf(BATBlock.GetBATBlockAndIndex(offset, header, blocks).Block));
+            ClassicAssert.AreEqual(0, BATBlock.GetBATBlockAndIndex(offset, header, blocks).Index);
+            ClassicAssert.AreEqual(0, blocks.IndexOf(BATBlock.GetBATBlockAndIndex(offset, header, blocks).Block));
 
             offset = 126;
-            Assert.AreEqual(126, BATBlock.GetBATBlockAndIndex(offset, header, blocks).Index);
-            Assert.AreEqual(0, blocks.IndexOf(BATBlock.GetBATBlockAndIndex(offset, header, blocks).Block));
+            ClassicAssert.AreEqual(126, BATBlock.GetBATBlockAndIndex(offset, header, blocks).Index);
+            ClassicAssert.AreEqual(0, blocks.IndexOf(BATBlock.GetBATBlockAndIndex(offset, header, blocks).Block));
 
             offset = 127;
-            Assert.AreEqual(127, BATBlock.GetBATBlockAndIndex(offset, header, blocks).Index);
-            Assert.AreEqual(0, blocks.IndexOf(BATBlock.GetBATBlockAndIndex(offset, header, blocks).Block));
+            ClassicAssert.AreEqual(127, BATBlock.GetBATBlockAndIndex(offset, header, blocks).Index);
+            ClassicAssert.AreEqual(0, blocks.IndexOf(BATBlock.GetBATBlockAndIndex(offset, header, blocks).Block));
 
             offset = 128;
-            Assert.AreEqual(0, BATBlock.GetBATBlockAndIndex(offset, header, blocks).Index);
-            Assert.AreEqual(1, blocks.IndexOf(BATBlock.GetBATBlockAndIndex(offset, header, blocks).Block));
+            ClassicAssert.AreEqual(0, BATBlock.GetBATBlockAndIndex(offset, header, blocks).Index);
+            ClassicAssert.AreEqual(1, blocks.IndexOf(BATBlock.GetBATBlockAndIndex(offset, header, blocks).Block));
 
             offset = 129;
-            Assert.AreEqual(1, BATBlock.GetBATBlockAndIndex(offset, header, blocks).Index);
-            Assert.AreEqual(1, blocks.IndexOf(BATBlock.GetBATBlockAndIndex(offset, header, blocks).Block));
+            ClassicAssert.AreEqual(1, BATBlock.GetBATBlockAndIndex(offset, header, blocks).Index);
+            ClassicAssert.AreEqual(1, blocks.IndexOf(BATBlock.GetBATBlockAndIndex(offset, header, blocks).Block));
 
 
             // Check with the bigger block size too
             header = new HeaderBlock(POIFSConstants.LARGER_BIG_BLOCK_SIZE_DETAILS);
 
             offset = 0;
-            Assert.AreEqual(0, BATBlock.GetBATBlockAndIndex(offset, header, blocks).Index);
-            Assert.AreEqual(0, blocks.IndexOf(BATBlock.GetBATBlockAndIndex(offset, header, blocks).Block));
+            ClassicAssert.AreEqual(0, BATBlock.GetBATBlockAndIndex(offset, header, blocks).Index);
+            ClassicAssert.AreEqual(0, blocks.IndexOf(BATBlock.GetBATBlockAndIndex(offset, header, blocks).Block));
 
             offset = 1022;
-            Assert.AreEqual(1022, BATBlock.GetBATBlockAndIndex(offset, header, blocks).Index);
-            Assert.AreEqual(0, blocks.IndexOf(BATBlock.GetBATBlockAndIndex(offset, header, blocks).Block));
+            ClassicAssert.AreEqual(1022, BATBlock.GetBATBlockAndIndex(offset, header, blocks).Index);
+            ClassicAssert.AreEqual(0, blocks.IndexOf(BATBlock.GetBATBlockAndIndex(offset, header, blocks).Block));
 
             offset = 1023;
-            Assert.AreEqual(1023, BATBlock.GetBATBlockAndIndex(offset, header, blocks).Index);
-            Assert.AreEqual(0, blocks.IndexOf(BATBlock.GetBATBlockAndIndex(offset, header, blocks).Block));
+            ClassicAssert.AreEqual(1023, BATBlock.GetBATBlockAndIndex(offset, header, blocks).Index);
+            ClassicAssert.AreEqual(0, blocks.IndexOf(BATBlock.GetBATBlockAndIndex(offset, header, blocks).Block));
 
             offset = 1024;
-            Assert.AreEqual(0, BATBlock.GetBATBlockAndIndex(offset, header, blocks).Index);
-            Assert.AreEqual(1, blocks.IndexOf(BATBlock.GetBATBlockAndIndex(offset, header, blocks).Block));
+            ClassicAssert.AreEqual(0, BATBlock.GetBATBlockAndIndex(offset, header, blocks).Index);
+            ClassicAssert.AreEqual(1, blocks.IndexOf(BATBlock.GetBATBlockAndIndex(offset, header, blocks).Block));
 
             // Biggr block size, back to real BATs
             header.BATCount = (2);
 
             offset = 0;
-            Assert.AreEqual(0, BATBlock.GetBATBlockAndIndex(offset, header, blocks).Index);
-            Assert.AreEqual(0, blocks.IndexOf(BATBlock.GetBATBlockAndIndex(offset, header, blocks).Block));
+            ClassicAssert.AreEqual(0, BATBlock.GetBATBlockAndIndex(offset, header, blocks).Index);
+            ClassicAssert.AreEqual(0, blocks.IndexOf(BATBlock.GetBATBlockAndIndex(offset, header, blocks).Block));
 
             offset = 1022;
-            Assert.AreEqual(1022, BATBlock.GetBATBlockAndIndex(offset, header, blocks).Index);
-            Assert.AreEqual(0, blocks.IndexOf(BATBlock.GetBATBlockAndIndex(offset, header, blocks).Block));
+            ClassicAssert.AreEqual(1022, BATBlock.GetBATBlockAndIndex(offset, header, blocks).Index);
+            ClassicAssert.AreEqual(0, blocks.IndexOf(BATBlock.GetBATBlockAndIndex(offset, header, blocks).Block));
 
             offset = 1023;
-            Assert.AreEqual(1023, BATBlock.GetBATBlockAndIndex(offset, header, blocks).Index);
-            Assert.AreEqual(0, blocks.IndexOf(BATBlock.GetBATBlockAndIndex(offset, header, blocks).Block));
+            ClassicAssert.AreEqual(1023, BATBlock.GetBATBlockAndIndex(offset, header, blocks).Index);
+            ClassicAssert.AreEqual(0, blocks.IndexOf(BATBlock.GetBATBlockAndIndex(offset, header, blocks).Block));
 
             offset = 1024;
-            Assert.AreEqual(0, BATBlock.GetBATBlockAndIndex(offset, header, blocks).Index);
-            Assert.AreEqual(1, blocks.IndexOf(BATBlock.GetBATBlockAndIndex(offset, header, blocks).Block));
+            ClassicAssert.AreEqual(0, BATBlock.GetBATBlockAndIndex(offset, header, blocks).Index);
+            ClassicAssert.AreEqual(1, blocks.IndexOf(BATBlock.GetBATBlockAndIndex(offset, header, blocks).Block));
         }
     }
 }

@@ -26,7 +26,7 @@ namespace NPOI.HSSF.UserModel
     using NPOI.HSSF.Model;
     using NPOI.HSSF.Record;
     using NPOI.SS.Util;
-    using SixLabors.ImageSharp;
+    using SkiaSharp;
 
 
     /// <summary>
@@ -189,18 +189,17 @@ namespace NPOI.HSSF.UserModel
         /// </summary>
         /// <param name="r">The image.</param>
         /// <returns>the resolution</returns>
-        protected Size GetResolution(Image r)
+        protected SKSizeI GetResolution(SKBitmap r)
         {
-            //int hdpi = 96, vdpi = 96;
-            //double mm2inch = 25.4;
-            return new Size((int) r.Metadata.HorizontalResolution, (int) r.Metadata.VerticalResolution);
+            // SKBitmap does not expose DPI metadata; return zeros so callers default to 96 DPI
+            return new SKSizeI(0, 0);
         }
 
         /// <summary>
         /// Return the dimension of the embedded image in pixel
         /// </summary>
         /// <returns>image dimension</returns>
-        public Size GetImageDimension()
+        public SKSizeI GetImageDimension()
         {
             InternalWorkbook iwb = (_patriarch.Sheet.Workbook as HSSFWorkbook).Workbook;
             EscherBSERecord bse = iwb.GetBSERecord(PictureIndex);
@@ -209,9 +208,10 @@ namespace NPOI.HSSF.UserModel
 
             using(MemoryStream ms = RecyclableMemory.GetStream(data))
             {
-                using(Image img = Image.Load(ms))
+                using(SKBitmap img = SKBitmap.Decode(ms))
                 {
-                    return img.Size();
+                    if (img == null) return new SKSizeI();
+                    return new SKSizeI(img.Width, img.Height);
                 }
             }
         }
@@ -223,6 +223,10 @@ namespace NPOI.HSSF.UserModel
         {
             get
             {
+                if(PictureIndex == -1)
+                {
+                    return null;
+                }
                 HSSFPatriarch patriarch = Patriarch;
                 HSSFShape parent = Parent as HSSFShape;
                 while(patriarch == null && parent != null)
@@ -264,7 +268,7 @@ namespace NPOI.HSSF.UserModel
             {
                 EscherComplexProperty propFile = (EscherComplexProperty)GetOptRecord().Lookup(
                               EscherProperties.BLIP__BLIPFILENAME);
-                return (null == propFile) ? "" : Trim(StringUtil.GetFromUnicodeLE(propFile.ComplexData));
+                return (null == propFile) ? "" : StringUtil.Trim(StringUtil.GetFromUnicodeLE(propFile.ComplexData));
             }
             set
             {
@@ -273,23 +277,6 @@ namespace NPOI.HSSF.UserModel
                 EscherComplexProperty prop = new EscherComplexProperty(EscherProperties.BLIP__BLIPFILENAME, true, bytes);
                 SetPropertyValue(prop);
             }
-        }
-        private String Trim(string value)
-        {
-            int end = value.Length;
-            int st = 0;
-            //int off = offset;      /* avoid getfield opcode */
-            char[] val = value.ToCharArray();    /* avoid getfield opcode */
-
-            while((st < end) && (val[st] <= ' '))
-            {
-                st++;
-            }
-            while((st < end) && (val[end - 1] <= ' '))
-            {
-                end--;
-            }
-            return ((st > 0) || (end < value.Length)) ? value.Substring(st, end - st) : value;
         }
 
         public override int ShapeType
@@ -320,7 +307,7 @@ namespace NPOI.HSSF.UserModel
             get
             {
                 HSSFAnchor a = Anchor as HSSFAnchor;
-                return (a is HSSFClientAnchor) ? (HSSFClientAnchor) a : null;
+                return (a is HSSFClientAnchor clientAnchor) ? clientAnchor : null;
             }
         }
 

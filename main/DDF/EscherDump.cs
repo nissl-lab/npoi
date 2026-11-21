@@ -48,7 +48,7 @@ namespace NPOI.DDF
         /// <param name="size">The number of bytes to Read.</param>
         public void Dump(byte[] data, int offset, int size)
         {
-            IEscherRecordFactory recordFactory = new DefaultEscherRecordFactory();
+            DefaultEscherRecordFactory recordFactory = new();
             int pos = offset;
             while (pos < offset + size)
             {
@@ -424,7 +424,7 @@ namespace NPOI.DDF
             }
         }
 
-        private class PropName
+        private sealed class PropName
         {
             public PropName(int id, String name)
             {
@@ -441,7 +441,7 @@ namespace NPOI.DDF
         /// </summary>
         /// <param name="propertyId">The property number for the name</param>
         /// <returns>A descriptive name.</returns>
-        private String PropertyName(short propertyId)
+        private static String PropertyName(short propertyId)
         {
 
 
@@ -738,7 +738,7 @@ namespace NPOI.DDF
         /// </summary>
         /// <param name="b">blip id</param>
         /// <returns> A description.</returns>
-        private String GetBlipType(byte b)
+        private static String GetBlipType(byte b)
         {
             switch (b)
             {
@@ -771,7 +771,7 @@ namespace NPOI.DDF
         /// </summary>
         /// <param name="n32">The N32.</param>
         /// <returns></returns>
-        private String Dec1616(int n32)
+        private static String Dec1616(int n32)
         {
             String result = "";
             result += (short)(n32 >> 16);
@@ -785,7 +785,7 @@ namespace NPOI.DDF
         /// </summary>
         /// <param name="bytes">How many bytes this hex value consists of.</param>
         /// <param name="in1">The stream to Read the hex value from.</param>
-        private void OutHex(int bytes, Stream in1)
+        private static void OutHex(int bytes, Stream in1)
         {
             switch (bytes)
             {

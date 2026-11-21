@@ -18,7 +18,8 @@
 namespace NPOI.XSSF.UserModel.Helpers
 {
     using System;
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
 
     public class HeaderFooterHelper
     {
@@ -69,7 +70,7 @@ namespace NPOI.XSSF.UserModel.Helpers
         /**
          * Split into left, center, right
          */
-        private String[] GetParts(String str)
+        private static String[] GetParts(String str)
         {
             String[] parts = new String[] { "", "", "" };
             if (str == null)
@@ -110,14 +111,15 @@ namespace NPOI.XSSF.UserModel.Helpers
 
             return parts;
         }
-        private String JoinParts(String[] parts)
+
+        private static String JoinParts(String[] parts)
         {
             return JoinParts(parts[0], parts[1], parts[2]);
         }
-        private String JoinParts(String l, String c, String r)
-        {
-            StringBuilder ret = new StringBuilder();
 
+        private static String JoinParts(String l, String c, String r)
+        {
+            using var ret = ZString.CreateStringBuilder();
             // Join as c, l, r
             if (c.Length > 0)
             {

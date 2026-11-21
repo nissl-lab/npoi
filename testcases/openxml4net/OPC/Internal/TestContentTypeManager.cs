@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 using System.Collections.Generic;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using NPOI.OpenXml4Net.OPC.Internal;
 using NPOI.OpenXml4Net.OPC;
 
@@ -26,7 +26,7 @@ namespace TestCases.OpenXml4Net.OPC.Internal
             PackageRelationship corePropertiesRelationship = rels.GetRelationship(0);
             PackagePart coreDocument = p.GetPart(corePropertiesRelationship);
 
-            Assert.AreEqual("application/vnd.openxmlformats-package.core-properties+xml", coreDocument.ContentType);
+            ClassicAssert.AreEqual("application/vnd.openxmlformats-package.core-properties+xml", coreDocument.ContentType);
             // TODO - finish writing this test
             Assume.That(false,"finish writing this test");
 
@@ -53,10 +53,10 @@ namespace TestCases.OpenXml4Net.OPC.Internal
             ctm.AddContentType(name3, "text/xml+rel");
             ctm.AddContentType(name4, "text/xml+rel");
 
-            Assert.AreEqual(ctm.GetContentType(name1), "foo-type1");
-            Assert.AreEqual(ctm.GetContentType(name2), "foo-type2");
-            Assert.AreEqual(ctm.GetContentType(name3), "text/xml+rel");
-            Assert.AreEqual(ctm.GetContentType(name3), "text/xml+rel");
+            ClassicAssert.AreEqual(ctm.GetContentType(name1), "foo-type1");
+            ClassicAssert.AreEqual(ctm.GetContentType(name2), "foo-type2");
+            ClassicAssert.AreEqual(ctm.GetContentType(name3), "text/xml+rel");
+            ClassicAssert.AreEqual(ctm.GetContentType(name3), "text/xml+rel");
         }
         /**
          * Test the addition then removal of content types.
@@ -79,13 +79,13 @@ namespace TestCases.OpenXml4Net.OPC.Internal
             ctm.RemoveContentType(name2);
             ctm.RemoveContentType(name3);
 
-            Assert.AreEqual(ctm.GetContentType(name1), "foo-type1");
-            Assert.AreEqual(ctm.GetContentType(name2), "foo-type1");
-            Assert.AreEqual(ctm.GetContentType(name3), null);
+            ClassicAssert.AreEqual(ctm.GetContentType(name1), "foo-type1");
+            ClassicAssert.AreEqual(ctm.GetContentType(name2), "foo-type1");
+            ClassicAssert.AreEqual(ctm.GetContentType(name3), null);
 
             ctm.RemoveContentType(name1);
-            Assert.AreEqual(ctm.GetContentType(name1), null);
-            Assert.AreEqual(ctm.GetContentType(name2), null);
+            ClassicAssert.AreEqual(ctm.GetContentType(name1), null);
+            ClassicAssert.AreEqual(ctm.GetContentType(name2), null);
         }
 
     }

@@ -16,7 +16,7 @@
 ==================================================================== */
 
 using TestCases.SS.Util;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using System;
 using NPOI.SS.Util;
 using System.Text;
@@ -84,8 +84,8 @@ namespace TestCases.SS.Util
         {
             double a = 0.06 - 0.01;
             double b = 0.05;
-            Assert.IsFalse(a == b);
-            Assert.AreEqual(0, NumberComparer.Compare(a, b));
+            ClassicAssert.IsFalse(a == b);
+            ClassicAssert.AreEqual(0, NumberComparer.Compare(a, b));
         }
 
         /**
@@ -96,8 +96,8 @@ namespace TestCases.SS.Util
         {
             double a = 1 + 1.0028 - 0.9973;
             double b = 1.0055;
-            Assert.IsFalse(a == b);
-            Assert.AreEqual(0, NumberComparer.Compare(a, b));
+            ClassicAssert.IsFalse(a == b);
+            ClassicAssert.AreEqual(0, NumberComparer.Compare(a, b));
         }
 
         private static bool Confirm(int i, double a, double b, int expRes)

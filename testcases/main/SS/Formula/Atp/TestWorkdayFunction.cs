@@ -22,7 +22,7 @@ using NPOI.SS.Formula.Atp;
 using NPOI.SS.Formula.Eval;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using System.Globalization;
 namespace TestCases.SS.Formula.Atp
 {
@@ -38,23 +38,23 @@ namespace TestCases.SS.Formula.Atp
         [Test]
         public void TestFailWhenNoArguments()
         {
-            Assert.AreEqual(ErrorEval.VALUE_INVALID, WorkdayFunction.instance.Evaluate(new ValueEval[0], null));
+            ClassicAssert.AreEqual(ErrorEval.VALUE_INVALID, WorkdayFunction.instance.Evaluate(new ValueEval[0], null));
         }
 
         [Test]
         public void TestFailWhenLessThan2Arguments()
         {
-            Assert.AreEqual(ErrorEval.VALUE_INVALID, WorkdayFunction.instance.Evaluate(new ValueEval[1], null));
+            ClassicAssert.AreEqual(ErrorEval.VALUE_INVALID, WorkdayFunction.instance.Evaluate(new ValueEval[1], null));
         }
         [Test]
         public void TestFailWhenMoreThan3Arguments()
         {
-            Assert.AreEqual(ErrorEval.VALUE_INVALID, WorkdayFunction.instance.Evaluate(new ValueEval[4], null));
+            ClassicAssert.AreEqual(ErrorEval.VALUE_INVALID, WorkdayFunction.instance.Evaluate(new ValueEval[4], null));
         }
         [Test]
         public void TestFailWhenArgumentsAreNotDatesNorNumbers()
         {
-            Assert.AreEqual(ErrorEval.VALUE_INVALID, WorkdayFunction.instance.Evaluate(
+            ClassicAssert.AreEqual(ErrorEval.VALUE_INVALID, WorkdayFunction.instance.Evaluate(
                     new ValueEval[] { new StringEval("Potato"), new StringEval("Cucumber") }, EC));
         }
         [Test]
@@ -63,7 +63,7 @@ namespace TestCases.SS.Formula.Atp
             DateTime expDate = new DateTime(2009, 4, 30);
             ValueEval[] ve = { new StringEval(STARTING_DATE), new NumberEval(151) };
             DateTime actDate = DateUtil.GetJavaDate(((NumberEval)WorkdayFunction.instance.Evaluate(ve, EC)).NumberValue);
-            Assert.AreEqual(expDate, actDate);
+            ClassicAssert.AreEqual(expDate, actDate);
         }
 
         [Test]
@@ -75,10 +75,10 @@ namespace TestCases.SS.Formula.Atp
 
             ValueEval[] ve = { new StringEval("2013/09/30"), new NumberEval(-1) };
             double numberValue = ((NumberEval)WorkdayFunction.instance.Evaluate(ve, EC)).NumberValue;
-            Assert.AreEqual(41544.0, numberValue, 0);
+            ClassicAssert.AreEqual(41544.0, numberValue, 0);
 
             DateTime actDate = DateUtil.GetJavaDate(numberValue);
-            Assert.AreEqual(expDate, actDate);
+            ClassicAssert.AreEqual(expDate, actDate);
         }
 
         [Test]
@@ -90,10 +90,10 @@ namespace TestCases.SS.Formula.Atp
 
             ValueEval[] ve = { new StringEval("2013/09/27"), new NumberEval(1) };
             double numberValue = ((NumberEval)WorkdayFunction.instance.Evaluate(ve, EC)).NumberValue;
-            Assert.AreEqual(41547.0, numberValue, 0);
+            ClassicAssert.AreEqual(41547.0, numberValue, 0);
 
             DateTime actDate = DateUtil.GetJavaDate(numberValue);
-            Assert.AreEqual(expDate, actDate);
+            ClassicAssert.AreEqual(expDate, actDate);
         }
 
         [Test]
@@ -105,10 +105,10 @@ namespace TestCases.SS.Formula.Atp
 
             ValueEval[] ve = { new StringEval("2013/10/06"), new NumberEval(1) };
             double numberValue = ((NumberEval)WorkdayFunction.instance.Evaluate(ve, EC)).NumberValue;
-            Assert.AreEqual(41554.0, numberValue, 0);
+            ClassicAssert.AreEqual(41554.0, numberValue, 0);
 
             DateTime actDate = DateUtil.GetJavaDate(numberValue);
-            Assert.AreEqual(expDate, actDate);
+            ClassicAssert.AreEqual(expDate, actDate);
 
         }
 
@@ -121,10 +121,10 @@ namespace TestCases.SS.Formula.Atp
 
             ValueEval[] ve = { new StringEval("2013/10/06"), new NumberEval(-1) };
             double numberValue = ((NumberEval)WorkdayFunction.instance.Evaluate(ve, EC)).NumberValue;
-            Assert.AreEqual(41551.0, numberValue, 0);
+            ClassicAssert.AreEqual(41551.0, numberValue, 0);
 
             DateTime actDate = DateUtil.GetJavaDate(numberValue);
-            Assert.AreEqual(expDate, actDate);
+            ClassicAssert.AreEqual(expDate, actDate);
         }
         [Test]
         public void TestReturnWorkdaysWithDaysTruncated()
@@ -133,7 +133,7 @@ namespace TestCases.SS.Formula.Atp
             ValueEval[] ve = { new StringEval(STARTING_DATE), new NumberEval(151.99999) };
             double numberValue = ((NumberEval)WorkdayFunction.instance.Evaluate(ve, EC)).NumberValue;
             DateTime actDate = DateUtil.GetJavaDate(numberValue);
-            Assert.AreEqual(expDate, actDate);
+            ClassicAssert.AreEqual(expDate, actDate);
         }
         [Test]
         public void TestReturnRetroativeWorkday()
@@ -143,7 +143,7 @@ namespace TestCases.SS.Formula.Atp
                 new StringEval(RETROATIVE_HOLIDAY) };
             double numberValue = ((NumberEval)WorkdayFunction.instance.Evaluate(ve, EC)).NumberValue;
             DateTime actDate = DateUtil.GetJavaDate(numberValue);
-            Assert.AreEqual(expDate, actDate);
+            ClassicAssert.AreEqual(expDate, actDate);
         }
         [Test]
         public void TestReturnNetworkdaysWithManyHolidays()
@@ -154,7 +154,7 @@ namespace TestCases.SS.Formula.Atp
                 new MockAreaEval(new string[] {FIRST_HOLIDAY, SECOND_HOLIDAY, THIRD_HOLIDAY }) };
             double numberValue = ((NumberEval)WorkdayFunction.instance.Evaluate(ve, EC)).NumberValue;
             DateTime actDate = DateUtil.GetJavaDate(numberValue);
-            Assert.AreEqual(expDate, actDate);
+            ClassicAssert.AreEqual(expDate, actDate);
         }
 
         private class MockAreaEval : AreaEvalBase

@@ -50,15 +50,27 @@ namespace NPOI.XSSF.Streaming
             return new SXSSFFormulaEvaluator(workbook, stabilityClassifier, udfFinder);
         }
 
+        public override void NotifySetFormula(ICell cell)
+        {
+            _bookEvaluator.NotifyUpdateCell(new SXSSFEvaluationCell((SXSSFCell)cell));
+        }
+        public override void NotifyDeleteCell(ICell cell)
+        {
+            _bookEvaluator.NotifyDeleteCell(new SXSSFEvaluationCell((SXSSFCell)cell));
+        }
+        public override void NotifyUpdateCell(ICell cell)
+        {
+            _bookEvaluator.NotifyUpdateCell(new SXSSFEvaluationCell((SXSSFCell)cell));
+        }
         protected override IEvaluationCell ToEvaluationCell(ICell cell)
         {
-            if (!(cell is SXSSFCell))
+            if (cell is not SXSSFCell sxssfCell)
             {
                 throw new ArgumentException("Unexpected type of cell: " + cell.GetType() + "." +
                         " Only SXSSFCells can be evaluated.");
             }
 
-            return new SXSSFEvaluationCell((SXSSFCell)cell);
+            return new SXSSFEvaluationCell(sxssfCell);
         }
 
         public static void EvaluateAllFormulaCells(SXSSFWorkbook wb, bool skipOutOfWindow)

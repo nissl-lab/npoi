@@ -20,7 +20,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
 {
     using System;
     using NPOI.OpenXml4Net.OPC;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.OpenXml4Net.Exceptions;
     /**
      * Test part name Open Packaging Convention compliance.
@@ -95,10 +95,10 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
                 }
                 catch
                 {
-                    Assert.IsTrue(s.Equals("[Content_Types].xml"));
+                    ClassicAssert.IsTrue(s.Equals("[Content_Types].xml"));
                     continue;
                 }
-                Assert.IsFalse(
+                ClassicAssert.IsFalse(
                         PackagingUriHelper.IsValidPartName(uri), "This part name SHOULD NOT be valid: " + s);
             }
         }
@@ -112,7 +112,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
             String[] validNames = { "/xml/item1.xml", "/document.xml",
                 "/a/%D1%86.xml" };
             foreach (String s in validNames)
-                Assert.IsTrue(
+                ClassicAssert.IsTrue(
                         PackagingUriHelper.IsValidPartName(new Uri(s, UriKind.RelativeOrAbsolute)),
                         "This part name SHOULD be valid: " + s);
         }
@@ -149,7 +149,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
                 "/xml./doc.xml", "/document.", "/./document.xml",
                 "/word/./doc.rels", "/%2F/document.xml" };
             foreach (String s in invalidNames)
-                Assert.IsFalse(
+                ClassicAssert.IsFalse(
                         PackagingUriHelper.IsValidPartName(new Uri(s, UriKind.RelativeOrAbsolute)),
                         "A part name shall not have empty segments. [M1.3]");
         }
@@ -165,7 +165,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
             try
             {
                 foreach (String s in validNames)
-                    Assert.IsTrue(
+                    ClassicAssert.IsTrue(
                             PackagingUriHelper
                                     .IsValidPartName(new Uri(s, UriKind.RelativeOrAbsolute)),
                                     "A segment shall not contain non pchar characters [M1.6] : "
@@ -187,7 +187,7 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
             try
             {
                 foreach (String s in invalidNames)
-                    Assert.IsFalse(
+                    ClassicAssert.IsFalse(
                              PackagingUriHelper
                                     .IsValidPartName(new Uri(s, UriKind.RelativeOrAbsolute)),
                                     "A segment shall not contain percent-encoded unreserved characters [M1.8] : "
@@ -246,9 +246,9 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
             {
                 PackagePartName p1 = PackagingUriHelper.CreatePartName(partName1[i]);
                 PackagePartName p2 = PackagingUriHelper.CreatePartName(partName2[i]);
-                Assert.IsTrue(p1.Equals(p2));
-                Assert.IsTrue(p1.CompareTo(p2) == 0);
-                Assert.IsTrue(p1.GetHashCode() == p2.GetHashCode());
+                ClassicAssert.IsTrue(p1.Equals(p2));
+                ClassicAssert.IsTrue(p1.CompareTo(p2) == 0);
+                ClassicAssert.IsTrue(p1.GetHashCode() == p2.GetHashCode());
             }
         }
 
@@ -267,9 +267,9 @@ namespace TestCases.OpenXml4Net.OPC.Compliance
             {
                 PackagePartName p1 = PackagingUriHelper.CreatePartName(partName1[i]);
                 PackagePartName p2 = PackagingUriHelper.CreatePartName(partName2[i]);
-                Assert.IsFalse(p1.Equals(p2));
-                Assert.IsFalse(p1.CompareTo(p2) == 0);
-                Assert.IsFalse(p1.GetHashCode() == p2.GetHashCode());
+                ClassicAssert.IsFalse(p1.Equals(p2));
+                ClassicAssert.IsFalse(p1.CompareTo(p2) == 0);
+                ClassicAssert.IsFalse(p1.GetHashCode() == p2.GetHashCode());
             }
         }
     }

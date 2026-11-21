@@ -46,9 +46,9 @@ namespace NPOI.POIFS.Storage
          * Possibly any size (usually 512K or 64K).  Assumed to be at least 8 bytes for all blocks
          * before the end of the stream.  The last block in the stream can be any size except zero. 
          */
-        private byte[] _buf;
+        private readonly byte[] _buf;
         private int _readIndex;
-        private int _maxIndex;
+        private readonly int _maxIndex;
 
         internal DataInputBlock(byte[] data, int startOffset)
         {

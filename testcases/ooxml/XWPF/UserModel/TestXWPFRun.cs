@@ -14,21 +14,23 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ==================================================================== */
+using NUnit.Framework;
+using System;
+using NPOI.OpenXmlFormats.Wordprocessing;
+using NPOI.Util;
+using NPOI.WP.UserModel;
+using NPOI.XDDF.UserModel.Chart;
+using NPOI.XWPF.Model;
+using NPOI.XWPF.UserModel;
+using NUnit.Framework.Legacy;
+using System.Collections.Generic;
+using System.IO;
+
 namespace TestCases.XWPF.UserModel
 {
-    using NPOI.OpenXmlFormats.Wordprocessing;
     using CT_Blip = NPOI.OpenXmlFormats.Dml.CT_Blip;
     using CT_BlipFillProperties = NPOI.OpenXmlFormats.Dml.CT_BlipFillProperties;
     using CT_Picture = NPOI.OpenXmlFormats.Dml.Picture.CT_Picture;
-    using NPOI.Util;
-    using NPOI.WP.UserModel;
-    using NPOI.XWPF.Model;
-    using NPOI.XWPF.UserModel;
-    using NUnit.Framework;
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
 
     /**
      * Tests for XWPF Run
@@ -36,17 +38,17 @@ namespace TestCases.XWPF.UserModel
     [TestFixture]
     public class TestXWPFRun
     {
-
         public CT_R ctRun;
-        public IRunBody p;
+        public XWPFParagraph p;
+        public IRunBody irb;
+        XWPFDocument doc;
         [SetUp]
         public void SetUp()
         {
-            XWPFDocument doc = new XWPFDocument();
+            doc = new XWPFDocument();
             p = doc.CreateParagraph();
-
+            irb = p;
             this.ctRun = new CT_R();
-
         }
 
         [Test]
@@ -56,49 +58,16 @@ namespace TestCases.XWPF.UserModel
             ctRun.AddNewT().Value = ("TEST2 STRING");
             ctRun.AddNewT().Value = ("TEST3 STRING");
 
-            Assert.AreEqual(3, ctRun.SizeOfTArray());
-            XWPFRun run = new XWPFRun(ctRun, p);
+            ClassicAssert.AreEqual(3, ctRun.SizeOfTArray());
+            XWPFRun run = new XWPFRun(ctRun, irb);
 
-            Assert.AreEqual("TEST2 STRING", run.GetText(1));
+            ClassicAssert.AreEqual("TEST2 STRING", run.GetText(1));
 
             run.SetText("NEW STRING", 0);
-            Assert.AreEqual("NEW STRING", run.GetText(0));
+            ClassicAssert.AreEqual("NEW STRING", run.GetText(0));
 
             //Run.Text=("xxx",14);
             //Assert.Fail("Position wrong");
-        }
-
-        /*
-         * bug 59208
-         * Purpose: test all valid boolean-like values
-         * exercise isCTOnOff(CTOnOff) through all valid permutations
-         */
-        [Ignore("stub testCTOnOff")]
-        public void TestCTOnOff()
-        {
-            //CTRPr rpr = ctRun.addNewRPr();
-            //CTOnOff bold = rpr.addNewB();
-            //XWPFRun run = new XWPFRun(ctRun, p);
-
-            //// True values: "true", "1", "on"
-            //bold.setVal(STOnOff.TRUE);
-            //assertEquals(true, run.isBold());
-
-            //bold.setVal(STOnOff.X_1);
-            //assertEquals(true, run.isBold());
-
-            //bold.setVal(STOnOff.ON);
-            //assertEquals(true, run.isBold());
-
-            //// False values: "false", "0", "off"
-            //bold.setVal(STOnOff.FALSE);
-            //assertEquals(false, run.isBold());
-
-            //bold.setVal(STOnOff.X_0);
-            //assertEquals(false, run.isBold());
-
-            //bold.setVal(STOnOff.OFF);
-            //assertEquals(false, run.isBold());
         }
 
         [Test]
@@ -107,14 +76,14 @@ namespace TestCases.XWPF.UserModel
             CT_RPr rpr = ctRun.AddNewRPr();
             rpr.AddNewB().val = true;
 
-            XWPFRun run = new XWPFRun(ctRun, p);
-            Assert.AreEqual(true, run.IsBold);
+            XWPFRun run = new XWPFRun(ctRun, irb);
+            ClassicAssert.AreEqual(true, run.IsBold);
 
             run.IsBold = (false);
             // Implementation detail: POI natively prefers <w:b w:val="false"/>,
             // but should correctly read val="0" and val="off"
-            Assert.AreEqual(false, run.IsBold);
-            Assert.AreEqual(false, rpr.b.val);
+            ClassicAssert.AreEqual(false, run.IsBold);
+            ClassicAssert.AreEqual(false, rpr.b.val);
         }
 
         [Test]
@@ -123,11 +92,26 @@ namespace TestCases.XWPF.UserModel
             CT_RPr rpr = ctRun.AddNewRPr();
             rpr.AddNewI().val = true;
 
-            XWPFRun run = new XWPFRun(ctRun, p);
-            Assert.AreEqual(true, run.IsItalic);
+            XWPFRun run = new XWPFRun(ctRun, irb);
+            ClassicAssert.AreEqual(true, run.IsItalic);
 
             run.IsItalic = false;
-            Assert.AreEqual(false, rpr.i.val);
+            ClassicAssert.AreEqual(false, rpr.i.val);
+        }
+
+        [Test]
+        public void TestSetGetRtl()
+        {
+            XWPFRun run = new XWPFRun(ctRun, irb);
+            // default: no rPr, IsRtl should be false
+            ClassicAssert.AreEqual(false, run.IsRtl);
+
+            CT_RPr rpr = ctRun.AddNewRPr();
+            rpr.AddNewRtl().val = true;
+            ClassicAssert.AreEqual(true, run.IsRtl);
+
+            run.IsRtl = false;
+            ClassicAssert.AreEqual(false, rpr.rtl.val);
         }
 
         [Test]
@@ -136,11 +120,11 @@ namespace TestCases.XWPF.UserModel
             CT_RPr rpr = ctRun.AddNewRPr();
             rpr.AddNewStrike().val = true;
 
-            XWPFRun run = new XWPFRun(ctRun, p);
-            Assert.IsTrue(run.IsStrikeThrough);
+            XWPFRun run = new XWPFRun(ctRun, irb);
+            ClassicAssert.IsTrue(run.IsStrikeThrough);
 
             run.IsStrikeThrough = false;
-            Assert.AreEqual(false, rpr.strike.val);
+            ClassicAssert.AreEqual(false, rpr.strike.val);
         }
 
         [Test]
@@ -149,25 +133,11 @@ namespace TestCases.XWPF.UserModel
             CT_RPr rpr = ctRun.AddNewRPr();
             rpr.AddNewU().val = (ST_Underline.dash);
 
-            XWPFRun run = new XWPFRun(ctRun, p);
-            Assert.AreEqual(UnderlinePatterns.Dash, run.Underline);
+            XWPFRun run = new XWPFRun(ctRun, irb);
+            ClassicAssert.AreEqual(UnderlinePatterns.Dash, run.Underline);
 
             run.Underline = UnderlinePatterns.None;
-            Assert.AreEqual(ST_Underline.none, rpr.u.val);
-        }
-
-
-        [Test]
-        public void TestSetGetVAlign()
-        {
-            CT_RPr rpr = ctRun.AddNewRPr();
-            rpr.AddNewVertAlign().val = (ST_VerticalAlignRun.subscript);
-
-            XWPFRun run = new XWPFRun(ctRun, p);
-            Assert.AreEqual(VerticalAlign.SUBSCRIPT, run.Subscript);
-
-            run.Subscript = (VerticalAlign.BASELINE);
-            Assert.AreEqual(ST_VerticalAlignRun.baseline, rpr.vertAlign.val);
+            ClassicAssert.AreEqual(ST_Underline.none, rpr.u.val);
         }
 
 
@@ -177,11 +147,11 @@ namespace TestCases.XWPF.UserModel
             CT_RPr rpr = ctRun.AddNewRPr();
             rpr.AddNewRFonts().ascii = ("Times New Roman");
 
-            XWPFRun run = new XWPFRun(ctRun, p);
-            Assert.AreEqual("Times New Roman", run.FontFamily);
+            XWPFRun run = new XWPFRun(ctRun, irb);
+            ClassicAssert.AreEqual("Times New Roman", run.FontFamily);
 
             run.FontFamily = ("Verdana");
-            Assert.AreEqual("Verdana", rpr.rFonts.ascii);
+            ClassicAssert.AreEqual("Verdana", rpr.rFonts.ascii);
         }
 
 
@@ -191,14 +161,14 @@ namespace TestCases.XWPF.UserModel
             CT_RPr rpr = ctRun.AddNewRPr();
             rpr.AddNewSz().val = 14;
 
-            XWPFRun run = new XWPFRun(ctRun, p);
-            Assert.AreEqual(7.0, run.FontSize);
+            XWPFRun run = new XWPFRun(ctRun, irb);
+            ClassicAssert.AreEqual(7.0, run.FontSize);
 
             run.FontSize = 24;
-            Assert.AreEqual(48, (int)rpr.sz.val);
+            ClassicAssert.AreEqual(48, (int) rpr.sz.val);
 
             run.FontSize = 24.5;
-            Assert.AreEqual(24.5, run.FontSize);
+            ClassicAssert.AreEqual(24.5, run.FontSize);
         }
 
 
@@ -208,40 +178,38 @@ namespace TestCases.XWPF.UserModel
             CT_RPr rpr = ctRun.AddNewRPr();
             rpr.AddNewPosition().val = "4000";
 
-            XWPFRun run = new XWPFRun(ctRun, p);
-            Assert.AreEqual(4000, run.TextPosition);
+            XWPFRun run = new XWPFRun(ctRun, irb);
+            ClassicAssert.AreEqual(4000, run.TextPosition);
 
             run.TextPosition = (2400);
-            Assert.AreEqual(2400, int.Parse(rpr.position.val));
+            ClassicAssert.AreEqual(2400, int.Parse(rpr.position.val));
         }
         [Test]
         public void TestSetGetColor()
         {
-            XWPFRun run = new XWPFRun(ctRun, p);
+            XWPFRun run = new XWPFRun(ctRun, irb);
             run.SetColor("0F0F0F");
             String clr = run.GetColor();
-            Assert.AreEqual("0F0F0F", clr);
+            ClassicAssert.AreEqual("0F0F0F", clr);
         }
         [Test]
         public void TestAddCarriageReturn()
         {
-
             ctRun.AddNewT().Value = ("TEST STRING");
             ctRun.AddNewCr();
             ctRun.AddNewT().Value = ("TEST2 STRING");
             ctRun.AddNewCr();
             ctRun.AddNewT().Value = ("TEST3 STRING");
-            Assert.AreEqual(2, ctRun.SizeOfCrArray());
+            ClassicAssert.AreEqual(2, ctRun.SizeOfCrArray());
 
-            XWPFRun run = new XWPFRun(new CT_R(), p);
+            XWPFRun run = new XWPFRun(new CT_R(), irb);
             run.AppendText("T1");
             run.AddCarriageReturn();
             run.AddCarriageReturn();
             run.AppendText("T2");
             run.AddCarriageReturn();
-            Assert.AreEqual(3, run.GetCTR().GetCrList().Count);
-            Assert.AreEqual("T1\n\nT2\n", run.ToString());
-
+            ClassicAssert.AreEqual(3, run.GetCTR().GetCrList().Count);
+            ClassicAssert.AreEqual("T1\n\nT2\n", run.ToString());
         }
 
         [Test]
@@ -252,19 +220,19 @@ namespace TestCases.XWPF.UserModel
             ctRun.AddNewT().Value = "TEST2 STRING";
             ctRun.AddNewTab();
             ctRun.AddNewT().Value = "TEST3 STRING";
-            Assert.AreEqual(1, ctRun.SizeOfCrArray());
-            Assert.AreEqual(1, ctRun.SizeOfTabArray());
+            ClassicAssert.AreEqual(1, ctRun.SizeOfCrArray());
+            ClassicAssert.AreEqual(1, ctRun.SizeOfTabArray());
 
-            XWPFRun run = new XWPFRun(new CT_R(), p);
+            XWPFRun run = new XWPFRun(new CT_R(), irb);
             run.AppendText("T1");
             run.AddCarriageReturn();
             run.AppendText("T2");
             run.AddTab();
             run.AppendText("T3");
-            Assert.AreEqual(1, run.GetCTR().GetCrList().Count);
-            Assert.AreEqual(1, run.GetCTR().GetTabList().Count);
+            ClassicAssert.AreEqual(1, run.GetCTR().GetCrList().Count);
+            ClassicAssert.AreEqual(1, run.GetCTR().GetTabList().Count);
 
-            Assert.AreEqual("T1\nT2\tT3", run.ToString());
+            ClassicAssert.AreEqual("T1\nT2\tT3", run.ToString());
         }
 
 
@@ -277,20 +245,20 @@ namespace TestCases.XWPF.UserModel
             CT_Br breac = ctRun.AddNewBr();
             breac.clear = ST_BrClear.left;
             ctRun.AddNewT().Value = "TEST3 STRING";
-            Assert.AreEqual(2, ctRun.SizeOfBrArray());
+            ClassicAssert.AreEqual(2, ctRun.SizeOfBrArray());
 
-            XWPFRun run = new XWPFRun(new CT_R(), p);
+            XWPFRun run = new XWPFRun(new CT_R(), irb);
             run.SetText("TEXT1");
             run.AddBreak();
             run.SetText("TEXT2");
             run.AddBreak(BreakType.TEXTWRAPPING);
-            Assert.AreEqual(2, run.GetCTR().SizeOfBrArray());
+            ClassicAssert.AreEqual(2, run.GetCTR().SizeOfBrArray());
         }
 
         /**
          * Test that on an existing document, we do the
          *  right thing with it
-         * @throws IOException 
+         * @ 
          */
         [Test]
         public void TestExisting()
@@ -302,127 +270,127 @@ namespace TestCases.XWPF.UserModel
 
             // First paragraph is simple
             p = doc.GetParagraphArray(0);
-            Assert.AreEqual("This is a test document.", p.Text);
-            Assert.AreEqual(2, p.Runs.Count);
+            ClassicAssert.AreEqual("This is a test document.", p.Text);
+            ClassicAssert.AreEqual(2, p.Runs.Count);
 
             run = p.Runs[0];
-            Assert.AreEqual("This is a test document", run.ToString());
-            Assert.AreEqual(false, run.IsBold);
-            Assert.AreEqual(false, run.IsItalic);
-            Assert.IsFalse(run.IsStrikeThrough);
-            Assert.AreEqual(null, run.GetCTR().rPr);
+            ClassicAssert.AreEqual("This is a test document", run.ToString());
+            ClassicAssert.AreEqual(false, run.IsBold);
+            ClassicAssert.AreEqual(false, run.IsItalic);
+            ClassicAssert.IsFalse(run.IsStrikeThrough);
+            ClassicAssert.AreEqual(null, run.GetCTR().rPr);
 
             run = p.Runs[1];
-            Assert.AreEqual(".", run.ToString());
-            Assert.AreEqual(false, run.IsBold);
-            Assert.AreEqual(false, run.IsItalic);
-            Assert.IsFalse(run.IsStrikeThrough);
-            Assert.AreEqual(null, run.GetCTR().rPr);
+            ClassicAssert.AreEqual(".", run.ToString());
+            ClassicAssert.AreEqual(false, run.IsBold);
+            ClassicAssert.AreEqual(false, run.IsItalic);
+            ClassicAssert.IsFalse(run.IsStrikeThrough);
+            ClassicAssert.AreEqual(null, run.GetCTR().rPr);
 
 
             // Next paragraph is all in one style, but a different one
             p = doc.GetParagraphArray(1);
-            Assert.AreEqual("This bit is in bold and italic", p.Text);
-            Assert.AreEqual(1, p.Runs.Count);
+            ClassicAssert.AreEqual("This bit is in bold and italic", p.Text);
+            ClassicAssert.AreEqual(1, p.Runs.Count);
 
             run = p.Runs[0];
-            Assert.AreEqual("This bit is in bold and italic", run.ToString());
-            Assert.AreEqual(true, run.IsBold);
-            Assert.AreEqual(true, run.IsItalic);
-            Assert.IsFalse(run.IsStrikeThrough);
-            Assert.AreEqual(true, run.GetCTR().rPr.IsSetB());
-            Assert.AreEqual(false, run.GetCTR().rPr.b.IsSetVal());
+            ClassicAssert.AreEqual("This bit is in bold and italic", run.ToString());
+            ClassicAssert.AreEqual(true, run.IsBold);
+            ClassicAssert.AreEqual(true, run.IsItalic);
+            ClassicAssert.IsFalse(run.IsStrikeThrough);
+            ClassicAssert.AreEqual(true, run.GetCTR().rPr.IsSetB());
+            ClassicAssert.AreEqual(false, run.GetCTR().rPr.b.IsSetVal());
 
 
             // Back to normal
             p = doc.GetParagraphArray(2);
-            Assert.AreEqual("Back to normal", p.Text);
-            Assert.AreEqual(1, p.Runs.Count);
+            ClassicAssert.AreEqual("Back to normal", p.Text);
+            ClassicAssert.AreEqual(1, p.Runs.Count);
 
             run = p.Runs[(0)];
-            Assert.AreEqual("Back to normal", run.ToString());
-            Assert.AreEqual(false, run.IsBold);
-            Assert.AreEqual(false, run.IsItalic);
-            Assert.IsFalse(run.IsStrikeThrough);
-            Assert.AreEqual(null, run.GetCTR().rPr);
+            ClassicAssert.AreEqual("Back to normal", run.ToString());
+            ClassicAssert.AreEqual(false, run.IsBold);
+            ClassicAssert.AreEqual(false, run.IsItalic);
+            ClassicAssert.IsFalse(run.IsStrikeThrough);
+            ClassicAssert.AreEqual(null, run.GetCTR().rPr);
 
 
             // Different styles in one paragraph
             p = doc.GetParagraphArray(3);
-            Assert.AreEqual("This contains BOLD, ITALIC and BOTH, as well as RED and YELLOW text.", p.Text);
-            Assert.AreEqual(11, p.Runs.Count);
+            ClassicAssert.AreEqual("This contains BOLD, ITALIC and BOTH, as well as RED and YELLOW text.", p.Text);
+            ClassicAssert.AreEqual(11, p.Runs.Count);
 
             run = p.Runs[(0)];
-            Assert.AreEqual("This contains ", run.ToString());
-            Assert.AreEqual(false, run.IsBold);
-            Assert.AreEqual(false, run.IsItalic);
-            Assert.IsFalse(run.IsStrikeThrough);
-            Assert.AreEqual(null, run.GetCTR().rPr);
+            ClassicAssert.AreEqual("This contains ", run.ToString());
+            ClassicAssert.AreEqual(false, run.IsBold);
+            ClassicAssert.AreEqual(false, run.IsItalic);
+            ClassicAssert.IsFalse(run.IsStrikeThrough);
+            ClassicAssert.AreEqual(null, run.GetCTR().rPr);
 
             run = p.Runs[(1)];
-            Assert.AreEqual("BOLD", run.ToString());
-            Assert.AreEqual(true, run.IsBold);
-            Assert.AreEqual(false, run.IsItalic);
-            Assert.IsFalse(run.IsStrikeThrough);
+            ClassicAssert.AreEqual("BOLD", run.ToString());
+            ClassicAssert.AreEqual(true, run.IsBold);
+            ClassicAssert.AreEqual(false, run.IsItalic);
+            ClassicAssert.IsFalse(run.IsStrikeThrough);
 
             run = p.Runs[2];
-            Assert.AreEqual(", ", run.ToString());
-            Assert.AreEqual(false, run.IsBold);
-            Assert.AreEqual(false, run.IsItalic);
-            Assert.IsFalse(run.IsStrikeThrough);
-            Assert.AreEqual(null, run.GetCTR().rPr);
+            ClassicAssert.AreEqual(", ", run.ToString());
+            ClassicAssert.AreEqual(false, run.IsBold);
+            ClassicAssert.AreEqual(false, run.IsItalic);
+            ClassicAssert.IsFalse(run.IsStrikeThrough);
+            ClassicAssert.AreEqual(null, run.GetCTR().rPr);
 
             run = p.Runs[(3)];
-            Assert.AreEqual("ITALIC", run.ToString());
-            Assert.AreEqual(false, run.IsBold);
-            Assert.AreEqual(true, run.IsItalic);
-            Assert.IsFalse(run.IsStrikeThrough);
+            ClassicAssert.AreEqual("ITALIC", run.ToString());
+            ClassicAssert.AreEqual(false, run.IsBold);
+            ClassicAssert.AreEqual(true, run.IsItalic);
+            ClassicAssert.IsFalse(run.IsStrikeThrough);
 
             run = p.Runs[(4)];
-            Assert.AreEqual(" and ", run.ToString());
-            Assert.AreEqual(false, run.IsBold);
-            Assert.AreEqual(false, run.IsItalic);
-            Assert.IsFalse(run.IsStrikeThrough);
-            Assert.AreEqual(null, run.GetCTR().rPr);
+            ClassicAssert.AreEqual(" and ", run.ToString());
+            ClassicAssert.AreEqual(false, run.IsBold);
+            ClassicAssert.AreEqual(false, run.IsItalic);
+            ClassicAssert.IsFalse(run.IsStrikeThrough);
+            ClassicAssert.AreEqual(null, run.GetCTR().rPr);
 
             run = p.Runs[(5)];
-            Assert.AreEqual("BOTH", run.ToString());
-            Assert.AreEqual(true, run.IsBold);
-            Assert.AreEqual(true, run.IsItalic);
-            Assert.IsFalse(run.IsStrikeThrough);
+            ClassicAssert.AreEqual("BOTH", run.ToString());
+            ClassicAssert.AreEqual(true, run.IsBold);
+            ClassicAssert.AreEqual(true, run.IsItalic);
+            ClassicAssert.IsFalse(run.IsStrikeThrough);
 
             run = p.Runs[(6)];
-            Assert.AreEqual(", as well as ", run.ToString());
-            Assert.AreEqual(false, run.IsBold);
-            Assert.AreEqual(false, run.IsItalic);
-            Assert.IsFalse(run.IsStrikeThrough);
-            Assert.AreEqual(null, run.GetCTR().rPr);
+            ClassicAssert.AreEqual(", as well as ", run.ToString());
+            ClassicAssert.AreEqual(false, run.IsBold);
+            ClassicAssert.AreEqual(false, run.IsItalic);
+            ClassicAssert.IsFalse(run.IsStrikeThrough);
+            ClassicAssert.AreEqual(null, run.GetCTR().rPr);
 
             run = p.Runs[(7)];
-            Assert.AreEqual("RED", run.ToString());
-            Assert.AreEqual(false, run.IsBold);
-            Assert.AreEqual(false, run.IsItalic);
-            Assert.IsFalse(run.IsStrikeThrough);
+            ClassicAssert.AreEqual("RED", run.ToString());
+            ClassicAssert.AreEqual(false, run.IsBold);
+            ClassicAssert.AreEqual(false, run.IsItalic);
+            ClassicAssert.IsFalse(run.IsStrikeThrough);
 
             run = p.Runs[(8)];
-            Assert.AreEqual(" and ", run.ToString());
-            Assert.AreEqual(false, run.IsBold);
-            Assert.AreEqual(false, run.IsItalic);
-            Assert.IsFalse(run.IsStrikeThrough);
-            Assert.AreEqual(null, run.GetCTR().rPr);
+            ClassicAssert.AreEqual(" and ", run.ToString());
+            ClassicAssert.AreEqual(false, run.IsBold);
+            ClassicAssert.AreEqual(false, run.IsItalic);
+            ClassicAssert.IsFalse(run.IsStrikeThrough);
+            ClassicAssert.AreEqual(null, run.GetCTR().rPr);
 
             run = p.Runs[(9)];
-            Assert.AreEqual("YELLOW", run.ToString());
-            Assert.AreEqual(false, run.IsBold);
-            Assert.AreEqual(false, run.IsItalic);
-            Assert.IsFalse(run.IsStrikeThrough);
+            ClassicAssert.AreEqual("YELLOW", run.ToString());
+            ClassicAssert.AreEqual(false, run.IsBold);
+            ClassicAssert.AreEqual(false, run.IsItalic);
+            ClassicAssert.IsFalse(run.IsStrikeThrough);
 
             run = p.Runs[(10)];
-            Assert.AreEqual(" text.", run.ToString());
-            Assert.AreEqual(false, run.IsBold);
-            Assert.AreEqual(false, run.IsItalic);
-            Assert.IsFalse(run.IsStrikeThrough);
-            Assert.AreEqual(null, run.GetCTR().rPr);
+            ClassicAssert.AreEqual(" text.", run.ToString());
+            ClassicAssert.AreEqual(false, run.IsBold);
+            ClassicAssert.AreEqual(false, run.IsItalic);
+            ClassicAssert.IsFalse(run.IsStrikeThrough);
+            ClassicAssert.AreEqual(null, run.GetCTR().rPr);
         }
 
         [Test]
@@ -435,39 +403,25 @@ namespace TestCases.XWPF.UserModel
 
             int count = 0;
 
-            foreach (XWPFParagraph p in header.Paragraphs)
+            foreach(XWPFParagraph p in header.Paragraphs)
             {
-                foreach (XWPFRun r in p.Runs)
+                foreach(XWPFRun r in p.Runs)
                 {
                     List<XWPFPicture> pictures = r.GetEmbeddedPictures();
 
-                    foreach (XWPFPicture pic in pictures)
+                    foreach(XWPFPicture pic in pictures)
                     {
-                        Assert.IsNotNull(pic.GetPictureData());
-                        Assert.AreEqual("DOZOR", pic.GetDescription());
+                        ClassicAssert.IsNotNull(pic.GetPictureData());
+                        ClassicAssert.AreEqual("DOZOR", pic.GetDescription());
                     }
 
                     count += pictures.Count;
                 }
             }
 
-            Assert.AreEqual(1, count);
+            ClassicAssert.AreEqual(1, count);
         }
 
-        [Test]
-        public void testSetGetHighlight()
-        {
-            XWPFRun run = new XWPFRun(ctRun, p);
-            Assert.AreEqual(false, run.IsHighlighted);
-
-            // TODO Do this using XWPFRun methods
-            run.GetCTR().AddNewRPr().AddNewHighlight().val = (ST_HighlightColor.none);
-            Assert.AreEqual(false, run.IsHighlighted);
-            run.GetCTR().rPr.highlight.val = (ST_HighlightColor.cyan);
-            Assert.AreEqual(true, run.IsHighlighted);
-            run.GetCTR().rPr.highlight.val = (ST_HighlightColor.none);
-            Assert.AreEqual(false, run.IsHighlighted);
-        }
 
         [Test]
         public void TestAddPicture()
@@ -476,13 +430,13 @@ namespace TestCases.XWPF.UserModel
             XWPFParagraph p = doc.GetParagraphArray(2);
             XWPFRun r = p.Runs[0];
 
-            Assert.AreEqual(0, doc.AllPictures.Count);
-            Assert.AreEqual(0, r.GetEmbeddedPictures().Count);
+            ClassicAssert.AreEqual(0, doc.AllPictures.Count);
+            ClassicAssert.AreEqual(0, r.GetEmbeddedPictures().Count);
 
-            r.AddPicture(new MemoryStream(new byte[0]), (int)PictureType.JPEG, "test.jpg", 21, 32);
+            r.AddPicture(new MemoryStream(new byte[0]), (int) PictureType.JPEG, "test.jpg", 21, 32);
 
-            Assert.AreEqual(1, doc.AllPictures.Count);
-            Assert.AreEqual(1, r.GetEmbeddedPictures().Count);
+            ClassicAssert.AreEqual(1, doc.AllPictures.Count);
+            ClassicAssert.AreEqual(1, r.GetEmbeddedPictures().Count);
         }
 
         /**
@@ -498,32 +452,32 @@ namespace TestCases.XWPF.UserModel
             XWPFParagraph p = hdr.CreateParagraph();
             XWPFRun r = p.CreateRun();
 
-            Assert.AreEqual(0, hdr.AllPictures.Count);
-            Assert.AreEqual(0, r.GetEmbeddedPictures().Count);
+            ClassicAssert.AreEqual(0, hdr.AllPictures.Count);
+            ClassicAssert.AreEqual(0, r.GetEmbeddedPictures().Count);
 
-            r.AddPicture(new ByteArrayInputStream(new byte[0]), (int)PictureType.JPEG, "test.jpg", 21, 32);
+            r.AddPicture(new ByteArrayInputStream(new byte[0]), (int) PictureType.JPEG, "test.jpg", 21, 32);
 
-            Assert.AreEqual(1, hdr.AllPictures.Count);
-            Assert.AreEqual(1, r.GetEmbeddedPictures().Count);
+            ClassicAssert.AreEqual(1, hdr.AllPictures.Count);
+            ClassicAssert.AreEqual(1, r.GetEmbeddedPictures().Count);
 
             XWPFPicture pic = r.GetEmbeddedPictures()[0];
             CT_Picture ctPic = pic.GetCTPicture();
             CT_BlipFillProperties ctBlipFill = ctPic.blipFill;
 
-            Assert.IsNotNull(ctBlipFill);
+            ClassicAssert.IsNotNull(ctBlipFill);
 
             CT_Blip ctBlip = ctBlipFill.blip;
 
-            Assert.IsNotNull(ctBlip);
-            Assert.AreEqual("rId1", ctBlip.embed);
+            ClassicAssert.IsNotNull(ctBlip);
+            ClassicAssert.AreEqual("rId1", ctBlip.embed);
 
             XWPFDocument docBack = XWPFTestDataSamples.WriteOutAndReadBack(doc);
             XWPFHeader hdrBack = docBack.GetHeaderArray(0);
             XWPFParagraph pBack = hdrBack.GetParagraphArray(0);
             XWPFRun rBack = pBack.Runs[0];
 
-            Assert.AreEqual(1, hdrBack.AllPictures.Count);
-            Assert.AreEqual(1, rBack.GetEmbeddedPictures().Count);
+            ClassicAssert.AreEqual(1, hdrBack.AllPictures.Count);
+            ClassicAssert.AreEqual(1, rBack.GetEmbeddedPictures().Count);
         }
 
         /**
@@ -535,15 +489,15 @@ namespace TestCases.XWPF.UserModel
         {
             XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("52288.docx");
             IEnumerator<XWPFParagraph> paragraphs = doc.Paragraphs.GetEnumerator();
-            while (paragraphs.MoveNext())
+            while(paragraphs.MoveNext())
             {
                 XWPFParagraph paragraph = paragraphs.Current;
-                foreach (XWPFRun run in paragraph.Runs)
+                foreach(XWPFRun run in paragraph.Runs)
                 {
-                    if (run != null)
+                    if(run != null)
                     {
                         String text = run.GetText(0);
-                        if (text != null)
+                        if(text != null)
                         {
                             run.FontFamily = ("Times New Roman");
                         }
@@ -556,60 +510,51 @@ namespace TestCases.XWPF.UserModel
         public void TestBug55476()
         {
             byte[] image = XWPFTestDataSamples.GetImage("abstract1.jpg");
-            XWPFDocument document = new XWPFDocument();
+            using var document = new XWPFDocument();
             document.CreateParagraph().CreateRun().AddPicture(
-                    new MemoryStream(image), (int)PictureType.JPEG, "test.jpg", Units.ToEMU(300), Units.ToEMU(100));
-            XWPFDocument docBack = XWPFTestDataSamples.WriteOutAndReadBack(document);
+                    new MemoryStream(image), (int) PictureType.JPEG, "test.jpg", Units.ToEMU(300), Units.ToEMU(100));
+            using var docBack = XWPFTestDataSamples.WriteOutAndReadBack(document);
             List<XWPFPicture> pictures = docBack.GetParagraphArray(0).Runs[0].GetEmbeddedPictures();
-            Assert.AreEqual(1, pictures.Count);
-            docBack.Close();
-            /*OutputStream stream = new FileOutputStream("c:\\temp\\55476.docx");
-            try {
-                document.write(stream);
-            } finally {
-                stream.close();
-            }*/
-            document.Close();
+            ClassicAssert.AreEqual(1, pictures.Count);
         }
 
         [Test]
-        [Ignore("TODO FIX CI TESTS")]
         public void TestBug58922()
         {
-            XWPFDocument document = new XWPFDocument();
+            using XWPFDocument document = new XWPFDocument();
             XWPFRun run = document.CreateParagraph().CreateRun();
-            Assert.AreEqual(-1, run.FontSize);
+            ClassicAssert.AreEqual(-1, run.FontSize);
             run.FontSize = 10;
-            Assert.AreEqual(10, run.FontSize);
+            ClassicAssert.AreEqual(10, run.FontSize);
             run.FontSize = short.MaxValue - 1;
-            Assert.AreEqual(short.MaxValue - 1, run.FontSize);
+            ClassicAssert.AreEqual(short.MaxValue - 1, run.FontSize);
             run.FontSize = short.MaxValue;
-            Assert.AreEqual(short.MaxValue, run.FontSize);
+            ClassicAssert.AreEqual(short.MaxValue, run.FontSize);
             run.FontSize = short.MaxValue + 1;
-            Assert.AreEqual(short.MaxValue + 1, run.FontSize);
+            ClassicAssert.AreEqual(short.MaxValue + 1, run.FontSize);
             run.FontSize = int.MaxValue - 1;
-            Assert.AreEqual(int.MaxValue - 1, run.FontSize);
+            ClassicAssert.AreEqual(int.MaxValue - 1, run.FontSize);
             run.FontSize = int.MaxValue;
-            Assert.AreEqual(int.MaxValue, run.FontSize);
+            ClassicAssert.AreEqual(int.MaxValue, run.FontSize);
             run.FontSize = -1;
-            Assert.AreEqual(-1, run.FontSize);
-            Assert.AreEqual(-1, run.TextPosition);
+            ClassicAssert.AreEqual(-1, run.FontSize);
+            ClassicAssert.AreEqual(-1, run.TextPosition);
             run.TextPosition = 10;
-            Assert.AreEqual(10, run.TextPosition);
+            ClassicAssert.AreEqual(10, run.TextPosition);
             run.TextPosition = short.MaxValue - 1;
-            Assert.AreEqual(short.MaxValue - 1, run.TextPosition);
+            ClassicAssert.AreEqual(short.MaxValue - 1, run.TextPosition);
             run.TextPosition = short.MaxValue;
-            Assert.AreEqual(short.MaxValue, run.TextPosition);
+            ClassicAssert.AreEqual(short.MaxValue, run.TextPosition);
             run.TextPosition = short.MaxValue + 1;
-            Assert.AreEqual(short.MaxValue + 1, run.TextPosition);
+            ClassicAssert.AreEqual(short.MaxValue + 1, run.TextPosition);
             run.TextPosition = short.MaxValue + 1;
-            Assert.AreEqual(short.MaxValue + 1, run.TextPosition);
+            ClassicAssert.AreEqual(short.MaxValue + 1, run.TextPosition);
             run.TextPosition = int.MaxValue - 1;
-            Assert.AreEqual(int.MaxValue - 1, run.TextPosition);
+            ClassicAssert.AreEqual(int.MaxValue - 1, run.TextPosition);
             run.TextPosition = int.MaxValue;
-            Assert.AreEqual(int.MaxValue, run.TextPosition);
+            ClassicAssert.AreEqual(int.MaxValue, run.TextPosition);
             run.TextPosition = -1;
-            Assert.AreEqual(-1, run.TextPosition);
+            ClassicAssert.AreEqual(-1, run.TextPosition);
         }
 
         [Test]
@@ -620,9 +565,9 @@ namespace TestCases.XWPF.UserModel
                 "  The quick brown fox",
                 "\t\tjumped over the lazy dog"
             };
-            MemoryStream bos = new MemoryStream();
-            XWPFDocument doc = new XWPFDocument();
-            foreach (String s in text)
+            using MemoryStream bos = new MemoryStream();
+            using XWPFDocument doc = new XWPFDocument();
+            foreach(String s in text)
             {
                 XWPFParagraph p1 = doc.CreateParagraph();
                 XWPFRun r1 = p1.CreateRun();
@@ -630,41 +575,189 @@ namespace TestCases.XWPF.UserModel
             }
             doc.Write(bos);
 
-            MemoryStream bis = new MemoryStream(bos.ToArray());
+            using MemoryStream bis = new MemoryStream(bos.ToArray());
             var doc2 = new XWPFDocument(bis);
 
             var paragraphs = doc2.Paragraphs;
-            Assert.AreEqual(2, paragraphs.Count);
-            for (int i = 0; i < text.Length; i++)
+            ClassicAssert.AreEqual(2, paragraphs.Count);
+            for(int i = 0; i < text.Length; i++)
             {
                 XWPFParagraph p1 = paragraphs[i];
                 String expected = text[i];
-                Assert.AreEqual(expected, p1.Text);
+                ClassicAssert.AreEqual(expected, p1.Text);
                 CT_P ctp = p1.GetCTP();
                 CT_R ctr = ctp.GetRArray(0);
                 CT_Text ctText = ctr.GetTArray(0);
                 // if text has leading whitespace then expect xml-fragment to have xml:space="preserve" set
                 // <xml-fragment xml:space="preserve" xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
                 bool isWhitespace = Character.isWhitespace(expected[0]);
-                Assert.AreEqual(isWhitespace, ctText.space == "preserve");
+                ClassicAssert.AreEqual(isWhitespace, ctText.space == "preserve");
             }
+        }
+        [Test]
+        public void TestGetNumberOfTexts()
+        {
+            using XWPFDocument doc = new XWPFDocument();
+            var p = doc.CreateParagraph();
+            XWPFRun run = p.CreateRun();
+            ClassicAssert.AreEqual(0, run.NumberOfTexts);
+            run.SetText("TEST STRING");
+            ClassicAssert.AreEqual(1, run.NumberOfTexts);
         }
         [Test]
         public void TestSetStyleId()
         {
-            XWPFDocument document = XWPFTestDataSamples.OpenSampleDocument("SampleDoc.docx");
+            using var document = XWPFTestDataSamples.OpenSampleDocument("SampleDoc.docx");
 
             XWPFRun run = document.CreateParagraph().CreateRun();
 
             String styleId = "bolditalic";
             run.SetStyle(styleId);
             String candStyleId = run.GetCTR().rPr.rStyle.val;
-            Assert.IsNotNull(candStyleId, "Expected to find a run style ID");
-            Assert.AreEqual(styleId, candStyleId);
+            ClassicAssert.IsNotNull(candStyleId, "Expected to find a run style ID");
+            ClassicAssert.AreEqual(styleId, candStyleId);
 
-            Assert.AreEqual(styleId, run.GetStyle());
+            ClassicAssert.AreEqual(styleId, run.GetStyle());
 
             document.Close();
+        }
+
+        [Test]
+        public void TestSetGetTextScale()
+        {
+            using(XWPFDocument document = new XWPFDocument())
+            {
+                XWPFRun run = document.CreateParagraph().CreateRun();
+                ClassicAssert.AreEqual(100, run.TextScale);
+                run.TextScale =200;
+                ClassicAssert.AreEqual(200, run.TextScale);
+            }
+        }
+
+        [Test]
+        public void TestSetGetTextHighlightColor()
+        {
+            using(XWPFDocument document = new XWPFDocument())
+            {
+                XWPFRun run = document.CreateParagraph().CreateRun();
+                ClassicAssert.AreEqual(ST_HighlightColor.none, run.TextHightlightColor);
+                ClassicAssert.AreEqual(false, run.IsHighlighted);
+                run.TextHighlightColor = ("darkGreen"); // See 17.18.40 ST_HighlightColor (Text Highlight Colors)
+                ClassicAssert.AreEqual(ST_HighlightColor.darkGreen, run.TextHightlightColor);
+                ClassicAssert.AreEqual(true, run.IsHighlighted);
+                run.TextHighlightColor = ("none");
+                ClassicAssert.AreEqual(false, run.IsHighlighted);
+            }
+        }
+
+        [Test]
+        public void TestSetGetVanish()
+        {
+            using(XWPFDocument document = new XWPFDocument())
+            {
+                XWPFRun run = document.CreateParagraph().CreateRun();
+                ClassicAssert.AreEqual(false, run.IsVanish);
+                run.IsVanish = (true);
+                ClassicAssert.AreEqual(true, run.IsVanish);
+                run.IsVanish = (false);
+                ClassicAssert.AreEqual(false, run.IsVanish);
+            }
+        }
+
+        [Test]
+        public void TestSetVerticalAlignment()
+        {
+            using(XWPFDocument document = new XWPFDocument())
+            {
+                XWPFRun run = document.CreateParagraph().CreateRun();
+                ClassicAssert.AreEqual(ST_VerticalAlignRun.baseline, run.VerticalAlignment);
+                run.VerticalAlignment = ST_VerticalAlignRun.subscript;
+                ClassicAssert.AreEqual(ST_VerticalAlignRun.subscript, run.VerticalAlignment);
+                run.VerticalAlignment = ST_VerticalAlignRun.superscript;
+                ClassicAssert.AreEqual(ST_VerticalAlignRun.superscript, run.VerticalAlignment);
+            }
+        }
+
+        [Test]
+        public void TestSetGetVAlign()
+        {
+            var rpr = ctRun.AddNewRPr();
+            rpr.AddNewVertAlign().val = ST_VerticalAlignRun.subscript;
+
+            XWPFRun run = new XWPFRun(ctRun, p);
+            ClassicAssert.AreEqual(VerticalAlign.SUBSCRIPT, run.Subscript);
+
+            run.Subscript =VerticalAlign.BASELINE;
+            ClassicAssert.AreEqual(ST_VerticalAlignRun.baseline, rpr.vertAlign.val);
+        }
+
+
+        [Test]
+        public void TestSetGetEmphasisMark()
+        {
+            using(XWPFDocument document = new XWPFDocument())
+            {
+                XWPFRun run = document.CreateParagraph().CreateRun();
+                ClassicAssert.AreEqual(ST_Em.none, run.EmphasisMark);
+                run.EmphasisMark = ST_Em.dot;
+                ClassicAssert.AreEqual(ST_Em.dot, run.EmphasisMark);
+            }
+        }
+
+        [Test]
+        public void TestSetGetUnderlineColor()
+        {
+            using XWPFDocument document = new XWPFDocument();
+            XWPFRun run = document.CreateParagraph().CreateRun();
+            ClassicAssert.AreEqual("auto", run.UnderlineColor);
+            String colorRgb = "C0F1a2";
+            run.UnderlineColor = (colorRgb);
+            ClassicAssert.AreEqual(colorRgb.ToLower(), run.UnderlineColor);
+            run.UnderlineColor = ("auto");
+            ClassicAssert.AreEqual("auto", run.UnderlineColor);
+        }
+
+        [Test]
+        public void TestSetGetUnderlineThemeColor()
+        {
+            using XWPFDocument document = new XWPFDocument();
+            XWPFRun run = document.CreateParagraph().CreateRun();
+            ClassicAssert.AreEqual("none", run.UnderlineThemeColor);
+            String colorName = "accent4";
+            run.UnderlineThemeColor = (colorName);
+            ClassicAssert.AreEqual(colorName, run.UnderlineThemeColor);
+            run.UnderlineThemeColor =("none");
+            ClassicAssert.AreEqual("none", run.UnderlineThemeColor);
+        }
+        [Test]
+        public void TestGetEmbeddedCharts()
+        {
+            using(XWPFDocument sampleDoc = XWPFTestDataSamples.OpenSampleDocument("61745.docx"))
+            {
+                List<XWPFChart> charts = sampleDoc.GetCharts();
+                ClassicAssert.AreEqual(2, charts.Count);
+                List<XWPFChart> run1Charts = sampleDoc.GetParagraphArray(0).Runs[0].GetEmbeddedCharts();
+                ClassicAssert.AreEqual(1, run1Charts.Count);
+                ClassicAssert.AreEqual(charts[0], run1Charts[0]);
+                List<XWPFChart> run2Charts = sampleDoc.GetParagraphArray(1).Runs[0].GetEmbeddedCharts();
+                ClassicAssert.AreEqual(1, run2Charts.Count);
+                ClassicAssert.AreEqual(charts[1], run2Charts[0]);
+            }
+        }
+        [Test]
+        public void TestAddChartGetEmbeddedCharts() {
+            XWPFRun run1 = p.CreateRun();
+            XWPFChart chart1 = doc.CreateChart(run1, XDDFChart.DEFAULT_WIDTH, XDDFChart.DEFAULT_HEIGHT);
+            ClassicAssert.AreEqual(1, run1.GetEmbeddedCharts().Count);
+            ClassicAssert.AreEqual(chart1, run1.GetEmbeddedCharts()[0]);
+
+            XWPFRun run2 = p.CreateRun();
+            XWPFChart chart2 = doc.CreateChart(run2, XDDFChart.DEFAULT_WIDTH, XDDFChart.DEFAULT_HEIGHT);
+            ClassicAssert.AreEqual(1, run2.GetEmbeddedCharts().Count);
+            ClassicAssert.AreEqual(chart2, run2.GetEmbeddedCharts()[0]);
+
+            XWPFRun run3 = p.CreateRun();
+            ClassicAssert.AreEqual(0, run3.GetEmbeddedCharts().Count);
         }
     }
 }

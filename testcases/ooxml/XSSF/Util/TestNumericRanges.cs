@@ -16,7 +16,7 @@
 ==================================================================== */
 
 using NPOI.XSSF.Util;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 namespace TestCases.XSSF.Util
 {
 
@@ -32,11 +32,11 @@ namespace TestCases.XSSF.Util
             long[] r4 = { 2, 20 };
             long[] r5 = { 5, 6 };
             long[] r6 = { 20, 23 };
-            Assert.AreEqual(NumericRanges.OVERLAPS_1_MINOR, NumericRanges.GetOverlappingType(r1, r2));
-            Assert.AreEqual(NumericRanges.OVERLAPS_2_MINOR, NumericRanges.GetOverlappingType(r1, r3));
-            Assert.AreEqual(NumericRanges.OVERLAPS_2_WRAPS, NumericRanges.GetOverlappingType(r1, r4));
-            Assert.AreEqual(NumericRanges.OVERLAPS_1_WRAPS, NumericRanges.GetOverlappingType(r1, r5));
-            Assert.AreEqual(NumericRanges.NO_OVERLAPS, NumericRanges.GetOverlappingType(r1, r6));
+            ClassicAssert.AreEqual(NumericRanges.OVERLAPS_1_MINOR, NumericRanges.GetOverlappingType(r1, r2));
+            ClassicAssert.AreEqual(NumericRanges.OVERLAPS_2_MINOR, NumericRanges.GetOverlappingType(r1, r3));
+            ClassicAssert.AreEqual(NumericRanges.OVERLAPS_2_WRAPS, NumericRanges.GetOverlappingType(r1, r4));
+            ClassicAssert.AreEqual(NumericRanges.OVERLAPS_1_WRAPS, NumericRanges.GetOverlappingType(r1, r5));
+            ClassicAssert.AreEqual(NumericRanges.NO_OVERLAPS, NumericRanges.GetOverlappingType(r1, r6));
         }
         [Test]
         public void TestGetOverlappingRange()
@@ -47,16 +47,16 @@ namespace TestCases.XSSF.Util
             long[] r4 = { 2, 20 };
             long[] r5 = { 5, 6 };
             long[] r6 = { 20, 23 };
-            Assert.AreEqual(6, NumericRanges.GetOverlappingRange(r1, r2)[0]);
-            Assert.AreEqual(8, NumericRanges.GetOverlappingRange(r1, r2)[1]);
-            Assert.AreEqual(3, NumericRanges.GetOverlappingRange(r1, r3)[0]);
-            Assert.AreEqual(5, NumericRanges.GetOverlappingRange(r1, r3)[1]);
-            Assert.AreEqual(3, NumericRanges.GetOverlappingRange(r1, r4)[0]);
-            Assert.AreEqual(8, NumericRanges.GetOverlappingRange(r1, r4)[1]);
-            Assert.AreEqual(5, NumericRanges.GetOverlappingRange(r1, r5)[0]);
-            Assert.AreEqual(6, NumericRanges.GetOverlappingRange(r1, r5)[1]);
-            Assert.AreEqual(-1, NumericRanges.GetOverlappingRange(r1, r6)[0]);
-            Assert.AreEqual(-1, NumericRanges.GetOverlappingRange(r1, r6)[1]);
+            ClassicAssert.AreEqual(6, NumericRanges.GetOverlappingRange(r1, r2)[0]);
+            ClassicAssert.AreEqual(8, NumericRanges.GetOverlappingRange(r1, r2)[1]);
+            ClassicAssert.AreEqual(3, NumericRanges.GetOverlappingRange(r1, r3)[0]);
+            ClassicAssert.AreEqual(5, NumericRanges.GetOverlappingRange(r1, r3)[1]);
+            ClassicAssert.AreEqual(3, NumericRanges.GetOverlappingRange(r1, r4)[0]);
+            ClassicAssert.AreEqual(8, NumericRanges.GetOverlappingRange(r1, r4)[1]);
+            ClassicAssert.AreEqual(5, NumericRanges.GetOverlappingRange(r1, r5)[0]);
+            ClassicAssert.AreEqual(6, NumericRanges.GetOverlappingRange(r1, r5)[1]);
+            ClassicAssert.AreEqual(-1, NumericRanges.GetOverlappingRange(r1, r6)[0]);
+            ClassicAssert.AreEqual(-1, NumericRanges.GetOverlappingRange(r1, r6)[1]);
         }
 
     }

@@ -15,7 +15,7 @@
    limitations under the License.
 ==================================================================== */
 
-using SixLabors.ImageSharp;
+using SkiaSharp;
 namespace NPOI.SS.UserModel
 {
     public enum PictureType : int
@@ -130,7 +130,7 @@ namespace NPOI.SS.UserModel
          *
          * @return image dimension in pixels
          */
-        Size GetImageDimension();
+        SKSizeI GetImageDimension();
 
 
 

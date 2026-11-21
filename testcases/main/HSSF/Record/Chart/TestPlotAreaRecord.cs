@@ -23,7 +23,7 @@ namespace TestCases.HSSF.Record.Chart
     using System;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.Chart;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     /**
      * Tests the serialization and deserialization of the PlotAreaRecord
@@ -51,7 +51,7 @@ namespace TestCases.HSSF.Record.Chart
 
 
 
-            Assert.AreEqual(4, record.RecordSize);
+            ClassicAssert.AreEqual(4, record.RecordSize);
         }
         [Test]
         public void TestStore()
@@ -59,9 +59,9 @@ namespace TestCases.HSSF.Record.Chart
             PlotAreaRecord record = new PlotAreaRecord();
 
             byte[] recordBytes = record.Serialize();
-            Assert.AreEqual(recordBytes.Length - 4, data.Length);
+            ClassicAssert.AreEqual(recordBytes.Length - 4, data.Length);
             for (int i = 0; i < data.Length; i++)
-                Assert.AreEqual(data[i], recordBytes[i + 4], "At offset " + i);
+                ClassicAssert.AreEqual(data[i], recordBytes[i + 4], "At offset " + i);
         }
     }
 }

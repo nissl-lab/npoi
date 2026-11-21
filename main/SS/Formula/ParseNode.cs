@@ -29,11 +29,11 @@ namespace NPOI.SS.Formula
     class ParseNode
     {
 
-        public static ParseNode[] EMPTY_ARRAY = { };
-        private Ptg _token;
-        private ParseNode[] _children;
-        private bool _isIf;
-        private int _tokenCount;
+        public static ParseNode[] EMPTY_ARRAY = [];
+        private readonly Ptg _token;
+        private readonly ParseNode[] _children;
+        private readonly bool _isIf;
+        private readonly int _tokenCount;
 
         public ParseNode(Ptg token, ParseNode[] children)
         {
@@ -171,9 +171,8 @@ namespace NPOI.SS.Formula
 
         private static bool IsIf(Ptg token)
         {
-            if (token is FuncVarPtg)
+            if (token is FuncVarPtg func)
             {
-                FuncVarPtg func = (FuncVarPtg)token;
                 if (FunctionMetadataRegistry.FUNCTION_NAME_IF.Equals(func.Name))
                 {
                     return true;
@@ -192,10 +191,10 @@ namespace NPOI.SS.Formula
             return _children;
         }
 
-        private class TokenCollector
+        private sealed class TokenCollector
         {
 
-            private Ptg[] _ptgs;
+            private readonly Ptg[] _ptgs;
             private int _offset;
 
             public TokenCollector(int tokenCount)

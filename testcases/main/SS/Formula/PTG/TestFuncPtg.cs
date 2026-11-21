@@ -18,7 +18,7 @@
 namespace TestCases.SS.Formula.PTG
 {
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.SS.Formula.PTG;
     using TestCases.HSSF.Record;
 
@@ -37,17 +37,17 @@ namespace TestCases.SS.Formula.PTG
             byte[] fakeData = { 0x20, 0x00, };
 
             FuncPtg ptg = FuncPtg.Create(TestcaseRecordInputStream.CreateLittleEndian(fakeData));
-            Assert.AreEqual(0x20, ptg.FunctionIndex, "Len formula index is not 32(20H)");
-            Assert.AreEqual(1, ptg.NumberOfOperands, "Number of operands in the len formula");
-            Assert.AreEqual("LEN", ptg.Name, "Function Name");
-            Assert.AreEqual(3, ptg.Size, "Ptg Size");
+            ClassicAssert.AreEqual(0x20, ptg.FunctionIndex, "Len formula index is not 32(20H)");
+            ClassicAssert.AreEqual(1, ptg.NumberOfOperands, "Number of operands in the len formula");
+            ClassicAssert.AreEqual("LEN", ptg.Name, "Function Name");
+            ClassicAssert.AreEqual(3, ptg.Size, "Ptg Size");
         }
         [Test]
         public void TestNumberOfOperands()
         {
             FuncPtg funcPtg = FuncPtg.Create(27); // ROUND() - takes 2 args
-            Assert.AreEqual(2, funcPtg.NumberOfOperands);
-            Assert.AreEqual("ROUND", funcPtg.Name);
+            ClassicAssert.AreEqual(2, funcPtg.NumberOfOperands);
+            ClassicAssert.AreEqual("ROUND", funcPtg.Name);
         }
     }
 

@@ -68,12 +68,12 @@ namespace NPOI.HSSF.Record
             if (field_3_hasMultibyte)
             {
                 // Unicode
-                field_4_formatstring = in1.ReadUnicodeLEString(field_3_unicode_len);
+                field_4_formatstring = ReadStringCommon(in1, field_3_unicode_len, false);
             }
             else
             {
                 // not Unicode
-                field_4_formatstring = in1.ReadCompressedUnicode(field_3_unicode_len);
+                field_4_formatstring = ReadStringCommon(in1, field_3_unicode_len, true);
             }
         }
         
@@ -151,6 +151,68 @@ namespace NPOI.HSSF.Record
         {
             // immutable
             return new FormatRecord(this);
+        }
+
+        private static String ReadStringCommon(RecordInputStream ris, int requestedLength, bool pIsCompressedEncoding)
+        {
+            //custom copy of ris.readUnicodeLEString to allow for extra bytes at the end
+
+            // Sanity check to detect garbage string lengths
+            if (requestedLength < 0 || requestedLength > 0x100000)
+            { // 16 million chars?
+                throw new ArgumentOutOfRangeException("Bad requested string length (" + requestedLength + ")");
+            }
+            char[] buf = null;
+            bool isCompressedEncoding = pIsCompressedEncoding;
+            int availableChars = isCompressedEncoding ? ris.Remaining : ris.Remaining / LittleEndianConsts.SHORT_SIZE;
+            //everything worked out.  Great!
+            int remaining = ris.Remaining;
+            if (requestedLength == availableChars)
+            {
+                buf = new char[requestedLength];
+            }
+            else
+            {
+                //sometimes in older Excel 97 .xls files,
+                //the requested length is wrong.
+                //Read all available characters.
+                buf = new char[availableChars];
+            }
+            for (int i = 0; i < buf.Length; i++)
+            {
+                char ch;
+                if (isCompressedEncoding)
+                {
+                    ch = (char)ris.ReadUByte();
+                }
+                else
+                {
+                    ch = (char)ris.ReadShort();
+                }
+                buf[i] = ch;
+            }
+
+            //TIKA-2154's file shows that even in a unicode string
+            //there can be a remaining byte (without proper final '00')
+            //that should be read as a byte
+            if (ris.Available() == 1)
+            {
+                char[] tmp = new char[buf.Length + 1];
+                Array.Copy(buf, 0, tmp, 0, buf.Length);
+                tmp[buf.Length] = (char)ris.ReadUByte();
+                buf = tmp;
+            }
+
+            if (ris.Available() > 0)
+            {
+                //logger.log(POILogger.INFO, "FormatRecord has " + ris.Available() + " unexplained bytes. Silently skipping");
+                //swallow what's left
+                while (ris.Available() > 0)
+                {
+                    ris.ReadByte();
+                }
+            }
+            return new String(buf);
         }
     }
 }

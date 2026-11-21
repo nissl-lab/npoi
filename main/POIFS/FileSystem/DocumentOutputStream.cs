@@ -27,10 +27,10 @@ namespace NPOI.POIFS.FileSystem
      * @author Marc Johnson (mjohnson at apache dot org)
      */
 
-    public class DocumentOutputStream : MemoryStream
+    public class DocumentOutputStream : OutputStream
     {
-        private Stream _stream;
-        private int _limit;
+        private readonly Stream _stream;
+        private readonly int _limit;
         private int _written;
 
         /**
@@ -59,7 +59,7 @@ namespace NPOI.POIFS.FileSystem
          *                        output stream has been closed, or if the
          *                        Writer tries to write too much data.
          */
-        public void Write(int b)
+        public override void Write(int b)
         {
             LimitCheck(1);
             _stream.WriteByte((byte)b);

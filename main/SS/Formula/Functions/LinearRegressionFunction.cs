@@ -42,13 +42,13 @@ namespace NPOI.SS.Formula.Functions
 
         private abstract class ValueArray : ValueVector
         {
-            private int _size;
+            private readonly int _size;
             protected ValueArray(int size)
             {
                 _size = size;
             }
 
-            public ValueEval GetItem(int index)
+            public override ValueEval GetItem(int index)
             {
                 if (index < 0 || index > _size)
                 {
@@ -59,7 +59,7 @@ namespace NPOI.SS.Formula.Functions
             }
             protected abstract ValueEval GetItemInternal(int index);
 
-            public int Size
+            public override int Size
             {
                 get
                 {
@@ -68,9 +68,9 @@ namespace NPOI.SS.Formula.Functions
             }
         }
 
-        private class SingleCellValueArray : ValueArray
+        private sealed class SingleCellValueArray : ValueArray
         {
-            private ValueEval _value;
+            private readonly ValueEval _value;
             public SingleCellValueArray(ValueEval value)
                 : base(1)
             {
@@ -83,10 +83,10 @@ namespace NPOI.SS.Formula.Functions
             }
         }
 
-        private class RefValueArray : ValueArray
+        private sealed class RefValueArray : ValueArray
         {
-            private RefEval _ref;
-            private int _width;
+            private readonly RefEval _ref;
+            private readonly int _width;
             public RefValueArray(RefEval ref1)
                 : base(ref1.NumberOfSheets)
             {
@@ -101,10 +101,10 @@ namespace NPOI.SS.Formula.Functions
             }
         }
 
-        private class AreaValueArray : ValueArray
+        private sealed class AreaValueArray : ValueArray
         {
-            private TwoDEval _ae;
-            private int _width;
+            private readonly TwoDEval _ae;
+            private readonly int _width;
 
             public AreaValueArray(TwoDEval ae)
                 : base(ae.Width * ae.Height)
@@ -170,28 +170,26 @@ namespace NPOI.SS.Formula.Functions
             {
                 ValueEval vx = x.GetItem(i);
                 ValueEval vy = y.GetItem(i);
-                if (vx is ErrorEval)
+                if (vx is ErrorEval eval)
                 {
                     if (firstXerr == null)
                     {
-                        firstXerr = (ErrorEval)vx;
+                        firstXerr = eval;
                         continue;
                     }
                 }
-                if (vy is ErrorEval)
+                if (vy is ErrorEval errorEval)
                 {
                     if (firstYerr == null)
                     {
-                        firstYerr = (ErrorEval)vy;
+                        firstYerr = errorEval;
                         continue;
                     }
                 }
                 // only count pairs if both elements are numbers
-                if (vx is NumberEval && vy is NumberEval)
+                if (vx is NumberEval nx && vy is NumberEval ny)
                 {
                     accumlatedSome = true;
-                    NumberEval nx = (NumberEval)vx;
-                    NumberEval ny = (NumberEval)vy;
                     sumx += nx.NumberValue;
                     sumy += ny.NumberValue;
                 }
@@ -210,28 +208,26 @@ namespace NPOI.SS.Formula.Functions
                 ValueEval vx = x.GetItem(i);
                 ValueEval vy = y.GetItem(i);
 
-                if (vx is ErrorEval)
+                if (vx is ErrorEval eval)
                 {
                     if (firstXerr == null)
                     {
-                        firstXerr = (ErrorEval)vx;
+                        firstXerr = eval;
                         continue;
                     }
                 }
-                if (vy is ErrorEval)
+                if (vy is ErrorEval errorEval)
                 {
                     if (firstYerr == null)
                     {
-                        firstYerr = (ErrorEval)vy;
+                        firstYerr = errorEval;
                         continue;
                     }
                 }
 
                 // only count pairs if both elements are numbers
-                if (vx is NumberEval && vy is NumberEval)
+                if (vx is NumberEval nx && vy is NumberEval ny)
                 {
-                    NumberEval nx = (NumberEval)vx;
-                    NumberEval ny = (NumberEval)vy;
                     xxbar += (nx.NumberValue - xbar) * (nx.NumberValue - xbar);
                     xybar += (nx.NumberValue - xbar) * (ny.NumberValue - ybar);
                 }
@@ -266,19 +262,19 @@ namespace NPOI.SS.Formula.Functions
             }
         }
 
-        private ValueVector CreateValueVector(ValueEval arg)
+        private static ValueVector CreateValueVector(ValueEval arg)
         {
-            if (arg is ErrorEval)
+            if (arg is ErrorEval eval)
             {
-                throw new EvaluationException((ErrorEval)arg);
+                throw new EvaluationException(eval);
             }
-            if (arg is TwoDEval)
+            if (arg is TwoDEval dEval)
             {
-                return new AreaValueArray((TwoDEval)arg);
+                return new AreaValueArray(dEval);
             }
-            if (arg is RefEval)
+            if (arg is RefEval refEval)
             {
-                return new RefValueArray((RefEval)arg);
+                return new RefValueArray(refEval);
             }
             return new SingleCellValueArray(arg);
         }

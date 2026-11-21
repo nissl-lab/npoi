@@ -37,7 +37,7 @@ namespace NPOI.SS.Formula.PTG
         private String lastSheetName;
 
         public Area3DPxg(int externalWorkbookNumber, SheetIdentifier sheetName, String arearef)
-            : this(externalWorkbookNumber, sheetName, new AreaReference(arearef))
+            : this(externalWorkbookNumber, sheetName, new AreaReference(arearef, SpreadsheetVersion.EXCEL2007))
         {
             ;
         }
@@ -46,9 +46,9 @@ namespace NPOI.SS.Formula.PTG
         {
             this.externalWorkbookNumber = externalWorkbookNumber;
             this.firstSheetName = sheetName.SheetId.Name;
-            if (sheetName is SheetRangeIdentifier)
+            if (sheetName is SheetRangeIdentifier identifier)
             {
-                this.lastSheetName = ((SheetRangeIdentifier)sheetName).LastSheetIdentifier.Name;
+                this.lastSheetName = identifier.LastSheetIdentifier.Name;
             }
             else
             {
@@ -57,7 +57,7 @@ namespace NPOI.SS.Formula.PTG
         }
 
         public Area3DPxg(SheetIdentifier sheetName, String arearef)
-            : this(sheetName, new AreaReference(arearef))
+            : this(sheetName, new AreaReference(arearef, SpreadsheetVersion.EXCEL2007))
         {
         }
         public Area3DPxg(SheetIdentifier sheetName, AreaReference arearef)

@@ -49,7 +49,7 @@ namespace NPOI.SS.UserModel.Drawing
         public const int reserved423 = 0x1a7;
         public const int fillStyleBoolean = 0x1bf;
 
-        private static Dictionary<int, string> fillStyle = new Dictionary<int,string>();
+        private static readonly Dictionary<int, string> fillStyle = new Dictionary<int,string>();
         private static void InitFillStyle()
         {
             fillStyle.Add(0x180, "fillType");
@@ -96,8 +96,8 @@ namespace NPOI.SS.UserModel.Drawing
         }
         public static string GetFillStyleName(int optionId)
         {
-            if (fillStyle.ContainsKey(optionId))
-                return fillStyle[optionId];
+            if (fillStyle.TryGetValue(optionId, out string name))
+                return name;
             return "Unknown";
         }
         #endregion

@@ -45,13 +45,13 @@ namespace NPOI.POIFS.Storage
 
         private const int BLOCK_SHIFT = 6;
 
-        private byte[]            _data;
+        private readonly byte[]            _data;
         private const byte _default_fill         = ( byte ) 0xff;
         private const int  _block_size           =  1 << BLOCK_SHIFT;
         private const int BLOCK_MASK = _block_size - 1;
         private static int _blocks_per_big_block =
             POIFSConstants.BIG_BLOCK_SIZE / _block_size;
-        private POIFSBigBlockSize _bigBlockSize;
+        private readonly POIFSBigBlockSize _bigBlockSize;
 
         public SmallDocumentBlock(POIFSBigBlockSize bigBlockSize, byte[] data, int index)
         {

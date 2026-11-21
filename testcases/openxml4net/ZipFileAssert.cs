@@ -20,7 +20,7 @@ using System;
 
 using System.Collections.Generic;
 using ICSharpCode.SharpZipLib.Zip;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 namespace TestCases.OpenXml4Net.OPC
 {
 
@@ -157,16 +157,16 @@ namespace TestCases.OpenXml4Net.OPC
          */
         public static void AssertEqual(FileInfo expected, FileInfo actual)
         {
-            Assert.IsNotNull(expected);
-            Assert.IsNotNull(actual);
+            ClassicAssert.IsNotNull(expected);
+            ClassicAssert.IsNotNull(actual);
 
-            Assert.IsTrue(File.Exists(expected.FullName), "File does not exist [" + expected.FullName
+            ClassicAssert.IsTrue(File.Exists(expected.FullName), "File does not exist [" + expected.FullName
                     + "]");
-            Assert.IsTrue(File.Exists(actual.FullName), "File does not exist [" + actual.FullName
+            ClassicAssert.IsTrue(File.Exists(actual.FullName), "File does not exist [" + actual.FullName
                     + "]");
 
-            //Assert.IsTrue("Expected file not Readable", expected.anRead());
-            //Assert.IsTrue("Actual file not Readable", actual.canRead());
+            //ClassicAssert.IsTrue("Expected file not Readable", expected.anRead());
+            //ClassicAssert.IsTrue("Actual file not Readable", actual.canRead());
 
             try
             {

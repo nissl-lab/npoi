@@ -23,7 +23,7 @@ namespace TestCases.HSSF.Record
     using System;
     using NPOI.HSSF.Record;
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     /**
      * Tests the serialization and deserialization of the CommonObjectDataSubRecord
@@ -50,17 +50,17 @@ namespace TestCases.HSSF.Record
             CommonObjectDataSubRecord record = new CommonObjectDataSubRecord(TestcaseRecordInputStream.Create((short)0x15, data),data.Length);
 
 
-            Assert.AreEqual(CommonObjectType.ListBox, record.ObjectType);
-            Assert.AreEqual((short)1, record.ObjectId);
-            Assert.AreEqual((short)1, record.Option);
-            Assert.AreEqual(true, record.IsLocked);
-            Assert.AreEqual(false, record.IsPrintable);
-            Assert.AreEqual(false, record.IsAutoFill);
-            Assert.AreEqual(false, record.IsAutoline);
-            Assert.AreEqual((int)24593, record.Reserved1);
-            Assert.AreEqual((int)218103808, record.Reserved2);
-            Assert.AreEqual((int)294, record.Reserved3);
-            Assert.AreEqual(18, record.DataSize);
+            ClassicAssert.AreEqual(CommonObjectType.ListBox, record.ObjectType);
+            ClassicAssert.AreEqual((short)1, record.ObjectId);
+            ClassicAssert.AreEqual((short)1, record.Option);
+            ClassicAssert.AreEqual(true, record.IsLocked);
+            ClassicAssert.AreEqual(false, record.IsPrintable);
+            ClassicAssert.AreEqual(false, record.IsAutoFill);
+            ClassicAssert.AreEqual(false, record.IsAutoline);
+            ClassicAssert.AreEqual((int)24593, record.Reserved1);
+            ClassicAssert.AreEqual((int)218103808, record.Reserved2);
+            ClassicAssert.AreEqual((int)294, record.Reserved3);
+            ClassicAssert.AreEqual(18, record.DataSize);
         }
         [Test]
         public void TestStore()
@@ -79,9 +79,9 @@ namespace TestCases.HSSF.Record
             record.Reserved3 = ((int)294);
 
             byte[] recordBytes = record.Serialize();
-            Assert.AreEqual(recordBytes.Length - 4, data.Length);
+            ClassicAssert.AreEqual(recordBytes.Length - 4, data.Length);
             for (int i = 0; i < data.Length; i++)
-                Assert.AreEqual(data[i], recordBytes[i + 4], "At offset " + i);
+                ClassicAssert.AreEqual(data[i], recordBytes[i + 4], "At offset " + i);
         }
     }
 }

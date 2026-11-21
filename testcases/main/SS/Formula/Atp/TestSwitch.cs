@@ -1,7 +1,7 @@
 ﻿using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -39,20 +39,20 @@ namespace TestCases.SS.Formula.Atp
 
 
             cellA1.SetCellValue("A");
-            Assert.AreEqual(CellType.String, evaluator.Evaluate(cell1).CellType);
-            Assert.AreEqual("Value for A", evaluator.Evaluate(cell1).StringValue,
+            ClassicAssert.AreEqual(CellType.String, evaluator.Evaluate(cell1).CellType);
+            ClassicAssert.AreEqual("Value for A", evaluator.Evaluate(cell1).StringValue,
                     "SWITCH should return 'Value for A'");
 
             cellA1.SetCellValue("B");
             evaluator.ClearAllCachedResultValues();
-            Assert.AreEqual(CellType.String, evaluator.Evaluate(cell1).CellType);
-            Assert.AreEqual("Value for B", evaluator.Evaluate(cell1).StringValue,
+            ClassicAssert.AreEqual(CellType.String, evaluator.Evaluate(cell1).CellType);
+            ClassicAssert.AreEqual("Value for B", evaluator.Evaluate(cell1).StringValue,
                     "SWITCH should return 'Value for B'");
 
             cellA1.SetCellValue("");
             evaluator.ClearAllCachedResultValues();
-            Assert.AreEqual(CellType.String, evaluator.Evaluate(cell1).CellType);
-            Assert.AreEqual("Something else", evaluator.Evaluate(cell1).StringValue,
+            ClassicAssert.AreEqual(CellType.String, evaluator.Evaluate(cell1).CellType);
+            ClassicAssert.AreEqual("Something else", evaluator.Evaluate(cell1).StringValue,
                     "SWITCH should return 'Something else'");
 
         }

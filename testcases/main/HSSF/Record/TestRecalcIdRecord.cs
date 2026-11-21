@@ -17,7 +17,7 @@
 
 namespace TestCases.HSSF.Record
 {
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     using NPOI.Util;
     using TestCases.HSSF.Record;
@@ -67,14 +67,14 @@ namespace TestCases.HSSF.Record
                 }
                 throw e;
             }
-            Assert.AreEqual(0, in1.Remaining);
-            Assert.IsTrue(Arrays.Equals(r.Serialize(), goodData));
+            ClassicAssert.AreEqual(0, in1.Remaining);
+            ClassicAssert.IsTrue(Arrays.Equals(r.Serialize(), goodData));
         }
         private static RecalcIdRecord Create(byte[] data)
         {
             RecordInputStream in1 = TestcaseRecordInputStream.Create(RecalcIdRecord.sid, data);
             RecalcIdRecord result = new RecalcIdRecord(in1);
-            Assert.AreEqual(0, in1.Remaining);
+            ClassicAssert.AreEqual(0, in1.Remaining);
             return result;
         }
     }

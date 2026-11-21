@@ -21,7 +21,7 @@ namespace TestCases.SS.Formula.Functions
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.Formula.Functions;
     using NPOI.SS.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     /**
      * Tests for OFFSET function implementation
@@ -36,7 +36,7 @@ namespace TestCases.SS.Formula.Functions
         {
             try
             {
-                Assert.AreEqual(expected, Offset.EvaluateIntArg(new NumberEval(doubleVal), -1, -1));
+                ClassicAssert.AreEqual(expected, Offset.EvaluateIntArg(new NumberEval(doubleVal), -1, -1));
             }
             catch (EvaluationException e)
             {
@@ -80,29 +80,29 @@ namespace TestCases.SS.Formula.Functions
             Offset.LinearOffsetRange lor;
 
             lor = new Offset.LinearOffsetRange(3, 2);
-            Assert.AreEqual(3, lor.FirstIndex);
-            Assert.AreEqual(4, lor.LastIndex);
+            ClassicAssert.AreEqual(3, lor.FirstIndex);
+            ClassicAssert.AreEqual(4, lor.LastIndex);
             lor = lor.NormaliseAndTranslate(0); // expected no change
-            Assert.AreEqual(3, lor.FirstIndex);
-            Assert.AreEqual(4, lor.LastIndex);
+            ClassicAssert.AreEqual(3, lor.FirstIndex);
+            ClassicAssert.AreEqual(4, lor.LastIndex);
 
             lor = lor.NormaliseAndTranslate(5);
-            Assert.AreEqual(8, lor.FirstIndex);
-            Assert.AreEqual(9, lor.LastIndex);
+            ClassicAssert.AreEqual(8, lor.FirstIndex);
+            ClassicAssert.AreEqual(9, lor.LastIndex);
 
             // negative length
 
             lor = new Offset.LinearOffsetRange(6, -4).NormaliseAndTranslate(0);
-            Assert.AreEqual(3, lor.FirstIndex);
-            Assert.AreEqual(6, lor.LastIndex);
+            ClassicAssert.AreEqual(3, lor.FirstIndex);
+            ClassicAssert.AreEqual(6, lor.LastIndex);
 
 
             // bounds Checking
             lor = new Offset.LinearOffsetRange(0, 100);
-            Assert.IsFalse(lor.IsOutOfBounds(0, 16383));
+            ClassicAssert.IsFalse(lor.IsOutOfBounds(0, 16383));
             lor = lor.NormaliseAndTranslate(16300);
-            Assert.IsTrue(lor.IsOutOfBounds(0, 16383));
-            Assert.IsFalse(lor.IsOutOfBounds(0, 65535));
+            ClassicAssert.IsTrue(lor.IsOutOfBounds(0, 16383));
+            ClassicAssert.IsFalse(lor.IsOutOfBounds(0, 65535));
         }
 
         [Test]
@@ -115,8 +115,8 @@ namespace TestCases.SS.Formula.Functions
             ICell valueCell = cell.Row.CreateCell(1);
             valueCell.SetCellValue(value);
             workbook.GetCreationHelper().CreateFormulaEvaluator().EvaluateAll();
-            Assert.AreEqual(CellType.String, cell.CachedFormulaResultType);
-            Assert.AreEqual(value, cell.StringCellValue);
+            ClassicAssert.AreEqual(CellType.String, cell.CachedFormulaResultType);
+            ClassicAssert.AreEqual(value, cell.StringCellValue);
         }
     }
 

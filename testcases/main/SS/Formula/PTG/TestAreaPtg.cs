@@ -20,7 +20,7 @@ namespace TestCases.SS.Formula.PTG
 {
 
     using System;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.Model;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.Formula.PTG;
@@ -51,12 +51,12 @@ namespace TestCases.SS.Formula.PTG
         public void TestSortTopLeftToBottomRight()
         {
             AreaPtg ptg = new AreaPtg("A$1:$B5");
-            Assert.AreEqual("A$1:$B5", ptg.ToFormulaString());
+            ClassicAssert.AreEqual("A$1:$B5", ptg.ToFormulaString());
             ptg.FirstColumn = (3);
-            Assert.AreEqual("D$1:$B5", ptg.ToFormulaString(),
+            ClassicAssert.AreEqual("D$1:$B5", ptg.ToFormulaString(),
                 "Area Ptg should not implicitly re-sort itself (except during construction)");
             ptg.SortTopLeftToBottomRight();
-            Assert.AreEqual("$B$1:D5", ptg.ToFormulaString(),
+            ClassicAssert.AreEqual("$B$1:D5", ptg.ToFormulaString(),
                 "Area Ptg should restore itself to top-left to lower-right order when explicitly asked");
         }
 
@@ -75,10 +75,10 @@ namespace TestCases.SS.Formula.PTG
 
         private void validateReference(bool abs, AreaPtg ref1)
         {
-            Assert.AreEqual(abs, !ref1.IsFirstColRelative, "First column reference is not " + (abs ? "absolute" : "relative"));
-            Assert.AreEqual(abs, !ref1.IsLastColRelative, "Last column reference is not " + (abs ? "absolute" : "relative"));
-            Assert.AreEqual(abs, !ref1.IsFirstRowRelative, "First row reference is not " + (abs ? "absolute" : "relative"));
-            Assert.AreEqual(abs, !ref1.IsLastRowRelative, "Last row reference is not " + (abs ? "absolute" : "relative"));
+            ClassicAssert.AreEqual(abs, !ref1.IsFirstColRelative, "First column reference is not " + (abs ? "absolute" : "relative"));
+            ClassicAssert.AreEqual(abs, !ref1.IsLastColRelative, "Last column reference is not " + (abs ? "absolute" : "relative"));
+            ClassicAssert.AreEqual(abs, !ref1.IsFirstRowRelative, "First row reference is not " + (abs ? "absolute" : "relative"));
+            ClassicAssert.AreEqual(abs, !ref1.IsLastRowRelative, "Last row reference is not " + (abs ? "absolute" : "relative"));
         }
 
 
@@ -88,8 +88,8 @@ namespace TestCases.SS.Formula.PTG
             int lc = aptg.LastColumn;
             aptg.FirstColumn = (fc);
             aptg.LastColumn = (lc);
-            Assert.AreEqual(fc, aptg.FirstColumn);
-            Assert.AreEqual(lc, aptg.LastColumn);
+            ClassicAssert.AreEqual(fc, aptg.FirstColumn);
+            ClassicAssert.AreEqual(lc, aptg.LastColumn);
         }
 
         [Test]
@@ -100,20 +100,20 @@ namespace TestCases.SS.Formula.PTG
             AreaPtg sca3 = new AreaPtg(5, 5, 7, 7, true, false, true, false);
             AreaPtg sca4 = new AreaPtg(5, 5, 7, 7, false, true, false, true);
 
-            Assert.AreEqual("G5:$H$6", sca1.ToFormulaString(), "first rel., last abs.");
-            Assert.AreEqual("$G$5:H6", sca2.ToFormulaString(), "first abs., last rel.");
-            Assert.AreEqual("H6:$H$6", sca3.ToFormulaString(), "first rel., last abs.");
-            Assert.AreEqual("$H$6:H6", sca4.ToFormulaString(), "first abs., last rel.");
+            ClassicAssert.AreEqual("G5:$H$6", sca1.ToFormulaString(), "first rel., last abs.");
+            ClassicAssert.AreEqual("$G$5:H6", sca2.ToFormulaString(), "first abs., last rel.");
+            ClassicAssert.AreEqual("H6:$H$6", sca3.ToFormulaString(), "first rel., last abs.");
+            ClassicAssert.AreEqual("$H$6:H6", sca4.ToFormulaString(), "first abs., last rel.");
 
             AreaPtg cla1 = CloneArea(sca1);
             AreaPtg cla2 = CloneArea(sca2);
             AreaPtg cla3 = CloneArea(sca3);
             AreaPtg cla4 = CloneArea(sca4);
 
-            Assert.AreEqual("G5:$H$6", cla1.ToFormulaString(), "first rel., last abs.");
-            Assert.AreEqual("$G$5:H6", cla2.ToFormulaString(), "first abs., last rel.");
-            Assert.AreEqual("H6:$H$6", cla3.ToFormulaString(), "first rel., last abs.");
-            Assert.AreEqual("$H$6:H6", cla4.ToFormulaString(), "first abs., last rel.");
+            ClassicAssert.AreEqual("G5:$H$6", cla1.ToFormulaString(), "first rel., last abs.");
+            ClassicAssert.AreEqual("$G$5:H6", cla2.ToFormulaString(), "first abs., last rel.");
+            ClassicAssert.AreEqual("H6:$H$6", cla3.ToFormulaString(), "first rel., last abs.");
+            ClassicAssert.AreEqual("$H$6:H6", cla4.ToFormulaString(), "first abs., last rel.");
         }
         private AreaPtg CloneArea(AreaPtg a)
         {
@@ -130,12 +130,12 @@ namespace TestCases.SS.Formula.PTG
             String formula1 = "SUM($E$5:$E$6)";
             String expectedFormula1 = "SUM($F$5:$F$6)";
             String newFormula1 = ShiftAllColumnsBy1(formula1);
-            Assert.AreEqual(expectedFormula1, newFormula1, "Absolute references Changed");
+            ClassicAssert.AreEqual(expectedFormula1, newFormula1, "Absolute references Changed");
 
             String formula2 = "SUM(E5:E6)";
             String expectedFormula2 = "SUM(F5:F6)";
             String newFormula2 = ShiftAllColumnsBy1(formula2);
-            Assert.AreEqual(expectedFormula2, newFormula2, "Relative references Changed");
+            ClassicAssert.AreEqual(expectedFormula2, newFormula2, "Relative references Changed");
         }
 
         private static String ShiftAllColumnsBy1(String formula)

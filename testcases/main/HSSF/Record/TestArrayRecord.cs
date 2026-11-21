@@ -18,7 +18,7 @@
 namespace TestCases.HSSF.Record
 {
     using System;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.PTG;
     using NPOI.SS.Util;
@@ -41,20 +41,20 @@ namespace TestCases.HSSF.Record
             RecordInputStream in1 = TestcaseRecordInputStream.Create(data);
             ArrayRecord r1 = new ArrayRecord(in1);
             CellRangeAddress8Bit range = r1.Range;
-            Assert.AreEqual(1, range.FirstColumn);
-            Assert.AreEqual(1, range.LastColumn);
-            Assert.AreEqual(1, range.FirstRow);
-            Assert.AreEqual(1, range.LastRow);
+            ClassicAssert.AreEqual(1, range.FirstColumn);
+            ClassicAssert.AreEqual(1, range.LastColumn);
+            ClassicAssert.AreEqual(1, range.FirstRow);
+            ClassicAssert.AreEqual(1, range.LastRow);
 
             Ptg[] ptg = r1.FormulaTokens;
-            Assert.AreEqual(FormulaRenderer.ToFormulaString(null, ptg), "MAX(C1:C2-D1:D2)");
+            ClassicAssert.AreEqual(FormulaRenderer.ToFormulaString(null, ptg), "MAX(C1:C2-D1:D2)");
 
             //construct a new ArrayRecord with the same contents as r1
             Ptg[] fmlaPtg = FormulaParser.Parse("MAX(C1:C2-D1:D2)", null, FormulaType.Array, 0, -1);
             ArrayRecord r2 = new ArrayRecord(Formula.Create(fmlaPtg), new CellRangeAddress8Bit(1, 1, 1, 1));
             byte[] ser = r2.Serialize();
             //serialize and check that the data is the same as in r1
-            Assert.AreEqual(HexDump.ToHex(data), HexDump.ToHex(ser));
+            ClassicAssert.AreEqual(HexDump.ToHex(data), HexDump.ToHex(ser));
 
 
         }
@@ -72,10 +72,10 @@ namespace TestCases.HSSF.Record
 
             // Write the output to a file
             HSSFWorkbook wbBack = HSSFTestDataSamples.WriteOutAndReadBack(wb);
-            Assert.IsNotNull(wbBack);
+            ClassicAssert.IsNotNull(wbBack);
 
-            Assert.IsNotNull(wbBack.GetSheet("master"));
-            Assert.IsNotNull(wbBack.GetSheet("newName"));
+            ClassicAssert.IsNotNull(wbBack.GetSheet("master"));
+            ClassicAssert.IsNotNull(wbBack.GetSheet("newName"));
         }
 
     }

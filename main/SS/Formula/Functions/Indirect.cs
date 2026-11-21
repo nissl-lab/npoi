@@ -129,7 +129,7 @@ namespace NPOI.SS.Formula.Functions
 
             String refStrPart1;
             String refStrPart2;
-            if (Table.IsStructuredReference.Match(refText).Success)
+            if (Table.IsStructuredReference.IsMatch(refText))
             { // The argument is structured reference
                 Area3DPxg areaPtg = null;
                 try
@@ -138,6 +138,16 @@ namespace NPOI.SS.Formula.Functions
                 }
                 catch (FormulaParseException)
                 {
+                    // Malformed syntax, unknown table or column, or a row-relative specifier with
+                    // no usable row index.
+                    return ErrorEval.REF_INVALID;
+                }
+                catch (InvalidOperationException)
+                {
+                    // Valid syntax that designates no single area, so there is nothing to return a
+                    // reference to: [#Totals] on a table with no totals row, or [#This Row]/@ on a
+                    // row outside the table. INDIRECT reports any reference it cannot resolve as
+                    // #REF!, matching the FormulaParseException case above.
                     return ErrorEval.REF_INVALID;
                 }
                 return ec.GetArea3DEval(areaPtg);

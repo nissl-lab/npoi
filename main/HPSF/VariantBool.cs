@@ -18,14 +18,14 @@ using NPOI.Util;
 
 namespace NPOI.HPSF
 {
-    public class VariantBool
+    internal class VariantBool
     {
         public const int SIZE = 2;
         private bool _value;
-
-        public VariantBool(byte[] data, int offset)
+        internal VariantBool() {}
+        internal void Read( LittleEndianByteArrayInputStream lei )
         {
-            short value = LittleEndian.GetShort(data, offset);
+            short value = lei.ReadShort();
             switch (value)
             {
                 case 0:

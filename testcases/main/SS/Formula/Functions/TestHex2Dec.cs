@@ -20,7 +20,7 @@ namespace TestCases.SS.Formula.Functions
     using System;
 
     using NPOI.SS.Formula.Eval;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.SS.Formula.Functions;
 using NPOI.SS.Formula;
 using NPOI.HSSF.UserModel;
@@ -43,15 +43,15 @@ using NPOI.HSSF.UserModel;
         private static void ConfirmValue(String msg, String number1, String expected)
         {
             ValueEval result = invokeValue(number1);
-            Assert.AreEqual(typeof(NumberEval), result.GetType());
-            Assert.AreEqual(expected, ((NumberEval)result).StringValue, msg);
+            ClassicAssert.AreEqual(typeof(NumberEval), result.GetType());
+            ClassicAssert.AreEqual(expected, ((NumberEval)result).StringValue, msg);
         }
 
         private static void ConfirmValueError(String msg, String number1, ErrorEval numError)
         {
             ValueEval result = invokeValue(number1);
-            Assert.AreEqual(typeof(ErrorEval), result.GetType());
-            Assert.AreEqual(numError, result, msg);
+            ClassicAssert.AreEqual(typeof(ErrorEval), result.GetType());
+            ClassicAssert.AreEqual(numError, result, msg);
         }
 
         [Test]
@@ -77,8 +77,8 @@ using NPOI.HSSF.UserModel;
             ValueEval[] args = new ValueEval[] { ctx.GetRefEval(0, 0) };
             ValueEval result = new Hex2Dec().Evaluate(args, ctx);
 
-            Assert.AreEqual(typeof(NumberEval), result.GetType());
-            Assert.AreEqual("0", ((NumberEval)result).StringValue);
+            ClassicAssert.AreEqual(typeof(NumberEval), result.GetType());
+            ClassicAssert.AreEqual("0", ((NumberEval)result).StringValue);
         }
 
         [Test]
@@ -89,8 +89,8 @@ using NPOI.HSSF.UserModel;
             ValueEval[] args = new ValueEval[] { ctx.GetRefEval(0, 0), ctx.GetRefEval(0, 0) };
             ValueEval result = new Hex2Dec().Evaluate(args, ctx);
 
-            Assert.AreEqual(typeof(ErrorEval), result.GetType());
-            Assert.AreEqual(ErrorEval.VALUE_INVALID, result);
+            ClassicAssert.AreEqual(typeof(ErrorEval), result.GetType());
+            ClassicAssert.AreEqual(ErrorEval.VALUE_INVALID, result);
         }
 
         private OperationEvaluationContext CreateContext()
@@ -119,8 +119,8 @@ using NPOI.HSSF.UserModel;
             ValueEval[] args = new ValueEval[] { ctx.GetRefEval(0, 0) };
             ValueEval result = new Hex2Dec().Evaluate(args, -1, -1);
 
-            Assert.AreEqual(typeof(NumberEval), result.GetType());
-            Assert.AreEqual("0", ((NumberEval)result).StringValue);
+            ClassicAssert.AreEqual(typeof(NumberEval), result.GetType());
+            ClassicAssert.AreEqual("0", ((NumberEval)result).StringValue);
         }
 
     }

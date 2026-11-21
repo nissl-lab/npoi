@@ -21,7 +21,7 @@ using System;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.Util;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using TestCases.HSSF;
 using System.Collections.Generic;
 
@@ -54,8 +54,8 @@ namespace TestCases.SS.Formula
             mainWorkbook = HSSFTestDataSamples.OpenSampleWorkbook(MAIN_WORKBOOK_FILENAME);
             sourceWorkbook = HSSFTestDataSamples.OpenSampleWorkbook(SOURCE_WORKBOOK_FILENAME);
 
-            Assert.IsNotNull(mainWorkbook);
-            Assert.IsNotNull(sourceWorkbook);
+            ClassicAssert.IsNotNull(mainWorkbook);
+            ClassicAssert.IsNotNull(sourceWorkbook);
         }
 
         [Test]
@@ -67,7 +67,7 @@ namespace TestCases.SS.Formula
             IRow lARow = lSheet.GetRow(0);
             ICell lA1Cell = lARow.GetCell(0);
 
-            Assert.AreEqual(CellType.Formula, lA1Cell.CellType);
+            ClassicAssert.AreEqual(CellType.Formula, lA1Cell.CellType);
             try
             {
                 evaluator.EvaluateFormulaCell(lA1Cell);
@@ -75,7 +75,7 @@ namespace TestCases.SS.Formula
             }
             catch (RuntimeException re)
             {
-                Assert.IsTrue(re.Message.IndexOf(SOURCE_DUMMY_WORKBOOK_FILENAME) != -1, "Unexpected exception: " + re);
+                ClassicAssert.IsTrue(re.Message.IndexOf(SOURCE_DUMMY_WORKBOOK_FILENAME) != -1, "Unexpected exception: " + re);
             }
         }
 
@@ -87,26 +87,26 @@ namespace TestCases.SS.Formula
             ICell lB1Cell = lSheet.GetRow(1).GetCell(0);
             ICell lC1Cell = lSheet.GetRow(2).GetCell(0);
 
-            Assert.AreEqual(CellType.Formula, lA1Cell.CellType);
-            Assert.AreEqual(CellType.Formula, lB1Cell.CellType);
-            Assert.AreEqual(CellType.Formula, lC1Cell.CellType);
+            ClassicAssert.AreEqual(CellType.Formula, lA1Cell.CellType);
+            ClassicAssert.AreEqual(CellType.Formula, lB1Cell.CellType);
+            ClassicAssert.AreEqual(CellType.Formula, lC1Cell.CellType);
 
             // Check cached values
-            Assert.AreEqual(10.0d, lA1Cell.NumericCellValue, 0.00001d);
-            Assert.AreEqual("POI rocks!", lB1Cell.StringCellValue);
-            Assert.AreEqual(true, lC1Cell.BooleanCellValue);
+            ClassicAssert.AreEqual(10.0d, lA1Cell.NumericCellValue, 0.00001d);
+            ClassicAssert.AreEqual("POI rocks!", lB1Cell.StringCellValue);
+            ClassicAssert.AreEqual(true, lC1Cell.BooleanCellValue);
 
             // Evaluate
             IFormulaEvaluator evaluator = mainWorkbook.GetCreationHelper().CreateFormulaEvaluator();
             evaluator.IgnoreMissingWorkbooks = (true);
 
-            Assert.AreEqual(CellType.Numeric, evaluator.EvaluateFormulaCell(lA1Cell));
-            Assert.AreEqual(CellType.String, evaluator.EvaluateFormulaCell(lB1Cell));
-            Assert.AreEqual(CellType.Boolean, evaluator.EvaluateFormulaCell(lC1Cell));
+            ClassicAssert.AreEqual(CellType.Numeric, evaluator.EvaluateFormulaCell(lA1Cell));
+            ClassicAssert.AreEqual(CellType.String, evaluator.EvaluateFormulaCell(lB1Cell));
+            ClassicAssert.AreEqual(CellType.Boolean, evaluator.EvaluateFormulaCell(lC1Cell));
 
-            Assert.AreEqual(10.0d, lA1Cell.NumericCellValue, 0.00001d);
-            Assert.AreEqual("POI rocks!", lB1Cell.StringCellValue);
-            Assert.AreEqual(true, lC1Cell.BooleanCellValue);
+            ClassicAssert.AreEqual(10.0d, lA1Cell.NumericCellValue, 0.00001d);
+            ClassicAssert.AreEqual("POI rocks!", lB1Cell.StringCellValue);
+            ClassicAssert.AreEqual(true, lC1Cell.BooleanCellValue);
         }
 
         [Test]
@@ -117,9 +117,9 @@ namespace TestCases.SS.Formula
             ICell lB1Cell = lSheet.GetRow(1).GetCell(0);
             ICell lC1Cell = lSheet.GetRow(2).GetCell(0);
 
-            Assert.AreEqual(CellType.Formula, lA1Cell.CellType);
-            Assert.AreEqual(CellType.Formula, lB1Cell.CellType);
-            Assert.AreEqual(CellType.Formula, lC1Cell.CellType);
+            ClassicAssert.AreEqual(CellType.Formula, lA1Cell.CellType);
+            ClassicAssert.AreEqual(CellType.Formula, lB1Cell.CellType);
+            ClassicAssert.AreEqual(CellType.Formula, lC1Cell.CellType);
 
             IFormulaEvaluator lMainWorkbookEvaluator = mainWorkbook.GetCreationHelper().CreateFormulaEvaluator();
             IFormulaEvaluator lSourceEvaluator = sourceWorkbook.GetCreationHelper().CreateFormulaEvaluator();
@@ -128,13 +128,13 @@ namespace TestCases.SS.Formula
             workbooks.Add(SOURCE_DUMMY_WORKBOOK_FILENAME, lSourceEvaluator);
             lMainWorkbookEvaluator.SetupReferencedWorkbooks(workbooks);
 
-            Assert.AreEqual(CellType.Numeric, lMainWorkbookEvaluator.EvaluateFormulaCell(lA1Cell));
-            Assert.AreEqual(CellType.String, lMainWorkbookEvaluator.EvaluateFormulaCell(lB1Cell));
-            Assert.AreEqual(CellType.Boolean, lMainWorkbookEvaluator.EvaluateFormulaCell(lC1Cell));
+            ClassicAssert.AreEqual(CellType.Numeric, lMainWorkbookEvaluator.EvaluateFormulaCell(lA1Cell));
+            ClassicAssert.AreEqual(CellType.String, lMainWorkbookEvaluator.EvaluateFormulaCell(lB1Cell));
+            ClassicAssert.AreEqual(CellType.Boolean, lMainWorkbookEvaluator.EvaluateFormulaCell(lC1Cell));
 
-            Assert.AreEqual(20.0d, lA1Cell.NumericCellValue, 0.00001d);
-            Assert.AreEqual("Apache rocks!", lB1Cell.StringCellValue);
-            Assert.AreEqual(false, lC1Cell.BooleanCellValue);
+            ClassicAssert.AreEqual(20.0d, lA1Cell.NumericCellValue, 0.00001d);
+            ClassicAssert.AreEqual("Apache rocks!", lB1Cell.StringCellValue);
+            ClassicAssert.AreEqual(false, lC1Cell.BooleanCellValue);
         }
 
     }

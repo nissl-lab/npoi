@@ -18,7 +18,8 @@
 namespace NPOI
 {
 
-    using System.Text;
+    using System.Text; 
+using Cysharp.Text;
     using NPOI.OpenXml4Net.OPC.Internal;
     using System;
     using System.Collections.Generic;
@@ -51,20 +52,23 @@ namespace NPOI
 
         }
 
-        private void AppendIfPresent(StringBuilder text, String thing, bool value)
+        private static void AppendIfPresent(StringBuilder text, String thing, bool value)
         {
             AppendIfPresent(text, thing, value.ToString());
         }
-        private void AppendIfPresent(StringBuilder text, String thing, int value)
+
+        private static void AppendIfPresent(StringBuilder text, String thing, int value)
         {
             AppendIfPresent(text, thing, value.ToString());
         }
-        private void AppendIfPresent(StringBuilder text, String thing, DateTime? value)
+
+        private static void AppendIfPresent(StringBuilder text, String thing, DateTime? value)
         {
             if (value == null) { return; }
             AppendIfPresent(text, thing, value.ToString());
         }
-        private void AppendIfPresent(StringBuilder text, String thing, String value)
+
+        private static void AppendIfPresent(StringBuilder text, String thing, String value)
         {
             if (value == null) { return; }
             text.Append(thing);
@@ -90,7 +94,7 @@ namespace NPOI
             AppendIfPresent(text, "Category", props.GetCategoryProperty());
             AppendIfPresent(text, "ContentStatus", props.GetContentStatusProperty());
             AppendIfPresent(text, "ContentType", props.GetContentTypeProperty());
-            AppendIfPresent(text, "Created", props.GetCreatedProperty().Value);
+            POIXMLPropertiesTextExtractor.AppendIfPresent(text, "Created", props.GetCreatedProperty().Value);
             AppendIfPresent(text, "CreatedString", props.GetCreatedPropertyString());
             AppendIfPresent(text, "Creator", props.GetCreatorProperty());
             AppendIfPresent(text, "Description", props.GetDescriptionProperty());
@@ -98,9 +102,9 @@ namespace NPOI
             AppendIfPresent(text, "Keywords", props.GetKeywordsProperty());
             AppendIfPresent(text, "Language", props.GetLanguageProperty());
             AppendIfPresent(text, "LastModifiedBy", props.GetLastModifiedByProperty());
-            AppendIfPresent(text, "LastPrinted", props.GetLastPrintedProperty());
+            POIXMLPropertiesTextExtractor.AppendIfPresent(text, "LastPrinted", props.GetLastPrintedProperty());
             AppendIfPresent(text, "LastPrintedString", props.GetLastPrintedPropertyString());
-            AppendIfPresent(text, "Modified", props.GetModifiedProperty());
+            POIXMLPropertiesTextExtractor.AppendIfPresent(text, "Modified", props.GetModifiedProperty());
             AppendIfPresent(text, "ModifiedString", props.GetModifiedPropertyString());
             AppendIfPresent(text, "Revision", props.GetRevisionProperty());
             AppendIfPresent(text, "Subject", props.GetSubjectProperty());
@@ -125,19 +129,19 @@ namespace NPOI
 
             AppendIfPresent(text, "Application", props.Application);
             AppendIfPresent(text, "AppVersion", props.AppVersion);
-            AppendIfPresent(text, "Characters", props.Characters);
-            AppendIfPresent(text, "CharactersWithSpaces", props.CharactersWithSpaces);
+            POIXMLPropertiesTextExtractor.AppendIfPresent(text, "Characters", props.Characters);
+            POIXMLPropertiesTextExtractor.AppendIfPresent(text, "CharactersWithSpaces", props.CharactersWithSpaces);
             AppendIfPresent(text, "Company", props.Company);
             AppendIfPresent(text, "HyperlinkBase", props.HyperlinkBase);
-            AppendIfPresent(text, "HyperlinksChanged", props.HyperlinksChanged);
-            AppendIfPresent(text, "Lines", props.Lines);
-            AppendIfPresent(text, "LinksUpToDate", props.LinksUpToDate);
+            POIXMLPropertiesTextExtractor.AppendIfPresent(text, "HyperlinksChanged", props.HyperlinksChanged);
+            POIXMLPropertiesTextExtractor.AppendIfPresent(text, "Lines", props.Lines);
+            POIXMLPropertiesTextExtractor.AppendIfPresent(text, "LinksUpToDate", props.LinksUpToDate);
             AppendIfPresent(text, "Manager", props.Manager);
-            AppendIfPresent(text, "Pages", props.Pages);
-            AppendIfPresent(text, "Paragraphs", props.Paragraphs);
+            POIXMLPropertiesTextExtractor.AppendIfPresent(text, "Pages", props.Pages);
+            POIXMLPropertiesTextExtractor.AppendIfPresent(text, "Paragraphs", props.Paragraphs);
             AppendIfPresent(text, "PresentationFormat", props.PresentationFormat);
             AppendIfPresent(text, "Template", props.Template);
-            AppendIfPresent(text, "TotalTime", props.TotalTime);
+            POIXMLPropertiesTextExtractor.AppendIfPresent(text, "TotalTime", props.TotalTime);
 
             return text.ToString();
         }
@@ -151,100 +155,20 @@ namespace NPOI
             {  // event based extractor does not have a document
                 return "";
             }
-            StringBuilder text = new StringBuilder();
+            using var text = ZString.CreateStringBuilder();
             CT_CustomProperties props = Document.GetProperties().CustomProperties.GetUnderlyingProperties();
 
             List<CT_Property> properties = props.GetPropertyList();
             foreach (CT_Property property in properties)
             {
-                String val = "(not implemented!)";
-                //val = property.Item.ToString();
-                if (property.IsSetLpwstr())
-                {
-                    val = property.GetLpwstr();
-                }
-                else if (property.IsSetLpstr())
-                {
-                    val = property.GetLpstr();
-                }
-                else if (property.IsSetDate())
-                {
-                    val = property.GetDate().ToString();
-                }
-                else if (property.IsSetFiletime())
-                {
-                    val = property.GetFiletime().ToString();
-                }
-                else if (property.IsSetBool())
-                {
-                    val = property.GetBool().ToString();
-                }
+                if(property.Item==null)
+                    continue;
 
-                // Integers
-                else if (property.IsSetI1())
-                {
-                    val = property.GetI1().ToString();
-                }
-                else if (property.IsSetI2())
-                {
-                    val = property.GetI2().ToString();
-                }
-                else if (property.IsSetI4())
-                {
-                    val = property.GetI4().ToString();
-                }
-                else if (property.IsSetI8())
-                {
-                    val = property.GetI8().ToString();
-                }
-                else if (property.IsSetInt())
-                {
-                    val = property.GetInt().ToString();
-                }
-
-                // Unsigned Integers
-                else if (property.IsSetUi1())
-                {
-                    val = property.GetUi1().ToString();
-                }
-                else if (property.IsSetUi2())
-                {
-                    val = property.GetUi2().ToString();
-                }
-                else if (property.IsSetUi4())
-                {
-                    val = property.GetUi4().ToString();
-                }
-                else if (property.IsSetUi8())
-                {
-                    val = property.GetUi8().ToString();
-                }
-                else if (property.IsSetUint())
-                {
-                    val = property.GetUint().ToString();
-                }
-
-                // Reals
-                else if (property.IsSetR4())
-                {
-                    val = property.GetR4().ToString();
-                }
-                else if (property.IsSetR8())
-                {
-                    val = property.GetR8().ToString();
-                }
-                else if (property.IsSetDecimal())
-                {
-                    Decimal? d = property.GetDecimal();
-                    if (d == null)
-                    {
-                        val = null;
-                    }
-                    else
-                    {
-                        val = d.ToString();
-                    }
-                }
+                string val=null;
+                if(property.Item is string)
+                    val = (string) property.Item;
+                else
+                    val = property.Item.ToString();
 
                 //else if (property.IsSetArray())
                 //{
@@ -270,9 +194,9 @@ namespace NPOI
                 //}
 
                 text.Append(
-                      property.name +
-                      " = " + val + "\n"
-                );
+                          property.name +
+                          " = " + val + "\n"
+                    );
             }
 
             return text.ToString();

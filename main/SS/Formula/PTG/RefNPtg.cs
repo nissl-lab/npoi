@@ -17,7 +17,9 @@
 
 namespace NPOI.SS.Formula.PTG
 {
+    using NPOI.SS.Util;
     using NPOI.Util;
+    using System.Text;
 
     /**
      * RefNPtg
@@ -38,6 +40,32 @@ namespace NPOI.SS.Formula.PTG
         protected override byte Sid
         {
             get { return sid; }
+        }
+
+        protected string FormatReferenceAsString()
+        {
+            StringBuilder builder = new StringBuilder();
+
+            // The bits in RefNPtg indicate offset, not relative/absolute values!
+            if(IsRowRelative)
+            {
+                builder.Append("RowOffset: ").Append(Row).Append(" ");
+            }
+            else
+            {
+                builder.Append(Row+1);
+            }
+        
+            if(IsColRelative)
+            {
+                builder.Append(" ColOffset: ").Append(Column);
+            }
+            else
+            {
+                builder.Append(CellReference.ConvertNumToColString(Column));
+            }
+        
+            return builder.ToString();
         }
     }
 }

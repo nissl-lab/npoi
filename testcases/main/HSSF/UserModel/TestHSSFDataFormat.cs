@@ -16,7 +16,7 @@
 */
 namespace TestCases.HSSF.UserModel
 {
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     using TestCases.HSSF;
     using TestCases.SS.UserModel;
@@ -48,13 +48,13 @@ namespace TestCases.HSSF.UserModel
 
             // an attempt to register an existing format returns its index
             int poundFmtIdx = wb.GetSheetAt(0).GetRow(0).GetCell(0).CellStyle.DataFormat;
-            Assert.AreEqual(poundFmtIdx, wb.CreateDataFormat().GetFormat(poundFmt));
+            ClassicAssert.AreEqual(poundFmtIdx, wb.CreateDataFormat().GetFormat(poundFmt));
 
             // now create a custom format with Pound (\u00a3)
             IDataFormat dataFormat = wb.CreateDataFormat();
             short customFmtIdx = dataFormat.GetFormat("\u00a3##.00[Yellow]");
-            Assert.IsTrue(customFmtIdx >= BuiltinFormats.FIRST_USER_DEFINED_FORMAT_INDEX);
-            Assert.AreEqual("\u00a3##.00[Yellow]", dataFormat.GetFormat(customFmtIdx));
+            ClassicAssert.IsTrue(customFmtIdx >= BuiltinFormats.FIRST_USER_DEFINED_FORMAT_INDEX);
+            ClassicAssert.AreEqual("\u00a3##.00[Yellow]", dataFormat.GetFormat(customFmtIdx));
 
             wb.Close();
         }

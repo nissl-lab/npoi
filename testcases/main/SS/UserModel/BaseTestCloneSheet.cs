@@ -19,7 +19,7 @@ namespace TestCases.SS.UserModel
 {
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using System;
     using TestCases.SS;
 
@@ -45,7 +45,7 @@ namespace TestCases.SS.UserModel
             s.AddMergedRegion(new CellRangeAddress(0, 1, 0, 1));
             ISheet ClonedSheet = b.CloneSheet(0);
 
-            Assert.AreEqual(1, ClonedSheet.NumMergedRegions, "One merged area");
+            ClassicAssert.AreEqual(1, ClonedSheet.NumMergedRegions, "One merged area");
 
             b.Close();
         }
@@ -63,12 +63,12 @@ namespace TestCases.SS.UserModel
             s.SetColumnBreak((short)6);
 
             ISheet clone = b.CloneSheet(0);
-            Assert.IsTrue(clone.IsRowBroken(3), "Row 3 not broken");
-            Assert.IsTrue(clone.IsColumnBroken((short)6), "Column 6 not broken");
+            ClassicAssert.IsTrue(clone.IsRowBroken(3), "Row 3 not broken");
+            ClassicAssert.IsTrue(clone.IsColumnBroken((short)6), "Column 6 not broken");
 
             s.RemoveRowBreak(3);
 
-            Assert.IsTrue(clone.IsRowBroken(3), "Row 3 still should be broken");
+            ClassicAssert.IsTrue(clone.IsRowBroken(3), "Row 3 still should be broken");
 
             b.Close();
         }
@@ -79,7 +79,7 @@ namespace TestCases.SS.UserModel
             IWorkbook wb = _testDataProvider.CreateWorkbook();
             wb.CreateSheet("Sheet01");
             wb.CloneSheet(0);
-            Assert.AreEqual(2, wb.NumberOfSheets);
+            ClassicAssert.AreEqual(2, wb.NumberOfSheets);
             try
             {
                 wb.CloneSheet(2);
@@ -105,7 +105,7 @@ namespace TestCases.SS.UserModel
             {
                 // expected here
             }
-            Assert.AreEqual(1, wb.NumberOfSheets);
+            ClassicAssert.AreEqual(1, wb.NumberOfSheets);
         }
     }
 

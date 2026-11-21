@@ -31,7 +31,7 @@ namespace NPOI.XWPF.UserModel
 
         protected StringBuilder text = new StringBuilder();
         private CT_Tbl ctTbl;
-        protected internal List<XWPFTableRow> tableRows;
+        protected internal List<XWPFTableRow> tableRows = new List<XWPFTableRow>();
         //protected List<String> styleIDs;
 
         // Create a map from this XWPF-level enum to the STBorder.Enum values
@@ -105,7 +105,6 @@ namespace NPOI.XWPF.UserModel
             this.part = part;
             this.ctTbl = table;
 
-            tableRows = new List<XWPFTableRow>();
             // is an empty table: I add one row and one column as default
             if (table.SizeOfTrArray() == 0)
                 CreateEmptyTable(table);
@@ -131,7 +130,7 @@ namespace NPOI.XWPF.UserModel
             }
         }
         
-        private void CreateEmptyTable(CT_Tbl table)
+        private static void CreateEmptyTable(CT_Tbl table)
         {
             // MINIMUM ELEMENTS FOR A TABLE
             table.AddNewTr().AddNewTc().AddNewP();
@@ -236,8 +235,10 @@ namespace NPOI.XWPF.UserModel
         {
             get
             {
-                CT_TblPr tblPr = GetTrPr();
-                return tblPr.IsSetTblW() ? int.Parse(tblPr.tblW.w) : -1;
+                CT_TblPr tblPr = GetTblPr(false);
+                return tblPr != null && tblPr.IsSetTblW() && !string.IsNullOrEmpty(tblPr.tblW.w)
+                    ? int.Parse(tblPr.tblW.w)
+                    : -1;
             }
             set 
             {
@@ -247,6 +248,33 @@ namespace NPOI.XWPF.UserModel
                         .AddNewTblW();
                 tblWidth.w = value.ToString();
                 tblWidth.type = ST_TblWidth.pct;
+            }
+        }
+
+        public TableWidthType WidthType
+        {
+            get
+            {
+                CT_TblPr pr = GetTblPr(false);
+                return pr != null && GetTblPr().IsSetTblW() ? GetWidthType(pr.tblW) : TableWidthType.AUTO;
+            }
+        }
+
+        protected TableWidthType GetWidthType(CT_TblWidth ctWidth)
+        {
+            var typeValue = ctWidth.type;
+
+            switch(typeValue)
+            {
+                case ST_TblWidth.nil:
+                    return TableWidthType.NIL;
+                case ST_TblWidth.dxa:
+                    return TableWidthType.DXA;
+                case ST_TblWidth.pct:
+                    return TableWidthType.PCT;
+                default:
+                case ST_TblWidth.auto:
+                    return TableWidthType.AUTO;
             }
         }
 
@@ -261,13 +289,78 @@ namespace NPOI.XWPF.UserModel
             }
         }
 
+        public int NumberOfColumns
+        {
+            get
+            {
+                return ctTbl.SizeOfTrArray() > 0 ? ctTbl.GetTrArray(0)
+                        .SizeOfTcArray() : 0;
+            }
+        }
+
         public CT_TblPr GetTrPr()
         {
             return (ctTbl.tblPr != null) ? ctTbl.tblPr : ctTbl
                     .AddNewTblPr();
         }
 
-        private void AddColumn(XWPFTableRow tabRow, int sizeCol)
+        /// <summary>
+        /// Returns CTTblPr object for table. Creates it if it does not exist.
+        /// </summary>
+        private CT_TblPr GetTblPr() {
+            return GetTblPr(true);
+        }
+
+        /// <summary>
+        /// Returns CTTblPr object for table. If force parameter is true, will
+        /// create the element if necessary. If force parameter is false, returns
+        /// null when CTTblPr element is missing.
+        /// </summary>
+        /// <param name="force">- force creation of CTTblPr element if necessary</param>
+        private CT_TblPr GetTblPr(bool force)
+        {
+            return (ctTbl.tblPr != null) ? ctTbl.tblPr 
+                    : (force ? ctTbl.AddNewTblPr() : null);
+        }
+
+        /// <summary>
+        /// Get or set the current table alignment or NULL
+        /// </summary>
+        /// <returns>Table Alignment as a <see cref="TableRowAlign"/> enum</returns>
+        public TableRowAlign? TableAlignment
+        {
+            get
+            {
+                CT_TblPr tPr = GetTblPr(false);
+                return tPr == null ? null
+                        : tPr.IsSetJc() ? TableRowAlignExtension.ValueOf((int)tPr.jc.val)
+                        : null;
+            }
+            set
+            {
+                if(value.HasValue) 
+                {
+                    CT_TblPr tPr = GetTblPr(true);
+                    CT_Jc jc = tPr.IsSetJc() ? tPr.jc : tPr.AddNewJc();
+                    jc.val = (ST_Jc)value.Value.GetValue();
+                }
+                else
+                {
+                    RemoveTableAlignment();
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Removes the table alignment attribute from a table
+        /// </summary>
+        public void RemoveTableAlignment() {
+            CT_TblPr tPr = GetTblPr(false);
+            if (tPr != null && tPr.IsSetJc()) {
+                tPr.UnsetJc();
+            }
+        }
+        private static void AddColumn(XWPFTableRow tabRow, int sizeCol)
         {
             if (sizeCol > 0)
             {

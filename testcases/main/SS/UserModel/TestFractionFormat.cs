@@ -18,7 +18,7 @@
 using System;
 using NPOI.SS.UserModel;
 using TestCases.HSSF;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -40,7 +40,7 @@ namespace TestCases.SS.UserModel
             FractionFormat f = new FractionFormat("", "##");
             string val = "321.321";
             String ret = f.Format(val);
-            Assert.AreEqual("26027/81", ret);
+            ClassicAssert.AreEqual("26027/81", ret);
         }
         [Test]
         public void TestTruthFile()
@@ -74,12 +74,28 @@ namespace TestCases.SS.UserModel
                     }
 
                     
-                    Assert.AreEqual(truth, formatted, testKey);
+                    ClassicAssert.AreEqual(truth, formatted, testKey);
                 }
                 truthLine = reader.ReadLine();
             }
             wb.Close();
             reader.Close();
+        }
+        [Test]
+        public void TestWithBigWholePart()
+        {
+            FractionFormat f = new FractionFormat("#", "???/???");
+
+            ClassicAssert.AreEqual("10100136259702", f.Format(10100136259702d));
+            ClassicAssert.AreEqual("-10100136259702", f.Format(-10100136259702d));
+
+            // With format ???/??? (max denom 999), NPOI produces 10/100 for 0.1 and 90/100 for 0.9
+            ClassicAssert.AreEqual("10100136259702 10/100", f.Format(10100136259702.1d));
+            ClassicAssert.AreEqual("-10100136259702 10/100", f.Format(-10100136259702.1d));
+
+            // With format ???/??? (max denom 999), NPOI produces 90/100 for 0.9
+            ClassicAssert.AreEqual("10100136259702 90/100", f.Format(10100136259702.9d));
+            ClassicAssert.AreEqual("-10100136259702 90/100", f.Format(-10100136259702.9d));
         }
 
         private String Clean(String s)

@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Text;
+using System.Text; 
+using Cysharp.Text;
 using System.Text.RegularExpressions;
 using NPOI.OpenXml4Net.Exceptions;
 using System.IO;
@@ -148,7 +149,7 @@ namespace NPOI.OpenXml4Net.OPC
             {
                 if (kind == UriKind.Absolute)
                     throw new UriFormatException();
-                if (kind == UriKind.RelativeOrAbsolute && s.StartsWith("/"))
+                if (kind == UriKind.RelativeOrAbsolute && s.StartsWith('/'))
                     kind = UriKind.Relative;
             }
             return new Uri(s, kind);
@@ -198,7 +199,7 @@ namespace NPOI.OpenXml4Net.OPC
         public static String GetFilenameWithoutExtension(Uri uri)
         {
             String filename = GetFilename(uri);
-            int dotIndex = filename.LastIndexOf(".", StringComparison.Ordinal);
+            int dotIndex = filename.LastIndexOf('.');
             if (dotIndex == -1)
                 return filename;
             return filename.Substring(0, dotIndex);
@@ -261,13 +262,9 @@ namespace NPOI.OpenXml4Net.OPC
          */
         public static String Combine(String prefix, String suffix)
         {
-            if (!prefix.EndsWith("" + FORWARD_SLASH_CHAR)
-                    && !suffix.StartsWith("" + FORWARD_SLASH_CHAR))
+            if (!prefix.EndsWith(FORWARD_SLASH_STRING) && !suffix.StartsWith(FORWARD_SLASH_STRING))
                 return prefix + FORWARD_SLASH_CHAR + suffix;
-            else if ((!prefix.EndsWith("" + FORWARD_SLASH_CHAR)
-                    && suffix.StartsWith("" + FORWARD_SLASH_CHAR) || (prefix
-                    .EndsWith("" + FORWARD_SLASH_CHAR) && !suffix.StartsWith(""
-                    + FORWARD_SLASH_CHAR))))
+            else if (prefix.EndsWith(FORWARD_SLASH_STRING) ^ suffix.StartsWith(FORWARD_SLASH_STRING))
                 return prefix + suffix;
             else
                 return "";
@@ -287,8 +284,8 @@ namespace NPOI.OpenXml4Net.OPC
         public static Uri RelativizeUri(Uri sourceURI, Uri targetURI, bool msCompatible)
         {
             StringBuilder retVal = new StringBuilder();
-            String[] segmentsSource = sourceURI.ToString().Split(new char[] { '/' });
-            String[] segmentsTarget = targetURI.ToString().Split(new char[] { '/' });
+            String[] segmentsSource = sourceURI.ToString().Split('/');
+            String[] segmentsTarget = targetURI.ToString().Split('/');
 
             // If the source Uri is empty
             if (segmentsSource.Length == 0)
@@ -474,13 +471,13 @@ namespace NPOI.OpenXml4Net.OPC
                 path = Path.GetDirectoryName(sourcePartUri.OriginalString).Replace("\\", "/");
 
             string targetPath = targetUri.OriginalString;
-            if (targetPath.StartsWith("#"))
+            if (targetPath.StartsWith('#'))
             {
                 path += "/" + Path.GetFileName(sourcePartUri.OriginalString) + targetPath;
             }
             else if (targetPath.StartsWith("../"))
             {
-                string[] segments = path.Split(new char[] { '/' });
+                string[] segments = path.Split('/');
 
                 int segmentEnd = segments.Length - 1;
                 while (targetPath.StartsWith("../"))
@@ -492,8 +489,10 @@ namespace NPOI.OpenXml4Net.OPC
 
                 for (int i = 0; i <= segmentEnd;i++ )
                 {
-                    if(segments[i]!=string.Empty)
-                    path += segments[i]+"/";
+                    if(segments[i] != string.Empty)
+                    {
+                        path += segments[i]+"/";
+                    }
                 }
                 path += targetPath;
             }
@@ -695,7 +694,8 @@ namespace NPOI.OpenXml4Net.OPC
          */
         public static String DecodeURI(Uri uri)
         {
-            StringBuilder retVal = new StringBuilder();
+            using var retVal = ZString.CreateStringBuilder();
+
             String uriStr = uri.OriginalString;
             char c;
             int length = uriStr.Length;
@@ -749,10 +749,7 @@ namespace NPOI.OpenXml4Net.OPC
         public static Uri ToUri(String value)
         {
             //5. Convert all back slashes to forward slashes
-            if (value.IndexOf("\\") != -1)
-            {
-                value = value.Replace('\\', '/');
-            }
+            value = value.Replace('\\', '/');
 
             // URI fragemnts (those starting with '#') are not encoded
             // and may contain white spaces and raw unicode characters
@@ -767,7 +764,7 @@ namespace NPOI.OpenXml4Net.OPC
             // trailing white spaces must be url-encoded, see Bugzilla 53282
             if (value.Length > 0)
             {
-                StringBuilder b = new StringBuilder();
+               using var b= ZString.CreateStringBuilder();
                 int idx = value.Length - 1;
                 for (; idx >= 0; idx--)
                 {
@@ -813,8 +810,9 @@ namespace NPOI.OpenXml4Net.OPC
         if (n == 0) return s;
 
         byte[] bb = Encoding.UTF8.GetBytes(s);
-        StringBuilder sb = new StringBuilder();
-        foreach (byte b in bb)
+        using var sb = ZString.CreateStringBuilder();
+
+        foreach(byte b in bb)
         { 
             int b1 = (int)b & 0xff;
             if (IsUnsafe(b1)) {

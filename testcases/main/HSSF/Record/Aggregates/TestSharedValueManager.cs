@@ -17,7 +17,7 @@
 
 using System;
 using System.Reflection;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using NPOI.HSSF.Record;
 using NPOI.HSSF.Record.Aggregates;
 using NPOI.HSSF.UserModel;
@@ -74,13 +74,13 @@ namespace TestCases.HSSF.Record.Aggregates
 
                 HSSFSheet sheet = (HSSFSheet)wb.GetSheetAt(0);
                 RecordInspector.GetRecords(sheet, 0);
-                Assert.AreEqual("1+1", sheet.GetRow(2).GetCell(0).CellFormula);
+                ClassicAssert.AreEqual("1+1", sheet.GetRow(2).GetCell(0).CellFormula);
                 if ("1+1".Equals(sheet.GetRow(3).GetCell(0).CellFormula))
                 {
                     throw new AssertionException("Identified bug - wrong shared formula record chosen"
                             + " (attempt " + attempt + ")");
                 }
-                Assert.AreEqual("2+2", sheet.GetRow(3).GetCell(0).CellFormula);
+                ClassicAssert.AreEqual("2+2", sheet.GetRow(3).GetCell(0).CellFormula);
                 records = RecordInspector.GetRecords(sheet, 0);
             } while (attempt++ < MAX_ATTEMPTS);
 
@@ -92,7 +92,7 @@ namespace TestCases.HSSF.Record.Aggregates
                     count++;
                 }
             }
-            Assert.AreEqual(2, count);
+            ClassicAssert.AreEqual(2, count);
         }
 
         /**
@@ -130,7 +130,7 @@ namespace TestCases.HSSF.Record.Aggregates
                     count++;
                 }
             }
-            Assert.AreEqual(2, count);
+            ClassicAssert.AreEqual(2, count);
         }
 
         /**
@@ -184,7 +184,7 @@ namespace TestCases.HSSF.Record.Aggregates
                 }
                 throw e;
             }
-            Assert.AreEqual("$AF24*A$7", formulaText);
+            ClassicAssert.AreEqual("$AF24*A$7", formulaText);
         }
 
         /**
@@ -224,19 +224,19 @@ namespace TestCases.HSSF.Record.Aggregates
             HSSFWorkbook wb1 = HSSFTestDataSamples.OpenSampleWorkbook("52527.xls");
             HSSFWorkbook wb2 = HSSFTestDataSamples.WriteOutAndReadBack(wb1);
 
-            Assert.AreEqual("IF(H3,LINEST(N9:N14,K9:M14,FALSE),LINEST(N8:N14,K8:M14,FALSE))",
+            ClassicAssert.AreEqual("IF(H3,LINEST(N9:N14,K9:M14,FALSE),LINEST(N8:N14,K8:M14,FALSE))",
                     wb1.GetSheetAt(0).GetRow(4).GetCell(11).CellFormula);
-            Assert.AreEqual("IF(H3,LINEST(N9:N14,K9:M14,FALSE),LINEST(N8:N14,K8:M14,FALSE))",
+            ClassicAssert.AreEqual("IF(H3,LINEST(N9:N14,K9:M14,FALSE),LINEST(N8:N14,K8:M14,FALSE))",
                     wb2.GetSheetAt(0).GetRow(4).GetCell(11).CellFormula);
 
-            Assert.AreEqual("1/SQRT(J9)",
+            ClassicAssert.AreEqual("1/SQRT(J9)",
                     wb1.GetSheetAt(0).GetRow(8).GetCell(10).CellFormula);
-            Assert.AreEqual("1/SQRT(J9)",
+            ClassicAssert.AreEqual("1/SQRT(J9)",
                     wb2.GetSheetAt(0).GetRow(8).GetCell(10).CellFormula);
 
-            Assert.AreEqual("1/SQRT(J26)",
+            ClassicAssert.AreEqual("1/SQRT(J26)",
                     wb1.GetSheetAt(0).GetRow(25).GetCell(10).CellFormula);
-            Assert.AreEqual("1/SQRT(J26)",
+            ClassicAssert.AreEqual("1/SQRT(J26)",
                     wb2.GetSheetAt(0).GetRow(25).GetCell(10).CellFormula);
         }
     }

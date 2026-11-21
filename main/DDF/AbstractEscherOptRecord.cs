@@ -17,7 +17,8 @@
 using System.Collections.Generic;
 using NPOI.Util;
 using System;
-using System.Text;
+using System.Text; 
+using Cysharp.Text;
 namespace NPOI.DDF
 {
 
@@ -127,7 +128,8 @@ namespace NPOI.DDF
             listener.AfterRecordSerialize(pos, RecordId, pos - offset, this);
             return pos - offset;
         }
-        internal class EscherPropertyComparer : IComparer<EscherProperty>
+
+        internal sealed class EscherPropertyComparer : IComparer<EscherProperty>
         {
             public int Compare(EscherProperty p1, EscherProperty p2)
             {
@@ -136,6 +138,7 @@ namespace NPOI.DDF
                 return s1 < s2 ? -1 : s1 == s2 ? 0 : 1;
             }
         }
+
         /**
          * Records should be sorted by property number before being stored.
          */
@@ -152,11 +155,9 @@ namespace NPOI.DDF
          */
         public void SetEscherProperty(EscherProperty value)
         {
-            List<EscherProperty> toRemove = new List<EscherProperty>();
-            for (IEnumerator<EscherProperty> iterator =
-                          properties.GetEnumerator(); iterator.MoveNext(); )
+            List<EscherProperty> toRemove = [];
+            foreach (var prop in properties)
             {
-                EscherProperty prop = iterator.Current;
                 if (prop.Id == value.Id)
                 {
                     //iterator.Remove();
@@ -171,18 +172,20 @@ namespace NPOI.DDF
 
         public void RemoveEscherProperty(int num)
         {
-            List<EscherProperty> toRemove = new List<EscherProperty>();
-            for (IEnumerator<EscherProperty> iterator = EscherProperties.GetEnumerator(); iterator.MoveNext(); )
+            List<EscherProperty> toRemove = [];
+            foreach(var prop in EscherProperties)
             {
-                EscherProperty prop = iterator.Current;
                 if (prop.PropertyNumber == num)
                 {
                     //iterator.Remove();
                     toRemove.Add(prop);
                 }
             }
-            foreach (EscherProperty e in toRemove)
+
+            foreach(EscherProperty e in toRemove)
+            {
                 EscherProperties.Remove(e);
+            }
         }
 
         /**
@@ -192,7 +195,7 @@ namespace NPOI.DDF
         {
             String nl = Environment.NewLine;
 
-            StringBuilder stringBuilder = new StringBuilder();
+           using var stringBuilder = ZString.CreateStringBuilder();
             stringBuilder.Append(GetType().Name);
             stringBuilder.Append(":");
             stringBuilder.Append(nl);

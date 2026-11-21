@@ -30,7 +30,7 @@ namespace NPOI.XSSF.UserModel
     public class XSSFRelation : POIXMLRelation
     {
 
-        private static POILogger log = POILogFactory.GetLogger(typeof(XSSFRelation));
+        private static readonly POILogger log = POILogFactory.GetLogger(typeof(XSSFRelation));
 
         /**
          * A map to lookup POIXMLRelation by its relation type
@@ -262,6 +262,28 @@ namespace NPOI.XSSF.UserModel
                 "/xl/activeX/activeX#.bin",
                 null
         );
+
+        public static XSSFRelation MACRO_SHEET_BIN = new XSSFRelation(
+            null,//TODO: figure out what this should be?
+            "http://schemas.microsoft.com/office/2006/relationships/xlMacrosheet",
+            "/xl/macroSheets/sheet#.bin",
+            null
+        );
+
+        public static XSSFRelation INTL_MACRO_SHEET_BIN = new XSSFRelation(
+            null,//TODO: figure out what this should be?
+            "http://schemas.microsoft.com/office/2006/relationships/xlIntlMacrosheet",
+            "/xl/macroSheets/sheet#.bin",
+            null
+        );
+
+        public static XSSFRelation DIALOG_SHEET_BIN = new XSSFRelation(
+            null,//TODO: figure out what this should be?
+            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/dialogsheet",
+            "/xl/dialogSheets/sheet#.bin",
+            null
+        );
+
         public static XSSFRelation THEME = new XSSFRelation(
                 "application/vnd.openxmlformats-officedocument.theme+xml",
                 "http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme",
@@ -363,8 +385,8 @@ namespace NPOI.XSSF.UserModel
          */
         public static XSSFRelation GetInstance(String rel)
         {
-            if (_table.ContainsKey(rel))
-                return _table[rel];
+            if (_table.TryGetValue(rel, out XSSFRelation instance))
+                return instance;
             else
                 return null;
         }
@@ -376,10 +398,7 @@ namespace NPOI.XSSF.UserModel
         /// <param name="relation">Relation to remove</param>
         public static void RemoveRelation(XSSFRelation relation)
         {
-            if (_table.ContainsKey(relation.Relation))
-            {
-                _table.Remove(relation.Relation);
-            }
+            _table.Remove(relation.Relation);
         }
 
         /// <summary>

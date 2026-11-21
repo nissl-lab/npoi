@@ -86,9 +86,9 @@ namespace NPOI.XWPF.Model
                 CT_HdrFtrRef ref1 = sectPr.GetHeaderReferenceArray(i);
                 POIXMLDocumentPart relatedPart = doc.GetRelationById(ref1.id);
                 XWPFHeader hdr = null;
-                if (relatedPart != null && relatedPart is XWPFHeader)
+                if (relatedPart != null && relatedPart is XWPFHeader part)
                 {
-                    hdr = (XWPFHeader)relatedPart;
+                    hdr = part;
                 }
                 // Assign it
                 ST_HdrFtr type = ref1.type;
@@ -100,9 +100,9 @@ namespace NPOI.XWPF.Model
                 CT_HdrFtrRef ref1 = sectPr.GetFooterReferenceArray(i);
                 POIXMLDocumentPart relatedPart = doc.GetRelationById(ref1.id);
                 XWPFFooter ftr = null;
-                if (relatedPart != null && relatedPart is XWPFFooter)
+                if (relatedPart != null && relatedPart is XWPFFooter part)
                 {
-                    ftr = (XWPFFooter)relatedPart;
+                    ftr = part;
                 }
                 // Assign it
                 ST_HdrFtr type = ref1.type;
@@ -245,7 +245,7 @@ namespace NPOI.XWPF.Model
          * that had previoulsy been instantiated in the CreateHeader(int, XWPFParagraph[]) or 
          * CreateFooter(int, XWPFParagraph[]) methods.
          */
-        private CT_HdrFtr buildHdrFtr(String pStyle, XWPFParagraph[] paragraphs, XWPFHeaderFooter wrapper)
+        private static CT_HdrFtr buildHdrFtr(String pStyle, XWPFParagraph[] paragraphs, XWPFHeaderFooter wrapper)
         {
             CT_HdrFtr ftr = wrapper._getHdrFtr();
             if (paragraphs != null) {
@@ -291,7 +291,7 @@ namespace NPOI.XWPF.Model
         }
 
 
-        private XmlSerializerNamespaces Commit(XWPFHeaderFooter wrapper)
+        private static XmlSerializerNamespaces Commit(XWPFHeaderFooter wrapper)
         {
             XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new XmlQualifiedName[] {
                 new XmlQualifiedName("ve", "http://schemas.openxmlformats.org/markup-compatibility/2006"),

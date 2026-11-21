@@ -20,7 +20,7 @@
 namespace TestCases.SS.Formula
 {
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.SS.Formula;
     using NPOI.SS.Formula.Eval;
 
@@ -50,22 +50,22 @@ namespace TestCases.SS.Formula
                         for (int columnIndex = 0; columnIndex < 0x4000; columnIndex += 0x100)
                         {
                             Loc loc = new Loc(bookIndex, sheetIndex, rowIndex, columnIndex);
-                            Assert.AreEqual(bookIndex, loc.BookIndex);
-                            Assert.AreEqual(sheetIndex, loc.SheetIndex);
-                            Assert.AreEqual(rowIndex, loc.RowIndex);
-                            Assert.AreEqual(columnIndex, loc.ColumnIndex);
+                            ClassicAssert.AreEqual(bookIndex, loc.BookIndex);
+                            ClassicAssert.AreEqual(sheetIndex, loc.SheetIndex);
+                            ClassicAssert.AreEqual(rowIndex, loc.RowIndex);
+                            ClassicAssert.AreEqual(columnIndex, loc.ColumnIndex);
 
                             Loc sameLoc = new Loc(bookIndex, sheetIndex, rowIndex, columnIndex);
-                            Assert.AreEqual(loc.GetHashCode(), sameLoc.GetHashCode());
-                            Assert.IsTrue(loc.Equals(sameLoc));
+                            ClassicAssert.AreEqual(loc.GetHashCode(), sameLoc.GetHashCode());
+                            ClassicAssert.IsTrue(loc.Equals(sameLoc));
 
-                            Assert.IsNull(cache.Get(loc));
+                            ClassicAssert.IsNull(cache.Get(loc));
                             PlainValueCellCacheEntry entry = new PlainValueCellCacheEntry(new NumberEval(0));
                             cache.Put(loc, entry);
 
-                            Assert.AreSame(entry, cache.Get(loc));
+                            ClassicAssert.AreSame(entry, cache.Get(loc));
                             cache.Remove(loc);
-                            Assert.IsNull(cache.Get(loc));
+                            ClassicAssert.IsNull(cache.Get(loc));
 
                             cache.Put(loc, entry);
                         }

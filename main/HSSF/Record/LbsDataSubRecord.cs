@@ -25,14 +25,14 @@ namespace NPOI.HSSF.Record
         /**
          * a formula that specifies the range of cell values that are the items in this list.
          */
-        private int _unknownPreFormulaInt;
-        private Ptg _linkPtg;
-        private Byte? _unknownPostFormulaByte;
+        private readonly int _unknownPreFormulaInt;
+        private readonly Ptg _linkPtg;
+        private readonly Byte? _unknownPostFormulaByte;
 
         /**
          * An unsigned integer that specifies the number of items in the list.
          */
-        private int _cLines;
+        private readonly int _cLines;
 
         /**
          * An unsigned integer that specifies the one-based index of the first selected item in this list.
@@ -49,7 +49,7 @@ namespace NPOI.HSSF.Record
          * An ObjId that specifies the edit box associated with this list.
          * A value of 0x00 specifies that there is no edit box associated with this list.
          */
-        private int _idEdit;
+        private readonly int _idEdit;
 
         /**
          * An optional LbsDropData that specifies properties for this dropdown control.
@@ -61,13 +61,13 @@ namespace NPOI.HSSF.Record
          * An optional array of strings where each string specifies an item in the list.
          * The number of elements in this array, if it exists, MUST be {@link #_cLines}
          */
-        private String[] _rgLines;
+        private readonly String[] _rgLines;
 
         /**
          * An optional array of bools that specifies
          * which items in the list are part of a multiple selection
          */
-        private bool[] _bsels;
+        private readonly bool[] _bsels;
 
         LbsDataSubRecord()
         {
@@ -269,16 +269,16 @@ namespace NPOI.HSSF.Record
         }
         private static Ptg ReadRefPtg(byte[] formulaRawBytes)
         {
-            ILittleEndianInput in1 = new LittleEndianByteArrayInputStream(formulaRawBytes);
+            LittleEndianByteArrayInputStream in1 = new(formulaRawBytes);
             byte ptgSid = (byte)in1.ReadByte();
-            switch (ptgSid)
+            return ptgSid switch
             {
-                case AreaPtg.sid: return new AreaPtg(in1);
-                case Area3DPtg.sid: return new Area3DPtg(in1);
-                case RefPtg.sid: return new RefPtg(in1);
-                case Ref3DPtg.sid: return new Ref3DPtg(in1);
-            }
-            return null;
+                AreaPtg.sid => new AreaPtg(in1),
+                Area3DPtg.sid => new Area3DPtg(in1),
+                RefPtg.sid => new RefPtg(in1),
+                Ref3DPtg.sid => new Ref3DPtg(in1),
+                _ => null
+            };
         }
         public override Object Clone()
         {
@@ -353,18 +353,18 @@ namespace NPOI.HSSF.Record
         /**
          * An unsigned integer that specifies the smallest width in pixels allowed for the dropdown window
          */
-        private int _dxMin;
+        private readonly int _dxMin;
 
         /**
          * a string that specifies the current string value in the dropdown
          */
-        private String _str;
+        private readonly String _str;
 
         /**
          * Optional, undefined and MUST be ignored.
          * This field MUST exist if and only if the size of str in bytes is an odd number
          */
-        private Byte _unused;
+        private readonly Byte _unused;
 
         public LbsDropData()
         {

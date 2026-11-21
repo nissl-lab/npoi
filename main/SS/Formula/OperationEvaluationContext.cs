@@ -20,13 +20,13 @@ namespace NPOI.SS.Formula
     public class OperationEvaluationContext
     {
         public static readonly FreeRefFunction UDF = UserDefinedFunction.instance;
-        private IEvaluationWorkbook _workbook;
-        private int _sheetIndex;
-        private int _rowIndex;
-        private int _columnIndex;
-        private EvaluationTracker _tracker;
-        private bool _isSingleValue;
-        private WorkbookEvaluator _bookEvaluator;
+        private readonly IEvaluationWorkbook _workbook;
+        private readonly int _sheetIndex;
+        private readonly int _rowIndex;
+        private readonly int _columnIndex;
+        private readonly EvaluationTracker _tracker;
+        private readonly bool _isSingleValue;
+        private readonly WorkbookEvaluator _bookEvaluator;
         private bool _isInArrayContext;
         
         public OperationEvaluationContext(WorkbookEvaluator bookEvaluator, IEvaluationWorkbook workbook, int sheetIndex, int srcRowNum,
@@ -119,9 +119,9 @@ namespace NPOI.SS.Formula
                     otherFirstSheetIndex = _workbook.GetSheetIndex(externalSheet.SheetName);
                 }
 
-                if (externalSheet is ExternalSheetRange)
+                if (externalSheet is ExternalSheetRange range)
                 {
-                    String lastSheetName = ((ExternalSheetRange)externalSheet).LastSheetName;
+                    String lastSheetName = range.LastSheetName;
                     otherLastSheetIndex = _workbook.GetSheetIndex(lastSheetName);
                 }
             }
@@ -139,9 +139,9 @@ namespace NPOI.SS.Formula
                 }
 
                 otherFirstSheetIndex = targetEvaluator.GetSheetIndex(externalSheet.SheetName);
-                if (externalSheet is ExternalSheetRange)
+                if (externalSheet is ExternalSheetRange range)
                 {
-                    String lastSheetName = ((ExternalSheetRange)externalSheet).LastSheetName;
+                    String lastSheetName = range.LastSheetName;
                     otherLastSheetIndex = targetEvaluator.GetSheetIndex(lastSheetName);
                 }
 
@@ -393,40 +393,40 @@ namespace NPOI.SS.Formula
                     aptg.LastRow, aptg.LastColumn, sre);
         }
         public ValueEval GetAreaValueEval(int firstRowIndex, int firstColumnIndex,
-         int lastRowIndex, int lastColumnIndex, Object[,] tokens)
+         int lastRowIndex, int lastColumnIndex, Object[][] tokens)
         {
 
-            ValueEval[] values = new ValueEval[tokens.GetLength(0) * tokens.GetLength(1)];
+            ValueEval[] values = new ValueEval[tokens.Length * tokens[0].Length];
 
             int index = 0;
-            for (int jdx = 0; jdx < tokens.GetLength(0); jdx++)
+            for (int jdx = 0; jdx < tokens.Length; jdx++)
             {
-                for (int idx = 0; idx < tokens.GetLength(1); idx++)
+                for (int idx = 0; idx < tokens[0].Length; idx++)
                 {
-                    values[index++] = convertObjectEval(tokens[jdx,idx]);
+                    values[index++] = ConvertObjectEval(tokens[jdx][idx]);
                 }
             }
 
             return new CacheAreaEval(firstRowIndex, firstColumnIndex, lastRowIndex,
                                      lastColumnIndex, values);
         }
-        private ValueEval convertObjectEval(Object token)
+        private static ValueEval ConvertObjectEval(Object token)
         {
             if (token == null)
             {
                 throw new ArgumentNullException("Array item cannot be null");
             }
-            if (token is String) {
-                return new StringEval((String)token);
+            if (token is String s) {
+                return new StringEval(s);
             }
-            if (token is Double) {
-                return new NumberEval(((Double)token));
+            if (token is Double d) {
+                return new NumberEval(d);
             }
-            if (token is Boolean) {
-                return BoolEval.ValueOf((Boolean)token);
+            if (token is Boolean b) {
+                return BoolEval.ValueOf(b);
             }
-            if (token is Constant.ErrorConstant) {
-                return ErrorEval.ValueOf(((Constant.ErrorConstant)token).ErrorCode);
+            if (token is Constant.ErrorConstant constant) {
+                return ErrorEval.ValueOf(constant.ErrorCode);
             }
             throw new ArgumentException("Unexpected constant class (" + token.GetType().Name + ")");
         }
@@ -545,24 +545,20 @@ namespace NPOI.SS.Formula
                             refWorkbookEvaluator, refWorkbookEvaluator.Workbook, -1, -1, -1, _tracker);
 
                     Ptg ptg = evaluationName.NameDefinition[0];
-                    if (ptg is Ref3DPtg)
+                    if (ptg is Ref3DPtg rptg)
                     {
-                        Ref3DPtg ref3D = (Ref3DPtg)ptg;
+                        return refWorkbookContext.GetRef3DEval(rptg);
+                    }
+                    else if (ptg is Ref3DPxg ref3D)
+                    {
                         return refWorkbookContext.GetRef3DEval(ref3D);
                     }
-                    else if (ptg is Ref3DPxg)
+                    else if (ptg is Area3DPtg aptg)
                     {
-                        Ref3DPxg ref3D = (Ref3DPxg)ptg;
-                        return refWorkbookContext.GetRef3DEval(ref3D);
+                        return refWorkbookContext.GetArea3DEval(aptg);
                     }
-                    else if (ptg is Area3DPtg)
+                    else if (ptg is Area3DPxg area3D)
                     {
-                        Area3DPtg area3D = (Area3DPtg)ptg;
-                        return refWorkbookContext.GetArea3DEval(area3D);
-                    }
-                    else if (ptg is Area3DPxg)
-                    {
-                        Area3DPxg area3D = (Area3DPxg)ptg;
                         return refWorkbookContext.GetArea3DEval(area3D);
                     }
 

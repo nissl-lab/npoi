@@ -30,7 +30,7 @@ namespace NPOI.POIFS.Storage
         /// </summary>
         public BlockListImpl()
         {
-            _blocks = new ListManagedBlock[ 0 ];
+            _blocks = [];
             _bat    = null;
         }
 

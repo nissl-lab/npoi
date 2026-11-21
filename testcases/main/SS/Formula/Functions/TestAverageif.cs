@@ -21,7 +21,7 @@ namespace TestCases.SS.Formula.Functions {
     using NPOI.SS.Formula.Eval;
     using NPOI.SS.Formula.Functions;
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     /**
      * Test cases for SUM
@@ -52,7 +52,7 @@ namespace TestCases.SS.Formula.Functions {
                 throw new AssertionException("Expected numeric result");
             }
             NumericValueEval nve = (NumericValueEval)actualEval;
-            Assert.AreEqual(expected, nve.NumberValue, 0);
+            ClassicAssert.AreEqual(expected, nve.NumberValue, 0);
         }
 
         private static void Confirm(double expectedResult, ValueEval[] args) {
@@ -103,7 +103,7 @@ namespace TestCases.SS.Formula.Functions {
                 EvalFactory.CreateAreaEval("A2:A5", a2a5),
                 new StringEval("<95000"),
             };
-            Assert.AreEqual(ErrorEval.VALUE_INVALID, InvokeAverageif(args, EC));
+            ClassicAssert.AreEqual(ErrorEval.VALUE_INVALID, InvokeAverageif(args, EC));
 
             // "=AVERAGEIF(A2:A5,">250000",B2:B5)"
             args = new ValueEval[]

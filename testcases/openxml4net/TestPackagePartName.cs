@@ -16,7 +16,7 @@
 ==================================================================== */
 
 using NPOI.OpenXml4Net.OPC;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 namespace TestCases.OpenXml4Net.OPC
 {
     [TestFixture]
@@ -31,8 +31,8 @@ namespace TestCases.OpenXml4Net.OPC
         {
             PackagePartName name1 = PackagingUriHelper.CreatePartName("/doc/props/document.xml");
             PackagePartName name2 = PackagingUriHelper.CreatePartName("/root/document");
-            Assert.AreEqual("xml", name1.Extension);
-            Assert.AreEqual("", name2.Extension);
+            ClassicAssert.AreEqual("xml", name1.Extension);
+            ClassicAssert.AreEqual("", name2.Extension);
         }
     }
 

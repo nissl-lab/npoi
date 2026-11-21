@@ -46,10 +46,10 @@ namespace NPOI.SS.Formula.PTG
 
     	public class OffsetArea: AreaI {
 
-		private int _firstColumn;
-		private int _firstRow;
-		private int _lastColumn;
-		private int _lastRow;
+		private readonly int _firstColumn;
+		private readonly int _firstRow;
+		private readonly int _lastColumn;
+		private readonly int _lastRow;
 
 		public OffsetArea(int baseRow, int baseColumn, int relFirstRowIx, int relLastRowIx,
 				int relFirstColIx, int relLastColIx) {

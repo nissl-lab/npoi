@@ -21,7 +21,7 @@ namespace TestCases.DDF
 
     using System;
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.DDF;
     using NPOI.Util;
     [TestFixture]
@@ -31,7 +31,7 @@ namespace TestCases.DDF
         public void TestToString()
         {
             EscherBoolProperty p = new EscherBoolProperty((short)1, 1);
-            Assert.AreEqual("propNum: 1, RAW: 0x0001, propName: unknown, complex: False, blipId: False, value: 1 (0x00000001)", p.ToString());
+            ClassicAssert.AreEqual("propNum: 1, RAW: 0x0001, propName: unknown, complex: False, blipId: False, value: 1 (0x00000001)", p.ToString());
         }
 
     }

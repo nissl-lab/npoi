@@ -1,12 +1,9 @@
 ﻿using NPOI.OpenXmlFormats.Shared;
-using NPOI.XWPF.UserModel;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace NPOI.XWPF.Usermodel
+namespace NPOI.XWPF.UserModel
 {
     public abstract class MathContainer : IRunBody
     {
@@ -55,33 +52,33 @@ namespace NPOI.XWPF.Usermodel
         {
             foreach (object o in items)
             {
-                if (o is CT_R)
+                if (o is CT_R r)
                 {
-                    runs.Add(new XWPFSharedRun(o as CT_R, this));
+                    runs.Add(new XWPFSharedRun(r, this));
                 }
-                if (o is CT_Acc)
+                if (o is CT_Acc acc)
                 {
-                    accs.Add(new XWPFAcc(o as CT_Acc, this));
-                }
-
-                if (o is CT_Nary)
-                {
-                    naries.Add(new XWPFNary(o as CT_Nary, this));
+                    accs.Add(new XWPFAcc(acc, this));
                 }
 
-                if (o is CT_SSub)
+                if (o is CT_Nary nary)
                 {
-                    sSubs.Add(new XWPFSSub(o as CT_SSub, this));
+                    naries.Add(new XWPFNary(nary, this));
                 }
 
-                if (o is CT_F)
+                if (o is CT_SSub sub)
                 {
-                    fs.Add(new XWPFF(o as CT_F, this));
+                    sSubs.Add(new XWPFSSub(sub, this));
                 }
 
-                if (o is CT_Rad)
+                if (o is CT_F f)
                 {
-                    rads.Add(new XWPFRad(o as CT_Rad, this));
+                    fs.Add(new XWPFF(f, this));
+                }
+
+                if (o is CT_Rad rad)
+                {
+                    rads.Add(new XWPFRad(rad, this));
                 }
             }
         }

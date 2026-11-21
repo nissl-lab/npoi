@@ -18,7 +18,7 @@
 namespace TestCases.SS.Formula.PTG
 {
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
 
@@ -38,8 +38,8 @@ namespace TestCases.SS.Formula.PTG
         {
             HSSFWorkbook workbook = LoadWorkbook("IntersectionPtg.xls");
             ICell cell = workbook.GetSheetAt(0).GetRow(4).GetCell(2);
-            Assert.AreEqual(5.0, cell.NumericCellValue, 0.0, "Wrong cell value");
-            Assert.AreEqual("SUM(A1:B2 B2:C3)", cell.CellFormula, "Wrong cell formula");
+            ClassicAssert.AreEqual(5.0, cell.NumericCellValue, 0.0, "Wrong cell value");
+            ClassicAssert.AreEqual("SUM(A1:B2 B2:C3)", cell.CellFormula, "Wrong cell formula");
         }
     }
 

@@ -39,9 +39,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "count", this.count);
-            sw.Write(">");
+            sw.Write('>');
             if (this.fill != null)
             {
                 foreach (CT_Fill x in this.fill)
@@ -49,7 +49,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                     x.Write(sw, "fill");
                 }
             }
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.WriteEndElement(nodeName);
         }
 
         [XmlElement]

@@ -19,7 +19,7 @@ namespace TestCases.SS.Formula.Functions
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
     using System;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     [TestFixture]
     public class TestClean
     {
@@ -62,8 +62,8 @@ namespace TestCases.SS.Formula.Functions
             cell.CellFormula = (formulaText);
             fe.NotifyUpdateCell(cell);
             CellValue result = fe.Evaluate(cell);
-            Assert.AreEqual(result.CellType, CellType.String);
-            Assert.AreEqual(expectedResult, result.StringValue);
+            ClassicAssert.AreEqual(result.CellType, CellType.String);
+            ClassicAssert.AreEqual(expectedResult, result.StringValue);
         }
     }
 

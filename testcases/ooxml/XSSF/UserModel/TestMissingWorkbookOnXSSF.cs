@@ -18,7 +18,7 @@
 namespace TestCases.XSSF.UserModel
 {
     using NPOI.XSSF;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using TestCases.HSSF;
     using TestCases.SS.Formula;
 
@@ -40,8 +40,8 @@ namespace TestCases.XSSF.UserModel
             mainWorkbook = XSSFTestDataSamples.OpenSampleWorkbook(this.MAIN_WORKBOOK_FILENAME);
             sourceWorkbook = HSSFTestDataSamples.OpenSampleWorkbook(this.SOURCE_WORKBOOK_FILENAME);
 
-            Assert.IsNotNull(mainWorkbook);
-            Assert.IsNotNull(sourceWorkbook);
+            ClassicAssert.IsNotNull(mainWorkbook);
+            ClassicAssert.IsNotNull(sourceWorkbook);
         }
     }
 }

@@ -18,7 +18,7 @@
 namespace TestCases.HSSF.Record
 {
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.Record.AutoFilter;
     using NPOI.Util;
 
@@ -39,11 +39,11 @@ namespace TestCases.HSSF.Record
 
             AutoFilterInfoRecord record = new AutoFilterInfoRecord(TestcaseRecordInputStream.Create(AutoFilterInfoRecord.sid, data));
 
-            Assert.AreEqual(AutoFilterInfoRecord.sid, record.Sid);
-            Assert.AreEqual(data.Length, record.RecordSize - 4);
-            Assert.AreEqual(5, record.NumEntries);
+            ClassicAssert.AreEqual(AutoFilterInfoRecord.sid, record.Sid);
+            ClassicAssert.AreEqual(data.Length, record.RecordSize - 4);
+            ClassicAssert.AreEqual(5, record.NumEntries);
             record.NumEntries = (/*setter*/(short)3);
-            Assert.AreEqual(3, record.NumEntries);
+            ClassicAssert.AreEqual(3, record.NumEntries);
         }
         [Test]
         public void TestWrite()
@@ -52,9 +52,9 @@ namespace TestCases.HSSF.Record
             record.NumEntries = (/*setter*/(short)3);
 
             byte[] ser = record.Serialize();
-            Assert.AreEqual(ser.Length - 4, data.Length);
+            ClassicAssert.AreEqual(ser.Length - 4, data.Length);
             record = new AutoFilterInfoRecord(TestcaseRecordInputStream.Create(ser));
-            Assert.AreEqual(3, record.NumEntries);
+            ClassicAssert.AreEqual(3, record.NumEntries);
         }
         [Test]
         public void TestClone()
@@ -64,11 +64,11 @@ namespace TestCases.HSSF.Record
             byte[] src = record.Serialize();
 
             AutoFilterInfoRecord Cloned = (AutoFilterInfoRecord)record.Clone();
-            Assert.AreEqual(3, record.NumEntries);
+            ClassicAssert.AreEqual(3, record.NumEntries);
             byte[] cln = Cloned.Serialize();
 
-            Assert.AreEqual(record.RecordSize, Cloned.RecordSize);
-            Assert.IsTrue(Arrays.Equals(src, cln));
+            ClassicAssert.AreEqual(record.RecordSize, Cloned.RecordSize);
+            ClassicAssert.IsTrue(Arrays.Equals(src, cln));
         }
     }
 }

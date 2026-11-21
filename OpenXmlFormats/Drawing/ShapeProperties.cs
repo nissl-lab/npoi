@@ -1,8 +1,6 @@
 ﻿using NPOI.OpenXml4Net.Util;
-using NPOI.OpenXmlFormats.Dml.Spreadsheet;
 using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
@@ -65,7 +63,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<a:{0}", nodeName));
+            sw.WriteStart("a", nodeName);
             XmlHelper.WriteAttribute(sw, "noGrp", this.noGrp);
             XmlHelper.WriteAttribute(sw, "noSelect", this.noSelect);
             XmlHelper.WriteAttribute(sw, "noRot", this.noRot);
@@ -76,10 +74,10 @@ namespace NPOI.OpenXmlFormats.Dml
             XmlHelper.WriteAttribute(sw, "noAdjustHandles", this.noAdjustHandles);
             XmlHelper.WriteAttribute(sw, "noChangeArrowheads", this.noChangeArrowheads);
             XmlHelper.WriteAttribute(sw, "noChangeShapeType", this.noChangeShapeType);
-            sw.Write(">");
+            sw.Write('>');
             if (this.extLst != null)
                 this.extLst.Write(sw, "extLst");
-            sw.Write(string.Format("</a:{0}>", nodeName));
+            sw.WriteEndElement("a", nodeName);
         }
 
         public CT_ConnectorLocking()
@@ -328,7 +326,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<a:{0}", nodeName));
+            sw.WriteStart("a", nodeName);
             if(noGrp)
                 XmlHelper.WriteAttribute(sw, "noGrp", this.noGrp);
             if (noSelect)
@@ -351,10 +349,10 @@ namespace NPOI.OpenXmlFormats.Dml
                 XmlHelper.WriteAttribute(sw, "noChangeShapeType", this.noChangeShapeType);
             if (noCrop)
                 XmlHelper.WriteAttribute(sw, "noCrop", this.noCrop);
-            sw.Write(">");
+            sw.Write('>');
             if (this.extLst != null)
                 this.extLst.Write(sw, "extLst");
-            sw.Write(string.Format("</a:{0}>", nodeName));
+            sw.WriteEndElement("a", nodeName);
         }
         [XmlElement(Order = 0)]
         public CT_OfficeArtExtensionList extLst
@@ -583,7 +581,8 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<a:{0} xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\"", nodeName));
+            sw.WriteStart("a", nodeName);
+            XmlHelper.WriteAttribute(sw, "xmlns:a", "http://schemas.openxmlformats.org/drawingml/2006/main");
             XmlHelper.WriteAttribute(sw, "noGrp", this.noGrp, false);
             XmlHelper.WriteAttribute(sw, "noDrilldown", this.noDrilldown, false);
             XmlHelper.WriteAttribute(sw, "noSelect", this.noSelect, false);
@@ -592,9 +591,9 @@ namespace NPOI.OpenXmlFormats.Dml
             XmlHelper.WriteAttribute(sw, "noResize", this.noResize, false);
             if (this.extLst != null && this.extLst.ext.Count != 0)
             {
-                sw.Write(">");
+                sw.Write('>');
                 this.extLst.Write(sw, "extLst");
-                sw.Write(string.Format("</a:{0}>", nodeName));
+                sw.WriteEndElement("a", nodeName);
             }
             else
             {
@@ -733,20 +732,20 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<pic:{0}", nodeName));
+            sw.WriteStart("pic", nodeName);
             XmlHelper.WriteAttribute(sw, "id", this.id, true);
             XmlHelper.WriteAttribute(sw, "name", this.name);
             XmlHelper.WriteAttribute(sw, "descr", this.descr);
             if(this.hidden)
                 XmlHelper.WriteAttribute(sw, "hidden", this.hidden);
-            sw.Write(">");
+            sw.Write('>');
             if (this.hlinkClick != null)
                 this.hlinkClick.Write(sw, "hlinkClick");
             if (this.hlinkHover != null)
                 this.hlinkHover.Write(sw, "hlinkHover");
             if (this.extLst != null)
                 this.extLst.Write(sw, "extLst");
-            sw.Write(string.Format("</pic:{0}>", nodeName));
+            sw.WriteEndElement("pic", nodeName);
         }
 
         private CT_Hyperlink hlinkClickField = null;
@@ -901,14 +900,14 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<a:{0}", nodeName));
+            sw.WriteStart("a", nodeName);
             XmlHelper.WriteAttribute(sw, "txBox", this.txBox, false);
-            sw.Write(">");
+            sw.Write('>');
             if (this.spLocks != null)
                 this.spLocks.Write(sw, "spLocks");
             if (this.extLst != null)
                 this.extLst.Write(sw, "extLst");
-            sw.Write(string.Format("</a:{0}>", nodeName));
+            sw.WriteEndElement("a", nodeName);
         }
 
 
@@ -985,8 +984,8 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<xdr:{0}", nodeName));
-            sw.Write(">");
+            sw.WriteStart("xdr", nodeName);
+            sw.Write('>');
             if (this.cxnSpLocks != null)
                 this.cxnSpLocks.Write(sw, "cxnSpLocks");
             if (this.stCxn != null)
@@ -995,7 +994,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.endCxn.Write(sw, "endCxn");
             if (this.extLst != null)
                 this.extLst.Write(sw, "extLst");
-            sw.Write(string.Format("</xdr:{0}>", nodeName));
+            sw.WriteEndElement("xdr", nodeName);
         }
 
 
@@ -1093,15 +1092,15 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<pic:{0}", nodeName));
+            sw.WriteStart("pic", nodeName);
             if (!preferRelativeResize)
                 XmlHelper.WriteAttribute(sw, "preferRelativeResize", this.preferRelativeResize);
-            sw.Write(">");
+            sw.Write('>');
             if (this.picLocks != null)  
                 this.picLocks.Write(sw, "picLocks");
             if (this.extLst != null)
                 this.extLst.Write(sw, "extLst");
-            sw.Write(string.Format("</pic:{0}>", nodeName));
+            sw.WriteEndElement("pic", nodeName);
         }
 
         private CT_PictureLocking picLocksField = null;
@@ -1192,13 +1191,13 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
-            sw.Write(">");
+            sw.WriteStart(nodeName);
+            sw.Write('>');
             if (this.grpSpLocks != null)
                 this.grpSpLocks.Write(sw, "grpSpLocks");
             if (this.extLst != null)
                 this.extLst.Write(sw, "extLst");
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.WriteEndElement(nodeName);
         }
 
         public CT_NonVisualGroupDrawingShapeProps()
@@ -1270,13 +1269,13 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<a:{0}", nodeName));
-            sw.Write(">");
+            sw.WriteStart("a", nodeName);
+            sw.Write('>');
             if (this.graphicFrameLocks != null)
                 this.graphicFrameLocks.Write(sw, "graphicFrameLocks");
             if (this.extLst != null)
                 this.extLst.Write(sw, "extLst");
-            sw.Write(string.Format("</a:{0}>", nodeName));
+            sw.WriteEndElement("a", nodeName);
         }
 
         [XmlElement(Order = 0)]
@@ -1365,7 +1364,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<a:{0}", nodeName));
+            sw.WriteStart("a", nodeName);
             XmlHelper.WriteAttribute(sw, "noGrp", this.noGrp, false);
             XmlHelper.WriteAttribute(sw, "noSelect", this.noSelect, false);
             XmlHelper.WriteAttribute(sw, "noRot", this.noRot, false);
@@ -1384,9 +1383,9 @@ namespace NPOI.OpenXmlFormats.Dml
             }
             else
             {
-                sw.Write(">");
+                sw.Write('>');
                 this.extLst.Write(sw, "extLst");
-                sw.Write(string.Format("</a:{0}>", nodeName));
+                sw.WriteEndElement("a", nodeName);
             }
         }
         public CT_ShapeLocking()
@@ -1632,7 +1631,7 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<a:{0}", nodeName));
+            sw.WriteStart("a", nodeName);
             if(this.noGrp)
                 XmlHelper.WriteAttribute(sw, "noGrp", this.noGrp);
             if(this.noUngrp)
@@ -1834,11 +1833,11 @@ namespace NPOI.OpenXmlFormats.Dml
             this.lnField = new CT_LineProperties();
             return lnField;
         }
-        public void unsetPattFill()
+        public void UnsetPattFill()
         {
             this.pattFill = null;
         }
-        public void unsetSolidFill()
+        public void UnsetSolidFill()
         {
             this.solidFill = null;
         }
@@ -2055,6 +2054,34 @@ namespace NPOI.OpenXmlFormats.Dml
         {
             get { return ST_BlackWhiteMode.none != this.bwModeField; }
         }
+        public bool IsSetBwMode()
+        {
+            return bwModeField != ST_BlackWhiteMode.none;
+        }
+
+        public void UnsetBwMode()
+        {
+            this.bwModeField = ST_BlackWhiteMode.none;
+        }
+        public void Set(CT_ShapeProperties other)
+        {
+            this.xfrmField = other.xfrm;
+            this.custGeomField = other.custGeom;
+            this.prstGeomField = other.prstGeom;
+            this.noFillField = other.noFill;
+            this.solidFillField = other.solidFill;
+            this.gradFillField = other.gradFill;
+            this.blipFillField = other.blipFill;
+            this.pattFillField = other.pattFill;
+            this.grpFillField = other.grpFill;
+            this.lnField = other.ln;
+            this.effectLstField = other.effectLst;
+            this.effectDagField = other.effectDag;
+            this.scene3dField = other.scene3d;
+            this.sp3dField = other.sp3d;
+            this.extLstField = other.extLst;
+            this.bwModeField = other.bwModeField;
+        }
 
         public static CT_ShapeProperties Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
@@ -2103,10 +2130,10 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteStart(nodeName);
             if(this.bwMode!= ST_BlackWhiteMode.none)
                 XmlHelper.WriteAttribute(sw, "bwMode", this.bwMode.ToString());
-            sw.Write(">");
+            sw.Write('>');
             if (this.xfrm != null)
                 this.xfrm.Write(sw, "a:xfrm");
             if (this.custGeom != null)
@@ -2137,7 +2164,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.sp3d.Write(sw, "sp3d");
             if (this.extLst != null)
                 this.extLst.Write(sw, "extLst");
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.WriteEndElement(nodeName);
         }
 
     }
@@ -2211,10 +2238,10 @@ namespace NPOI.OpenXmlFormats.Dml
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteStart(nodeName);
             if(this.bwMode!= ST_BlackWhiteMode.none)
                 XmlHelper.WriteAttribute(sw, "bwMode", this.bwMode.ToString());
-            sw.Write(">");
+            sw.Write('>');
             if (this.xfrm != null)
                 this.xfrm.Write(sw, "xfrm");
             if (this.noFill != null)
@@ -2237,7 +2264,7 @@ namespace NPOI.OpenXmlFormats.Dml
                 this.scene3d.Write(sw, "scene3d");
             if (this.extLst != null)
                 this.extLst.Write(sw, "extLst");
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.WriteEndElement(nodeName);
         }
 
         public CT_GroupShapeProperties()

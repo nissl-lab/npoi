@@ -18,13 +18,13 @@ namespace NPOI.OpenXml4Net.OPC
      * @author Julien Chable, CDubet
      * @version 0.1
      */
-    public abstract class OPCPackage : RelationshipSource, ICloseable
+    public abstract class OPCPackage : RelationshipSource, ICloseable,IDisposable
     {
 
         /**
          * Logger.
          */
-        private static POILogger logger = POILogFactory.GetLogger(typeof(OPCPackage));
+        private static readonly POILogger logger = POILogFactory.GetLogger(typeof(OPCPackage));
 
         /**
          * Default package access.
@@ -34,7 +34,7 @@ namespace NPOI.OpenXml4Net.OPC
         /**
          * Package access.
          */
-        private PackageAccess packageAccess;
+        private readonly PackageAccess packageAccess;
 
         /**
          * Package parts collection.
@@ -540,7 +540,7 @@ namespace NPOI.OpenXml4Net.OPC
             catch (InvalidFormatException)
             {
                 String partName = "/docProps/thumbnail" +
-                         filename.Substring(filename.LastIndexOf(".") + 1);
+                         filename.Substring(filename.LastIndexOf('.') + 1);
                 try
                 {
                     thumbnailPartName = PackagingUriHelper.CreatePartName(partName);
@@ -604,7 +604,7 @@ namespace NPOI.OpenXml4Net.OPC
          * 
          * @return The PackageProperties part of this package.
          */
-        public PackageProperties GetPackageProperties()
+        public IPackageProperties GetPackageProperties()
         {
             this.ThrowExceptionIfWriteOnly();
             // If no properties part has been found then we Create one
@@ -693,15 +693,14 @@ namespace NPOI.OpenXml4Net.OPC
             return retArr;
         }
 
-        /**
-         * Retrieve parts by relationship type.
-         * 
-         * @param relationshipType
-         *            Relationship type.
-         * @return All parts which are the target of a relationship with the
-         *         specified type, if the method can't retrieve relationships from
-         *         the package, then return <code>null</code>.
-         */
+        /// <summary>
+        /// Retrieve parts by relationship type.
+        /// </summary>
+        /// <param name="relationshipType">Relationship type. Must not be <c>null</c>.</param>
+        /// <returns>All parts which are the target of a relationship with the
+        /// specified type. If no such parts are found, the list is empty.</returns>
+        /// <exception cref="InvalidOperationException">If called on a write-only package.</exception>
+        /// <exception cref="ArgumentException">If <paramref name="relationshipType"/> is null.</exception>
         public List<PackagePart> GetPartsByRelationshipType(
                 String relationshipType)
         {
@@ -835,9 +834,8 @@ namespace NPOI.OpenXml4Net.OPC
                                     "POI will use only the first, but other software may reject this file.");
                     }
 
-                    if (partUnmarshallers.ContainsKey(part._contentType))
+                    if (partUnmarshallers.TryGetValue(part._contentType, out PartUnmarshaller partUnmarshaller))
                     {
-                        PartUnmarshaller partUnmarshaller = partUnmarshallers[part._contentType];
                         UnmarshallContext context = new UnmarshallContext(this,
                                 part.PartName);
                         try
@@ -848,11 +846,11 @@ namespace NPOI.OpenXml4Net.OPC
 
                             // Core properties case-- use first CoreProperties part we come across
                             // and ignore any subsequent ones
-                            if (unmarshallPart is PackagePropertiesPart &&
+                            if (unmarshallPart is PackagePropertiesPart propertiesPart &&
                                     hasCorePropertiesPart &&
                                     needCorePropertiesPart)
                             {
-                                this.packageProperties = (PackagePropertiesPart)unmarshallPart;
+                                this.packageProperties = propertiesPart;
                                 needCorePropertiesPart = false;
                             }
                         }
@@ -1060,9 +1058,9 @@ namespace NPOI.OpenXml4Net.OPC
                 throw new ArgumentException("part");
             }
 
-            if (partList.ContainsKey(part.PartName))
+            if (partList.TryGetValue(part.PartName, out PackagePart value))
             {
-                if (!partList[part.PartName].IsDeleted)
+                if (!value.IsDeleted)
                 {
                     throw new InvalidOperationException(
                             "A part with the name '"
@@ -1110,9 +1108,9 @@ namespace NPOI.OpenXml4Net.OPC
                 throw new ArgumentException("PartName");
 
             // Delete the specified part from the package.
-            if (this.partList.ContainsKey(PartName))
+            if (this.partList.TryGetValue(PartName, out PackagePart value))
             {
-                this.partList[PartName].IsDeleted = (true);
+                value.IsDeleted = (true);
                 this.RemovePartImpl(PartName);
                 this.partList.Remove(PartName);
             }
@@ -1321,7 +1319,9 @@ namespace NPOI.OpenXml4Net.OPC
             // A format consumer shall consider more than one core properties
             // relationship for a package to be an error. If present, the
             // relationship shall target the Core Properties part.
-            if (relationshipType.Equals(PackageRelationshipTypes.CORE_PROPERTIES)
+            if ((relationshipType.Equals(PackageRelationshipTypes.CORE_PROPERTIES)
+                    || relationshipType.Equals(PackageRelationshipTypes.CORE_PROPERTIES_ECMA376)
+                    || relationshipType.Equals(PackageRelationshipTypes.CORE_PROPERTIES_ECMA376_LOWERCASE))
                     && this.packageProperties != null)
                 throw new InvalidOperationException(
                         "OPC Compliance error [M4.1]: can't add another core properties part ! Use the built-in package method instead.");
@@ -1828,6 +1828,11 @@ namespace NPOI.OpenXml4Net.OPC
             RemovePart(partName);
             this.contentTypeManager.RemoveContentType(partName);
             this.isDirty = true;
+        }
+
+        public void Dispose()
+        {
+            this.Close();
         }
     }
 

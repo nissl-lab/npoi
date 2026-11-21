@@ -34,9 +34,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "count", this.count, true);
-            sw.Write(">");
+            sw.Write('>');
             if (this.border != null)
             {
                 foreach (CT_Border x in this.border)
@@ -44,7 +44,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                     x.Write(sw, "border");
                 }
             }
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.WriteEndElement(nodeName);
         }
 
         public CT_Borders()

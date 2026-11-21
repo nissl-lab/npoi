@@ -28,7 +28,6 @@ using NPOI.XSSF.UserModel.Extensions;
 using System.Collections.ObjectModel;
 using NPOI.SS;
 using NPOI.OOXML.XSSF.UserModel;
-using NPOI.Common.UserModel.Fonts;
 
 namespace NPOI.XSSF.Model
 {
@@ -41,24 +40,24 @@ namespace NPOI.XSSF.Model
      */
     public class StylesTable : POIXMLDocumentPart
     {
-        private SortedDictionary<short, String> numberFormats = new SortedDictionary<short, String>();
-        private List<XSSFFont> fonts = new List<XSSFFont>();
-        private List<XSSFCellFill> fills = new List<XSSFCellFill>();
-        private List<XSSFCellBorder> borders = new List<XSSFCellBorder>();
-        private List<CT_Xf> styleXfs = new List<CT_Xf>();
-        private List<CT_Xf> xfs = new List<CT_Xf>();
+        private readonly SortedDictionary<short, String> numberFormats = new SortedDictionary<short, String>();
+        private readonly List<XSSFFont> fonts = new List<XSSFFont>();
+        private readonly List<XSSFCellFill> fills = new List<XSSFCellFill>();
+        private readonly List<XSSFCellBorder> borders = new List<XSSFCellBorder>();
+        private readonly List<CT_Xf> styleXfs = new List<CT_Xf>();
+        private readonly List<CT_Xf> xfs = new List<CT_Xf>();
 
-        private List<CT_Dxf> dxfs = new List<CT_Dxf>();
-        private Dictionary<string, ITableStyle> tableStyles = new Dictionary<string, ITableStyle>();
+        private readonly List<CT_Dxf> dxfs = new List<CT_Dxf>();
+        private readonly Dictionary<string, ITableStyle> tableStyles = new Dictionary<string, ITableStyle>();
         private IIndexedColorMap indexedColors = new DefaultIndexedColorMap();
         /**
          * The first style id available for use as a custom style
          */
         public static int FIRST_CUSTOM_STYLE_ID = BuiltinFormats.FIRST_USER_DEFINED_FORMAT_INDEX + 1;
         // Is this right? Number formats (XSSFDataFormat) and cell styles (XSSFCellStyle) are different. What's up with the plus 1?
-        private static int MAXIMUM_STYLE_ID = SpreadsheetVersion.EXCEL2007.MaxCellStyles;
+        private static readonly int MAXIMUM_STYLE_ID = SpreadsheetVersion.EXCEL2007.MaxCellStyles;
 
-        private static short FIRST_USER_DEFINED_NUMBER_FORMAT_ID = BuiltinFormats.FIRST_USER_DEFINED_FORMAT_INDEX;
+        private static readonly short FIRST_USER_DEFINED_NUMBER_FORMAT_ID = BuiltinFormats.FIRST_USER_DEFINED_FORMAT_INDEX;
         /**
          * Depending on the version of Excel, the maximum number of number formats in a workbook is between 200 and 250
          * See https://support.office.com/en-us/article/excel-specifications-and-limits-1672b34d-7043-467e-8e27-269d656771c3
@@ -100,6 +99,11 @@ namespace NPOI.XSSF.Model
         private XSSFWorkbook workbook;
         private ThemesTable theme;
 
+        // Lazy-loading support: tracks whether the XML has been parsed into the
+        // in-memory model, and whether the model has been mutated and needs saving.
+        private bool _isLoaded = true;
+        private bool _isTouched = true;
+
         /**
          * Create a new, empty StylesTable
          */
@@ -111,13 +115,19 @@ namespace NPOI.XSSF.Model
             doc.AddNewStyleSheet();
             // Initialization required in order to make the document Readable by MSExcel
             Initialize();
+            // New table is always considered loaded and touched (must be saved)
+            _isLoaded = true;
+            _isTouched = true;
         }
 
         internal StylesTable(PackagePart part)
             : base(part)
         {
-            XmlDocument xmldoc = ConvertStreamToXml(part.GetInputStream());
-            ReadFrom(xmldoc);
+            // Lazy loading: defer XML parsing until the table is actually used.
+            // The part reference is kept via base(part) and retrieved using
+            // GetPackagePart() when EnsureLoaded() is called on first access.
+            _isLoaded = false;
+            _isTouched = false;
         }
 
         [Obsolete("deprecated in POI 3.14, scheduled for removal in POI 3.16")]
@@ -131,29 +141,105 @@ namespace NPOI.XSSF.Model
         {
             this.workbook = wb;
         }
+        public ThemesTable Theme 
+        {
+            get
+            {
+                return theme;
+            }
+            set
+            {
+                // A theme is a package part owned by exactly one workbook. If the
+                // assigned theme does not already belong to this workbook's package
+                // (e.g. it was obtained from another workbook via GetTheme()), just
+                // holding a reference would never be written out when this workbook
+                // is saved. Clone it into a new theme part of this workbook instead.
+                if (value != null && workbook != null && !ReferenceEquals(value.GetParent(), workbook))
+                {
+                    ThemesTable newTheme = (ThemesTable)workbook.CreateRelationship(XSSFRelation.THEME, XSSFFactory.GetInstance());
+                    newTheme.CopyThemeFrom(value);
+                    value = newTheme;
+                }
+                this.theme = value;
+
+                // Pass the themes table along to things which need to
+                //  know about it, but have already been Created by now.
+                // Only iterate in-memory collections if the model has been loaded;
+                // EnsureLoaded() will apply the theme after parsing when needed.
+                if (_isLoaded)
+                {
+                    foreach(XSSFFont font in fonts)
+                    {
+                        font.SetThemesTable(theme);
+                    }
+                    foreach(XSSFCellBorder border in borders)
+                    {
+                        border.SetThemesTable(theme);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Assigns the theme to this workbook's styles table, mirroring
+        /// <see cref="Theme"/>. If the given theme belongs to a different workbook
+        /// it is copied into this workbook so it is written out on save.
+        /// </summary>
+        /// <param name="theme">the theme to assign</param>
+        public void SetTheme(ThemesTable theme)
+        {
+            Theme = theme;
+        }
+
+        /// <summary>
+        /// Gets the theme of the current workbook, or null if the workbook
+        /// has no theme.
+        /// </summary>
+        /// <returns>the theme table, or null</returns>
         public ThemesTable GetTheme()
         {
             return theme;
         }
 
-        public void SetTheme(ThemesTable theme)
+        /**
+         * Ensure the in-memory model has been populated from the package part.
+         * This is a no-op for newly created (non-package) tables.
+         */
+        private void EnsureLoaded()
         {
-            this.theme = theme;
-
-            // Pass the themes table along to things which need to 
-            //  know about it, but have already been Created by now
-            foreach (XSSFFont font in fonts)
+            if (_isLoaded) return;
+            XmlDocument xmldoc = ConvertStreamToXml(GetPackagePart().GetInputStream());
+            ReadFrom(xmldoc);
+            _isLoaded = true;
+            // Apply the theme that was set before loading
+            if (theme != null)
             {
-                font.SetThemesTable(theme);
-            }
-            foreach (XSSFCellBorder border in borders)
-            {
-                border.SetThemesTable(theme);
+                foreach (XSSFFont font in fonts)
+                    font.SetThemesTable(theme);
+                foreach (XSSFCellBorder border in borders)
+                    border.SetThemesTable(theme);
             }
         }
+
+        /**
+         * Mark this styles table as having been modified so that it will be
+         * committed (written out) when the workbook is saved.
+         */
+        internal void MarkTouched()
+        {
+            _isTouched = true;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="name">of the table style</param>
+        /// <return>defined style, either explicit or built-in, or null if not found</return>
+        ///
+        /// @since 3.17 beta 1
         public ITableStyle GetTableStyle(String name)
         {
             if (name == null) return null;
+            EnsureLoaded();
             try
             {
                 return XSSFBuiltinTableStyle.GetStyle(
@@ -164,9 +250,26 @@ namespace NPOI.XSSF.Model
                 return GetExplicitTableStyle(name);
             }
         }
+        /// <summary>
+        /// NOTE: this only returns explicitly defined styles
+        /// </summary>
+        /// <param name="name">of the table style</param>
+        /// <return>defined style, or null if not explicitly defined</return>
+        ///
+        /// @since 3.17 beta 1
         public ITableStyle GetExplicitTableStyle(String name)
         {
+            EnsureLoaded();
             return tableStyles[name];
+        }
+
+        public ISet<string> ExplicitTableStyleNames
+        {
+            get
+            {
+                EnsureLoaded();
+                return new HashSet<string>(tableStyles.Keys);
+            }
         }
         /**
          * If there isn't currently a {@link ThemesTable} for the
@@ -175,8 +278,9 @@ namespace NPOI.XSSF.Model
          */
         public void EnsureThemesTable()
         {
+            EnsureLoaded();
             if (theme != null) return;
-
+            MarkTouched();
             theme = (ThemesTable)workbook.CreateRelationship(XSSFRelation.THEME, XSSFFactory.GetInstance());
         }
         /**
@@ -195,6 +299,9 @@ namespace NPOI.XSSF.Model
                 CT_Stylesheet styleSheet = doc.GetStyleSheet();
 
                 // Grab all the different bits we care about
+                // keep this first, as some constructors below want it
+                IIndexedColorMap customColors = CustomIndexedColorMap.FromColors(styleSheet.colors);
+                if (customColors != null) indexedColors = customColors;
                 CT_NumFmts ctfmts = styleSheet.numFmts;
                 if (ctfmts != null)
                 {
@@ -213,7 +320,7 @@ namespace NPOI.XSSF.Model
                     foreach (CT_Font font in ctfonts.font)
                     {
                         // Create the font and save it. Themes Table supplied later
-                        XSSFFont f = new XSSFFont(font, idx);
+                        XSSFFont f = new XSSFFont(font, idx, indexedColors);
                         fonts.Add(f);
                         idx++;
                     }
@@ -223,7 +330,7 @@ namespace NPOI.XSSF.Model
                 {
                     foreach (CT_Fill fill in ctFills.fill)
                     {
-                        fills.Add(new XSSFCellFill(fill));
+                        fills.Add(new XSSFCellFill(fill, indexedColors));
                     }
                 }
 
@@ -232,7 +339,7 @@ namespace NPOI.XSSF.Model
                 {
                     foreach (CT_Border border in ctborders.border)
                     {
-                        borders.Add(new XSSFCellBorder(border));
+                        borders.Add(new XSSFCellBorder(border, indexedColors));
                     }
                 }
 
@@ -284,8 +391,9 @@ namespace NPOI.XSSF.Model
          */
         public String GetNumberFormatAt(short fmtId)
         {
-            if (numberFormats.ContainsKey(fmtId))
-                return numberFormats[fmtId];
+            EnsureLoaded();
+            if (numberFormats.TryGetValue(fmtId, out string at))
+                return at;
             else
                 return null;
         }
@@ -312,6 +420,8 @@ namespace NPOI.XSSF.Model
          */
         public int PutNumberFormat(String fmt)
         {
+            EnsureLoaded();
+            MarkTouched();
             // Check if number format already exists
             if (numberFormats.ContainsValue(fmt))
             {
@@ -372,6 +482,8 @@ namespace NPOI.XSSF.Model
          */
         public void PutNumberFormat(short index, String fmt)
         {
+            EnsureLoaded();
+            MarkTouched();
             if (numberFormats.ContainsKey(index))
                 numberFormats[index] = fmt;
             else
@@ -387,6 +499,8 @@ namespace NPOI.XSSF.Model
          */
         public bool RemoveNumberFormat(short index)
         {
+            EnsureLoaded();
+            MarkTouched();
             String fmt = numberFormats[index];
             bool removed = numberFormats.Remove(index);
             //bool removed = (fmt != null);
@@ -414,12 +528,15 @@ namespace NPOI.XSSF.Model
          */
         public bool RemoveNumberFormat(String fmt)
         {
+            EnsureLoaded();
+            MarkTouched();
             short id = GetNumberFormatId(fmt);
             return RemoveNumberFormat(id);
         }
 
         public XSSFFont GetFontAt(int idx)
         {
+            EnsureLoaded();
             return fonts[idx];
         }
 
@@ -435,6 +552,8 @@ namespace NPOI.XSSF.Model
          */
         public int PutFont(XSSFFont font, bool forceRegistration)
         {
+            EnsureLoaded();
+            MarkTouched();
             int idx = -1;
             if (!forceRegistration)
             {
@@ -462,6 +581,7 @@ namespace NPOI.XSSF.Model
          */
         public XSSFCellStyle GetStyleAt(int idx)
         {
+            EnsureLoaded();
             int styleXfId = 0;
 
             if (idx < 0 || idx >= xfs.Count)
@@ -480,6 +600,8 @@ namespace NPOI.XSSF.Model
         }
         public int PutStyle(XSSFCellStyle style)
         {
+            EnsureLoaded();
+            MarkTouched();
             CT_Xf mainXF = style.GetCoreXf();
 
             if (!xfs.Contains(mainXF))
@@ -491,6 +613,7 @@ namespace NPOI.XSSF.Model
 
         public XSSFCellBorder GetBorderAt(int idx)
         {
+            EnsureLoaded();
             return borders[idx];
         }
         /// <summary>
@@ -501,6 +624,8 @@ namespace NPOI.XSSF.Model
         /// <returns>return the index of the added border</returns>
         public int PutBorder(XSSFCellBorder border)
         {
+            EnsureLoaded();
+            MarkTouched();
             int idx = borders.IndexOf(border);
             if (idx != -1)
             {
@@ -513,26 +638,34 @@ namespace NPOI.XSSF.Model
 
         public XSSFCellFill GetFillAt(int idx)
         {
+            EnsureLoaded();
             return fills[idx];
         }
 
         public ReadOnlyCollection<XSSFCellBorder> GetBorders()
         {
+            EnsureLoaded();
             return borders.AsReadOnly();
         }
 
         public ReadOnlyCollection<XSSFCellFill> GetFills()
         {
+            EnsureLoaded();
             return fills.AsReadOnly();
         }
 
-        public ReadOnlyCollection<XSSFFont> GetFonts()
+        public ReadOnlyCollection<XSSFFont> Fonts
         {
-            return fonts.AsReadOnly();
+            get
+            {
+                EnsureLoaded();
+                return fonts.AsReadOnly();
+            }
         }
 
         public IDictionary<short, String> GetNumberFormats()
         {
+            EnsureLoaded();
             return numberFormats;
         }
         /// <summary>
@@ -543,6 +676,8 @@ namespace NPOI.XSSF.Model
         /// <returns>return the index of the added fill</returns>
         public int PutFill(XSSFCellFill fill)
         {
+            EnsureLoaded();
+            MarkTouched();
             int idx = fills.IndexOf(fill);
             if (idx != -1)
             {
@@ -554,6 +689,7 @@ namespace NPOI.XSSF.Model
 
         internal CT_Xf GetCellXfAt(int idx)
         {
+            EnsureLoaded();
             return xfs[idx];
         }
 
@@ -564,16 +700,21 @@ namespace NPOI.XSSF.Model
         /// <returns>return the added cell ID in the style table</returns>
         internal int PutCellXf(CT_Xf cellXf)
         {
+            EnsureLoaded();
+            MarkTouched();
             xfs.Add(cellXf);
             return xfs.Count;
         }
         internal void ReplaceCellXfAt(int idx, CT_Xf cellXf)
         {
+            EnsureLoaded();
+            MarkTouched();
             xfs[idx] = cellXf;
         }
 
         internal CT_Xf GetCellStyleXfAt(int idx)
         {
+            EnsureLoaded();
             if (idx < 0 || idx >= styleXfs.Count)
                 return null;
             return styleXfs[idx];
@@ -586,12 +727,16 @@ namespace NPOI.XSSF.Model
         /// <returns>return the cell style ID in the style table</returns>
         internal int PutCellStyleXf(CT_Xf cellStyleXf)
         {
+            EnsureLoaded();
+            MarkTouched();
             styleXfs.Add(cellStyleXf);
             // TODO: check for duplicate
             return styleXfs.Count;
         }
         internal void ReplaceCellStyleXfAt(int idx, CT_Xf cellStyleXf)
         {
+            EnsureLoaded();
+            MarkTouched();
             styleXfs[idx] = cellStyleXf;
         }
 
@@ -602,6 +747,7 @@ namespace NPOI.XSSF.Model
         {
             get
             {
+                EnsureLoaded();
                 // Each cell style has a unique xfs entry
                 // Several might share the same styleXfs entry
                 return xfs.Count;
@@ -614,6 +760,7 @@ namespace NPOI.XSSF.Model
         {
             get
             {
+                EnsureLoaded();
                 return numberFormats.Count;
             }
         }
@@ -625,6 +772,7 @@ namespace NPOI.XSSF.Model
         {
             get
             {
+                EnsureLoaded();
                 return numberFormats.Count;
             }
         }
@@ -636,6 +784,7 @@ namespace NPOI.XSSF.Model
         {
             get
             {
+                EnsureLoaded();
                 return xfs.Count;
             }
         }
@@ -646,6 +795,7 @@ namespace NPOI.XSSF.Model
         {
             get
             {
+                EnsureLoaded();
                 return styleXfs.Count;
             }
         }
@@ -654,12 +804,14 @@ namespace NPOI.XSSF.Model
          */
         internal CT_Stylesheet GetCTStylesheet()
         {
+            EnsureLoaded();
             return doc.GetStyleSheet();
         }
         internal int DXfsSize
         {
             get
             {
+                EnsureLoaded();
                 return dxfs.Count;
             }
         }
@@ -673,6 +825,7 @@ namespace NPOI.XSSF.Model
          */
         public void WriteTo(Stream out1)
         {
+            EnsureLoaded();
 
             // Work on the current one
             // Need to do this, as we don't handle
@@ -789,8 +942,18 @@ namespace NPOI.XSSF.Model
         }
 
 
+        protected internal override void PrepareForCommit()
+        {
+            // If styles have not been modified, skip clearing the package part so
+            // that the original bytes are preserved when the workbook is saved.
+            if (!_isTouched) return;
+            base.PrepareForCommit();
+        }
+
         protected internal override void Commit()
         {
+            // Only write out the styles if they have been modified.
+            if (!_isTouched) return;
             PackagePart part = GetPackagePart();
             Stream out1 = part.GetOutputStream();
             WriteTo(out1);
@@ -804,8 +967,8 @@ namespace NPOI.XSSF.Model
             fonts.Add(xssfFont);
 
             CT_Fill[] ctFill = CreateDefaultFills();
-            fills.Add(new XSSFCellFill(ctFill[0]));
-            fills.Add(new XSSFCellFill(ctFill[1]));
+            fills.Add(new XSSFCellFill(ctFill[0], indexedColors));
+            fills.Add(new XSSFCellFill(ctFill[1], indexedColors));
 
             CT_Border ctBorder = CreateDefaultBorder();
             borders.Add(new XSSFCellBorder(ctBorder));
@@ -849,7 +1012,7 @@ namespace NPOI.XSSF.Model
         private static XSSFFont CreateDefaultFont()
         {
             CT_Font ctFont = new CT_Font();
-            XSSFFont xssfFont = new XSSFFont(ctFont, 0);
+            XSSFFont xssfFont = new XSSFFont(ctFont, 0, null);
             xssfFont.FontHeightInPoints = (XSSFFont.DEFAULT_FONT_SIZE);
             xssfFont.Color = (XSSFFont.DEFAULT_FONT_COLOR);//SetTheme
             xssfFont.FontName = (XSSFFont.DEFAULT_FONT_NAME);
@@ -860,6 +1023,7 @@ namespace NPOI.XSSF.Model
 
         public CT_Dxf GetDxfAt(int idx)
         {
+            EnsureLoaded();
             return dxfs[idx];
         }
 
@@ -870,9 +1034,12 @@ namespace NPOI.XSSF.Model
         /// <returns>added dxf ID in the style table</returns>
         public int PutDxf(CT_Dxf dxf)
         {
+            EnsureLoaded();
+            MarkTouched();
             this.dxfs.Add(dxf);
             return this.dxfs.Count;
         }
+
         /**
          * Create a cell style in this style table.
          * Note - End users probably want to call {@link XSSFWorkbook#createCellStyle()}
@@ -880,6 +1047,8 @@ namespace NPOI.XSSF.Model
          */
         public XSSFCellStyle CreateCellStyle()
         {
+            EnsureLoaded();
+            MarkTouched();
             if (NumCellStyles > MAXIMUM_STYLE_ID)
                 throw new InvalidOperationException("The maximum number of Cell Styles was exceeded. " +
                           "You can define up to " + MAXIMUM_STYLE_ID + " style in a .xlsx Workbook");
@@ -902,30 +1071,10 @@ namespace NPOI.XSSF.Model
         /**
          * Finds a font that matches the one with the supplied attributes
          */
-         [Obsolete("deprecated POI 3.15 beta 2. Use {@link #findFont(boolean, short, short, String, boolean, boolean, short, byte)} instead.")]
-        public XSSFFont FindFont(short boldWeight, short color, short fontHeight, String name, bool italic, bool strikeout, FontSuperScript typeOffset,FontUnderlineType underline)
+        public XSSFFont FindFont(bool bold, short color, short fontHeight, String name, bool italic, bool strikeout,
+            FontSuperScript typeOffset, FontUnderlineType underline)
         {
-            foreach (XSSFFont font in fonts)
-            {
-                if ((font.Boldweight == boldWeight)
-                        && font.Color == color
-                        && font.FontHeight == fontHeight
-                        && font.FontName.Equals(name)
-                        && font.IsItalic == italic
-                        && font.IsStrikeout == strikeout
-                        && font.TypeOffset == typeOffset
-                        && font.Underline == underline)
-                {
-                    return font;
-                }
-            }
-            return null;
-        }
-        /**
-         * Finds a font that matches the one with the supplied attributes
-         */
-        public XSSFFont FindFont(bool bold, short color, short fontHeight, String name, bool italic, bool strikeout, FontSuperScript typeOffset, FontUnderlineType underline)
-        {
+            EnsureLoaded();
             foreach (XSSFFont font in fonts)
             {
                 if ((font.IsBold == bold)
@@ -943,9 +1092,40 @@ namespace NPOI.XSSF.Model
             return null;
         }
 
-        public IIndexedColorMap GetIndexedColors()
+        /// <summary>
+        /// Finds a font that matches the one with the supplied attributes,
+        /// where color is the actual Color-value, not the indexed color
+        /// </summary>
+        public XSSFFont FindFont(bool bold, IColor color, short fontHeight, string name, bool italic, bool strikeout,
+            FontSuperScript typeOffset, FontUnderlineType underline)
         {
-            return indexedColors;
+            EnsureLoaded();
+            foreach(XSSFFont font in fonts)
+            {
+                if((font.IsBold == bold)
+                        && font.GetXSSFColor().Equals(color)
+                        && font.FontHeight == fontHeight
+                        && font.FontName.Equals(name)
+                        && font.IsItalic == italic
+                        && font.IsStrikeout == strikeout
+                        && font.TypeOffset == typeOffset
+                        && font.Underline == underline)
+                {
+                    return font;
+                }
+            }
+            return null;
+        }
+        /// <summary>
+        /// default or custom indexed color to RGB mapping
+        /// </summary>
+        public IIndexedColorMap IndexedColors
+        {
+            get
+            {
+                EnsureLoaded();
+                return indexedColors;
+            }
         }
     }
 }

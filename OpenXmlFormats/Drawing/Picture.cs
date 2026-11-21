@@ -1,6 +1,7 @@
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.IO;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace NPOI.OpenXmlFormats.Dml.Picture
@@ -59,7 +60,9 @@ namespace NPOI.OpenXmlFormats.Dml.Picture
         }
         public void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0} xmlns:pic=\"{1}\">", nodeName, "http://schemas.openxmlformats.org/drawingml/2006/picture"));
+            sw.WriteStart(nodeName);
+            sw.WriteAttribute("xmlns:pic", "http://schemas.openxmlformats.org/drawingml/2006/picture");
+            sw.Write('>');
             if (this.nvPicPr != null)
             {
                 this.nvPicPr.Write(sw, "pic:nvPicPr");
@@ -72,9 +75,25 @@ namespace NPOI.OpenXmlFormats.Dml.Picture
             {
                 this.spPr.Write(sw, "pic:spPr");
             }
-            sw.Write(string.Format("</{0}>",nodeName));
+            sw.WriteEndElement(nodeName);
         }
 
+        public static CT_Picture Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if(node == null) return null;
+            CT_Picture ctObj = new CT_Picture();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if(childNode.LocalName == "nvPicPr")
+                    ctObj.nvPicPrField = CT_PictureNonVisual.Parse(childNode, namespaceManager);
+                else if(childNode.LocalName == "blipFill")
+                    ctObj.blipFillField = CT_BlipFillProperties.Parse(childNode, namespaceManager);
+                else if(childNode.LocalName == "spPr")
+                    ctObj.spPrField = CT_ShapeProperties.Parse(childNode, namespaceManager);
+            }
+
+            return ctObj;
+        }
     }
 
     // see same class in different name space in SpeedsheetDrawing.cs
@@ -114,9 +133,10 @@ namespace NPOI.OpenXmlFormats.Dml.Picture
             set { this.cNvPicPrField = value; }
         }
 
-        internal void Write(StreamWriter sw, string p)
+        internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}>",p));
+            sw.WriteStart(nodeName);
+            sw.Write('>');
             if (this.cNvPr!=null)
             {
                 this.cNvPr.Write(sw, "cNvPr");
@@ -125,7 +145,23 @@ namespace NPOI.OpenXmlFormats.Dml.Picture
             {
                 this.cNvPicPr.Write(sw, "cNvPicPr");
             }
-            sw.Write(string.Format("</{0}>", p));
+            sw.WriteEndElement(nodeName);
+        }
+
+        public static CT_PictureNonVisual Parse(XmlNode node, XmlNamespaceManager namespaceManager)
+        {
+            if(node == null) return null;
+            CT_PictureNonVisual ctObj = new CT_PictureNonVisual();
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if(childNode.LocalName == "cNvPr")
+                    ctObj.cNvPrField = CT_NonVisualDrawingProps.Parse(childNode, namespaceManager);
+                else if(childNode.LocalName == "cNvPicPr")
+                    ctObj.cNvPicPrField = CT_NonVisualPictureProperties.Parse(childNode, namespaceManager);
+
+            }
+
+            return ctObj;
         }
     }
 

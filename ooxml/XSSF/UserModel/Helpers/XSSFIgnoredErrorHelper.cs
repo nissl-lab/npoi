@@ -103,10 +103,10 @@ namespace NPOI.XSSF.UserModel.Helpers
 
         public static ISet<IgnoredErrorType> GetErrorTypes(CT_IgnoredError err)
         {
-            ISet<IgnoredErrorType> result = new HashSet<IgnoredErrorType>();
+            HashSet<IgnoredErrorType> result = [];
             foreach (IgnoredErrorType errType in IgnoredErrorTypeValues.Values)
             {
-                if (XSSFIgnoredErrorHelper.IsSet(errType, err))
+                if (IsSet(errType, err))
                 {
                     result.Add(errType);
                 }

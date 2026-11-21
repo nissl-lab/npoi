@@ -105,7 +105,7 @@ namespace NPOI.SS.Formula.Functions
             return DateUtil.GetExcelDate(year, month, day, 0, 0, 0, use1904windowing); // XXX fix 1900/1904 problem
         }
 
-        private int GetYear(double d)
+        private static int GetYear(double d)
         {
             int year = (int)d;
 

@@ -27,14 +27,14 @@ namespace NPOI.SS.Formula.Functions
     public class SingleValueVector : ValueVector
     {
 
-        private ValueEval _value;
+        private readonly ValueEval _value;
 
         public SingleValueVector(ValueEval value)
         {
             _value = value;
         }
 
-        public ValueEval GetItem(int index)
+        public override ValueEval GetItem(int index)
         {
             if (index != 0)
             {
@@ -44,7 +44,7 @@ namespace NPOI.SS.Formula.Functions
             return _value;
         }
 
-        public int Size
+        public override int Size
         {
             get
             {
@@ -135,9 +135,8 @@ namespace NPOI.SS.Formula.Functions
 
         private static ValueVector EvaluateLookupRange(ValueEval eval)
         {
-            if (eval is RefEval)
+            if (eval is RefEval re)
             {
-                RefEval re = (RefEval)eval;
                 if (re.NumberOfSheets == 1)
                 {
                     return new SingleValueVector(re.GetInnerValueEval(re.FirstSheetIndex));
@@ -147,9 +146,9 @@ namespace NPOI.SS.Formula.Functions
                     return LookupUtils.CreateVector(re);
                 }
             }
-            if (eval is TwoDEval)
+            if (eval is TwoDEval dEval)
             {
-                ValueVector result = LookupUtils.CreateVector((TwoDEval)eval);
+                ValueVector result = LookupUtils.CreateVector(dEval);
                 if (result == null)
                 {
                     throw new EvaluationException(ErrorEval.NA);
@@ -162,9 +161,8 @@ namespace NPOI.SS.Formula.Functions
             {
                 throw new EvaluationException(ErrorEval.NA);
             }
-            if (eval is StringEval)
+            if (eval is StringEval se)
             {
-                StringEval se = (StringEval)eval;
                 double d = OperandResolver.ParseDouble(se.StringValue);
                 if (double.IsNaN(d))
                 {
@@ -174,7 +172,11 @@ namespace NPOI.SS.Formula.Functions
                 // else looks like a number
                 throw new EvaluationException(ErrorEval.NA);
             }
-            throw new Exception("Unexpected eval type (" + eval.GetType().Name + ")");
+            if (eval is ErrorEval errorEval)
+            {
+                throw new EvaluationException(errorEval);
+            }
+            throw new Exception("Unexpected eval type (" + eval.ToString() + ")");
         }
 
 
@@ -183,30 +185,29 @@ namespace NPOI.SS.Formula.Functions
         {
             ValueEval match_type = OperandResolver.GetSingleValue(arg, srcCellRow, srcCellCol);
 
-            if (match_type is ErrorEval)
+            if (match_type is ErrorEval eval)
             {
-                throw new EvaluationException((ErrorEval)match_type);
+                throw new EvaluationException(eval);
             }
-            if (match_type is NumericValueEval)
+            if (match_type is NumericValueEval ne)
             {
-                NumericValueEval ne = (NumericValueEval)match_type;
                 return ne.NumberValue;
             }
-            if (match_type is StringEval)
+            if (match_type is StringEval se)
             {
-                StringEval se = (StringEval)match_type;
                 double d = OperandResolver.ParseDouble(se.StringValue);
                 if (double.IsNaN(d))
                 {
                     // plain string
                     throw new EvaluationException(ErrorEval.VALUE_INVALID);
                 }
-                // if the string Parses as a number, it Is OK
+                // if the string parses as a number, it is OK
                 return d;
             }
-            //if the 3rd argument is missing, use the default value
-            if (match_type is MissingArgEval)
+            if (match_type is MissingArgEval || match_type is BlankEval)
             {
+                // Excel-Online ignores a missing match-type and
+                // uses the default-value instead
                 return 1d;
             }
             throw new Exception("Unexpected match_type type (" + match_type.GetType().Name + ")");

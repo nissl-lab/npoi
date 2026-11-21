@@ -53,7 +53,7 @@ namespace NPOI.SS.Util
      * <tt>CellReference</tt>s have a concept of "sheet", while <tt>CellAddress</tt>es do not.</p>
      */
 
-    public class CellReference
+    public class CellReference : IComparable
     {
         /** The character ($) that signifies a row or column value is absolute instead of relative */
         private const char ABSOLUTE_REFERENCE_MARKER = '$';
@@ -63,7 +63,7 @@ namespace NPOI.SS.Util
         private const char SPECIAL_NAME_DELIMITER = '\'';
 
         //private static final Pattern NAMED_RANGE_NAME_PATTERN = Pattern.compile("[_A-Z][_.A-Z0-9]*", Pattern.CASE_INSENSITIVE);
-        private static Regex NAMED_RANGE_NAME_PATTERN = new Regex("^[_A-Za-z][_.A-Za-z0-9]*$", RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.CultureInvariant);
+        private static readonly Regex NAMED_RANGE_NAME_PATTERN = new Regex("^[_A-Za-z][_.A-Za-z0-9]*$", RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.CultureInvariant);
         //private static string BIFF8_LAST_COLUMN = "IV";
         //private static int BIFF8_LAST_COLUMN_TEXT_LEN = BIFF8_LAST_COLUMN.Length;
         //private static string BIFF8_LAST_ROW = (0x10000).ToString();
@@ -71,11 +71,11 @@ namespace NPOI.SS.Util
 
         // FIXME: _sheetName may be null, depending on the entry point.
         // Perhaps it would be better to declare _sheetName is never null, using an empty string to represent a 2D reference.
-        private String _sheetName;
-        private int _rowIndex;
-        private int _colIndex;
-        private bool _isRowAbs;
-        private bool _isColAbs;
+        private readonly String _sheetName;
+        private readonly int _rowIndex;
+        private readonly int _colIndex;
+        private readonly bool _isRowAbs;
+        private readonly bool _isColAbs;
 
         /**
          * Create an cell ref from a string representation.  Sheet names containing special characters should be
@@ -544,15 +544,12 @@ namespace NPOI.SS.Util
             return IsRowWithinRange(rowStr, ssVersion);
         }
 
-        /**
-         * @deprecated 3.15 beta 2. Use {@link #isColumnWithinRange}.
-         */
-        [Obsolete("deprecated 3.15 beta 2. Use {@link #isColumnWithinRange}.")]
-        public static bool IsColumnWithnRange(String colStr, SpreadsheetVersion ssVersion)
-        {
-            return IsColumnWithinRange(colStr, ssVersion);
-        }
-
+        /// <summary>
+        /// Determines whether <c>rowStr</c> is a valid row number for a given SpreadsheetVersion.
+        /// </summary>
+        /// <param name="rowStr">the numeric portion of an A1-style cell reference (1-based index)</param>
+        /// <param name="ssVersion">the spreadsheet version</param>
+        /// <returns></returns>
         public static bool IsRowWithinRange(String rowStr, SpreadsheetVersion ssVersion)
             => IsRowWithinRange(rowStr.AsSpan(), ssVersion);
 
@@ -560,13 +557,18 @@ namespace NPOI.SS.Util
         {
             CellReferenceParser.TryParsePositiveInt32Fast(rowStr, out var rowNum);
             rowNum -= 1;
-            return 0 <= rowNum && rowNum <= ssVersion.LastRowIndex;
+            return IsRowWithinRange(rowNum, ssVersion);
         }
 
-        [Obsolete("deprecated 3.15 beta 2. Use {@link #isRowWithinRange}")]
-        public static bool isRowWithnRange(String rowStr, SpreadsheetVersion ssVersion)
+        /// <summary>
+        /// Determines whether <c>row</c> is a valid row number for a given SpreadsheetVersion.
+        /// </summary>
+        /// <param name="rowNum">the row number (0-based index)</param>
+        /// <param name="ssVersion">the spreadsheet version</param>
+        /// <returns></returns>
+        public static bool IsRowWithinRange(int rowNum, SpreadsheetVersion ssVersion)
         {
-            return IsRowWithinRange(rowStr, ssVersion);
+            return 0 <= rowNum && rowNum <= ssVersion.LastRowIndex;
         }
 
         public static bool IsColumnWithinRange(String colStr, SpreadsheetVersion ssVersion)
@@ -602,18 +604,18 @@ namespace NPOI.SS.Util
         {
             if (object.ReferenceEquals(this, o))
                 return true;
-            if (!(o is CellReference))
+            if (o is not CellReference cr)
             {
                 return false;
             }
-            CellReference cr = (CellReference)o;
+
             return _rowIndex == cr._rowIndex
-                && _colIndex == cr._colIndex
-                && _isRowAbs == cr._isRowAbs
-                && _isColAbs == cr._isColAbs
-                && ((_sheetName == null)
-                        ? (cr._sheetName == null)
-                        : _sheetName.Equals(cr._sheetName));
+                   && _colIndex == cr._colIndex
+                   && _isRowAbs == cr._isRowAbs
+                   && _isColAbs == cr._isColAbs
+                   && ((_sheetName == null)
+                       ? (cr._sheetName == null)
+                       : _sheetName.Equals(cr._sheetName));
         }
 
         public override int GetHashCode ()
@@ -625,6 +627,19 @@ namespace NPOI.SS.Util
             result = 31 * result + (_isColAbs ? 1 : 0);
             result = 31 * result + (_sheetName == null ? 0 : _sheetName.GetHashCode());
             return result;
+        }
+
+        public int CompareTo(object obj)
+        {
+            if (obj == null) return 1;
+            CellReference otherRef = obj as CellReference;
+
+            if (otherRef != null)
+            {
+                return string.Compare(otherRef.ToString(), this.ToString());
+            }
+            else
+                throw new ArgumentException("Object is not a CellReference");
         }
     }
 }

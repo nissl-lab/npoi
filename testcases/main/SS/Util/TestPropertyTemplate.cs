@@ -22,13 +22,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace NPOI.SS.Util
+namespace TestCases.SS.Util
 {
-
-
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
-    using NUnit.Framework;
+    using NPOI.SS.Util;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     /// <summary>
     /// Tests Spreadsheet PropertyTemplate
@@ -44,11 +43,11 @@ namespace NPOI.SS.Util
             CellRangeAddress a1 = new CellRangeAddress(0, 0, 0, 0);
             PropertyTemplate pt = new PropertyTemplate();
             pt.DrawBorders(a1, BorderStyle.Thin, BorderExtent.TOP);
-            Assert.AreEqual(1, pt.GetNumBorders(0, 0));
+            ClassicAssert.AreEqual(1, pt.GetNumBorders(0, 0));
             pt.DrawBorders(a1, BorderStyle.Medium, BorderExtent.BOTTOM);
-            Assert.AreEqual(2, pt.GetNumBorders(0, 0));
+            ClassicAssert.AreEqual(2, pt.GetNumBorders(0, 0));
             pt.DrawBorders(a1, BorderStyle.Medium, BorderExtent.NONE);
-            Assert.AreEqual(0, pt.GetNumBorders(0, 0));
+            ClassicAssert.AreEqual(0, pt.GetNumBorders(0, 0));
         }
 
         [Test]
@@ -58,11 +57,11 @@ namespace NPOI.SS.Util
             CellRangeAddress a1 = new CellRangeAddress(0, 0, 0, 0);
             PropertyTemplate pt = new PropertyTemplate();
             pt.DrawBorderColors(a1, IndexedColors.Red.Index, BorderExtent.TOP);
-            Assert.AreEqual(1, pt.GetNumBorderColors(0, 0));
+            ClassicAssert.AreEqual(1, pt.GetNumBorderColors(0, 0));
             pt.DrawBorderColors(a1, IndexedColors.Red.Index, BorderExtent.BOTTOM);
-            Assert.AreEqual(2, pt.GetNumBorderColors(0, 0));
+            ClassicAssert.AreEqual(2, pt.GetNumBorderColors(0, 0));
             pt.DrawBorderColors(a1, IndexedColors.Red.Index, BorderExtent.NONE);
-            Assert.AreEqual(0, pt.GetNumBorderColors(0, 0));
+            ClassicAssert.AreEqual(0, pt.GetNumBorderColors(0, 0));
         }
 
         [Test]
@@ -72,16 +71,16 @@ namespace NPOI.SS.Util
             CellRangeAddress a1 = new CellRangeAddress(0, 0, 0, 0);
             PropertyTemplate pt = new PropertyTemplate();
             pt.DrawBorders(a1, BorderStyle.Thin, BorderExtent.TOP);
-            Assert.AreEqual(BorderStyle.Thin,
+            ClassicAssert.AreEqual(BorderStyle.Thin,
                     pt.GetBorderStyle(0, 0, CellUtil.BORDER_TOP));
             pt.DrawBorders(a1, BorderStyle.Medium, BorderExtent.BOTTOM);
-            Assert.AreEqual(BorderStyle.Medium,
+            ClassicAssert.AreEqual(BorderStyle.Medium,
                     pt.GetBorderStyle(0, 0, CellUtil.BORDER_BOTTOM));
             pt.DrawBorderColors(a1, IndexedColors.Red.Index, BorderExtent.TOP);
-            Assert.AreEqual(IndexedColors.Red.Index,
+            ClassicAssert.AreEqual(IndexedColors.Red.Index,
                     pt.GetTemplateProperty(0, 0, CellUtil.TOP_BORDER_COLOR));
             pt.DrawBorderColors(a1, IndexedColors.Blue.Index, BorderExtent.BOTTOM);
-            Assert.AreEqual(IndexedColors.Blue.Index,
+            ClassicAssert.AreEqual(IndexedColors.Blue.Index,
                     pt.GetTemplateProperty(0, 0, CellUtil.BOTTOM_BORDER_COLOR));
         }
 
@@ -97,14 +96,14 @@ namespace NPOI.SS.Util
             {
                 for(int j = 0; j <= 2; j++)
                 {
-                    Assert.AreEqual(4, pt.GetNumBorders(i, j));
-                    Assert.AreEqual(BorderStyle.Thin,
+                    ClassicAssert.AreEqual(4, pt.GetNumBorders(i, j));
+                    ClassicAssert.AreEqual(BorderStyle.Thin,
                             pt.GetBorderStyle(i, j, CellUtil.BORDER_TOP));
-                    Assert.AreEqual(BorderStyle.Thin,
+                    ClassicAssert.AreEqual(BorderStyle.Thin,
                             pt.GetBorderStyle(i, j, CellUtil.BORDER_BOTTOM));
-                    Assert.AreEqual(BorderStyle.Thin,
+                    ClassicAssert.AreEqual(BorderStyle.Thin,
                             pt.GetBorderStyle(i, j, CellUtil.BORDER_LEFT));
-                    Assert.AreEqual(BorderStyle.Thin,
+                    ClassicAssert.AreEqual(BorderStyle.Thin,
                             pt.GetBorderStyle(i, j, CellUtil.BORDER_RIGHT));
                 }
             }
@@ -114,51 +113,51 @@ namespace NPOI.SS.Util
             {
                 for(int j = 0; j <= 2; j++)
                 {
-                    Assert.AreEqual(4, pt.GetNumBorders(i, j));
+                    ClassicAssert.AreEqual(4, pt.GetNumBorders(i, j));
                     if(i == 0)
                     {
                         if(j == 0)
                         {
-                            Assert.AreEqual(BorderStyle.Medium,
+                            ClassicAssert.AreEqual(BorderStyle.Medium,
                                     pt.GetBorderStyle(i, j,
                                             CellUtil.BORDER_TOP));
-                            Assert.AreEqual(BorderStyle.Thin,
+                            ClassicAssert.AreEqual(BorderStyle.Thin,
                                     pt.GetBorderStyle(i, j,
                                             CellUtil.BORDER_BOTTOM));
-                            Assert.AreEqual(BorderStyle.Medium,
+                            ClassicAssert.AreEqual(BorderStyle.Medium,
                                     pt.GetBorderStyle(i, j,
                                             CellUtil.BORDER_LEFT));
-                            Assert.AreEqual(BorderStyle.Thin,
+                            ClassicAssert.AreEqual(BorderStyle.Thin,
                                     pt.GetBorderStyle(i, j,
                                             CellUtil.BORDER_RIGHT));
                         }
                         else if(j == 2)
                         {
-                            Assert.AreEqual(BorderStyle.Medium,
+                            ClassicAssert.AreEqual(BorderStyle.Medium,
                                     pt.GetBorderStyle(i, j,
                                             CellUtil.BORDER_TOP));
-                            Assert.AreEqual(BorderStyle.Thin,
+                            ClassicAssert.AreEqual(BorderStyle.Thin,
                                     pt.GetBorderStyle(i, j,
                                             CellUtil.BORDER_BOTTOM));
-                            Assert.AreEqual(BorderStyle.Thin,
+                            ClassicAssert.AreEqual(BorderStyle.Thin,
                                     pt.GetBorderStyle(i, j,
                                             CellUtil.BORDER_LEFT));
-                            Assert.AreEqual(BorderStyle.Medium,
+                            ClassicAssert.AreEqual(BorderStyle.Medium,
                                     pt.GetBorderStyle(i, j,
                                             CellUtil.BORDER_RIGHT));
                         }
                         else
                         {
-                            Assert.AreEqual(BorderStyle.Medium,
+                            ClassicAssert.AreEqual(BorderStyle.Medium,
                                     pt.GetBorderStyle(i, j,
                                             CellUtil.BORDER_TOP));
-                            Assert.AreEqual(BorderStyle.Thin,
+                            ClassicAssert.AreEqual(BorderStyle.Thin,
                                     pt.GetBorderStyle(i, j,
                                             CellUtil.BORDER_BOTTOM));
-                            Assert.AreEqual(BorderStyle.Thin,
+                            ClassicAssert.AreEqual(BorderStyle.Thin,
                                     pt.GetBorderStyle(i, j,
                                             CellUtil.BORDER_LEFT));
-                            Assert.AreEqual(BorderStyle.Thin,
+                            ClassicAssert.AreEqual(BorderStyle.Thin,
                                     pt.GetBorderStyle(i, j,
                                             CellUtil.BORDER_RIGHT));
                         }
@@ -167,46 +166,46 @@ namespace NPOI.SS.Util
                     {
                         if(j == 0)
                         {
-                            Assert.AreEqual(BorderStyle.Thin,
+                            ClassicAssert.AreEqual(BorderStyle.Thin,
                                     pt.GetBorderStyle(i, j,
                                             CellUtil.BORDER_TOP));
-                            Assert.AreEqual(BorderStyle.Medium,
+                            ClassicAssert.AreEqual(BorderStyle.Medium,
                                     pt.GetBorderStyle(i, j,
                                             CellUtil.BORDER_BOTTOM));
-                            Assert.AreEqual(BorderStyle.Medium,
+                            ClassicAssert.AreEqual(BorderStyle.Medium,
                                     pt.GetBorderStyle(i, j,
                                             CellUtil.BORDER_LEFT));
-                            Assert.AreEqual(BorderStyle.Thin,
+                            ClassicAssert.AreEqual(BorderStyle.Thin,
                                     pt.GetBorderStyle(i, j,
                                             CellUtil.BORDER_RIGHT));
                         }
                         else if(j == 2)
                         {
-                            Assert.AreEqual(BorderStyle.Thin,
+                            ClassicAssert.AreEqual(BorderStyle.Thin,
                                     pt.GetBorderStyle(i, j,
                                             CellUtil.BORDER_TOP));
-                            Assert.AreEqual(BorderStyle.Medium,
+                            ClassicAssert.AreEqual(BorderStyle.Medium,
                                     pt.GetBorderStyle(i, j,
                                             CellUtil.BORDER_BOTTOM));
-                            Assert.AreEqual(BorderStyle.Thin,
+                            ClassicAssert.AreEqual(BorderStyle.Thin,
                                     pt.GetBorderStyle(i, j,
                                             CellUtil.BORDER_LEFT));
-                            Assert.AreEqual(BorderStyle.Medium,
+                            ClassicAssert.AreEqual(BorderStyle.Medium,
                                     pt.GetBorderStyle(i, j,
                                             CellUtil.BORDER_RIGHT));
                         }
                         else
                         {
-                            Assert.AreEqual(BorderStyle.Thin,
+                            ClassicAssert.AreEqual(BorderStyle.Thin,
                                     pt.GetBorderStyle(i, j,
                                             CellUtil.BORDER_TOP));
-                            Assert.AreEqual(BorderStyle.Medium,
+                            ClassicAssert.AreEqual(BorderStyle.Medium,
                                     pt.GetBorderStyle(i, j,
                                             CellUtil.BORDER_BOTTOM));
-                            Assert.AreEqual(BorderStyle.Thin,
+                            ClassicAssert.AreEqual(BorderStyle.Thin,
                                     pt.GetBorderStyle(i, j,
                                             CellUtil.BORDER_LEFT));
-                            Assert.AreEqual(BorderStyle.Thin,
+                            ClassicAssert.AreEqual(BorderStyle.Thin,
                                     pt.GetBorderStyle(i, j,
                                             CellUtil.BORDER_RIGHT));
                         }
@@ -215,46 +214,46 @@ namespace NPOI.SS.Util
                     {
                         if(j == 0)
                         {
-                            Assert.AreEqual(BorderStyle.Thin,
+                            ClassicAssert.AreEqual(BorderStyle.Thin,
                                     pt.GetBorderStyle(i, j,
                                             CellUtil.BORDER_TOP));
-                            Assert.AreEqual(BorderStyle.Thin,
+                            ClassicAssert.AreEqual(BorderStyle.Thin,
                                     pt.GetBorderStyle(i, j,
                                             CellUtil.BORDER_BOTTOM));
-                            Assert.AreEqual(BorderStyle.Medium,
+                            ClassicAssert.AreEqual(BorderStyle.Medium,
                                     pt.GetBorderStyle(i, j,
                                             CellUtil.BORDER_LEFT));
-                            Assert.AreEqual(BorderStyle.Thin,
+                            ClassicAssert.AreEqual(BorderStyle.Thin,
                                     pt.GetBorderStyle(i, j,
                                             CellUtil.BORDER_RIGHT));
                         }
                         else if(j == 2)
                         {
-                            Assert.AreEqual(BorderStyle.Thin,
+                            ClassicAssert.AreEqual(BorderStyle.Thin,
                                     pt.GetBorderStyle(i, j,
                                             CellUtil.BORDER_TOP));
-                            Assert.AreEqual(BorderStyle.Thin,
+                            ClassicAssert.AreEqual(BorderStyle.Thin,
                                     pt.GetBorderStyle(i, j,
                                             CellUtil.BORDER_BOTTOM));
-                            Assert.AreEqual(BorderStyle.Thin,
+                            ClassicAssert.AreEqual(BorderStyle.Thin,
                                     pt.GetBorderStyle(i, j,
                                             CellUtil.BORDER_LEFT));
-                            Assert.AreEqual(BorderStyle.Medium,
+                            ClassicAssert.AreEqual(BorderStyle.Medium,
                                     pt.GetBorderStyle(i, j,
                                             CellUtil.BORDER_RIGHT));
                         }
                         else
                         {
-                            Assert.AreEqual(BorderStyle.Thin,
+                            ClassicAssert.AreEqual(BorderStyle.Thin,
                                     pt.GetBorderStyle(i, j,
                                             CellUtil.BORDER_TOP));
-                            Assert.AreEqual(BorderStyle.Thin,
+                            ClassicAssert.AreEqual(BorderStyle.Thin,
                                     pt.GetBorderStyle(i, j,
                                             CellUtil.BORDER_BOTTOM));
-                            Assert.AreEqual(BorderStyle.Thin,
+                            ClassicAssert.AreEqual(BorderStyle.Thin,
                                     pt.GetBorderStyle(i, j,
                                             CellUtil.BORDER_LEFT));
-                            Assert.AreEqual(BorderStyle.Thin,
+                            ClassicAssert.AreEqual(BorderStyle.Thin,
                                     pt.GetBorderStyle(i, j,
                                             CellUtil.BORDER_RIGHT));
                         }
@@ -267,7 +266,7 @@ namespace NPOI.SS.Util
             {
                 for(int j = 0; j <= 2; j++)
                 {
-                    Assert.AreEqual(0, pt.GetNumBorders(i, j));
+                    ClassicAssert.AreEqual(0, pt.GetNumBorders(i, j));
                 }
             }
             pt.DrawBorders(a1c3, BorderStyle.Medium,
@@ -278,13 +277,13 @@ namespace NPOI.SS.Util
                 {
                     if(i == 0)
                     {
-                        Assert.AreEqual(1, pt.GetNumBorders(i, j));
-                        Assert.AreEqual(BorderStyle.Medium,
+                        ClassicAssert.AreEqual(1, pt.GetNumBorders(i, j));
+                        ClassicAssert.AreEqual(BorderStyle.Medium,
                                 pt.GetBorderStyle(i, j, CellUtil.BORDER_TOP));
                     }
                     else
                     {
-                        Assert.AreEqual(0, pt.GetNumBorders(i, j));
+                        ClassicAssert.AreEqual(0, pt.GetNumBorders(i, j));
                     }
                 }
             }
@@ -298,13 +297,13 @@ namespace NPOI.SS.Util
                 {
                     if(i == 2)
                     {
-                        Assert.AreEqual(1, pt.GetNumBorders(i, j));
-                        Assert.AreEqual(BorderStyle.Medium, pt
+                        ClassicAssert.AreEqual(1, pt.GetNumBorders(i, j));
+                        ClassicAssert.AreEqual(BorderStyle.Medium, pt
                                 .GetBorderStyle(i, j, CellUtil.BORDER_BOTTOM));
                     }
                     else
                     {
-                        Assert.AreEqual(0, pt.GetNumBorders(i, j));
+                        ClassicAssert.AreEqual(0, pt.GetNumBorders(i, j));
                     }
                 }
             }
@@ -318,13 +317,13 @@ namespace NPOI.SS.Util
                 {
                     if(j == 0)
                     {
-                        Assert.AreEqual(1, pt.GetNumBorders(i, j));
-                        Assert.AreEqual(BorderStyle.Medium,
+                        ClassicAssert.AreEqual(1, pt.GetNumBorders(i, j));
+                        ClassicAssert.AreEqual(BorderStyle.Medium,
                                 pt.GetBorderStyle(i, j, CellUtil.BORDER_LEFT));
                     }
                     else
                     {
-                        Assert.AreEqual(0, pt.GetNumBorders(i, j));
+                        ClassicAssert.AreEqual(0, pt.GetNumBorders(i, j));
                     }
                 }
             }
@@ -338,13 +337,13 @@ namespace NPOI.SS.Util
                 {
                     if(j == 2)
                     {
-                        Assert.AreEqual(1, pt.GetNumBorders(i, j));
-                        Assert.AreEqual(BorderStyle.Medium, pt
+                        ClassicAssert.AreEqual(1, pt.GetNumBorders(i, j));
+                        ClassicAssert.AreEqual(BorderStyle.Medium, pt
                                 .GetBorderStyle(i, j, CellUtil.BORDER_RIGHT));
                     }
                     else
                     {
-                        Assert.AreEqual(0, pt.GetNumBorders(i, j));
+                        ClassicAssert.AreEqual(0, pt.GetNumBorders(i, j));
                     }
                 }
             }
@@ -356,10 +355,10 @@ namespace NPOI.SS.Util
             {
                 for(int j = 0; j <= 2; j++)
                 {
-                    Assert.AreEqual(2, pt.GetNumBorders(i, j));
-                    Assert.AreEqual(BorderStyle.Medium,
+                    ClassicAssert.AreEqual(2, pt.GetNumBorders(i, j));
+                    ClassicAssert.AreEqual(BorderStyle.Medium,
                             pt.GetBorderStyle(i, j, CellUtil.BORDER_TOP));
-                    Assert.AreEqual(BorderStyle.Medium,
+                    ClassicAssert.AreEqual(BorderStyle.Medium,
                             pt.GetBorderStyle(i, j, CellUtil.BORDER_BOTTOM));
                 }
             }
@@ -373,22 +372,22 @@ namespace NPOI.SS.Util
                 {
                     if(i == 0)
                     {
-                        Assert.AreEqual(1, pt.GetNumBorders(i, j));
-                        Assert.AreEqual(BorderStyle.Medium, pt
+                        ClassicAssert.AreEqual(1, pt.GetNumBorders(i, j));
+                        ClassicAssert.AreEqual(BorderStyle.Medium, pt
                                 .GetBorderStyle(i, j, CellUtil.BORDER_BOTTOM));
                     }
                     else if(i == 2)
                     {
-                        Assert.AreEqual(1, pt.GetNumBorders(i, j));
-                        Assert.AreEqual(BorderStyle.Medium,
+                        ClassicAssert.AreEqual(1, pt.GetNumBorders(i, j));
+                        ClassicAssert.AreEqual(BorderStyle.Medium,
                                 pt.GetBorderStyle(i, j, CellUtil.BORDER_TOP));
                     }
                     else
                     {
-                        Assert.AreEqual(2, pt.GetNumBorders(i, j));
-                        Assert.AreEqual(BorderStyle.Medium,
+                        ClassicAssert.AreEqual(2, pt.GetNumBorders(i, j));
+                        ClassicAssert.AreEqual(BorderStyle.Medium,
                                 pt.GetBorderStyle(i, j, CellUtil.BORDER_TOP));
-                        Assert.AreEqual(BorderStyle.Medium, pt
+                        ClassicAssert.AreEqual(BorderStyle.Medium, pt
                                 .GetBorderStyle(i, j, CellUtil.BORDER_BOTTOM));
                     }
                 }
@@ -403,19 +402,19 @@ namespace NPOI.SS.Util
                 {
                     if(i == 0)
                     {
-                        Assert.AreEqual(1, pt.GetNumBorders(i, j));
-                        Assert.AreEqual(BorderStyle.Medium,
+                        ClassicAssert.AreEqual(1, pt.GetNumBorders(i, j));
+                        ClassicAssert.AreEqual(BorderStyle.Medium,
                                 pt.GetBorderStyle(i, j, CellUtil.BORDER_TOP));
                     }
                     else if(i == 2)
                     {
-                        Assert.AreEqual(1, pt.GetNumBorders(i, j));
-                        Assert.AreEqual(BorderStyle.Medium, pt
+                        ClassicAssert.AreEqual(1, pt.GetNumBorders(i, j));
+                        ClassicAssert.AreEqual(BorderStyle.Medium, pt
                                 .GetBorderStyle(i, j, CellUtil.BORDER_BOTTOM));
                     }
                     else
                     {
-                        Assert.AreEqual(0, pt.GetNumBorders(i, j));
+                        ClassicAssert.AreEqual(0, pt.GetNumBorders(i, j));
                     }
                 }
             }
@@ -427,10 +426,10 @@ namespace NPOI.SS.Util
             {
                 for(int j = 0; j <= 2; j++)
                 {
-                    Assert.AreEqual(2, pt.GetNumBorders(i, j));
-                    Assert.AreEqual(BorderStyle.Medium,
+                    ClassicAssert.AreEqual(2, pt.GetNumBorders(i, j));
+                    ClassicAssert.AreEqual(BorderStyle.Medium,
                             pt.GetBorderStyle(i, j, CellUtil.BORDER_LEFT));
-                    Assert.AreEqual(BorderStyle.Medium,
+                    ClassicAssert.AreEqual(BorderStyle.Medium,
                             pt.GetBorderStyle(i, j, CellUtil.BORDER_RIGHT));
                 }
             }
@@ -444,22 +443,22 @@ namespace NPOI.SS.Util
                 {
                     if(j == 0)
                     {
-                        Assert.AreEqual(1, pt.GetNumBorders(i, j));
-                        Assert.AreEqual(BorderStyle.Medium, pt
+                        ClassicAssert.AreEqual(1, pt.GetNumBorders(i, j));
+                        ClassicAssert.AreEqual(BorderStyle.Medium, pt
                                 .GetBorderStyle(i, j, CellUtil.BORDER_RIGHT));
                     }
                     else if(j == 2)
                     {
-                        Assert.AreEqual(1, pt.GetNumBorders(i, j));
-                        Assert.AreEqual(BorderStyle.Medium,
+                        ClassicAssert.AreEqual(1, pt.GetNumBorders(i, j));
+                        ClassicAssert.AreEqual(BorderStyle.Medium,
                                 pt.GetBorderStyle(i, j, CellUtil.BORDER_LEFT));
                     }
                     else
                     {
-                        Assert.AreEqual(2, pt.GetNumBorders(i, j));
-                        Assert.AreEqual(BorderStyle.Medium,
+                        ClassicAssert.AreEqual(2, pt.GetNumBorders(i, j));
+                        ClassicAssert.AreEqual(BorderStyle.Medium,
                                 pt.GetBorderStyle(i, j, CellUtil.BORDER_LEFT));
-                        Assert.AreEqual(BorderStyle.Medium, pt
+                        ClassicAssert.AreEqual(BorderStyle.Medium, pt
                                 .GetBorderStyle(i, j, CellUtil.BORDER_RIGHT));
                     }
                 }
@@ -474,19 +473,19 @@ namespace NPOI.SS.Util
                 {
                     if(j == 0)
                     {
-                        Assert.AreEqual(1, pt.GetNumBorders(i, j));
-                        Assert.AreEqual(BorderStyle.Medium,
+                        ClassicAssert.AreEqual(1, pt.GetNumBorders(i, j));
+                        ClassicAssert.AreEqual(BorderStyle.Medium,
                                 pt.GetBorderStyle(i, j, CellUtil.BORDER_LEFT));
                     }
                     else if(j == 2)
                     {
-                        Assert.AreEqual(1, pt.GetNumBorders(i, j));
-                        Assert.AreEqual(BorderStyle.Medium, pt
+                        ClassicAssert.AreEqual(1, pt.GetNumBorders(i, j));
+                        ClassicAssert.AreEqual(BorderStyle.Medium, pt
                                 .GetBorderStyle(i, j, CellUtil.BORDER_RIGHT));
                     }
                     else
                     {
-                        Assert.AreEqual(0, pt.GetNumBorders(i, j));
+                        ClassicAssert.AreEqual(0, pt.GetNumBorders(i, j));
                     }
                 }
             }
@@ -504,16 +503,16 @@ namespace NPOI.SS.Util
             {
                 for(int j = 0; j <= 2; j++)
                 {
-                    Assert.AreEqual(4, pt.GetNumBorders(i, j));
-                    Assert.AreEqual(4, pt.GetNumBorderColors(i, j));
-                    Assert.AreEqual(IndexedColors.Red.Index, pt
+                    ClassicAssert.AreEqual(4, pt.GetNumBorders(i, j));
+                    ClassicAssert.AreEqual(4, pt.GetNumBorderColors(i, j));
+                    ClassicAssert.AreEqual(IndexedColors.Red.Index, pt
                             .GetTemplateProperty(i, j, CellUtil.TOP_BORDER_COLOR));
-                    Assert.AreEqual(IndexedColors.Red.Index,
+                    ClassicAssert.AreEqual(IndexedColors.Red.Index,
                             pt.GetTemplateProperty(i, j,
                                     CellUtil.BOTTOM_BORDER_COLOR));
-                    Assert.AreEqual(IndexedColors.Red.Index, pt
+                    ClassicAssert.AreEqual(IndexedColors.Red.Index, pt
                             .GetTemplateProperty(i, j, CellUtil.LEFT_BORDER_COLOR));
-                    Assert.AreEqual(IndexedColors.Red.Index,
+                    ClassicAssert.AreEqual(IndexedColors.Red.Index,
                             pt.GetTemplateProperty(i, j,
                                     CellUtil.RIGHT_BORDER_COLOR));
                 }
@@ -524,52 +523,52 @@ namespace NPOI.SS.Util
             {
                 for(int j = 0; j <= 2; j++)
                 {
-                    Assert.AreEqual(4, pt.GetNumBorders(i, j));
-                    Assert.AreEqual(4, pt.GetNumBorderColors(i, j));
+                    ClassicAssert.AreEqual(4, pt.GetNumBorders(i, j));
+                    ClassicAssert.AreEqual(4, pt.GetNumBorderColors(i, j));
                     if(i == 0)
                     {
                         if(j == 0)
                         {
-                            Assert.AreEqual(IndexedColors.Blue.Index,
+                            ClassicAssert.AreEqual(IndexedColors.Blue.Index,
                                     pt.GetTemplateProperty(i, j,
                                             CellUtil.TOP_BORDER_COLOR));
-                            Assert.AreEqual(IndexedColors.Red.Index,
+                            ClassicAssert.AreEqual(IndexedColors.Red.Index,
                                     pt.GetTemplateProperty(i, j,
                                             CellUtil.BOTTOM_BORDER_COLOR));
-                            Assert.AreEqual(IndexedColors.Blue.Index,
+                            ClassicAssert.AreEqual(IndexedColors.Blue.Index,
                                     pt.GetTemplateProperty(i, j,
                                             CellUtil.LEFT_BORDER_COLOR));
-                            Assert.AreEqual(IndexedColors.Red.Index,
+                            ClassicAssert.AreEqual(IndexedColors.Red.Index,
                                     pt.GetTemplateProperty(i, j,
                                             CellUtil.RIGHT_BORDER_COLOR));
                         }
                         else if(j == 2)
                         {
-                            Assert.AreEqual(IndexedColors.Blue.Index,
+                            ClassicAssert.AreEqual(IndexedColors.Blue.Index,
                                     pt.GetTemplateProperty(i, j,
                                             CellUtil.TOP_BORDER_COLOR));
-                            Assert.AreEqual(IndexedColors.Red.Index,
+                            ClassicAssert.AreEqual(IndexedColors.Red.Index,
                                     pt.GetTemplateProperty(i, j,
                                             CellUtil.BOTTOM_BORDER_COLOR));
-                            Assert.AreEqual(IndexedColors.Red.Index,
+                            ClassicAssert.AreEqual(IndexedColors.Red.Index,
                                     pt.GetTemplateProperty(i, j,
                                             CellUtil.LEFT_BORDER_COLOR));
-                            Assert.AreEqual(IndexedColors.Blue.Index,
+                            ClassicAssert.AreEqual(IndexedColors.Blue.Index,
                                     pt.GetTemplateProperty(i, j,
                                             CellUtil.RIGHT_BORDER_COLOR));
                         }
                         else
                         {
-                            Assert.AreEqual(IndexedColors.Blue.Index,
+                            ClassicAssert.AreEqual(IndexedColors.Blue.Index,
                                     pt.GetTemplateProperty(i, j,
                                             CellUtil.TOP_BORDER_COLOR));
-                            Assert.AreEqual(IndexedColors.Red.Index,
+                            ClassicAssert.AreEqual(IndexedColors.Red.Index,
                                     pt.GetTemplateProperty(i, j,
                                             CellUtil.BOTTOM_BORDER_COLOR));
-                            Assert.AreEqual(IndexedColors.Red.Index,
+                            ClassicAssert.AreEqual(IndexedColors.Red.Index,
                                     pt.GetTemplateProperty(i, j,
                                             CellUtil.LEFT_BORDER_COLOR));
-                            Assert.AreEqual(IndexedColors.Red.Index,
+                            ClassicAssert.AreEqual(IndexedColors.Red.Index,
                                     pt.GetTemplateProperty(i, j,
                                             CellUtil.RIGHT_BORDER_COLOR));
                         }
@@ -578,46 +577,46 @@ namespace NPOI.SS.Util
                     {
                         if(j == 0)
                         {
-                            Assert.AreEqual(IndexedColors.Red.Index,
+                            ClassicAssert.AreEqual(IndexedColors.Red.Index,
                                     pt.GetTemplateProperty(i, j,
                                             CellUtil.TOP_BORDER_COLOR));
-                            Assert.AreEqual(IndexedColors.Blue.Index,
+                            ClassicAssert.AreEqual(IndexedColors.Blue.Index,
                                     pt.GetTemplateProperty(i, j,
                                             CellUtil.BOTTOM_BORDER_COLOR));
-                            Assert.AreEqual(IndexedColors.Blue.Index,
+                            ClassicAssert.AreEqual(IndexedColors.Blue.Index,
                                     pt.GetTemplateProperty(i, j,
                                             CellUtil.LEFT_BORDER_COLOR));
-                            Assert.AreEqual(IndexedColors.Red.Index,
+                            ClassicAssert.AreEqual(IndexedColors.Red.Index,
                                     pt.GetTemplateProperty(i, j,
                                             CellUtil.RIGHT_BORDER_COLOR));
                         }
                         else if(j == 2)
                         {
-                            Assert.AreEqual(IndexedColors.Red.Index,
+                            ClassicAssert.AreEqual(IndexedColors.Red.Index,
                                     pt.GetTemplateProperty(i, j,
                                             CellUtil.TOP_BORDER_COLOR));
-                            Assert.AreEqual(IndexedColors.Blue.Index,
+                            ClassicAssert.AreEqual(IndexedColors.Blue.Index,
                                     pt.GetTemplateProperty(i, j,
                                             CellUtil.BOTTOM_BORDER_COLOR));
-                            Assert.AreEqual(IndexedColors.Red.Index,
+                            ClassicAssert.AreEqual(IndexedColors.Red.Index,
                                     pt.GetTemplateProperty(i, j,
                                             CellUtil.LEFT_BORDER_COLOR));
-                            Assert.AreEqual(IndexedColors.Blue.Index,
+                            ClassicAssert.AreEqual(IndexedColors.Blue.Index,
                                     pt.GetTemplateProperty(i, j,
                                             CellUtil.RIGHT_BORDER_COLOR));
                         }
                         else
                         {
-                            Assert.AreEqual(IndexedColors.Red.Index,
+                            ClassicAssert.AreEqual(IndexedColors.Red.Index,
                                     pt.GetTemplateProperty(i, j,
                                             CellUtil.TOP_BORDER_COLOR));
-                            Assert.AreEqual(IndexedColors.Blue.Index,
+                            ClassicAssert.AreEqual(IndexedColors.Blue.Index,
                                     pt.GetTemplateProperty(i, j,
                                             CellUtil.BOTTOM_BORDER_COLOR));
-                            Assert.AreEqual(IndexedColors.Red.Index,
+                            ClassicAssert.AreEqual(IndexedColors.Red.Index,
                                     pt.GetTemplateProperty(i, j,
                                             CellUtil.LEFT_BORDER_COLOR));
-                            Assert.AreEqual(IndexedColors.Red.Index,
+                            ClassicAssert.AreEqual(IndexedColors.Red.Index,
                                     pt.GetTemplateProperty(i, j,
                                             CellUtil.RIGHT_BORDER_COLOR));
                         }
@@ -626,46 +625,46 @@ namespace NPOI.SS.Util
                     {
                         if(j == 0)
                         {
-                            Assert.AreEqual(IndexedColors.Red.Index,
+                            ClassicAssert.AreEqual(IndexedColors.Red.Index,
                                     pt.GetTemplateProperty(i, j,
                                             CellUtil.TOP_BORDER_COLOR));
-                            Assert.AreEqual(IndexedColors.Red.Index,
+                            ClassicAssert.AreEqual(IndexedColors.Red.Index,
                                     pt.GetTemplateProperty(i, j,
                                             CellUtil.BOTTOM_BORDER_COLOR));
-                            Assert.AreEqual(IndexedColors.Blue.Index,
+                            ClassicAssert.AreEqual(IndexedColors.Blue.Index,
                                     pt.GetTemplateProperty(i, j,
                                             CellUtil.LEFT_BORDER_COLOR));
-                            Assert.AreEqual(IndexedColors.Red.Index,
+                            ClassicAssert.AreEqual(IndexedColors.Red.Index,
                                     pt.GetTemplateProperty(i, j,
                                             CellUtil.RIGHT_BORDER_COLOR));
                         }
                         else if(j == 2)
                         {
-                            Assert.AreEqual(IndexedColors.Red.Index,
+                            ClassicAssert.AreEqual(IndexedColors.Red.Index,
                                     pt.GetTemplateProperty(i, j,
                                             CellUtil.TOP_BORDER_COLOR));
-                            Assert.AreEqual(IndexedColors.Red.Index,
+                            ClassicAssert.AreEqual(IndexedColors.Red.Index,
                                     pt.GetTemplateProperty(i, j,
                                             CellUtil.BOTTOM_BORDER_COLOR));
-                            Assert.AreEqual(IndexedColors.Red.Index,
+                            ClassicAssert.AreEqual(IndexedColors.Red.Index,
                                     pt.GetTemplateProperty(i, j,
                                             CellUtil.LEFT_BORDER_COLOR));
-                            Assert.AreEqual(IndexedColors.Blue.Index,
+                            ClassicAssert.AreEqual(IndexedColors.Blue.Index,
                                     pt.GetTemplateProperty(i, j,
                                             CellUtil.RIGHT_BORDER_COLOR));
                         }
                         else
                         {
-                            Assert.AreEqual(IndexedColors.Red.Index,
+                            ClassicAssert.AreEqual(IndexedColors.Red.Index,
                                     pt.GetTemplateProperty(i, j,
                                             CellUtil.TOP_BORDER_COLOR));
-                            Assert.AreEqual(IndexedColors.Red.Index,
+                            ClassicAssert.AreEqual(IndexedColors.Red.Index,
                                     pt.GetTemplateProperty(i, j,
                                             CellUtil.BOTTOM_BORDER_COLOR));
-                            Assert.AreEqual(IndexedColors.Red.Index,
+                            ClassicAssert.AreEqual(IndexedColors.Red.Index,
                                     pt.GetTemplateProperty(i, j,
                                             CellUtil.LEFT_BORDER_COLOR));
-                            Assert.AreEqual(IndexedColors.Red.Index,
+                            ClassicAssert.AreEqual(IndexedColors.Red.Index,
                                     pt.GetTemplateProperty(i, j,
                                             CellUtil.RIGHT_BORDER_COLOR));
                         }
@@ -680,8 +679,8 @@ namespace NPOI.SS.Util
             {
                 for(int j = 0; j <= 2; j++)
                 {
-                    Assert.AreEqual(0, pt.GetNumBorders(i, j));
-                    Assert.AreEqual(0, pt.GetNumBorderColors(i, j));
+                    ClassicAssert.AreEqual(0, pt.GetNumBorders(i, j));
+                    ClassicAssert.AreEqual(0, pt.GetNumBorderColors(i, j));
                 }
             }
             pt.DrawBorderColors(a1c3, IndexedColors.Blue.Index,
@@ -692,16 +691,16 @@ namespace NPOI.SS.Util
                 {
                     if(i == 0)
                     {
-                        Assert.AreEqual(1, pt.GetNumBorders(i, j));
-                        Assert.AreEqual(1, pt.GetNumBorderColors(i, j));
-                        Assert.AreEqual(IndexedColors.Blue.Index,
+                        ClassicAssert.AreEqual(1, pt.GetNumBorders(i, j));
+                        ClassicAssert.AreEqual(1, pt.GetNumBorderColors(i, j));
+                        ClassicAssert.AreEqual(IndexedColors.Blue.Index,
                                 pt.GetTemplateProperty(i, j,
                                         CellUtil.TOP_BORDER_COLOR));
                     }
                     else
                     {
-                        Assert.AreEqual(0, pt.GetNumBorders(i, j));
-                        Assert.AreEqual(0, pt.GetNumBorderColors(i, j));
+                        ClassicAssert.AreEqual(0, pt.GetNumBorders(i, j));
+                        ClassicAssert.AreEqual(0, pt.GetNumBorderColors(i, j));
                     }
                 }
             }
@@ -717,16 +716,16 @@ namespace NPOI.SS.Util
                 {
                     if(i == 2)
                     {
-                        Assert.AreEqual(1, pt.GetNumBorders(i, j));
-                        Assert.AreEqual(1, pt.GetNumBorderColors(i, j));
-                        Assert.AreEqual(IndexedColors.Blue.Index,
+                        ClassicAssert.AreEqual(1, pt.GetNumBorders(i, j));
+                        ClassicAssert.AreEqual(1, pt.GetNumBorderColors(i, j));
+                        ClassicAssert.AreEqual(IndexedColors.Blue.Index,
                                 pt.GetTemplateProperty(i, j,
                                         CellUtil.BOTTOM_BORDER_COLOR));
                     }
                     else
                     {
-                        Assert.AreEqual(0, pt.GetNumBorders(i, j));
-                        Assert.AreEqual(0, pt.GetNumBorderColors(i, j));
+                        ClassicAssert.AreEqual(0, pt.GetNumBorders(i, j));
+                        ClassicAssert.AreEqual(0, pt.GetNumBorderColors(i, j));
                     }
                 }
             }
@@ -742,16 +741,16 @@ namespace NPOI.SS.Util
                 {
                     if(j == 0)
                     {
-                        Assert.AreEqual(1, pt.GetNumBorders(i, j));
-                        Assert.AreEqual(1, pt.GetNumBorderColors(i, j));
-                        Assert.AreEqual(IndexedColors.Blue.Index,
+                        ClassicAssert.AreEqual(1, pt.GetNumBorders(i, j));
+                        ClassicAssert.AreEqual(1, pt.GetNumBorderColors(i, j));
+                        ClassicAssert.AreEqual(IndexedColors.Blue.Index,
                                 pt.GetTemplateProperty(i, j,
                                         CellUtil.LEFT_BORDER_COLOR));
                     }
                     else
                     {
-                        Assert.AreEqual(0, pt.GetNumBorders(i, j));
-                        Assert.AreEqual(0, pt.GetNumBorderColors(i, j));
+                        ClassicAssert.AreEqual(0, pt.GetNumBorders(i, j));
+                        ClassicAssert.AreEqual(0, pt.GetNumBorderColors(i, j));
                     }
                 }
             }
@@ -767,16 +766,16 @@ namespace NPOI.SS.Util
                 {
                     if(j == 2)
                     {
-                        Assert.AreEqual(1, pt.GetNumBorders(i, j));
-                        Assert.AreEqual(1, pt.GetNumBorderColors(i, j));
-                        Assert.AreEqual(IndexedColors.Blue.Index,
+                        ClassicAssert.AreEqual(1, pt.GetNumBorders(i, j));
+                        ClassicAssert.AreEqual(1, pt.GetNumBorderColors(i, j));
+                        ClassicAssert.AreEqual(IndexedColors.Blue.Index,
                                 pt.GetTemplateProperty(i, j,
                                         CellUtil.RIGHT_BORDER_COLOR));
                     }
                     else
                     {
-                        Assert.AreEqual(0, pt.GetNumBorders(i, j));
-                        Assert.AreEqual(0, pt.GetNumBorderColors(i, j));
+                        ClassicAssert.AreEqual(0, pt.GetNumBorders(i, j));
+                        ClassicAssert.AreEqual(0, pt.GetNumBorderColors(i, j));
                     }
                 }
             }
@@ -790,11 +789,11 @@ namespace NPOI.SS.Util
             {
                 for(int j = 0; j <= 2; j++)
                 {
-                    Assert.AreEqual(2, pt.GetNumBorders(i, j));
-                    Assert.AreEqual(2, pt.GetNumBorderColors(i, j));
-                    Assert.AreEqual(IndexedColors.Blue.Index, pt
+                    ClassicAssert.AreEqual(2, pt.GetNumBorders(i, j));
+                    ClassicAssert.AreEqual(2, pt.GetNumBorderColors(i, j));
+                    ClassicAssert.AreEqual(IndexedColors.Blue.Index, pt
                             .GetTemplateProperty(i, j, CellUtil.TOP_BORDER_COLOR));
-                    Assert.AreEqual(IndexedColors.Blue.Index,
+                    ClassicAssert.AreEqual(IndexedColors.Blue.Index,
                             pt.GetTemplateProperty(i, j,
                                     CellUtil.BOTTOM_BORDER_COLOR));
                 }
@@ -811,28 +810,28 @@ namespace NPOI.SS.Util
                 {
                     if(i == 0)
                     {
-                        Assert.AreEqual(1, pt.GetNumBorders(i, j));
-                        Assert.AreEqual(1, pt.GetNumBorderColors(i, j));
-                        Assert.AreEqual(IndexedColors.Blue.Index,
+                        ClassicAssert.AreEqual(1, pt.GetNumBorders(i, j));
+                        ClassicAssert.AreEqual(1, pt.GetNumBorderColors(i, j));
+                        ClassicAssert.AreEqual(IndexedColors.Blue.Index,
                                 pt.GetTemplateProperty(i, j,
                                         CellUtil.BOTTOM_BORDER_COLOR));
                     }
                     else if(i == 2)
                     {
-                        Assert.AreEqual(1, pt.GetNumBorders(i, j));
-                        Assert.AreEqual(1, pt.GetNumBorderColors(i, j));
-                        Assert.AreEqual(IndexedColors.Blue.Index,
+                        ClassicAssert.AreEqual(1, pt.GetNumBorders(i, j));
+                        ClassicAssert.AreEqual(1, pt.GetNumBorderColors(i, j));
+                        ClassicAssert.AreEqual(IndexedColors.Blue.Index,
                                 pt.GetTemplateProperty(i, j,
                                         CellUtil.TOP_BORDER_COLOR));
                     }
                     else
                     {
-                        Assert.AreEqual(2, pt.GetNumBorders(i, j));
-                        Assert.AreEqual(2, pt.GetNumBorderColors(i, j));
-                        Assert.AreEqual(IndexedColors.Blue.Index,
+                        ClassicAssert.AreEqual(2, pt.GetNumBorders(i, j));
+                        ClassicAssert.AreEqual(2, pt.GetNumBorderColors(i, j));
+                        ClassicAssert.AreEqual(IndexedColors.Blue.Index,
                                 pt.GetTemplateProperty(i, j,
                                         CellUtil.TOP_BORDER_COLOR));
-                        Assert.AreEqual(IndexedColors.Blue.Index,
+                        ClassicAssert.AreEqual(IndexedColors.Blue.Index,
                                 pt.GetTemplateProperty(i, j,
                                         CellUtil.BOTTOM_BORDER_COLOR));
                     }
@@ -850,24 +849,24 @@ namespace NPOI.SS.Util
                 {
                     if(i == 0)
                     {
-                        Assert.AreEqual(1, pt.GetNumBorders(i, j));
-                        Assert.AreEqual(1, pt.GetNumBorderColors(i, j));
-                        Assert.AreEqual(IndexedColors.Blue.Index,
+                        ClassicAssert.AreEqual(1, pt.GetNumBorders(i, j));
+                        ClassicAssert.AreEqual(1, pt.GetNumBorderColors(i, j));
+                        ClassicAssert.AreEqual(IndexedColors.Blue.Index,
                                 pt.GetTemplateProperty(i, j,
                                         CellUtil.TOP_BORDER_COLOR));
                     }
                     else if(i == 2)
                     {
-                        Assert.AreEqual(1, pt.GetNumBorders(i, j));
-                        Assert.AreEqual(1, pt.GetNumBorderColors(i, j));
-                        Assert.AreEqual(IndexedColors.Blue.Index,
+                        ClassicAssert.AreEqual(1, pt.GetNumBorders(i, j));
+                        ClassicAssert.AreEqual(1, pt.GetNumBorderColors(i, j));
+                        ClassicAssert.AreEqual(IndexedColors.Blue.Index,
                                 pt.GetTemplateProperty(i, j,
                                         CellUtil.BOTTOM_BORDER_COLOR));
                     }
                     else
                     {
-                        Assert.AreEqual(0, pt.GetNumBorders(i, j));
-                        Assert.AreEqual(0, pt.GetNumBorderColors(i, j));
+                        ClassicAssert.AreEqual(0, pt.GetNumBorders(i, j));
+                        ClassicAssert.AreEqual(0, pt.GetNumBorderColors(i, j));
                     }
                 }
             }
@@ -881,11 +880,11 @@ namespace NPOI.SS.Util
             {
                 for(int j = 0; j <= 2; j++)
                 {
-                    Assert.AreEqual(2, pt.GetNumBorders(i, j));
-                    Assert.AreEqual(2, pt.GetNumBorderColors(i, j));
-                    Assert.AreEqual(IndexedColors.Blue.Index, pt
+                    ClassicAssert.AreEqual(2, pt.GetNumBorders(i, j));
+                    ClassicAssert.AreEqual(2, pt.GetNumBorderColors(i, j));
+                    ClassicAssert.AreEqual(IndexedColors.Blue.Index, pt
                             .GetTemplateProperty(i, j, CellUtil.LEFT_BORDER_COLOR));
-                    Assert.AreEqual(IndexedColors.Blue.Index,
+                    ClassicAssert.AreEqual(IndexedColors.Blue.Index,
                             pt.GetTemplateProperty(i, j,
                                     CellUtil.RIGHT_BORDER_COLOR));
                 }
@@ -902,28 +901,28 @@ namespace NPOI.SS.Util
                 {
                     if(j == 0)
                     {
-                        Assert.AreEqual(1, pt.GetNumBorders(i, j));
-                        Assert.AreEqual(1, pt.GetNumBorderColors(i, j));
-                        Assert.AreEqual(IndexedColors.Blue.Index,
+                        ClassicAssert.AreEqual(1, pt.GetNumBorders(i, j));
+                        ClassicAssert.AreEqual(1, pt.GetNumBorderColors(i, j));
+                        ClassicAssert.AreEqual(IndexedColors.Blue.Index,
                                 pt.GetTemplateProperty(i, j,
                                         CellUtil.RIGHT_BORDER_COLOR));
                     }
                     else if(j == 2)
                     {
-                        Assert.AreEqual(1, pt.GetNumBorders(i, j));
-                        Assert.AreEqual(1, pt.GetNumBorderColors(i, j));
-                        Assert.AreEqual(IndexedColors.Blue.Index,
+                        ClassicAssert.AreEqual(1, pt.GetNumBorders(i, j));
+                        ClassicAssert.AreEqual(1, pt.GetNumBorderColors(i, j));
+                        ClassicAssert.AreEqual(IndexedColors.Blue.Index,
                                 pt.GetTemplateProperty(i, j,
                                         CellUtil.LEFT_BORDER_COLOR));
                     }
                     else
                     {
-                        Assert.AreEqual(2, pt.GetNumBorders(i, j));
-                        Assert.AreEqual(2, pt.GetNumBorderColors(i, j));
-                        Assert.AreEqual(IndexedColors.Blue.Index,
+                        ClassicAssert.AreEqual(2, pt.GetNumBorders(i, j));
+                        ClassicAssert.AreEqual(2, pt.GetNumBorderColors(i, j));
+                        ClassicAssert.AreEqual(IndexedColors.Blue.Index,
                                 pt.GetTemplateProperty(i, j,
                                         CellUtil.LEFT_BORDER_COLOR));
-                        Assert.AreEqual(IndexedColors.Blue.Index,
+                        ClassicAssert.AreEqual(IndexedColors.Blue.Index,
                                 pt.GetTemplateProperty(i, j,
                                         CellUtil.RIGHT_BORDER_COLOR));
                     }
@@ -941,24 +940,24 @@ namespace NPOI.SS.Util
                 {
                     if(j == 0)
                     {
-                        Assert.AreEqual(1, pt.GetNumBorders(i, j));
-                        Assert.AreEqual(1, pt.GetNumBorderColors(i, j));
-                        Assert.AreEqual(IndexedColors.Blue.Index,
+                        ClassicAssert.AreEqual(1, pt.GetNumBorders(i, j));
+                        ClassicAssert.AreEqual(1, pt.GetNumBorderColors(i, j));
+                        ClassicAssert.AreEqual(IndexedColors.Blue.Index,
                                 pt.GetTemplateProperty(i, j,
                                         CellUtil.LEFT_BORDER_COLOR));
                     }
                     else if(j == 2)
                     {
-                        Assert.AreEqual(1, pt.GetNumBorders(i, j));
-                        Assert.AreEqual(1, pt.GetNumBorderColors(i, j));
-                        Assert.AreEqual(IndexedColors.Blue.Index,
+                        ClassicAssert.AreEqual(1, pt.GetNumBorders(i, j));
+                        ClassicAssert.AreEqual(1, pt.GetNumBorderColors(i, j));
+                        ClassicAssert.AreEqual(IndexedColors.Blue.Index,
                                 pt.GetTemplateProperty(i, j,
                                         CellUtil.RIGHT_BORDER_COLOR));
                     }
                     else
                     {
-                        Assert.AreEqual(0, pt.GetNumBorders(i, j));
-                        Assert.AreEqual(0, pt.GetNumBorderColors(i, j));
+                        ClassicAssert.AreEqual(0, pt.GetNumBorders(i, j));
+                        ClassicAssert.AreEqual(0, pt.GetNumBorderColors(i, j));
                     }
                 }
             }
@@ -976,24 +975,24 @@ namespace NPOI.SS.Util
             {
                 for(int j = 0; j <= 2; j++)
                 {
-                    Assert.AreEqual(4, pt.GetNumBorders(i, j));
-                    Assert.AreEqual(4, pt.GetNumBorderColors(i, j));
-                    Assert.AreEqual(BorderStyle.Medium,
+                    ClassicAssert.AreEqual(4, pt.GetNumBorders(i, j));
+                    ClassicAssert.AreEqual(4, pt.GetNumBorderColors(i, j));
+                    ClassicAssert.AreEqual(BorderStyle.Medium,
                             pt.GetBorderStyle(i, j, CellUtil.BORDER_TOP));
-                    Assert.AreEqual(BorderStyle.Medium,
+                    ClassicAssert.AreEqual(BorderStyle.Medium,
                             pt.GetBorderStyle(i, j, CellUtil.BORDER_BOTTOM));
-                    Assert.AreEqual(BorderStyle.Medium,
+                    ClassicAssert.AreEqual(BorderStyle.Medium,
                             pt.GetBorderStyle(i, j, CellUtil.BORDER_LEFT));
-                    Assert.AreEqual(BorderStyle.Medium,
+                    ClassicAssert.AreEqual(BorderStyle.Medium,
                             pt.GetBorderStyle(i, j, CellUtil.BORDER_RIGHT));
-                    Assert.AreEqual(IndexedColors.Red.Index, pt
+                    ClassicAssert.AreEqual(IndexedColors.Red.Index, pt
                             .GetTemplateProperty(i, j, CellUtil.TOP_BORDER_COLOR));
-                    Assert.AreEqual(IndexedColors.Red.Index,
+                    ClassicAssert.AreEqual(IndexedColors.Red.Index,
                             pt.GetTemplateProperty(i, j,
                                     CellUtil.BOTTOM_BORDER_COLOR));
-                    Assert.AreEqual(IndexedColors.Red.Index, pt
+                    ClassicAssert.AreEqual(IndexedColors.Red.Index, pt
                             .GetTemplateProperty(i, j, CellUtil.LEFT_BORDER_COLOR));
-                    Assert.AreEqual(IndexedColors.Red.Index,
+                    ClassicAssert.AreEqual(IndexedColors.Red.Index,
                             pt.GetTemplateProperty(i, j,
                                     CellUtil.RIGHT_BORDER_COLOR));
                 }
@@ -1004,15 +1003,15 @@ namespace NPOI.SS.Util
             {
                 for(int j = 0; j <= 2; j++)
                 {
-                    Assert.AreEqual(4, pt.GetNumBorders(i, j));
-                    Assert.AreEqual(0, pt.GetNumBorderColors(i, j));
-                    Assert.AreEqual(BorderStyle.None,
+                    ClassicAssert.AreEqual(4, pt.GetNumBorders(i, j));
+                    ClassicAssert.AreEqual(0, pt.GetNumBorderColors(i, j));
+                    ClassicAssert.AreEqual(BorderStyle.None,
                             pt.GetBorderStyle(i, j, CellUtil.BORDER_TOP));
-                    Assert.AreEqual(BorderStyle.None,
+                    ClassicAssert.AreEqual(BorderStyle.None,
                             pt.GetBorderStyle(i, j, CellUtil.BORDER_BOTTOM));
-                    Assert.AreEqual(BorderStyle.None,
+                    ClassicAssert.AreEqual(BorderStyle.None,
                             pt.GetBorderStyle(i, j, CellUtil.BORDER_LEFT));
-                    Assert.AreEqual(BorderStyle.None,
+                    ClassicAssert.AreEqual(BorderStyle.None,
                             pt.GetBorderStyle(i, j, CellUtil.BORDER_RIGHT));
                 }
             }
@@ -1036,14 +1035,14 @@ namespace NPOI.SS.Util
                 foreach(ICell cell in row)
                 {
                     ICellStyle cs = cell.CellStyle;
-                    Assert.AreEqual(BorderStyle.Thin, cs.BorderTop);
-                    Assert.AreEqual(IndexedColors.Red.Index, cs.TopBorderColor);
-                    Assert.AreEqual(BorderStyle.Thin, cs.BorderBottom);
-                    Assert.AreEqual(IndexedColors.Red.Index, cs.BottomBorderColor);
-                    Assert.AreEqual(BorderStyle.Thin, cs.BorderLeft);
-                    Assert.AreEqual(IndexedColors.Red.Index, cs.LeftBorderColor);
-                    Assert.AreEqual(BorderStyle.Thin, cs.BorderRight);
-                    Assert.AreEqual(IndexedColors.Red.Index, cs.RightBorderColor);
+                    ClassicAssert.AreEqual(BorderStyle.Thin, cs.BorderTop);
+                    ClassicAssert.AreEqual(IndexedColors.Red.Index, cs.TopBorderColor);
+                    ClassicAssert.AreEqual(BorderStyle.Thin, cs.BorderBottom);
+                    ClassicAssert.AreEqual(IndexedColors.Red.Index, cs.BottomBorderColor);
+                    ClassicAssert.AreEqual(BorderStyle.Thin, cs.BorderLeft);
+                    ClassicAssert.AreEqual(IndexedColors.Red.Index, cs.LeftBorderColor);
+                    ClassicAssert.AreEqual(BorderStyle.Thin, cs.BorderRight);
+                    ClassicAssert.AreEqual(IndexedColors.Red.Index, cs.RightBorderColor);
                 }
             }
 
@@ -1057,39 +1056,39 @@ namespace NPOI.SS.Util
                     ICellStyle cs = cell.CellStyle;
                     if(cell.ColumnIndex != 1 || row.RowNum == 0)
                     {
-                        Assert.AreEqual(BorderStyle.Thin, cs.BorderTop);
-                        Assert.AreEqual(IndexedColors.Red.Index, cs.TopBorderColor);
+                        ClassicAssert.AreEqual(BorderStyle.Thin, cs.BorderTop);
+                        ClassicAssert.AreEqual(IndexedColors.Red.Index, cs.TopBorderColor);
                     }
                     else
                     {
-                        Assert.AreEqual(BorderStyle.None, cs.BorderTop);
+                        ClassicAssert.AreEqual(BorderStyle.None, cs.BorderTop);
                     }
                     if(cell.ColumnIndex != 1 || row.RowNum == 2)
                     {
-                        Assert.AreEqual(BorderStyle.Thin, cs.BorderBottom);
-                        Assert.AreEqual(IndexedColors.Red.Index, cs.BottomBorderColor);
+                        ClassicAssert.AreEqual(BorderStyle.Thin, cs.BorderBottom);
+                        ClassicAssert.AreEqual(IndexedColors.Red.Index, cs.BottomBorderColor);
                     }
                     else
                     {
-                        Assert.AreEqual(BorderStyle.None, cs.BorderBottom);
+                        ClassicAssert.AreEqual(BorderStyle.None, cs.BorderBottom);
                     }
                     if(cell.ColumnIndex == 0 || row.RowNum != 1)
                     {
-                        Assert.AreEqual(BorderStyle.Thin, cs.BorderLeft);
-                        Assert.AreEqual(IndexedColors.Red.Index, cs.LeftBorderColor);
+                        ClassicAssert.AreEqual(BorderStyle.Thin, cs.BorderLeft);
+                        ClassicAssert.AreEqual(IndexedColors.Red.Index, cs.LeftBorderColor);
                     }
                     else
                     {
-                        Assert.AreEqual(BorderStyle.None, cs.BorderLeft);
+                        ClassicAssert.AreEqual(BorderStyle.None, cs.BorderLeft);
                     }
                     if(cell.ColumnIndex == 2 || row.RowNum != 1)
                     {
-                        Assert.AreEqual(BorderStyle.Thin, cs.BorderRight);
-                        Assert.AreEqual(IndexedColors.Red.Index, cs.RightBorderColor);
+                        ClassicAssert.AreEqual(BorderStyle.Thin, cs.BorderRight);
+                        ClassicAssert.AreEqual(IndexedColors.Red.Index, cs.RightBorderColor);
                     }
                     else
                     {
-                        Assert.AreEqual(BorderStyle.None, cs.BorderRight);
+                        ClassicAssert.AreEqual(BorderStyle.None, cs.BorderRight);
                     }
                 }
             }
@@ -1105,13 +1104,13 @@ namespace NPOI.SS.Util
             PropertyTemplate pt = new PropertyTemplate();
             pt.DrawBorders(a1c3, BorderStyle.Medium, IndexedColors.Red.Index, BorderExtent.ALL);
             PropertyTemplate pt2 = new PropertyTemplate(pt);
-            Assert.AreNotSame(pt2, pt);
+            ClassicAssert.AreNotSame(pt2, pt);
             for(int i = 0; i <= 2; i++)
             {
                 for(int j = 0; j <= 2; j++)
                 {
-                    Assert.AreEqual(4, pt2.GetNumBorderColors(i, j));
-                    Assert.AreEqual(4, pt2.GetNumBorderColors(i, j));
+                    ClassicAssert.AreEqual(4, pt2.GetNumBorderColors(i, j));
+                    ClassicAssert.AreEqual(4, pt2.GetNumBorderColors(i, j));
                 }
             }
 
@@ -1127,14 +1126,14 @@ namespace NPOI.SS.Util
                 foreach(ICell cell in row)
                 {
                     ICellStyle cs = cell.CellStyle;
-                    Assert.AreEqual(BorderStyle.Medium, cs.BorderTop);
-                    Assert.AreEqual(BorderStyle.Medium, cs.BorderBottom);
-                    Assert.AreEqual(BorderStyle.Medium, cs.BorderLeft);
-                    Assert.AreEqual(BorderStyle.Medium, cs.BorderRight);
-                    Assert.AreEqual(IndexedColors.Red.Index, cs.TopBorderColor);
-                    Assert.AreEqual(IndexedColors.Red.Index, cs.BottomBorderColor);
-                    Assert.AreEqual(IndexedColors.Red.Index, cs.LeftBorderColor);
-                    Assert.AreEqual(IndexedColors.Red.Index, cs.RightBorderColor);
+                    ClassicAssert.AreEqual(BorderStyle.Medium, cs.BorderTop);
+                    ClassicAssert.AreEqual(BorderStyle.Medium, cs.BorderBottom);
+                    ClassicAssert.AreEqual(BorderStyle.Medium, cs.BorderLeft);
+                    ClassicAssert.AreEqual(BorderStyle.Medium, cs.BorderRight);
+                    ClassicAssert.AreEqual(IndexedColors.Red.Index, cs.TopBorderColor);
+                    ClassicAssert.AreEqual(IndexedColors.Red.Index, cs.BottomBorderColor);
+                    ClassicAssert.AreEqual(IndexedColors.Red.Index, cs.LeftBorderColor);
+                    ClassicAssert.AreEqual(IndexedColors.Red.Index, cs.RightBorderColor);
                 }
             }
 

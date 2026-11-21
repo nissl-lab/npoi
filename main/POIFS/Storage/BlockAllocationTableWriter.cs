@@ -50,12 +50,12 @@ namespace NPOI.POIFS.Storage
     /// </summary>
     public class BlockAllocationTableWriter : BlockWritable, BATManaged
     {
-        private List<int>    _entries;
+        private readonly List<int>    _entries;
         private BATBlock[] _blocks;
         private int        _start_block;
-        private POIFSBigBlockSize _bigBlockSize;
+        private readonly POIFSBigBlockSize _bigBlockSize;
 
-        private static int _default_size = 128;
+        private static readonly int _default_size = 128;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BlockAllocationTableWriter"/> class.
@@ -64,7 +64,7 @@ namespace NPOI.POIFS.Storage
         {
             _start_block = POIFSConstants.END_OF_CHAIN;
             _entries = new List<int>(_default_size);
-            _blocks      = new BATBlock[ 0 ];
+            _blocks      = [];
             _bigBlockSize = bigBlockSize;
         }
 

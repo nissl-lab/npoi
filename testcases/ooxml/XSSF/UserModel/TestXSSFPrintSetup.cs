@@ -15,7 +15,7 @@
    limitations under the License.
 ==================================================================== */
 
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
@@ -37,11 +37,11 @@ namespace TestCases.XSSF.UserModel
             CT_PageSetup pSetup = worksheet.AddNewPageSetup();
             pSetup.paperSize = (9);
             XSSFPrintSetup printSetup = new XSSFPrintSetup(worksheet);
-            Assert.AreEqual(PaperSize.A4, printSetup.GetPaperSizeEnum());
-            Assert.AreEqual(9, printSetup.PaperSize);
+            ClassicAssert.AreEqual(PaperSize.A4, printSetup.GetPaperSizeEnum());
+            ClassicAssert.AreEqual(9, printSetup.PaperSize);
 
             printSetup.SetPaperSize(PaperSize.A3);
-            Assert.AreEqual((uint)8, pSetup.paperSize);
+            ClassicAssert.AreEqual((uint)8, pSetup.paperSize);
         }
 
         [Test]
@@ -51,10 +51,10 @@ namespace TestCases.XSSF.UserModel
             CT_PageSetup pSetup = worksheet.AddNewPageSetup();
             pSetup.scale = (uint)9;
             XSSFPrintSetup printSetup = new XSSFPrintSetup(worksheet);
-            Assert.AreEqual(9, printSetup.Scale);
+            ClassicAssert.AreEqual(9, printSetup.Scale);
 
             printSetup.Scale = ((short)100);
-            Assert.AreEqual((uint)100, pSetup.scale);
+            ClassicAssert.AreEqual((uint)100, pSetup.scale);
         }
         [Test]
         public void TestSetGetPageStart()
@@ -63,10 +63,10 @@ namespace TestCases.XSSF.UserModel
             CT_PageSetup pSetup = worksheet.AddNewPageSetup();
             pSetup.firstPageNumber = 9;
             XSSFPrintSetup printSetup = new XSSFPrintSetup(worksheet);
-            Assert.AreEqual(9, printSetup.PageStart);
+            ClassicAssert.AreEqual(9, printSetup.PageStart);
 
             printSetup.PageStart = ((short)1);
-            Assert.AreEqual((uint)1, pSetup.firstPageNumber);
+            ClassicAssert.AreEqual((uint)1, pSetup.firstPageNumber);
         }
 
         [Test]
@@ -77,13 +77,13 @@ namespace TestCases.XSSF.UserModel
             pSetup.fitToWidth = (50);
             pSetup.fitToHeight = (99);
             XSSFPrintSetup printSetup = new XSSFPrintSetup(worksheet);
-            Assert.AreEqual(50, printSetup.FitWidth);
-            Assert.AreEqual(99, printSetup.FitHeight);
+            ClassicAssert.AreEqual(50, printSetup.FitWidth);
+            ClassicAssert.AreEqual(99, printSetup.FitHeight);
 
             printSetup.FitWidth = ((short)66);
             printSetup.FitHeight = ((short)80);
-            Assert.AreEqual((uint)66, pSetup.fitToWidth);
-            Assert.AreEqual((uint)80, pSetup.fitToHeight);
+            ClassicAssert.AreEqual((uint)66, pSetup.fitToWidth);
+            ClassicAssert.AreEqual((uint)80, pSetup.fitToHeight);
 
         }
         [Test]
@@ -93,10 +93,10 @@ namespace TestCases.XSSF.UserModel
             CT_PageSetup pSetup = worksheet.AddNewPageSetup();
             pSetup.pageOrder = (ST_PageOrder.downThenOver);
             XSSFPrintSetup printSetup = new XSSFPrintSetup(worksheet);
-            Assert.AreEqual(false, printSetup.LeftToRight);
+            ClassicAssert.AreEqual(false, printSetup.LeftToRight);
 
             printSetup.LeftToRight = (true);
-            Assert.AreEqual(PageOrder.OVER_THEN_DOWN.Value, (int)pSetup.pageOrder);
+            ClassicAssert.AreEqual(PageOrder.OVER_THEN_DOWN.Value, (int)pSetup.pageOrder);
         }
         [Test]
         public void TestSetGetOrientation()
@@ -105,14 +105,14 @@ namespace TestCases.XSSF.UserModel
             CT_PageSetup pSetup = worksheet.AddNewPageSetup();
             pSetup.orientation = (ST_Orientation.portrait);
             XSSFPrintSetup printSetup = new XSSFPrintSetup(worksheet);
-            Assert.AreEqual(PrintOrientation.PORTRAIT, printSetup.Orientation);
-            Assert.AreEqual(false, printSetup.Landscape);
-            Assert.AreEqual(false, printSetup.NoOrientation);
+            ClassicAssert.AreEqual(PrintOrientation.PORTRAIT, printSetup.Orientation);
+            ClassicAssert.AreEqual(false, printSetup.Landscape);
+            ClassicAssert.AreEqual(false, printSetup.NoOrientation);
 
             printSetup.Orientation = (PrintOrientation.LANDSCAPE);
-            Assert.AreEqual((int)pSetup.orientation, printSetup.Orientation.Value);
-            Assert.AreEqual(true, printSetup.Landscape);
-            Assert.AreEqual(false, printSetup.NoOrientation);
+            ClassicAssert.AreEqual((int)pSetup.orientation, printSetup.Orientation.Value);
+            ClassicAssert.AreEqual(true, printSetup.Landscape);
+            ClassicAssert.AreEqual(false, printSetup.NoOrientation);
         }
 
         [Test]
@@ -122,10 +122,10 @@ namespace TestCases.XSSF.UserModel
             CT_PageSetup pSetup = worksheet.AddNewPageSetup();
             pSetup.usePrinterDefaults = (false);
             XSSFPrintSetup printSetup = new XSSFPrintSetup(worksheet);
-            Assert.AreEqual(false, printSetup.ValidSettings);
+            ClassicAssert.AreEqual(false, printSetup.ValidSettings);
 
             printSetup.ValidSettings = (true);
-            Assert.AreEqual(true, pSetup.usePrinterDefaults);
+            ClassicAssert.AreEqual(true, pSetup.usePrinterDefaults);
         }
         [Test]
         public void TestSetGetNoColor()
@@ -134,10 +134,10 @@ namespace TestCases.XSSF.UserModel
             CT_PageSetup pSetup = worksheet.AddNewPageSetup();
             pSetup.blackAndWhite = (false);
             XSSFPrintSetup printSetup = new XSSFPrintSetup(worksheet);
-            Assert.AreEqual(false, printSetup.NoColor);
+            ClassicAssert.AreEqual(false, printSetup.NoColor);
 
             printSetup.NoColor = true;
-            Assert.AreEqual(true, pSetup.blackAndWhite);
+            ClassicAssert.AreEqual(true, pSetup.blackAndWhite);
         }
         [Test]
         public void TestSetGetDraft()
@@ -146,10 +146,10 @@ namespace TestCases.XSSF.UserModel
             CT_PageSetup pSetup = worksheet.AddNewPageSetup();
             pSetup.draft = (false);
             XSSFPrintSetup printSetup = new XSSFPrintSetup(worksheet);
-            Assert.AreEqual(false, printSetup.Draft);
+            ClassicAssert.AreEqual(false, printSetup.Draft);
 
             printSetup.Draft = (true);
-            Assert.AreEqual(true, pSetup.draft);
+            ClassicAssert.AreEqual(true, pSetup.draft);
         }
         [Test]
         public void TestSetGetNotes()
@@ -158,10 +158,10 @@ namespace TestCases.XSSF.UserModel
             CT_PageSetup pSetup = worksheet.AddNewPageSetup();
             pSetup.cellComments = ST_CellComments.none;
             XSSFPrintSetup printSetup = new XSSFPrintSetup(worksheet);
-            Assert.AreEqual(false, printSetup.Notes);
+            ClassicAssert.AreEqual(false, printSetup.Notes);
 
             printSetup.Notes = true;
-            Assert.AreEqual(PrintCellComments.AS_DISPLAYED.Value, (int)pSetup.cellComments);
+            ClassicAssert.AreEqual(PrintCellComments.AS_DISPLAYED.Value, (int)pSetup.cellComments);
         }
 
         [Test]
@@ -171,10 +171,10 @@ namespace TestCases.XSSF.UserModel
             CT_PageSetup pSetup = worksheet.AddNewPageSetup();
             pSetup.useFirstPageNumber = (false);
             XSSFPrintSetup printSetup = new XSSFPrintSetup(worksheet);
-            Assert.AreEqual(false, printSetup.UsePage);
+            ClassicAssert.AreEqual(false, printSetup.UsePage);
 
             printSetup.UsePage = (true);
-            Assert.AreEqual(true, pSetup.useFirstPageNumber);
+            ClassicAssert.AreEqual(true, pSetup.useFirstPageNumber);
         }
         [Test]
         public void TestSetGetHVResolution()
@@ -184,13 +184,13 @@ namespace TestCases.XSSF.UserModel
             pSetup.horizontalDpi = (120);
             pSetup.verticalDpi = (100);
             XSSFPrintSetup printSetup = new XSSFPrintSetup(worksheet);
-            Assert.AreEqual(120, printSetup.HResolution);
-            Assert.AreEqual(100, printSetup.VResolution);
+            ClassicAssert.AreEqual(120, printSetup.HResolution);
+            ClassicAssert.AreEqual(100, printSetup.VResolution);
 
             printSetup.HResolution = ((short)150);
             printSetup.VResolution = ((short)130);
-            Assert.AreEqual((uint)150, pSetup.horizontalDpi);
-            Assert.AreEqual((uint)130, pSetup.verticalDpi);
+            ClassicAssert.AreEqual((uint)150, pSetup.horizontalDpi);
+            ClassicAssert.AreEqual((uint)130, pSetup.verticalDpi);
         }
         [Test]
         public void TestSetGetHeaderFooterMargin()
@@ -200,13 +200,13 @@ namespace TestCases.XSSF.UserModel
             pMargins.header = (1.5);
             pMargins.footer = (2);
             XSSFPrintSetup printSetup = new XSSFPrintSetup(worksheet);
-            Assert.AreEqual(1.5, printSetup.HeaderMargin, 0.0);
-            Assert.AreEqual(2.0, printSetup.FooterMargin, 0.0);
+            ClassicAssert.AreEqual(1.5, printSetup.HeaderMargin, 0.0);
+            ClassicAssert.AreEqual(2.0, printSetup.FooterMargin, 0.0);
 
             printSetup.HeaderMargin = (5);
             printSetup.FooterMargin = (3.5);
-            Assert.AreEqual(5.0, pMargins.header, 0.0);
-            Assert.AreEqual(3.5, pMargins.footer, 0.0);
+            ClassicAssert.AreEqual(5.0, pMargins.header, 0.0);
+            ClassicAssert.AreEqual(3.5, pMargins.footer, 0.0);
         }
         [Test]
         public void TestSetGetCopies()
@@ -215,31 +215,31 @@ namespace TestCases.XSSF.UserModel
             CT_PageSetup pSetup = worksheet.AddNewPageSetup();
             pSetup.copies = (9);
             XSSFPrintSetup printSetup = new XSSFPrintSetup(worksheet);
-            Assert.AreEqual(9, printSetup.Copies);
+            ClassicAssert.AreEqual(9, printSetup.Copies);
 
             printSetup.Copies = (short)15;
-            Assert.AreEqual((uint)15, pSetup.copies);
+            ClassicAssert.AreEqual((uint)15, pSetup.copies);
         }
         [Test]
         public void TestSetSaveRead()
         {
             XSSFWorkbook wb = new XSSFWorkbook();
             XSSFSheet s1 = (XSSFSheet)wb.CreateSheet();
-            Assert.AreEqual(false, s1.GetCTWorksheet().IsSetPageSetup());
-            Assert.AreEqual(true, s1.GetCTWorksheet().IsSetPageMargins());
+            ClassicAssert.AreEqual(false, s1.GetCTWorksheet().IsSetPageSetup());
+            ClassicAssert.AreEqual(true, s1.GetCTWorksheet().IsSetPageMargins());
 
             XSSFPrintSetup print = (XSSFPrintSetup)s1.PrintSetup;
-            Assert.AreEqual(true, s1.GetCTWorksheet().IsSetPageSetup());
-            Assert.AreEqual(true, s1.GetCTWorksheet().IsSetPageMargins());
+            ClassicAssert.AreEqual(true, s1.GetCTWorksheet().IsSetPageSetup());
+            ClassicAssert.AreEqual(true, s1.GetCTWorksheet().IsSetPageMargins());
 
             print.Copies = ((short)3);
             print.Landscape = (true);
-            Assert.AreEqual(3, print.Copies);
-            Assert.AreEqual(true, print.Landscape);
+            ClassicAssert.AreEqual(3, print.Copies);
+            ClassicAssert.AreEqual(true, print.Landscape);
 
             XSSFSheet s2 = (XSSFSheet)wb.CreateSheet();
-            Assert.AreEqual(false, s2.GetCTWorksheet().IsSetPageSetup());
-            Assert.AreEqual(true, s2.GetCTWorksheet().IsSetPageMargins());
+            ClassicAssert.AreEqual(false, s2.GetCTWorksheet().IsSetPageSetup());
+            ClassicAssert.AreEqual(true, s2.GetCTWorksheet().IsSetPageMargins());
 
             // Round trip and check
             XSSFWorkbook wbBack = (XSSFWorkbook)XSSFITestDataProvider.instance.WriteOutAndReadBack(wb);
@@ -247,14 +247,14 @@ namespace TestCases.XSSF.UserModel
             s1 = (XSSFSheet)wbBack.GetSheetAt(0);
             s2 = (XSSFSheet)wbBack.GetSheetAt(1);
 
-            Assert.AreEqual(true, s1.GetCTWorksheet().IsSetPageSetup());
-            Assert.AreEqual(true, s1.GetCTWorksheet().IsSetPageMargins());
-            Assert.AreEqual(false, s2.GetCTWorksheet().IsSetPageSetup());
-            Assert.AreEqual(true, s2.GetCTWorksheet().IsSetPageMargins());
+            ClassicAssert.AreEqual(true, s1.GetCTWorksheet().IsSetPageSetup());
+            ClassicAssert.AreEqual(true, s1.GetCTWorksheet().IsSetPageMargins());
+            ClassicAssert.AreEqual(false, s2.GetCTWorksheet().IsSetPageSetup());
+            ClassicAssert.AreEqual(true, s2.GetCTWorksheet().IsSetPageMargins());
 
             print = (XSSFPrintSetup)s1.PrintSetup;
-            Assert.AreEqual(3, print.Copies);
-            Assert.AreEqual(true, print.Landscape);
+            ClassicAssert.AreEqual(3, print.Copies);
+            ClassicAssert.AreEqual(true, print.Landscape);
 
             wb.Close();
         }
@@ -263,13 +263,13 @@ namespace TestCases.XSSF.UserModel
         {
             XSSFPrintSetup ps = new XSSFPrintSetup(new CT_Worksheet());
 
-            Assert.IsFalse(ps.Landscape);
+            ClassicAssert.IsFalse(ps.Landscape);
 
             ps.Landscape = (true);
-            Assert.IsTrue(ps.Landscape);
+            ClassicAssert.IsTrue(ps.Landscape);
 
             ps.Landscape = (false);
-            Assert.IsFalse(ps.Landscape);
+            ClassicAssert.IsFalse(ps.Landscape);
         }
 
         [Test]
@@ -277,13 +277,13 @@ namespace TestCases.XSSF.UserModel
         {
             XSSFPrintSetup ps = new XSSFPrintSetup(new CT_Worksheet());
 
-            Assert.IsFalse(ps.LeftToRight);
+            ClassicAssert.IsFalse(ps.LeftToRight);
 
             ps.LeftToRight = (true);
-            Assert.IsTrue(ps.LeftToRight);
+            ClassicAssert.IsTrue(ps.LeftToRight);
 
             ps.LeftToRight = (false);
-            Assert.IsFalse(ps.LeftToRight);
+            ClassicAssert.IsFalse(ps.LeftToRight);
         }
     }
 }

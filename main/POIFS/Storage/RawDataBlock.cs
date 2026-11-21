@@ -40,10 +40,13 @@ namespace NPOI.POIFS.Storage
     /// </summary>
     public class RawDataBlock : ListManagedBlock
     {
-        private byte[] _data;
-        private bool _eof;
-        private bool _hasData;
-        private static POILogger log = POILogFactory.GetLogger(typeof(RawDataBlock));
+        //arbitrarily selected; may need to increase
+        private static int MAX_RECORD_LENGTH = 100_000;
+
+        private readonly byte[] _data;
+        private readonly bool _eof;
+        private readonly bool _hasData;
+        private static readonly POILogger log = POILogFactory.GetLogger(typeof(RawDataBlock));
 
         /// <summary>
         /// Constructor RawDataBlock
@@ -61,7 +64,7 @@ namespace NPOI.POIFS.Storage
         /// <param name="blockSize">the size of the POIFS blocks, normally 512 bytes {@link POIFSConstants#BIG_BLOCK_SIZE}</param>
         public RawDataBlock(Stream stream, int blockSize)
         {
-            _data = new byte[blockSize];
+            _data = IOUtils.SafelyAllocate(blockSize, MAX_RECORD_LENGTH);
             int count = IOUtils.ReadFully(stream, _data);
             _hasData = (count > 0);
 

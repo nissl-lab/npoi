@@ -18,7 +18,7 @@ namespace TestCases.SS.Formula.Functions
 {
 
     using NPOI.SS.Formula.Eval;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.SS.Formula.Functions;
     using System;
 
@@ -39,15 +39,15 @@ namespace TestCases.SS.Formula.Functions
         private static void ConfirmValue(String msg, String real_num, String i_num, String suffix, String expected)
         {
             ValueEval result = invokeValue(real_num, i_num, suffix);
-            Assert.AreEqual(typeof(StringEval), result.GetType());
-            Assert.AreEqual( expected, ((StringEval)result).StringValue, msg);
+            ClassicAssert.AreEqual(typeof(StringEval), result.GetType());
+            ClassicAssert.AreEqual( expected, ((StringEval)result).StringValue, msg);
         }
 
         private static void ConfirmValueError(String msg, String real_num, String i_num, String suffix, ErrorEval numError)
         {
             ValueEval result = invokeValue(real_num, i_num, suffix);
-            Assert.AreEqual(typeof(ErrorEval), result.GetType());
-            Assert.AreEqual( numError, result, msg);
+            ClassicAssert.AreEqual(typeof(ErrorEval), result.GetType());
+            ClassicAssert.AreEqual( numError, result, msg);
         }
         [Test]
         public void TestBasic()

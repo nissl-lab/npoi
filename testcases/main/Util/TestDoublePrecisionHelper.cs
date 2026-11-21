@@ -16,7 +16,7 @@
  *    limitations under the License.
  * ====================================================================
  */
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -35,19 +35,19 @@ namespace TestCases.SS.Util
 
         private static void BigDecimalPrecisionTest(bool expected, string repre)
         {
-            Assert.AreEqual(expected, BigDecimal.Parse(repre).IsIntegerWithDigitsDropped(Precision), repre);
+            ClassicAssert.AreEqual(expected, BigDecimal.Parse(repre).IsIntegerWithDigitsDropped(Precision), repre);
         }
         private static void BigDecimalPrecisionTest(bool expected, double repre)
         {
-            Assert.AreEqual(expected, new BigDecimal(repre).IsIntegerWithDigitsDropped(Precision), repre.ToString());
+            ClassicAssert.AreEqual(expected, new BigDecimal(repre).IsIntegerWithDigitsDropped(Precision), repre.ToString());
         }
         private static void DoublePrecisionTest(bool expected, string repre)
         {
-            Assert.AreEqual(expected, double.Parse(repre).IsIntegerWithDigitsDropped(Precision), repre);
+            ClassicAssert.AreEqual(expected, double.Parse(repre).IsIntegerWithDigitsDropped(Precision), repre);
         }
         private static void DoublePrecisionTest(bool expected, double repre)
         {
-            Assert.AreEqual(expected, repre.IsIntegerWithDigitsDropped(Precision), repre.ToString());
+            ClassicAssert.AreEqual(expected, repre.IsIntegerWithDigitsDropped(Precision), repre.ToString());
         }
 
         [Test]

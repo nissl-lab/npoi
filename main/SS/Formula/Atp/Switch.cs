@@ -39,9 +39,8 @@ namespace NPOI.SS.Formula.Atp
 
 
                     ValueEval evaluate = (new EqualEval()).Evaluate(new ValueEval[] { expression, value }, ec.RowIndex, ec.ColumnIndex);
-                    if (evaluate is BoolEval)
+                    if (evaluate is BoolEval boolEval)
                     {
-                        BoolEval boolEval = (BoolEval)evaluate;
                         bool booleanValue = boolEval.BooleanValue;
                         if (booleanValue)
                         {

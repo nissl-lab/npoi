@@ -16,7 +16,7 @@
 ==================================================================== */
 
 using NPOI;
-using NPOI.Common.UserModel.Fonts;
+using NPOI.OOXML.XSSF.UserModel;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
@@ -24,6 +24,7 @@ using NPOI.Util;
 using NPOI.XSSF;
 using NPOI.XSSF.UserModel;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using System.Text;
 using TestCases.SS.UserModel;
 
@@ -47,7 +48,7 @@ namespace TestCases.XSSF.UserModel
         public void TestConstructor()
         {
             XSSFFont xssfFont = new XSSFFont();
-            Assert.IsNotNull(xssfFont.GetCTFont());
+            ClassicAssert.IsNotNull(xssfFont.GetCTFont());
         }
         [Test]
         public void TestBold()
@@ -57,11 +58,11 @@ namespace TestCases.XSSF.UserModel
             bool1.val = (false);
             ctFont.SetBArray(0, bool1);
             XSSFFont xssfFont = new XSSFFont(ctFont);
-            Assert.AreEqual(false, xssfFont.IsBold);
+            ClassicAssert.AreEqual(false, xssfFont.IsBold);
 
             xssfFont.IsBold = (true);
-            Assert.AreEqual(ctFont.b.Count, 1);
-            Assert.AreEqual(true, ctFont.GetBArray(0).val);
+            ClassicAssert.AreEqual(ctFont.b.Count, 1);
+            ClassicAssert.AreEqual(true, ctFont.GetBArray(0).val);
         }
         [Test]
         public void TestCharSet()
@@ -72,23 +73,23 @@ namespace TestCases.XSSF.UserModel
 
             ctFont.SetCharsetArray(0, prop);
             XSSFFont xssfFont = new XSSFFont(ctFont);
-            Assert.AreEqual(FontCharset.ANSI.Value, xssfFont.Charset);
+            ClassicAssert.AreEqual(FontCharset.ANSI.Value, xssfFont.Charset);
 
             xssfFont.SetCharSet(FontCharset.DEFAULT);
-            Assert.AreEqual(FontCharset.DEFAULT.Value, ctFont.GetCharsetArray(0).val);
+            ClassicAssert.AreEqual(FontCharset.DEFAULT.Value, ctFont.GetCharsetArray(0).val);
 
             // Try with a few less usual ones:
             // Set with the Charset itself
             xssfFont.SetCharSet(FontCharset.RUSSIAN);
-            Assert.AreEqual(FontCharset.RUSSIAN.Value, xssfFont.Charset);
+            ClassicAssert.AreEqual(FontCharset.RUSSIAN.Value, xssfFont.Charset);
             // And Set with the Charset index
             xssfFont.SetCharSet(FontCharset.ARABIC.Value);
-            Assert.AreEqual(FontCharset.ARABIC.Value, xssfFont.Charset);
+            ClassicAssert.AreEqual(FontCharset.ARABIC.Value, xssfFont.Charset);
             xssfFont.SetCharSet((byte)(FontCharset.ARABIC.Value));
-            Assert.AreEqual(FontCharset.ARABIC.Value, xssfFont.Charset);
+            ClassicAssert.AreEqual(FontCharset.ARABIC.Value, xssfFont.Charset);
 
             // This one isn't allowed
-            Assert.AreEqual(null, FontCharset.ValueOf(9999));
+            ClassicAssert.AreEqual(null, FontCharset.ValueOf(9999));
             try
             {
                 xssfFont.SetCharSet(9999);
@@ -101,13 +102,13 @@ namespace TestCases.XSSF.UserModel
 
             // Normal charset
             XSSFWorkbook workbook = XSSFTestDataSamples.OpenSampleWorkbook("Formatting.xlsx");
-            Assert.AreEqual(0,
+            ClassicAssert.AreEqual(0,
                   ((XSSFCellStyle)workbook.GetSheetAt(0).GetRow(0).GetCell(0).CellStyle).GetFont().Charset
             );
 
             // GB2312 charact Set
             workbook = XSSFTestDataSamples.OpenSampleWorkbook("49273.xlsx");
-            Assert.AreEqual(134,
+            ClassicAssert.AreEqual(134,
                   ((XSSFCellStyle)workbook.GetSheetAt(0).GetRow(0).GetCell(0).CellStyle).GetFont().Charset
             );
         }
@@ -120,10 +121,10 @@ namespace TestCases.XSSF.UserModel
             ctFont.name = fname;
 
             XSSFFont xssfFont = new XSSFFont(ctFont);
-            Assert.AreEqual("Arial", xssfFont.FontName);
+            ClassicAssert.AreEqual("Arial", xssfFont.FontName);
 
             xssfFont.FontName = "Courier";
-            Assert.AreEqual("Courier", ctFont.name.val);
+            ClassicAssert.AreEqual("Courier", ctFont.name.val);
         }
         [Test]
         public void TestItalic()
@@ -134,12 +135,12 @@ namespace TestCases.XSSF.UserModel
             ctFont.SetIArray(0, bool1);
 
             XSSFFont xssfFont = new XSSFFont(ctFont);
-            Assert.AreEqual(false, xssfFont.IsItalic);
+            ClassicAssert.AreEqual(false, xssfFont.IsItalic);
 
             xssfFont.IsItalic = (true);
-            Assert.AreEqual(1, ctFont.i.Count);
-            Assert.AreEqual(true, ctFont.GetIArray(0).val);
-            Assert.AreEqual(true, ctFont.GetIArray(0).val);
+            ClassicAssert.AreEqual(1, ctFont.i.Count);
+            ClassicAssert.AreEqual(true, ctFont.GetIArray(0).val);
+            ClassicAssert.AreEqual(true, ctFont.GetIArray(0).val);
         }
         [Test]
         public void TestStrikeout()
@@ -150,12 +151,12 @@ namespace TestCases.XSSF.UserModel
             ctFont.SetStrikeArray(0, bool1);
 
             XSSFFont xssfFont = new XSSFFont(ctFont);
-            Assert.AreEqual(false, xssfFont.IsStrikeout);
+            ClassicAssert.AreEqual(false, xssfFont.IsStrikeout);
 
             xssfFont.IsStrikeout = (true);
-            Assert.AreEqual(1, ctFont.strike.Count);
-            Assert.AreEqual(true, ctFont.GetStrikeArray(0).val);
-            Assert.AreEqual(true, ctFont.GetStrikeArray(0).val);
+            ClassicAssert.AreEqual(1, ctFont.strike.Count);
+            ClassicAssert.AreEqual(true, ctFont.GetStrikeArray(0).val);
+            ClassicAssert.AreEqual(true, ctFont.GetStrikeArray(0).val);
         }
         [Test]
         public void TestFontHeight()
@@ -166,11 +167,11 @@ namespace TestCases.XSSF.UserModel
             ctFont.SetSzArray(0, size);
 
             XSSFFont xssfFont = new XSSFFont(ctFont);
-            Assert.AreEqual(11, xssfFont.FontHeightInPoints);
+            ClassicAssert.AreEqual(11, xssfFont.FontHeightInPoints);
 
             //should use FontHeightInPoints here, not FontHeight.
             xssfFont.FontHeightInPoints = 20;
-            Assert.AreEqual(20.0, ctFont.GetSzArray(0).val, 0.0);
+            ClassicAssert.AreEqual(20.0, ctFont.GetSzArray(0).val, 0.0);
         }
         [Test]
         public void TestFontHeightInPoint()
@@ -181,10 +182,10 @@ namespace TestCases.XSSF.UserModel
             ctFont.SetSzArray(0, size);
 
             XSSFFont xssfFont = new XSSFFont(ctFont);
-            Assert.AreEqual(14, xssfFont.FontHeightInPoints);
+            ClassicAssert.AreEqual(14, xssfFont.FontHeightInPoints);
 
             xssfFont.FontHeightInPoints = (short)20;
-            Assert.AreEqual(20.0, ctFont.GetSzArray(0).val, 0.0);
+            ClassicAssert.AreEqual(20.0, ctFont.GetSzArray(0).val, 0.0);
         }
         [Test]
         public void TestUnderline()
@@ -195,15 +196,15 @@ namespace TestCases.XSSF.UserModel
             ctFont.SetUArray(0, underlinePropr);
 
             XSSFFont xssfFont = new XSSFFont(ctFont);
-            Assert.AreEqual(FontUnderlineType.Single, xssfFont.Underline);
+            ClassicAssert.AreEqual(FontUnderlineType.Single, xssfFont.Underline);
 
             xssfFont.SetUnderline(FontUnderlineType.Double);
-            Assert.AreEqual(1, ctFont.u.Count);
-            Assert.AreEqual(ST_UnderlineValues.@double, ctFont.GetUArray(0).val);
+            ClassicAssert.AreEqual(1, ctFont.u.Count);
+            ClassicAssert.AreEqual(ST_UnderlineValues.@double, ctFont.GetUArray(0).val);
 
             xssfFont.SetUnderline(FontUnderlineType.DoubleAccounting);
-            Assert.AreEqual(1, ctFont.u.Count);
-            Assert.AreEqual(ST_UnderlineValues.doubleAccounting, ctFont.GetUArray(0).val);
+            ClassicAssert.AreEqual(1, ctFont.u.Count);
+            ClassicAssert.AreEqual(ST_UnderlineValues.doubleAccounting, ctFont.GetUArray(0).val);
         }
         [Test]
         public void TestColor()
@@ -214,10 +215,10 @@ namespace TestCases.XSSF.UserModel
             ctFont.SetColorArray(0, color);
 
             XSSFFont xssfFont = new XSSFFont(ctFont);
-            Assert.AreEqual(IndexedColors.Black.Index, xssfFont.Color);
+            ClassicAssert.AreEqual(IndexedColors.Black.Index, xssfFont.Color);
 
             xssfFont.Color = IndexedColors.Red.Index;
-            Assert.AreEqual((uint)IndexedColors.Red.Index, ctFont.GetColorArray(0).indexed);
+            ClassicAssert.AreEqual((uint)IndexedColors.Red.Index, ctFont.GetColorArray(0).indexed);
         }
         [Test]
         public void TestRgbColor()
@@ -230,22 +231,22 @@ namespace TestCases.XSSF.UserModel
             ctFont.SetColorArray(0, color);
 
             XSSFFont xssfFont = new XSSFFont(ctFont);
-            Assert.AreEqual(ctFont.GetColorArray(0).GetRgb()[0], xssfFont.GetXSSFColor().RGB[0]);
-            Assert.AreEqual(ctFont.GetColorArray(0).GetRgb()[1], xssfFont.GetXSSFColor().RGB[1]);
-            Assert.AreEqual(ctFont.GetColorArray(0).GetRgb()[2], xssfFont.GetXSSFColor().RGB[2]);
-            Assert.AreEqual(ctFont.GetColorArray(0).GetRgb()[3], xssfFont.GetXSSFColor().RGB[3]);
+            ClassicAssert.AreEqual(ctFont.GetColorArray(0).GetRgb()[0], xssfFont.GetXSSFColor().RGB[0]);
+            ClassicAssert.AreEqual(ctFont.GetColorArray(0).GetRgb()[1], xssfFont.GetXSSFColor().RGB[1]);
+            ClassicAssert.AreEqual(ctFont.GetColorArray(0).GetRgb()[2], xssfFont.GetXSSFColor().RGB[2]);
+            ClassicAssert.AreEqual(ctFont.GetColorArray(0).GetRgb()[3], xssfFont.GetXSSFColor().RGB[3]);
 
             xssfFont.Color = ((short)23);
 
             byte[] bytes = Encoding.ASCII.GetBytes(HexDump.ToHex(0xF1F1F1));
             color.rgb = (bytes);
 
-            XSSFColor newColor = new XSSFColor(color);
+            XSSFColor newColor = XSSFColor.From(color, null);
             xssfFont.SetColor(newColor);
-            Assert.AreEqual(ctFont.GetColorArray(0).GetRgb()[2], newColor.RGB[2]);
+            ClassicAssert.AreEqual(ctFont.GetColorArray(0).GetRgb()[2], newColor.RGB[2]);
 
             CollectionAssert.AreEqual(bytes, xssfFont.GetXSSFColor().RGB);
-            Assert.AreEqual(0, xssfFont.Color);
+            ClassicAssert.AreEqual(0, xssfFont.Color);
         }
         [Test]
         public void TestThemeColor()
@@ -257,10 +258,10 @@ namespace TestCases.XSSF.UserModel
             ctFont.SetColorArray(0, color);
 
             XSSFFont xssfFont = new XSSFFont(ctFont);
-            Assert.AreEqual((short)ctFont.GetColorArray(0).theme, xssfFont.GetThemeColor());
+            ClassicAssert.AreEqual((short)ctFont.GetColorArray(0).theme, xssfFont.GetThemeColor());
 
             xssfFont.SetThemeColor(IndexedColors.Red.Index);
-            Assert.AreEqual((uint)IndexedColors.Red.Index, ctFont.GetColorArray(0).theme);
+            ClassicAssert.AreEqual((uint)IndexedColors.Red.Index, ctFont.GetColorArray(0).theme);
         }
         [Test]
         public void TestFamily()
@@ -271,7 +272,7 @@ namespace TestCases.XSSF.UserModel
             ctFont.SetFamilyArray(0, family);
 
             XSSFFont xssfFont = new XSSFFont(ctFont);
-            Assert.AreEqual(FontFamily.MODERN.Value, xssfFont.Family);
+            ClassicAssert.AreEqual(FontFamily.MODERN.Value, xssfFont.Family);
         }
         [Test]
         public void TestScheme()
@@ -282,10 +283,10 @@ namespace TestCases.XSSF.UserModel
             ctFont.SetSchemeArray(0, scheme);
 
             XSSFFont font = new XSSFFont(ctFont);
-            Assert.AreEqual(FontScheme.MAJOR, font.GetScheme());
+            ClassicAssert.AreEqual(FontScheme.MAJOR, font.GetScheme());
 
             font.SetScheme(FontScheme.NONE);
-            Assert.AreEqual(ST_FontScheme.none, ctFont.GetSchemeArray(0).val);
+            ClassicAssert.AreEqual(ST_FontScheme.none, ctFont.GetSchemeArray(0).val);
         }
         [Test]
         public void TestTypeOffset()
@@ -296,10 +297,10 @@ namespace TestCases.XSSF.UserModel
             ctFont.SetVertAlignArray(0, valign);
 
             XSSFFont font = new XSSFFont(ctFont);
-            Assert.AreEqual(FontSuperScript.None, font.TypeOffset);
+            ClassicAssert.AreEqual(FontSuperScript.None, font.TypeOffset);
 
             font.TypeOffset = FontSuperScript.Super;
-            Assert.AreEqual(ST_VerticalAlignRun.superscript, ctFont.GetVertAlignArray(0).val);
+            ClassicAssert.AreEqual(ST_VerticalAlignRun.superscript, ctFont.GetVertAlignArray(0).val);
         }
 
         // store test from TestSheetUtil here as it uses XSSF
@@ -323,6 +324,113 @@ namespace TestCases.XSSF.UserModel
 
             // Even with invalid fonts we still get back useful data most of the time... 
             SheetUtil.CanComputeColumnWidth(font);
+        }
+
+        /// <summary>
+        /// Test that fonts Get added properly
+        /// </summary>
+        [Test]
+        public void TestFindFont()
+        {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            ClassicAssert.AreEqual(1, wb.NumberOfFonts);
+
+            XSSFSheet s = wb.CreateSheet() as XSSFSheet;
+            s.CreateRow(0);
+            s.CreateRow(1);
+            s.GetRow(0).CreateCell(0);
+            s.GetRow(1).CreateCell(0);
+
+            ClassicAssert.AreEqual(1, wb.NumberOfFonts);
+
+            XSSFFont f1 = wb.GetFontAt(0) as XSSFFont;
+            ClassicAssert.IsFalse(f1.IsBold);
+
+            // Check that asking for the same font
+            //  multiple times gives you the same thing.
+            // Otherwise, our tests wouldn't work!
+            ClassicAssert.AreSame(wb.GetFontAt(0), wb.GetFontAt(0));
+            ClassicAssert.AreEqual(
+                    wb.GetFontAt(0),
+                    wb.GetFontAt(0)
+            );
+
+            // Look for a new font we have
+            //  yet to add
+            ClassicAssert.IsNull(
+                    wb.FindFont(
+                            false, IndexedColors.Indigo.Index, (short) 22,
+                            "Thingy", false, true, (FontSuperScript) 2, (FontUnderlineType) 2
+                    )
+            );
+            ClassicAssert.IsNull(
+                    wb.GetStylesSource().FindFont(
+                            false, new XSSFColor(IndexedColors.Indigo, new DefaultIndexedColorMap()), (short) 22,
+                            "Thingy", false, true, (FontSuperScript) 2, (FontUnderlineType) 2
+                    )
+            );
+
+            XSSFFont nf = wb.CreateFont() as XSSFFont;
+            ClassicAssert.AreEqual(2, wb.NumberOfFonts);
+
+            ClassicAssert.AreEqual(1, nf.IndexAsInt);
+            ClassicAssert.AreEqual(nf, wb.GetFontAt(1));
+
+            nf.IsBold = false;
+            nf.Color = IndexedColors.Indigo.Index;
+            nf.FontHeight = 22;
+            nf.FontName = "Thingy";
+            nf.IsItalic = false;
+            nf.IsStrikeout = true;
+            nf.TypeOffset = (FontSuperScript) 2;
+            nf.Underline = (FontUnderlineType) 2;
+
+            ClassicAssert.AreEqual(2, wb.NumberOfFonts);
+            ClassicAssert.AreEqual(nf, wb.GetFontAt(1));
+
+            ClassicAssert.IsTrue(
+                    wb.GetFontAt(0)
+                            !=
+                            wb.GetFontAt(1)
+            );
+
+            // Find it now
+            ClassicAssert.IsNotNull(
+                    wb.FindFont(
+                            false, IndexedColors.Indigo.Index, (short) 22,
+                            "Thingy", false, true, (FontSuperScript) 2, (FontUnderlineType) 2
+                    )
+            );
+            ClassicAssert.IsNotNull(
+                    wb.GetStylesSource().FindFont(
+                            false, new XSSFColor(IndexedColors.Indigo, new DefaultIndexedColorMap()), (short) 22,
+                            "Thingy", false, true, (FontSuperScript) 2, (FontUnderlineType) 2
+                    )
+            );
+
+            XSSFFont font = wb.FindFont(
+                false, IndexedColors.Indigo.Index, (short) 22,
+                "Thingy", false, true, (FontSuperScript) 2, (FontUnderlineType) 2
+            ) as XSSFFont;
+            ClassicAssert.IsNotNull(font);
+            ClassicAssert.AreEqual(
+                    1,
+                    font.IndexAsInt
+            );
+            ClassicAssert.AreEqual(nf,
+                    wb.FindFont(
+                            false, IndexedColors.Indigo.Index, (short) 22,
+                            "Thingy", false, true, (FontSuperScript) 2, (FontUnderlineType) 2
+                    )
+            );
+            ClassicAssert.AreEqual(nf,
+                    wb.GetStylesSource().FindFont(
+                            false, new XSSFColor(IndexedColors.Indigo, new DefaultIndexedColorMap()), (short) 22,
+                            "Thingy", false, true, (FontSuperScript) 2, (FontUnderlineType) 2
+                    )
+            );
+
+            wb.Close();
         }
     }
 }

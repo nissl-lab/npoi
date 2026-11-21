@@ -160,13 +160,13 @@ namespace NPOI.HWPF.Model.Types
             this.field_65_brcBetween = new BorderCode();
             this.field_66_brcBar = new BorderCode();
             this.field_67_shd = new ShadingDescriptor();
-            this.field_68_anld = new byte[0];
-            this.field_69_phe = new byte[0];
+            this.field_68_anld = [];
+            this.field_69_phe = [];
             this.field_72_dttmPropRMark = new DateAndTime();
-            this.field_74_rgdxaTab = new int[0];
-            this.field_75_rgtbd = new byte[0];
-            this.field_76_numrm = new byte[0];
-            this.field_77_ptap = new byte[0];
+            this.field_74_rgdxaTab = [];
+            this.field_75_rgtbd = [];
+            this.field_76_numrm = [];
+            this.field_77_ptap = [];
         }
 
 

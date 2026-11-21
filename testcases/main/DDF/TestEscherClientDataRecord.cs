@@ -24,7 +24,7 @@ namespace TestCases.DDF
     using System.Collections.Generic;
     using System.IO;
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.DDF;
     using NPOI.Util;
     [TestFixture]
@@ -37,8 +37,8 @@ namespace TestCases.DDF
 
             byte[] data = new byte[8];
             int bytesWritten = r.Serialize(0, data);
-            Assert.AreEqual(8, bytesWritten);
-            Assert.AreEqual("[02, 00, " +
+            ClassicAssert.AreEqual(8, bytesWritten);
+            ClassicAssert.AreEqual("[02, 00, " +
                     "11, F0, " +
                     "00, 00, 00, 00]",
                     HexDump.ToHex(data));
@@ -53,9 +53,9 @@ namespace TestCases.DDF
             EscherClientDataRecord r = new EscherClientDataRecord();
             int bytesWritten = r.FillFields(data, new DefaultEscherRecordFactory());
 
-            Assert.AreEqual(8, bytesWritten);
-            Assert.AreEqual(unchecked((short)0xF011), r.RecordId);
-            Assert.AreEqual("[]", HexDump.ToHex(r.RemainingData));
+            ClassicAssert.AreEqual(8, bytesWritten);
+            ClassicAssert.AreEqual(unchecked((short)0xF011), r.RecordId);
+            ClassicAssert.AreEqual("[]", HexDump.ToHex(r.RemainingData));
         }
         [Test]
         public void TestToString()
@@ -68,7 +68,7 @@ namespace TestCases.DDF
                     "  Instance: 0x0000" + nl +
                     "  Extra Data:" + nl +
                     "No Data" + nl;
-            Assert.AreEqual(expected, CreateRecord().ToString());
+            ClassicAssert.AreEqual(expected, CreateRecord().ToString());
         }
 
         private EscherClientDataRecord CreateRecord()

@@ -27,14 +27,14 @@ namespace NPOI.SS.Formula.Eval
      */
     public abstract class AreaEvalBase : AreaEval
     {
-        private int _firstSheet;
-        private int _firstColumn;
-        private int _firstRow;
-        private int _lastSheet;
-        private int _lastColumn;
-        private int _lastRow;
-        private int _nColumns;
-        private int _nRows;
+        private readonly int _firstSheet;
+        private readonly int _firstColumn;
+        private readonly int _firstRow;
+        private readonly int _lastSheet;
+        private readonly int _lastColumn;
+        private readonly int _lastRow;
+        private readonly int _nColumns;
+        private readonly int _nRows;
 
         protected AreaEvalBase(ISheetRange sheets, int firstRow, int firstColumn, int lastRow, int lastColumn)
         {
@@ -176,10 +176,18 @@ namespace NPOI.SS.Formula.Eval
         }
 
         /**
- * @return  whether cell at rowIndex and columnIndex is a subtotal.
- * By default return false which means 'don't care about subtotals'
-*/
+         * @return  whether cell at rowIndex and columnIndex is a subtotal.
+         * By default return false which means 'don't care about subtotals'
+        */
         public virtual bool IsSubTotal(int rowIndex, int columnIndex)
+        {
+            return false;
+        }
+        /**
+         * @return false by default, meaning all rows are calculated
+         * @see org.apache.poi.ss.formula.TwoDEval#isRowHidden(int)
+         */
+        public bool IsRowHidden(int rowIndex)
         {
             return false;
         }

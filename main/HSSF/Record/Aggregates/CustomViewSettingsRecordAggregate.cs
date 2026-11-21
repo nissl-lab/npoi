@@ -31,13 +31,13 @@ namespace NPOI.HSSF.Record.Aggregates
     public class CustomViewSettingsRecordAggregate : RecordAggregate
     {
 
-        private Record _begin;
-        private Record _end;
+        private readonly Record _begin;
+        private readonly Record _end;
         /**
          * All the records between BOF and EOF
          */
-        private List<RecordBase> _recs;
-        private PageSettingsBlock _psBlock;
+        private readonly List<RecordBase> _recs;
+        private readonly PageSettingsBlock _psBlock;
 
         public CustomViewSettingsRecordAggregate(RecordStream rs)
         {
@@ -86,9 +86,9 @@ namespace NPOI.HSSF.Record.Aggregates
             for (int i = 0; i < _recs.Count; i++)
             {
                 RecordBase rb = _recs[i];
-                if (rb is RecordAggregate)
+                if (rb is RecordAggregate aggregate)
                 {
-                    ((RecordAggregate)rb).VisitContainedRecords(rv);
+                    aggregate.VisitContainedRecords(rv);
                 }
                 else
                 {

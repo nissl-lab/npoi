@@ -16,7 +16,7 @@
 ==================================================================== */
 using NPOI.SS.UserModel;
 using NPOI.XSSF.Streaming;
-using NUnit.Framework;
+using NUnit.Framework;using NUnit.Framework.Legacy;
 
 namespace TestCases.XSSF.Streaming
 {
@@ -30,7 +30,7 @@ namespace TestCases.XSSF.Streaming
         {
             _objectToTest = new SXSSFCell(null, CellType.Error);
             _objectToTest.SetCellErrorValue((byte)(0x00));
-            Assert.AreEqual((byte)0x00, _objectToTest.ErrorCellValue);
+            ClassicAssert.AreEqual((byte)0x00, _objectToTest.ErrorCellValue);
         }
 
         
@@ -39,7 +39,7 @@ namespace TestCases.XSSF.Streaming
         {
             _objectToTest = new SXSSFCell(null, CellType.Numeric);
             _objectToTest.SetCellErrorValue(FormulaError.DIV0.Code);
-            Assert.AreEqual((byte)7, _objectToTest.ErrorCellValue);
+            ClassicAssert.AreEqual((byte)7, _objectToTest.ErrorCellValue);
         }
 
         [Test]
@@ -47,7 +47,7 @@ namespace TestCases.XSSF.Streaming
         {
             _objectToTest = new SXSSFCell(null, CellType.Formula);
             _objectToTest.SetCellFormula("SUM(C4:E4)");
-            Assert.AreEqual("SUM(C4:E4)", _objectToTest.CellFormula);
+            ClassicAssert.AreEqual("SUM(C4:E4)", _objectToTest.CellFormula);
         }
 
         [Test]
@@ -56,21 +56,21 @@ namespace TestCases.XSSF.Streaming
             _objectToTest = new SXSSFCell(null, CellType.Formula);
             _objectToTest.SetCellFormula("SUM(C4:E4)");
 
-            Assert.AreEqual(CellType.Numeric, _objectToTest.CachedFormulaResultType);
+            ClassicAssert.AreEqual(CellType.Numeric, _objectToTest.CachedFormulaResultType);
         }
         [Test]
         public void IfSettingFormulaValueWithNullShouldChangeToBlankCell()
         {
             _objectToTest = new SXSSFCell(null, CellType.Formula);
             _objectToTest.SetCellFormula(null);
-            Assert.AreEqual(CellType.Blank, _objectToTest.CellType);
+            ClassicAssert.AreEqual(CellType.Blank, _objectToTest.CellType);
         }
 
         [Test]
         public void IfCellTypeIsBlankBooleanCellValueShouldReturnFalse()
         {
             _objectToTest = new SXSSFCell(null, CellType.Blank);
-            Assert.IsFalse(_objectToTest.BooleanCellValue);
+            ClassicAssert.IsFalse(_objectToTest.BooleanCellValue);
         }
         [Test]
         [Ignore("This test doesn't make sense")]
@@ -78,7 +78,7 @@ namespace TestCases.XSSF.Streaming
         {
             _objectToTest = new SXSSFCell(null, CellType.Formula);
 
-            Assert.IsFalse(_objectToTest.BooleanCellValue);
+            ClassicAssert.IsFalse(_objectToTest.BooleanCellValue);
         }
 
         [Test]
@@ -86,7 +86,7 @@ namespace TestCases.XSSF.Streaming
         {
             _objectToTest = new SXSSFCell(null, CellType.Formula);
             _objectToTest.SetCellFormula("SUM(C4:E4)");
-            Assert.AreEqual("SUM(C4:E4)", _objectToTest.CellFormula);
+            ClassicAssert.AreEqual("SUM(C4:E4)", _objectToTest.CellFormula);
         }
 
         [Test]
@@ -94,7 +94,7 @@ namespace TestCases.XSSF.Streaming
         {
             _objectToTest = new SXSSFCell(null, CellType.Formula);
             _objectToTest.CellFormula ="SUM(C4:E4)";
-            Assert.AreEqual("SUM(C4:E4)", _objectToTest.CellFormula);
+            ClassicAssert.AreEqual("SUM(C4:E4)", _objectToTest.CellFormula);
         }
 
         [Test]
@@ -102,14 +102,14 @@ namespace TestCases.XSSF.Streaming
         {
             _objectToTest = new SXSSFCell(null, CellType.Formula);
             _objectToTest.CellFormula = null;
-            Assert.AreEqual(CellType.Blank, _objectToTest.CellType);
+            ClassicAssert.AreEqual(CellType.Blank, _objectToTest.CellType);
         }
 
         [Test]
         public void IfCellTypeIsBlankNumericCellValueShouldReturnZero()
         {
             _objectToTest = new SXSSFCell(null, CellType.Blank);
-            Assert.AreEqual(0.0, _objectToTest.NumericCellValue);
+            ClassicAssert.AreEqual(0.0, _objectToTest.NumericCellValue);
         }
 
         [Test]
@@ -117,7 +117,7 @@ namespace TestCases.XSSF.Streaming
         {
             _objectToTest = new SXSSFCell(null, CellType.Formula);
             _objectToTest.SetCellFormula("SUM(C4:E4)");
-            Assert.AreEqual(0.0, _objectToTest.NumericCellValue);
+            ClassicAssert.AreEqual(0.0, _objectToTest.NumericCellValue);
         }
 
         [Test]
@@ -125,7 +125,7 @@ namespace TestCases.XSSF.Streaming
         {
             _objectToTest = new SXSSFCell(null, CellType.Formula);
             _objectToTest.SetCellValue(9);
-            Assert.AreEqual(9, _objectToTest.NumericCellValue);
+            ClassicAssert.AreEqual(9, _objectToTest.NumericCellValue);
         }
 
     }

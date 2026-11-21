@@ -36,13 +36,13 @@ namespace NPOI.HSSF.UserModel
         /**
          * Stores the parameters that identify the evaluation of one cell.<br/>
          */
-        private class CellEvaluationFrame
+        private sealed class CellEvaluationFrame
         {
 
-            private HSSFWorkbook _workbook;
-            private HSSFSheet _sheet;
-            private int _srcRowNum;
-            private int _srcColNum;
+            private readonly HSSFWorkbook _workbook;
+            private readonly HSSFSheet _sheet;
+            private readonly int _srcRowNum;
+            private readonly int _srcColNum;
 
             public CellEvaluationFrame(HSSFWorkbook workbook, HSSFSheet sheet, int srcRowNum, int srcColNum)
             {
@@ -106,7 +106,7 @@ namespace NPOI.HSSF.UserModel
             }
         }
 
-        private IList _evaluationFrames;
+        private readonly ArrayList _evaluationFrames;
 
         public EvaluationCycleDetector()
         {

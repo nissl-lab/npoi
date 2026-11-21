@@ -53,7 +53,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}>", nodeName));
+            sw.WriteStart(nodeName);
+            sw.Write('>');
             if (this.indexedColors != null)
             {
                 sw.Write("<indexedColors>");
@@ -72,7 +73,23 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
                 }
                 sw.Write("</mruColors>");
             }
-            sw.Write(string.Format("</{0}>", nodeName));
+            sw.WriteEndElement(nodeName);
+        }
+
+        public override string ToString()
+        {
+            using MemoryStream ms = new MemoryStream();
+            using StreamWriter sw = new StreamWriter(ms);
+            Write(sw, "colors");
+            sw.Flush();
+            ms.Position = 0;
+            using StreamReader sr = new StreamReader(ms);
+            return sr.ReadToEnd();
+        }
+
+        public bool IsSetIndexedColors()
+        {
+            return this.indexedColors != null;
         }
 
         [XmlArray(Order = 0)]
@@ -112,6 +129,8 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             if (node == null)
                 return null;
             CT_RgbColor ctObj = new CT_RgbColor();
+            if(node.Attributes["rgb"] != null) 
+                ctObj.rgbHex = node.Attributes["rgb"].Value;
             ctObj.rgb = XmlHelper.ReadBytes(node.Attributes["rgb"]);
             return ctObj;
         }
@@ -120,7 +139,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "rgb", this.rgb);
             sw.Write("/>");
         }
@@ -139,6 +158,12 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             {
                 this.rgbField = value;
             }
+        }
+        [XmlIgnore]
+        public string rgbHex
+        {
+            get;
+            set;
         }
     }
 
@@ -322,18 +347,6 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
         }
         #endregion tint
 
-        //internal static XmlSerializer serializer = new XmlSerializer(typeof(CT_Color));
-        //internal static XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces(new XmlQualifiedName[] {
-        //    new XmlQualifiedName("", "http://schemas.openxmlformats.org/spreadsheetml/2006/main") });
-        //public override string ToString()
-        //{
-        //    using (StringWriter stringWriter = new StringWriter())
-        //    {
-        //        serializer.Serialize(stringWriter, this, namespaces);
-        //        return stringWriter.ToString();
-        //    }
-        //}
-
         public static CT_Color Parse(XmlNode node, XmlNamespaceManager namespaceManager)
         {
             if (node == null)
@@ -352,12 +365,9 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             return ctObj;
         }
 
-
-
-
         internal void Write(StreamWriter sw, string nodeName)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "auto", this.auto,false);
             if (indexedSpecified)
                 XmlHelper.WriteAttribute(sw, "indexed", this.indexed, true);
@@ -368,6 +378,17 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             if(tintSpecified)
                 XmlHelper.WriteAttribute(sw, "tint", this.tint);
             sw.Write("/>");
+        }
+
+        public override string ToString()
+        {
+            using MemoryStream ms = new MemoryStream();
+            using StreamWriter sw = new StreamWriter(ms);
+            Write(sw, "color");
+            sw.Flush();
+            ms.Position = 0;
+            using StreamReader sr = new StreamReader(ms);
+            return sr.ReadToEnd();
         }
 
         public CT_Color Copy()

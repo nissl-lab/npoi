@@ -54,12 +54,16 @@ namespace NPOI.XSSF.UserModel.Extensions
             return this.headerFooter;
         }
 
-        public String GetValue()
+        public String Value
         {
-            String value = Text;
-            if (value == null)
-                return "";
-            return value;
+            get
+            {
+                String value = Text;
+                if(value == null)
+                    return "";
+                return value;
+            }
+            
         }
 
         /**

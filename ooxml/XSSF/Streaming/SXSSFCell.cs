@@ -30,9 +30,9 @@ namespace NPOI.XSSF.Streaming
 {
     public class SXSSFCell : ICell
     {
-        private static POILogger logger = POILogFactory.GetLogger(typeof(SXSSFCell));
+        private static readonly POILogger logger = POILogFactory.GetLogger(typeof(SXSSFCell));
 
-        private SXSSFRow _row;
+        private readonly SXSSFRow _row;
         private Value _value;
         private ICellStyle _style;
         private Property _firstProperty;
@@ -87,7 +87,7 @@ namespace NPOI.XSSF.Streaming
         {
             get
             {
-                if(_value.GetType() != CellType.Formula)
+                if(!IsFormulaCell())
                 {
                     throw new InvalidOperationException("Only formula cells have cached results");
                 }
@@ -97,6 +97,7 @@ namespace NPOI.XSSF.Streaming
         }
 
         [Obsolete("Will be removed at NPOI 2.8, Use CachedFormulaResultType instead.")]
+        [Removal(Version = "4.2")]
         public CellType GetCachedFormulaResultTypeEnum()
         {
             return CachedFormulaResultType;
@@ -174,8 +175,13 @@ namespace NPOI.XSSF.Streaming
             {
                 if (_style == null)
                 {
-                    SXSSFWorkbook wb = (SXSSFWorkbook)Row.Sheet.Workbook;
-                    return wb.GetCellStyleAt(0);
+                    ICellStyle style = GetDefaultCellStyleFromColumn();
+                    if (style == null)
+                    {
+                        SXSSFWorkbook wb = (SXSSFWorkbook)Sheet.Workbook;
+                        style = wb.GetCellStyleAt(0);
+                    }
+                    return style;
                 }
                 else
                 {
@@ -189,11 +195,55 @@ namespace NPOI.XSSF.Streaming
             }
         }
 
-        public CellType CellType
+        private ICellStyle GetDefaultCellStyleFromColumn()
         {
-            get { return _value.GetType(); }
+            ICellStyle style = null;
+            SXSSFSheet sheet = (SXSSFSheet)Sheet;
+            if (sheet != null)
+            {
+                style = sheet.GetColumnStyle(ColumnIndex);
+            }
+            return style;
+        }
+        public ICellStyle Style
+        {
+            get
+            {
+                if (_style == null)
+                {
+                    _style = CellStyle;
+                    if (_style == null)
+                    {
+                        var wb = (SXSSFWorkbook)Row.Sheet.Workbook;
+                        _style = wb.CreateCellStyle();
+                    }
+                }
+                return _style;
+            }
+            set
+            {
+                _style = value;
+                CellStyle = value;
+            }
         }
 
+        private bool IsFormulaCell()
+        {
+            return _value is FormulaValue;
+        }
+        public CellType CellType
+        {
+            get 
+            { 
+                if(IsFormulaCell())
+                {
+                    return CellType.Formula;
+                } 
+                return _value.GetType(); 
+            }
+        }
+
+        
         public int ColumnIndex
         {
             get
@@ -448,12 +498,21 @@ namespace NPOI.XSSF.Streaming
 
         public ICell SetCellErrorValue(byte value)
         {
-            //ensure type garuntees that the type is error so the if condition is never true.
-            EnsureType(CellType.Error);
-            if (_value.GetType() == CellType.Formula)
-                ((ErrorFormulaValue)_value).PreEvaluatedValue = value;
+            // for formulas, we want to keep the type and only have an ERROR as formula value
+            if(_value.GetType()==CellType.Formula)
+            {
+                // ensure that the type is "ERROR"
+                SetFormulaType(CellType.Error);
+
+                // populate the value
+                ((ErrorFormulaValue) _value).PreEvaluatedValue = value;
+            }
             else
-                ((ErrorValue)_value).Value = value;
+            {
+                EnsureType(CellType.Error);
+                ((ErrorValue) _value).Value = value;
+            }
+
             return this;
         }
 
@@ -488,9 +547,9 @@ namespace NPOI.XSSF.Streaming
                 }
 
                 if (_value.GetType() == CellType.Formula)
-                    if (_value is NumericFormulaValue)
+                    if (_value is NumericFormulaValue formulaValue)
                     {
-                        ((NumericFormulaValue)_value).PreEvaluatedValue = Double.Parse(value);
+                        formulaValue.PreEvaluatedValue = Double.Parse(value);
                     }
                     else
                     {
@@ -595,7 +654,7 @@ namespace NPOI.XSSF.Streaming
                 case CellType.Numeric:
                     if (DateUtil.IsCellDateFormatted(this))
                     {
-                        FormatBase sdf = new SimpleDateFormat("dd-MMM-yyyy");
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
                         //sdf.setTimeZone(LocaleUtil.getUserTimeZone());
                         return sdf.Format(DateCellValue);
                     }
@@ -820,15 +879,17 @@ namespace NPOI.XSSF.Streaming
             }
 
             // if we had a Formula before, we should copy over the _value of the formula
-            if (prevValue is FormulaValue)
+            if (prevValue is FormulaValue value)
             {
-                ((FormulaValue)_value).Value = ((FormulaValue)prevValue).Value;
+                ((FormulaValue)_value).Value = value.Value;
             }
         }
-        private CellType ComputeTypeFromFormula(String formula)
+
+        private static CellType ComputeTypeFromFormula(String formula)
         {
             return CellType.Numeric;
         }
+
         //COPIED FROM https://svn.apache.org/repos/asf/poi/trunk/src/ooxml/java/org/apache/poi/xssf/usermodel/XSSFCell.java since the functions are declared private there
         /**
          * Used to help format error messages

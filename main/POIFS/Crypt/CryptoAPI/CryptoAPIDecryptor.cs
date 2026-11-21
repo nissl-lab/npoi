@@ -27,8 +27,9 @@ namespace NPOI.POIFS.Crypt.CryptoAPI
     public class CryptoAPIDecryptor : Decryptor {
 
         private long _length;
+        private int chunkSize = -1;
 
-        private class SeekableMemoryStream : MemoryStream {
+        private sealed class SeekableMemoryStream : MemoryStream {
             Cipher cipher;
             byte[] oneByte = { 0 };
 
@@ -78,7 +79,7 @@ namespace NPOI.POIFS.Crypt.CryptoAPI
             }
         }
 
-        internal class StreamDescriptorEntry {
+        internal sealed class StreamDescriptorEntry {
             internal static BitField flagStream = BitFieldFactory.GetInstance(1);
 
             internal int streamOffset;
@@ -224,7 +225,12 @@ namespace NPOI.POIFS.Crypt.CryptoAPI
             fsOut.Close();
             _length = bos.Length;
             ByteArrayInputStream bis = new ByteArrayInputStream(bos.ToArray());
-            throw new NotImplementedException("ByteArrayInputStream should be derived from InputStream");
+            return bis;
+        }
+
+        public override InputStream GetDataStream(InputStream stream, int size, int initialPos)
+        {
+            return new CryptoAPICipherInputStream(stream, size, initialPos, chunkSize, this);
         }
 
         /**
@@ -236,7 +242,24 @@ namespace NPOI.POIFS.Crypt.CryptoAPI
             }
             return _length;
         }
+
+        public override void SetChunkSize(int chunkSize)
+        {
+            this.chunkSize = chunkSize;
+        }
+
+        private class CryptoAPICipherInputStream : ChunkedCipherInputStream
+        {
+            protected override Cipher InitCipherForBlock(Cipher existing, int block)
+            {
+                ISecretKey secretKey = decryptor.GetSecretKey();
+                return CryptoAPIDecryptor.InitCipherForBlock(existing, block, decryptor.builder, secretKey, Cipher.DECRYPT_MODE);
+            }
+
+            public CryptoAPICipherInputStream(InputStream stream, long size, int initialPos, int chunkSize, CryptoAPIDecryptor decryptor) :
+                base(stream, size, chunkSize, initialPos, decryptor)
+            {
+            }
+        }
     }
-
-
 }

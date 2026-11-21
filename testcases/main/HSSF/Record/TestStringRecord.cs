@@ -19,7 +19,7 @@ namespace TestCases.HSSF.Record
 {
     using System;
     using System.Text;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.HSSF.Record;
     using NPOI.Util;
 
@@ -42,9 +42,9 @@ namespace TestCases.HSSF.Record
         public void TestLoad()
         {
             StringRecord record = new StringRecord(TestcaseRecordInputStream.Create(0x207, data));
-            Assert.AreEqual("Fahrzeugtyp", record.String);
+            ClassicAssert.AreEqual("Fahrzeugtyp", record.String);
 
-            Assert.AreEqual(18, record.RecordSize);
+            ClassicAssert.AreEqual(18, record.RecordSize);
         }
 
         [Test]
@@ -54,10 +54,10 @@ namespace TestCases.HSSF.Record
             record.String = (/*setter*/"Fahrzeugtyp");
 
             byte[] recordBytes = record.Serialize();
-            Assert.AreEqual(recordBytes.Length - 4, data.Length);
+            ClassicAssert.AreEqual(recordBytes.Length - 4, data.Length);
             for (int i = 0; i < data.Length; i++)
             {
-                Assert.AreEqual(data[i], recordBytes[i + 4], "At offset " + i);
+                ClassicAssert.AreEqual(data[i], recordBytes[i + 4], "At offset " + i);
             }
         }
 
@@ -77,30 +77,30 @@ namespace TestCases.HSSF.Record
             StringRecord sr = new StringRecord();
             sr.String = (/*setter*/sb.ToString());
             byte[] ser = sr.Serialize();
-            Assert.AreEqual(StringRecord.sid, LittleEndian.GetUShort(ser, 0));
+            ClassicAssert.AreEqual(StringRecord.sid, LittleEndian.GetUShort(ser, 0));
             if (LittleEndian.GetUShort(ser, 2) > MAX_BIFF_DATA)
             {
                 Assert.Fail("StringRecord should have been split with a continue record");
             }
 
             // Confirm expected size of first record, and ushort strLen.
-            Assert.AreEqual(MAX_BIFF_DATA, LittleEndian.GetUShort(ser, 2));
-            Assert.AreEqual(TEXT_LEN, LittleEndian.GetUShort(ser, 4));
+            ClassicAssert.AreEqual(MAX_BIFF_DATA, LittleEndian.GetUShort(ser, 2));
+            ClassicAssert.AreEqual(TEXT_LEN, LittleEndian.GetUShort(ser, 4));
 
             // Confirm first few bytes of ContinueRecord
             LittleEndianByteArrayInputStream crIn = new LittleEndianByteArrayInputStream(ser, (MAX_BIFF_DATA + 4));
             int nCharsInFirstRec = MAX_BIFF_DATA - (2 + 1); // strLen, optionFlags
             int nCharsInSecondRec = TEXT_LEN - nCharsInFirstRec;
-            Assert.AreEqual(ContinueRecord.sid, crIn.ReadUShort());
-            Assert.AreEqual(1 + nCharsInSecondRec, crIn.ReadUShort());
-            Assert.AreEqual(0, crIn.ReadUByte());
-            Assert.AreEqual('N', crIn.ReadUByte());
-            Assert.AreEqual('O', crIn.ReadUByte());
+            ClassicAssert.AreEqual(ContinueRecord.sid, crIn.ReadUShort());
+            ClassicAssert.AreEqual(1 + nCharsInSecondRec, crIn.ReadUShort());
+            ClassicAssert.AreEqual(0, crIn.ReadUByte());
+            ClassicAssert.AreEqual('N', crIn.ReadUByte());
+            ClassicAssert.AreEqual('O', crIn.ReadUByte());
 
             // re-read and make sure string value is the same
             RecordInputStream in1 = TestcaseRecordInputStream.Create(ser);
             StringRecord sr2 = new StringRecord(in1);
-            Assert.AreEqual(sb.ToString(), sr2.String);
+            ClassicAssert.AreEqual(sb.ToString(), sr2.String);
         }
     }
 

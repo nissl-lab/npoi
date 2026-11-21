@@ -16,23 +16,20 @@
    limitations Under the License.
 ==================================================================== */
 
+using System;
+using System.Text;
+using System.Collections.Generic;
+
+using NPOI.Util;
 
 namespace NPOI.HSSF.Record
 {
-
-    using System;
-    using System.Text;
-    using System.Collections;
-    using NPOI.Util;
-    using System.Collections.Generic;
-
-
     public class RefSubRecord
     {
         public const int ENCODED_SIZE = 6;
 
         /** index to External Book Block (which starts with a EXTERNALBOOK record) */
-        private int _extBookIndex;
+        private readonly int _extBookIndex;
         private int _firstSheetIndex; // may be -1 (0xFFFF)
         private int _lastSheetIndex;  // may be -1 (0xFFFF)
 
@@ -114,14 +111,11 @@ namespace NPOI.HSSF.Record
     public class ExternSheetRecord : StandardRecord
     {
         public const short sid = 0x17;
-        private IList<RefSubRecord> _list;
-
-
-
+        private readonly List<RefSubRecord> _list;
 
         public ExternSheetRecord()
         {
-            _list = new List<RefSubRecord>();
+            _list = [];
         }
 
         /**

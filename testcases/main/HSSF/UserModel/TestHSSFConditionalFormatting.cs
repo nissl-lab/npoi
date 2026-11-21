@@ -22,7 +22,7 @@ namespace TestCases.HSSF.UserModel
     using NPOI.HSSF.UserModel;
     using NPOI.HSSF.Util;
     using NPOI.HSSF.Record;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.SS.Util;
     using NPOI.SS.UserModel;
     using NPOI.HSSF.Record.CF;
@@ -37,20 +37,20 @@ namespace TestCases.HSSF.UserModel
     {
         protected override void AssertColour(String hexExpected, IColor actual)
         {
-            Assert.IsNotNull(actual, "Colour must be given");
+            ClassicAssert.IsNotNull(actual, "Colour must be given");
 
             if (actual is HSSFColor) {
                 HSSFColor colour = (HSSFColor)actual;
-                Assert.AreEqual(hexExpected, colour.GetHexString());
+                ClassicAssert.AreEqual(hexExpected, colour.GetHexString());
             } else {
                 HSSFExtendedColor colour = (HSSFExtendedColor)actual;
                 if (hexExpected.Length == 8)
                 {
-                    Assert.AreEqual(hexExpected, colour.ARGBHex);
+                    ClassicAssert.AreEqual(hexExpected, colour.ARGBHex);
                 }
                 else
                 {
-                    Assert.AreEqual(hexExpected, colour.ARGBHex.Substring(2));
+                    ClassicAssert.AreEqual(hexExpected, colour.ARGBHex.Substring(2));
                 }
             }
         }
@@ -121,7 +121,7 @@ namespace TestCases.HSSF.UserModel
         {
             // assert that we can Write/read it in memory
             IWorkbook wbBack = HSSFITestDataProvider.Instance.WriteOutAndReadBack(wb);
-            Assert.IsNotNull(wbBack);
+            ClassicAssert.IsNotNull(wbBack);
             wbBack.Close();
         }
     }

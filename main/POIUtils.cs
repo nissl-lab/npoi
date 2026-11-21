@@ -18,8 +18,7 @@ using NPOI.POIFS.FileSystem;
 using System.Collections;
 using System.Collections.Generic;
 using System;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.PixelFormats;
+using SkiaSharp;
 
 namespace NPOI.Util
 {
@@ -97,9 +96,9 @@ namespace NPOI.Util
             CopyNodes(source.Root, target.Root, excepts);
         }
 
-        // TODO-ImageSharp: Not sure how to translate System.Drawing.Color.Empty - should
-        // we use null instead, or is System.Drawing.Color.Empty used in NPOI like RGB=0?
-        public static readonly Rgb24 Color_Empty = new Rgb24(0, 0, 0);  
+        // SKColor.Empty represents "no color" (RGBA = 0,0,0,0), used as a sentinel value
+        // analogous to System.Drawing.Color.Empty
+        public static readonly SKColor Color_Empty = SKColor.Empty;
     }
 
 }

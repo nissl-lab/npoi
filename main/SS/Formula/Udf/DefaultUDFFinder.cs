@@ -29,7 +29,7 @@ namespace NPOI.SS.Formula.UDF
      */
     public class DefaultUDFFinder : UDFFinder
     {
-        private Dictionary<String, FreeRefFunction> _functionsByName;
+        private readonly Dictionary<String, FreeRefFunction> _functionsByName;
 
         public DefaultUDFFinder(String[] functionNames, FreeRefFunction[] functionImpls)
         {

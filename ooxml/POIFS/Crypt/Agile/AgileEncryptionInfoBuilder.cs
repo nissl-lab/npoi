@@ -116,7 +116,7 @@ namespace NPOI.POIFS.Crypt.Agile
             return encryptor;
         }
 
-        public EncryptionInfo GetInfo()
+        public EncryptionInfo GetEncryptionInfo()
         {
             return info;
         }

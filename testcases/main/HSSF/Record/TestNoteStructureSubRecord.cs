@@ -19,7 +19,7 @@ namespace TestCases.HSSF.Record
     using System;
     using NPOI.HSSF.Record;
 
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
 
     /**
      * Tests the serialization and deserialization of the NoteRecord
@@ -47,19 +47,19 @@ namespace TestCases.HSSF.Record
 
             NoteStructureSubRecord record = new NoteStructureSubRecord(TestcaseRecordInputStream.Create(NoteStructureSubRecord.sid, data),data.Length);
 
-            Assert.AreEqual(NoteStructureSubRecord.sid, record.Sid);
-            Assert.AreEqual(data.Length , record.DataSize);
+            ClassicAssert.AreEqual(NoteStructureSubRecord.sid, record.Sid);
+            ClassicAssert.AreEqual(data.Length , record.DataSize);
 
         }
         [Test]
         public void TestWrite()
         {
             NoteStructureSubRecord record = new NoteStructureSubRecord();
-            Assert.AreEqual(NoteStructureSubRecord.sid, record.Sid);
-            Assert.AreEqual(data.Length , record.DataSize);
+            ClassicAssert.AreEqual(NoteStructureSubRecord.sid, record.Sid);
+            ClassicAssert.AreEqual(data.Length , record.DataSize);
 
             byte[] ser = record.Serialize();
-            Assert.AreEqual(ser.Length - 4, data.Length);
+            ClassicAssert.AreEqual(ser.Length - 4, data.Length);
 
         }
         [Test]
@@ -71,8 +71,8 @@ namespace TestCases.HSSF.Record
             NoteStructureSubRecord cloned = (NoteStructureSubRecord)record.Clone();
             byte[] cln = cloned.Serialize();
 
-            Assert.AreEqual(record.DataSize, cloned.DataSize);
-            Assert.IsTrue(NPOI.Util.Arrays.Equals(src, cln));
+            ClassicAssert.AreEqual(record.DataSize, cloned.DataSize);
+            ClassicAssert.IsTrue(NPOI.Util.Arrays.Equals(src, cln));
         }
     }
 }

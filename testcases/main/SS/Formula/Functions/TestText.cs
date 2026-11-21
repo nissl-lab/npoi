@@ -19,7 +19,7 @@ namespace TestCases.SS.Formula.Functions
 {
 
     using NPOI.SS.Formula.Eval;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using System;
     using NPOI.SS.Util;
     using NPOI.SS.Formula.Functions;
@@ -42,7 +42,23 @@ namespace TestCases.SS.Formula.Functions
             ValueEval formatArg = new StringEval("abc");
             ValueEval[] args = { strArg, formatArg };
             ValueEval result = TextFunction.TEXT.Evaluate(args, -1, (short)-1);
-            Assert.AreEqual(strArg, result);
+            ClassicAssert.AreEqual(strArg, result);
+        }
+
+        [Test]
+        public void TestTextWithRefEvalStringFirstArg()
+        {
+            // Simulate a cell reference (RefEval) that resolves to a string cell value,
+            // e.g. TEXT(L2, "dd/mm/yyyy") where L2 is a text cell.
+            // Previously this incorrectly returned ErrorCode 15 (#VALUE!) because the
+            // StringEval check was done before resolving the RefEval.
+            ValueEval strArg = new StringEval("07/04/2026");
+            ValueEval refArg = new RefEvalImplementation(strArg);
+            ValueEval formatArg = new StringEval("dd/mm/yyyy");
+            ValueEval[] args = { refArg, formatArg };
+            ValueEval result = TextFunction.TEXT.Evaluate(args, -1, (short)-1);
+            ClassicAssert.AreEqual(typeof(StringEval), result.GetType());
+            ClassicAssert.AreEqual("07/04/2026", ((StringEval)result).StringValue);
         }
         [Test]
         public void TestTextWithDeciamlFormatSecondArg()
@@ -60,20 +76,20 @@ namespace TestCases.SS.Formula.Functions
             string decimalSeparator = fs.NumberDecimalSeparator; ;
 
             ValueEval testResult = new StringEval("321" + groupSeparator + "321" + decimalSeparator + "32100");
-            Assert.AreEqual(testResult.ToString(), result.ToString());
+            ClassicAssert.AreEqual(testResult.ToString(), result.ToString());
             numArg = new NumberEval(321.321);
             formatArg = new StringEval("00000.00000");
             args[0] = numArg;
             args[1] = formatArg;
             result = TextFunction.TEXT.Evaluate(args, -1, (short)-1);
             testResult = new StringEval("00321" + decimalSeparator + "32100");
-            Assert.AreEqual(testResult.ToString(), result.ToString());
+            ClassicAssert.AreEqual(testResult.ToString(), result.ToString());
 
             formatArg = new StringEval("$#.#");
             args[1] = formatArg;
             result = TextFunction.TEXT.Evaluate(args, -1, (short)-1);
             testResult = new StringEval("$321" + decimalSeparator + "3");
-            Assert.AreEqual(testResult.ToString(), result.ToString());
+            ClassicAssert.AreEqual(testResult.ToString(), result.ToString());
         }
         [Test]
         public void TestTextWithFractionFormatSecondArg()
@@ -85,19 +101,19 @@ namespace TestCases.SS.Formula.Functions
             ValueEval[] args = { numArg, formatArg };
             ValueEval result = TextFunction.TEXT.Evaluate(args, -1, (short)-1);
             ValueEval testResult = new StringEval("321 1/3");
-            Assert.AreEqual(testResult.ToString(), result.ToString());  //this bug is caused by DecimalFormat
+            ClassicAssert.AreEqual(testResult.ToString(), result.ToString());  //this bug is caused by DecimalFormat
 
             formatArg = new StringEval("# #/##");
             args[1] = formatArg;
             result = TextFunction.TEXT.Evaluate(args, -1, (short)-1);
             testResult = new StringEval("321 26/81");
-            Assert.AreEqual(testResult.ToString(), result.ToString());
+            ClassicAssert.AreEqual(testResult.ToString(), result.ToString());
 
             formatArg = new StringEval("#/##");
             args[1] = formatArg;
             result = TextFunction.TEXT.Evaluate(args, -1, (short)-1);
             testResult = new StringEval("26027/81");
-            Assert.AreEqual(testResult.ToString(), result.ToString());
+            ClassicAssert.AreEqual(testResult.ToString(), result.ToString());
         }
         [Test]
         public void TestTextWithDateFormatSecondArg()
@@ -109,14 +125,14 @@ namespace TestCases.SS.Formula.Functions
             ValueEval[] args = { numArg, formatArg };
             ValueEval result = TextFunction.TEXT.Evaluate(args, -1, (short)-1);
             ValueEval testResult = new StringEval("16:11:1900 07:42:14");
-            Assert.AreEqual(testResult.ToString(), result.ToString());
+            ClassicAssert.AreEqual(testResult.ToString(), result.ToString());
 
             // Excel also supports "m before h is month"
             formatArg = new StringEval("dd:mm:yyyy hh:mm:ss");
             args[1] = formatArg;
             result = TextFunction.TEXT.Evaluate(args, -1, (short)-1);
             testResult = new StringEval("16:11:1900 07:42:14");
-            //Assert.AreEqual(testResult.ToString(), result.ToString());
+            //ClassicAssert.AreEqual(testResult.ToString(), result.ToString());
 
             // this line is intended to compute how "November" would look like in the current locale
             String november = new SimpleDateFormat("MMMM").Format(new DateTime(2010, 11, 15), CultureInfo.CurrentCulture);
@@ -128,14 +144,14 @@ namespace TestCases.SS.Formula.Functions
             NPOI.SS.Formula.Functions.Text.Formatter = new NPOI.SS.UserModel.DataFormatter(CultureInfo.CurrentCulture);
             result = TextFunction.TEXT.Evaluate(args, -1, (short)-1);
             testResult = new StringEval(november + " 16, 1900");
-            Assert.AreEqual(testResult.ToString(), result.ToString());
+            ClassicAssert.AreEqual(testResult.ToString(), result.ToString());
 
             // And Excel style
             formatArg = new StringEval("mmmm dd, yyyy");
             args[1] = formatArg;
             result = TextFunction.TEXT.Evaluate(args, -1, (short)-1);
             testResult = new StringEval(november + " 16, 1900");
-            Assert.AreEqual(testResult.ToString(), result.ToString());
+            ClassicAssert.AreEqual(testResult.ToString(), result.ToString());
         }
     }
 

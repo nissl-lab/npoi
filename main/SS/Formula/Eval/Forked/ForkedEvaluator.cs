@@ -39,8 +39,8 @@ namespace NPOI.SS.Formula.Eval.Forked
     public class ForkedEvaluator
     {
 
-        private WorkbookEvaluator _evaluator;
-        private ForkedEvaluationWorkbook _sewb;
+        private readonly WorkbookEvaluator _evaluator;
+        private readonly ForkedEvaluationWorkbook _sewb;
 
         private ForkedEvaluator(IEvaluationWorkbook masterWorkbook, IStabilityClassifier stabilityClassifier, UDFFinder udfFinder)
         {
@@ -49,9 +49,9 @@ namespace NPOI.SS.Formula.Eval.Forked
         }
         private static IEvaluationWorkbook CreateEvaluationWorkbook(IWorkbook wb)
         {
-            if (wb is HSSFWorkbook)
+            if (wb is HSSFWorkbook workbook)
             {
-                return HSSFEvaluationWorkbook.Create((HSSFWorkbook)wb);
+                return HSSFEvaluationWorkbook.Create(workbook);
             }
             else
             {

@@ -111,7 +111,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
 
         internal void Write(StreamWriter sw, string nodeName, bool writingCellStyle=false)
         {
-            sw.Write(string.Format("<{0}", nodeName));
+            sw.WriteStart(nodeName);
             XmlHelper.WriteAttribute(sw, "numFmtId", this.numFmtId, true);
             XmlHelper.WriteAttribute(sw, "fontId", this.fontId, true);
             XmlHelper.WriteAttribute(sw, "fillId", this.fillId, true);
@@ -137,25 +137,26 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             }
             else
             {
-                sw.Write(">");
+                sw.Write('>');
                 if (this.alignment != null)
                     this.alignment.Write(sw, "alignment");
                 if (this.protection != null)
                     this.protection.Write(sw, "protection");
                 if (this.extLst != null)
                     this.extLst.Write(sw, "extLst");
-                sw.Write(string.Format("</{0}>", nodeName));
+                sw.WriteEndElement(nodeName);
             }
         }
 
         public override string ToString()
         {
-            XmlSerializer serializer = new XmlSerializer(typeof(CT_Xf));
-            using (StringWriter stream = new StringWriter())
-            {
-                serializer.Serialize(stream, this);
-                return stream.ToString();
-            }
+            using MemoryStream ms = new MemoryStream();
+            using StreamWriter sw = new StreamWriter(ms);
+            Write(sw, "xf", true);
+            sw.Flush();
+            ms.Position = 0;
+            using StreamReader sr = new StreamReader(ms);
+            return sr.ReadToEnd();
         }
 
         public bool IsSetFontId()

@@ -116,6 +116,16 @@ namespace NPOI.XWPF.UserModel
         }
 
         /**
+         * Clones a table row and inserts it at the specified position in the table
+         */
+        public XWPFTableRow CloneRow(int pos)
+        {
+            XWPFTableRow clonedRow= new XWPFTableRow(ctRow.Copy(), this.table);
+            table.AddRow(clonedRow, pos);
+            return clonedRow;
+        }
+
+        /**
          * This element specifies the height of the current table row within the
          * current table. This height shall be used to determine the resulting
          * height of the table row, which may be absolute or relative (depending on
@@ -165,13 +175,13 @@ namespace NPOI.XWPF.UserModel
 
             foreach(object o in ctRow.Items)
             {
-                if (o is CT_Tc)
+                if (o is CT_Tc tc)
                 {
-                    cells.Add(new XWPFTableCell((CT_Tc)o, this, table.Body));
+                    cells.Add(new XWPFTableCell(tc, this, table.Body));
                 }
-                else if (o is CT_SdtCell)
+                else if (o is CT_SdtCell cell)
                 {
-                    cells.Add(new XWPFSDTCell((CT_SdtCell)o, this, table.Body));
+                    cells.Add(new XWPFSDTCell(cell, this, table.Body));
                 }
             }
             return cells;

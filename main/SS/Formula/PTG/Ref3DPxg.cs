@@ -47,9 +47,9 @@ namespace NPOI.SS.Formula.PTG
         {
             this.externalWorkbookNumber = externalWorkbookNumber;
             this.firstSheetName = sheetName.SheetId.Name;
-            if (sheetName is SheetRangeIdentifier)
+            if (sheetName is SheetRangeIdentifier identifier)
             {
-                this.lastSheetName = ((SheetRangeIdentifier)sheetName).LastSheetIdentifier.Name;
+                this.lastSheetName = identifier.LastSheetIdentifier.Name;
             }
             else
             {

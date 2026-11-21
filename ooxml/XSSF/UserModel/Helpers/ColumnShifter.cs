@@ -15,12 +15,12 @@
    limitations under the License.
 ==================================================================== */
 
+using System.Collections.Generic;
+using System.Linq;
+
 using NPOI.SS.Formula;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace NPOI.XSSF.UserModel.Helpers
 {
@@ -53,8 +53,8 @@ namespace NPOI.XSSF.UserModel.Helpers
             int endColumn,
             int n)
         {
-            List<CellRangeAddress> shiftedRegions = new List<CellRangeAddress>();
-            ISet<int> removedIndices = new HashSet<int>();
+            List<CellRangeAddress> shiftedRegions = [];
+            HashSet<int> removedIndices = [];
             //move merged regions completely if they fall within the new region
             //boundaries when they are Shifted
             int size = sheet.NumMergedRegions;

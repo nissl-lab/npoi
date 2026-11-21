@@ -21,6 +21,9 @@ namespace NPOI.Util
                 case ParagraphAlignment.MEDIUM_KASHIDA: return ST_Jc.mediumKashida;
                 case ParagraphAlignment.NUM_TAB: return ST_Jc.numTab;
                 case ParagraphAlignment.RIGHT: return ST_Jc.right;
+                case ParagraphAlignment.LEFT: return ST_Jc.left;
+                case ParagraphAlignment.START: return ST_Jc.start;
+                case ParagraphAlignment.END: return ST_Jc.end;
                 case ParagraphAlignment.THAI_DISTRIBUTE: return ST_Jc.thaiDistribute;
                 default: return ST_Jc.left;
             }

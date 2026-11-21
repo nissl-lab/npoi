@@ -15,15 +15,15 @@ namespace NPOI.HSSF.Util
         public const int ENCODED_SIZE = 16;
 
         /** 4 bytes - little endian */
-        private int _d1;
+        private readonly int _d1;
         /** 2 bytes - little endian */
-        private int _d2;
+        private readonly int _d2;
         /** 2 bytes - little endian */
-        private int _d3;
+        private readonly int _d3;
         /**
          * 8 bytes - serialized as big endian,  stored with inverted endianness here
          */
-        private long _d4;
+        private readonly long _d4;
 
         public GUID(ILittleEndianInput in1) 
             :this(in1.ReadInt(), in1.ReadUShort(), in1.ReadUShort(), in1.ReadLong())
@@ -47,10 +47,9 @@ namespace NPOI.HSSF.Util
 
         
         public override bool Equals(Object obj) {
-            if (!(obj is GUID)) return false;
-            GUID other = (GUID) obj;
+            if (obj is not GUID other) return false;
             return _d1 == other._d1 && _d2 == other._d2 
-                && _d3 == other._d3 && _d4 == other._d4;
+                                    && _d3 == other._d3 && _d4 == other._d4;
         }
 
         public override int GetHashCode ()

@@ -20,7 +20,7 @@
 namespace TestCases.HSSF.Record
 {
     using System;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using NPOI.Util.Collections;
     using NPOI.HSSF.Record;
     using NPOI.HSSF.Record.Cont;
@@ -134,7 +134,7 @@ namespace TestCases.HSSF.Record
             ContinuableRecordOutput cro = ContinuableRecordOutput.CreateForCountingOnly();
             SSTSerializer ss = new SSTSerializer(strings, 0, 0);
             ss.Serialize(cro);
-            Assert.AreEqual(expectedSize, cro.TotalSize);
+            ClassicAssert.AreEqual(expectedSize, cro.TotalSize);
         }
 
     }

@@ -23,7 +23,7 @@ namespace TestCases.XSSF
     using NPOI.Util;
     using NPOI.XSSF;
     using NPOI.XSSF.UserModel;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using TestCases.HSSF;
     using TestCases.SS.UserModel;
 
@@ -48,8 +48,8 @@ namespace TestCases.XSSF
         [Test]
         public void TestCloneSheetIntStringValidName() {
             ISheet cloned = wb.CloneSheet(0, OTHER_SHEET_NAME);
-            Assert.AreEqual(OTHER_SHEET_NAME, cloned.SheetName);
-            Assert.AreEqual(2, wb.NumberOfSheets);
+            ClassicAssert.AreEqual(OTHER_SHEET_NAME, cloned.SheetName);
+            ClassicAssert.AreEqual(2, wb.NumberOfSheets);
         }
 
         [Test]
@@ -60,7 +60,7 @@ namespace TestCases.XSSF
             } catch (ArgumentException) {
                 // expected here
             }
-            Assert.AreEqual(1, wb.NumberOfSheets);
+            ClassicAssert.AreEqual(1, wb.NumberOfSheets);
         }
 
         [Test]
@@ -68,14 +68,14 @@ namespace TestCases.XSSF
         {
             XSSFWorkbook wb = XSSFTestDataSamples.OpenSampleWorkbook("60512.xlsm");
 
-            Assert.AreEqual(1, wb.NumberOfSheets);
+            ClassicAssert.AreEqual(1, wb.NumberOfSheets);
             ISheet sheet = wb.CloneSheet(0);
-            Assert.IsNotNull(sheet);
-            Assert.AreEqual(2, wb.NumberOfSheets);
+            ClassicAssert.IsNotNull(sheet);
+            ClassicAssert.AreEqual(2, wb.NumberOfSheets);
 
 
             IWorkbook wbBack = XSSFTestDataSamples.WriteOutAndReadBack(wb);
-            Assert.IsNotNull(wbBack);
+            ClassicAssert.IsNotNull(wbBack);
             wbBack.Close();
 
             wb.Close();

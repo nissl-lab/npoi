@@ -18,7 +18,7 @@
 namespace TestCases.Util
 {
     using NPOI.Util;
-    using NUnit.Framework;
+    using NUnit.Framework;using NUnit.Framework.Legacy;
     using System;
     using System.IO;
     using System.Text;
@@ -182,7 +182,7 @@ namespace TestCases.Util
                 //throw new Exception(e);
                 throw e;
             }
-            Assert.AreEqual(expected, expanded);
+            ClassicAssert.AreEqual(expected, expanded);
         }
     }
 

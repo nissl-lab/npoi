@@ -11,7 +11,7 @@ namespace NPOI.OOXML.XSSF.UserModel
     {
         private String name;
         private int index;
-        private Dictionary<TableStyleType, DifferentialStyleProvider> elementMap = new Dictionary<TableStyleType, DifferentialStyleProvider>();
+        private Dictionary<TableStyleType, IDifferentialStyleProvider> elementMap = new Dictionary<TableStyleType, IDifferentialStyleProvider>();
 
         public XSSFTableStyle(int index, CT_Dxfs dxfs, CT_TableStyle tableStyle, IIndexedColorMap colorMap)
         {
@@ -23,12 +23,11 @@ namespace NPOI.OOXML.XSSF.UserModel
             foreach (CT_TableStyleElement element in tableStyle.tableStyleElement)
             {
                 TableStyleType type = Enums.Parse<TableStyleType>(element.type.GetName());
-                DifferentialStyleProvider dstyle = null;
+                IDifferentialStyleProvider dstyle = null;
                 if (element.dxfIdSpecified)
                 {
                     int idx = (int)element.dxfId;
-                    CT_Dxf dxf;
-                    dxf = dxfList[idx];
+                    CT_Dxf dxf = dxfList[idx];
                     int stripeSize = 0;
                     if (element.size!=0) stripeSize = (int)element.size;
                     if (dxf != null) dstyle = new XSSFDxfStyleProvider(dxf, stripeSize, colorMap);
@@ -51,9 +50,9 @@ namespace NPOI.OOXML.XSSF.UserModel
             get { return false; }
         }
 
-        public DifferentialStyleProvider GetStyle(TableStyleType type)
+        public IDifferentialStyleProvider GetStyle(TableStyleType type)
         {
-            return elementMap[type];
+            return elementMap.TryGetValue(type, out IDifferentialStyleProvider value) ? value : null;
         }
     }
 }

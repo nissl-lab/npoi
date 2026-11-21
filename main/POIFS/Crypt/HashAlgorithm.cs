@@ -50,7 +50,10 @@ namespace NPOI.POIFS.Crypt
 
         // only for xml signing
         public static readonly HashAlgorithm sha224 = new HashAlgorithm("SHA-224", -1, "SHA224", 28, "HmacSHA224", true);
-        public static HashAlgorithm[] values = new HashAlgorithm[] {none,sha1,sha256,sha384,sha512,md5,md4,md2,ripemd128,ripemd160,whirlpool,sha224};
+
+        public static readonly HashAlgorithm rc4 = new HashAlgorithm("SHA-1", 32772, "SHA1", 128, "HmacSHA1", false);
+
+        public static HashAlgorithm[] values = new HashAlgorithm[] {none,sha1,sha256,sha384,sha512,md5,md4,md2,ripemd128,ripemd160,whirlpool,sha224,rc4};
 
         public String jceId;
         public int ecmaId;
