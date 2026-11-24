@@ -15,6 +15,7 @@
    limitations under the License.
 ==================================================================== */
 
+using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using NPOI.XSSF;
@@ -22,6 +23,7 @@ using NPOI.XSSF.UserModel;
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace TestCases.XSSF.UserModel
@@ -109,6 +111,122 @@ namespace TestCases.XSSF.UserModel
             ClassicAssert.AreEqual(2, (srcChartSheet.CreateDrawingPatriarch() as XSSFDrawing).GetCharts().Count);
             ClassicAssert.AreEqual(2, (destSheet.CreateDrawingPatriarch() as XSSFDrawing).GetCharts().Count);
             ClassicAssert.AreEqual(2, (destSheet.CreateDrawingPatriarch() as XSSFDrawing).GetCharts()[0].GetAxis().Count);
+        }
+
+        [Test]
+        public void CopySheetToSameWorkbookShouldNotDuplicateIndexedFonts()
+        {
+            using var workbook = new XSSFWorkbook();
+            var font = workbook.CreateFont();
+            font.Color = IndexedColors.White.Index;
+            var style = workbook.CreateCellStyle();
+            style.SetFont(font);
+            var sheet = workbook.CreateSheet("Source");
+            var cell = sheet.CreateRow(0).CreateCell(0);
+            cell.CellStyle = style;
+            cell.SetCellValue("source");
+            var fontCount = workbook.NumberOfFonts;
+
+            sheet.CopyTo(workbook, "Copied", true, true);
+
+            var copiedColor = ((XSSFFont)workbook.GetSheet("Copied").GetRow(0).GetCell(0).CellStyle.GetFont(workbook)).GetXSSFColor();
+            ClassicAssert.IsTrue(copiedColor.IsIndexed);
+            ClassicAssert.AreEqual(IndexedColors.White.Index, copiedColor.Indexed);
+            ClassicAssert.AreEqual(fontCount, workbook.NumberOfFonts);
+        }
+
+        [Test]
+        public void CopySheetToWorkbookShouldPreserveReportedWhiteFontColor()
+        {
+            using var srcWorkbook = XSSFTestDataSamples.OpenSampleWorkbook("1586-test2.xlsx");
+            using var destWorkbook = new XSSFWorkbook();
+            var srcSheet = (XSSFSheet)srcWorkbook.GetSheetAt(0);
+
+            srcSheet.CopyTo(destWorkbook, "Copied", true, true);
+
+            using var reloadedWorkbook = (XSSFWorkbook)XSSFTestDataSamples.WriteOutAndReadBack(destWorkbook);
+            var copiedSheet = reloadedWorkbook.GetSheet("Copied");
+            foreach (var address in new[] { "A3", "B3" })
+            {
+                var cell = copiedSheet.GetRow(2).GetCell(new CellReference(address).Col);
+                var font = (XSSFFont)cell.CellStyle.GetFont(reloadedWorkbook);
+                ClassicAssert.AreEqual("FFFFFFFF", font.GetXSSFColor().ARGBHex, address);
+            }
+        }
+
+        [Test]
+        public void CopySheetToWorkbookShouldResolveIndexedFontColorWithSourcePalette()
+        {
+            using var srcWorkbook = new XSSFWorkbook();
+            var srcFont = srcWorkbook.CreateFont();
+            srcFont.FontName = "SourceWhite";
+            srcFont.Color = IndexedColors.White.Index;
+            var srcStyle = srcWorkbook.CreateCellStyle();
+            srcStyle.SetFont(srcFont);
+            var srcCell = srcWorkbook.CreateSheet("Source").CreateRow(0).CreateCell(0);
+            srcCell.CellStyle = srcStyle;
+            srcCell.SetCellValue("source");
+            var automaticFont = srcWorkbook.CreateFont();
+            automaticFont.Color = IndexedColors.Automatic.Index;
+            var automaticStyle = srcWorkbook.CreateCellStyle();
+            automaticStyle.SetFont(automaticFont);
+            var automaticCell = srcWorkbook.GetSheet("Source").GetRow(0).CreateCell(1);
+            automaticCell.CellStyle = automaticStyle;
+            automaticCell.SetCellValue("automatic");
+            SetIndexedColor(srcWorkbook, IndexedColors.White.Index, new byte[] { 255, 255, 255 });
+
+            using var destWorkbook = new XSSFWorkbook();
+            var destFont = destWorkbook.CreateFont();
+            destFont.Color = IndexedColors.White.Index;
+            var destStyle = destWorkbook.CreateCellStyle();
+            destStyle.SetFont(destFont);
+            var destCell = destWorkbook.CreateSheet("Existing").CreateRow(0).CreateCell(0);
+            destCell.CellStyle = destStyle;
+            destCell.SetCellValue("existing");
+            SetIndexedColor(destWorkbook, IndexedColors.White.Index, new byte[] { 255, 0, 0 });
+
+            using var reloadedSource = (XSSFWorkbook)XSSFTestDataSamples.WriteOutAndReadBack(srcWorkbook);
+            using var reloadedDest = (XSSFWorkbook)XSSFTestDataSamples.WriteOutAndReadBack(destWorkbook);
+            var sourceSheet = (XSSFSheet)reloadedSource.GetSheet("Source");
+
+            sourceSheet.CopyTo(reloadedDest, "Copied", true, true);
+
+            using var result = (XSSFWorkbook)XSSFTestDataSamples.WriteOutAndReadBack(reloadedDest);
+            var copiedFont = (XSSFFont)result.GetSheet("Copied").GetRow(0).GetCell(0).CellStyle.GetFont(result);
+            var copiedColor = copiedFont.GetXSSFColor();
+            ClassicAssert.IsFalse(copiedColor.IsIndexed);
+            ClassicAssert.IsTrue(copiedColor.IsRGB);
+            ClassicAssert.AreEqual("FFFFFFFF", copiedColor.ARGBHex);
+            foreach (var font in result.GetStylesSource().Fonts.Where(f => f.FontName == "SourceWhite"))
+            {
+                var color = font.GetXSSFColor();
+                ClassicAssert.IsFalse(color.IsIndexed);
+                ClassicAssert.AreEqual("FFFFFFFF", color.ARGBHex);
+            }
+
+            var copiedAutomaticFont = (XSSFFont)result.GetSheet("Copied").GetRow(0).GetCell(1).CellStyle.GetFont(result);
+            var automaticColor = copiedAutomaticFont.GetXSSFColor();
+            ClassicAssert.IsTrue(automaticColor.IsIndexed);
+            ClassicAssert.AreEqual(IndexedColors.Automatic.Index, automaticColor.Indexed);
+
+            var existingColor = ((XSSFFont)result.GetSheet("Existing").GetRow(0).GetCell(0).CellStyle.GetFont(result)).GetXSSFColor();
+            ClassicAssert.IsTrue(existingColor.IsIndexed);
+            ClassicAssert.AreEqual("FFFF0000", existingColor.ARGBHex);
+            CollectionAssert.AreEqual(new byte[] { 255, 0, 0 }, result.GetStylesSource().IndexedColors.GetRGB(IndexedColors.White.Index));
+        }
+
+        private static void SetIndexedColor(XSSFWorkbook workbook, short index, byte[] rgb)
+        {
+            var colors = new CT_Colors();
+            colors.indexedColors = new List<CT_RgbColor>();
+            for (var i = 0; i < 64; i++)
+            {
+                colors.indexedColors.Add(new CT_RgbColor
+                {
+                    rgb = i == index ? rgb : NPOI.OOXML.XSSF.UserModel.DefaultIndexedColorMap.GetDefaultRGB(i)
+                });
+            }
+            workbook.GetStylesSource().GetCTStylesheet().colors = colors;
         }
     }
 }

@@ -181,9 +181,7 @@ namespace NPOI.XSSF.UserModel
                     // Copy the font
                     try
                     {
-                        CT_Font ctFont =
-                              src.GetFont().GetCTFont().Clone();
-                        XSSFFont font = new XSSFFont(ctFont);
+                        var font = src.GetFont().CopyWithColorMap(src._stylesSource, _stylesSource);
                         font.RegisterTo(_stylesSource);
                         SetFont(font);
                     }
