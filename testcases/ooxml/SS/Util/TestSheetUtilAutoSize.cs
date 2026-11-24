@@ -15,6 +15,7 @@
    limitations under the License.
 ==================================================================== */
 
+using System;
 using System.Diagnostics;
 
 using NUnit.Framework;
@@ -33,6 +34,44 @@ namespace TestCases.SS.Util
     [TestFixture]
     public class TestSheetUtilAutoSize
     {
+        [TestCase(11)]
+        [TestCase(1)]
+        public void TestDefaultCharWidthUsesIntegerPartOfMeasuredDigit(double fontHeightInPoints)
+        {
+            using var wb = new XSSFWorkbook();
+            IFont defaultFont = wb.GetFontAt((short)0);
+            defaultFont.FontHeightInPoints = fontHeightInPoints;
+            using var font = SheetUtil.IFont2Font(defaultFont);
+            float measuredWidth = font.MeasureText("0");
+            int expectedWidth = Math.Max(1, (int)measuredWidth);
+
+            int actualWidth = SheetUtil.GetDefaultCharWidth(wb);
+
+            TestContext.WriteLine($"Measured '0' width: {measuredWidth} px; expected maximum digit width: {expectedWidth} px; actual: {actualWidth} px");
+            ClassicAssert.AreEqual(expectedWidth, actualWidth);
+        }
+
+        [Test]
+        public void TestAutoSizeColumnFitsLongTextUsingMaximumDigitWidth()
+        {
+            const string text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit ut";
+            using var wb = new XSSFWorkbook();
+            ISheet sheet = wb.CreateSheet("test");
+            ICell cell = sheet.CreateRow(0).CreateCell(0);
+            cell.SetCellValue(text);
+            using var font = SheetUtil.IFont2Font(wb.GetFontAt((short)0));
+
+            int maximumDigitWidth = (int)font.MeasureText("0");
+            double expectedWidth = Math.Round(
+                SheetUtil.GetCellWidth(cell, maximumDigitWidth, new DataFormatter(), false) * 256, 2);
+
+            sheet.AutoSizeColumn(0);
+            double actualWidth = sheet.GetColumnWidth(0);
+
+            TestContext.WriteLine($"Maximum digit width: {maximumDigitWidth} px; expected column width: {expectedWidth}; actual: {actualWidth}");
+            ClassicAssert.AreEqual(expectedWidth, actualWidth);
+        }
+
         [Test]
         public void TestAutoSizeColumnProducesSameWidthAsGetCellWidth()
         {
