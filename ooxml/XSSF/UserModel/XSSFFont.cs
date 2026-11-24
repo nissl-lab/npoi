@@ -98,6 +98,33 @@ namespace NPOI.XSSF.UserModel
             return _ctFont;
         }
 
+        internal XSSFFont CopyWithColorMap(StylesTable sourceStyles, StylesTable destinationStyles)
+        {
+            var ctFont = _ctFont.Clone();
+            if (ctFont.sizeOfColorArray() > 0)
+            {
+                var sourceColor = _ctFont.GetColorArray(0);
+                if (sourceColor.IsSetIndexed())
+                {
+                    var rgb = sourceStyles.IndexedColors.GetRGB((int)sourceColor.indexed);
+                    var color = ctFont.GetColorArray(0);
+                    if (rgb != null)
+                    {
+                        color.UnsetIndexed();
+                        color.SetRgb(rgb);
+                    }
+                    else if (sourceColor.indexed == IndexedColors.Automatic.Index || sourceColor.indexed == 65)
+                    {
+                        // Automatic and system colors have no palette RGB and retain the same meaning in every workbook.
+                        color.indexed = sourceColor.indexed;
+                        color.indexedSpecified = true;
+                    }
+                }
+            }
+
+            return new XSSFFont(ctFont, 0, destinationStyles.IndexedColors);
+        }
+
         /**
          * get a bool value for the boldness to use.
          *

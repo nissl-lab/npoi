@@ -4436,9 +4436,13 @@ namespace NPOI.XSSF.UserModel
             StylesTable styles = ((XSSFWorkbook) dest).GetStylesSource();
             if(copyStyle && Workbook.NumberOfFonts > 0)
             {
-                foreach(XSSFFont font in ((XSSFWorkbook) Workbook).GetStylesSource().Fonts)
+                var sourceStyles = ((XSSFWorkbook)Workbook).GetStylesSource();
+                if (sourceStyles != styles)
                 {
-                    styles.PutFont(font);
+                    foreach(XSSFFont font in sourceStyles.Fonts)
+                    {
+                        styles.PutFont(font.CopyWithColorMap(sourceStyles, styles));
+                    }
                 }
             }
 
