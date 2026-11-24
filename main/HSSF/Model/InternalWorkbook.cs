@@ -349,7 +349,8 @@ namespace NPOI.HSSF.Model
             records.Add(new InterfaceHdrRecord(CODEPAGE));
             records.Add(CreateMMS());
             records.Add(InterfaceEndRecord.Instance);
-            records.Add(CreateWriteAccess());
+            retval.writeAccess = CreateWriteAccess();
+            records.Add(retval.writeAccess);
             records.Add(CreateCodepage());
             records.Add(CreateDSF());
             records.Add(CreateTabId());
