@@ -217,6 +217,23 @@ namespace TestCases.POIFS.FileSystem
 
         }
 
+        [Test]
+        public void TestNonClosingInputStreamSeeksWithoutClosingSource()
+        {
+            using (var source = new MemoryStream(new byte[] { 0, 1, 2, 3 }))
+            {
+                var stream = POIFSFileSystem.CreateNonClosingInputStream(source);
+                ClassicAssert.AreEqual(2L, stream.Seek(2, SeekOrigin.Begin));
+                ClassicAssert.AreEqual(2L, stream.Position);
+                ClassicAssert.AreEqual(2, stream.ReadByte());
+                ClassicAssert.AreEqual(1L, stream.Seek(-2, SeekOrigin.Current));
+                ClassicAssert.AreEqual(1, stream.ReadByte());
+                stream.Dispose();
+                ClassicAssert.IsTrue(source.CanRead);
+                ClassicAssert.AreEqual(2, source.ReadByte());
+            }
+        }
+
         /**
          * Test for bug # 48898 - problem opening an OLE2
          *  file where the last block is short (i.e. not a full

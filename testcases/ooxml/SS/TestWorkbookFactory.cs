@@ -196,6 +196,22 @@ namespace TestCases.SS
             CollectionAssert.AreEqual(before, after, "Invalid type file was modified after trying to open the file as a spreadsheet");
         }
 
+        [Test]
+        public void TestCreateFromNonClosingInputStream()
+        {
+            using (var fileStream = HSSFTestDataSamples.OpenSampleFileStream(xls))
+            using (var inputStream = POIFSFileSystem.CreateNonClosingInputStream(fileStream))
+            {
+                using (var wb = WorkbookFactory.Create(inputStream))
+                {
+                    ClassicAssert.IsInstanceOf<HSSFWorkbook>(wb);
+                    ClassicAssert.IsTrue(fileStream.CanRead);
+                }
+
+                ClassicAssert.IsTrue(fileStream.CanRead);
+            }
+        }
+
         /**
          * Check that the overloaded stream methods which take passwords work properly
          */

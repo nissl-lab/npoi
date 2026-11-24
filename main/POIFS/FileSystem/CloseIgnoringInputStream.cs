@@ -56,7 +56,7 @@ namespace NPOI.POIFS.FileSystem
         }
         public override long Seek(long offset, SeekOrigin origin)
         {
-            return 0L;
+            return _is.Seek(offset, origin);
         }
 
         public override void SetLength(long value)
