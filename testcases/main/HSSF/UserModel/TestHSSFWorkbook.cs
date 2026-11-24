@@ -973,11 +973,49 @@ namespace TestCases.HSSF.UserModel
         public void WriteProtection()
         {
             HSSFWorkbook wb = new HSSFWorkbook();
+            IList records = wb.Workbook.Records;
+            WriteAccessRecord initialWriteAccess = null;
+            int interfaceEndIndex = -1;
+            int writeAccessIndex = -1;
 
+            for (int i = 0; i < records.Count; i++)
+            {
+                if (records[i] is InterfaceEndRecord)
+                {
+                    interfaceEndIndex = i;
+                }
+                else if (records[i] is WriteAccessRecord)
+                {
+                    initialWriteAccess = (WriteAccessRecord)records[i];
+                    writeAccessIndex = i;
+                }
+            }
+
+            ClassicAssert.IsNotNull(initialWriteAccess);
+            ClassicAssert.AreEqual(interfaceEndIndex + 1, writeAccessIndex);
             ClassicAssert.IsFalse(wb.IsWriteProtected);
 
             wb.WriteProtectWorkbook("mypassword", "myuser");
             ClassicAssert.IsTrue(wb.IsWriteProtected);
+
+            int writeAccessCount = 0;
+            int fileSharingIndex = -1;
+            for (int i = 0; i < records.Count; i++)
+            {
+                if (records[i] is WriteAccessRecord)
+                {
+                    writeAccessCount++;
+                }
+                else if (records[i] is FileSharingRecord)
+                {
+                    fileSharingIndex = i;
+                }
+            }
+
+            ClassicAssert.AreEqual(1, writeAccessCount);
+            ClassicAssert.AreSame(initialWriteAccess, wb.Workbook.WriteAccess);
+            ClassicAssert.AreSame(records[writeAccessIndex], wb.Workbook.WriteAccess);
+            ClassicAssert.AreEqual(writeAccessIndex + 1, fileSharingIndex);
 
             wb.UnwriteProtectWorkbook();
             ClassicAssert.IsFalse(wb.IsWriteProtected);
