@@ -738,7 +738,9 @@ namespace NPOI.SS.Util
 
             try
             {
-                return (int)Math.Ceiling(font.MeasureText(new string(defaultChar, 1)));
+                // Excel uses the measured maximum digit width rounded down to a whole pixel.
+                // Keep the divisor positive for fonts whose digit width is less than one pixel.
+                return Math.Max(1, (int)font.MeasureText(new string(defaultChar, 1)));
             }
             catch (Exception)
             {
