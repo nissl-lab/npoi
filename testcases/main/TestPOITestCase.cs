@@ -28,6 +28,13 @@ namespace TestCases
     [TestFixture]
     public class TestPOITestCase
     {
+        [TestCase(null)]
+        [TestCase("Prefix mismatch")]
+        public void AssertStartsWithAcceptsOptionalMessage(string message)
+        {
+            POITestCase.AssertStartsWith(message, "Apache POI", "Apache");
+        }
+
         [Test]
         public void AssertStartsWith()
         {

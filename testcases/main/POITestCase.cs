@@ -41,8 +41,8 @@ namespace TestCases
 
         public static void AssertStartsWith(String message, String actual, String prefix)
         {
-            ClassicAssert.IsNotNull(message, actual);
-            ClassicAssert.IsNotNull(message, prefix);
+            ClassicAssert.IsNotNull(actual, message);
+            ClassicAssert.IsNotNull(prefix, message);
             StringAssert.StartsWith(prefix, actual, message);
         }
 
