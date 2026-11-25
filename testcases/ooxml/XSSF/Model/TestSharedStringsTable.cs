@@ -26,6 +26,9 @@ using System.IO;
 using NPOI.XSSF.Model;
 using NPOI.XSSF;
 using NPOI;
+using NPOI.XSSF.Streaming;
+using ICSharpCode.SharpZipLib.Zip;
+using System.Xml;
 
 namespace TestCases.XSSF.Model
 {
@@ -382,6 +385,71 @@ namespace TestCases.XSSF.Model
             ClassicAssert.AreEqual("A", A1);
             ClassicAssert.AreEqual(null, A2);
             ClassicAssert.AreEqual("B", A3);
+        }
+
+        /// <summary>
+        /// #1894: a new workbook without shared strings still writes the
+        /// sharedStrings.xml part that its relationship and content type point to.
+        /// </summary>
+        [Test]
+        public void TestNewWorkbookWithoutStringsWritesSst()
+        {
+            byte[] bytes;
+            using (XSSFWorkbook wb = new XSSFWorkbook())
+            {
+                ISheet sheet = wb.CreateSheet("Export");
+                for (int r = 0; r < 3; r++)
+                    sheet.CreateRow(r).CreateCell(0).SetCellValue(r);
+                using MemoryStream ms = new MemoryStream();
+                wb.Write(ms, false);
+                bytes = ms.ToArray();
+            }
+
+            AssertEmptySstWritten(bytes);
+        }
+
+        /// <summary>
+        /// #1894: SXSSF writes strings inline, so its shared strings table stays empty.
+        /// </summary>
+        [Test]
+        public void TestNewStreamingWorkbookWithInlineStringsWritesSst()
+        {
+            byte[] bytes;
+            SXSSFWorkbook wb = new SXSSFWorkbook();
+            try
+            {
+                ISheet sheet = wb.CreateSheet("Export");
+                for (int r = 0; r < 3; r++)
+                    sheet.CreateRow(r).CreateCell(0).SetCellValue("text " + r);
+                using MemoryStream ms = new MemoryStream();
+                wb.Write(ms);
+                bytes = ms.ToArray();
+            }
+            finally
+            {
+                wb.Dispose();
+            }
+
+            AssertEmptySstWritten(bytes);
+        }
+
+        private static void AssertEmptySstWritten(byte[] bytes)
+        {
+            ZipFile zf = new ZipFile(new MemoryStream(bytes));
+            try
+            {
+                ZipEntry entry = zf.GetEntry("xl/sharedStrings.xml");
+                ClassicAssert.IsNotNull(entry, "xl/sharedStrings.xml should be written");
+                XmlDocument xml = POIXMLDocumentPart.ConvertStreamToXml(zf.GetInputStream(entry));
+                XmlElement sst = xml.DocumentElement;
+                ClassicAssert.AreEqual("sst", sst.LocalName);
+                ClassicAssert.AreEqual("0", sst.GetAttribute("count"));
+                ClassicAssert.AreEqual("0", sst.GetAttribute("uniqueCount"));
+            }
+            finally
+            {
+                zf.Close();
+            }
         }
     }
 }
