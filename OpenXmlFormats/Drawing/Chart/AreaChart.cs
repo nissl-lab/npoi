@@ -300,7 +300,7 @@ namespace NPOI.OpenXmlFormats.Dml.Chart
             if (this.tx != null)
                 this.tx.Write(sw, "tx");
             if (this.spPr != null)
-                this.spPr.Write(sw, "spPr");
+                this.spPr.Write(sw, "c:spPr");
             if (this.pictureOptions != null)
                 this.pictureOptions.Write(sw, "pictureOptions");
             if (this.dLbls != null)

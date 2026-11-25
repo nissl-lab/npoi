@@ -102,9 +102,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             if (workbookParameterField)
                 XmlHelper.WriteAttribute(sw, "workbookParameter", this.workbookParameter);
             sw.Write('>');
-            sw.Write("<![CDATA[");
-            sw.Write(this.Value);
-            sw.Write("]]>");
+            sw.WriteCDATA(this.Value);
             sw.WriteEndElement(nodeName);
         }
 

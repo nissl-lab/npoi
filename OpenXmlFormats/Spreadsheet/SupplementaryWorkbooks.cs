@@ -857,7 +857,7 @@ namespace NPOI.OpenXmlFormats.Spreadsheet
             else
             {
                 sw.Write('>');
-                sw.WriteElementAndContent("v", XmlHelper.EncodeXml(this.v));
+                sw.WriteElementAndContent("v", this.v);
                 sw.WriteEndElement(nodeName);
             }
         }
