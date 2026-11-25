@@ -2335,6 +2335,9 @@ namespace NPOI.OpenXmlFormats.Wordprocessing
         internal new void Write(StreamWriter sw, string nodeName)
         {
             sw.WriteStartW(nodeName);
+            XmlHelper.WriteAttribute(sw, "w:author", this.author, true);
+            XmlHelper.WriteAttribute(sw, "w:date", this.date);
+            XmlHelper.WriteAttribute(sw, "w:id", this.id, true);
             sw.Write('>');
             foreach (object o in this.Items)
             {
