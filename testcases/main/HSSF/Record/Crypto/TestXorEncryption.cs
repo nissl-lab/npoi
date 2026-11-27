@@ -39,6 +39,22 @@ namespace TestCases.HSSF.Record.Crypto
             Biff8EncryptionKey.CurrentUserPassword = (/*setter*/null);
         }
 
+        [TestCase(0, false)]
+        [TestCase(7, false)]
+        [TestCase(0, true)]
+        [TestCase(7, true)]
+        public void StreamPreservesSizeAndInitialPosition(int initialPosition, bool throughBaseType)
+        {
+            var decryptor = new NPOI.POIFS.Crypt.XOR.XORDecryptor(null);
+            using var input = new ByteArrayInputStream(new byte[32]);
+            using var stream = throughBaseType
+                ? ((Decryptor)decryptor).GetDataStream(input, 32, initialPosition)
+                : decryptor.GetDataStream(input, 32, initialPosition);
+
+            ClassicAssert.AreEqual(initialPosition, ((ChunkedCipherInputStream)stream).GetPos());
+            ClassicAssert.AreEqual(32 - initialPosition, stream.Available());
+        }
+
         [Test]
         public void TestXorEncryption1() {
             // Xor-Password: abc
