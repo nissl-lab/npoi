@@ -77,6 +77,20 @@ directly.
       ISS-Switzerland
 </td>
 <td align="center">
+      <a href="https://github.com/RevvitySignals">
+        <img width="200" height="200" alt="image" src="https://github.com/user-attachments/assets/b3cf0330-a7b7-4a32-8acb-d5eced40d33e" />
+      </a>
+      <br />
+      Revvity Signals
+</td>
+<td align="center">
+      <a href="https://github.com/varicent">
+        <img width="128" height="128" alt="image" src="https://github.com/user-attachments/assets/f96d46ad-45c5-4658-8387-8aeba48c9bad" />
+      </a>
+      <br />
+      Varicent
+</td>
+<td align="center">
       <a href="https://easylaser.com/">
      <img width="100" alt="image" src="https://github.com/user-attachments/assets/5e3fb6ab-93c3-49b3-89ea-eb0851763d68" />
       </a>
