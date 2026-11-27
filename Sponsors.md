@@ -125,16 +125,15 @@ directly.
       <br />
       Homie AG
 </td>
-
-<td align="center">
+  </tr>
+   <tr>
+  <td align="center">
       <a href="https://www.silex-partners.com/">
         <img width="100" alt="image" src="https://github.com/user-attachments/assets/fc4aa3ee-9340-4272-b425-07c91aabceea" />
       </a>
       <br />
       Silex
 </td>
-  </tr>
-   <tr>
 <td align="center">
       <a href="https://wem.io/">
         <img width="100 alt="image" src="https://github.com/user-attachments/assets/1c349370-946b-4d96-81fa-17743f11bbcf" />
