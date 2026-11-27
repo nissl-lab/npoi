@@ -150,7 +150,7 @@ directly.
 </td>
   <td align="center">
      <a href="https://www.lifehelp.com/">
-     <img width="100" alt="image" src="https://github.com/user-attachments/assets/aa9d7ffb-bbe2-4da1-8c82-16daff20202a" />
+     <img width="150" alt="image" src="https://github.com/user-attachments/assets/aa9d7ffb-bbe2-4da1-8c82-16daff20202a" />
      </a>
     <br/>
      Life Help
@@ -169,6 +169,13 @@ directly.
     <br/>
      ReceiveUp
    </td>     
+  <td align="center">
+     <a href="https://github.com/WolfeReiter">
+      <img width="200" height="200" alt="image" src="https://github.com/user-attachments/assets/7d31a699-1b10-4cbc-865f-6a93c00f902c" />
+     </a>
+    <br/>
+     WolfeReiter LLC
+   </td>        
    </tr>
 </table>
 
