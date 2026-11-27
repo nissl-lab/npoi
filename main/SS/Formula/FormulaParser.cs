@@ -1587,7 +1587,7 @@ namespace NPOI.SS.Formula
                  * (b) LOG10 + 1
                  * In (a) LOG10 is a name of a built-in function. In (b) LOG10 is a cell reference
                  */
-                bool isFunc = FunctionMetadataRegistry.GetFunctionByName(str.ToString().ToUpper()) != null;
+                bool isFunc = FunctionMetadataRegistry.GetFunctionByName(str.ToString().ToUpperInvariant()) != null;
                 if (isFunc)
                 {
                     int savePointer = _pointer;
@@ -1699,7 +1699,7 @@ namespace NPOI.SS.Formula
         private ParseNode GetFunction(String name, Ptg namePtg, ParseNode[] args)
         {
 
-            FunctionMetadata fm = FunctionMetadataRegistry.GetFunctionByName(name.ToUpper());
+            FunctionMetadata fm = FunctionMetadataRegistry.GetFunctionByName(name.ToUpperInvariant());
             int numArgs = args.Length;
             if (fm == null)
             {
