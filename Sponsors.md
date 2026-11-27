@@ -133,7 +133,8 @@ directly.
       <br />
       Silex
 </td>
-
+  </tr>
+   <tr>
 <td align="center">
       <a href="https://wem.io/">
         <img width="100 alt="image" src="https://github.com/user-attachments/assets/1c349370-946b-4d96-81fa-17743f11bbcf" />
@@ -147,8 +148,6 @@ directly.
       <br />
       Equin Limited
 </td>
-  </tr>
-   <tr>
   <td align="center">
      <a href="https://www.lifehelp.com/">
      <img width="100" alt="image" src="https://github.com/user-attachments/assets/aa9d7ffb-bbe2-4da1-8c82-16daff20202a" />
@@ -163,9 +162,13 @@ directly.
     <br/>
      KEYSYS
    </td>
-
-     
-
+  <td align="center">
+     <a href="https://receiveup.com/">
+      <img width="304" height="120" alt="image" src="https://github.com/user-attachments/assets/4a846f3b-a738-487a-9749-2df02df4897e" />
+     </a>
+    <br/>
+     ReceiveUp
+   </td>     
    </tr>
 </table>
 
