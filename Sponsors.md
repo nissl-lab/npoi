@@ -174,7 +174,14 @@ directly.
      </a>
     <br/>
      WolfeReiter LLC
-   </td>        
+   </td>      
+     <td align="center">
+     <a href="https://github.com/SelectViewData"> 
+     <img width="200" height="200" alt="image" src="https://github.com/user-attachments/assets/07050446-7ff8-4224-8dd8-aa3c976a8f6c" />
+     </a>
+    <br/>
+     SelectView Data Solutions
+   </td>  
    </tr>
 </table>
 
