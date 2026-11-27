@@ -115,7 +115,7 @@ namespace TestCases.SS.Formula.Eval
                     break;
                 case CellType.Error:
                     ClassicAssert.AreEqual(CellType.Error, actual.CellType, msg);
-                    ClassicAssert.AreEqual(msg, ErrorEval.GetText(expected.ErrorCellValue), ErrorEval.GetText(actual.ErrorValue));
+                    ClassicAssert.AreEqual(ErrorEval.GetText(expected.ErrorCellValue), ErrorEval.GetText(actual.ErrorValue), msg);
                     break;
                 case CellType.Formula: // will never be used, since we will call method After formula Evaluation
                     throw new AssertFailedException("Cannot expect formula as result of formula Evaluation: " + msg);
@@ -125,8 +125,38 @@ namespace TestCases.SS.Formula.Eval
                     break;
                 case CellType.String:
                     ClassicAssert.AreEqual(CellType.String, actual.CellType, msg);
-                    ClassicAssert.AreEqual(msg, expected.RichStringCellValue.String, actual.StringValue);
+                    ClassicAssert.AreEqual(expected.RichStringCellValue.String, actual.StringValue, msg);
                     break;
+            }
+        }
+
+        [TestCase(false, false)]
+        [TestCase(false, true)]
+        [TestCase(true, false)]
+        [TestCase(true, true)]
+        public void ConfirmExpectedResultChecksStringsAndErrors(bool error, bool matches)
+        {
+            using var testWorkbook = new HSSFWorkbook();
+            var expected = testWorkbook.CreateSheet().CreateRow(0).CreateCell(0);
+            CellValue actual;
+            if (error)
+            {
+                expected.SetCellErrorValue(7);
+                actual = CellValue.GetError(matches ? 7 : 15);
+            }
+            else
+            {
+                expected.SetCellValue("expected");
+                actual = new CellValue(matches ? "expected" : "different");
+            }
+
+            if (matches)
+            {
+                ConfirmExpectedResult("Formula result", expected, actual);
+            }
+            else
+            {
+                Assert.Throws<AssertionException>(() => ConfirmExpectedResult("Formula result", expected, actual));
             }
         }
 
