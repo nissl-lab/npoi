@@ -15,13 +15,16 @@
    limitations under the License.
 ==================================================================== */
 
+using System;
 using System.Diagnostics;
 
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
 
+using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
+using NPOI.XSSF.Streaming;
 using NPOI.XSSF.UserModel;
 
 namespace TestCases.SS.Util
@@ -33,6 +36,45 @@ namespace TestCases.SS.Util
     [TestFixture]
     public class TestSheetUtilAutoSize
     {
+        [TestCase("xls")]
+        [TestCase("xlsx")]
+        [TestCase("streaming xlsx")]
+        [NonParallelizable]
+        public void TestAutoSizeColumnWithEstimatedWidths(string format)
+        {
+            const string switchName = "NPOI.UseEstimatedColumnWidths";
+            AppContext.TryGetSwitch(switchName, out bool previousValue);
+            AppContext.SetSwitch(switchName, true);
+            try
+            {
+                using IWorkbook workbook = format switch
+                {
+                    "xls" => new HSSFWorkbook(),
+                    "xlsx" => new XSSFWorkbook(),
+                    _ => new SXSSFWorkbook(null, 1)
+                };
+
+                ISheet sheet = workbook.CreateSheet("test");
+                if (sheet is SXSSFSheet streamingSheet)
+                {
+                    streamingSheet.TrackColumnForAutoSizing(0);
+                    streamingSheet.TrackColumnForAutoSizing(1);
+                }
+
+                sheet.CreateRow(0).CreateCell(0).SetCellValue(new string('i', 40));
+                sheet.CreateRow(1).CreateCell(1).SetCellValue(new string('W', 20));
+                sheet.AutoSizeColumn(0);
+                sheet.AutoSizeColumn(1);
+
+                Assert.That(sheet.GetColumnWidth(1), Is.GreaterThan(256));
+                Assert.That(sheet.GetColumnWidth(0), Is.GreaterThan(sheet.GetColumnWidth(1)));
+            }
+            finally
+            {
+                AppContext.SetSwitch(switchName, previousValue);
+            }
+        }
+
         [Test]
         public void TestAutoSizeColumnProducesSameWidthAsGetCellWidth()
         {

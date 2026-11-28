@@ -33,6 +33,20 @@ Documentation
 
 [Useful Packages based on NPOI](https://github.com/nissl-lab/npoi/wiki/ORM-on-NPOI)
 
+### Automatic column widths without loading SkiaSharp
+
+If IIS Web Deploy cannot replace `libSkiaSharp.dll` after `AutoSizeColumn` runs,
+enable estimated column widths at application startup, before creating any workbooks:
+
+```csharp
+AppContext.SetSwitch("NPOI.UseEstimatedColumnWidths", true);
+```
+
+The switch applies to automatic column sizing for XLS, XLSX, and streaming XLSX.
+The estimate uses font size and text length, so check fit for wide glyphs and
+proportional fonts. Other drawing and measurement APIs can still load SkiaSharp.
+Restart the application to release any copy of the DLL already loaded.
+
 Sponsors
 =================
 Thank you for all the sponsors. [Here is the sponsors list](Sponsors.md) 

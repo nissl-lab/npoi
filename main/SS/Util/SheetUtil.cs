@@ -45,6 +45,9 @@ namespace NPOI.SS.Util
         // Default dpi
         private static int dpi = 96;
 
+        private static bool UseEstimatedColumnWidths =>
+            AppContext.TryGetSwitch("NPOI.UseEstimatedColumnWidths", out bool enabled) && enabled;
+
         // /**
         // * This is the multiple that the font height is scaled by when determining the
         // * boundary of rotated text.
@@ -526,55 +529,38 @@ namespace NPOI.SS.Util
             }
 
             IFont font = wb.GetFontAt(cell.CellStyle.FontIndex);
-            using SKFont windowsFont = IFont2Font(font);
+            using SKFont windowsFont = UseEstimatedColumnWidths ? null : IFont2Font(font);
 
-            return MeasureCellWidth(cell, defaultCharWidth, formatter, colspan, windowsFont);
+            return MeasureCellWidth(cell, defaultCharWidth, formatter, colspan, font, windowsFont);
         }
 
         private static double GetCellWidth(int defaultCharWidth, int colspan,
-            ICellStyle style, double width, string str, SKFont windowsFont, ICell cell)
+            ICellStyle style, double width, string str, IFont font, SKFont windowsFont, ICell cell)
         {
-            double actualWidth;
-            try
+            double textHeight = GetFontSizeInPixels(font);
+            double textWidth = str.Length * textHeight * 0.5;
+            if (windowsFont != null)
             {
-                float textWidth = windowsFont.MeasureText(str);
-                windowsFont.GetFontMetrics(out SKFontMetrics metrics);
-                float textHeight = metrics.Descent - metrics.Ascent;
-
-                if (style.Rotation != 0)
+                try
                 {
-                    double angle = style.Rotation * 2.0 * Math.PI / 360.0;
-                    double x1 = Math.Abs(textHeight * Math.Sin(angle));
-                    double x2 = Math.Abs(textWidth * Math.Cos(angle));
-                    actualWidth = Math.Round(x1 + x2, 0, MidpointRounding.ToEven);
+                    float measuredWidth = windowsFont.MeasureText(str);
+                    windowsFont.GetFontMetrics(out SKFontMetrics metrics);
+                    textWidth = measuredWidth;
+                    textHeight = metrics.Descent - metrics.Ascent;
                 }
-                else
-                    actualWidth = Math.Round(textWidth, 0, MidpointRounding.ToEven);
-            }
-            catch (Exception)
-            {
-                // Fallback for environments without complete font support (e.g., missing font tables).
-                // Estimate dimensions proportionally: characters are approximately half as wide as the
-                // font height (an empirical approximation for proportional fonts that preserves relative
-                // width differences between fonts of different sizes and between rotated and non-rotated
-                // text).
-                double fontHeightPx = windowsFont.Size;  // already in pixels at the configured DPI
-                double estimatedCharWidthPx = fontHeightPx * 0.5;
-                double estimatedTextWidthPx = str.Length * estimatedCharWidthPx;
-
-                if (style.Rotation != 0)
+                catch (Exception)
                 {
-                    double angle = style.Rotation * 2.0 * Math.PI / 360.0;
-                    double x1 = Math.Abs(fontHeightPx * Math.Sin(angle));
-                    double x2 = Math.Abs(estimatedTextWidthPx * Math.Cos(angle));
-                    actualWidth = Math.Round(x1 + x2, 0, MidpointRounding.ToEven);
-                }
-                else
-                {
-                    actualWidth = Math.Round(estimatedTextWidthPx, 0, MidpointRounding.ToEven);
+                    // Use the estimated dimensions if the font cannot be measured.
                 }
             }
 
+            if (style.Rotation != 0)
+            {
+                double angle = style.Rotation * 2.0 * Math.PI / 360.0;
+                textWidth = Math.Abs(textHeight * Math.Sin(angle)) + Math.Abs(textWidth * Math.Cos(angle));
+            }
+
+            double actualWidth = Math.Round(textWidth, 0, MidpointRounding.ToEven);
             int padding = 5;
             double correction = 1.05;
             width = Math.Max(width, ((actualWidth + padding) / colspan / defaultCharWidth * correction) + cell.CellStyle.Indention);
@@ -584,10 +570,10 @@ namespace NPOI.SS.Util
         /// <summary>
         /// Shared cell measurement logic used by both the public GetCellWidth and the
         /// optimized internal overload. Handles cell type resolution, text extraction,
-        /// and width calculation via the provided SKFont.
+        /// and width calculation.
         /// </summary>
         private static double MeasureCellWidth(ICell cell, int defaultCharWidth, DataFormatter formatter,
-            int colspan, SKFont windowsFont)
+            int colspan, IFont font, SKFont windowsFont)
         {
             CellType cellType = cell.CellType;
 
@@ -612,7 +598,7 @@ namespace NPOI.SS.Util
                         // TODO: support rich text fragments
                     }
 
-                    width = GetCellWidth(defaultCharWidth, colspan, cell.CellStyle, width, txt, windowsFont, cell);
+                    width = GetCellWidth(defaultCharWidth, colspan, cell.CellStyle, width, txt, font, windowsFont, cell);
                 }
             }
             else
@@ -639,7 +625,7 @@ namespace NPOI.SS.Util
                     String txt = sval;
                     //str = new AttributedString(txt);
                     //copyAttributes(font, str, 0, txt.length());
-                    width = GetCellWidth(defaultCharWidth, colspan, cell.CellStyle, width, txt, windowsFont, cell);
+                    width = GetCellWidth(defaultCharWidth, colspan, cell.CellStyle, width, txt, font, windowsFont, cell);
                 }
             }
 
@@ -678,7 +664,8 @@ namespace NPOI.SS.Util
         public static double GetColumnWidth(ISheet sheet, int column, bool useMergedCells, int firstRow, int lastRow, int maxRows = 0)
         {
             DataFormatter formatter = new DataFormatter();
-            int defaultCharWidth = GetDefaultCharWidth(sheet.Workbook);
+            bool useEstimatedWidths = UseEstimatedColumnWidths;
+            int defaultCharWidth = GetDefaultCharWidth(sheet.Workbook, useEstimatedWidths);
 
             // No need to explore the whole sheet: explore only the first maxRows lines
             if (maxRows > 0 && lastRow - firstRow > maxRows) lastRow = firstRow + maxRows;
@@ -702,7 +689,7 @@ namespace NPOI.SS.Util
             }
 
             // Cache SKFont objects by font index to avoid repeated allocation/disposal
-            var fontCache = new Dictionary<int, SKFont>();
+            var fontCache = useEstimatedWidths ? null : new Dictionary<int, SKFont>();
             try
             {
                 double width = -1;
@@ -720,8 +707,11 @@ namespace NPOI.SS.Util
             }
             finally
             {
-                foreach (SKFont cached in fontCache.Values)
-                    cached.Dispose();
+                if (fontCache != null)
+                {
+                    foreach (SKFont cached in fontCache.Values)
+                        cached.Dispose();
+                }
             }
         }
 
@@ -733,7 +723,15 @@ namespace NPOI.SS.Util
          */
         public static int GetDefaultCharWidth(IWorkbook wb)
         {
+            return GetDefaultCharWidth(wb, UseEstimatedColumnWidths);
+        }
+
+        private static int GetDefaultCharWidth(IWorkbook wb, bool useEstimatedWidths)
+        {
             IFont defaultFont = wb.GetFontAt((short)0);
+            if (useEstimatedWidths)
+                return Math.Max(1, (int)Math.Ceiling(GetFontSizeInPixels(defaultFont) * 0.5));
+
             using SKFont font = IFont2Font(defaultFont);
 
             try
@@ -824,13 +822,14 @@ namespace NPOI.SS.Util
             }
 
             IFont font = wb.GetFontAt(cell.CellStyle.FontIndex);
-            if (!fontCache.TryGetValue(cell.CellStyle.FontIndex, out SKFont windowsFont))
+            SKFont windowsFont = null;
+            if (fontCache != null && !fontCache.TryGetValue(cell.CellStyle.FontIndex, out windowsFont))
             {
                 windowsFont = IFont2Font(font);
                 fontCache[cell.CellStyle.FontIndex] = windowsFont;
             }
 
-            return MeasureCellWidth(cell, defaultCharWidth, formatter, colspan, windowsFont);
+            return MeasureCellWidth(cell, defaultCharWidth, formatter, colspan, font, windowsFont);
         }
 
         /**
@@ -948,8 +947,13 @@ namespace NPOI.SS.Util
             var key = new FontCacheKey(font1.FontName, font1.IsBold, font1.IsItalic);
             SKTypeface typeface = TypefaceCache.GetOrAdd(key, IFont2TypefaceImpl);
             // Convert point size to pixels at the configured DPI so that MeasureText returns pixel values.
-            float textSizePx = (float)font1.FontHeightInPoints * dpi / 72f;
+            float textSizePx = GetFontSizeInPixels(font1);
             return new SKFont(typeface, textSizePx);
+        }
+
+        private static float GetFontSizeInPixels(IFont font)
+        {
+            return (float)font.FontHeightInPoints * dpi / 72f;
         }
 
         private static SKTypeface IFont2TypefaceImpl(FontCacheKey cacheKey)
