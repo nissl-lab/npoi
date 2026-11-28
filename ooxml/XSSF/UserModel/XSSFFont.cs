@@ -85,7 +85,6 @@ namespace NPOI.XSSF.UserModel
         public XSSFFont()
         {
             this._ctFont = new CT_Font();
-            FontName = DEFAULT_FONT_NAME;
             FontHeightInPoints =DEFAULT_FONT_SIZE;
         }
 
@@ -282,22 +281,22 @@ namespace NPOI.XSSF.UserModel
                 fontSize.val = value;
             }
         }
-        /**
-         * get the name of the font (i.e. Arial)
-         *
-         * @return String - a string representing the name of the font to use
-         */
+        /// <summary>
+        /// Gets or sets the explicit font name. A null value omits the name so Excel can resolve the font.
+        /// </summary>
         public String FontName
         {
-            get
+            get => _ctFont.name?.val;
+            set
             {
-                CT_FontName name = _ctFont.name;
-                return name == null ? DEFAULT_FONT_NAME : name.val;
-            }
-            set 
-            {
-                CT_FontName fontName = _ctFont.name==null?_ctFont.AddNewName():_ctFont.name;
-                fontName.val = value == null ? DEFAULT_FONT_NAME : value;
+                if (value == null)
+                {
+                    _ctFont.name = null;
+                    return;
+                }
+
+                var fontName = _ctFont.name ?? _ctFont.AddNewName();
+                fontName.val = value;
             }
         }
 

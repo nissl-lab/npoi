@@ -16,6 +16,7 @@
 ==================================================================== */
 
 using NPOI;
+using NPOI.HSSF.UserModel;
 using NPOI.OOXML.XSSF.UserModel;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.SS.UserModel;
@@ -25,7 +26,10 @@ using NPOI.XSSF;
 using NPOI.XSSF.UserModel;
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
+using System.IO;
+using System.Linq;
 using System.Text;
+using System.Xml.Linq;
 using TestCases.SS.UserModel;
 
 namespace TestCases.XSSF.UserModel
@@ -42,7 +46,7 @@ namespace TestCases.XSSF.UserModel
         [Test]
         public void TestDefaultFont()
         {
-            BaseTestDefaultFont("Calibri", 220, IndexedColors.Black.Index);
+            BaseTestDefaultFont(null, 220, IndexedColors.Black.Index);
         }
         [Test]
         public void TestConstructor()
@@ -126,6 +130,51 @@ namespace TestCases.XSSF.UserModel
             xssfFont.FontName = "Courier";
             ClassicAssert.AreEqual("Courier", ctFont.name.val);
         }
+        [Test]
+        public void TestFontNamesInSavedWorkbook()
+        {
+            using var workbook = new XSSFWorkbook();
+            workbook.CreateSheet();
+
+            var unnamed = workbook.CreateFont();
+            var cleared = workbook.CreateFont();
+            cleared.FontName = "Calibri";
+            cleared.FontName = null;
+            var named = workbook.CreateFont();
+            named.FontName = "Courier";
+
+            using var output = new MemoryStream();
+            workbook.Write(output, true);
+            output.Position = 0;
+
+            using var reloaded = new XSSFWorkbook(output);
+            using var styles = reloaded.GetStylesSource().GetPackagePart().GetInputStream();
+            var root = XDocument.Load(styles).Root;
+            var ns = root.Name.Namespace;
+            var fonts = root.Element(ns + "fonts").Elements(ns + "font").ToArray();
+
+            ClassicAssert.IsNull(fonts[0].Element(ns + "name"));
+            ClassicAssert.IsNull(fonts[unnamed.Index].Element(ns + "name"));
+            ClassicAssert.IsNull(fonts[cleared.Index].Element(ns + "name"));
+            ClassicAssert.AreEqual("Courier", (string)fonts[named.Index].Element(ns + "name").Attribute("val"));
+        }
+
+        [Test]
+        public void TestCloneUnnamedFontToHSSF()
+        {
+            using var xlsx = new XSSFWorkbook();
+            using var xls = new HSSFWorkbook();
+            var font = xls.CreateFont();
+            font.CloneStyleFrom(xlsx.CreateFont());
+
+            using var output = new MemoryStream();
+            xls.Write(output, true);
+            output.Position = 0;
+
+            using var reloaded = new HSSFWorkbook(output);
+            ClassicAssert.AreEqual(HSSFFont.FONT_ARIAL, reloaded.GetFontAt(font.Index).FontName);
+        }
+
         [Test]
         public void TestItalic()
         {

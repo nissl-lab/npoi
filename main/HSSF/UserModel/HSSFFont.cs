@@ -257,7 +257,7 @@ namespace NPOI.HSSF.UserModel
 
         public void CloneStyleFrom(IFont src)
         {
-            FontName = src.FontName;
+            FontName = src.FontName ?? FONT_ARIAL;
             FontHeight = src.FontHeight;
             IsBold = src.IsBold;
             IsItalic = src.IsItalic;

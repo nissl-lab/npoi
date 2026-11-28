@@ -1015,7 +1015,6 @@ namespace NPOI.XSSF.Model
             XSSFFont xssfFont = new XSSFFont(ctFont, 0, null);
             xssfFont.FontHeightInPoints = (XSSFFont.DEFAULT_FONT_SIZE);
             xssfFont.Color = (XSSFFont.DEFAULT_FONT_COLOR);//SetTheme
-            xssfFont.FontName = (XSSFFont.DEFAULT_FONT_NAME);
             xssfFont.SetFamily(FontFamily.SWISS);
             xssfFont.SetScheme(FontScheme.MINOR);
             return xssfFont;
@@ -1080,7 +1079,7 @@ namespace NPOI.XSSF.Model
                 if ((font.IsBold == bold)
                         && font.Color == color
                         && font.FontHeight == fontHeight
-                        && font.FontName.Equals(name)
+                        && string.Equals(font.FontName, name, StringComparison.Ordinal)
                         && font.IsItalic == italic
                         && font.IsStrikeout == strikeout
                         && font.TypeOffset == typeOffset
@@ -1103,9 +1102,9 @@ namespace NPOI.XSSF.Model
             foreach(XSSFFont font in fonts)
             {
                 if((font.IsBold == bold)
-                        && font.GetXSSFColor().Equals(color)
+                        && Equals(font.GetXSSFColor(), color)
                         && font.FontHeight == fontHeight
-                        && font.FontName.Equals(name)
+                        && string.Equals(font.FontName, name, StringComparison.Ordinal)
                         && font.IsItalic == italic
                         && font.IsStrikeout == strikeout
                         && font.TypeOffset == typeOffset
