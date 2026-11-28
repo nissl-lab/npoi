@@ -568,5 +568,21 @@ namespace TestCases.XWPF.UserModel
                 rp => rp.Relationship.RelationshipType == XWPFRelation.STYLES.Relation));
             ClassicAssert.IsTrue(back.GetStyles().StyleExist("TOC1"));
         }
+
+        [Test]
+        public void CreateTOCKeepsTheStylesTheDocumentAlreadyHas()
+        {
+            XWPFDocument doc = XWPFTestDataSamples.OpenSampleDocument("heading123.docx");
+            ClassicAssert.AreEqual(11, doc.GetStyles().NumberOfStyles);
+
+            doc.CreateTOC();
+
+            XWPFStyles styles = XWPFTestDataSamples.WriteOutAndReadBack(doc).GetStyles();
+            ClassicAssert.AreEqual(14, styles.NumberOfStyles);
+            ClassicAssert.IsTrue(styles.StyleExist("Normal"));
+            ClassicAssert.IsTrue(styles.StyleExist("Heading3"));
+            ClassicAssert.IsTrue(styles.StyleExist("TOC2"));
+            ClassicAssert.AreEqual("heading 1", styles.GetStyle("Heading1").Name);
+        }
     }
 }

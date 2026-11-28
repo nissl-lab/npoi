@@ -1245,11 +1245,26 @@ namespace NPOI.XWPF.UserModel
         /// Please set paragraphs style to "Heading{#}" and document
         /// styles for TOC <see cref="DocumentStylesBuilder.BuildStylesForTOC"/>.
         /// Otherwise, it renders an empty one.
+        /// Styles already in the document are kept, only the missing TOC styles are added.
         /// </summary>
         public void CreateTOC()
         {
-            var ctStyles = DocumentStylesBuilder.BuildStylesForTOC();
-            CreateStyles().SetStyles(ctStyles);
+            var tocStyles = DocumentStylesBuilder.BuildStylesForTOC();
+            XWPFStyles styles = CreateStyles();
+            CT_Styles current = styles.GetCTStyles();
+
+            if (current.GetStyleList().Count == 0 && !current.IsSetDocDefaults())
+            {
+                styles.SetStyles(tocStyles);
+            }
+            else
+            {
+                foreach (CT_Style style in tocStyles.GetStyleList())
+                {
+                    if (!styles.StyleExist(style.styleId))
+                        styles.AddStyle(new XWPFStyle(style, styles));
+                }
+            }
 
             CT_SdtBlock tocBlock = Document.body.AddNewSdt();
             TOC toc = new TOC(tocBlock);
