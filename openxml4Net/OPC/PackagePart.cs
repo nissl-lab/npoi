@@ -230,7 +230,7 @@ namespace NPOI.OpenXml4Net.OPC
          *            Relationship unique id.
          * @return The newly created and added relationship
          * 
-         * @throws InvalidFormatException
+         * @throws InvalidOperationException
          *             If the URI point to a relationship part URI.
          * @see org.apache.poi.OpenXml4Net.opc.RelationshipSource#AddRelationship(org.apache.poi.OpenXml4Net.opc.PackagePartName,
          *      org.apache.poi.OpenXml4Net.opc.TargetMode, java.lang.String, java.lang.String)
@@ -307,7 +307,7 @@ namespace NPOI.OpenXml4Net.OPC
          *            Relationship unique id.
          * @return The newly created and added relationship
          * 
-         * @throws InvalidFormatException
+         * @throws InvalidOperationException
          *             If the URI point to a relationship part URI.
          * @see org.apache.poi.OpenXml4Net.opc.RelationshipSource#AddRelationship(org.apache.poi.OpenXml4Net.opc.PackagePartName,
          *      org.apache.poi.OpenXml4Net.opc.TargetMode, java.lang.String, java.lang.String)
